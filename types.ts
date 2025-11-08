@@ -27,17 +27,33 @@ export interface OperationalData {
 }
 
 export interface HPPImprovement {
-    id: string;
+    id:string;
     title: string;
     description: string;
     category: 'Mechanical' | 'Digital' | 'Ecological' | 'Systemic';
+}
+
+export type VerificationStatus = 'Pending' | 'Verified' | 'Failed' | 'Reworked';
+
+export interface VerificationData {
+    value: string;
+    comment: string;
+    logbookConfirmed: boolean;
+    status: VerificationStatus;
+    timestamp?: string;
 }
 
 export interface ProtocolStep {
     id: string;
     title: string;
     details: string[];
-    critical?: boolean;
+    risk?: 'Critical' | 'High Risk' | 'Standard';
+    tooltip?: string;
+    validation?: {
+        type: 'number';
+        condition: 'lessThanOrEqual' | 'greaterThanOrEqual';
+        value: number;
+    }
 }
 
 export interface ProtocolSection {
@@ -46,4 +62,58 @@ export interface ProtocolSection {
     steps: ProtocolStep[];
 }
 
-export type AppView = 'hub' | 'riskAssessment' | 'investorBriefing' | 'standardOfExcellence' | 'digitalIntroduction' | 'hppImprovements' | 'installationGuarantee' | 'genderEquity' | 'hppBuilder' | 'turbineDetail' | 'phaseGuide' | 'suggestionBox';
+export type AppView = 'hub' | 'riskAssessment' | 'investorBriefing' | 'standardOfExcellence' | 'digitalIntroduction' | 'hppImprovements' | 'installationGuarantee' | 'genderEquity' | 'hppBuilder' | 'turbineDetail' | 'phaseGuide' | 'suggestionBox' | 'riverWildlife' | 'questionnaireSummary' | 'revitalizationStrategy' | 'digitalIntegrity' | 'contractManagement';
+
+export interface NavigationContextType {
+    navigateTo: (view: AppView) => void;
+    navigateBack: () => void;
+    navigateToHub: () => void;
+    navigateToTurbineDetail: (turbineKey: string) => void;
+    showFeedbackModal: () => void;
+}
+
+export interface TurbineRecommendation {
+    key: string;
+    score: number;
+    reasons: string[];
+    isBest: boolean;
+}
+
+export interface QuestionnaireContextType {
+  answers: Answers;
+  description: string;
+  selectedTurbine: TurbineType | null;
+  operationalData: OperationalData;
+  isQuestionnaireDataFresh: boolean;
+  setAnswers: React.Dispatch<React.SetStateAction<Answers>>;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTurbine: React.Dispatch<React.SetStateAction<TurbineType | null>>;
+  setOperationalData: React.Dispatch<React.SetStateAction<OperationalData>>;
+  setIsQuestionnaireDataFresh: React.Dispatch<React.SetStateAction<boolean>>;
+  resetQuestionnaire: () => void;
+}
+
+export interface RiskContextType {
+  disciplineRiskScore: number;
+  updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void;
+  calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
+}
+
+
+// HPP Builder Types
+export type WaterQuality = 'clean' | 'suspended' | 'abrasive' | 'both';
+export type FlowVariation = 'stable' | 'seasonal' | 'variable';
+
+export interface HPPSettings {
+    head: number;
+    flow: number;
+    efficiency: number;
+    powerFactor: number;
+    waterQuality: WaterQuality;
+    flowVariation: FlowVariation;
+}
+
+export interface SavedConfiguration extends HPPSettings {
+    name: string;
+    id: string;
+}

@@ -1,182 +1,122 @@
 import React, { useState } from 'react';
 import { BackButton } from './BackButton';
 
-const sectionsData = [
+const modulesData = [
   {
-    id: 'faza1',
-    title: 'I. Hydrodynamic Immunity (Temeljna Faza Upravljanja Rizikom)',
-    content: (
-      <>
-        <p className="mb-3">Ovo je najkritičnija faza, jer se ovdje rizici eliminiraju, a ne ublažavaju. Ulaganje u superioran dizajn stvara inherentni imunitet postrojenja na kronične kvarove, osiguravajući dugoročnu stabilnost i zaštitu imovine od samog početka.</p>
-        <ul className="list-disc list-inside pl-2 space-y-2">
-          <li>
-            <strong>Inženjering Imuniteta:</strong> Temeljni princip ove faze je prelazak s reaktivnog popravljanja na proaktivno eliminiranje rizika u samom dizajnu. Fokus je na fundamentalnom sprječavanju hidrodinamičke nestabilnosti, vrtloga (vortex shedding) i separacije protoka, čime se uzrok kroničnih kvarova rješava u korijenu.
-          </li>
-          <li>
-            <strong>Dual Application Strategy (Napredna Inovacija):</strong> Istraživanje biomimetičkih rješenja, poput primjene tuberkula (izbočina inspiriranih perajama kita) na lopatice rotora i privodno kolo, predstavlja vrhunac ove filozofije. Cilj je stvoriti sinergijski efekt koji drastično proširuje operativni prozor visoke efikasnosti i smanjuje vibracije. Iako je još u fazi naprednog istraživanja, ova strategija pokazuje smjer budućeg razvoja ka potpunom hidrodinamičkom imunitetu.
-          </li>
-          <li>
-            <strong>Materijalni Mandat (Garancija Dugovječnosti):</strong> Obavezna upotreba martenzitnog nehrđajućeg čelika <strong>13Cr4Ni</strong> za sve ključne hidrauličke komponente. Ovaj mandat osigurava da je materijal izabran na temelju superiorne otpornosti na kavitacijsku eroziju i zamor materijala, a ne isključivo na temelju cijene. Njegova fina mikrostruktura i uravnotežen sastav kroma i nikla pružaju izvanrednu žilavost i sposobnost podnošenja implozijskih šokova kavitacije, čime se eliminira rizik od preuranjenih katastrofalnih kvarova i značajno produžava životni vijek opreme.
-          </li>
-        </ul>
-      </>
-    )
+    id: 'm1',
+    icon: '💧',
+    title: 'I. Hydrodynamic Immunity',
+    problem: 'How to apply design-phase RCFA to eliminate Cavitation and Erosion?',
+    content: 'The mandatory use of 13Cr4Ni steel and advanced blade design to create inherent plant immunity to chronic hydrodynamic failures. This is a foundational step in LCC Optimization, eliminating a root cause of failure before it occurs.'
   },
   {
-    id: 'faza2',
-    title: 'II. Flawless Execution (Premošćivanje Jaza)',
-    content: (
-      <>
-        <p className="mb-3">Srž protokola besprijekorne montaže. Ova faza eliminira "Execution Gap" (jaz između plana i izvedbe) kroz apsolutnu preciznost i digitalnu verifikaciju na terenu.</p>
-        <ul className="list-disc list-inside pl-2 space-y-2">
-          <li>
-            <strong>Laserski Mandat:</strong> Obavezna verifikacija poravnanja osovine s tolerancijom manjom od <strong>0.1 mm</strong>. Ovaj korak izravno sprječava 48% rizika od dinamičke nestabilnosti uzrokovane lošom montažom.
-          </li>
-          <li>
-            <strong>Digitalni Audit (3D Skeniranje):</strong> Uspostava QC protokola gdje se svi ključni zavari, momenti pritezanja vijaka i geometrija komponenti mjere 3D skeniranjem i trajno bilježe u digitalnom formatu, stvarajući nepromjenjiv zapis o kvaliteti.
-          </li>
-          <li>
-            <strong>Ljudski Faktor i Sigurnosne Granice:</strong> Sva obuka osoblja na terenu mora biti temeljena na granicama sigurnosti definiranim kroz CFD (računalna dinamika fluida) i FEA (analiza konačnih elemenata) simulacije, osiguravajući duboko razumijevanje operativnih granica.
-          </li>
-        </ul>
-      </>
-    )
+    id: 'm2',
+    icon: '🎯',
+    title: 'II. Flawless Execution',
+    problem: 'How to enforce the 0.05 mm/m precision and eliminate the Execution Gap?',
+    content: 'A system of digital verification (3D scanning), laser alignment mandates (0.05 mm/m), and documented torque protocols that bridge the Execution Gap between plan and reality, securing the full warranty term.'
   },
   {
-    id: 'faza3',
-    title: 'III. Active Operational Resilience (Prediktivno Upravljanje)',
-    content: (
-       <>
-        <p className="mb-3">Ova faza se odnosi na održavanje optimalnog zdravlja postrojenja kroz proaktivno i prediktivno praćenje, umjesto reaktivnog djelovanja.</p>
-         <ul className="list-disc list-inside pl-2 space-y-2">
-            <li>
-                <strong>Baseline Monitoring ("Otisak Prsta"):</strong> Obavezno snimanje "Otiska Prsta" vibracija i akustike tijekom puštanja u pogon. Ovaj zapis služi kao Zlatni Standard Zdravlja postrojenja, s kojim se uspoređuju sva buduća mjerenja.
-            </li>
-            <li>
-                <strong>Vibracijski Prag (VRT):</strong> Postavljanje internih VRT (Vibratory Risk Threshold) pragova koji su znatno niži od ISO standarda. Cilj je održavati vibracije na <strong>60% ISO granice</strong>, čime se problemi detektiraju u najranijoj fazi.
-            </li>
-            <li>
-                <strong>Mašinsko-Električna Sinergija:</strong> Uvođenje integriranog nadzora koji korelira mehaničke parametre (vibracije, temperatura) s električnim podacima (struja, napon, frekvencija). Ovo omogućuje rano otkrivanje kvarova u automatizaciji i elektro-sustavu koji uzrokuju mehanički stres.
-            </li>
-        </ul>
-       </>
-    )
+    id: 'm3',
+    icon: '🧠',
+    title: 'III. Active Operational Resilience',
+    problem: 'How to shift from reactive repair to predictive analytics (RCFA) for true LCC Optimization?',
+    content: 'Using AI-driven acoustic monitoring and baseline "fingerprints" to apply Root Cause Failure Analysis (RCFA), detecting instability at 60% of ISO limits before damage occurs. This is the core of our ethical LCC Optimization mandate.'
   },
   {
-    id: 'faza4',
-    title: 'IV. Strategic & Cultural Mandate (Širenje Izvrsnosti)',
-    content: (
-       <>
-        <p className="mb-3">Ova sekcija povezuje tehničku izvrsnost sa širom poslovnom strategijom, kulturom i budućim tehnološkim razvojem.</p>
-        <ul className="list-disc list-inside pl-2 space-y-2">
-            <li>
-                <strong>Digitalni Blizanac (Digital Twin):</strong> Postavljanje vizije za budućnost gdje se koriste AI analitika i virtualne replike postrojenja za potpuno prediktivno održavanje i optimizaciju performansi.
-            </li>
-            <li>
-                <strong>ESG & Kultura Izvrsnosti:</strong> Integracija tehničke preciznosti u šire okvire održivosti (ESG), uključujući <strong>Rodnu Ravnopravnost (Gender Equity)</strong> i ciljeve Europske tehnološke i inovacijske platforme (ETIP/EERA), dokazujući da je inkluzivnost ključna za inovacije.
-            </li>
-            <li>
-                <strong>Aditivna Proizvodnja (AM):</strong> Naglašavanje strateške potrebe za ulaganjem u AM tehnologiju (3D printanje metala) za brzu i jeftinu izradu kompleksnih rezervnih dijelova i prototipova, čime se smanjuju troškovi i povećava operativna fleksibilnost.
-            </li>
-        </ul>
-      </>
-    )
+    id: 'm4',
+    icon: '🤝',
+    title: 'IV. Strategic & Cultural Mandate',
+    problem: 'How is the cultural Execution Gap closed through a zero-tolerance policy?',
+    content: 'Integrating technical precision with a culture of excellence, where Gender Equity and diverse teams are recognized as critical assets for closing the Execution Gap in human capital and fostering innovation.'
   },
   {
-    id: 'faza5',
-    title: 'V. Održavanje Znanja i Zatvorena Petlja Učenja',
-    content: (
-       <>
-        <p className="mb-3">Izvrsnost nije jednokratno postignuće, već kontinuirani proces. Ova faza osigurava da se svako iskustvo—bilo uspjeh ili neuspjeh—sistematski pretvara u trajno znanje koje jača cijelu organizaciju.</p>
-        <ul className="list-disc list-inside pl-2 space-y-2">
-            <li>
-                <strong>Mandatorna Analiza Korijenskog Uzroka (RCA):</strong> Za svaki značajan kvar ili 'skoro incident', obavezna je provedba strukturirane analize korijenskog uzroka. Zaključci se moraju formalno dokumentirati i unijeti u centralnu bazu znanja.
-            </li>
-            <li>
-                <strong>Živući Standardi (Dynamic Protocols):</strong> Ovaj 'Standard Izvrsnosti' nije statičan dokument. Nalaže se godišnja revizija i ažuriranje svih protokola na temelju novih terenskih podataka, tehnoloških inovacija i zaključaka iz RCA analiza.
-            </li>
-            <li>
-                <strong>Digitalna Baza Znanja:</strong> Uspostava jedinstvene, digitalne baze znanja koja sadrži sve tehničke protokole, povijest održavanja, RCA izvještaje i najbolje prakse. Pristup ovoj bazi mora biti osiguran svim inženjerima i tehničkom osoblju.
-            </li>
-        </ul>
-      </>
-    )
+    id: 'm5',
+    icon: '📚',
+    title: 'V. Knowledge Retention',
+    problem: 'How to prevent the loss of institutional knowledge (the silent Execution Gap)?',
+    content: 'A mandate for a "Living Standard"—a digital knowledge base where all Root Cause Analyses and field data are documented, ensuring continuous, closed-loop learning to prevent recurring failures and optimize LCC.'
   },
   {
-    id: 'faza6',
-    title: 'VI. Izvrsnost u Lancu Opskrbe i Partnerskom Ekosustavu',
-    content: (
-       <>
-        <p className="mb-3">Standard izvrsnosti ne može postojati izolirano. On se mora protezati na cijeli ekosustav, uključujući dobavljače, proizvođače komponenti i servisne partnere.</p>
-        <ul className="list-disc list-inside pl-2 space-y-2">
-            <li>
-                <strong>Program Certificiranih Partnera:</strong> Samo dobavljači i izvođači koji mogu dokazati usklađenost s ključnim načelima Faze II (Flawless Execution) i materijalnim mandatima mogu dobiti status 'Certificiranog Partnera'. Time se osigurava kvaliteta kroz cijeli lanac vrijednosti.
-            </li>
-            <li>
-                <strong>Mandat Sljedivosti Materijala:</strong> Zahtijeva se potpuna sljedivost materijala (npr. certifikati EN 10204 3.1) za sve kritične komponente. Time se garantira da su specificirani materijali (poput 13Cr4Ni) ugrađeni, a ne zamijenjeni jeftinijim alternativama.
-            </li>
-             <li>
-                <strong>Zajedničke Inovacijske Inicijative:</strong> Poticanje strateških partnerstava s ključnim dobavljačima i akademskim institucijama za zajednička istraživanja i razvoj (R&D), posebno u područjima aditivne proizvodnje, novih materijala i napredne dijagnostike.
-            </li>
-        </ul>
-      </>
-    )
+    id: 'm6',
+    icon: '🔗',
+    title: 'VI. Excellence in the Supply Chain',
+    problem: 'How to close the supply chain Execution Gap and guarantee material integrity?',
+    content: 'A Certified Partner Program and a non-negotiable Material Traceability Mandate (EN 10204 3.1) to eliminate a critical source of systemic risk and ensure long-term LCC performance.'
   }
 ];
 
-
-const AccordionSection: React.FC<{ title: string; children: React.ReactNode; isOpen: boolean; onClick: () => void }> = ({ title, children, isOpen, onClick }) => (
-    <div className="border border-slate-700 rounded-lg bg-slate-800/50 mb-4 overflow-hidden">
-        <button
-            onClick={onClick}
-            className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-700/50 transition-colors"
-            aria-expanded={isOpen}
-        >
-            <h3 className="text-xl font-bold text-cyan-400">{title}</h3>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className={`h-6 w-6 text-slate-400 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-        </button>
+const ModuleCard: React.FC<{
+  module: typeof modulesData[0];
+  isOpen: boolean;
+  onClick: () => void;
+}> = ({ module, isOpen, onClick }) => {
+  return (
+    <div className={`bg-slate-800/60 border rounded-2xl transition-all duration-300 ${isOpen ? 'border-cyan-400 shadow-2xl shadow-cyan-500/20' : 'border-slate-700'}`}>
+        <div className="p-6">
+            <div className="flex items-start gap-4">
+                <div className="text-4xl">{module.icon}</div>
+                <div>
+                    <h3 className="text-xl font-bold text-slate-100">{module.title}</h3>
+                    <p className="text-sm text-slate-400 mt-1 italic">{module.problem}</p>
+                </div>
+            </div>
+        </div>
         {isOpen && (
-            <div className="p-6 pt-0 text-slate-300 space-y-2 animate-fade-in">
-                {children}
+            <div className="p-6 pt-0 animate-fade-in">
+                <div className="border-t border-slate-700 pt-4">
+                    <p className="text-slate-300">{module.content}</p>
+                </div>
             </div>
         )}
+         <div className="px-6 pb-4">
+            <button
+                onClick={onClick}
+                className="w-full text-center py-2 text-sm font-semibold rounded-lg bg-slate-700/70 text-cyan-400 hover:bg-slate-700 transition-colors"
+            >
+                {isOpen ? 'CLOSE MODULE' : 'DEEPER DIVE'}
+            </button>
+        </div>
     </div>
-);
+  );
+};
 
-const StandardOfExcellence: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-  const [openSectionId, setOpenSectionId] = useState<string | null>(sectionsData[0]?.id ?? null);
 
-  const handleToggleSection = (sectionId: string) => {
-    setOpenSectionId(prevId => (prevId === sectionId ? null : sectionId));
+const StandardOfExcellence: React.FC = () => {
+  const [openModuleId, setOpenModuleId] = useState<string | null>(null);
+
+  const handleToggleModule = (moduleId: string) => {
+    setOpenModuleId(prevId => (prevId === moduleId ? null : moduleId));
   };
   
   return (
     <div className="animate-fade-in">
-      <BackButton onClick={onBack} text="Natrag na HUB" />
+      <BackButton text="Back to HUB" />
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">Standard Izvrsnosti: Šest Faza Upravljanja Rizicima</h2>
-        <p className="text-slate-400 mb-8">Holistička metodologija za uspjeh hidroenergetskih projekata, od dizajna do strateške integracije.</p>
+        <h2 className="text-3xl font-bold text-white mb-2">THE STANDARD OF EXCELLENCE: Masterclass Modules</h2>
+        <p className="text-slate-400 mb-8 max-w-3xl mx-auto">This Hub contains deep-dive modules that transition the user from 'protocol adherence' to 'systemic mastery', taught through the lens of Hydro-Prijatelj's RCFA and Discipline Philosophy.</p>
       </div>
       
-      <div>
-        {sectionsData.map(section => (
-           <AccordionSection
-            key={section.id}
-            title={section.title}
-            isOpen={openSectionId === section.id}
-            onClick={() => handleToggleSection(section.id)}
-          >
-            {section.content}
-          </AccordionSection>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {modulesData.map(module => (
+           <ModuleCard
+            key={module.id}
+            module={module}
+            isOpen={openModuleId === module.id}
+            onClick={() => handleToggleModule(module.id)}
+          />
         ))}
+      </div>
+      
+      <div className="mt-12 p-6 bg-slate-900/50 border-2 border-yellow-400/50 rounded-2xl text-center">
+          <h3 className="text-2xl font-bold text-yellow-300 mb-3">GUARANTEEING THE METAL: The Certified Partner Mandate</h3>
+          <div className="flex justify-center items-center gap-8 text-5xl text-slate-400 my-4">
+            <span>🏅</span>
+            <span>📜</span>
+          </div>
+          <p className="text-slate-300 max-w-2xl mx-auto">
+            The **Material Traceability Mandate** (EN 10204 3.1) is non-negotiable. It represents the ultimate ethical defense against financial risk and premature failure caused by counterfeit or substandard materials.
+          </p>
       </div>
 
     </div>

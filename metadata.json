@@ -1,5 +1,5 @@
 {
-  "name": "Alat za Procjenu Rizika",
-  "description": "Aplikacija za edukaciju i procjenu rizika koja pomaže korisnicima da razumiju 'Execution Gap' analizom unesenih simptoma i dajući izvještaj o nivou rizika.",
+  "name": "AnoHUB | HPP Risk & Excellence Platform",
+  "description": "An educational and risk assessment application helping users understand the 'Execution Gap' by analyzing symptoms and generating a comprehensive risk report.",
   "requestFramePermissions": []
 }
