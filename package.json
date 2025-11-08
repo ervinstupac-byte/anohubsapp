@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"  <-- OVO JE NOVI RED
+    "deploy": "gh-pages -d dist"  <-- PROVERITE ZAREZE! Mora biti zarez pre ove linije, i zarez iza nje ako sledi još jedna skripta.
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
-    "gh-pages": "^6.1.1",     <-- PROVERITE DA LI IMATE OVU LINIJU
+    "gh-pages": "^6.1.1",     
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
