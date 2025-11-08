@@ -4,98 +4,51 @@ import { BackButton } from './BackButton';
 const sectionsData = [
   {
     id: 'imperativ',
-    title: 'Strateški Imperativ: Iznad Turbina',
+    title: 'The Strategic Imperative: Organizational Flaws Create Systemic Risk',
     content: (
-      <p>Duboko tehničko majstorstvo i razumijevanje organizacijske dinamike – posebno koncepta 'Execution Gap' – predstavljaju jedinstvenu polugu za zagovaranje rodne ravnopravnosti u hidroenergetskom sektoru. Ovo nije samo HR inicijativa; to je strateški imperativ za postizanje 'Standarda Izvrsnosti'. Istinska inženjerska preciznost proteže se izvan mehaničkih tolerancija na preciznost upravljanja ljudskim kapitalom, osiguravajući da se svi talenti, bez obzira na spol, prepoznaju kao strateška imovina.</p>
+      <p>True engineering precision extends beyond mechanical tolerances to the precision of human capital management. An organization that fails to attract, retain, and promote diverse talent suffers from a deep, systemic failure. This is not just an HR initiative; it is a strategic imperative for eliminating a critical source of systemic risk and closing the Execution Gap where it is most often ignored.</p>
     )
   },
   {
     id: 'redefiniranje',
-    title: '1. Redefiniranje \'Standarda Izvrsnosti\' za Inkluzivni Rast',
+    title: "1. Redefining 'Excellence' with Inclusive Growth",
     content: (
       <>
-        <p>Filozofija 'Standarda Izvrsnosti', koja tehničke neuspjehe vidi kao simptome organizacijskih nedostataka, pruža moćan okvir za zagovaranje rodne ravnopravnosti. Organizacija koja dosljedno ne uspijeva privući, zadržati i promovirati raznolike talente, posebno žene, pati od dubokog 'Execution Gap-a' u svojoj strategiji ljudskog kapitala. Taj jaz izravno utječe na inovacije, rješavanje problema i, u konačnici, na 'švicarsku preciznost sata' koja se zagovara.</p>
-        <ul className="list-disc list-inside pl-2 space-y-1 mt-3">
-            <li><strong>Povezivanje Tehničke Izvrsnosti s Raznolikošću:</strong> Neophodno je artikulirati kako raznolikost mišljenja, često pojačana rodnom raznolikošću, izravno poboljšava inovacije, dijagnozu problema (npr. razlikovanje abrazije od kavitacije kroz različite perspektive) i potiče razvoj probojnih rješenja.</li>
-            <li><strong>Holistička Preciznost:</strong> Rodnu ravnopravnost treba pozicionirati ne kao zasebnu inicijativu, već kao sastavni dio postizanja cjelovite operativne izvrsnosti. Kao što se zahtijeva preciznost u montaži do 0.05 mm/m, tako se mora zahtijevati preciznost u upravljanju talentima, osiguravajući da se nijedan potencijal ne zanemari ili podcijeni.</li>
-        </ul>
-      </>
-    )
-  },
-  {
-    id: 'platforma',
-    title: '2. Platforma za Liderstvo i Zagovaranje',
-    content: (
-      <>
-        <p>Korištenje postojećeg znanja omogućuje stvaranje uvjerljivog sadržaja koji povezuje tehničku vještinu sa strateškom prednošću rodne raznolikosti.</p>
-        <ul className="list-disc list-inside pl-2 space-y-1 mt-3">
-          <li><strong>Stvaranje Sadržaja:</strong> Razvoj članaka, LinkedIn objava ili posvećenih serija blogova. Potencijalne teme uključuju: "Nevidljivi 'Execution Gap': Kako nedostatak rodne raznolikosti koči inovacije u hidroenergiji."</li>
-          <li><strong>Javni Nastupi i Webinari:</strong> Traženje prilika za predstavljanje na industrijskim konferencijama, događajima za žene u STEM-u ili sveučilišnim panelima.</li>
-          <li><strong>Digitalna Prisutnost:</strong> Optimizacija profesionalnih profila kako bi eksplicitno navodili predanost 'Inkluzivnoj Izvrsnosti u Hidroenergetskom Inženjerstvu'.</li>
+        <p className="mb-3">The philosophy of the 'Standard of Excellence' provides a powerful framework. We must connect technical failure to organizational shortcomings.</p>
+        <ul className="list-disc list-inside pl-2 space-y-2">
+            <li><strong>The Inescapable Analogy:</strong> If we tolerate 10% bias in our hiring or promotion process, that is equivalent to building a turbine with a 10% tolerance gap. Both are conscious decisions that knowingly guarantee future system failure and a wide Execution Gap.</li>
+            <li><strong>Holistic Precision Mandate:</strong> Just as technical precision is required to **0.05 mm/m**, organizational precision requires a **zero-tolerance policy for bias**. One cannot exist without the other in a truly excellent system.</li>
+            <li><strong>Defining the Human Capital Execution Gap:</strong> The loss of a highly skilled female engineer due to a non-inclusive culture *is* an **Execution Gap in Human Capital**. Its financial cost is equivalent to a catastrophic component failure, stemming from a failure to maintain the system's integrity and optimize LCC.</li>
         </ul>
       </>
     )
   },
   {
     id: 'umrezavanje',
-    title: '3. Strateško Umrežavanje i Razvoj Partnerstava',
+    title: '2. System Integration: Building a Diverse Talent Network',
     content: (
        <>
-        <p>Identifikacija i angažman ključnih dionika koji već zagovaraju rodnu ravnopravnost, što zahtijeva širenje mreže izvan čisto tehničkih krugova.</p>
-         <ul className="list-disc list-inside pl-2 space-y-1 mt-3">
-            <li><strong>Identifikacija Ključnih Organizacija:</strong> Istraživanje i povezivanje s organizacijama poput 'Women in Energy', 'Global Women\'s Network for the Energy Transition (GWNET)' i relevantnim ograncima 'Women in STEM'.</li>
-            <li><strong>Ciljani Pristup:</strong> Iniciranje kontakta s HR direktorima i voditeljima za raznolikost, jednakost i inkluziju (DEI) u vodećim hidroenergetskim tvrtkama.</li>
-            <li><strong>Mentorstvo i Savjetodavne Uloge:</strong> Istraživanje nekonkurentnih savjetodavnih uloga ili prilika za mentorstvo.</li>
+        <p>Networking is insufficient. We must engage in **System Integration**, building a robust, diverse talent network capable of upholding the Standard of Excellence.</p>
+         <ul className="list-disc list-inside pl-2 space-y-2 mt-3">
+            <li><strong>Targeted Technical Outreach:</strong> Our focus is on **Chief Engineers and Technical Directors**. The Standard of Excellence is a technical philosophy; it must be adopted and championed by those who own the technical outcomes, not just by HR.</li>
+            <li><strong>The Mentorship Mandate (Creating 'Heirs to the Standard'):</strong> The goal of mentorship is explicit: to mentor the next generation of female engineers to master and perpetuate the non-negotiable principles of precision and discipline that define our work.</li>
         </ul>
        </>
     )
   },
   {
     id: 'politike',
-    title: '4. Zagovaranje Politika i Lokalni Kontekst',
+    title: '3. Policy, Advocacy, and the Systemic Bias Audit',
     content: (
        <>
-        <p>Iskustvo s lokalnim sustavima rada (npr. austrijski AMS, AK) pruža jedinstvenu perspektivu na praktičnu primjenu i izazove zakona o radu.</p>
-        <ul className="list-disc list-inside pl-2 space-y-1 mt-3">
-            <li><strong>Korištenje Lokalnog Znanja:</strong> Pružanje informiranih perspektiva o tome kako bi postojeći zakoni o radu mogli bolje podržati žene u tehničkim poljima.</li>
-            <li><strong>Fokus na Sistemske Barijere:</strong> Zagovaranje promjena koje nadilaze pojedinačna zapošljavanja, rješavajući pitanja zadržavanja, promocije i borbe protiv nesvjesne pristranosti.</li>
+        <p>Vague aspirations are insufficient. We require actionable, engineering-grade protocols to close the systemic gaps that hinder true inclusivity.</p>
+        <ul className="list-disc list-inside pl-2 space-y-2 mt-3">
+            <li><strong>NEW PROTOCOL: The "Systemic Bias Audit":</strong> We must treat HR and talent data with the same analytical rigor as SCADA data from a turbine. Using data analytics to identify bottlenecks in the promotion and retention funnel allows us to move from subjective discussion to objective, diagnostic action.</li>
+            <li><strong>Leveraging Legal Frameworks:</strong> An in-depth understanding of Austrian/EU labor law is a strategic asset. It is used to build legally-sound inclusion standards that are robust, enforceable, and resistant to the 'Execution Gap'.</li>
         </ul>
        </>
     )
   },
-   {
-    id: 'brending',
-    title: '5. Profesionalni Brending i Usklađivanje Karijere',
-    content: (
-        <>
-        <p>Integracija zagovaranja rodne ravnopravnosti u profesionalni narativ i strategiju razvoja karijere.</p>
-         <ul className="list-disc list-inside pl-2 space-y-1 mt-3">
-            <li><strong>Integrirana Vrijednosna Ponuda:</strong> Pozicioniranje stručnjaka ne samo kao tehničkih eksperata, već kao holističkih vođa koji razumiju da je organizacijska izvrsnost neodvojiva od raznolikog i pravednog upravljanja talentima.</li>
-            <li><strong>Strateški Pristup Intervjuima:</strong> Tijekom razgovora, važno je artikulirati kako je vizija tehničke strogosti i 'Standarda Izvrsnosti' neraskidivo povezana s poticanjem inkluzivnog radnog okruženja.</li>
-        </ul>
-        </>
-    )
-  },
-  {
-    id: 'plan',
-    title: '6. Strateški Akcijski Plan',
-    content: (
-      <>
-        <p><strong>Faza 1: Izgradnja Temelja i Inkubacija Sadržaja</strong></p>
-         <ul className="list-disc list-inside pl-2 space-y-1">
-            <li>Izrada nacrta za 2-3 stručna članka/objave koji povezuju filozofiju 'Execution Gap' s izazovima i prilikama rodne ravnopravnosti.</li>
-            <li>Istraživanje i identifikacija najmanje 5 ključnih organizacija ili profesionalnih mreža usmjerenih na žene u energetici/STEM-u u DACH regiji i na razini EU.</li>
-            <li>Ažuriranje profesionalnih profila kako bi odražavali predanost 'Inkluzivnoj Izvrsnosti'.</li>
-        </ul>
-        <p className="mt-4"><strong>Faza 2: Doseg i Razvoj Platforme</strong></p>
-         <ul className="list-disc list-inside pl-2 space-y-1">
-            <li>Identifikacija potencijalnih prilika za virtualne govore (webinari, online paneli).</li>
-            <li>Započinjanje ciljanog dosega prema identificiranim organizacijama za neformalne informativne razgovore.</li>
-            <li>Razvoj sažetog i uvjerljivog 'elevator pitcha' od 60 sekundi koji sažima ključnu poruku.</li>
-        </ul>
-      </>
-    )
-  }
 ];
 
 const AccordionSection: React.FC<{ title: string; children: React.ReactNode; isOpen: boolean; onClick: () => void }> = ({ title, children, isOpen, onClick }) => (
@@ -125,7 +78,7 @@ const AccordionSection: React.FC<{ title: string; children: React.ReactNode; isO
 );
 
 
-const GenderEquity: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+const GenderEquity: React.FC = () => {
   const [openSectionId, setOpenSectionId] = useState<string | null>(sectionsData[0]?.id ?? null);
 
   const handleToggleSection = (sectionId: string) => {
@@ -134,10 +87,10 @@ const GenderEquity: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   return (
     <div className="animate-fade-in">
-      <BackButton onClick={onBack} text="Natrag na HUB" />
+      <BackButton text="Back to HUB" />
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">Inženjering Kulture Inkluzivnosti</h2>
-        <p className="text-slate-400 mb-8">Strateški nacrt za rodnu ravnopravnost u hidroenergiji.</p>
+        <h2 className="text-3xl font-bold text-white mb-2">Engineering a Culture of Inclusivity</h2>
+        <p className="text-slate-400 mb-8">A strategic blueprint for gender equity in hydropower.</p>
       </div>
       
       <div>

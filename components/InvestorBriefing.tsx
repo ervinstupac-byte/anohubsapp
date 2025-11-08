@@ -12,78 +12,78 @@ interface Risk {
 const briefingContent: Record<string, { conditions: string[]; risks: Risk[] }> = {
   // Kaplan
   kaplan_vertical: {
-    conditions: ['Niski padovi (10-70m)', 'Veliki i promjenjivi protoci (do >300 m³/s)', 'Podesive lopatice rotora i privodnog kola'],
+    conditions: ['Low heads (10-70m)', 'Large and variable flow rates (up to >300 m³/s)', 'Adjustable runner blades and guide vanes'],
     risks: [
-      { text: 'Kavitacija na lopaticama pri djelomičnom opterećenju', level: 'High' },
-      { text: 'Stvaranje vrtloga u usisnoj cijevi (draft tube vortex)', level: 'Medium' },
-      { text: 'Rizik od curenja na mehanizmu za zakretanje lopatica', level: 'Medium' },
+      { text: 'Cavitation on blades at partial load', level: 'High' },
+      { text: 'Draft tube vortex formation', level: 'Medium' },
+      { text: 'Risk of leakage at the blade adjustment mechanism', level: 'Medium' },
     ],
   },
   kaplan_horizontal: {
-    conditions: ['Niski padovi (10-70m)', 'Veliki protoci, često za specifične instalacije', 'Slično vertikalnoj izvedbi'],
+    conditions: ['Low heads (10-70m)', 'Large flow rates, often for specific installations', 'Similar to vertical design'],
     risks: [
-      { text: 'Veće opterećenje na ležajeve zbog horizontalne orijentacije', level: 'Medium' },
-      { text: 'Složeni sustavi brtvljenja osovine', level: 'High' },
-      { text: 'Kavitacija na lopaticama', level: 'High' },
+      { text: 'Increased load on bearings due to horizontal orientation', level: 'Medium' },
+      { text: 'Complex shaft sealing systems', level: 'High' },
+      { text: 'Cavitation on blades', level: 'High' },
     ],
   },
   kaplan_bulb: {
-    conditions: ['Vrlo niski padovi (< 20m)', 'Vrlo veliki protoci (riječne elektrane)', 'Agregat je potopljen u vodotoku'],
+    conditions: ['Very low heads (< 20m)', 'Very large flow rates (run-of-river plants)', 'Unit is submerged in the water stream'],
     risks: [
-      { text: 'Visok rizik od kavitacije', level: 'High' },
-      { text: 'Složeno i kritično brtvljenje (zaštita generatora od vode)', level: 'High' },
-      { text: 'Otežan pristup za održavanje', level: 'Medium' },
+      { text: 'High risk of cavitation', level: 'High' },
+      { text: 'Complex and critical sealing (protecting the generator from water)', level: 'High' },
+      { text: 'Difficult access for maintenance', level: 'Medium' },
     ],
   },
   kaplan_s: {
-    conditions: ['Niski padovi, često za adaptacije starih mlinova', 'S-oblikovana usisna cijev', 'Manje jedinice'],
+    conditions: ['Low heads, often for retrofitting old mills', 'S-shaped draft tube', 'Smaller units'],
     risks: [
-      { text: 'Povećani hidraulički gubici zbog S-cijevi', level: 'Medium' },
-      { text: 'Neujednačeno opterećenje na rotoru', level: 'Medium' },
-      { text: 'Kavitacija i vibracije', level: 'High' },
+      { text: 'Increased hydraulic losses due to the S-tube', level: 'Medium' },
+      { text: 'Uneven loading on the runner', level: 'Medium' },
+      { text: 'Cavitation and vibrations', level: 'High' },
     ],
   },
   // Francis
   francis_vertical: {
-    conditions: ['Srednji do visoki padovi (40-600m)', 'Srednji protoci', 'Fiksne lopatice rotora'],
+    conditions: ['Medium to high heads (40-600m)', 'Medium flow rates', 'Fixed runner blades'],
     risks: [
-      { text: 'Teška kavitacija pri radu izvan optimalne točke (part load)', level: 'High' },
-      { text: 'Erozija rotora sedimentima (abrazivno trošenje)', level: 'Medium' },
-      { text: 'Pukotine zamora materijala na rotoru zbog hidrauličkih pulsacija', level: 'High' },
+      { text: 'Severe cavitation when operating off-design (part load)', level: 'High' },
+      { text: 'Runner erosion: A wide Execution Gap in operational discipline (e.g., running off-design) allows cavitation (the root cause) to be misdiagnosed as simple abrasion. Adherence to RCFA is a prerequisite for true LCC Optimization.', level: 'High' },
+      { text: 'Material fatigue cracks on the runner due to hydraulic pulsations', level: 'High' },
     ],
   },
   francis_horizontal: {
-    conditions: ['Niži i srednji padovi (do 250m)', 'Manje snage, često sa spiralnim kućištem', 'Jednostavnija instalacija za manje jedinice'],
+    conditions: ['Lower to medium heads (up to 250m)', 'Smaller power outputs, often with a spiral casing', 'Simpler installation for smaller units'],
     risks: [
-      { text: 'Slični rizici kao kod vertikalne, ali pojačani', level: 'High' },
-      { text: 'Potencijalno veće opterećenje ležajeva', level: 'Medium' },
-      { text: 'Trošenje brtvi osovine', level: 'Medium' },
+      { text: 'Similar risks to vertical, but often amplified', level: 'High' },
+      { text: 'Potentially higher bearing loads', level: 'Medium' },
+      { text: 'Wear of shaft seals', level: 'Medium' },
     ],
   },
   // Pelton
   pelton_vertical: {
-    conditions: ['Visoki do vrlo visoki padovi (> 300m)', 'Mali protoci', 'Više mlaznica (3-6)'],
+    conditions: ['High to very high heads (> 300m)', 'Low flow rates', 'Multiple jets (3-6)'],
     risks: [
-      { text: 'Zamor materijala i pucanje lopatica (buckets)', level: 'High' },
-      { text: 'Trošenje mlaznica i igle (smanjuje efikasnost)', level: 'Medium' },
-      { text: 'Vibracije uzrokovane interferencijom mlazova', level: 'Medium' },
+      { text: 'Material fatigue and cracking of buckets', level: 'High' },
+      { text: 'Wear of nozzles and needles (reduces efficiency)', level: 'Medium' },
+      { text: 'Vibrations caused by jet interference', level: 'Medium' },
     ],
   },
   pelton_horizontal: {
-    conditions: ['Visoki padovi (> 250m)', 'Manji protoci i snage', 'Jedna ili dvije mlaznice'],
+    conditions: ['High heads (> 250m)', 'Lower flow rates and power outputs', 'One or two jets'],
     risks: [
-      { text: 'Trošenje ležajeva zbog neuravnoteženosti', level: 'Medium' },
-      { text: 'Zamor materijala lopatica', level: 'High' },
-      { text: 'Erozija kućišta od prskanja vode pod visokim tlakom', level: 'Low' },
+      { text: 'Bearing wear due to imbalance', level: 'Medium' },
+      { text: 'Fatigue of buckets', level: 'High' },
+      { text: 'Housing erosion from high-pressure water spray', level: 'Low' },
     ],
   },
   // Crossflow
   crossflow: {
-    conditions: ['Niski do srednji padovi (2-200m)', 'Širok raspon promjenjivih protoka', 'Jednostavna konstrukcija'],
+    conditions: ['Low to medium heads (2-200m)', 'Wide range of variable flows', 'Simple construction'],
     risks: [
-      { text: 'Niža vršna efikasnost u usporedbi s drugim tipovima', level: 'Low' },
-      { text: 'Trošenje ležajeva', level: 'Medium' },
-      { text: 'Oštećenje lopatica od većih krhotina u vodi (kamenje, drvo)', level: 'Medium' },
+      { text: 'Lower peak efficiency compared to other types', level: 'Low' },
+      { text: 'Bearing wear', level: 'Medium' },
+      { text: 'Blade damage from large debris in the water (stones, wood)', level: 'Medium' },
     ],
   },
 };
@@ -124,7 +124,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
     return (
       <div className="space-y-8 animate-fade-in">
         <div>
-          <h2 className="text-2xl font-bold text-center mb-6 text-slate-200">Korak 1: Odaberite Kategoriju Turbine</h2>
+          <h2 className="text-2xl font-bold text-center mb-6 text-slate-200">Step 1: Select Turbine Category</h2>
           <div className="flex flex-wrap justify-center gap-3 mb-6">
             {Object.keys(turbineCategories).map((key) => {
               const category = turbineCategories[key];
@@ -144,14 +144,14 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
         </div>
 
         <div className="mt-8 text-center animate-fade-in border-t border-slate-700 pt-6">
-            <h3 className="text-lg font-semibold text-slate-300 mb-3">Opcionalno: Filtrirajte po Dominantnom Riziku</h3>
+            <h3 className="text-lg font-semibold text-slate-300 mb-3">Optional: Filter by Dominant Risk</h3>
             <div className="flex flex-wrap justify-center gap-3">
                 <button
                     type="button"
                     onClick={() => setRiskFilter(null)}
                     className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${!riskFilter ? 'bg-cyan-600 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}`}
                 >
-                    Svi Rizici
+                    All Risks
                 </button>
                 {(['High', 'Medium', 'Low'] as RiskLevel[]).map(level => (
                      <button
@@ -161,7 +161,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
                         className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors flex items-center gap-2 ${riskFilter === level ? 'bg-cyan-600 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}`}
                     >
                         <span className={`w-3 h-3 rounded-full ${riskLevelStyles[level]}`}></span>
-                        {level === 'High' ? 'Visok' : level === 'Medium' ? 'Srednji' : 'Nizak'}
+                        {level}
                     </button>
                 ))}
             </div>
@@ -181,7 +181,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
 
           return (
             <div className="animate-fade-in">
-              <h2 className="text-2xl font-bold text-center mb-6 text-slate-200">Korak 2: Odaberite Specifičan Tip</h2>
+              <h2 className="text-2xl font-bold text-center mb-6 text-slate-200">Step 2: Select Specific Type</h2>
               {filteredTypes.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   {filteredTypes.map(turbine => (
@@ -197,7 +197,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
                 </div>
               ) : (
                  <div className="text-center text-slate-400 p-8 bg-slate-700/50 rounded-lg">
-                    Nema turbina koje odgovaraju odabranom filteru rizika.
+                    No turbines match the selected risk filter.
                 </div>
               )}
             </div>
@@ -219,7 +219,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
            className="absolute top-4 right-4 text-xs flex items-center space-x-1 text-slate-400 hover:text-cyan-400 transition-colors"
          >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h5M20 20v-5h-5" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 9a9 9 0 0114.12-5.12M20 15a9 9 0 01-14.12 5.12" /></svg>
-            <span>Promijeni Turbinu</span>
+            <span>Change Turbine</span>
          </button>
          <h2 className="text-2xl font-bold text-cyan-400 mb-2">{selectedTurbine.name}</h2>
          <p className="text-slate-400 mb-4">{selectedTurbine.description}</p>
@@ -227,13 +227,13 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
          {turbineDetails && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 border-t border-slate-700 pt-4">
                 <div>
-                    <h4 className="text-lg font-semibold text-slate-200 mb-2">Tipični Uvjeti Rada</h4>
+                    <h4 className="text-lg font-semibold text-slate-200 mb-2">Typical Operating Conditions</h4>
                      <ul className="list-disc list-inside space-y-1 text-slate-300">
                         {turbineDetails.conditions.map((item, index) => <li key={index}>{item}</li>)}
                     </ul>
                 </div>
                 <div>
-                    <h4 className="text-lg font-semibold text-red-400 mb-2">Ključni Povezani Rizici</h4>
+                    <h4 className="text-lg font-semibold text-red-400 mb-2">Key Associated Risks</h4>
                     <ul className="list-none space-y-2 text-slate-300">
                         {turbineDetails.risks.map((risk, index) => (
                            <li key={index} className="flex items-start">
@@ -249,7 +249,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
 
       {/* Part 2: General Component Browser */}
       <div>
-        <h3 className="text-2xl font-bold text-center mb-6 text-slate-200">Analiza Ključnih Komponenti Postrojenja</h3>
+        <h3 className="text-2xl font-bold text-center mb-6 text-slate-200">Analysis of Key Plant Components</h3>
          {componentData.map((component) => (
             <div key={component.id} className="bg-slate-700/50 rounded-lg border border-slate-700 overflow-hidden mb-4">
             <button
@@ -278,7 +278,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                    <h4 className="text-lg font-semibold text-cyan-400 mb-2">Ključni Pokazatelji (KPIs)</h4>
+                    <h4 className="text-lg font-semibold text-cyan-400 mb-2">Key Performance Indicators (KPIs)</h4>
                     <ul className="list-disc list-inside space-y-1 text-slate-300">
                         {component.kpis.map((kpi, index) => (
                         <li key={index}>{kpi}</li>
@@ -286,7 +286,7 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
                     </ul>
                     </div>
                     <div>
-                    <h4 className="text-lg font-semibold text-red-400 mb-2">Potencijalni Rizici</h4>
+                    <h4 className="text-lg font-semibold text-red-400 mb-2">Potential Risks</h4>
                     <ul className="list-none space-y-2 text-slate-300">
                         {component.risks.map((risk, index) => (
                            <li key={index} className="flex items-start">

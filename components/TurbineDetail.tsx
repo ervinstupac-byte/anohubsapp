@@ -5,7 +5,6 @@ import type { TurbineDetail, TurbineComponent } from '../data/turbineDetailData'
 
 interface TurbineDetailProps {
     turbineKey: string;
-    onBack: () => void;
 }
 
 const criticalityStyles = {
@@ -25,25 +24,25 @@ const ComponentCard: React.FC<TurbineComponent> = ({ name, description, critical
 );
 
 
-const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey, onBack }) => {
+const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
     const data: TurbineDetail | undefined = turbineDetailData[turbineKey];
 
     if (!data) {
         return (
             <div className="text-center">
-                <p className="text-red-400">Podaci za odabranu turbinu nisu pronađeni.</p>
-                <BackButton onClick={onBack} text="Natrag na Kalkulator" />
+                <p className="text-red-400">Data for the selected turbine was not found.</p>
+                <BackButton text="Back to Calculator" />
             </div>
         );
     }
 
     return (
         <div className="animate-fade-in">
-            <BackButton onClick={onBack} text="Natrag na Kalkulator" />
+            <BackButton text="Back to Calculator" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Mechanical Components */}
                 <div className="space-y-4">
-                    <h3 className="text-2xl font-bold text-cyan-400 border-b-2 border-cyan-500/50 pb-2">Mehaničke Komponente</h3>
+                    <h3 className="text-2xl font-bold text-cyan-400 border-b-2 border-cyan-500/50 pb-2">Mechanical Components</h3>
                     {data.mechanical.map((comp) => (
                         <ComponentCard key={comp.name} {...comp} />
                     ))}
@@ -51,7 +50,7 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey, onBack }) => 
 
                 {/* Electrical Components */}
                 <div className="space-y-4">
-                    <h3 className="text-2xl font-bold text-cyan-400 border-b-2 border-cyan-500/50 pb-2">Električne Komponente</h3>
+                    <h3 className="text-2xl font-bold text-cyan-400 border-b-2 border-cyan-500/50 pb-2">Electrical Components</h3>
                     {data.electrical.map((comp) => (
                         <ComponentCard key={comp.name} {...comp} />
                     ))}

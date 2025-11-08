@@ -1,14 +1,15 @@
 import React from 'react';
+import { useNavigation } from '../contexts/NavigationContext';
 
 interface BackButtonProps {
-  onClick: () => void;
   text?: string;
 }
 
-export const BackButton: React.FC<BackButtonProps> = ({ onClick, text = "Natrag" }) => {
+export const BackButton: React.FC<BackButtonProps> = ({ text = "Back" }) => {
+  const { navigateBack } = useNavigation();
   return (
     <button 
-      onClick={onClick} 
+      onClick={navigateBack} 
       className="flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6"
       aria-label={text}
     >
