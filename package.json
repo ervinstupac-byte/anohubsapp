@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"  <-- PROVERITE ZAREZE! Mora biti zarez pre ove linije, i zarez iza nje ako sledi još jedna skripta.
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^19.2.0",
