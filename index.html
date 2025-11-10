@@ -90,9 +90,11 @@
 <body class="text-white">
     <div id="root"></div>
     <script>
-        // KRITIČNA JS LOGIKA ZA POZADINU (keš-busting)
-        // Ime slike je digital_cfd_mesh.png
-        document.body.style.backgroundImage = "url('digital_cfd_mesh.png?v=" + new Date().getTime() + "')";
+        // KRITIČNA JS LOGIKA ZA POZADINU (Forsiramo keš-busting i putanju)
+        const assetPath = 'digital_cfd_mesh.png';
+        const cacheBuster = new Date().getTime();
+        
+        document.body.style.backgroundImage = "url('" + assetPath + "?v=" + cacheBuster + "')";
         document.body.style.backgroundSize = "cover";
         document.body.style.backgroundPosition = "center center";
         document.body.style.backgroundRepeat = "no-repeat";
