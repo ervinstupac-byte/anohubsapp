@@ -1,101 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AnoHUB | HPP Risk & Excellence Platform</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnoHUB | HPP Risk & Excellence Platform</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  
-  <script type="importmap">
-    {
-      "imports": {
-        "react/": "https://aistudiocdn.com/react@^19.2.0/",
-        "react": "https://aistudiocdn.com/react@^19.2.0",
-        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.24.0",
-        "recharts": "https://aistudiocdn.com/recharts@^2.13.0"
-      }
-    }
-  </script>
+    <style>
+        /* Globalni stilovi za aplikaciju, ako je potrebno */
+        :root {
+            --hydro-primary: #22d3ee;
+            --hydro-secondary: #4ade80;
+            --hydro-charcoal: #111827;
+            --hydro-slate: #1E293B;
+        }
 
-  <style>
-    /* Globalni stilovi za aplikaciju, ako je potrebno */
-    :root {
-        --hydro-primary: #22d3ee;
-        --hydro-secondary: #4ade80;
-        --hydro-charcoal: #111827;
-        --hydro-slate: #1E293B;
-    }
+        /* Stilizacija za štampanje - Ostavljeno kako je bilo */
+        @media print {
+            body {
+                background-image: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .print-main {
+                padding: 0 !important;
+                box-shadow: none !important;
+                background: none !important;
+                border-radius: 0 !important;
+            }
+        }
 
-    /* Stilizacija za štampanje - Ostavljeno kako je bilo */
-    @media print {
-      body {
-          background-image: none !important;
-      }
-      .no-print {
-          display: none !important;
-      }
-      .print-container {
-          display: block !important;
-          width: 100% !important;
-          max-width: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
-      }
-      .print-main {
-          padding: 0 !important;
-          box-shadow: none !important;
-          background: none !important;
-          border-radius: 0 !important;
-      }
-    }
+        /* CSS STILOVI ZA POZADINU KOMPONENATA */
+        .text-hydro-primary { color: var(--hydro-primary); }
+        .app-header {
+            background-color: rgba(30, 41, 59, 0.9);
+            border-bottom: 2px solid var(--hydro-primary);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-    /* CSS STILOVI ZA POZADINU KOMPONENATA */
-    .text-hydro-primary { color: var(--hydro-primary); }
-
-    .app-header {
-        background-color: rgba(30, 41, 59, 0.9);
-        border-bottom: 2px solid var(--hydro-primary);
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .app-card {
-        /* Osiguravamo da se digitalna pozadina vidi kroz kartice */
-        background-color: rgba(30, 41, 59, 0.85); 
-        border-left: 5px solid var(--hydro-primary);
-        transition: background-color 0.3s;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-    .app-card:hover {
-        background-color: rgba(51, 65, 85, 0.9);
-        border-left: 5px solid var(--hydro-secondary);
-    }
-    .card-title {
-        color: var(--hydro-primary);
-        font-weight: 700;
-        font-size: 1.25rem;
-    }
-
-  </style>
-  <link rel="stylesheet" href="index.css">
+        .app-card {
+            background-color: rgba(30, 41, 59, 0.85); 
+            border-left: 5px solid var(--hydro-primary);
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .app-card:hover {
+            background-color: rgba(51, 65, 85, 0.9);
+            border-left: 5px solid var(--hydro-secondary);
+        }
+        .card-title {
+            color: var(--hydro-primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+    </style>
 </head>
 <body class="text-white">
     <div id="root"></div>
+    
     <script>
-        // KRITIČNA JS LOGIKA ZA POZADINU (Forsiramo keš-busting i putanju)
-        // Ime slike je digital_cfd_mesh.png
+        // Ostavljamo tvoju logiku za pozadinu, ali se nadamo da si riješio Vite BASE problem 
+        // da ne bi došlo do grešaka u putanjama (vidjet ćemo je li potrebna poslije builda).
         const assetPath = 'digital_cfd_mesh.png';
         const cacheBuster = new Date().getTime();
         
-        // Apsolutna putanja ka fajlu, koristeći ime repozitorijuma (ako je u podfolderu)
-        const repoName = 'anohubs-site'; // Pretpostavljeno ime repozitorijuma
-        const deploymentRoot = window.location.origin + '/' + repoName + '/';
-
-        // Ako je aplikacija u podfolderu /anohubsapp/, putanja će biti ispravna.
+        // KRITIČNO: Zadržavamo tvoju logiku za path, jer pokušava riješiti deploy u podfolder
         const finalPath = window.location.href.includes('/anohubsapp/') 
             ? window.location.href.substring(0, window.location.href.indexOf('anohubsapp/') + 'anohubsapp/'.length) + assetPath
             : assetPath; 
@@ -106,6 +85,7 @@
         document.body.style.backgroundRepeat = "no-repeat";
         document.body.style.backgroundAttachment = "fixed";
     </script>
+    
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
