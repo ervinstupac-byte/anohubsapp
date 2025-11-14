@@ -95,13 +95,9 @@
         const cacheBuster = new Date().getTime();
         
         // KRITIČNO: Koristimo apsolutnu putanju za aplikaciju koja je u podfolderu
-        // Predlažem putanju koja uključuje ime repozitorijuma, npr. /anohubs-site/digital_cfd_mesh.png
-        // Ako je aplikacija u root folderu: 'digital_cfd_mesh.png'
-        // Ako je aplikacija u podfolderu (kao što je tipično za GitHub Pages), moramo koristiti /ime_repozitorijuma/slika.
-        // Pošto ne znam tačnu putanju aplikacije, koristićemo putanju iz root foldera:
-        const fullPath = window.location.pathname.includes('/anohubsapp/') 
-            ? window.location.pathname.replace('/index.html', '').replace('/anohubsapp/', '/digital_cfd_mesh.png')
-            : assetPath; 
+        // Pretpostavljamo da je slika u rootu GitHub Pages hostinga:
+        const deploymentRoot = window.location.origin + window.location.pathname.replace('index.html', '').replace('anohubsapp/', '');
+        const fullPath = deploymentRoot + assetPath;
         
         document.body.style.backgroundImage = "url('" + fullPath + "?v=" + cacheBuster + "')";
         document.body.style.backgroundSize = "cover";
