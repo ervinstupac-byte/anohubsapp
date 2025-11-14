@@ -4,24 +4,21 @@
   <meta charset="UTF-8" />
   
   
-  <!-- KRITIČNO: Uklonjen stari inline style iz body taga -->
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AnoHUB | HPP Risk & Excellence Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
   
-
-<script type="importmap">
-  {
-    "imports": {
-      "react/": "https://aistudiocdn.com/react@^19.2.0/",
-      "react": "https://aistudiocdn.com/react@^19.2.0",
-      "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-      "@google/genai": "https://aistudiocdn.com/@google/genai@^1.24.0",
-      "recharts": "https://aistudiocdn.com/recharts@^2.13.0"
+  <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.24.0",
+        "recharts": "https://aistudiocdn.com/recharts@^2.13.0"
+      }
     }
-  }
   </script>
 
   <style>
@@ -59,7 +56,6 @@
     /* CSS STILOVI ZA POZADINU KOMPONENATA */
     .text-hydro-primary { color: var(--hydro-primary); }
 
-    /* Stilovi za glavni sadržaj aplikacije (primer iz prethodnog razgovora) */
     .app-header {
         background-color: rgba(30, 41, 59, 0.9);
         border-bottom: 2px solid var(--hydro-primary);
@@ -91,15 +87,20 @@
     <div id="root"></div>
     <script>
         // KRITIČNA JS LOGIKA ZA POZADINU (Forsiramo keš-busting i putanju)
+        // Ime slike je digital_cfd_mesh.png
         const assetPath = 'digital_cfd_mesh.png';
         const cacheBuster = new Date().getTime();
         
-        // KRITIČNO: Koristimo apsolutnu putanju za aplikaciju koja je u podfolderu
-        // Pretpostavljamo da je slika u rootu GitHub Pages hostinga:
-        const deploymentRoot = window.location.origin + window.location.pathname.replace('index.html', '').replace('anohubsapp/', '');
-        const fullPath = deploymentRoot + assetPath;
+        // Apsolutna putanja ka fajlu, koristeći ime repozitorijuma (ako je u podfolderu)
+        const repoName = 'anohubs-site'; // Pretpostavljeno ime repozitorijuma
+        const deploymentRoot = window.location.origin + '/' + repoName + '/';
+
+        // Ako je aplikacija u podfolderu /anohubsapp/, putanja će biti ispravna.
+        const finalPath = window.location.href.includes('/anohubsapp/') 
+            ? window.location.href.substring(0, window.location.href.indexOf('anohubsapp/') + 'anohubsapp/'.length) + assetPath
+            : assetPath; 
         
-        document.body.style.backgroundImage = "url('" + fullPath + "?v=" + cacheBuster + "')";
+        document.body.style.backgroundImage = "url('" + finalPath + "?v=" + cacheBuster + "')";
         document.body.style.backgroundSize = "cover";
         document.body.style.backgroundPosition = "center center";
         document.body.style.backgroundRepeat = "no-repeat";
