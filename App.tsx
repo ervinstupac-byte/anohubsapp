@@ -24,7 +24,7 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 
-// --- NOVO: Import slike za pozadinu ---
+// Import slike za pozadinu
 import bgImage from './digital_cfd_mesh.png'; 
 
 // Adding .ts extension for definition files (constants and types)
@@ -135,11 +135,9 @@ const AppContent: React.FC = () => {
 
   return (
     <NavigationProvider value={navigationContextValue}>
-      {/* --- OVDJE JE GLAVNA PROMJENA: Novi style atribut i očišćene klase za background --- */}
       <div 
         className="min-h-screen text-slate-200 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans print-container"
         style={{
-            // Postavlja sliku, ali s tamnim slojem (gradient) preko nje radi čitljivosti
             backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.95)), url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -150,30 +148,52 @@ const AppContent: React.FC = () => {
         {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
 
         <div className="w-full max-w-6xl mx-auto">
-          <header className="text-center mb-8 no-print">
-              <div className="relative h-20 flex items-center justify-center">
-                    {currentView !== 'hub' && (
-                    <button 
-                      onClick={navigateBack} 
-                      className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-10"
-                      aria-label="Back to previous screen"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                      <span>Back</span>
-                    </button>
-                  )}
-                  <h1 className="text-4xl sm:text-5xl font-bold text-cyan-400">
+          {/* HEADER - Ovdje smo dodali funkcionalnost */}
+          <header className="text-center mb-8 no-print relative">
+              
+              {/* Gumb za povratak (pojavljuje se samo ako nisi na Hub-u) */}
+              {currentView !== 'hub' && (
+                 <button 
+                   onClick={navigateBack} 
+                   className="absolute left-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20"
+                   aria-label="Back to previous screen"
+                 >
+                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                   </svg>
+                   <span className="hidden sm:inline">Back</span>
+                 </button>
+              )}
+
+              {/* HOME GUMB - Uvijek vidljiv u gornjem desnom kutu */}
+              <button 
+                onClick={navigateToHub}
+                className="absolute right-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20"
+                title="Return to AnoHUB Home"
+              >
+                 <span className="hidden sm:inline text-sm font-semibold">HOME</span>
+                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                 </svg>
+              </button>
+
+              <div className="py-4">
+                  {/* NASLOV - Sada je klikabilan i vraća na Hub */}
+                  <h1 
+                    onClick={navigateToHub}
+                    className="text-4xl sm:text-5xl font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition-colors inline-block"
+                    title="Go to Dashboard"
+                  >
                       {title}
                   </h1>
+                  
+                  <p className="mt-2 text-lg text-slate-400 max-w-3xl mx-auto">
+                    {subtitle}
+                  </p>
               </div>
-            <p className="mt-2 text-lg text-slate-400 max-w-3xl mx-auto">
-              {subtitle}
-            </p>
           </header>
 
-          <main className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main">
+          <main className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main backdrop-blur-md border border-slate-700/50">
             {currentView === 'hub' && <Hub />}
             
             {currentView === 'riskAssessment' && (
