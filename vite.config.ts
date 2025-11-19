@@ -3,8 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // --- KONFIGURACIJA ---
-// Ovo mora odgovarati imenu tvog repozitorija na GitHubu.
-// Ako ti je repozitorij https://github.com/korisnik/anohubsapp, onda je ovo točno.
+// Postavljeno na /anohubsapp/ jer je to ime GitHub repozitorija
 const repoName = '/anohubsapp/'; 
 
 export default defineConfig(({ mode }) => {
@@ -24,13 +23,12 @@ export default defineConfig(({ mode }) => {
 
         define: {
             // Sigurno prosljeđivanje API ključa u aplikaciju
-            // Dostupno u kodu kao process.env.GEMINI_API_KEY
             'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
         },
 
         resolve: {
             alias: {
-                // Omogućuje importiranje s '@' (npr. import X from '@/components/...')
+                // Omogućuje importiranje s '@'
                 '@': path.resolve(__dirname, '.'),
             }
         },
@@ -39,7 +37,7 @@ export default defineConfig(({ mode }) => {
             // Optimizacija za produkciju
             outDir: 'dist',
             assetsDir: 'assets',
-            sourcemap: false, // Isključujemo mape za manji build
+            sourcemap: false, 
         }
     };
 });

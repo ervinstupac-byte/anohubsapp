@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '../contexts/NavigationContext';
 
-// --- MODERNIZIRANA KARTICA ---
-// Koristi 'glassmorphism' efekt i suptilne animacije
+// --- MODERNIZIRANA KARTICA (Glassmorphism) ---
 const Card: React.FC<{title: string, description: string, onClick: () => void, icon: string, isCritical?: boolean}> = ({ title, description, onClick, icon, isCritical = false }) => (
     <div 
         onClick={onClick}

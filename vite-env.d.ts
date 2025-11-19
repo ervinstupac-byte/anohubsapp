@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-// Ovo govori TypeScriptu da su slike "moduli" koje se može importati
+// Deklaracije za sve tipove slika
 declare module '*.png' {
     const value: string;
     export default value;
