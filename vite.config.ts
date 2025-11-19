@@ -1,35 +1,45 @@
-// vite.config.ts
-
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// KRITIČNO: Apsolutna putanja ka podfolderu (Ime tvog repozitorijuma)
+// --- KONFIGURACIJA ---
+// Ovo mora odgovarati imenu tvog repozitorija na GitHubu.
+// Ako ti je repozitorij https://github.com/korisnik/anohubsapp, onda je ovo točno.
 const repoName = '/anohubsapp/'; 
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    // Učitavamo .env varijable iz trenutnog direktorija
+    const env = loadEnv(mode, process.cwd(), '');
 
     return {
-        // Postavljamo base na APSOLUTNU putanju. Ovo prisiljava Vite da kreira putanje
-        // koje sadrže /anohubsapp/ na početku (npr. /anohubsapp/assets/index-XXXX.js).
+        // Base URL je ključan za GitHub Pages
         base: repoName, 
         
         server: {
             port: 3000,
             host: '0.0.0.0',
         },
+
         plugins: [react()],
+
         define: {
-            // Zadržavamo tvoje varijable okruženja
-            'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+            // Sigurno prosljeđivanje API ključa u aplikaciju
+            // Dostupno u kodu kao process.env.GEMINI_API_KEY
             'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
         },
+
         resolve: {
             alias: {
-                // Zadržavamo tvoj alias
+                // Omogućuje importiranje s '@' (npr. import X from '@/components/...')
                 '@': path.resolve(__dirname, '.'),
             }
+        },
+
+        build: {
+            // Optimizacija za produkciju
+            outDir: 'dist',
+            assetsDir: 'assets',
+            sourcemap: false, // Isključujemo mape za manji build
         }
     };
 });

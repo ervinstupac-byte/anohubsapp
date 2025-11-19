@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface TurbineType {
   id: string;
   name: string;
