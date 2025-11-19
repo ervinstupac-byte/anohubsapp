@@ -24,6 +24,9 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 
+// --- NOVO: Import slike za pozadinu ---
+import bgImage from './digital_cfd_mesh.png'; 
+
 // Adding .ts extension for definition files (constants and types)
 import { TURBINE_CATEGORIES } from './constants.ts'; 
 import type { AppView } from './types.ts';
@@ -132,13 +135,24 @@ const AppContent: React.FC = () => {
 
   return (
     <NavigationProvider value={navigationContextValue}>
-      <div className="min-h-screen bg-slate-900/90 backdrop-blur-sm text-slate-200 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans print-container">
+      {/* --- OVDJE JE GLAVNA PROMJENA: Novi style atribut i očišćene klase za background --- */}
+      <div 
+        className="min-h-screen text-slate-200 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans print-container"
+        style={{
+            // Postavlja sliku, ali s tamnim slojem (gradient) preko nje radi čitljivosti
+            backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.95)), url(${bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            backgroundRepeat: 'no-repeat'
+        }}
+      >
         {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
 
         <div className="w-full max-w-6xl mx-auto">
           <header className="text-center mb-8 no-print">
               <div className="relative h-20 flex items-center justify-center">
-                   {currentView !== 'hub' && (
+                    {currentView !== 'hub' && (
                     <button 
                       onClick={navigateBack} 
                       className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-10"
