@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { Answers, OperationalData, TurbineType, QuestionnaireContextType } from '../types';
+// BITNO: Dodana .ts ekstenzija za stabilnost importa
+import type { Answers, OperationalData, TurbineType, QuestionnaireContextType } from '../types.ts';
 
 const QuestionnaireContext = createContext<QuestionnaireContextType | undefined>(undefined);
 
@@ -7,7 +8,15 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
   const [answers, setAnswers] = useState<Answers>({});
   const [description, setDescription] = useState<string>('');
   const [selectedTurbine, setSelectedTurbine] = useState<TurbineType | null>(null);
-  const [operationalData, setOperationalData] = useState<OperationalData>({ head: '', flow: '', pressure: '', output: '' });
+  
+  // Inicijalno stanje za operativne podatke (prazni stringovi za input polja)
+  const [operationalData, setOperationalData] = useState<OperationalData>({ 
+    head: '', 
+    flow: '', 
+    pressure: '', 
+    output: '' 
+  });
+  
   const [isQuestionnaireDataFresh, setIsQuestionnaireDataFresh] = useState(false);
 
   const resetQuestionnaire = () => {

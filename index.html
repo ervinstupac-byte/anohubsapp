@@ -1,42 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AnoHUB | HPP Risk & Excellence Platform</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnoHUB | HPP Risk & Excellence Platform</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <style>
-        /* (Svi stilovi su ovdje i to je ispravno) */
-        :root {
-            --hydro-primary: #22d3ee;
-            --hydro-secondary: #4ade80;
-            --hydro-charcoal: #111827;
-            --hydro-slate: #1E293B;
-        }
-        /* ... ostali stilovi ... */
-    </style>
-</head>
-<body class="text-white">
-    <div id="root"></div>
-    
-    <script>
-        // Tvoja JS logika za pozadinu (OK je da ostane ovdje)
-        const assetPath = 'digital_cfd_mesh.png';
-        const cacheBuster = new Date().getTime();
-        
-        const finalPath = window.location.href.includes('/anohubsapp/') 
-            ? window.location.href.substring(0, window.location.href.indexOf('anohubsapp/') + 'anohubsapp/'.length) + assetPath
-            : assetPath; 
-        
-        document.body.style.backgroundImage = "url('" + finalPath + "?v=" + cacheBuster + "')";
-        document.body.style.backgroundSize = "cover";
-        document.body.style.backgroundPosition = "center center";
-        document.body.style.backgroundRepeat = "no-repeat";
-        document.body.style.backgroundAttachment = "fixed";
-    </script>
-    
-        <script type="module" src="index.tsx"></script>
-</body>
+    <style>
+       body {
+         margin: 0;
+         background-color: #0f172a;
+         font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+         color: white;
+         overflow-x: hidden;
+       }
+
+       /* Loading Spinner Styles */
+       .loading-container {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         background: #0f172a;
+         flex-direction: column;
+         gap: 20px;
+         z-index: 9999;
+       }
+       
+       .spinner {
+         width: 60px;
+         height: 60px;
+         border: 4px solid rgba(34, 211, 238, 0.1);
+         border-radius: 50%;
+         border-top-color: #22d3ee;
+         animation: spin 1s ease-in-out infinite;
+         box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+       }
+       
+       .loading-text {
+         color: #94a3b8;
+         font-size: 0.9rem;
+         letter-spacing: 0.2em;
+         animation: pulse 2s infinite;
+         font-family: monospace;
+       }
+
+       @keyframes spin { to { transform: rotate(360deg); } }
+       @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="loading-container">
+        <div class="spinner"></div>
+        <div class="loading-text">INITIALIZING SYSTEMS...</div>
+      </div>
+    </div>
+
+    <script type="module" src="./index.tsx"></script>
+  </body>
 </html>

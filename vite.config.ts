@@ -6,9 +6,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
-        // --- KLJUČNA PROMJENA ---
-        // Koristimo './' (relativnu putanju) umjesto '/' (apsolutne).
-        // Ovo popravlja problem s 'app-iframe.html' i učitavanjem skripti.
+        // Zadržavamo relativnu putanju zbog onog iframe problema
         base: './', 
         
         server: {
@@ -24,7 +22,10 @@ export default defineConfig(({ mode }) => {
 
         resolve: {
             alias: {
-                '@': path.resolve(__dirname, './src'),
+                // --- GLAVNA PROMJENA ---
+                // Prije je bilo: path.resolve(__dirname, './src')
+                // Sada je točka (.), što znači "ovaj glavni folder gdje se nalazim"
+                '@': path.resolve(__dirname, '.'),
             }
         },
 

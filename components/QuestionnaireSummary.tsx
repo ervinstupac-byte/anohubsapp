@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext';
-import { QUESTIONS } from '../constants';
-import type { Question } from '../types';
-import { useNavigation } from '../contexts/NavigationContext';
-import { useRisk } from '../contexts/RiskContext';
+import React, { useEffect, useMemo } from 'react';
+import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
+import { useNavigation } from '../contexts/NavigationContext.tsx';
+import { useRisk } from '../contexts/RiskContext.tsx';
+import { QUESTIONS } from '../constants.ts';
+import type { Question } from '../types.ts';
 
+// --- RISK ANALYSIS LOGIC ---
 export const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
     q1: { high: ['no'], medium: ['not documented'] }, q2: { high: ['no'], medium: ['partially'] },
     q4: { high: ['no'], medium: ['sometimes'] }, q5: { high: ['frequently'], medium: ['occasionally'] },
@@ -18,12 +19,46 @@ export const riskKeywords: Record<string, { high: string[], medium: string[] }> 
     q17: { high: ['major service needed'], medium: ['requires minor maintenance'] },
 };
 
+// --- HELPER COMPONENT: RISK GAUGE ---
+const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) => {
+    let color = '';
+    let percentage = 0;
+    let text = '';
+
+    switch (level) {
+        case 'High': color = 'text-red-500'; percentage = 90; text = 'CRITICAL'; break;
+        case 'Medium': color = 'text-yellow-400'; percentage = 50; text = 'MODERATE'; break;
+        case 'Low': color = 'text-green-400'; percentage = 15; text = 'STABLE'; break;
+    }
+
+    return (
+        <div className="relative flex flex-col items-center justify-center py-6">
+            <div className="w-40 h-40 rounded-full border-8 border-slate-800 relative flex items-center justify-center shadow-inner">
+                {/* SVG Circle for Progress */}
+                <svg className="absolute inset-0 transform -rotate-90 w-full h-full p-1" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-700 opacity-20" />
+                    <circle 
+                        cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" 
+                        strokeDasharray="283" strokeDashoffset={283 - (283 * percentage) / 100}
+                        className={`${color} transition-all duration-1000 ease-out`}
+                    />
+                </svg>
+                <div className="text-center z-10">
+                    <span className={`text-3xl font-black ${color} tracking-tighter block`}>{text}</span>
+                    <span className="text-xs text-slate-500 uppercase tracking-widest">Risk Level</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- MAIN COMPONENT ---
 const QuestionnaireSummary: React.FC = () => {
     const { navigateToHub } = useNavigation();
     const { answers, resetQuestionnaire } = useQuestionnaire();
     const { calculateAndSetQuestionnaireRisk } = useRisk();
 
-    const analysis = React.useMemo(() => {
+    const analysis = useMemo(() => {
         const highRisk: Question[] = [];
         const mediumRisk: Question[] = [];
 
@@ -43,15 +78,14 @@ const QuestionnaireSummary: React.FC = () => {
         calculateAndSetQuestionnaireRisk(answers);
     }, [answers, calculateAndSetQuestionnaireRisk]);
 
-
-    const getRiskLevelIndicator = (highCount: number, mediumCount: number) => {
+    const getRiskLevel = (highCount: number, mediumCount: number): 'High' | 'Medium' | 'Low' => {
         const totalScore = highCount * 2 + mediumCount;
-        if (totalScore > 10) return { text: 'High Risk', color: 'text-red-400', bgColor: 'bg-red-500/20' };
-        if (totalScore > 5) return { text: 'Medium Risk', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' };
-        return { text: 'Low Risk', color: 'text-green-400', bgColor: 'bg-green-500/20' };
+        if (totalScore > 10) return 'High';
+        if (totalScore > 5) return 'Medium';
+        return 'Low';
     };
     
-    const riskLevel = getRiskLevelIndicator(analysis.highRisk.length, analysis.mediumRisk.length);
+    const riskLevel = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
 
     const handleReturn = () => {
         resetQuestionnaire();
@@ -59,47 +93,117 @@ const QuestionnaireSummary: React.FC = () => {
     };
 
     return (
-        <div className="space-y-8 animate-fade-in">
-             <div className="text-center p-6 bg-slate-800/50 rounded-lg border border-slate-700">
-                <h2 className="text-2xl font-bold text-white mb-2">Overall Assessment</h2>
-                <p className={`text-3xl font-bold ${riskLevel.color} ${riskLevel.bgColor} inline-block px-4 py-2 rounded-lg`}>{riskLevel.text}</p>
-                 <p className="text-slate-400 mt-3 max-w-2xl mx-auto">
-                    This automated analysis identifies potential indicators of a widening Execution Gap based on your responses.
+        <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
+            
+            {/* HEADER */}
+            <div className="text-center space-y-4 animate-fade-in-up">
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                    Diagnostic <span className="text-cyan-400">Report</span>
+                </h2>
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                    Automated analysis of systemic risks and potential Execution Gaps based on site parameters.
                 </p>
             </div>
-            
-            <div className="p-6 bg-slate-900/50 border-l-4 border-cyan-400 rounded-r-lg">
-                <h3 className="text-xl font-bold text-cyan-300">What is the Execution Gap?</h3>
-                <p className="text-slate-300 mt-2">The Execution Gap is the primary source of operational risk. It represents the critical difference between a flawless engineering plan and the inconsistent reality of on-site implementation. It is indicated by failures in discipline and documentation against non-negotiable standards like the **0.05 mm/m precision mandate**, and it directly compromises system integrity, LCC, and can void manufacturer warranties.</p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
+                <div className="lg:col-span-1 space-y-6">
+                    <div className="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-500 bg-gradient-to-b from-slate-800/80 to-slate-900/80">
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Overall Assessment</h3>
+                        <RiskGauge level={riskLevel} />
+                        
+                        <div className="mt-6 pt-6 border-t border-slate-700/50">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-sm text-slate-400">High Priority Alerts</span>
+                                <span className="text-xl font-bold text-red-400">{analysis.highRisk.length}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm text-slate-400">Warnings</span>
+                                <span className="text-xl font-bold text-yellow-400">{analysis.mediumRisk.length}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="glass-panel p-6 rounded-2xl bg-cyan-900/10 border-cyan-500/20">
+                        <div className="flex items-center gap-3 mb-3">
+                            <span className="text-2xl">🧠</span>
+                            <h4 className="font-bold text-cyan-300 text-sm uppercase">Concept: The Execution Gap</h4>
+                        </div>
+                        <p className="text-xs text-cyan-100/80 leading-relaxed">
+                            The critical divergence between a flawless engineering plan and the inconsistent reality of on-site implementation. 
+                            It is the primary source of operational risk, often indicated by failures in discipline (e.g., undocumented alignment).
+                        </p>
+                    </div>
+                </div>
+
+                {/* RIGHT COLUMN: DETAILED FINDINGS */}
+                <div className="lg:col-span-2 space-y-6">
+                    
+                    {/* High Risk Section */}
+                    {analysis.highRisk.length > 0 && (
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-red-500/20 rounded-lg text-red-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">Critical Indicators</h3>
+                                    <p className="text-xs text-red-300">Immediate attention required to prevent warranty invalidation.</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-3">
+                                {analysis.highRisk.map(q => (
+                                    <li key={q.id} className="flex items-start gap-3 p-3 rounded-lg bg-red-900/10 border border-red-500/10">
+                                        <span className="text-red-500 mt-0.5">•</span>
+                                        <span className="text-sm text-slate-300">{q.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Medium Risk Section */}
+                    {analysis.mediumRisk.length > 0 && (
+                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 animate-scale-in" style={{ animationDelay: '200ms' }}>
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 bg-yellow-500/20 rounded-lg text-yellow-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-white">Operational Warnings</h3>
+                                    <p className="text-xs text-yellow-200/80">Potential gaps in documentation or discipline.</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-3">
+                                {analysis.mediumRisk.map(q => (
+                                    <li key={q.id} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-900/10 border border-yellow-500/10">
+                                        <span className="text-yellow-500 mt-0.5">•</span>
+                                        <span className="text-sm text-slate-300">{q.text}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {analysis.highRisk.length === 0 && analysis.mediumRisk.length === 0 && (
+                        <div className="glass-panel p-8 rounded-2xl border-green-500/30 text-center">
+                            <div className="text-5xl mb-4">✅</div>
+                            <h3 className="text-xl font-bold text-white">System Optimal</h3>
+                            <p className="text-slate-400 mt-2">No significant deviations from the Standard of Excellence detected.</p>
+                        </div>
+                    )}
+                </div>
             </div>
-            
-            {analysis.highRisk.length > 0 && (
-                 <div className="bg-red-900/30 border border-red-500/50 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold text-red-300 mb-4">High-Priority Indicators ({analysis.highRisk.length})</h3>
-                    <p className="text-sm text-red-200 mb-4">These responses suggest a significant deviation from the Standard of Excellence and a wide Execution Gap.</p>
-                    <ul className="list-disc list-inside space-y-2 text-slate-300">
-                        {analysis.highRisk.map(q => <li key={q.id}>{q.text}</li>)}
-                    </ul>
-                </div>
-            )}
-            
-            {analysis.mediumRisk.length > 0 && (
-                <div className="bg-yellow-900/30 border border-yellow-500/50 p-6 rounded-lg">
-                    <h3 className="text-xl font-bold text-yellow-300 mb-4">Indicators for Review ({analysis.mediumRisk.length})</h3>
-                     <p className="text-sm text-yellow-200 mb-4">These responses point to potential gaps in discipline or documentation that require further investigation.</p>
-                    <ul className="list-disc list-inside space-y-2 text-slate-300">
-                        {analysis.mediumRisk.map(q => <li key={q.id}>{q.text}</li>)}
-                    </ul>
-                </div>
-            )}
-            
-             <div className="text-center p-4 bg-slate-800 rounded-lg">
-                <p className="text-slate-300 mb-4">Thank you for completing the assessment. Your full submission has been sent for expert review.</p>
+
+            {/* ACTION FOOTER */}
+            <div className="flex justify-center pt-8">
                 <button
                     onClick={handleReturn}
-                    className="px-8 py-3 text-lg font-bold rounded-lg transition-colors bg-cyan-600 hover:bg-cyan-500 text-white"
+                    className="px-10 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all hover:-translate-y-1 shadow-lg flex items-center gap-2"
                 >
-                    Return to HUB
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    Return to Dashboard
                 </button>
             </div>
         </div>

@@ -1,132 +1,250 @@
-import type { Question, TurbineCategories } from './types';
+import { HubTool } from './types.ts';
 
-export const TURBINE_CATEGORIES: TurbineCategories = {
-  kaplan: {
-    name: 'Kaplan',
-    types: [
-      { id: 'kaplan_vertical', name: 'Vertical', description: 'Standard design for low heads and high flow rates.' },
-      { id: 'kaplan_horizontal', name: 'Horizontal', description: 'Used for specific installations where a vertical design is not feasible.'},
-      { id: 'kaplan_bulb', name: 'Bulb', description: 'Horizontal unit inside a pipe, maximizing hydraulic efficiency.' },
-      { id: 'kaplan_s', name: 'S-Type', description: 'Horizontal turbine with an S-shaped draft tube, for retrofitting existing sites.' },
-    ],
+// --- HUB KARTICE ---
+
+export const CORE_STRATEGY_TOOLS: HubTool[] = [
+  {
+    id: 'assessment',
+    view: 'riskAssessment',
+    title: "Risk Assessment Tool",
+    description: "Quantify the Execution Gap and diagnose systemic risks before they impact LCC.",
+    icon: '⚠️',
+    isCritical: true,
+    delay: 0
   },
-  francis: {
-    name: 'Francis',
-    types: [
-       { id: 'francis_vertical', name: 'Vertical', description: 'For higher power outputs and medium to high heads.' },
-       { id: 'francis_horizontal', name: 'Horizontal', description: 'For lower power outputs, often with a spiral casing.' },
-    ],
+  {
+    id: 'phaseGuide',
+    view: 'phaseGuide',
+    title: "Project Phase Guide",
+    description: "Master the protocols that enforce our Three Postulates for precision and risk mitigation.",
+    icon: '🗺️',
+    isCritical: true,
+    delay: 100
   },
-  pelton: {
-    name: 'Pelton',
-    types: [
-      { id: 'pelton_vertical', name: 'Vertical', description: 'With multiple jets (3-6), for high power and high heads.' },
-      { id: 'pelton_horizontal', name: 'Horizontal', description: 'With one or two jets, for small to medium power outputs.' },
-    ],
+  {
+    id: 'installation',
+    view: 'installationGuarantee',
+    title: "Installation Standard",
+    description: "Enforce the 0.05 mm/m precision mandate to close the Execution Gap.",
+    icon: '⚙️',
+    isCritical: true,
+    delay: 200
   },
-  crossflow: {
-      name: 'Crossflow (Banki-Michell)',
-      types: [
-        { id: 'crossflow', name: 'Crossflow', description: 'Simple and robust, for small HPPs and a wide range of flows.' },
-      ],
+  {
+    id: 'revitalization',
+    view: 'revitalizationStrategy',
+    title: "Revitalization Strategy",
+    description: "Data-driven framework for closing the M-E Synergy Gap in legacy assets.",
+    icon: '🔄',
+    isCritical: true,
+    delay: 300
   },
-  flow_through: {
-    name: 'Run-of-River',
-    types: [
-      { id: 'flow_through_generic', name: 'Run-of-River', description: 'Optimized for operation on rivers with low head and constant flow.' },
-    ],
+  {
+    id: 'digitalIntegrity',
+    view: 'digitalIntegrity',
+    title: "Digital Integrity",
+    description: "Immutable ledger providing irrefutable proof of discipline against liability.",
+    icon: '🛡️',
+    isCritical: true,
+    delay: 400
   },
+  {
+    id: 'contractManagement',
+    view: 'contractManagement',
+    title: "Contract & Legal",
+    description: "Legally mandate the 0.05 mm/m precision standard to protect warranty.",
+    icon: '⚖️',
+    isCritical: true,
+    delay: 500
+  },
+];
+
+export const KNOWLEDGE_INNOVATION_TOOLS: HubTool[] = [
+  {
+    id: 'intro',
+    view: 'digitalIntroduction',
+    title: "Digital Introduction",
+    description: "Core principles: enforcing the 0.05 mm/m precision mandate.",
+    icon: '🌐',
+    delay: 0
+  },
+  {
+    id: 'builder',
+    view: 'hppBuilder',
+    title: "HPP Power Calculator",
+    description: "Configure HPPs using principles of LCC Optimization.",
+    icon: '⚡',
+    delay: 100
+  },
+  {
+    id: 'investor',
+    view: 'investorBriefing',
+    title: "Investor Info-Center",
+    description: "Review transparent, risk-adjusted KPIs for sustainable returns.",
+    icon: '💰',
+    delay: 200
+  },
+  {
+    id: 'riverWildlife',
+    view: 'riverWildlife',
+    title: "River Stewardship",
+    description: "Ethical mandates for Ecosystem Protection and E-Flow.",
+    icon: '🌿',
+    delay: 300
+  },
+  {
+    id: 'excellence',
+    view: 'standardOfExcellence',
+    title: "Standard of Excellence",
+    description: "Blueprint for uncompromised quality and elimination of Execution Gap.",
+    icon: '🏆',
+    delay: 400
+  },
+  {
+    id: 'improvements',
+    view: 'hppImprovements',
+    title: "HPP Ino-Hub",
+    description: "Collaborative innovations supporting LCC Optimization.",
+    icon: '💡',
+    delay: 500
+  },
+  {
+    id: 'equity',
+    view: 'genderEquity',
+    title: "Gender Equity",
+    description: "Closing the Execution Gap in human capital.",
+    icon: '⚖️',
+    delay: 600
+  },
+];
+
+export const FEEDBACK_TOOLS: HubTool[] = [
+  {
+    id: 'suggestion',
+    view: 'suggestionBox',
+    title: "Suggestion / Idea",
+    description: "Share ideas to improve protocols for precision and risk mitigation.",
+    icon: '✍️',
+    delay: 0
+  },
+];
+
+// --- TURBINE CATEGORIES (Prošireno za Investor Briefing) ---
+export const TURBINE_CATEGORIES: any = {
+    kaplan: { 
+        name: 'Kaplan', 
+        description: 'Adjustable blades for low head, high flow efficiency.',
+        types: [
+            { id: 'kaplan_vertical', name: 'Vertical Kaplan', description: 'Standard for large flows and low heads.' },
+            { id: 'kaplan_horizontal', name: 'Horizontal Kaplan (Pit/S-Type)', description: 'For smaller heads and easier access.' },
+            { id: 'kaplan_bulb', name: 'Bulb Turbine', description: 'Compact, submerged unit for run-of-river.' }
+        ]
+    },
+    francis: { 
+        name: 'Francis', 
+        description: 'The most common water turbine, covering medium heads.',
+        types: [
+            { id: 'francis_vertical', name: 'Vertical Francis', description: 'For medium to high heads and large power outputs.' },
+            { id: 'francis_horizontal', name: 'Horizontal Francis', description: 'For smaller units, often in spiral casing.' }
+        ]
+    },
+    pelton: { 
+        name: 'Pelton', 
+        description: 'Impulse turbine for high heads and low flows.',
+        types: [
+            { id: 'pelton_vertical', name: 'Vertical Pelton', description: 'Multiple jets (4-6) for high power.' },
+            { id: 'pelton_horizontal', name: 'Horizontal Pelton', description: '1-2 jets, easier maintenance for smaller units.' }
+        ]
+    },
+    crossflow: {
+        name: 'Crossflow',
+        description: 'Robust, simple design for variable flows.',
+        types: [
+            { id: 'crossflow', name: 'Standard Crossflow', description: 'Banki-Michell design for broad efficiency curve.' }
+        ]
+    }
 };
 
-
-export const QUESTIONS: Question[] = [
-  // --- CORE DISCIPLINE & ASSEMBLY ---
-  {
-    id: 'q1',
-    text: 'Was laser alignment of the runner used within specified tolerances (e.g., 0.05 mm/m)?',
-    options: ['Yes, documented', 'Yes, but not documented', 'No'],
-  },
-  {
-    id: 'q2',
-    text: 'Were the machine foundations checked and leveled (flatness <0.1mm) before final equipment assembly?',
-    options: ['Yes', 'No', 'Partially'],
-  },
-  {
-    id: 'q11',
-    text: 'Is the quality of the runner balancing (G-grade) within ISO standards (e.g., G 2.5)?',
-    options: ['Yes', 'No', 'We do not measure it'],
-  },
-  
-  // --- DOCUMENTATION & ETHICS ---
-  {
-    id: 'q6',
-    text: 'Is the electronic Maintenance Logbook fully completed and verified?',
-    options: ['Yes, completely', 'Partially filled', 'Not maintained'],
-  },
-  {
-    id: 'q9',
-    text: 'Did the on-site technical staff have immediate digital access to the complete service history?',
-    options: ['Yes, always', 'Limited access', 'No'],
-  },
-  {
-    id: 'q12',
-    text: 'In the last service quote, was the client offered the option to repair a critical component before full replacement?',
-    options: ['Yes, always offered', 'Sometimes', 'No, only replacement is offered'],
-  },
-
-  // --- SENSORS & MONITORING ---
-  {
-    id: 'q5',
-    text: 'Are there unusual vibrations, sounds, or elevated temperatures during machine operation?',
-    options: ['No', 'Occasionally', 'Yes, frequently'],
-  },
-  {
-    id: 'q8',
-    text: 'Is an Acoustic Monitoring system (AI for cavitation/erosion detection) implemented?',
-    options: ['Yes, implemented', 'In testing phase', 'No'],
-  },
-  {
-    id: 'q13',
-    text: 'Is the sediment concentration at the turbine inlet proactively monitored?',
-    options: ['Yes, continuously', 'Periodically', 'No'],
-  },
-  {
-    id: 'q14',
-    text: 'What is the status of the vibration and temperature sensors?',
-    options: ['All correct and calibrated', 'Some require checking', 'Not installed/functional'],
-  },
-  {
-    id: 'q15',
-    text: 'Is the runner speed monitored by precise sensors, and is there overspeed protection?',
-    options: ['Yes, a reliable system', 'System exists, but is outdated', 'No'],
-  },
-
-  // --- AUXILIARY SYSTEMS ---
-   {
-    id: 'q4',
-    text: 'Are specified lubricants and oils used at recommended intervals?',
-    options: ['Yes, always', 'Sometimes', 'No'],
-  },
-  {
-    id: 'q16',
-    text: 'Is the bearing lubrication system automatic or manual?',
-    options: ['Fully automatic', 'Semi-automatic', 'Manual'],
-  },
-  {
-    id: 'q17',
-    text: 'What is the condition of the hydraulic power unit (pressure, oil cleanliness, valve function)?',
-    options: ['Optimal', 'Requires minor maintenance', 'Major service needed'],
-  },
-
-  // --- OPERATIONAL & ENVIRONMENTAL RISKS ---
-  {
-    id: 'q7',
-    text: 'Are failures resolved by addressing the root cause or only by fixing the symptom?',
-    options: ['We always seek the root cause', 'Sometimes we only fix the symptom', 'Often we only fix the symptom'],
-  },
-  {
-    id: 'q10',
-    text: 'Is the minimum environmental flow (E-flow) maintained and automatically documented?',
-    options: ['Yes, continuously and automatically', 'Monitored periodically', 'Not monitored'],
-  },
+// --- RISK ASSESSMENT QUESTIONS ---
+export const QUESTIONS = [
+    {
+        id: 'q1',
+        text: 'Is there a digital, searchable archive of all original design documents and "as-built" drawings?',
+        options: ['Yes, fully digitized', 'Partially / Hard copies only', 'No / Not documented']
+    },
+    {
+        id: 'q2',
+        text: 'Was the shaft alignment verified to < 0.05 mm/m during the last major overhaul?',
+        options: ['Yes, documented', 'Partially / Unknown', 'No']
+    },
+    {
+        id: 'q4',
+        text: 'Do you experience unexplained vibrations or noise at specific load points?',
+        options: ['No', 'Sometimes', 'Yes, frequently']
+    },
+    {
+        id: 'q5',
+        text: 'Is there visible pitting (cavitation) on the runner blades?',
+        options: ['No', 'Occasionally', 'Yes, frequently']
+    },
+    {
+        id: 'q6',
+        text: 'Is the Digital Logbook regularly updated with maintenance events?',
+        options: ['Yes, always', 'Partially filled', 'Not maintained']
+    },
+    {
+        id: 'q7',
+        text: 'When a failure occurs, is a Root Cause Failure Analysis (RCFA) performed?',
+        options: ['Yes, always', 'Sometimes we only fix the symptom', 'Often we only fix the symptom']
+    },
+    {
+        id: 'q8',
+        text: 'Do you use AI-driven acoustic monitoring for predictive maintenance?',
+        options: ['Yes', 'In testing phase', 'No']
+    },
+    {
+        id: 'q9',
+        text: 'Is remote monitoring (SCADA) accessible securely from off-site?',
+        options: ['Yes', 'Limited access', 'No']
+    },
+    {
+        id: 'q10',
+        text: 'Are bearing temperatures monitored continuously?',
+        options: ['Yes, real-time', 'Monitored periodically', 'Not monitored']
+    },
+    {
+        id: 'q11',
+        text: 'Is Environmental Flow (E-flow) automatically measured and logged?',
+        options: ['Yes', 'No, do not measure']
+    },
+    {
+        id: 'q12',
+        text: 'Is "Repair" considered before "Replace" for major components?',
+        options: ['Yes, always', 'Sometimes', 'No, only replacement is offered']
+    },
+    {
+        id: 'q13',
+        text: 'Does the staff receive regular training on new protocols?',
+        options: ['Yes', 'Periodically', 'No']
+    },
+    {
+        id: 'q14',
+        text: 'Are protection relays tested annually?',
+        options: ['Yes', 'Some require checking', 'Not installed/functional']
+    },
+    {
+        id: 'q15',
+        text: 'Is the control system hardware less than 10 years old?',
+        options: ['Yes', 'No (Outdated)']
+    },
+    {
+        id: 'q16',
+        text: 'Is the lubrication system automated?',
+        options: ['Yes', 'Semi-automatic', 'Manual']
+    },
+    {
+        id: 'q17',
+        text: 'What is the current maintenance status?',
+        options: ['Fully operational', 'Requires minor maintenance', 'Major service needed']
+    }
 ];

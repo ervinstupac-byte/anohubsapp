@@ -1,36 +1,37 @@
 import React, { useState } from 'react';
-import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 
+// --- DATA STRUCTURE ---
+// Prebacili smo HTML stringove u čisti JSX radi sigurnosti i fleksibilnosti
 const phasesData = [
     {
         id: 'planning',
         icon: '🔭',
         title: '1. Research & Planning',
         objectives: [
-            'Confirm the technical and economic feasibility of the project.',
+            'Confirm technical and economic feasibility.',
             'Secure financing and obtain key permits.',
-            'Define the project scope, budget, and timeline.'
+            'Define project scope, budget, and timeline.'
         ],
         protocols: [
             { text: 'Feasibility Study', action: null },
             { text: 'Environmental Impact Assessment (EIA)', action: null },
-            { text: 'Investor Briefing & Technical Review (KPI)', action: 'investorBriefing' },
+            { text: 'Investor Briefing & Technical Review', action: 'investorBriefing' },
         ],
         risks: [
-            'Inaccurate hydrological data leads to incorrect production estimates.',
-            'Delays in obtaining permits block the start of construction.',
-            'Underestimation of costs (CAPEX) threatens financial stability.',
+            'Inaccurate hydrological data (Production estimates).',
+            'Permitting delays blocking construction start.',
+            'Underestimation of CAPEX costs.',
         ],
-        tools: ['HPP Power Calculator Tool', 'Hydrological modeling software (e.g., HEC-RAS)', 'Financial modeling and LCOE analysis tools'],
+        tools: ['HPP Power Calculator', 'Hydrological modeling (HEC-RAS)', 'LCOE analysis tools'],
         mandate: {
-            title: "Hydro-Prijatelj's Mandate: Three Ethical KPI Checks for Investors",
+            title: "Hydro-Prijatelj's Mandate: Ethical KPI Checks",
             color: 'cyan',
-            intro: 'To secure financing with integrity, your plan must be based on realism, not optimism. These checks are non-negotiable.',
+            intro: 'To secure financing with integrity, your plan must be based on realism. These checks are non-negotiable.',
             items: [
-                { title: "1. Hydrology & Risk (The Transparency Demand):", content: "Has the hydrological data been subjected to a stress test (worst-case scenario: e.g., 20% lower flow) to ensure the LCOE remains viable? The risk of inaccurate data is the project's biggest financial threat." },
-                { title: "2. Ecological Commitment (The E-Flow Guarantee):", content: "The plan must document the continuous, automatic maintenance of the minimal ecological flow (E-flow) and the system for its digital verification, fulfilling our ethical mandate for Ecosystem Protection." },
-                { title: "3. Life Cycle Cost - LCC (The Realism Mandate):", content: "Require an LCC analysis that specifically includes the cost of proactive, predictive maintenance (AI/Acoustic Monitoring). This is a foundational step for true LCC Optimization and avoids unrealistic O&M cost projections." }
+                { title: "Hydrology & Risk", content: "Has the hydrological data been stress-tested (e.g., -20% flow)? Inaccurate data is the #1 financial threat." },
+                { title: "Ecological Commitment", content: "Document the continuous, automatic maintenance of E-flow and its digital verification." },
+                { title: "Life Cycle Cost (LCC)", content: "Include the cost of predictive maintenance (AI Monitoring) in the LCC analysis now, not later." }
             ]
         }
     },
@@ -39,9 +40,9 @@ const phasesData = [
         icon: '🏗️',
         title: '2. Construction & Assembly',
         objectives: [
-            'Execute the project within the specified budget and deadlines.',
-            'Ensure the highest quality of construction and assembly.',
-            'Strict adherence to HSE (Health, Safety, Environment) standards.'
+            'Execute within budget and deadlines.',
+            'Ensure highest quality of assembly.',
+            'Strict adherence to HSE standards.'
         ],
         protocols: [
             { text: 'Standard for Flawless Assembly', action: 'installationGuarantee' },
@@ -49,19 +50,19 @@ const phasesData = [
             { text: 'Digital QC protocols (3D scanning)', action: null },
         ],
         risks: [
-            'The gap between plan and execution ("Execution Gap") causes systemic errors.',
-            'Supply chain issues (equipment delays).',
-            'Poor quality of work leading to premature failures.',
+            'The "Execution Gap" between plan and reality.',
+            'Supply chain delays.',
+            'Poor quality leading to premature failures.',
         ],
-        tools: ['Laser alignment tools', 'Project management software (e.g., Primavera)', '3D scanning equipment for digital verification'],
+        tools: ['Laser alignment tools', 'Primavera / MS Project', '3D scanning equipment'],
         mandate: {
-            title: "Hydro-Prijatelj's Mandate: Three Non-Negotiable Checks for Integrity",
+            title: "Hydro-Prijatelj's Mandate: Integrity Checks",
             color: 'yellow',
-            intro: 'Discipline is not optional; it is the foundation of longevity. These checks are absolute requirements.',
+            intro: 'Discipline is not optional; it is the foundation of longevity.',
             items: [
-                { title: "1. Precision Mandate (The 'Swiss Watch' Standard):", content: "The industry standard of 0.1 mm/m is insufficient. You must verify and document an alignment of **0.05 mm/m**. This is the requirement for achieving the precision that guarantees decades of stable operation and closes a critical Execution Gap." },
-                { title: "2. Documentation Mandate (Warranty Integrity):", content: "Before final sign-off, all bolt torques and alignment records must be digitally signed and stored. Failure to provide this immutable proof of precision **voids the manufacturer's warranty** and creates a massive Execution Gap liability." },
-                { title: "3. Discipline Mandate (Closing the Execution Gap):", content: "Monitor the **Execution Gap**—the difference between the approved plan and the realized on-site work—daily. Implement a mandatory 'Plan-Do-Check-Act' meeting at the start of each shift. Any deviation must be logged, explained, and approved." }
+                { title: "Precision Mandate", content: "The industry standard (0.1 mm/m) is insufficient. You must verify and document **0.05 mm/m**." },
+                { title: "Documentation Mandate", content: "All bolt torques and alignment records must be digitally signed. No proof = No warranty." },
+                { title: "Discipline Mandate", content: "Monitor the Execution Gap daily. Any deviation from the plan must be logged and approved." }
             ]
         }
     },
@@ -70,32 +71,29 @@ const phasesData = [
         icon: '⚙️',
         title: '3. Maintenance & Diagnostics',
         objectives: [
-            'Maximize plant availability and reliability (>99%).',
+            'Maximize plant availability (>99%).',
             'Optimize performance and efficiency.',
-            'Prevent catastrophic failures through predictive maintenance.'
+            'Prevent catastrophic failures (Predictive).'
         ],
         protocols: [
             { text: 'Operational Risk Assessment', action: 'riskAssessment' },
-            { text: 'Vibration "Fingerprint" Baseline Recording', action: null },
+            { text: 'Vibration "Fingerprint" Baseline', action: null },
             { text: 'Root Cause Failure Analysis (RCFA)', action: null },
         ],
         risks: [
-            'Unplanned outages cause significant production losses.',
-            'Cavitation and erosion reduce turbine efficiency and lifespan.',
-            'Catastrophic failure of bearings or generator insulation.',
+            'Unplanned outages (Revenue loss).',
+            'Cavitation/Erosion reducing efficiency.',
+            'Catastrophic bearing/generator failure.',
         ],
-        tools: [
-            'Advanced vibration analysis systems', 'Thermal imaging cameras',
-            'SCADA systems with predictive analytics (AI Monitoring)', 'Internal Risk Assessment Tool'
-        ],
+        tools: ['Vibration analysis systems', 'Thermal imaging', 'AI Predictive Monitoring', 'Risk Tool'],
         mandate: {
-            title: "Hydro-Prijatelj's Mandate: Three Diagnostic Questions for RCFA",
+            title: "Hydro-Prijatelj's Mandate: Diagnostic Ethics",
             color: 'red',
-            intro: 'Do not treat symptoms; eliminate the root cause. Before any intervention, you must answer these questions to ensure ethical LCC Optimization.',
+            intro: 'Do not treat symptoms; eliminate the root cause.',
             items: [
-                { title: "1. The Cause (Symptom vs. Root):", content: "Is the current solution treating the physical symptom (e.g., replacing a part due to **Abrasion**), or is it addressing the primary cause (**Cavitation**) to prevent a recurring Execution Gap in maintenance?" },
-                { title: "2. The Data (Observation vs. Evidence):", content: "Is this diagnosis based on a human observation, or on **AI-driven acoustic data (e.g., cavitation signatures)** integrated from the SCADA system?" },
-                { title: "3. The Ethics (Repair vs. Replace):", content: "Was the most cost-effective and sustainable solution for **LCC Optimization** (e.g., advanced welding/repair) offered before immediately recommending a full replacement of the component?" }
+                { title: "The Cause (Symptom vs. Root)", content: "Are you treating the symptom (Abrasion) or the cause (Cavitation)?" },
+                { title: "The Data (Observation vs. Evidence)", content: "Is this diagnosis based on human opinion or AI-driven acoustic evidence?" },
+                { title: "The Ethics (Repair vs. Replace)", content: "Was the most sustainable solution (Repair) offered before recommending Replacement?" }
             ]
         }
     },
@@ -104,44 +102,49 @@ const phasesData = [
         icon: '🧠',
         title: '4. Strategic Management',
         objectives: [
-            'Long-term Asset Performance Management (APM).',
-            'Implementation of a culture of continuous improvement.',
-            'Ensuring compliance with future technological and regulatory changes.'
+            'Long-term Asset Performance Management.',
+            'Culture of continuous improvement.',
+            'Compliance with future regulations.'
         ],
         protocols: [
-            { text: 'Implementation of the Standard of Excellence', action: 'standardOfExcellence' },
+            { text: 'Standard of Excellence Implementation', action: 'standardOfExcellence' },
             { text: 'Life Cycle Cost (LCC) Analysis', action: null },
-            { text: 'Digital Twin Strategy', action: 'standardOfExcellence' },
+            { text: 'Digital Twin Strategy', action: 'digitalIntroduction' },
         ],
         risks: [
-            'Technological obsolescence of equipment and control systems.',
-            'Changes in market conditions and regulations.',
-            'Loss of institutional knowledge with the departure of experienced staff.',
+            'Technological obsolescence.',
+            'Regulatory/Market changes.',
+            'Loss of institutional knowledge.',
         ],
-        tools: ['Asset Performance Management (APM) platforms', 'Digital Twin simulation software', 'Knowledge Management Systems']
+        tools: ['APM Platforms', 'Digital Twin Simulation', 'Knowledge Management Systems'],
+        mandate: null
     }
 ];
 
-const MandateSection: React.FC<{ mandate: typeof phasesData[0]['mandate'] }> = ({ mandate }) => {
+// --- COMPONENTS ---
+
+const MandateSection: React.FC<{ mandate: any }> = ({ mandate }) => {
     if (!mandate) return null;
-    const colors = {
-        cyan: 'border-cyan-400 text-cyan-300',
-        yellow: 'border-yellow-400 text-yellow-300',
-        red: 'border-red-400 text-red-300',
-    };
-    const colorClass = colors[mandate.color as keyof typeof colors] || colors.cyan;
+    
+    let colorClasses = '';
+    switch(mandate.color) {
+        case 'cyan': colorClasses = 'border-cyan-500 bg-cyan-900/20 text-cyan-100'; break;
+        case 'yellow': colorClasses = 'border-yellow-500 bg-yellow-900/20 text-yellow-100'; break;
+        case 'red': colorClasses = 'border-red-500 bg-red-900/20 text-red-100'; break;
+        default: colorClasses = 'border-slate-500 bg-slate-800 text-slate-200';
+    }
 
     return (
-        <div className={`mt-6 p-4 border-l-4 bg-slate-900/50 rounded-r-lg ${colorClass}`}>
-            <h5 className={`font-bold text-lg`}>
-                {mandate.title}
+        <div className={`mt-6 p-5 border-l-4 rounded-r-xl ${colorClasses}`}>
+            <h5 className="font-bold text-lg mb-2 flex items-center gap-2">
+                <span className="text-2xl">🛡️</span> {mandate.title}
             </h5>
-            <p className="text-sm text-slate-400 mt-2 mb-4">{mandate.intro}</p>
-            <ul className="space-y-3 text-sm">
-                {mandate.items.map((item, index) => (
-                    <li key={index}>
-                        <strong className="text-slate-200 block" dangerouslySetInnerHTML={{ __html: item.title }}/>
-                        <span className="text-slate-300" dangerouslySetInnerHTML={{ __html: item.content }}/>
+            <p className="text-sm opacity-80 mb-4 italic">{mandate.intro}</p>
+            <ul className="space-y-3">
+                {mandate.items.map((item: any, index: number) => (
+                    <li key={index} className="bg-black/20 p-3 rounded-lg">
+                        <strong className="block text-white text-sm mb-1">{item.title}</strong>
+                        <span className="text-sm opacity-90">{item.content}</span>
                     </li>
                 ))}
             </ul>
@@ -149,106 +152,130 @@ const MandateSection: React.FC<{ mandate: typeof phasesData[0]['mandate'] }> = (
     );
 };
 
-
-const AccordionSection: React.FC<{ 
-    phase: typeof phasesData[0]; 
-    isOpen: boolean; 
-    onClick: () => void;
-}> = ({ phase, isOpen, onClick }) => {
-    const { navigateTo } = useNavigation();
-
-    return (
-        <div className="border border-slate-700 rounded-lg bg-slate-800/50 mb-4 overflow-hidden">
-            <button
-                onClick={onClick}
-                className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-700/50 transition-colors"
-                aria-expanded={isOpen}
-            >
-                <div className="flex items-center">
-                    <span className="text-3xl mr-4">{phase.icon}</span>
-                    <h3 className="text-xl font-bold text-cyan-400">{phase.title}</h3>
-                </div>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className={`h-6 w-6 text-slate-400 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            {isOpen && (
-                <div className="p-6 pt-0 text-slate-300 space-y-6 animate-fade-in">
-                    {/* Key Objectives */}
-                    <div>
-                        <h4 className="font-bold text-slate-100 mb-2">Key Objectives</h4>
-                        <ul className="list-disc list-inside space-y-1 text-slate-400">
-                            {phase.objectives.map((obj, i) => <li key={i}>{obj}</li>)}
-                        </ul>
-                    </div>
-                    {/* Main Protocols */}
-                    <div>
-                        <h4 className="font-bold text-slate-100 mb-2">Main Protocols</h4>
-                        <ul className="list-disc list-inside space-y-1 text-slate-400">
-                            {phase.protocols.map((proto, i) => (
-                                <li key={i}>
-                                    {proto.text}
-                                    {proto.action && (
-                                        <button onClick={() => navigateTo(proto.action as any)} className="ml-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 underline">(Open Tool)</button>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    {/* Critical Risk Points */}
-                    <div>
-                        <h4 className="font-bold text-red-400 mb-2">Critical Risk Points</h4>
-                        <ul className="list-disc list-inside space-y-1 text-slate-400">
-                            {phase.risks.map((risk, i) => <li key={i}>{risk}</li>)}
-                        </ul>
-                    </div>
-                     {/* Suggested Tools */}
-                    <div>
-                        <h4 className="font-bold text-yellow-400 mb-2">Suggested Tools</h4>
-                        <ul className="list-disc list-inside space-y-1 text-slate-400">
-                            {phase.tools.map((tool, i) => <li key={i}>{tool}</li>)}
-                        </ul>
-                    </div>
-                    
-                    <MandateSection mandate={phase.mandate} />
-                </div>
-            )}
-        </div>
-    );
-}
-
 const ProjectPhaseGuide: React.FC = () => {
-    const [openSectionId, setOpenSectionId] = useState<string | null>(phasesData[0]?.id ?? null);
+    const { navigateTo } = useNavigation();
+    const [openSectionId, setOpenSectionId] = useState<string | null>('planning');
 
-    const handleToggleSection = (sectionId: string) => {
-        setOpenSectionId(prevId => (prevId === sectionId ? null : sectionId));
+    const handleToggle = (id: string) => {
+        setOpenSectionId(prev => prev === id ? null : id);
     };
 
     return (
-        <div className="animate-fade-in">
-            <BackButton text="Back to HUB" />
-            <div className="text-center mb-8">
-                <p className="mt-2 text-xl text-slate-400 max-w-3xl mx-auto">
-                    Expand each project phase to view detailed protocols, objectives, and tools.
+        <div className="animate-fade-in space-y-8 pb-8 max-w-5xl mx-auto">
+            
+            {/* HEADER */}
+            <div className="text-center space-y-4 animate-fade-in-up">
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                    Project Phase <span className="text-cyan-400">Guide</span>
+                </h2>
+                <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
+                    Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation, and Ethical LCC Optimization across the lifecycle.
                 </p>
             </div>
 
-            {/* Accordion */}
-            <div>
-                {phasesData.map(phase => (
-                    <AccordionSection 
-                        key={phase.id}
-                        phase={phase}
-                        isOpen={openSectionId === phase.id}
-                        onClick={() => handleToggleSection(phase.id)}
-                    />
-                ))}
+            {/* ACCORDION */}
+            <div className="space-y-4">
+                {phasesData.map((phase, index) => {
+                    const isOpen = openSectionId === phase.id;
+                    return (
+                        <div 
+                            key={phase.id} 
+                            className={`glass-panel rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-cyan-500/40 shadow-lg' : 'border-slate-700/50'}`}
+                            style={{ animationDelay: `${index * 100}ms` }}
+                        >
+                            <button
+                                onClick={() => handleToggle(phase.id)}
+                                className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-800/50 transition-colors"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={`text-3xl p-3 rounded-xl ${isOpen ? 'bg-cyan-900/30' : 'bg-slate-800'}`}>
+                                        {phase.icon}
+                                    </div>
+                                    <div>
+                                        <h3 className={`text-xl font-bold ${isOpen ? 'text-white' : 'text-slate-300'}`}>{phase.title}</h3>
+                                        <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
+                                            {isOpen ? 'Active Phase' : 'Expand Details'}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-300 ${isOpen ? 'bg-cyan-500 text-slate-900 rotate-180' : 'bg-slate-800 text-slate-400'}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            {/* CONTENT */}
+                            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="p-6 pt-0 border-t border-slate-700/50">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                                        
+                                        {/* LEFT COLUMN */}
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Core Objectives</h4>
+                                                <ul className="space-y-2">
+                                                    {phase.objectives.map((obj, i) => (
+                                                        <li key={i} className="flex items-start text-sm text-slate-300">
+                                                            <span className="text-cyan-500 mr-2">▹</span> {obj}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            <div>
+                                                <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Key Protocols & Tools</h4>
+                                                <ul className="space-y-2">
+                                                    {phase.protocols.map((proto, i) => (
+                                                        <li key={i} className="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-slate-700/50">
+                                                            <span className="text-sm text-slate-200">{proto.text}</span>
+                                                            {proto.action && (
+                                                                <button 
+                                                                    onClick={() => navigateTo(proto.action as any)}
+                                                                    className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded hover:bg-cyan-600 hover:text-white transition-colors uppercase font-bold"
+                                                                >
+                                                                    Open Tool
+                                                                </button>
+                                                            )}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        {/* RIGHT COLUMN */}
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-red-400 font-bold uppercase text-xs tracking-widest mb-3">Critical Risks</h4>
+                                                <ul className="space-y-2">
+                                                    {phase.risks.map((risk, i) => (
+                                                        <li key={i} className="flex items-start text-sm text-slate-400">
+                                                            <span className="text-red-500 mr-2">⚠️</span> {risk}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            
+                                            <div>
+                                                <h4 className="text-yellow-500 font-bold uppercase text-xs tracking-widest mb-3">Suggested Software</h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {phase.tools.map((tool, i) => (
+                                                        <span key={i} className="text-xs bg-yellow-900/20 text-yellow-200 px-2 py-1 rounded border border-yellow-700/30">
+                                                            {tool}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* MANDATE SECTION */}
+                                    <MandateSection mandate={phase.mandate} />
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { HashRouter, Routes, Route, useNavigate, useLocation, Outlet, useParams } from 'react-router-dom';
 
 // --- IMPORTI KOMPONENTI ---
-// Zadržao sam .tsx ekstenzije kako si tražio zbog Rollup-a
 import { Questionnaire } from './components/Questionnaire.tsx';
 import { Hub } from './components/Hub.tsx';
 import { InvestorBriefing } from './components/InvestorBriefing.tsx';
@@ -19,6 +18,7 @@ import { Feedback } from './components/Feedback.tsx';
 import { Onboarding } from './components/Onboarding.tsx';
 import RiverWildlife from './components/RiverWildlife.tsx';
 import QuestionnaireSummary from './components/QuestionnaireSummary.tsx';
+import RiskReport from './components/RiskReport.tsx'; // Dodan RiskReport
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import RevitalizationStrategy from './components/RevitalizationStrategy.tsx';
 import DigitalIntegrity from './components/DigitalIntegrity.tsx';
@@ -34,12 +34,30 @@ import type { AppView } from './types.ts';
 // --- SLIKA ---
 import bgImage from './digital_cfd_mesh.png'; 
 
-// --- POMOĆNA FUNKCIJA ZA ODREĐIVANJE NASLOVA ---
+// --- KONFIGURACIJA RUTA ---
+const ROUTE_CONFIG: Record<string, { title: string; subtitle: string }> = {
+    '': { title: 'AnoHUB', subtitle: "Your center for enforcing the Standard of Excellence in hydropower." },
+    'risk-assessment': { title: 'HPP Risk Assessment', subtitle: "A diagnostic tool to quantify the Execution Gap and identify systemic risks before they impact LCC." },
+    'risk-report': { title: 'System Integrity Audit', subtitle: "Official digital certificate of plant health and risk vectors." }, // Dodan naslov za report
+    'investor-briefing': { title: 'Investor Briefing (KPI Review)', subtitle: "A technical review ensuring KPIs are based on realistic risk assessment and ethical LCC Optimization." },
+    'standard-of-excellence': { title: 'THE STANDARD OF EXCELLENCE', subtitle: "Masterclass modules for eliminating the Execution Gap through the 0.05 mm/m precision mandate." },
+    'digital-introduction': { title: 'Digital Introduction', subtitle: "Our core principles: enforcing the 0.05 mm/m precision mandate to close the Execution Gap." },
+    'hpp-improvements': { title: 'HPP Ino-Hub', subtitle: "A collaborative hub for innovations that support LCC Optimization and Ecosystem Protection." },
+    'installation-guarantee': { title: 'Installation Standard', subtitle: "The non-negotiable protocol for closing the Execution Gap and M-E Synergy Gap during assembly." },
+    'gender-equity': { title: 'Gender Equity in Hydropower', subtitle: "Eliminating the 'Execution Gap' in human capital by applying the same zero-tolerance principles as our 0.05 mm/m technical mandate." },
+    'hpp-builder': { title: 'HPP Power Calculator', subtitle: "An interactive tool for HPP configuration, guided by the principles of LCC Optimization and resilience to the Execution Gap." },
+    'phase-guide': { title: 'Project Phase Guide', subtitle: "Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation (Execution Gap), and Ethical LCC Optimization." },
+    'suggestion-box': { title: 'Suggestion & Idea Log', subtitle: "Share your ideas for improving our protocols for precision, risk mitigation, and ethics." },
+    'river-wildlife': { title: 'River & Wildlife Stewardship', subtitle: "The ethical mandate for Ecosystem Protection: enforcing and documenting E-Flow as a core operational requirement." },
+    'questionnaire-summary': { title: 'Preliminary Execution Gap Analysis', subtitle: "An initial analysis linking operational symptoms to failures in discipline against our non-negotiable precision standards." },
+    'revitalization-strategy': { title: 'Revitalization & Obsolescence', subtitle: "A data-driven framework for ensuring LCC Optimization by closing the M-E Synergy Gap in legacy assets." },
+    'digital-integrity': { title: 'Digital Integrity & Blockchain', subtitle: "Using an immutable ledger to provide irrefutable proof of discipline and close the Execution Gap against legal liability." },
+    'contract-management': { title: 'Contract & Legal Risk', subtitle: "Legally mandating the 0.05 mm/m precision standard to protect your warranty from the Execution Gap." },
+};
+
 const getHeaderInfo = (pathname: string): { title: string; subtitle: string } => {
-    // Uklanjamo kosu crtu na početku
     const path = pathname.startsWith('/') ? pathname.slice(1) : pathname;
 
-    // Logika za Turbinu (jer ima dinamički ID u URL-u)
     if (path.startsWith('turbine/')) {
         const turbineKey = path.split('/')[1];
         const turbineName = TURBINE_CATEGORIES[turbineKey]?.name || 'Turbine';
@@ -49,42 +67,16 @@ const getHeaderInfo = (pathname: string): { title: string; subtitle: string } =>
         };
     }
 
-    switch (path) {
-        case '': 
-            return { title: 'AnoHUB', subtitle: "Your center for enforcing the Standard of Excellence in hydropower." };
-        case 'risk-assessment':
-            return { title: 'HPP Risk Assessment', subtitle: "A diagnostic tool to quantify the Execution Gap and identify systemic risks before they impact LCC." };
-        case 'investor-briefing':
-            return { title: 'Investor Briefing (KPI Review)', subtitle: "A technical review ensuring KPIs are based on realistic risk assessment and ethical LCC Optimization." };
-        case 'standard-of-excellence':
-            return { title: 'THE STANDARD OF EXCELLENCE', subtitle: "Masterclass modules for eliminating the Execution Gap through the 0.05 mm/m precision mandate." };
-        case 'digital-introduction':
-            return { title: 'Digital Introduction', subtitle: "Our core principles: enforcing the 0.05 mm/m precision mandate to close the Execution Gap." };
-        case 'hpp-improvements':
-            return { title: 'HPP Ino-Hub', subtitle: "A collaborative hub for innovations that support LCC Optimization and Ecosystem Protection." };
-        case 'installation-guarantee':
-            return { title: 'Installation Standard', subtitle: "The non-negotiable protocol for closing the Execution Gap and M-E Synergy Gap during assembly." };
-        case 'gender-equity':
-            return { title: 'Gender Equity in Hydropower', subtitle: "Eliminating the 'Execution Gap' in human capital by applying the same zero-tolerance principles as our 0.05 mm/m technical mandate." };
-        case 'hpp-builder':
-            return { title: 'HPP Power Calculator', subtitle: "An interactive tool for HPP configuration, guided by the principles of LCC Optimization and resilience to the Execution Gap." };
-        case 'phase-guide': 
-            return { title: 'Project Phase Guide', subtitle: "Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation (Execution Gap), and Ethical LCC Optimization." };
-        case 'suggestion-box':
-            return { title: 'Suggestion & Idea Log', subtitle: "Share your ideas for improving our protocols for precision, risk mitigation, and ethics." };
-        case 'river-wildlife':
-            return { title: 'River & Wildlife Stewardship', subtitle: "The ethical mandate for Ecosystem Protection: enforcing and documenting E-Flow as a core operational requirement." };
-        case 'questionnaire-summary':
-            return { title: 'Preliminary Execution Gap Analysis', subtitle: "An initial analysis linking operational symptoms to failures in discipline against our non-negotiable precision standards." };
-        case 'revitalization-strategy':
-            return { title: 'Revitalization & Obsolescence', subtitle: "A data-driven framework for ensuring LCC Optimization by closing the M-E Synergy Gap in legacy assets." };
-        case 'digital-integrity':
-            return { title: 'Digital Integrity & Blockchain', subtitle: "Using an immutable ledger to provide irrefutable proof of discipline and close the Execution Gap against legal liability." };
-        case 'contract-management':
-            return { title: 'Contract & Legal Risk', subtitle: "Legally mandating the 0.05 mm/m precision standard to protect your warranty from the Execution Gap." };
-        default:
-            return { title: 'AnoHUB', subtitle: "Standard of Excellence" };
-    }
+    return ROUTE_CONFIG[path] || { title: 'AnoHUB', subtitle: "Standard of Excellence" };
+};
+
+// --- SCROLL TO TOP ---
+const ScrollToTop = () => {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+    return null;
 };
 
 // --- GLAVNI LAYOUT ---
@@ -94,7 +86,6 @@ const AppLayout: React.FC = () => {
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
 
-    // Dohvati naslov na temelju trenutne rute
     const { title, subtitle } = getHeaderInfo(location.pathname);
     const isHub = location.pathname === '/';
 
@@ -105,15 +96,16 @@ const AppLayout: React.FC = () => {
         }
     }, []);
 
+    useEffect(() => {
+        document.title = title === 'AnoHUB' ? 'AnoHUB | Standard of Excellence' : `${title} | AnoHUB`;
+    }, [title]);
+
     const handleOnboardingComplete = () => {
         localStorage.setItem('hasCompletedOnboarding', 'true');
         setShowOnboarding(false);
     };
 
-    // --- NAVIGATION ADAPTER ---
-    // Ovo omogućuje da tvoje postojeće komponente (Hub, Buttons) rade bez promjene koda.
-    // One pozivaju navigateTo('nekoIme'), a mi to pretvaramo u URL rutu.
-    const navigationContextValue = {
+    const navigationContextValue = useMemo(() => ({
         navigateTo: (view: AppView) => {
             const routeMap: Record<string, string> = {
                 'hub': '/',
@@ -129,18 +121,22 @@ const AppLayout: React.FC = () => {
                 'suggestionBox': '/suggestion-box',
                 'riverWildlife': '/river-wildlife',
                 'questionnaireSummary': '/questionnaire-summary',
+                'riskReport': '/risk-report', // Dodana ruta u mapu
                 'revitalizationStrategy': '/revitalization-strategy',
                 'digitalIntegrity': '/digital-integrity',
                 'contractManagement': '/contract-management',
-                'turbineDetail': '/turbine' // Fallback
+                'turbineDetail': '/turbine'
             };
-            
             navigate(routeMap[view] || '/');
         },
         navigateBack: () => navigate(-1),
         navigateToHub: () => navigate('/'),
         navigateToTurbineDetail: (turbineKey: string) => navigate(`/turbine/${turbineKey}`),
         showFeedbackModal: () => setIsFeedbackVisible(true),
+    }), [navigate]);
+
+    const handleHomeClick = () => {
+        window.location.href = 'https://www.anohubs.com';
     };
 
     return (
@@ -158,7 +154,6 @@ const AppLayout: React.FC = () => {
                 {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
 
                 <div className="w-full max-w-6xl mx-auto flex-grow flex flex-col">
-                    {/* HEADER */}
                     <header className="text-center mb-8 no-print relative">
                         {!isHub && (
                             <button 
@@ -174,9 +169,9 @@ const AppLayout: React.FC = () => {
                         )}
 
                         <button 
-                            onClick={() => navigate('/')}
+                            onClick={handleHomeClick}
                             className="absolute right-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20"
-                            title="Return to AnoHUB Home"
+                            title="Reload Application"
                         >
                             <span className="hidden sm:inline text-sm font-semibold">HOME</span>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,9 +181,9 @@ const AppLayout: React.FC = () => {
 
                         <div className="py-4">
                             <h1 
-                                onClick={() => navigate('/')}
+                                onClick={handleHomeClick}
                                 className="text-4xl sm:text-5xl font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition-colors inline-block"
-                                title="Go to Dashboard"
+                                title="Reload Application"
                             >
                                 {title}
                             </h1>
@@ -198,8 +193,10 @@ const AppLayout: React.FC = () => {
                         </div>
                     </header>
 
-                    {/* MAIN CONTENT */}
-                    <main className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main backdrop-blur-md border border-slate-700/50 flex-grow">
+                    <main 
+                        key={location.pathname}
+                        className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main backdrop-blur-md border border-slate-700/50 flex-grow animate-[fadeIn_0.5s_ease-out]"
+                    >
                         <Outlet />
                     </main>
 
@@ -227,8 +224,6 @@ const AppLayout: React.FC = () => {
     );
 };
 
-// --- WRAPPER KOMPONENTE ZA SPECIFIČNE RUTE ---
-
 const TurbineDetailWrapper = () => {
     const { id } = useParams();
     if (!id) return <div>Turbine not found</div>;
@@ -240,17 +235,18 @@ const QuestionnaireWrapper = () => {
     return <Questionnaire onShowSummary={() => navigate('/questionnaire-summary')} />;
 }
 
-// --- GLAVNA APLIKACIJA ---
 const App: React.FC = () => {
   return (
     <QuestionnaireProvider>
       <RiskProvider>
         <HashRouter>
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<AppLayout />}>
                     <Route index element={<Hub />} />
                     <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
                     <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                    <Route path="risk-report" element={<RiskReport />} /> {/* Dodana ruta */}
                     <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
                     <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
                     <Route path="digital-introduction" element={<DigitalIntroduction />} />
@@ -265,7 +261,6 @@ const App: React.FC = () => {
                     <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
                     <Route path="digital-integrity" element={<DigitalIntegrity />} />
                     <Route path="contract-management" element={<ContractManagement />} />
-                    {/* 404 stranica */}
                     <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Stranica nije pronađena</div>} />
                 </Route>
             </Routes>

@@ -1,215 +1,244 @@
 import React, { useState } from 'react';
-import { BackButton } from './BackButton';
 
+// --- DATA STRUCTURE ---
 const sectionsData = [
   {
     id: 'fish_passage',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM20.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0014 8v8a1 1 0 001.6.8l5.333-4z" />
-      </svg>
-    ),
+    icon: '🐟',
     title: 'Fish Passage Technologies',
+    subtitle: 'Bio-Engineering for Migration',
     content: (
-      <>
-        <p className="mb-4 text-slate-300">Ensuring upstream and downstream migration for aquatic species is critical for maintaining biodiversity. Modern technologies focus on safe, effective, and minimally stressful passage around dams.</p>
-        <div className="space-y-3">
-          <div>
-            <h4 className="font-bold text-slate-100">Fish Ladders & Stairways</h4>
-            <p className="text-slate-400 text-sm">A series of pools (Pool-and-Weir) or baffled channels (Denil) that allow fish to pass a dam. To prevent fatigue in species like salmon and trout, they are designed with gradients between 1:8 and 1:12, and flow is controlled to create an attractive current that guides fish without exhausting them.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Fish Lifts & Elevators</h4>
-            <p className="text-slate-400 text-sm">A mechanical system where fish are attracted into a collection area (a hopper) which is then lifted over the dam and released. Effective for a wider variety of species and higher dams where ladders are impractical.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Nature-Like Bypass Channels</h4>
-            <p className="text-slate-400 text-sm">A man-made channel designed to mimic a natural stream, providing a low-gradient, gentle path around the dam. This is often the most ecologically effective solution, though it requires more space.</p>
-          </div>
-           <div>
-            <h4 className="font-bold text-slate-100">Fish-Friendly Turbines</h4>
-            <p className="text-slate-400 text-sm">Advanced turbine designs (e.g., Alden turbine) with fewer, smoother blades, and wider gaps, significantly reducing blade-strike mortality for fish passing downstream through the powerhouse.</p>
-          </div>
+      <div className="space-y-6">
+        <p className="text-slate-300 leading-relaxed">
+            Modern technologies focus on safe, effective, and minimally stressful passage around dams to maintain biodiversity.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                <h4 className="font-bold text-cyan-400 mb-2">Fish Ladders & Stairways</h4>
+                <p className="text-xs text-slate-400">Pool-and-Weir or Denil channels with gradients (1:8 to 1:12) designed to guide fish without exhaustion.</p>
+            </div>
+            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                <h4 className="font-bold text-cyan-400 mb-2">Fish Lifts & Elevators</h4>
+                <p className="text-xs text-slate-400">Mechanical hoppers for high dams where ladders are impractical. Automated collection and release.</p>
+            </div>
+            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                <h4 className="font-bold text-cyan-400 mb-2">Nature-Like Bypass</h4>
+                <p className="text-xs text-slate-400">Man-made channels mimicking natural streams. The most ecologically effective, low-gradient solution.</p>
+            </div>
+            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                <h4 className="font-bold text-cyan-400 mb-2">Fish-Friendly Turbines</h4>
+                <p className="text-xs text-slate-400">Advanced designs (e.g. Alden) with fewer blades and wider gaps to reduce blade-strike mortality.</p>
+            </div>
         </div>
-      </>
+      </div>
     )
   },
   {
     id: 'sediment_management',
-    icon: (
-       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-      </svg>
-    ),
-    title: 'Sediment Management & Erosion Control',
+    icon: '⛰️',
+    title: 'Sediment & Erosion Control',
+    subtitle: 'Protecting Reservoir Capacity & Equipment',
     content: (
-       <>
-        <p className="mb-4 text-slate-300">Dams trap sediment, which reduces reservoir capacity and can cause severe abrasion damage to turbine components. Proactive management is essential for long-term sustainability.</p>
-        <div className="space-y-3">
-          <div>
-            <h4 className="font-bold text-slate-100">Sediment Bypass Tunnels</h4>
-            <p className="text-slate-400 text-sm">During high flow events, a tunnel is opened to divert sediment-laden water from upstream of the reservoir directly to the downstream river, mimicking natural sediment transport and protecting the turbine.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Flushing and Sluicing</h4>
-            <p className="text-slate-400 text-sm">Controlled operations where low-level outlets in the dam are opened to flush accumulated sediments downstream. This requires careful management to avoid negative environmental impacts.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Watershed Management</h4>
-            <p className="text-slate-400 text-sm">The most sustainable solution is to reduce sediment inflow at the source through practices like reforestation, terracing, and sustainable agriculture in the upstream catchment area.</p>
-          </div>
-        </div>
+       <div className="space-y-6">
+        <p className="text-slate-300">
+            Dams trap sediment, reducing capacity and causing turbine abrasion. Proactive management is essential.
+        </p>
         
-        <div className="mt-6 p-4 border-l-4 border-yellow-400 bg-slate-900/50 rounded-r-lg">
-            <h5 className="font-bold text-yellow-400">Visualization & Monitoring</h5>
-            <p className="text-sm text-slate-400 mt-2">
-                To truly understand and manage sediment impact, data visualization is key. Suggested methods include:
-            </p>
-            <ul className="list-disc list-inside space-y-2 mt-3 text-sm text-slate-300">
-                <li><strong>Bathymetric Survey Charts:</strong> Comparing surveys over time visually demonstrates the loss of reservoir capacity.</li>
-                <li><strong>3D Wear Scans:</strong> High-resolution 3D scans of turbine runners before and after a season can quantify material loss and visualize wear patterns, helping to distinguish between abrasion and cavitation.</li>
-            </ul>
+        {/* Techniques Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="bg-slate-800 p-3 rounded-lg text-center">
+                <h4 className="font-bold text-white text-sm">Bypass Tunnels</h4>
+                <p className="text-[10px] text-slate-400 mt-1">Diverting sediment-laden water during floods.</p>
+            </div>
+            <div className="bg-slate-800 p-3 rounded-lg text-center">
+                <h4 className="font-bold text-white text-sm">Flushing</h4>
+                <p className="text-[10px] text-slate-400 mt-1">Opening low-level outlets to clear accumulation.</p>
+            </div>
+            <div className="bg-slate-800 p-3 rounded-lg text-center">
+                <h4 className="font-bold text-white text-sm">Watershed Mgmt</h4>
+                <p className="text-[10px] text-slate-400 mt-1">Reforestation to reduce inflow at source.</p>
+            </div>
         </div>
 
-        <div className="mt-6 p-4 border-l-4 border-red-400 bg-slate-900/50 rounded-r-lg">
-            <h5 className="font-bold text-red-400">RCFA Focus: Abrasion vs. Cavitation</h5>
-            <p className="text-sm text-slate-400 mt-2">
-                A critical error in diagnostics is to mistake cavitation damage for simple abrasion. Understanding the root cause is essential for effective maintenance.
-            </p>
-            <ul className="list-disc list-inside space-y-2 mt-3 text-sm text-slate-300">
-                <li>
-                    <strong className="text-slate-200">Symptom (Abrasion):</strong> The physical wearing away of surfaces by suspended particles like sand. Results in a smooth, polished appearance.
-                </li>
-                <li>
-                    <strong className="text-slate-200">Root Cause (Cavitation):</strong> Occurs when low pressure causes water to vaporize. Bubbles collapse violently, generating micro-jets that pit and destroy the metal, resulting in a rough, "spongy" texture.
-                </li>
-                 <li>
-                    <strong className="text-slate-200">The Destructive Synergy:</strong> Cavitation attacks the material's integrity first. The weakened, pitted surface is then easily eroded by abrasive particles. <strong>Treating only abrasion without addressing the hydraulic conditions causing cavitation will lead to recurring, costly failures.</strong>
-                </li>
-            </ul>
+        {/* WARNING BOXES */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Visualization */}
+            <div className="p-4 border-l-2 border-yellow-500 bg-yellow-900/10 rounded-r-xl">
+                <h5 className="font-bold text-yellow-400 text-sm mb-2 flex items-center">
+                    <span className="mr-2">📊</span> Visualization
+                </h5>
+                <ul className="list-disc list-inside text-xs text-slate-300 space-y-1">
+                    <li><strong>Bathymetric Surveys:</strong> Visualizing capacity loss.</li>
+                    <li><strong>3D Wear Scans:</strong> Quantifying runner material loss.</li>
+                </ul>
+            </div>
+
+            {/* RCFA Critical */}
+            <div className="p-4 border-l-2 border-red-500 bg-red-900/10 rounded-r-xl">
+                <h5 className="font-bold text-red-400 text-sm mb-2 flex items-center">
+                    <span className="mr-2">⚠️</span> RCFA Critical: Diagnosis
+                </h5>
+                <div className="space-y-2 text-xs text-slate-300">
+                    <p><strong className="text-white">Abrasion (Symptom):</strong> Smooth, polished wear.</p>
+                    <p><strong className="text-white">Cavitation (Root Cause):</strong> Pitted, spongy surface.</p>
+                    <p className="italic text-red-300 mt-1">"Treating abrasion without fixing cavitation leads to recurring failure."</p>
+                </div>
+            </div>
         </div>
-      </>
+       </div>
     )
   },
   {
     id: 'water_quality',
-    icon: (
-       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    title: 'Water Quality & Environmental Flow',
+    icon: '💧',
+    title: 'Water Quality & E-Flow',
+    subtitle: 'The Ethical Mandate',
     content: (
-        <>
-        <p className="mb-4 text-slate-300">Maintaining the natural flow regime and water quality is crucial for downstream habitats. Hydropower operations can alter temperature, oxygen levels, and flow patterns.</p>
-        <div className="space-y-3">
-          <div>
-            <h4 className="font-bold text-slate-100">Environmental Flow (E-flow)</h4>
-            <p className="text-slate-400 text-sm">The managed release of water to mimic a river's natural variability. As per our Postulate of Ethics, **automatic, continuous measurement and documentation of E-Flow is a non-negotiable condition** for sustainable hydropower operation, not an optional addition.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Aerating Turbines & Spillways</h4>
-            <p className="text-slate-400 text-sm">Techniques like turbine venting or modifying spillways to entrain air into the water as it is released. This increases dissolved oxygen levels, which can be depleted in deep reservoirs, to support aquatic life.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Selective Withdrawal Structures</h4>
-            <p className="text-slate-400 text-sm">Intake structures built with multiple gates at different depths. This allows operators to select water from different reservoir layers to manage downstream water temperature, which is vital for temperature-sensitive species.</p>
-          </div>
-        </div>
-      </>
+       <div className="space-y-6">
+         <p className="text-slate-300">
+            Maintaining natural flow regimes, temperature, and oxygen levels for downstream habitats.
+         </p>
+         <div className="space-y-4">
+            <div className="glass-panel p-4 rounded-xl border-l-4 border-cyan-500">
+                <h4 className="font-bold text-cyan-300 mb-1">Environmental Flow (E-flow)</h4>
+                <p className="text-sm text-slate-300">
+                    The managed release of water to mimic natural variability. 
+                    <br/><span className="text-white font-bold">Mandate:</span> Automatic, continuous measurement and digital documentation is non-negotiable.
+                </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-slate-900/30 p-4 rounded-xl">
+                    <h4 className="font-bold text-white text-sm">Aerating Turbines</h4>
+                    <p className="text-xs text-slate-400 mt-1">Venting turbines to increase dissolved oxygen levels.</p>
+                </div>
+                <div className="bg-slate-900/30 p-4 rounded-xl">
+                    <h4 className="font-bold text-white text-sm">Selective Withdrawal</h4>
+                    <p className="text-xs text-slate-400 mt-1">Multi-level intakes to manage water temperature.</p>
+                </div>
+            </div>
+         </div>
+       </div>
     )
   },
    {
     id: 'habitat_restoration',
-    icon: (
-       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-      </svg>
-    ),
-    title: 'Habitat Restoration & Enhancement',
+    icon: '🌿',
+    title: 'Habitat Restoration',
+    subtitle: 'Beyond Mitigation',
     content: (
-      <>
-        <p className="mb-4 text-slate-300">Beyond mitigating impacts, modern hydropower projects often include proactive measures to restore and enhance local ecosystems, creating a net positive environmental outcome.</p>
-        <div className="space-y-3">
-          <div>
-            <h4 className="font-bold text-slate-100">Gravel Augmentation</h4>
-            <p className="text-slate-400 text-sm">The strategic placement of clean gravels downstream of a dam to create or improve spawning habitats for fish like salmon and trout, which are lost due to sediment trapping by the dam.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-100">Riparian Zone Restoration</h4>
-            <p className="text-slate-400 text-sm">Re-planting native trees and vegetation along riverbanks. This stabilizes the banks, reduces erosion, provides shade to cool the water, and creates habitat for both aquatic and terrestrial wildlife.</p>
-          </div>
-           <div>
-            <h4 className="font-bold text-slate-100">In-stream Structure Enhancement</h4>
-            <p className="text-slate-400 text-sm">Placement of boulders, large woody debris (logs), and other structures in the river channel to create complex habitats with varied flow velocities, providing resting and feeding areas for fish.</p>
-          </div>
+      <div className="space-y-4">
+        <p className="text-slate-300">
+            Proactive measures to create a net positive environmental outcome.
+        </p>
+        <div className="space-y-2">
+            {[
+                { title: 'Gravel Augmentation', desc: 'Placing clean gravels for fish spawning habitats.' },
+                { title: 'Riparian Zone', desc: 'Re-planting native vegetation to stabilize banks and shade water.' },
+                { title: 'In-stream Structures', desc: 'Boulders and logs creating complex flow habitats.' }
+            ].map((item, i) => (
+                <div key={i} className="flex items-center p-3 bg-green-900/20 border border-green-500/20 rounded-lg">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                    <div>
+                        <strong className="text-green-300 text-sm block">{item.title}</strong>
+                        <span className="text-slate-400 text-xs">{item.desc}</span>
+                    </div>
+                </div>
+            ))}
         </div>
-      </>
+      </div>
     )
   }
 ];
 
+// --- COMPONENTS ---
 
-const AccordionSection: React.FC<{ title: string; children: React.ReactNode; icon: React.ReactNode; isOpen: boolean; onClick: () => void }> = ({ title, children, icon, isOpen, onClick }) => (
-    <div className="border border-slate-700 rounded-lg bg-slate-800/50 mb-4 overflow-hidden">
+const EcoModule: React.FC<{ 
+    item: typeof sectionsData[0]; 
+    isOpen: boolean; 
+    onClick: () => void;
+    delay: number;
+}> = ({ item, isOpen, onClick, delay }) => (
+    <div 
+        className={`glass-panel rounded-2xl overflow-hidden transition-all duration-500 animate-fade-in-up ${isOpen ? 'border-cyan-500/40 shadow-lg' : 'border-slate-700/50 hover:border-slate-600'}`}
+        style={{ animationDelay: `${delay}ms` }}
+    >
         <button
             onClick={onClick}
-            className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-700/50 transition-colors"
-            aria-expanded={isOpen}
+            className="w-full flex justify-between items-center text-left p-6 transition-colors"
         >
-            <div className="flex items-center">
-                {icon}
-                <h3 className="text-xl font-bold text-cyan-400">{title}</h3>
+            <div className="flex items-center gap-4">
+                <div className={`text-3xl p-3 rounded-xl transition-colors ${isOpen ? 'bg-cyan-900/30' : 'bg-slate-800'}`}>
+                    {item.icon}
+                </div>
+                <div>
+                    <h3 className={`text-xl font-bold transition-colors ${isOpen ? 'text-white' : 'text-slate-300'}`}>{item.title}</h3>
+                    <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">{item.subtitle}</p>
+                </div>
             </div>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className={`h-6 w-6 text-slate-400 transform transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 ${isOpen ? 'bg-cyan-500 text-slate-900 rotate-180' : 'bg-slate-800 text-slate-400'}`}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
         </button>
-        {isOpen && (
-            <div className="p-6 pt-0 animate-fade-in">
-                {children}
+        
+        <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className="p-6 pt-0 border-t border-slate-700/50">
+                <div className="pt-6 animate-fade-in">
+                    {item.content}
+                </div>
             </div>
-        )}
+        </div>
     </div>
 );
 
 const RiverWildlife: React.FC = () => {
-  const [openSectionId, setOpenSectionId] = useState<string | null>(sectionsData[0]?.id ?? null);
+  const [openSectionId, setOpenSectionId] = useState<string | null>('fish_passage');
 
   const handleToggleSection = (sectionId: string) => {
     setOpenSectionId(prevId => (prevId === sectionId ? null : sectionId));
   };
   
   return (
-    <div className="animate-fade-in">
-      <BackButton text="Back to HUB" />
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">Ecological Engineering in Hydropower</h2>
-        <p className="text-slate-400 mb-8">This hub provides the non-negotiable technologies required to fulfill our ethical mandate for Ecosystem Protection.</p>
+    <div className="space-y-8 pb-8 max-w-4xl mx-auto">
+      
+      {/* HEADER */}
+      <div className="text-center space-y-4 animate-fade-in-up">
+        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+            Ecological <span className="text-cyan-400">Engineering</span>
+        </h2>
+        <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+            Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.
+        </p>
       </div>
 
-      <div className="p-4 bg-slate-900/50 border-l-4 border-cyan-400 rounded-r-lg mb-8">
-        <h4 className="text-lg font-bold text-cyan-300">Hydro-Prijatelj Mandate: The Postulate of Ethics</h4>
-        <p className="text-slate-300 mt-1 text-sm">Our Postulate of Ethics is non-negotiable. Adherence to these principles, especially the **automatic measurement and digital documentation of E-Flow**, is a core requirement of the Standard of Excellence. We do not just mitigate impact; we actively protect the ecosystem as a primary engineering goal.</p>
-    </div>
+      {/* MANDATE BANNER */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cyan-900/40 to-slate-900/40 border border-cyan-500/30 p-6 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+        <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500"></div>
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+            <div className="text-4xl">📜</div>
+            <div>
+                <h4 className="text-lg font-bold text-cyan-300 uppercase tracking-wider mb-1">The Postulate of Ethics</h4>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                    We do not just mitigate impact; we actively protect the ecosystem. 
+                    <strong className="text-white"> Automatic E-Flow measurement</strong> is a core requirement of the Standard of Excellence.
+                </p>
+            </div>
+        </div>
+      </div>
       
-      <div>
-        {sectionsData.map(section => (
-           <AccordionSection
+      {/* MODULES */}
+      <div className="space-y-4">
+        {sectionsData.map((section, index) => (
+           <EcoModule
             key={section.id}
-            title={section.title}
-            icon={section.icon}
+            item={section}
             isOpen={openSectionId === section.id}
             onClick={() => handleToggleSection(section.id)}
-          >
-            {section.content}
-          </AccordionSection>
+            delay={200 + (index * 100)}
+          />
         ))}
       </div>
 

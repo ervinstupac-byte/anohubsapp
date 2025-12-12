@@ -1,9 +1,31 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { Answers, RiskContextType } from '../types';
-import { riskKeywords } from '../components/QuestionnaireSummary';
+// BITNO: .ts ekstenzija
+import type { Answers, RiskContextType } from '../types.ts';
 
 const RiskContext = createContext<RiskContextType | undefined>(undefined);
 const LOCAL_STORAGE_KEY_RISK = 'discipline-risk-index';
+
+// --- RISK CONFIGURATION ---
+// Definiramo ovo OVDJE kako bismo izbjegli "Circular Dependency" s QuestionnaireSummary komponentom.
+// Ovo čini RiskContext potpuno neovisnim i stabilnim.
+const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
+    q1: { high: ['no'], medium: ['not documented'] }, 
+    q2: { high: ['no'], medium: ['partially'] },
+    q4: { high: ['no'], medium: ['sometimes'] }, 
+    q5: { high: ['frequently'], medium: ['occasionally'] },
+    q6: { high: ['not maintained'], medium: ['partially filled'] },
+    q7: { high: ['often we only fix the symptom'], medium: ['sometimes we only fix the symptom'] },
+    q8: { high: ['no'], medium: ['in testing phase'] }, 
+    q9: { high: ['no'], medium: ['limited access'] },
+    q10: { high: ['not monitored'], medium: ['monitored periodically'] },
+    q11: { high: ['no', 'do not measure'], medium: [] }, 
+    q12: { high: ['only replacement', 'no, only replacement is offered'], medium: ['sometimes'] },
+    q13: { high: ['no'], medium: ['periodically'] }, 
+    q14: { high: ['not installed/functional'], medium: ['some require checking'] },
+    q15: { high: ['no'], medium: ['outdated'] }, 
+    q16: { high: ['manual'], medium: ['semi-automatic'] },
+    q17: { high: ['major service needed'], medium: ['requires minor maintenance'] },
+};
 
 export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [disciplineRiskScore, setDisciplineRiskScore] = useState<number>(() => {
@@ -39,6 +61,7 @@ export const RiskProvider: React.FC<{ children: React.ReactNode }> = ({ children
         Object.keys(answers).forEach(qId => {
             const answer = answers[qId]?.toLowerCase();
             const riskDef = riskKeywords[qId];
+            
             if (!answer || !riskDef) return;
 
             if (riskDef.high.some(keyword => answer.includes(keyword))) {
