@@ -1,7 +1,6 @@
-import { HubTool } from './types.ts';
+import { HubTool, TurbineCategories } from './types.ts';
 
 // --- HUB KARTICE ---
-
 export const CORE_STRATEGY_TOOLS: HubTool[] = [
   {
     id: 'assessment',
@@ -129,8 +128,8 @@ export const FEEDBACK_TOOLS: HubTool[] = [
   },
 ];
 
-// --- TURBINE CATEGORIES (Prošireno za Investor Briefing) ---
-export const TURBINE_CATEGORIES: any = {
+// --- TURBINE CATEGORIES (Type-Safe) ---
+export const TURBINE_CATEGORIES: TurbineCategories = {
     kaplan: { 
         name: 'Kaplan', 
         description: 'Adjustable blades for low head, high flow efficiency.',

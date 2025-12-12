@@ -1,9 +1,9 @@
-// types.ts
+import React from 'react';
 
 // --- NAVIGACIJA ---
 export type AppView = 
-  | 'hub'
-  | 'riskAssessment'
+  | 'hub' 
+  | 'riskAssessment' 
   | 'investorBriefing'
   | 'standardOfExcellence'
   | 'digitalIntroduction'
@@ -16,7 +16,7 @@ export type AppView =
   | 'suggestionBox'
   | 'riverWildlife'
   | 'questionnaireSummary'
-  | 'riskReport' // Dodano za Risk Report
+  | 'riskReport'
   | 'revitalizationStrategy'
   | 'digitalIntegrity'
   | 'contractManagement';
@@ -40,7 +40,7 @@ export interface HubTool {
   delay?: number;
 }
 
-// --- TURBINES (Za Investor Briefing i Questionnaire) ---
+// --- TURBINES ---
 export interface TurbineType {
     id: string;
     name: string;
@@ -98,7 +98,7 @@ export type FlowVariation = 'stable' | 'seasonal' | 'variable';
 export interface HPPSettings {
     head: number;
     flow: number;
-    efficiency: number;
+    efficiency: number; // Integer 0-100
     powerFactor: number;
     waterQuality: WaterQuality;
     flowVariation: FlowVariation;
@@ -116,7 +116,7 @@ export interface TurbineRecommendation {
     isBest: boolean;
 }
 
-// --- INSTALLATION GUARANTEE (Protokoli) ---
+// --- INSTALLATION GUARANTEE ---
 export type RiskLevel = 'Standard' | 'High Risk' | 'Critical';
 export type VerificationStatus = 'Pending' | 'Verified' | 'Failed' | 'Reworked';
 
@@ -149,7 +149,7 @@ export interface VerificationData {
     timestamp: string;
 }
 
-// --- INO-HUB (Improvements) ---
+// --- INO-HUB ---
 export interface HPPImprovement {
     id: string;
     title: string;
