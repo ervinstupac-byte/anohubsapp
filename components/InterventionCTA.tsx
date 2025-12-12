@@ -4,12 +4,13 @@ import { useRisk } from '../contexts/RiskContext';
 export const InterventionCTA: React.FC = () => {
     const { disciplineRiskScore } = useRisk();
 
-    // Prag za prikazivanje intervencije
+    // Prag za prikazivanje intervencije (mora biti < 55 da se NE prikazuje, tj. prikazuje se ako je >= 55)
+    // Ovdje je logika: Ako je score MANJI od 55, vrati null (ne prikazuj ništa).
     if (disciplineRiskScore < 55) {
         return null;
     }
 
-    const mailtoLink = `mailto:info@anohubs.com?subject=URGENT: Zero-Tolerance Audit Request (Risk Score: ${disciplineRiskScore})&body=SYSTEM ALERT: My current Discipline Risk Index score is ${disciplineRiskScore}, which indicates a CRITICAL level of systemic risk.\n\nI am requesting an immediate scheduling of a private, remote 'Zero-Tolerance Audit' to identify the Execution Gap and protect my asset's warranty.\n\nPlease provide next steps immediately.`;
+    const mailtoLink = `mailto:ino@anohubs.com?subject=URGENT: Zero-Tolerance Audit Request (Risk Score: ${disciplineRiskScore})&body=SYSTEM ALERT: My current Discipline Risk Index score is ${disciplineRiskScore}, which indicates a CRITICAL level of systemic risk.\n\nI am requesting an immediate scheduling of a private, remote 'Zero-Tolerance Audit' to identify the Execution Gap and protect my asset's warranty.\n\nPlease provide next steps immediately.`;
 
     return (
         <div className="fixed bottom-0 left-0 right-0 z-[100] no-print animate-fade-in-up">
@@ -52,12 +53,10 @@ export const InterventionCTA: React.FC = () => {
                     {/* RIGHT: ACTION BUTTON */}
                     <a
                         href={mailtoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="
                             flex-shrink-0 group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg 
                             shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(220,38,38,0.6)]
-                            whitespace-nowrap overflow-hidden
+                            whitespace-nowrap overflow-hidden flex items-center gap-2
                         "
                     >
                         <span className="relative z-10 flex items-center gap-2">

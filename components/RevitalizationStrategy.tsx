@@ -122,7 +122,7 @@ const RevitalizationStrategy: React.FC = () => {
                         <p className="text-slate-400 mb-6">Schedule an audit to determine the future of your asset.</p>
                         
                         <a 
-                            href="mailto:info@anohubs.com?subject=Inquiry: Obsolescence Audit" 
+                            href="mailto:ino@anohubs.com?subject=Inquiry: Obsolescence Audit" 
                             className="inline-flex items-center px-8 py-4 bg-cyan-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 transition-all duration-300"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

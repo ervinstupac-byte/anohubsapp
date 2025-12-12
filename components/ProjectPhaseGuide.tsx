@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigation } from '../contexts/NavigationContext.tsx';
+import { BackButton } from './BackButton';
+import { useNavigation } from '../contexts/NavigationContext';
 
-// --- DATA STRUCTURE ---
-// Prebacili smo HTML stringove u čisti JSX radi sigurnosti i fleksibilnosti
+// --- RICH DATA STRUCTURE (Tvoj originalni sadržaj) ---
 const phasesData = [
     {
         id: 'planning',
         icon: '🔭',
         title: '1. Research & Planning',
+        color: 'border-cyan-500',
         objectives: [
             'Confirm technical and economic feasibility.',
             'Secure financing and obtain key permits.',
@@ -39,6 +40,7 @@ const phasesData = [
         id: 'construction',
         icon: '🏗️',
         title: '2. Construction & Assembly',
+        color: 'border-blue-500',
         objectives: [
             'Execute within budget and deadlines.',
             'Ensure highest quality of assembly.',
@@ -70,6 +72,7 @@ const phasesData = [
         id: 'maintenance',
         icon: '⚙️',
         title: '3. Maintenance & Diagnostics',
+        color: 'border-indigo-500',
         objectives: [
             'Maximize plant availability (>99%).',
             'Optimize performance and efficiency.',
@@ -101,6 +104,7 @@ const phasesData = [
         id: 'strategic',
         icon: '🧠',
         title: '4. Strategic Management',
+        color: 'border-purple-500',
         objectives: [
             'Long-term Asset Performance Management.',
             'Culture of continuous improvement.',
@@ -121,7 +125,7 @@ const phasesData = [
     }
 ];
 
-// --- COMPONENTS ---
+// --- SUB-COMPONENTS ---
 
 const MandateSection: React.FC<{ mandate: any }> = ({ mandate }) => {
     if (!mandate) return null;
@@ -143,8 +147,8 @@ const MandateSection: React.FC<{ mandate: any }> = ({ mandate }) => {
             <ul className="space-y-3">
                 {mandate.items.map((item: any, index: number) => (
                     <li key={index} className="bg-black/20 p-3 rounded-lg">
-                        <strong className="block text-white text-sm mb-1">{item.title}</strong>
-                        <span className="text-sm opacity-90">{item.content}</span>
+                        <strong className="block text-white text-sm mb-1" dangerouslySetInnerHTML={{ __html: item.title }}/>
+                        <span className="text-sm opacity-90" dangerouslySetInnerHTML={{ __html: item.content }}/>
                     </li>
                 ))}
             </ul>
@@ -165,112 +169,118 @@ const ProjectPhaseGuide: React.FC = () => {
             
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                <BackButton text="Back to HUB" />
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-4">
                     Project Phase <span className="text-cyan-400">Guide</span>
                 </h2>
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
-                    Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation, and Ethical LCC Optimization across the lifecycle.
+                    The lifecycle of excellence: Enforcing Precision, Risk Mitigation, and Ethical LCC Optimization.
                 </p>
             </div>
 
-            {/* ACCORDION */}
-            <div className="space-y-4">
+            {/* TIMELINE ACCORDION */}
+            <div className="relative border-l-2 border-slate-700 ml-4 md:ml-6 space-y-8 py-4">
                 {phasesData.map((phase, index) => {
                     const isOpen = openSectionId === phase.id;
                     return (
-                        <div 
-                            key={phase.id} 
-                            className={`glass-panel rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-cyan-500/40 shadow-lg' : 'border-slate-700/50'}`}
-                            style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                            <button
-                                onClick={() => handleToggle(phase.id)}
-                                className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-800/50 transition-colors"
+                        <div key={phase.id} className="relative pl-8 md:pl-12">
+                            
+                            {/* Timeline Dot */}
+                            <div className={`absolute -left-[9px] top-6 w-4 h-4 rounded-full bg-slate-900 border-2 ${phase.color} shadow-[0_0_10px_currentColor] transition-all duration-300 ${isOpen ? 'scale-125 bg-white' : ''}`}></div>
+
+                            <div 
+                                className={`glass-panel rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? `border-l-4 ${phase.color} shadow-lg` : 'border-slate-700/50 hover:border-slate-600'}`}
+                                style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                <div className="flex items-center gap-4">
-                                    <div className={`text-3xl p-3 rounded-xl ${isOpen ? 'bg-cyan-900/30' : 'bg-slate-800'}`}>
-                                        {phase.icon}
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-xl font-bold ${isOpen ? 'text-white' : 'text-slate-300'}`}>{phase.title}</h3>
-                                        <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
-                                            {isOpen ? 'Active Phase' : 'Expand Details'}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform duration-300 ${isOpen ? 'bg-cyan-500 text-slate-900 rotate-180' : 'bg-slate-800 text-slate-400'}`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </button>
-
-                            {/* CONTENT */}
-                            <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                                <div className="p-6 pt-0 border-t border-slate-700/50">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-                                        
-                                        {/* LEFT COLUMN */}
-                                        <div className="space-y-6">
-                                            <div>
-                                                <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Core Objectives</h4>
-                                                <ul className="space-y-2">
-                                                    {phase.objectives.map((obj, i) => (
-                                                        <li key={i} className="flex items-start text-sm text-slate-300">
-                                                            <span className="text-cyan-500 mr-2">▹</span> {obj}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            <div>
-                                                <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Key Protocols & Tools</h4>
-                                                <ul className="space-y-2">
-                                                    {phase.protocols.map((proto, i) => (
-                                                        <li key={i} className="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-slate-700/50">
-                                                            <span className="text-sm text-slate-200">{proto.text}</span>
-                                                            {proto.action && (
-                                                                <button 
-                                                                    onClick={() => navigateTo(proto.action as any)}
-                                                                    className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded hover:bg-cyan-600 hover:text-white transition-colors uppercase font-bold"
-                                                                >
-                                                                    Open Tool
-                                                                </button>
-                                                            )}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
+                                <button
+                                    onClick={() => handleToggle(phase.id)}
+                                    className="w-full flex justify-between items-center text-left p-6 hover:bg-slate-800/50 transition-colors"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`text-3xl p-2 rounded-xl ${isOpen ? 'bg-white/10' : 'opacity-50'}`}>
+                                            {phase.icon}
                                         </div>
+                                        <div>
+                                            <h3 className={`text-xl font-bold ${isOpen ? 'text-white' : 'text-slate-300'}`}>{phase.title}</h3>
+                                            <p className="text-xs text-slate-500 uppercase tracking-widest mt-1">
+                                                {isOpen ? 'Phase Active' : 'View Details'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-180 bg-white/10 text-white' : 'text-slate-500'}`}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </button>
 
-                                        {/* RIGHT COLUMN */}
-                                        <div className="space-y-6">
-                                            <div>
-                                                <h4 className="text-red-400 font-bold uppercase text-xs tracking-widest mb-3">Critical Risks</h4>
-                                                <ul className="space-y-2">
-                                                    {phase.risks.map((risk, i) => (
-                                                        <li key={i} className="flex items-start text-sm text-slate-400">
-                                                            <span className="text-red-500 mr-2">⚠️</span> {risk}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
+                                {/* CONTENT */}
+                                <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                                    <div className="p-6 pt-0 border-t border-slate-700/50">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
                                             
-                                            <div>
-                                                <h4 className="text-yellow-500 font-bold uppercase text-xs tracking-widest mb-3">Suggested Software</h4>
-                                                <div className="flex flex-wrap gap-2">
-                                                    {phase.tools.map((tool, i) => (
-                                                        <span key={i} className="text-xs bg-yellow-900/20 text-yellow-200 px-2 py-1 rounded border border-yellow-700/30">
-                                                            {tool}
-                                                        </span>
-                                                    ))}
+                                            {/* LEFT COLUMN */}
+                                            <div className="space-y-6">
+                                                <div>
+                                                    <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Core Objectives</h4>
+                                                    <ul className="space-y-2">
+                                                        {phase.objectives.map((obj, i) => (
+                                                            <li key={i} className="flex items-start text-sm text-slate-300">
+                                                                <span className="text-cyan-500 mr-2">▹</span> {obj}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+
+                                                <div>
+                                                    <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-3">Key Protocols & Tools</h4>
+                                                    <ul className="space-y-2">
+                                                        {phase.protocols.map((proto, i) => (
+                                                            <li key={i} className="flex items-center justify-between bg-slate-800/50 p-2 rounded border border-slate-700/50">
+                                                                <span className="text-sm text-slate-200">{proto.text}</span>
+                                                                {proto.action && (
+                                                                    <button 
+                                                                        onClick={() => navigateTo(proto.action as any)}
+                                                                        className="text-[10px] bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded hover:bg-cyan-600 hover:text-white transition-colors uppercase font-bold tracking-wider"
+                                                                    >
+                                                                        Open Tool
+                                                                    </button>
+                                                                )}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            {/* RIGHT COLUMN */}
+                                            <div className="space-y-6">
+                                                <div>
+                                                    <h4 className="text-red-400 font-bold uppercase text-xs tracking-widest mb-3">Critical Risks</h4>
+                                                    <ul className="space-y-2">
+                                                        {phase.risks.map((risk, i) => (
+                                                            <li key={i} className="flex items-start text-sm text-slate-400">
+                                                                <span className="text-red-500 mr-2">⚠️</span> {risk}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                                
+                                                <div>
+                                                    <h4 className="text-yellow-500 font-bold uppercase text-xs tracking-widest mb-3">Suggested Software</h4>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {phase.tools.map((tool, i) => (
+                                                            <span key={i} className="text-xs bg-yellow-900/20 text-yellow-200 px-2 py-1 rounded border border-yellow-700/30">
+                                                                {tool}
+                                                            </span>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* MANDATE SECTION */}
-                                    <MandateSection mandate={phase.mandate} />
+                                        {/* MANDATE SECTION */}
+                                        <MandateSection mandate={phase.mandate} />
+                                    </div>
                                 </div>
                             </div>
                         </div>

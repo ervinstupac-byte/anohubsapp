@@ -1,116 +1,109 @@
 import React from 'react';
-
-// Reusable komponenta za sekcije (ista kao u DigitalIntroduction za konzistenciju)
-const Section: React.FC<{ title: string; children: React.ReactNode; className?: string; delay?: number }> = ({ title, children, className, delay = 0 }) => (
-    <div 
-        className={`glass-panel rounded-2xl p-6 animate-fade-in-up ${className}`}
-        style={{ animationDelay: `${delay}ms` }}
-    >
-        <div className="flex items-center space-x-3 mb-6">
-            <div className="h-8 w-1 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
-            <h3 className="text-xl font-bold text-white tracking-wide">{title}</h3>
-        </div>
-        {children}
-    </div>
-);
+import { BackButton } from './BackButton';
 
 const ContractManagement: React.FC = () => {
     return (
-        <div className="space-y-8 pb-8 max-w-5xl mx-auto">
+        <div className="animate-fade-in space-y-12 pb-12 max-w-5xl mx-auto">
+            <BackButton text="Back to HUB" />
             
-            {/* HEADER */}
-            <div className="text-center space-y-4 animate-fade-in-up">
+            {/* HERO SECTION */}
+            <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Contract Management & <span className="text-cyan-400">Legal Risk</span>
+                    Contract & <span className="text-cyan-400">Legal Risk</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
-                    Ensuring technical standards are legally binding. We prevent the Execution Gap from becoming a legal liability.
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                    The Execution Gap starts in the contract. If you don't legally mandate the 0.05 mm/m standard, you cannot enforce it on site.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                {/* 1. TEHNIČKA SPECIFIKACIJA (Lijeva strana) */}
-                <Section title="The Technical Specification Mandate" delay={100} className="h-full">
-                    <p className="text-slate-300 mb-6 leading-relaxed">
-                        Introducing the <strong className="text-white">"Zero-Tolerance Specification Clause"</strong>. 
-                        This mandate legally enforces:
+            {/* THE TRAP VS THE SOLUTION */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* The Trap */}
+                <div className="glass-panel p-8 rounded-2xl border-l-4 border-red-500 bg-gradient-to-br from-slate-900 to-red-950/20">
+                    <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">
+                        <span>⚠️</span> The "Industry Standard" Trap
+                    </h3>
+                    <p className="text-slate-300 mb-4 text-sm leading-relaxed">
+                        Most HPP contracts use vague phrases like <em>"Installation according to ISO standards"</em> or <em>"Best industry practice."</em>
                     </p>
-                    <ul className="space-y-3 mb-6">
-                        <li className="flex items-start space-x-3 text-slate-300">
-                            <span className="text-cyan-400 mt-1">✓</span>
-                            <span>The <strong className="text-cyan-300">0.05 mm/m</strong> precision standard.</span>
-                        </li>
-                        <li className="flex items-start space-x-3 text-slate-300">
-                            <span className="text-cyan-400 mt-1">✓</span>
-                            <span>Acoustic Baseline & RCFA protocols.</span>
-                        </li>
-                    </ul>
-
-                    {/* CRITICAL RISK ALERT - Redizajniran */}
-                    <div className="p-5 bg-red-900/20 border border-red-500/30 rounded-xl relative overflow-hidden group hover:bg-red-900/30 transition-colors">
-                        <div className="absolute -right-4 -top-4 text-red-500/10 text-9xl font-black select-none">!</div>
-                        <h4 className="font-bold text-red-400 flex items-center mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                            CRITICAL RISK FACTOR
-                        </h4>
-                        <p className="text-slate-300 text-sm relative z-10">
-                            Vague contractual language (e.g., "Industry Best Practice") is a primary source of the Execution Gap. 
-                            <span className="block mt-2 font-medium text-white">AnoHub's metrics provide the legal clarity needed for enforcement.</span>
+                    <div className="bg-slate-900/50 p-4 rounded-lg border border-red-500/20">
+                        <strong className="text-red-300 text-xs uppercase tracking-widest block mb-2">The Consequence:</strong>
+                        <p className="text-slate-400 text-sm">
+                            Contractors will default to the easiest tolerance (often 0.1 mm/m or worse). When bearings fail prematurely, 
+                            <strong className="text-white"> you have no legal ground to claim warranty</strong> because they "met the standard."
                         </p>
                     </div>
-                </Section>
-
-                {/* Desna strana - Sekcije 2 i 3 */}
-                <div className="space-y-8">
-                    <Section title="The Warranty Integrity Audit" delay={200}>
-                        <div className="flex items-start space-x-4">
-                            <div className="text-4xl">🛡️</div>
-                            <div>
-                                <p className="text-slate-300 text-sm leading-relaxed">
-                                    A mandatory check for <strong className="text-white">Warranty Validity Risk</strong>. 
-                                    We verify if the Digital Logbook is consistently updated, ensuring you have legal proof against any warranty claim denial.
-                                </p>
-                            </div>
-                        </div>
-                    </Section>
-
-                    <Section title="Dispute Resolution & Blockchain" delay={300}>
-                        <div className="flex items-start space-x-4">
-                            <div className="text-4xl">⛓️</div>
-                            <div>
-                                <p className="text-slate-300 text-sm leading-relaxed">
-                                    The <strong className="text-white">Digital Integrity Ledger</strong> serves as an unalterable record of all CRITICAL verification protocols (e.g., Final Alignment Data). 
-                                    <span className="block mt-2 text-cyan-400 font-medium">Irrefutable evidence in legal disputes.</span>
-                                </p>
-                            </div>
-                        </div>
-                    </Section>
                 </div>
-            </div>
 
-            {/* CTA SECTION - Futuristički gumb */}
-            <div className="mt-12 text-center animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                <div className="inline-block p-[1px] rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500">
-                    <div className="bg-slate-900 rounded-xl p-8 backdrop-blur-xl">
-                        <h3 className="text-2xl font-bold text-white mb-2">Protect Your Capital</h3>
-                        <p className="text-slate-400 mb-6">Audit your technical specifications against the Standard of Excellence.</p>
-                        
-                        <a 
-                            href="mailto:info@anohubs.com?subject=Inquiry: Technical Specification Audit" 
-                            className="inline-flex items-center px-8 py-4 bg-cyan-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 transition-all duration-300"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Audit Against AnoHub Standards
-                        </a>
+                {/* The Solution */}
+                <div className="glass-panel p-8 rounded-2xl border-l-4 border-green-500 bg-gradient-to-br from-slate-900 to-green-950/20">
+                    <h3 className="text-xl font-bold text-green-400 mb-4 flex items-center gap-2">
+                        <span>⚖️</span> The Hydro-Prijatelj Clauses
+                    </h3>
+                    <p className="text-slate-300 mb-4 text-sm leading-relaxed">
+                        We provide specific, non-negotiable text blocks to insert into your EPC or O&M contracts *before* signing.
+                    </p>
+                    <div className="bg-slate-900/50 p-4 rounded-lg border border-green-500/20">
+                        <strong className="text-green-300 text-xs uppercase tracking-widest block mb-2">The Protection:</strong>
+                        <p className="text-slate-400 text-sm">
+                            By defining "Success" as <strong className="text-white">verified 0.05 mm/m alignment</strong>, 
+                            payment becomes conditional on quality, not just completion.
+                        </p>
                     </div>
                 </div>
             </div>
 
+            {/* MANDATORY CLAUSES LIST */}
+            <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-white text-center">Mandatory Contract Clauses</h3>
+                
+                <div className="glass-panel p-6 rounded-xl border border-cyan-500/30 hover:border-cyan-500/60 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-lg font-bold text-cyan-400">Clause 1: The Precision Payment Trigger</h4>
+                        <span className="bg-cyan-900/50 text-cyan-200 text-xs px-2 py-1 rounded border border-cyan-500/30">Financial</span>
+                    </div>
+                    <p className="text-slate-300 italic text-sm mb-3">
+                        "Final payment for the mechanical installation phase is contingent upon the submission of a digital alignment report verifying shaft runout ≤ 0.05 mm/m."
+                    </p>
+                    <p className="text-xs text-slate-500">Prevents "rush jobs" at the end of the project.</p>
+                </div>
+
+                <div className="glass-panel p-6 rounded-xl border border-purple-500/30 hover:border-purple-500/60 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-lg font-bold text-purple-400">Clause 2: The Digital Evidence Mandate</h4>
+                        <span className="bg-purple-900/50 text-purple-200 text-xs px-2 py-1 rounded border border-purple-500/30">Legal</span>
+                    </div>
+                    <p className="text-slate-300 italic text-sm mb-3">
+                        "All critical torque values and pressure tests must be photo-documented and uploaded to the designated Integrity Ledger within 24 hours of execution."
+                    </p>
+                    <p className="text-xs text-slate-500">Eliminates the "filled out the logbook in the hotel room" phenomenon.</p>
+                </div>
+
+                <div className="glass-panel p-6 rounded-xl border border-yellow-500/30 hover:border-yellow-500/60 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-lg font-bold text-yellow-400">Clause 3: The RCFA Right</h4>
+                        <span className="bg-yellow-900/50 text-yellow-200 text-xs px-2 py-1 rounded border border-yellow-500/30">Technical</span>
+                    </div>
+                    <p className="text-slate-300 italic text-sm mb-3">
+                        "In the event of failure, the Owner reserves the right to independent Root Cause Failure Analysis (RCFA). If the root cause is determined to be an 'Execution Gap' deviation, the Warranty Period resets."
+                    </p>
+                    <p className="text-xs text-slate-500">Protects against recurring "symptom fixing" by the manufacturer.</p>
+                </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-10 text-center p-8 bg-slate-900/50 border border-slate-700 rounded-2xl">
+                <h3 className="text-2xl font-bold text-white mb-2">Audit Your Current Contract</h3>
+                <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
+                    Are you exposed? Send us your draft contract for a "Red Pen Review" to identify vague clauses before you sign.
+                </p>
+                <a 
+                    href="mailto:ino@anohubs.com?subject=Request: Contract Review & Clause Injection" 
+                    className="inline-flex items-center px-8 py-4 bg-slate-100 hover:bg-white text-slate-900 font-bold rounded-xl transition-transform hover:-translate-y-1 shadow-xl"
+                >
+                    <span className="mr-2">📄</span> Request Contract Review
+                </a>
+            </div>
         </div>
     );
 };

@@ -135,7 +135,6 @@ const InstallationGuarantee: React.FC = () => {
         } catch (error) { console.error("Failed to save data", error); }
     }, [progress]);
 
-    // --- POPRAVAK: Izuzeli smo 'timestamp' iz tipa jer ga generiramo ovdje ---
     const handleVerification = (stepId: string, data: Omit<VerificationData, 'status' | 'timestamp'>) => {
         const step = modalState.step;
         let status: VerificationStatus = 'Verified';
@@ -158,7 +157,6 @@ const InstallationGuarantee: React.FC = () => {
             alert(`PROTOCOL FAILED. Risk Score +15. Immediate corrective action required.`);
         }
 
-        // Timestamp se dodaje ovdje
         setProgress(prev => ({...prev, [stepId]: { ...data, status, timestamp: new Date().toISOString() }}));
         if(riskPenalty > 0) updateDisciplineRiskScore(riskPenalty, 'add');
         setModalState({ isOpen: false, step: null, sectionId: null });
@@ -169,6 +167,28 @@ const InstallationGuarantee: React.FC = () => {
             setProgress({});
             updateDisciplineRiskScore(0, 'reset');
         }
+    };
+
+    // --- NOVA FUNKCIJA ZA SLANJE IZVJEŠTAJA ---
+    const handleSendReport = () => {
+        const reportBody = Object.entries(progress).map(([key, val]) => {
+            return `Step ID ${key}: [${val.status}] Value: ${val.value}, Note: ${val.comment}`;
+        }).join('\n');
+
+        const subject = `Installation Protocol Report - Risk Score: ${disciplineRiskScore}`;
+        const body = `
+Hello AnoHub Team (ino@anohubs.com),
+
+Here is the installation verification log:
+
+Current Risk Score: ${disciplineRiskScore}
+
+--- PROTOCOL DATA ---
+${reportBody || 'No steps verified yet.'}
+
+Please archive this for warranty validation.
+        `;
+        window.location.href = `mailto:ino@anohubs.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
 
     const protocols = { General: generalProtocol, Kaplan: kaplanProtocol, Francis: francisProtocol, Pelton: peltonProtocol };
@@ -241,6 +261,20 @@ const InstallationGuarantee: React.FC = () => {
                         delay={index * 100}
                     />
                 ))}
+            </div>
+
+            {/* --- NOVI GUMB ZA SLANJE IZVJEŠTAJA --- */}
+            <div className="mt-12 pt-8 border-t border-slate-700 text-center animate-fade-in-up">
+                <div className="inline-block p-[1px] rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600">
+                    <button 
+                        onClick={handleSendReport}
+                        className="px-10 py-4 bg-slate-900 text-white font-bold rounded-xl shadow-2xl hover:bg-slate-800 transition-all flex items-center gap-3 uppercase tracking-wider"
+                    >
+                        <span className="text-xl">📤</span> 
+                        Submit Protocol Report to HQ
+                    </button>
+                </div>
+                <p className="text-slate-500 text-sm mt-3">Generates an email with full verification logs for warranty validation.</p>
             </div>
 
             {/* VERIFICATION MODAL */}
@@ -347,7 +381,6 @@ const VerificationModal: React.FC<{
     step: ProtocolStep,
     sectionId: string,
     onClose: () => void,
-    // --- POPRAVAK: Izuzeli smo 'timestamp' i ovdje ---
     onSubmit: (stepId: string, data: Omit<VerificationData, 'status' | 'timestamp'>) => void,
 }> = ({ step, onClose, onSubmit }) => {
     const [value, setValue] = useState('');

@@ -1,124 +1,95 @@
 import React from 'react';
-
-// Reusable Glass Section (Standardizirano)
-const Section: React.FC<{ title: string; children: React.ReactNode; className?: string; delay?: number }> = ({ title, children, className, delay = 0 }) => (
-    <div 
-        className={`glass-panel rounded-2xl p-6 animate-fade-in-up ${className}`}
-        style={{ animationDelay: `${delay}ms` }}
-    >
-        <div className="flex items-center space-x-3 mb-6">
-            <div className="h-8 w-1 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
-            <h3 className="text-xl font-bold text-white tracking-wide">{title}</h3>
-        </div>
-        {children}
-    </div>
-);
+import { BackButton } from './BackButton';
 
 const DigitalIntegrity: React.FC = () => {
     return (
-        <div className="space-y-8 pb-8 max-w-5xl mx-auto">
+        <div className="animate-fade-in space-y-12 pb-12 max-w-5xl mx-auto">
+            <BackButton text="Back to HUB" />
             
-            {/* HEADER */}
-            <div className="text-center space-y-4 animate-fade-in-up">
+            {/* HERO SECTION */}
+            <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Digital Integrity & <span className="text-cyan-400">Blockchain</span>
+                    Digital Integrity & <span className="text-purple-400">Blockchain</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
-                    Establishing the definitive, unalterable proof of compliance required to protect your warranty and close the Execution Gap.
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                    The immutable ledger. Moving from "Trust me" to "Here is the cryptographic proof."
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                {/* LEFT COLUMN: THE CORE CONCEPT */}
-                <div className="space-y-8">
-                    <Section title="The Immutable Protocol Mandate" delay={100}>
-                        <p className="text-slate-300 mb-6 leading-relaxed">
-                            Introducing the <strong className="text-white">'Digital Integrity Ledger'</strong>. 
-                            Every time a CRITICAL protocol is digitally signed in AnoHub, that data point is instantly stored on an Immutable Ledger.
-                        </p>
-                        
-                        <div className="space-y-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/50">
-                            <div className="flex items-center justify-between text-sm text-slate-400 border-b border-slate-700 pb-2 mb-2">
-                                <span>Example Data Block:</span>
-                                <span className="text-cyan-500 font-mono text-xs">HASH: #8A2...9F1</span>
-                            </div>
-                            <ul className="space-y-2 text-sm text-cyan-100 font-mono">
-                                <li className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Final Shaft Alignment: 0.04 mm/m</li>
-                                <li className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>Final Torque: Verified</li>
-                                <li className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>E-Flow: Compliant</li>
-                            </ul>
-                        </div>
-                    </Section>
-
-                    {/* GLOWING CORE VALUE BOX */}
-                    <div className="relative group animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-                        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                        <div className="relative glass-panel p-6 rounded-2xl border-cyan-500/30">
-                            <h4 className="font-bold text-cyan-300 flex items-center mb-3">
-                                <span className="text-2xl mr-3">⚖️</span>
-                                Core Value: Irrefutable Proof
-                            </h4>
-                            <p className="text-slate-300 text-sm leading-relaxed">
-                                This eliminates data falsification, providing <strong className="text-white">irrefutable legal proof</strong> of technical discipline against any warranty denial claim. 
-                                It is the ultimate defense against the Execution Gap.
-                            </p>
-                        </div>
-                    </div>
+            {/* CONCEPT VISUALIZATION */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div className="glass-panel p-6 rounded-2xl">
+                    <div className="text-4xl mb-3">📸</div>
+                    <h4 className="font-bold text-white">1. Capture</h4>
+                    <p className="text-xs text-slate-400 mt-1">Technician takes a photo of the torque wrench reading or alignment screen.</p>
                 </div>
-
-                {/* RIGHT COLUMN: AUDIT & AI */}
-                <div className="space-y-8">
-                    <Section title="Audit Trail for Non-Compliance" delay={300}>
-                        <div className="flex items-start space-x-4">
-                            <div className="text-4xl p-2 bg-slate-800 rounded-lg">🔍</div>
-                            <div>
-                                <p className="text-slate-300 text-sm leading-relaxed mb-4">
-                                    The Ledger also records all <strong className="text-red-400">CRITICAL Protocol Failures</strong> and subsequent <strong className="text-green-400">REWORK & VERIFY</strong> actions.
-                                </p>
-                                <p className="text-slate-400 text-xs italic">
-                                    "Transparency builds trust. Showing how you fixed a problem is as important as preventing it."
-                                </p>
-                            </div>
-                        </div>
-                    </Section>
-
-                    <Section title="Hydro-Prijatelj as Regulator" delay={400}>
-                         <div className="flex items-start space-x-4">
-                            <div className="text-4xl p-2 bg-slate-800 rounded-lg">🤖</div>
-                            <div>
-                                <p className="text-slate-300 text-sm leading-relaxed">
-                                    The <strong className="text-cyan-400">Hydro-Prijatelj AI</strong> acts as the gatekeeper.
-                                </p>
-                                <div className="mt-3 p-3 bg-cyan-900/20 border-l-2 border-cyan-500 text-cyan-200 text-sm font-medium">
-                                    "Hydro-Prijatelj ensures that only Immutably Verified Data can be used for final Commissioning Sign-Off."
-                                </div>
-                            </div>
-                        </div>
-                    </Section>
+                <div className="flex items-center justify-center text-slate-600">
+                    <svg className="w-8 h-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </div>
+                <div className="glass-panel p-6 rounded-2xl border border-purple-500/50 bg-purple-900/10">
+                    <div className="text-4xl mb-3">🔐</div>
+                    <h4 className="font-bold text-white">2. Hash & Time-stamp</h4>
+                    <p className="text-xs text-slate-400 mt-1">Data is converted to a SHA-256 hash and anchored to the blockchain.</p>
+                </div>
+                <div className="flex items-center justify-center text-slate-600">
+                    <svg className="w-8 h-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                </div>
+                <div className="glass-panel p-6 rounded-2xl border border-green-500/50 bg-green-900/10">
+                    <div className="text-4xl mb-3">🛡️</div>
+                    <h4 className="font-bold text-white">3. Immutable Proof</h4>
+                    <p className="text-xs text-slate-400 mt-1">The record cannot be deleted, altered, or backdated. It is legal evidence.</p>
                 </div>
             </div>
 
-            {/* CTA SECTION */}
-            <div className="mt-12 text-center animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-                <div className="inline-block p-[1px] rounded-xl bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500">
+            {/* DEEP DIVE SECTION */}
+            <div className="glass-panel p-8 rounded-2xl border-l-4 border-purple-500">
+                <div className="flex items-start gap-4">
+                    <div className="text-3xl mt-1">⛓️</div>
+                    <div>
+                        <h3 className="text-xl font-bold text-white mb-3">Why a Paper Logbook is a Liability</h3>
+                        <p className="text-slate-300 leading-relaxed mb-4">
+                            In a warranty dispute involving millions of Euros, a paper logbook is weak evidence. It can be lost, coffee-stained, or (as often happens) filled out days after the actual work was done ("pencil whipping").
+                        </p>
+                        <p className="text-slate-300 leading-relaxed">
+                            <strong>The "Execution Gap" thrives in the shadows of bad documentation.</strong> If you cannot prove that the alignment was 0.05 mm/m on the day of installation, the manufacturer can claim it drifted due to "improper operation," voiding your warranty.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* BENEFITS GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+                    <h4 className="text-green-400 font-bold uppercase tracking-widest text-sm mb-2">The Liability Shield</h4>
+                    <p className="text-sm text-slate-400">
+                        When a component fails, the first question is "Was it installed correctly?" With Digital Integrity, you send a link to the ledger entry. 
+                        The discussion ends, and the <strong>manufacturer's liability begins</strong>.
+                    </p>
+                </div>
+                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+                    <h4 className="text-cyan-400 font-bold uppercase tracking-widest text-sm mb-2">Resale Value</h4>
+                    <p className="text-sm text-slate-400">
+                        An asset with a complete, verified digital history ("Digital Twin Passport") is worth significantly more during due diligence for acquisition or refinancing.
+                    </p>
+                </div>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center pt-8">
+                <div className="inline-block p-[1px] rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600">
                     <div className="bg-slate-900 rounded-xl p-8 backdrop-blur-xl">
-                        <h3 className="text-2xl font-bold text-white mb-2">Secure Your Warranty</h3>
-                        <p className="text-slate-400 mb-6">Adopt the Immutable Protocol and protect your assets forever.</p>
+                        <h3 className="text-2xl font-bold text-white mb-2">Secure Your Asset's History</h3>
+                        <p className="text-slate-400 mb-6">Deploy the AnoHUB Digital Integrity Ledger for your project.</p>
                         
                         <a 
-                            href="mailto:info@anohubs.com?subject=Inquiry: Immutable Protocol Adoption" 
-                            className="inline-flex items-center px-8 py-4 bg-cyan-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 transition-all duration-300"
+                            href="mailto:ino@anohubs.com?subject=Inquiry: Digital Integrity Ledger Deployment" 
+                            className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                            Request Consultation
+                            <span className="mr-2">🚀</span> Deploy Integrity Ledger
                         </a>
                     </div>
                 </div>
             </div>
-
         </div>
     );
 };
