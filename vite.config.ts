@@ -2,17 +2,14 @@ import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// --- KONFIGURACIJA ---
-// Postavljeno na /anohubsapp/ jer je to ime GitHub repozitorija
-const repoName = '/anohubsapp/'; 
-
 export default defineConfig(({ mode }) => {
     // Učitavamo .env varijable iz trenutnog direktorija
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
-        // Base URL je ključan za GitHub Pages
-        base: repoName, 
+        // BITNO: Za custom domenu (anohubs.com) ovo MORA biti '/'
+        // Da je običan github page bez domene, bilo bi '/anohubsapp/'
+        base: '/', 
         
         server: {
             port: 3000,
@@ -22,22 +19,23 @@ export default defineConfig(({ mode }) => {
         plugins: [react()],
 
         define: {
-            // Sigurno prosljeđivanje API ključa u aplikaciju
+            // Sigurno prosljeđivanje API ključa
             'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
         },
 
         resolve: {
             alias: {
-                // Omogućuje importiranje s '@'
-                '@': path.resolve(__dirname, '.'),
+                // Ovo omogućuje da pišeš import { Hub } from '@/components/Hub'
+                '@': path.resolve(__dirname, './src'),
             }
         },
 
         build: {
-            // Optimizacija za produkciju
             outDir: 'dist',
             assetsDir: 'assets',
-            sourcemap: false, 
+            sourcemap: false,
+            // Čisti output folder prije svakog builda da nema starih fileova
+            emptyOutDir: true, 
         }
     };
 });
