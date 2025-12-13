@@ -65,6 +65,17 @@ gh secret set CODECOV_TOKEN --body "your_codecov_token"
 
 After setting these, the CI workflow will use `secrets.CODECOV_TOKEN` if present to publish coverage, and `GITHUB_TOKEN` is used by the deployment action.
 
+## Deploying to GitHub Pages
+
+The repository is configured to deploy to GitHub Pages using the `gh-pages` branch. You can deploy manually using the npm script:
+
+```bash
+npm run deploy
+```
+
+Or let the CI automatically deploy on push to `main` (the workflow uses `GITHUB_TOKEN`). If you want PR previews, consider using Vercel or Netlify which automatically create preview deploys per PR.
+
+
 3. Run the app in development:
    `npm run dev`
 
