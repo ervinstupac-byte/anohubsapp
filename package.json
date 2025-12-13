@@ -12,6 +12,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
+    "coverage:check": "node scripts/check-coverage.js",
+    "coverage:update-baseline": "node scripts/check-coverage.js --update-baseline",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -34,11 +36,12 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "gh-pages": "^6.3.0",
-    "vitest": "^1.1.6",
+    "vitest": "^4.0.15",
     "@testing-library/react": "^14.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/user-event": "^14.4.3",
     "jsdom": "^22.1.0",
+    "@vitest/coverage-v8": "^4.0.15",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

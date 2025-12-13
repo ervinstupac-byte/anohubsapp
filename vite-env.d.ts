@@ -4,6 +4,9 @@
 // Ovo omogućuje TypeScriptu da prepozna tvoj Gemini API ključ
 interface ImportMetaEnv {
     readonly VITE_GEMINI_API_KEY: string;
+    // Supabase public (anon) URL and key used by the frontend.
+    readonly VITE_SUPABASE_URL: string;
+    readonly VITE_SUPABASE_ANON_KEY: string;
     // Ovdje možeš dodati druge varijable ako ih budeš imao
 }
 

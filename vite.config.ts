@@ -41,6 +41,20 @@ export default defineConfig(({ mode }) => {
             globals: true,
             setupFiles: 'src/setupTests.ts',
             include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+            coverage: {
+                provider: 'v8',
+                reporter: ['text', 'lcov'],
+                reportsDirectory: 'coverage',
+                all: true,
+                threshold: {
+                    global: {
+                        statements: 60,
+                        branches: 15,
+                        functions: 45,
+                        lines: 60,
+                    }
+                }
+            }
         }
     };
 });

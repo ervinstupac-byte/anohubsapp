@@ -51,6 +51,20 @@ View your app in AI Studio: https://ai.studio/apps/drive/1zgDE7SyHUytzj4hoREdr3Y
 
    - Only perform a history rewrite if you understand the consequences (will change commit hashes and require collaborators to rebase or re-clone). If you'd like, I can help with that offline.
 
+## Setting repository secrets (GitHub Actions)
+
+To include environment variables for CI or deployments, add them via the repository Settings → Secrets → Actions, or via GitHub CLI:
+
+```bash
+# Using the GitHub CLI
+gh secret set VITE_SUPABASE_URL --body "https://your-supabase-url.supabase.co"
+gh secret set VITE_SUPABASE_ANON_KEY --body "your_supabase_anon_key"
+gh secret set VITE_GEMINI_API_KEY --body "your_gemini_api_key"
+gh secret set CODECOV_TOKEN --body "your_codecov_token"
+```
+
+After setting these, the CI workflow will use `secrets.CODECOV_TOKEN` if present to publish coverage, and `GITHUB_TOKEN` is used by the deployment action.
+
 3. Run the app in development:
    `npm run dev`
 
