@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, useNavigate, useLocation, Outlet, useParams } from 'react-router-dom';
 
 // --- IMPORTI KOMPONENTI ---
@@ -12,13 +12,12 @@ import InstallationGuarantee from './components/InstallationGuarantee.tsx';
 import GenderEquity from './components/GenderEquity.tsx';
 import HPPBuilder from './components/HPPBuilder.tsx';
 import TurbineDetail from './components/TurbineDetail.tsx';
-import ProjectPhaseGuide from './components/ProjectPhaseGuide.tsx'; 
+import ProjectPhaseGuide from './components/ProjectPhaseGuide.tsx';
 import SuggestionBox from './components/SuggestionBox.tsx';
 import { Feedback } from './components/Feedback.tsx';
 import { Onboarding } from './components/Onboarding.tsx';
 import RiverWildlife from './components/RiverWildlife.tsx';
 import QuestionnaireSummary from './components/QuestionnaireSummary.tsx';
-import RiskReport from './components/RiskReport.tsx'; // Dodan RiskReport
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import RevitalizationStrategy from './components/RevitalizationStrategy.tsx';
 import DigitalIntegrity from './components/DigitalIntegrity.tsx';
@@ -28,55 +27,62 @@ import ContractManagement from './components/ContractManagement.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
-import { TURBINE_CATEGORIES } from './constants.ts'; 
+import { ToastProvider } from './contexts/ToastContext.tsx'; // <--- NOVO
+import { TURBINE_CATEGORIES } from './constants.ts';
 import type { AppView } from './types.ts';
 
 // --- SLIKA ---
-import bgImage from './digital_cfd_mesh.png'; 
+import bgImage from './digital_cfd_mesh.png';
 
-// --- KONFIGURACIJA RUTA ---
-const ROUTE_CONFIG: Record<string, { title: string; subtitle: string }> = {
-    '': { title: 'AnoHUB', subtitle: "Your center for enforcing the Standard of Excellence in hydropower." },
-    'risk-assessment': { title: 'HPP Risk Assessment', subtitle: "A diagnostic tool to quantify the Execution Gap and identify systemic risks before they impact LCC." },
-    'risk-report': { title: 'System Integrity Audit', subtitle: "Official digital certificate of plant health and risk vectors." }, // Dodan naslov za report
-    'investor-briefing': { title: 'Investor Briefing (KPI Review)', subtitle: "A technical review ensuring KPIs are based on realistic risk assessment and ethical LCC Optimization." },
-    'standard-of-excellence': { title: 'THE STANDARD OF EXCELLENCE', subtitle: "Masterclass modules for eliminating the Execution Gap through the 0.05 mm/m precision mandate." },
-    'digital-introduction': { title: 'Digital Introduction', subtitle: "Our core principles: enforcing the 0.05 mm/m precision mandate to close the Execution Gap." },
-    'hpp-improvements': { title: 'HPP Ino-Hub', subtitle: "A collaborative hub for innovations that support LCC Optimization and Ecosystem Protection." },
-    'installation-guarantee': { title: 'Installation Standard', subtitle: "The non-negotiable protocol for closing the Execution Gap and M-E Synergy Gap during assembly." },
-    'gender-equity': { title: 'Gender Equity in Hydropower', subtitle: "Eliminating the 'Execution Gap' in human capital by applying the same zero-tolerance principles as our 0.05 mm/m technical mandate." },
-    'hpp-builder': { title: 'HPP Power Calculator', subtitle: "An interactive tool for HPP configuration, guided by the principles of LCC Optimization and resilience to the Execution Gap." },
-    'phase-guide': { title: 'Project Phase Guide', subtitle: "Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation (Execution Gap), and Ethical LCC Optimization." },
-    'suggestion-box': { title: 'Suggestion & Idea Log', subtitle: "Share your ideas for improving our protocols for precision, risk mitigation, and ethics." },
-    'river-wildlife': { title: 'River & Wildlife Stewardship', subtitle: "The ethical mandate for Ecosystem Protection: enforcing and documenting E-Flow as a core operational requirement." },
-    'questionnaire-summary': { title: 'Preliminary Execution Gap Analysis', subtitle: "An initial analysis linking operational symptoms to failures in discipline against our non-negotiable precision standards." },
-    'revitalization-strategy': { title: 'Revitalization & Obsolescence', subtitle: "A data-driven framework for ensuring LCC Optimization by closing the M-E Synergy Gap in legacy assets." },
-    'digital-integrity': { title: 'Digital Integrity & Blockchain', subtitle: "Using an immutable ledger to provide irrefutable proof of discipline and close the Execution Gap against legal liability." },
-    'contract-management': { title: 'Contract & Legal Risk', subtitle: "Legally mandating the 0.05 mm/m precision standard to protect your warranty from the Execution Gap." },
-};
-
+// --- POMOĆNA FUNKCIJA ZA ODREĐIVANJE NASLOVA ---
 const getHeaderInfo = (pathname: string): { title: string; subtitle: string } => {
     const path = pathname.startsWith('/') ? pathname.slice(1) : pathname;
 
     if (path.startsWith('turbine/')) {
         const turbineKey = path.split('/')[1];
         const turbineName = TURBINE_CATEGORIES[turbineKey]?.name || 'Turbine';
-        return { 
-            title: `Details: ${turbineName} Turbine`, 
-            subtitle: "A technical overview focused on components critical to LCC and vulnerable to the Execution Gap." 
+        return {
+            title: `Details: ${turbineName} Turbine`,
+            subtitle: "A technical overview focused on components critical to LCC and vulnerable to the Execution Gap."
         };
     }
 
-    return ROUTE_CONFIG[path] || { title: 'AnoHUB', subtitle: "Standard of Excellence" };
-};
-
-// --- SCROLL TO TOP ---
-const ScrollToTop = () => {
-    const { pathname } = useLocation();
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
-    return null;
+    switch (path) {
+        case '':
+            return { title: 'AnoHUB', subtitle: "Your center for enforcing the Standard of Excellence in hydropower." };
+        case 'risk-assessment':
+            return { title: 'HPP Risk Assessment', subtitle: "A diagnostic tool to quantify the Execution Gap and identify systemic risks before they impact LCC." };
+        case 'investor-briefing':
+            return { title: 'Investor Briefing (KPI Review)', subtitle: "A technical review ensuring KPIs are based on realistic risk assessment and ethical LCC Optimization." };
+        case 'standard-of-excellence':
+            return { title: 'THE STANDARD OF EXCELLENCE', subtitle: "Masterclass modules for eliminating the Execution Gap through the 0.05 mm/m precision mandate." };
+        case 'digital-introduction':
+            return { title: 'Digital Introduction', subtitle: "Our core principles: enforcing the 0.05 mm/m precision mandate to close the Execution Gap." };
+        case 'hpp-improvements':
+            return { title: 'HPP Ino-Hub', subtitle: "A collaborative hub for innovations that support LCC Optimization and Ecosystem Protection." };
+        case 'installation-guarantee':
+            return { title: 'Installation Standard', subtitle: "The non-negotiable protocol for closing the Execution Gap and M-E Synergy Gap during assembly." };
+        case 'gender-equity':
+            return { title: 'Gender Equity in Hydropower', subtitle: "Eliminating the 'Execution Gap' in human capital by applying the same zero-tolerance principles as our 0.05 mm/m technical mandate." };
+        case 'hpp-builder':
+            return { title: 'HPP Power Calculator', subtitle: "An interactive tool for HPP configuration, guided by the principles of LCC Optimization and resilience to the Execution Gap." };
+        case 'phase-guide':
+            return { title: 'Project Phase Guide', subtitle: "Enforcing the Three Postulates: Precision (0.05 mm/m), Risk Mitigation (Execution Gap), and Ethical LCC Optimization." };
+        case 'suggestion-box':
+            return { title: 'Suggestion & Idea Log', subtitle: "Share your ideas for improving our protocols for precision, risk mitigation, and ethics." };
+        case 'river-wildlife':
+            return { title: 'River & Wildlife Stewardship', subtitle: "The ethical mandate for Ecosystem Protection: enforcing and documenting E-Flow as a core operational requirement." };
+        case 'questionnaire-summary':
+            return { title: 'Preliminary Execution Gap Analysis', subtitle: "An initial analysis linking operational symptoms to failures in discipline against our non-negotiable precision standards." };
+        case 'revitalization-strategy':
+            return { title: 'Revitalization & Obsolescence', subtitle: "A data-driven framework for ensuring LCC Optimization by closing the M-E Synergy Gap in legacy assets." };
+        case 'digital-integrity':
+            return { title: 'Digital Integrity & Blockchain', subtitle: "Using an immutable ledger to provide irrefutable proof of discipline and close the Execution Gap against legal liability." };
+        case 'contract-management':
+            return { title: 'Contract & Legal Risk', subtitle: "Legally mandating the 0.05 mm/m precision standard to protect your warranty from the Execution Gap." };
+        default:
+            return { title: 'AnoHUB', subtitle: "Standard of Excellence" };
+    }
 };
 
 // --- GLAVNI LAYOUT ---
@@ -96,16 +102,12 @@ const AppLayout: React.FC = () => {
         }
     }, []);
 
-    useEffect(() => {
-        document.title = title === 'AnoHUB' ? 'AnoHUB | Standard of Excellence' : `${title} | AnoHUB`;
-    }, [title]);
-
     const handleOnboardingComplete = () => {
         localStorage.setItem('hasCompletedOnboarding', 'true');
         setShowOnboarding(false);
     };
 
-    const navigationContextValue = useMemo(() => ({
+    const navigationContextValue = {
         navigateTo: (view: AppView) => {
             const routeMap: Record<string, string> = {
                 'hub': '/',
@@ -121,7 +123,6 @@ const AppLayout: React.FC = () => {
                 'suggestionBox': '/suggestion-box',
                 'riverWildlife': '/river-wildlife',
                 'questionnaireSummary': '/questionnaire-summary',
-                'riskReport': '/risk-report', // Dodana ruta u mapu
                 'revitalizationStrategy': '/revitalization-strategy',
                 'digitalIntegrity': '/digital-integrity',
                 'contractManagement': '/contract-management',
@@ -133,15 +134,11 @@ const AppLayout: React.FC = () => {
         navigateToHub: () => navigate('/'),
         navigateToTurbineDetail: (turbineKey: string) => navigate(`/turbine/${turbineKey}`),
         showFeedbackModal: () => setIsFeedbackVisible(true),
-    }), [navigate]);
-
-    const handleHomeClick = () => {
-        window.location.href = 'https://www.anohubs.com';
     };
 
     return (
         <NavigationProvider value={navigationContextValue}>
-            <div 
+            <div
                 className="min-h-screen text-slate-200 flex flex-col items-center p-4 sm:p-6 lg:p-8 font-sans print-container"
                 style={{
                     backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.95)), url(${bgImage})`,
@@ -156,8 +153,8 @@ const AppLayout: React.FC = () => {
                 <div className="w-full max-w-6xl mx-auto flex-grow flex flex-col">
                     <header className="text-center mb-8 no-print relative">
                         {!isHub && (
-                            <button 
-                                onClick={() => navigate(-1)} 
+                            <button
+                                onClick={() => navigate(-1)}
                                 className="absolute left-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20"
                                 aria-label="Back to previous screen"
                             >
@@ -168,10 +165,10 @@ const AppLayout: React.FC = () => {
                             </button>
                         )}
 
-                        <button 
-                            onClick={handleHomeClick}
+                        <button
+                            onClick={() => navigate('/')}
                             className="absolute right-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20"
-                            title="Reload Application"
+                            title="Return to AnoHUB Home"
                         >
                             <span className="hidden sm:inline text-sm font-semibold">HOME</span>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,10 +177,10 @@ const AppLayout: React.FC = () => {
                         </button>
 
                         <div className="py-4">
-                            <h1 
-                                onClick={handleHomeClick}
+                            <h1
+                                onClick={() => navigate('/')}
                                 className="text-4xl sm:text-5xl font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition-colors inline-block"
-                                title="Reload Application"
+                                title="Go to Dashboard"
                             >
                                 {title}
                             </h1>
@@ -193,10 +190,7 @@ const AppLayout: React.FC = () => {
                         </div>
                     </header>
 
-                    <main 
-                        key={location.pathname}
-                        className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main backdrop-blur-md border border-slate-700/50 flex-grow animate-[fadeIn_0.5s_ease-out]"
-                    >
+                    <main className="bg-slate-800/80 rounded-xl shadow-2xl p-6 sm:p-8 transition-all duration-500 print-main backdrop-blur-md border border-slate-700/50 flex-grow">
                         <Outlet />
                     </main>
 
@@ -239,32 +233,32 @@ const App: React.FC = () => {
   return (
     <QuestionnaireProvider>
       <RiskProvider>
-        <HashRouter>
-            <ScrollToTop />
-            <Routes>
-                <Route path="/" element={<AppLayout />}>
-                    <Route index element={<Hub />} />
-                    <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                    <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                    <Route path="risk-report" element={<RiskReport />} /> {/* Dodana ruta */}
-                    <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
-                    <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
-                    <Route path="digital-introduction" element={<DigitalIntroduction />} />
-                    <Route path="hpp-improvements" element={<HPPImprovements />} />
-                    <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                    <Route path="gender-equity" element={<GenderEquity />} />
-                    <Route path="hpp-builder" element={<HPPBuilder />} />
-                    <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                    <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                    <Route path="suggestion-box" element={<SuggestionBox />} />
-                    <Route path="river-wildlife" element={<RiverWildlife />} />
-                    <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                    <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                    <Route path="contract-management" element={<ContractManagement />} />
-                    <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Stranica nije pronađena</div>} />
-                </Route>
-            </Routes>
-        </HashRouter>
+        <ToastProvider> {/* <--- OMOTANO S TOAST PROVIDEROM */}
+            <HashRouter>
+                <Routes>
+                    <Route path="/" element={<AppLayout />}>
+                        <Route index element={<Hub />} />
+                        <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                        <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                        <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
+                        <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
+                        <Route path="digital-introduction" element={<DigitalIntroduction />} />
+                        <Route path="hpp-improvements" element={<HPPImprovements />} />
+                        <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                        <Route path="gender-equity" element={<GenderEquity />} />
+                        <Route path="hpp-builder" element={<HPPBuilder />} />
+                        <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                        <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                        <Route path="suggestion-box" element={<SuggestionBox />} />
+                        <Route path="river-wildlife" element={<RiverWildlife />} />
+                        <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                        <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                        <Route path="contract-management" element={<ContractManagement />} />
+                        <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Stranica nije pronađena</div>} />
+                    </Route>
+                </Routes>
+            </HashRouter>
+        </ToastProvider>
       </RiskProvider>
     </QuestionnaireProvider>
   );

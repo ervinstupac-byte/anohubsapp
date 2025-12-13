@@ -98,7 +98,7 @@ export type FlowVariation = 'stable' | 'seasonal' | 'variable';
 export interface HPPSettings {
     head: number;
     flow: number;
-    efficiency: number; // Integer 0-100
+    efficiency: number;
     powerFactor: number;
     waterQuality: WaterQuality;
     flowVariation: FlowVariation;
@@ -155,4 +155,11 @@ export interface HPPImprovement {
     title: string;
     description: string;
     category: 'Mechanical' | 'Digital' | 'Ecological' | 'Systemic';
+}
+
+// --- TOAST NOTIFICATIONS (NOVO) ---
+export type ToastType = 'success' | 'error' | 'info' | 'warning';
+
+export interface ToastContextType {
+    showToast: (message: string, type: ToastType) => void;
 }
