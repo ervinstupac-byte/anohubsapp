@@ -4,7 +4,7 @@ import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; // <--- NOVO
 // Putanja: Izlazimo iz 'components' (..), ulazimo u 'src/utils/'
-import { generateRiskReport } from '../src/utils/pdfGenerator.ts'; // <--- NOVO
+import { generateRiskReport } from '../utils/pdfGenerator.ts'; // <--- NOVO
 import { QUESTIONS } from '../constants.ts';
 import type { Question } from '../types.ts';
 

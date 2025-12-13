@@ -4,7 +4,7 @@ import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 // Izlazimo iz 'components' u root, pa ulazimo u 'src/utils'
-import { generateFinancialReport } from '../src/utils/pdfGenerator.ts';
+import { generateFinancialReport } from '../utils/pdfGenerator.ts';
 import type { TurbineCategories, TurbineType } from '../types.ts';
 
 // --- STARI PODACI (TEXT DATA) ---

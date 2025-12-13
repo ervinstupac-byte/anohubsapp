@@ -1,9 +1,9 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// PUTANJE (Izlazimo iz 'utils', pa iz 'src' u root):
-import type { VerificationData, ProtocolSection, Answers, OperationalData, HPPSettings, TurbineRecommendation } from '../../types.ts';
-import { QUESTIONS } from '../../constants.ts'; 
+// PUTANJE: Izlazimo iz 'utils' (..) direktno u 'src' gdje su types i constants
+import type { VerificationData, ProtocolSection, Answers, OperationalData, HPPSettings, TurbineRecommendation } from '../types.ts';
+import { QUESTIONS } from '../constants.ts'; 
 
 // --- HELPER: COMMON HEADER ---
 const addHeader = (doc: jsPDF, title: string) => {
@@ -91,6 +91,11 @@ export const generateInstallationReport = (
             theme: 'grid',
             headStyles: { fillColor: [15, 23, 42], textColor: [6, 182, 212], fontStyle: 'bold' },
             styles: { fontSize: 8, cellPadding: 2 },
+            columnStyles: {
+                0: { cellWidth: 15 }, 
+                2: { cellWidth: 20, fontStyle: 'bold' }, 
+                5: { cellWidth: 15 } 
+            },
             didParseCell: function(data) {
                 if (data.section === 'body' && data.column.index === 2) {
                     const text = data.cell.raw as string;
@@ -286,7 +291,7 @@ export const generateCalculationReport = (
     doc.save(`AnoHUB_Design_Report_${new Date().toISOString().slice(0,10)}.pdf`);
 };
 
-// --- 4. FINANCIAL KPI REPORT (NOVO!) ---
+// --- 4. FINANCIAL KPI REPORT ---
 export const generateFinancialReport = (
     inputs: { capex: number; opex: number; price: number },
     baseKPI: { irr: string; npv: string; payback: string },
@@ -295,7 +300,6 @@ export const generateFinancialReport = (
     const doc = new jsPDF();
     let startY = addHeader(doc, 'INVESTOR BRIEFING: KPI & RISK ANALYSIS');
 
-    // --- FINANCIAL INPUTS ---
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('1. Financial Assumptions (Inputs)', 14, startY);
@@ -317,7 +321,6 @@ export const generateFinancialReport = (
 
     let currentY = (doc as any).lastAutoTable?.finalY + 15;
 
-    // --- KPI COMPARISON TABLE ---
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('2. Risk Impact Analysis (The Execution Gap)', 14, currentY);
@@ -340,14 +343,13 @@ export const generateFinancialReport = (
         headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255] },
         columnStyles: { 
             0: { fontStyle: 'bold', cellWidth: 60 },
-            3: { fontStyle: 'bold', textColor: [220, 38, 38] } // Red text for loss
+            3: { fontStyle: 'bold', textColor: [220, 38, 38] } 
         }
     });
 
     currentY = (doc as any).lastAutoTable?.finalY + 15;
 
-    // --- CONCLUSION ---
-    doc.setFillColor(240, 253, 250); // Light Cyan bg
+    doc.setFillColor(240, 253, 250); 
     doc.roundedRect(14, currentY, 180, 35, 3, 3, 'F');
     
     doc.setFontSize(11);

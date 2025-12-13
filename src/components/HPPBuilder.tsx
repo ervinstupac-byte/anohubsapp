@@ -3,7 +3,7 @@ import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; // <--- NOVO: Toast
 // Putanja: Izlazimo iz 'components', ulazimo u 'src/utils'
-import { generateCalculationReport } from '../src/utils/pdfGenerator.ts'; // <--- NOVO: PDF
+import { generateCalculationReport } from '../utils/pdfGenerator.ts'; // <--- NOVO: PDF
 import { TURBINE_CATEGORIES } from '../constants.ts';
 import type { HPPSettings, TurbineRecommendation, SavedConfiguration } from '../types.ts';
 
