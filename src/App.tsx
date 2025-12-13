@@ -2,19 +2,20 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { HashRouter, useLocation, useNavigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
 
 // --- IMPORTI KONTEKSTA ---
+// Dodan AuthContext
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'; 
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 
 // --- IMPORTI KOMPONENTI ---
+import { Login } from './components/Login.tsx'; // <--- NOVO
 import { Feedback } from './components/Feedback.tsx';
 import { Onboarding } from './components/Onboarding.tsx';
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import { Spinner } from './components/Spinner.tsx';
 
-// --- IMPORT SLIKE (POPRAVLJENA PUTANJA) ---
-// Slika je sada u assets mapi
 import bgImage from './assets/digital_cfd_mesh.png'; 
 
 import type { AppView } from './types.ts';
@@ -50,7 +51,6 @@ const QuestionnaireWrapper = () => {
     return <Questionnaire onShowSummary={() => window.location.hash = '#/questionnaire-summary'} />;
 };
 
-// Header Logic
 const getHeaderInfo = (pathname: string): { title: string; subtitle: string } => {
     const path = pathname.startsWith('/') ? pathname.slice(1) : pathname;
     if (path.startsWith('turbine/')) {
@@ -82,6 +82,16 @@ const getHeaderInfo = (pathname: string): { title: string; subtitle: string } =>
     return titles[path] || { title: 'AnoHUB', subtitle: "Standard of Excellence" };
 };
 
+// --- AUTH WRAPPER (Zaštita) ---
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { user, loading } = useAuth();
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-900"><Spinner /></div>;
+    if (!user) return <Login />;
+
+    return <>{children}</>;
+};
+
 // Layout
 const AppLayout: React.FC = () => {
     const location = useLocation();
@@ -90,6 +100,9 @@ const AppLayout: React.FC = () => {
     const [showOnboarding, setShowOnboarding] = useState(false);
     const { title, subtitle } = getHeaderInfo(location.pathname);
     const isHub = location.pathname === '/';
+    
+    // Dodajemo Logout funkciju
+    const { signOut, user } = useAuth();
 
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
@@ -99,6 +112,11 @@ const AppLayout: React.FC = () => {
     const handleOnboardingComplete = () => {
         localStorage.setItem('hasCompletedOnboarding', 'true');
         setShowOnboarding(false);
+    };
+
+    const handleLogout = async () => {
+        await signOut();
+        navigate('/'); // Osvježi
     };
 
     const navigationContextValue = {
@@ -137,9 +155,18 @@ const AppLayout: React.FC = () => {
                                 <span className="text-2xl">←</span> <span className="hidden sm:inline">Back</span>
                             </button>
                         )}
-                        <button onClick={() => navigate('/')} className="absolute right-0 top-4 flex items-center space-x-2 text-slate-400 hover:text-cyan-400 transition-colors z-20">
-                            <span className="hidden sm:inline text-sm font-semibold">HOME</span> <span className="text-xl">🏠</span>
-                        </button>
+                        
+                        {/* USER PROFILE & LOGOUT */}
+                        <div className="absolute right-0 top-0 flex items-center gap-4 z-20">
+                            <div className="hidden md:flex flex-col items-end">
+                                <span className="text-xs text-slate-400">Logged in as</span>
+                                <span className="text-sm font-bold text-cyan-400">{user?.email}</span>
+                            </div>
+                            <button onClick={handleLogout} className="px-3 py-1 bg-slate-800 hover:bg-red-900/30 text-slate-300 hover:text-red-400 border border-slate-700 rounded text-xs transition-colors">
+                                SIGN OUT
+                            </button>
+                        </div>
+
                         <div className="py-4">
                             <h1 onClick={() => navigate('/')} className="text-4xl sm:text-5xl font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition-colors inline-block">{title}</h1>
                             <p className="mt-2 text-lg text-slate-400 max-w-3xl mx-auto">{subtitle}</p>
@@ -167,36 +194,44 @@ const AppLayout: React.FC = () => {
 // --- GLAVNA APP KOMPONENTA ---
 const App: React.FC = () => {
   return (
-    <QuestionnaireProvider>
-      <RiskProvider>
-        <ToastProvider>
-            <HashRouter>
-                <Routes>
-                    <Route path="/" element={<AppLayout />}>
-                        <Route index element={<Hub />} />
-                        <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                        <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                        <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
-                        <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
-                        <Route path="digital-introduction" element={<DigitalIntroduction />} />
-                        <Route path="hpp-improvements" element={<HPPImprovements />} />
-                        <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                        <Route path="gender-equity" element={<GenderEquity />} />
-                        <Route path="hpp-builder" element={<HPPBuilder />} />
-                        <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                        <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                        <Route path="suggestion-box" element={<SuggestionBox />} />
-                        <Route path="river-wildlife" element={<RiverWildlife />} />
-                        <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                        <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                        <Route path="contract-management" element={<ContractManagement />} />
-                        <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Module Not Found</div>} />
-                    </Route>
-                </Routes>
-            </HashRouter>
-        </ToastProvider>
-      </RiskProvider>
-    </QuestionnaireProvider>
+    // AuthProvider mora biti na vrhu!
+    <ToastProvider>
+        <AuthProvider>
+            <QuestionnaireProvider>
+                <RiskProvider>
+                    <HashRouter>
+                        <Routes>
+                            <Route path="/" element={
+                                // Ovdje štitimo cijelu aplikaciju Loginom
+                                <ProtectedRoute>
+                                    <AppLayout />
+                                </ProtectedRoute>
+                            }>
+                                <Route index element={<Hub />} />
+                                <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                                <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                                <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
+                                <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
+                                <Route path="digital-introduction" element={<DigitalIntroduction />} />
+                                <Route path="hpp-improvements" element={<HPPImprovements />} />
+                                <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                                <Route path="gender-equity" element={<GenderEquity />} />
+                                <Route path="hpp-builder" element={<HPPBuilder />} />
+                                <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                                <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                                <Route path="suggestion-box" element={<SuggestionBox />} />
+                                <Route path="river-wildlife" element={<RiverWildlife />} />
+                                <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                                <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                                <Route path="contract-management" element={<ContractManagement />} />
+                                <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Module Not Found</div>} />
+                            </Route>
+                        </Routes>
+                    </HashRouter>
+                </RiskProvider>
+            </QuestionnaireProvider>
+        </AuthProvider>
+    </ToastProvider>
   );
 };
 
