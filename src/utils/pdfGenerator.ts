@@ -27,7 +27,7 @@ const addHeader = (doc: jsPDF, title: string) => {
 
     doc.setFontSize(11);
     doc.text(`Date: ${date} ${time}`, 14, 48);
-    return 55; // Vraća Y poziciju za nastavak
+    return 55; 
 };
 
 const addFooter = (doc: jsPDF) => {
@@ -194,7 +194,7 @@ export const generateRiskReport = (
     doc.save(`AnoHUB_Risk_Report_${new Date().toISOString().slice(0,10)}.pdf`);
 };
 
-// --- 3. HPP CALCULATION REPORT (NOVO!) ---
+// --- 3. HPP CALCULATION REPORT ---
 export const generateCalculationReport = (
     settings: HPPSettings,
     calculations: { powerMW: string, annualGWh: string, n_sq: string },
@@ -203,7 +203,6 @@ export const generateCalculationReport = (
     const doc = new jsPDF();
     let startY = addHeader(doc, 'HYDROPOWER DESIGN REPORT');
 
-    // --- INPUT PARAMETERS ---
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('1. Design Parameters (Inputs)', 14, startY);
@@ -227,7 +226,6 @@ export const generateCalculationReport = (
 
     let currentY = (doc as any).lastAutoTable?.finalY + 15;
 
-    // --- CALCULATED PHYSICS ---
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('2. Physics & Output Analysis', 14, currentY);
@@ -249,7 +247,6 @@ export const generateCalculationReport = (
 
     currentY = (doc as any).lastAutoTable?.finalY + 15;
 
-    // --- RECOMMENDATIONS ---
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('3. Engineering Selection (Ranked)', 14, currentY);
@@ -258,7 +255,6 @@ export const generateCalculationReport = (
     recommendations.forEach((rec, index) => {
         const rank = index + 1;
         const status = rec.isBest ? 'OPTIMAL MATCH' : (rec.score > 0 ? 'Viable' : 'Not Recommended');
-        // Formatiranje razloga u jedan string
         const reasons = rec.reasons.map(r => r.replace('+', 'PRO: ').replace('-', 'CON: ')).join('\n');
         
         recRows.push([
@@ -281,11 +277,89 @@ export const generateCalculationReport = (
         },
         didParseCell: function(data) {
             if (data.column.index === 1 && data.cell.raw === 'OPTIMAL MATCH') {
-                data.cell.styles.textColor = [22, 163, 74]; // Green text
+                data.cell.styles.textColor = [22, 163, 74]; 
             }
         }
     });
 
     addFooter(doc);
     doc.save(`AnoHUB_Design_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+};
+
+// --- 4. FINANCIAL KPI REPORT (NOVO!) ---
+export const generateFinancialReport = (
+    inputs: { capex: number; opex: number; price: number },
+    baseKPI: { irr: string; npv: string; payback: string },
+    riskKPI: { irr: string; npv: string; payback: string; penalty: string }
+) => {
+    const doc = new jsPDF();
+    let startY = addHeader(doc, 'INVESTOR BRIEFING: KPI & RISK ANALYSIS');
+
+    // --- FINANCIAL INPUTS ---
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text('1. Financial Assumptions (Inputs)', 14, startY);
+
+    const inputRows = [
+        ['CAPEX (Est.)', `€ ${inputs.capex.toLocaleString()}`],
+        ['OPEX (Annual)', `€ ${inputs.opex.toLocaleString()}`],
+        ['Energy Price', `€ ${inputs.price} / MWh`]
+    ];
+
+    autoTable(doc, {
+        startY: startY + 5,
+        head: [['Category', 'Value']],
+        body: inputRows,
+        theme: 'plain',
+        styles: { fontSize: 10 },
+        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 60 } }
+    });
+
+    let currentY = (doc as any).lastAutoTable?.finalY + 15;
+
+    // --- KPI COMPARISON TABLE ---
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text('2. Risk Impact Analysis (The Execution Gap)', 14, currentY);
+    
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.text('Comparison of returns: Ideal Scenario vs. Reality with "Standard" Execution.', 14, currentY + 5);
+
+    const kpiRows = [
+        ['IRR (Internal Rate of Return)', `${baseKPI.irr}%`, `${riskKPI.irr}%`, `-${(parseFloat(baseKPI.irr) - parseFloat(riskKPI.irr)).toFixed(1)}%`],
+        ['NPV (Net Present Value)', `€ ${baseKPI.npv}M`, `€ ${riskKPI.npv}M`, `€ -${(parseFloat(baseKPI.npv) - parseFloat(riskKPI.npv)).toFixed(2)}M`],
+        ['Payback Period', `${baseKPI.payback} Years`, `${riskKPI.payback} Years`, `+${(parseFloat(riskKPI.payback) - parseFloat(baseKPI.payback)).toFixed(1)} Years`]
+    ];
+
+    autoTable(doc, {
+        startY: currentY + 10,
+        head: [['KPI Metric', 'Ideal Target', 'Risk-Adjusted (Real)', 'Net Impact (Loss)']],
+        body: kpiRows,
+        theme: 'grid',
+        headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255] },
+        columnStyles: { 
+            0: { fontStyle: 'bold', cellWidth: 60 },
+            3: { fontStyle: 'bold', textColor: [220, 38, 38] } // Red text for loss
+        }
+    });
+
+    currentY = (doc as any).lastAutoTable?.finalY + 15;
+
+    // --- CONCLUSION ---
+    doc.setFillColor(240, 253, 250); // Light Cyan bg
+    doc.roundedRect(14, currentY, 180, 35, 3, 3, 'F');
+    
+    doc.setFontSize(11);
+    doc.setTextColor(6, 182, 212);
+    doc.text('STRATEGIC RECOMMENDATION', 20, currentY + 10);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(50);
+    const conclusion = `The analysis shows a potential value leakage of €${riskKPI.penalty} over the project lifecycle due to the Execution Gap. Implementing the AnoHUB Standard of Excellence (0.05 mm/m precision) is projected to recover approx. 85% of this risk-adjusted loss.`;
+    const splitConclusion = doc.splitTextToSize(conclusion, 170);
+    doc.text(splitConclusion, 20, currentY + 20);
+
+    addFooter(doc);
+    doc.save(`AnoHUB_Investor_Briefing_${new Date().toISOString().slice(0,10)}.pdf`);
 };
