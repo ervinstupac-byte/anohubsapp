@@ -1,7 +1,7 @@
-// src/utils/pdfGenerator.ts
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import type { VerificationData, ProtocolSection } from '../types';
+// Putanja: Izlazimo iz 'utils', pa iz 'src', ravno u root po types.ts
+import type { VerificationData, ProtocolSection } from '../../types.ts';
 
 export const generateInstallationReport = (
     progress: Record<string, VerificationData>,
@@ -44,24 +44,30 @@ export const generateInstallationReport = (
     }
 
     // --- DATA PREPARATION ---
-    // Moramo spojiti podatke iz 'progress' (vrijednosti) sa 'protocols' (naslovi koraka)
     const tableRows: any[] = [];
 
-    protocols.forEach(section => {
-        section.steps.forEach(step => {
-            const data = progress[step.id];
-            if (data) {
-                tableRows.push([
-                    step.id,
-                    step.title,
-                    data.status.toUpperCase(),
-                    data.value || '-',
-                    data.comment || '-',
-                    data.logbookConfirmed ? 'YES' : 'NO'
-                ]);
+    if (protocols) {
+        // Forsiramo array strukturu
+        const sections = Array.isArray(protocols) ? protocols : [protocols];
+        
+        sections.forEach((section: any) => {
+            if(section.steps) {
+                section.steps.forEach((step: any) => {
+                    const data = progress[step.id];
+                    if (data) {
+                        tableRows.push([
+                            step.id,
+                            step.title,
+                            data.status.toUpperCase(),
+                            data.value || '-',
+                            data.comment || '-',
+                            data.logbookConfirmed ? 'YES' : 'NO'
+                        ]);
+                    }
+                });
             }
         });
-    });
+    }
 
     if (tableRows.length === 0) {
         doc.setFontSize(12);
@@ -75,8 +81,8 @@ export const generateInstallationReport = (
             body: tableRows,
             theme: 'grid',
             headStyles: { 
-                fillColor: [15, 23, 42], // Slate 900
-                textColor: [6, 182, 212], // Cyan
+                fillColor: [15, 23, 42],
+                textColor: [6, 182, 212],
                 fontStyle: 'bold'
             },
             styles: {
@@ -89,7 +95,6 @@ export const generateInstallationReport = (
                 5: { cellWidth: 15 } // Logbook
             },
             didParseCell: function(data) {
-                // Color coding for status
                 if (data.section === 'body' && data.column.index === 2) {
                     const text = data.cell.raw as string;
                     if (text === 'FAILED') {
@@ -103,7 +108,7 @@ export const generateInstallationReport = (
     }
 
     // --- FOOTER & SIGNATURE ---
-    const finalY = (doc as any).lastAutoTable.finalY || 70;
+    const finalY = (doc as any).lastAutoTable?.finalY || 70;
     
     doc.setFontSize(10);
     doc.setTextColor(0);

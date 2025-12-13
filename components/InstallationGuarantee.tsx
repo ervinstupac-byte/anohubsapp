@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
-import { generateInstallationReport } from '../utils/pdfGenerator.ts'; // Import PDF generatora
+// Putanja: Izlazimo iz 'components', ulazimo u 'src/utils/'
+import { generateInstallationReport } from '../src/utils/pdfGenerator.ts';
 import type { ProtocolSection, ProtocolStep, VerificationData, VerificationStatus } from '../types.ts';
 
 const LOCAL_STORAGE_KEY_PROGRESS = 'installation-progress-v3';
