@@ -1,8 +1,8 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// PUTANJE PRILAGOĐENE TVOJOJ STRUKTURI (Izlazimo iz 'utils', pa iz 'src' u root):
-import type { VerificationData, ProtocolSection, Answers, OperationalData } from '../../types.ts';
+// PUTANJE (Izlazimo iz 'utils', pa iz 'src' u root):
+import type { VerificationData, ProtocolSection, Answers, OperationalData, HPPSettings, TurbineRecommendation } from '../../types.ts';
 import { QUESTIONS } from '../../constants.ts'; 
 
 // --- HELPER: COMMON HEADER ---
@@ -46,7 +46,6 @@ export const generateInstallationReport = (
     const doc = new jsPDF();
     let startY = addHeader(doc, 'INSTALLATION VERIFICATION REPORT');
     
-    // Risk Score
     doc.text('Discipline Risk Score:', 14, startY);
     doc.setFontSize(14);
     if (riskScore > 0) {
@@ -92,11 +91,6 @@ export const generateInstallationReport = (
             theme: 'grid',
             headStyles: { fillColor: [15, 23, 42], textColor: [6, 182, 212], fontStyle: 'bold' },
             styles: { fontSize: 8, cellPadding: 2 },
-            columnStyles: {
-                0: { cellWidth: 15 }, 
-                2: { cellWidth: 20, fontStyle: 'bold' }, 
-                5: { cellWidth: 15 } 
-            },
             didParseCell: function(data) {
                 if (data.section === 'body' && data.column.index === 2) {
                     const text = data.cell.raw as string;
@@ -126,7 +120,6 @@ export const generateRiskReport = (
     const doc = new jsPDF();
     let startY = addHeader(doc, 'HPP RISK ASSESSMENT REPORT');
 
-    // Operational Data
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text('Operational Parameters:', 14, startY);
@@ -135,13 +128,11 @@ export const generateRiskReport = (
     doc.setTextColor(80);
     const opY = startY + 8;
     
-    // Sigurna provjera podataka prije ispisa
     doc.text(`Head: ${operationalData?.head || '-'} m`, 14, opY);
     doc.text(`Flow: ${operationalData?.flow || '-'} m3/s`, 60, opY);
     doc.text(`Pressure: ${operationalData?.pressure || '-'} bar`, 110, opY);
     doc.text(`Output: ${operationalData?.output || '-'} MW`, 160, opY);
 
-    // Calculated Risk Level
     const riskY = opY + 15;
     doc.setFontSize(12);
     doc.setTextColor(0);
@@ -154,7 +145,6 @@ export const generateRiskReport = (
     
     doc.text(riskLevel.text.toUpperCase(), 80, riskY);
 
-    // Questionnaire Table
     const tableRows: any[] = [];
     QUESTIONS.forEach(q => {
         const answer = answers[q.id];
@@ -202,4 +192,100 @@ export const generateRiskReport = (
 
     addFooter(doc);
     doc.save(`AnoHUB_Risk_Report_${new Date().toISOString().slice(0,10)}.pdf`);
+};
+
+// --- 3. HPP CALCULATION REPORT (NOVO!) ---
+export const generateCalculationReport = (
+    settings: HPPSettings,
+    calculations: { powerMW: string, annualGWh: string, n_sq: string },
+    recommendations: TurbineRecommendation[]
+) => {
+    const doc = new jsPDF();
+    let startY = addHeader(doc, 'HYDROPOWER DESIGN REPORT');
+
+    // --- INPUT PARAMETERS ---
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text('1. Design Parameters (Inputs)', 14, startY);
+    
+    const inputData = [
+        ['Net Head (H)', `${settings.head} m`],
+        ['Flow Rate (Q)', `${settings.flow} m3/s`],
+        ['Turbine Efficiency', `${settings.efficiency}%`],
+        ['Hydrology Type', settings.flowVariation.toUpperCase()],
+        ['Water Quality', settings.waterQuality.toUpperCase()]
+    ];
+
+    autoTable(doc, {
+        startY: startY + 5,
+        head: [['Parameter', 'Value']],
+        body: inputData,
+        theme: 'plain',
+        styles: { fontSize: 10, cellPadding: 2 },
+        columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
+    });
+
+    let currentY = (doc as any).lastAutoTable?.finalY + 15;
+
+    // --- CALCULATED PHYSICS ---
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text('2. Physics & Output Analysis', 14, currentY);
+
+    const physicsData = [
+        ['Installed Capacity (P)', `${calculations.powerMW} MW`],
+        ['Annual Production (Est.)', `${calculations.annualGWh} GWh/year`],
+        ['Specific Speed Index (n_sq)', `${calculations.n_sq} (Topology Factor)`]
+    ];
+
+    autoTable(doc, {
+        startY: currentY + 5,
+        head: [['Metric', 'Calculated Result']],
+        body: physicsData,
+        theme: 'grid',
+        headStyles: { fillColor: [15, 23, 42], textColor: [6, 182, 212] },
+        styles: { fontSize: 11, fontStyle: 'bold' }
+    });
+
+    currentY = (doc as any).lastAutoTable?.finalY + 15;
+
+    // --- RECOMMENDATIONS ---
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text('3. Engineering Selection (Ranked)', 14, currentY);
+
+    const recRows: any[] = [];
+    recommendations.forEach((rec, index) => {
+        const rank = index + 1;
+        const status = rec.isBest ? 'OPTIMAL MATCH' : (rec.score > 0 ? 'Viable' : 'Not Recommended');
+        // Formatiranje razloga u jedan string
+        const reasons = rec.reasons.map(r => r.replace('+', 'PRO: ').replace('-', 'CON: ')).join('\n');
+        
+        recRows.push([
+            `#${rank} ${rec.key.toUpperCase()}`,
+            status,
+            reasons
+        ]);
+    });
+
+    autoTable(doc, {
+        startY: currentY + 5,
+        head: [['Turbine Type', 'Suitability', 'Engineering Justification']],
+        body: recRows,
+        theme: 'grid',
+        headStyles: { fillColor: [6, 182, 212], textColor: [255, 255, 255] },
+        columnStyles: { 
+            0: { fontStyle: 'bold', cellWidth: 30 },
+            1: { fontStyle: 'bold', cellWidth: 30 },
+            2: { fontSize: 9 } 
+        },
+        didParseCell: function(data) {
+            if (data.column.index === 1 && data.cell.raw === 'OPTIMAL MATCH') {
+                data.cell.styles.textColor = [22, 163, 74]; // Green text
+            }
+        }
+    });
+
+    addFooter(doc);
+    doc.save(`AnoHUB_Design_Report_${new Date().toISOString().slice(0,10)}.pdf`);
 };
