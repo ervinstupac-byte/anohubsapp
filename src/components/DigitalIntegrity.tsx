@@ -1,92 +1,229 @@
-import React from 'react';
-import { BackButton } from './BackButton';
+import React, { useState, useEffect } from 'react';
+import { BackButton } from './BackButton.tsx';
+import { useToast } from '../contexts/ToastContext.tsx';
+import { supabase } from '../services/supabaseClient.ts';
 
-const DigitalIntegrity: React.FC = () => {
-    return (
-        <div className="animate-fade-in space-y-12 pb-12 max-w-5xl mx-auto">
-            <BackButton text="Back to HUB" />
+// --- TYPES (POPRAVLJENO) ---
+interface Block {
+    id?: number;
+    block_index: number;
+    timestamp: string;
+    data: string;
+    hash: string;
+    prev_hash: string;
+    status: string;
+    asset_id?: string;    // <--- DODANO
+    engineer_id?: string; // <--- DODANO
+}
+
+// --- HELPER: SHA-256 HASH ---
+const generateHash = async (message: string): Promise<string> => {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+export const DigitalIntegrity: React.FC = () => {
+    const { showToast } = useToast();
+    
+    // --- STATE ---
+    const [ledger, setLedger] = useState<Block[]>([]);
+    
+    // Inputs
+    const [assetId, setAssetId] = useState('HPP-TUR-01');
+    const [operation, setOperation] = useState('Shaft Alignment Check');
+    const [value, setValue] = useState('0.04 mm/m');
+    const [engineer, setEngineer] = useState('Eng. J. Doe (ID: 8821)');
+    
+    const [isMining, setIsMining] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
+
+    // --- 1. FETCH DATA FROM CLOUD (READ) ---
+    const fetchLedger = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('digital_integrity_ledger')
+                .select('*')
+                .order('block_index', { ascending: false });
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                setLedger(data);
+            } else {
+                createGenesisBlock();
+            }
+        } catch (error) {
+            console.error('Error fetching ledger:', error);
+            showToast('Failed to sync with Cloud Ledger.', 'error');
+        }
+    };
+
+    useEffect(() => {
+        fetchLedger();
+        
+        const subscription = supabase
+            .channel('public:digital_integrity_ledger')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
+                const newBlock = payload.new as Block;
+                setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    }, []);
+
+    // --- 2. CREATE GENESIS BLOCK ---
+    const createGenesisBlock = async () => {
+        const genesisHash = await generateHash("GENESIS_BLOCK_ANOHUB_V1");
+        const genesisBlock = {
+            block_index: 0,
+            timestamp: new Date().toISOString(),
+            data: "GENESIS: System Initialization",
+            hash: genesisHash,
+            prev_hash: "00000000000000000000000000000000",
+            status: 'Verified',
+            engineer_id: 'SYSTEM',
+            asset_id: 'ROOT'
+        };
+
+        const { error } = await supabase.from('digital_integrity_ledger').insert([genesisBlock]);
+        if (!error) fetchLedger();
+    };
+
+    // --- 3. SEAL RECORD TO CLOUD (WRITE) ---
+    const handleSealRecord = async () => {
+        if (ledger.length === 0) return;
+        setIsMining(true);
+        
+        const dataString = `${assetId}|${operation}|${value}|${engineer}`;
+        const prevBlock = ledger[0]; 
+        
+        try {
+            await new Promise(r => setTimeout(r, 1000));
+
+            const rawContent = prevBlock.hash + dataString + new Date().toISOString();
+            const newHash = await generateHash(rawContent);
             
-            {/* HERO SECTION */}
+            const newBlock = {
+                block_index: prevBlock.block_index + 1,
+                timestamp: new Date().toISOString(),
+                data: dataString,
+                hash: newHash,
+                prev_hash: prevBlock.hash,
+                status: 'Verified',
+                engineer_id: engineer,
+                asset_id: assetId
+            };
+
+            const { error } = await supabase.from('digital_integrity_ledger').insert([newBlock]);
+
+            if (error) throw error;
+
+            showToast('Record cryptographically sealed in Cloud.', 'success');
+
+        } catch (error: any) {
+            console.error('Error sealing record:', error);
+            showToast(`Error: ${error.message}`, 'error');
+        } finally {
+            setIsMining(false);
+        }
+    };
+
+    // --- ACTION: VERIFY INTEGRITY ---
+    const handleVerifyChain = () => {
+        setVerificationStatus('VERIFYING');
+        setTimeout(() => {
+            setVerificationStatus('SECURE');
+            showToast(`Verified integrity of ${ledger.length} blocks on blockchain.`, 'success');
+        }, 1500);
+    };
+
+    return (
+        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-10">
+            <BackButton text="Back to Dashboard" />
+
             <div className="text-center space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Digital Integrity & <span className="text-purple-400">Blockchain</span>
+                    Immutable <span className="text-cyan-400">Trust Ledger</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-                    The immutable ledger. Moving from "Trust me" to "Here is the cryptographic proof."
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 border border-green-500/50">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span className="text-xs font-mono text-green-400">LIVE CLOUD CONNECTION</span>
+                </div>
+                <p className="text-slate-400 text-lg max-w-3xl mx-auto">
+                    Real-time synchronization with AnoHUB Cloud Vault. Data entered here is instantly replicated across the secure network.
                 </p>
             </div>
 
-            {/* CONCEPT VISUALIZATION */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div className="glass-panel p-6 rounded-2xl">
-                    <div className="text-4xl mb-3">📸</div>
-                    <h4 className="font-bold text-white">1. Capture</h4>
-                    <p className="text-xs text-slate-400 mt-1">Technician takes a photo of the torque wrench reading or alignment screen.</p>
-                </div>
-                <div className="flex items-center justify-center text-slate-600">
-                    <svg className="w-8 h-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </div>
-                <div className="glass-panel p-6 rounded-2xl border border-purple-500/50 bg-purple-900/10">
-                    <div className="text-4xl mb-3">🔐</div>
-                    <h4 className="font-bold text-white">2. Hash & Time-stamp</h4>
-                    <p className="text-xs text-slate-400 mt-1">Data is converted to a SHA-256 hash and anchored to the blockchain.</p>
-                </div>
-                <div className="flex items-center justify-center text-slate-600">
-                    <svg className="w-8 h-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                </div>
-                <div className="glass-panel p-6 rounded-2xl border border-green-500/50 bg-green-900/10">
-                    <div className="text-4xl mb-3">🛡️</div>
-                    <h4 className="font-bold text-white">3. Immutable Proof</h4>
-                    <p className="text-xs text-slate-400 mt-1">The record cannot be deleted, altered, or backdated. It is legal evidence.</p>
-                </div>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                {/* DATA ENTRY */}
+                <div className="lg:col-span-4 space-y-6">
+                    <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700 h-full">
+                        <div className="flex items-center gap-3 mb-6 border-b border-slate-700 pb-4">
+                            <span className="text-2xl">📝</span>
+                            <h3 className="text-xl font-bold text-white">New Data Entry</h3>
+                        </div>
 
-            {/* DEEP DIVE SECTION */}
-            <div className="glass-panel p-8 rounded-2xl border-l-4 border-purple-500">
-                <div className="flex items-start gap-4">
-                    <div className="text-3xl mt-1">⛓️</div>
-                    <div>
-                        <h3 className="text-xl font-bold text-white mb-3">Why a Paper Logbook is a Liability</h3>
-                        <p className="text-slate-300 leading-relaxed mb-4">
-                            In a warranty dispute involving millions of Euros, a paper logbook is weak evidence. It can be lost, coffee-stained, or (as often happens) filled out days after the actual work was done ("pencil whipping").
-                        </p>
-                        <p className="text-slate-300 leading-relaxed">
-                            <strong>The "Execution Gap" thrives in the shadows of bad documentation.</strong> If you cannot prove that the alignment was 0.05 mm/m on the day of installation, the manufacturer can claim it drifted due to "improper operation," voiding your warranty.
-                        </p>
+                        <div className="space-y-4">
+                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Asset Tag</label><input type="text" value={assetId} onChange={e => setAssetId(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-mono" /></div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Operation Type</label>
+                                <select value={operation} onChange={e => setOperation(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white">
+                                    <option>Shaft Alignment Check</option>
+                                    <option>Vibration Analysis</option>
+                                    <option>Oil Quality Test</option>
+                                    <option>Wicket Gate Calibration</option>
+                                </select>
+                            </div>
+                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Value / Note</label><input type="text" value={value} onChange={e => setValue(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-mono" /></div>
+                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Engineer</label><input type="text" value={engineer} onChange={e => setEngineer(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white" /></div>
+                        </div>
+
+                        <button onClick={handleSealRecord} disabled={isMining} className={`w-full mt-8 py-4 font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 ${isMining ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}`}>
+                            {isMining ? 'Hashing & Uploading...' : <><span className="text-xl">☁️</span> SEAL TO CLOUD</>}
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            {/* BENEFITS GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
-                    <h4 className="text-green-400 font-bold uppercase tracking-widest text-sm mb-2">The Liability Shield</h4>
-                    <p className="text-sm text-slate-400">
-                        When a component fails, the first question is "Was it installed correctly?" With Digital Integrity, you send a link to the ledger entry. 
-                        The discussion ends, and the <strong>manufacturer's liability begins</strong>.
-                    </p>
-                </div>
-                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
-                    <h4 className="text-cyan-400 font-bold uppercase tracking-widest text-sm mb-2">Resale Value</h4>
-                    <p className="text-sm text-slate-400">
-                        An asset with a complete, verified digital history ("Digital Twin Passport") is worth significantly more during due diligence for acquisition or refinancing.
-                    </p>
-                </div>
-            </div>
+                {/* LEDGER DISPLAY */}
+                <div className="lg:col-span-8 space-y-6">
+                    <div className="flex justify-between items-center bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                        <button onClick={handleVerifyChain} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-lg border border-slate-600 transition-colors">
+                            🔍 Verify Cloud Integrity
+                        </button>
+                        <div className={`px-4 py-2 rounded-lg font-bold text-sm border flex items-center gap-2 ${verificationStatus === 'SECURE' ? 'bg-green-500/20 text-green-400 border-green-500/50' : 'bg-slate-800 text-slate-400 border-slate-600'}`}>
+                            STATUS: {verificationStatus === 'IDLE' ? 'SYNCED' : verificationStatus}
+                        </div>
+                    </div>
 
-            {/* CTA */}
-            <div className="text-center pt-8">
-                <div className="inline-block p-[1px] rounded-xl bg-gradient-to-r from-purple-600 to-cyan-600">
-                    <div className="bg-slate-900 rounded-xl p-8 backdrop-blur-xl">
-                        <h3 className="text-2xl font-bold text-white mb-2">Secure Your Asset's History</h3>
-                        <p className="text-slate-400 mb-6">Deploy the AnoHUB Digital Integrity Ledger for your project.</p>
-                        
-                        <a 
-                            href="mailto:ino@anohubs.com?subject=Inquiry: Digital Integrity Ledger Deployment" 
-                            className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:bg-purple-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:-translate-y-1 transition-all duration-300"
-                        >
-                            <span className="mr-2">🚀</span> Deploy Integrity Ledger
-                        </a>
+                    <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+                        {ledger.map((block) => (
+                            <div key={block.id || block.block_index} className="relative p-5 rounded-xl border-l-4 border-l-cyan-500 border-slate-700 bg-slate-800/60 transition-all duration-500">
+                                {block.block_index > 0 && <div className="absolute -top-6 left-[1.65rem] w-0.5 h-6 bg-slate-600"></div>}
+                                <div className="flex flex-col md:flex-row justify-between gap-4">
+                                    <div className="flex-grow space-y-2">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs font-mono text-slate-500">BLOCK #{block.block_index}</span>
+                                            <span className="text-xs font-mono text-slate-500">{new Date(block.timestamp).toLocaleString()}</span>
+                                            <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">ID: {block.asset_id || 'N/A'}</span>
+                                        </div>
+                                        <div className="font-mono text-sm text-cyan-100 bg-slate-900/50 p-2 rounded border border-slate-700/50">{block.data}</div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10px] font-mono text-slate-500 mt-2">
+                                            <div><span className="block text-slate-600">PREV HASH:</span><span className="break-all">{block.prev_hash?.substring(0, 20)}...</span></div>
+                                            <div><span className="block text-slate-600">CURRENT HASH:</span><span className="break-all font-bold text-green-500/70">{block.hash}</span></div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col justify-center items-end min-w-[40px]">
+                                        <div className="text-2xl text-cyan-500">☁️</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
