@@ -91,11 +91,6 @@ export const generateInstallationReport = (
             theme: 'grid',
             headStyles: { fillColor: [15, 23, 42], textColor: [6, 182, 212], fontStyle: 'bold' },
             styles: { fontSize: 8, cellPadding: 2 },
-            columnStyles: {
-                0: { cellWidth: 15 }, 
-                2: { cellWidth: 20, fontStyle: 'bold' }, 
-                5: { cellWidth: 15 } 
-            },
             didParseCell: function(data) {
                 if (data.section === 'body' && data.column.index === 2) {
                     const text = data.cell.raw as string;

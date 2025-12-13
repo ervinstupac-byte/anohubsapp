@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx'; // <--- NOVO
-// Putanja: Izlazimo iz 'components' (..), ulazimo u 'src/utils/'
-import { generateRiskReport } from '../utils/pdfGenerator.ts'; // <--- NOVO
+import { useToast } from '../contexts/ToastContext.tsx';
+import { supabase } from '../services/supabaseClient.ts';
+
+// --- POPRAVLJENA PUTANJA ---
+// Izlazimo iz 'components' (..) direktno u 'utils'
+import { generateRiskReport } from '../utils/pdfGenerator.ts'; 
+
 import { QUESTIONS } from '../constants.ts';
 import type { Question } from '../types.ts';
 
@@ -37,7 +41,6 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
     return (
         <div className="relative flex flex-col items-center justify-center py-6">
             <div className="w-40 h-40 rounded-full border-8 border-slate-800 relative flex items-center justify-center shadow-inner bg-slate-900/50">
-                {/* SVG Circle for Progress */}
                 <svg className="absolute inset-0 transform -rotate-90 w-full h-full p-1" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-700 opacity-20" />
                     <circle 
@@ -59,8 +62,11 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
 const QuestionnaireSummary: React.FC = () => {
     const { navigateToHub } = useNavigation();
     const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
-    const { calculateAndSetQuestionnaireRisk } = useRisk();
-    const { showToast } = useToast(); // <--- TOAST HOOK
+    const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
+    const { showToast } = useToast();
+    
+    const [isUploading, setIsUploading] = useState(false);
+    const [isUploaded, setIsUploaded] = useState(false);
 
     const analysis = useMemo(() => {
         const highRisk: Question[] = [];
@@ -91,20 +97,47 @@ const QuestionnaireSummary: React.FC = () => {
     
     const riskIndicator = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
 
-    // --- PDF GENERATION HANDLER ---
-    const handleDownloadPDF = () => {
+    const handleSubmitToCloud = async () => {
         if (Object.keys(answers).length === 0) {
-            showToast('No data available. Please complete the assessment first.', 'warning');
+            showToast('No data to submit.', 'warning');
             return;
         }
         
+        setIsUploading(true);
+
         try {
-            generateRiskReport(answers, operationalData, { text: riskIndicator.text, color: riskIndicator.color }, description);
-            showToast('Risk Report PDF Downloaded.', 'success');
-        } catch (error) {
-            console.error(error);
-            showToast('Failed to generate report.', 'error');
+            const payload = {
+                asset_name: 'HPP-Asset-Unspecified', 
+                engineer_id: 'Anonymous Engineer',     
+                answers: answers,                      
+                operational_data: operationalData,     
+                risk_score: disciplineRiskScore,
+                risk_level: riskIndicator.level,
+                description: description
+            };
+
+            const { error } = await supabase.from('risk_assessments').insert([payload]);
+
+            if (error) throw error;
+
+            showToast('Diagnosis synced to AnoHUB Cloud Database.', 'success');
+            setIsUploaded(true);
+
+        } catch (error: any) {
+            console.error('Upload failed:', error);
+            showToast(`Cloud Sync Failed: ${error.message}`, 'error');
+        } finally {
+            setIsUploading(false);
         }
+    };
+
+    const handleDownloadPDF = () => {
+        if (Object.keys(answers).length === 0) {
+            showToast('No data available.', 'warning');
+            return;
+        }
+        generateRiskReport(answers, operationalData, { text: riskIndicator.text, color: riskIndicator.color }, description);
+        showToast('Risk Report PDF Downloaded.', 'success');
     };
 
     const handleReturn = () => {
@@ -114,20 +147,21 @@ const QuestionnaireSummary: React.FC = () => {
 
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
-            
-            {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
                     Diagnostic <span className="text-cyan-400">Report</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                    Automated analysis of systemic risks and potential Execution Gaps based on site parameters.
-                </p>
+                <div className="flex justify-center gap-4 text-sm text-slate-400">
+                    <span className="flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-green-500"></span> Live Analysis
+                    </span>
+                    <span className="flex items-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-cyan-500"></span> AI Ready
+                    </span>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
                     <div className="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-500 bg-gradient-to-b from-slate-800/80 to-slate-900/80">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Overall Assessment</h3>
@@ -144,13 +178,33 @@ const QuestionnaireSummary: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* --- PDF DOWNLOAD BUTTON (NOVO) --- */}
-                        <button 
-                            onClick={handleDownloadPDF}
-                            className="w-full mt-6 py-3 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-bold rounded-lg shadow-lg hover:shadow-yellow-500/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group"
-                        >
-                            <span className="text-lg group-hover:scale-110 transition-transform">📄</span> Download PDF Report
-                        </button>
+                        <div className="mt-6 space-y-3">
+                            <button 
+                                onClick={handleDownloadPDF}
+                                className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg border border-slate-500 transition-all flex items-center justify-center gap-2 group"
+                            >
+                                <span className="text-lg">📄</span> Download PDF
+                            </button>
+                            
+                            <button 
+                                onClick={handleSubmitToCloud}
+                                disabled={isUploading || isUploaded}
+                                className={`
+                                    w-full py-3 font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2
+                                    ${isUploaded 
+                                        ? 'bg-green-600/20 text-green-400 border border-green-500/50 cursor-default' 
+                                        : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}
+                                `}
+                            >
+                                {isUploading ? (
+                                    <>Uploading...</>
+                                ) : isUploaded ? (
+                                    <><span>✓</span> Synced to Cloud</>
+                                ) : (
+                                    <><span className="text-lg">☁️</span> Submit to HQ</>
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="glass-panel p-6 rounded-2xl bg-cyan-900/10 border-cyan-500/20">
@@ -159,16 +213,12 @@ const QuestionnaireSummary: React.FC = () => {
                             <h4 className="font-bold text-cyan-300 text-sm uppercase">Concept: The Execution Gap</h4>
                         </div>
                         <p className="text-xs text-cyan-100/80 leading-relaxed">
-                            The critical divergence between a flawless engineering plan and the inconsistent reality of on-site implementation. 
-                            It is the primary source of operational risk, often indicated by failures in discipline (e.g., undocumented alignment).
+                            The critical divergence between a flawless engineering plan and the inconsistent reality of on-site implementation.
                         </p>
                     </div>
                 </div>
 
-                {/* RIGHT COLUMN: DETAILED FINDINGS */}
                 <div className="lg:col-span-2 space-y-6">
-                    
-                    {/* High Risk Section */}
                     {analysis.highRisk.length > 0 && (
                         <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
                             <div className="flex items-center gap-3 mb-6">
@@ -191,7 +241,6 @@ const QuestionnaireSummary: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Medium Risk Section */}
                     {analysis.mediumRisk.length > 0 && (
                         <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 animate-scale-in" style={{ animationDelay: '200ms' }}>
                             <div className="flex items-center gap-3 mb-6">
@@ -214,7 +263,6 @@ const QuestionnaireSummary: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Clean State (No Risks) */}
                     {analysis.highRisk.length === 0 && analysis.mediumRisk.length === 0 && (
                         <div className="glass-panel p-8 rounded-2xl border-green-500/30 text-center">
                             <div className="text-5xl mb-4">✅</div>
