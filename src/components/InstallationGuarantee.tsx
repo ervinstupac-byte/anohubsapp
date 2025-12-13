@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; 
-// Putanja: Izlazimo iz 'components', ulazimo u 'src/utils/'
+// Cloud Client
+import { supabase } from '../services/supabaseClient.ts';
+// PDF Generator
 import { generateInstallationReport } from '../utils/pdfGenerator.ts';
 import type { ProtocolSection, ProtocolStep, VerificationData, VerificationStatus } from '../types.ts';
 
 const LOCAL_STORAGE_KEY_PROGRESS = 'installation-progress-v3';
 
-// --- PROTOCOL DATA (SVI PODACI SU OVDJE) ---
+// --- PROTOCOL DATA (STANDARD) ---
 const generalProtocol: ProtocolSection[] = [
     {
         id: 'gen1', title: 'Phase 1: Project Initiation',
@@ -122,6 +124,7 @@ const StatusBadge: React.FC<{ status: VerificationStatus }> = ({ status }) => {
 const InstallationGuarantee: React.FC = () => {
     const { showToast } = useToast(); 
     const [activeTab, setActiveTab] = useState<'General' | 'Kaplan' | 'Francis' | 'Pelton'>('General');
+    const [isSyncing, setIsSyncing] = useState(false);
     
     const [progress, setProgress] = useState<Record<string, VerificationData>>(() => {
         try {
@@ -176,6 +179,38 @@ const InstallationGuarantee: React.FC = () => {
         }
     };
 
+    // --- SYNC TO CLOUD (NOVO) ---
+    const handleSyncToCloud = async () => {
+        setIsSyncing(true);
+        try {
+            // Izračunaj postotak završenosti
+            const protocols = { General: generalProtocol, Kaplan: kaplanProtocol, Francis: francisProtocol, Pelton: peltonProtocol };
+            const currentSteps = protocols[activeTab].flatMap(s => s.steps);
+            const completedCount = currentSteps.filter(s => progress[s.id]?.status === 'Verified').length;
+            const completion = Math.round((completedCount / currentSteps.length) * 100);
+
+            const payload = {
+                project_name: 'HPP-Project-Alpha', // Placeholder, kasnije dinamički
+                engineer_id: 'Eng-001',
+                turbine_type: activeTab,
+                progress_data: progress, // Spremamo cijeli JSON
+                risk_score: disciplineRiskScore,
+                completion_percentage: completion
+            };
+
+            const { error } = await supabase.from('installation_audits').insert([payload]);
+
+            if (error) throw error;
+
+            showToast('Installation audit synced to Cloud successfully.', 'success');
+        } catch (error: any) {
+            console.error('Sync error:', error);
+            showToast('Failed to sync to Cloud.', 'error');
+        } finally {
+            setIsSyncing(false);
+        }
+    };
+
     const handleSendReport = () => {
         const protocols = { General: generalProtocol, Kaplan: kaplanProtocol, Francis: francisProtocol, Pelton: peltonProtocol };
         const currentProtocolData = protocols[activeTab];
@@ -205,9 +240,10 @@ const InstallationGuarantee: React.FC = () => {
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
                     Installation <span className="text-cyan-400">Standard</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                    A dynamic, accountability-driven tool for enforcing the 0.05 mm/m precision mandate during assembly.
-                </p>
+                <div className="flex justify-center items-center gap-2 text-sm text-slate-400">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span>Cloud Sync Active</span>
+                </div>
             </div>
 
             {/* HUD / CONTROL PANEL */}
@@ -242,13 +278,22 @@ const InstallationGuarantee: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* RESET BUTTON */}
-                    <button 
-                        onClick={handleResetAll} 
-                        className="text-xs font-bold text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2 rounded-lg hover:bg-red-500/10 transition-colors"
-                    >
-                        RESET DATA
-                    </button>
+                    {/* ACTION BUTTONS */}
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={handleSyncToCloud}
+                            disabled={isSyncing}
+                            className="text-xs font-bold text-white bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                        >
+                            {isSyncing ? 'Syncing...' : '☁️ SYNC'}
+                        </button>
+                        <button 
+                            onClick={handleResetAll} 
+                            className="text-xs font-bold text-red-400 hover:text-red-300 border border-red-500/30 px-4 py-2 rounded-lg hover:bg-red-500/10 transition-colors"
+                        >
+                            RESET
+                        </button>
+                    </div>
                 </div>
             </div>
 
