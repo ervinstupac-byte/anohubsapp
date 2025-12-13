@@ -3,11 +3,11 @@ import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
+import { useAuth } from '../contexts/AuthContext.tsx'; // <--- NOVO: Identitet
 import { supabase } from '../services/supabaseClient.ts';
 
-// --- POPRAVLJENA PUTANJA ---
-// Izlazimo iz 'components' (..) direktno u 'utils'
-import { generateRiskReport } from '../utils/pdfGenerator.ts'; 
+// ISPRAVNA PUTANJA: Izlazimo iz 'components' u 'src', pa u 'utils'
+import { generateRiskReport } from '../utils/pdfGenerator.ts';
 
 import { QUESTIONS } from '../constants.ts';
 import type { Question } from '../types.ts';
@@ -64,6 +64,7 @@ const QuestionnaireSummary: React.FC = () => {
     const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
     const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
     const { showToast } = useToast();
+    const { user } = useAuth(); // <--- KORISNIK
     
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
@@ -97,6 +98,7 @@ const QuestionnaireSummary: React.FC = () => {
     
     const riskIndicator = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
 
+    // --- CLOUD SUBMISSION ---
     const handleSubmitToCloud = async () => {
         if (Object.keys(answers).length === 0) {
             showToast('No data to submit.', 'warning');
@@ -108,7 +110,7 @@ const QuestionnaireSummary: React.FC = () => {
         try {
             const payload = {
                 asset_name: 'HPP-Asset-Unspecified', 
-                engineer_id: 'Anonymous Engineer',     
+                engineer_id: user?.email || 'Anonymous Engineer', // <--- EMAIL IZ AUTH-a
                 answers: answers,                      
                 operational_data: operationalData,     
                 risk_score: disciplineRiskScore,
@@ -120,7 +122,7 @@ const QuestionnaireSummary: React.FC = () => {
 
             if (error) throw error;
 
-            showToast('Diagnosis synced to AnoHUB Cloud Database.', 'success');
+            showToast(`Diagnosis synced to AnoHUB Cloud by ${user?.email || 'User'}.`, 'success');
             setIsUploaded(true);
 
         } catch (error: any) {
@@ -147,6 +149,8 @@ const QuestionnaireSummary: React.FC = () => {
 
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
+            
+            {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
                     Diagnostic <span className="text-cyan-400">Report</span>
@@ -162,6 +166,8 @@ const QuestionnaireSummary: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
                     <div className="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-500 bg-gradient-to-b from-slate-800/80 to-slate-900/80">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Overall Assessment</h3>
@@ -178,6 +184,7 @@ const QuestionnaireSummary: React.FC = () => {
                             </div>
                         </div>
 
+                        {/* --- ACTION BUTTONS --- */}
                         <div className="mt-6 space-y-3">
                             <button 
                                 onClick={handleDownloadPDF}
@@ -218,7 +225,10 @@ const QuestionnaireSummary: React.FC = () => {
                     </div>
                 </div>
 
+                {/* RIGHT COLUMN: DETAILED FINDINGS */}
                 <div className="lg:col-span-2 space-y-6">
+                    
+                    {/* High Risk Section */}
                     {analysis.highRisk.length > 0 && (
                         <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
                             <div className="flex items-center gap-3 mb-6">
@@ -241,6 +251,7 @@ const QuestionnaireSummary: React.FC = () => {
                         </div>
                     )}
 
+                    {/* Medium Risk Section */}
                     {analysis.mediumRisk.length > 0 && (
                         <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 animate-scale-in" style={{ animationDelay: '200ms' }}>
                             <div className="flex items-center gap-3 mb-6">
@@ -263,6 +274,7 @@ const QuestionnaireSummary: React.FC = () => {
                         </div>
                     )}
 
+                    {/* Clean State (No Risks) */}
                     {analysis.highRisk.length === 0 && analysis.mediumRisk.length === 0 && (
                         <div className="glass-panel p-8 rounded-2xl border-green-500/30 text-center">
                             <div className="text-5xl mb-4">✅</div>

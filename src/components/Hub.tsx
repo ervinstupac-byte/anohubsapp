@@ -1,120 +1,178 @@
-import React, { useState, useEffect } from 'react';
-import { CORE_STRATEGY_TOOLS, KNOWLEDGE_INNOVATION_TOOLS, FEEDBACK_TOOLS } from '../constants';
-import { useNavigation } from '../contexts/NavigationContext';
-import type { HubTool } from '../types';
-
-// --- KARTICA ALATA ---
-const ToolCard: React.FC<{ tool: HubTool; onClick: () => void }> = ({ tool, onClick }) => (
-    <div 
-        onClick={onClick}
-        className={`
-            group relative p-6 rounded-2xl border cursor-pointer transition-all duration-300 hover:-translate-y-1 overflow-hidden
-            ${tool.isCritical 
-                ? 'bg-slate-800/80 border-cyan-500/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]' 
-                : 'bg-slate-800/40 border-slate-700 hover:border-slate-500 hover:bg-slate-800/60'}
-        `}
-        style={{ animationDelay: `${tool.delay}ms` }}
-    >
-        <div className="flex items-start justify-between mb-4">
-            <div className="text-4xl filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">{tool.icon}</div>
-            {tool.isCritical && (
-                <span className="bg-red-500/20 text-red-400 text-[10px] font-bold px-2 py-1 rounded border border-red-500/30 uppercase tracking-wider animate-pulse">
-                    Core Tool
-                </span>
-            )}
-        </div>
-        <h3 className={`text-lg font-bold mb-2 group-hover:text-cyan-400 transition-colors ${tool.isCritical ? 'text-white' : 'text-slate-200'}`}>
-            {tool.title}
-        </h3>
-        <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300">
-            {tool.description}
-        </p>
-        
-        {/* Hover Effect Line */}
-        <div className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300 group-hover:w-full"></div>
-    </div>
-);
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '../contexts/NavigationContext.tsx';
+import { useAuth } from '../contexts/AuthContext.tsx';
+import { supabase } from '../services/supabaseClient.ts';
+import { HUB_TOOLS } from '../constants.ts';
+import type { HubTool } from '../types.ts';
 
 export const Hub: React.FC = () => {
     const { navigateTo } = useNavigation();
-    const [userName, setUserName] = useState<string | null>(localStorage.getItem('anoHubUser'));
+    const { user } = useAuth();
+    
+    // --- DASHBOARD STATS STATE ---
+    const [stats, setStats] = useState({
+        riskCount: 0,
+        ledgerBlocks: 0,
+        installAudits: 0,
+        designs: 0, // NOVO: Brojač dizajna
+        systemStatus: 'CONNECTING...'
+    });
 
-    const handleLogin = () => {
-        const name = prompt("Enter your Pilot Callsign (Name):");
-        if (name) {
-            localStorage.setItem('anoHubUser', name);
-            setUserName(name);
-        }
-    };
+    // --- FETCH LIVE DATA ---
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                // 1. Count Risk Assessments
+                const { count: riskCount } = await supabase
+                    .from('risk_assessments')
+                    .select('*', { count: 'exact', head: true });
 
-    const handleLogout = () => {
-        if(confirm("Log out?")) {
-            localStorage.removeItem('anoHubUser');
-            setUserName(null);
-        }
-    };
+                // 2. Count Ledger Blocks
+                const { count: ledgerCount } = await supabase
+                    .from('digital_integrity_ledger')
+                    .select('*', { count: 'exact', head: true });
+
+                // 3. Count Install Audits
+                const { count: installCount } = await supabase
+                    .from('installation_audits')
+                    .select('*', { count: 'exact', head: true });
+
+                // 4. Count Designs (NOVO)
+                const { count: designCount } = await supabase
+                    .from('turbine_designs')
+                    .select('*', { count: 'exact', head: true });
+
+                setStats({
+                    riskCount: riskCount || 0,
+                    ledgerBlocks: ledgerCount || 0,
+                    installAudits: installCount || 0,
+                    designs: designCount || 0,
+                    systemStatus: 'OPERATIONAL'
+                });
+
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                setStats(prev => ({ ...prev, systemStatus: 'OFFLINE' }));
+            }
+        };
+
+        fetchStats();
+    }, []);
+
+    // Formatiranje imena iz emaila (npr. ervin.stupac -> Ervin)
+    const displayName = user?.email ? user.email.split('@')[0].split('.')[0] : 'Engineer';
+    const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
     return (
-        <div className="animate-fade-in pb-12">
+        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-10">
             
-            {/* LOGIN STATUS BAR (Top Left) */}
-            <div className="absolute top-0 left-0 p-4 z-50">
-                {userName ? (
-                    <button onClick={handleLogout} className="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-full border border-cyan-500/30 hover:bg-red-900/30 hover:border-red-500/50 transition-all group">
-                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse group-hover:bg-red-500"></span>
-                        <span className="text-xs font-bold text-cyan-400 group-hover:text-red-400">PILOT: {userName.toUpperCase()}</span>
-                    </button>
-                ) : (
-                    <button onClick={handleLogin} className="flex items-center gap-2 bg-slate-800 px-4 py-2 rounded-full border border-slate-600 hover:border-cyan-400 hover:text-white text-slate-400 transition-all text-xs font-bold uppercase tracking-wider">
-                        <span>👤</span> Identify Yourself
-                    </button>
-                )}
-            </div>
-
-            {/* HEADER */}
-            <div className="text-center py-10 space-y-4">
-                <h2 className="text-2xl font-light text-slate-400 uppercase tracking-[0.2em]">Strategic Operations Center</h2>
-                <div className="h-1 w-24 bg-gradient-to-r from-transparent via-cyan-500 to-transparent mx-auto rounded-full opacity-50"></div>
-            </div>
-
-            <div className="space-y-12 max-w-6xl mx-auto">
+            {/* --- HERO SECTION (Mission Control) --- */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 border border-slate-700 shadow-2xl p-8 md:p-12">
+                {/* Background Decor */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
                 
-                {/* SECTION 1: CORE STRATEGY */}
-                <section>
-                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span className="text-cyan-500">I.</span> Core Strategy & Execution Tools
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {CORE_STRATEGY_TOOLS.map(tool => (
-                            <ToolCard key={tool.id} tool={tool} onClick={() => navigateTo(tool.view)} />
-                        ))}
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className={`w-2 h-2 rounded-full ${stats.systemStatus === 'OPERATIONAL' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
+                            <span className="text-xs font-mono text-cyan-400 tracking-widest">{stats.systemStatus}</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2">
+                            Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{formattedName}</span>
+                        </h1>
+                        <p className="text-slate-400 text-lg max-w-2xl">
+                            Global Standard of Excellence Enforcement Platform.
+                        </p>
                     </div>
-                </section>
-
-                {/* SECTION 2: KNOWLEDGE & INNOVATION */}
-                <section>
-                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span className="text-purple-500">II.</span> Knowledge, Innovation & Ethics
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {KNOWLEDGE_INNOVATION_TOOLS.map(tool => (
-                            <ToolCard key={tool.id} tool={tool} onClick={() => navigateTo(tool.view)} />
-                        ))}
+                    
+                    <div className="text-right hidden md:block">
+                        <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">AnoHUB Cloud</p>
+                        <p className="text-xl font-mono text-white">v2.4.0 (Enterprise)</p>
                     </div>
-                </section>
+                </div>
 
-                {/* SECTION 3: FEEDBACK */}
-                <section>
-                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span className="text-yellow-500">III.</span> System Improvement
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {FEEDBACK_TOOLS.map(tool => (
-                            <ToolCard key={tool.id} tool={tool} onClick={() => navigateTo(tool.view)} />
-                        ))}
+                {/* --- LIVE METRICS GRID --- */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+                    {/* CARD 1: RISK */}
+                    <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-red-500/30 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Risks</span>
+                            <span className="text-xl">🛡️</span>
+                        </div>
+                        <div className="text-3xl font-black text-white">{stats.riskCount}</div>
                     </div>
-                </section>
 
+                    {/* CARD 2: BLOCKCHAIN */}
+                    <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-cyan-500/30 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Blocks</span>
+                            <span className="text-xl">🔗</span>
+                        </div>
+                        <div className="text-3xl font-black text-white">{stats.ledgerBlocks}</div>
+                    </div>
+
+                    {/* CARD 3: AUDITS */}
+                    <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-green-500/30 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Audits</span>
+                            <span className="text-xl">🏗️</span>
+                        </div>
+                        <div className="text-3xl font-black text-white">{stats.installAudits}</div>
+                    </div>
+
+                     {/* CARD 4: DESIGNS (NOVO) */}
+                     <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-purple-500/30 transition-colors">
+                        <div className="flex justify-between items-start mb-2">
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Designs</span>
+                            <span className="text-xl">📐</span>
+                        </div>
+                        <div className="text-3xl font-black text-white">{stats.designs}</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* --- TOOLS GRID (Original Navigation) --- */}
+            <div className="space-y-6">
+                <h3 className="text-2xl font-bold text-white border-l-4 border-cyan-500 pl-4">Operational Modules</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {HUB_TOOLS.map((tool: HubTool, index: number) => (
+                        <div
+                            key={tool.id}
+                            onClick={() => navigateTo(tool.view)}
+                            className="group relative bg-slate-800/40 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl overflow-hidden"
+                            style={{ animationDelay: `${index * 50}ms` }}
+                        >
+                            {/* Hover Gradient Effect */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/5 group-hover:to-blue-500/10 transition-all duration-500"></div>
+
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-600 group-hover:border-cyan-500/50 text-3xl shadow-lg">
+                                        {tool.icon}
+                                    </div>
+                                    {tool.isCritical && (
+                                        <span className="px-2 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/30">
+                                            Critical
+                                        </span>
+                                    )}
+                                </div>
+                                
+                                <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">
+                                    {tool.title}
+                                </h3>
+                                
+                                <p className="text-sm text-slate-400 leading-relaxed flex-grow group-hover:text-slate-300">
+                                    {tool.description}
+                                </p>
+
+                                <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center text-xs font-bold text-cyan-600 group-hover:text-cyan-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                                    Launch Module →
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

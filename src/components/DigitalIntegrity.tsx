@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
+import { useAuth } from '../contexts/AuthContext.tsx'; // <--- NOVO: Auth
 
-// --- TYPES (POPRAVLJENO) ---
+// --- TYPES ---
 interface Block {
     id?: number;
     block_index: number;
@@ -12,7 +13,7 @@ interface Block {
     hash: string;
     prev_hash: string;
     status: string;
-    asset_id?: string;    // <--- DODANO
+    asset_id?: string;    // <--- DODANO (Fix za TS grešku)
     engineer_id?: string; // <--- DODANO
 }
 
@@ -26,6 +27,7 @@ const generateHash = async (message: string): Promise<string> => {
 
 export const DigitalIntegrity: React.FC = () => {
     const { showToast } = useToast();
+    const { user } = useAuth(); // <--- KORISNIK IZ AUTH KONTEKSTA
     
     // --- STATE ---
     const [ledger, setLedger] = useState<Block[]>([]);
@@ -34,10 +36,18 @@ export const DigitalIntegrity: React.FC = () => {
     const [assetId, setAssetId] = useState('HPP-TUR-01');
     const [operation, setOperation] = useState('Shaft Alignment Check');
     const [value, setValue] = useState('0.04 mm/m');
-    const [engineer, setEngineer] = useState('Eng. J. Doe (ID: 8821)');
+    // Inicijalno postavi inženjera na logiranog korisnika (ili fallback)
+    const [engineer, setEngineer] = useState(user?.email || 'Eng. J. Doe');
     
     const [isMining, setIsMining] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
+
+    // Ažuriraj inženjera ako se korisnik učita naknadno
+    useEffect(() => {
+        if (user?.email) {
+            setEngineer(user.email);
+        }
+    }, [user]);
 
     // --- 1. FETCH DATA FROM CLOUD (READ) ---
     const fetchLedger = async () => {
@@ -63,6 +73,7 @@ export const DigitalIntegrity: React.FC = () => {
     useEffect(() => {
         fetchLedger();
         
+        // Real-time pretplata
         const subscription = supabase
             .channel('public:digital_integrity_ledger')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
@@ -115,7 +126,7 @@ export const DigitalIntegrity: React.FC = () => {
                 hash: newHash,
                 prev_hash: prevBlock.hash,
                 status: 'Verified',
-                engineer_id: engineer,
+                engineer_id: engineer, // Šaljemo pravi email
                 asset_id: assetId
             };
 
@@ -181,7 +192,17 @@ export const DigitalIntegrity: React.FC = () => {
                                 </select>
                             </div>
                             <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Value / Note</label><input type="text" value={value} onChange={e => setValue(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-mono" /></div>
-                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Engineer</label><input type="text" value={engineer} onChange={e => setEngineer(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white" /></div>
+                            
+                            {/* Engineer field is read-only or auto-filled but editable */}
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Certified Engineer</label>
+                                <input 
+                                    type="text" 
+                                    value={engineer} 
+                                    onChange={e => setEngineer(e.target.value)} 
+                                    className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white opacity-80" 
+                                />
+                            </div>
                         </div>
 
                         <button onClick={handleSealRecord} disabled={isMining} className={`w-full mt-8 py-4 font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 ${isMining ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}`}>
@@ -210,6 +231,7 @@ export const DigitalIntegrity: React.FC = () => {
                                         <div className="flex items-center gap-3">
                                             <span className="text-xs font-mono text-slate-500">BLOCK #{block.block_index}</span>
                                             <span className="text-xs font-mono text-slate-500">{new Date(block.timestamp).toLocaleString()}</span>
+                                            {/* Fix za Asset ID */}
                                             <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">ID: {block.asset_id || 'N/A'}</span>
                                         </div>
                                         <div className="font-mono text-sm text-cyan-100 bg-slate-900/50 p-2 rounded border border-slate-700/50">{block.data}</div>
@@ -220,6 +242,7 @@ export const DigitalIntegrity: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col justify-center items-end min-w-[40px]">
                                         <div className="text-2xl text-cyan-500">☁️</div>
+                                        <div className="text-[9px] text-slate-500 mt-1">{block.engineer_id ? 'Signed' : 'System'}</div>
                                     </div>
                                 </div>
                             </div>
