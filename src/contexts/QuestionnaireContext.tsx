@@ -1,90 +1,112 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-// Putanja je točna za tvoju strukturu: izlazimo iz 'contexts' u root
-import type { Answers, OperationalData, TurbineType, QuestionnaireContextType } from '../types.ts';
+// src/contexts/QuestionnaireContext.tsx
 
-const QuestionnaireContext = createContext<QuestionnaireContextType | undefined>(undefined);
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { 
+    Answers, 
+    OperationalData, 
+    QuestionnaireContextType, 
+    TurbineType 
+} from '../types.ts';
 
-// Ključ za lokalnu memoriju preglednika
-const STORAGE_KEY = 'anohub-questionnaire-data-v1';
-
-export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  
-  // --- HELPER ZA UČITAVANJE (Lazy Load) ---
-  // Ovo sprječava gubitak podataka na refresh
-  const loadState = () => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        return JSON.parse(saved);
-      }
-    } catch (e) {
-      console.error("Failed to load questionnaire data", e);
-    }
-    return null; 
-  };
-
-  const savedData = loadState();
-
-  // --- STATE INICIJALIZACIJA ---
-  // Ako imamo spremljeno, koristimo to. Ako ne, prazno.
-  const [answers, setAnswers] = useState<Answers>(savedData?.answers || {});
-  const [description, setDescription] = useState<string>(savedData?.description || '');
-  const [selectedTurbine, setSelectedTurbine] = useState<TurbineType | null>(savedData?.selectedTurbine || null);
-  const [operationalData, setOperationalData] = useState<OperationalData>(
-    savedData?.operationalData || { head: '', flow: '', pressure: '', output: '' }
-  );
-  
-  const [isQuestionnaireDataFresh, setIsQuestionnaireDataFresh] = useState(false);
-
-  // --- AUTOMATSKO SPREMANJE (Auto-Save) ---
-  // Svaki put kad se nešto promijeni, spremi u localStorage
-  useEffect(() => {
-    const dataToSave = {
-      answers,
-      description,
-      selectedTurbine,
-      operationalData
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-  }, [answers, description, selectedTurbine, operationalData]);
-
-  // --- RESET FUNKCIJA (Čisti sve) ---
-  const resetQuestionnaire = () => {
-    setAnswers({});
-    setDescription('');
-    setSelectedTurbine(null);
-    setOperationalData({ head: '', flow: '', pressure: '', output: '' });
-    setIsQuestionnaireDataFresh(false);
-    
-    // Ključno: Brišemo i iz memorije preglednika
-    localStorage.removeItem(STORAGE_KEY);
-  };
-
-  const value = {
-    answers,
-    description,
-    selectedTurbine,
-    operationalData,
-    isQuestionnaireDataFresh,
-    setAnswers,
-    setDescription,
-    setSelectedTurbine,
-    setOperationalData,
-    setIsQuestionnaireDataFresh,
-    resetQuestionnaire,
-  };
-
-  return (
-    <QuestionnaireContext.Provider value={value}>
-      {children}
-    </QuestionnaireContext.Provider>
-  );
+// Početno stanje za operativne podatke (prazne stringove)
+const initialOperationalData: OperationalData = {
+    commissioningYear: '',
+    maintenanceCycle: '',
+    powerOutput: '',
+    turbineType: '',
+    head: '',
+    flow: '',
+    pressure: '',
+    output: '',
 };
 
-export const useQuestionnaire = (): QuestionnaireContextType => {
-  const context = useContext(QuestionnaireContext);
-  if (context === undefined) {
-    throw new Error('useQuestionnaire must be used within a QuestionnaireProvider');
-  }
-  return context;
+const initialContext: QuestionnaireContextType = {
+    answers: {},
+    description: '',
+    selectedTurbine: null,
+    operationalData: initialOperationalData,
+    isQuestionnaireDataFresh: false,
+    
+    // Potrebne dummy funkcije za inicijalizaciju
+    setAnswer: () => {}, 
+    setOperationalData: () => {},
+    
+    // Ostatak
+    setAnswers: () => {},
+    setDescription: () => {},
+    setSelectedTurbine: () => {},
+    setIsQuestionnaireDataFresh: () => {},
+    resetQuestionnaire: () => {},
+};
+
+export const QuestionnaireContext = createContext<QuestionnaireContextType>(initialContext);
+
+export const useQuestionnaire = () => useContext(QuestionnaireContext);
+
+export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [answers, setAnswers] = useState<Answers>({});
+    const [description, setDescriptionState] = useState('');
+    const [selectedTurbine, setSelectedTurbine] = useState<TurbineType | null>(null);
+    const [operationalData, setOperationalDataState] = useState<OperationalData>(initialOperationalData);
+    const [isQuestionnaireDataFresh, setIsQuestionnaireDataFresh] = useState(false);
+
+    // FUNKCIJA: Postavlja odgovor na jedno pitanje
+    const setAnswer = useCallback((questionId: string, answer: string) => {
+        setAnswers(prev => ({ ...prev, [questionId]: answer }));
+    }, []);
+
+    // FUNKCIJA: Postavlja vrijednost za jedan operativni podatak
+    const setOperationalData = useCallback((key: keyof OperationalData, value: string) => {
+        setOperationalDataState(prev => ({
+            ...prev,
+            [key]: value
+        }));
+    }, []);
+    
+    // FUNKCIJA: Postavlja opis
+    const setDescription = useCallback((desc: string) => {
+        setDescriptionState(desc);
+    }, []);
+
+    // FUNKCIJA: Resetuje cijelu anketu
+    const resetQuestionnaire = useCallback(() => {
+        setAnswers({});
+        setDescriptionState('');
+        setSelectedTurbine(null);
+        setOperationalDataState(initialOperationalData);
+        setIsQuestionnaireDataFresh(false);
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        answers,
+        description,
+        selectedTurbine,
+        operationalData,
+        isQuestionnaireDataFresh,
+        
+        // Funkcije
+        setAnswers,
+        setDescription,
+        setAnswer, // <-- ISPRAVLJENO: Dodano
+        setSelectedTurbine,
+        setOperationalData, // <-- ISPRAVLJENO: Dodano
+        setIsQuestionnaireDataFresh,
+        resetQuestionnaire,
+    }), [
+        answers, 
+        description, 
+        selectedTurbine, 
+        operationalData, 
+        isQuestionnaireDataFresh,
+        setDescription, 
+        setAnswer, 
+        setOperationalData, 
+        resetQuestionnaire
+    ]);
+
+    return (
+        <QuestionnaireContext.Provider value={contextValue}>
+            {children}
+        </QuestionnaireContext.Provider>
+    );
 };

@@ -139,6 +139,14 @@ export const HUB_TOOLS: HubTool[] = [
         icon: '🔗'
     },
     {
+        id: 'map',
+        view: 'globalMap', // Paziti na ovaj ID, koristimo ga u App.tsx
+        title: 'Global Asset Map',
+        description: 'Geospatial intelligence and live status monitoring.',
+        icon: '🌍',
+        isCritical: false
+    },
+    {
         id: 'investor',
         view: 'investorBriefing',
         title: 'Investor Briefing',
