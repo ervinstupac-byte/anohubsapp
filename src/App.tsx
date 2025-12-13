@@ -1,28 +1,29 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { HashRouter, useLocation, useNavigate, Outlet, Route, Routes, useParams } from 'react-router-dom';
 
-// --- IMPORTI KONTEKSTA ---
-// Dodan AuthContext
+// Contexts
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'; 
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 
-// --- IMPORTI KOMPONENTI ---
-import { Login } from './components/Login.tsx'; // <--- NOVO
+// Components
+import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
 import { Onboarding } from './components/Onboarding.tsx';
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import { Spinner } from './components/Spinner.tsx';
+import { supabase } from './services/supabaseClient.ts'; // Za dohvat imena
 
 import bgImage from './assets/digital_cfd_mesh.png'; 
 
 import type { AppView } from './types.ts';
 import { TURBINE_CATEGORIES } from './constants.ts';
 
-// --- LAZY LOADING ---
+// Lazy Load
 const Hub = React.lazy(() => import('./components/Hub.tsx').then(m => ({ default: m.Hub })));
+const UserProfile = React.lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile }))); // NOVO
 const Questionnaire = React.lazy(() => import('./components/Questionnaire.tsx').then(m => ({ default: m.Questionnaire })));
 const QuestionnaireSummary = React.lazy(() => import('./components/QuestionnaireSummary.tsx'));
 const InvestorBriefing = React.lazy(() => import('./components/InvestorBriefing.tsx').then(m => ({ default: m.InvestorBriefing })));
@@ -51,6 +52,7 @@ const QuestionnaireWrapper = () => {
     return <Questionnaire onShowSummary={() => window.location.hash = '#/questionnaire-summary'} />;
 };
 
+// Header Helper
 const getHeaderInfo = (pathname: string): { title: string; subtitle: string } => {
     const path = pathname.startsWith('/') ? pathname.slice(1) : pathname;
     if (path.startsWith('turbine/')) {
@@ -58,51 +60,67 @@ const getHeaderInfo = (pathname: string): { title: string; subtitle: string } =>
         const turbineName = TURBINE_CATEGORIES[turbineKey]?.name || 'Turbine';
         return {
             title: `Details: ${turbineName} Turbine`,
-            subtitle: "A technical overview focused on components critical to LCC and vulnerable to the Execution Gap."
+            subtitle: "Technical overview focused on Execution Gap vulnerabilities."
         };
     }
     const titles: Record<string, {title: string, subtitle: string}> = {
-        '': { title: 'AnoHUB', subtitle: "Your center for enforcing the Standard of Excellence in hydropower." },
-        'risk-assessment': { title: 'HPP Risk Assessment', subtitle: "A diagnostic tool to quantify the Execution Gap and identify systemic risks." },
-        'investor-briefing': { title: 'Investor Briefing', subtitle: "Technical review ensuring KPIs are based on realistic risk assessment." },
+        '': { title: 'AnoHUB', subtitle: "Global Operating System for Hydropower Excellence." },
+        'profile': { title: 'Engineer Profile', subtitle: "Identity & Access Management." }, // NOVO
+        'risk-assessment': { title: 'HPP Risk Assessment', subtitle: "Diagnostic tool to identify systemic risks." },
+        'investor-briefing': { title: 'Investor Briefing', subtitle: "Financial KPIs and Risk Impact Analysis." },
         'standard-of-excellence': { title: 'THE STANDARD OF EXCELLENCE', subtitle: "Masterclass modules for eliminating the Execution Gap." },
         'digital-introduction': { title: 'Digital Introduction', subtitle: "Core principles: enforcing the 0.05 mm/m precision mandate." },
         'hpp-improvements': { title: 'HPP Ino-Hub', subtitle: "Collaborative hub for innovations supporting LCC Optimization." },
         'installation-guarantee': { title: 'Installation Standard', subtitle: "Non-negotiable protocol for closing the Execution Gap during assembly." },
-        'gender-equity': { title: 'Gender Equity', subtitle: "Eliminating the 'Execution Gap' in human capital." },
-        'hpp-builder': { title: 'HPP Power Calculator', subtitle: "Interactive HPP configuration guided by LCC Optimization principles." },
+        'gender-equity': { title: 'Gender Equity', subtitle: "Inclusive strategies for human capital." },
+        'hpp-builder': { title: 'HPP Design Studio', subtitle: "Physics-based turbine selection and calculation." },
         'phase-guide': { title: 'Project Phase Guide', subtitle: "Enforcing the Three Postulates: Precision, Risk Mitigation, and Ethics." },
-        'suggestion-box': { title: 'Suggestion & Idea Log', subtitle: "Share ideas for improving protocols." },
-        'river-wildlife': { title: 'River & Wildlife Stewardship', subtitle: "Ethical mandate for Ecosystem Protection and E-Flow." },
+        'suggestion-box': { title: 'Suggestion & Idea Log', subtitle: "Feedback loop for protocol improvement." },
+        'river-wildlife': { title: 'River & Wildlife', subtitle: "Ethical mandate for Ecosystem Protection." },
         'questionnaire-summary': { title: 'Execution Gap Analysis', subtitle: "Linking operational symptoms to failures in discipline." },
-        'revitalization-strategy': { title: 'Revitalization Strategy', subtitle: "Framework for closing the M-E Synergy Gap in legacy assets." },
-        'digital-integrity': { title: 'Digital Integrity', subtitle: "Immutable ledger providing irrefutable proof of discipline." },
-        'contract-management': { title: 'Contract & Legal Risk', subtitle: "Legally mandating precision standards to protect warranty." },
+        'revitalization-strategy': { title: 'Revitalization Strategy', subtitle: "Closing the M-E Synergy Gap in legacy assets." },
+        'digital-integrity': { title: 'Digital Integrity', subtitle: "Immutable ledger providing irrefutable proof." },
+        'contract-management': { title: 'Contract & Legal', subtitle: "Warranty protection via data compliance." },
     };
     return titles[path] || { title: 'AnoHUB', subtitle: "Standard of Excellence" };
 };
 
-// --- AUTH WRAPPER (Zaštita) ---
+// Auth Guard
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user, loading } = useAuth();
-
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-900"><Spinner /></div>;
     if (!user) return <Login />;
-
     return <>{children}</>;
 };
 
-// Layout
+// --- APP LAYOUT ---
 const AppLayout: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
+    const [displayName, setDisplayName] = useState('Engineer'); // State za ime
+    
     const { title, subtitle } = getHeaderInfo(location.pathname);
     const isHub = location.pathname === '/';
-    
-    // Dodajemo Logout funkciju
     const { signOut, user } = useAuth();
+
+    // Dohvati pravo ime (ili Nickname) iz Profile tablice
+    useEffect(() => {
+        const fetchProfileName = async () => {
+            if (user) {
+                const { data } = await supabase
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (data?.full_name) setDisplayName(data.full_name);
+                else setDisplayName(user.email?.split('@')[0] || 'Engineer');
+            }
+        };
+        fetchProfileName();
+    }, [user]);
 
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
@@ -116,12 +134,13 @@ const AppLayout: React.FC = () => {
 
     const handleLogout = async () => {
         await signOut();
-        navigate('/'); // Osvježi
+        navigate('/');
     };
 
     const navigationContextValue = {
         navigateTo: (view: AppView) => {
-            const routeMap: Record<string, string> = {
+            // Mapping... (skraćeno za preglednost, ali logika je ista kao prije)
+            const routeMap: any = {
                 'hub': '/', 'riskAssessment': '/risk-assessment', 'investorBriefing': '/investor-briefing',
                 'standardOfExcellence': '/standard-of-excellence', 'digitalIntroduction': '/digital-introduction',
                 'hppImprovements': '/hpp-improvements', 'installationGuarantee': '/installation-guarantee',
@@ -158,12 +177,12 @@ const AppLayout: React.FC = () => {
                         
                         {/* USER PROFILE & LOGOUT */}
                         <div className="absolute right-0 top-0 flex items-center gap-4 z-20">
-                            <div className="hidden md:flex flex-col items-end">
+                            <div className="hidden md:flex flex-col items-end cursor-pointer" onClick={() => navigate('/profile')}>
                                 <span className="text-xs text-slate-400">Logged in as</span>
-                                <span className="text-sm font-bold text-cyan-400">{user?.email}</span>
+                                <span className="text-sm font-bold text-cyan-400 hover:text-white transition-colors">{displayName}</span>
                             </div>
                             <button onClick={handleLogout} className="px-3 py-1 bg-slate-800 hover:bg-red-900/30 text-slate-300 hover:text-red-400 border border-slate-700 rounded text-xs transition-colors">
-                                SIGN OUT
+                                EXIT
                             </button>
                         </div>
 
@@ -191,23 +210,17 @@ const AppLayout: React.FC = () => {
     );
 };
 
-// --- GLAVNA APP KOMPONENTA ---
 const App: React.FC = () => {
   return (
-    // AuthProvider mora biti na vrhu!
     <ToastProvider>
         <AuthProvider>
             <QuestionnaireProvider>
                 <RiskProvider>
                     <HashRouter>
                         <Routes>
-                            <Route path="/" element={
-                                // Ovdje štitimo cijelu aplikaciju Loginom
-                                <ProtectedRoute>
-                                    <AppLayout />
-                                </ProtectedRoute>
-                            }>
+                            <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                                 <Route index element={<Hub />} />
+                                <Route path="profile" element={<UserProfile />} /> {/* NOVO */}
                                 <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
                                 <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
                                 <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
