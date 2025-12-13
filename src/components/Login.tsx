@@ -22,24 +22,39 @@ export const Login: React.FC = () => {
             if (mode === 'GUEST') {
                 if (!nickname) throw new Error('Please enter a nickname.');
                 
-                // Generiraj privremeni email za bazu
-                const randomId = Math.floor(Math.random() * 10000);
-                const dummyEmail = `${nickname.replace(/\s+/g, '').toLowerCase()}_${randomId}@guest.anohub.com`;
-                const dummyPassword = `guest_${randomId}_secure`;
+                // 1. STROŽA SANITIZACIJA: Samo slova i brojevi (a-z, 0-9)
+                const cleanNick = nickname.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                
+                if (cleanNick.length < 3) {
+                    throw new Error('Nickname must have at least 3 letters/numbers.');
+                }
 
+                // 2. Generiraj siguran email format
+                const randomId = Math.floor(Math.random() * 100000);
+                const dummyEmail = `${cleanNick}.${randomId}@guest.anohub.com`; // Koristimo točku umjesto donje crte za svaki slučaj
+                const dummyPassword = `guest-${randomId}-secure`;
+
+                // 3. Registracija
                 const { data, error } = await supabase.auth.signUp({
                     email: dummyEmail,
                     password: dummyPassword,
                     options: {
                         data: {
-                            full_name: nickname,
+                            full_name: nickname, // Ovdje čuvamo originalni nadimak s razmacima
                             is_guest: true
                         }
                     }
                 });
 
                 if (error) throw error;
-                showToast(`Welcome aboard, ${nickname}! (Guest Mode)`, 'success');
+
+                // Ako je "Confirm email" isključen, data.session će postojati
+                if (data.session) {
+                    showToast(`Welcome aboard, ${nickname}! (Guest Mode)`, 'success');
+                } else {
+                    // Ako korisnik nije isključio "Confirm email", ovo će se dogoditi
+                    showToast('Please disable "Confirm Email" in Supabase Auth settings to use Guest Mode.', 'warning');
+                }
 
             } else if (mode === 'REGISTER') {
                 const { error } = await supabase.auth.signUp({
@@ -50,12 +65,13 @@ export const Login: React.FC = () => {
                 showToast('Registration successful! Please check your email.', 'success');
                 
             } else {
+                // LOGIN MODE
                 const { error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
                 if (error) throw error;
-                showToast('Welcome back to AnoHub.', 'success');
+                showToast('Welcome back to AnoHUB.', 'success');
             }
         } catch (error: any) {
             showToast(error.message, 'error');
@@ -130,7 +146,7 @@ export const Login: React.FC = () => {
                                 value={nickname}
                                 onChange={(e) => setNickname(e.target.value)}
                                 className="w-full bg-slate-900 border border-cyan-500/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all font-mono"
-                                placeholder="e.g. HydroWolf_99"
+                                placeholder="e.g. HydroWolf"
                                 autoFocus
                             />
                             <p className="text-xs text-slate-500 mt-2">
