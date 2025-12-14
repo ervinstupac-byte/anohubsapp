@@ -14,7 +14,8 @@ vi.mock('../../../src/services/supabaseClient.ts', () => {
         getSession: async () => ({ data: { session: { user: { email: 'test.user@example.com' } } } }),
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
       }
-    }
+    },
+    getTableCount: async (table: string) => 0
   };
 });
 

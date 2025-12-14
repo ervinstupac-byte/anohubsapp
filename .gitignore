@@ -15,6 +15,9 @@ dist-ssr
 .env.*
 coverage
 
+# Local artifacts (diagnostic captures)
+artifacts/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

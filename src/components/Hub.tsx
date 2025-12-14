@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { supabase } from '../services/supabaseClient.ts';
+import { supabase, getTableCount } from '../services/supabaseClient.ts';
 import { HUB_TOOLS } from '../constants.ts';
 import type { HubTool } from '../types.ts';
 
@@ -23,41 +23,11 @@ export const Hub: React.FC = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                // Helper: try HEAD count, fallback to GET + count if HEAD fails
-                const getCount = async (table: string) => {
-                    // Try HEAD count first (fast), retry once on failure
-                    for (let attempt = 0; attempt < 2; attempt++) {
-                        try {
-                            const { count } = await supabase.from(table).select('*', { count: 'exact', head: true });
-                            if (typeof count === 'number') return count;
-                        } catch (e) {
-                            console.warn(`HEAD count failed for ${table}:`, (e as Error).message || e);
-                            await new Promise(r => setTimeout(r, 250));
-                        }
-                    }
-
-                    // Fallback: GET with count (slightly heavier but reliable)
-                    try {
-                        const { data, count } = await supabase.from(table).select('id', { count: 'exact' });
-                        if (typeof count === 'number') return count;
-                        return Array.isArray(data) ? data.length : 0;
-                    } catch (e) {
-                        console.error(`Count fallback failed for ${table}:`, (e as Error).message || e);
-                        return 0;
-                    }
-                };
-
-                // 1. Count Risk Assessments
-                const riskCount = await getCount('risk_assessments');
-
-                // 2. Count Ledger Blocks
-                const ledgerCount = await getCount('digital_integrity_ledger');
-
-                // 3. Count Install Audits
-                const installCount = await getCount('installation_audits');
-
-                // 4. Count Designs (NOVO)
-                const designCount = await getCount('turbine_designs');
+                // Use GET+count helper for reliable counts
+                const riskCount = await getTableCount('risk_assessments');
+                const ledgerCount = await getTableCount('digital_integrity_ledger');
+                const installCount = await getTableCount('installation_audits');
+                const designCount = await getTableCount('turbine_designs');
 
                 setStats({
                     riskCount: riskCount || 0,

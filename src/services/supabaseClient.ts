@@ -8,3 +8,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+/**
+ * Get an exact count for a table using a GET with count=exact.
+ * Falls back to array length when count is not provided by the client.
+ */
+export async function getTableCount(table: string): Promise<number> {
+    try {
+        const res: any = await supabase.from(table).select('id', { count: 'exact' });
+        const { count, data } = res;
+        if (typeof count === 'number') return count;
+        if (Array.isArray(data)) return data.length;
+        return 0;
+    } catch (e) {
+        console.error(`getTableCount failed for ${table}:`, (e as Error).message || e);
+        return 0;
+    }
+}
