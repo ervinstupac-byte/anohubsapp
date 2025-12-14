@@ -1,3 +1,0 @@
-[2025-12-14T12:14:48.997Z] warning: cdn.tailwindcss.com should not be used in production. To use Tailwind CSS in production, install it as a PostCSS plugin or use the Tailwind CLI: https://tailwindcss.com/docs/installation
-[2025-12-14T12:14:49.112Z] error: Failed to load resource: the server responded with a status of 404 ()
-[2025-12-14T12:14:54.734Z] error: Failed to load resource: the server responded with a status of 401 ()
