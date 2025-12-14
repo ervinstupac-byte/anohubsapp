@@ -37,6 +37,7 @@ const RiverWildlife = React.lazy(() => import('./components/RiverWildlife.tsx'))
 const RevitalizationStrategy = React.lazy(() => import('./components/RevitalizationStrategy.tsx'));
 const DigitalIntegrity = React.lazy(() => import('./components/DigitalIntegrity.tsx'));
 const ContractManagement = React.lazy(() => import('./components/ContractManagement.tsx'));
+const GlobalMap = React.lazy(() => import('./components/GlobalMap.tsx').then(m => ({ default: m.GlobalMap })));
 
 // --- WRAPPERS ---
 const TurbineDetailWrapper = () => {
@@ -80,6 +81,7 @@ const getHeaderInfo = (pathname: string): { title: string; subtitle: string } =>
         'revitalization-strategy': { title: 'Revitalization Strategy', subtitle: "Framework for closing the M-E Synergy Gap in legacy assets." },
         'digital-integrity': { title: 'Digital Integrity', subtitle: "Immutable ledger providing irrefutable proof of discipline." },
         'contract-management': { title: 'Contract & Legal Risk', subtitle: "Legally mandating precision standards to protect warranty." },
+        'global-map': { title: 'Global Asset Map', subtitle: 'Geospatial intelligence and live status monitoring.' },
     };
     return titles[path] || { title: 'AnoHUB', subtitle: "Standard of Excellence" };
 };
@@ -227,6 +229,7 @@ const App: React.FC = () => {
                         <Route path="river-wildlife" element={<RiverWildlife />} />
                         <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
                         <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                        <Route path="global-map" element={<GlobalMap />} />
                         <Route path="contract-management" element={<ContractManagement />} />
                         <Route path="*" element={<div className="text-center p-10 text-xl text-slate-400">404 - Module Not Found</div>} />
                     </Route>
