@@ -117,9 +117,9 @@ const AppLayout: React.FC = () => {
                 'standardOfExcellence': '/standard-of-excellence', 'digitalIntroduction': '/digital-introduction',
                 'hppImprovements': '/hpp-improvements', 'installationGuarantee': '/installation-guarantee',
                 'genderEquity': '/gender-equity', 'hppBuilder': '/hpp-builder', 'phaseGuide': '/phase-guide',
-                'suggestionBox': '/suggestion-box', 'riverWildlife': '/river-wildlife',
+                        'suggestionBox': '/suggestion-box', 'riverWildlife': '/river-wildlife',
                 'questionnaireSummary': '/questionnaire-summary', 'revitalizationStrategy': '/revitalization-strategy',
-                'digitalIntegrity': '/digital-integrity', 'contractManagement': '/contract-management',
+                        'digitalIntegrity': '/digital-integrity', 'globalMap': '/global-map', 'contractManagement': '/contract-management',
                 'turbineDetail': '/turbine'
             };
             navigate(routeMap[view] || '/');
