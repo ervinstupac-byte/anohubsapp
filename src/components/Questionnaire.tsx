@@ -5,30 +5,13 @@ import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import type { Question, OperationalData } from '../types.ts';
+import { QUESTIONS } from '../constants.ts';
 
 interface QuestionnaireProps {
     onShowSummary: () => void;
 }
 
-// --- Fiksna struktura pitanja (za primjer) ---
-const QUESTIONS: Question[] = [
-    {
-        id: 'q1_corrosion',
-        text: 'Koliko često se uočava problem korozije na glavnim dijelovima turbine?',
-        options: ['Nikad', 'Rijetko (godišnje inspekcije)', 'Umjereno (kvartalno)', 'Vrlo često (mjesečno)'],
-    },
-    {
-        id: 'q2_vibration',
-        text: 'Kakva je razina vibracija zabilježena u posljednjih 6 mjeseci?',
-        options: ['Unutar nominalnih granica', 'Povremena odstupanja (+10% nominalne)', 'Stalna odstupanja (+20% nominalne)', 'Kritična odstupanja (+30% nominalne)'],
-    },
-    {
-        id: 'q3_documentation',
-        text: 'Koliko je ažurna tehnička dokumentacija (digitalni blizanci, logbook, itd.)?',
-        options: ['Potpuno ažurna (u realnom vremenu)', 'Ažurna (unutar 7 dana)', 'Djelomično ažurna (kašnjenje > 1 mjesec)', 'Neažurna (potpuno zastarjela)'],
-    },
-    // Dodajte ostala pitanja po potrebi...
-];
+// Use canonical QUESTIONS from `constants.ts` (English)
 
 const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
     const { answers, setAnswer, operationalData, setOperationalData, resetQuestionnaire } = useQuestionnaire();
@@ -38,15 +21,15 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
 
     // Lista polja za Operativne podatke
     const operationalFields: { key: keyof OperationalData, label: string, type: 'text' | 'number' }[] = useMemo(() => [
-        { key: 'commissioningYear', label: 'Godina puštanja u rad', type: 'text' },
-        { key: 'maintenanceCycle', label: 'Ciklus održavanja (godine)', type: 'text' },
-        { key: 'powerOutput', label: 'Projektirana izlazna snaga (MW)', type: 'number' },
-        { key: 'turbineType', label: 'Tip turbine (Francis/Kaplan/Pelton)', type: 'text' },
-        // Stara polja koja se koriste za integracije (Gemini/PDF)
-        { key: 'head', label: 'Bruto pad (Head) [m]', type: 'number' },
-        { key: 'flow', label: 'Protok (Flow) [m³/s]', type: 'number' },
-        { key: 'pressure', label: 'Tlak (Pressure) [bar]', type: 'number' },
-        { key: 'output', label: 'Trenutna snaga (MW)', type: 'number' },
+        { key: 'commissioningYear', label: 'Commissioning Year', type: 'text' },
+        { key: 'maintenanceCycle', label: 'Maintenance Cycle (years)', type: 'text' },
+        { key: 'powerOutput', label: 'Designed Power Output (MW)', type: 'number' },
+        { key: 'turbineType', label: 'Turbine Type (Francis/Kaplan/Pelton)', type: 'text' },
+        // Legacy/integration fields for Gemini/PDF
+        { key: 'head', label: 'Gross Head [m]', type: 'number' },
+        { key: 'flow', label: 'Flow [m³/s]', type: 'number' },
+        { key: 'pressure', label: 'Pressure [bar]', type: 'number' },
+        { key: 'output', label: 'Current Output (MW)', type: 'number' },
     ], []);
 
 
@@ -81,8 +64,8 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
         if (step === 0) {
             return (
                 <div className="space-y-6">
-                    <h3 className="text-2xl font-semibold text-cyan-400">1. Operativni podaci HPP-a</h3>
-                    <p className="text-slate-300">Unesite ključne operativne parametre koji će definirati kontekst analize rizika.</p>
+                    <h3 className="text-2xl font-semibold text-cyan-400">1. Operational Plant Data</h3>
+                    <p className="text-slate-300">Enter key operational parameters that define the context for the risk analysis.</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {operationalFields.map(({ key, label, type }) => (
@@ -106,7 +89,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
                         disabled={!operationalFields.slice(0, 4).every(field => operationalData[field.key] !== '')}
                         className="w-full mt-6 bg-cyan-600 text-white py-3 rounded-lg font-bold hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 transition-colors"
                     >
-                        Nastavi na procjenu discipline
+                        Continue to Discipline Assessment
                     </button>
                 </div>
             );
@@ -114,17 +97,17 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
 
         const currentQuestion = QUESTIONS[step - 1];
 
-        if (!currentQuestion) {
-            // Završni ekran
+            if (!currentQuestion) {
+            // Final screen
             return (
                 <div className="text-center space-y-8 p-8 bg-slate-700/50 rounded-lg">
-                    <h3 className="text-3xl font-bold text-green-400">Procjena završena!</h3>
-                    <p className="text-xl text-slate-200">Svi podaci su prikupljeni. Spremni ste generirati Analizu izvršnog jaza (Execution Gap Analysis) i izvještaj o riziku.</p>
+                    <h3 className="text-3xl font-bold text-green-400">Assessment Complete!</h3>
+                    <p className="text-xl text-slate-200">All data captured. You can generate the Execution Gap Analysis and Risk Report.</p>
                     <button
                         onClick={handleComplete}
                         className="w-full md:w-1/2 bg-green-600 text-white py-3 rounded-lg font-bold text-lg hover:bg-green-500 transition-colors shadow-lg"
                     >
-                        Prikaži sažetak i izvještaj o riziku
+                        Show summary and risk report
                     </button>
                 </div>
             );
@@ -132,7 +115,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
 
         return (
             <div className="space-y-6">
-                <h3 className="text-2xl font-semibold text-cyan-400">2. Procjena discipline (Pitanje {step} / {QUESTIONS.length})</h3>
+                <h3 className="text-2xl font-semibold text-cyan-400">2. Discipline Assessment (Question {step} / {QUESTIONS.length})</h3>
                 <p className="text-slate-300 max-w-2xl">{currentQuestion.text}</p>
                 
                 <div className="space-y-3">
@@ -156,14 +139,14 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
                         onClick={() => setStep(prev => Math.max(0, prev - 1))}
                         className="px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-500 transition-colors"
                     >
-                        &larr; Natrag
+                        &larr; Back
                     </button>
                     <button
                         onClick={() => setStep(prev => prev + 1)}
                         disabled={!answers[currentQuestion.id]}
                         className="px-6 py-2 bg-cyan-600 text-white rounded-lg font-bold hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 transition-colors"
                     >
-                        {step < QUESTIONS.length ? 'Sljedeće pitanje \u2192' : 'Završi procjenu'}
+                        {step < QUESTIONS.length ? 'Next Question \u2192' : 'Complete Assessment'}
                     </button>
                 </div>
             </div>
@@ -183,7 +166,7 @@ const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
                     onClick={navigateToHub} 
                     className="text-slate-400 hover:text-cyan-400 transition-colors text-sm"
                 >
-                    &larr; Povratak na HUB
+                    &larr; Back to HUB
                 </button>
             </div>
         </div>

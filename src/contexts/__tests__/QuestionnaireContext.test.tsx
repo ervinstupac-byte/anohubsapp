@@ -10,7 +10,7 @@ const Consumer: React.FC = () => {
       <div data-testid="head">{operationalData.head}</div>
       <button onClick={() => setOperationalData('head', '12.34')}>Set Head</button>
       <div data-testid="answer">{answers['q1'] || ''}</div>
-      <button onClick={() => setAnswer('q1', 'Nikad')}>Answer Q1</button>
+      <button onClick={() => setAnswer('q1', 'Never')}>Answer Q1</button>
     </div>
   );
 };
@@ -29,6 +29,6 @@ describe('QuestionnaireContext', () => {
 
     const answerBtn = screen.getByText('Answer Q1');
     await userEvent.click(answerBtn);
-    expect(screen.getByTestId('answer')).toHaveTextContent('Nikad');
+    expect(screen.getByTestId('answer')).toHaveTextContent('Never');
   });
 });

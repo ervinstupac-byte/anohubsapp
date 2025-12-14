@@ -1,0 +1,1250 @@
+{
+  "requests": [
+    {
+      "id": "9818BF538E4BA81918C0E4E39A2F5A8C",
+      "url": "https://anohubs.com/app-iframe.html",
+      "method": "GET",
+      "resourceType": "document",
+      "headers": {
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\""
+      },
+      "timestamp": 1765714413399
+    },
+    {
+      "id": "18176.2",
+      "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC0597rHYrJKvkUauCIPqCfRPrvIs7r_GLpXH-xe0gMb1lZ5p7PbUK5J0r8zszsQZMA",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://anohubs.com/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413448
+    },
+    {
+      "id": "18176.3",
+      "url": "https://anohubs.com/js/head-init.js",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://anohubs.com/app-iframe.html",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413448
+    },
+    {
+      "id": "8163D52D1F39DF196A0C28C95D4256A9",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/",
+      "method": "GET",
+      "resourceType": "document",
+      "headers": {
+        "referer": "https://anohubs.com/",
+        "upgrade-insecure-requests": "1",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\""
+      },
+      "timestamp": 1765714413459
+    },
+    {
+      "id": "44260.2",
+      "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC3GvoJE-wljzurLTFlFi93NN43otWfH05GWtOOZe2Gqqbsdu2w-gjllfICS-g4Qrjg",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413508
+    },
+    {
+      "id": "44260.3",
+      "url": "https://cdn.tailwindcss.com/",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413508
+    },
+    {
+      "id": "44260.4",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-BsLWT1BY.js",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413508
+    },
+    {
+      "id": "44260.5",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-7Ewte4aI.css",
+      "method": "GET",
+      "resourceType": "stylesheet",
+      "headers": {
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413508
+    },
+    {
+      "id": "44260.3",
+      "url": "https://cdn.tailwindcss.com/3.4.17",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "referer": "https://ervinstupac-byte.github.io/"
+      },
+      "timestamp": 1765714413557
+    },
+    {
+      "id": "18176.7",
+      "url": "https://anohubs.com/favicon.ico?v=1765714413457",
+      "method": "GET",
+      "resourceType": "other",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://anohubs.com/app-iframe.html",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413680
+    },
+    {
+      "id": "44260.11",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/Hub-icaIlBYw.js",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413712
+    },
+    {
+      "id": "44260.12",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/useTranslation-CjXTkf2E.js",
+      "method": "GET",
+      "resourceType": "script",
+      "headers": {
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413712
+    },
+    {
+      "id": "44260.13",
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/digital_cfd_mesh-CbuRECV1.png",
+      "method": "GET",
+      "resourceType": "image",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714413988
+    },
+    {
+      "id": "44260.14",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "method": "HEAD",
+      "resourceType": "fetch",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "timestamp": 1765714414014
+    },
+    {
+      "id": "1E8990B99DB3768E3FDA81CA9A652191",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "method": "OPTIONS",
+      "resourceType": "other",
+      "headers": {
+        "accept": "*/*",
+        "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-request-method": "HEAD",
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-fetch-mode": "cors",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      },
+      "timestamp": 1765714414014
+    },
+    {
+      "id": "44260.15",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+      "method": "HEAD",
+      "resourceType": "fetch",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "timestamp": 1765714414648
+    },
+    {
+      "id": "59F0667BAD27BCDC8E956A4DFCA5716A",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+      "method": "OPTIONS",
+      "resourceType": "other",
+      "headers": {
+        "accept": "*/*",
+        "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-request-method": "HEAD",
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-fetch-mode": "cors",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      },
+      "timestamp": 1765714414648
+    },
+    {
+      "id": "44260.16",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+      "method": "HEAD",
+      "resourceType": "fetch",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "timestamp": 1765714414753
+    },
+    {
+      "id": "4A1D305E7A627738BCA982AF9DDF532D",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+      "method": "OPTIONS",
+      "resourceType": "other",
+      "headers": {
+        "accept": "*/*",
+        "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-request-method": "HEAD",
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-fetch-mode": "cors",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      },
+      "timestamp": 1765714414753
+    },
+    {
+      "id": "44260.17",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+      "method": "HEAD",
+      "resourceType": "fetch",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "timestamp": 1765714414926
+    },
+    {
+      "id": "A87E6FC468DAA366E10FD21D1494D826",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+      "method": "OPTIONS",
+      "resourceType": "other",
+      "headers": {
+        "accept": "*/*",
+        "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-request-method": "HEAD",
+        "origin": "https://ervinstupac-byte.github.io",
+        "sec-fetch-mode": "cors",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+      },
+      "timestamp": 1765714414927
+    },
+    {
+      "id": "44260.18",
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "method": "GET",
+      "resourceType": "fetch",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0"
+      },
+      "timestamp": 1765714419335
+    }
+  ],
+  "responses": [
+    {
+      "url": "https://anohubs.com/app-iframe.html",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "247",
+        "cache-control": "max-age=600",
+        "content-length": "1456",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693c1a66-4c0\"",
+        "expires": "Sun, 14 Dec 2025 11:17:24 GMT",
+        "last-modified": "Fri, 12 Dec 2025 13:36:38 GMT",
+        "server": "GitHub.com",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "533b88a71e325e44224b2e43c71de2212ba58557",
+        "x-github-request-id": "CEF8:1E057F:177AA11:17DF0C2:693E9A6C",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6336-VIE",
+        "x-timer": "S1765714413.270897,VS0,VE5"
+      },
+      "request": {
+        "url": "https://anohubs.com/app-iframe.html",
+        "method": "GET",
+        "headers": {
+          "upgrade-insecure-requests": "1",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Windows\""
+        }
+      },
+      "timestamp": 1765714413442
+    },
+    {
+      "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC0597rHYrJKvkUauCIPqCfRPrvIs7r_GLpXH-xe0gMb1lZ5p7PbUK5J0r8zszsQZMA",
+      "status": 200,
+      "headers": {
+        "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+        "content-length": "98070",
+        "content-type": "application/x-javascript;charset=UTF-8",
+        "expires": "Mon, 04 Dec 1999 21:29:02 GMT",
+        "pragma": "no-cache"
+      },
+      "request": {
+        "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC0597rHYrJKvkUauCIPqCfRPrvIs7r_GLpXH-xe0gMb1lZ5p7PbUK5J0r8zszsQZMA",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://anohubs.com/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413454
+    },
+    {
+      "url": "https://anohubs.com/js/head-init.js",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "246",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "846",
+        "content-type": "application/javascript; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693c1a66-731\"",
+        "expires": "Sun, 14 Dec 2025 11:17:24 GMT",
+        "last-modified": "Fri, 12 Dec 2025 13:36:38 GMT",
+        "server": "GitHub.com",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "7a7a44948d8df0d2919a6bafe363f6b2626582a6",
+        "x-github-request-id": "E514:A25A8:1773C55:17D81F1:693E9A6C",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6336-VIE",
+        "x-timer": "S1765714413.289708,VS0,VE2"
+      },
+      "request": {
+        "url": "https://anohubs.com/js/head-init.js",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://anohubs.com/app-iframe.html",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413456
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "260",
+        "cache-control": "max-age=600",
+        "content-length": "2212",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693ea6d7-7b4\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "6167f0419dc9bee1c2398ecc0478dfe10e97ae95",
+        "x-github-request-id": "29DE:A25A8:1833570:189A743:693EA7C0",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714413.329469,VS0,VE5"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/",
+        "method": "GET",
+        "headers": {
+          "referer": "https://anohubs.com/",
+          "upgrade-insecure-requests": "1",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Windows\""
+        }
+      },
+      "timestamp": 1765714413501
+    },
+    {
+      "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC3GvoJE-wljzurLTFlFi93NN43otWfH05GWtOOZe2Gqqbsdu2w-gjllfICS-g4Qrjg",
+      "status": 200,
+      "headers": {
+        "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+        "content-length": "98070",
+        "content-type": "application/x-javascript;charset=UTF-8",
+        "expires": "Mon, 04 Dec 1999 21:29:02 GMT",
+        "pragma": "no-cache"
+      },
+      "request": {
+        "url": "https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=L3HTNNN-ERGqFBc-5jHMC3GvoJE-wljzurLTFlFi93NN43otWfH05GWtOOZe2Gqqbsdu2w-gjllfICS-g4Qrjg",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413518
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-7Ewte4aI.css",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "260",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "685",
+        "content-type": "text/css; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693ea6d7-70d\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "958e60e2b7713eb67f4af3d440162117fc2062f4",
+        "x-github-request-id": "FA75:17891F:184530A:18AC54C:693EA7C0",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714413.352972,VS0,VE10"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-7Ewte4aI.css",
+        "method": "GET",
+        "headers": {
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413540
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-BsLWT1BY.js",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "260",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "151855",
+        "content-type": "application/javascript; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693ea6d7-7c1a1\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "0c7c18f1c99c135b83acad436928067ce18429e8",
+        "x-github-request-id": "2644:1AD575:17AE87C:1815719:693EA7C0",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714413.353535,VS0,VE3"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/index-BsLWT1BY.js",
+        "method": "GET",
+        "headers": {
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413547
+    },
+    {
+      "url": "https://cdn.tailwindcss.com/",
+      "status": 302,
+      "headers": {
+        "age": "883",
+        "cache-control": "max-age=14400",
+        "cf-cache-status": "HIT",
+        "cf-ray": "9add9dabae70c30f-VIE",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "location": "/3.4.17",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=LrF6xiauQ2FrnR5fuvRgZy7SVybmNZkEvZsjRKXiG9suVARQoiiaFp8zbZT2rO%2FwLiLVU6AQaxFi86D9lGU%2BXVAHkLsFKAbrfL%2FtL6CS24o%3D\"}]}",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "accept-encoding",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "fra1::iad1::xkw67-1765713529867-143d0c3af27f"
+      },
+      "request": {
+        "url": "https://cdn.tailwindcss.com/",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413556
+    },
+    {
+      "url": "https://cdn.tailwindcss.com/3.4.17",
+      "status": 200,
+      "headers": {
+        "age": "1418677",
+        "cache-control": "max-age=31536000",
+        "cf-cache-status": "HIT",
+        "cf-ray": "9add9dabce81c30f-VIE",
+        "content-encoding": "br",
+        "content-type": "text/javascript",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "last-modified": "Wed, 19 Nov 2025 02:26:57 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=vLaF46SM%2F%2Bwxejqz2gARKJoRVBepXMZjz337UkR6pVRxART%2FH7TpK2PrjaTXJeBowG%2FZ50zZ6GbgU1RBvyk%2F49fk9Ke1ZY0RF6PHo8%2FmWVs%3D\"}]}",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=63072000",
+        "vary": "accept-encoding",
+        "x-vercel-cache": "MISS",
+        "x-vercel-id": "arn1::iad1::zrxjn-1763519216515-428a84849afa"
+      },
+      "request": {
+        "url": "https://cdn.tailwindcss.com/3.4.17",
+        "method": "GET",
+        "headers": {
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "referer": "https://ervinstupac-byte.github.io/"
+        }
+      },
+      "timestamp": 1765714413587
+    },
+    {
+      "url": "https://anohubs.com/favicon.ico?v=1765714413457",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "246",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "8778",
+        "content-type": "image/vnd.microsoft.icon",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693c1a66-3c2e\"",
+        "expires": "Sun, 14 Dec 2025 11:17:24 GMT",
+        "last-modified": "Fri, 12 Dec 2025 13:36:38 GMT",
+        "server": "GitHub.com",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "870482a479fdabee9c1c6acb02f7be7da0eb7aa5",
+        "x-github-request-id": "7B4C:97F80:17EC532:1850CFA:693E9A6C",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6336-VIE",
+        "x-timer": "S1765714414.525846,VS0,VE3"
+      },
+      "request": {
+        "url": "https://anohubs.com/favicon.ico?v=1765714413457",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://anohubs.com/app-iframe.html",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413695
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/Hub-icaIlBYw.js",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "246",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "1772",
+        "content-type": "application/javascript; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693ea6d7-1768\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "41d299370f204063e3250d551f46443870df139d",
+        "x-github-request-id": "D9B6:1FD8C:187F1B0:18E720D:693EA7C0",
+        "x-origin-cache": "HIT",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714414.540050,VS0,VE4"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/Hub-icaIlBYw.js",
+        "method": "GET",
+        "headers": {
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413712
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/useTranslation-CjXTkf2E.js",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "246",
+        "cache-control": "max-age=600",
+        "content-encoding": "gzip",
+        "content-length": "1640",
+        "content-type": "application/javascript; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "W/\"693ea6d7-ecf\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "1217db3351d72bd0be35997705902b669647a0f7",
+        "x-github-request-id": "2494:2470B9:180D806:1874A58:693EA7C0",
+        "x-origin-cache": "HIT",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714414.541551,VS0,VE3"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/useTranslation-CjXTkf2E.js",
+        "method": "GET",
+        "headers": {
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413712
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/digital_cfd_mesh-CbuRECV1.png",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "access-control-allow-origin": "*",
+        "age": "261",
+        "cache-control": "max-age=600",
+        "content-length": "1355412",
+        "content-type": "image/png",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "etag": "\"693ea6d7-14ae94\"",
+        "expires": "Sun, 14 Dec 2025 12:14:16 GMT",
+        "last-modified": "Sun, 14 Dec 2025 12:00:23 GMT",
+        "server": "GitHub.com",
+        "strict-transport-security": "max-age=31556952",
+        "vary": "Accept-Encoding",
+        "via": "1.1 varnish",
+        "x-cache": "HIT",
+        "x-cache-hits": "0",
+        "x-fastly-request-id": "95388b09cc559130b16cf803112257a5b030d342",
+        "x-github-request-id": "ED8A:1E7659:17C03C2:1827492:693EA7C0",
+        "x-proxy-cache": "MISS",
+        "x-served-by": "cache-vie6381-VIE",
+        "x-timer": "S1765714414.808541,VS0,VE8"
+      },
+      "request": {
+        "url": "https://ervinstupac-byte.github.io/anohubsapp/assets/digital_cfd_mesh-CbuRECV1.png",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/anohubsapp/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714413988
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT",
+        "access-control-allow-origin": "*",
+        "access-control-max-age": "3600",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-ray": "9add9daecb92c2c0-VIE",
+        "content-length": "0",
+        "date": "Sun, 14 Dec 2025 12:13:33 GMT",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-c947-761c-bc4a-44a0318d1034",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=CPd3CZgFb3rHMvOor2PBX9wB5_ztZdl8xpWF47PoEqY-1765714413-1.0.1.1-xmPQcAwS8dI.xPdVY4y2vaOE0j2Ly5kRM08qysQsaZREE3pOTET0GVVsWy3e3UokhrhVH1uElRrYV34PurN2_5it5C4iA_f0LrRkVYqmmO0; path=/; expires=Sun, 14-Dec-25 12:43:33 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+        "method": "OPTIONS",
+        "headers": {
+          "accept": "*/*",
+          "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+          "access-control-request-method": "HEAD",
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-fetch-mode": "cors",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        }
+      },
+      "timestamp": 1765714414098
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "https://ervinstupac-byte.github.io",
+        "access-control-expose-headers": "Content-Encoding, Content-Location, Content-Range, Content-Type, Date, Location, Server, Transfer-Encoding, Range-Unit",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9add9daf2bd5c2c0-VIE",
+        "content-encoding": "br",
+        "content-location": "/risk_assessments?select=%2A",
+        "content-profile": "public",
+        "content-range": "0-1/2",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "preference-applied": "count=exact",
+        "sb-gateway-version": "1",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-c980-71d2-b235-4f9bc652a6e6",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=59mFzZ3xPEwuVKFznDwg9R1h9TZhli7nVko0kxWB5J4-1765714414-1.0.1.1-OtmEqMA.u.d2RNkwVqxju9VGpBBR7.XEZoMG.6Szj0r4_tvGgbuXcB4i_NhOtioeErkpH5eL1VhgCNkKMyLY9UeUw93.j1sliNiAfea8YrY; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-envoy-attempt-count": "1",
+        "x-envoy-upstream-service-time": "440"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+        "method": "HEAD",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "x-client-info": "supabase-js-web/2.87.1",
+          "prefer": "count=exact",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "accept-profile": "public",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+        }
+      },
+      "timestamp": 1765714414647
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT",
+        "access-control-allow-origin": "*",
+        "access-control-max-age": "3600",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-ray": "9add9db29e7bc2c0-VIE",
+        "content-length": "0",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-cba4-7cea-a70c-6fd4cb5b05ee",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=HBq8MFaFWJeh4_yY3TmrllcwupXx82EpIW9yUEauIfw-1765714414-1.0.1.1-RWm04GoLO.g7_m8pWabI9j4BQB50MGrAScjyzyxmtnpPLBbcjd1gZnIZmq3xrOxototfdbWE76pWJX.SlKbRKbA_bmAQCqLuCamfGBdzyXw; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+        "method": "OPTIONS",
+        "headers": {
+          "accept": "*/*",
+          "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+          "access-control-request-method": "HEAD",
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-fetch-mode": "cors",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        }
+      },
+      "timestamp": 1765714414669
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "https://ervinstupac-byte.github.io",
+        "access-control-expose-headers": "Content-Encoding, Content-Location, Content-Range, Content-Type, Date, Location, Server, Transfer-Encoding, Range-Unit",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9add9db2be9ec2c0-VIE",
+        "content-encoding": "br",
+        "content-location": "/digital_integrity_ledger?select=%2A",
+        "content-profile": "public",
+        "content-range": "0-1/2",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "preference-applied": "count=exact",
+        "sb-gateway-version": "1",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-cbb9-731d-b528-e264cb6110ba",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=CBhwcJt6wKrDaI3nA9Gsiv8mmfZiCgsNFhIc.4dcUw4-1765714414-1.0.1.1-inRndpb.RPw9gMmwDpC.0o._gwa9UYEgmRjqreyiqivIR7iBeUZSgzaDwbc_cnGAzxMGXdaxMyeZ_PXClop6bPapI8VRIJwsQiA1WAGUHyQ; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-envoy-attempt-count": "1",
+        "x-envoy-upstream-service-time": "21"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+        "method": "HEAD",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "x-client-info": "supabase-js-web/2.87.1",
+          "prefer": "count=exact",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "accept-profile": "public",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+        }
+      },
+      "timestamp": 1765714414752
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT",
+        "access-control-allow-origin": "*",
+        "access-control-max-age": "3600",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-ray": "9add9db33f00c2c0-VIE",
+        "content-length": "0",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-cc0b-7e01-8333-eaab7d1d29e1",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=6hlaWdQl1RXY_6x4r2APOblxNFpiWZUSjmN.5ouOEqs-1765714414-1.0.1.1-s59AcX9s6JwIGORKht5_u.jNoc8RsKFOT8WJVwGt9guY7cp6315EEW9juQPp0n6HXJyYAl8j3hP.UQNoKizH4PgdSxM2Ag0QxCLmuK8NR1k; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+        "method": "OPTIONS",
+        "headers": {
+          "accept": "*/*",
+          "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+          "access-control-request-method": "HEAD",
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-fetch-mode": "cors",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        }
+      },
+      "timestamp": 1765714414772
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "https://ervinstupac-byte.github.io",
+        "access-control-expose-headers": "Content-Encoding, Content-Location, Content-Range, Content-Type, Date, Location, Server, Transfer-Encoding, Range-Unit",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9add9db35f0bc2c0-VIE",
+        "content-encoding": "br",
+        "content-location": "/installation_audits?select=%2A",
+        "content-profile": "public",
+        "content-range": "0-0/1",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "preference-applied": "count=exact",
+        "sb-gateway-version": "1",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-cc28-77a1-9a8d-bfb1aaf646b9",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=LkY3nj4bsRTE0rFk1yx8Hql0ZQix0Qhj2UmOyoX09vY-1765714414-1.0.1.1-qX4Gpxa53ul6CCZmsH1LyBL2HEgTC8JU.TOf9ZrLhZACDBGKFxevjkA0z6L4kwUvEhAmk8NPducyA4no9HqipT3Z7M_DkxR06Rx34UPWeNw; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-envoy-attempt-count": "1",
+        "x-envoy-upstream-service-time": "75"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+        "method": "HEAD",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "x-client-info": "supabase-js-web/2.87.1",
+          "prefer": "count=exact",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "accept-profile": "public",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+        }
+      },
+      "timestamp": 1765714414925
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+        "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT",
+        "access-control-allow-origin": "*",
+        "access-control-max-age": "3600",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-ray": "9add9db44fdcc2c0-VIE",
+        "content-length": "0",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-ccbc-715a-bd34-b4847f6c93f0",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=oyjrT.5sj3MkM177ejBV.uRv6EgMRlYpZyCi2Yb..ok-1765714414-1.0.1.1-6edxh0iuuuFLAdcHfRA5SQzWS.Hma235uR5sjQvpoW7MbjvQyFOMz8lla0SYfBKXl6mIAW3MAqyP5KzkAbzmNd8FGtb2obxnGffLSmE6i0Q; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+        "method": "OPTIONS",
+        "headers": {
+          "accept": "*/*",
+          "access-control-request-headers": "accept-profile,apikey,authorization,prefer,x-client-info",
+          "access-control-request-method": "HEAD",
+          "origin": "https://ervinstupac-byte.github.io",
+          "sec-fetch-mode": "cors",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
+        }
+      },
+      "timestamp": 1765714414950
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+      "status": 200,
+      "headers": {
+        "access-control-allow-origin": "https://ervinstupac-byte.github.io",
+        "access-control-expose-headers": "Content-Encoding, Content-Location, Content-Range, Content-Type, Date, Location, Server, Transfer-Encoding, Range-Unit",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9add9db47810c2c0-VIE",
+        "content-encoding": "br",
+        "content-location": "/turbine_designs?select=%2A",
+        "content-profile": "public",
+        "content-range": "*/0",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Sun, 14 Dec 2025 12:13:34 GMT",
+        "preference-applied": "count=exact",
+        "sb-gateway-version": "1",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-ccd2-7a6a-8f5e-b1f72f1bf570",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=_tnXZoZMDQfFyKQ8Q8wqZxXOJ0FxX7qo6USQOFAmtgI-1765714414-1.0.1.1-s8hx6_Oh0AHfoWc76zK4Cv6MiGa5REACr5zXtnpXxpm7RlAzKfEqkyrG_4PRDfFsREazSLNFOf0hIIU40R5scQKdMLjh3dU__M1kDA7Okd0; path=/; expires=Sun, 14-Dec-25 12:43:34 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-envoy-attempt-count": "1",
+        "x-envoy-upstream-service-time": "23"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+        "method": "HEAD",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "x-client-info": "supabase-js-web/2.87.1",
+          "prefer": "count=exact",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "accept-profile": "public",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+        }
+      },
+      "timestamp": 1765714415033
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "status": 401,
+      "headers": {
+        "access-control-allow-methods": "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,TRACE,CONNECT",
+        "access-control-allow-origin": "*",
+        "access-control-max-age": "3600",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-ray": "9add9dcfdcdac2c0-VIE",
+        "content-length": "101",
+        "content-type": "application/json;charset=UTF-8",
+        "date": "Sun, 14 Dec 2025 12:13:39 GMT",
+        "sb-project-ref": "nehxtecejxklqknscbgf",
+        "sb-request-id": "019b1cc7-ddf5-7eee-847d-99c8f60d38ad",
+        "server": "cloudflare",
+        "set-cookie": "__cf_bm=eTEjIVijY5Kq9AHGQ_gH1w.oQz2L4.ksSnMjbpIZobY-1765714419-1.0.1.1-xEVaLniAfe3Xl6BnxXqzpk_CauXEcEX9UqtQtNsNsFPp1_qLRLhr4FAAjVq6KAA4_M56MDE86aNgX_8YOYB36niB.JgkylqR.Lb5UNz53xA; path=/; expires=Sun, 14-Dec-25 12:43:39 GMT; domain=.supabase.co; HttpOnly; Secure; SameSite=None",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "vary": "Accept-Encoding",
+        "x-content-type-options": "nosniff"
+      },
+      "request": {
+        "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+        "method": "GET",
+        "headers": {
+          "sec-ch-ua-platform": "\"Windows\"",
+          "referer": "https://ervinstupac-byte.github.io/",
+          "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+          "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0"
+        }
+      },
+      "timestamp": 1765714419359
+    }
+  ],
+  "failed": [
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*",
+      "method": "HEAD",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "resourceType": "fetch",
+      "timestamp": 1765714414647,
+      "errorText": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/digital_integrity_ledger?select=*",
+      "method": "HEAD",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "resourceType": "fetch",
+      "timestamp": 1765714414752,
+      "errorText": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/installation_audits?select=*",
+      "method": "HEAD",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "resourceType": "fetch",
+      "timestamp": 1765714414926,
+      "errorText": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://nehxtecejxklqknscbgf.supabase.co/rest/v1/turbine_designs?select=*",
+      "method": "HEAD",
+      "headers": {
+        "sec-ch-ua-platform": "\"Windows\"",
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A",
+        "referer": "https://ervinstupac-byte.github.io/",
+        "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-client-info": "supabase-js-web/2.87.1",
+        "prefer": "count=exact",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+        "accept-profile": "public",
+        "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A"
+      },
+      "resourceType": "fetch",
+      "timestamp": 1765714415034,
+      "errorText": "net::ERR_ABORTED"
+    }
+  ],
+  "frames": [
+    {
+      "url": "https://anohubs.com/app-iframe.html",
+      "name": ""
+    },
+    {
+      "url": "https://ervinstupac-byte.github.io/anohubsapp/",
+      "name": ""
+    }
+  ],
+  "console": [],
+  "inFrameFetch": {
+    "status": 401,
+    "length": 101
+  }
+}

@@ -23,25 +23,41 @@ export const Hub: React.FC = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
+                // Helper: try HEAD count, fallback to GET + count if HEAD fails
+                const getCount = async (table: string) => {
+                    // Try HEAD count first (fast), retry once on failure
+                    for (let attempt = 0; attempt < 2; attempt++) {
+                        try {
+                            const { count } = await supabase.from(table).select('*', { count: 'exact', head: true });
+                            if (typeof count === 'number') return count;
+                        } catch (e) {
+                            console.warn(`HEAD count failed for ${table}:`, (e as Error).message || e);
+                            await new Promise(r => setTimeout(r, 250));
+                        }
+                    }
+
+                    // Fallback: GET with count (slightly heavier but reliable)
+                    try {
+                        const { data, count } = await supabase.from(table).select('id', { count: 'exact' });
+                        if (typeof count === 'number') return count;
+                        return Array.isArray(data) ? data.length : 0;
+                    } catch (e) {
+                        console.error(`Count fallback failed for ${table}:`, (e as Error).message || e);
+                        return 0;
+                    }
+                };
+
                 // 1. Count Risk Assessments
-                const { count: riskCount } = await supabase
-                    .from('risk_assessments')
-                    .select('*', { count: 'exact', head: true });
+                const riskCount = await getCount('risk_assessments');
 
                 // 2. Count Ledger Blocks
-                const { count: ledgerCount } = await supabase
-                    .from('digital_integrity_ledger')
-                    .select('*', { count: 'exact', head: true });
+                const ledgerCount = await getCount('digital_integrity_ledger');
 
                 // 3. Count Install Audits
-                const { count: installCount } = await supabase
-                    .from('installation_audits')
-                    .select('*', { count: 'exact', head: true });
+                const installCount = await getCount('installation_audits');
 
                 // 4. Count Designs (NOVO)
-                const { count: designCount } = await supabase
-                    .from('turbine_designs')
-                    .select('*', { count: 'exact', head: true });
+                const designCount = await getCount('turbine_designs');
 
                 setStats({
                     riskCount: riskCount || 0,
