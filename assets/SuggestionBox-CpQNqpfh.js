@@ -1,4 +1,4 @@
-import{r as i,j as e}from"./index-Bx7O9Yeq.js";import{B as c}from"./BackButton-D7sklUwO.js";const u=()=>{const[t,o]=i.useState({title:"",category:"Process Improvement",description:"",email:""}),l=s=>{s.preventDefault();const r=`AnoHub Idea: ${t.title} (${t.category})`,n=`
+import{r as i,j as e}from"./index-luLf85Hr.js";import{B as c}from"./BackButton-CE5TxSkT.js";const u=()=>{const[t,o]=i.useState({title:"",category:"Process Improvement",description:"",email:""}),l=s=>{s.preventDefault();const r=`AnoHub Idea: ${t.title} (${t.category})`,n=`
 Hello AnoHub Team (ino@anohubs.com),
 
 I have a suggestion for the platform:
