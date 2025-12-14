@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
@@ -59,6 +60,8 @@ export const Hub: React.FC = () => {
         fetchStats();
     }, []);
 
+    const { t } = useTranslation();
+
     // Formatiranje imena iz emaila (npr. ervin.stupac -> Ervin)
     const displayName = user?.email ? user.email.split('@')[0].split('.')[0] : 'Engineer';
     const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
@@ -78,16 +81,16 @@ export const Hub: React.FC = () => {
                             <span className="text-xs font-mono text-cyan-400 tracking-widest">{stats.systemStatus}</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2">
-                            Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{formattedName}</span>
+                            {t('hub.welcome', { name: formattedName })}
                         </h1>
                         <p className="text-slate-400 text-lg max-w-2xl">
-                            Global Standard of Excellence Enforcement Platform.
+                            {t('hub.subtitle')}
                         </p>
                     </div>
                     
                     <div className="text-right hidden md:block">
                         <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">AnoHUB Cloud</p>
-                        <p className="text-xl font-mono text-white">v2.4.0 (Enterprise)</p>
+                        <p className="text-xl font-mono text-white">{t('common.version')}</p>
                     </div>
                 </div>
 
@@ -133,7 +136,7 @@ export const Hub: React.FC = () => {
 
             {/* --- TOOLS GRID (Original Navigation) --- */}
             <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-white border-l-4 border-cyan-500 pl-4">Operational Modules</h3>
+                <h3 className="text-2xl font-bold text-white border-l-4 border-cyan-500 pl-4">{t('hub.operationalModules')}</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {HUB_TOOLS.map((tool: HubTool, index: number) => (
@@ -167,7 +170,7 @@ export const Hub: React.FC = () => {
                                 </p>
 
                                 <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center text-xs font-bold text-cyan-600 group-hover:text-cyan-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    Launch Module →
+                                    {t('common.launch')}
                                 </div>
                             </div>
                         </div>

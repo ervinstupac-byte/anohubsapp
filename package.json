@@ -9,11 +9,15 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "coverage:check": "node scripts/check-coverage.js",
     "coverage:update-baseline": "node scripts/check-coverage.js --update-baseline",
+    "check-i18n": "node scripts/check-i18n.cjs",
+    "check-i18n-keys": "node scripts/check-i18n-keys.cjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -31,6 +35,9 @@
     "recharts": "^2.15.4"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.20",
+    "@storybook/addon-interactions": "^7.6.20",
+    "@storybook/react-vite": "^7.6.20",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -40,8 +47,10 @@
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/coverage-v8": "^4.0.15",
     "gh-pages": "^6.3.0",
+    "i18next": "^23.16.8",
     "jsdom": "^22.1.0",
     "puppeteer-core": "^21.11.0",
+    "react-i18next": "^13.5.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vitest": "^4.0.15"

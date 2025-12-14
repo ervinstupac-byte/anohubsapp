@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
@@ -65,11 +66,12 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
 
 // --- MAIN COMPONENT ---
 const QuestionnaireSummary: React.FC = () => {
-    const { navigateToHub } = useNavigation();
+        const { navigateToHub } = useNavigation();
     const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
     const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
     const { showToast } = useToast();
     const { user } = useAuth(); // <--- KORISNIK: Uvoz je sada ispravan
+        const { t } = useTranslation();
     
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
@@ -111,8 +113,8 @@ const QuestionnaireSummary: React.FC = () => {
 
     // --- CLOUD SUBMISSION ---
     const handleSubmitToCloud = async () => {
-        if (Object.keys(answers).length === 0) {
-            showToast('No data to submit.', 'warning');
+                if (Object.keys(answers).length === 0) {
+                        showToast(t('questionnaire.noDataToSubmit'), 'warning');
             return;
         }
         
@@ -135,28 +137,28 @@ const QuestionnaireSummary: React.FC = () => {
 
             if (error) throw error;
 
-            showToast(`Diagnosis synced to AnoHUB Cloud by ${user?.email || 'User'}.`, 'success');
+            showToast(t('questionnaire.diagnosisSynced', { email: user?.email || 'User' }), 'success');
             setIsUploaded(true);
 
         } catch (error: any) {
             console.error('Upload failed:', error);
             // Sigurna provjera za pristup svojstvu
             const errorMessage = error.message || 'Unknown error occurred.';
-            showToast(`Cloud Sync Failed: ${errorMessage}`, 'error');
+            showToast(t('questionnaire.cloudSyncFailed', { error: errorMessage }), 'error');
         } finally {
             setIsUploading(false);
         }
     };
 
     const handleDownloadPDF = () => {
-        if (Object.keys(answers).length === 0) {
-            showToast('No data available.', 'warning');
+                if (Object.keys(answers).length === 0) {
+                        showToast(t('questionnaire.noDataAvailable'), 'warning');
             return;
         }
         
         // Generiranje PDF-a
         generateRiskReport(answers, operationalData, { text: riskIndicator.text, color: riskIndicator.color }, description);
-        showToast('Risk Report PDF Downloaded.', 'success');
+        showToast(t('questionnaire.pdfDownloaded'), 'success');
     };
 
     const handleReturn = () => {
@@ -169,17 +171,17 @@ const QuestionnaireSummary: React.FC = () => {
             
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Diagnostic <span className="text-cyan-400">Report</span>
-                </h2>
-                <div className="flex justify-center gap-4 text-sm text-slate-400">
-                    <span className="flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500"></span> Live Analysis
-                    </span>
-                    <span className="flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-cyan-500"></span> AI Ready
-                    </span>
-                </div>
+                                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                                        {t('questionnaire.title').split(' ')[0]} <span className="text-cyan-400">{t('questionnaire.title').split(' ').slice(1).join(' ')}</span>
+                                </h2>
+                                <div className="flex justify-center gap-4 text-sm text-slate-400">
+                                        <span className="flex items-center gap-1">
+                                                <span className="w-2 h-2 rounded-full bg-green-500"></span> {t('questionnaire.liveAnalysis')}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                                <span className="w-2 h-2 rounded-full bg-cyan-500"></span> {t('questionnaire.aiReady')}
+                                        </span>
+                                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -187,7 +189,7 @@ const QuestionnaireSummary: React.FC = () => {
                 {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
                     <div className="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-500 bg-gradient-to-b from-slate-800/80 to-slate-900/80">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Overall Assessment</h3>
+                                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">{t('questionnaire.overallAssessment')}</h3>
                         <RiskGauge level={riskIndicator.level} />
                         
                         <div className="mt-6 pt-6 border-t border-slate-700/50">
@@ -203,12 +205,12 @@ const QuestionnaireSummary: React.FC = () => {
 
                         {/* --- ACTION BUTTONS --- */}
                         <div className="mt-6 space-y-3">
-                            <button 
-                                onClick={handleDownloadPDF}
-                                className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg border border-slate-500 transition-all flex items-center justify-center gap-2 group"
-                            >
-                                <span className="text-lg">📄</span> Download PDF
-                            </button>
+                                                                                        <button 
+                                                                                                onClick={handleDownloadPDF}
+                                                                                                className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg border border-slate-500 transition-all flex items-center justify-center gap-2 group"
+                                                                                        >
+                                                                                                <span className="text-lg">📄</span> {t('questionnaire.downloadPDF')}
+                                                                                        </button>
                             
                             <button 
                                 onClick={handleSubmitToCloud}
@@ -220,15 +222,15 @@ const QuestionnaireSummary: React.FC = () => {
                                         : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}
                                 `}
                             >
-                                {isUploading ? (
+                                                                                        {isUploading ? (
                                     <>
-                                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                            Uploading...
+                                                                                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                                                                        {t('questionnaire.uploading')}
                                         </>
                                 ) : isUploaded ? (
-                                    <><span>✓</span> Synced to Cloud</>
+                                                                                        <><span>✓</span> {t('questionnaire.syncedToCloud')}</>
                                 ) : (
-                                    <><span className="text-lg">☁️</span> Submit to HQ</>
+                                                                                        <><span className="text-lg">☁️</span> {t('questionnaire.submitToHQ')}</>
                                 )}
                             </button>
                         </div>
@@ -237,11 +239,11 @@ const QuestionnaireSummary: React.FC = () => {
                     <div className="glass-panel p-6 rounded-2xl bg-cyan-900/10 border-cyan-500/20">
                         <div className="flex items-center gap-3 mb-3">
                             <span className="text-2xl">🧠</span>
-                            <h4 className="font-bold text-cyan-300 text-sm uppercase">Concept: The Execution Gap</h4>
+                                            <h4 className="font-bold text-cyan-300 text-sm uppercase">{t('questionnaire.conceptTitle')}</h4>
                         </div>
-                        <p className="text-xs text-cyan-100/80 leading-relaxed">
-                            The critical divergence between a flawless engineering plan and the inconsistent reality of on-site implementation.
-                        </p>
+                                                                                        <p className="text-xs text-cyan-100/80 leading-relaxed">
+                                                                                                {t('questionnaire.conceptDesc')}
+                                                                                        </p>
                     </div>
                 </div>
 
@@ -256,8 +258,8 @@ const QuestionnaireSummary: React.FC = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white">Critical Indicators</h3>
-                                    <p className="text-xs text-red-300">Immediate attention required to prevent warranty invalidation.</p>
+                                            <h3 className="text-lg font-bold text-white">{t('questionnaire.criticalIndicators')}</h3>
+                                            <p className="text-xs text-red-300">{t('questionnaire.criticalIndicatorsDesc')}</p>
                                 </div>
                             </div>
                             <ul className="space-y-3">
@@ -279,8 +281,8 @@ const QuestionnaireSummary: React.FC = () => {
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white">Operational Warnings</h3>
-                                    <p className="text-xs text-yellow-200/80">Potential gaps in documentation or discipline.</p>
+                                            <h3 className="text-lg font-bold text-white">{t('questionnaire.operationalWarnings')}</h3>
+                                            <p className="text-xs text-yellow-200/80">{t('questionnaire.operationalWarningsDesc')}</p>
                                 </div>
                             </div>
                             <ul className="space-y-3">
@@ -298,18 +300,18 @@ const QuestionnaireSummary: React.FC = () => {
                     {analysis.highRisk.length === 0 && analysis.mediumRisk.length === 0 && (
                         <div className="glass-panel p-8 rounded-2xl border-green-500/30 text-center">
                             <div className="text-5xl mb-4">✅</div>
-                            <h3 className="text-xl font-bold text-white">System Optimal</h3>
-                            <p className="text-slate-400 mt-2">No significant deviations from the Standard of Excellence detected.</p>
+                                            <h3 className="text-xl font-bold text-white">{t('questionnaire.systemOptimal')}</h3>
+                                            <p className="text-slate-400 mt-2">{t('questionnaire.systemOptimalDesc')}</p>
                         </div>
                     )}
 
                     <div className="text-center pt-8 border-t border-slate-700/50">
-                        <button 
-                            onClick={handleReturn}
-                            className="px-8 py-3 text-sm font-bold rounded-lg transition-colors bg-slate-800 hover:bg-slate-700 text-white border border-slate-600"
-                        >
-                            Return to Dashboard
-                        </button>
+                                                                                        <button 
+                                                                                                onClick={handleReturn}
+                                                                                                className="px-8 py-3 text-sm font-bold rounded-lg transition-colors bg-slate-800 hover:bg-slate-700 text-white border border-slate-600"
+                                                                                        >
+                                                                                                {t('questionnaire.returnToDashboard')}
+                                                                                        </button>
                     </div>
                 </div>
             </div>

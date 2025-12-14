@@ -1,0 +1,40 @@
+{
+  "hub": {
+    "welcome": "Welcome, {{name}}",
+    "subtitle": "Global Standard of Excellence Enforcement Platform.",
+    "operationalModules": "Operational Modules",
+    "systemStatusConnecting": "CONNECTING...",
+    "systemStatusOperational": "OPERATIONAL"
+  },
+  "common": {
+    "launch": "Launch Module →",
+    "version": "v2.4.0 (Enterprise)"
+  }
+  ,
+  "questionnaire": {
+    "title": "Diagnostic Report",
+    "liveAnalysis": "Live Analysis",
+    "aiReady": "AI Ready",
+    "overallAssessment": "Overall Assessment",
+    "highPriorityAlerts": "High Priority Alerts",
+    "warnings": "Warnings",
+    "downloadPDF": "Download PDF",
+    "uploading": "Uploading...",
+    "syncedToCloud": "✓ Synced to Cloud",
+    "submitToHQ": "Submit to HQ",
+    "conceptTitle": "Concept: The Execution Gap",
+    "conceptDesc": "The critical divergence between a flawless engineering plan and the inconsistent reality of on-site implementation.",
+    "criticalIndicators": "Critical Indicators",
+    "criticalIndicatorsDesc": "Immediate attention required to prevent warranty invalidation.",
+    "operationalWarnings": "Operational Warnings",
+    "operationalWarningsDesc": "Potential gaps in documentation or discipline.",
+    "systemOptimal": "System Optimal",
+    "systemOptimalDesc": "No significant deviations from the Standard of Excellence detected.",
+    "returnToDashboard": "Return to Dashboard",
+    "noDataToSubmit": "No data to submit.",
+    "diagnosisSynced": "Diagnosis synced to AnoHUB Cloud by {{email}}.",
+    "cloudSyncFailed": "Cloud Sync Failed: {{error}}",
+    "noDataAvailable": "No data available.",
+    "pdfDownloaded": "Risk Report PDF Downloaded."
+  }
+}
