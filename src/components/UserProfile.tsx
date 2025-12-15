@@ -28,7 +28,7 @@ export const UserProfile: React.FC = () => {
                     .eq('id', user.id)
                     .single();
 
-                if (error && error.code !== 'PGRST116') throw error; // Ignoriraj "Not found"
+                if (error && error.code !== 'PGRST116') throw error;
 
                 if (data) {
                     setFullName(data.full_name || '');
@@ -84,17 +84,14 @@ export const UserProfile: React.FC = () => {
             const fileName = `${user?.id}-${Math.random()}.${fileExt}`;
             const filePath = `${fileName}`;
 
-            // Upload to Supabase Storage
             const { error: uploadError } = await supabase.storage
                 .from('avatars')
                 .upload(filePath, file);
 
             if (uploadError) throw uploadError;
 
-            // Get Public URL
             const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
             
-            // Update Profile with new URL
             setAvatarUrl(data.publicUrl);
             
             const { error: updateError } = await supabase.from('profiles').upsert({

@@ -14,7 +14,6 @@ export const Spinner: React.FC<SpinnerProps> = ({
   fullScreen = false 
 }) => {
   
-  // Mapiranje veličina
   const sizeClasses = {
     sm: 'w-6 h-6 border-2',
     md: 'w-12 h-12 border-4',
@@ -26,20 +25,20 @@ export const Spinner: React.FC<SpinnerProps> = ({
     <div className={`flex flex-col items-center justify-center gap-4 ${className}`}>
       <div className="relative flex items-center justify-center">
         
-        {/* Pozadinski sjaj (Glow) */}
+        {/* Glow */}
         <div className={`absolute bg-cyan-500/20 rounded-full blur-xl animate-pulse ${size === 'xl' ? 'w-40 h-40' : 'w-full h-full'}`}></div>
 
-        {/* Vanjski statični prsten */}
+        {/* Static Ring */}
         <div className={`${sizeClasses[size]} border-slate-700 rounded-full opacity-30 absolute`}></div>
 
-        {/* Glavni rotirajući prsten (Cyan) */}
+        {/* Rotating Ring */}
         <div className={`
             ${sizeClasses[size]} rounded-full 
             border-t-cyan-400 border-r-transparent border-b-cyan-600 border-l-transparent 
             animate-spin shadow-[0_0_15px_rgba(34,211,238,0.4)]
         `}></div>
 
-        {/* Unutarnji brzi prsten (obrnuta rotacija) */}
+        {/* Inner Reverse Ring */}
         {size !== 'sm' && (
            <div className={`
               absolute rounded-full border-t-transparent border-r-slate-400 border-b-transparent border-l-slate-400
@@ -49,7 +48,6 @@ export const Spinner: React.FC<SpinnerProps> = ({
         )}
       </div>
 
-      {/* Tekst ispod spinnera (Tipkajući efekt) */}
       {text && (
         <div className="text-cyan-400 font-mono text-xs uppercase tracking-[0.2em] animate-pulse">
           {text}

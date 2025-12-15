@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { supabase, getTableCount } from '../services/supabaseClient.ts';
+import { getTableCount } from '../services/supabaseClient.ts';
 import { HUB_TOOLS } from '../constants.ts';
 import type { HubTool } from '../types.ts';
 
 export const Hub: React.FC = () => {
     const { navigateTo } = useNavigation();
     const { user } = useAuth();
+    const { t } = useTranslation();
     
     // --- DASHBOARD STATS STATE ---
     const [stats, setStats] = useState({
         riskCount: 0,
         ledgerBlocks: 0,
         installAudits: 0,
-        designs: 0, // NOVO: Brojač dizajna
+        designs: 0,
         systemStatus: 'CONNECTING...'
     });
 
@@ -23,17 +24,19 @@ export const Hub: React.FC = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                // Use GET+count helper for reliable counts
-                const riskCount = await getTableCount('risk_assessments');
-                const ledgerCount = await getTableCount('digital_integrity_ledger');
-                const installCount = await getTableCount('installation_audits');
-                const designCount = await getTableCount('turbine_designs');
+                // Paralelno dohvaćanje broja zapisa za brže učitavanje
+                const [risk, ledger, install, design] = await Promise.all([
+                    getTableCount('risk_assessments'),
+                    getTableCount('digital_integrity_ledger'),
+                    getTableCount('installation_audits'),
+                    getTableCount('turbine_designs')
+                ]);
 
                 setStats({
-                    riskCount: riskCount || 0,
-                    ledgerBlocks: ledgerCount || 0,
-                    installAudits: installCount || 0,
-                    designs: designCount || 0,
+                    riskCount: risk || 0,
+                    ledgerBlocks: ledger || 0,
+                    installAudits: install || 0,
+                    designs: design || 0,
                     systemStatus: 'OPERATIONAL'
                 });
 
@@ -46,18 +49,63 @@ export const Hub: React.FC = () => {
         fetchStats();
     }, []);
 
-    const { t } = useTranslation();
-
-    // Formatiranje imena iz emaila (npr. ervin.stupac -> Ervin)
+    // Formatiranje imena iz emaila za ljepši prikaz
     const displayName = user?.email ? user.email.split('@')[0].split('.')[0] : 'Engineer';
     const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
-    return (
-        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-10">
+    // --- TOOL CATEGORIZATION LOGIC ---
+    const coreIds = ['risk', 'install', 'design', 'map'];
+    const strategicIds = ['investor', 'contract', 'integrity', 'revital'];
+    
+    // Filtriranje alata u grupe
+    const coreTools = HUB_TOOLS.filter(t => coreIds.includes(t.id));
+    const strategicTools = HUB_TOOLS.filter(t => strategicIds.includes(t.id));
+    // Sve što nije Core ili Strategic ide u Knowledge (uključujući tvoj novi 'library')
+    const knowledgeTools = HUB_TOOLS.filter(t => !coreIds.includes(t.id) && !strategicIds.includes(t.id));
+
+    // --- REUSABLE TOOL CARD COMPONENT ---
+    const ToolCard = ({ tool, index }: { tool: HubTool, index: number }) => (
+        <div
+            onClick={() => navigateTo(tool.view)}
+            className="group relative bg-slate-800/40 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl overflow-hidden flex flex-col h-full"
+            style={{ animationDelay: `${index * 50}ms` }}
+        >
+            {/* Background Hover Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/5 group-hover:to-blue-500/10 transition-all duration-500"></div>
             
-            {/* --- HERO SECTION (Mission Control) --- */}
+            <div className="relative z-10 flex flex-col h-full">
+                <div className="flex justify-between items-start mb-4">
+                    <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-600 group-hover:border-cyan-500/50 text-3xl shadow-lg transition-colors">
+                        {tool.icon}
+                    </div>
+                    {tool.isCritical && (
+                        <span className="px-2 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/30 animate-pulse">
+                            Critical
+                        </span>
+                    )}
+                </div>
+                
+                <h3 className="text-lg font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">
+                    {tool.title}
+                </h3>
+                
+                <p className="text-sm text-slate-400 leading-relaxed flex-grow group-hover:text-slate-300">
+                    {tool.description}
+                </p>
+                
+                <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center text-xs font-bold text-cyan-600 group-hover:text-cyan-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                    {t('common.launch')} →
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-12">
+            
+            {/* --- 1. HERO SECTION (Mission Control) --- */}
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 border border-slate-700 shadow-2xl p-8 md:p-12">
-                {/* Background Decor */}
+                {/* Decorative Glow */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
                 
                 <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
@@ -82,37 +130,38 @@ export const Hub: React.FC = () => {
 
                 {/* --- LIVE METRICS GRID --- */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
-                    {/* CARD 1: RISK */}
+                    
+                    {/* RISK CARD */}
                     <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-red-500/30 transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <span className="text-slate-400 text-[10px] font-bold uppercase">Risks</span>
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Risks Detected</span>
                             <span className="text-xl">🛡️</span>
                         </div>
                         <div className="text-3xl font-black text-white">{stats.riskCount}</div>
                     </div>
 
-                    {/* CARD 2: BLOCKCHAIN */}
+                    {/* BLOCKCHAIN CARD */}
                     <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-cyan-500/30 transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <span className="text-slate-400 text-[10px] font-bold uppercase">Blocks</span>
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Ledger Blocks</span>
                             <span className="text-xl">🔗</span>
                         </div>
                         <div className="text-3xl font-black text-white">{stats.ledgerBlocks}</div>
                     </div>
 
-                    {/* CARD 3: AUDITS */}
+                    {/* AUDIT CARD */}
                     <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-green-500/30 transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <span className="text-slate-400 text-[10px] font-bold uppercase">Audits</span>
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Install Audits</span>
                             <span className="text-xl">🏗️</span>
                         </div>
                         <div className="text-3xl font-black text-white">{stats.installAudits}</div>
                     </div>
 
-                     {/* CARD 4: DESIGNS (NOVO) */}
-                     <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-purple-500/30 transition-colors">
+                    {/* DESIGN CARD */}
+                    <div className="bg-slate-800/50 border border-slate-600/50 rounded-2xl p-4 backdrop-blur-sm hover:border-purple-500/30 transition-colors">
                         <div className="flex justify-between items-start mb-2">
-                            <span className="text-slate-400 text-[10px] font-bold uppercase">Designs</span>
+                            <span className="text-slate-400 text-[10px] font-bold uppercase">Designs Saved</span>
                             <span className="text-xl">📐</span>
                         </div>
                         <div className="text-3xl font-black text-white">{stats.designs}</div>
@@ -120,49 +169,38 @@ export const Hub: React.FC = () => {
                 </div>
             </div>
 
-            {/* --- TOOLS GRID (Original Navigation) --- */}
-            <div className="space-y-6">
-                <h3 className="text-2xl font-bold text-white border-l-4 border-cyan-500 pl-4">{t('hub.operationalModules')}</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {HUB_TOOLS.map((tool: HubTool, index: number) => (
-                        <div
-                            key={tool.id}
-                            onClick={() => navigateTo(tool.view)}
-                            className="group relative bg-slate-800/40 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl overflow-hidden"
-                            style={{ animationDelay: `${index * 50}ms` }}
-                        >
-                            {/* Hover Gradient Effect */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/5 group-hover:to-blue-500/10 transition-all duration-500"></div>
-
-                            <div className="relative z-10 flex flex-col h-full">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-600 group-hover:border-cyan-500/50 text-3xl shadow-lg">
-                                        {tool.icon}
-                                    </div>
-                                    {tool.isCritical && (
-                                        <span className="px-2 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold uppercase rounded border border-red-500/30">
-                                            Critical
-                                        </span>
-                                    )}
-                                </div>
-                                
-                                <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">
-                                    {tool.title}
-                                </h3>
-                                
-                                <p className="text-sm text-slate-400 leading-relaxed flex-grow group-hover:text-slate-300">
-                                    {tool.description}
-                                </p>
-
-                                <div className="mt-6 pt-4 border-t border-slate-700/50 flex items-center text-xs font-bold text-cyan-600 group-hover:text-cyan-400 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
-                                    {t('common.launch')}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+            {/* --- 2. SECTIONS GRID --- */}
+            
+            {/* CORE OPERATIONS */}
+            <div>
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2 pl-2 border-l-4 border-cyan-500">
+                    <span className="text-cyan-400 text-2xl">⚡</span> Core Operations
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {coreTools.map((tool, idx) => <ToolCard key={tool.id} tool={tool} index={idx} />)}
                 </div>
             </div>
+
+            {/* STRATEGIC INTELLIGENCE */}
+            <div>
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2 pl-2 border-l-4 border-purple-500">
+                    <span className="text-purple-400 text-2xl">🧠</span> Strategic Intelligence
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {strategicTools.map((tool, idx) => <ToolCard key={tool.id} tool={tool} index={idx} />)}
+                </div>
+            </div>
+
+            {/* KNOWLEDGE & CULTURE (Ovdje spada i Component Library) */}
+            <div>
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2 pl-2 border-l-4 border-green-500">
+                    <span className="text-green-400 text-2xl">📚</span> Knowledge & Culture
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {knowledgeTools.map((tool, idx) => <ToolCard key={tool.id} tool={tool} index={idx} />)}
+                </div>
+            </div>
+
         </div>
     );
 };

@@ -2,11 +2,12 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; 
-import { useAuth } from '../contexts/AuthContext.tsx'; // <--- AUTH
-import { supabase } from '../services/supabaseClient.ts'; // <--- CLOUD
+import { useAuth } from '../contexts/AuthContext.tsx'; 
+import { supabase } from '../services/supabaseClient.ts'; 
 import { generateCalculationReport } from '../utils/pdfGenerator.ts'; 
 import { TURBINE_CATEGORIES } from '../constants.ts';
-import type { HPPSettings, TurbineRecommendation, SavedConfiguration } from '../types.ts';
+import { AssetPicker, useAssetContext } from './AssetPicker.tsx'; 
+import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -16,16 +17,24 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
     const leftPos = Math.max(0, Math.min(100, (Math.log10(flow) / Math.log10(200)) * 100));
 
     return (
-        <div className="relative w-full h-64 bg-slate-900 rounded-xl border border-slate-600 overflow-hidden mb-6 shadow-inner">
+        <div className="relative w-full h-64 bg-slate-900 rounded-xl border border-slate-600 overflow-hidden mb-6 shadow-inner group">
             <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
             <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '10px 10px' }}></div>
+            
             <div className="absolute top-[15%] left-[10%] text-slate-700 text-xs font-black tracking-widest rotate-[-15deg]">PELTON ZONE</div>
             <div className="absolute top-[50%] left-[40%] text-slate-700 text-xs font-black tracking-widest rotate-[-15deg]">FRANCIS ZONE</div>
             <div className="absolute bottom-[20%] right-[20%] text-slate-700 text-xs font-black tracking-widest rotate-[-15deg]">KAPLAN ZONE</div>
+            
             <div className="absolute left-2 top-2 text-[10px] text-cyan-500 font-bold">Head (m) ▲</div>
             <div className="absolute right-2 bottom-2 text-[10px] text-cyan-500 font-bold">Flow (m³/s) ►</div>
-            <div className="absolute w-4 h-4 bg-cyan-400 rounded-full border-2 border-white shadow-[0_0_15px_cyan] transition-all duration-500 z-10" style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}>
-                <div className="absolute -top-8 -left-8 w-24 bg-slate-900/90 text-[10px] text-center text-white rounded p-1 border border-slate-600 pointer-events-none shadow-lg">Operating Point</div>
+            
+            <div 
+                className="absolute w-4 h-4 bg-cyan-400 rounded-full border-2 border-white shadow-[0_0_15px_cyan] transition-all duration-500 z-10" 
+                style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}
+            >
+                <div className="absolute -top-10 -left-12 w-28 bg-slate-900/90 text-[10px] text-center text-white rounded p-1 border border-cyan-500/50 pointer-events-none shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    H: {head}m | Q: {flow}m³/s
+                </div>
             </div>
         </div>
     );
@@ -34,7 +43,8 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
 const HPPBuilder: React.FC = () => {
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
-    const { user } = useAuth(); // <--- IDENTITET
+    const { user } = useAuth();
+    const { selectedAsset } = useAssetContext(); 
     
     // --- STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
@@ -54,7 +64,7 @@ const HPPBuilder: React.FC = () => {
     // Load configs from CLOUD on mount
     useEffect(() => {
         fetchCloudConfigs();
-    }, []);
+    }, [selectedAsset]); 
 
     // Save current settings locally
     useEffect(() => {
@@ -70,8 +80,9 @@ const HPPBuilder: React.FC = () => {
         const specificSpeedIndex = (1000 * Math.sqrt(settings.flow)) / Math.pow(settings.head, 0.75); 
 
         return {
-            powerMW: powerMW.toFixed(2),
-            annualGWh: annualGWh.toFixed(2),
+            powerMW: parseFloat(powerMW.toFixed(2)),
+            energyGWh: parseFloat(annualGWh.toFixed(2)), // Number za tip CalculationResult
+            annualGWh: annualGWh.toFixed(2), // String za prikaz (ako zatreba)
             n_sq: specificSpeedIndex.toFixed(0)
         };
     }, [settings]);
@@ -122,14 +133,25 @@ const HPPBuilder: React.FC = () => {
 
     // --- CLOUD ACTIONS ---
     const fetchCloudConfigs = async () => {
+        if (!user) return;
         setIsLoading(true);
-        const { data, error } = await supabase.from('turbine_designs').select('*').order('created_at', { ascending: false });
+        
+        let query = supabase.from('turbine_designs').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+        
+        if (selectedAsset) {
+            query = query.eq('asset_id', selectedAsset.id);
+        }
+
+        const { data, error } = await query;
+        
         if (!error && data) {
-            // Map DB data to local format
-            const mapped = data.map(d => ({
-                ...d.parameters,
+            const mapped: SavedConfiguration[] = data.map((d: any) => ({
                 id: d.id.toString(),
-                name: d.design_name
+                name: d.design_name,
+                asset_id: d.asset_id,
+                timestamp: new Date(d.created_at).getTime(),
+                parameters: d.parameters,
+                results: d.calculations // Mapiranje na results (CalculationResult)
             }));
             setSavedConfigs(mapped);
         }
@@ -138,6 +160,7 @@ const HPPBuilder: React.FC = () => {
 
     const handleSaveConfiguration = async () => {
         if (!configName) { showToast('Enter a name.', 'warning'); return; }
+        if (!selectedAsset) { showToast('Select an Asset to attach this design to.', 'error'); return; } 
         
         setIsLoading(true);
         try {
@@ -145,20 +168,23 @@ const HPPBuilder: React.FC = () => {
             
             const payload = {
                 engineer_id: user?.email || 'Anonymous',
+                user_id: user?.id, 
                 design_name: configName,
                 parameters: settings,
-                calculations: calculations,
-                recommended_turbine: bestTurbine
+                calculations: calculations, 
+                recommended_turbine: bestTurbine,
+                asset_id: selectedAsset.id 
             };
 
             const { error } = await supabase.from('turbine_designs').insert([payload]);
             if (error) throw error;
 
-            showToast('Design saved to Cloud Studio.', 'success');
+            showToast(`Design linked to ${selectedAsset.name} & saved.`, 'success');
             setSaveModalOpen(false);
             setConfigName('');
-            fetchCloudConfigs(); // Refresh list
+            fetchCloudConfigs(); 
         } catch (error: any) {
+            console.error('Save error:', error);
             showToast(`Save failed: ${error.message}`, 'error');
         } finally {
             setIsLoading(false);
@@ -166,27 +192,19 @@ const HPPBuilder: React.FC = () => {
     };
     
     const loadConfiguration = (config: SavedConfiguration) => {
-        const { id, name, ...rest } = config;
-        setSettings(rest as HPPSettings);
-        showToast(`Loaded design: ${name}`, 'info');
-    };
-
-    // Only allow deleting if we implement Delete Policy in Supabase, for now just local UI hide
-    const deleteConfiguration = (id: string) => {
-        // U stvarnom appu bi zvali supabase.delete()
-        const updatedConfigs = savedConfigs.filter(c => c.id !== id);
-        setSavedConfigs(updatedConfigs);
-        showToast('Config removed from view (Cloud persistence active).', 'info');
+        setSettings(config.parameters);
+        showToast(`Loaded: ${config.name}`, 'info');
     };
 
     const handleGeneratePDF = () => {
-        generateCalculationReport(settings, calculations, recommendations);
+        generateCalculationReport(settings, calculations, recommendations, selectedAsset?.name);
         showToast('Design Report PDF Generated.', 'success');
     };
 
     return (
         <div className="animate-fade-in space-y-8 pb-12 max-w-7xl mx-auto">
             <BackButton text="Back to HUB" />
+            <AssetPicker />
             
             <div className="text-center space-y-4">
                 <h2 className="text-3xl font-bold text-white">HPP Design <span className="text-cyan-400">Studio</span></h2>
@@ -249,13 +267,14 @@ const HPPBuilder: React.FC = () => {
                         </div>
                         <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
                            {isLoading && <p className="text-xs text-slate-500 animate-pulse">Syncing...</p>}
-                           {!isLoading && savedConfigs.length === 0 && <p className="text-xs text-slate-500 italic">No cloud designs found.</p>}
+                           {!isLoading && savedConfigs.length === 0 && <p className="text-xs text-slate-500 italic">No cloud designs found for this asset.</p>}
                            {savedConfigs.map(c => (
                             <div key={c.id} className="flex items-center justify-between bg-slate-700/50 p-2 rounded text-xs group hover:bg-slate-700 transition-colors">
-                              <span className="text-slate-300 truncate w-32 font-bold">{c.name}</span>
-                              <div className="flex gap-2">
-                                <button onClick={() => loadConfiguration(c)} className="text-cyan-400 hover:text-cyan-300 uppercase font-bold text-[10px]">Load</button>
+                              <div className="truncate w-32">
+                                <span className="text-slate-300 font-bold block">{c.name}</span>
+                                {c.asset_id && <span className="text-[9px] text-slate-500">Linked</span>}
                               </div>
+                              <button onClick={() => loadConfiguration(c)} className="text-cyan-400 hover:text-cyan-300 uppercase font-bold text-[10px]">Load</button>
                             </div>
                           ))}
                         </div>
@@ -275,7 +294,7 @@ const HPPBuilder: React.FC = () => {
                             </div>
                             <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
                                 <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">Est. Generation</p>
-                                <div className="text-2xl font-mono text-green-400 font-bold">{calculations.annualGWh}</div>
+                                <div className="text-2xl font-mono text-green-400 font-bold">{calculations.energyGWh}</div>
                                 <p className="text-[9px] text-slate-500">GWh / year</p>
                             </div>
                         </div>
@@ -332,10 +351,18 @@ const HPPBuilder: React.FC = () => {
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-fade-in">
                     <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 w-full max-w-sm">
                         <h3 className="text-lg font-bold mb-4 text-white">Save to Cloud</h3>
-                        <input type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder="Project Name (e.g. Amazon-01)" className="w-full bg-slate-900 border border-slate-600 p-2 rounded mb-4 text-white" autoFocus />
+                        
+                        {!selectedAsset && (
+                            <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded text-red-300 text-xs">
+                                ⚠️ Please select a Target Asset in the main view first.
+                            </div>
+                        )}
+
+                        <input type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder="Design Name (e.g. Variant A)" className="w-full bg-slate-900 border border-slate-600 p-2 rounded mb-4 text-white" autoFocus />
+                        
                         <div className="flex justify-end gap-2">
                             <button onClick={() => setSaveModalOpen(false)} className="px-4 py-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">Cancel</button>
-                            <button onClick={handleSaveConfiguration} disabled={isLoading} className="px-4 py-2 bg-cyan-600 text-white rounded hover:bg-cyan-500 flex items-center gap-2">
+                            <button onClick={handleSaveConfiguration} disabled={isLoading || !selectedAsset} className={`px-4 py-2 text-white rounded flex items-center gap-2 ${isLoading || !selectedAsset ? 'bg-slate-600 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-500'}`}>
                                 {isLoading ? 'Saving...' : <><span>☁️</span> Upload Design</>}
                             </button>
                         </div>

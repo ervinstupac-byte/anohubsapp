@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { useAuth } from '../contexts/AuthContext.tsx'; // <--- NOVO: Auth
+import { useAuth } from '../contexts/AuthContext.tsx';
+import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
 
 // --- TYPES ---
 interface Block {
@@ -13,11 +14,11 @@ interface Block {
     hash: string;
     prev_hash: string;
     status: string;
-    asset_id?: string;    // <--- DODANO (Fix za TS grešku)
-    engineer_id?: string; // <--- DODANO
+    asset_id?: string;    
+    engineer_id?: string;
 }
 
-// --- HELPER: SHA-256 HASH ---
+// --- HELPER: SHA-256 HASH GENERATOR ---
 const generateHash = async (message: string): Promise<string> => {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -27,38 +28,38 @@ const generateHash = async (message: string): Promise<string> => {
 
 export const DigitalIntegrity: React.FC = () => {
     const { showToast } = useToast();
-    const { user } = useAuth(); // <--- KORISNIK IZ AUTH KONTEKSTA
+    const { user } = useAuth();
+    const { selectedAsset } = useAssetContext();
     
     // --- STATE ---
     const [ledger, setLedger] = useState<Block[]>([]);
     
-    // Inputs
-    const [assetId, setAssetId] = useState('HPP-TUR-01');
+    // Form Inputs
     const [operation, setOperation] = useState('Shaft Alignment Check');
     const [value, setValue] = useState('0.04 mm/m');
-    // Inicijalno postavi inženjera na logiranog korisnika (ili fallback)
-    const [engineer, setEngineer] = useState(user?.email || 'Eng. J. Doe');
+    const [engineer, setEngineer] = useState(user?.email || 'Eng. Unknown');
     
+    // UI States
     const [isMining, setIsMining] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
 
-    // Ažuriraj inženjera ako se korisnik učita naknadno
+    // Update engineer name on load
     useEffect(() => {
-        if (user?.email) {
-            setEngineer(user.email);
-        }
+        if (user?.email) setEngineer(user.email);
+        else if (user?.user_metadata?.full_name) setEngineer(user.user_metadata.full_name);
     }, [user]);
 
-    // --- 1. FETCH DATA FROM CLOUD (READ) ---
+    // --- 1. FETCH LEDGER (REAL-TIME) ---
     const fetchLedger = async () => {
         try {
             const { data, error } = await supabase
                 .from('digital_integrity_ledger')
                 .select('*')
-                .order('block_index', { ascending: false });
+                .order('block_index', { ascending: false })
+                .limit(50); // Show last 50 blocks
 
             if (error) throw error;
-
+            
             if (data && data.length > 0) {
                 setLedger(data);
             } else {
@@ -66,56 +67,57 @@ export const DigitalIntegrity: React.FC = () => {
             }
         } catch (error) {
             console.error('Error fetching ledger:', error);
-            showToast('Failed to sync with Cloud Ledger.', 'error');
         }
     };
 
     useEffect(() => {
         fetchLedger();
         
-        // Real-time pretplata
-        const subscription = supabase
-            .channel('public:digital_integrity_ledger')
+        // Subscribe to new blocks
+        const sub = supabase.channel('public:digital_integrity_ledger')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
                 const newBlock = payload.new as Block;
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
-            })
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(subscription);
-        };
+            }).subscribe();
+            
+        return () => { supabase.removeChannel(sub); };
     }, []);
 
-    // --- 2. CREATE GENESIS BLOCK ---
+    // --- 2. GENESIS BLOCK (First Block) ---
     const createGenesisBlock = async () => {
-        const genesisHash = await generateHash("GENESIS_BLOCK_ANOHUB_V1");
+        const genesisHash = await generateHash("GENESIS_ANOHUB_V1");
         const genesisBlock = {
             block_index: 0,
             timestamp: new Date().toISOString(),
-            data: "GENESIS: System Initialization",
+            data: "GENESIS: SYSTEM INITIALIZATION",
             hash: genesisHash,
             prev_hash: "00000000000000000000000000000000",
             status: 'Verified',
             engineer_id: 'SYSTEM',
             asset_id: 'ROOT'
         };
-
-        const { error } = await supabase.from('digital_integrity_ledger').insert([genesisBlock]);
-        if (!error) fetchLedger();
+        await supabase.from('digital_integrity_ledger').insert([genesisBlock]);
+        fetchLedger();
     };
 
-    // --- 3. SEAL RECORD TO CLOUD (WRITE) ---
+    // --- 3. MINING NEW BLOCK (Write) ---
     const handleSealRecord = async () => {
-        if (ledger.length === 0) return;
+        if (!selectedAsset) { 
+            showToast('Please select a Target Asset first.', 'error'); 
+            return; 
+        }
+        
         setIsMining(true);
         
-        const dataString = `${assetId}|${operation}|${value}|${engineer}`;
+        // Format data string
+        const dataString = `${selectedAsset.id}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
         const prevBlock = ledger[0]; 
         
         try {
-            await new Promise(r => setTimeout(r, 1000));
+            // Simulate Proof-of-Work delay
+            await new Promise(r => setTimeout(r, 1000)); 
 
+            // Calculate Hash
             const rawContent = prevBlock.hash + dataString + new Date().toISOString();
             const newHash = await generateHash(rawContent);
             
@@ -126,123 +128,167 @@ export const DigitalIntegrity: React.FC = () => {
                 hash: newHash,
                 prev_hash: prevBlock.hash,
                 status: 'Verified',
-                engineer_id: engineer, // Šaljemo pravi email
-                asset_id: assetId
+                engineer_id: engineer,
+                asset_id: selectedAsset.id.toString(),
             };
 
             const { error } = await supabase.from('digital_integrity_ledger').insert([newBlock]);
 
             if (error) throw error;
-
-            showToast('Record cryptographically sealed in Cloud.', 'success');
+            showToast(`Block #${newBlock.block_index} successfully mined on-chain.`, 'success');
 
         } catch (error: any) {
-            console.error('Error sealing record:', error);
-            showToast(`Error: ${error.message}`, 'error');
+            console.error('Mining failed:', error);
+            showToast(error.message, 'error');
         } finally {
             setIsMining(false);
         }
     };
 
-    // --- ACTION: VERIFY INTEGRITY ---
+    // --- 4. VERIFICATION SIMULATION ---
     const handleVerifyChain = () => {
         setVerificationStatus('VERIFYING');
         setTimeout(() => {
             setVerificationStatus('SECURE');
-            showToast(`Verified integrity of ${ledger.length} blocks on blockchain.`, 'success');
-        }, 1500);
+            showToast('Cryptographic integrity confirmed. Ledger is immutable.', 'success');
+        }, 2000);
     };
 
     return (
-        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-10">
+        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
             <BackButton text="Back to Dashboard" />
+            
+            {/* ASSET PICKER (Global Context) */}
+            <AssetPicker />
 
             <div className="text-center space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                <h2 className="text-3xl font-bold text-white tracking-tight">
                     Immutable <span className="text-cyan-400">Trust Ledger</span>
                 </h2>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-900/30 border border-green-500/50">
-                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span className="text-xs font-mono text-green-400">LIVE CLOUD CONNECTION</span>
+                <div className="flex justify-center gap-4">
+                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 shadow-lg">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span className="text-xs font-mono text-slate-400">NODE STATUS: <span className="text-green-400">ACTIVE</span></span>
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 shadow-lg">
+                        <span className="text-xs font-mono text-slate-400">HEIGHT: <span className="text-cyan-400">{ledger.length} BLOCKS</span></span>
+                    </div>
                 </div>
-                <p className="text-slate-400 text-lg max-w-3xl mx-auto">
-                    Real-time synchronization with AnoHUB Cloud Vault. Data entered here is instantly replicated across the secure network.
-                </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
-                {/* DATA ENTRY */}
-                <div className="lg:col-span-4 space-y-6">
-                    <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700 h-full">
-                        <div className="flex items-center gap-3 mb-6 border-b border-slate-700 pb-4">
-                            <span className="text-2xl">📝</span>
-                            <h3 className="text-xl font-bold text-white">New Data Entry</h3>
+                {/* LEFT: MINING CONSOLE */}
+                <div className="lg:col-span-1 glass-panel p-6 rounded-2xl bg-slate-900 border border-slate-700 flex flex-col gap-5 shadow-2xl">
+                    <h3 className="text-lg font-bold text-white border-b border-slate-700 pb-2 flex items-center gap-2">
+                        <span>⛏️</span> Mining Console
+                    </h3>
+                    
+                    {!selectedAsset ? (
+                        <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-center">
+                            <p className="text-sm text-red-400 font-bold">TARGET ASSET REQUIRED</p>
+                            <p className="text-xs text-red-300/70 mt-1">Select a project above to enable mining.</p>
                         </div>
+                    ) : (
+                        <div className="space-y-4 animate-fade-in">
+                            <div className="bg-slate-800/50 p-3 rounded border border-slate-700">
+                                <label className="text-[10px] text-slate-500 uppercase font-bold">Target</label>
+                                <div className="text-cyan-400 font-mono text-sm">{selectedAsset.name}</div>
+                            </div>
 
-                        <div className="space-y-4">
-                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Asset Tag</label><input type="text" value={assetId} onChange={e => setAssetId(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-mono" /></div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Operation Type</label>
-                                <select value={operation} onChange={e => setOperation(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white">
+                                <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">Operation Type</label>
+                                <select value={operation} onChange={e => setOperation(e.target.value)} className="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm focus:border-cyan-500 outline-none transition-colors">
                                     <option>Shaft Alignment Check</option>
                                     <option>Vibration Analysis</option>
-                                    <option>Oil Quality Test</option>
-                                    <option>Wicket Gate Calibration</option>
+                                    <option>Component Replacement</option>
+                                    <option>Firmware Update</option>
+                                    <option>Safety Protocol Audit</option>
                                 </select>
                             </div>
-                            <div><label className="block text-xs font-bold text-slate-400 uppercase mb-2">Value / Note</label><input type="text" value={value} onChange={e => setValue(e.target.value)} className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white font-mono" /></div>
-                            
-                            {/* Engineer field is read-only or auto-filled but editable */}
+
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Certified Engineer</label>
-                                <input 
-                                    type="text" 
-                                    value={engineer} 
-                                    onChange={e => setEngineer(e.target.value)} 
-                                    className="w-full bg-slate-900 border border-slate-600 rounded p-3 text-white opacity-80" 
-                                />
+                                <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">Measured Value / Result</label>
+                                <input type="text" value={value} onChange={e => setValue(e.target.value)} className="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm font-mono focus:border-cyan-500 outline-none transition-colors" />
+                            </div>
+
+                            <div className="pt-4">
+                                <button 
+                                    onClick={handleSealRecord} 
+                                    disabled={isMining} 
+                                    className={`w-full py-4 font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 ${isMining ? 'bg-slate-800 text-slate-500 cursor-wait' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}`}
+                                >
+                                    {isMining ? (
+                                        <><span className="animate-spin">⚙️</span> HASHING...</>
+                                    ) : (
+                                        <><span className="text-lg">☁️</span> SEAL TO BLOCKCHAIN</>
+                                    )}
+                                </button>
                             </div>
                         </div>
-
-                        <button onClick={handleSealRecord} disabled={isMining} className={`w-full mt-8 py-4 font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-3 ${isMining ? 'bg-slate-700 text-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}`}>
-                            {isMining ? 'Hashing & Uploading...' : <><span className="text-xl">☁️</span> SEAL TO CLOUD</>}
-                        </button>
-                    </div>
+                    )}
                 </div>
 
-                {/* LEDGER DISPLAY */}
-                <div className="lg:col-span-8 space-y-6">
-                    <div className="flex justify-between items-center bg-slate-900/50 p-4 rounded-xl border border-slate-700">
-                        <button onClick={handleVerifyChain} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-lg border border-slate-600 transition-colors">
-                            🔍 Verify Cloud Integrity
+                {/* RIGHT: LEDGER VISUALIZER */}
+                <div className="lg:col-span-2 space-y-4">
+                    <div className="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-slate-700">
+                        <h3 className="text-sm font-bold text-white pl-2">Latest Blocks</h3>
+                        <button 
+                            onClick={handleVerifyChain} 
+                            className={`text-xs px-4 py-2 rounded-lg font-bold border transition-all ${verificationStatus === 'SECURE' ? 'bg-green-500/10 text-green-400 border-green-500/50' : 'bg-slate-800 text-slate-300 border-slate-600 hover:bg-slate-700'}`}
+                        >
+                            {verificationStatus === 'VERIFYING' ? 'VERIFYING SIGNATURES...' : verificationStatus === 'SECURE' ? '✅ CHAIN SECURE' : '🔍 VERIFY INTEGRITY'}
                         </button>
-                        <div className={`px-4 py-2 rounded-lg font-bold text-sm border flex items-center gap-2 ${verificationStatus === 'SECURE' ? 'bg-green-500/20 text-green-400 border-green-500/50' : 'bg-slate-800 text-slate-400 border-slate-600'}`}>
-                            STATUS: {verificationStatus === 'IDLE' ? 'SYNCED' : verificationStatus}
-                        </div>
                     </div>
 
-                    <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
+                    <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
                         {ledger.map((block) => (
-                            <div key={block.id || block.block_index} className="relative p-5 rounded-xl border-l-4 border-l-cyan-500 border-slate-700 bg-slate-800/60 transition-all duration-500">
-                                {block.block_index > 0 && <div className="absolute -top-6 left-[1.65rem] w-0.5 h-6 bg-slate-600"></div>}
-                                <div className="flex flex-col md:flex-row justify-between gap-4">
-                                    <div className="flex-grow space-y-2">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-xs font-mono text-slate-500">BLOCK #{block.block_index}</span>
-                                            <span className="text-xs font-mono text-slate-500">{new Date(block.timestamp).toLocaleString()}</span>
-                                            {/* Fix za Asset ID */}
-                                            <span className="text-[10px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">ID: {block.asset_id || 'N/A'}</span>
+                            <div key={block.block_index} className="relative p-4 bg-slate-800/60 rounded-xl border border-slate-700 hover:border-cyan-500/50 transition-all group overflow-hidden">
+                                {/* Connector Line */}
+                                {block.block_index > 0 && <div className="absolute -top-4 left-[22px] w-0.5 h-6 bg-slate-600 z-0"></div>}
+                                
+                                <div className="flex justify-between items-start relative z-10">
+                                    <div className="flex gap-4">
+                                        {/* Block Index */}
+                                        <div className="flex flex-col items-center">
+                                            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-xs font-mono font-bold text-slate-400 border border-slate-700 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors">
+                                                #{block.block_index}
+                                            </div>
                                         </div>
-                                        <div className="font-mono text-sm text-cyan-100 bg-slate-900/50 p-2 rounded border border-slate-700/50">{block.data}</div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10px] font-mono text-slate-500 mt-2">
-                                            <div><span className="block text-slate-600">PREV HASH:</span><span className="break-all">{block.prev_hash?.substring(0, 20)}...</span></div>
-                                            <div><span className="block text-slate-600">CURRENT HASH:</span><span className="break-all font-bold text-green-500/70">{block.hash}</span></div>
+
+                                        {/* Block Data */}
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <p className="text-sm font-bold text-white">
+                                                    {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
+                                                </p>
+                                                {block.asset_id && block.asset_id !== 'ROOT' && (
+                                                    <span className="text-[9px] bg-slate-700 px-1.5 py-0.5 rounded text-cyan-300 border border-slate-600">
+                                                        ID: {block.asset_id}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-[10px] text-slate-500 font-mono mb-2">
+                                                {new Date(block.timestamp).toLocaleString()} • {block.engineer_id?.split('@')[0] || 'System'}
+                                            </p>
+                                            
+                                            {/* Hash Visualizer */}
+                                            <div className="bg-slate-950/50 p-2 rounded border border-slate-800 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
+                                                <div className="flex gap-2">
+                                                    <span className="text-slate-600 select-none">HASH:</span>
+                                                    <span className="truncate w-48 md:w-64">{block.hash}</span>
+                                                </div>
+                                                <div className="flex gap-2 mt-1">
+                                                    <span className="text-slate-600 select-none">PREV:</span>
+                                                    <span className="truncate w-48 md:w-64">{block.prev_hash}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col justify-center items-end min-w-[40px]">
-                                        <div className="text-2xl text-cyan-500">☁️</div>
-                                        <div className="text-[9px] text-slate-500 mt-1">{block.engineer_id ? 'Signed' : 'System'}</div>
+
+                                    {/* Icon */}
+                                    <div className="text-slate-700 group-hover:text-cyan-500/20 transition-colors text-4xl select-none">
+                                        🔗
                                     </div>
                                 </div>
                             </div>
@@ -253,5 +299,3 @@ export const DigitalIntegrity: React.FC = () => {
         </div>
     );
 };
-
-export default DigitalIntegrity;

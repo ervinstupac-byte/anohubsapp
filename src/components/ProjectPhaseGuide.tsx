@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { BackButton } from './BackButton';
-import { useNavigation } from '../contexts/NavigationContext';
+import { BackButton } from './BackButton.tsx';
+import { useNavigation } from '../contexts/NavigationContext.tsx';
+import { useAssetContext } from './AssetPicker.tsx'; // <--- ENTERPRISE ADDITION
 
-// --- RICH DATA STRUCTURE (Tvoj originalni sadržaj) ---
+// --- RICH DATA STRUCTURE ---
 const phasesData = [
     {
         id: 'planning',
@@ -158,6 +159,7 @@ const MandateSection: React.FC<{ mandate: any }> = ({ mandate }) => {
 
 const ProjectPhaseGuide: React.FC = () => {
     const { navigateTo } = useNavigation();
+    const { selectedAsset } = useAssetContext(); // <--- KORISTIMO ASSET CONTEXT
     const [openSectionId, setOpenSectionId] = useState<string | null>('planning');
 
     const handleToggle = (id: string) => {
@@ -170,9 +172,18 @@ const ProjectPhaseGuide: React.FC = () => {
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
                 <BackButton text="Back to HUB" />
+                
+                {/* Dynamic Title based on selected asset */}
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-4">
                     Project Phase <span className="text-cyan-400">Guide</span>
                 </h2>
+                
+                {selectedAsset && (
+                    <div className="inline-block px-4 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/50 text-cyan-300 text-sm font-mono mb-2">
+                        Active Context: {selectedAsset.name}
+                    </div>
+                )}
+
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
                     The lifecycle of excellence: Enforcing Precision, Risk Mitigation, and Ethical LCC Optimization.
                 </p>

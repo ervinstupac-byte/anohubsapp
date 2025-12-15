@@ -1,4 +1,6 @@
 import React from 'react';
+import { BackButton } from './BackButton.tsx'; // Dodao sam BackButton za konzistentnost
+import { useAssetContext } from './AssetPicker.tsx'; // <--- ENTERPRISE CONTEXT
 
 // Reusable Glass Section
 const Section: React.FC<{ title: string; children: React.ReactNode; className?: string; delay?: number }> = ({ title, children, className, delay = 0 }) => (
@@ -15,12 +17,19 @@ const Section: React.FC<{ title: string; children: React.ReactNode; className?: 
 );
 
 const RevitalizationStrategy: React.FC = () => {
+    const { selectedAsset } = useAssetContext(); // <--- DOHVAĆAMO ASSET
+
+    // Pametni link
+    const assetSubject = selectedAsset ? ` for ${selectedAsset.name}` : '';
+    const mailtoLink = `mailto:ino@anohubs.com?subject=Inquiry: Obsolescence Audit${assetSubject}`;
+
     return (
         <div className="space-y-8 pb-8 max-w-5xl mx-auto">
             
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+                <BackButton text="Back to HUB" />
+                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-4">
                     Asset <span className="text-cyan-400">Revitalization</span> & Obsolescence
                 </h2>
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
@@ -122,7 +131,7 @@ const RevitalizationStrategy: React.FC = () => {
                         <p className="text-slate-400 mb-6">Schedule an audit to determine the future of your asset.</p>
                         
                         <a 
-                            href="mailto:ino@anohubs.com?subject=Inquiry: Obsolescence Audit" 
+                            href={mailtoLink}
                             className="inline-flex items-center px-8 py-4 bg-cyan-600 text-white font-bold rounded-lg shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:bg-cyan-500 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:-translate-y-1 transition-all duration-300"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

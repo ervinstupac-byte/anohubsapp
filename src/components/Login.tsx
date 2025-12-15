@@ -22,25 +22,22 @@ export const Login: React.FC = () => {
             if (mode === 'GUEST') {
                 if (!nickname) throw new Error('Please enter a nickname.');
                 
-                // 1. STROŽA SANITIZACIJA: Samo slova i brojevi (a-z, 0-9)
+                // Sanitizacija nickname-a
                 const cleanNick = nickname.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-                
-                if (cleanNick.length < 3) {
-                    throw new Error('Nickname must have at least 3 letters/numbers.');
-                }
+                if (cleanNick.length < 3) throw new Error('Nickname must have at least 3 letters/numbers.');
 
-                // 2. Generiraj siguran email format
+                // Generiraj siguran "privremeni" identitet
                 const randomId = Math.floor(Math.random() * 100000);
-                const dummyEmail = `${cleanNick}.${randomId}@guest.anohub.com`; // Koristimo točku umjesto donje crte za svaki slučaj
+                const dummyEmail = `${cleanNick}.${randomId}@guest.anohub.com`; 
                 const dummyPassword = `guest-${randomId}-secure`;
 
-                // 3. Registracija
+                // Guest SignUp (Login ako već postoji je malo vjerojatan s random ID, ali sigurno)
                 const { data, error } = await supabase.auth.signUp({
                     email: dummyEmail,
                     password: dummyPassword,
                     options: {
                         data: {
-                            full_name: nickname, // Ovdje čuvamo originalni nadimak s razmacima
+                            full_name: nickname, // Pravo ime za prikaz
                             is_guest: true
                         }
                     }
@@ -48,28 +45,21 @@ export const Login: React.FC = () => {
 
                 if (error) throw error;
 
-                // Ako je "Confirm email" isključen, data.session će postojati
                 if (data.session) {
                     showToast(`Welcome aboard, ${nickname}! (Guest Mode)`, 'success');
                 } else {
-                    // Ako korisnik nije isključio "Confirm email", ovo će se dogoditi
-                    showToast('Please disable "Confirm Email" in Supabase Auth settings to use Guest Mode.', 'warning');
+                    // Fallback ako je Confirm Email uključen
+                    showToast('Please disable "Confirm Email" in Supabase Auth settings.', 'warning');
                 }
 
             } else if (mode === 'REGISTER') {
-                const { error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                });
+                const { error } = await supabase.auth.signUp({ email, password });
                 if (error) throw error;
                 showToast('Registration successful! Please check your email.', 'success');
                 
             } else {
-                // LOGIN MODE
-                const { error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
+                // LOGIN
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
                 showToast('Welcome back to AnoHUB.', 'success');
             }
@@ -119,7 +109,7 @@ export const Login: React.FC = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
-                                    placeholder="engineer@anohub-enterprise.com"
+                                    placeholder="engineer@anohub.com"
                                 />
                             </div>
                             <div>
@@ -150,7 +140,7 @@ export const Login: React.FC = () => {
                                 autoFocus
                             />
                             <p className="text-xs text-slate-500 mt-2">
-                                *Guest access creates a temporary session. Perfect for demos.
+                                *Guest access creates a temporary session. Perfect for live demos.
                             </p>
                         </div>
                     )}
@@ -159,7 +149,7 @@ export const Login: React.FC = () => {
                         type="submit"
                         disabled={loading}
                         className={`
-                            w-full py-4 font-bold rounded-xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed
+                            w-full py-4 font-bold rounded-xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-wider
                             ${mode === 'GUEST' 
                                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:shadow-green-500/20' 
                                 : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/20'}
@@ -167,12 +157,19 @@ export const Login: React.FC = () => {
                         `}
                     >
                         {loading ? 'Authenticating...' : (
-                            mode === 'LOGIN' ? 'SECURE LOGIN' : 
-                            mode === 'REGISTER' ? 'CREATE ACCOUNT' : 
-                            'ENTER AS GUEST'
+                            mode === 'LOGIN' ? 'Access Dashboard' : 
+                            mode === 'REGISTER' ? 'Register Account' : 
+                            'Initialize Guest Session'
                         )}
                     </button>
                 </form>
+
+                <div className="mt-6 text-center">
+                    <p className="text-[10px] text-slate-600 uppercase flex items-center justify-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-green-500"></span>
+                        Secured by Supabase Auth
+                    </p>
+                </div>
             </div>
         </div>
     );

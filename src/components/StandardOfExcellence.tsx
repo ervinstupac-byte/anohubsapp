@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BackButton } from './BackButton.tsx'; // <--- DODANO
 
 // --- DATA ---
 const modulesData = [
@@ -71,7 +72,7 @@ const ModuleCard: React.FC<{
         `}
         style={{ animationDelay: `${delay}ms` }}
     >
-        {/* Background Grid Pattern (Subtle) */}
+        {/* Background Grid Pattern */}
         <div className="absolute inset-0 opacity-5 pointer-events-none" 
              style={{backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '20px 20px'}}>
         </div>
@@ -121,7 +122,8 @@ const StandardOfExcellence: React.FC = () => {
       
       {/* HEADER */}
       <div className="text-center space-y-4 animate-fade-in-up">
-        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+        <BackButton text="Back to Hub" />
+        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-4">
             The Standard of <span className="text-cyan-400">Excellence</span>
         </h2>
         <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">

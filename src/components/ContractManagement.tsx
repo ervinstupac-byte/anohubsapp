@@ -1,218 +1,218 @@
 import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
+import { useAssetContext, AssetPicker } from './AssetPicker.tsx';
+import { supabase } from '../services/supabaseClient.ts';
 import { useToast } from '../contexts/ToastContext.tsx';
+import jsPDF from 'jspdf'; // Koristimo direktno za brzi pravni dokument
 
-// --- DATA: WARRANTY KILLERS & SOLUTIONS ---
-const warrantyKillers = [
-    { 
-        id: 1, 
-        text: "No digital log of initial alignment (0.05 mm/m)", 
-        cost: 450000, 
-        severity: 'Critical',
-        desc: "Without this proof, any bearing failure is blamed on installation.",
-        // SPECIFIČNO RJEŠENJE ZA OVU STAVKU
-        solutionTitle: "Blockchain Ledger",
-        solutionDesc: "Creates an immutable, timestamped hash of the alignment report linked to the Asset ID."
-    },
-    { 
-        id: 2, 
-        text: "Operation below 40% load for >2 hours", 
-        cost: 120000, 
-        severity: 'High',
-        desc: "Cavitation damage outside operating envelope is not covered.",
-        solutionTitle: "AI Watchdog & SCADA",
-        solutionDesc: "Real-time alerts trigger an automatic stop or SMS warning when load dips below threshold."
-    },
-    { 
-        id: 3, 
-        text: "Maintenance by uncertified local personnel", 
-        cost: 85000, 
-        severity: 'Medium',
-        desc: "Manufacturer requires certified technicians for major service.",
-        solutionTitle: "AR Remote Supervision",
-        solutionDesc: "Local staff wears AR glasses, allowing a certified remote engineer to sign off on the work digitally."
-    },
-    { 
-        id: 4, 
-        text: "Use of non-OEM spare parts (Seals/Oil)", 
-        cost: 25000, 
-        severity: 'Medium',
-        desc: "Immediate invalidation of hydraulic circuit warranty.",
-        solutionTitle: "QR Inventory Control",
-        solutionDesc: "App rejects maintenance logs if scanned spare part codes do not match the OEM whitelist."
-    },
-    { 
-        id: 5, 
-        text: "Missing vibration spectrum analysis logs", 
-        cost: 150000, 
-        severity: 'High',
-        desc: "Cannot prove failure wasn't caused by resonance.",
-        solutionTitle: "IoT Sensor Cloud",
-        solutionDesc: "24/7 vibration monitoring automates data logging, removing human error from the equation."
-    }
-];
+interface ContractStatus {
+    status: 'ACTIVE' | 'BREACHED' | 'WARNING' | 'EXPIRED';
+    warranty_valid: boolean;
+    penalty_amount: number;
+    days_remaining: number;
+    last_audit_date: string;
+    breach_reason?: string;
+}
 
 export const ContractManagement: React.FC = () => {
+    const { selectedAsset } = useAssetContext();
     const { showToast } = useToast();
-    const [selectedRisks, setSelectedRisks] = useState<number[]>([]);
-    const [isVoid, setIsVoid] = useState(false);
-    const [totalLiability, setTotalLiability] = useState(0);
+    const [loading, setLoading] = useState(false);
+    
+    const [contract, setContract] = useState<ContractStatus>({
+        status: 'ACTIVE',
+        warranty_valid: true,
+        penalty_amount: 0,
+        days_remaining: 1095, // 3 years default
+        last_audit_date: 'N/A'
+    });
 
-    const toggleRisk = (id: number) => {
-        const isSelected = selectedRisks.includes(id);
-        const newSelection = isSelected 
-            ? selectedRisks.filter(riskId => riskId !== id) 
-            : [...selectedRisks, id];
-        
-        setSelectedRisks(newSelection);
-    };
-
-    // Calculate status
+    // --- ANALIZA PODATAKA ---
     useEffect(() => {
-        const currentLiability = warrantyKillers
-            .filter(k => selectedRisks.includes(k.id))
-            .reduce((acc, curr) => acc + curr.cost, 0);
+        const analyzeContractHealth = async () => {
+            if (!selectedAsset) return;
+            setLoading(true);
+
+            try {
+                // 1. Dohvati zadnji Instalacijski Audit
+                const { data: auditData } = await supabase
+                    .from('installation_audits')
+                    .select('*')
+                    .eq('asset_id', selectedAsset.id)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                // 2. Dohvati Risk Score
+                const { data: riskData } = await supabase
+                    .from('risk_assessments')
+                    .select('risk_score')
+                    .eq('asset_id', selectedAsset.id)
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .single();
+
+                // --- LOGIKA "PAMETNOG UGOVORA" ---
+                let newStatus: ContractStatus = {
+                    status: 'ACTIVE',
+                    warranty_valid: true,
+                    penalty_amount: 0,
+                    days_remaining: 1095, // Hardcoded 3 years for demo
+                    last_audit_date: auditData ? new Date(auditData.created_at).toLocaleDateString() : 'No Audits'
+                };
+
+                // PRAVILO: FAILED AUDIT = AUTOMATSKI PREKRŠAJ
+                if (auditData && auditData.audit_status === 'FAILED') {
+                    newStatus.status = 'BREACHED';
+                    newStatus.warranty_valid = false;
+                    newStatus.penalty_amount = 250000; // Početna kazna
+                    newStatus.breach_reason = 'Critical Non-Compliance: 0.05 mm/m Protocol Failed.';
+                }
+                // PRAVILO: HIGH RISK = UPOZORENJE I PENALI
+                else if (riskData && riskData.risk_score > 50) {
+                    newStatus.status = 'WARNING';
+                    newStatus.penalty_amount = riskData.risk_score * 1000; // Dinamički penal
+                    newStatus.breach_reason = 'Operational Risk exceeds contractual safety limits.';
+                }
+
+                setContract(newStatus);
+
+            } catch (error) {
+                console.error('Contract analysis failed:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        analyzeContractHealth();
+    }, [selectedAsset]);
+
+    // --- GENERIRANJE PRAVNOG DOKUMENTA (On-the-fly) ---
+    const generateLegalNotice = () => {
+        if (!selectedAsset) return;
+        const doc = new jsPDF();
         
-        setTotalLiability(currentLiability);
-
-        // Logic: 1 Critical OR >= 2 High/Medium voids the warranty
-        const criticalCount = warrantyKillers.filter(k => selectedRisks.includes(k.id) && k.severity === 'Critical').length;
-        const otherCount = selectedRisks.length - criticalCount;
-        const shouldVoid = criticalCount > 0 || otherCount >= 2;
-
-        setIsVoid(shouldVoid);
-    }, [selectedRisks]);
-
-    const handleReset = () => {
-        setSelectedRisks([]);
-        setIsVoid(false);
-        setTotalLiability(0);
-        showToast('Simulator reset.', 'info');
+        doc.setFontSize(18);
+        doc.text("NOTICE OF NON-COMPLIANCE", 105, 20, { align: 'center' });
+        
+        doc.setFontSize(12);
+        doc.text(`Asset: ${selectedAsset.name}`, 20, 40);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 50);
+        doc.text(`Status: ${contract.status}`, 20, 60);
+        
+        doc.text("Pursuant to the Master Service Agreement, AnoHUB system has detected", 20, 80);
+        doc.text("deviations from the mandatory Standard of Excellence.", 20, 86);
+        
+        if (contract.breach_reason) {
+            doc.setTextColor(255, 0, 0);
+            doc.text(`VIOLATION: ${contract.breach_reason}`, 20, 100);
+            doc.setTextColor(0, 0, 0);
+        }
+        
+        doc.text(`Estimated Contract Penalty: EUR ${contract.penalty_amount.toLocaleString()}`, 20, 120);
+        
+        doc.save(`Legal_Notice_${selectedAsset.name}.pdf`);
+        showToast('Legal Notice generated.', 'success');
     };
 
     return (
-        <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-10">
-            <BackButton text="Back to Dashboard" />
+        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
+            <BackButton text="Back to Hub" />
+            <AssetPicker />
 
             <div className="text-center space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Contract & <span className="text-cyan-400">Legal Shield</span>
+                <h2 className="text-3xl font-bold text-white tracking-tight">
+                    Smart Contract <span className="text-cyan-400">Intelligence</span>
                 </h2>
-                <p className="text-slate-400 text-lg max-w-3xl mx-auto">
-                    Manufacturers use lack of data to void warranties. See exactly how AnoHUB plugs those specific legal holes.
+                <p className="text-slate-400 max-w-2xl mx-auto">
+                    Automated warranty validation & dynamic penalty calculation.
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                
-                {/* LEFT: SIMULATOR INPUTS */}
-                <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-                    <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                        <h3 className="text-xl font-bold text-white">⚠️ Operational Errors</h3>
-                        <span className="text-xs text-slate-400 uppercase tracking-widest">Select to simulate</span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                        {warrantyKillers.map((killer) => (
-                            <div 
-                                key={killer.id}
-                                onClick={() => toggleRisk(killer.id)}
-                                className={`
-                                    relative p-4 rounded-xl border cursor-pointer transition-all duration-300 flex items-start gap-4 group
-                                    ${selectedRisks.includes(killer.id) 
-                                        ? 'bg-red-900/20 border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]' 
-                                        : 'bg-slate-900/40 border-slate-700 hover:bg-slate-800'}
-                                `}
-                            >
-                                <div className={`mt-1 w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${selectedRisks.includes(killer.id) ? 'bg-red-500 border-red-500 text-white' : 'border-slate-500 group-hover:border-slate-400'}`}>
-                                    {selectedRisks.includes(killer.id) && '✓'}
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <h4 className={`font-bold transition-colors ${selectedRisks.includes(killer.id) ? 'text-red-300' : 'text-slate-200'}`}>{killer.text}</h4>
-                                        {killer.severity === 'Critical' && <span className="text-[10px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold uppercase">Critical</span>}
-                                    </div>
-                                    <p className="text-xs text-slate-500">{killer.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    
-                    <button onClick={handleReset} className="mt-6 w-full py-3 text-sm font-bold text-slate-400 hover:text-white border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors">
-                        Reset Simulator
-                    </button>
+            {!selectedAsset ? (
+                <div className="text-center p-12 bg-slate-800/30 rounded-2xl border border-slate-700 border-dashed">
+                    <p className="text-slate-500">Select a project above to execute legal analysis.</p>
                 </div>
-
-                {/* RIGHT: STATUS & SOLUTIONS */}
-                <div className="space-y-6 sticky top-8">
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
-                    {/* CERTIFICATE CARD */}
-                    <div className={`
-                        relative p-8 rounded-2xl border-4 transition-all duration-500 overflow-hidden min-h-[300px] flex flex-col justify-between
-                        ${isVoid 
-                            ? 'bg-slate-200 border-red-600 shadow-[0_0_30px_rgba(220,38,38,0.4)]' 
-                            : 'bg-gradient-to-br from-slate-100 to-slate-300 border-green-600 shadow-xl'}
-                    `}>
-                        {/* Background Pattern */}
-                        <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-
-                        <div className="text-center border-b-2 border-slate-400 pb-4 mb-4 relative z-10">
-                            <h2 className="text-2xl font-serif font-black text-slate-800 tracking-widest uppercase">Warranty Status</h2>
+                    {/* LEFT: STATUS CARD */}
+                    <div className={`p-8 rounded-3xl border-2 flex flex-col justify-center items-center text-center shadow-2xl transition-all relative overflow-hidden ${
+                        contract.status === 'BREACHED' ? 'bg-red-900/20 border-red-500 shadow-red-900/20' :
+                        contract.status === 'WARNING' ? 'bg-yellow-900/20 border-yellow-500 shadow-yellow-900/20' :
+                        'bg-green-900/20 border-green-500 shadow-green-900/20'
+                    }`}>
+                        {/* Background watermark */}
+                        <div className="absolute inset-0 opacity-5 text-9xl font-black flex items-center justify-center select-none">
+                            {contract.status}
                         </div>
 
-                        <div className="space-y-4 text-slate-800 font-mono text-sm relative z-10">
-                            <div className="flex justify-between border-b border-slate-300 pb-1"><span>Coverage:</span><span className="font-bold">Full Mechanical</span></div>
-                            <div className="mt-8 pt-4 border-t-2 border-slate-800">
-                                <p className="text-xs uppercase tracking-bold mb-1">Liability Exposure</p>
-                                <div className={`text-4xl font-black ${isVoid ? 'text-red-600' : 'text-slate-400'}`}>
-                                    € {totalLiability.toLocaleString()}
-                                </div>
+                        <div className="text-6xl mb-4 relative z-10">
+                            {contract.status === 'BREACHED' ? '⚖️' : contract.status === 'WARNING' ? '⚠️' : '🛡️'}
+                        </div>
+                        <h3 className="text-4xl font-black text-white mb-2 relative z-10">{contract.status}</h3>
+                        <p className="text-sm uppercase tracking-widest text-slate-400 mb-6 relative z-10">Contract Standing</p>
+                        
+                        <div className="w-full bg-slate-900/80 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm relative z-10">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-slate-400 text-sm">Warranty Validity</span>
+                                <span className={`font-bold ${contract.warranty_valid ? 'text-green-400' : 'text-red-400'}`}>
+                                    {contract.warranty_valid ? 'VALID' : 'VOID'}
+                                </span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-slate-400 text-sm">Accumulated Penalty</span>
+                                <span className="font-mono font-bold text-white">€ {contract.penalty_amount.toLocaleString()}</span>
                             </div>
                         </div>
 
-                        {/* STAMP */}
-                        <div className={`
-                            absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                            border-8 rounded-xl px-8 py-2 font-black text-5xl tracking-widest opacity-80 rotate-[-15deg] transition-all duration-300
-                            ${isVoid ? 'border-red-600 text-red-600 scale-100' : 'border-green-600 text-green-600 scale-0 opacity-0'}
-                        `}>
-                            VOID
-                        </div>
-                        
-                        {!isVoid && (
-                            <div className="absolute bottom-6 right-6 w-20 h-20 rounded-full border-4 border-green-600 flex items-center justify-center text-green-600 font-bold rotate-[-10deg] opacity-60">
-                                VALID
+                        {contract.breach_reason && (
+                            <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-left w-full relative z-10 animate-pulse">
+                                <p className="text-xs font-bold text-red-400 uppercase mb-1">Detected Violation:</p>
+                                <p className="text-sm text-red-200">{contract.breach_reason}</p>
                             </div>
                         )}
                     </div>
 
-                    {/* DYNAMIC SOLUTION LIST (OVO JE NOVO) */}
-                    {selectedRisks.length > 0 && (
-                        <div className="animate-fade-in-up">
-                            <div className="flex items-center gap-2 mb-3">
-                                <span className="text-xl">🛡️</span>
-                                <h4 className="text-sm font-bold text-cyan-400 uppercase tracking-wider">AnoHUB Mitigation Protocols</h4>
-                            </div>
-                            
-                            <div className="space-y-3">
-                                {warrantyKillers.filter(k => selectedRisks.includes(k.id)).map(risk => (
-                                    <div key={risk.id} className="bg-cyan-900/20 border border-cyan-500/30 p-4 rounded-xl flex gap-4 animate-scale-in">
-                                        <div className="mt-1 w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold border border-cyan-500/50 flex-shrink-0">
-                                            {risk.id}
-                                        </div>
-                                        <div>
-                                            <h5 className="text-sm font-bold text-white mb-1">{risk.solutionTitle}</h5>
-                                            <p className="text-xs text-cyan-200/70 leading-relaxed">{risk.solutionDesc}</p>
-                                        </div>
-                                    </div>
-                                ))}
+                    {/* RIGHT: TIMELINE & ACTIONS */}
+                    <div className="space-y-6">
+                        <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
+                            <h3 className="text-lg font-bold text-white mb-4">Warranty Timeline</h3>
+                            <div className="relative pt-6 pb-2">
+                                <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                                    <div className="h-full bg-cyan-500" style={{ width: '25%' }}></div>
+                                </div>
+                                <div className="flex justify-between text-xs mt-2 text-slate-400">
+                                    <span>Start Date</span>
+                                    <span className="text-white font-bold">{contract.days_remaining} Days Remaining</span>
+                                    <span>End Date</span>
+                                </div>
                             </div>
                         </div>
-                    )}
+
+                        <div className="glass-panel p-6 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700">
+                            <h3 className="text-lg font-bold text-white mb-2">Legal Enforcement</h3>
+                            <p className="text-xs text-slate-400 mb-6">
+                                Automated protocols for contract compliance.
+                            </p>
+                            
+                            <div className="grid grid-cols-1 gap-3">
+                                <button 
+                                    onClick={generateLegalNotice}
+                                    className={`p-4 rounded-lg text-white text-sm font-bold border transition-all flex items-center justify-center gap-2 ${
+                                        contract.status === 'ACTIVE' 
+                                        ? 'bg-slate-800 text-slate-500 border-slate-700 hover:bg-slate-700' 
+                                        : 'bg-red-600 hover:bg-red-500 border-red-400 shadow-lg shadow-red-900/50'
+                                    }`}
+                                >
+                                    <span>📜</span>
+                                    {contract.status === 'ACTIVE' ? 'Generate Compliance Certificate' : 'GENERATE NOTICE OF BREACH'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
-
-export default ContractManagement;

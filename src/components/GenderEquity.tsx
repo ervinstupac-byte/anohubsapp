@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BackButton } from './BackButton.tsx'; // Dodajemo navigaciju
 
 // --- DATA STRUCTURE ---
 const sectionsData = [
@@ -152,7 +153,7 @@ const AccordionSection: React.FC<{
 );
 
 
-const GenderEquity: React.FC = () => {
+export const GenderEquity: React.FC = () => {
   const [openSectionId, setOpenSectionId] = useState<string | null>('imperativ');
 
   const handleToggleSection = (sectionId: string) => {
@@ -160,10 +161,12 @@ const GenderEquity: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-8 max-w-4xl mx-auto">
+    <div className="animate-fade-in space-y-8 pb-12 max-w-4xl mx-auto">
       
-      {/* HEADER */}
-      <div className="text-center space-y-4 animate-fade-in-up">
+      {/* HEADER & NAV */}
+      <BackButton text="Back to Hub" />
+      
+      <div className="text-center space-y-4">
         <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
             Engineering a Culture of <span className="text-cyan-400">Inclusivity</span>
         </h2>
@@ -192,4 +195,4 @@ const GenderEquity: React.FC = () => {
   );
 };
 
-export default GenderEquity;
+export default GenderEquity; // Zadržavamo default export ako ga lazy loading očekuje

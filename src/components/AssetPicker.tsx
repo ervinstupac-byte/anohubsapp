@@ -1,99 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../services/supabaseClient.ts';
-import { useToast } from '../contexts/ToastContext.tsx';
-import type { Asset } from '../types.ts';
+import React, { useEffect } from 'react';
+// Uvozimo iz definicije konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 
-// Context za Asset (Morat ćemo ga kreirati u sljedećem koraku)
-interface AssetContextType {
-    selectedAsset: Asset | null;
-    setSelectedAssetId: (id: number | null) => void;
-    loading: boolean;
-    assets: Asset[];
-}
-
-// Globalni Context je potreban da bi svi moduli znali koji je Asset odabran
-// Za sada koristimo mock context (stvarni context ćemo kreirati u KORAKU 3)
-const MockAssetContext = React.createContext<AssetContextType | undefined>(undefined);
-
-// Kreiramo hook za Asset
-export const useAssetContext = () => {
-    const context = React.useContext(MockAssetContext);
-    if (!context) {
-        throw new Error('useAssetContext must be used within an AssetProvider');
-    }
-    return context;
-};
-
-// --- KOMPONENTA ---
 export const AssetPicker: React.FC = () => {
-    const { showToast } = useToast();
-    const [assets, setAssets] = useState<Asset[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null);
+    const { assets, selectedAsset, selectAsset, loading } = useAssetContext();
 
-    // Placeholder za trenutni Asset (dok ne napravimo stvarni Context)
-    const selectedAsset = assets.find(a => a.id === selectedAssetId) || null;
-
+    // Auto-select first asset if none selected (Optional UX improvement)
     useEffect(() => {
-        const fetchAssets = async () => {
-            setLoading(true);
-            const { data, error } = await supabase.from('assets').select('*');
-            if (error) {
-                showToast('Failed to load asset list.', 'error');
-            } else {
-                setAssets(data || []);
-                // Učitaj zadnji odabrani ID iz local storage
-                const savedId = localStorage.getItem('selectedAssetId');
-                if (savedId) {
-                    const id = parseInt(savedId);
-                    if (data.some(a => a.id === id)) {
-                        setSelectedAssetId(id);
-                    }
-                }
-            }
-            setLoading(false);
-        };
-        fetchAssets();
-    }, []);
+        if (!selectedAsset && assets.length > 0) {
+            // selectAsset(assets[0].id); // Uncomment if you want auto-select
+        }
+    }, [assets, selectedAsset, selectAsset]);
 
-    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const id = parseInt(e.target.value);
-        setSelectedAssetId(id);
-        localStorage.setItem('selectedAssetId', id.toString());
-        showToast(`Asset set to: ${assets.find(a => a.id === id)?.name}`, 'info');
-    };
-
-    if (loading) {
-        return <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-700 text-cyan-400 text-sm animate-pulse">Loading Assets...</div>;
-    }
+    if (loading) return <div className="text-xs text-slate-500 animate-pulse">Loading Assets...</div>;
 
     return (
-        <div className="sticky top-4 z-20 glass-panel p-4 rounded-xl border-cyan-500/20 shadow-2xl backdrop-blur-xl flex justify-between items-center gap-4">
-            <label className="text-xs font-bold text-slate-400 uppercase tracking-widest min-w-[120px]">
-                Target Asset:
-            </label>
-            <select
-                onChange={handleSelectChange}
-                value={selectedAssetId || 'default'}
-                className="flex-grow bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white outline-none focus:border-cyan-500"
-            >
-                <option value="default" disabled>{assets.length > 0 ? '--- Select Project ---' : 'No Assets Found'}</option>
-                {assets.map((asset) => (
-                    <option key={asset.id} value={asset.id}>
-                        {asset.name} ({asset.power_output})
-                    </option>
-                ))}
-            </select>
-            
-            {selectedAsset && (
-                <div className={`px-3 py-1 text-xs font-bold rounded-full border ${
-                    selectedAsset.status === 'Critical' ? 'bg-red-500/20 text-red-400 border-red-500/50' : 
-                    selectedAsset.status === 'Warning' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50' : 
-                    'bg-green-500/20 text-green-400 border-green-500/50'
-                } hidden sm:block`}>
-                    {selectedAsset.status.toUpperCase()}
+        <div className="w-full mb-6">
+            <div className="flex items-center gap-3 bg-slate-800/80 p-2 rounded-lg border border-slate-700 shadow-sm">
+                <div className="bg-cyan-900/30 p-2 rounded text-cyan-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
                 </div>
-            )}
+                
+                <div className="flex-grow">
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">
+                        Active Project Context
+                    </label>
+                    <select
+                        value={selectedAsset?.id || ''}
+                        onChange={(e) => selectAsset(e.target.value)}
+                        className="w-full bg-transparent text-white font-bold text-sm focus:outline-none cursor-pointer"
+                    >
+                        <option value="" disabled className="text-slate-500">Select Target Asset...</option>
+                        {assets.map(asset => (
+                            <option key={asset.id} value={asset.id} className="bg-slate-800 text-white">
+                                {asset.name} ({asset.type}) - {asset.location}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {selectedAsset && (
+                    <div className="hidden sm:block px-3 py-1 bg-green-500/10 border border-green-500/30 rounded text-[10px] text-green-400 font-mono">
+                        ONLINE
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
+
+// --- KLJUČNI FIX ZA TS2459 ---
+// Re-exportamo hook tako da import { useAssetContext } from './AssetPicker' u drugim fajlovima radi.
+export { useAssetContext } from '../contexts/AssetContext.tsx';

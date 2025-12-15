@@ -1,4 +1,5 @@
 import React from 'react';
+import { BackButton } from './BackButton.tsx'; // <--- DODANO
 import { turbineDetailData } from '../data/turbineDetailData.ts';
 import type { TurbineDetail as TurbineDetailType, TurbineComponent } from '../data/turbineDetailData.ts';
 
@@ -67,12 +68,16 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                 <div className="text-4xl mb-4">🚫</div>
                 <h3 className="text-xl font-bold text-white mb-2">System Data Not Found</h3>
                 <p className="text-slate-400">Configuration parameters for <span className="text-cyan-400 font-mono">'{turbineKey}'</span> are missing from the database.</p>
+                <div className="mt-6">
+                    <BackButton text="Return to Design Studio" />
+                </div>
             </div>
         );
     }
 
     return (
         <div className="animate-fade-in pb-8 max-w-7xl mx-auto space-y-8">
+            <BackButton text="Back to Design Studio" />
             
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">

@@ -58,56 +58,9 @@ export const QUESTIONS: Question[] = [
     { id: 'q17', text: 'What is the current condition of the draft tube concrete surface?', options: ['Good', 'Requires Minor Maintenance', 'Major Service Needed'] }
 ];
 
-// --- 3. COMPONENT DATA (Used in Technical Details) ---
-export const COMPONENT_DATA = [
-    {
-        id: 'runner',
-        title: 'Runner & Blades',
-        description: 'The heart of the turbine. Converts hydraulic energy into rotation. Critical for efficiency.',
-        risks: [
-            { text: 'Cavitation Pitting', level: 'High' },
-            { text: 'Fatigue Cracking (Root)', level: 'High' },
-            { text: 'Erosion (Sand/Silt)', level: 'Medium' }
-        ],
-        kpis: ['Efficiency > 94%', 'Vibration < 2.5 mm/s', 'Cavitation Loss < 2g/1000h']
-    },
-    {
-        id: 'bearings',
-        title: 'Guide Bearings',
-        description: 'Supports the shaft radially. Sensitive to alignment and oil quality.',
-        risks: [
-            { text: 'White Metal Wiping', level: 'Critical' },
-            { text: 'Oil Film Instability', level: 'High' },
-            { text: 'Contamination', level: 'Medium' }
-        ],
-        kpis: ['Temp < 65°C', 'Oil Water < 200ppm', 'Clearance Compliance']
-    },
-    {
-        id: 'shaft',
-        title: 'Main Shaft & Seal',
-        description: 'Transmits torque. The seal prevents water ingress into the powerhouse.',
-        risks: [
-            { text: 'Seal Leakage (Flooding)', level: 'High' },
-            { text: 'Run-out / Alignment', level: 'Critical' },
-            { text: 'Torsional Vibration', level: 'Medium' }
-        ],
-        kpis: ['Run-out < 0.05mm', 'Seal Leakage < 5 L/min', 'Alignment < 0.05 mm/m']
-    },
-    {
-        id: 'distributor',
-        title: 'Distributor (Wicket Gates)',
-        description: 'Regulates flow to the runner. High mechanical stress area.',
-        risks: [
-            { text: 'Shear Pin Failure', level: 'Medium' },
-            { text: 'Linkage Wear', level: 'Medium' },
-            { text: 'Jamming (Debris)', level: 'High' }
-        ],
-        kpis: ['Opening Sync < 1%', 'Hysteresis < 0.5%', 'Leakage (Closed) < 1%']
-    }
-];
-
-// --- 4. HUB TOOLS (MENU ITEMS - Used in Hub.tsx) ---
+// --- 3. HUB TOOLS (MENU ITEMS - Used in Hub.tsx) ---
 export const HUB_TOOLS: HubTool[] = [
+    // CORE
     {
         id: 'risk',
         view: 'riskAssessment',
@@ -132,20 +85,15 @@ export const HUB_TOOLS: HubTool[] = [
         icon: '⚡'
     },
     {
-        id: 'integrity',
-        view: 'digitalIntegrity',
-        title: 'Digital Integrity',
-        description: 'Blockchain ledger for immutable data proof.',
-        icon: '🔗'
-    },
-    {
         id: 'map',
-        view: 'globalMap', // Paziti na ovaj ID, koristimo ga u App.tsx
+        view: 'globalMap',
         title: 'Global Asset Map',
         description: 'Geospatial intelligence and live status monitoring.',
         icon: '🌍',
         isCritical: false
     },
+
+    // STRATEGIC
     {
         id: 'investor',
         view: 'investorBriefing',
@@ -161,11 +109,12 @@ export const HUB_TOOLS: HubTool[] = [
         icon: '⚖️'
     },
     {
-        id: 'excellence',
-        view: 'standardOfExcellence',
-        title: 'Standard of Excellence',
-        description: 'Masterclass modules for eliminating the Execution Gap.',
-        icon: '🎓'
+        id: 'integrity',
+        view: 'digitalIntegrity',
+        title: 'Digital Integrity',
+        description: 'Blockchain ledger for immutable data proof.',
+        icon: '🔗',
+        isCritical: true
     },
     {
         id: 'revital',
@@ -173,6 +122,22 @@ export const HUB_TOOLS: HubTool[] = [
         title: 'Revitalization Strategy',
         description: 'Closing the M-E Synergy Gap in legacy assets.',
         icon: '♻️'
+    },
+
+    // KNOWLEDGE & CULTURE
+    {
+        id: 'library', // <--- NEW: Component Library
+        view: 'library',
+        title: 'Component Library',
+        description: 'Technical encyclopedia. KPIs and failure modes.',
+        icon: '📚'
+    },
+    {
+        id: 'excellence',
+        view: 'standardOfExcellence',
+        title: 'Standard of Excellence',
+        description: 'Masterclass modules for eliminating the Execution Gap.',
+        icon: '🏅'
     },
     {
         id: 'phase',
@@ -182,25 +147,11 @@ export const HUB_TOOLS: HubTool[] = [
         icon: '📅'
     },
     {
-        id: 'digital',
-        view: 'digitalIntroduction',
-        title: 'Digital Introduction',
-        description: 'Core principles of the AnoHUB philosophy.',
-        icon: '📱'
-    },
-    {
         id: 'ino',
         view: 'hppImprovements',
         title: 'HPP Ino-Hub',
         description: 'Innovations supporting LCC Optimization.',
         icon: '💡'
-    },
-    {
-        id: 'gender',
-        view: 'genderEquity',
-        title: 'Gender Equity',
-        description: 'Inclusive strategies for human capital.',
-        icon: '👥'
     },
     {
         id: 'wildlife',
@@ -210,10 +161,17 @@ export const HUB_TOOLS: HubTool[] = [
         icon: '🐟'
     },
     {
-        id: 'suggestion',
-        view: 'suggestionBox',
-        title: 'Suggestion Box',
-        description: 'Feedback loop for protocol improvement.',
-        icon: '💬'
+        id: 'gender',
+        view: 'genderEquity',
+        title: 'Gender Equity',
+        description: 'Inclusive strategies for human capital.',
+        icon: '👥'
+    },
+    {
+        id: 'digital',
+        view: 'digitalIntroduction',
+        title: 'Digital Introduction',
+        description: 'Core principles of the AnoHUB philosophy.',
+        icon: '📱'
     }
 ];

@@ -1,112 +1,81 @@
-// src/contexts/QuestionnaireContext.tsx
-
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { 
     Answers, 
     OperationalData, 
-    QuestionnaireContextType, 
-    TurbineType 
+    QuestionnaireContextType 
 } from '../types.ts';
 
-// Početno stanje za operativne podatke (prazne stringove)
-const initialOperationalData: OperationalData = {
-    commissioningYear: '',
-    maintenanceCycle: '',
-    powerOutput: '',
-    turbineType: '',
-    head: '',
-    flow: '',
-    pressure: '',
-    output: '',
-};
-
-const initialContext: QuestionnaireContextType = {
-    answers: {},
-    description: '',
-    selectedTurbine: null,
-    operationalData: initialOperationalData,
-    isQuestionnaireDataFresh: false,
-    
-    // Potrebne dummy funkcije za inicijalizaciju
-    setAnswer: () => {}, 
-    setOperationalData: () => {},
-    
-    // Ostatak
-    setAnswers: () => {},
-    setDescription: () => {},
-    setSelectedTurbine: () => {},
-    setIsQuestionnaireDataFresh: () => {},
-    resetQuestionnaire: () => {},
-};
-
-export const QuestionnaireContext = createContext<QuestionnaireContextType>(initialContext);
-
-export const useQuestionnaire = () => useContext(QuestionnaireContext);
+const QuestionnaireContext = createContext<QuestionnaireContextType | undefined>(undefined);
 
 export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [answers, setAnswers] = useState<Answers>({});
-    const [description, setDescriptionState] = useState('');
-    const [selectedTurbine, setSelectedTurbine] = useState<TurbineType | null>(null);
-    const [operationalData, setOperationalDataState] = useState<OperationalData>(initialOperationalData);
-    const [isQuestionnaireDataFresh, setIsQuestionnaireDataFresh] = useState(false);
-
-    // FUNKCIJA: Postavlja odgovor na jedno pitanje
-    const setAnswer = useCallback((questionId: string, answer: string) => {
-        setAnswers(prev => ({ ...prev, [questionId]: answer }));
-    }, []);
-
-    // FUNKCIJA: Postavlja vrijednost za jedan operativni podatak
-    const setOperationalData = useCallback((key: keyof OperationalData, value: string) => {
-        setOperationalDataState(prev => ({
-            ...prev,
-            [key]: value
-        }));
-    }, []);
+    // Stanje za odgovore na pitanja
+    const [answers, setAnswersState] = useState<Answers>({});
     
-    // FUNKCIJA: Postavlja opis
-    const setDescription = useCallback((desc: string) => {
-        setDescriptionState(desc);
-    }, []);
+    // Stanje za operativne podatke (Head, Flow, itd.)
+    // Inicijaliziramo s praznim stringovima da input polja budu "controlled"
+    const [operationalData, setOperationalDataState] = useState<OperationalData>({
+        commissioningYear: '',
+        maintenanceCycle: '',
+        powerOutput: '',
+        turbineType: '',
+        head: '',
+        flow: '',
+        pressure: '',
+        output: '',
+    });
+    
+    // Stanje za opis/zaključak
+    const [description, setDescription] = useState('');
 
-    // FUNKCIJA: Resetuje cijelu anketu
-    const resetQuestionnaire = useCallback(() => {
-        setAnswers({});
-        setDescriptionState('');
-        setSelectedTurbine(null);
-        setOperationalDataState(initialOperationalData);
-        setIsQuestionnaireDataFresh(false);
-    }, []);
+    // Funkcija za ažuriranje pojedinog odgovora
+    const setAnswer = (questionId: string, value: string) => {
+        setAnswersState(prev => ({ ...prev, [questionId]: value }));
+    };
 
-    const contextValue = useMemo(() => ({
+    // Funkcija za ažuriranje operativnih podataka
+    const setOperationalData = (key: keyof OperationalData, value: string | number) => {
+        setOperationalDataState(prev => ({ ...prev, [key]: value }));
+    };
+
+    // Resetiranje cijelog upitnika na nulu
+    const resetQuestionnaire = () => {
+        setAnswersState({});
+        setOperationalDataState({
+            commissioningYear: '',
+            maintenanceCycle: '',
+            powerOutput: '',
+            turbineType: '',
+            head: '',
+            flow: '',
+            pressure: '',
+            output: '',
+        });
+        setDescription('');
+    };
+
+    // Vrijednosti koje dijelimo kroz aplikaciju
+    const value = {
         answers,
-        description,
-        selectedTurbine,
+        setAnswer,
         operationalData,
-        isQuestionnaireDataFresh,
-        
-        // Funkcije
-        setAnswers,
+        setOperationalData,
+        description,
         setDescription,
-        setAnswer, // <-- ISPRAVLJENO: Dodano
-        setSelectedTurbine,
-        setOperationalData, // <-- ISPRAVLJENO: Dodano
-        setIsQuestionnaireDataFresh,
-        resetQuestionnaire,
-    }), [
-        answers, 
-        description, 
-        selectedTurbine, 
-        operationalData, 
-        isQuestionnaireDataFresh,
-        setDescription, 
-        setAnswer, 
-        setOperationalData, 
         resetQuestionnaire
-    ]);
+    };
 
     return (
-        <QuestionnaireContext.Provider value={contextValue}>
+        <QuestionnaireContext.Provider value={value}>
             {children}
         </QuestionnaireContext.Provider>
     );
+};
+
+// Hook za korištenje konteksta u komponentama
+export const useQuestionnaire = () => {
+    const context = useContext(QuestionnaireContext);
+    if (!context) {
+        throw new Error('useQuestionnaire must be used within a QuestionnaireProvider');
+    }
+    return context;
 };

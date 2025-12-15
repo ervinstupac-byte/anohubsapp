@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { BackButton } from './BackButton.tsx';
+import { useAssetContext } from './AssetPicker.tsx'; // <--- ENTERPRISE CONTEXT
 
 // --- DATA STRUCTURE ---
 const sectionsData = [
@@ -195,6 +197,7 @@ const EcoModule: React.FC<{
 );
 
 const RiverWildlife: React.FC = () => {
+  const { selectedAsset } = useAssetContext(); // <--- CONTEXT CONNECTION
   const [openSectionId, setOpenSectionId] = useState<string | null>('fish_passage');
 
   const handleToggleSection = (sectionId: string) => {
@@ -206,9 +209,19 @@ const RiverWildlife: React.FC = () => {
       
       {/* HEADER */}
       <div className="text-center space-y-4 animate-fade-in-up">
-        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+        <BackButton text="Back to Hub" />
+        
+        <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mt-4">
             Ecological <span className="text-cyan-400">Engineering</span>
         </h2>
+        
+        {/* CONTEXT BADGE */}
+        {selectedAsset && (
+            <div className="inline-block px-4 py-1 rounded-full bg-cyan-900/30 border border-cyan-500/50 text-cyan-300 text-sm font-mono mb-2">
+                Applied Context: {selectedAsset.name}
+            </div>
+        )}
+
         <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
             Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.
         </p>

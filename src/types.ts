@@ -1,198 +1,160 @@
-// src/types.ts
-
-import React from 'react';
-
-// --- NAVIGACIJA ---
+// --- GLOBAL VIEW TYPES ---
 export type AppView = 
-    | 'hub' 
-    | 'riskAssessment' 
-    | 'investorBriefing'
-    | 'standardOfExcellence'
-    | 'digitalIntroduction'
-    | 'hppImprovements'
-    | 'installationGuarantee'
-    | 'genderEquity'
-    | 'hppBuilder'
-    | 'turbineDetail'
-    | 'phaseGuide'
-    | 'suggestionBox'
-    | 'riverWildlife'
-    | 'questionnaireSummary'
-    | 'riskReport'
-    | 'revitalizationStrategy'
-    | 'digitalIntegrity'
-    | 'contractManagement'
-    | 'globalMap'; // Uključeno 'globalMap'
+  | 'hub' | 'risk' | 'install' | 'design' | 'map' 
+  | 'investor' | 'contract' | 'integrity' | 'revital' | 'library'
+  | 'improvements' | 'guide' | 'standards' | 'wildlife' | 'gender' | 'digital'
+  | 'profile' | 'questionnaireSummary' | 'riskReport' | 'turbineDetail'
+  | 'riskAssessment' | 'installationGuarantee' | 'hppBuilder' | 'globalMap'
+  | 'investorBriefing' | 'standardOfExcellence' | 'digitalIntroduction'
+  | 'hppImprovements' | 'genderEquity' | 'phaseGuide' | 'riverWildlife'
+  | 'revitalizationStrategy' | 'digitalIntegrity' | 'contractManagement'
+  | 'ino' | 'excellence' | 'suggestion' | 'suggestionBox';
 
-export interface NavigationContextType {
-    navigateTo: (view: AppView) => void;
-    navigateBack: () => void;
-    navigateToHub: () => void;
-    navigateToTurbineDetail: (turbineKey: string) => void;
-    showFeedbackModal: () => void;
-}
+// --- SHARED DATA TYPES ---
+export type Answers = Record<string, string>;
 
-// --- HUB ---
 export interface HubTool {
-    id: string;
-    view: AppView;
-    title: string;
-    description: string;
-    icon: string;
-    isCritical?: boolean;
-    delay?: number;
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  view: AppView;
+  isCritical?: boolean;
 }
 
-// --- TURBINES ---
+// --- ASSET MANAGEMENT ---
+export interface Asset {
+  id: string;
+  name: string;
+  type: 'HPP' | 'Solar' | 'Wind';
+  location: string;
+  coordinates: [number, number]; // [lat, lng]
+  capacity: number; // MW (ovo zamjenjuje power_output)
+  status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning'; // Dodani statusi za mapu
+  imageUrl?: string;
+}
+
+export interface AssetContextType {
+  assets: Asset[];
+  selectedAsset: Asset | null;
+  selectAsset: (id: string) => void;
+  loading: boolean;
+}
+
+// --- RISK & QUESTIONNAIRE ---
+export interface Question {
+  id: string;
+  text: string;
+  options: string[];
+}
+
+export interface OperationalData {
+  commissioningYear: string;
+  maintenanceCycle: string;
+  powerOutput: number | string; // Fleksibilno za input
+  turbineType: string;
+  head: number | string;
+  flow: number | string;
+  pressure?: number | string;
+  output?: number | string;
+}
+
+export interface QuestionnaireContextType {
+  answers: Answers;
+  setAnswer: (questionId: string, value: string) => void;
+  operationalData: OperationalData;
+  setOperationalData: (key: keyof OperationalData, value: string | number) => void;
+  description: string;
+  setDescription: (text: string) => void;
+  resetQuestionnaire: () => void;
+}
+
+export interface RiskContextType {
+  disciplineRiskScore: number;
+  calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
+}
+
+// --- TOASTS ---
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
+
+export interface ToastContextType {
+  showToast: (message: string, type?: ToastType) => void;
+}
+
+// --- TURBINE DATA ---
 export interface TurbineType {
-    id: string;
-    name: string;
-    description: string;
+  id: string;
+  name: string;
+  description: string;
 }
 
 export interface TurbineCategory {
-    name: string;
-    description: string;
-    types: TurbineType[];
+  name: string;
+  description?: string;
+  types?: TurbineType[];
 }
 
 export type TurbineCategories = Record<string, TurbineCategory>;
 
-// --- QUESTIONNAIRE & RISK ---
-export interface Question {
-    id: string;
-    text: string;
-    options: string[];
-}
-
-export type Answers = Record<string, string>;
-
-/**
- * AŽURIRANA STRUKTURA OPERATIONAL DATA
- * Sadrži SVA polja koja se koriste u RiskAssessment.tsx (nova)
- * i u Questionnaire.tsx, GeminiService.ts, PDFGenerator.ts (stara).
- * Rješava greške TS2339.
- */
-export interface OperationalData {
-    // Polja koja se koriste u starim/postojećim komponentama
-    head: string; // m (koristi Questionnaire, Gemini, PDF)
-    flow: string; // m3/s (koristi Questionnaire, Gemini, PDF)
-    pressure: string; // bar (koristi Questionnaire, PDF)
-    output: string; // MW (koristi Questionnaire, Gemini, PDF)
-
-    // Polja koja se koriste u RiskAssessment.tsx i QuestionnaireContext.tsx
-    commissioningYear: string; 
-    maintenanceCycle: string; 
-    powerOutput: string; // Duplicira gornji 'output' ali je zadržan za svaki slučaj
-    turbineType: 'Francis' | 'Kaplan' | 'Pelton' | ''; 
-}
-
-export interface QuestionnaireContextType {
-    answers: Answers;
-    description: string;
-    selectedTurbine: TurbineType | null;
-    operationalData: OperationalData;
-    isQuestionnaireDataFresh: boolean;
-    
-    // Ispravan potpis funkcije za rješavanje TS2554 u Questionnaire.tsx
-    setAnswer: (questionId: string, answer: string) => void;
-    setOperationalData: (key: keyof OperationalData, value: string) => void; 
-    
-    // Ostale funkcije
-    setAnswers: React.Dispatch<React.SetStateAction<Answers>>;
-    setDescription: (desc: string) => void;
-    setSelectedTurbine: (turbine: TurbineType | null) => void;
-    setIsQuestionnaireDataFresh: (isFresh: boolean) => void;
-    resetQuestionnaire: () => void;
-}
-
-export interface RiskContextType {
-    disciplineRiskScore: number;
-    updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void;
-    calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
-}
-
-// --- HPP BUILDER (Power Calculator) ---
-export type WaterQuality = 'clean' | 'suspended' | 'abrasive' | 'both';
-export type FlowVariation = 'stable' | 'seasonal' | 'variable';
-
+// --- HPP BUILDER ---
 export interface HPPSettings {
-    head: number;
-    flow: number;
-    efficiency: number;
-    powerFactor: number;
-    waterQuality: WaterQuality;
-    flowVariation: FlowVariation;
-}
-
-export interface SavedConfiguration extends HPPSettings {
-    id: string;
-    name: string;
+  head: number;
+  flow: number;
+  efficiency: number;
+  powerFactor: number;
+  waterQuality: string;
+  flowVariation: string;
 }
 
 export interface TurbineRecommendation {
-    key: string;
-    score: number;
-    reasons: string[];
-    isBest: boolean;
+  key: string;
+  score: number;
+  reasons: string[];
+  isBest: boolean;
 }
 
-// --- INSTALLATION GUARANTEE ---
-export type RiskLevel = 'Standard' | 'High Risk' | 'Critical';
-export type VerificationStatus = 'Pending' | 'Verified' | 'Failed' | 'Reworked';
-
-export interface ValidationRule {
-    type: 'number';
-    condition: 'lessThanOrEqual' | 'greaterThanOrEqual';
-    value: number;
+export interface CalculationResult {
+  powerMW: number;
+  energyGWh: number;
+  revenue?: number;
+  capex?: number;
+  lcoe?: number;
+  roi?: number;
+  recommendedTurbine?: string;
+  n_sq: string;
+  annualGWh: string; // String radi prikaza
 }
 
-export interface ProtocolStep {
-    id: string;
-    title: string;
-    risk: RiskLevel;
-    details: string[];
-    validation?: ValidationRule;
-    tooltip?: string;
+export interface SavedConfiguration {
+  id: string;
+  name: string;
+  asset_id?: string;
+  timestamp: number;
+  parameters: HPPSettings;
+  results: CalculationResult;
 }
 
+// --- PDF GENERATOR ---
 export interface ProtocolSection {
-    id: string;
-    title: string;
-    steps: ProtocolStep[];
+  title: string;
+  content: string;
 }
 
 export interface VerificationData {
-    value: string;
-    comment: string;
-    logbookConfirmed: boolean;
-    status: VerificationStatus;
-    timestamp: string;
+  technician: string;
+  date: string;
+  location: string;
+  notes: string;
 }
 
-// --- INO-HUB ---
-export interface HPPImprovement {
-    id: string;
-    title: string;
-    description: string;
-    category: 'Mechanical' | 'Digital' | 'Ecological' | 'Systemic';
-}
-
-// --- TOAST NOTIFICATIONS ---
-export type ToastType = 'success' | 'error' | 'info' | 'warning';
-
-export interface ToastContextType {
-    showToast: (message: string, type: ToastType) => void;
-}
-
-// --- ASSET (Global Map) ---
-export interface Asset {
-    id: number;
-    name: string;
-    lat: number;
-    lng: number;
-    status: 'Operational' | 'Warning' | 'Critical' | 'Offline';
-    power_output: string;
-    type: string;
-    country?: string;
+// --- NAVIGATION ---
+export interface NavigationContextType {
+  currentView: AppView;
+  navigateTo: (view: AppView) => void;
+  navigateBack: () => void;
+  navigateToHub: () => void;
+  navigateToTurbineDetail: (turbineKey: string) => void;
+  showFeedbackModal: () => void;
+  showOnboarding: boolean;
+  completeOnboarding: () => void;
 }

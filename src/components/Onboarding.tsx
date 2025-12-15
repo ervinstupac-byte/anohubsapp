@@ -54,7 +54,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         }
     };
 
-    // Close on Escape
+    // Close on Escape / Arrow Keys
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') handleComplete();
@@ -70,8 +70,8 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     return (
         <div 
             className={`
-                fixed inset-0 z-[100] flex items-center justify-center p-4
-                bg-slate-900/90 backdrop-blur-md transition-opacity duration-300
+                fixed inset-0 z-[200] flex items-center justify-center p-4
+                bg-slate-900/95 backdrop-blur-md transition-opacity duration-300
                 ${isExiting ? 'opacity-0' : 'opacity-100 animate-fade-in'}
             `}
             role="dialog"
@@ -98,7 +98,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 <div className="p-8 pb-6 text-center relative z-10">
                     {/* Animated Icon Container */}
                     <div className="mx-auto w-24 h-24 mb-6 flex items-center justify-center bg-slate-900/50 rounded-full border border-slate-700 shadow-inner group">
-                        <span className="text-5xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] transform transition-transform duration-500 group-hover:scale-110">
+                        <span className="text-5xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] transform transition-transform duration-500 group-hover:scale-110 select-none">
                             {currentData.icon}
                         </span>
                     </div>

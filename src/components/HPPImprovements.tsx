@@ -1,42 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { BackButton } from './BackButton';
-import type { HPPImprovement } from '../types';
+import { BackButton } from './BackButton.tsx';
+import { useAuth } from '../contexts/AuthContext.tsx'; // Koristimo pravi Auth
+import { supabase } from '../services/supabaseClient.ts'; // Spajamo se na bazu
+import { useToast } from '../contexts/ToastContext.tsx';
 
-// --- DATA: INITIAL IDEAS (Vraćeni tvoji originalni primjeri) ---
-const initialIdeas: HPPImprovement[] = [
-    {
-        id: 'idea-5',
-        title: 'Guide Vane Redesign',
-        description: 'Future research into redesigning the guide vanes (GV) using a combination of tubercle and denticle technology principles to optimize flow, reduce vibration, and increase efficiency at partial loads.',
-        category: 'Systemic',
-    },
-    {
-        id: 'idea-4',
-        title: 'Shark Skin (DENTICLE) Technology',
-        description: 'Application of micro-structures inspired by shark skin (denticles) on blade and casing surfaces to reduce friction, prevent biofilm buildup, and improve hydrodynamic efficiency.',
-        category: 'Mechanical',
-    },
-    {
-        id: 'idea-1',
-        title: '"Whale Fin" Runner-Stator Unit',
-        description: 'A biomimetic runner with a leading edge featuring tubercles (inspired by humpback whales) for maximum efficiency in turbulent conditions. Includes an integrated conical stator to recover vortex energy.',
-        category: 'Mechanical',
-    },
-    {
-        id: 'idea-2',
-        title: 'Passive Positioning System',
-        description: 'An innovative system that uses hydrodynamic fins to passively position a pico-turbine in the main river current, eliminating the need for energy-intensive active thrusters.',
-        category: 'Ecological',
-    },
-    {
-        id: 'idea-3',
-        title: '"Hydraulic Heart" System',
-        description: 'A hybrid energy storage concept that combines the principles of a pumped-storage hydropower (PSH) with a mechanical buoyancy engine, creating a dual-cycle system for energy generation and storage.',
-        category: 'Systemic',
-    },
-];
+// --- TYPES ---
+interface Improvement {
+    id: number;
+    title: string;
+    description: string;
+    category: 'Mechanical' | 'Digital' | 'Ecological' | 'Systemic';
+    votes: number;
+    author_id: string;
+    created_at: string;
+}
 
-const LOCAL_STORAGE_KEY = 'hpp-improvement-ideas';
+const CATEGORIES = ['All', 'Mechanical', 'Digital', 'Ecological', 'Systemic'];
 
 // --- BADGE COMPONENT ---
 const CategoryBadge: React.FC<{ category: string }> = ({ category }) => {
@@ -49,134 +28,210 @@ const CategoryBadge: React.FC<{ category: string }> = ({ category }) => {
         default: colorClass = 'bg-slate-500/20 text-slate-300';
     }
     return (
-        <span className={`px-2 py-1 rounded-full text-xs font-bold border ${colorClass}`}>
+        <span className={`px-2 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider ${colorClass}`}>
             {category}
         </span>
     );
 };
 
 // --- MAIN COMPONENT ---
-const HPPImprovements: React.FC = () => {
-    // Učitaj iz LocalStorage ili koristi početne ideje
-    const [ideas, setIdeas] = useState<HPPImprovement[]>(() => {
-        try {
-            const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-            return saved ? JSON.parse(saved) : initialIdeas;
-        } catch { return initialIdeas; }
-    });
+export const HPPImprovements: React.FC = () => {
+    const { user } = useAuth();
+    const { showToast } = useToast();
+    
+    const [ideas, setIdeas] = useState<Improvement[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState('All');
 
+    // Form State
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [category, setCategory] = useState<HPPImprovement['category']>('Mechanical');
+    const [category, setCategory] = useState<Improvement['category']>('Mechanical');
 
-    // Provjera logina (samo za prikaz forme)
-    const user = localStorage.getItem('anoHubUser');
+    // --- FETCH IDEAS ---
+    const fetchIdeas = async () => {
+        setLoading(true);
+        const { data, error } = await supabase
+            .from('hpp_improvements')
+            .select('*')
+            .order('votes', { ascending: false }); // Najpopularnije prve
+
+        if (error) {
+            console.error('Error fetching ideas:', error);
+        } else {
+            setIdeas(data || []);
+        }
+        setLoading(false);
+    };
 
     useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(ideas));
-    }, [ideas]);
+        fetchIdeas();
+        // Subscribe to changes (Real-time updates)
+        const sub = supabase.channel('public:hpp_improvements')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'hpp_improvements' }, () => {
+                fetchIdeas();
+            }).subscribe();
+        return () => { supabase.removeChannel(sub); };
+    }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // --- ACTIONS ---
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!title || !description) return;
-        const newIdea: HPPImprovement = {
-            id: new Date().toISOString(),
+
+        const newIdea = {
             title,
             description,
             category,
+            author_id: user?.email || 'Anonymous',
+            votes: 0
         };
-        setIdeas(prev => [newIdea, ...prev]);
-        setTitle('');
-        setDescription('');
-    };
 
-    const handleDelete = (id: string) => {
-        if (confirm('Delete this idea?')) {
-            setIdeas(prev => prev.filter(i => i.id !== id));
+        const { error } = await supabase.from('hpp_improvements').insert([newIdea]);
+
+        if (error) {
+            showToast(error.message, 'error');
+        } else {
+            showToast('Innovation logged successfully!', 'success');
+            setTitle('');
+            setDescription('');
         }
     };
 
-    const inputClass = "w-full bg-slate-900/50 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none";
+    const handleVote = async (id: number, currentVotes: number) => {
+        // Optimistički UI update (odmah pokaži promjenu)
+        setIdeas(prev => prev.map(i => i.id === id ? { ...i, votes: currentVotes + 1 } : i));
+        
+        const { error } = await supabase
+            .from('hpp_improvements')
+            .update({ votes: currentVotes + 1 })
+            .eq('id', id);
+
+        if (error) showToast('Failed to register vote.', 'error');
+    };
+
+    const filteredIdeas = filter === 'All' ? ideas : ideas.filter(i => i.category === filter);
 
     return (
-        <div className="animate-fade-in max-w-6xl mx-auto pb-12">
+        <div className="animate-fade-in max-w-7xl mx-auto pb-12">
             <BackButton text="Back to HUB" />
             
             <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-white">HPP Ino-Hub</h2>
-                <p className="text-slate-400">Log, categorize, and develop innovative ideas.</p>
+                <h2 className="text-3xl font-bold text-white tracking-tight">HPP <span className="text-cyan-400">Ino-Hub</span></h2>
+                <p className="text-slate-400">Collaborative Engineering Intelligence.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                {/* LEFT: FORM (Samo za logirane) */}
-                <div className="lg:col-span-1">
-                    {!user ? (
-                        <div className="glass-panel p-8 text-center border-dashed border-slate-600 rounded-2xl">
-                            <div className="text-4xl mb-4">🔒</div>
-                            <h3 className="text-xl font-bold text-white mb-2">Restricted Access</h3>
-                            <p className="text-slate-400 text-sm mb-6">Identification required to log new concepts.</p>
-                            <button 
-                                onClick={() => {
-                                    const name = prompt("Enter your Name/Callsign:");
-                                    if(name) { localStorage.setItem('anoHubUser', name); window.location.reload(); }
-                                }}
-                                className="px-6 py-2 bg-cyan-600 text-white rounded-lg font-bold hover:bg-cyan-500 w-full"
-                            >
-                                IDENTIFY YOURSELF
-                            </button>
+                {/* LEFT: SUBMISSION FORM */}
+                <div className="lg:col-span-4">
+                    <div className="glass-panel p-6 rounded-2xl border-l-4 border-cyan-500 sticky top-24">
+                        <div className="mb-6 flex justify-between items-center border-b border-slate-700 pb-4">
+                            <h3 className="text-lg font-bold text-white">Log New Concept</h3>
+                            <span className="text-[10px] text-slate-500 uppercase font-mono">Contributor: {user?.email?.split('@')[0] || 'GUEST'}</span>
                         </div>
-                    ) : (
-                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-cyan-500">
-                            <div className="mb-4 flex justify-between items-center">
-                                <h3 className="text-lg font-bold text-white">Log New Concept</h3>
-                                <span className="text-xs text-cyan-400 font-mono">PILOT: {user}</span>
+                        
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Concept Title</label>
+                                <input 
+                                    type="text" 
+                                    value={title} 
+                                    onChange={e => setTitle(e.target.value)} 
+                                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none transition-colors" 
+                                    placeholder="e.g. Biomimetic Coating" 
+                                    required 
+                                />
                             </div>
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Title</label>
-                                    <input type="text" value={title} onChange={e => setTitle(e.target.value)} className={inputClass} placeholder="e.g. Biomimetic Coating" required />
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Discipline</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {['Mechanical', 'Digital', 'Ecological', 'Systemic'].map(cat => (
+                                        <button
+                                            key={cat}
+                                            type="button"
+                                            onClick={() => setCategory(cat as any)}
+                                            className={`text-xs py-2 rounded-lg border transition-all ${category === cat ? 'bg-cyan-600 text-white border-cyan-500' : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'}`}
+                                        >
+                                            {cat}
+                                        </button>
+                                    ))}
                                 </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Category</label>
-                                    <select value={category} onChange={e => setCategory(e.target.value as any)} className={inputClass}>
-                                        <option value="Mechanical">Mechanical</option>
-                                        <option value="Digital">Digital</option>
-                                        <option value="Ecological">Ecological</option>
-                                        <option value="Systemic">Systemic</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Description</label>
-                                    <textarea rows={4} value={description} onChange={e => setDescription(e.target.value)} className={inputClass} placeholder="Technical details..." required />
-                                </div>
-                                <button type="submit" className="w-full py-3 bg-cyan-600 text-white font-bold rounded-lg hover:bg-cyan-500 shadow-lg transition-transform hover:-translate-y-1">
-                                    ADD TO LOG
-                                </button>
-                            </form>
-                        </div>
-                    )}
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-1">Technical Description</label>
+                                <textarea 
+                                    rows={5} 
+                                    value={description} 
+                                    onChange={e => setDescription(e.target.value)} 
+                                    className="w-full bg-slate-900/50 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none resize-none transition-colors text-sm" 
+                                    placeholder="Describe the proposed improvement..." 
+                                    required 
+                                />
+                            </div>
+                            <button type="submit" className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-lg shadow-lg transition-transform hover:-translate-y-1 hover:shadow-cyan-500/20">
+                                🚀 SUBMIT FOR REVIEW
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 {/* RIGHT: IDEA FEED */}
-                <div className="lg:col-span-2 space-y-4 h-[800px] overflow-y-auto pr-2 custom-scrollbar">
-                    {ideas.length === 0 && <p className="text-center text-slate-500 py-10">No ideas logged yet.</p>}
-                    {ideas.map((idea) => (
-                        <div key={idea.id} className="glass-panel p-6 rounded-xl hover:bg-slate-800/60 transition-all border border-slate-700/50">
-                            <div className="flex justify-between items-start mb-3">
-                                <CategoryBadge category={idea.category} />
-                                <button onClick={() => handleDelete(idea.id)} className="text-slate-600 hover:text-red-400 transition-colors" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                </button>
+                <div className="lg:col-span-8 space-y-6">
+                    
+                    {/* FILTERS */}
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                        {CATEGORIES.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setFilter(cat)}
+                                className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${filter === cat ? 'bg-white text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* LIST */}
+                    <div className="space-y-4 max-h-[800px] overflow-y-auto custom-scrollbar pr-2">
+                        {loading && <div className="text-center p-10 text-slate-500 animate-pulse">Syncing Innovation Database...</div>}
+                        
+                        {!loading && filteredIdeas.length === 0 && (
+                            <div className="text-center p-12 border border-dashed border-slate-700 rounded-2xl">
+                                <p className="text-slate-500">No ideas found in this category. Be the first!</p>
                             </div>
-                            <h4 className="text-xl font-bold text-white mb-2">{idea.title}</h4>
-                            <p className="text-slate-300 text-sm leading-relaxed">{idea.description}</p>
-                        </div>
-                    ))}
+                        )}
+
+                        {filteredIdeas.map((idea) => (
+                            <div key={idea.id} className="group relative glass-panel p-6 rounded-2xl hover:bg-slate-800/80 transition-all border border-slate-700/50 flex gap-4">
+                                {/* VOTE COLUMN */}
+                                <div className="flex flex-col items-center gap-1 min-w-[50px]">
+                                    <button 
+                                        onClick={() => handleVote(idea.id, idea.votes)}
+                                        className="w-10 h-10 rounded-full bg-slate-800 hover:bg-cyan-500/20 hover:text-cyan-400 flex items-center justify-center transition-colors text-slate-400"
+                                    >
+                                        ▲
+                                    </button>
+                                    <span className="font-mono font-bold text-white text-lg">{idea.votes}</span>
+                                </div>
+
+                                {/* CONTENT */}
+                                <div className="flex-grow">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <h4 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">{idea.title}</h4>
+                                        <CategoryBadge category={idea.category} />
+                                    </div>
+                                    <p className="text-slate-300 text-sm leading-relaxed mb-3">{idea.description}</p>
+                                    <div className="flex justify-between items-center text-[10px] text-slate-500 border-t border-slate-700/50 pt-3">
+                                        <span>Submitted by: <span className="text-slate-400">{idea.author_id.split('@')[0]}</span></span>
+                                        <span>{new Date(idea.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
-
-export default HPPImprovements;
