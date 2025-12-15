@@ -96,5 +96,134 @@
   },
   "actions": {
     "back": "Nazad na Hub"
+  },
+  "hppBuilder": {
+    "title": "HPP Dizajn Studio",
+    "connected": "Povezano sa Inženjerskim Cloudom",
+    "parameters": "Parametri",
+    "netHead": "Neto Pad (H)",
+    "flowRate": "Protok (Q)",
+    "efficiency": "Efikasnost (%)",
+    "hydrologyType": "Tip Hidrologije",
+    "waterCondition": "Stanje Vode",
+    "teamDesigns": "Timski Dizajni (Cloud)",
+    "save": "Spremi",
+    "load": "UČITAJ",
+    "syncing": "Sinhronizacija...",
+    "noDesigns": "Nema spremljenih dizajna za ovu elektranu.",
+    "topologyIndex": "Indeks Topologije",
+    "physicsDeterminant": "Fizička Determinanta",
+    "estGeneration": "Procj. Proizvodnja",
+    "calcPower": "Izračunata Izlazna Snaga",
+    "downloadReport": "Preuzmi Izvještaj Dizajna",
+    "engineeringSelection": "Inženjerska Selekcija",
+    "rankedBy": "Rangirano po Fizici i LCC",
+    "optimalMatch": "OPTIMALAN IZBOR",
+    "viewSpecs": "Pogledaj Tehničke Specifikacije",
+    "saveModalTitle": "Spremi na Cloud",
+    "selectAssetWarning": "Molimo prvo odaberite ciljnu elektranu u glavnom prikazu.",
+    "designNamePlaceholder": "Naziv Dizajna (npr. Varijanta A)",
+    "cancel": "Otkaži",
+    "uploadDesign": "Pošalji Dizajn",
+    "saving": "Spremanje..."
+  },
+  "investorBriefing": {
+    "title": "Investitorski Briefing",
+    "subtitle": "Finansijsko modeliranje u stvarnom vremenu i procjena rizika na osnovu telemetrije uživo.",
+    "generateProspectus": "Generiši Prospekt",
+    "noAssetTitle": "Elektrana Nije Odabrana",
+    "noAssetDesc": "Molimo odaberite ciljnu elektranu iznad za pokretanje finansijskog modela.",
+    "marketAssumptions": "Tržišne Pretpostavke",
+    "electricityPrice": "Cijena Električne Energije (€/MWh)",
+    "interestRate": "Kamatna Stopa (%)",
+    "projectLifespan": "Životni Vijek Projekta (Godine)",
+    "assetContext": "Kontekst Elektrane",
+    "calcBasedOn": "Izračuni temeljeni na",
+    "capacity": "kapacitetu",
+    "atLocation": "na lokaciji",
+    "roi": "Povrat Investicije (ROI)",
+    "annualizedYield": "Godišnji prinos",
+    "lcoe": "LCOE",
+    "perMwh": "po proizvedenom MWh",
+    "annualRevenue": "Godišnji Prihod",
+    "grossIncome": "Bruto prihod @ trenutna cijena",
+    "paybackPeriod": "Period Povrata",
+    "breakEven": "Tačka pokrića",
+    "financialStructure": "Finansijska Struktura (Prva Godina)",
+    "revenueInflow": "Prihod (Priliv)",
+    "opexOutflow": "OPEX (Odliv)",
+    "downloaded": "Finansijski Briefing Preuzet"
+  },
+  "profile": {
+    "loading": "Učitavanje Enterprise Profila...",
+    "title": "Inženjerski Profil",
+    "subtitle": "Upravljajte svojim identitetom i AnoHub akreditivima.",
+    "changePhoto": "PROMIJENI SLIKU",
+    "unassignedRole": "Nedodijeljena Uloga",
+    "fullName": "Puno Ime",
+    "role": "Uloga / Titula",
+    "rolePlaceholder": "npr. Viši Mašinski Inženjer",
+    "company": "Kompanija / Organizacija",
+    "companyPlaceholder": "npr. AnoHub Enterprise Rješenja",
+    "saveButton": "Spremi Promjene Profila",
+    "saving": "Spremanje...",
+    "uploadError": "Morate odabrati sliku za slanje.",
+    "updateSuccess": "Profil uspješno ažuriran!",
+    "avatarSuccess": "Avatar postavljen!",
+    "noUser": "Korisnik nije prijavljen!",
+    "back": "Nazad na Kontrolnu Ploču"
+  },
+  "turbineDetail": {
+    "specification": "Specifikacija",
+    "subtitle": "Tehnička razrada kritičnih podsistema i LCC ranjivosti.",
+    "mechanicalSystems": "Mehanički Sistemi",
+    "rotatingParts": "Rotirajući dijelovi i Hidraulika",
+    "electricalComponents": "Električne Komponente",
+    "generatorControl": "Generator i Upravljanje",
+    "criticalityNote": "* Procjena kritičnosti bazirana na statističkim stopama kvarova i analizi utjecaja na LCC.",
+    "notFoundTitle": "Sistemski Podaci Nisu Pronađeni",
+    "notFoundDesc": "Konfiguracijski parametri za ovu turbinu nedostaju.",
+    "returnButton": "Povratak u Dizajn Studio"
+  },
+  "standardOfExcellence": {
+    "title": "Standard Izvrsnosti",
+    "subtitle": "Masterclass moduli za prelazak sa jednostavnog pridržavanja protokola na sistemsko majstorstvo.",
+    "modules": {
+      "m1": {
+        "title": "Hidrodinamički Imunitet",
+        "problem": "Eliminacija kavitacije i erozije dizajnom",
+        "content": "Obavezna upotreba čelika 13Cr4Ni i napredni dizajn lopatica za stvaranje inherentnog imuniteta postrojenja na kronične hidrodinamičke kvarove. Ovo je temeljni korak u optimizaciji LCC-a."
+      },
+      "m2": {
+        "title": "Besprijekorna Izvedba",
+        "problem": "Provedba mandata preciznosti od 0.05 mm/m",
+        "content": "Sistem digitalne verifikacije (3D skeniranje), mandati laserskog poravnanja (0.05 mm/m) i dokumentirani protokoli zakretnog momenta koji premošćuju jaz u izvršenju."
+      },
+      "m3": {
+        "title": "Operativna Otpornost",
+        "problem": "Prediktivna analitika vs. Reaktivni popravak",
+        "content": "Korištenje AI akustičnog monitoringa i osnovnih 'otisaka' za primjenu analize uzroka kvara (RCFA), otkrivajući nestabilnost na 60% ISO granica prije nego što nastane šteta."
+      },
+      "m4": {
+        "title": "Kulturni Mandat",
+        "problem": "Zatvaranje jaza u izvršenju ljudskog kapitala",
+        "content": "Integracija tehničke preciznosti sa kulturom izvrsnosti, gdje se rodna ravnopravnost i raznoliki timovi prepoznaju kao ključni resursi za zatvaranje jaza u izvršenju."
+      },
+      "m5": {
+        "title": "Zadržavanje Znanja",
+        "problem": "Baza podataka 'Živi Standard'",
+        "content": "Mandat za digitalnu bazu znanja u kojoj su dokumentirane sve analize uzroka i podaci s terena, osiguravajući kontinuirano učenje radi sprečavanja ponovnih kvarova."
+      },
+      "m6": {
+        "title": "Izvrsnost Lanca Opskrbe",
+        "problem": "Integritet materijala i sljedivost",
+        "content": "Program certificiranih partnera i mandat o sljedivosti materijala (EN 10204 3.1) za eliminaciju kritičnog izvora sistemskog rizika i osiguranje dugoročnih performansi."
+      }
+    },
+    "partnerMandate": {
+      "title": "Mandat Certificiranog Partnera",
+      "text": "Mandat o sljedivosti materijala (EN 10204 3.1) je neupitan. Predstavlja krajnju etičku odbranu od finansijskog rizika i prijevremenih kvarova uzrokovanih lažnim materijalima.",
+      "badge": "Službeni Zahtjev • ISO 9001 Usklađen"
+    }
   }
 }

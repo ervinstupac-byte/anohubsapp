@@ -57,7 +57,7 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
     );
 };
 
-export const QuestionnaireSummary: React.FC = () => { // Export as named constant to match safe import in App.tsx
+export const QuestionnaireSummary: React.FC = () => {
     const { navigateToHub } = useNavigation();
     const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
     const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
@@ -136,18 +136,29 @@ export const QuestionnaireSummary: React.FC = () => { // Export as named constan
         }
     };
 
+    // --- POPRAVLJENO: GENERIRANJE PDF-A ---
     const handleDownloadPDF = () => {
         if (Object.keys(answers).length === 0) {
             showToast(t('questionnaire.noDataAvailable'), 'warning');
             return;
         }
         
-        // Use the function from utils/pdfGenerator.ts
+        // 1. Pripremi objekt s podacima kakav pdfGenerator očekuje
+        const riskDataForPDF = {
+            id: 'DRAFT', // Nema ID jer još nije spremljen
+            risk_score: disciplineRiskScore,
+            risk_level: riskIndicator.level,
+            answers: answers,
+            assetName: selectedAsset?.name || 'Unspecified Asset'
+        };
+
+        // 2. Pozovi funkciju s ispravnim argumentima: (Objekt, ImeInženjera, Opis)
         generateRiskReport(
-            disciplineRiskScore, // Score
-            answers,             // Answers map
-            description          // Notes
+            riskDataForPDF,
+            user?.email || 'AnoHUB Engineer',
+            description
         );
+        
         showToast(t('questionnaire.pdfDownloaded'), 'success');
     };
 
@@ -162,14 +173,14 @@ export const QuestionnaireSummary: React.FC = () => { // Export as named constan
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    Execution Gap <span className="text-cyan-400">Diagnostic</span>
+                    {t('questionnaire.title').split(' ')[0]} <span className="text-cyan-400">{t('questionnaire.title').split(' ').slice(1).join(' ')}</span>
                 </h2>
                 <div className="flex justify-center gap-4 text-sm text-slate-400">
                     <span className="flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Live Analysis
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> {t('questionnaire.liveAnalysis')}
                     </span>
                     <span className="flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-cyan-500"></span> AI Ready
+                        <span className="w-2 h-2 rounded-full bg-cyan-500"></span> {t('questionnaire.aiReady')}
                     </span>
                 </div>
             </div>
@@ -184,11 +195,11 @@ export const QuestionnaireSummary: React.FC = () => { // Export as named constan
                         
                         <div className="mt-6 pt-6 border-t border-slate-700/50">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-sm text-slate-400">Critical Flags</span>
+                                <span className="text-sm text-slate-400">{t('questionnaire.highPriorityAlerts')}</span>
                                 <span className="text-xl font-bold text-red-400">{analysis.highRisk.length}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm text-slate-400">Warnings</span>
+                                <span className="text-sm text-slate-400">{t('questionnaire.warnings')}</span>
                                 <span className="text-xl font-bold text-yellow-400">{analysis.mediumRisk.length}</span>
                             </div>
                         </div>

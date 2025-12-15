@@ -96,5 +96,134 @@
   },
   "actions": {
     "back": "Back to Hub"
+  },
+  "hppBuilder": {
+    "title": "HPP Design Studio",
+    "connected": "Connected to Engineering Cloud",
+    "parameters": "Parameters",
+    "netHead": "Net Head (H)",
+    "flowRate": "Flow Rate (Q)",
+    "efficiency": "Efficiency (%)",
+    "hydrologyType": "Hydrology Type",
+    "waterCondition": "Water Condition",
+    "teamDesigns": "Team Designs (Cloud)",
+    "save": "Save",
+    "load": "LOAD",
+    "syncing": "Syncing...",
+    "noDesigns": "No cloud designs found for this asset.",
+    "topologyIndex": "Topology Index",
+    "physicsDeterminant": "Physics Determinant",
+    "estGeneration": "Est. Generation",
+    "calcPower": "Calculated Power Output",
+    "downloadReport": "Download Design Report",
+    "engineeringSelection": "Engineering Selection",
+    "rankedBy": "Ranked by Physics & LCC",
+    "optimalMatch": "OPTIMAL MATCH",
+    "viewSpecs": "View Technical Specs",
+    "saveModalTitle": "Save to Cloud",
+    "selectAssetWarning": "Please select a Target Asset in the main view first.",
+    "designNamePlaceholder": "Design Name (e.g. Variant A)",
+    "cancel": "Cancel",
+    "uploadDesign": "Upload Design",
+    "saving": "Saving..."
+  },
+  "investorBriefing": {
+    "title": "Investor Briefing",
+    "subtitle": "Real-time financial modelling and risk-adjusted valuation based on live telemetry.",
+    "generateProspectus": "Generate Prospectus",
+    "noAssetTitle": "No Asset Selected",
+    "noAssetDesc": "Please select a target asset above to initialize the financial model.",
+    "marketAssumptions": "Market Assumptions",
+    "electricityPrice": "Electricity Price (€/MWh)",
+    "interestRate": "Interest Rate (%)",
+    "projectLifespan": "Project Lifespan (Years)",
+    "assetContext": "Asset Context",
+    "calcBasedOn": "Calculations based on",
+    "capacity": "capacity",
+    "atLocation": "at location",
+    "roi": "Return on Investment",
+    "annualizedYield": "Annualized yield",
+    "lcoe": "LCOE",
+    "perMwh": "per MWh generated",
+    "annualRevenue": "Annual Revenue",
+    "grossIncome": "Gross income @ current price",
+    "paybackPeriod": "Payback Period",
+    "breakEven": "Break-even point",
+    "financialStructure": "Financial Structure (First Year)",
+    "revenueInflow": "Revenue (Inflow)",
+    "opexOutflow": "OPEX (Outflow)",
+    "downloaded": "Financial Briefing Downloaded"
+  },
+  "profile": {
+    "loading": "Loading Enterprise Profile...",
+    "title": "Engineer Profile",
+    "subtitle": "Manage your identity and AnoHub credentials.",
+    "changePhoto": "CHANGE PHOTO",
+    "unassignedRole": "Unassigned Role",
+    "fullName": "Full Name",
+    "role": "Role / Title",
+    "rolePlaceholder": "e.g. Senior Mechanical Lead",
+    "company": "Company / Organization",
+    "companyPlaceholder": "e.g. AnoHub Enterprise Solutions",
+    "saveButton": "Save Profile Changes",
+    "saving": "Saving...",
+    "uploadError": "You must select an image to upload.",
+    "updateSuccess": "Profile updated successfully!",
+    "avatarSuccess": "Avatar uploaded!",
+    "noUser": "No user logged in!",
+    "back": "Back to Dashboard"
+  },
+  "turbineDetail": {
+    "specification": "Specification",
+    "subtitle": "Technical breakdown of critical subsystems and LCC vulnerabilities.",
+    "mechanicalSystems": "Mechanical Systems",
+    "rotatingParts": "Rotating Parts & Hydraulics",
+    "electricalComponents": "Electrical Components",
+    "generatorControl": "Generator & Control",
+    "criticalityNote": "* Criticality assessment based on statistical failure rates and LCC impact analysis.",
+    "notFoundTitle": "System Data Not Found",
+    "notFoundDesc": "Configuration parameters for this turbine are missing.",
+    "returnButton": "Return to Design Studio"
+  },
+  "standardOfExcellence": {
+    "title": "The Standard of Excellence",
+    "subtitle": "Masterclass modules for transitioning from simple protocol adherence to systemic mastery.",
+    "modules": {
+      "m1": {
+        "title": "Hydrodynamic Immunity",
+        "problem": "Eliminating Cavitation & Erosion by Design",
+        "content": "The mandatory use of 13Cr4Ni steel and advanced blade design to create inherent plant immunity to chronic hydrodynamic failures. This is a foundational step in LCC Optimization."
+      },
+      "m2": {
+        "title": "Flawless Execution",
+        "problem": "Enforcing the 0.05 mm/m Precision Mandate",
+        "content": "A system of digital verification (3D scanning), laser alignment mandates (0.05 mm/m), and documented torque protocols that bridge the Execution Gap between plan and reality."
+      },
+      "m3": {
+        "title": "Operational Resilience",
+        "problem": "Predictive Analytics vs. Reactive Repair",
+        "content": "Using AI-driven acoustic monitoring and baseline 'fingerprints' to apply Root Cause Failure Analysis (RCFA), detecting instability at 60% of ISO limits before damage occurs."
+      },
+      "m4": {
+        "title": "Cultural Mandate",
+        "problem": "Closing the Human Capital Execution Gap",
+        "content": "Integrating technical precision with a culture of excellence, where Gender Equity and diverse teams are recognized as critical assets for closing the Execution Gap in human capital."
+      },
+      "m5": {
+        "title": "Knowledge Retention",
+        "problem": "The 'Living Standard' Database",
+        "content": "A mandate for a digital knowledge base where all Root Cause Analyses and field data are documented, ensuring continuous, closed-loop learning to prevent recurring failures."
+      },
+      "m6": {
+        "title": "Supply Chain Excellence",
+        "problem": "Material Integrity & Traceability",
+        "content": "A Certified Partner Program and a non-negotiable Material Traceability Mandate (EN 10204 3.1) to eliminate a critical source of systemic risk and ensure long-term LCC performance."
+      }
+    },
+    "partnerMandate": {
+      "title": "The Certified Partner Mandate",
+      "text": "The Material Traceability Mandate (EN 10204 3.1) is non-negotiable. It represents the ultimate ethical defense against financial risk and premature failure caused by counterfeit materials.",
+      "badge": "Official Requirement • ISO 9001 Compliant"
+    }
   }
 }

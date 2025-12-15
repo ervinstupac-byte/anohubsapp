@@ -1,5 +1,6 @@
 import React from 'react';
-import { BackButton } from './BackButton.tsx'; // <--- DODANO
+import { useTranslation } from 'react-i18next'; // <--- IMPORT
+import { BackButton } from './BackButton.tsx';
 import { turbineDetailData } from '../data/turbineDetailData.ts';
 import type { TurbineDetail as TurbineDetailType, TurbineComponent } from '../data/turbineDetailData.ts';
 
@@ -35,6 +36,9 @@ const CriticalityBadge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ leve
 };
 
 // --- COMPONENT CARD ---
+// Napomena: Tekstovi unutar kartica dolaze iz 'turbineDetailData'. 
+// Ako želiš i njih prevesti, morao bi i te podatke prebaciti u i18n JSON, 
+// ali za tehničke specifikacije je često OK da ostanu na engleskom (industrijski standard).
 const ComponentCard: React.FC<TurbineComponent> = ({ name, description, criticality }) => (
     <div className={`
         group relative p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1
@@ -60,16 +64,19 @@ const ComponentCard: React.FC<TurbineComponent> = ({ name, description, critical
 
 // --- MAIN COMPONENT ---
 const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
+    const { t } = useTranslation(); // <--- HOOK
     const data: TurbineDetailType | undefined = turbineDetailData[turbineKey];
 
     if (!data) {
         return (
             <div className="flex flex-col items-center justify-center h-64 text-center p-8 glass-panel rounded-2xl border-red-500/30">
                 <div className="text-4xl mb-4">🚫</div>
-                <h3 className="text-xl font-bold text-white mb-2">System Data Not Found</h3>
-                <p className="text-slate-400">Configuration parameters for <span className="text-cyan-400 font-mono">'{turbineKey}'</span> are missing from the database.</p>
+                <h3 className="text-xl font-bold text-white mb-2">{t('turbineDetail.notFoundTitle')}</h3>
+                <p className="text-slate-400">
+                    {t('turbineDetail.notFoundDesc')} <span className="text-cyan-400 font-mono">'{turbineKey}'</span>
+                </p>
                 <div className="mt-6">
-                    <BackButton text="Return to Design Studio" />
+                    <BackButton text={t('turbineDetail.returnButton')} />
                 </div>
             </div>
         );
@@ -77,15 +84,15 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
 
     return (
         <div className="animate-fade-in pb-8 max-w-7xl mx-auto space-y-8">
-            <BackButton text="Back to Design Studio" />
+            <BackButton text={t('actions.back', 'Back')} />
             
             {/* HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight uppercase">
-                    <span className="text-cyan-400">{turbineKey}</span> Specification
+                    <span className="text-cyan-400">{turbineKey}</span> {t('turbineDetail.specification')}
                 </h2>
                 <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                    Technical breakdown of critical subsystems and LCC vulnerabilities.
+                    {t('turbineDetail.subtitle')}
                 </p>
             </div>
 
@@ -96,8 +103,8 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                     <div className="flex items-center gap-3 mb-2 p-3 bg-cyan-900/20 rounded-lg border border-cyan-500/20">
                         <span className="text-2xl">⚙️</span>
                         <div>
-                            <h3 className="text-lg font-bold text-cyan-300 uppercase tracking-wider">Mechanical Systems</h3>
-                            <p className="text-xs text-cyan-200/60">Rotating Parts & Hydraulics</p>
+                            <h3 className="text-lg font-bold text-cyan-300 uppercase tracking-wider">{t('turbineDetail.mechanicalSystems')}</h3>
+                            <p className="text-xs text-cyan-200/60">{t('turbineDetail.rotatingParts')}</p>
                         </div>
                     </div>
                     
@@ -113,8 +120,8 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                     <div className="flex items-center gap-3 mb-2 p-3 bg-purple-900/20 rounded-lg border border-purple-500/20">
                         <span className="text-2xl">⚡</span>
                         <div>
-                            <h3 className="text-lg font-bold text-purple-300 uppercase tracking-wider">Electrical Components</h3>
-                            <p className="text-xs text-purple-200/60">Generator & Control</p>
+                            <h3 className="text-lg font-bold text-purple-300 uppercase tracking-wider">{t('turbineDetail.electricalComponents')}</h3>
+                            <p className="text-xs text-purple-200/60">{t('turbineDetail.generatorControl')}</p>
                         </div>
                     </div>
 
@@ -130,7 +137,7 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
             {/* FOOTER NOTE */}
             <div className="text-center pt-8 border-t border-slate-800">
                 <p className="text-xs text-slate-500 font-mono">
-                    * Criticality assessment based on statistical failure rates and LCC impact analysis.
+                    {t('turbineDetail.criticalityNote')}
                 </p>
             </div>
         </div>

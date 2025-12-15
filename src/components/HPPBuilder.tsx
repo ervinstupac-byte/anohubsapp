@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // <--- IMPORT
 import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; 
@@ -45,6 +46,7 @@ const HPPBuilder: React.FC = () => {
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext(); 
+    const { t } = useTranslation(); // <--- HOOK
     
     // --- STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
@@ -203,14 +205,14 @@ const HPPBuilder: React.FC = () => {
 
     return (
         <div className="animate-fade-in space-y-8 pb-12 max-w-7xl mx-auto">
-            <BackButton text="Back to HUB" />
+            <BackButton text={t('actions.back', 'Back to Hub')} />
             <AssetPicker />
             
             <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold text-white">HPP Design <span className="text-cyan-400">Studio</span></h2>
+                <h2 className="text-3xl font-bold text-white">{t('hppBuilder.title').split(' ')[0]} {t('hppBuilder.title').split(' ')[1]} <span className="text-cyan-400">{t('hppBuilder.title').split(' ')[2]}</span></h2>
                 <div className="flex justify-center items-center gap-2 text-sm text-slate-400">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span>Connected to Engineering Cloud</span>
+                    <span>{t('hppBuilder.connected')}</span>
                 </div>
             </div>
 
@@ -220,27 +222,27 @@ const HPPBuilder: React.FC = () => {
                 <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700 space-y-6 h-fit">
                     <div className="flex items-center gap-3 mb-2 border-b border-slate-700 pb-4">
                         <span className="text-2xl">🎛️</span>
-                        <h3 className="text-xl font-bold text-white">Parameters</h3>
+                        <h3 className="text-xl font-bold text-white">{t('hppBuilder.parameters')}</h3>
                     </div>
                     
                     <div className="space-y-6">
                         <div>
-                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">Net Head (H)</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.head} m</span></div>
+                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">{t('hppBuilder.netHead')}</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.head} m</span></div>
                             <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e) => updateSettings('head', parseInt(e.target.value))} className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
                         </div>
                         <div>
-                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">Flow Rate (Q)</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.flow} m³/s</span></div>
+                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">{t('hppBuilder.flowRate')}</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.flow} m³/s</span></div>
                             <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
                         </div>
                          <div>
-                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">Efficiency (%)</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.efficiency}%</span></div>
+                            <div className="flex justify-between text-sm mb-2"><span className="text-slate-300 font-bold">{t('hppBuilder.efficiency')}</span><span className="text-cyan-400 font-mono font-bold bg-cyan-900/30 px-2 rounded">{settings.efficiency}%</span></div>
                             <input type="range" min="70" max="98" step="1" value={settings.efficiency} onChange={(e) => updateSettings('efficiency', parseInt(e.target.value))} className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 pt-4 border-t border-slate-700">
                         <div>
-                            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Hydrology Type</label>
+                            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('hppBuilder.hydrologyType')}</label>
                             <select value={settings.flowVariation} onChange={(e) => updateSettings('flowVariation', e.target.value)} className="w-full bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white outline-none focus:border-cyan-500">
                                 <option value="stable">Stable Base Load</option>
                                 <option value="seasonal">Seasonal Peak/Off-Peak</option>
@@ -248,7 +250,7 @@ const HPPBuilder: React.FC = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Water Condition</label>
+                            <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('hppBuilder.waterCondition')}</label>
                             <select value={settings.waterQuality} onChange={(e) => updateSettings('waterQuality', e.target.value)} className="w-full bg-slate-900/80 border border-slate-600 rounded-lg p-3 text-sm text-white outline-none focus:border-cyan-500">
                                 <option value="clean">Clear Water</option>
                                 <option value="suspended">Silt Load (Glacial)</option>
@@ -260,21 +262,21 @@ const HPPBuilder: React.FC = () => {
                     {/* CLOUD CONFIG MANAGER */}
                     <div className="border-t border-slate-700 pt-4">
                         <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-sm font-bold text-white">Team Designs (Cloud)</h4>
+                            <h4 className="text-sm font-bold text-white">{t('hppBuilder.teamDesigns')}</h4>
                             <button onClick={() => setSaveModalOpen(true)} className="text-xs bg-cyan-600 px-2 py-1 rounded text-white hover:bg-cyan-500 flex items-center gap-1">
-                                <span>☁️</span> Save
+                                <span>☁️</span> {t('hppBuilder.save')}
                             </button>
                         </div>
                         <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
-                           {isLoading && <p className="text-xs text-slate-500 animate-pulse">Syncing...</p>}
-                           {!isLoading && savedConfigs.length === 0 && <p className="text-xs text-slate-500 italic">No cloud designs found for this asset.</p>}
+                           {isLoading && <p className="text-xs text-slate-500 animate-pulse">{t('hppBuilder.syncing')}</p>}
+                           {!isLoading && savedConfigs.length === 0 && <p className="text-xs text-slate-500 italic">{t('hppBuilder.noDesigns')}</p>}
                            {savedConfigs.map(c => (
                             <div key={c.id} className="flex items-center justify-between bg-slate-700/50 p-2 rounded text-xs group hover:bg-slate-700 transition-colors">
                               <div className="truncate w-32">
                                 <span className="text-slate-300 font-bold block">{c.name}</span>
                                 {c.asset_id && <span className="text-[9px] text-slate-500">Linked</span>}
                               </div>
-                              <button onClick={() => loadConfiguration(c)} className="text-cyan-400 hover:text-cyan-300 uppercase font-bold text-[10px]">Load</button>
+                              <button onClick={() => loadConfiguration(c)} className="text-cyan-400 hover:text-cyan-300 uppercase font-bold text-[10px]">{t('hppBuilder.load')}</button>
                             </div>
                           ))}
                         </div>
@@ -288,19 +290,19 @@ const HPPBuilder: React.FC = () => {
                         
                         <div className="grid grid-cols-2 gap-4 mt-6">
                             <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                                <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">Topology Index ($n_s$)</p>
+                                <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">{t('hppBuilder.topologyIndex')} ($n_s$)</p>
                                 <div className="text-2xl font-mono text-yellow-400 font-bold">{calculations.n_sq}</div>
-                                <p className="text-[9px] text-slate-500">Physics Determinant</p>
+                                <p className="text-[9px] text-slate-500">{t('hppBuilder.physicsDeterminant')}</p>
                             </div>
                             <div className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                                <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">Est. Generation</p>
+                                <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-1">{t('hppBuilder.estGeneration')}</p>
                                 <div className="text-2xl font-mono text-green-400 font-bold">{calculations.energyGWh}</div>
                                 <p className="text-[9px] text-slate-500">GWh / year</p>
                             </div>
                         </div>
 
                         <div className="mt-8 text-center border-t border-slate-700/50 pt-6">
-                            <p className="text-slate-400 text-xs uppercase tracking-[0.2em] mb-2">Calculated Power Output</p>
+                            <p className="text-slate-400 text-xs uppercase tracking-[0.2em] mb-2">{t('hppBuilder.calcPower')}</p>
                             <h3 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 drop-shadow-lg">
                                 {calculations.powerMW} <span className="text-xl text-slate-500">MW</span>
                             </h3>
@@ -308,7 +310,7 @@ const HPPBuilder: React.FC = () => {
 
                         <div className="mt-6 text-center">
                              <button onClick={handleGeneratePDF} className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-full transition-all flex items-center gap-2 mx-auto border border-slate-500 shadow-lg hover:shadow-cyan-500/20 transform hover:-translate-y-1">
-                                <span className="text-lg">📄</span> Download Design Report
+                                <span className="text-lg">📄</span> {t('hppBuilder.downloadReport')}
                              </button>
                         </div>
                     </div>
@@ -319,15 +321,15 @@ const HPPBuilder: React.FC = () => {
                     <div className="flex items-center gap-3 mb-4 border-b border-slate-700 pb-4">
                         <span className="text-2xl">🧠</span>
                         <div>
-                            <h3 className="text-lg font-bold text-white">Engineering Selection</h3>
-                            <p className="text-xs text-slate-400">Ranked by Physics & LCC</p>
+                            <h3 className="text-lg font-bold text-white">{t('hppBuilder.engineeringSelection')}</h3>
+                            <p className="text-xs text-slate-400">{t('hppBuilder.rankedBy')}</p>
                         </div>
                     </div>
                     {recommendations.map((rec) => {
                         const turbineName = TURBINE_CATEGORIES[rec.key]?.name || rec.key.toUpperCase();
                         return (
                             <div key={rec.key} onClick={() => rec.score > 0 && navigateToTurbineDetail(rec.key)} className={`group p-4 rounded-xl border transition-all duration-300 relative overflow-hidden ${rec.isBest ? 'bg-gradient-to-r from-green-900/20 to-slate-900 border-green-500 shadow-lg transform scale-100 cursor-pointer' : rec.score > 0 ? 'bg-slate-800/40 border-slate-700 hover:border-slate-500 hover:bg-slate-800 cursor-pointer' : 'bg-slate-900/30 border-slate-800 opacity-50 cursor-not-allowed'}`}>
-                                {rec.isBest && <div className="absolute top-0 right-0 bg-green-500 text-slate-900 text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-md">OPTIMAL MATCH</div>}
+                                {rec.isBest && <div className="absolute top-0 right-0 bg-green-500 text-slate-900 text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-md">{t('hppBuilder.optimalMatch')}</div>}
                                 <div className="flex justify-between items-center mb-3">
                                     <h4 className={`font-bold text-lg ${rec.isBest ? 'text-green-400' : 'text-slate-200'}`}>{turbineName}</h4>
                                 </div>
@@ -339,7 +341,7 @@ const HPPBuilder: React.FC = () => {
                                         </li>
                                     ))}
                                 </ul>
-                                {rec.score > 0 && <div className="pt-3 border-t border-slate-700/50 flex justify-end"><span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 group-hover:text-cyan-300 transition-colors">View Technical Specs →</span></div>}
+                                {rec.score > 0 && <div className="pt-3 border-t border-slate-700/50 flex justify-end"><span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 group-hover:text-cyan-300 transition-colors">{t('hppBuilder.viewSpecs')} →</span></div>}
                             </div>
                         );
                     })}
@@ -350,20 +352,20 @@ const HPPBuilder: React.FC = () => {
              {isSaveModalOpen && (
                 <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-fade-in">
                     <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 w-full max-w-sm">
-                        <h3 className="text-lg font-bold mb-4 text-white">Save to Cloud</h3>
+                        <h3 className="text-lg font-bold mb-4 text-white">{t('hppBuilder.saveModalTitle')}</h3>
                         
                         {!selectedAsset && (
                             <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded text-red-300 text-xs">
-                                ⚠️ Please select a Target Asset in the main view first.
+                                ⚠️ {t('hppBuilder.selectAssetWarning')}
                             </div>
                         )}
 
-                        <input type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder="Design Name (e.g. Variant A)" className="w-full bg-slate-900 border border-slate-600 p-2 rounded mb-4 text-white" autoFocus />
+                        <input type="text" value={configName} onChange={e => setConfigName(e.target.value)} placeholder={t('hppBuilder.designNamePlaceholder')} className="w-full bg-slate-900 border border-slate-600 p-2 rounded mb-4 text-white" autoFocus />
                         
                         <div className="flex justify-end gap-2">
-                            <button onClick={() => setSaveModalOpen(false)} className="px-4 py-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">Cancel</button>
+                            <button onClick={() => setSaveModalOpen(false)} className="px-4 py-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600">{t('hppBuilder.cancel')}</button>
                             <button onClick={handleSaveConfiguration} disabled={isLoading || !selectedAsset} className={`px-4 py-2 text-white rounded flex items-center gap-2 ${isLoading || !selectedAsset ? 'bg-slate-600 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-500'}`}>
-                                {isLoading ? 'Saving...' : <><span>☁️</span> Upload Design</>}
+                                {isLoading ? t('hppBuilder.saving') : <><span>☁️</span> {t('hppBuilder.uploadDesign')}</>}
                             </button>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // <--- IMPORT
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useToast } from '../contexts/ToastContext.tsx';
@@ -7,6 +8,8 @@ import { BackButton } from './BackButton.tsx';
 export const UserProfile: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
+    const { t } = useTranslation(); // <--- HOOK
+    
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
@@ -50,7 +53,7 @@ export const UserProfile: React.FC = () => {
     const updateProfile = async () => {
         try {
             setSaving(true);
-            if (!user) throw new Error('No user logged in!');
+            if (!user) throw new Error(t('profile.noUser'));
 
             const updates = {
                 id: user.id,
@@ -63,7 +66,7 @@ export const UserProfile: React.FC = () => {
             const { error } = await supabase.from('profiles').upsert(updates);
 
             if (error) throw error;
-            showToast('Profile updated successfully!', 'success');
+            showToast(t('profile.updateSuccess'), 'success');
         } catch (error: any) {
             showToast(error.message, 'error');
         } finally {
@@ -76,7 +79,7 @@ export const UserProfile: React.FC = () => {
         try {
             setSaving(true);
             if (!event.target.files || event.target.files.length === 0) {
-                throw new Error('You must select an image to upload.');
+                throw new Error(t('profile.uploadError'));
             }
 
             const file = event.target.files[0];
@@ -101,7 +104,7 @@ export const UserProfile: React.FC = () => {
 
             if (updateError) throw updateError;
 
-            showToast('Avatar uploaded!', 'success');
+            showToast(t('profile.avatarSuccess'), 'success');
         } catch (error: any) {
             showToast(error.message, 'error');
         } finally {
@@ -109,17 +112,17 @@ export const UserProfile: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="p-10 text-center text-slate-400">Loading Enterprise Profile...</div>;
+    if (loading) return <div className="p-10 text-center text-slate-400">{t('profile.loading')}</div>;
 
     return (
         <div className="animate-fade-in pb-12 max-w-4xl mx-auto space-y-8">
-            <BackButton text="Back to Dashboard" />
+            <BackButton text={t('profile.back')} />
 
             <div className="text-center space-y-4">
                 <h2 className="text-3xl font-bold text-white tracking-tight">
-                    Engineer <span className="text-cyan-400">Profile</span>
+                    {t('profile.title').split(' ')[0]} <span className="text-cyan-400">{t('profile.title').split(' ')[1]}</span>
                 </h2>
-                <p className="text-slate-400">Manage your identity and AnoHub credentials.</p>
+                <p className="text-slate-400">{t('profile.subtitle')}</p>
             </div>
 
             <div className="glass-panel p-8 rounded-2xl bg-slate-800/50 border border-slate-700">
@@ -136,14 +139,14 @@ export const UserProfile: React.FC = () => {
                                 )}
                             </div>
                             <label className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer text-xs font-bold text-white">
-                                CHANGE PHOTO
+                                {t('profile.changePhoto')}
                                 <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving} />
                             </label>
                         </div>
                         <div className="text-center">
                             <p className="text-sm text-slate-500 font-mono">{user?.email}</p>
                             <span className="inline-block mt-2 px-3 py-1 bg-cyan-900/30 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/30">
-                                {role || 'Unassigned Role'}
+                                {role || t('profile.unassignedRole')}
                             </span>
                         </div>
                     </div>
@@ -152,7 +155,7 @@ export const UserProfile: React.FC = () => {
                     <div className="flex-grow w-full space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Full Name</label>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.fullName')}</label>
                                 <input 
                                     type="text" 
                                     value={fullName} 
@@ -161,23 +164,23 @@ export const UserProfile: React.FC = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Role / Title</label>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.role')}</label>
                                 <input 
                                     type="text" 
                                     value={role} 
                                     onChange={(e) => setRole(e.target.value)} 
                                     className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" 
-                                    placeholder="e.g. Senior Mechanical Lead"
+                                    placeholder={t('profile.rolePlaceholder')}
                                 />
                             </div>
                             <div className="md:col-span-2">
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Company / Organization</label>
+                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.company')}</label>
                                 <input 
                                     type="text" 
                                     value={company} 
                                     onChange={(e) => setCompany(e.target.value)} 
                                     className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" 
-                                    placeholder="e.g. AnoHub Enterprise Solutions"
+                                    placeholder={t('profile.companyPlaceholder')}
                                 />
                             </div>
                         </div>
@@ -188,7 +191,7 @@ export const UserProfile: React.FC = () => {
                                 disabled={saving}
                                 className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all disabled:opacity-50"
                             >
-                                {saving ? 'Saving...' : 'Save Profile Changes'}
+                                {saving ? t('profile.saving') : t('profile.saveButton')}
                             </button>
                         </div>
                     </div>
