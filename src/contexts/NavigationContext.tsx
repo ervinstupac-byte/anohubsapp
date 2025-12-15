@@ -1,5 +1,4 @@
 import React, { createContext, useContext } from 'react';
-// BITNO: Dodana .ts ekstenzija radi sigurnosti importa
 import type { NavigationContextType } from '../types.ts';
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);

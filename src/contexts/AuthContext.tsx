@@ -5,6 +5,8 @@ import { supabase } from '../services/supabaseClient.ts';
 interface AuthContextType {
     session: Session | null;
     user: User | null;
+    // DODANO: Funkcija za prijavu koja je falila
+    signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
     signOut: () => Promise<void>;
     loading: boolean;
 }
@@ -34,6 +36,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return () => subscription.unsubscribe();
     }, []);
 
+    // IMPLEMENTACIJA SIGN IN
+    const signIn = async (email: string, password: string) => {
+        return await supabase.auth.signInWithPassword({ email, password });
+    };
+
     const signOut = async () => {
         await supabase.auth.signOut();
     };
@@ -41,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const value = {
         session,
         user,
+        signIn, // Dodano u export
         signOut,
         loading
     };

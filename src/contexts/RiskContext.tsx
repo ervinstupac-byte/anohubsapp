@@ -1,13 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-// BITNO: .ts ekstenzija
 import type { Answers, RiskContextType } from '../types.ts';
 
 const RiskContext = createContext<RiskContextType | undefined>(undefined);
 const LOCAL_STORAGE_KEY_RISK = 'discipline-risk-index';
 
 // --- RISK CONFIGURATION ---
-// Definiramo ovo OVDJE kako bismo izbjegli "Circular Dependency" s QuestionnaireSummary komponentom.
-// Ovo čini RiskContext potpuno neovisnim i stabilnim.
 const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
     q1: { high: ['no'], medium: ['not documented'] }, 
     q2: { high: ['no'], medium: ['partially'] },

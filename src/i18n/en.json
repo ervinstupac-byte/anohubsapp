@@ -4,13 +4,32 @@
     "subtitle": "Global Standard of Excellence Enforcement Platform.",
     "operationalModules": "Operational Modules",
     "systemStatusConnecting": "CONNECTING...",
-    "systemStatusOperational": "OPERATIONAL"
+    "systemStatusOperational": "OPERATIONAL",
+    "risks": "Risks Detected",
+    "designs": "Designs Saved"
+  },
+  "modules": {
+    "riskAssessment": "Risk Assessment",
+    "riskReport": "Master Project Dossier",
+    "hppBuilder": "HPP Design Studio",
+    "installationGuarantee": "Installation Standard",
+    "globalMap": "Global Asset Map",
+    "investorBriefing": "Investor Briefing",
+    "contractManagement": "Contract & Legal",
+    "digitalIntegrity": "Digital Integrity",
+    "revitalizationStrategy": "Revitalization Strategy",
+    "library": "Component Library",
+    "standardOfExcellence": "Standard of Excellence",
+    "phaseGuide": "Project Phase Guide",
+    "hppImprovements": "HPP Ino-Hub",
+    "riverWildlife": "River & Wildlife",
+    "genderEquity": "Gender Equity",
+    "digitalIntroduction": "Digital Introduction"
   },
   "common": {
-    "launch": "Launch Module →",
+    "launch": "Launch Module",
     "version": "v2.4.0 (Enterprise)"
-  }
-  ,
+  },
   "questionnaire": {
     "title": "Diagnostic Report",
     "liveAnalysis": "Live Analysis",
@@ -36,5 +55,46 @@
     "cloudSyncFailed": "Cloud Sync Failed: {{error}}",
     "noDataAvailable": "No data available.",
     "pdfDownloaded": "Risk Report PDF Downloaded."
+  },
+  "login": {
+    "title": "Sign In to AnoHUB",
+    "subtitle": "Enterprise Access",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "signInButton": "Sign In",
+    "loading": "Authenticating...",
+    "error": "Error signing in",
+    "magicLink": "Send Magic Link",
+    "footer": "Authorized Personnel Only"
+  },
+  "riskReport": {
+    "title": "Project",
+    "dossier": "Dossier",
+    "subtitle": "Centralized repository of all interactive data modules linked to the selected asset.",
+    "activeContext": "Active Context",
+    "noAsset": "No Asset Selected",
+    "selectPromptTitle": "Select an Asset to View Dossier",
+    "selectPromptDesc": "Use the dropdown in the header or the global asset picker.",
+    "loading": "Retrieving encrypted data from HQ...",
+    "riskDiagnostic": "Risk Diagnostic",
+    "missing": "MISSING",
+    "riskLevel": "Risk Level",
+    "gapScore": "Execution Gap Score",
+    "noRiskData": "No risk assessment data found for this asset.",
+    "runDiagnostics": "Run Diagnostics Now",
+    "technicalDesign": "Technical Design",
+    "configuration": "Configuration",
+    "turbine": "Turbine",
+    "calcOutput": "Calculated Output",
+    "annualEnergy": "Annual Energy",
+    "noDesignData": "No technical design configuration found.",
+    "openStudio": "Open Design Studio",
+    "compileTitle": "Ready to Compile?",
+    "compileDesc": "This action will aggregate the latest snapshots from all modules into a single, watermarked PDF document.",
+    "downloadButton": "Download Master Project Dossier",
+    "noDataButton": "No Data to Compile"
+  },
+  "actions": {
+    "back": "Back to Hub"
   }
 }

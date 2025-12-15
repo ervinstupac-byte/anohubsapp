@@ -1,0 +1,39 @@
+{
+  "hub": {
+    "welcome": "Willkommen, {{name}}",
+    "subtitle": "Globale Plattform zur Durchsetzung von Exzellenzstandards.",
+    "operationalModules": "Betriebsmodule",
+    "systemStatusConnecting": "VERBINDUNG...",
+    "systemStatusOperational": "BETRIEBSBEREIT"
+  },
+  "common": {
+    "launch": "Modul Starten →",
+    "version": "v2.4.0 (Enterprise)"
+  },
+  "questionnaire": {
+    "title": "Diagnosebericht",
+    "liveAnalysis": "Live-Analyse",
+    "aiReady": "KI-Bereit",
+    "overallAssessment": "Gesamtbewertung",
+    "highPriorityAlerts": "Warnungen hoher Priorität",
+    "warnings": "Warnungen",
+    "downloadPDF": "PDF Herunterladen",
+    "uploading": "Hochladen...",
+    "syncedToCloud": "✓ Mit Cloud synchronisiert",
+    "submitToHQ": "An Zentrale senden",
+    "conceptTitle": "Konzept: Ausführungslücke (Execution Gap)",
+    "conceptDesc": "Die kritische Abweichung zwischen einem fehlerfreien technischen Plan und der inkonsistenten Realität der Umsetzung vor Ort.",
+    "criticalIndicators": "Kritische Indikatoren",
+    "criticalIndicatorsDesc": "Sofortige Aufmerksamkeit erforderlich, um Garantieverlust zu vermeiden.",
+    "operationalWarnings": "Betriebswarnungen",
+    "operationalWarningsDesc": "Mögliche Lücken in der Dokumentation oder Disziplin.",
+    "systemOptimal": "System Optimal",
+    "systemOptimalDesc": "Keine signifikanten Abweichungen vom Exzellenzstandard festgestellt.",
+    "returnToDashboard": "Zurück zum Dashboard",
+    "noDataToSubmit": "Keine Daten zum Senden.",
+    "diagnosisSynced": "Diagnose von {{email}} mit AnoHUB Cloud synchronisiert.",
+    "cloudSyncFailed": "Cloud-Sync fehlgeschlagen: {{error}}",
+    "noDataAvailable": "Keine Daten verfügbar.",
+    "pdfDownloaded": "Risikobericht PDF heruntergeladen."
+  }
+}

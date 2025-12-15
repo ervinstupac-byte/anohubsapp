@@ -16,6 +16,7 @@ import { Onboarding } from './components/Onboarding.tsx';
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import { Spinner } from './components/Spinner.tsx';
 import { supabase } from './services/supabaseClient.ts';
+import { LanguageSelector } from './components/LanguageSelector.tsx'; // <--- NOVI IMPORT
 
 // --- 3. ASSETS & TYPES ---
 import bgImage from './assets/digital_cfd_mesh.png';
@@ -52,12 +53,10 @@ const ComponentLibrary = React.lazy(() => import('./components/ComponentLibrary.
 const TurbineDetailWrapper = () => {
     const { id } = useParams();
     if (!id) return <div className="text-center text-slate-400 mt-10">Turbine not found</div>;
-    // Ovdje koristimo TurbineDetail koji je sada 'any', pa TS dopušta 'turbineKey'
     return <TurbineDetail turbineKey={id} />;
 };
 
 const QuestionnaireWrapper = () => {
-    // Ovdje koristimo RiskAssessment koji je sada 'any', pa TS dopušta 'onShowSummary'
     return <RiskAssessment onShowSummary={() => window.location.hash = '#/questionnaire-summary'} />;
 };
 
@@ -209,6 +208,10 @@ const AppLayout: React.FC = () => {
                         )}
 
                         <div className="absolute right-0 top-0 flex items-center gap-4 z-20">
+                            
+                            {/* JEZIČNI SELEKTOR OVDJE 👇 */}
+                            <LanguageSelector />
+                            
                             <div className="hidden md:flex flex-col items-end cursor-pointer" onClick={() => navigate('/profile')}>
                                 <span className="text-xs text-slate-400">Logged in as</span>
                                 <span className="text-sm font-bold text-cyan-400 hover:text-white transition-colors">{displayName}</span>
@@ -233,7 +236,6 @@ const AppLayout: React.FC = () => {
                                 <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
                                 <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
                                 <Route path="risk-report" element={<RiskReport />} />
-                                {/* Ovdje koristimo InvestorBriefing koji je sada 'any', pa TS dopušta 'turbineCategories' */}
                                 <Route path="investor-briefing" element={<InvestorBriefing turbineCategories={TURBINE_CATEGORIES} />} />
                                 <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
                                 <Route path="digital-introduction" element={<DigitalIntroduction />} />

@@ -12,7 +12,6 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     const [answers, setAnswersState] = useState<Answers>({});
     
     // Stanje za operativne podatke (Head, Flow, itd.)
-    // Inicijaliziramo s praznim stringovima da input polja budu "controlled"
     const [operationalData, setOperationalDataState] = useState<OperationalData>({
         commissioningYear: '',
         maintenanceCycle: '',
@@ -53,7 +52,6 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
         setDescription('');
     };
 
-    // Vrijednosti koje dijelimo kroz aplikaciju
     const value = {
         answers,
         setAnswer,
@@ -71,7 +69,6 @@ export const QuestionnaireProvider: React.FC<{ children: React.ReactNode }> = ({
     );
 };
 
-// Hook za korištenje konteksta u komponentama
 export const useQuestionnaire = () => {
     const context = useContext(QuestionnaireContext);
     if (!context) {

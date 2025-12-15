@@ -19,7 +19,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (data) {
                     // Mapiranje baze na naš Frontend tip
                     const mappedAssets: Asset[] = data.map((item: any) => ({
-                        id: item.id.toString(), // OSIUGRAVAMO STRING
+                        id: item.id.toString(), // OSIGURAVAMO STRING
                         name: item.name,
                         type: item.type,
                         location: item.location,

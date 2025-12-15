@@ -16,7 +16,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const id = Date.now();
         setToasts(prev => [...prev, { id, message, type }]);
 
-        // Auto-remove nakon 3 sekunde
+        // Auto-remove nakon 4 sekunde
         setTimeout(() => {
             setToasts(prev => prev.filter(t => t.id !== id));
         }, 4000);

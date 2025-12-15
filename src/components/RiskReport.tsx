@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next'; // <--- IMPORT
 import { BackButton } from './BackButton.tsx';
 import { useAssetContext } from './AssetPicker.tsx';
-import { useNavigation } from '../contexts/NavigationContext.tsx'; // Treba nam za redirekciju
+import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { generateMasterDossier } from '../utils/pdfGenerator.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
@@ -10,6 +11,7 @@ export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { user } = useAuth();
     const { navigateTo } = useNavigation();
+    const { t } = useTranslation(); // <--- HOOK
     
     const [riskData, setRiskData] = useState<any>(null);
     const [designData, setDesignData] = useState<any>(null);
@@ -26,28 +28,27 @@ export const RiskReport: React.FC = () => {
 
             setLoading(true);
             try {
-                // 1. Dohvati ZADNJI Risk Assessment za ovu elektranu
+                // 1. Dohvati ZADNJI Risk Assessment
                 const { data: risk } = await supabase
                     .from('risk_assessments')
                     .select('*')
                     .eq('asset_id', selectedAsset.id)
-                    .order('created_at', { ascending: false }) // Najnoviji prvi
+                    .order('created_at', { ascending: false })
                     .limit(1)
                     .single();
 
-                // 2. Dohvati ZADNJI Turbine Design za ovu elektranu
+                // 2. Dohvati ZADNJI Turbine Design
                 const { data: design } = await supabase
                     .from('turbine_designs')
                     .select('*')
                     .eq('asset_id', selectedAsset.id)
-                    .order('created_at', { ascending: false }) // Najnoviji prvi
+                    .order('created_at', { ascending: false })
                     .limit(1)
                     .single();
 
                 setRiskData(risk);
                 setDesignData(design);
             } catch (error) {
-                // Supabase vraća error ako nema podataka (.single()), to je OK, samo znači da nema podataka
                 console.log('Fetching status:', error); 
             } finally {
                 setLoading(false);
@@ -68,7 +69,6 @@ export const RiskReport: React.FC = () => {
         );
     };
 
-    // Helper za boje rizika
     const getRiskColor = (level: string) => {
         if (level === 'High') return 'text-red-500 border-red-500';
         if (level === 'Medium') return 'text-yellow-400 border-yellow-400';
@@ -77,23 +77,24 @@ export const RiskReport: React.FC = () => {
 
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
-            <BackButton text="Back to Hub" />
+            <BackButton text={t('actions.back', 'Back to Hub')} />
             
             {/* HEADER AREA */}
             <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-slate-700 pb-6">
                 <div>
                     <h2 className="text-3xl font-bold text-white tracking-tight">
-                        Project <span className="text-cyan-400">Dossier</span>
+                        {t('riskReport.title')} <span className="text-cyan-400">{t('riskReport.dossier')}</span>
                     </h2>
                     <p className="text-slate-400 mt-2 max-w-xl">
-                        Centralized repository of all interactive data modules linked to the selected asset.
-                        Generates a consolidated legal-grade PDF report.
+                        {t('riskReport.subtitle')}
                     </p>
                 </div>
                 
                 {/* Asset Context Indicator */}
                 <div className="text-right">
-                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Active Context</div>
+                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">
+                        {t('riskReport.activeContext')}
+                    </div>
                     <div className="text-lg font-mono font-bold text-white bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 flex items-center gap-2">
                         {selectedAsset ? (
                             <>
@@ -101,7 +102,7 @@ export const RiskReport: React.FC = () => {
                                 {selectedAsset.name}
                             </>
                         ) : (
-                            <span className="text-slate-500 italic">No Asset Selected</span>
+                            <span className="text-slate-500 italic">{t('riskReport.noAsset')}</span>
                         )}
                     </div>
                 </div>
@@ -111,13 +112,13 @@ export const RiskReport: React.FC = () => {
             {!selectedAsset ? (
                 <div className="p-16 text-center border-2 border-dashed border-slate-700 rounded-3xl bg-slate-800/30">
                     <span className="text-6xl block mb-6 opacity-30">📂</span>
-                    <h3 className="text-xl font-bold text-white mb-2">Select an Asset to View Dossier</h3>
-                    <p className="text-slate-400">Use the dropdown in the header or the global asset picker.</p>
+                    <h3 className="text-xl font-bold text-white mb-2">{t('riskReport.selectPromptTitle')}</h3>
+                    <p className="text-slate-400">{t('riskReport.selectPromptDesc')}</p>
                 </div>
             ) : loading ? (
                 <div className="p-20 text-center">
                     <span className="animate-spin text-4xl block mb-4">⚙️</span>
-                    <p className="text-cyan-400 font-mono animate-pulse">Retrieving encrypted data from HQ...</p>
+                    <p className="text-cyan-400 font-mono animate-pulse">{t('riskReport.loading')}</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -126,14 +127,14 @@ export const RiskReport: React.FC = () => {
                     <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-cyan-500/30 transition-all shadow-lg">
                         <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
                             <h3 className="font-bold text-white text-lg flex items-center gap-2">
-                                <span>🛡️</span> Risk Diagnostic
+                                <span>🛡️</span> {t('riskReport.riskDiagnostic')}
                             </h3>
                             {riskData ? (
                                 <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
                                     ID: {riskData.id.toString().slice(0,4)}...
                                 </span>
                             ) : (
-                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">MISSING</span>
+                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">{t('riskReport.missing')}</span>
                             )}
                         </div>
                         
@@ -141,7 +142,7 @@ export const RiskReport: React.FC = () => {
                             {riskData ? (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
-                                        <span className="text-slate-400 text-sm">Risk Level</span>
+                                        <span className="text-slate-400 text-sm">{t('riskReport.riskLevel')}</span>
                                         <span className={`text-xl font-black uppercase ${getRiskColor(riskData.risk_level)}`}>
                                             {riskData.risk_level}
                                         </span>
@@ -149,11 +150,11 @@ export const RiskReport: React.FC = () => {
                                     <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
                                         <div 
                                             className={`h-full ${riskData.risk_score > 50 ? 'bg-red-500' : 'bg-green-500'}`} 
-                                            style={{ width: `${Math.min(riskData.risk_score * 2, 100)}%` }} // Skaliranje skora za vizualizaciju
+                                            style={{ width: `${Math.min(riskData.risk_score * 2, 100)}%` }} 
                                         ></div>
                                     </div>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-slate-400 text-sm">Execution Gap Score</span>
+                                        <span className="text-slate-400 text-sm">{t('riskReport.gapScore')}</span>
                                         <span className="text-2xl font-mono text-white">{riskData.risk_score}/100</span>
                                     </div>
                                     <div className="mt-4 p-3 bg-slate-900 rounded border border-slate-700 text-xs text-slate-400 italic line-clamp-2">
@@ -162,12 +163,12 @@ export const RiskReport: React.FC = () => {
                                 </div>
                             ) : (
                                 <div className="text-center py-4">
-                                    <p className="text-slate-500 text-sm mb-4">No risk assessment data found for this asset.</p>
+                                    <p className="text-slate-500 text-sm mb-4">{t('riskReport.noRiskData')}</p>
                                     <button 
                                         onClick={() => navigateTo('riskAssessment')}
                                         className="text-xs bg-slate-700 hover:bg-cyan-600 text-white px-4 py-2 rounded transition-colors"
                                     >
-                                        Run Diagnostics Now
+                                        {t('riskReport.runDiagnostics')}
                                     </button>
                                 </div>
                             )}
@@ -178,14 +179,14 @@ export const RiskReport: React.FC = () => {
                     <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-purple-500/30 transition-all shadow-lg">
                         <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
                             <h3 className="font-bold text-white text-lg flex items-center gap-2">
-                                <span>⚙️</span> Technical Design
+                                <span>⚙️</span> {t('riskReport.technicalDesign')}
                             </h3>
                             {designData ? (
                                 <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
                                     VER: {designData.created_at.slice(0,10)}
                                 </span>
                             ) : (
-                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">MISSING</span>
+                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">{t('riskReport.missing')}</span>
                             )}
                         </div>
 
@@ -194,33 +195,33 @@ export const RiskReport: React.FC = () => {
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
-                                            <div className="text-[10px] text-slate-500 uppercase">Configuration</div>
+                                            <div className="text-[10px] text-slate-500 uppercase">{t('riskReport.configuration')}</div>
                                             <div className="text-white font-bold truncate">{designData.design_name}</div>
                                         </div>
                                         <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
-                                            <div className="text-[10px] text-slate-500 uppercase">Turbine</div>
+                                            <div className="text-[10px] text-slate-500 uppercase">{t('riskReport.turbine')}</div>
                                             <div className="text-cyan-400 font-bold">{designData.recommended_turbine}</div>
                                         </div>
                                     </div>
                                     <div className="flex justify-between items-end border-t border-slate-700/50 pt-4">
                                         <div>
-                                            <span className="text-slate-400 text-xs block">Calculated Output</span>
+                                            <span className="text-slate-400 text-xs block">{t('riskReport.calcOutput')}</span>
                                             <span className="text-3xl font-black text-white">{designData.calculations?.powerMW} <span className="text-lg font-normal text-slate-500">MW</span></span>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-slate-400 text-xs block">Annual Energy</span>
+                                            <span className="text-slate-400 text-xs block">{t('riskReport.annualEnergy')}</span>
                                             <span className="text-xl font-bold text-green-400">{designData.calculations?.energyGWh || designData.calculations?.annualGWh} <span className="text-xs text-slate-500">GWh</span></span>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="text-center py-4">
-                                    <p className="text-slate-500 text-sm mb-4">No technical design configuration found.</p>
+                                    <p className="text-slate-500 text-sm mb-4">{t('riskReport.noDesignData')}</p>
                                     <button 
                                         onClick={() => navigateTo('hppBuilder')}
                                         className="text-xs bg-slate-700 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors"
                                     >
-                                        Open Design Studio
+                                        {t('riskReport.openStudio')}
                                     </button>
                                 </div>
                             )}
@@ -231,9 +232,9 @@ export const RiskReport: React.FC = () => {
                     <div className="md:col-span-2 mt-6">
                         <div className="p-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-xl shadow-2xl">
                             <div className="bg-slate-900 rounded-lg p-8 text-center">
-                                <h3 className="text-2xl font-bold text-white mb-2">Ready to Compile?</h3>
+                                <h3 className="text-2xl font-bold text-white mb-2">{t('riskReport.compileTitle')}</h3>
                                 <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
-                                    This action will aggregate the latest snapshots from all modules into a single, watermarked PDF document suitable for investors and technical audit.
+                                    {t('riskReport.compileDesc')}
                                 </p>
                                 
                                 <button
@@ -247,9 +248,9 @@ export const RiskReport: React.FC = () => {
                                     `}
                                 >
                                     {(!riskData && !designData) ? (
-                                        <><span>🚫</span> No Data to Compile</>
+                                        <><span>🚫</span> {t('riskReport.noDataButton')}</>
                                     ) : (
-                                        <><span>🖨️</span> Download Master Project Dossier</>
+                                        <><span>🖨️</span> {t('riskReport.downloadButton')}</>
                                     )}
                                 </button>
                             </div>
@@ -261,5 +262,3 @@ export const RiskReport: React.FC = () => {
         </div>
     );
 };
-
-export default RiskReport;
