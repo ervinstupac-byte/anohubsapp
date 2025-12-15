@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next'; // <--- IMPORT
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { BackButton } from './BackButton.tsx';
+import { GlassCard } from './ui/GlassCard.tsx';     // <--- UI Kit
+import { ModernInput } from './ui/ModernInput.tsx';   // <--- UI Kit
+import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
 
 export const UserProfile: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
-    const { t } = useTranslation(); // <--- HOOK
+    const { t } = useTranslation();
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -112,91 +115,107 @@ export const UserProfile: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="p-10 text-center text-slate-400">{t('profile.loading')}</div>;
+    if (loading) return (
+        <div className="flex justify-center items-center h-64">
+            <div className="animate-spin text-4xl">⚙️</div>
+        </div>
+    );
 
     return (
         <div className="animate-fade-in pb-12 max-w-4xl mx-auto space-y-8">
-            <BackButton text={t('profile.back')} />
-
-            <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold text-white tracking-tight">
-                    {t('profile.title').split(' ')[0]} <span className="text-cyan-400">{t('profile.title').split(' ')[1]}</span>
-                </h2>
-                <p className="text-slate-400">{t('profile.subtitle')}</p>
+            <div className="flex justify-between items-center">
+                <BackButton text={t('profile.back')} />
+                <div className="text-xs font-mono text-slate-500">ID: {user?.id?.slice(0, 8)}...</div>
             </div>
 
-            <div className="glass-panel p-8 rounded-2xl bg-slate-800/50 border border-slate-700">
-                <div className="flex flex-col md:flex-row gap-8 items-start">
-                    
-                    {/* AVATAR SECTION */}
-                    <div className="flex flex-col items-center gap-4 w-full md:w-1/3">
-                        <div className="relative group">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-700 bg-slate-900 shadow-xl">
-                                {avatarUrl ? (
-                                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-4xl">👷</div>
-                                )}
-                            </div>
-                            <label className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer text-xs font-bold text-white">
-                                {t('profile.changePhoto')}
-                                <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving} />
-                            </label>
-                        </div>
-                        <div className="text-center">
-                            <p className="text-sm text-slate-500 font-mono">{user?.email}</p>
-                            <span className="inline-block mt-2 px-3 py-1 bg-cyan-900/30 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/30">
-                                {role || t('profile.unassignedRole')}
-                            </span>
-                        </div>
-                    </div>
+            <div className="text-center space-y-2 mb-8">
+                <h2 className="text-4xl font-black text-white tracking-tighter">
+                    {t('profile.title', 'Engineer Profile').split(' ')[0]} <span className="text-cyan-400">{t('profile.title', 'Engineer Profile').split(' ')[1]}</span>
+                </h2>
+                <p className="text-slate-400 font-medium">{t('profile.subtitle', 'Manage your identity and access levels.')}</p>
+            </div>
 
-                    {/* DETAILS FORM */}
-                    <div className="flex-grow w-full space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.fullName')}</label>
-                                <input 
-                                    type="text" 
+            <GlassCard className="p-0"> {/* p-0 jer GlassCard ima default padding koji želimo kontrolirati */}
+                <div className="p-8 md:p-10">
+                    <div className="flex flex-col md:flex-row gap-10 items-start">
+                        
+                        {/* LEFT COLUMN: AVATAR */}
+                        <div className="flex flex-col items-center gap-6 w-full md:w-1/3 border-b md:border-b-0 md:border-r border-white/5 pb-8 md:pb-0 md:pr-8">
+                            <div className="relative group">
+                                <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-slate-800 bg-slate-900 shadow-2xl shadow-black/50 ring-1 ring-white/10">
+                                    {avatarUrl ? (
+                                        <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-5xl bg-gradient-to-br from-slate-800 to-slate-900 text-slate-600">
+                                            👷
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                {/* Upload Button Overlay */}
+                                <label className="absolute bottom-2 right-2 p-3 rounded-full bg-cyan-600 text-white shadow-lg cursor-pointer hover:bg-cyan-500 transition-all hover:scale-110 active:scale-95 border border-cyan-400/50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving} />
+                                </label>
+                            </div>
+                            
+                            <div className="text-center w-full">
+                                <p className="text-xs text-slate-500 font-mono mb-2 truncate max-w-[200px] mx-auto">{user?.email}</p>
+                                <span className={`inline-block px-4 py-1.5 text-xs font-bold rounded-full border ${role ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
+                                    {role || t('profile.unassignedRole', 'Unassigned Role')}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* RIGHT COLUMN: FORM */}
+                        <div className="flex-grow w-full space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <ModernInput 
+                                    label={t('profile.fullName', 'Full Name')}
                                     value={fullName} 
                                     onChange={(e) => setFullName(e.target.value)} 
-                                    className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" 
+                                    placeholder="e.g. John Doe"
+                                    fullWidth
                                 />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.role')}</label>
-                                <input 
-                                    type="text" 
+                                
+                                <ModernInput 
+                                    label={t('profile.role', 'Position / Role')}
                                     value={role} 
                                     onChange={(e) => setRole(e.target.value)} 
-                                    className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" 
-                                    placeholder={t('profile.rolePlaceholder')}
+                                    placeholder="e.g. Lead Engineer"
+                                    fullWidth
                                 />
-                            </div>
-                            <div className="md:col-span-2">
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{t('profile.company')}</label>
-                                <input 
-                                    type="text" 
-                                    value={company} 
-                                    onChange={(e) => setCompany(e.target.value)} 
-                                    className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none" 
-                                    placeholder={t('profile.companyPlaceholder')}
-                                />
-                            </div>
-                        </div>
 
-                        <div className="pt-6 border-t border-slate-700/50 flex justify-end">
-                            <button 
-                                onClick={updateProfile} 
-                                disabled={saving}
-                                className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all disabled:opacity-50"
-                            >
-                                {saving ? t('profile.saving') : t('profile.saveButton')}
-                            </button>
+                                <div className="md:col-span-2">
+                                    <ModernInput 
+                                        label={t('profile.company', 'Organization')}
+                                        value={company} 
+                                        onChange={(e) => setCompany(e.target.value)} 
+                                        placeholder="e.g. Global Hydropower Inc."
+                                        fullWidth
+                                        icon={<span>🏢</span>}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="pt-8 border-t border-white/5 flex justify-end">
+                                <ModernButton 
+                                    onClick={updateProfile} 
+                                    isLoading={saving}
+                                    variant="primary"
+                                    className="px-8"
+                                    icon={<span>💾</span>}
+                                >
+                                    {t('profile.saveButton', 'Save Changes')}
+                                </ModernButton>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </GlassCard>
         </div>
     );
 };

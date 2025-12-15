@@ -10,48 +10,75 @@ import { generateRiskReport } from '../utils/pdfGenerator.ts';
 import { useAssetContext } from './AssetPicker.tsx'; 
 import { QUESTIONS } from '../constants.ts'; 
 import type { Question } from '../types.ts';
+import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
+import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
 
-// RISK LOGIC
+// --- RISK LOGIC MAP ---
 export const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
-    q1: { high: ['no'], medium: ['not documented'] }, q2: { high: ['no'], medium: ['partially'] },
-    q4: { high: ['no'], medium: ['sometimes'] }, q5: { high: ['frequently'], medium: ['occasionally'] },
+    q1: { high: ['no'], medium: ['not documented'] }, 
+    q2: { high: ['no'], medium: ['partially'] },
+    q4: { high: ['no'], medium: ['sometimes'] }, 
+    q5: { high: ['frequently'], medium: ['occasionally'] },
     q6: { high: ['not maintained'], medium: ['partially filled'] },
     q7: { high: ['often we only fix the symptom'], medium: ['sometimes we only fix the symptom'] },
-    q8: { high: ['no'], medium: ['in testing phase'] }, q9: { high: ['no'], medium: ['limited access'] },
+    q8: { high: ['no'], medium: ['in testing phase'] }, 
+    q9: { high: ['no'], medium: ['limited access'] },
     q10: { high: ['not monitored'], medium: ['monitored periodically'] },
-    q11: { high: ['no', 'do not measure'], medium: [] }, q12: { high: ['only replacement', 'no, only replacement is offered'], medium: ['sometimes'] },
-    q13: { high: ['no'], medium: ['periodically'] }, q14: { high: ['not installed/functional'], medium: ['some require checking'] },
-    q15: { high: ['no'], medium: ['outdated'] }, q16: { high: ['manual'], medium: ['semi-automatic'] },
+    q11: { high: ['no', 'do not measure'], medium: [] }, 
+    q12: { high: ['only replacement', 'no, only replacement is offered'], medium: ['sometimes'] },
+    q13: { high: ['no'], medium: ['periodically'] }, 
+    q14: { high: ['not installed/functional'], medium: ['some require checking'] },
+    q15: { high: ['no'], medium: ['outdated'] }, 
+    q16: { high: ['manual'], medium: ['semi-automatic'] },
     q17: { high: ['major service needed'], medium: ['requires minor maintenance'] },
 };
 
-// RISK GAUGE COMPONENT
+// --- MODERN RISK GAUGE COMPONENT ---
 const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) => {
     let color = '';
     let percentage = 0;
     let text = '';
 
     switch (level) {
-        case 'High': color = 'text-red-500'; percentage = 90; text = 'CRITICAL'; break;
-        case 'Medium': color = 'text-yellow-400'; percentage = 50; text = 'MODERATE'; break;
-        case 'Low': color = 'text-green-400'; percentage = 15; text = 'STABLE'; break;
+        case 'High': 
+            color = 'text-red-500'; 
+            percentage = 90; 
+            text = 'CRITICAL'; 
+            break;
+        case 'Medium': 
+            color = 'text-amber-400'; 
+            percentage = 50; 
+            text = 'MODERATE'; 
+            break;
+        case 'Low': 
+            color = 'text-emerald-400'; 
+            percentage = 15; 
+            text = 'STABLE'; 
+            break;
     }
 
     return (
-        <div className="relative flex flex-col items-center justify-center py-6">
-            <div className="w-40 h-40 rounded-full border-8 border-slate-800 relative flex items-center justify-center shadow-inner bg-slate-900/50">
-                <svg className="absolute inset-0 transform -rotate-90 w-full h-full p-1" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-700 opacity-20" />
+        <div className="relative flex flex-col items-center justify-center py-8">
+            <div className="w-48 h-48 rounded-full relative flex items-center justify-center bg-slate-900/50 shadow-inner border border-slate-700">
+                {/* Background Track */}
+                <svg className="absolute inset-0 transform -rotate-90 w-full h-full p-2" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="6" className="text-slate-800" />
+                    {/* Progress Circle */}
                     <circle 
-                        cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="8" 
+                        cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round"
                         strokeDasharray="283" strokeDashoffset={283 - (283 * percentage) / 100}
-                        className={`${color} transition-all duration-1000 ease-out drop-shadow-[0_0_15px_currentColor]`}
+                        className={`${color} transition-all duration-1000 ease-out drop-shadow-[0_0_10px_currentColor]`}
                     />
                 </svg>
+                
+                {/* Center Content */}
                 <div className="text-center z-10">
-                    <span className={`text-3xl font-black ${color} tracking-tighter block`}>{text}</span>
-                    <span className="text-xs text-slate-500 uppercase tracking-widest">Risk Level</span>
+                    <div className={`text-4xl font-black ${color} tracking-tighter drop-shadow-md mb-1`}>{text}</div>
+                    <div className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">Risk Level</div>
                 </div>
+
+                {/* Inner Glow */}
+                <div className={`absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-transparent to-${color.split('-')[1]}-500/10 opacity-50`}></div>
             </div>
         </div>
     );
@@ -69,6 +96,7 @@ export const QuestionnaireSummary: React.FC = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
 
+    // Analyze Answers
     const analysis = useMemo(() => {
         const highRisk: Question[] = [];
         const mediumRisk: Question[] = [];
@@ -94,8 +122,8 @@ export const QuestionnaireSummary: React.FC = () => {
     const getRiskLevel = (highCount: number, mediumCount: number) => {
         const totalScore = highCount * 2 + mediumCount;
         if (totalScore > 10) return { text: 'High Risk', color: 'text-red-400', level: 'High' as const };
-        if (totalScore > 5) return { text: 'Medium Risk', color: 'text-yellow-400', level: 'Medium' as const };
-        return { text: 'Low Risk', color: 'text-green-400', level: 'Low' as const };
+        if (totalScore > 5) return { text: 'Medium Risk', color: 'text-amber-400', level: 'Medium' as const };
+        return { text: 'Low Risk', color: 'text-emerald-400', level: 'Low' as const };
     };
     
     const riskIndicator = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
@@ -136,23 +164,21 @@ export const QuestionnaireSummary: React.FC = () => {
         }
     };
 
-    // --- POPRAVLJENO: GENERIRANJE PDF-A ---
+    // --- PDF GENERATION ---
     const handleDownloadPDF = () => {
         if (Object.keys(answers).length === 0) {
             showToast(t('questionnaire.noDataAvailable'), 'warning');
             return;
         }
         
-        // 1. Pripremi objekt s podacima kakav pdfGenerator očekuje
         const riskDataForPDF = {
-            id: 'DRAFT', // Nema ID jer još nije spremljen
+            id: 'DRAFT', 
             risk_score: disciplineRiskScore,
             risk_level: riskIndicator.level,
             answers: answers,
             assetName: selectedAsset?.name || 'Unspecified Asset'
         };
 
-        // 2. Pozovi funkciju s ispravnim argumentima: (Objekt, ImeInženjera, Opis)
         generateRiskReport(
             riskDataForPDF,
             user?.email || 'AnoHUB Engineer',
@@ -170,16 +196,17 @@ export const QuestionnaireSummary: React.FC = () => {
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
             
-            {/* HEADER */}
-            <div className="text-center space-y-4 animate-fade-in-up">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                    {t('questionnaire.title').split(' ')[0]} <span className="text-cyan-400">{t('questionnaire.title').split(' ').slice(1).join(' ')}</span>
+            {/* HERO HEADER */}
+            <div className="text-center space-y-4 animate-fade-in-up pt-6">
+                <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
+                    {t('questionnaire.title', 'Execution Gap').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('questionnaire.title', 'Execution Gap Analysis').split(' ').slice(1).join(' ')}</span>
                 </h2>
-                <div className="flex justify-center gap-4 text-sm text-slate-400">
-                    <span className="flex items-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> {t('questionnaire.liveAnalysis')}
+                
+                <div className="flex justify-center gap-6 text-xs uppercase tracking-widest text-slate-500 font-bold">
+                    <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> {t('questionnaire.liveAnalysis')}
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-cyan-500"></span> {t('questionnaire.aiReady')}
                     </span>
                 </div>
@@ -189,60 +216,54 @@ export const QuestionnaireSummary: React.FC = () => {
                 
                 {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="glass-panel p-6 rounded-2xl border-t-4 border-t-cyan-500 bg-gradient-to-b from-slate-800/80 to-slate-900/80 shadow-2xl">
+                    <GlassCard className="border-t-4 border-t-cyan-500">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">{t('questionnaire.overallAssessment')}</h3>
                         <RiskGauge level={riskIndicator.level} />
                         
-                        <div className="mt-6 pt-6 border-t border-slate-700/50">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-sm text-slate-400">{t('questionnaire.highPriorityAlerts')}</span>
-                                <span className="text-xl font-bold text-red-400">{analysis.highRisk.length}</span>
+                        <div className="mt-4 pt-6 border-t border-slate-700/50 space-y-3">
+                            <div className="flex justify-between items-center p-3 bg-red-900/10 rounded-lg border border-red-500/10">
+                                <span className="text-xs font-bold text-red-400 uppercase tracking-wider">{t('questionnaire.highPriorityAlerts')}</span>
+                                <span className="text-xl font-black text-red-400">{analysis.highRisk.length}</span>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-slate-400">{t('questionnaire.warnings')}</span>
-                                <span className="text-xl font-bold text-yellow-400">{analysis.mediumRisk.length}</span>
+                            <div className="flex justify-between items-center p-3 bg-amber-900/10 rounded-lg border border-amber-500/10">
+                                <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">{t('questionnaire.warnings')}</span>
+                                <span className="text-xl font-black text-amber-400">{analysis.mediumRisk.length}</span>
                             </div>
                         </div>
 
-                        {/* --- ACTION BUTTONS --- */}
-                        <div className="mt-6 space-y-3">
-                            <button 
+                        {/* ACTION BUTTONS */}
+                        <div className="mt-8 space-y-3">
+                            <ModernButton 
                                 onClick={handleDownloadPDF}
-                                className="w-full py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg border border-slate-500 transition-all flex items-center justify-center gap-2 group"
+                                variant="secondary"
+                                fullWidth
+                                icon={<span>📄</span>}
                             >
-                                <span className="text-lg">📄</span> {t('questionnaire.downloadPDF')}
-                            </button>
+                                {t('questionnaire.downloadPDF')}
+                            </ModernButton>
                             
-                            <button 
+                            <ModernButton 
                                 onClick={handleSubmitToCloud}
                                 disabled={isUploading || isUploaded}
-                                className={`
-                                    w-full py-3 font-bold rounded-lg shadow-lg transition-all flex items-center justify-center gap-2
-                                    ${isUploaded 
-                                        ? 'bg-green-600/20 text-green-400 border border-green-500/50 cursor-default' 
-                                        : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}
-                                `}
+                                variant={isUploaded ? 'secondary' : 'primary'}
+                                fullWidth
+                                isLoading={isUploading}
+                                icon={!isUploading && (isUploaded ? <span>✓</span> : <span>☁️</span>)}
                             >
-                                {isUploading ? (
-                                    <><span className="animate-spin">⚙️</span> {t('questionnaire.uploading')}</>
-                                ) : isUploaded ? (
-                                    <><span>✓</span> {t('questionnaire.syncedToCloud')}</>
-                                ) : (
-                                    <><span className="text-lg">☁️</span> {t('questionnaire.submitToHQ')}</>
-                                )}
-                            </button>
+                                {isUploaded ? t('questionnaire.syncedToCloud') : t('questionnaire.submitToHQ')}
+                            </ModernButton>
                         </div>
-                    </div>
+                    </GlassCard>
 
-                    <div className="glass-panel p-6 rounded-2xl bg-cyan-900/10 border-cyan-500/20">
+                    <GlassCard className="bg-cyan-900/10 border-cyan-500/20">
                         <div className="flex items-center gap-3 mb-3">
                             <span className="text-2xl">🧠</span>
-                            <h4 className="font-bold text-cyan-300 text-sm uppercase">{t('questionnaire.conceptTitle')}</h4>
+                            <h4 className="font-bold text-cyan-300 text-sm uppercase tracking-wide">{t('questionnaire.conceptTitle')}</h4>
                         </div>
-                        <p className="text-xs text-cyan-100/80 leading-relaxed">
+                        <p className="text-xs text-cyan-100/70 leading-relaxed font-medium">
                             {t('questionnaire.conceptDesc')}
                         </p>
-                    </div>
+                    </GlassCard>
                 </div>
 
                 {/* RIGHT COLUMN: DETAILED FINDINGS */}
@@ -250,66 +271,67 @@ export const QuestionnaireSummary: React.FC = () => {
                     
                     {/* High Risk Section */}
                     {analysis.highRisk.length > 0 && (
-                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-red-500/20 rounded-lg text-red-400">
+                        <GlassCard className="border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="p-3 bg-red-500/10 rounded-xl text-red-400 border border-red-500/20">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-white">{t('questionnaire.criticalIndicators')}</h3>
-                                    <p className="text-xs text-red-300">{t('questionnaire.criticalIndicatorsDesc')}</p>
+                                    <p className="text-xs text-red-300 font-medium mt-1">{t('questionnaire.criticalIndicatorsDesc')}</p>
                                 </div>
                             </div>
                             <ul className="space-y-3">
                                 {analysis.highRisk.map(q => (
-                                    <li key={q.id} className="flex items-start gap-3 p-3 rounded-lg bg-red-900/10 border border-red-500/10">
-                                        <span className="text-red-500 mt-0.5">•</span>
-                                        <span className="text-sm text-slate-300">{q.text}</span>
+                                    <li key={q.id} className="flex items-start gap-3 p-4 rounded-xl bg-red-950/30 border border-red-500/10 hover:border-red-500/30 transition-colors">
+                                        <span className="text-red-500 mt-0.5 text-lg">•</span>
+                                        <span className="text-sm text-slate-300 font-medium">{q.text}</span>
                                     </li>
                                 ))}
                             </ul>
-                        </div>
+                        </GlassCard>
                     )}
 
                     {/* Medium Risk Section */}
                     {analysis.mediumRisk.length > 0 && (
-                        <div className="glass-panel p-6 rounded-2xl border-l-4 border-l-yellow-500 animate-scale-in" style={{ animationDelay: '200ms' }}>
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-yellow-500/20 rounded-lg text-yellow-400">
+                        <GlassCard className="border-l-4 border-l-amber-500 animate-scale-in" style={{ animationDelay: '200ms' }}>
+                            <div className="flex items-start gap-4 mb-6">
+                                <div className="p-3 bg-amber-500/10 rounded-xl text-amber-400 border border-amber-500/20">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-bold text-white">{t('questionnaire.operationalWarnings')}</h3>
-                                    <p className="text-xs text-yellow-200/80">{t('questionnaire.operationalWarningsDesc')}</p>
+                                    <p className="text-xs text-amber-200/70 font-medium mt-1">{t('questionnaire.operationalWarningsDesc')}</p>
                                 </div>
                             </div>
                             <ul className="space-y-3">
                                 {analysis.mediumRisk.map(q => (
-                                    <li key={q.id} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-900/10 border border-yellow-500/10">
-                                        <span className="text-yellow-500 mt-0.5">•</span>
-                                        <span className="text-sm text-slate-300">{q.text}</span>
+                                    <li key={q.id} className="flex items-start gap-3 p-4 rounded-xl bg-amber-950/20 border border-amber-500/10 hover:border-amber-500/30 transition-colors">
+                                        <span className="text-amber-500 mt-0.5 text-lg">•</span>
+                                        <span className="text-sm text-slate-300 font-medium">{q.text}</span>
                                     </li>
                                 ))}
                             </ul>
-                        </div>
+                        </GlassCard>
                     )}
 
                     {/* Clean State */}
                     {analysis.highRisk.length === 0 && analysis.mediumRisk.length === 0 && (
-                        <div className="glass-panel p-8 rounded-2xl border-green-500/30 text-center">
-                            <div className="text-5xl mb-4">✅</div>
-                            <h3 className="text-xl font-bold text-white">{t('questionnaire.systemOptimal')}</h3>
-                            <p className="text-slate-400 mt-2">{t('questionnaire.systemOptimalDesc')}</p>
-                        </div>
+                        <GlassCard className="border-emerald-500/30 text-center py-12">
+                            <div className="text-6xl mb-6 opacity-80">✅</div>
+                            <h3 className="text-2xl font-bold text-white mb-2">{t('questionnaire.systemOptimal')}</h3>
+                            <p className="text-slate-400 max-w-md mx-auto">{t('questionnaire.systemOptimalDesc')}</p>
+                        </GlassCard>
                     )}
 
-                    <div className="text-center pt-8 border-t border-slate-700/50">
-                        <button 
+                    <div className="text-center pt-8">
+                        <ModernButton 
                             onClick={handleReturn}
-                            className="px-8 py-3 text-sm font-bold rounded-lg transition-colors bg-slate-800 hover:bg-slate-700 text-white border border-slate-600"
+                            variant="ghost"
+                            className="text-slate-400 hover:text-white"
                         >
                             {t('questionnaire.returnToDashboard')}
-                        </button>
+                        </ModernButton>
                     </div>
                 </div>
             </div>

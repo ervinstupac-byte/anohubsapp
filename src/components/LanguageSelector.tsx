@@ -8,16 +8,15 @@ export const LanguageSelector: React.FC = () => {
         i18n.changeLanguage(lng);
     };
 
-    // Stilovi za aktivni vs neaktivni gumb
     const btnClass = (lng: string) => `
-        px-2 py-1 text-xs font-bold rounded transition-colors uppercase cursor-pointer
+        px-3 py-1 text-[10px] font-bold rounded-full transition-all duration-300 uppercase cursor-pointer
         ${i18n.language === lng 
-            ? 'bg-cyan-600 text-white shadow-[0_0_10px_rgba(8,145,178,0.5)] border border-cyan-400' 
-            : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 border border-transparent'}
+            ? 'bg-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.5)]' 
+            : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}
     `;
 
     return (
-        <div className="flex gap-2 items-center bg-slate-900/50 p-1 rounded-lg border border-slate-700">
+        <div className="flex gap-1 items-center bg-slate-900/80 backdrop-blur-md p-1 rounded-full border border-slate-700/50">
             <button onClick={() => changeLanguage('en')} className={btnClass('en')}>EN</button>
             <button onClick={() => changeLanguage('de')} className={btnClass('de')}>DE</button>
             <button onClick={() => changeLanguage('bs')} className={btnClass('bs')}>BS</button>

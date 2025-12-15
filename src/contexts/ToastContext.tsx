@@ -30,32 +30,51 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         <ToastContext.Provider value={{ showToast }}>
             {children}
             
-            {/* TOAST CONTAINER (UI) - Lebdeći element */}
-            <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-3 pointer-events-none">
+            {/* MODERN TOAST CONTAINER */}
+            <div className="fixed top-6 right-6 z-[9999] flex flex-col gap-4 pointer-events-none w-full max-w-sm">
                 {toasts.map(toast => (
                     <div 
                         key={toast.id}
                         className={`
-                            pointer-events-auto transform transition-all duration-300 ease-out animate-in slide-in-from-right
-                            min-w-[300px] max-w-md p-4 rounded-lg shadow-2xl border-l-4 flex items-center justify-between
-                            ${toast.type === 'success' ? 'bg-slate-900 text-white border-green-500 shadow-green-900/20' : ''}
-                            ${toast.type === 'error' ? 'bg-slate-900 text-white border-red-500 shadow-red-900/20' : ''}
-                            ${toast.type === 'warning' ? 'bg-slate-900 text-white border-yellow-500 shadow-yellow-900/20' : ''}
-                            ${toast.type === 'info' ? 'bg-slate-900 text-white border-cyan-500 shadow-cyan-900/20' : ''}
+                            pointer-events-auto transform transition-all duration-500 ease-out animate-slide-in-right
+                            p-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-start gap-4 relative overflow-hidden group
+                            ${toast.type === 'success' ? 'bg-emerald-900/80 border-emerald-500/50 text-emerald-100 shadow-emerald-900/50' : ''}
+                            ${toast.type === 'error' ? 'bg-red-900/80 border-red-500/50 text-red-100 shadow-red-900/50' : ''}
+                            ${toast.type === 'warning' ? 'bg-amber-900/80 border-amber-500/50 text-amber-100 shadow-amber-900/50' : ''}
+                            ${toast.type === 'info' ? 'bg-cyan-900/80 border-cyan-500/50 text-cyan-100 shadow-cyan-900/50' : ''}
                         `}
                     >
-                        <div className="flex items-center gap-3">
-                            <span className="text-xl">
-                                {toast.type === 'success' && '✅'}
-                                {toast.type === 'error' && '⚠️'}
-                                {toast.type === 'warning' && '🚧'}
-                                {toast.type === 'info' && 'ℹ️'}
-                            </span>
-                            <p className="font-semibold text-sm">{toast.message}</p>
+                        {/* Glow Effect */}
+                        <div className={`absolute -top-10 -left-10 w-20 h-20 rounded-full blur-2xl opacity-50
+                            ${toast.type === 'success' ? 'bg-emerald-500' : ''}
+                            ${toast.type === 'error' ? 'bg-red-500' : ''}
+                            ${toast.type === 'warning' ? 'bg-amber-500' : ''}
+                            ${toast.type === 'info' ? 'bg-cyan-500' : ''}
+                        `}></div>
+
+                        {/* Icon */}
+                        <div className={`
+                            flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-lg shadow-inner border border-white/10
+                            ${toast.type === 'success' ? 'bg-emerald-800' : ''}
+                            ${toast.type === 'error' ? 'bg-red-800' : ''}
+                            ${toast.type === 'warning' ? 'bg-amber-800' : ''}
+                            ${toast.type === 'info' ? 'bg-cyan-800' : ''}
+                        `}>
+                            {toast.type === 'success' && '✓'}
+                            {toast.type === 'error' && '✕'}
+                            {toast.type === 'warning' && '⚠'}
+                            {toast.type === 'info' && 'ℹ'}
                         </div>
+
+                        {/* Content */}
+                        <div className="flex-grow pt-1">
+                            <p className="font-bold text-sm leading-tight drop-shadow-md">{toast.message}</p>
+                        </div>
+
+                        {/* Close Button */}
                         <button 
                             onClick={() => removeToast(toast.id)}
-                            className="ml-4 text-slate-400 hover:text-white"
+                            className="text-white/50 hover:text-white transition-colors"
                         >
                             ✕
                         </button>

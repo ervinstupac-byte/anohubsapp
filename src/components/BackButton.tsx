@@ -4,7 +4,7 @@ import { useNavigation } from '../contexts/NavigationContext.tsx';
 interface BackButtonProps {
   text?: string;
   className?: string;
-  onClick?: () => void; // Opcionalno: Ako želimo pregaziti defaultno ponašanje
+  onClick?: () => void; 
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({ 
@@ -13,34 +13,33 @@ export const BackButton: React.FC<BackButtonProps> = ({
   onClick 
 }) => {
   const { navigateBack } = useNavigation();
-
-  // Ako korisnik pošalje svoju funkciju, koristi nju. Inače koristi defaultni navigateBack.
   const handleClick = onClick || navigateBack;
 
   return (
     <button 
       onClick={handleClick} 
       className={`
-        group flex items-center space-x-2 px-4 py-2 rounded-lg
-        text-slate-400 font-medium tracking-wide
+        group flex items-center space-x-2 px-3 py-1.5 rounded-lg
+        text-slate-500 text-xs font-bold uppercase tracking-wider
         border border-transparent
         transition-all duration-300 ease-out
-        hover:text-cyan-400 hover:bg-slate-800/50 hover:border-slate-700/50 hover:shadow-[0_0_15px_rgba(34,211,238,0.1)]
+        hover:text-cyan-400 hover:bg-slate-800/80 hover:border-slate-700 hover:shadow-lg
         active:scale-95
         ${className}
       `}
       aria-label={text}
     >
-      {/* Strelica se pomiče ulijevo na hover */}
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        className="h-5 w-5 transform transition-transform duration-300 group-hover:-translate-x-1" 
-        fill="none" 
-        viewBox="0 0 24 24" 
-        stroke="currentColor"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-      </svg>
+      <div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-cyan-500/10 transition-colors">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-3 w-3 transform transition-transform duration-300 group-hover:-translate-x-0.5" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+          </svg>
+      </div>
       <span>{text}</span>
     </button>
   );

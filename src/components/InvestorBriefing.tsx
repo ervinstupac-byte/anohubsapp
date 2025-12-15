@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next'; // <--- IMPORT
+import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { useNavigation } from '../contexts/NavigationContext.tsx';
+// import { useNavigation } UKLONJENO JER SE NE KORISTI
 import { useToast } from '../contexts/ToastContext.tsx';
 import { generateFinancialReport } from '../utils/pdfGenerator.ts';
 import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
-import type { TurbineCategories } from '../types.ts';
+import { GlassCard } from './ui/GlassCard.tsx'; 
+import { ModernInput } from './ui/ModernInput.tsx'; 
+import { ModernButton } from './ui/ModernButton.tsx'; 
 
-interface InvestorBriefingProps {
-    turbineCategories: TurbineCategories;
-}
+// Props interface prazan jer smo maknuli turbineCategories
+interface InvestorBriefingProps {}
 
-export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCategories }) => {
-    const { navigateTo } = useNavigation();
+export const InvestorBriefing: React.FC<InvestorBriefingProps> = () => {
+    // const { navigateTo } UKLONJENO
     const { showToast } = useToast();
     const { selectedAsset } = useAssetContext();
-    const { t } = useTranslation(); // <--- HOOK
+    const { t } = useTranslation();
 
     // --- STATE ---
-    // Default values for financial model
     const [params, setParams] = useState({
-        electricityPrice: 80, // EUR/MWh
-        interestRate: 5,      // %
-        lifespan: 30,         // Years
-        opexPercent: 2        // % of CAPEX
+        electricityPrice: 80, 
+        interestRate: 5,      
+        lifespan: 30,         
+        opexPercent: 2        
     });
 
     const [kpis, setKpis] = useState({
@@ -35,32 +35,25 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
         payback: 0
     });
 
-    // --- AUTOMATIC CALCULATION ---
+    // --- CALCULATION ---
     useEffect(() => {
         if (!selectedAsset) return;
 
-        // 1. Get capacity from selected asset
         const powerMW = selectedAsset.capacity || 0; 
-        
-        // If no capacity (e.g. new location), use placeholder
         const effectivePower = powerMW > 0 ? powerMW : 10; 
 
-        // 2. Basic engineering calculations (Rule of Thumb)
-        const annualGenerationGWh = effectivePower * 8760 * 0.5; // 50% capacity factor
-        const totalRevenue = annualGenerationGWh * 1000 * params.electricityPrice; // MWh * Price
+        const annualGenerationGWh = effectivePower * 8760 * 0.5; 
+        const totalRevenue = annualGenerationGWh * 1000 * params.electricityPrice; 
 
-        // Estimated CAPEX (e.g. 1.8M EUR per MW)
         const estimatedCapex = effectivePower * 1800000; 
         const annualOpex = estimatedCapex * (params.opexPercent / 100);
 
-        // 3. Financial Indicators
         const cashFlow = totalRevenue - annualOpex;
         const roi = (cashFlow / estimatedCapex) * 100;
         const paybackPeriod = estimatedCapex / cashFlow;
 
-        // LCOE = (Capex + Sum(Opex)) / Sum(Energy) - simplified
         const totalLifetimeCost = estimatedCapex + (annualOpex * params.lifespan);
-        const totalLifetimeEnergy = annualGenerationGWh * 1000 * params.lifespan; // MWh
+        const totalLifetimeEnergy = annualGenerationGWh * 1000 * params.lifespan; 
         const lcoe = totalLifetimeCost / totalLifetimeEnergy;
 
         setKpis({
@@ -94,154 +87,145 @@ export const InvestorBriefing: React.FC<InvestorBriefingProps> = ({ turbineCateg
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-            <BackButton text={t('actions.back', 'Back to Hub')} />
             
-            <div className="flex flex-col md:flex-row justify-between items-end gap-4">
-                <div className="space-y-4 flex-grow w-full">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-                        {t('investorBriefing.title').split(' ')[0]} <span className="text-purple-400">{t('investorBriefing.title').split(' ')[1]}</span>
-                    </h2>
-                    <p className="text-slate-400 text-lg max-w-2xl">
-                        {t('investorBriefing.subtitle')}
-                    </p>
-                    
-                    {/* ASSET PICKER INTEGRATED */}
-                    <div className="max-w-md">
-                        <AssetPicker />
-                    </div>
+            {/* HERO HEADER */}
+            <div className="text-center space-y-6 pt-6">
+                <div className="flex justify-between items-center absolute top-0 w-full max-w-7xl px-4">
+                    <BackButton text={t('actions.back', 'Back to Hub')} />
                 </div>
                 
-                <button
-                    onClick={handleDownloadReport}
-                    disabled={!selectedAsset}
-                    className={`
-                        flex items-center px-6 py-4 rounded-xl font-bold transition-all shadow-lg
-                        ${selectedAsset 
-                            ? 'bg-purple-600 hover:bg-purple-500 text-white hover:-translate-y-1 shadow-purple-500/30' 
-                            : 'bg-slate-800 text-slate-500 cursor-not-allowed'}
-                    `}
-                >
-                    <span className="mr-2 text-xl">📄</span> {t('investorBriefing.generateProspectus')}
-                </button>
+                <div>
+                    <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
+                        {t('investorBriefing.title', 'Investor Briefing').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">{t('investorBriefing.title', 'Investor Briefing').split(' ')[1]}</span>
+                    </h2>
+                    <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
+                        {t('investorBriefing.subtitle', 'Financial KPIs and Risk Impact Analysis.')}
+                    </p>
+                </div>
+
+                <div className="max-w-md mx-auto">
+                    <AssetPicker />
+                </div>
             </div>
 
             {!selectedAsset ? (
-                <div className="p-12 border-2 border-dashed border-slate-700 rounded-2xl text-center">
-                    <div className="text-5xl mb-4 opacity-30">💼</div>
-                    <h3 className="text-xl font-bold text-white mb-2">{t('investorBriefing.noAssetTitle')}</h3>
+                <GlassCard className="text-center py-20 border-dashed border-slate-700">
+                    <div className="text-6xl mb-6 opacity-20 grayscale">💼</div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{t('investorBriefing.noAssetTitle')}</h3>
                     <p className="text-slate-400">{t('investorBriefing.noAssetDesc')}</p>
-                </div>
+                </GlassCard>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
                     
-                    {/* LEFT COLUMN: INPUTS */}
+                    {/* LEFT COLUMN: ASSUMPTIONS */}
                     <div className="space-y-6">
-                        <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-                            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <span>🎚️</span> {t('investorBriefing.marketAssumptions')}
-                            </h3>
-                            
+                        <GlassCard 
+                            title={t('investorBriefing.marketAssumptions')} 
+                            className="bg-slate-900/60"
+                            action={<span className="text-xl">🎚️</span>}
+                        >
                             <div className="space-y-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">{t('investorBriefing.electricityPrice')}</label>
-                                    <input 
-                                        type="number" 
-                                        value={params.electricityPrice}
-                                        onChange={(e) => setParams({...params, electricityPrice: parseFloat(e.target.value) || 0})}
-                                        className="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white focus:border-purple-500 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">{t('investorBriefing.interestRate')}</label>
-                                    <input 
-                                        type="number" 
-                                        value={params.interestRate}
-                                        onChange={(e) => setParams({...params, interestRate: parseFloat(e.target.value) || 0})}
-                                        className="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white focus:border-purple-500 outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-1">{t('investorBriefing.projectLifespan')}</label>
-                                    <input 
-                                        type="number" 
-                                        value={params.lifespan}
-                                        onChange={(e) => setParams({...params, lifespan: parseFloat(e.target.value) || 0})}
-                                        className="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white focus:border-purple-500 outline-none"
-                                    />
-                                </div>
+                                <ModernInput 
+                                    label={t('investorBriefing.electricityPrice')}
+                                    type="number"
+                                    value={params.electricityPrice}
+                                    onChange={(e) => setParams({...params, electricityPrice: parseFloat(e.target.value) || 0})}
+                                    icon={<span>€</span>}
+                                />
+                                <ModernInput 
+                                    label={t('investorBriefing.interestRate')}
+                                    type="number"
+                                    value={params.interestRate}
+                                    onChange={(e) => setParams({...params, interestRate: parseFloat(e.target.value) || 0})}
+                                    icon={<span>%</span>}
+                                />
+                                <ModernInput 
+                                    label={t('investorBriefing.projectLifespan')}
+                                    type="number"
+                                    value={params.lifespan}
+                                    onChange={(e) => setParams({...params, lifespan: parseFloat(e.target.value) || 0})}
+                                    icon={<span>📅</span>}
+                                />
                             </div>
-                        </div>
 
-                        <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-xl">
-                            <h4 className="text-blue-300 font-bold text-sm mb-1">{t('investorBriefing.assetContext')}</h4>
-                            <p className="text-xs text-slate-400">
-                                {t('investorBriefing.calcBasedOn')} <strong className="text-white">{selectedAsset.capacity} MW</strong> {t('investorBriefing.capacity')} 
-                                {t('investorBriefing.atLocation')} <strong className="text-white">{selectedAsset.location}</strong>.
-                            </p>
-                        </div>
+                            <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                                <h4 className="text-blue-400 font-bold text-xs uppercase tracking-wider mb-2">{t('investorBriefing.assetContext')}</h4>
+                                <p className="text-xs text-slate-300 leading-relaxed">
+                                    {t('investorBriefing.calcBasedOn')} <strong className="text-white">{selectedAsset.capacity} MW</strong> {t('investorBriefing.capacity')} 
+                                    <br/>{t('investorBriefing.atLocation')} <strong className="text-white">{selectedAsset.location}</strong>.
+                                </p>
+                            </div>
+                        </GlassCard>
                     </div>
 
                     {/* RIGHT COLUMN: KPI DASHBOARD */}
                     <div className="lg:col-span-2 space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* ROI CARD */}
-                            <div className="glass-panel p-6 rounded-2xl bg-gradient-to-br from-slate-800 to-purple-900/20 border border-purple-500/30">
+                            
+                            {/* ROI CARD (Premium) */}
+                            <GlassCard className="bg-gradient-to-br from-purple-900/40 to-slate-900 border-purple-500/30">
                                 <p className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">{t('investorBriefing.roi')}</p>
-                                <div className="text-4xl font-black text-white mb-1">{kpis.roi.toFixed(1)}%</div>
+                                <div className="text-5xl font-black text-white tracking-tighter mb-1">{kpis.roi.toFixed(1)}%</div>
                                 <p className="text-xs text-slate-400">{t('investorBriefing.annualizedYield')}</p>
-                            </div>
+                            </GlassCard>
 
                             {/* LCOE CARD */}
-                            <div className="glass-panel p-6 rounded-2xl bg-slate-800 border border-slate-700">
+                            <GlassCard>
                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{t('investorBriefing.lcoe')}</p>
                                 <div className="text-4xl font-black text-white mb-1">€{kpis.lcoe.toFixed(2)}</div>
                                 <p className="text-xs text-slate-500">{t('investorBriefing.perMwh')}</p>
-                            </div>
+                            </GlassCard>
 
                             {/* REVENUE CARD */}
-                            <div className="glass-panel p-6 rounded-2xl bg-slate-800 border border-slate-700">
-                                <p className="text-xs font-bold text-green-400 uppercase tracking-widest mb-2">{t('investorBriefing.annualRevenue')}</p>
-                                <div className="text-2xl font-bold text-white mb-1">€{(kpis.revenue / 1000000).toFixed(2)}M</div>
+                            <GlassCard>
+                                <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">{t('investorBriefing.annualRevenue')}</p>
+                                <div className="text-3xl font-black text-white mb-1">€{(kpis.revenue / 1000000).toFixed(2)}M</div>
                                 <p className="text-xs text-slate-500">{t('investorBriefing.grossIncome')}</p>
-                            </div>
+                            </GlassCard>
 
                             {/* PAYBACK CARD */}
-                            <div className="glass-panel p-6 rounded-2xl bg-slate-800 border border-slate-700">
+                            <GlassCard>
                                 <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">{t('investorBriefing.paybackPeriod')}</p>
-                                <div className="text-2xl font-bold text-white mb-1">{kpis.payback.toFixed(1)} Yrs</div>
+                                <div className="text-3xl font-black text-white mb-1">{kpis.payback.toFixed(1)} Yrs</div>
                                 <p className="text-xs text-slate-500">{t('investorBriefing.breakEven')}</p>
-                            </div>
+                            </GlassCard>
                         </div>
 
-                        {/* CHART VISUALIZATION (Simple CSS Bar) */}
-                        <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700">
-                            <h3 className="text-sm font-bold text-white mb-6">{t('investorBriefing.financialStructure')}</h3>
-                            <div className="space-y-4">
+                        {/* FINANCIAL STRUCTURE & DOWNLOAD */}
+                        <GlassCard className="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div className="w-full space-y-4">
                                 <div>
-                                    <div className="flex justify-between text-xs mb-1">
+                                    <div className="flex justify-between text-xs mb-1 font-bold uppercase tracking-wider">
                                         <span className="text-slate-400">{t('investorBriefing.revenueInflow')}</span>
-                                        <span className="text-green-400 font-mono">€{(kpis.revenue / 1000).toFixed(0)}k</span>
+                                        <span className="text-emerald-400">€{(kpis.revenue / 1000).toFixed(0)}k</span>
                                     </div>
-                                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                                        <div className="h-full bg-green-500 rounded-full" style={{ width: '100%' }}></div>
+                                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <div className="h-full bg-emerald-500 rounded-full w-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="flex justify-between text-xs mb-1">
+                                    <div className="flex justify-between text-xs mb-1 font-bold uppercase tracking-wider">
                                         <span className="text-slate-400">{t('investorBriefing.opexOutflow')}</span>
-                                        <span className="text-red-400 font-mono">€{(kpis.opex / 1000).toFixed(0)}k</span>
+                                        <span className="text-red-400">€{(kpis.opex / 1000).toFixed(0)}k</span>
                                     </div>
-                                    <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                                         <div className="h-full bg-red-500 rounded-full" style={{ width: `${(kpis.opex / kpis.revenue) * 100}%` }}></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <ModernButton 
+                                onClick={handleDownloadReport}
+                                variant="primary"
+                                className="min-w-[220px] shadow-purple-500/20"
+                                icon={<span>📄</span>}
+                            >
+                                {t('investorBriefing.generateProspectus')}
+                            </ModernButton>
+                        </GlassCard>
                     </div>
                 </div>
             )}
         </div>
     );
 };
-
-export default InvestorBriefing;

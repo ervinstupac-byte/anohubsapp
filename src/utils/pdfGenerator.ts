@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// --- POMOĆNA FUNKCIJA: KREIRA PDF OBJEKT (Ne sprema ga, samo crta) ---
+// --- HELPER: CREATE PDF OBJECT (Shared Logic) ---
 const createDossierDoc = (
     assetName: string,
     riskData: any,
@@ -12,11 +12,9 @@ const createDossierDoc = (
     const timestamp = new Date().toLocaleString();
 
     // --- 1. COVER PAGE ---
-    // Background
     doc.setFillColor(15, 23, 42); // Slate-900 (Enterprise Dark)
     doc.rect(0, 0, 210, 297, 'F');
     
-    // Branding
     doc.setTextColor(6, 182, 212); // Cyan-400
     doc.setFontSize(30);
     doc.setFont('helvetica', 'bold');
@@ -27,12 +25,10 @@ const createDossierDoc = (
     doc.setFont('helvetica', 'normal');
     doc.text('ENTERPRISE PROJECT DOSSIER', 105, 115, { align: 'center' });
 
-    // Decorative Line
     doc.setDrawColor(6, 182, 212);
     doc.setLineWidth(0.5);
     doc.line(60, 125, 150, 125);
 
-    // Meta Info
     doc.setFontSize(12);
     doc.setTextColor(148, 163, 184); // Slate-400
     doc.text(`Target Asset: ${assetName}`, 105, 140, { align: 'center' });
@@ -46,7 +42,6 @@ const createDossierDoc = (
     if (riskData) {
         doc.addPage();
         
-        // Header Strip
         doc.setFillColor(220, 38, 38); // Red-600
         doc.rect(0, 0, 210, 25, 'F');
         doc.setTextColor(255, 255, 255);
@@ -54,14 +49,19 @@ const createDossierDoc = (
         doc.setFont('helvetica', 'bold');
         doc.text('SECTION A: RISK DIAGNOSTIC', 14, 17);
 
-        // Summary Box
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(12);
         doc.text(`Risk ID: ${riskData.id || 'N/A'}`, 14, 40);
+        
+        if (riskData.risk_level === 'High') doc.setTextColor(220, 38, 38);
+        else if (riskData.risk_level === 'Medium') doc.setTextColor(234, 179, 8);
+        else doc.setTextColor(22, 163, 74);
+        
         doc.text(`Risk Level: ${riskData.risk_level || 'Unknown'}`, 14, 48);
+        doc.setTextColor(0, 0, 0);
+        
         doc.text(`Execution Gap Score: ${riskData.risk_score || 0}/100`, 14, 56);
         
-        // Notes (Sada podržava i notes proslijeđen izvana)
         const notesText = riskData.description || '';
         if (notesText) {
             doc.setFont('helvetica', 'italic');
@@ -71,18 +71,20 @@ const createDossierDoc = (
             doc.text(notes, 14, 66);
         }
 
-        // Table of Answers
         if (riskData.answers) {
-            const answerRows = Object.entries(riskData.answers).map(([k, v]) => [k, v]);
+            const answerRows = Object.entries(riskData.answers).map(([k, v]) => {
+                const questionNum = k.toUpperCase(); 
+                return [questionNum, v];
+            });
             
             autoTable(doc, {
                 startY: notesText ? 80 : 70,
                 head: [['Diagnostic Check', 'Status']],
-                body: answerRows,
+                body: answerRows as any[], // <--- FIXED TYPE ERROR
                 theme: 'grid',
                 headStyles: { fillColor: [220, 38, 38], textColor: 255, fontStyle: 'bold' },
                 styles: { fontSize: 9, cellPadding: 3 },
-                alternateRowStyles: { fillColor: [254, 242, 242] } // Light red tint
+                alternateRowStyles: { fillColor: [254, 242, 242] }
             });
         }
     }
@@ -91,7 +93,6 @@ const createDossierDoc = (
     if (designData) {
         doc.addPage();
 
-        // Header Strip
         doc.setFillColor(8, 145, 178); // Cyan-600
         doc.rect(0, 0, 210, 25, 'F');
         doc.setTextColor(255, 255, 255);
@@ -104,7 +105,6 @@ const createDossierDoc = (
         doc.text(`Design Name: ${designData.design_name}`, 14, 40);
         doc.text(`Recommended Turbine: ${designData.recommended_turbine}`, 14, 48);
 
-        // Parameters Table
         const params = designData.parameters || {};
         autoTable(doc, {
             startY: 55,
@@ -120,9 +120,7 @@ const createDossierDoc = (
             styles: { fontSize: 10 }
         });
 
-        // Calculation Results Table
         const calcs = designData.calculations || {};
-        // Get the Y position where the previous table ended
         const finalY = (doc as any).lastAutoTable.finalY || 100;
 
         autoTable(doc, {
@@ -132,15 +130,13 @@ const createDossierDoc = (
                 ['Power Output', `${calcs.powerMW} MW`],
                 ['Annual Generation', `${calcs.energyGWh || calcs.annualGWh} GWh`],
                 ['Specific Speed (nq)', parseFloat(calcs.n_sq || 0).toFixed(2)],
-                ['Rotational Speed (Est.)', `${Math.round(calcs.rpm || 0)} rpm`]
             ],
             theme: 'grid',
-            headStyles: { fillColor: [15, 23, 42] }, // Dark header
+            headStyles: { fillColor: [15, 23, 42] },
             columnStyles: { 1: { fontStyle: 'bold', textColor: [8, 145, 178] } }
         });
     }
 
-    // --- FOOTER (Page Numbers) ---
     const pageCount = (doc as any).internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
@@ -152,7 +148,7 @@ const createDossierDoc = (
     return doc;
 };
 
-// --- EXPORT 1: DOWNLOAD FUNKCIJA (Za korisnika - Lokalno) ---
+// --- EXPORT 1: DOWNLOAD FUNCTION (Local) ---
 export const generateMasterDossier = (
     assetName: string,
     riskData: any,
@@ -160,10 +156,11 @@ export const generateMasterDossier = (
     engineerName: string
 ) => {
     const doc = createDossierDoc(assetName, riskData, designData, engineerName);
-    doc.save(`${assetName}_Master_Dossier.pdf`);
+    const filename = `${assetName.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
+    doc.save(filename);
 };
 
-// --- EXPORT 2: BLOB FUNKCIJA (Za Cloud Upload) ---
+// --- EXPORT 2: BLOB FUNCTION (Cloud Upload) ---
 export const generateMasterDossierBlob = (
     assetName: string,
     riskData: any,
@@ -174,11 +171,10 @@ export const generateMasterDossierBlob = (
     return doc.output('blob');
 };
 
-// --- EXPORT 3: FINANCIAL REPORT (Za Investor Briefing) ---
+// --- EXPORT 3: FINANCIAL REPORT (Investor Briefing) ---
 export const generateFinancialReport = (assetName: string, kpis: any) => {
     const doc = new jsPDF();
     
-    // Header
     doc.setFillColor(15, 23, 42); 
     doc.rect(0, 0, 210, 40, 'F');
     doc.setFontSize(22);
@@ -189,7 +185,6 @@ export const generateFinancialReport = (assetName: string, kpis: any) => {
     doc.setTextColor(100);
     doc.text(`Asset: ${assetName}`, 14, 50);
     
-    // KPI Table
     autoTable(doc, {
         startY: 60,
         head: [['Metric', 'Value']],
@@ -199,13 +194,14 @@ export const generateFinancialReport = (assetName: string, kpis: any) => {
             ['Total CAPEX', kpis.capex]
         ],
         theme: 'grid',
-        headStyles: { fillColor: [88, 28, 135] } // Purple
+        headStyles: { fillColor: [88, 28, 135] }
     });
     
-    doc.save(`${assetName}_Financial_Report.pdf`);
+    const filename = `${assetName.replace(/\s+/g, '_')}_Financial_Report.pdf`;
+    doc.save(filename);
 };
 
-// --- EXPORT 4: CALCULATION REPORT (Za HPP Builder) ---
+// --- EXPORT 4: CALCULATION REPORT (HPP Builder) ---
 export const generateCalculationReport = (
     settings: any, 
     results: any, 
@@ -215,13 +211,11 @@ export const generateCalculationReport = (
     const doc = new jsPDF();
     const title = assetName ? `HPP Design: ${assetName}` : 'HPP Design Calculation';
     
-    // Header
     doc.setFontSize(18);
     doc.text(title, 14, 20);
     doc.setFontSize(10);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
     
-    // Input Parameters
     autoTable(doc, {
         startY: 35,
         head: [['Input Parameter', 'Value']],
@@ -233,7 +227,6 @@ export const generateCalculationReport = (
         theme: 'striped'
     });
     
-    // Results
     autoTable(doc, {
         startY: (doc as any).lastAutoTable.finalY + 10,
         head: [['Result', 'Value']],
@@ -246,32 +239,30 @@ export const generateCalculationReport = (
         headStyles: { fillColor: [6, 182, 212] }
     });
 
-    // Best Recommendation
     const best = recommendations.find(r => r.isBest);
     if (best) {
         const yPos = (doc as any).lastAutoTable.finalY + 20;
         doc.setFontSize(12);
-        doc.setTextColor(0, 150, 0);
+        doc.setTextColor(22, 163, 74); 
         doc.text(`Recommended Turbine: ${best.key.toUpperCase()}`, 14, yPos);
     }
     
     doc.save('HPP_Design_Report.pdf');
 };
 
-// --- EXPORT 5: LEGACY SUPPORT (ZA QuestionnaireSummary) ---
-// OVO JE ONO ŠTO JE TREBALO POPRAVITI:
-// Dodan je treći argument 'notes?: string'
+// --- EXPORT 5: RISK REPORT (Legacy) ---
 export const generateRiskReport = (
     riskData: any, 
     engineerName: string, 
     notes?: string
 ) => {
-    // Ako je proslijeđen opis, dodaj ga u objekt
     if (notes) {
         riskData.description = notes;
     }
 
     const assetName = riskData.assetName || "Assessment";
     const doc = createDossierDoc(assetName, riskData, null, engineerName);
-    doc.save(`Risk_Assessment_${new Date().toISOString().split('T')[0]}.pdf`);
+    
+    const filename = `Risk_Assessment_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
 };

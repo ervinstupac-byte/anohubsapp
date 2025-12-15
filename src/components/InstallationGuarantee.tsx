@@ -3,7 +3,23 @@ import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { AssetPicker, useAssetContext } from './AssetPicker.tsx'; // <--- NOVO
+import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
+
+// --- TYPE DEFINITIONS ---
+// Definiramo kako izgleda status jedne faze
+interface StageStatus {
+    value: string;
+    status: 'N/A' | 'PASS' | 'FAIL';
+}
+
+// Definiramo cijelo stanje audita
+// Record<string, StageStatus> znači: objekt gdje su ključevi stringovi, a vrijednosti StageStatus
+interface AuditState {
+    stageStatus: Record<string, StageStatus>;
+    finalNotes: string;
+}
 
 const AUDIT_STAGES = [
     { id: 'foundation', name: 'Foundation Alignment', requirement: '< 0.05 mm/m (Verticality)' },
@@ -18,9 +34,12 @@ export const InstallationGuarantee: React.FC = () => {
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
     
-    // Audit States
-    const [audit, setAudit] = useState({
-        stageStatus: AUDIT_STAGES.reduce((acc, stage) => ({ ...acc, [stage.id]: { value: '', status: 'N/A' as 'N/A' | 'PASS' | 'FAIL' } }), {}),
+    // Inicijalizacija stanja s eksplicitnim tipom AuditState
+    const [audit, setAudit] = useState<AuditState>({
+        stageStatus: AUDIT_STAGES.reduce((acc, stage) => ({ 
+            ...acc, 
+            [stage.id]: { value: '', status: 'N/A' } 
+        }), {} as Record<string, StageStatus>), // Važno: casting u Record
         finalNotes: '',
     });
 
@@ -43,11 +62,11 @@ export const InstallationGuarantee: React.FC = () => {
             return;
         }
 
-        const overallStatus = Object.values(audit.stageStatus).some((s: any) => s.status === 'FAIL') ? 'FAILED' : 'PASSED';
+        const overallStatus = Object.values(audit.stageStatus).some((s) => s.status === 'FAIL') ? 'FAILED' : 'PASSED';
 
         const payload = {
             engineer_id: user?.email || 'Guest',
-            asset_id: selectedAsset.id, // <--- VEZANO ZA ASSET
+            asset_id: selectedAsset.id,
             asset_name_audit: selectedAsset.name,
             audit_data: audit.stageStatus,
             final_notes: audit.finalNotes,
@@ -56,70 +75,86 @@ export const InstallationGuarantee: React.FC = () => {
 
         try {
             const { error } = await supabase.from('installation_audits').insert([payload]);
-
             if (error) throw error;
-
-            showToast(`Audit for ${selectedAsset.name} sealed successfully! Status: ${overallStatus}`, overallStatus === 'PASSED' ? 'success' : 'warning');
+            showToast(`Audit sealed successfully! Status: ${overallStatus}`, overallStatus === 'PASSED' ? 'success' : 'warning');
         } catch (error: any) {
             console.error('Save Audit Error:', error);
             showToast(`Failed to save audit: ${error.message}`, 'error');
         }
     };
 
-    const overallStatus = Object.values(audit.stageStatus).some((s: any) => s.status === 'FAIL') ? 'FAILED' : 
-                          Object.values(audit.stageStatus).some((s: any) => s.status === 'PASS') ? 'PASSED' : 'PENDING';
+    // Logika za status trake
+    const overallStatus = Object.values(audit.stageStatus).some((s) => s.status === 'FAIL') ? 'FAILED' : 
+                          Object.values(audit.stageStatus).some((s) => s.status === 'PASS') ? 'PASSED' : 'PENDING';
 
     return (
-        <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-            <BackButton text="Back to Hub" />
+        <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6">
+                <BackButton text="Back to Hub" />
+                <div className="w-full max-w-xs">
+                    <AssetPicker />
+                </div>
+            </div>
 
-            {/* 1. ASSET PICKER */}
-            <AssetPicker />
-            
-            <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold text-white">Installation Guarantee</h2>
-                <p className="text-slate-400 text-lg max-w-3xl mx-auto">
-                    The 0.05 mm/m Protocol. Non-negotiable precision mandate during assembly and commissioning.
+            <div className="text-center space-y-2 mb-8">
+                <h2 className="text-4xl font-black text-white tracking-tighter uppercase">
+                    Installation <span className="text-cyan-400">Guarantee</span>
+                </h2>
+                <p className="text-slate-400 text-lg max-w-3xl mx-auto font-light">
+                    The 0.05 mm/m Protocol. Non-negotiable precision mandate during assembly.
                 </p>
             </div>
 
-            <div className="glass-panel p-6 rounded-2xl bg-slate-800/50 border border-slate-700 space-y-6">
-                
+            <GlassCard className="p-0 border-t-4 border-t-cyan-500">
                 {/* STATUS BAR */}
-                <div className={`flex justify-between items-center p-4 rounded-xl border ${
-                    overallStatus === 'FAILED' ? 'bg-red-900/20 border-red-500/50' : 
-                    overallStatus === 'PASSED' ? 'bg-green-900/20 border-green-500/50' : 
-                    'bg-slate-900/50 border-slate-700'
-                }`}>
-                    <div>
-                        <p className="text-sm font-bold text-slate-400 uppercase">Current Asset:</p>
-                        <p className="text-xl font-mono text-white">{selectedAsset?.name || '--- Select Asset ---'}</p>
+                <div className="p-6 border-b border-white/5 bg-slate-900/50 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-slate-800 rounded-lg border border-slate-700">
+                            <span className="text-2xl">🏗️</span>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active Audit For</p>
+                            <p className="text-lg font-bold text-white">{selectedAsset?.name || '--- Select Asset ---'}</p>
+                        </div>
                     </div>
-                    <div className="text-right">
-                        <p className="text-sm font-bold text-slate-400 uppercase">Audit Status:</p>
-                        <p className={`text-xl font-black ${overallStatus === 'FAILED' ? 'text-red-500' : overallStatus === 'PASSED' ? 'text-green-500' : 'text-yellow-500'}`}>
+                    
+                    <div className="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-xl border border-white/5">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live Status</span>
+                        <span className={`text-xl font-black uppercase tracking-wider ${
+                            overallStatus === 'FAILED' ? 'text-red-500' : 
+                            overallStatus === 'PASSED' ? 'text-emerald-400' : 'text-amber-400'
+                        }`}>
                             {overallStatus}
-                        </p>
+                        </span>
                     </div>
                 </div>
 
                 {/* AUDIT TABLE */}
-                <h3 className="text-lg font-bold text-white border-b border-slate-700 pb-2">Mandatory Checks</h3>
-                <div className="space-y-4">
-                    {AUDIT_STAGES.map(stage => (
-                        <div key={stage.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-3 bg-slate-900/50 rounded-lg border border-slate-700">
+                <div className="p-6 md:p-8 space-y-4">
+                    <div className="flex items-center gap-2 mb-6">
+                        <span className="h-px w-8 bg-cyan-500"></span>
+                        <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest">Mandatory Checkpoints</h3>
+                    </div>
+
+                    {AUDIT_STAGES.map((stage, index) => (
+                        <div key={stage.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 bg-slate-800/40 rounded-xl border border-white/5 hover:border-cyan-500/30 transition-colors">
                             <div className="md:col-span-5">
-                                <p className="text-sm font-bold text-white">{stage.name}</p>
-                                <p className="text-xs text-slate-500">{stage.requirement}</p>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-xs font-mono text-slate-600">0{index + 1}</span>
+                                    <div>
+                                        <p className="text-sm font-bold text-slate-200">{stage.name}</p>
+                                        <p className="text-[10px] text-cyan-400/80 font-mono mt-0.5">{stage.requirement}</p>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="md:col-span-4">
                                 <input
                                     type="text"
-                                    placeholder="Measured Value"
+                                    placeholder="Enter Measured Value..."
                                     value={audit.stageStatus[stage.id].value}
                                     onChange={(e) => handleStageUpdate(stage.id, 'value', e.target.value)}
-                                    className="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm focus:border-cyan-500 outline-none"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all placeholder-slate-600"
                                 />
                             </div>
 
@@ -127,46 +162,45 @@ export const InstallationGuarantee: React.FC = () => {
                                 <select
                                     value={audit.stageStatus[stage.id].status}
                                     onChange={(e) => handleStageUpdate(stage.id, 'status', e.target.value as any)}
-                                    className={`w-full border rounded p-2 text-sm font-bold cursor-pointer ${
-                                        audit.stageStatus[stage.id].status === 'PASS' ? 'bg-green-900/50 border-green-500 text-green-400' :
-                                        audit.stageStatus[stage.id].status === 'FAIL' ? 'bg-red-900/50 border-red-500 text-red-400' :
+                                    className={`w-full border rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors outline-none appearance-none text-center ${
+                                        audit.stageStatus[stage.id].status === 'PASS' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' :
+                                        audit.stageStatus[stage.id].status === 'FAIL' ? 'bg-red-500/20 border-red-500/50 text-red-400' :
                                         'bg-slate-800 border-slate-600 text-slate-400'
                                     }`}
                                 >
-                                    <option value="N/A">PENDING</option>
-                                    <option value="PASS">PASS</option>
-                                    <option value="FAIL">FAIL</option>
+                                    <option value="N/A">Pending</option>
+                                    <option value="PASS">Pass</option>
+                                    <option value="FAIL">Fail</option>
                                 </select>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* NOTES */}
-                <h3 className="text-lg font-bold text-white border-b border-slate-700 pb-2 pt-4">Final Remarks</h3>
-                <textarea
-                    rows={4}
-                    value={audit.finalNotes}
-                    onChange={(e) => setAudit(prev => ({ ...prev, finalNotes: e.target.value }))}
-                    className="w-full bg-slate-900/50 border border-slate-600 rounded p-3 text-white resize-none focus:border-cyan-500 outline-none"
-                    placeholder="Document deviations, risks, and necessary corrective actions."
-                />
+                {/* NOTES & FOOTER */}
+                <div className="p-6 md:p-8 bg-slate-900/30 border-t border-white/5">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Engineer's Remarks</h3>
+                    <textarea
+                        rows={3}
+                        value={audit.finalNotes}
+                        onChange={(e) => setAudit(prev => ({ ...prev, finalNotes: e.target.value }))}
+                        className="w-full bg-slate-950/50 border border-slate-700 rounded-xl p-4 text-slate-300 text-sm resize-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all"
+                        placeholder="Document any deviations, risks, or corrective actions taken..."
+                    />
 
-                {/* SAVE BUTTON */}
-                <div className="flex justify-end pt-4 border-t border-slate-700">
-                    <button 
-                        onClick={handleSaveAudit} 
-                        disabled={!selectedAsset} 
-                        className={`px-8 py-4 font-bold rounded-xl shadow-lg transition-all ${
-                            !selectedAsset 
-                            ? 'bg-slate-700 text-slate-500 cursor-not-allowed' 
-                            : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'
-                        }`}
-                    >
-                        {selectedAsset ? 'SEAL AUDIT TO CLOUD' : 'Select Asset to Save'}
-                    </button>
+                    <div className="flex justify-end mt-6">
+                        <ModernButton 
+                            onClick={handleSaveAudit} 
+                            disabled={!selectedAsset} 
+                            variant="primary"
+                            className="px-8 shadow-lg shadow-cyan-900/20"
+                            icon={<span>🔒</span>}
+                        >
+                            {selectedAsset ? 'Seal Audit to Cloud' : 'Select Asset to Begin'}
+                        </ModernButton>
+                    </div>
                 </div>
-            </div>
+            </GlassCard>
         </div>
     );
 };

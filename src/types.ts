@@ -1,26 +1,30 @@
 // --- GLOBAL VIEW TYPES ---
+// Ovo su svi ekrani koje tvoja aplikacija može prikazati
 export type AppView = 
-  | 'hub' | 'risk' | 'install' | 'design' | 'map' 
-  | 'investor' | 'contract' | 'integrity' | 'revital' | 'library'
-  | 'improvements' | 'guide' | 'standards' | 'wildlife' | 'gender' | 'digital'
-  | 'profile' | 'questionnaireSummary' | 'riskReport' | 'turbineDetail'
-  | 'riskAssessment' | 'installationGuarantee' | 'hppBuilder' | 'globalMap'
-  | 'investorBriefing' | 'standardOfExcellence' | 'digitalIntroduction'
-  | 'hppImprovements' | 'genderEquity' | 'phaseGuide' | 'riverWildlife'
-  | 'revitalizationStrategy' | 'digitalIntegrity' | 'contractManagement'
-  | 'ino' | 'excellence' | 'suggestion' | 'suggestionBox';
+  | 'hub' 
+  | 'onboarding'
+  | 'profile'
+  | 'globalMap'               // Global Map
+  | 'riskAssessment'          // Questionnaire
+  | 'questionnaireSummary'    // Summary & Gauge
+  | 'riskReport'              // PDF Dossier
+  | 'installationGuarantee'   // Audit Form
+  | 'hppBuilder'              // Physics Engine
+  | 'investorBriefing'        // Financials
+  | 'contractManagement'      // Smart Contracts
+  | 'digitalIntegrity'        // Blockchain Ledger
+  | 'revitalizationStrategy'  // Life Extension
+  | 'library'                 // Component Library
+  | 'hppImprovements'         // Ino-Hub
+  | 'phaseGuide'              // Project Guide
+  | 'standardOfExcellence'    // Standards
+  | 'riverWildlife'           // Ecology
+  | 'genderEquity'            // HR Strategy
+  | 'digitalIntroduction'     // Manifesto
+  | 'turbineDetail';          // Specific Turbine View
 
 // --- SHARED DATA TYPES ---
 export type Answers = Record<string, string>;
-
-export interface HubTool {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  view: AppView;
-  isCritical?: boolean;
-}
 
 // --- ASSET MANAGEMENT ---
 export interface Asset {
@@ -28,9 +32,9 @@ export interface Asset {
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;
-  coordinates: [number, number]; // [lat, lng]
-  capacity: number; // MW (ovo zamjenjuje power_output)
-  status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning'; // Dodani statusi za mapu
+  coordinates: [number, number]; // [lat, lng] za Mapu
+  capacity: number; // MW
+  status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
 }
 
@@ -51,12 +55,13 @@ export interface Question {
 export interface OperationalData {
   commissioningYear: string;
   maintenanceCycle: string;
-  powerOutput: number | string; // Fleksibilno za input
+  powerOutput: number | string; 
   turbineType: string;
   head: number | string;
   flow: number | string;
   pressure?: number | string;
   output?: number | string;
+  [key: string]: string | number | undefined; // Index signature za fleksibilnost
 }
 
 export interface QuestionnaireContextType {
@@ -71,6 +76,7 @@ export interface QuestionnaireContextType {
 
 export interface RiskContextType {
   disciplineRiskScore: number;
+  updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void; // <--- OVO JE NEDOSTAJALO
   calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
 }
 
@@ -78,7 +84,7 @@ export interface RiskContextType {
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface ToastContextType {
-  showToast: (message: string, type?: ToastType) => void;
+  showToast: (message: string, type: ToastType) => void;
 }
 
 // --- TURBINE DATA ---
@@ -116,13 +122,12 @@ export interface TurbineRecommendation {
 export interface CalculationResult {
   powerMW: number;
   energyGWh: number;
+  annualGWh: string; // String radi prikaza u UI i PDF-u
+  n_sq: string;      // Specific speed index
   revenue?: number;
   capex?: number;
   lcoe?: number;
   roi?: number;
-  recommendedTurbine?: string;
-  n_sq: string;
-  annualGWh: string; // String radi prikaza
 }
 
 export interface SavedConfiguration {
@@ -134,27 +139,24 @@ export interface SavedConfiguration {
   results: CalculationResult;
 }
 
-// --- PDF GENERATOR ---
-export interface ProtocolSection {
-  title: string;
-  content: string;
-}
-
-export interface VerificationData {
-  technician: string;
-  date: string;
-  location: string;
-  notes: string;
-}
-
 // --- NAVIGATION ---
 export interface NavigationContextType {
   currentView: AppView;
+  showOnboarding: boolean;
+  completeOnboarding: () => void;
   navigateTo: (view: AppView) => void;
   navigateBack: () => void;
   navigateToHub: () => void;
   navigateToTurbineDetail: (turbineKey: string) => void;
   showFeedbackModal: () => void;
-  showOnboarding: boolean;
-  completeOnboarding: () => void;
+}
+
+// --- HUB TOOL ---
+export interface HubTool {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  view: AppView;
+  isCritical?: boolean;
 }

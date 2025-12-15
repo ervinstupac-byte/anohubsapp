@@ -1,5 +1,18 @@
 {
-  "name": "AnoHUB | HPP Risk & Excellence Platform",
-  "description": "An educational and risk assessment application helping users understand the 'Execution Gap' by analyzing symptoms and generating a comprehensive risk report.",
-  "requestFramePermissions": []
+  "name": "AnoHUB | Enterprise Operations OS",
+  "short_name": "AnoHUB",
+  "description": "The definitive platform for Hydropower Risk Management, LCC Optimization, and Digital Asset Integrity. Closing the Execution Gap via the 0.05 mm/m Standard.",
+  "version": "2.4.0",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#0F172A",
+  "background_color": "#020617",
+  "display": "standalone",
+  "orientation": "landscape",
+  "categories": ["business", "productivity", "utilities"]
 }

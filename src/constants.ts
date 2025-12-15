@@ -1,4 +1,4 @@
-import { HubTool, Question, TurbineCategories } from './types.ts';
+import type { HubTool, Question, TurbineCategories } from './types.ts';
 
 // --- 1. TURBINE CATEGORIES (Used in Builder & Briefing) ---
 export const TURBINE_CATEGORIES: TurbineCategories = {
@@ -126,7 +126,7 @@ export const HUB_TOOLS: HubTool[] = [
 
     // KNOWLEDGE & CULTURE
     {
-        id: 'library', // <--- NEW: Component Library
+        id: 'library',
         view: 'library',
         title: 'Component Library',
         description: 'Technical encyclopedia. KPIs and failure modes.',

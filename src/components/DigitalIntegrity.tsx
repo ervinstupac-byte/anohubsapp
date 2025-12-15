@@ -4,6 +4,9 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
+import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
+import { ModernInput } from './ui/ModernInput.tsx'; // <--- UI Kit
+import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
 
 // --- TYPES ---
 interface Block {
@@ -43,7 +46,6 @@ export const DigitalIntegrity: React.FC = () => {
     const [isMining, setIsMining] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
 
-    // Update engineer name on load
     useEffect(() => {
         if (user?.email) setEngineer(user.email);
         else if (user?.user_metadata?.full_name) setEngineer(user.user_metadata.full_name);
@@ -56,7 +58,7 @@ export const DigitalIntegrity: React.FC = () => {
                 .from('digital_integrity_ledger')
                 .select('*')
                 .order('block_index', { ascending: false })
-                .limit(50); // Show last 50 blocks
+                .limit(50); 
 
             if (error) throw error;
             
@@ -73,7 +75,6 @@ export const DigitalIntegrity: React.FC = () => {
     useEffect(() => {
         fetchLedger();
         
-        // Subscribe to new blocks
         const sub = supabase.channel('public:digital_integrity_ledger')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
                 const newBlock = payload.new as Block;
@@ -109,15 +110,12 @@ export const DigitalIntegrity: React.FC = () => {
         
         setIsMining(true);
         
-        // Format data string
         const dataString = `${selectedAsset.id}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
         const prevBlock = ledger[0]; 
         
         try {
-            // Simulate Proof-of-Work delay
             await new Promise(r => setTimeout(r, 1000)); 
 
-            // Calculate Hash
             const rawContent = prevBlock.hash + dataString + new Date().toISOString();
             const newHash = await generateHash(rawContent);
             
@@ -156,49 +154,64 @@ export const DigitalIntegrity: React.FC = () => {
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-            <BackButton text="Back to Dashboard" />
             
-            {/* ASSET PICKER (Global Context) */}
-            <AssetPicker />
+            {/* HERO HEADER */}
+            <div className="text-center space-y-6 pt-6 relative">
+                <div className="flex justify-between items-center absolute top-0 w-full max-w-7xl px-4">
+                    <BackButton text="Back to Hub" />
+                </div>
+                
+                <div>
+                    <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
+                        Immutable <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Trust Ledger</span>
+                    </h2>
+                    <div className="flex justify-center gap-4">
+                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700 shadow-lg">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span className="text-xs font-mono text-slate-400">NODE STATUS: <span className="text-emerald-400 font-bold">ACTIVE</span></span>
+                        </div>
+                        <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700 shadow-lg">
+                            <span className="text-xs font-mono text-slate-400">HEIGHT: <span className="text-cyan-400 font-bold">{ledger.length} BLOCKS</span></span>
+                        </div>
+                    </div>
+                </div>
 
-            <div className="text-center space-y-4">
-                <h2 className="text-3xl font-bold text-white tracking-tight">
-                    Immutable <span className="text-cyan-400">Trust Ledger</span>
-                </h2>
-                <div className="flex justify-center gap-4">
-                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 shadow-lg">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                        <span className="text-xs font-mono text-slate-400">NODE STATUS: <span className="text-green-400">ACTIVE</span></span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 shadow-lg">
-                        <span className="text-xs font-mono text-slate-400">HEIGHT: <span className="text-cyan-400">{ledger.length} BLOCKS</span></span>
-                    </div>
+                <div className="max-w-md mx-auto">
+                    <AssetPicker />
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
                 {/* LEFT: MINING CONSOLE */}
-                <div className="lg:col-span-1 glass-panel p-6 rounded-2xl bg-slate-900 border border-slate-700 flex flex-col gap-5 shadow-2xl">
-                    <h3 className="text-lg font-bold text-white border-b border-slate-700 pb-2 flex items-center gap-2">
-                        <span>⛏️</span> Mining Console
-                    </h3>
+                <GlassCard className="h-fit border-l-4 border-l-blue-500">
+                    <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+                        <span className="text-2xl">⛏️</span>
+                        <h3 className="text-lg font-bold text-white uppercase tracking-wider">Mining Console</h3>
+                    </div>
                     
                     {!selectedAsset ? (
-                        <div className="p-4 bg-red-900/20 border border-red-500/30 rounded-lg text-center">
-                            <p className="text-sm text-red-400 font-bold">TARGET ASSET REQUIRED</p>
-                            <p className="text-xs text-red-300/70 mt-1">Select a project above to enable mining.</p>
+                        <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
+                            <p className="text-sm text-red-400 font-bold uppercase tracking-wide mb-1">Target Asset Required</p>
+                            <p className="text-xs text-red-200/70">Select a project above to enable mining operations.</p>
                         </div>
                     ) : (
-                        <div className="space-y-4 animate-fade-in">
-                            <div className="bg-slate-800/50 p-3 rounded border border-slate-700">
-                                <label className="text-[10px] text-slate-500 uppercase font-bold">Target</label>
-                                <div className="text-cyan-400 font-mono text-sm">{selectedAsset.name}</div>
+                        <div className="space-y-5 animate-fade-in">
+                            <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                                <label className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block mb-1">Target Asset</label>
+                                <div className="text-cyan-400 font-mono text-sm font-bold flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></span>
+                                    {selectedAsset.name}
+                                </div>
                             </div>
 
                             <div>
-                                <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">Operation Type</label>
-                                <select value={operation} onChange={e => setOperation(e.target.value)} className="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm focus:border-cyan-500 outline-none transition-colors">
+                                <label className="text-xs text-slate-500 uppercase font-bold mb-2 block ml-1">Operation Type</label>
+                                <select 
+                                    value={operation} 
+                                    onChange={e => setOperation(e.target.value)} 
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:border-cyan-500 outline-none transition-colors cursor-pointer"
+                                >
                                     <option>Shaft Alignment Check</option>
                                     <option>Vibration Analysis</option>
                                     <option>Component Replacement</option>
@@ -207,35 +220,42 @@ export const DigitalIntegrity: React.FC = () => {
                                 </select>
                             </div>
 
-                            <div>
-                                <label className="text-xs text-slate-500 uppercase font-bold mb-1 block">Measured Value / Result</label>
-                                <input type="text" value={value} onChange={e => setValue(e.target.value)} className="w-full bg-slate-800 border border-slate-600 rounded p-2 text-white text-sm font-mono focus:border-cyan-500 outline-none transition-colors" />
-                            </div>
+                            <ModernInput 
+                                label="Measured Value / Result"
+                                value={value} 
+                                onChange={e => setValue(e.target.value)} 
+                                className="font-mono"
+                            />
 
                             <div className="pt-4">
-                                <button 
+                                <ModernButton 
                                     onClick={handleSealRecord} 
                                     disabled={isMining} 
-                                    className={`w-full py-4 font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 ${isMining ? 'bg-slate-800 text-slate-500 cursor-wait' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:shadow-cyan-500/30 hover:-translate-y-1'}`}
+                                    variant="primary"
+                                    fullWidth
+                                    isLoading={isMining}
+                                    className="h-14 shadow-cyan-500/20"
+                                    icon={!isMining && <span>🔒</span>}
                                 >
-                                    {isMining ? (
-                                        <><span className="animate-spin">⚙️</span> HASHING...</>
-                                    ) : (
-                                        <><span className="text-lg">☁️</span> SEAL TO BLOCKCHAIN</>
-                                    )}
-                                </button>
+                                    {isMining ? 'HASHING BLOCK...' : 'SEAL TO BLOCKCHAIN'}
+                                </ModernButton>
                             </div>
                         </div>
                     )}
-                </div>
+                </GlassCard>
 
                 {/* RIGHT: LEDGER VISUALIZER */}
                 <div className="lg:col-span-2 space-y-4">
-                    <div className="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-slate-700">
-                        <h3 className="text-sm font-bold text-white pl-2">Latest Blocks</h3>
+                    <div className="flex justify-between items-center bg-slate-900/60 p-4 rounded-2xl border border-slate-700 backdrop-blur-md">
+                        <h3 className="text-sm font-bold text-white pl-2 uppercase tracking-wider">Latest Blocks</h3>
                         <button 
                             onClick={handleVerifyChain} 
-                            className={`text-xs px-4 py-2 rounded-lg font-bold border transition-all ${verificationStatus === 'SECURE' ? 'bg-green-500/10 text-green-400 border-green-500/50' : 'bg-slate-800 text-slate-300 border-slate-600 hover:bg-slate-700'}`}
+                            className={`
+                                text-[10px] px-4 py-2 rounded-lg font-bold border transition-all uppercase tracking-widest
+                                ${verificationStatus === 'SECURE' 
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
+                                    : 'bg-slate-800 text-slate-400 border-slate-600 hover:bg-slate-700 hover:text-white'}
+                            `}
                         >
                             {verificationStatus === 'VERIFYING' ? 'VERIFYING SIGNATURES...' : verificationStatus === 'SECURE' ? '✅ CHAIN SECURE' : '🔍 VERIFY INTEGRITY'}
                         </button>
@@ -243,51 +263,55 @@ export const DigitalIntegrity: React.FC = () => {
 
                     <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
                         {ledger.map((block) => (
-                            <div key={block.block_index} className="relative p-4 bg-slate-800/60 rounded-xl border border-slate-700 hover:border-cyan-500/50 transition-all group overflow-hidden">
+                            <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
+                                
                                 {/* Connector Line */}
-                                {block.block_index > 0 && <div className="absolute -top-4 left-[22px] w-0.5 h-6 bg-slate-600 z-0"></div>}
+                                {block.block_index > 0 && <div className="absolute -top-6 left-[27px] w-0.5 h-10 bg-slate-800 z-0"></div>}
                                 
                                 <div className="flex justify-between items-start relative z-10">
-                                    <div className="flex gap-4">
+                                    <div className="flex gap-5">
                                         {/* Block Index */}
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-xs font-mono font-bold text-slate-400 border border-slate-700 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors">
+                                        <div className="flex flex-col items-center pt-1">
+                                            <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-xs font-mono font-bold text-slate-500 border border-slate-800 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors shadow-inner">
                                                 #{block.block_index}
                                             </div>
                                         </div>
 
                                         {/* Block Data */}
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <p className="text-sm font-bold text-white">
+                                        <div className="flex-grow">
+                                            <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+                                                <p className="text-base font-bold text-white tracking-tight">
                                                     {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
                                                 </p>
                                                 {block.asset_id && block.asset_id !== 'ROOT' && (
-                                                    <span className="text-[9px] bg-slate-700 px-1.5 py-0.5 rounded text-cyan-300 border border-slate-600">
-                                                        ID: {block.asset_id}
+                                                    <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-cyan-200 border border-slate-700 font-mono w-fit">
+                                                        ASSET ID: {block.asset_id}
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-[10px] text-slate-500 font-mono mb-2">
-                                                {new Date(block.timestamp).toLocaleString()} • {block.engineer_id?.split('@')[0] || 'System'}
-                                            </p>
+                                            
+                                            <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wide">
+                                                <span>{new Date(block.timestamp).toLocaleString()}</span>
+                                                <span className="w-1 h-1 bg-slate-600 rounded-full"></span>
+                                                <span>{block.engineer_id?.split('@')[0] || 'System'}</span>
+                                            </div>
                                             
                                             {/* Hash Visualizer */}
-                                            <div className="bg-slate-950/50 p-2 rounded border border-slate-800 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
-                                                <div className="flex gap-2">
-                                                    <span className="text-slate-600 select-none">HASH:</span>
-                                                    <span className="truncate w-48 md:w-64">{block.hash}</span>
+                                            <div className="bg-black/40 p-3 rounded-lg border border-white/5 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
+                                                <div className="flex gap-3 mb-1">
+                                                    <span className="text-slate-600 select-none font-bold w-8 text-right">HASH:</span>
+                                                    <span className="truncate w-full text-emerald-500/80">{block.hash}</span>
                                                 </div>
-                                                <div className="flex gap-2 mt-1">
-                                                    <span className="text-slate-600 select-none">PREV:</span>
-                                                    <span className="truncate w-48 md:w-64">{block.prev_hash}</span>
+                                                <div className="flex gap-3">
+                                                    <span className="text-slate-600 select-none font-bold w-8 text-right">PREV:</span>
+                                                    <span className="truncate w-full">{block.prev_hash}</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     {/* Icon */}
-                                    <div className="text-slate-700 group-hover:text-cyan-500/20 transition-colors text-4xl select-none">
+                                    <div className="text-slate-800 group-hover:text-cyan-500/10 transition-colors text-5xl select-none absolute right-4 top-4 pointer-events-none">
                                         🔗
                                     </div>
                                 </div>

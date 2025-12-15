@@ -7,6 +7,9 @@ import { supabase } from '../services/supabaseClient.ts';
 import { generateMasterDossier, generateMasterDossierBlob } from '../utils/pdfGenerator.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
+import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
+import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { Spinner } from './Spinner.tsx'; // <--- New Spinner
 
 export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -31,7 +34,7 @@ export const RiskReport: React.FC = () => {
 
             setLoading(true);
             try {
-                // Dohvati zadnji Risk Assessment
+                // Fetch latest Risk Assessment
                 const { data: risk } = await supabase
                     .from('risk_assessments')
                     .select('*')
@@ -40,7 +43,7 @@ export const RiskReport: React.FC = () => {
                     .limit(1)
                     .single();
 
-                // Dohvati zadnji Design
+                // Fetch latest Design
                 const { data: design } = await supabase
                     .from('turbine_designs')
                     .select('*')
@@ -52,7 +55,6 @@ export const RiskReport: React.FC = () => {
                 setRiskData(risk);
                 setDesignData(design);
             } catch (error) {
-                // Ignore error if just no rows found
                 console.log('Status check:', error);
             } finally {
                 setLoading(false);
@@ -62,7 +64,7 @@ export const RiskReport: React.FC = () => {
         fetchData();
     }, [selectedAsset]);
 
-    // --- 2. HANDLER: LOCAL DOWNLOAD ---
+    // --- 2. HANDLERS ---
     const handleDownload = () => {
         if (!selectedAsset) return;
         try {
@@ -78,13 +80,11 @@ export const RiskReport: React.FC = () => {
         }
     };
 
-    // --- 3. HANDLER: UPLOAD TO CLOUD (ENTERPRISE) ---
     const handleUploadToHQ = async () => {
         if (!selectedAsset || !user) return;
         setUploading(true);
 
         try {
-            // A) Generiraj PDF Blob
             const pdfBlob = generateMasterDossierBlob(
                 selectedAsset.name,
                 riskData,
@@ -92,24 +92,18 @@ export const RiskReport: React.FC = () => {
                 user.email || 'Engineer'
             );
 
-            // B) Kreiraj putanju fajla: reports/USER_ID/ASSET_NAME_TIMESTAMP.pdf
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const safeAssetName = selectedAsset.name.replace(/\s+/g, '_');
             const fileName = `${safeAssetName}_${timestamp}.pdf`;
             const filePath = `${user.id}/${fileName}`;
 
-            // C) Upload na Supabase Storage
             const { error: uploadError } = await supabase.storage
-                .from('reports') // Mora postojati bucket 'reports'
-                .upload(filePath, pdfBlob, {
-                    contentType: 'application/pdf',
-                    upsert: false
-                });
+                .from('reports')
+                .upload(filePath, pdfBlob, { contentType: 'application/pdf', upsert: false });
 
             if (uploadError) throw uploadError;
 
             showToast('Dossier successfully archived to HQ Cloud.', 'success');
-
         } catch (error: any) {
             console.error('Upload failed:', error);
             showToast(`Archive failed: ${error.message}`, 'error');
@@ -118,206 +112,184 @@ export const RiskReport: React.FC = () => {
         }
     };
 
-    // Helper za boje
+    // Helper for risk colors
     const getRiskColor = (level: string) => {
-        if (level === 'High') return 'text-red-500 border-red-500';
-        if (level === 'Medium') return 'text-yellow-400 border-yellow-400';
-        return 'text-green-400 border-green-400';
+        if (level === 'High') return 'text-red-400 border-red-500/50 bg-red-500/10';
+        if (level === 'Medium') return 'text-amber-400 border-amber-500/50 bg-amber-500/10';
+        return 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10';
     };
 
     return (
-        <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
-            <BackButton text={t('actions.back', 'Back to Hub')} />
+        <div className="animate-fade-in pb-12 space-y-8 max-w-7xl mx-auto">
             
-            {/* HEADER */}
-            <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-slate-700 pb-6">
-                <div>
-                    <h2 className="text-3xl font-bold text-white tracking-tight">
-                        {t('riskReport.title')} <span className="text-cyan-400">{t('riskReport.dossier')}</span>
-                    </h2>
-                    <p className="text-slate-400 mt-2 max-w-xl">
-                        {t('riskReport.subtitle')}
-                    </p>
-                </div>
+            {/* TOP BAR */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <BackButton text={t('actions.back', 'Return to Hub')} />
                 
-                <div className="text-right">
-                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">
-                        {t('riskReport.activeContext')}
-                    </div>
-                    <div className="text-lg font-mono font-bold text-white bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 flex items-center gap-2">
-                        {selectedAsset ? (
-                            <>
-                                <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                                {selectedAsset.name}
-                            </>
-                        ) : (
-                            <span className="text-slate-500 italic">{t('riskReport.noAsset')}</span>
-                        )}
-                    </div>
+                {/* Context Badge */}
+                <div className="flex items-center gap-3 bg-slate-900/80 border border-slate-700 rounded-full px-4 py-1.5 backdrop-blur-md">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Active Context</span>
+                    <div className="h-4 w-px bg-slate-700"></div>
+                    {selectedAsset ? (
+                        <div className="flex items-center gap-2 text-sm font-mono text-cyan-400">
+                             <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                             {selectedAsset.name}
+                        </div>
+                    ) : (
+                        <span className="text-sm text-slate-500 italic">No Asset Selected</span>
+                    )}
                 </div>
             </div>
 
-            {/* EMPTY STATE */}
+            {/* HEADER */}
+            <div className="text-center py-6 animate-fade-in-up">
+                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase mb-2">
+                    {t('riskReport.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('riskReport.dossier')}</span>
+                </h1>
+                <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
+                    {t('riskReport.subtitle')}
+                </p>
+            </div>
+
+            {/* CONTENT AREA */}
             {!selectedAsset ? (
-                <div className="p-16 text-center border-2 border-dashed border-slate-700 rounded-3xl bg-slate-800/30">
-                    <span className="text-6xl block mb-6 opacity-30">📂</span>
-                    <h3 className="text-xl font-bold text-white mb-2">{t('riskReport.selectPromptTitle')}</h3>
-                    <p className="text-slate-400">{t('riskReport.selectPromptDesc')}</p>
-                </div>
+                 <GlassCard className="text-center py-20 border-dashed border-slate-700">
+                    <div className="text-6xl mb-6 opacity-20 grayscale">📂</div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{t('riskReport.selectPromptTitle')}</h3>
+                    <p className="text-slate-400 mb-8">{t('riskReport.selectPromptDesc')}</p>
+                    <ModernButton onClick={() => navigateTo('globalMap')} variant="secondary">Select Asset from Map</ModernButton>
+                </GlassCard>
             ) : loading ? (
-                <div className="p-20 text-center">
-                    <span className="animate-spin text-4xl block mb-4">⚙️</span>
-                    <p className="text-cyan-400 font-mono animate-pulse">{t('riskReport.loading')}</p>
+                <div className="h-96 flex items-center justify-center">
+                    <Spinner text="Compiling Data..." size="lg" />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in-up">
                     
-                    {/* RISK CARD */}
-                    <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-cyan-500/30 transition-all shadow-lg">
-                        <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
-                            <h3 className="font-bold text-white text-lg flex items-center gap-2">
-                                <span>🛡️</span> {t('riskReport.riskDiagnostic')}
-                            </h3>
-                            {riskData ? (
-                                <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
-                                    ID: {riskData.id.toString().slice(0,4)}
-                                </span>
-                            ) : (
-                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">{t('riskReport.missing')}</span>
-                            )}
-                        </div>
-                        
-                        <div className="p-6 flex-grow flex flex-col justify-center">
-                            {riskData ? (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-slate-400 text-sm">{t('riskReport.riskLevel')}</span>
-                                        <span className={`text-xl font-black uppercase ${getRiskColor(riskData.risk_level)}`}>
-                                            {riskData.risk_level}
-                                        </span>
-                                    </div>
-                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                                        <div 
-                                            className={`h-full ${riskData.risk_score > 50 ? 'bg-red-500' : 'bg-green-500'}`} 
-                                            style={{ width: `${Math.min(riskData.risk_score * 2, 100)}%` }} 
-                                        ></div>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-slate-400 text-sm">{t('riskReport.gapScore')}</span>
-                                        <span className="text-2xl font-mono text-white">{riskData.risk_score}/100</span>
-                                    </div>
-                                    <div className="mt-4 p-3 bg-slate-900 rounded border border-slate-700 text-xs text-slate-400 italic line-clamp-2">
-                                        "{riskData.description || 'No additional notes provided.'}"
-                                    </div>
+                    {/* LEFT COLUMN: RISK DIAGNOSTIC */}
+                    <GlassCard 
+                        title={t('riskReport.riskDiagnostic')} 
+                        subtitle={riskData ? `ID: ${riskData.id.slice(0,8)}` : 'NO DATA'}
+                        className="h-full flex flex-col"
+                        action={<span className="text-2xl">🛡️</span>}
+                    >
+                        {riskData ? (
+                            <div className="space-y-6">
+                                <div className="flex justify-between items-center p-4 rounded-xl border bg-slate-900/50 border-slate-700">
+                                    <span className="text-slate-400 text-sm font-bold uppercase tracking-wider">{t('riskReport.riskLevel')}</span>
+                                    <span className={`text-xl font-black uppercase px-3 py-1 rounded border ${getRiskColor(riskData.risk_level)}`}>
+                                        {riskData.risk_level}
+                                    </span>
                                 </div>
-                            ) : (
-                                <div className="text-center py-4">
-                                    <p className="text-slate-500 text-sm mb-4">{t('riskReport.noRiskData')}</p>
-                                    <button 
-                                        onClick={() => navigateTo('riskAssessment')}
-                                        className="text-xs bg-slate-700 hover:bg-cyan-600 text-white px-4 py-2 rounded transition-colors"
-                                    >
-                                        {t('riskReport.runDiagnostics')}
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* DESIGN CARD */}
-                    <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-purple-500/30 transition-all shadow-lg">
-                        <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
-                            <h3 className="font-bold text-white text-lg flex items-center gap-2">
-                                <span>⚙️</span> {t('riskReport.technicalDesign')}
-                            </h3>
-                            {designData ? (
-                                <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
-                                    VER: {designData.created_at.slice(0,10)}
-                                </span>
-                            ) : (
-                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">{t('riskReport.missing')}</span>
-                            )}
-                        </div>
-
-                        <div className="p-6 flex-grow flex flex-col justify-center">
-                            {designData ? (
-                                <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
-                                            <div className="text-[10px] text-slate-500 uppercase">{t('riskReport.configuration')}</div>
-                                            <div className="text-white font-bold truncate">{designData.design_name}</div>
-                                        </div>
-                                        <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
-                                            <div className="text-[10px] text-slate-500 uppercase">{t('riskReport.turbine')}</div>
-                                            <div className="text-cyan-400 font-bold">{designData.recommended_turbine}</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-between items-end border-t border-slate-700/50 pt-4">
-                                        <div>
-                                            <span className="text-slate-400 text-xs block">{t('riskReport.calcOutput')}</span>
-                                            <span className="text-3xl font-black text-white">{designData.calculations?.powerMW} <span className="text-lg font-normal text-slate-500">MW</span></span>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className="text-slate-400 text-xs block">{t('riskReport.annualEnergy')}</span>
-                                            <span className="text-xl font-bold text-green-400">{designData.calculations?.energyGWh || designData.calculations?.annualGWh} <span className="text-xs text-slate-500">GWh</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="text-center py-4">
-                                    <p className="text-slate-500 text-sm mb-4">{t('riskReport.noDesignData')}</p>
-                                    <button 
-                                        onClick={() => navigateTo('hppBuilder')}
-                                        className="text-xs bg-slate-700 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors"
-                                    >
-                                        {t('riskReport.openStudio')}
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* ACTION AREA (Enterprise Features) */}
-                    <div className="md:col-span-2 mt-6">
-                        <div className="p-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-xl shadow-2xl">
-                            <div className="bg-slate-900 rounded-lg p-8 text-center">
-                                <h3 className="text-2xl font-bold text-white mb-2">{t('riskReport.compileTitle')}</h3>
-                                <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
-                                    {t('riskReport.compileDesc')}
-                                </p>
                                 
-                                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                    {/* BUTTON 1: LOCAL DOWNLOAD */}
-                                    <button
-                                        onClick={handleDownload}
-                                        disabled={!riskData && !designData}
-                                        className="px-6 py-3 rounded-xl font-bold bg-slate-700 text-slate-200 hover:bg-slate-600 hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        <span>⬇️</span> {t('questionnaire.downloadPDF', 'Download Local Copy')}
-                                    </button>
+                                <div>
+                                    <div className="flex justify-between text-xs text-slate-400 mb-2 uppercase tracking-wide font-bold">
+                                        <span>Gap Score Analysis</span>
+                                        <span>{riskData.risk_score}/100</span>
+                                    </div>
+                                    <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
+                                        <div 
+                                            className={`h-full relative overflow-hidden ${riskData.risk_score > 50 ? 'bg-red-500' : 'bg-emerald-500'}`} 
+                                            style={{ width: `${Math.min(riskData.risk_score * 2, 100)}%` }} 
+                                        >
+                                            <div className="absolute inset-0 bg-white/20 animate-[shine_1s_infinite]"></div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    {/* BUTTON 2: CLOUD ARCHIVE */}
-                                    <button
-                                        onClick={handleUploadToHQ}
-                                        disabled={(!riskData && !designData) || uploading}
-                                        className={`
-                                            px-8 py-3 rounded-xl font-bold text-lg shadow-xl transition-all flex items-center justify-center gap-3
-                                            ${(!riskData && !designData) 
-                                                ? 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700' 
-                                                : uploading
-                                                    ? 'bg-cyan-900 text-cyan-200 cursor-wait'
-                                                    : 'bg-white text-slate-900 hover:bg-cyan-50 hover:scale-105'
-                                            }
-                                        `}
-                                    >
-                                        {(!riskData && !designData) ? (
-                                            <><span>🚫</span> {t('riskReport.noDataButton')}</>
-                                        ) : uploading ? (
-                                            <><span>☁️</span> {t('questionnaire.uploading', 'Archiving...')}</>
-                                        ) : (
-                                            <><span>🚀</span> Submit to HQ Archive</>
-                                        )}
-                                    </button>
+                                <div className="p-4 bg-slate-900/80 rounded-xl border border-slate-700/50">
+                                    <p className="text-xs text-slate-500 font-mono mb-2 uppercase tracking-widest">Engineer Notes</p>
+                                    <p className="text-sm text-slate-300 italic">
+                                        "{riskData.description || 'No additional notes provided.'}"
+                                    </p>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-64 text-center">
+                                <p className="text-slate-500 mb-6">{t('riskReport.noRiskData')}</p>
+                                <ModernButton onClick={() => navigateTo('riskAssessment')} variant="secondary" icon={<span>🩺</span>}>
+                                    {t('riskReport.runDiagnostics')}
+                                </ModernButton>
+                            </div>
+                        )}
+                    </GlassCard>
+
+                    {/* RIGHT COLUMN: TECHNICAL DESIGN */}
+                    <GlassCard 
+                        title={t('riskReport.technicalDesign')}
+                        subtitle={designData ? `REV: ${designData.created_at.slice(0,10)}` : 'NO DATA'}
+                        className="h-full flex flex-col"
+                        action={<span className="text-2xl">⚙️</span>}
+                    >
+                         {designData ? (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">{t('riskReport.configuration')}</div>
+                                        <div className="text-white font-bold truncate">{designData.design_name}</div>
+                                    </div>
+                                    <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">{t('riskReport.turbine')}</div>
+                                        <div className="text-cyan-400 font-bold">{designData.recommended_turbine}</div>
+                                    </div>
+                                </div>
+
+                                <div className="p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 flex justify-between items-end">
+                                    <div>
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.calcOutput')}</span>
+                                        <span className="text-4xl font-black text-white tracking-tighter">{designData.calculations?.powerMW} <span className="text-lg font-medium text-slate-500">MW</span></span>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.annualEnergy')}</span>
+                                        <span className="text-2xl font-bold text-emerald-400">{designData.calculations?.energyGWh || designData.calculations?.annualGWh} <span className="text-sm text-slate-500">GWh</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-64 text-center">
+                                <p className="text-slate-500 mb-6">{t('riskReport.noDesignData')}</p>
+                                <ModernButton onClick={() => navigateTo('hppBuilder')} variant="secondary" icon={<span>📐</span>}>
+                                    {t('riskReport.openStudio')}
+                                </ModernButton>
+                            </div>
+                        )}
+                    </GlassCard>
+
+                    {/* BOTTOM ACTION BAR (FULL WIDTH) */}
+                    <div className="lg:col-span-2 mt-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                        <div className="relative overflow-hidden rounded-2xl p-[1px] bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600">
+                            <div className="bg-slate-900 rounded-[15px] p-8 text-center relative overflow-hidden">
+                                {/* Background Glow */}
+                                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-cyan-500/5 blur-3xl pointer-events-none"></div>
+
+                                <div className="relative z-10">
+                                    <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{t('riskReport.compileTitle')}</h3>
+                                    <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-sm">
+                                        {t('riskReport.compileDesc')}
+                                    </p>
+                                    
+                                    <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                        <ModernButton 
+                                            onClick={handleDownload}
+                                            disabled={!riskData && !designData}
+                                            variant="secondary"
+                                            icon={<span>⬇️</span>}
+                                            className="min-w-[200px]"
+                                        >
+                                            {t('questionnaire.downloadPDF', 'Download Local Copy')}
+                                        </ModernButton>
+
+                                        <ModernButton 
+                                            onClick={handleUploadToHQ}
+                                            disabled={(!riskData && !designData) || uploading}
+                                            variant="primary"
+                                            isLoading={uploading}
+                                            icon={<span>🚀</span>}
+                                            className="min-w-[240px] shadow-cyan-500/20"
+                                        >
+                                            {(!riskData && !designData) ? t('riskReport.noDataButton') : 'Submit to HQ Archive'}
+                                        </ModernButton>
+                                    </div>
                                 </div>
                             </div>
                         </div>

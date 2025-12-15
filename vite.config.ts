@@ -3,39 +3,36 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
+    // Učitavamo env varijable da budu dostupne u configu ako zatrebaju
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
-        // Zadržavamo relativnu putanju zbog onog iframe problema
+        // Relativna putanja za siguran build (radi i u podfolderima)
         base: './', 
         
         server: {
             port: 3000,
-            host: '0.0.0.0',
+            host: '0.0.0.0', // Omogućuje pristup s drugih uređaja na mreži
         },
 
         plugins: [react()],
 
-        define: {
-            'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-        },
-
         resolve: {
             alias: {
-                // --- GLAVNA PROMJENA ---
-                // Prije je bilo: path.resolve(__dirname, './src')
-                // Sada je točka (.), što znači "ovaj glavni folder gdje se nalazim"
-                '@': path.resolve(__dirname, '.'),
+                // --- BEST PRACTICE ---
+                // @ mapiramo na ./src folder. 
+                // Ovo omogućuje import: import Button from '@/components/Button'
+                '@': path.resolve(__dirname, './src'),
             }
         },
 
         build: {
             outDir: 'dist',
             assetsDir: 'assets',
-            sourcemap: false,
+            sourcemap: false, // Manji bundle, teže za debuggiranje u produkciji (dobro za performance)
             emptyOutDir: true, 
-        }
-        ,
+        },
+
         test: {
             environment: 'jsdom',
             globals: true,

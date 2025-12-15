@@ -1,6 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next'; // <--- IMPORT
+import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
+import { GlassCard } from './ui/GlassCard.tsx'; // <--- KORISTIMO NOVI UI KIT
 import { turbineDetailData } from '../data/turbineDetailData.ts';
 import type { TurbineDetail as TurbineDetailType, TurbineComponent } from '../data/turbineDetailData.ts';
 
@@ -8,135 +9,140 @@ interface TurbineDetailProps {
     turbineKey: string;
 }
 
-// --- HELPER: CRITICALITY BADGE ---
+// --- MODERN CRITICALITY BADGE (Neon Style) ---
 const CriticalityBadge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) => {
     let style = '';
     let icon = '';
     
     switch (level) {
         case 'High': 
-            style = 'bg-red-500/20 text-red-400 border-red-500/50 shadow-[0_0_10px_rgba(248,113,113,0.3)]'; 
+            style = 'bg-red-500/10 text-red-400 border-red-500/20 shadow-[0_0_15px_rgba(248,113,113,0.25)]'; 
             icon = '⚠️ CRITICAL';
             break;
         case 'Medium': 
-            style = 'bg-yellow-500/20 text-yellow-400 border-yellow-500/50'; 
+            style = 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.2)]'; 
             icon = '⚡ ATTENTION';
             break;
         case 'Low': 
-            style = 'bg-green-500/20 text-green-400 border-green-500/50'; 
+            style = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.2)]'; 
             icon = '✓ STANDARD';
             break;
     }
 
     return (
-        <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded border ${style}`}>
+        <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border backdrop-blur-md ${style}`}>
             {icon}
         </span>
     );
 };
 
-// --- COMPONENT CARD ---
-// Napomena: Tekstovi unutar kartica dolaze iz 'turbineDetailData'. 
-// Ako želiš i njih prevesti, morao bi i te podatke prebaciti u i18n JSON, 
-// ali za tehničke specifikacije je često OK da ostanu na engleskom (industrijski standard).
+// --- MODERN COMPONENT CARD (Mini Glass Tile) ---
 const ComponentCard: React.FC<TurbineComponent> = ({ name, description, criticality }) => (
     <div className={`
-        group relative p-5 rounded-xl border transition-all duration-300 hover:-translate-y-1
+        group relative p-5 rounded-2xl border transition-all duration-300
         ${criticality === 'High' 
-            ? 'bg-gradient-to-br from-slate-900/80 to-red-900/10 border-red-500/30 hover:border-red-500/60' 
-            : 'bg-slate-800/40 border-slate-700/50 hover:border-cyan-500/40 hover:bg-slate-800/60'}
+            ? 'bg-gradient-to-br from-slate-900/60 to-red-950/30 border-red-500/20 hover:border-red-500/50' 
+            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-cyan-500/30'}
+        backdrop-blur-sm
     `}>
-        <div className="flex justify-between items-start mb-3">
-            <h4 className={`text-lg font-bold ${criticality === 'High' ? 'text-white' : 'text-slate-200'}`}>
+        {/* Hover Glow */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+        <div className="flex justify-between items-start mb-3 relative z-10">
+            <h4 className={`text-lg font-bold tracking-tight ${criticality === 'High' ? 'text-white' : 'text-slate-200 group-hover:text-white'}`}>
                 {name}
             </h4>
             <CriticalityBadge level={criticality} />
         </div>
         
-        <p className="text-sm text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+        <p className="text-sm text-slate-400 leading-relaxed font-medium group-hover:text-slate-300 transition-colors relative z-10">
             {description}
         </p>
-
-        {/* Decorative Corner */}
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-slate-600 rounded-br-lg group-hover:border-cyan-500 transition-colors"></div>
     </div>
 );
 
 // --- MAIN COMPONENT ---
 const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
-    const { t } = useTranslation(); // <--- HOOK
+    const { t } = useTranslation();
     const data: TurbineDetailType | undefined = turbineDetailData[turbineKey];
 
+    // ERROR STATE (Glass Style)
     if (!data) {
         return (
-            <div className="flex flex-col items-center justify-center h-64 text-center p-8 glass-panel rounded-2xl border-red-500/30">
-                <div className="text-4xl mb-4">🚫</div>
-                <h3 className="text-xl font-bold text-white mb-2">{t('turbineDetail.notFoundTitle')}</h3>
-                <p className="text-slate-400">
-                    {t('turbineDetail.notFoundDesc')} <span className="text-cyan-400 font-mono">'{turbineKey}'</span>
-                </p>
-                <div className="mt-6">
+            <div className="flex items-center justify-center min-h-[50vh]">
+                <GlassCard className="text-center p-12 border-red-500/30 max-w-lg">
+                    <div className="text-5xl mb-6 opacity-80">🚫</div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{t('turbineDetail.notFoundTitle')}</h3>
+                    <p className="text-slate-400 mb-8">
+                        {t('turbineDetail.notFoundDesc')} <span className="text-cyan-400 font-mono bg-cyan-900/30 px-2 py-1 rounded border border-cyan-500/30">'{turbineKey}'</span>
+                    </p>
                     <BackButton text={t('turbineDetail.returnButton')} />
-                </div>
+                </GlassCard>
             </div>
         );
     }
 
     return (
-        <div className="animate-fade-in pb-8 max-w-7xl mx-auto space-y-8">
-            <BackButton text={t('actions.back', 'Back')} />
+        <div className="animate-fade-in pb-12 space-y-8">
+            {/* Top Navigation */}
+            <div className="flex items-center justify-between">
+                <BackButton text={t('actions.back', 'Back')} />
+                <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest hidden sm:block">
+                    System Specification • Rev 2.4
+                </div>
+            </div>
             
-            {/* HEADER */}
-            <div className="text-center space-y-4 animate-fade-in-up">
-                <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight uppercase">
-                    <span className="text-cyan-400">{turbineKey}</span> {t('turbineDetail.specification')}
+            {/* HERO HEADER */}
+            <div className="text-center space-y-4 animate-fade-in-up py-4">
+                <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase drop-shadow-lg">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{turbineKey}</span> {t('turbineDetail.specification')}
                 </h2>
-                <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed font-medium">
                     {t('turbineDetail.subtitle')}
                 </p>
             </div>
 
+            {/* MAIN GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
                 {/* MECHANICAL COLUMN */}
-                <div className="space-y-4 animate-slide-in-left">
-                    <div className="flex items-center gap-3 mb-2 p-3 bg-cyan-900/20 rounded-lg border border-cyan-500/20">
-                        <span className="text-2xl">⚙️</span>
-                        <div>
-                            <h3 className="text-lg font-bold text-cyan-300 uppercase tracking-wider">{t('turbineDetail.mechanicalSystems')}</h3>
-                            <p className="text-xs text-cyan-200/60">{t('turbineDetail.rotatingParts')}</p>
+                <div className="animate-slide-in-left">
+                    <GlassCard 
+                        title={t('turbineDetail.mechanicalSystems')} 
+                        subtitle={t('turbineDetail.rotatingParts')}
+                        className="h-full shadow-cyan-900/10"
+                        action={<span className="text-2xl p-2 bg-cyan-500/10 rounded-lg text-cyan-400">⚙️</span>}
+                    >
+                        <div className="space-y-4 mt-2">
+                            {data.mechanical.map((comp) => (
+                                <ComponentCard key={comp.name} {...comp} />
+                            ))}
                         </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                        {data.mechanical.map((comp) => (
-                            <ComponentCard key={comp.name} {...comp} />
-                        ))}
-                    </div>
+                    </GlassCard>
                 </div>
 
                 {/* ELECTRICAL COLUMN */}
-                <div className="space-y-4 animate-slide-in-right" style={{ animationDelay: '100ms' }}>
-                    <div className="flex items-center gap-3 mb-2 p-3 bg-purple-900/20 rounded-lg border border-purple-500/20">
-                        <span className="text-2xl">⚡</span>
-                        <div>
-                            <h3 className="text-lg font-bold text-purple-300 uppercase tracking-wider">{t('turbineDetail.electricalComponents')}</h3>
-                            <p className="text-xs text-purple-200/60">{t('turbineDetail.generatorControl')}</p>
+                <div className="animate-slide-in-right" style={{ animationDelay: '100ms' }}>
+                    <GlassCard 
+                        title={t('turbineDetail.electricalComponents')} 
+                        subtitle={t('turbineDetail.generatorControl')}
+                        className="h-full shadow-purple-900/10"
+                        action={<span className="text-2xl p-2 bg-purple-500/10 rounded-lg text-purple-400">⚡</span>}
+                    >
+                        <div className="space-y-4 mt-2">
+                            {data.electrical.map((comp) => (
+                                <ComponentCard key={comp.name} {...comp} />
+                            ))}
                         </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        {data.electrical.map((comp) => (
-                            <ComponentCard key={comp.name} {...comp} />
-                        ))}
-                    </div>
+                    </GlassCard>
                 </div>
 
             </div>
             
             {/* FOOTER NOTE */}
-            <div className="text-center pt-8 border-t border-slate-800">
-                <p className="text-xs text-slate-500 font-mono">
+            <div className="text-center pt-8 border-t border-white/5">
+                <p className="text-xs text-slate-500 font-mono flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500/50 animate-pulse"></span>
                     {t('turbineDetail.criticalityNote')}
                 </p>
             </div>
