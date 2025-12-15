@@ -1,4 +1,4 @@
-import{u as n,j as e}from"./index-Cp5U1a6g.js";const l=({text:r="Back",className:t="",onClick:o})=>{const{navigateBack:s}=n(),a=o||s;return e.jsxs("button",{onClick:a,className:`
+import{u as n,j as e}from"./index-BAFFkbr6.js";const l=({text:r="Back",className:t="",onClick:o})=>{const{navigateBack:s}=n(),a=o||s;return e.jsxs("button",{onClick:a,className:`
         group flex items-center space-x-2 px-3 py-1.5 rounded-lg
         text-slate-500 text-xs font-bold uppercase tracking-wider
         border border-transparent
