@@ -32,6 +32,7 @@ const onboardingSteps = [
     },
 ];
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     const [step, setStep] = useState(0);
     const [isExiting, setIsExiting] = useState(false);
@@ -62,6 +63,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
             if (e.key === 'ArrowLeft') prevStep();
         };
         window.addEventListener('keydown', handleKeyDown);
+        // Clean up funkcija
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [step]);
 
@@ -161,3 +163,4 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

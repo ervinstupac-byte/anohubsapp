@@ -17,19 +17,17 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (error) throw error;
                 
                 if (data) {
-                    // Mapiranje baze na naš Frontend tip
                     const mappedAssets: Asset[] = data.map((item: any) => ({
-                        id: item.id.toString(), // OSIGURAVAMO STRING
+                        id: item.id.toString(),
                         name: item.name,
                         type: item.type,
                         location: item.location,
-                        coordinates: [item.lat || 0, item.lng || 0], // Mapiramo lat/lng u coordinates
-                        capacity: parseFloat(item.power_output) || 0, // Mapiramo power_output u capacity
+                        coordinates: [item.lat || 0, item.lng || 0],
+                        capacity: parseFloat(item.power_output) || 0,
                         status: item.status || 'Operational'
                     }));
                     setAssets(mappedAssets);
                     
-                    // Auto-select prvi ako nema odabranog
                     if (mappedAssets.length > 0 && !selectedAssetId) {
                         setSelectedAssetId(mappedAssets[0].id);
                     }
@@ -48,10 +46,56 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setSelectedAssetId(id);
     };
 
+    // --- NOVA FUNKCIJA: DODAVANJE NOVE TURBINE ---
+    const addAsset = async (newAssetData: Omit<Asset, 'id'>) => {
+        try {
+            // 1. Pripremi podatke za Supabase (mapiraj Frontend -> Baza)
+            // Pretpostavljamo da baza ima kolone: name, type, location, lat, lng, power_output
+            const dbPayload = {
+                name: newAssetData.name,
+                type: newAssetData.type,
+                location: newAssetData.location,
+                lat: newAssetData.coordinates[0],
+                lng: newAssetData.coordinates[1],
+                power_output: newAssetData.capacity,
+                status: 'Operational' // Default status
+            };
+
+            // 2. Insert u bazu i vrati taj novi red
+            const { data, error } = await supabase
+                .from('assets')
+                .insert([dbPayload])
+                .select()
+                .single();
+
+            if (error) throw error;
+
+            // 3. Mapiraj vraćeni podatak iz baze u Frontend format
+            const newAsset: Asset = {
+                id: data.id.toString(),
+                name: data.name,
+                type: data.type,
+                location: data.location,
+                coordinates: [data.lat, data.lng],
+                capacity: parseFloat(data.power_output),
+                status: data.status
+            };
+
+            // 4. Ažuriraj lokalni state i odmah selektiraj novu turbinu
+            setAssets(prev => [...prev, newAsset]);
+            setSelectedAssetId(newAsset.id);
+
+        } catch (error) {
+            console.error('Error creating asset:', error);
+            throw error; // Bacamo grešku da UI može prikazati poruku korisniku
+        }
+    };
+
     const selectedAsset = assets.find(a => a.id === selectedAssetId) || null;
 
     return (
-        <AssetContext.Provider value={{ assets, selectedAsset, selectAsset, loading }}>
+        // Ne zaboravi dodati addAsset u value objekt!
+        <AssetContext.Provider value={{ assets, selectedAsset, selectAsset, loading, addAsset }}>
             {children}
         </AssetContext.Provider>
     );

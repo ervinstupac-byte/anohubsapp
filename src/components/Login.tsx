@@ -7,6 +7,7 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Login: React.FC = () => {
     const { signIn, signInAsGuest } = useAuth(); // <--- Uzimamo i signInAsGuest
     const { showToast } = useToast();
@@ -124,3 +125,4 @@ export const Login: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

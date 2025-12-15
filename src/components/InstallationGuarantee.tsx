@@ -3,19 +3,19 @@ import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
+// ISPRAVKA IMPORTA: Uvozimo AssetPicker kao komponentu
+import { AssetPicker } from './AssetPicker.tsx'; 
+// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 
 // --- TYPE DEFINITIONS ---
-// Definiramo kako izgleda status jedne faze
 interface StageStatus {
     value: string;
     status: 'N/A' | 'PASS' | 'FAIL';
 }
 
-// Definiramo cijelo stanje audita
-// Record<string, StageStatus> znači: objekt gdje su ključevi stringovi, a vrijednosti StageStatus
 interface AuditState {
     stageStatus: Record<string, StageStatus>;
     finalNotes: string;
@@ -29,17 +29,18 @@ const AUDIT_STAGES = [
     { id: 'commissioning_vibration', name: 'Vibration Baseline', requirement: '< 2.5 mm/s (Overall)' },
 ];
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const InstallationGuarantee: React.FC = () => {
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
     
-    // Inicijalizacija stanja s eksplicitnim tipom AuditState
+    // Inicijalizacija stanja
     const [audit, setAudit] = useState<AuditState>({
         stageStatus: AUDIT_STAGES.reduce((acc, stage) => ({ 
             ...acc, 
             [stage.id]: { value: '', status: 'N/A' } 
-        }), {} as Record<string, StageStatus>), // Važno: casting u Record
+        }), {} as Record<string, StageStatus>),
         finalNotes: '',
     });
 
@@ -204,5 +205,4 @@ export const InstallationGuarantee: React.FC = () => {
         </div>
     );
 };
-
-export default InstallationGuarantee;
+// Uklonjen dupli eksport na dnu fajla.

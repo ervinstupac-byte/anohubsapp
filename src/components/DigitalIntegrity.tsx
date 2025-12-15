@@ -3,10 +3,12 @@ import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { AssetPicker, useAssetContext } from './AssetPicker.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernInput } from './ui/ModernInput.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { AssetPicker } from './AssetPicker.tsx'; 
+// Ispravka: useAssetContext se uvozi izravno iz konteksta, a ne iz AssetPicker.tsx
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
+import { GlassCard } from './ui/GlassCard.tsx'; 
+import { ModernInput } from './ui/ModernInput.tsx'; 
+import { ModernButton } from './ui/ModernButton.tsx'; 
 
 // --- TYPES ---
 interface Block {
@@ -29,6 +31,7 @@ const generateHash = async (message: string): Promise<string> => {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const DigitalIntegrity: React.FC = () => {
     const { showToast } = useToast();
     const { user } = useAuth();
@@ -223,7 +226,7 @@ export const DigitalIntegrity: React.FC = () => {
                             <ModernInput 
                                 label="Measured Value / Result"
                                 value={value} 
-                                onChange={e => setValue(e.target.value)} 
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)} 
                                 className="font-mono"
                             />
 
@@ -323,3 +326,4 @@ export const DigitalIntegrity: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

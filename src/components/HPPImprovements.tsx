@@ -3,9 +3,9 @@ import { BackButton } from './BackButton.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx'; 
 import { supabase } from '../services/supabaseClient.ts'; 
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernInput } from './ui/ModernInput.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { GlassCard } from './ui/GlassCard.tsx'; 
+import { ModernInput } from './ui/ModernInput.tsx'; 
+import { ModernButton } from './ui/ModernButton.tsx'; 
 
 // --- TYPES ---
 interface Improvement {
@@ -37,6 +37,7 @@ const CategoryBadge: React.FC<{ category: string }> = ({ category }) => {
     );
 };
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const HPPImprovements: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
@@ -103,6 +104,7 @@ export const HPPImprovements: React.FC = () => {
     };
 
     const handleVote = async (id: number, currentVotes: number) => {
+        // Optimistic update
         setIdeas(prev => prev.map(i => i.id === id ? { ...i, votes: currentVotes + 1 } : i));
         
         const { error } = await supabase
@@ -110,7 +112,11 @@ export const HPPImprovements: React.FC = () => {
             .update({ votes: currentVotes + 1 })
             .eq('id', id);
 
-        if (error) showToast('Failed to register vote.', 'error');
+        if (error) {
+             showToast('Failed to register vote.', 'error');
+             // Revert optimistic update on error if needed, or just let the next fetch fix it
+             fetchIdeas();
+        }
     };
 
     const filteredIdeas = filter === 'All' ? ideas : ideas.filter(i => i.category === filter);
@@ -148,7 +154,7 @@ export const HPPImprovements: React.FC = () => {
                             <ModernInput 
                                 label="Concept Title"
                                 value={title} 
-                                onChange={e => setTitle(e.target.value)} 
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)} 
                                 placeholder="e.g. Biomimetic Coating" 
                                 required 
                             />
@@ -283,3 +289,4 @@ export const HPPImprovements: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

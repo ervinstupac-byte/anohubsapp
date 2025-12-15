@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BackButton } from './BackButton.tsx';
-import { useAssetContext, AssetPicker } from './AssetPicker.tsx';
-import { supabase } from '../services/supabaseClient.ts';
+// ISPRAVKA 1: AssetPicker (komponenta) ostaje uvezena iz svog fajla
+import { AssetPicker } from './AssetPicker.tsx'; 
+// ISPRAVKA 2: useAssetContext (hook) se uvozi izravno iz Contexta, što je ispravan put
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
+import { useRisk } from '../contexts/RiskContext.tsx'; 
 import { useToast } from '../contexts/ToastContext.tsx';
 import jsPDF from 'jspdf';
 import { GlassCard } from './ui/GlassCard.tsx'; 
@@ -16,11 +19,11 @@ interface ContractStatus {
     breach_reason?: string;
 }
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const ContractManagement: React.FC = () => {
     const { selectedAsset } = useAssetContext();
+    const { riskState } = useRisk(); 
     const { showToast } = useToast();
-    
-    // UKLONJENO loading stanje jer se nije koristilo u UI-u
     
     const [contract, setContract] = useState<ContractStatus>({
         status: 'ACTIVE',
@@ -30,58 +33,40 @@ export const ContractManagement: React.FC = () => {
         last_audit_date: 'N/A'
     });
 
+    // --- LOGIC ENGINE ---
     useEffect(() => {
-        const analyzeContractHealth = async () => {
-            if (!selectedAsset) return;
+        if (!selectedAsset) return;
 
-            try {
-                // Fetch last Audit
-                const { data: auditData } = await supabase
-                    .from('installation_audits')
-                    .select('*')
-                    .eq('asset_id', selectedAsset.id)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single();
-
-                // Fetch Risk Score
-                const { data: riskData } = await supabase
-                    .from('risk_assessments')
-                    .select('risk_score')
-                    .eq('asset_id', selectedAsset.id)
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .single();
-
-                let newStatus: ContractStatus = {
-                    status: 'ACTIVE',
-                    warranty_valid: true,
-                    penalty_amount: 0,
-                    days_remaining: 1095, 
-                    last_audit_date: auditData ? new Date(auditData.created_at).toLocaleDateString() : 'No Audits'
-                };
-
-                // RULES ENGINE
-                if (auditData && auditData.audit_status === 'FAILED') {
-                    newStatus.status = 'BREACHED';
-                    newStatus.warranty_valid = false;
-                    newStatus.penalty_amount = 250000;
-                    newStatus.breach_reason = 'Critical Non-Compliance: 0.05 mm/m Protocol Failed.';
-                } else if (riskData && riskData.risk_score > 50) {
-                    newStatus.status = 'WARNING';
-                    newStatus.penalty_amount = riskData.risk_score * 1000;
-                    newStatus.breach_reason = 'Operational Risk exceeds contractual safety limits.';
-                }
-
-                setContract(newStatus);
-
-            } catch (error) {
-                console.error('Contract analysis failed:', error);
-            }
+        // Default Status
+        let newStatus: ContractStatus = {
+            status: 'ACTIVE',
+            warranty_valid: true,
+            penalty_amount: 0,
+            days_remaining: 1095, 
+            last_audit_date: riskState.isAssessmentComplete ? new Date().toLocaleDateString() : 'Pending'
         };
 
-        analyzeContractHealth();
-    }, [selectedAsset]);
+        // 🧠 NEURAL LINK LOGIC:
+        if (riskState.isAssessmentComplete) {
+            
+            if (riskState.criticalFlags > 0) {
+                // KRITIČNO: Bilo koji 'High' rizik poništava garanciju
+                newStatus.status = 'BREACHED';
+                newStatus.warranty_valid = false;
+                newStatus.penalty_amount = 50000 * riskState.criticalFlags;
+                newStatus.breach_reason = `CRITICAL OPERATIONAL RISK DETECTED (${riskState.criticalFlags} flags via Neural Link)`;
+            
+            } else if (riskState.riskScore > 40) {
+                // UPOZORENJE: Visok score, ali nema kritičnih zastavica
+                newStatus.status = 'WARNING';
+                newStatus.penalty_amount = riskState.riskScore * 500;
+                newStatus.breach_reason = 'Operational Risk Score exceeds safety threshold.';
+            }
+        }
+
+        setContract(newStatus);
+
+    }, [selectedAsset, riskState]); // Osvježava se kad se promijeni rizik
 
     const generateLegalNotice = () => {
         if (!selectedAsset) return;
@@ -99,7 +84,7 @@ export const ContractManagement: React.FC = () => {
         doc.text("deviations from the mandatory Standard of Excellence.", 20, 86);
         
         if (contract.breach_reason) {
-            doc.setTextColor(255, 0, 0);
+            doc.setTextColor(220, 38, 38);
             doc.text(`VIOLATION: ${contract.breach_reason}`, 20, 100);
             doc.setTextColor(0, 0, 0);
         }
@@ -124,7 +109,7 @@ export const ContractManagement: React.FC = () => {
                     Smart Contract <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Intelligence</span>
                 </h2>
                 <p className="text-slate-400 max-w-2xl mx-auto text-lg font-light">
-                    Automated warranty validation & dynamic penalty calculation.
+                    Automated warranty validation & dynamic penalty calculation based on live risk data.
                 </p>
             </div>
 
@@ -138,17 +123,17 @@ export const ContractManagement: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in-up">
                     
                     {/* LEFT: STATUS CARD */}
-                    <GlassCard className={`p-0 overflow-hidden border-2 ${
-                        contract.status === 'BREACHED' ? 'border-red-500 shadow-red-900/20' :
-                        contract.status === 'WARNING' ? 'border-amber-500 shadow-amber-900/20' :
-                        'border-emerald-500 shadow-emerald-900/20'
+                    <GlassCard className={`p-0 overflow-hidden border-2 transition-all duration-500 ${
+                        contract.status === 'BREACHED' ? 'border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)]' :
+                        contract.status === 'WARNING' ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]' :
+                        'border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
                     }`}>
-                        <div className={`p-10 text-center relative ${
-                             contract.status === 'BREACHED' ? 'bg-red-900/10' :
-                             contract.status === 'WARNING' ? 'bg-amber-900/10' :
-                             'bg-emerald-900/10'
+                        <div className={`p-10 text-center relative h-full flex flex-col justify-center ${
+                             contract.status === 'BREACHED' ? 'bg-red-950/30' :
+                             contract.status === 'WARNING' ? 'bg-amber-950/30' :
+                             'bg-emerald-950/30'
                         }`}>
-                            <div className="text-8xl mb-6 filter drop-shadow-lg">
+                            <div className="text-8xl mb-6 filter drop-shadow-lg animate-bounce-slow">
                                 {contract.status === 'BREACHED' ? '🚫' : contract.status === 'WARNING' ? '⚠️' : '✅'}
                             </div>
                             <h3 className="text-5xl font-black text-white mb-2 tracking-tight">{contract.status}</h3>
@@ -169,7 +154,7 @@ export const ContractManagement: React.FC = () => {
 
                             {contract.breach_reason && (
                                 <div className="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-left animate-pulse">
-                                    <p className="text-[10px] font-bold text-red-400 uppercase mb-1">Detected Violation</p>
+                                    <p className="text-[10px] font-bold text-red-400 uppercase mb-1">Detected Violation (Live)</p>
                                     <p className="text-sm text-red-100 font-medium leading-relaxed">{contract.breach_reason}</p>
                                 </div>
                             )}
@@ -178,20 +163,28 @@ export const ContractManagement: React.FC = () => {
 
                     {/* RIGHT: TIMELINE & ACTIONS */}
                     <div className="space-y-6">
-                        <GlassCard title="Warranty Timeline" subtitle="Contract Duration">
-                            <div className="pt-4">
-                                <div className="flex justify-between text-xs text-slate-400 mb-2 uppercase font-bold tracking-wider">
-                                    <span>Inception</span>
-                                    <span>Expiration</span>
-                                </div>
-                                <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden mb-2">
-                                    <div className="absolute top-0 left-0 h-full bg-cyan-500 w-1/4"></div>
-                                </div>
-                                <div className="text-center">
-                                    <span className="text-2xl font-black text-white">{contract.days_remaining}</span>
-                                    <span className="text-sm text-slate-500 ml-2 font-medium">Days Remaining</span>
-                                </div>
-                            </div>
+                        
+                        {/* LIVE FEED PANEL */}
+                        <GlassCard title="Live Risk Feed" subtitle="Data Source: Risk Assessment Module">
+                            {!riskState.isAssessmentComplete ? (
+                                    <div className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
+                                        <span className="w-2 h-2 bg-slate-500 rounded-full animate-pulse"></span>
+                                        <p className="text-xs text-slate-400">Waiting for Risk Assessment data...</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center p-3 bg-slate-900 rounded-lg border border-white/5">
+                                            <span className="text-xs text-slate-400">Calculated Risk Score</span>
+                                            <span className="text-sm font-mono font-bold text-white">{riskState.riskScore}/100</span>
+                                        </div>
+                                        <div className="flex justify-between items-center p-3 bg-slate-900 rounded-lg border border-white/5">
+                                            <span className="text-xs text-slate-400">Critical Flags</span>
+                                            <span className={`text-sm font-mono font-bold ${riskState.criticalFlags > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                                                {riskState.criticalFlags}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                         </GlassCard>
 
                         <GlassCard className="bg-gradient-to-br from-slate-900 to-slate-800">

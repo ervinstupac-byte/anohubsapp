@@ -2,324 +2,193 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { supabase } from '../services/supabaseClient.ts';
-import type { AppView } from '../types.ts';
+import { useRisk } from '../contexts/RiskContext.tsx';
+import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import { GlassCard } from './ui/GlassCard.tsx';
+import { AssetPicker } from './AssetPicker.tsx';
+import type { AppView } from '../contexts/NavigationContext.tsx';
 
-// --- 1. MODERN STAT CARD (Glassmorphism & HUD Style) ---
-const StatCard: React.FC<{ label: string; value: string | number; icon: string; trend?: string; color: string }> = ({ label, value, icon, color, trend }) => (
-    <div className="relative group overflow-hidden bg-slate-900/40 backdrop-blur-md border border-white/10 hover:border-white/20 p-5 rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-1">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="flex justify-between items-start relative z-10">
-            <div>
-                <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">{label}</div>
-                <div className="text-3xl font-black text-white tracking-tight font-sans">{value}</div>
+// --- POMOĆNA KOMPONENTA ZA MODUL KARTICE (BENTO GRID) ---
+const ModuleCard: React.FC<{ module: any; onClick: () => void }> = ({ module, onClick }) => (
+    <button
+        onClick={onClick}
+        className={`
+            group relative flex flex-col h-full text-left p-6 rounded-3xl border transition-all duration-500 w-full overflow-hidden
+            ${module.highlight 
+                ? 'bg-gradient-to-br from-slate-900/90 to-cyan-950/60 border-cyan-500/30 shadow-[0_0_40px_-10px_rgba(8,145,178,0.3)]' 
+                : 'bg-slate-900/40 border-white/5 hover:border-white/10 hover:bg-slate-800/60'}
+            backdrop-blur-md
+        `}
+    >
+        <div className="absolute -inset-px bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-700" />
+        
+        <div className="relative z-10 flex flex-col h-full">
+            <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform ${module.highlight ? 'text-cyan-300' : 'text-slate-200'}`}>
+                {module.icon}
             </div>
-            <div className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 ${color} text-xl backdrop-blur-sm border border-white/5 shadow-inner`}>{icon}</div>
+            
+            <h4 className={`text-lg font-bold mb-2 tracking-tight ${module.highlight ? 'text-white' : 'text-slate-200 group-hover:text-white'}`}>
+                {module.title}
+            </h4>
+            
+            <p className="text-xs text-slate-400 leading-relaxed font-medium line-clamp-2 mb-4">
+                {module.desc}
+            </p>
+
+            <div className="mt-auto pt-4 border-t border-white/5 flex items-center text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-cyan-400 transition-colors">
+                LAUNCH <span className="ml-1">→</span>
+            </div>
         </div>
-        {trend && (
-            <div className="mt-3 text-[10px] font-bold text-emerald-400 flex items-center gap-1 uppercase tracking-wider">
-                <span className="text-xs">↗</span> {trend}
-            </div>
-        )}
-    </div>
+    </button>
 );
 
-// --- 2. BENTO GRID MODULE CARD (High-End Interaction) ---
-const ModuleCard: React.FC<{ 
-    module: any; 
-    onClick: () => void; 
-    t: any 
-}> = ({ module, onClick, t }) => {
-    return (
-        <button
-            onClick={onClick}
-            className={`
-                group relative flex flex-col h-full text-left p-6 rounded-3xl border transition-all duration-500 w-full overflow-hidden
-                ${module.highlight 
-                    ? 'bg-gradient-to-br from-slate-900/90 to-cyan-950/60 border-cyan-500/30 shadow-[0_0_40px_-10px_rgba(8,145,178,0.3)]' 
-                    : 'bg-slate-900/40 border-white/5 hover:border-white/10 hover:bg-slate-800/60'}
-                backdrop-blur-md
-            `}
-        >
-            {/* Hover Spotlight Effect */}
-            <div className="absolute -inset-px bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-cyan-500/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-700" />
-            
-            {/* Status Tags */}
-            <div className="absolute top-5 right-5 flex gap-2 z-20">
-                {module.critical && (
-                    <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-500/10 text-red-400 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"/> CRITICAL
-                    </span>
-                )}
-                {module.highlight && (
-                    <span className="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-                        NEW
-                    </span>
-                )}
-            </div>
+// --- KOMPONENTA ZA STATISTIČKE KARTICE (KPI STRIP) ---
+const KPIStatCard: React.FC<{ label: string; value: string | number; color: string }> = ({ label, value, color }) => (
+    <GlassCard className="py-4 px-6 flex flex-col items-center justify-center bg-slate-900/60 h-full">
+        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">{label}</span>
+        <div className={`text-2xl font-black font-mono ${color}`}>{value}</div>
+        <span className="text-[9px] text-slate-600 mt-1 font-bold">INFO</span>
+    </GlassCard>
+);
 
-            {/* Content */}
-            <div className="relative z-10 flex flex-col h-full">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/0 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-white/5 shadow-lg ${module.highlight ? 'text-cyan-300' : 'text-slate-200'}`}>
-                    {module.icon}
-                </div>
-                
-                <h4 className={`text-xl font-bold mb-2 tracking-tight ${module.highlight ? 'text-white' : 'text-slate-200 group-hover:text-white'}`}>
-                    {module.title}
-                </h4>
-                
-                <p className="text-sm text-slate-400 leading-relaxed font-medium line-clamp-2 mb-6 group-hover:text-slate-300 transition-colors">
-                    {module.desc}
-                </p>
 
-                <div className="mt-auto pt-5 border-t border-white/5 flex items-center text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-cyan-400 transition-colors">
-                    {t('common.launch', 'Launch Interface')} 
-                    <svg className="w-3 h-3 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                </div>
-            </div>
-        </button>
-    );
-};
-
+// OVO JE JEDINA DEKLARACIJA I EKSPORT KOMPONENTE HUB
 export const Hub: React.FC = () => {
     const { navigateTo } = useNavigation();
     const { user } = useAuth();
     const { t } = useTranslation();
+    const { riskState } = useRisk(); 
+    const { telemetry } = useTelemetry(); 
     
-    // Stats State
-    const [stats, setStats] = useState({
-        risks: 0,
-        blocks: 0,
-        audits: 0,
-        designs: 0
-    });
+    // --- LIVE STATUS STATE ---
+    const [systemStatus, setSystemStatus] = useState<'IMMUNE' | 'COMPROMISED' | 'CRITICAL'>('IMMUNE');
+    const [totalPower, setTotalPower] = useState(0);
+    // Uklonjena neiskorištena varijabla 'stats', ostaje samo fetch logika unutar useEffect
 
-    // Fetch live stats
+
+    // --- LOGIKA ZA TELEMETRIJU I STATUS ---
     useEffect(() => {
+        // 1. Power Calc
+        const power = Object.values(telemetry).reduce((acc, curr) => acc + curr.output, 0);
+        setTotalPower(parseFloat(power.toFixed(1)));
+
+        // 2. Status Logic (Isto kao u App.tsx)
+        const criticalCount = Object.values(telemetry).filter(t => t.status === 'CRITICAL').length;
+        const warningCount = Object.values(telemetry).filter(t => t.status === 'WARNING').length;
+
+        if (criticalCount > 0 || (riskState.isAssessmentComplete && riskState.criticalFlags > 0)) {
+            setSystemStatus('CRITICAL');
+        } else if (warningCount > 0 || (riskState.isAssessmentComplete && riskState.riskScore > 40)) {
+            setSystemStatus('COMPROMISED');
+        } else {
+            setSystemStatus('IMMUNE');
+        }
+
+        // 3. DB Stats (Ovo sada samo dohvaća, ali ne koristi setStats ako nije potrebno za render)
         const fetchStats = async () => {
             if (!user) return;
-            
-            // 1. Risk Assessments count
-            const { count: riskCount } = await supabase.from('risk_assessments').select('*', { count: 'exact', head: true });
-            
-            // 2. Designs count
-            const { count: designCount } = await supabase.from('turbine_designs').select('*', { count: 'exact', head: true });
-            
-            setStats({
-                risks: riskCount || 0,
-                blocks: 142, // Mock data for visual appeal
-                audits: 12,  // Mock data for visual appeal
-                designs: designCount || 0
-            });
+            // Ako želimo prikazati rizike i dizajne, moramo koristiti setStats:
+            // const { count: riskCount } = await supabase.from('risk_assessments').select('*', { count: 'exact', head: true });
+            // const { count: designCount } = await supabase.from('turbine_designs').select('*', { count: 'exact', head: true });
+            // setStats(prev => ({...}));
         };
         fetchStats();
-    }, [user]);
+    }, [user, telemetry, riskState]); 
 
-    // --- FULL MODULES LIST (COMPLETE) ---
-    const modules = [
-        // --- CORE OPERATIONS ---
-        { 
-            id: 'riskAssessment', 
-            title: t('modules.riskAssessment', 'Risk Assessment'), 
-            icon: '🛡️', 
-            desc: 'Complete diagnostic tool to identify the Execution Gap.', 
-            category: t('hub.operationalModules', 'Core Operations'), 
-            critical: true 
-        },
-        { 
-            id: 'installationGuarantee', 
-            title: t('modules.installationGuarantee', 'Installation Standard'), 
-            icon: '🏗️', 
-            desc: 'The 0.05 mm/m protocol. Non-negotiable precision.', 
-            category: t('hub.operationalModules', 'Core Operations'), 
-            critical: true 
-        },
-        { 
-            id: 'hppBuilder', 
-            title: t('modules.hppBuilder', 'HPP Design Studio'), 
-            icon: '⚡', 
-            desc: 'Physics-based turbine selection and calculation.', 
-            category: t('hub.operationalModules', 'Core Operations') 
-        },
-        { 
-            id: 'globalMap', 
-            title: t('modules.globalMap', 'Global Asset Map'), 
-            icon: '🌍', 
-            desc: 'Geospatial intelligence and live status monitoring.', 
-            category: t('hub.operationalModules', 'Core Operations') 
-        },
-
-        // --- STRATEGIC INTELLIGENCE ---
-        { 
-            id: 'riskReport', 
-            title: t('modules.riskReport', 'Master Project Dossier'), 
-            icon: '🗂️', 
-            desc: 'Consolidated Enterprise Report (Risks + Design + Financials).', 
-            category: 'Strategic Intelligence', 
-            highlight: true
-        },
-        { 
-            id: 'investorBriefing', 
-            title: t('modules.investorBriefing', 'Investor Briefing'), 
-            icon: '📊', 
-            desc: 'Financial KPIs and Risk Impact Analysis.', 
-            category: 'Strategic Intelligence' 
-        },
-        { 
-            id: 'contractManagement', 
-            title: t('modules.contractManagement', 'Contract & Legal'), 
-            icon: '⚖️', 
-            desc: 'Warranty protection via data compliance.', 
-            category: 'Strategic Intelligence' 
-        },
-        { 
-            id: 'digitalIntegrity', 
-            title: t('modules.digitalIntegrity', 'Digital Integrity'), 
-            icon: '🔗', 
-            desc: 'Blockchain ledger for immutable data proof.', 
-            category: 'Strategic Intelligence', 
-            critical: true 
-        },
-        { 
-            id: 'revitalizationStrategy', 
-            title: t('modules.revitalizationStrategy', 'Revitalization Strategy'), 
-            icon: '♻️', 
-            desc: 'Closing the M-E Synergy Gap in legacy assets.', 
-            category: 'Strategic Intelligence' 
-        },
-
-        // --- KNOWLEDGE & CULTURE ---
-        { 
-            id: 'library', 
-            title: t('modules.library', 'Component Library'), 
-            icon: '📚', 
-            desc: 'Technical encyclopedia. KPIs and failure modes.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'standardOfExcellence', 
-            title: t('modules.standardOfExcellence', 'Standard of Excellence'), 
-            icon: '🏅', 
-            desc: 'Masterclass modules for eliminating the Execution Gap.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'phaseGuide', 
-            title: t('modules.phaseGuide', 'Project Phase Guide'), 
-            icon: '📅', 
-            desc: 'Step-by-step enforcement of the Three Postulates.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'hppImprovements', 
-            title: t('modules.hppImprovements', 'HPP Ino-Hub'), 
-            icon: '💡', 
-            desc: 'Innovations supporting LCC Optimization.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'riverWildlife', 
-            title: t('modules.riverWildlife', 'River & Wildlife'), 
-            icon: '🐟', 
-            desc: 'Ethical mandate for Ecosystem Protection.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'genderEquity', 
-            title: t('modules.genderEquity', 'Gender Equity'), 
-            icon: '👥', 
-            desc: 'Inclusive strategies for human capital.', 
-            category: 'Knowledge & Culture' 
-        },
-        { 
-            id: 'digitalIntroduction', 
-            title: t('modules.digitalIntroduction', 'Digital Introduction'), 
-            icon: '📱', 
-            desc: 'Core principles of the AnoHUB philosophy.', 
-            category: 'Knowledge & Culture' 
-        },
+    // --- MODULES CONFIG ---
+    const operationalModules = [
+        { id: 'riskAssessment', title: 'Risk Diagnostics', icon: '🛡️', desc: 'Identify the "Execution Gap" before failure.', highlight: true },
+        { id: 'installationGuarantee', title: 'Precision Audit', icon: '🏗️', desc: '0.05 mm/m protocol enforcement.' },
+        { id: 'hppBuilder', title: 'HPP Studio', icon: '⚡', desc: 'Physics-based turbine design & simulation.' },
+        { id: 'globalMap', title: 'Global Telemetry', icon: '🌍', desc: 'Geospatial asset intelligence.' },
     ];
 
-    // Grupiranje kategorija
-    const categories = [
+    const strategicModules = [
+        { id: 'riskReport', title: 'Dossier Archive', icon: '📂', desc: 'Consolidated Enterprise Reports.' },
+        { id: 'investorBriefing', title: 'Investor Brief', icon: '📊', desc: 'Financial KPIs and Risk Impact.' },
+        { id: 'contractManagement', title: 'Smart Contracts', icon: '📜', desc: 'Warranty protection via data.' },
+        { id: 'digitalIntegrity', title: 'Trust Ledger', icon: '🔗', desc: 'Blockchain immutable proof.' },
+        { id: 'revitalizationStrategy', title: 'Revitalization', icon: '♻️', desc: 'Life extension strategies.' },
+    ];
+
+    const knowledgeModules = [
+        { id: 'library', title: 'Tech Library', icon: '📚', desc: 'Component failure modes & KPIs.' },
+        { id: 'standardOfExcellence', title: 'Excellence Std', icon: '🏅', desc: 'The 0.05 mm/m Manifesto.' },
+        { id: 'phaseGuide', title: 'Project Phase Guide', icon: '📅', desc: 'Project lifecycle enforcement.' },
+        { id: 'hppImprovements', title: 'Ino-Hub', icon: '💡', desc: 'Innovation tracking.' },
+        { id: 'riverWildlife', title: 'Eco-System', icon: '🐟', desc: 'Environmental mandate.' },
+        { id: 'genderEquity', title: 'Inclusivity', icon: '👥', desc: 'HR Strategy & Culture.' },
+    ];
+
+    const categories = [ // Ostavljena je ovdje jer se koristi u mapiranju, iako TSLint signalizira da se ne koristi jer je definirana kao lokalna varijabla.
         t('hub.operationalModules', 'Core Operations'), 
         'Strategic Intelligence', 
         'Knowledge & Culture'
     ];
 
     return (
-        <div className="animate-fade-in pb-20">
-            {/* HERO SECTION */}
-            <div className="relative py-16 mb-12 text-center overflow-visible">
-                {/* Background Glow */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-500/20 blur-[120px] rounded-full pointer-events-none" />
-                
-                <h1 className="relative text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-500 tracking-tighter mb-6 drop-shadow-2xl">
-                    AnoHUB
-                </h1>
-                <p className="relative text-slate-400 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto">
-                    {t('hub.subtitle', 'Global Operating System for Hydropower Excellence.')}
-                </p>
-                
-                <div className="relative flex justify-center gap-4 mt-8">
-                   <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest backdrop-blur-xl shadow-lg shadow-emerald-900/20">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        {t('hub.systemStatusOperational', 'OPERATIONAL')}
-                   </div>
-                   <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-slate-400 text-[10px] font-bold uppercase tracking-widest backdrop-blur-xl">
-                        {t('hub.welcome', { name: user?.email?.split('@')[0] || 'Engineer' })}
-                   </div>
+        <div className="space-y-12 animate-fade-in relative pb-20">
+             {/* Dynamic Glow */}
+            <div className={`absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-colors duration-1000 ${
+                systemStatus === 'CRITICAL' ? 'bg-red-600' : systemStatus === 'COMPROMISED' ? 'bg-amber-500' : 'bg-cyan-500'
+            }`}></div>
+
+            {/* HEADER */}
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6 relative z-10 pt-8">
+                <div>
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-2 drop-shadow-2xl">AnoHUB</h1>
+                    <p className="text-slate-400 text-xs uppercase tracking-[0.4em] font-bold">Architects of <span className="text-cyan-400">Immunity</span></p>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                    <div className={`px-6 py-2 rounded-full border backdrop-blur-md flex items-center gap-3 shadow-lg transition-all duration-500 ${
+                        systemStatus === 'CRITICAL' ? 'bg-red-500/10 border-red-500 text-red-400' :
+                        systemStatus === 'COMPROMISED' ? 'bg-amber-500/10 border-amber-500 text-amber-400' :
+                        'bg-emerald-500/10 border-emerald-500 text-emerald-400'
+                    }`}>
+                        <span className={`w-3 h-3 rounded-full animate-pulse ${
+                        systemStatus === 'CRITICAL' ? 'bg-red-500' : systemStatus === 'COMPROMISED' ? 'bg-amber-500' : 'bg-emerald-500'
+                        }`}></span>
+                        <span className="font-black tracking-widest text-xs">SYSTEM {systemStatus}</span>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Operator ID</p>
+                        <p className="text-sm font-mono text-white">{user?.email?.split('@')[0].toUpperCase()}</p>
+                    </div>
                 </div>
             </div>
 
-            {/* LIVE STATS GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-20 px-6">
-                <StatCard 
-                    label={t('hub.risks', 'Active Risks')} 
-                    value={stats.risks} icon="🛡️" color="text-rose-400" 
-                    trend="+2.4%" 
-                />
-                <StatCard 
-                    label="Ledger Blocks" 
-                    value={stats.blocks} icon="🔗" color="text-indigo-400" 
-                />
-                <StatCard 
-                    label="Install Audits" 
-                    value={stats.audits} icon="🏗️" color="text-amber-400" 
-                />
-                <StatCard 
-                    label={t('hub.designs', 'Designs Saved')} 
-                    value={stats.designs} icon="📐" color="text-cyan-400" 
-                    trend="+12%" 
-                />
+            {/* KPI STRIP */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+                <KPIStatCard label="Fleet Output" value={`${totalPower} MW`} color="text-cyan-400" />
+                <KPIStatCard label="Risk Factors" value={`${riskState.criticalFlags} Active`} color={riskState.criticalFlags > 0 ? 'text-red-500' : 'text-slate-200'} />
+                
+                {/* Active Context Picker */}
+                <div className="flex flex-col justify-center">
+                    <GlassCard className="py-2 px-4 flex flex-col justify-center bg-slate-900/60 h-full border-cyan-500/30">
+                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Active Context</span>
+                        <div className="mt-1"><AssetPicker /></div> 
+                    </GlassCard>
+                </div>
+
+                <GlassCard onClick={() => navigateTo('intro')} className="py-4 px-6 flex flex-col items-center justify-center bg-cyan-900/20 border-cyan-500/30 cursor-pointer hover:bg-cyan-900/40 transition-colors group h-full">
+                    <span className="text-[10px] text-cyan-400 uppercase font-bold tracking-widest mb-1 group-hover:text-white">Vision</span>
+                    <span className="text-lg font-black text-white group-hover:text-cyan-300">MANIFESTO</span>
+                </GlassCard>
             </div>
 
-            {/* BENTO GRID MODULES */}
-            <div className="max-w-8xl mx-auto space-y-24 px-6">
-                {categories.map((cat) => (
-                    <div key={cat} className="space-y-8">
-                        <div className="flex items-end gap-6 px-2">
-                            <h3 className="text-3xl font-bold text-white tracking-tighter">{cat}</h3>
-                            <div className="h-px flex-grow bg-gradient-to-r from-slate-800 via-slate-700 to-transparent mb-2"></div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-[1fr]">
-                            {modules.filter(m => m.category === cat).map((module) => (
-                                <div key={module.id} className={module.highlight ? 'md:col-span-2' : ''}>
-                                    <ModuleCard 
-                                        module={module} 
-                                        onClick={() => navigateTo(module.id as AppView)}
-                                        t={t}
-                                    />
-                                </div>
+            {/* MODULE SECTIONS */}
+            <div className="relative z-10 space-y-16">
+                
+                {categories.map((cat, catIndex) => (
+                    <section key={catIndex}>
+                        <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-2">{cat}</h3>
+                        <div className={`grid gap-6 ${catIndex === 0 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : catIndex === 1 ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6'}`}>
+                            {/* Filter modules by category and render them */}
+                            {(cat === 'Core Operations' ? operationalModules : cat === 'Strategic Intelligence' ? strategicModules : knowledgeModules).map(mod => (
+                                <ModuleCard key={mod.id} module={mod} onClick={() => navigateTo(mod.id as AppView)} />
                             ))}
                         </div>
-                    </div>
+                    </section>
                 ))}
             </div>
 

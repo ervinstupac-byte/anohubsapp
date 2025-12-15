@@ -7,11 +7,12 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx'; 
 import { supabase } from '../services/supabaseClient.ts'; 
 import { generateRiskReport } from '../utils/pdfGenerator.ts';
-import { useAssetContext } from './AssetPicker.tsx'; 
+// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import { QUESTIONS } from '../constants.ts'; 
 import type { Question } from '../types.ts';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
 
 // --- RISK LOGIC MAP ---
 export const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
@@ -84,6 +85,7 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
     );
 };
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const QuestionnaireSummary: React.FC = () => {
     const { navigateToHub } = useNavigation();
     const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
@@ -142,8 +144,8 @@ export const QuestionnaireSummary: React.FC = () => {
                 asset_name: selectedAsset ? selectedAsset.name : `HPP-${operationalData.turbineType || 'Unspecified'}`, 
                 asset_id: selectedAsset?.id, 
                 engineer_id: user?.email || 'Anonymous Engineer',
-                answers: answers,                      
-                operational_data: operationalData,     
+                answers: answers, 
+                operational_data: operationalData, 
                 risk_score: disciplineRiskScore,
                 risk_level: riskIndicator.level,
                 description: description
@@ -218,7 +220,7 @@ export const QuestionnaireSummary: React.FC = () => {
                 <div className="lg:col-span-1 space-y-6">
                     <GlassCard className="border-t-4 border-t-cyan-500">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">{t('questionnaire.overallAssessment')}</h3>
-                        <RiskGauge level={riskIndicator.level} />
+                        <RiskGauge level={riskIndicator.level} /> 
                         
                         <div className="mt-4 pt-6 border-t border-slate-700/50 space-y-3">
                             <div className="flex justify-between items-center p-3 bg-red-900/10 rounded-lg border border-red-500/10">
@@ -338,5 +340,3 @@ export const QuestionnaireSummary: React.FC = () => {
         </div>
     );
 };
-
-export default QuestionnaireSummary;

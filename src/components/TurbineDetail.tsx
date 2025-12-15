@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- KORISTIMO NOVI UI KIT
+import { GlassCard } from './ui/GlassCard.tsx';
 import { turbineDetailData } from '../data/turbineDetailData.ts';
 import type { TurbineDetail as TurbineDetailType, TurbineComponent } from '../data/turbineDetailData.ts';
 
@@ -61,8 +61,8 @@ const ComponentCard: React.FC<TurbineComponent> = ({ name, description, critical
     </div>
 );
 
-// --- MAIN COMPONENT ---
-const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
+// --- MAIN COMPONENT (JEDINA DEKLARACIJA I EKSPORT) ---
+export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
     const { t } = useTranslation();
     const data: TurbineDetailType | undefined = turbineDetailData[turbineKey];
 
@@ -149,5 +149,4 @@ const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
         </div>
     );
 };
-
-export default TurbineDetail;
+// Uklonjen dupli eksport na dnu fajla.

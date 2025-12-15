@@ -7,11 +7,15 @@ import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts'; 
 import { generateCalculationReport } from '../utils/pdfGenerator.ts'; 
 import { TURBINE_CATEGORIES } from '../constants.ts';
-import { AssetPicker, useAssetContext } from './AssetPicker.tsx'; 
+// ISPRAVKA 1: Uvezi AssetPicker kao komponentu
+import { AssetPicker } from './AssetPicker.tsx'; 
+// ISPRAVKA 2: Uvezi hook izravno iz konteksta (Ispravlja TS2459)
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 import { GlassCard } from './ui/GlassCard.tsx'; 
 import { ModernButton } from './ui/ModernButton.tsx'; 
-import { ModernInput } from './ui/ModernInput.tsx'; // Import dodan
+// ISPRAVKA 3: Dodan ModernInput (rješava TS2304)
+import { ModernInput } from './ui/ModernInput.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -50,7 +54,7 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
     );
 };
 
-const HPPBuilder: React.FC = () => {
+export const HPPBuilder: React.FC = () => {
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
     const { user } = useAuth();
@@ -59,7 +63,7 @@ const HPPBuilder: React.FC = () => {
     
     // --- STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
-         try {
+          try {
             const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
             return saved ? JSON.parse(saved) : {
                 head: 50, flow: 10, efficiency: 92, powerFactor: 0.8, waterQuality: 'clean', flowVariation: 'stable'
@@ -72,15 +76,18 @@ const HPPBuilder: React.FC = () => {
     const [configName, setConfigName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => { fetchCloudConfigs(); }, [selectedAsset]); 
+    useEffect(() => { fetchCloudConfigs(); }, [selectedAsset, user]); // Dodan user u dependency
     useEffect(() => { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings)); }, [settings]);
 
     // --- PHYSICS CALCULATIONS ---
     const calculations = useMemo(() => {
+        // g = 9.81 m/s²
         const powerMW = (9.81 * settings.head * settings.flow * (settings.efficiency / 100)) / 1000;
         const hours = 8760;
         const capacityFactor = settings.flowVariation === 'stable' ? 0.85 : settings.flowVariation === 'seasonal' ? 0.6 : 0.45;
         const annualGWh = (powerMW * hours * capacityFactor) / 1000;
+        // Specifična brzina: Ns = N * sqrt(Q) / H^(3/4)
+        // Pretpostavljamo tipičnu brzinu N=1000, pa koristimo pojednostavljeni indeks.
         const specificSpeedIndex = (1000 * Math.sqrt(settings.flow)) / Math.pow(settings.head, 0.75); 
 
         return {
@@ -239,28 +246,32 @@ const HPPBuilder: React.FC = () => {
                                 <span>{t('hppBuilder.netHead')}</span>
                                 <span className="text-cyan-400 font-mono bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/20">{settings.head} m</span>
                             </div>
-                            <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e) => updateSettings('head', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
+                            {/* TypeScript Range fix */}
+                            <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('head', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
                         </div>
                         <div>
                             <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
                                 <span>{t('hppBuilder.flowRate')}</span>
                                 <span className="text-cyan-400 font-mono bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/20">{settings.flow} m³/s</span>
                             </div>
-                            <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
+                            {/* TypeScript Range fix */}
+                            <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
                         </div>
                          <div>
                             <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
                                 <span>{t('hppBuilder.efficiency')}</span>
                                 <span className="text-emerald-400 font-mono bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/20">{settings.efficiency}%</span>
                             </div>
-                            <input type="range" min="70" max="98" step="1" value={settings.efficiency} onChange={(e) => updateSettings('efficiency', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all" />
+                            {/* TypeScript Range fix */}
+                            <input type="range" min="70" max="98" step="1" value={settings.efficiency} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('efficiency', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all" />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 pt-6 mt-6 border-t border-white/5">
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">{t('hppBuilder.hydrologyType')}</label>
-                            <select value={settings.flowVariation} onChange={(e) => updateSettings('flowVariation', e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
+                            {/* TypeScript Select fix */}
+                            <select value={settings.flowVariation} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateSettings('flowVariation', e.target.value as HPPSettings['flowVariation'])} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
                                 <option value="stable">Stable Base Load</option>
                                 <option value="seasonal">Seasonal Peak/Off-Peak</option>
                                 <option value="variable">Highly Variable (Flashy)</option>
@@ -268,7 +279,8 @@ const HPPBuilder: React.FC = () => {
                         </div>
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">{t('hppBuilder.waterCondition')}</label>
-                            <select value={settings.waterQuality} onChange={(e) => updateSettings('waterQuality', e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
+                            {/* TypeScript Select fix */}
+                            <select value={settings.waterQuality} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateSettings('waterQuality', e.target.value as HPPSettings['waterQuality'])} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
                                 <option value="clean">Clear Water</option>
                                 <option value="suspended">Silt Load (Glacial)</option>
                                 <option value="abrasive">Hard Sediment (Quartz)</option>
@@ -291,7 +303,7 @@ const HPPBuilder: React.FC = () => {
                             <div key={c.id} className="flex items-center justify-between bg-slate-900/40 p-2 rounded border border-white/5 hover:border-white/10 transition-colors group cursor-pointer" onClick={() => loadConfiguration(c)}>
                               <div className="truncate w-32">
                                 <span className="text-slate-300 font-bold text-xs block group-hover:text-white transition-colors">{c.name}</span>
-                                {c.asset_id && <span className="text-[9px] text-slate-500 flex items-center gap-1"><span className="w-1 h-1 bg-green-500 rounded-full"></span>Linked</span>}
+                                {c.asset_id && <span className="text-[9px] text-slate-500 flex items-center gap-1"><span className="w-1 h-1 bg-emerald-500 rounded-full"></span>Linked</span>}
                               </div>
                               <span className="text-slate-600 group-hover:text-cyan-400 text-[10px] uppercase font-bold transition-colors">Load</span>
                             </div>
@@ -329,9 +341,9 @@ const HPPBuilder: React.FC = () => {
                         </div>
 
                         <div className="p-6 mt-auto">
-                             <ModernButton onClick={handleGeneratePDF} variant="primary" className="shadow-cyan-500/20" icon={<span>📄</span>} fullWidth>
+                            <ModernButton onClick={handleGeneratePDF} variant="primary" className="shadow-cyan-500/20" icon={<span>📄</span>} fullWidth>
                                 {t('hppBuilder.downloadReport')}
-                             </ModernButton>
+                            </ModernButton>
                         </div>
                     </GlassCard>
                 </div>
@@ -414,6 +426,7 @@ const HPPBuilder: React.FC = () => {
 
                         <ModernInput 
                             value={configName} 
+                            // ISPRAVKA: Dodan eksplicitni tip za rješavanje TS7006
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfigName(e.target.value)} 
                             placeholder="e.g. Run-of-River Concept V1" 
                             autoFocus 
@@ -433,9 +446,7 @@ const HPPBuilder: React.FC = () => {
                         </div>
                     </GlassCard>
                 </div>
-             )}
+            )}
         </div>
     );
 };
-
-export default HPPBuilder;

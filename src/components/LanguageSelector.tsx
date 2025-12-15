@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const LanguageSelector: React.FC = () => {
     const { i18n } = useTranslation();
 
@@ -8,6 +9,7 @@ export const LanguageSelector: React.FC = () => {
         i18n.changeLanguage(lng);
     };
 
+    // Funkcija se zove btnClass
     const btnClass = (lng: string) => `
         px-3 py-1 text-[10px] font-bold rounded-full transition-all duration-300 uppercase cursor-pointer
         ${i18n.language === lng 
@@ -17,6 +19,7 @@ export const LanguageSelector: React.FC = () => {
 
     return (
         <div className="flex gap-1 items-center bg-slate-900/80 backdrop-blur-md p-1 rounded-full border border-slate-700/50">
+            {/* SADA SVE KORISTE btnClass */}
             <button onClick={() => changeLanguage('en')} className={btnClass('en')}>EN</button>
             <button onClick={() => changeLanguage('de')} className={btnClass('de')}>DE</button>
             <button onClick={() => changeLanguage('bs')} className={btnClass('bs')}>BS</button>

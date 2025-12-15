@@ -1,65 +1,172 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+// VAŽNO: useAssetContext se importuje iz svog konteksta, a ne iz AssetPicker.tsx
 import { useAssetContext } from '../contexts/AssetContext.tsx'; 
+import { useToast } from '../contexts/ToastContext.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
+import { ModernInput } from './ui/ModernInput.tsx';
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT KOMPONENTE AssetPicker
 export const AssetPicker: React.FC = () => {
-    const { assets, selectedAsset, selectAsset, loading } = useAssetContext();
+    const { assets, selectedAsset, selectAsset, addAsset, loading } = useAssetContext();
+    const { showToast } = useToast();
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    // Form State
+    const [newName, setNewName] = useState('');
+    const [newType, setNewType] = useState('Kaplan');
+    const [newLocation, setNewLocation] = useState('');
+    const [newCapacity, setNewCapacity] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        if (!selectedAsset && assets.length > 0) {
-            // selectAsset(assets[0].id); // Optional auto-select
+    const handleCreate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newName || !newLocation || !newCapacity) {
+            showToast('Please fill all fields', 'error');
+            return; // Funkcija vraća 'void'
         }
-    }, [assets, selectedAsset, selectAsset]);
 
-    if (loading) return <div className="text-xs text-slate-500 animate-pulse font-mono uppercase tracking-widest">Syncing Assets...</div>;
+        setIsSubmitting(true);
+        try {
+            await addAsset({
+                name: newName,
+                type: newType as any,
+                location: newLocation,
+                coordinates: [45.0, 16.0], // Default placeholder coordinates
+                capacity: parseFloat(newCapacity),
+                status: 'Operational'
+            });
+            showToast('New asset registered successfully', 'success');
+            setIsModalOpen(false);
+            // Reset form
+            setNewName('');
+            setNewLocation('');
+            setNewCapacity('');
+        } catch (error) {
+            showToast('Failed to create asset', 'error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
-    return (
-        <div className="w-full relative z-20">
-            <div className="flex items-center gap-3 bg-slate-900/80 p-2 pl-3 rounded-xl border border-slate-700/50 shadow-lg backdrop-blur-md group hover:border-cyan-500/30 transition-colors">
-                <div className="bg-cyan-500/10 p-2 rounded-lg text-cyan-400 group-hover:text-cyan-300 group-hover:bg-cyan-500/20 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                </div>
+    if (loading) return <div className="h-10 w-48 bg-slate-800/50 animate-pulse rounded-lg"></div>;
+
+    // Osnovno pravilo React komponente: MORA VRAĆATI JSX
+    return ( 
+        <>
+            {/* PICKER DROPDOWN */}
+            <div className="relative group min-w-[200px]">
+                <select
+                    value={selectedAsset?.id || ''}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                        if (e.target.value === 'NEW') {
+                            setIsModalOpen(true);
+                        } else {
+                            selectAsset(e.target.value);
+                        }
+                    }}
+                    className="appearance-none w-full bg-slate-900/80 border border-slate-700 text-white text-sm rounded-lg px-4 py-2.5 pr-8 focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer hover:bg-slate-800"
+                >
+                    <option value="" disabled>Select Asset Context</option>
+                    {assets.map((asset) => (
+                        <option key={asset.id} value={asset.id}>
+                            {asset.name} ({asset.type})
+                        </option>
+                    ))}
+                    <option disabled>──────────</option>
+                    <option value="NEW" className="text-cyan-400 font-bold">+ Register New Asset</option>
+                </select>
                 
-                <div className="flex-grow min-w-0">
-                    <label className="block text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">
-                        Active Project Context
-                    </label>
-                    <select
-                        value={selectedAsset?.id || ''}
-                        onChange={(e) => selectAsset(e.target.value)}
-                        className="w-full bg-transparent text-white font-bold text-sm focus:outline-none cursor-pointer truncate appearance-none hover:text-cyan-400 transition-colors"
-                    >
-                        <option value="" disabled className="text-slate-500">Select Target Asset...</option>
-                        {assets.map(asset => (
-                            <option key={asset.id} value={asset.id} className="bg-slate-900 text-white">
-                                {asset.name} • {asset.type}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="hidden sm:flex items-center px-3 border-l border-slate-700/50 h-8">
-                    {selectedAsset ? (
-                        <div className="flex items-center gap-2">
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span className="text-[10px] font-bold text-emerald-500 tracking-wider">LIVE</span>
-                        </div>
-                    ) : (
-                        <div className="w-2 h-2 rounded-full bg-slate-700"></div>
-                    )}
-                </div>
-                
-                {/* Custom Chevron */}
-                <div className="pr-2 pointer-events-none text-slate-500">
+                {/* Custom Arrow Icon */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
             </div>
-        </div>
+
+            {/* CREATE MODAL */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl shadow-cyan-900/20">
+                        
+                        {/* Modal Header */}
+                        <div className="bg-slate-950/50 p-6 border-b border-white/5 flex justify-between items-center">
+                            <h3 className="text-xl font-bold text-white">Register New Asset</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-white transition-colors">✕</button>
+                        </div>
+
+                        {/* Modal Body */}
+                        <form onSubmit={handleCreate} className="p-6 space-y-4">
+                            <ModernInput 
+                                label="Asset Name"
+                                value={newName}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewName(e.target.value)}
+                                placeholder="e.g. John Doe"
+                                fullWidth
+                            />
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">Turbine Type</label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {['Kaplan', 'Francis', 'Pelton'].map((type) => (
+                                        <button
+                                            type="button"
+                                            key={type}
+                                            onClick={() => setNewType(type)}
+                                            className={`
+                                                py-2 rounded-lg text-xs font-bold border transition-all
+                                                ${newType === type 
+                                                    ? 'bg-cyan-500 text-white border-cyan-400' 
+                                                    : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'}
+                                            `}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <ModernInput 
+                                label="Location"
+                                value={newLocation}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLocation(e.target.value)}
+                                placeholder="River, Country"
+                                fullWidth
+                                icon={<span>📍</span>}
+                            />
+
+                            <ModernInput 
+                                label="Capacity (MW)"
+                                type="number"
+                                value={newCapacity}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewCapacity(e.target.value)}
+                                placeholder="0.0"
+                                fullWidth
+                                icon={<span>⚡</span>}
+                            />
+
+                            <div className="pt-4 flex gap-3">
+                                <ModernButton 
+                                    onClick={() => setIsModalOpen(false)}
+                                    variant="ghost"
+                                    className="flex-1"
+                                    type="button"
+                                >
+                                    Cancel
+                                </ModernButton>
+                                <ModernButton 
+                                    type="submit"
+                                    variant="primary"
+                                    className="flex-1"
+                                    isLoading={isSubmitting}
+                                >
+                                    Register Asset
+                                </ModernButton>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
-
-export { useAssetContext } from '../contexts/AssetContext.tsx';
+// Uklonjen dupli export na dnu fajla.

@@ -1,10 +1,12 @@
 import React from 'react';
 import { BackButton } from './BackButton.tsx';
-import { useAssetContext } from './AssetPicker.tsx';
+// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
 import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
 
-const RevitalizationStrategy: React.FC = () => {
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
+export const RevitalizationStrategy: React.FC = () => {
     const { selectedAsset } = useAssetContext();
 
     // Smart mailto link
@@ -165,5 +167,4 @@ const RevitalizationStrategy: React.FC = () => {
         </div>
     );
 };
-
-export default RevitalizationStrategy;
+// Uklonjen dupli eksport na dnu fajla.

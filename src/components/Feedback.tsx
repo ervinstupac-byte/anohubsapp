@@ -7,6 +7,7 @@ interface FeedbackProps {
     onClose: () => void;
 }
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Feedback: React.FC<FeedbackProps> = ({ onClose }) => {
     const [rating, setRating] = useState<number | null>(null);
     const [comment, setComment] = useState('');
@@ -117,3 +118,5 @@ Sent directly from AnoHub App.
         </div>
     );
 };
+
+// Uklonjen dupli eksport na dnu fajla.

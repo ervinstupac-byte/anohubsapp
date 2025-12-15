@@ -1,7 +1,8 @@
 import React from 'react';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- Koristimo UI Kit
+import { GlassCard } from './ui/GlassCard.tsx'; 
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const ProjectPhaseGuide: React.FC = () => {
     return (
         <div className="animate-fade-in pb-12 max-w-5xl mx-auto space-y-12">
@@ -154,3 +155,4 @@ export const ProjectPhaseGuide: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

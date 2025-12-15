@@ -1,213 +1,157 @@
-import React, { useState, useMemo } from 'react';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
-import { useRisk } from '../contexts/RiskContext.tsx';
-import { useNavigation } from '../contexts/NavigationContext.tsx';
-import type { OperationalData } from '../types.ts';
-import { QUESTIONS } from '../constants.ts';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernInput } from './ui/ModernInput.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import React, { useState } from 'react';
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
+
+// Pitanja i opcije
+const QUESTIONS = [
+    { 
+        id: 'q1', 
+        text: 'Do you verify intake velocity profiles using CFD or physical scale models?', 
+        options: ['Yes, always', 'Only for large units', 'No, relied on OEM', 'Not documented'],
+        critical: 'No, relied on OEM' // Ako ovo odabere, dobiva Critical Flag
+    },
+    { 
+        id: 'q2', 
+        text: 'Is the "0.05 mm/m" alignment tolerance strictly enforced in contracts?', 
+        options: ['Yes, non-negotiable', 'Yes, but defined loosely', 'No', 'Unknown'],
+        critical: 'No'
+    },
+    { 
+        id: 'q3', 
+        text: 'Are vibration spectra (FFT) integrated into the SCADA logic?', 
+        options: ['Yes, full integration', 'Standalone system only', 'Portable measurements', 'No'],
+        critical: 'No'
+    },
+    { 
+        id: 'q4', 
+        text: 'Do you have EN 10204 3.1 certificates for all runner bolts?', 
+        options: ['Yes, archived digitally', 'Paper copies only', 'Partial', 'No'],
+        critical: 'No'
+    },
+    { 
+        id: 'q5', 
+        text: 'Is "Ownership Maintenance" practiced by operators?', 
+        options: ['Yes, highly disciplined', 'Variable discipline', 'No, "Run-to-Failure" mentality'],
+        critical: 'No, "Run-to-Failure" mentality'
+    }
+];
 
 interface QuestionnaireProps {
     onShowSummary: () => void;
+    onRiskSync?: (score: number, criticalCount: number) => void; // Funkcija koju dobivamo od roditelja
 }
 
-const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary }) => {
-    const { answers, setAnswer, operationalData, setOperationalData } = useQuestionnaire();
-    const { calculateAndSetQuestionnaireRisk } = useRisk();
-    const { navigateToHub } = useNavigation();
-    const [step, setStep] = useState(0);
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
+export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onRiskSync }) => {
+    const [currentStep, setCurrentStep] = useState(0);
+    const [answers, setAnswers] = useState<Record<string, string>>({});
 
-    const operationalFields: { key: keyof OperationalData, label: string, type: 'text' | 'number' }[] = useMemo(() => [
-        { key: 'commissioningYear', label: 'Commissioning Year', type: 'text' },
-        { key: 'maintenanceCycle', label: 'Maintenance Cycle (years)', type: 'text' },
-        { key: 'powerOutput', label: 'Designed Power Output (MW)', type: 'number' },
-        { key: 'turbineType', label: 'Turbine Type (Francis/Kaplan/Pelton)', type: 'text' },
-        { key: 'head', label: 'Gross Head [m]', type: 'number' },
-        { key: 'flow', label: 'Flow [m³/s]', type: 'number' },
-    ], []);
+    const handleAnswer = (option: string) => {
+        setAnswers(prev => ({ ...prev, [QUESTIONS[currentStep].id]: option }));
+    };
+
+    const handleNext = () => {
+        if (currentStep < QUESTIONS.length - 1) {
+            setCurrentStep(prev => prev + 1);
+        } else {
+            handleComplete();
+        }
+    };
 
     const handleComplete = () => {
-        calculateAndSetQuestionnaireRisk(answers);
+        // 1. IZRAČUN REZULTATA (LOGIKA)
+        let calculatedScore = 0;
+        let criticalCount = 0;
+
+        QUESTIONS.forEach((q) => {
+            const answer = answers[q.id];
+            
+            // Logika bodovanja
+            if (answer === q.critical) {
+                calculatedScore += 20; // Puno bodova za loš odgovor
+                criticalCount++;      // Zabilježi kritičnu grešku
+            } else if (answer.includes('No') || answer.includes('Unknown') || answer.includes('Partial')) {
+                calculatedScore += 10; // Srednji rizik
+            }
+        });
+
+        // 2. AKTIVACIJA NEURAL LINKA (Šaljemo podatke u System Core)
+        if (onRiskSync) {
+            console.log(`🧠 Neural Link Transmitting: Score ${calculatedScore}, Flags: ${criticalCount}`);
+            onRiskSync(calculatedScore, criticalCount);
+        }
+
+        // 3. PRIKAZI SAŽETAK
         onShowSummary();
     };
 
-    const progressPercentage = Math.round((step / (QUESTIONS.length + 1)) * 100);
-
-    const renderStep = () => {
-        // STEP 0: Operational Data
-        if (step === 0) {
-            return (
-                <div className="space-y-8 animate-fade-in">
-                    <div className="text-center mb-8">
-                        <div className="inline-block p-3 bg-cyan-900/30 rounded-2xl mb-4 border border-cyan-500/20">
-                            <span className="text-3xl">🏗️</span>
-                        </div>
-                        <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">Operational Context</h3>
-                        <p className="text-slate-400 text-sm max-w-md mx-auto">
-                            Define the physical parameters of the asset to calibrate the risk model.
-                        </p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {operationalFields.map(({ key, label, type }) => (
-                            <ModernInput
-                                key={key}
-                                label={label}
-                                type={type}
-                                value={operationalData[key]}
-                                onChange={e => setOperationalData(key, e.target.value)}
-                                placeholder={`Enter ${label.toLowerCase()}...`}
-                            />
-                        ))}
-                    </div>
-                    
-                    <div className="pt-6 flex justify-end">
-                        <ModernButton
-                            onClick={() => setStep(1)}
-                            disabled={!operationalFields.slice(0, 3).every(field => operationalData[field.key] !== '')}
-                            variant="primary"
-                            className="px-8"
-                            icon={<span>→</span>}
-                        >
-                            Proceed to Diagnostic Protocol
-                        </ModernButton>
-                    </div>
-                </div>
-            );
-        }
-
-        const currentQuestion = QUESTIONS[step - 1];
-
-        // FINAL SCREEN
-        if (!currentQuestion) {
-            return (
-                <div className="text-center space-y-8 py-12 animate-scale-in">
-                    <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-emerald-500/20 blur-xl rounded-full animate-pulse"></div>
-                        <div className="relative w-24 h-24 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6">
-                            <span className="text-5xl text-white">✅</span>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <h3 className="text-3xl font-black text-white mb-2 tracking-tight">Diagnostic Complete</h3>
-                        <p className="text-slate-400 text-lg max-w-md mx-auto leading-relaxed">
-                            All data points have been captured. The system is ready to generate the Execution Gap Analysis.
-                        </p>
-                    </div>
-
-                    <div className="pt-4">
-                        <ModernButton
-                            onClick={handleComplete}
-                            variant="primary"
-                            className="px-10 py-4 text-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500"
-                            icon={<span>📊</span>}
-                        >
-                            Generate Risk Report
-                        </ModernButton>
-                    </div>
-                </div>
-            );
-        }
-
-        // QUESTIONS
-        return (
-            <div className="space-y-8 animate-fade-in">
-                <div className="border-b border-white/5 pb-6">
-                    <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-[0.2em] mb-3 block">
-                        Question {step} of {QUESTIONS.length}
-                    </span>
-                    <h3 className="text-xl md:text-2xl font-bold text-white leading-relaxed tracking-wide">
-                        {currentQuestion.text}
-                    </h3>
-                </div>
-                
-                <div className="grid gap-4">
-                    {currentQuestion.options.map((option, index) => {
-                        const isSelected = answers[currentQuestion.id] === option;
-                        return (
-                            <button
-                                key={index}
-                                onClick={() => setAnswer(currentQuestion.id, option)}
-                                className={`
-                                    w-full text-left p-5 rounded-xl border transition-all duration-300 flex items-center gap-5 group relative overflow-hidden
-                                    ${isSelected
-                                        ? 'bg-cyan-600/20 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.15)]'
-                                        : 'bg-slate-900/40 border-white/5 hover:bg-slate-800/60 hover:border-white/10'
-                                    }
-                                `}
-                            >
-                                {/* Selection Indicator */}
-                                <div className={`
-                                    w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all duration-300
-                                    ${isSelected ? 'border-cyan-400 bg-cyan-400 scale-110' : 'border-slate-600 group-hover:border-slate-400'}
-                                `}>
-                                    {isSelected && <div className="w-2.5 h-2.5 bg-slate-900 rounded-full" />}
-                                </div>
-                                
-                                <span className={`text-lg font-medium transition-colors ${isSelected ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
-                                    {option}
-                                </span>
-
-                                {/* Hover Glow */}
-                                <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shine pointer-events-none opacity-50`}></div>
-                            </button>
-                        );
-                    })}
-                </div>
-
-                <div className="flex justify-between pt-8 border-t border-white/5">
-                    <ModernButton
-                        onClick={() => setStep(prev => Math.max(0, prev - 1))}
-                        variant="ghost"
-                        icon={<span>←</span>}
-                    >
-                        Back
-                    </ModernButton>
-                    
-                    <ModernButton
-                        onClick={() => setStep(prev => prev + 1)}
-                        disabled={!answers[currentQuestion.id]}
-                        variant="primary"
-                        className="shadow-cyan-500/20"
-                        icon={<span>→</span>}
-                    >
-                        Next Step
-                    </ModernButton>
-                </div>
-            </div>
-        );
-    };
+    const currentQ = QUESTIONS[currentStep];
+    const isLastQuestion = currentStep === QUESTIONS.length - 1;
+    const progress = ((currentStep + 1) / QUESTIONS.length) * 100;
 
     return (
-        <div className="max-w-4xl mx-auto py-6">
+        <div className="max-w-2xl mx-auto">
             {/* PROGRESS BAR */}
-            <div className="w-full bg-slate-900/50 h-2 rounded-full mb-8 overflow-hidden border border-white/5">
-                <div 
-                    className="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full transition-all duration-700 ease-out shadow-[0_0_15px_cyan] relative" 
-                    style={{ width: `${progressPercentage}%` }}
-                >
-                    <div className="absolute top-0 right-0 w-2 h-full bg-white/50 blur-[2px]"></div>
+            <div className="mb-8">
+                <div className="flex justify-between text-xs text-slate-400 uppercase font-bold tracking-widest mb-2">
+                    <span>System Diagnostic</span>
+                    <span>{Math.round(progress)}% Complete</span>
+                </div>
+                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                        className="h-full bg-cyan-500 transition-all duration-500 ease-out shadow-[0_0_10px_cyan]" 
+                        style={{ width: `${progress}%` }}
+                    ></div>
                 </div>
             </div>
 
-            <GlassCard className="p-8 md:p-10 shadow-2xl shadow-cyan-900/10 min-h-[600px] flex flex-col justify-center">
-                {renderStep()}
-            </GlassCard>
+            {/* QUESTION CARD */}
+            <GlassCard className="min-h-[400px] flex flex-col justify-between border-t-4 border-t-cyan-500">
+                <div>
+                    <span className="inline-block px-2 py-1 bg-cyan-950/50 text-cyan-400 text-[10px] font-mono rounded border border-cyan-500/20 mb-4">
+                        QUERY_ID: {currentQ.id.toUpperCase()}
+                    </span>
+                    
+                    <h3 className="text-2xl font-bold text-white mb-8 leading-relaxed">
+                        {currentQ.text}
+                    </h3>
 
-            {step > 0 && step <= QUESTIONS.length && (
-                <div className="mt-8 text-center">
-                    <button 
-                        onClick={navigateToHub} 
-                        className="text-slate-500 hover:text-red-400 transition-colors text-[10px] font-bold uppercase tracking-[0.2em] hover:underline decoration-red-400 underline-offset-4"
-                    >
-                        Abort Diagnostic Protocol
-                    </button>
+                    <div className="space-y-3">
+                        {currentQ.options.map((option) => (
+                            <button
+                                key={option}
+                                onClick={() => handleAnswer(option)}
+                                className={`
+                                    w-full text-left p-4 rounded-xl border transition-all duration-200 group relative overflow-hidden
+                                    ${answers[currentQ.id] === option 
+                                        ? 'bg-cyan-600 border-cyan-400 text-white shadow-lg shadow-cyan-900/50' 
+                                        : 'bg-slate-800/50 border-white/5 text-slate-300 hover:bg-slate-800 hover:border-white/20 hover:text-white'}
+                                `}
+                            >
+                                <div className="flex items-center justify-between relative z-10">
+                                    <span className="text-sm font-medium">{option}</span>
+                                    {answers[currentQ.id] === option && (
+                                        <span className="text-white animate-scale-in">✓</span>
+                                    )}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            )}
+
+                <div className="mt-8 pt-6 border-t border-white/5 flex justify-end">
+                    <ModernButton 
+                        onClick={handleNext} 
+                        disabled={!answers[currentQ.id]}
+                        variant="primary"
+                        className="px-8"
+                        icon={isLastQuestion ? <span>💾</span> : <span>→</span>}
+                    >
+                        {isLastQuestion ? 'Finalize Analysis' : 'Next Parameter'}
+                    </ModernButton>
+                </div>
+            </GlassCard>
         </div>
     );
 };
-
-export default Questionnaire;
+// Uklonjen dupli eksport na dnu fajla.

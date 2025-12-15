@@ -3,7 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { BackButton } from './BackButton.tsx';
-import { useAssetContext } from './AssetPicker.tsx'; 
+// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import { useTelemetry } from '../contexts/TelemetryContext.tsx'; 
 import { GlassCard } from './ui/GlassCard.tsx'; 
 
@@ -39,7 +40,7 @@ const MapAutoResize: React.FC<{ center: [number, number] }> = ({ center }) => {
     return null;
 };
 
-// --- MAIN COMPONENT ---
+// --- MAIN COMPONENT (JEDINA DEKLARACIJA I EKSPORT) ---
 export const GlobalMap: React.FC = () => {
     const { assets, selectAsset } = useAssetContext();
     const { telemetry } = useTelemetry(); 
@@ -85,8 +86,8 @@ export const GlobalMap: React.FC = () => {
                 <div className="bg-slate-950/80 backdrop-blur-md border border-slate-700 rounded-xl p-4 shadow-2xl space-y-3">
                     <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2">
                         <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </span>
                         <p className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Incoming Telemetry</p>
                     </div>
@@ -198,3 +199,4 @@ export const GlobalMap: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

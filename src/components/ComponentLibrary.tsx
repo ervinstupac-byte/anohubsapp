@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import { BackButton } from './BackButton.tsx';
 import { componentData } from '../data/componentData.ts';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
+import { GlassCard } from './ui/GlassCard.tsx'; 
 
+// Define a local interface if not exported from componentData.ts
+// Ideally, this should be imported from the data file or a types file.
+
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const ComponentLibrary: React.FC = () => {
+    // Ensure we have data before rendering
+    if (!componentData || componentData.length === 0) {
+        return <div className="text-center p-10 text-slate-500">No components available in the library.</div>;
+    }
+
     const [selectedId, setSelectedId] = useState<string>(componentData[0].id);
 
-    const selectedComponent = componentData.find(c => c.id === selectedId) || componentData[0];
+    // Safe find with fallback
+    const selectedComponent = componentData.find((c) => c.id === selectedId) || componentData[0];
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-6 h-[calc(100vh-120px)] flex flex-col">
@@ -92,7 +102,7 @@ export const ComponentLibrary: React.FC = () => {
                                             <span className={`
                                                 mt-1.5 w-2 h-2 rounded-full flex-shrink-0
                                                 ${risk.level === 'High' ? 'bg-red-500 shadow-[0_0_8px_red]' : 
-                                                  risk.level === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'}
+                                                    risk.level === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'}
                                             `}></span>
                                             <span className="text-sm text-slate-300 font-medium">{risk.text}</span>
                                         </li>
@@ -108,3 +118,4 @@ export const ComponentLibrary: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { useAssetContext } from './AssetPicker.tsx';
+// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
+import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { generateMasterDossier, generateMasterDossierBlob } from '../utils/pdfGenerator.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
-import { Spinner } from './Spinner.tsx'; // <--- New Spinner
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
+import { Spinner } from './Spinner.tsx';
 
+// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { user } = useAuth();
@@ -221,7 +223,7 @@ export const RiskReport: React.FC = () => {
                         className="h-full flex flex-col"
                         action={<span className="text-2xl">⚙️</span>}
                     >
-                         {designData ? (
+                       {designData ? (
                             <div className="space-y-6">
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
@@ -300,3 +302,4 @@ export const RiskReport: React.FC = () => {
         </div>
     );
 };
+// Uklonjen dupli eksport na dnu fajla.

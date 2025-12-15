@@ -1,156 +1,70 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
+<!doctype html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <title>AnoHUB | Enterprise Operations OS</title>
-    <meta name="description" content="AnoHUB: The definitive platform for Hydropower Risk Management, LCC Optimization, and Digital Integrity. Closing the Execution Gap." />
-    <meta name="theme-color" content="#0F172A" />
-    <meta name="author" content="AnoHUB Engineering" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="AnoHUB | Enterprise Operations OS" />
-    <meta property="og:description" content="AI-driven Hydropower Risk Management & 0.05 mm/m Precision Protocol." />
-    <meta property="og:image" content="/og-image.png" /> <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <title>AnoHUB | Command Center</title>
+    <meta name="description" content="Dynamic Risk vs Operational Certainty. The Architects of Immunity.">
+    <meta name="theme-color" content="#020617">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-       /* --- GLOBAL RESET & SCROLL FIX --- */
-       body {
-         margin: 0;
-         background-color: #020617; /* Slate-950 */
-         font-family: 'Inter', sans-serif;
-         color: white;
-         /* OVO JE BIO PROBLEM: */
-         overflow-x: hidden; /* Spriječava horizontalno mrdanje */
-         overflow-y: auto;   /* OMOGUĆAVA vertikalno skrolanje */
-         -webkit-font-smoothing: antialiased; /* Ljepši fontovi na Macu */
-         -moz-osx-font-smoothing: grayscale;
-       }
+      :root {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      
+      html, body {
+        background-color: #020617;
+        color: white;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
 
-       /* Scrollbar Styling (Chrome/Safari/Edge) */
-       ::-webkit-scrollbar {
-         width: 8px;
-       }
-       ::-webkit-scrollbar-track {
-         background: #020617; 
-       }
-       ::-webkit-scrollbar-thumb {
-         background: #1e293b; 
-         border-radius: 4px;
-       }
-       ::-webkit-scrollbar-thumb:hover {
-         background: #334155; 
-       }
+      /* Loader Logic */
+      #root:empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+      }
 
-       /* --- FUTURISTIC LOADER CSS --- */
-       /* Zadržavamo loader fixed dok React ne preuzme */
-       .boot-screen {
-         position: fixed;
-         inset: 0;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
-         z-index: 9999;
-         flex-direction: column;
-       }
+      #root:empty::before {
+        content: 'AnoHUB';
+        font-weight: 900;
+        font-size: 3rem;
+        letter-spacing: -0.05em;
+        color: white;
+        margin-bottom: 1rem;
+      }
 
-       .reactor-core {
-         position: relative;
-         width: 80px;
-         height: 80px;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-       }
+      #root:empty::after {
+        content: 'ESTABLISHING SECURE CONNECTION...';
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        color: #06b6d4; /* Cyan */
+        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
 
-       /* Outer Ring */
-       .ring-outer {
-         position: absolute;
-         width: 100%;
-         height: 100%;
-         border: 2px solid rgba(6, 182, 212, 0.1);
-         border-top: 2px solid #06b6d4; /* Cyan-500 */
-         border-radius: 50%;
-         animation: spin 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-         box-shadow: 0 0 40px rgba(6, 182, 212, 0.1);
-       }
-
-       /* Inner Ring (Reverse) */
-       .ring-inner {
-         position: absolute;
-         width: 70%;
-         height: 70%;
-         border: 2px solid rgba(6, 182, 212, 0.1);
-         border-bottom: 2px solid #22d3ee; /* Cyan-400 */
-         border-radius: 50%;
-         animation: spin 1s linear infinite reverse;
-       }
-
-       /* Center Core */
-       .core-dot {
-         width: 8px;
-         height: 8px;
-         background-color: white;
-         border-radius: 50%;
-         box-shadow: 0 0 15px white;
-         animation: pulse 1s ease-in-out infinite alternate;
-       }
-
-       .loading-text {
-         margin-top: 2rem;
-         color: #94a3b8;
-         font-family: 'JetBrains Mono', monospace;
-         font-size: 0.75rem;
-         text-transform: uppercase;
-         letter-spacing: 0.3em;
-         display: flex;
-         align-items: center;
-         gap: 8px;
-       }
-
-       .loading-text::after {
-         content: '_';
-         animation: blink 1s step-end infinite;
-         color: #06b6d4;
-         font-weight: bold;
-       }
-
-       @keyframes spin { 100% { transform: rotate(360deg); } }
-       @keyframes pulse { from { opacity: 0.5; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
-       @keyframes blink { 50% { opacity: 0; } }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+      }
     </style>
   </head>
   <body>
-    <div id="root">
-      <div class="boot-screen">
-        <div class="reactor-core">
-          <div class="ring-outer"></div>
-          <div class="ring-inner"></div>
-          <div class="core-dot"></div>
-        </div>
-        <div class="loading-text">System Initialization</div>
-      </div>
-    </div>
-
-    <noscript>
-      <div style="height: 100vh; display: flex; justify-content: center; align-items: center; background: #020617; color: white; font-family: sans-serif; text-align: center;">
-        <div>
-          <h1 style="color: #ef4444; font-size: 2rem; margin-bottom: 1rem;">EXECUTION ERROR</h1>
-          <p>JavaScript is required to run the AnoHUB Operating System.</p>
-          <p style="color: #64748b; font-size: 0.875rem; margin-top: 1rem;">Please enable JavaScript in your security settings to proceed.</p>
-        </div>
-      </div>
-    </noscript>
-
-    <script type="module" src="./src/main.tsx"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

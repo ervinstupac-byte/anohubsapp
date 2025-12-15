@@ -1,27 +1,38 @@
 // --- GLOBAL VIEW TYPES ---
-// Ovo su svi ekrani koje tvoja aplikacija može prikazati
 export type AppView = 
+  | 'home' // Alias za hub
   | 'hub' 
+  | 'login' // Dodano za Auth
+  | 'intro' // Alias za digitalIntroduction
   | 'onboarding'
   | 'profile'
-  | 'globalMap'               // Global Map
-  | 'riskAssessment'          // Questionnaire
-  | 'questionnaireSummary'    // Summary & Gauge
-  | 'riskReport'              // PDF Dossier
-  | 'installationGuarantee'   // Audit Form
-  | 'hppBuilder'              // Physics Engine
-  | 'investorBriefing'        // Financials
-  | 'contractManagement'      // Smart Contracts
-  | 'digitalIntegrity'        // Blockchain Ledger
-  | 'revitalizationStrategy'  // Life Extension
-  | 'library'                 // Component Library
-  | 'hppImprovements'         // Ino-Hub
-  | 'phaseGuide'              // Project Guide
-  | 'standardOfExcellence'    // Standards
-  | 'riverWildlife'           // Ecology
-  | 'genderEquity'            // HR Strategy
-  | 'digitalIntroduction'     // Manifesto
-  | 'turbineDetail';          // Specific Turbine View
+  | 'globalMap'               
+  | 'riskAssessment'          
+  | 'questionnaireSummary'    
+  | 'riskReport'              
+  | 'installationGuarantee'   
+  | 'installation' // Alias
+  | 'hppBuilder'              
+  | 'investorBriefing'        
+  | 'investor' // Alias
+  | 'contractManagement'      
+  | 'contracts' // Alias
+  | 'digitalIntegrity'        
+  | 'integrity' // Alias
+  | 'revitalizationStrategy'  
+  | 'library'                 
+  | 'hppImprovements'         
+  | 'improvements' // Alias
+  | 'phaseGuide'              
+  | 'phases' // Alias
+  | 'standardOfExcellence'    
+  | 'standard' // Alias
+  | 'riverWildlife'           
+  | 'wildlife' // Alias
+  | 'genderEquity'            
+  | 'gender' // Alias
+  | 'digitalIntroduction'     
+  | 'turbineDetail';          
 
 // --- SHARED DATA TYPES ---
 export type Answers = Record<string, string>;
@@ -32,7 +43,7 @@ export interface Asset {
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;
-  coordinates: [number, number]; // [lat, lng] za Mapu
+  coordinates: [number, number]; 
   capacity: number; // MW
   status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
@@ -43,6 +54,7 @@ export interface AssetContextType {
   selectedAsset: Asset | null;
   selectAsset: (id: string) => void;
   loading: boolean;
+  addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>; // <--- NOVO: Za dodavanje
 }
 
 // --- RISK & QUESTIONNAIRE ---
@@ -61,7 +73,7 @@ export interface OperationalData {
   flow: number | string;
   pressure?: number | string;
   output?: number | string;
-  [key: string]: string | number | undefined; // Index signature za fleksibilnost
+  [key: string]: string | number | undefined; 
 }
 
 export interface QuestionnaireContextType {
@@ -74,9 +86,18 @@ export interface QuestionnaireContextType {
   resetQuestionnaire: () => void;
 }
 
+// --- RISK CONTEXT UPDATE ---
+export interface RiskState { // <--- NOVO: Struktura stanja rizika
+    riskScore: number;
+    riskLevel: 'Low' | 'Medium' | 'High';
+    criticalFlags: number;
+    isAssessmentComplete: boolean;
+}
+
 export interface RiskContextType {
-  disciplineRiskScore: number;
-  updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void; // <--- OVO JE NEDOSTAJALO
+  riskState: RiskState; // <--- NOVO: Umjesto samo disciplineRiskScore
+  disciplineRiskScore: number; // Zadržavamo radi kompatibilnosti ako treba
+  updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void;
   calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
 }
 
@@ -122,8 +143,8 @@ export interface TurbineRecommendation {
 export interface CalculationResult {
   powerMW: number;
   energyGWh: number;
-  annualGWh: string; // String radi prikaza u UI i PDF-u
-  n_sq: string;      // Specific speed index
+  annualGWh: string; 
+  n_sq: string;      
   revenue?: number;
   capex?: number;
   lcoe?: number;
@@ -140,14 +161,15 @@ export interface SavedConfiguration {
 }
 
 // --- NAVIGATION ---
+// Ovdje koristimo currentPage da odgovara onome što smo pisali u NavigationContext.tsx
 export interface NavigationContextType {
-  currentView: AppView;
-  showOnboarding: boolean;
-  completeOnboarding: () => void;
+  currentPage: AppView; // <--- Promijenjeno iz currentView u currentPage radi konzistencije
   navigateTo: (view: AppView) => void;
   navigateBack: () => void;
   navigateToHub: () => void;
   navigateToTurbineDetail: (turbineKey: string) => void;
+  showOnboarding: boolean;
+  completeOnboarding: () => void;
   showFeedbackModal: () => void;
 }
 
