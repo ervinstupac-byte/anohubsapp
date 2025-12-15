@@ -5,26 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
     <title>AnoHUB | Enterprise Operations OS</title>
-    <meta name="description" content="The definitive platform for Hydropower Risk Management, LCC Optimization, and Digital Integrity." />
+    <meta name="description" content="AnoHUB: The definitive platform for Hydropower Risk Management, LCC Optimization, and Digital Integrity. Closing the Execution Gap." />
     <meta name="theme-color" content="#0F172A" />
+    <meta name="author" content="AnoHUB Engineering" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AnoHUB | Enterprise Operations OS" />
+    <meta property="og:description" content="AI-driven Hydropower Risk Management & 0.05 mm/m Precision Protocol." />
+    <meta property="og:image" content="/og-image.png" /> <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-       /* Global Reset overrides */
+       /* --- GLOBAL RESET & SCROLL FIX --- */
        body {
          margin: 0;
          background-color: #020617; /* Slate-950 */
          font-family: 'Inter', sans-serif;
          color: white;
-         overflow: hidden; /* Prevent scroll during load */
+         /* OVO JE BIO PROBLEM: */
+         overflow-x: hidden; /* Spriječava horizontalno mrdanje */
+         overflow-y: auto;   /* OMOGUĆAVA vertikalno skrolanje */
+         -webkit-font-smoothing: antialiased; /* Ljepši fontovi na Macu */
+         -moz-osx-font-smoothing: grayscale;
+       }
+
+       /* Scrollbar Styling (Chrome/Safari/Edge) */
+       ::-webkit-scrollbar {
+         width: 8px;
+       }
+       ::-webkit-scrollbar-track {
+         background: #020617; 
+       }
+       ::-webkit-scrollbar-thumb {
+         background: #1e293b; 
+         border-radius: 4px;
+       }
+       ::-webkit-scrollbar-thumb:hover {
+         background: #334155; 
        }
 
        /* --- FUTURISTIC LOADER CSS --- */
+       /* Zadržavamo loader fixed dok React ne preuzme */
        .boot-screen {
          position: fixed;
          inset: 0;
@@ -113,6 +140,16 @@
         <div class="loading-text">System Initialization</div>
       </div>
     </div>
+
+    <noscript>
+      <div style="height: 100vh; display: flex; justify-content: center; align-items: center; background: #020617; color: white; font-family: sans-serif; text-align: center;">
+        <div>
+          <h1 style="color: #ef4444; font-size: 2rem; margin-bottom: 1rem;">EXECUTION ERROR</h1>
+          <p>JavaScript is required to run the AnoHUB Operating System.</p>
+          <p style="color: #64748b; font-size: 0.875rem; margin-top: 1rem;">Please enable JavaScript in your security settings to proceed.</p>
+        </div>
+      </div>
+    </noscript>
 
     <script type="module" src="./src/main.tsx"></script>
   </body>
