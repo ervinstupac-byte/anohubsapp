@@ -1,4 +1,4 @@
-import{j as ee,E as Q}from"./jspdf.es.min-Bb_ED9-s.js";import{m as te,e as ne,d as X}from"./index-CgvhEY_8.js";var q={exports:{}};const re=te(ee);/*!
+import{j as ee,E as Q}from"./jspdf.es.min-DHKt-_YL.js";import{k as te,g as ne,e as X}from"./index-CF_wl3tZ.js";var q={exports:{}};const re=te(ee);/*!
  * 
  *               jsPDF AutoTable plugin v3.8.4
  *
