@@ -8,6 +8,7 @@ import './i18n/index.ts'; // Inicijalizacija prijevoda
 import { AuthProvider } from './contexts/AuthContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 import { AssetProvider } from './contexts/AssetContext.tsx';
+import { TelemetryProvider } from './contexts/TelemetryContext.tsx'; // <--- NOVI "MOTOR"
 import { RiskProvider } from './contexts/RiskContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 
@@ -30,15 +31,21 @@ root.render(
         {/* 3. ASSET PROVIDER (Učitava turbine iz baze) */}
         <AssetProvider>
           
-          {/* 4. LOGIC PROVIDERS (Rizik i Upitnik) */}
-          <RiskProvider>
-            <QuestionnaireProvider>
-              
-              {/* 5. GLAVNA APLIKACIJA */}
-              <App />
-              
-            </QuestionnaireProvider>
-          </RiskProvider>
+          {/* 4. TELEMETRY PROVIDER (Generira Live Podatke) */}
+          {/* VAŽNO: Mora biti UNUTAR AssetProvidera jer koristi popis imovine */}
+          <TelemetryProvider>
+            
+            {/* 5. LOGIC PROVIDERS (Rizik i Upitnik) */}
+            <RiskProvider>
+              <QuestionnaireProvider>
+                
+                {/* 6. GLAVNA APLIKACIJA */}
+                <App />
+                
+              </QuestionnaireProvider>
+            </RiskProvider>
+
+          </TelemetryProvider>
           
         </AssetProvider>
       </ToastProvider>
