@@ -1,223 +1,263 @@
 import React, { useEffect, useState } from 'react';
-import { useRisk } from '../contexts/RiskContext.tsx';
-import { useNavigation } from '../contexts/NavigationContext.tsx';
-import { useAssetContext } from './AssetPicker.tsx'; // <--- ENTERPRISE CONTEXT
+import { BackButton } from './BackButton.tsx';
+import { useAssetContext } from './AssetPicker.tsx';
+import { useNavigation } from '../contexts/NavigationContext.tsx'; // Treba nam za redirekciju
+import { supabase } from '../services/supabaseClient.ts';
+import { generateMasterDossier } from '../utils/pdfGenerator.ts';
+import { useAuth } from '../contexts/AuthContext.tsx';
 
-// --- HELPER COMPONENTS ---
+export const RiskReport: React.FC = () => {
+    const { selectedAsset } = useAssetContext();
+    const { user } = useAuth();
+    const { navigateTo } = useNavigation();
+    
+    const [riskData, setRiskData] = useState<any>(null);
+    const [designData, setDesignData] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
-const StatusIndicator: React.FC<{ score: number }> = ({ score }) => {
-    let color = '';
-    let text = '';
-    let icon = '';
-
-    if (score < 30) {
-        color = 'text-green-400 drop-shadow-[0_0_10px_rgba(74,222,128,0.5)]';
-        text = 'SYSTEM OPTIMAL';
-        icon = '🛡️';
-    } else if (score < 60) {
-        color = 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]';
-        text = 'WARNING';
-        icon = '⚠️';
-    } else {
-        color = 'text-red-500 drop-shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse';
-        text = 'CRITICAL FAILURE';
-        icon = '🚨';
-    }
-
-    return (
-        <div className="text-center space-y-2">
-            <div className="text-6xl">{icon}</div>
-            <h3 className={`text-2xl font-black tracking-widest ${color}`}>{text}</h3>
-        </div>
-    );
-};
-
-const RiskCategoryBar: React.FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => (
-    <div className="mb-4">
-        <div className="flex justify-between text-xs uppercase font-bold text-slate-400 mb-1">
-            <span>{label}</span>
-            <span>{value}% Risk</span>
-        </div>
-        <div className="h-2 bg-slate-700/50 rounded-full overflow-hidden">
-            <div 
-                className={`h-full rounded-full transition-all duration-1000 ${color}`} 
-                style={{ width: `${value}%` }}
-            ></div>
-        </div>
-    </div>
-);
-
-// --- MAIN COMPONENT ---
-
-const RiskReport: React.FC = () => {
-    const { navigateToHub } = useNavigation();
-    const { disciplineRiskScore } = useRisk();
-    const { selectedAsset } = useAssetContext(); // <--- ASSET INFO
-    const [analyzing, setAnalyzing] = useState(true);
-
-    // AI Simulation
+    // --- FETCH DATA FROM CLOUD ---
     useEffect(() => {
-        const timer = setTimeout(() => setAnalyzing(false), 800);
-        return () => clearTimeout(timer);
-    }, []);
+        const fetchData = async () => {
+            if (!selectedAsset) {
+                setRiskData(null);
+                setDesignData(null);
+                return;
+            }
 
-    const technicalRisk = Math.max(0, Math.min(100, Math.floor(disciplineRiskScore * 1.2)));
-    const legalRisk = Math.max(0, Math.min(100, Math.floor(disciplineRiskScore * 0.9)));
-    const financialRisk = Math.max(0, Math.min(100, Math.floor(disciplineRiskScore * 1.5)));
+            setLoading(true);
+            try {
+                // 1. Dohvati ZADNJI Risk Assessment za ovu elektranu
+                const { data: risk } = await supabase
+                    .from('risk_assessments')
+                    .select('*')
+                    .eq('asset_id', selectedAsset.id)
+                    .order('created_at', { ascending: false }) // Najnoviji prvi
+                    .limit(1)
+                    .single();
 
-    if (analyzing) {
-        return (
-            <div className="flex flex-col items-center justify-center h-[60vh] space-y-6 animate-fade-in">
-                <div className="w-20 h-20 border-4 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin"></div>
-                <p className="text-cyan-400 font-mono text-sm tracking-widest">GENERATING SYSTEM REPORT...</p>
-            </div>
+                // 2. Dohvati ZADNJI Turbine Design za ovu elektranu
+                const { data: design } = await supabase
+                    .from('turbine_designs')
+                    .select('*')
+                    .eq('asset_id', selectedAsset.id)
+                    .order('created_at', { ascending: false }) // Najnoviji prvi
+                    .limit(1)
+                    .single();
+
+                setRiskData(risk);
+                setDesignData(design);
+            } catch (error) {
+                // Supabase vraća error ako nema podataka (.single()), to je OK, samo znači da nema podataka
+                console.log('Fetching status:', error); 
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [selectedAsset]);
+
+    // --- HANDLERS ---
+    const handleDownload = () => {
+        if (!selectedAsset) return;
+        generateMasterDossier(
+            selectedAsset.name,
+            riskData,
+            designData,
+            user?.email || 'AnoHUB Engineer'
         );
-    }
+    };
 
-    const maxRisk = Math.max(technicalRisk, legalRisk, financialRisk);
-    const mainRiskCategory = 
-        (maxRisk === technicalRisk && maxRisk > 50) ? 'Technical' :
-        (maxRisk === legalRisk && maxRisk > 50) ? 'Legal' :
-        (maxRisk === financialRisk && maxRisk > 50) ? 'Financial' : 'Low';
+    // Helper za boje rizika
+    const getRiskColor = (level: string) => {
+        if (level === 'High') return 'text-red-500 border-red-500';
+        if (level === 'Medium') return 'text-yellow-400 border-yellow-400';
+        return 'text-green-400 border-green-400';
+    };
 
     return (
-        <div className="animate-fade-in space-y-8 pb-12 max-w-5xl mx-auto">
+        <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
+            <BackButton text="Back to Hub" />
             
-            {/* HEADER ACTION BAR */}
-            <div className="flex justify-between items-center no-print">
-                <button 
-                    onClick={() => navigateToHub()}
-                    className="flex items-center text-slate-400 hover:text-white transition-colors"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    Back to Dashboard
-                </button>
-                <button 
-                    onClick={() => window.print()}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-400 font-bold text-sm rounded-lg border border-cyan-500/30 flex items-center gap-2"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-                    PRINT REPORT
-                </button>
-            </div>
-
-            {/* REPORT CONTAINER */}
-            <div className="glass-panel p-8 md:p-12 rounded-2xl border-t-8 border-t-cyan-500 shadow-2xl relative overflow-hidden bg-slate-900">
+            {/* HEADER AREA */}
+            <div className="flex flex-col md:flex-row justify-between items-end gap-4 border-b border-slate-700 pb-6">
+                <div>
+                    <h2 className="text-3xl font-bold text-white tracking-tight">
+                        Project <span className="text-cyan-400">Dossier</span>
+                    </h2>
+                    <p className="text-slate-400 mt-2 max-w-xl">
+                        Centralized repository of all interactive data modules linked to the selected asset.
+                        Generates a consolidated legal-grade PDF report.
+                    </p>
+                </div>
                 
-                {/* Background Watermark */}
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[20rem] font-bold text-slate-800/20 pointer-events-none select-none z-0">
-                    {disciplineRiskScore}
-                </div>
-
-                <div className="relative z-10">
-                    <div className="text-center mb-12">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 uppercase tracking-tight">System Integrity Audit</h1>
-                        
-                        {/* ASSET NAME */}
-                        {selectedAsset && (
-                            <div className="inline-block px-4 py-1 bg-slate-800 rounded-full border border-slate-600 mb-2">
-                                <span className="text-cyan-400 font-bold font-mono">{selectedAsset.name.toUpperCase()}</span>
-                            </div>
-                        )}
-                        
-                        <p className="text-slate-400">Generated by AnoHUB Diagnostic Protocol</p>
-                        <div className="text-xs font-mono text-slate-500 mt-2">{new Date().toLocaleDateString()} • ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                        
-                        {/* LEFT: SCOREBOARD */}
-                        <div className="flex flex-col items-center justify-center p-8 bg-slate-800/50 rounded-2xl border border-slate-700/50">
-                            <StatusIndicator score={disciplineRiskScore} />
-                            
-                            <div className="mt-8 text-center">
-                                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Discipline Risk Index</span>
-                                <div className="text-8xl font-black text-white leading-none mt-2">{disciplineRiskScore}</div>
-                                <div className="text-xs text-slate-400 mt-2">/ 100 (Lower is Better)</div>
-                            </div>
-                        </div>
-
-                        {/* RIGHT: BREAKDOWN */}
-                        <div className="space-y-6">
-                            <h3 className="text-xl font-bold text-white border-b border-slate-700 pb-2 mb-4">Risk Vector Analysis</h3>
-                            
-                            <RiskCategoryBar 
-                                label="Execution Gap (Technical)" 
-                                value={technicalRisk} 
-                                color={technicalRisk > 50 ? 'bg-red-500' : 'bg-cyan-500'} 
-                            />
-                            <p className="text-xs text-slate-400 mb-4 italic">
-                                Probability of mechanical failure due to misalignment or assembly errors (e.g. {'>'} 0.05 mm/m).
-                            </p>
-                            
-                            <RiskCategoryBar 
-                                label="Warranty Liability (Legal)" 
-                                value={legalRisk} 
-                                color={legalRisk > 50 ? 'bg-red-500' : 'bg-purple-500'} 
-                            />
-                            <p className="text-xs text-slate-400 mb-4 italic">
-                                Risk of warranty invalidation due to lack of immutable documentation.
-                            </p>
-
-                            <RiskCategoryBar 
-                                label="LCC Impact (Financial)" 
-                                value={financialRisk} 
-                                color={financialRisk > 50 ? 'bg-red-500' : 'bg-yellow-500'} 
-                            />
-                            <p className="text-xs text-slate-400 italic">
-                                Projected increase in OPEX due to reactive maintenance.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* RECOMMENDATION ENGINE */}
-                    <div className="mt-12 p-6 rounded-xl border border-dashed border-slate-600 bg-slate-800/30">
-                        <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                            <span className="text-cyan-400">⚡</span> Strategic Recommendations
-                        </h4>
-                        
-                        {disciplineRiskScore > 50 ? (
-                            <ul className="space-y-3">
-                                {mainRiskCategory === 'Technical' && (
-                                    <li className="flex items-start gap-3 text-red-200">
-                                        <span className="font-bold text-red-500">1.</span>
-                                        <span><strong>Immediate Intervention:</strong> Schedule a 'Zero-Tolerance Audit' to identify specific points of failure.</span>
-                                    </li>
-                                )}
-                                <li className="flex items-start gap-3 text-slate-300">
-                                    <span className="font-bold text-cyan-500">2.</span>
-                                    <span><strong>Digital Lockdown:</strong> Enforce the use of the "Installation Guarantee" tool. No photo = No sign-off.</span>
-                                </li>
-                                <li className="flex items-start gap-3 text-slate-300">
-                                    <span className="font-bold text-cyan-500">3.</span>
-                                    <span><strong>RCFA Protocol:</strong> Initiate Root Cause Failure Analysis for vibration anomalies.</span>
-                                </li>
-                            </ul>
+                {/* Asset Context Indicator */}
+                <div className="text-right">
+                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Active Context</div>
+                    <div className="text-lg font-mono font-bold text-white bg-slate-800 px-4 py-2 rounded-lg border border-slate-700 flex items-center gap-2">
+                        {selectedAsset ? (
+                            <>
+                                <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                {selectedAsset.name}
+                            </>
                         ) : (
-                            <ul className="space-y-3">
-                                <li className="flex items-start gap-3 text-green-200">
-                                    <span className="font-bold text-green-500">1.</span>
-                                    <span><strong>Maintain Discipline:</strong> Continue using the 0.05 mm/m standard. Good adherence detected.</span>
-                                </li>
-                                <li className="flex items-start gap-3 text-slate-300">
-                                    <span className="font-bold text-cyan-500">2.</span>
-                                    <span><strong>Optimize LCC:</strong> Shift focus to predictive maintenance to further reduce OPEX.</span>
-                                </li>
-                            </ul>
+                            <span className="text-slate-500 italic">No Asset Selected</span>
                         )}
-                    </div>
-
-                    {/* FOOTER */}
-                    <div className="mt-8 text-center border-t border-slate-800 pt-6">
-                        <p className="text-xs text-slate-500 uppercase tracking-widest">
-                            Authorized by AnoHUB Standard of Excellence
-                        </p>
-                        <p className="text-[10px] text-slate-600 mt-1">
-                            This document serves as a preliminary diagnostic and does not replace a certified on-site inspection.
-                        </p>
                     </div>
                 </div>
             </div>
+
+            {/* EMPTY STATE */}
+            {!selectedAsset ? (
+                <div className="p-16 text-center border-2 border-dashed border-slate-700 rounded-3xl bg-slate-800/30">
+                    <span className="text-6xl block mb-6 opacity-30">📂</span>
+                    <h3 className="text-xl font-bold text-white mb-2">Select an Asset to View Dossier</h3>
+                    <p className="text-slate-400">Use the dropdown in the header or the global asset picker.</p>
+                </div>
+            ) : loading ? (
+                <div className="p-20 text-center">
+                    <span className="animate-spin text-4xl block mb-4">⚙️</span>
+                    <p className="text-cyan-400 font-mono animate-pulse">Retrieving encrypted data from HQ...</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    {/* 1. RISK ASSESSMENT CARD */}
+                    <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-cyan-500/30 transition-all shadow-lg">
+                        <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
+                            <h3 className="font-bold text-white text-lg flex items-center gap-2">
+                                <span>🛡️</span> Risk Diagnostic
+                            </h3>
+                            {riskData ? (
+                                <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
+                                    ID: {riskData.id.toString().slice(0,4)}...
+                                </span>
+                            ) : (
+                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">MISSING</span>
+                            )}
+                        </div>
+                        
+                        <div className="p-6 flex-grow flex flex-col justify-center">
+                            {riskData ? (
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-slate-400 text-sm">Risk Level</span>
+                                        <span className={`text-xl font-black uppercase ${getRiskColor(riskData.risk_level)}`}>
+                                            {riskData.risk_level}
+                                        </span>
+                                    </div>
+                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                                        <div 
+                                            className={`h-full ${riskData.risk_score > 50 ? 'bg-red-500' : 'bg-green-500'}`} 
+                                            style={{ width: `${Math.min(riskData.risk_score * 2, 100)}%` }} // Skaliranje skora za vizualizaciju
+                                        ></div>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-slate-400 text-sm">Execution Gap Score</span>
+                                        <span className="text-2xl font-mono text-white">{riskData.risk_score}/100</span>
+                                    </div>
+                                    <div className="mt-4 p-3 bg-slate-900 rounded border border-slate-700 text-xs text-slate-400 italic line-clamp-2">
+                                        "{riskData.description || 'No additional notes provided.'}"
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-4">
+                                    <p className="text-slate-500 text-sm mb-4">No risk assessment data found for this asset.</p>
+                                    <button 
+                                        onClick={() => navigateTo('riskAssessment')}
+                                        className="text-xs bg-slate-700 hover:bg-cyan-600 text-white px-4 py-2 rounded transition-colors"
+                                    >
+                                        Run Diagnostics Now
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 2. DESIGN CARD */}
+                    <div className="glass-panel p-0 rounded-2xl overflow-hidden flex flex-col h-full bg-slate-800 border border-slate-700 hover:border-purple-500/30 transition-all shadow-lg">
+                        <div className="p-6 border-b border-slate-700 bg-slate-900/50 flex justify-between items-center">
+                            <h3 className="font-bold text-white text-lg flex items-center gap-2">
+                                <span>⚙️</span> Technical Design
+                            </h3>
+                            {designData ? (
+                                <span className="text-[10px] bg-slate-800 border border-slate-600 px-2 py-1 rounded text-slate-400 font-mono">
+                                    VER: {designData.created_at.slice(0,10)}
+                                </span>
+                            ) : (
+                                <span className="text-[10px] bg-red-900/20 text-red-400 px-2 py-1 rounded font-bold">MISSING</span>
+                            )}
+                        </div>
+
+                        <div className="p-6 flex-grow flex flex-col justify-center">
+                            {designData ? (
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
+                                            <div className="text-[10px] text-slate-500 uppercase">Configuration</div>
+                                            <div className="text-white font-bold truncate">{designData.design_name}</div>
+                                        </div>
+                                        <div className="bg-slate-900/50 p-3 rounded border border-slate-700">
+                                            <div className="text-[10px] text-slate-500 uppercase">Turbine</div>
+                                            <div className="text-cyan-400 font-bold">{designData.recommended_turbine}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-end border-t border-slate-700/50 pt-4">
+                                        <div>
+                                            <span className="text-slate-400 text-xs block">Calculated Output</span>
+                                            <span className="text-3xl font-black text-white">{designData.calculations?.powerMW} <span className="text-lg font-normal text-slate-500">MW</span></span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-slate-400 text-xs block">Annual Energy</span>
+                                            <span className="text-xl font-bold text-green-400">{designData.calculations?.energyGWh || designData.calculations?.annualGWh} <span className="text-xs text-slate-500">GWh</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-4">
+                                    <p className="text-slate-500 text-sm mb-4">No technical design configuration found.</p>
+                                    <button 
+                                        onClick={() => navigateTo('hppBuilder')}
+                                        className="text-xs bg-slate-700 hover:bg-purple-600 text-white px-4 py-2 rounded transition-colors"
+                                    >
+                                        Open Design Studio
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 3. MASTER ACTION AREA */}
+                    <div className="md:col-span-2 mt-6">
+                        <div className="p-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-xl shadow-2xl">
+                            <div className="bg-slate-900 rounded-lg p-8 text-center">
+                                <h3 className="text-2xl font-bold text-white mb-2">Ready to Compile?</h3>
+                                <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
+                                    This action will aggregate the latest snapshots from all modules into a single, watermarked PDF document suitable for investors and technical audit.
+                                </p>
+                                
+                                <button
+                                    onClick={handleDownload}
+                                    disabled={!riskData && !designData}
+                                    className={`
+                                        px-8 py-4 rounded-xl font-bold text-lg shadow-xl transition-all flex items-center justify-center gap-3 mx-auto
+                                        ${(!riskData && !designData) 
+                                            ? 'bg-slate-800 text-slate-600 cursor-not-allowed border border-slate-700' 
+                                            : 'bg-white text-slate-900 hover:bg-cyan-50 hover:scale-105'}
+                                    `}
+                                >
+                                    {(!riskData && !designData) ? (
+                                        <><span>🚫</span> No Data to Compile</>
+                                    ) : (
+                                        <><span>🖨️</span> Download Master Project Dossier</>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 };
