@@ -1,10 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { supabase } from '../services/supabaseClient.ts';
 import type { Asset, AssetContextType } from '../types.ts';
+import { useAudit } from './AuditContext.tsx';
+import { debounce } from '../utils/performance.ts';
 
 const AssetContext = createContext<AssetContextType | undefined>(undefined);
 
 export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { logAction } = useAudit();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -15,7 +18,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             try {
                 const { data, error } = await supabase.from('assets').select('*');
                 if (error) throw error;
-                
+
                 if (data) {
                     const mappedAssets: Asset[] = data.map((item: any) => ({
                         id: item.id.toString(),
@@ -27,7 +30,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         status: item.status || 'Operational'
                     }));
                     setAssets(mappedAssets);
-                    
+
                     if (mappedAssets.length > 0 && !selectedAssetId) {
                         setSelectedAssetId(mappedAssets[0].id);
                     }
@@ -42,8 +45,21 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         fetchAssets();
     }, []);
 
+    // Create a ref to hold the debounced logging function
+    // We use a ref so the debounce timer persists across renders
+    const debouncedLogContextSwitch = useRef(
+        debounce((assetName: string) => {
+            logAction('CONTEXT_SWITCH', assetName, 'SUCCESS');
+        }, 1000) // 1 second delay
+    ).current;
+
     const selectAsset = (id: string) => {
         setSelectedAssetId(id);
+        const asset = assets.find(a => a.id === id);
+        if (asset) {
+            // Call the debounced function instead of direct logAction
+            debouncedLogContextSwitch(asset.name);
+        }
     };
 
     // --- NOVA FUNKCIJA: DODAVANJE NOVE TURBINE ---
@@ -84,6 +100,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             // 4. Ažuriraj lokalni state i odmah selektiraj novu turbinu
             setAssets(prev => [...prev, newAsset]);
             setSelectedAssetId(newAsset.id);
+            logAction('ASSET_REGISTER', newAsset.name, 'SUCCESS');
 
         } catch (error) {
             console.error('Error creating asset:', error);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useAssetContext } from '../../contexts/AssetContext.tsx';
 
-const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'stopped'; mw: number }> = ({ name, status, mw }) => (
+const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'stopped'; mw: number }> = React.memo(({ name, status, mw }) => (
     <div className="relative group">
         {/* Generator Housing */}
         <div className={`
@@ -29,21 +30,29 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
             )}
         </div>
     </div>
-);
+));
 
-export const ScadaMimic: React.FC = () => {
-    // Mock Data for now - could be connected to Prop or Context later
-    const [t1Mw, setT1Mw] = useState(242.5);
-    const [t2Mw, setT2Mw] = useState(242.6);
+export const ScadaMimic: React.FC = React.memo(() => {
+    const { selectedAsset } = useAssetContext();
+
+    // Mock Data - deterministic random based on asset ID to simulate different states
+    const seed = selectedAsset ? selectedAsset.id.charCodeAt(0) : 0;
+    const baseMw = 200 + (seed % 50);
+
+    const [t1Mw, setT1Mw] = useState(baseMw);
+    const [t2Mw, setT2Mw] = useState(baseMw);
 
     // Simulate subtle fluctuation
     useEffect(() => {
+        setT1Mw(baseMw);
+        setT2Mw(baseMw);
+
         const interval = setInterval(() => {
             setT1Mw(prev => +(prev + (Math.random() - 0.5) * 0.2).toFixed(1));
             setT2Mw(prev => +(prev + (Math.random() - 0.5) * 0.2).toFixed(1));
         }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, [baseMw]);
 
     return (
         <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-8">
@@ -54,8 +63,13 @@ export const ScadaMimic: React.FC = () => {
             </div>
 
             <div className="relative z-10 w-full max-w-4xl border border-slate-800 bg-slate-950/80 p-12 rounded-xl backdrop-blur-sm shadow-2xl">
-                <div className="absolute top-4 left-4 text-xs font-black text-slate-500 tracking-[0.2em] border border-slate-700 px-2 py-1 rounded">
-                    PROCESS MIMIC::OVERVIEW
+                <div className="absolute top-4 left-4 flex items-center gap-3">
+                    <div className="text-xs font-black text-slate-500 tracking-[0.2em] border border-slate-700 px-2 py-1 rounded">
+                        PROCESS MIMIC
+                    </div>
+                    <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                        :: {selectedAsset?.name || 'NO CONTEXT'}
+                    </div>
                 </div>
 
                 <div className="absolute top-4 right-4 text-xs font-mono text-emerald-500 bg-emerald-950/30 border border-emerald-900 px-2 py-1 rounded flex items-center gap-2">
@@ -89,4 +103,4 @@ export const ScadaMimic: React.FC = () => {
             </div>
         </div>
     );
-};
+});

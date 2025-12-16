@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabaseClient.ts';
+import { useAudit } from './AuditContext.tsx';
 
 interface AuthContextType {
     session: Session | null;
@@ -15,6 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { logAction } = useAudit(); // HOOK NA VRHU
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
@@ -68,16 +70,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } as User;
 
         setUser(guestUser);
+        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)
     const signOut = async () => {
+        const { logAction } = useAudit();
+        const currentUser = user?.email || 'unknown';
+
         if (isGuest) {
             setIsGuest(false);
             setUser(null);
             setSession(null);
+            logAction('AUTH_LOGOUT', 'Guest System', 'SUCCESS', { user: currentUser });
         } else {
             await supabase.auth.signOut();
+            logAction('AUTH_LOGOUT', 'Supabase Auth', 'SUCCESS', { user: currentUser });
         }
     };
 

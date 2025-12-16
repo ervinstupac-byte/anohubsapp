@@ -7,7 +7,7 @@ interface DigitalPanelProps {
     status?: 'normal' | 'warning' | 'critical';
 }
 
-export const DigitalPanel: React.FC<DigitalPanelProps> = ({ label, value, unit, status = 'normal' }) => {
+export const DigitalPanel: React.FC<DigitalPanelProps> = React.memo(({ label, value, unit, status = 'normal' }) => {
     const color = status === 'critical' ? 'text-red-500' : status === 'warning' ? 'text-amber-500' : 'text-cyan-400';
     const bg = status === 'critical' ? 'bg-red-950/30' : 'bg-slate-900/50';
     const border = status === 'critical' ? 'border-red-500/50' : 'border-slate-700';
@@ -21,4 +21,4 @@ export const DigitalPanel: React.FC<DigitalPanelProps> = ({ label, value, unit, 
             </div>
         </div>
     );
-};
+});

@@ -6,7 +6,7 @@ interface FleetOverviewProps {
     showMap: boolean;
 }
 
-export const FleetOverview: React.FC<FleetOverviewProps> = ({ onToggleMap, showMap }) => {
+export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggleMap, showMap }) => {
     const { assets, selectedAsset, selectAsset } = useAssetContext();
 
     return (
@@ -49,4 +49,4 @@ export const FleetOverview: React.FC<FleetOverviewProps> = ({ onToggleMap, showM
             </div>
         </div>
     );
-};
+});

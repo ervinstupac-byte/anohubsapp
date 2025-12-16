@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useTranslation } from 'react-i18next'; // IMPORT
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { BackButton } from './BackButton.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
@@ -48,13 +47,12 @@ export const GlobalMap: React.FC = () => {
     };
 
     return (
-        <div className="relative h-[calc(100vh-100px)] w-full rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl animate-fade-in bg-slate-950 isolate">
+        <div className="relative h-full w-full overflow-hidden bg-slate-950 isolate">
 
             {/* --- HUD: TOP BAR --- */}
             <div className="absolute top-4 left-4 right-4 z-[1000] flex justify-between items-start pointer-events-none">
-                <div className="pointer-events-auto">
-                    <BackButton text={t('actions.back', 'Back to Hub')} />
-                </div>
+                {/* Back button removed for SCADA integration */}
+                <div></div>
 
                 <div className="flex gap-3 pointer-events-auto">
                     <GlassCard className="py-2 px-4 flex flex-col items-center min-w-[80px] bg-slate-900/90 backdrop-blur-xl border-slate-700">
@@ -90,7 +88,7 @@ export const GlobalMap: React.FC = () => {
                             <span className="text-slate-500 font-mono group-hover:text-slate-300 transition-colors">ID-{tVal.assetId.split('-')[0]}</span>
                             <div className="flex items-center gap-3">
                                 <span className={`font-mono font-bold ${tVal.status === 'CRITICAL' ? 'text-red-500' :
-                                        tVal.status === 'WARNING' ? 'text-amber-400' : 'text-slate-300'
+                                    tVal.status === 'WARNING' ? 'text-amber-400' : 'text-slate-300'
                                     }`}>
                                     {tVal.vibration.toFixed(3)} <span className="text-[9px] text-slate-500">mm/s</span>
                                 </span>
@@ -128,7 +126,7 @@ export const GlobalMap: React.FC = () => {
                         <Marker key={asset.id} position={asset.coordinates}>
                             <Popup className="custom-popup" closeButton={false}>
                                 <div className={`bg-slate-900 text-white p-4 rounded-xl border shadow-2xl min-w-[260px] relative overflow-hidden ${isCritical ? 'border-red-500 shadow-red-900/50' :
-                                        isWarning ? 'border-amber-500' : 'border-slate-600'
+                                    isWarning ? 'border-amber-500' : 'border-slate-600'
                                     }`}>
                                     <div className={`absolute top-0 left-0 w-1 h-full ${isCritical ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
                                         }`}></div>
@@ -139,7 +137,7 @@ export const GlobalMap: React.FC = () => {
                                             <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">{asset.type} • {asset.location}</p>
                                         </div>
                                         <span className={`px-2 py-1 rounded text-[9px] font-black uppercase tracking-wide ${isCritical ? 'bg-red-500 text-white animate-pulse' :
-                                                isWarning ? 'bg-amber-500 text-slate-900' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                            isWarning ? 'bg-amber-500 text-slate-900' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                                             }`}>
                                             {statusDisplay}
                                         </span>

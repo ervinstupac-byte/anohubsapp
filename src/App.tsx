@@ -3,12 +3,13 @@ import { HashRouter, useLocation, useNavigate, Route, Routes, useParams } from '
 
 // --- 1. CONTEXTS ---
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
-import { NavigationProvider } from './contexts/NavigationContext.tsx'; 
+import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
-import { RiskProvider } from './contexts/RiskContext.tsx'; 
+import { RiskProvider } from './contexts/RiskContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
-import { AssetProvider } from './contexts/AssetContext.tsx'; 
-import { TelemetryProvider } from './contexts/TelemetryContext.tsx'; 
+import { AssetProvider } from './contexts/AssetContext.tsx';
+import { TelemetryProvider } from './contexts/TelemetryContext.tsx';
+import { AuditProvider } from './contexts/AuditContext.tsx';
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -17,7 +18,7 @@ import { Onboarding } from './components/Onboarding.tsx';
 import { InterventionCTA } from './components/InterventionCTA.tsx';
 import { Spinner } from './components/Spinner.tsx';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
-import { Hub } from './components/Hub.tsx'; 
+import { Hub } from './components/Hub.tsx';
 
 // --- 3. ASSETS & TYPES ---
 import bgImage from './assets/digital_cfd_mesh.png';
@@ -75,7 +76,7 @@ const AppLayout: React.FC = () => {
     const navigate = useNavigate();
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
-    
+
     const isHub = location.pathname === '/';
 
     useEffect(() => {
@@ -91,44 +92,44 @@ const AppLayout: React.FC = () => {
     const navigateTo = (view: AppView) => {
         const routeMap: Record<string, string> = {
             'home': '/',
-            'hub': '/', 
+            'hub': '/',
             'intro': '/digital-introduction',
-            'digitalIntroduction': '/digital-introduction', 
+            'digitalIntroduction': '/digital-introduction',
             'login': '/login',
             'globalMap': '/map',
             'riskAssessment': '/risk-assessment',
-            'investor': '/investor-briefing', 
+            'investor': '/investor-briefing',
             'investorBriefing': '/investor-briefing',
-            'standard': '/standard-of-excellence', 
+            'standard': '/standard-of-excellence',
             'standardOfExcellence': '/standard-of-excellence',
-            'improvements': '/hpp-improvements', 
+            'improvements': '/hpp-improvements',
             'hppImprovements': '/hpp-improvements',
-            'installation': '/installation-guarantee', 
+            'installation': '/installation-guarantee',
             'installationGuarantee': '/installation-guarantee',
-            'gender': '/gender-equity', 
+            'gender': '/gender-equity',
             'genderEquity': '/gender-equity',
             'hppBuilder': '/hpp-builder',
-            'phases': '/phase-guide', 
+            'phases': '/phase-guide',
             'phaseGuide': '/phase-guide',
-            'wildlife': '/river-wildlife', 
+            'wildlife': '/river-wildlife',
             'riverWildlife': '/river-wildlife',
             'riskReport': '/risk-report',
-            'integrity': '/digital-integrity', 
+            'integrity': '/digital-integrity',
             'digitalIntegrity': '/digital-integrity',
-            'contracts': '/contract-management', 
+            'contracts': '/contract-management',
             'contractManagement': '/contract-management',
             'library': '/library',
             'questionnaireSummary': '/questionnaire-summary',
             'revitalizationStrategy': '/revitalization-strategy',
-            'turbineDetail': '/turbine' 
+            'turbineDetail': '/turbine'
         };
         const target = routeMap[view];
         if (target) navigate(target);
     };
 
     return (
-        <NavigationProvider value={{ 
-            currentPage: isHub ? 'home' : 'intro', 
+        <NavigationProvider value={{
+            currentPage: isHub ? 'home' : 'intro',
             navigateTo,
             navigateBack: () => navigate(-1),
             navigateToHub: () => navigate('/'),
@@ -147,7 +148,7 @@ const AppLayout: React.FC = () => {
                 }}
             >
                 {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
-                
+
                 {!isHub && (
                     <header className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-white/5 bg-[#0f172a]/80 h-16 flex items-center px-6 justify-between">
                         <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
@@ -161,8 +162,8 @@ const AppLayout: React.FC = () => {
                     <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING MODULE...</span></div>}>
                         <div className={!isHub ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12"}>
                             <Routes>
-                                <Route index element={<CommandCentreDashboard />} /> 
-                                
+                                <Route index element={<CommandCentreDashboard />} />
+
                                 <Route path="profile" element={<UserProfile />} />
                                 <Route path="map" element={<GlobalMap />} />
                                 <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
@@ -193,11 +194,11 @@ const AppLayout: React.FC = () => {
                 </footer>
 
                 <InterventionCTA />
-                
+
                 <button onClick={() => setIsFeedbackVisible(true)} className="fixed bottom-6 right-6 group flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-110 hover:bg-cyan-400 transition-all z-50">
                     <span className="text-xl group-hover:rotate-12 transition-transform">💬</span>
                 </button>
-                
+
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
             </div>
         </NavigationProvider>
@@ -206,25 +207,27 @@ const AppLayout: React.FC = () => {
 
 // --- 9. APP ENTRY POINT ---
 const App: React.FC = () => {
-  return (
-    <ToastProvider>
-        <AuthProvider>
-            <QuestionnaireProvider>
-                <RiskProvider>
-                    <AssetProvider>
-                        <TelemetryProvider>
-                            <HashRouter>
-                                <Routes>
-                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                </Routes>
-                            </HashRouter>
-                        </TelemetryProvider>
-                    </AssetProvider>
-                </RiskProvider>
-            </QuestionnaireProvider> 
-        </AuthProvider>
-    </ToastProvider>
-  );
+    return (
+        <ToastProvider>
+            <AuditProvider>
+                <AuthProvider>
+                    <QuestionnaireProvider>
+                        <RiskProvider>
+                            <AssetProvider>
+                                <TelemetryProvider>
+                                    <HashRouter>
+                                        <Routes>
+                                            <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                        </Routes>
+                                    </HashRouter>
+                                </TelemetryProvider>
+                            </AssetProvider>
+                        </RiskProvider>
+                    </QuestionnaireProvider>
+                </AuthProvider>
+            </AuditProvider>
+        </ToastProvider>
+    );
 };
 
 export default App;

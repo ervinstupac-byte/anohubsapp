@@ -4,6 +4,7 @@ import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import { useAudit } from '../contexts/AuditContext.tsx';
 // New SCADA Imports
 import { Sidebar } from './scada/Sidebar.tsx';
 import { FleetOverview } from './scada/FleetOverview.tsx';
@@ -46,6 +47,7 @@ export const Hub: React.FC = () => {
     const { t } = useTranslation();
     const { riskState } = useRisk();
     const { telemetry } = useTelemetry();
+    const { logAction } = useAudit();
 
     // SCADA State
     const [showMap, setShowMap] = useState(false);
@@ -95,7 +97,10 @@ export const Hub: React.FC = () => {
                         <ModuleItem
                             key={mod.id}
                             {...mod}
-                            onClick={() => navigateTo(mod.id as AppView)}
+                            onClick={() => {
+                                logAction('MODULE_OPEN', mod.title, 'SUCCESS');
+                                navigateTo(mod.id as AppView);
+                            }}
                         />
                     ))}
 
@@ -110,7 +115,10 @@ export const Hub: React.FC = () => {
                             key={mod.id}
                             {...mod}
                             variant="secondary"
-                            onClick={() => navigateTo(mod.id as AppView)}
+                            onClick={() => {
+                                logAction('MODULE_OPEN', mod.title, 'SUCCESS');
+                                navigateTo(mod.id as AppView);
+                            }}
                         />
                     ))}
                 </div>

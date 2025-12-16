@@ -5,7 +5,7 @@ interface AlarmBarProps {
     message?: string;
 }
 
-export const AlarmBar: React.FC<AlarmBarProps> = ({ isActive, message }) => {
+export const AlarmBar: React.FC<AlarmBarProps> = React.memo(({ isActive, message }) => {
     return (
         <div className={`
             fixed bottom-0 left-[280px] right-0 h-12 flex items-center justify-center 
@@ -25,4 +25,4 @@ export const AlarmBar: React.FC<AlarmBarProps> = ({ isActive, message }) => {
             )}
         </div>
     );
-};
+});
