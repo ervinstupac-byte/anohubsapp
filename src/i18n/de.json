@@ -3,12 +3,68 @@
     "welcome": "Willkommen, {{name}}",
     "subtitle": "Globale Plattform zur Durchsetzung von Exzellenzstandards.",
     "operationalModules": "Betriebsmodule",
+    "strategicIntelligence": "Strategische Intelligenz",
+    "knowledgeCulture": "Wissen & Kultur",
     "systemStatusConnecting": "VERBINDUNG...",
-    "systemStatusOperational": "BETRIEBSBEREIT"
+    "systemStatusOperational": "BETRIEBSBEREIT",
+    "risks": "Risiken Erkannt",
+    "designs": "Designs Gespeichert",
+    "fleetOutput": "Flottenleistung",
+    "riskFactors": "Risikofaktoren",
+    "activeContext": "Aktiver Kontext",
+    "vision": "Vision",
+    "manifesto": "MANIFEST",
+    "footerText": "Engineered for Perfection",
+    "operatorId": "Betreiber-ID",
+    "tagline": "Architekten der Immunität",
+    "info": "INFO",
+    "copyright": "© 2025 Anohubs Inc.",
+    "protocol": "PROTOKOLL FÜR TECHNISCHE IMMUNITÄT"
+  },
+  "modules": {
+    "riskAssessment": "Risikobewertung",
+    "riskAssessmentDesc": "Identifizieren Sie die 'Ausführungslücke' vor dem Ausfall.",
+    "riskReport": "Master-Projektdossier",
+    "riskReportDesc": "Konsolidierte Unternehmensberichte.",
+    "hppBuilder": "HPP Design Studio",
+    "hppBuilderDesc": "Physikbasierte Turbinenauslegung & Simulation.",
+    "installationGuarantee": "Installationsstandard",
+    "installationGuaranteeDesc": "Durchsetzung des 0,05 mm/m Protokolls.",
+    "globalMap": "Globale Bestands Karte",
+    "globalMapDesc": "Geospatiale Asset-Intelligenz.",
+    "investorBriefing": "Investorenbriefing",
+    "investorBriefingDesc": "Finanz-KPIs und Risikoauswirkungen.",
+    "contractManagement": "Vertrag & Recht",
+    "contractManagementDesc": "Gewährleistungsschutz durch Daten.",
+    "digitalIntegrity": "Digitale Integrität",
+    "digitalIntegrityDesc": "Unveränderlicher Blockchain-Nachweis.",
+    "revitalizationStrategy": "Revitalisierungsstrategie",
+    "revitalizationStrategyDesc": "Strategien zur Lebensdauerverlängerung.",
+    "library": "Komponentenbibliothek",
+    "libraryDesc": "Fehlermodi & KPIs.",
+    "standardOfExcellence": "Standard der Exzellenz",
+    "standardOfExcellenceDesc": "Das 0,05 mm/m Manifest.",
+    "phaseGuide": "Projektphasen-Leitfaden",
+    "phaseGuideDesc": "Durchsetzung des Projektlebenszyklus.",
+    "hppImprovements": "HPP Ino-Hub",
+    "hppImprovementsDesc": "Innovationsverfolgung.",
+    "riverWildlife": "Fluss & Wildnis",
+    "riverWildlifeDesc": "Umweltmandat.",
+    "genderEquity": "Geschlechtergerechtigkeit",
+    "genderEquityDesc": "HR-Strategie & Kultur.",
+    "digitalIntroduction": "Digitale Einführung"
   },
   "common": {
-    "launch": "Modul Starten →",
-    "version": "v2.4.0 (Enterprise)"
+    "launch": "STARTEN",
+    "version": "v2.5.0 (Enterprise)",
+    "system": "SYSTEM",
+    "immune": "IMMUN",
+    "compromised": "KOMPROMITTIERT",
+    "critical": "KRITISCH",
+    "moderate": "MODERAT",
+    "stable": "STABIL",
+    "riskLevel": "Risikostufe",
+    "active": "Aktiv"
   },
   "questionnaire": {
     "title": "Diagnosebericht",
@@ -21,7 +77,7 @@
     "uploading": "Hochladen...",
     "syncedToCloud": "✓ Mit Cloud synchronisiert",
     "submitToHQ": "An Zentrale senden",
-    "conceptTitle": "Konzept: Ausführungslücke (Execution Gap)",
+    "conceptTitle": "Konzept: Ausführungslücke",
     "conceptDesc": "Die kritische Abweichung zwischen einem fehlerfreien technischen Plan und der inkonsistenten Realität der Umsetzung vor Ort.",
     "criticalIndicators": "Kritische Indikatoren",
     "criticalIndicatorsDesc": "Sofortige Aufmerksamkeit erforderlich, um Garantieverlust zu vermeiden.",
@@ -35,5 +91,72 @@
     "cloudSyncFailed": "Cloud-Sync fehlgeschlagen: {{error}}",
     "noDataAvailable": "Keine Daten verfügbar.",
     "pdfDownloaded": "Risikobericht PDF heruntergeladen."
+  },
+  "login": {
+    "title": "Anmelden bei AnoHUB",
+    "subtitle": "Unternehmenszugang",
+    "instructions": "Bitte überprüfen Sie Ihre Zugangsdaten.",
+    "emailLabel": "E-Mail-Adresse",
+    "passwordLabel": "Passwort",
+    "signInButton": "Anmelden",
+    "guestButton": "Als Gast fortfahren",
+    "or": "Oder",
+    "loading": "Authentifizierung...",
+    "error": "Fehler bei der Anmeldung",
+    "magicLink": "Magic Link senden",
+    "footer": "Nur für autorisiertes Personal",
+    "guestWelcome": "Willkommen, Ingenieur!"
+  },
+  "actions": {
+    "back": "Zurück zum Hub",
+    "previewPrint": "Vorschau & Drucken",
+    "cancel": "Abbrechen",
+    "close": "Schließen"
+  },
+  "assetPicker": {
+    "selectContext": "Asset-Kontext wählen",
+    "registerNew": "+ Neues Asset registrieren",
+    "modalTitle": "Neues Asset registrieren",
+    "labelName": "Asset Name",
+    "placeholderName": "z.B. HPP Blagaj",
+    "labelType": "Turbinentyp",
+    "labelLocation": "Standort",
+    "placeholderLocation": "Fluss, Land",
+    "labelCapacity": "Kapazität (MW)",
+    "registerButton": "Asset registrieren",
+    "successToast": "Neues Asset erfolgreich registriert",
+    "failToast": "Fehler beim Erstellen des Assets"
+  },
+  "assetWizard": {
+    "title": "Neues Asset registrieren",
+    "steps": {
+      "identity": "Identität",
+      "specs": "Technische Daten",
+      "risk": "Risikokalibrierung"
+    },
+    "fields": {
+      "name": "Asset Name",
+      "type": "Asset-Typ",
+      "location": "Standort",
+      "capacity": "Kapazität (MW)",
+      "units": "Anzahl der Einheiten",
+      "kpi": "Kritischer KPI"
+    },
+    "buttons": {
+      "next": "Nächster Schritt",
+      "prev": "Zurück",
+      "register": "Asset registrieren"
+    },
+    "success": "Asset erfolgreich registriert und in der Flotte initialisiert."
+  },
+  "globalMap": {
+    "fleet": "Flotte",
+    "liveMw": "Live MW",
+    "alerts": "Warnungen",
+    "output": "Leistung",
+    "status": {
+      "critical": "KRITISCH",
+      "warning": "WARNUNG"
+    }
   }
 }

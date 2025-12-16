@@ -12,26 +12,33 @@ export const LanguageSelector: React.FC = () => {
 
     const btnClass = (lng: string) => `
         px-3 py-1 text-[10px] font-bold rounded-full transition-all duration-300 uppercase cursor-pointer
-        ${i18n.language === lng 
-            ? 'bg-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.5)]' 
+        ${i18n.language === lng
+            ? 'bg-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.5)]'
             : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}
     `;
 
     return (
         <div className="flex gap-1 items-center bg-slate-900/80 backdrop-blur-md p-1 rounded-full border border-slate-700/50 shadow-lg">
-            <button 
-                onClick={() => changeLanguage('en')} 
+            <button
+                onClick={() => changeLanguage('en')}
                 className={btnClass('en')}
                 title="English"
             >
                 EN
             </button>
-            <button 
-                onClick={() => changeLanguage('bs')} 
+            <button
+                onClick={() => changeLanguage('bs')}
                 className={btnClass('bs')}
                 title="Bosanski"
             >
                 BS
+            </button>
+            <button
+                onClick={() => changeLanguage('de')}
+                className={btnClass('de')}
+                title="Deutsch"
+            >
+                DE
             </button>
         </div>
     );
