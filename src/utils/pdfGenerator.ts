@@ -1,7 +1,9 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// --- HELPER: CREATE PDF OBJECT (Shared Logic) ---
+// --- KLJUČNA IZMJENA: SVE FUNKCIJE ĆE SADA VRAĆATI BLOB ILI POZIVATI CREATE DOC ---
+
+// --- HELPER: CREATE DOSSIER PDF OBJECT (Shared Logic) ---
 const createDossierDoc = (
     assetName: string,
     riskData: any,
@@ -11,11 +13,11 @@ const createDossierDoc = (
     const doc = new jsPDF();
     const timestamp = new Date().toLocaleString();
 
-    // --- 1. COVER PAGE ---
-    doc.setFillColor(15, 23, 42); // Slate-900 (Enterprise Dark)
+    // --- 1. COVER PAGE (Ostaje isto) ---
+    doc.setFillColor(15, 23, 42); 
     doc.rect(0, 0, 210, 297, 'F');
     
-    doc.setTextColor(6, 182, 212); // Cyan-400
+    doc.setTextColor(6, 182, 212); 
     doc.setFontSize(30);
     doc.setFont('helvetica', 'bold');
     doc.text('AnoHUB', 105, 100, { align: 'center' });
@@ -30,7 +32,7 @@ const createDossierDoc = (
     doc.line(60, 125, 150, 125);
 
     doc.setFontSize(12);
-    doc.setTextColor(148, 163, 184); // Slate-400
+    doc.setTextColor(148, 163, 184); 
     doc.text(`Target Asset: ${assetName}`, 105, 140, { align: 'center' });
     doc.text(`Engineer: ${engineerName}`, 105, 150, { align: 'center' });
     doc.text(`Generated: ${timestamp}`, 105, 160, { align: 'center' });
@@ -38,11 +40,11 @@ const createDossierDoc = (
     doc.setFontSize(10);
     doc.text('Confidential - Internal Use Only', 105, 280, { align: 'center' });
 
-    // --- 2. RISK ASSESSMENT SECTION ---
+    // --- 2. RISK ASSESSMENT SECTION (Ostaje isto) ---
     if (riskData) {
         doc.addPage();
         
-        doc.setFillColor(220, 38, 38); // Red-600
+        doc.setFillColor(220, 38, 38); 
         doc.rect(0, 0, 210, 25, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(16);
@@ -80,7 +82,7 @@ const createDossierDoc = (
             autoTable(doc, {
                 startY: notesText ? 80 : 70,
                 head: [['Diagnostic Check', 'Status']],
-                body: answerRows as any[], // <--- FIXED TYPE ERROR
+                body: answerRows as any[], 
                 theme: 'grid',
                 headStyles: { fillColor: [220, 38, 38], textColor: 255, fontStyle: 'bold' },
                 styles: { fontSize: 9, cellPadding: 3 },
@@ -89,11 +91,11 @@ const createDossierDoc = (
         }
     }
 
-    // --- 3. TECHNICAL DESIGN SECTION ---
+    // --- 3. TECHNICAL DESIGN SECTION (Ostaje isto) ---
     if (designData) {
         doc.addPage();
 
-        doc.setFillColor(8, 145, 178); // Cyan-600
+        doc.setFillColor(8, 145, 178); 
         doc.rect(0, 0, 210, 25, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(16);
@@ -136,7 +138,8 @@ const createDossierDoc = (
             columnStyles: { 1: { fontStyle: 'bold', textColor: [8, 145, 178] } }
         });
     }
-
+    
+    // Dodavanje broja stranice na sve stranice
     const pageCount = (doc as any).internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
@@ -148,33 +151,28 @@ const createDossierDoc = (
     return doc;
 };
 
-// --- EXPORT 1: DOWNLOAD FUNCTION (Local) ---
-export const generateMasterDossier = (
-    assetName: string,
-    riskData: any,
-    designData: any,
-    engineerName: string
-) => {
-    const doc = createDossierDoc(assetName, riskData, designData, engineerName);
-    const filename = `${assetName.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
-    doc.save(filename);
-};
+// --- FUNKCIJA ZA KONVERTOVANJE DOC U BLOB ---
+const docToBlob = (doc: jsPDF): Blob => doc.output('blob');
 
-// --- EXPORT 2: BLOB FUNCTION (Cloud Upload) ---
-export const generateMasterDossierBlob = (
+
+// --- AŽURIRANI EXPORTI: SVE VRAĆAJU BLOB (ili koriste createDossierDoc) ---
+
+// 1. MASTER DOSSIER (Sastavlja Risk i Design)
+export const createMasterDossierBlob = (
     assetName: string,
     riskData: any,
     designData: any,
     engineerName: string
 ): Blob => {
     const doc = createDossierDoc(assetName, riskData, designData, engineerName);
-    return doc.output('blob');
+    return docToBlob(doc);
 };
 
-// --- EXPORT 3: FINANCIAL REPORT (Investor Briefing) ---
-export const generateFinancialReport = (assetName: string, kpis: any) => {
+// 2. FINANCIAL REPORT (Investor Briefing)
+export const createFinancialReportBlob = (assetName: string, kpis: any): Blob => {
     const doc = new jsPDF();
     
+    // ... Logika za generisanje Financial Reporta (Ostaje skoro ista) ...
     doc.setFillColor(15, 23, 42); 
     doc.rect(0, 0, 210, 40, 'F');
     doc.setFontSize(22);
@@ -196,18 +194,18 @@ export const generateFinancialReport = (assetName: string, kpis: any) => {
         theme: 'grid',
         headStyles: { fillColor: [88, 28, 135] }
     });
-    
-    const filename = `${assetName.replace(/\s+/g, '_')}_Financial_Report.pdf`;
-    doc.save(filename);
+    // ... (Možeš dodati još detalja iz Investitor Briefinga ovdje) ...
+
+    return docToBlob(doc);
 };
 
-// --- EXPORT 4: CALCULATION REPORT (HPP Builder) ---
-export const generateCalculationReport = (
+// 3. CALCULATION REPORT (HPP Builder)
+export const createCalculationReportBlob = (
     settings: any, 
     results: any, 
     recommendations: any[], 
     assetName?: string
-) => {
+): Blob => {
     const doc = new jsPDF();
     const title = assetName ? `HPP Design: ${assetName}` : 'HPP Design Calculation';
     
@@ -247,22 +245,41 @@ export const generateCalculationReport = (
         doc.text(`Recommended Turbine: ${best.key.toUpperCase()}`, 14, yPos);
     }
     
-    doc.save('HPP_Design_Report.pdf');
+    return docToBlob(doc);
 };
 
-// --- EXPORT 5: RISK REPORT (Legacy) ---
-export const generateRiskReport = (
+// 4. RISK REPORT (Samo Risk, kao dio glavnog Dossiera)
+export const createRiskReportBlob = (
     riskData: any, 
     engineerName: string, 
+    assetName: string,
     notes?: string
-) => {
+): Blob => {
     if (notes) {
         riskData.description = notes;
     }
-
-    const assetName = riskData.assetName || "Assessment";
+    // Koristimo istu helper funkciju, ali šaljemo null za designData
     const doc = createDossierDoc(assetName, riskData, null, engineerName);
+    return docToBlob(doc);
+};
+
+// --- HELPER: Funkcija za otvaranje i preuzimanje (Frontend će je koristiti) ---
+export const openAndDownloadBlob = (blob: Blob, filename: string, openPreview: boolean = true) => {
+    const url = URL.createObjectURL(blob);
     
-    const filename = `Risk_Assessment_${new Date().toISOString().split('T')[0]}.pdf`;
-    doc.save(filename);
+    if (openPreview) {
+        // Otvara u novom tabu, što omogućava prirodni Preview/Print
+        window.open(url);
+    } else {
+        // Samo skida (stara funkcionalnost)
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+    
+    // Oslobodi memoriju
+    URL.revokeObjectURL(url);
 };

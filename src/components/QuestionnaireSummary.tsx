@@ -4,32 +4,32 @@ import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { useAuth } from '../contexts/AuthContext.tsx'; 
-import { supabase } from '../services/supabaseClient.ts'; 
-import { generateRiskReport } from '../utils/pdfGenerator.ts';
+import { useAuth } from '../contexts/AuthContext.tsx';
+import { supabase } from '../services/supabaseClient.ts';
+import { createRiskReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
-import { useAssetContext } from '../contexts/AssetContext.tsx'; 
-import { QUESTIONS } from '../constants.ts'; 
+import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { QUESTIONS } from '../constants.ts';
 import type { Question } from '../types.ts';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 
 // --- RISK LOGIC MAP ---
 export const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
-    q1: { high: ['no'], medium: ['not documented'] }, 
+    q1: { high: ['no'], medium: ['not documented'] },
     q2: { high: ['no'], medium: ['partially'] },
-    q4: { high: ['no'], medium: ['sometimes'] }, 
+    q4: { high: ['no'], medium: ['sometimes'] },
     q5: { high: ['frequently'], medium: ['occasionally'] },
     q6: { high: ['not maintained'], medium: ['partially filled'] },
     q7: { high: ['often we only fix the symptom'], medium: ['sometimes we only fix the symptom'] },
-    q8: { high: ['no'], medium: ['in testing phase'] }, 
+    q8: { high: ['no'], medium: ['in testing phase'] },
     q9: { high: ['no'], medium: ['limited access'] },
     q10: { high: ['not monitored'], medium: ['monitored periodically'] },
-    q11: { high: ['no', 'do not measure'], medium: [] }, 
+    q11: { high: ['no', 'do not measure'], medium: [] },
     q12: { high: ['only replacement', 'no, only replacement is offered'], medium: ['sometimes'] },
-    q13: { high: ['no'], medium: ['periodically'] }, 
+    q13: { high: ['no'], medium: ['periodically'] },
     q14: { high: ['not installed/functional'], medium: ['some require checking'] },
-    q15: { high: ['no'], medium: ['outdated'] }, 
+    q15: { high: ['no'], medium: ['outdated'] },
     q16: { high: ['manual'], medium: ['semi-automatic'] },
     q17: { high: ['major service needed'], medium: ['requires minor maintenance'] },
 };
@@ -41,20 +41,20 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
     let text = '';
 
     switch (level) {
-        case 'High': 
-            color = 'text-red-500'; 
-            percentage = 90; 
-            text = 'CRITICAL'; 
+        case 'High':
+            color = 'text-red-500';
+            percentage = 90;
+            text = 'CRITICAL';
             break;
-        case 'Medium': 
-            color = 'text-amber-400'; 
-            percentage = 50; 
-            text = 'MODERATE'; 
+        case 'Medium':
+            color = 'text-amber-400';
+            percentage = 50;
+            text = 'MODERATE';
             break;
-        case 'Low': 
-            color = 'text-emerald-400'; 
-            percentage = 15; 
-            text = 'STABLE'; 
+        case 'Low':
+            color = 'text-emerald-400';
+            percentage = 15;
+            text = 'STABLE';
             break;
     }
 
@@ -65,13 +65,13 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
                 <svg className="absolute inset-0 transform -rotate-90 w-full h-full p-2" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="6" className="text-slate-800" />
                     {/* Progress Circle */}
-                    <circle 
+                    <circle
                         cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round"
                         strokeDasharray="283" strokeDashoffset={283 - (283 * percentage) / 100}
                         className={`${color} transition-all duration-1000 ease-out drop-shadow-[0_0_10px_currentColor]`}
                     />
                 </svg>
-                
+
                 {/* Center Content */}
                 <div className="text-center z-10">
                     <div className={`text-4xl font-black ${color} tracking-tighter drop-shadow-md mb-1`}>{text}</div>
@@ -92,9 +92,9 @@ export const QuestionnaireSummary: React.FC = () => {
     const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
     const { showToast } = useToast();
     const { user } = useAuth();
-    const { selectedAsset } = useAssetContext(); 
+    const { selectedAsset } = useAssetContext();
     const { t } = useTranslation();
-    
+
     const [isUploading, setIsUploading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
 
@@ -127,7 +127,7 @@ export const QuestionnaireSummary: React.FC = () => {
         if (totalScore > 5) return { text: 'Medium Risk', color: 'text-amber-400', level: 'Medium' as const };
         return { text: 'Low Risk', color: 'text-emerald-400', level: 'Low' as const };
     };
-    
+
     const riskIndicator = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
 
     // --- CLOUD SUBMISSION ---
@@ -136,21 +136,21 @@ export const QuestionnaireSummary: React.FC = () => {
             showToast(t('questionnaire.noDataToSubmit'), 'warning');
             return;
         }
-        
+
         setIsUploading(true);
 
         try {
             const payload = {
-                asset_name: selectedAsset ? selectedAsset.name : `HPP-${operationalData.turbineType || 'Unspecified'}`, 
-                asset_id: selectedAsset?.id, 
+                asset_name: selectedAsset ? selectedAsset.name : `HPP-${operationalData.turbineType || 'Unspecified'}`,
+                asset_id: selectedAsset?.id,
                 engineer_id: user?.email || 'Anonymous Engineer',
-                answers: answers, 
-                operational_data: operationalData, 
+                answers: answers,
+                operational_data: operationalData,
                 risk_score: disciplineRiskScore,
                 risk_level: riskIndicator.level,
                 description: description
             };
-            
+
             const { error } = await supabase.from('risk_assessments').insert([payload]);
 
             if (error) throw error;
@@ -172,21 +172,24 @@ export const QuestionnaireSummary: React.FC = () => {
             showToast(t('questionnaire.noDataAvailable'), 'warning');
             return;
         }
-        
+
         const riskDataForPDF = {
-            id: 'DRAFT', 
+            id: 'DRAFT',
             risk_score: disciplineRiskScore,
             risk_level: riskIndicator.level,
             answers: answers,
             assetName: selectedAsset?.name || 'Unspecified Asset'
         };
 
-        generateRiskReport(
+        const blob = createRiskReportBlob(
             riskDataForPDF,
             user?.email || 'AnoHUB Engineer',
+            riskDataForPDF.assetName,
             description
         );
-        
+
+        openAndDownloadBlob(blob, 'risk_report.pdf');
+
         showToast(t('questionnaire.pdfDownloaded'), 'success');
     };
 
@@ -197,13 +200,13 @@ export const QuestionnaireSummary: React.FC = () => {
 
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
-            
+
             {/* HERO HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up pt-6">
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
                     {t('questionnaire.title', 'Execution Gap').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('questionnaire.title', 'Execution Gap Analysis').split(' ').slice(1).join(' ')}</span>
                 </h2>
-                
+
                 <div className="flex justify-center gap-6 text-xs uppercase tracking-widest text-slate-500 font-bold">
                     <span className="flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> {t('questionnaire.liveAnalysis')}
@@ -215,13 +218,13 @@ export const QuestionnaireSummary: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {/* LEFT COLUMN: EXECUTIVE SUMMARY */}
                 <div className="lg:col-span-1 space-y-6">
                     <GlassCard className="border-t-4 border-t-cyan-500">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">{t('questionnaire.overallAssessment')}</h3>
-                        <RiskGauge level={riskIndicator.level} /> 
-                        
+                        <RiskGauge level={riskIndicator.level} />
+
                         <div className="mt-4 pt-6 border-t border-slate-700/50 space-y-3">
                             <div className="flex justify-between items-center p-3 bg-red-900/10 rounded-lg border border-red-500/10">
                                 <span className="text-xs font-bold text-red-400 uppercase tracking-wider">{t('questionnaire.highPriorityAlerts')}</span>
@@ -235,7 +238,7 @@ export const QuestionnaireSummary: React.FC = () => {
 
                         {/* ACTION BUTTONS */}
                         <div className="mt-8 space-y-3">
-                            <ModernButton 
+                            <ModernButton
                                 onClick={handleDownloadPDF}
                                 variant="secondary"
                                 fullWidth
@@ -243,8 +246,8 @@ export const QuestionnaireSummary: React.FC = () => {
                             >
                                 {t('questionnaire.downloadPDF')}
                             </ModernButton>
-                            
-                            <ModernButton 
+
+                            <ModernButton
                                 onClick={handleSubmitToCloud}
                                 disabled={isUploading || isUploaded}
                                 variant={isUploaded ? 'secondary' : 'primary'}
@@ -270,7 +273,7 @@ export const QuestionnaireSummary: React.FC = () => {
 
                 {/* RIGHT COLUMN: DETAILED FINDINGS */}
                 <div className="lg:col-span-2 space-y-6">
-                    
+
                     {/* High Risk Section */}
                     {analysis.highRisk.length > 0 && (
                         <GlassCard className="border-l-4 border-l-red-500 animate-scale-in" style={{ animationDelay: '100ms' }}>
@@ -327,7 +330,7 @@ export const QuestionnaireSummary: React.FC = () => {
                     )}
 
                     <div className="text-center pt-8">
-                        <ModernButton 
+                        <ModernButton
                             onClick={handleReturn}
                             variant="ghost"
                             className="text-slate-400 hover:text-white"

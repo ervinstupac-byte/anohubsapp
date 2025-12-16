@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx'; 
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { generateMasterDossier, generateMasterDossierBlob } from '../utils/pdfGenerator.ts';
+// ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
+import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { Spinner } from './Spinner.tsx';
 
-// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { user } = useAuth();
@@ -25,7 +24,7 @@ export const RiskReport: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
 
-    // --- 1. FETCH DATA FROM CLOUD ---
+    // --- 1. FETCH DATA FROM CLOUD (LOGIKA OSTAJE ISTA) ---
     useEffect(() => {
         const fetchData = async () => {
             if (!selectedAsset) {
@@ -66,28 +65,57 @@ export const RiskReport: React.FC = () => {
         fetchData();
     }, [selectedAsset]);
 
-    // --- 2. HANDLERS ---
-    const handleDownload = () => {
+    // --- 2. HANDLER: GENERATE AND ACTION (DOWNLOAD or PREVIEW) ---
+    const handleGenerateDossier = (openPreview: boolean) => {
         if (!selectedAsset) return;
+
+        // Provjeri da li postoji bilo kakav podatak za generisanje
+        if (!riskData && !designData) {
+            showToast('Nema podataka za generisanje Dossiera.', 'warning');
+            return;
+        }
+
         try {
-            generateMasterDossier(
+            // Generišemo Blob koristeći novu preimenovanu funkciju
+            const pdfBlob = createMasterDossierBlob(
                 selectedAsset.name,
                 riskData,
                 designData,
                 user?.email || 'AnoHUB Engineer'
             );
-            showToast(t('questionnaire.pdfDownloaded', 'PDF Downloaded successfully.'), 'success');
+            
+            const filename = `${selectedAsset.name.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
+
+            // Koristimo helper funkciju koja otvara Preview ili skida fajl
+            openAndDownloadBlob(pdfBlob, filename, openPreview);
+
+            if (openPreview) {
+                showToast(t('riskReport.previewOpened', 'Dossier je otvoren u novom prozoru.'), 'success');
+            } else {
+                showToast(t('questionnaire.pdfDownloaded', 'PDF uspješno preuzet.'), 'success');
+            }
+
         } catch (err) {
-            showToast('Error generating PDF', 'error');
+            console.error(err);
+            showToast('Greška pri generisanju PDF-a', 'error');
         }
     };
 
+    // --- 3. HANDLER: UPLOAD TO CLOUD (LOGIKA OSTAJE SKORO ISTA, koristi createMasterDossierBlob) ---
     const handleUploadToHQ = async () => {
         if (!selectedAsset || !user) return;
         setUploading(true);
 
+        // Provjeri da li postoji bilo kakav podatak za upload
+        if (!riskData && !designData) {
+             showToast('Nema podataka za arhiviranje.', 'warning');
+             setUploading(false);
+             return;
+        }
+
         try {
-            const pdfBlob = generateMasterDossierBlob(
+            // Ista Blob funkcija se koristi i za upload
+            const pdfBlob = createMasterDossierBlob(
                 selectedAsset.name,
                 riskData,
                 designData,
@@ -105,10 +133,10 @@ export const RiskReport: React.FC = () => {
 
             if (uploadError) throw uploadError;
 
-            showToast('Dossier successfully archived to HQ Cloud.', 'success');
+            showToast('Dossier uspješno arhiviran u HQ Cloud.', 'success');
         } catch (error: any) {
             console.error('Upload failed:', error);
-            showToast(`Archive failed: ${error.message}`, 'error');
+            showToast(`Arhiviranje neuspješno: ${error.message}`, 'error');
         } finally {
             setUploading(false);
         }
@@ -121,9 +149,13 @@ export const RiskReport: React.FC = () => {
         return 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10';
     };
 
+    const hasData = riskData || designData;
+
     return (
         <div className="animate-fade-in pb-12 space-y-8 max-w-7xl mx-auto">
             
+            {/* ... TOP BAR and HEADER ostaju isti ... */}
+
             {/* TOP BAR */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <BackButton text={t('actions.back', 'Return to Hub')} />
@@ -146,21 +178,21 @@ export const RiskReport: React.FC = () => {
             {/* HEADER */}
             <div className="text-center py-6 animate-fade-in-up">
                 <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase mb-2">
-                    {t('riskReport.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('riskReport.dossier')}</span>
+                    {t('riskReport.title', 'Project')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">{t('riskReport.dossier', 'Master Dossier')}</span>
                 </h1>
                 <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
-                    {t('riskReport.subtitle')}
+                    {t('riskReport.subtitle', 'Comprehensive risk and design summary for enterprise archiving.')}
                 </p>
             </div>
 
             {/* CONTENT AREA */}
             {!selectedAsset ? (
                  <GlassCard className="text-center py-20 border-dashed border-slate-700">
-                    <div className="text-6xl mb-6 opacity-20 grayscale">📂</div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{t('riskReport.selectPromptTitle')}</h3>
-                    <p className="text-slate-400 mb-8">{t('riskReport.selectPromptDesc')}</p>
-                    <ModernButton onClick={() => navigateTo('globalMap')} variant="secondary">Select Asset from Map</ModernButton>
-                </GlassCard>
+                     <div className="text-6xl mb-6 opacity-20 grayscale">📂</div>
+                     <h3 className="text-2xl font-bold text-white mb-2">{t('riskReport.selectPromptTitle', 'Asset Not Loaded')}</h3>
+                     <p className="text-slate-400 mb-8">{t('riskReport.selectPromptDesc', 'Please select an asset to generate its Dossier.')}</p>
+                     <ModernButton onClick={() => navigateTo('globalMap')} variant="secondary">Select Asset from Map</ModernButton>
+                 </GlassCard>
             ) : loading ? (
                 <div className="h-96 flex items-center justify-center">
                     <Spinner text="Compiling Data..." size="lg" />
@@ -170,13 +202,14 @@ export const RiskReport: React.FC = () => {
                     
                     {/* LEFT COLUMN: RISK DIAGNOSTIC */}
                     <GlassCard 
-                        title={t('riskReport.riskDiagnostic')} 
+                        title={t('riskReport.riskDiagnostic', 'Risk Diagnostic')} 
                         subtitle={riskData ? `ID: ${riskData.id.slice(0,8)}` : 'NO DATA'}
                         className="h-full flex flex-col"
                         action={<span className="text-2xl">🛡️</span>}
                     >
                         {riskData ? (
                             <div className="space-y-6">
+                                {/* ... (prikaz Risk Level, Gap Score, Engineer Notes) ... */}
                                 <div className="flex justify-between items-center p-4 rounded-xl border bg-slate-900/50 border-slate-700">
                                     <span className="text-slate-400 text-sm font-bold uppercase tracking-wider">{t('riskReport.riskLevel')}</span>
                                     <span className={`text-xl font-black uppercase px-3 py-1 rounded border ${getRiskColor(riskData.risk_level)}`}>
@@ -208,9 +241,9 @@ export const RiskReport: React.FC = () => {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center h-64 text-center">
-                                <p className="text-slate-500 mb-6">{t('riskReport.noRiskData')}</p>
+                                <p className="text-slate-500 mb-6">{t('riskReport.noRiskData', 'No latest risk assessment found.')}</p>
                                 <ModernButton onClick={() => navigateTo('riskAssessment')} variant="secondary" icon={<span>🩺</span>}>
-                                    {t('riskReport.runDiagnostics')}
+                                    {t('riskReport.runDiagnostics', 'Run Diagnostics')}
                                 </ModernButton>
                             </div>
                         )}
@@ -218,13 +251,14 @@ export const RiskReport: React.FC = () => {
 
                     {/* RIGHT COLUMN: TECHNICAL DESIGN */}
                     <GlassCard 
-                        title={t('riskReport.technicalDesign')}
+                        title={t('riskReport.technicalDesign', 'Technical Design')}
                         subtitle={designData ? `REV: ${designData.created_at.slice(0,10)}` : 'NO DATA'}
                         className="h-full flex flex-col"
                         action={<span className="text-2xl">⚙️</span>}
                     >
                        {designData ? (
                             <div className="space-y-6">
+                                {/* ... (prikaz Configuration, Turbine, Power Output/Annual Energy) ... */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
                                         <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">{t('riskReport.configuration')}</div>
@@ -238,26 +272,26 @@ export const RiskReport: React.FC = () => {
 
                                 <div className="p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 flex justify-between items-end">
                                     <div>
-                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.calcOutput')}</span>
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.calcOutput', 'Rated Power Output')}</span>
                                         <span className="text-4xl font-black text-white tracking-tighter">{designData.calculations?.powerMW} <span className="text-lg font-medium text-slate-500">MW</span></span>
                                     </div>
                                     <div className="text-right">
-                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.annualEnergy')}</span>
+                                        <span className="text-slate-400 text-xs font-bold uppercase tracking-wider block mb-1">{t('riskReport.annualEnergy', 'Annual Energy Gen.')}</span>
                                         <span className="text-2xl font-bold text-emerald-400">{designData.calculations?.energyGWh || designData.calculations?.annualGWh} <span className="text-sm text-slate-500">GWh</span></span>
                                     </div>
                                 </div>
                             </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center h-64 text-center">
-                                <p className="text-slate-500 mb-6">{t('riskReport.noDesignData')}</p>
+                                <p className="text-slate-500 mb-6">{t('riskReport.noDesignData', 'No latest technical design found.')}</p>
                                 <ModernButton onClick={() => navigateTo('hppBuilder')} variant="secondary" icon={<span>📐</span>}>
-                                    {t('riskReport.openStudio')}
+                                    {t('riskReport.openStudio', 'Open Design Studio')}
                                 </ModernButton>
                             </div>
                         )}
                     </GlassCard>
 
-                    {/* BOTTOM ACTION BAR (FULL WIDTH) */}
+                    {/* BOTTOM ACTION BAR (FULL WIDTH) - DODANE FUNKCIONALNOSTI ZA PREVIEW */}
                     <div className="lg:col-span-2 mt-4 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
                         <div className="relative overflow-hidden rounded-2xl p-[1px] bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600">
                             <div className="bg-slate-900 rounded-[15px] p-8 text-center relative overflow-hidden">
@@ -265,15 +299,28 @@ export const RiskReport: React.FC = () => {
                                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-cyan-500/5 blur-3xl pointer-events-none"></div>
 
                                 <div className="relative z-10">
-                                    <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{t('riskReport.compileTitle')}</h3>
+                                    <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{t('riskReport.compileTitle', 'Compile Master Dossier')}</h3>
                                     <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-sm">
-                                        {t('riskReport.compileDesc')}
+                                        {t('riskReport.compileDesc', 'Combine the latest Risk Diagnostic and Technical Design into a single, comprehensive PDF document for official use.')}
                                     </p>
                                     
                                     <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                        
+                                        {/* NOVO DUGME: PREVIEW & PRINT */}
                                         <ModernButton 
-                                            onClick={handleDownload}
-                                            disabled={!riskData && !designData}
+                                            onClick={() => handleGenerateDossier(true)} // true = otvori preview
+                                            disabled={!hasData}
+                                            variant="secondary"
+                                            icon={<span>👁️</span>}
+                                            className="min-w-[200px]"
+                                        >
+                                            {t('actions.previewPrint', 'Preview & Print')}
+                                        </ModernButton>
+                                        
+                                        {/* AŽURIRANO DUGME: DOWNLOAD (Sada koristi novu funkciju) */}
+                                        <ModernButton 
+                                            onClick={() => handleGenerateDossier(false)} // false = skini direktno
+                                            disabled={!hasData}
                                             variant="secondary"
                                             icon={<span>⬇️</span>}
                                             className="min-w-[200px]"
@@ -281,15 +328,16 @@ export const RiskReport: React.FC = () => {
                                             {t('questionnaire.downloadPDF', 'Download Local Copy')}
                                         </ModernButton>
 
+                                        {/* DUGME: UPLOAD TO HQ */}
                                         <ModernButton 
                                             onClick={handleUploadToHQ}
-                                            disabled={(!riskData && !designData) || uploading}
+                                            disabled={!hasData || uploading}
                                             variant="primary"
                                             isLoading={uploading}
                                             icon={<span>🚀</span>}
                                             className="min-w-[240px] shadow-cyan-500/20"
                                         >
-                                            {(!riskData && !designData) ? t('riskReport.noDataButton') : 'Submit to HQ Archive'}
+                                            {!hasData ? t('riskReport.noDataButton', 'No Data') : 'Submit to HQ Archive'}
                                         </ModernButton>
                                     </div>
                                 </div>
@@ -302,4 +350,3 @@ export const RiskReport: React.FC = () => {
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.

@@ -59,13 +59,17 @@
   "login": {
     "title": "Prijava u AnoHUB",
     "subtitle": "Enterprise Pristup",
+    "instructions": "Molimo potvrdite svoje akreditive.",
     "emailLabel": "Email Adresa",
     "passwordLabel": "Lozinka",
     "signInButton": "Prijavi se",
+    "guestButton": "Nastavi kao Gost",
+    "or": "Ili",
     "loading": "Autentifikacija...",
     "error": "Greška pri prijavi",
     "magicLink": "Pošalji Magic Link",
-    "footer": "Samo za ovlašteno osoblje"
+    "footer": "Samo za ovlašteno osoblje",
+    "guestWelcome": "Dobrodošli, gostujući inženjeru!"
   },
   "riskReport": {
     "title": "Projektni",

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useAuth } from '../contexts/AuthContext'; // Pazi da putanja odgovara tvojoj strukturi
+import { useToast } from '../contexts/ToastContext';
 import { useTranslation } from 'react-i18next';
-import { LanguageSelector } from './LanguageSelector.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { LanguageSelector } from './LanguageSelector';
+import { GlassCard } from './ui/GlassCard'; // Provjeri putanje importa
+import { ModernInput } from './ui/ModernInput';
+import { ModernButton } from './ui/ModernButton';
 
-// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Login: React.FC = () => {
-    const { signIn, signInAsGuest } = useAuth(); // <--- Uzimamo i signInAsGuest
+    const { signIn, signInAsGuest } = useAuth();
     const { showToast } = useToast();
     const { t } = useTranslation();
 
@@ -32,7 +31,7 @@ export const Login: React.FC = () => {
 
     const handleGuestLogin = () => {
         signInAsGuest();
-        showToast("Welcome, Guest Engineer!", "success");
+        showToast(t('login.guestWelcome', "Welcome, Guest Engineer!"), "success");
     };
 
     return (
@@ -43,6 +42,7 @@ export const Login: React.FC = () => {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '2s' }}></div>
             </div>
 
+            {/* Language Selector - Top Right */}
             <div className="absolute top-6 right-6 z-20">
                 <LanguageSelector />
             </div>
@@ -99,7 +99,9 @@ export const Login: React.FC = () => {
                             {/* GUEST BUTTON */}
                             <div className="relative flex py-2 items-center">
                                 <div className="flex-grow border-t border-slate-700"></div>
-                                <span className="flex-shrink-0 mx-4 text-slate-500 text-[10px] uppercase">Or</span>
+                                <span className="flex-shrink-0 mx-4 text-slate-500 text-[10px] uppercase">
+                                    {t('login.or', 'Or')}
+                                </span>
                                 <div className="flex-grow border-t border-slate-700"></div>
                             </div>
 
@@ -110,7 +112,7 @@ export const Login: React.FC = () => {
                                 variant="secondary" 
                                 icon={<span>👤</span>}
                             >
-                                Continue as Guest
+                                {t('login.guestButton', 'Continue as Guest')}
                             </ModernButton>
                         </div>
                     </form>
@@ -125,4 +127,3 @@ export const Login: React.FC = () => {
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.

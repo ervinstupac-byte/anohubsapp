@@ -3,23 +3,24 @@ import { initReactI18next } from 'react-i18next';
 
 // Importuj JSON fajlove
 import en from './en.json';
-import bs from './bs.json'; // <--- NOVO
-import de from './de.json'; // <--- NOVO
+import bs from './bs.json';
+// import de from './de.json'; // Njemački privremeno isključen
+
+// Provjeri da li postoji sačuvani jezik u memoriji preglednika
+const savedLanguage = localStorage.getItem('appLanguage') || 'en';
 
 i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: en
     },
-    bs: { // <--- NOVO
+    bs: {
       translation: bs
-    },
-    de: { // <--- NOVO
-      translation: de
     }
+    // de: { translation: de } // Isključeno za sada
   },
-  lng: 'en', // Defaultni jezik
-  fallbackLng: 'en', // Ako prevod fali, koristi engleski
+  lng: savedLanguage, // Koristi sačuvani jezik ili default (en)
+  fallbackLng: 'en',
   interpolation: { escapeValue: false }
 });
 

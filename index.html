@@ -15,55 +15,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <style>
-      :root {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      }
-      
-      html, body {
-        background-color: #020617;
-        color: white;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        min-height: 100vh;
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      /* Loader Logic */
-      #root:empty {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100vw;
-      }
-
-      #root:empty::before {
-        content: 'AnoHUB';
-        font-weight: 900;
-        font-size: 3rem;
-        letter-spacing: -0.05em;
-        color: white;
-        margin-bottom: 1rem;
-      }
-
-      #root:empty::after {
-        content: 'ESTABLISHING SECURE CONNECTION...';
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10px;
-        letter-spacing: 0.2em;
-        color: #06b6d4; /* Cyan */
-        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      @keyframes pulse {
-        0%, 100% { opacity: 0.3; }
-        50% { opacity: 1; }
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>

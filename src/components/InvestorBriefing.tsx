@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { generateFinancialReport } from '../utils/pdfGenerator.ts';
+import { createFinancialReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
 // ISPRAVKA IMPORTA: Uvozimo AssetPicker kao komponentu
-import { AssetPicker } from './AssetPicker.tsx'; 
+import { AssetPicker } from './AssetPicker.tsx';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
-import { useAssetContext } from '../contexts/AssetContext.tsx'; 
-import { GlassCard } from './ui/GlassCard.tsx'; 
-import { ModernInput } from './ui/ModernInput.tsx'; 
-import { ModernButton } from './ui/ModernButton.tsx'; 
+import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernInput } from './ui/ModernInput.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
 
 // Ključ koji koristi HPP Builder za spremanje
 const LOCAL_STORAGE_KEY_HPP = 'hpp-builder-settings';
@@ -22,7 +22,7 @@ export const InvestorBriefing: React.FC = () => {
 
     // --- STATE ---
     const [importedDesign, setImportedDesign] = useState<any>(null);
-    
+
     const [params, setParams] = useState({
         electricityPrice: 80, // EUR/MWh
         interestRate: 5,      // %
@@ -59,7 +59,7 @@ export const InvestorBriefing: React.FC = () => {
     useEffect(() => {
         // Ako imamo odabran asset, koristimo njegov kapacitet.
         // AKO NEMAMO, ali imamo HPP Dizajn, koristimo dizajn! (Smart Fallback)
-        
+
         let powerMW = selectedAsset?.capacity || 0;
         let annualGenerationGWh = 0;
 
@@ -75,19 +75,19 @@ export const InvestorBriefing: React.FC = () => {
 
         // Izračun energije (GWh)
         if (importedDesign && !selectedAsset) {
-              // Koristimo logiku iz HPP Buildera za GWh
-              const capacityFactor = importedDesign.flowVariation === 'stable' ? 0.85 : 0.6;
-              annualGenerationGWh = (effectivePower * 8760 * capacityFactor) / 1000;
+            // Koristimo logiku iz HPP Buildera za GWh
+            const capacityFactor = importedDesign.flowVariation === 'stable' ? 0.85 : 0.6;
+            annualGenerationGWh = (effectivePower * 8760 * capacityFactor) / 1000;
         } else {
-              // Generička procjena (50% capacity factor)
-              annualGenerationGWh = effectivePower * 8760 * 0.5 / 1000;
+            // Generička procjena (50% capacity factor)
+            annualGenerationGWh = effectivePower * 8760 * 0.5 / 1000;
         }
 
         // FINANCIJSKA MATEMATIKA
-        const totalRevenue = annualGenerationGWh * 1000 * params.electricityPrice; 
-        
+        const totalRevenue = annualGenerationGWh * 1000 * params.electricityPrice;
+
         // Empirijska formula za CAPEX (1.8M EUR po MW)
-        const estimatedCapex = effectivePower * 1800000; 
+        const estimatedCapex = effectivePower * 1800000;
         const annualOpex = estimatedCapex * (params.opexPercent / 100);
 
         const cashFlow = totalRevenue - annualOpex;
@@ -95,7 +95,7 @@ export const InvestorBriefing: React.FC = () => {
         const paybackPeriod = cashFlow > 0 ? estimatedCapex / cashFlow : 0;
 
         const totalLifetimeCost = estimatedCapex + (annualOpex * params.lifespan);
-        const totalLifetimeEnergy = annualGenerationGWh * 1000 * params.lifespan; 
+        const totalLifetimeEnergy = annualGenerationGWh * 1000 * params.lifespan;
         const lcoe = totalLifetimeEnergy > 0 ? totalLifetimeCost / totalLifetimeEnergy : 0;
 
         setKpis({
@@ -114,8 +114,8 @@ export const InvestorBriefing: React.FC = () => {
     // --- PDF GENERATION ---
     const handleDownloadReport = () => {
         const assetName = selectedAsset?.name || (importedDesign ? "HPP Concept Design" : "Generic Project");
-        
-        generateFinancialReport(
+
+        const blob = createFinancialReportBlob(
             assetName,
             {
                 lcoe: `€${kpis.lcoe.toFixed(2)} / MWh`,
@@ -123,18 +123,19 @@ export const InvestorBriefing: React.FC = () => {
                 capex: `€${(kpis.capex / 1000000).toFixed(1)}M`
             }
         );
+        openAndDownloadBlob(blob, 'financial_briefing.pdf');
         showToast(t('investorBriefing.downloaded', 'Financial Briefing Downloaded'), 'success');
     };
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-            
+
             {/* HERO HEADER */}
             <div className="text-center space-y-6 pt-6">
                 <div className="flex justify-between items-center absolute top-0 w-full max-w-7xl px-4">
                     <BackButton text={t('actions.back', 'Back to Hub')} />
                 </div>
-                
+
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
                         {t('investorBriefing.title', 'Investor Briefing').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">{t('investorBriefing.title', 'Investor Briefing').split(' ')[1]}</span>
@@ -151,34 +152,34 @@ export const InvestorBriefing: React.FC = () => {
 
             {/* MAIN GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
-                
+
                 {/* LEFT COLUMN: ASSUMPTIONS */}
                 <div className="space-y-6">
-                    <GlassCard 
-                        title={t('investorBriefing.marketAssumptions')} 
+                    <GlassCard
+                        title={t('investorBriefing.marketAssumptions')}
                         className="bg-slate-900/60"
                         action={<span className="text-xl">🎚️</span>}
                     >
                         <div className="space-y-4">
-                            <ModernInput 
+                            <ModernInput
                                 label={t('investorBriefing.electricityPrice')}
                                 type="number"
                                 value={params.electricityPrice}
-                                onChange={(e) => setParams({...params, electricityPrice: parseFloat(e.target.value) || 0})}
+                                onChange={(e) => setParams({ ...params, electricityPrice: parseFloat(e.target.value) || 0 })}
                                 icon={<span>€</span>}
                             />
-                            <ModernInput 
+                            <ModernInput
                                 label={t('investorBriefing.interestRate')}
                                 type="number"
                                 value={params.interestRate}
-                                onChange={(e) => setParams({...params, interestRate: parseFloat(e.target.value) || 0})}
+                                onChange={(e) => setParams({ ...params, interestRate: parseFloat(e.target.value) || 0 })}
                                 icon={<span>%</span>}
                             />
-                            <ModernInput 
+                            <ModernInput
                                 label={t('investorBriefing.projectLifespan')}
                                 type="number"
                                 value={params.lifespan}
-                                onChange={(e) => setParams({...params, lifespan: parseFloat(e.target.value) || 0})}
+                                onChange={(e) => setParams({ ...params, lifespan: parseFloat(e.target.value) || 0 })}
                                 icon={<span>📅</span>}
                             />
                         </div>
@@ -193,8 +194,8 @@ export const InvestorBriefing: React.FC = () => {
                                     {selectedAsset ? 'Active Asset Data' : (importedDesign ? 'HPP Design Studio Link' : 'Generic Model')}
                                 </h4>
                                 <p className="text-xs text-slate-400 leading-relaxed">
-                                    Calculating based on 
-                                    <strong className="text-white ml-1">{kpis.powerMW.toFixed(1)} MW</strong> capacity 
+                                    Calculating based on
+                                    <strong className="text-white ml-1">{kpis.powerMW.toFixed(1)} MW</strong> capacity
                                     and <strong className="text-white">{kpis.energyGWh.toFixed(1)} GWh/yr</strong> output.
                                 </p>
                                 {importedDesign && !selectedAsset && (
@@ -210,7 +211,7 @@ export const InvestorBriefing: React.FC = () => {
                 {/* RIGHT COLUMN: KPI DASHBOARD */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        
+
                         {/* ROI CARD (Premium) */}
                         <GlassCard className="bg-gradient-to-br from-purple-900/40 to-slate-900 border-purple-500/30">
                             <p className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">{t('investorBriefing.roi')}</p>
@@ -263,7 +264,7 @@ export const InvestorBriefing: React.FC = () => {
                             </div>
                         </div>
 
-                        <ModernButton 
+                        <ModernButton
                             onClick={handleDownloadReport}
                             variant="primary"
                             className="min-w-[220px] shadow-purple-500/20"

@@ -5,7 +5,7 @@ import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx'; 
 import { useAuth } from '../contexts/AuthContext.tsx'; 
 import { supabase } from '../services/supabaseClient.ts'; 
-import { generateCalculationReport } from '../utils/pdfGenerator.ts'; 
+import { createCalculationReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts'; 
 import { TURBINE_CATEGORIES } from '../constants.ts';
 // ISPRAVKA 1: Uvezi AssetPicker kao komponentu
 import { AssetPicker } from './AssetPicker.tsx'; 
@@ -14,7 +14,6 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 import { GlassCard } from './ui/GlassCard.tsx'; 
 import { ModernButton } from './ui/ModernButton.tsx'; 
-// ISPRAVKA 3: Dodan ModernInput (rješava TS2304)
 import { ModernInput } from './ui/ModernInput.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
@@ -89,7 +88,7 @@ export const HPPBuilder: React.FC = () => {
         // Specifična brzina: Ns = N * sqrt(Q) / H^(3/4)
         // Pretpostavljamo tipičnu brzinu N=1000, pa koristimo pojednostavljeni indeks.
         const specificSpeedIndex = (1000 * Math.sqrt(settings.flow)) / Math.pow(settings.head, 0.75); 
-
+    
         return {
             powerMW: parseFloat(powerMW.toFixed(2)),
             energyGWh: parseFloat(annualGWh.toFixed(2)),
@@ -137,7 +136,7 @@ export const HPPBuilder: React.FC = () => {
         const maxScore = Math.max(...recs.map(r => r.score));
         return recs.map(r => ({ ...r, isBest: r.score === maxScore && r.score > 0 })).sort((a, b) => b.score - a.score);
     }, [settings, calculations.n_sq]);
-
+    
     const updateSettings = (key: keyof HPPSettings, value: any) => {
         setSettings(prev => ({...prev, [key]: value}));
     };
@@ -202,7 +201,8 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const handleGeneratePDF = () => {
-        generateCalculationReport(settings, calculations, recommendations, selectedAsset?.name);
+        const blob = createCalculationReportBlob(settings, calculations, recommendations, selectedAsset?.name);
+        openAndDownloadBlob(blob, 'hpp_design_report.pdf');
         showToast('Design Report PDF Generated.', 'success');
     };
 

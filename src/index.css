@@ -10,9 +10,48 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #020617; /* Slate 950 - Dublja crna za bolji kontrast */
+  background-color: #020617; /* Slate 950 base */
   color: #e2e8f0; /* Slate 200 */
   overflow-x: hidden;
+
+  /* --- CYBERPUNK GRID BACKGROUND --- */
+  /* Ovo dodaje dubinu i tech osjećaj */
+  background-image: 
+    radial-gradient(circle at 50% 0%, #164e63 0%, transparent 40%), /* Glow na vrhu */
+    linear-gradient(#1e293b 1px, transparent 1px), /* Horizontalne linije */
+    linear-gradient(90deg, #1e293b 1px, transparent 1px); /* Vertikalne linije */
+  background-size: 100% 100%, 40px 40px, 40px 40px; /* Veličina mreže */
+  min-height: 100vh;
+}
+
+/* --- AUTOMATIC FORM STYLING (Popravak za Login) --- */
+/* Ovo automatski stilizira sva input polja da budu tamna/staklena */
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="number"],
+input[type="search"],
+select, 
+textarea {
+  background-color: rgba(15, 23, 42, 0.6) !important; /* Tamna prozirna */
+  border: 1px solid rgba(51, 65, 85, 0.5) !important; /* Slate border */
+  color: white !important;
+  border-radius: 0.5rem; /* Zaobljeni rubovi */
+  padding: 0.6rem 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Glow efekt kada kliknete na polje */
+input:focus, select:focus, textarea:focus {
+  border-color: #06b6d4 !important; /* Cyan border */
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important; /* Cyan glow prsten */
+  background-color: rgba(15, 23, 42, 0.9) !important;
+}
+
+/* Placeholder tekst da bude čitljiv ali suptilan */
+input::placeholder, textarea::placeholder {
+  color: #94a3b8; /* Slate 400 */
 }
 
 /* Globalna selekcija teksta (Cyberpunk Highlighting) */
@@ -24,22 +63,22 @@ body {
 
 /* --- CUSTOM SCROLLBAR (Stealth Mode) --- */
 ::-webkit-scrollbar {
-  width: 6px; /* Još tanji */
+  width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* Prozirna traka da se stapa s pozadinom */
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(71, 85, 105, 0.5); /* Slate 600, poluproziran */
+  background: rgba(71, 85, 105, 0.5);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #06b6d4; /* Cyan 500 na hover */
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5); /* Glow efekt na hover */
+  background: #06b6d4;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
 }
 
 /* --- ADVANCED GLASSMORPHISM UTILITIES --- */
@@ -61,7 +100,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* 3. Input Glass (za forme) */
+/* 3. Input Glass (Custom utility ako zatreba specifično) */
 .glass-input {
   background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(10px);
@@ -72,7 +111,7 @@ body {
 
 .glass-input:focus {
   background: rgba(15, 23, 42, 0.8);
-  border-color: rgba(34, 211, 238, 0.5); /* Cyan focus */
+  border-color: rgba(34, 211, 238, 0.5);
   box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
   outline: none;
 }
@@ -165,4 +204,37 @@ body {
     color: black !important;
     box-shadow: none !important;
   }
+}
+
+/* --- LOADER LOGIC (Moved from index.html) --- */
+#root:empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#root:empty::before {
+  content: 'AnoHUB';
+  font-weight: 900;
+  font-size: 3rem;
+  letter-spacing: -0.05em;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+#root:empty::after {
+  content: 'ESTABLISHING SECURE CONNECTION...';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #06b6d4; /* Cyan */
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
