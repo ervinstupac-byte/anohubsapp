@@ -5,6 +5,7 @@ import { HashRouter, useLocation, useNavigate, Route, Routes, useParams } from '
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
+import { HPPDesignProvider } from './contexts/HPPDesignContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 import { AssetProvider } from './contexts/AssetContext.tsx';
@@ -212,17 +213,19 @@ const App: React.FC = () => {
             <AuditProvider>
                 <AuthProvider>
                     <QuestionnaireProvider>
-                        <RiskProvider>
-                            <AssetProvider>
-                                <TelemetryProvider>
-                                    <HashRouter>
-                                        <Routes>
-                                            <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                        </Routes>
-                                    </HashRouter>
-                                </TelemetryProvider>
-                            </AssetProvider>
-                        </RiskProvider>
+                        <HPPDesignProvider>
+                            <RiskProvider>
+                                <AssetProvider>
+                                    <TelemetryProvider>
+                                        <HashRouter>
+                                            <Routes>
+                                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                            </Routes>
+                                        </HashRouter>
+                                    </TelemetryProvider>
+                                </AssetProvider>
+                            </RiskProvider>
+                        </HPPDesignProvider>
                     </QuestionnaireProvider>
                 </AuthProvider>
             </AuditProvider>

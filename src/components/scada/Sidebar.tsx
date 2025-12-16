@@ -1,9 +1,30 @@
 import React from 'react';
 
-export const Sidebar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface SidebarProps {
+    children: React.ReactNode;
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ children, isOpen, onClose }) => {
     return (
-        <aside className="w-[280px] bg-slate-950 border-r border-slate-800 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl">
-            {children}
-        </aside>
+        <>
+            {/* Backdrop for mobile */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/60 z-30 lg:hidden backdrop-blur-sm"
+                    onClick={onClose}
+                />
+            )}
+
+            {/* Sidebar */}
+            <aside className={`
+                w-[280px] bg-slate-950 border-r border-slate-800 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl
+                transition-transform duration-300 ease-in-out
+                ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+                {children}
+            </aside>
+        </>
     );
 };

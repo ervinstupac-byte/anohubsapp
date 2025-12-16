@@ -4,6 +4,7 @@ import { BackButton } from './BackButton.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
+import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 // ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
 import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
@@ -21,9 +22,10 @@ export const RiskReport: React.FC = () => {
     const { t } = useTranslation();
     const { showToast } = useToast();
     const { answers, description } = useQuestionnaire();
+    const { currentDesign } = useHPPDesign(); // ✅ Read HPP Design from context
 
     const [cloudRiskData, setCloudRiskData] = useState<any>(null);
-    const [designData, setDesignData] = useState<any>(null);
+    const [cloudDesignData, setCloudDesignData] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
 
@@ -69,7 +71,7 @@ export const RiskReport: React.FC = () => {
         const fetchData = async () => {
             if (!selectedAsset) {
                 setCloudRiskData(null);
-                setDesignData(null);
+                setCloudDesignData(null);
                 return;
             }
 
@@ -94,7 +96,7 @@ export const RiskReport: React.FC = () => {
                     .single();
 
                 setCloudRiskData(risk);
-                setDesignData(design);
+                setCloudDesignData(design);
             } catch (error) {
                 console.log('Status check:', error);
             } finally {
@@ -108,6 +110,10 @@ export const RiskReport: React.FC = () => {
     // --- MERGE LOCAL AND CLOUD DATA (Prioritize local if exists) ---
     const riskData = localRiskData || cloudRiskData;
     const riskDataStatus = localRiskData ? 'draft' : (cloudRiskData ? 'synced' : 'none');
+
+    // Design data merge (local from context > cloud from Supabase)
+    const designData = currentDesign || cloudDesignData;
+    const designDataStatus = currentDesign ? 'draft' : (cloudDesignData ? 'synced' : 'none');
 
     // --- 2. HANDLER: GENERATE AND ACTION (DOWNLOAD or PREVIEW) ---
     const handleGenerateDossier = (openPreview: boolean) => {
@@ -311,12 +317,17 @@ export const RiskReport: React.FC = () => {
                     {/* RIGHT COLUMN: TECHNICAL DESIGN */}
                     <GlassCard
                         title={t('riskReport.technicalDesign', 'Technical Design')}
-                        subtitle={designData ? `REV: ${designData.created_at.slice(0, 10)}` : 'NO DATA'}
+                        subtitle={designData ? `REV: ${designData.created_at ? designData.created_at.slice(0, 10) : 'DRAFT'}` : 'NO DATA'}
                         className="h-full flex flex-col"
                         action={<span className="text-2xl">⚙️</span>}
                     >
                         {designData ? (
                             <div className="space-y-6">
+                                {/* STATUS BADGE */}
+                                <div className="flex justify-end">
+                                    {getStatusBadge(designDataStatus)}
+                                </div>
+
                                 {/* ... (prikaz Configuration, Turbine, Power Output/Annual Energy) ... */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">

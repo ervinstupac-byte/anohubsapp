@@ -51,12 +51,12 @@ export const Hub: React.FC = () => {
     const { logAction } = useAudit();
 
     // SCADA State
-    const [showMap, setShowMap] = useState(false);
     const [totalPower, setTotalPower] = useState(0);
     const [alarmActive, setAlarmActive] = useState(false);
 
-    // Wizard State
+    const [showMap, setShowMap] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         const power = Object.values(telemetry).reduce((acc, curr) => acc + curr.output, 0);
@@ -85,18 +85,36 @@ export const Hub: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-black text-slate-200 font-sans selection:bg-cyan-500/30">
+        <div className="w-full h-screen bg-slate-950 text-white flex relative overflow-hidden">
 
             {/* WIZARD MODAL */}
             <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />
 
+            {/* Hamburger Menu Button (Mobile Only) */}
+            <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900/90 border border-slate-700 rounded-lg backdrop-blur-md hover:bg-slate-800 transition-colors"
+                aria-label="Toggle menu"
+            >
+                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {isSidebarOpen ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    )}
+                </svg>
+            </button>
+
             {/* SIDEBAR */}
-            <Sidebar>
+            <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
                 {/* 1. Fleet Overview at Top */}
                 <FleetOverview
                     onToggleMap={() => setShowMap(!showMap)}
                     showMap={showMap}
-                    onRegisterAsset={() => setIsWizardOpen(true)}
+                    onRegisterAsset={() => {
+                        setIsWizardOpen(true);
+                        setIsSidebarOpen(false);
+                    }}
                 />
 
                 {/* 2. Operational Modules (Primary) */}
@@ -111,6 +129,7 @@ export const Hub: React.FC = () => {
                             onClick={() => {
                                 logAction('MODULE_OPEN', mod.title, 'SUCCESS');
                                 navigateTo(mod.id as AppView);
+                                setIsSidebarOpen(false);
                             }}
                         />
                     ))}
@@ -129,6 +148,7 @@ export const Hub: React.FC = () => {
                             onClick={() => {
                                 logAction('MODULE_OPEN', mod.title, 'SUCCESS');
                                 navigateTo(mod.id as AppView);
+                                setIsSidebarOpen(false);
                             }}
                         />
                     ))}
@@ -142,7 +162,7 @@ export const Hub: React.FC = () => {
             </Sidebar>
 
             {/* MAIN CONTENT AREA */}
-            <main className="ml-[280px] h-screen flex flex-col relative bg-slate-950">
+            <main className="ml-0 lg:ml-[280px] w-full lg:w-[calc(100%-280px)] h-screen flex flex-col relative bg-slate-950 overflow-hidden">
 
                 {/* SCADA HEADER (Digital Panel) */}
                 <header className="h-20 border-b border-slate-800 bg-slate-950 flex items-center justify-between px-8 shadow-sm z-30">

@@ -15,6 +15,7 @@ import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
+import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -60,6 +61,7 @@ export const HPPBuilder: React.FC = () => {
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
     const { t } = useTranslation();
+    const { setDesign } = useHPPDesign();
 
     // --- STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
@@ -136,7 +138,21 @@ export const HPPBuilder: React.FC = () => {
 
         const maxScore = Math.max(...recs.map(r => r.score));
         return recs.map(r => ({ ...r, isBest: r.score === maxScore && r.score > 0 })).sort((a, b) => b.score - a.score);
-    }, [settings, calculations.n_sq, t]);
+    }, [settings, calculations, t]);
+
+    // --- SAVE TO CONTEXT WHENEVER CALCULATIONS CHANGE ---
+    useEffect(() => {
+        if (calculations && recommendations.length > 0) {
+            const bestTurbine = recommendations.find(r => r.isBest);
+            setDesign({
+                design_name: `Draft-${new Date().toISOString().slice(0, 10)}`,
+                recommended_turbine: bestTurbine?.key || 'Unknown',
+                parameters: settings,
+                calculations: calculations,
+                asset_id: selectedAsset?.id
+            });
+        }
+    }, [calculations, recommendations, settings, selectedAsset, setDesign]);
 
     const updateSettings = (key: keyof HPPSettings, value: any) => {
         setSettings(prev => ({ ...prev, [key]: value }));
