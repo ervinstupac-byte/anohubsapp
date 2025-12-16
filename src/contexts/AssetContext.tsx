@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { supabase } from '../services/supabaseClient.ts';
 import type { Asset, AssetContextType } from '../types.ts';
 import { useAudit } from './AuditContext.tsx';
+import { useAuth } from './AuthContext.tsx';
 import { debounce } from '../utils/performance.ts';
 
 const AssetContext = createContext<AssetContextType | undefined>(undefined);
@@ -62,11 +63,12 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
     };
 
+    const { isGuest } = useAuth(); // Hook to check guest status
+
     // --- NOVA FUNKCIJA: DODAVANJE NOVE TURBINE ---
     const addAsset = async (newAssetData: Omit<Asset, 'id'>) => {
         try {
             // 1. Pripremi podatke za Supabase (mapiraj Frontend -> Baza)
-            // Pretpostavljamo da baza ima kolone: name, type, location, lat, lng, power_output
             const dbPayload = {
                 name: newAssetData.name,
                 type: newAssetData.type,
@@ -77,27 +79,44 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 status: 'Operational' // Default status
             };
 
-            // 2. Insert u bazu i vrati taj novi red
-            const { data, error } = await supabase
-                .from('assets')
-                .insert([dbPayload])
-                .select()
-                .single();
+            let newAsset: Asset;
 
-            if (error) throw error;
+            if (isGuest) {
+                // --- GUEST MODE: MOCK INSERT ---
+                // Simuliramo mrežni zahtjev
+                await new Promise(resolve => setTimeout(resolve, 800));
 
-            // 3. Mapiraj vraćeni podatak iz baze u Frontend format
-            const newAsset: Asset = {
-                id: data.id.toString(),
-                name: data.name,
-                type: data.type,
-                location: data.location,
-                coordinates: [data.lat, data.lng],
-                capacity: parseFloat(data.power_output),
-                status: data.status
-            };
+                newAsset = {
+                    id: `guest-asset-${Date.now()}`,
+                    name: dbPayload.name,
+                    type: dbPayload.type,
+                    location: dbPayload.location,
+                    coordinates: [dbPayload.lat, dbPayload.lng],
+                    capacity: dbPayload.power_output,
+                    status: dbPayload.status as Asset['status']
+                };
+                console.log('[AssetContext] Guest Mode: Simulating asset creation', newAsset);
+            } else {
+                // --- REAL MODE: SUPABASE INSERT ---
+                const { data, error } = await supabase
+                    .from('assets')
+                    .insert([dbPayload])
+                    .select()
+                    .single();
 
-            // 4. Ažuriraj lokalni state i odmah selektiraj novu turbinu
+                if (error) throw error;
+
+                newAsset = {
+                    id: data.id.toString(),
+                    name: data.name,
+                    type: data.type,
+                    location: data.location,
+                    coordinates: [data.lat, data.lng],
+                    capacity: parseFloat(data.power_output),
+                    status: data.status
+                };
+            }
+
             setAssets(prev => [...prev, newAsset]);
             setSelectedAssetId(newAsset.id);
             logAction('ASSET_REGISTER', newAsset.name, 'SUCCESS');
