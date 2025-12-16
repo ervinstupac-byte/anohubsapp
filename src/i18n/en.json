@@ -3,32 +3,66 @@
     "welcome": "Welcome, {{name}}",
     "subtitle": "Global Standard of Excellence Enforcement Platform.",
     "operationalModules": "Operational Modules",
+    "strategicIntelligence": "Strategic Intelligence",
+    "knowledgeCulture": "Knowledge & Culture",
     "systemStatusConnecting": "CONNECTING...",
     "systemStatusOperational": "OPERATIONAL",
     "risks": "Risks Detected",
-    "designs": "Designs Saved"
+    "designs": "Designs Saved",
+    "fleetOutput": "Fleet Output",
+    "riskFactors": "Risk Factors",
+    "activeContext": "Active Context",
+    "vision": "Vision",
+    "manifesto": "MANIFESTO",
+    "footerText": "Engineered for Perfection",
+    "operatorId": "Operator ID",
+    "tagline": "Architects of Immunity",
+    "info": "INFO"
   },
   "modules": {
     "riskAssessment": "Risk Assessment",
+    "riskAssessmentDesc": "Identify the 'Execution Gap' before failure.",
     "riskReport": "Master Project Dossier",
+    "riskReportDesc": "Consolidated Enterprise Reports.",
     "hppBuilder": "HPP Design Studio",
+    "hppBuilderDesc": "Physics-based turbine design & simulation.",
     "installationGuarantee": "Installation Standard",
+    "installationGuaranteeDesc": "0.05 mm/m protocol enforcement.",
     "globalMap": "Global Asset Map",
+    "globalMapDesc": "Geospatial asset intelligence.",
     "investorBriefing": "Investor Briefing",
+    "investorBriefingDesc": "Financial KPIs and Risk Impact.",
     "contractManagement": "Contract & Legal",
+    "contractManagementDesc": "Warranty protection via data.",
     "digitalIntegrity": "Digital Integrity",
+    "digitalIntegrityDesc": "Blockchain immutable proof.",
     "revitalizationStrategy": "Revitalization Strategy",
+    "revitalizationStrategyDesc": "Life extension strategies.",
     "library": "Component Library",
+    "libraryDesc": "Component failure modes & KPIs.",
     "standardOfExcellence": "Standard of Excellence",
+    "standardOfExcellenceDesc": "The 0.05 mm/m Manifesto.",
     "phaseGuide": "Project Phase Guide",
+    "phaseGuideDesc": "Project lifecycle enforcement.",
     "hppImprovements": "HPP Ino-Hub",
+    "hppImprovementsDesc": "Innovation tracking.",
     "riverWildlife": "River & Wildlife",
+    "riverWildlifeDesc": "Environmental mandate.",
     "genderEquity": "Gender Equity",
+    "genderEquityDesc": "HR Strategy & Culture.",
     "digitalIntroduction": "Digital Introduction"
   },
   "common": {
-    "launch": "Launch Module",
-    "version": "v2.4.0 (Enterprise)"
+    "launch": "LAUNCH",
+    "version": "v2.5.0 (Enterprise)",
+    "system": "SYSTEM",
+    "immune": "IMMUNE",
+    "compromised": "COMPROMISED",
+    "critical": "CRITICAL",
+    "moderate": "MODERATE",
+    "stable": "STABLE",
+    "riskLevel": "Risk Level",
+    "active": "Active"
   },
   "questionnaire": {
     "title": "Diagnostic Report",
@@ -59,13 +93,17 @@
   "login": {
     "title": "Sign In to AnoHUB",
     "subtitle": "Enterprise Access",
+    "instructions": "Please verify your credentials.",
     "emailLabel": "Email Address",
     "passwordLabel": "Password",
     "signInButton": "Sign In",
+    "guestButton": "Continue as Guest",
+    "or": "Or",
     "loading": "Authenticating...",
     "error": "Error signing in",
     "magicLink": "Send Magic Link",
-    "footer": "Authorized Personnel Only"
+    "footer": "Authorized Personnel Only",
+    "guestWelcome": "Welcome, Visiting Engineer!"
   },
   "riskReport": {
     "title": "Project",
@@ -92,10 +130,44 @@
     "compileTitle": "Ready to Compile?",
     "compileDesc": "This action will aggregate the latest snapshots from all modules into a single, watermarked PDF document.",
     "downloadButton": "Download Master Project Dossier",
-    "noDataButton": "No Data to Compile"
+    "noDataButton": "No Data to Compile",
+    "previewOpened": "Dossier opened in new window.",
+    "noDataToGenerate": "No data to generate Dossier.",
+    "generateError": "Error generating PDF",
+    "noDataToArchive": "No data to archive.",
+    "archiveSuccess": "Dossier successfully archived to HQ Cloud.",
+    "archiveError": "Archiving failed: {{error}}",
+    "gapScoreAnalysis": "Gap Score Analysis",
+    "engineerNotes": "Engineer Notes",
+    "noNotes": "No additional notes provided.",
+    "noLatestRisk": "No latest risk assessment found.",
+    "ratedPower": "Rated Power Output",
+    "annualGen": "Annual Energy Gen.",
+    "noLatestDesign": "No latest technical design found.",
+    "submitArchive": "Submit to HQ Archive",
+    "assetNotLoaded": "Asset Not Loaded",
+    "selectAssetPrompt": "Please select an asset to generate its Dossier."
   },
   "actions": {
-    "back": "Back to Hub"
+    "back": "Back to Hub",
+    "previewPrint": "Preview & Print",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "assetPicker": {
+    "selectContext": "Select Asset Context",
+    "registerNew": "+ Register New Asset",
+    "modalTitle": "Register New Asset",
+    "labelName": "Asset Name",
+    "placeholderName": "e.g. HEPP Blagaj",
+    "labelType": "Turbine Type",
+    "labelLocation": "Location",
+    "placeholderLocation": "River, Country",
+    "labelCapacity": "Capacity (MW)",
+    "registerButton": "Register Asset",
+    "validationError": "Please fill all fields correctly, including a valid positive capacity.",
+    "successToast": "New asset registered successfully",
+    "failToast": "Failed to create asset"
   },
   "hppBuilder": {
     "title": "HPP Design Studio",
@@ -125,7 +197,61 @@
     "designNamePlaceholder": "Design Name (e.g. Variant A)",
     "cancel": "Cancel",
     "uploadDesign": "Upload Design",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "chart": {
+      "peltonZone": "PELTON ZONE",
+      "francisZone": "FRANCIS ZONE",
+      "kaplanZone": "KAPLAN ZONE",
+      "headAxis": "HEAD (m)",
+      "flowAxis": "FLOW (m³/s)"
+    },
+    "reasons": {
+      "pelton": {
+        "idealSpeed": "Ideal Specific Speed (Index: {{n}})",
+        "multiJet": "Multi-jet application range",
+        "optimalHead": "Optimal Head range (>200m)",
+        "lowHead": "Head too low for Impulse physics",
+        "erosion": "Resistant to erosion (no seal gaps)"
+      },
+      "francis": {
+        "idealZone": "Ideal Reaction Zone (Index: {{n}})",
+        "standard": "Standard Francis domain",
+        "variableFlow": "Efficiency drops at part load",
+        "erosion": "High erosion risk on guide vanes"
+      },
+      "kaplan": {
+        "highSpeed": "High Specific Speed domain",
+        "lowHead": "Low head specialist",
+        "highHead": "Head too high (Cavitation risk)",
+        "doubleReg": "Double-regulated (Excellent part-load)"
+      },
+      "crossflow": {
+        "efficiency": "Economic Efficiency for small scale",
+        "selfCleaning": "Self-cleaning capability"
+      }
+    },
+    "hydrology": {
+      "stable": "Stable Base Load",
+      "seasonal": "Seasonal Peak/Off-Peak",
+      "variable": "Highly Variable (Flashy)"
+    },
+    "water": {
+      "clean": "Clear Water",
+      "suspended": "Silt Load (Glacial)",
+      "abrasive": "Hard Sediment (Quartz)"
+    },
+    "toasts": {
+      "enterName": "Enter a name.",
+      "selectAsset": "Select an Asset to attach this design to.",
+      "designLinked": "Design linked to {{name}} & saved.",
+      "saveFailed": "Save failed: {{error}}",
+      "loaded": "Loaded: {{name}}",
+      "pdfGenerated": "Design Report PDF Generated."
+    },
+    "units": {
+      "gwhYear": "GWh / year"
+    },
+    "specs": "Specs"
   },
   "investorBriefing": {
     "title": "Investor Briefing",
@@ -152,7 +278,16 @@
     "financialStructure": "Financial Structure (First Year)",
     "revenueInflow": "Revenue (Inflow)",
     "opexOutflow": "OPEX (Outflow)",
-    "downloaded": "Financial Briefing Downloaded"
+    "downloaded": "Financial Briefing Downloaded",
+    "estimatedCapex": "Estimated CAPEX",
+    "capexBasis": "Based on €1.8M/MW avg.",
+    "activeAssetData": "Active Asset Data",
+    "designLink": "HPP Design Studio Link",
+    "genericModel": "Generic Model",
+    "genericProject": "Generic Project",
+    "hppConceptDesign": "HPP Concept Design",
+    "calculatingBasedOn": "Calculating based on <1>{{power}} MW</1> capacity and <3>{{energy}} GWh/yr</3> output.",
+    "liveSync": "LIVE SYNC WITH HPP BUILDER"
   },
   "profile": {
     "loading": "Loading Enterprise Profile...",
@@ -163,6 +298,7 @@
     "fullName": "Full Name",
     "role": "Role / Title",
     "rolePlaceholder": "e.g. Senior Mechanical Lead",
+    "fullNamePlaceholder": "e.g. John Doe",
     "company": "Company / Organization",
     "companyPlaceholder": "e.g. AnoHub Enterprise Solutions",
     "saveButton": "Save Profile Changes",
@@ -225,5 +361,218 @@
       "text": "The Material Traceability Mandate (EN 10204 3.1) is non-negotiable. It represents the ultimate ethical defense against financial risk and premature failure caused by counterfeit materials.",
       "badge": "Official Requirement • ISO 9001 Compliant"
     }
+  },
+  "questions": {
+    "q1": {
+      "text": "Do you verify intake velocity profiles using CFD or physical scale models?",
+      "options": [
+        "Yes, always",
+        "Only for large units",
+        "No, relied on OEM",
+        "Not documented"
+      ]
+    },
+    "q2": {
+      "text": "Is the \"0.05 mm/m\" alignment tolerance strictly enforced in contracts?",
+      "options": [
+        "Yes, non-negotiable",
+        "Yes, but defined loosely",
+        "No",
+        "Unknown"
+      ]
+    },
+    "q3": {
+      "text": "Are vibration spectra (FFT) integrated into the SCADA logic?",
+      "options": [
+        "Yes, full integration",
+        "Standalone system only",
+        "Portable measurements",
+        "No"
+      ]
+    },
+    "q4": {
+      "text": "Do you have EN 10204 3.1 certificates for all runner bolts?",
+      "options": [
+        "Yes, archived digitally",
+        "Paper copies only",
+        "Partial",
+        "No"
+      ]
+    },
+    "q5": {
+      "text": "Is \"Ownership Maintenance\" practiced by operators?",
+      "options": [
+        "Yes, highly disciplined",
+        "Variable discipline",
+        "No, \"Run-to-Failure\" mentality"
+      ]
+    },
+    "q6": {
+      "text": "Is the runner clearance (gap) monitored and logged annually?",
+      "options": [
+        "Yes",
+        "No",
+        "Not Maintained",
+        "Partially Filled"
+      ]
+    },
+    "q7": {
+      "text": "When failures occur, is a Root Cause Failure Analysis (RCFA) performed?",
+      "options": [
+        "Always",
+        "Often we only fix the symptom",
+        "Sometimes we only fix the symptom",
+        "Never"
+      ]
+    },
+    "q8": {
+      "text": "Is there an automated lubrication system for the wicket gate bearings?",
+      "options": [
+        "Yes",
+        "No",
+        "In Testing Phase"
+      ]
+    },
+    "q9": {
+      "text": "Are spare parts (seals, bearings) strictly OEM certified?",
+      "options": [
+        "Yes",
+        "No",
+        "Limited Access",
+        "Mixed Stock"
+      ]
+    },
+    "q10": {
+      "text": "Is the oil quality (water content/particles) monitored in real-time?",
+      "options": [
+        "Yes",
+        "Not Monitored",
+        "Monitored Periodically"
+      ]
+    },
+    "q11": {
+      "text": "Do you measure the \"Execution Gap\" (Planned vs. Actual maintenance time)?",
+      "options": [
+        "Yes",
+        "No",
+        "Do not measure"
+      ]
+    },
+    "q12": {
+      "text": "Does the contract enforce specific penalties for alignment deviations?",
+      "options": [
+        "Yes",
+        "No, only replacement is offered",
+        "Only Replacement",
+        "Sometimes"
+      ]
+    },
+    "q13": {
+      "text": "Is the cavitation pitting depth measured during every major overhaul?",
+      "options": [
+        "Yes",
+        "No",
+        "Periodically"
+      ]
+    },
+    "q14": {
+      "text": "Are vibration sensors installed on all main bearings?",
+      "options": [
+        "Yes",
+        "Not Installed/Functional",
+        "Some require checking"
+      ]
+    },
+    "q15": {
+      "text": "Is the SCADA system updated with the latest security patches?",
+      "options": [
+        "Yes",
+        "No",
+        "Outdated"
+      ]
+    },
+    "q16": {
+      "text": "Is the emergency shutdown sequence tested annually?",
+      "options": [
+        "Automatic",
+        "Manual",
+        "Semi-Automatic"
+      ]
+    },
+    "q17": {
+      "text": "What is the current condition of the draft tube concrete surface?",
+      "options": [
+        "Good",
+        "Requires Minor Maintenance",
+        "Major Service Needed"
+      ]
+    }
+  },
+  "globalMap": {
+    "fleet": "Fleet",
+    "liveMw": "Live MW",
+    "alerts": "Alerts",
+    "incomingTelemetry": "Incoming Telemetry",
+    "vibration": "Vibration",
+    "temp": "Temp",
+    "output": "Output",
+    "eff": "Eff.",
+    "openDashboard": "Open Dashboard",
+    "syncing": "SYNCING...",
+    "status": {
+      "critical": "CRITICAL",
+      "warning": "WARNING"
+    }
+  },
+  "contractManagement": {
+    "title": "Smart Contract",
+    "titleHighlight": "Intelligence",
+    "subtitle": "Automated warranty validation & dynamic penalty calculation based on live risk data.",
+    "noAssetTitle": "No Asset Selected",
+    "noAssetDesc": "Select a project above to execute legal analysis.",
+    "contractStanding": "Contract Standing",
+    "warrantyStatus": "Warranty Status",
+    "statusCodes": {
+      "active": "ACTIVE",
+      "breached": "BREACHED",
+      "warning": "WARNING",
+      "expired": "EXPIRED"
+    },
+    "valid": "VALID",
+    "void": "VOID",
+    "penaltyAccrued": "Penalty Accrued",
+    "detectedViolation": "Detected Violation (Live)",
+    "liveRiskFeed": "Live Risk Feed",
+    "dataSource": "Data Source: Risk Assessment Module",
+    "waitingForData": "Waiting for Risk Assessment data...",
+    "calcRiskScore": "Calculated Risk Score",
+    "criticalFlags": "Critical Flags",
+    "legalEnforcement": "Legal Enforcement",
+    "legalEnforcementDesc": "Generate legally binding notices based on real-time data.",
+    "genComplianceCert": "Generate Compliance Certificate",
+    "genNoticeBreach": "GENERATE NOTICE OF BREACH",
+    "toastGenerated": "Legal Notice generated.",
+    "pdf": {
+      "noticeTitle": "NOTICE OF NON-COMPLIANCE",
+      "asset": "Asset:",
+      "date": "Date:",
+      "status": "Status:",
+      "intro1": "Pursuant to the Master Service Agreement, AnoHUB system has detected",
+      "intro2": "deviations from the mandatory Standard of Excellence.",
+      "violation": "VIOLATION:",
+      "penalty": "Estimated Contract Penalty:"
+    },
+    "logic": {
+      "breachReasonCritical": "CRITICAL OPERATIONAL RISK DETECTED ({{flags}} flags via Neural Link)",
+      "breachReasonScore": "Operational Risk Score exceeds safety threshold."
+    }
+  },
+  "componentLibrary": {
+    "title": "Technical",
+    "titleHighlight": "Knowledge Base",
+    "criticalSystemsIndexed": "{{count}} Critical Systems Indexed",
+    "performanceKpis": "Performance KPIs",
+    "riskVectors": "Risk Vectors",
+    "noComponents": "No components available in the library."
   }
 }

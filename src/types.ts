@@ -1,38 +1,38 @@
 // --- GLOBAL VIEW TYPES ---
-export type AppView = 
+export type AppView =
   | 'home' // Alias za hub
-  | 'hub' 
+  | 'hub'
   | 'login' // Dodano za Auth
   | 'intro' // Alias za digitalIntroduction
   | 'onboarding'
   | 'profile'
-  | 'globalMap'               
-  | 'riskAssessment'          
-  | 'questionnaireSummary'    
-  | 'riskReport'              
-  | 'installationGuarantee'   
+  | 'globalMap'
+  | 'riskAssessment'
+  | 'questionnaireSummary'
+  | 'riskReport'
+  | 'installationGuarantee'
   | 'installation' // Alias
-  | 'hppBuilder'              
-  | 'investorBriefing'        
+  | 'hppBuilder'
+  | 'investorBriefing'
   | 'investor' // Alias
-  | 'contractManagement'      
+  | 'contractManagement'
   | 'contracts' // Alias
-  | 'digitalIntegrity'        
+  | 'digitalIntegrity'
   | 'integrity' // Alias
-  | 'revitalizationStrategy'  
-  | 'library'                 
-  | 'hppImprovements'         
+  | 'revitalizationStrategy'
+  | 'library'
+  | 'hppImprovements'
   | 'improvements' // Alias
-  | 'phaseGuide'              
+  | 'phaseGuide'
   | 'phases' // Alias
-  | 'standardOfExcellence'    
+  | 'standardOfExcellence'
   | 'standard' // Alias
-  | 'riverWildlife'           
+  | 'riverWildlife'
   | 'wildlife' // Alias
-  | 'genderEquity'            
+  | 'genderEquity'
   | 'gender' // Alias
-  | 'digitalIntroduction'     
-  | 'turbineDetail';          
+  | 'digitalIntroduction'
+  | 'turbineDetail';
 
 // --- SHARED DATA TYPES ---
 export type Answers = Record<string, string>;
@@ -43,7 +43,7 @@ export interface Asset {
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;
-  coordinates: [number, number]; 
+  coordinates: [number, number];
   capacity: number; // MW
   status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
@@ -62,18 +62,19 @@ export interface Question {
   id: string;
   text: string;
   options: string[];
+  critical?: string;
 }
 
 export interface OperationalData {
   commissioningYear: string;
   maintenanceCycle: string;
-  powerOutput: number | string; 
+  powerOutput: number | string;
   turbineType: string;
   head: number | string;
   flow: number | string;
   pressure?: number | string;
   output?: number | string;
-  [key: string]: string | number | undefined; 
+  [key: string]: string | number | undefined;
 }
 
 export interface QuestionnaireContextType {
@@ -88,10 +89,10 @@ export interface QuestionnaireContextType {
 
 // --- RISK CONTEXT UPDATE ---
 export interface RiskState { // <--- NOVO: Struktura stanja rizika
-    riskScore: number;
-    riskLevel: 'Low' | 'Medium' | 'High';
-    criticalFlags: number;
-    isAssessmentComplete: boolean;
+  riskScore: number;
+  riskLevel: 'Low' | 'Medium' | 'High';
+  criticalFlags: number;
+  isAssessmentComplete: boolean;
 }
 
 export interface RiskContextType {
@@ -143,8 +144,8 @@ export interface TurbineRecommendation {
 export interface CalculationResult {
   powerMW: number;
   energyGWh: number;
-  annualGWh: string; 
-  n_sq: string;      
+  annualGWh: string;
+  n_sq: string;
   revenue?: number;
   capex?: number;
   lcoe?: number;

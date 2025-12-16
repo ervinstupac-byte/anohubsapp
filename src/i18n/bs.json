@@ -10,25 +10,48 @@
   },
   "modules": {
     "riskAssessment": "Procjena Rizika",
+    "riskAssessmentDesc": "Identifikacija 'Jaza u Izvršenju' prije kvara.",
     "riskReport": "Glavni Projektni Dosje",
+    "riskReportDesc": "Konsolidovani Enterprise Izvještaji.",
     "hppBuilder": "HPP Dizajn Studio",
+    "hppBuilderDesc": "Fizikalni dizajn turbina i simulacija.",
     "installationGuarantee": "Instalacijski Standard",
+    "installationGuaranteeDesc": "Provedba protokola 0.05 mm/m.",
     "globalMap": "Globalna Mapa",
+    "globalMapDesc": "Geoprostorna inteligencija imovine.",
     "investorBriefing": "Investitorski Briefing",
+    "investorBriefingDesc": "Finansijski KPI i utjecaj rizika.",
     "contractManagement": "Ugovori i Pravo",
+    "contractManagementDesc": "Zaštita garancije kroz podatke.",
     "digitalIntegrity": "Digitalni Integritet",
+    "digitalIntegrityDesc": "Blockchain nepromjenjivi dokaz.",
     "revitalizationStrategy": "Strategija Revitalizacije",
+    "revitalizationStrategyDesc": "Strategije produženja životnog vijeka.",
     "library": "Biblioteka Komponenti",
+    "libraryDesc": "Načini kvara komponenti i KPI.",
     "standardOfExcellence": "Standard Izvrsnosti",
+    "standardOfExcellenceDesc": "Manifest 0.05 mm/m.",
     "phaseGuide": "Vodič kroz Faze",
+    "phaseGuideDesc": "Provedba životnog ciklusa projekta.",
     "hppImprovements": "HPP Ino-Hub",
+    "hppImprovementsDesc": "Praćenje inovacija.",
     "riverWildlife": "Rijeka i Divljina",
+    "riverWildlifeDesc": "Ekološki mandat.",
     "genderEquity": "Rodna Ravnopravnost",
+    "genderEquityDesc": "HR Strategija i Kultura.",
     "digitalIntroduction": "Digitalni Uvod"
   },
   "common": {
-    "launch": "Pokreni Modul",
-    "version": "v2.4.0 (Enterprise)"
+    "launch": "POKRENI",
+    "version": "v2.5.0 (Enterprise)",
+    "system": "SISTEM",
+    "immune": "IMUN",
+    "compromised": "KOMPROMITOVAN",
+    "critical": "KRITIČNO",
+    "moderate": "UMJERENO",
+    "stable": "STABILNO",
+    "riskLevel": "Nivo Rizika",
+    "active": "Aktivan"
   },
   "questionnaire": {
     "title": "Dijagnostički Izvještaj",
@@ -96,10 +119,44 @@
     "compileTitle": "Spremno za Kompajliranje?",
     "compileDesc": "Ova radnja će objediniti najnovije podatke iz svih modula u jedan PDF dokument sa vodenim žigom.",
     "downloadButton": "Preuzmi Glavni Projektni Dosje",
-    "noDataButton": "Nema podataka za kompajliranje"
+    "noDataButton": "Nema podataka za kompajliranje",
+    "previewOpened": "Dosje je otvoren u novom prozoru.",
+    "noDataToGenerate": "Nema podataka za generisanje Dosjea.",
+    "generateError": "Greška pri generisanju PDF-a",
+    "noDataToArchive": "Nema podataka za arhiviranje.",
+    "archiveSuccess": "Dosje uspješno arhiviran u HQ Cloud.",
+    "archiveError": "Arhiviranje neuspješno: {{error}}",
+    "gapScoreAnalysis": "Analiza Skora Jaza",
+    "engineerNotes": "Bilješke Inženjera",
+    "noNotes": "Nema dodatnih bilješki.",
+    "noLatestRisk": "Nije pronađena najnovija procjena rizika.",
+    "ratedPower": "Nazivna Izlazna Snaga",
+    "annualGen": "Godišnja Proizvodnja",
+    "noLatestDesign": "Nije pronađen najnoviji tehnički dizajn.",
+    "submitArchive": "Arhiviraj u Centralu",
+    "assetNotLoaded": "Elektrana Nije Učitana",
+    "selectAssetPrompt": "Molimo odaberite elektranu za generisanje Dosjea."
   },
   "actions": {
-    "back": "Nazad na Hub"
+    "back": "Nazad na Hub",
+    "previewPrint": "Pregled i Štampa",
+    "cancel": "Otkaži",
+    "close": "Zatvori"
+  },
+  "assetPicker": {
+    "selectContext": "Odaberi Kontekst Elektrane",
+    "registerNew": "+ Registruj Novu Elektranu",
+    "modalTitle": "Registracija Nove Elektrane",
+    "labelName": "Naziv Elektrane",
+    "placeholderName": "npr. HE Blagaj",
+    "labelType": "Tip Turbine",
+    "labelLocation": "Lokacija",
+    "placeholderLocation": "Rijeka, Država",
+    "labelCapacity": "Kapacitet (MW)",
+    "registerButton": "Registruj Elektranu",
+    "validationError": "Molimo ispunite sva polja ispravno, uključujući pozitivan kapacitet.",
+    "successToast": "Nova elektrana uspješno registrovana",
+    "failToast": "Neuspješno kreiranje elektrane"
   },
   "hppBuilder": {
     "title": "HPP Dizajn Studio",
@@ -129,7 +186,61 @@
     "designNamePlaceholder": "Naziv Dizajna (npr. Varijanta A)",
     "cancel": "Otkaži",
     "uploadDesign": "Pošalji Dizajn",
-    "saving": "Spremanje..."
+    "saving": "Spremanje...",
+    "chart": {
+      "peltonZone": "PELTON ZONA",
+      "francisZone": "FRANCIS ZONA",
+      "kaplanZone": "KAPLAN ZONA",
+      "headAxis": "PAD (m)",
+      "flowAxis": "PROTOK (m³/s)"
+    },
+    "reasons": {
+      "pelton": {
+        "idealSpeed": "Idealna Specifična Brzina (Indeks: {{n}})",
+        "multiJet": "Opseg primjene sa više mlaznica",
+        "optimalHead": "Optimalni raspon pada (>200m)",
+        "lowHead": "Prenizak pad za impulsnu fiziku",
+        "erosion": "Otporno na eroziju (nema zaptivača)"
+      },
+      "francis": {
+        "idealZone": "Idealna Reakcijska Zona (Indeks: {{n}})",
+        "standard": "Standardno Francis područje",
+        "variableFlow": "Pad efikasnosti pri djelomičnom opterećenju",
+        "erosion": "Visok rizik od erozije na lopaticama"
+      },
+      "kaplan": {
+        "highSpeed": "Područje visoke specifične brzine",
+        "lowHead": "Specijalist za niski pad",
+        "highHead": "Previsok pad (Rizik od kavitacije)",
+        "doubleReg": "Dvostruka regulacija (Odlično djelomično opterećenje)"
+      },
+      "crossflow": {
+        "efficiency": "Ekonomska efikasnost za male razmjere",
+        "selfCleaning": "Sposobnost samočišćenja"
+      }
+    },
+    "hydrology": {
+      "stable": "Stabilno Bazno Opterećenje",
+      "seasonal": "Sezonski Vrh/Van Vrha",
+      "variable": "Visoko Varijabilno (Bujično)"
+    },
+    "water": {
+      "clean": "Čista Voda",
+      "suspended": "Suspendirani Mulj (Glečerski)",
+      "abrasive": "Tvrdi Sediment (Kvarc)"
+    },
+    "toasts": {
+      "enterName": "Unesite naziv.",
+      "selectAsset": "Odaberite elektranu za povezivanje dizajna.",
+      "designLinked": "Dizajn povezan sa {{name}} i spremljen.",
+      "saveFailed": "Spremanje neuspješno: {{error}}",
+      "loaded": "Učitano: {{name}}",
+      "pdfGenerated": "Izvještaj Dizajna PDF Generisan."
+    },
+    "units": {
+      "gwhYear": "GWh / godina"
+    },
+    "specs": "Specifikacije"
   },
   "investorBriefing": {
     "title": "Investitorski Briefing",
@@ -156,7 +267,16 @@
     "financialStructure": "Finansijska Struktura (Prva Godina)",
     "revenueInflow": "Prihod (Priliv)",
     "opexOutflow": "OPEX (Odliv)",
-    "downloaded": "Finansijski Briefing Preuzet"
+    "downloaded": "Finansijski Briefing Preuzet",
+    "estimatedCapex": "Procijenjeni CAPEX",
+    "capexBasis": "Bazirano na €1.8M/MW prosj.",
+    "activeAssetData": "Podaci Aktivne Elektrane",
+    "designLink": "Link HPP Dizajn Studija",
+    "genericModel": "Generički Model",
+    "genericProject": "Generički Projekt",
+    "hppConceptDesign": "HPP Koncept Dizajn",
+    "calculatingBasedOn": "Izračun baziran na <1>{{power}} MW</1> kapaciteta i <3>{{energy}} GWh/yr</3> proizvodnje.",
+    "liveSync": "LIVE SINHRONIZACIJA SA HPP BUILDEROM"
   },
   "profile": {
     "loading": "Učitavanje Enterprise Profila...",
@@ -167,6 +287,7 @@
     "fullName": "Puno Ime",
     "role": "Uloga / Titula",
     "rolePlaceholder": "npr. Viši Mašinski Inženjer",
+    "fullNamePlaceholder": "npr. John Doe",
     "company": "Kompanija / Organizacija",
     "companyPlaceholder": "npr. AnoHub Enterprise Rješenja",
     "saveButton": "Spremi Promjene Profila",
@@ -229,5 +350,218 @@
       "text": "Mandat o sljedivosti materijala (EN 10204 3.1) je neupitan. Predstavlja krajnju etičku odbranu od finansijskog rizika i prijevremenih kvarova uzrokovanih lažnim materijalima.",
       "badge": "Službeni Zahtjev • ISO 9001 Usklađen"
     }
+  },
+  "questions": {
+    "q1": {
+      "text": "Provjeravate li profile brzine na ulazu koristeći CFD ili fizičke modele?",
+      "options": [
+        "Da, uvijek",
+        "Samo za velike jedinice",
+        "Ne, oslanjamo se na OEM",
+        "Nije dokumentovano"
+      ]
+    },
+    "q2": {
+      "text": "Da li je tolerancija poravnanja od \"0.05 mm/m\" strogo propisana u ugovorima?",
+      "options": [
+        "Da, bez pregovora",
+        "Da, ali labavo definisano",
+        "Ne",
+        "Nepoznato"
+      ]
+    },
+    "q3": {
+      "text": "Da li su spektri vibracija (FFT) integrisani u SCADA logiku?",
+      "options": [
+        "Da, potpuna integracija",
+        "Samo samostalni sistem",
+        "Prijenosna mjerenja",
+        "Ne"
+      ]
+    },
+    "q4": {
+      "text": "Imate li EN 10204 3.1 certifikate za sve vijke rotora?",
+      "options": [
+        "Da, digitalno arhivirano",
+        "Samo papirne kopije",
+        "Djelomično",
+        "Ne"
+      ]
+    },
+    "q5": {
+      "text": "Da li operateri praktikuju \"Vlasničko Održavanje\"?",
+      "options": [
+        "Da, visoka disciplina",
+        "Promjenjiva disciplina",
+        "Ne, mentalitet \"Vozi-do-Kvara\""
+      ]
+    },
+    "q6": {
+      "text": "Prati li se i bilježi zazor rotora (gap) godišnje?",
+      "options": [
+        "Da",
+        "Ne",
+        "Ne održava se",
+        "Djelomično popunjeno"
+      ]
+    },
+    "q7": {
+      "text": "Kada dođe do kvara, da li se provodi Analiza Osnovnog Uzroka (RCFA)?",
+      "options": [
+        "Uvijek",
+        "Često popravljamo samo simptom",
+        "Ponekad popravljamo samo simptom",
+        "Nikad"
+      ]
+    },
+    "q8": {
+      "text": "Postoji li automatski sistem podmazivanja za ležajeve sprovodnog aparata?",
+      "options": [
+        "Da",
+        "Ne",
+        "U fazi testiranja"
+      ]
+    },
+    "q9": {
+      "text": "Jesu li rezervni dijelovi (zaptivači, ležajevi) strogo OEM certificirani?",
+      "options": [
+        "Da",
+        "Ne",
+        "Ograničen pristup",
+        "Miješane zalihe"
+      ]
+    },
+    "q10": {
+      "text": "Prati li se kvaliteta ulja (sadržaj vode/čestice) u stvarnom vremenu?",
+      "options": [
+        "Da",
+        "Ne prati se",
+        "Prati se periodično"
+      ]
+    },
+    "q11": {
+      "text": "Mjerite li \"Izvršni Jaz\" (Planirano vs. Stvarno vrijeme održavanja)?",
+      "options": [
+        "Da",
+        "Ne",
+        "Ne mjerimo"
+      ]
+    },
+    "q12": {
+      "text": "Da li ugovor propisuje specifične penale za odstupanja u poravnanju?",
+      "options": [
+        "Da",
+        "Ne, nudi se samo zamjena",
+        "Samo zamjena",
+        "Ponekad"
+      ]
+    },
+    "q13": {
+      "text": "Mjeri li se dubina kavitacijskog trošenja tokom svakog velikog remonta?",
+      "options": [
+        "Da",
+        "Ne",
+        "Periodično"
+      ]
+    },
+    "q14": {
+      "text": "Jesu li senzori vibracija instalirani na svim glavnim ležajevima?",
+      "options": [
+        "Da",
+        "Nije instalirano/funkcionalno",
+        "Neki zahtijevaju provjeru"
+      ]
+    },
+    "q15": {
+      "text": "Je li SCADA sistem ažuriran najnovijim sigurnosnim zakrpama?",
+      "options": [
+        "Da",
+        "Ne",
+        "Zastarjelo"
+      ]
+    },
+    "q16": {
+      "text": "Testira li se sekvenca hitnog isključenja godišnje?",
+      "options": [
+        "Automatski",
+        "Ručno",
+        "Polu-automatski"
+      ]
+    },
+    "q17": {
+      "text": "Kakvo je trenutno stanje betonske površine sifonske cijevi?",
+      "options": [
+        "Dobro",
+        "Zahtijeva manje održavanje",
+        "Potreban veliki servis"
+      ]
+    }
+  },
+  "globalMap": {
+    "fleet": "Flota",
+    "liveMw": "Live MW",
+    "alerts": "Upozorenja",
+    "incomingTelemetry": "Dolazna Telemetrija",
+    "vibration": "Vibracija",
+    "temp": "Temp",
+    "output": "Snaga",
+    "eff": "Efik.",
+    "openDashboard": "Otvori Kontrolnu Ploču",
+    "syncing": "SINHRONIZACIJA...",
+    "status": {
+      "critical": "KRITIČNO",
+      "warning": "UPOZORENJE"
+    }
+  },
+  "contractManagement": {
+    "title": "Pametni Ugovor",
+    "titleHighlight": "Inteligencija",
+    "subtitle": "Automatska validacija garancije i dinamički izračun kazni na osnovu podataka o riziku uživo.",
+    "noAssetTitle": "Elektrana Nije Odabrana",
+    "noAssetDesc": "Odaberite projekat iznad za izvršenje pravne analize.",
+    "contractStanding": "Status Ugovora",
+    "warrantyStatus": "Status Garancije",
+    "statusCodes": {
+      "active": "AKTIVAN",
+      "breached": "PREKRŠEN",
+      "warning": "UPOZORENJE",
+      "expired": "ISTEKAO"
+    },
+    "valid": "VAŽEĆA",
+    "void": "PONIŠTENA",
+    "penaltyAccrued": "Obračunata Kazna",
+    "detectedViolation": "Detektirano Kršenje (Uživo)",
+    "liveRiskFeed": "Izvor Rizika Uživo",
+    "dataSource": "Izvor Podataka: Modul Procjene Rizika",
+    "waitingForData": "Čekanje podataka Procjene Rizika...",
+    "calcRiskScore": "Izračunati Skor Rizika",
+    "criticalFlags": "Kritične Zastavice",
+    "legalEnforcement": "Pravna Provedba",
+    "legalEnforcementDesc": "Generisanje pravno obavezujućih obavijesti na osnovu podataka u stvarnom vremenu.",
+    "genComplianceCert": "Generiši Potvrdu o Usklađenosti",
+    "genNoticeBreach": "GENERIŠI OBAVIJEST O KRŠENJU",
+    "toastGenerated": "Pravna obavijest generisana.",
+    "pdf": {
+      "noticeTitle": "OBAVIJEST O NEUSKLAĐENOSTI",
+      "asset": "Imovina:",
+      "date": "Datum:",
+      "status": "Status:",
+      "intro1": "U skladu sa Glavnim Ugovorom o Uslugama, AnoHUB sistem je detektirao",
+      "intro2": "odstupanja od obaveznog Standarda Izvrsnosti.",
+      "violation": "KRŠENJE:",
+      "penalty": "Procijenjena Ugovorna Kazna:"
+    },
+    "logic": {
+      "breachReasonCritical": "DETEKTIRAN KRITIČAN OPERATIVNI RIZIK ({{flags}} zastavica putem Neural Linka)",
+      "breachReasonScore": "Skor Operativnog Rizika prelazi sigurni prag."
+    }
+  },
+  "componentLibrary": {
+    "title": "Tehnička",
+    "titleHighlight": "Baza Znanja",
+    "criticalSystemsIndexed": "{{count}} Kritičnih Sistema Indeksirano",
+    "performanceKpis": "KPI Performansi",
+    "riskVectors": "Vektori Rizika",
+    "noComponents": "Nema dostupnih komponenti u biblioteci."
   }
 }

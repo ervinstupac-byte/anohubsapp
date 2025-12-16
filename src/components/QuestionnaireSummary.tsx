@@ -36,6 +36,7 @@ export const riskKeywords: Record<string, { high: string[], medium: string[] }> 
 
 // --- MODERN RISK GAUGE COMPONENT ---
 const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) => {
+    const { t } = useTranslation();
     let color = '';
     let percentage = 0;
     let text = '';
@@ -44,17 +45,17 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
         case 'High':
             color = 'text-red-500';
             percentage = 90;
-            text = 'CRITICAL';
+            text = t('common.critical', 'CRITICAL');
             break;
         case 'Medium':
             color = 'text-amber-400';
             percentage = 50;
-            text = 'MODERATE';
+            text = t('common.moderate', 'MODERATE');
             break;
         case 'Low':
             color = 'text-emerald-400';
             percentage = 15;
-            text = 'STABLE';
+            text = t('common.stable', 'STABLE');
             break;
     }
 
@@ -75,7 +76,7 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
                 {/* Center Content */}
                 <div className="text-center z-10">
                     <div className={`text-4xl font-black ${color} tracking-tighter drop-shadow-md mb-1`}>{text}</div>
-                    <div className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">Risk Level</div>
+                    <div className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-bold">{t('common.riskLevel', 'Risk Level')}</div>
                 </div>
 
                 {/* Inner Glow */}
@@ -290,7 +291,7 @@ export const QuestionnaireSummary: React.FC = () => {
                                 {analysis.highRisk.map(q => (
                                     <li key={q.id} className="flex items-start gap-3 p-4 rounded-xl bg-red-950/30 border border-red-500/10 hover:border-red-500/30 transition-colors">
                                         <span className="text-red-500 mt-0.5 text-lg">•</span>
-                                        <span className="text-sm text-slate-300 font-medium">{q.text}</span>
+                                        <span className="text-sm text-slate-300 font-medium">{t(`questions.${q.id}.text`, q.text)}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -313,7 +314,7 @@ export const QuestionnaireSummary: React.FC = () => {
                                 {analysis.mediumRisk.map(q => (
                                     <li key={q.id} className="flex items-start gap-3 p-4 rounded-xl bg-amber-950/20 border border-amber-500/10 hover:border-amber-500/30 transition-colors">
                                         <span className="text-amber-500 mt-0.5 text-lg">•</span>
-                                        <span className="text-sm text-slate-300 font-medium">{q.text}</span>
+                                        <span className="text-sm text-slate-300 font-medium">{t(`questions.${q.id}.text`, q.text)}</span>
                                     </li>
                                 ))}
                             </ul>

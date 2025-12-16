@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { createFinancialReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
@@ -113,7 +113,7 @@ export const InvestorBriefing: React.FC = () => {
 
     // --- PDF GENERATION ---
     const handleDownloadReport = () => {
-        const assetName = selectedAsset?.name || (importedDesign ? "HPP Concept Design" : "Generic Project");
+        const assetName = selectedAsset?.name || (importedDesign ? t('investorBriefing.hppConceptDesign', "HPP Concept Design") : t('investorBriefing.genericProject', "Generic Project"));
 
         const blob = createFinancialReportBlob(
             assetName,
@@ -191,16 +191,18 @@ export const InvestorBriefing: React.FC = () => {
                             </div>
                             <div>
                                 <h4 className="text-slate-300 font-bold text-xs uppercase tracking-wider mb-1">
-                                    {selectedAsset ? 'Active Asset Data' : (importedDesign ? 'HPP Design Studio Link' : 'Generic Model')}
+                                    {selectedAsset ? t('investorBriefing.activeAssetData', 'Active Asset Data') : (importedDesign ? t('investorBriefing.designLink', 'HPP Design Studio Link') : t('investorBriefing.genericModel', 'Generic Model'))}
                                 </h4>
                                 <p className="text-xs text-slate-400 leading-relaxed">
-                                    Calculating based on
-                                    <strong className="text-white ml-1">{kpis.powerMW.toFixed(1)} MW</strong> capacity
-                                    and <strong className="text-white">{kpis.energyGWh.toFixed(1)} GWh/yr</strong> output.
+                                    <Trans i18nKey="investorBriefing.calculatingBasedOn" values={{ power: kpis.powerMW.toFixed(1), energy: kpis.energyGWh.toFixed(1) }}>
+                                        Calculating based on
+                                        <strong className="text-white ml-1">0 MW</strong> capacity
+                                        and <strong className="text-white">0 GWh/yr</strong> output.
+                                    </Trans>
                                 </p>
                                 {importedDesign && !selectedAsset && (
                                     <div className="mt-2 text-[9px] text-cyan-400 bg-cyan-900/20 px-2 py-1 rounded border border-cyan-500/20 inline-block animate-pulse">
-                                        ● LIVE SYNC WITH HPP BUILDER
+                                        ● {t('investorBriefing.liveSync', 'LIVE SYNC WITH HPP BUILDER')}
                                     </div>
                                 )}
                             </div>
@@ -235,9 +237,9 @@ export const InvestorBriefing: React.FC = () => {
 
                         {/* CAPEX ESTIMATE CARD (NEW) */}
                         <GlassCard>
-                            <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Estimated CAPEX</p>
+                            <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">{t('investorBriefing.estimatedCapex', 'Estimated CAPEX')}</p>
                             <div className="text-3xl font-black text-white mb-1">€{(kpis.capex / 1000000).toFixed(1)}M</div>
-                            <p className="text-xs text-slate-500">Based on €1.8M/MW avg.</p>
+                            <p className="text-xs text-slate-500">{t('investorBriefing.capexBasis', 'Based on €1.8M/MW avg.')}</p>
                         </GlassCard>
                     </div>
 

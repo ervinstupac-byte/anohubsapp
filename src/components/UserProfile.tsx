@@ -13,7 +13,7 @@ export const UserProfile: React.FC = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
     const { t } = useTranslation();
-    
+
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
@@ -98,9 +98,9 @@ export const UserProfile: React.FC = () => {
             if (uploadError) throw uploadError;
 
             const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
-            
+
             setAvatarUrl(data.publicUrl);
-            
+
             const { error: updateError } = await supabase.from('profiles').upsert({
                 id: user?.id,
                 avatar_url: data.publicUrl,
@@ -142,7 +142,7 @@ export const UserProfile: React.FC = () => {
             <GlassCard className="p-0 overflow-hidden border-t-4 border-t-cyan-500">
                 <div className="p-8 md:p-10">
                     <div className="flex flex-col md:flex-row gap-10 items-start">
-                        
+
                         {/* LEFT COLUMN: AVATAR */}
                         <div className="flex flex-col items-center gap-6 w-full md:w-1/3 border-b md:border-b-0 md:border-r border-white/5 pb-8 md:pb-0 md:pr-8">
                             <div className="relative group">
@@ -155,7 +155,7 @@ export const UserProfile: React.FC = () => {
                                         </div>
                                     )}
                                 </div>
-                                
+
                                 {/* Upload Button Overlay */}
                                 <label className="absolute bottom-2 right-2 p-3 rounded-full bg-cyan-600 text-white shadow-lg cursor-pointer hover:bg-cyan-500 transition-all hover:scale-110 active:scale-95 border border-cyan-400/50 z-10">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,7 +165,7 @@ export const UserProfile: React.FC = () => {
                                     <input type="file" accept="image/*" onChange={uploadAvatar} className="hidden" disabled={saving} />
                                 </label>
                             </div>
-                            
+
                             <div className="text-center w-full">
                                 <p className="text-xs text-slate-500 font-mono mb-2 truncate max-w-[200px] mx-auto bg-slate-950/50 py-1 px-2 rounded">{user?.email}</p>
                                 <span className={`inline-block px-4 py-1.5 text-xs font-bold rounded-full border ${role ? 'bg-cyan-950/30 text-cyan-400 border-cyan-500/20' : 'bg-slate-800 text-slate-500 border-slate-700'}`}>
@@ -177,28 +177,28 @@ export const UserProfile: React.FC = () => {
                         {/* RIGHT COLUMN: FORM */}
                         <div className="flex-grow w-full space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <ModernInput 
+                                <ModernInput
                                     label={t('profile.fullName', 'Full Name')}
-                                    value={fullName} 
-                                    onChange={(e) => setFullName(e.target.value)} 
-                                    placeholder="e.g. John Doe"
+                                    value={fullName}
+                                    onChange={(e) => setFullName(e.target.value)}
+                                    placeholder={t('profile.fullNamePlaceholder', 'e.g. John Doe')}
                                     fullWidth
                                 />
-                                
-                                <ModernInput 
+
+                                <ModernInput
                                     label={t('profile.role', 'Position / Role')}
-                                    value={role} 
-                                    onChange={(e) => setRole(e.target.value)} 
-                                    placeholder="e.g. Lead Engineer"
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    placeholder={t('profile.rolePlaceholder', 'e.g. Lead Engineer')}
                                     fullWidth
                                 />
 
                                 <div className="md:col-span-2">
-                                    <ModernInput 
+                                    <ModernInput
                                         label={t('profile.company', 'Organization')}
-                                        value={company} 
-                                        onChange={(e) => setCompany(e.target.value)} 
-                                        placeholder="e.g. Global Hydropower Inc."
+                                        value={company}
+                                        onChange={(e) => setCompany(e.target.value)}
+                                        placeholder={t('profile.companyPlaceholder', 'e.g. Global Hydropower Inc.')}
                                         fullWidth
                                         icon={<span>🏢</span>}
                                     />
@@ -206,8 +206,8 @@ export const UserProfile: React.FC = () => {
                             </div>
 
                             <div className="pt-8 border-t border-white/5 flex justify-end">
-                                <ModernButton 
-                                    onClick={updateProfile} 
+                                <ModernButton
+                                    onClick={updateProfile}
                                     isLoading={saving}
                                     variant="primary"
                                     className="px-8 shadow-cyan-500/20"
