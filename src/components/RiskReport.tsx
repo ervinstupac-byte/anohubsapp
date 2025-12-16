@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
+import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 // ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
 import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
@@ -11,6 +12,7 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { Spinner } from './Spinner.tsx';
+import { QUESTIONS } from '../constants.ts';
 
 export const RiskReport: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -18,17 +20,55 @@ export const RiskReport: React.FC = () => {
     const { navigateTo } = useNavigation();
     const { t } = useTranslation();
     const { showToast } = useToast();
+    const { answers, description } = useQuestionnaire();
 
-    const [riskData, setRiskData] = useState<any>(null);
+    const [cloudRiskData, setCloudRiskData] = useState<any>(null);
     const [designData, setDesignData] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+
+    // --- CALCULATE LOCAL RISK DATA FROM CONTEXT ---
+    const localRiskData = useMemo(() => {
+        const answerCount = Object.keys(answers).length;
+        if (answerCount === 0) return null;
+
+        // Calculate risk score using same logic as Questionnaire
+        let calculatedScore = 0;
+        let criticalCount = 0;
+
+        QUESTIONS.forEach((q) => {
+            const answer = answers[q.id];
+            if (answer && answer === q.critical) {
+                calculatedScore += 20;
+                criticalCount++;
+            } else if (answer && (answer.includes('No') || answer.includes('Unknown') || answer.includes('Partial'))) {
+                calculatedScore += 10;
+            }
+        });
+
+        // Determine risk level
+        const totalScore = criticalCount * 2 + (answerCount - criticalCount);
+        let risk_level: 'High' | 'Medium' | 'Low' = 'Low';
+        if (totalScore > 10) risk_level = 'High';
+        else if (totalScore > 5) risk_level = 'Medium';
+
+        return {
+            id: 'LOCAL_DRAFT',
+            risk_score: calculatedScore,
+            risk_level: risk_level,
+            answers: answers,
+            description: description || 'No notes provided.',
+            asset_id: selectedAsset?.id,
+            created_at: new Date().toISOString(),
+            isDraft: true // Flag to identify local data
+        };
+    }, [answers, description, selectedAsset]);
 
     // --- 1. FETCH DATA FROM CLOUD (LOGIKA OSTAJE ISTA) ---
     useEffect(() => {
         const fetchData = async () => {
             if (!selectedAsset) {
-                setRiskData(null);
+                setCloudRiskData(null);
                 setDesignData(null);
                 return;
             }
@@ -53,7 +93,7 @@ export const RiskReport: React.FC = () => {
                     .limit(1)
                     .single();
 
-                setRiskData(risk);
+                setCloudRiskData(risk);
                 setDesignData(design);
             } catch (error) {
                 console.log('Status check:', error);
@@ -64,6 +104,10 @@ export const RiskReport: React.FC = () => {
 
         fetchData();
     }, [selectedAsset]);
+
+    // --- MERGE LOCAL AND CLOUD DATA (Prioritize local if exists) ---
+    const riskData = localRiskData || cloudRiskData;
+    const riskDataStatus = localRiskData ? 'draft' : (cloudRiskData ? 'synced' : 'none');
 
     // --- 2. HANDLER: GENERATE AND ACTION (DOWNLOAD or PREVIEW) ---
     const handleGenerateDossier = (openPreview: boolean) => {
@@ -149,6 +193,16 @@ export const RiskReport: React.FC = () => {
         return 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10';
     };
 
+    // Helper for status badge
+    const getStatusBadge = (status: 'draft' | 'synced' | 'none') => {
+        if (status === 'draft') {
+            return <span className="px-2 py-0.5 bg-amber-500/20 border border-amber-500/50 rounded text-[10px] font-bold text-amber-400 uppercase tracking-wider">🟡 Local Draft</span>;
+        } else if (status === 'synced') {
+            return <span className="px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/50 rounded text-[10px] font-bold text-emerald-400 uppercase tracking-wider">🟢 Synced</span>;
+        }
+        return null;
+    };
+
     const hasData = riskData || designData;
 
     return (
@@ -203,12 +257,17 @@ export const RiskReport: React.FC = () => {
                     {/* LEFT COLUMN: RISK DIAGNOSTIC */}
                     <GlassCard
                         title={t('riskReport.riskDiagnostic', 'Risk Diagnostic')}
-                        subtitle={riskData ? `ID: ${riskData.id.slice(0, 8)}` : 'NO DATA'}
+                        subtitle={riskData ? `ID: ${riskData.id.toString().slice(0, 8)}` : 'NO DATA'}
                         className="h-full flex flex-col"
                         action={<span className="text-2xl">🛡️</span>}
                     >
                         {riskData ? (
                             <div className="space-y-6">
+                                {/* STATUS BADGE */}
+                                <div className="flex justify-end">
+                                    {getStatusBadge(riskDataStatus)}
+                                </div>
+
                                 {/* ... (prikaz Risk Level, Gap Score, Engineer Notes) ... */}
                                 <div className="flex justify-between items-center p-4 rounded-xl border bg-slate-900/50 border-slate-700">
                                     <span className="text-slate-400 text-sm font-bold uppercase tracking-wider">{t('riskReport.riskLevel', 'Risk Level')}</span>
