@@ -23,6 +23,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Form Data
+    const [specificType, setSpecificType] = useState<string>('Kaplan');
     const [formData, setFormData] = useState({
         name: '',
         type: 'HPP' as Asset['type'],
@@ -63,12 +64,11 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 location: formData.location,
                 coordinates: [45.0 + Math.random(), 16.0 + Math.random()], // Simulation
                 capacity: capacityValue,
-                status: 'Operational' // Default to "Initialization" logic could be here if supported
+                status: 'Operational'
             });
 
             showToast(t('assetWizard.success', 'Asset registered successfully.'), 'success');
             onClose();
-            // Reset form could go here if we didn't unmount
         } catch (error) {
             console.error(error);
             showToast(t('assetPicker.failToast'), 'error');
@@ -100,19 +100,26 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">
                                 {t('assetWizard.fields.type', 'Asset Type')}
                             </label>
-                            <div className="flex gap-2">
-                                {(['HPP', 'Solar', 'Wind'] as const).map((type) => (
-                                    <button
-                                        key={type}
-                                        onClick={() => setFormData({ ...formData, type })}
-                                        className={`px-4 py-2 rounded-lg border text-sm font-bold transition-all ${formData.type === type
-                                                ? 'bg-cyan-500 text-white border-cyan-400'
-                                                : 'bg-slate-800 text-slate-400 border-slate-700'
-                                            }`}
-                                    >
-                                        {type}
-                                    </button>
-                                ))}
+                            <div className="grid grid-cols-3 gap-2">
+                                {(['Kaplan', 'Francis', 'Pelton', 'Pumping', 'Solar', 'Wind'] as const).map((label) => {
+                                    const isSelected = specificType === label;
+                                    return (
+                                        <button
+                                            key={label}
+                                            onClick={() => {
+                                                const isHpp = ['Kaplan', 'Francis', 'Pelton', 'Pumping'].includes(label);
+                                                setSpecificType(label);
+                                                setFormData({ ...formData, type: isHpp ? 'HPP' : (label as Asset['type']) });
+                                            }}
+                                            className={`px-2 py-2 rounded-lg border text-[10px] font-bold transition-all uppercase ${isSelected
+                                                ? 'bg-cyan-500 text-white border-cyan-400 shadow-lg shadow-cyan-500/20'
+                                                : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
+                                                }`}
+                                        >
+                                            {label}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>

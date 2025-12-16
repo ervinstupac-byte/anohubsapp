@@ -8,8 +8,8 @@ export default defineConfig(({ mode }) => {
 
     return {
         // Relativna putanja za siguran build (radi i u podfolderima)
-        base: './', 
-        
+        base: './',
+
         server: {
             port: 3000,
             host: '0.0.0.0', // Omogućuje pristup s drugih uređaja na mreži
@@ -30,7 +30,15 @@ export default defineConfig(({ mode }) => {
             outDir: 'dist',
             assetsDir: 'assets',
             sourcemap: false, // Manji bundle, teže za debuggiranje u produkciji (dobro za performance)
-            emptyOutDir: true, 
+            emptyOutDir: true,
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        pdf: ['jspdf', 'jspdf-autotable'],
+                        vendor: ['react', 'react-dom']
+                    }
+                }
+            }
         },
 
         test: {
