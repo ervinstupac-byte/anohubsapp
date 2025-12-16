@@ -88,19 +88,20 @@ export const Hub: React.FC = () => {
         <div className="w-full h-screen bg-slate-950 text-white flex relative overflow-hidden">
 
             {/* WIZARD MODAL */}
-            <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />
+            {/* Asset Registration Wizard Modal */}
+            {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
 
-            {/* Hamburger Menu Button (Mobile Only) */}
+            {/* Hamburger Menu Button (Mobile Only) - Top Right */}
             <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-slate-900/90 border border-slate-700 rounded-lg backdrop-blur-md hover:bg-slate-800 transition-colors"
+                className="lg:hidden fixed top-2 right-2 z-50 p-3 bg-cyan-900/90 border border-cyan-700 rounded-lg backdrop-blur-md hover:bg-cyan-800 transition-colors shadow-lg"
                 aria-label="Toggle menu"
             >
-                <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {isSidebarOpen ? (
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                     ) : (
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
                     )}
                 </svg>
             </button>
@@ -164,8 +165,8 @@ export const Hub: React.FC = () => {
             {/* MAIN CONTENT AREA */}
             <main className="ml-0 lg:ml-[280px] w-full lg:w-[calc(100%-280px)] h-screen flex flex-col relative bg-slate-950 overflow-hidden">
 
-                {/* SCADA HEADER (Digital Panel) */}
-                <header className="h-20 border-b border-slate-800 bg-slate-950 flex items-center justify-between px-8 shadow-sm z-30">
+                {/* SCADA HEADER (Digital Panel) - Hide on mobile */}
+                <header className="hidden lg:flex h-20 border-b border-slate-800 bg-slate-950 items-center justify-between px-8 shadow-sm z-30">
                     <div className="flex items-center gap-4">
                         <div className="text-right">
                             <h1 className="text-2xl font-black text-white tracking-tighter">AnoHUB <span className="text-cyan-600">SCADA</span></h1>
@@ -191,18 +192,12 @@ export const Hub: React.FC = () => {
                     </div>
                 </header>
 
-                {/* DYNAMIC CONTENT (Mimic or Map) */}
-                <div className="flex-1 relative overflow-hidden flex flex-col">
-                    {showMap ? (
-                        <div className="absolute inset-0 z-10 animate-fade-in">
-                            <GlobalMap />
-                        </div>
-                    ) : (
-                        <ScadaMimic />
-                    )}
+                {/* BOTTOM: Process Mimic / Map */}
+                <div className="flex-1 relative overflow-hidden">
+                    {showMap ? <GlobalMap /> : <ScadaMimic />}
                 </div>
 
-                {/* ALARM BAR */}
+                {/* BOTTOM: Alarm Bar - Responsive positioning */}
                 <AlarmBar isActive={alarmActive} />
 
             </main>
