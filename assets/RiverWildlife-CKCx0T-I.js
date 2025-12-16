@@ -1,4 +1,4 @@
-import{b as c,d as o,j as e}from"./index-0dg0MRsW.js";import{r as x}from"./vendor-BLMQF4_i.js";import{B as m}from"./BackButton-DxGTeNfb.js";import{T as h}from"./Trans-DdYPNl1X.js";import"./pdf-C099XNqT.js";const b=({item:s,isOpen:i,onClick:a,delay:r})=>e.jsxs("div",{className:`
+import{b as c,d as o,j as e}from"./index-pMjbTkwd.js";import{r as x}from"./vendor-BLMQF4_i.js";import{B as m}from"./BackButton-CCGk-rl-.js";import{T as h}from"./Trans-Coi5-y0E.js";import"./pdf-C099XNqT.js";const b=({item:s,isOpen:i,onClick:a,delay:r})=>e.jsxs("div",{className:`
             group relative overflow-hidden rounded-2xl transition-all duration-500 animate-fade-in-up
             ${i?"bg-slate-800/80 ring-1 ring-cyan-500/50 shadow-lg":"bg-slate-900/40 border border-white/5 hover:border-white/10 hover:bg-slate-800/60"}
             backdrop-blur-md
