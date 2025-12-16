@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
-import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAudit } from '../contexts/AuditContext.tsx';
 // New SCADA Imports
 import { Sidebar } from './scada/Sidebar.tsx';
@@ -47,29 +47,13 @@ export const Hub: React.FC = () => {
     const { user } = useAuth();
     const { t } = useTranslation();
     const { riskState } = useRisk();
-    const { telemetry } = useTelemetry();
     const { logAction } = useAudit();
+    const { answers } = useQuestionnaire(); // Get questionnaire data
 
     // SCADA State
-    const [totalPower, setTotalPower] = useState(0);
-    const [alarmActive, setAlarmActive] = useState(false);
-
     const [showMap, setShowMap] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    useEffect(() => {
-        const power = Object.values(telemetry).reduce((acc, curr) => acc + curr.output, 0);
-        setTotalPower(parseFloat(power.toFixed(1)));
-
-        // Alarm Logic
-        const criticalCount = Object.values(telemetry).filter(t => t.status === 'CRITICAL').length;
-        if (criticalCount > 0 || (riskState.isAssessmentComplete && riskState.criticalFlags > 0)) {
-            setAlarmActive(true);
-        } else {
-            setAlarmActive(false);
-        }
-    }, [telemetry, riskState]);
 
     const operationalModules = [
         { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️' },
@@ -175,19 +159,9 @@ export const Hub: React.FC = () => {
 
                     <div className="flex gap-4">
                         <DigitalPanel
-                            label={t('hub.fleetOutput', 'FLEET OUTPUT')}
-                            value={totalPower}
-                            unit="MW"
-                        />
-                        <DigitalPanel
                             label={t('hub.riskFactors', 'RISK FACTORS')}
                             value={riskState.criticalFlags}
                             status={riskState.criticalFlags > 0 ? 'critical' : 'normal'}
-                        />
-                        <DigitalPanel
-                            label="ACTIVE ALARMS"
-                            value={alarmActive ? 1 : 0}
-                            status={alarmActive ? 'critical' : 'normal'}
                         />
                     </div>
                 </header>
@@ -197,8 +171,8 @@ export const Hub: React.FC = () => {
                     {showMap ? <GlobalMap /> : <ScadaMimic />}
                 </div>
 
-                {/* BOTTOM: Alarm Bar - Responsive positioning */}
-                <AlarmBar isActive={alarmActive} />
+                {/* BOTTOM: Alarm Bar - Risk-based, only after assessment */}
+                <AlarmBar answers={answers} />
 
             </main>
         </div>

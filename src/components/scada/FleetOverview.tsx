@@ -11,12 +11,12 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
     const { assets, selectedAsset, selectAsset } = useAssetContext();
 
     return (
-        <div className="p-4 border-b border-slate-800 bg-slate-900/50">
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">FLEET OVERVIEW</h3>
+        <div className="p-3 sm:p-4 border-b border-slate-800 bg-slate-900/50">
+            <div className="flex justify-between items-center mb-3 sm:mb-4 gap-2">
+                <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest text-slate-400 truncate">FLEET OVERVIEW</h3>
                 <button
                     onClick={onToggleMap}
-                    className={`text-[10px] font-bold px-2 py-1 rounded border transition-colors ${showMap ? 'bg-cyan-900 text-cyan-400 border-cyan-700' : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-white'}`}
+                    className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 rounded border transition-colors whitespace-nowrap ${showMap ? 'bg-cyan-900 text-cyan-400 border-cyan-700' : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-white'}`}
                 >
                     {showMap ? 'HIDE MAP' : 'GLOBAL MAP'}
                 </button>
@@ -58,9 +58,11 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
             {/* Add Asset Button */}
             <button
                 onClick={onRegisterAsset}
-                className="w-full mt-3 py-2 flex items-center justify-center gap-2 border border-dashed border-slate-700 rounded text-[10px] font-bold text-slate-500 hover:text-cyan-400 hover:border-cyan-500 hover:bg-cyan-900/10 transition-all uppercase tracking-wider"
+                className="w-full mt-3 py-2 px-2 flex items-center justify-center gap-1 sm:gap-2 border border-dashed border-slate-700 rounded text-[9px] sm:text-[10px] font-bold text-slate-500 hover:text-cyan-400 hover:border-cyan-500 hover:bg-cyan-900/10 transition-all uppercase tracking-wider"
             >
-                <span>+</span> Register New Plant
+                <span className="text-sm">+</span>
+                <span className="hidden xs:inline">Register New Plant</span>
+                <span className="xs:hidden">New Plant</span>
             </button>
         </div>
     );

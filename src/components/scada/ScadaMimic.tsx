@@ -55,41 +55,42 @@ export const ScadaMimic: React.FC = React.memo(() => {
     }, [baseMw]);
 
     return (
-        <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-8">
+        <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-4 md:p-8">
 
             {/* Grid Background */}
             <div className="absolute inset-0 opacity-5 pointer-events-none"
                 style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
             </div>
 
-            <div className="relative z-10 w-full max-w-4xl border border-slate-800 bg-slate-950/80 p-12 rounded-xl backdrop-blur-sm shadow-2xl">
-                <div className="absolute top-4 left-4 flex items-center gap-3">
-                    <div className="text-xs font-black text-slate-500 tracking-[0.2em] border border-slate-700 px-2 py-1 rounded">
+            <div className="relative z-10 w-full max-w-4xl border border-slate-800 bg-slate-950/80 p-4 sm:p-6 md:p-12 rounded-xl backdrop-blur-sm shadow-2xl">
+                <div className="absolute top-2 left-2 sm:top-4 sm:left-4 flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3">
+                    <div className="text-[10px] sm:text-xs font-black text-slate-500 tracking-wider sm:tracking-[0.2em] border border-slate-700 px-2 py-1 rounded">
                         PROCESS MIMIC
                     </div>
-                    <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                    <div className="text-[10px] sm:text-xs font-bold text-cyan-400 uppercase tracking-wider truncate max-w-[150px] sm:max-w-none">
                         :: {selectedAsset?.name || 'NO CONTEXT'}
                     </div>
                 </div>
 
-                <div className="absolute top-4 right-4 text-xs font-mono text-emerald-500 bg-emerald-950/30 border border-emerald-900 px-2 py-1 rounded flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    SYSTEM OPTIMAL
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[9px] sm:text-xs font-mono text-emerald-500 bg-emerald-950/30 border border-emerald-900 px-2 py-1 rounded flex items-center gap-1 sm:gap-2">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="hidden sm:inline">SYSTEM OPTIMAL</span>
+                    <span className="sm:hidden">OK</span>
                 </div>
 
-                <div className="flex justify-around items-end pt-8 pb-12 relative">
+                <div className="flex flex-col sm:flex-row justify-around items-center sm:items-end pt-12 sm:pt-8 pb-8 sm:pb-12 relative gap-4 sm:gap-0">
                     {/* INTAKE / PENSTOCK VISUAL (Simplified) */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4/5 h-1 bg-cyan-900/30"></div>
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-20 bg-cyan-900/30"></div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1px] h-12 sm:h-20 bg-cyan-900/30"></div>
 
                     <TurbineUnit id="t1" name="GEN T1" status="running" mw={t1Mw} />
 
-                    <div className="w-px h-64 bg-slate-800/50 mx-8"></div>
+                    <div className="w-full h-px sm:w-px sm:h-64 bg-slate-800/50 sm:mx-8"></div>
 
                     <TurbineUnit id="t2" name="GEN T2" status="running" mw={t2Mw} />
 
-                    {/* Water Flow Lines (Decorative) */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" style={{ zIndex: -1 }}>
+                    {/* Water Flow Lines (Decorative) - Hide on mobile */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 hidden sm:block" style={{ zIndex: -1 }}>
                         <path d="M 200 50 Q 200 150 250 200" fill="none" stroke="#06b6d4" strokeWidth="2" strokeDasharray="5,5" className="animate-pulse" />
                         <path d="M 600 50 Q 600 150 550 200" fill="none" stroke="#06b6d4" strokeWidth="2" strokeDasharray="5,5" className="animate-pulse" />
                     </svg>
@@ -97,7 +98,10 @@ export const ScadaMimic: React.FC = React.memo(() => {
 
                 {/* OUTLET */}
                 <div className="w-full h-12 bg-gradient-to-b from-cyan-900/20 to-transparent border-t border-cyan-800/30 rounded-b-xl mt-4 relative overflow-hidden">
-                    <span className="absolute top-2 right-4 text-[10px] text-cyan-700 font-bold tracking-widest">TAILRACE LEVEL: 142.5m</span>
+                    <span className="absolute top-2 right-2 sm:right-4 text-[9px] sm:text-[10px] text-cyan-700 font-bold tracking-widest">
+                        <span className="hidden sm:inline">TAILRACE LEVEL: 142.5m</span>
+                        <span className="sm:hidden">TL: 142.5m</span>
+                    </span>
                     <div className="absolute bottom-0 w-full h-1 bg-cyan-500/10"></div>
                 </div>
             </div>
