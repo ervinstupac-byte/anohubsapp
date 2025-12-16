@@ -15,7 +15,7 @@ export const InterventionCTA: React.FC = () => {
     if (!selectedAsset) return null;
 
     return (
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in-up">
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in-up">
             <ModernButton
                 onClick={() => navigateTo('riskAssessment')} // Pretpostavljamo da vodi na Risk Assessment
                 variant="danger"

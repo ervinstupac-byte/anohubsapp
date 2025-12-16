@@ -21,24 +21,35 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                 </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="flex flex-col gap-1 max-h-60 overflow-y-auto custom-scrollbar pr-1">
                 {assets.map(asset => (
                     <button
                         key={asset.id}
                         onClick={() => selectAsset(asset.id)}
                         className={`
-                            h-2 rounded transition-all duration-300 relative group
-                            ${selectedAsset?.id === asset.id ? 'bg-cyan-400 shadow-[0_0_10px_cyan]' : 'bg-slate-700 hover:bg-slate-600'}
+                            w-full flex items-center gap-3 px-3 py-2 rounded transition-all group
+                            ${selectedAsset?.id === asset.id
+                                ? 'bg-cyan-900/30 border-l-2 border-cyan-400 text-white'
+                                : 'hover:bg-slate-800 border-l-2 border-transparent text-slate-400'}
                         `}
-                        title={asset.name}
                     >
-                        {/* Status Indicator Dot */}
+                        {/* Status Dot */}
                         <div className={`
-                            absolute -top-1 -right-1 w-2 h-2 rounded-full border border-slate-900
+                            w-2 h-2 rounded-full shrink-0
                              ${asset.status === 'Critical' ? 'bg-red-500 animate-pulse' :
                                 asset.status === 'Warning' || asset.status === 'Maintenance' ? 'bg-amber-400' :
                                     'bg-emerald-500'}
                          `}></div>
+
+                        {/* Asset Name */}
+                        <span className="text-xs font-bold uppercase truncate text-left flex-1">
+                            {asset.name}
+                        </span>
+
+                        {/* Selected Indicator */}
+                        {selectedAsset?.id === asset.id && (
+                            <span className="text-[10px] text-cyan-500">▶</span>
+                        )}
                     </button>
                 ))}
             </div>
