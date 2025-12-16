@@ -131,6 +131,17 @@ export const QuestionnaireSummary: React.FC = () => {
 
     const riskIndicator = getRiskLevel(analysis.highRisk.length, analysis.mediumRisk.length);
 
+    // --- GENERATE CONSULTATION / ADVICE ---
+    const consultationText = useMemo(() => {
+        if (riskIndicator.level === 'High') {
+            return t('consultation.high', 'URGENT: Your asset shows signs of critical "Execution Gap". Immediate alignment verification (<0.05mm/m) and vibration spectral analysis (ISO 10816) are recommended to prevent catastrophic failure. Review MIV and Guide Vane protocols immediately.');
+        } else if (riskIndicator.level === 'Medium') {
+            return t('consultation.medium', 'WARNING: Deviations detected. While immediate failure is unlikely, efficiency losses are accruing. Schedule a comprehensive "Ownership Maintenance" audit and verify sensor calibration within the next maintenance window.');
+        } else {
+            return t('consultation.low', 'OPTIMAL: Asset is operating within the Standard of Excellence. Continue predictive maintenance logging and ensure annual "Digital Twin" calibration to maintain this status.');
+        }
+    }, [riskIndicator.level, t]);
+
     // --- CLOUD SUBMISSION ---
     const handleSubmitToCloud = async () => {
         if (Object.keys(answers).length === 0) {
@@ -149,7 +160,8 @@ export const QuestionnaireSummary: React.FC = () => {
                 operational_data: operationalData,
                 risk_score: disciplineRiskScore,
                 risk_level: riskIndicator.level,
-                description: description
+                description: description,
+                consultation: consultationText // <--- Added Consultation to Payload
             };
 
             const { error } = await supabase.from('risk_assessments').insert([payload]);
@@ -179,7 +191,8 @@ export const QuestionnaireSummary: React.FC = () => {
             risk_score: disciplineRiskScore,
             risk_level: riskIndicator.level,
             answers: answers,
-            assetName: selectedAsset?.name || 'Unspecified Asset'
+            assetName: selectedAsset?.name || 'Unspecified Asset',
+            consultation: consultationText // <--- Added Consultation to PDF Data
         };
 
         const blob = createRiskReportBlob(
@@ -268,6 +281,19 @@ export const QuestionnaireSummary: React.FC = () => {
                         </div>
                         <p className="text-xs text-cyan-100/70 leading-relaxed font-medium">
                             {t('questionnaire.conceptDesc')}
+                        </p>
+                    </GlassCard>
+
+                    {/* AI CONSULTATION CARD */}
+                    <GlassCard className="bg-teal-900/20 border-teal-500/30">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="text-3xl">💡</span>
+                            <h4 className="font-bold text-teal-300 text-sm uppercase tracking-wide">
+                                {t('consultation.title', 'AI Consultation')}
+                            </h4>
+                        </div>
+                        <p className="text-sm text-teal-100/80 leading-relaxed font-medium border-l-4 border-teal-400 pl-4">
+                            {consultationText}
                         </p>
                     </GlassCard>
                 </div>
