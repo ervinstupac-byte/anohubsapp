@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { QUESTIONS } from '../constants.ts';
+import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 
 interface QuestionnaireProps {
     onShowSummary: () => void;
@@ -12,8 +13,9 @@ interface QuestionnaireProps {
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onRiskSync }) => {
     const { t } = useTranslation();
+    const { answers, setAnswer } = useQuestionnaire(); // ✅ Koristi Context umjesto lokalnog state-a
+
     const [currentStep, setCurrentStep] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, string>>({});
 
     // Dodano stanje za fokusiranu opciju (za navigaciju tastaturom)
     const [focusedOptionIndex, setFocusedOptionIndex] = useState<number>(-1);
@@ -57,7 +59,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
     }, [focusedOptionIndex, answers, currentQ, currentStep]);
 
     const handleAnswer = (option: string) => {
-        setAnswers(prev => ({ ...prev, [QUESTIONS[currentStep].id]: option }));
+        setAnswer(QUESTIONS[currentStep].id, option); // ✅ Spremi u Context
     };
 
     const handleNext = () => {
