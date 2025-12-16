@@ -4,9 +4,10 @@ import { useAssetContext } from '../../contexts/AssetContext.tsx';
 interface FleetOverviewProps {
     onToggleMap: () => void;
     showMap: boolean;
+    onRegisterAsset: () => void;
 }
 
-export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggleMap, showMap }) => {
+export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggleMap, showMap, onRegisterAsset }) => {
     const { assets, selectedAsset, selectAsset } = useAssetContext();
 
     return (
@@ -53,11 +54,14 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                     </button>
                 ))}
             </div>
-            <div className="mt-2 text-center">
-                <span className="text-xs font-mono font-bold text-white block truncate">
-                    {selectedAsset?.name || 'NO CONTEXT'}
-                </span>
-            </div>
+
+            {/* Add Asset Button */}
+            <button
+                onClick={onRegisterAsset}
+                className="w-full mt-3 py-2 flex items-center justify-center gap-2 border border-dashed border-slate-700 rounded text-[10px] font-bold text-slate-500 hover:text-cyan-400 hover:border-cyan-500 hover:bg-cyan-900/10 transition-all uppercase tracking-wider"
+            >
+                <span>+</span> Register New Plant
+            </button>
         </div>
     );
 });

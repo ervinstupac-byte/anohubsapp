@@ -160,7 +160,7 @@ const AppLayout: React.FC = () => {
 
                 <main className="flex-grow w-full relative z-10">
                     <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING MODULE...</span></div>}>
-                        <div className={!isHub ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12"}>
+                        <div className={!isHub ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "w-full h-full animate-fade-in"}>
                             <Routes>
                                 <Route index element={<CommandCentreDashboard />} />
 

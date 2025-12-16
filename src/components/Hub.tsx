@@ -12,6 +12,7 @@ import { AlarmBar } from './scada/AlarmBar.tsx';
 import { DigitalPanel } from './scada/DigitalPanel.tsx';
 import { ScadaMimic } from './scada/ScadaMimic.tsx';
 import { GlobalMap } from './GlobalMap.tsx';
+import { AssetRegistrationWizard } from './AssetRegistrationWizard.tsx';
 import type { AppView } from '../contexts/NavigationContext.tsx';
 
 // --- SIDEBAR MODULE ITEM ---
@@ -54,6 +55,9 @@ export const Hub: React.FC = () => {
     const [totalPower, setTotalPower] = useState(0);
     const [alarmActive, setAlarmActive] = useState(false);
 
+    // Wizard State
+    const [isWizardOpen, setIsWizardOpen] = useState(false);
+
     useEffect(() => {
         const power = Object.values(telemetry).reduce((acc, curr) => acc + curr.output, 0);
         setTotalPower(parseFloat(power.toFixed(1)));
@@ -83,10 +87,17 @@ export const Hub: React.FC = () => {
     return (
         <div className="min-h-screen bg-black text-slate-200 font-sans selection:bg-cyan-500/30">
 
+            {/* WIZARD MODAL */}
+            <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />
+
             {/* SIDEBAR */}
             <Sidebar>
                 {/* 1. Fleet Overview at Top */}
-                <FleetOverview onToggleMap={() => setShowMap(!showMap)} showMap={showMap} />
+                <FleetOverview
+                    onToggleMap={() => setShowMap(!showMap)}
+                    showMap={showMap}
+                    onRegisterAsset={() => setIsWizardOpen(true)}
+                />
 
                 {/* 2. Operational Modules (Primary) */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1">
