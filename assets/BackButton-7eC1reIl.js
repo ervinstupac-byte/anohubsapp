@@ -1,4 +1,4 @@
-import{b as c,g as l,j as t}from"./index-7DnLk_Az.js";const u=`
+import{b as c,g as l,j as t}from"./index-j4BFo8CQ.js";const u=`
     group flex items-center space-x-2 px-3 py-1.5 rounded-lg
     text-slate-500 text-xs font-bold uppercase tracking-wider
     border border-transparent
