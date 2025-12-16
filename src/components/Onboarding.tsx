@@ -1,41 +1,43 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
 
 interface OnboardingProps {
     onComplete: () => void;
 }
 
-const onboardingSteps = [
-    {
-        icon: '👋',
-        title: 'Welcome to AnoHUB',
-        subtitle: 'Systemic Risk & Excellence Platform',
-        content: "Your central command for strategic hydropower management. We bridge the gap between engineering precision and operational reality.",
-    },
-    {
-        icon: '🛠️',
-        title: 'Strategic Arsenal',
-        subtitle: 'Tools for Zero-Tolerance',
-        content: "Access the 'Risk Assessment Tool' to quantify the Execution Gap and the 'Installation Standard' to enforce the 0.05 mm/m mandate.",
-    },
-    {
-        icon: '⚡',
-        title: 'Innovation Engine',
-        subtitle: 'Configure & Optimize',
-        content: "Model power output with the 'HPP Calculator' and capture breakthrough ideas in the 'Ino-Hub'. Innovation meets discipline.",
-    },
-    {
-        icon: '🚀',
-        title: 'Systems Online',
-        subtitle: 'Ready for Deployment',
-        content: 'The platform is calibrated and ready. Engage with the tools to secure your warranty and optimize Life Cycle Costs.',
-    },
-];
-
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
+    const { t } = useTranslation();
     const [step, setStep] = useState(0);
     const [isExiting, setIsExiting] = useState(false);
+
+    const onboardingSteps = [
+        {
+            icon: '👋',
+            title: t('onboarding.steps.0.title'),
+            subtitle: t('onboarding.steps.0.subtitle'),
+            content: t('onboarding.steps.0.content'),
+        },
+        {
+            icon: '🛠️',
+            title: t('onboarding.steps.1.title'),
+            subtitle: t('onboarding.steps.1.subtitle'),
+            content: t('onboarding.steps.1.content'),
+        },
+        {
+            icon: '⚡',
+            title: t('onboarding.steps.2.title'),
+            subtitle: t('onboarding.steps.2.subtitle'),
+            content: t('onboarding.steps.2.content'),
+        },
+        {
+            icon: '🚀',
+            title: t('onboarding.steps.3.title'),
+            subtitle: t('onboarding.steps.3.subtitle'),
+            content: t('onboarding.steps.3.content'),
+        },
+    ];
 
     const handleComplete = () => {
         setIsExiting(true);
@@ -70,7 +72,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     const currentData = onboardingSteps[step];
 
     return (
-        <div 
+        <div
             className={`
                 fixed inset-0 z-[200] flex items-center justify-center p-4
                 bg-[#020617]/90 backdrop-blur-md transition-opacity duration-500
@@ -84,17 +86,17 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 overflow-hidden transition-all duration-500 transform
                 ${isExiting ? 'scale-95 translate-y-4' : 'scale-100 translate-y-0 animate-scale-in'}
             `}>
-                
+
                 {/* Background Decor */}
                 <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none animate-pulse-glow"></div>
                 <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none animate-pulse-glow" style={{ animationDelay: '2s' }}></div>
 
                 {/* Skip Button */}
-                <button 
+                <button
                     onClick={handleComplete}
                     className="absolute top-6 right-6 text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors z-20"
                 >
-                    Skip Intro
+                    {t('onboarding.skip')}
                 </button>
 
                 <div className="p-10 pb-8 text-center relative z-10">
@@ -122,11 +124,11 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
 
                 {/* Progress Bar & Footer */}
                 <div className="bg-slate-950/50 p-8 border-t border-slate-800">
-                    
+
                     {/* Step Indicators */}
                     <div className="flex justify-center gap-2 mb-8">
                         {onboardingSteps.map((_, index) => (
-                            <div 
+                            <div
                                 key={index}
                                 className={`
                                     h-1.5 rounded-full transition-all duration-500 ease-out
@@ -146,7 +148,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                                 ${step === 0 ? 'text-slate-800 cursor-default' : 'text-slate-500 hover:text-white'}
                             `}
                         >
-                            Back
+                            {t('onboarding.back')}
                         </button>
 
                         <ModernButton
@@ -154,7 +156,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                             variant="primary"
                             className="px-8 shadow-lg shadow-cyan-500/20"
                         >
-                            {step === onboardingSteps.length - 1 ? 'Initialize System' : 'Next'}
+                            {step === onboardingSteps.length - 1 ? t('onboarding.initialize') : t('onboarding.next')}
                         </ModernButton>
                     </div>
                 </div>

@@ -557,11 +557,740 @@
     }
   },
   "componentLibrary": {
+    "noComponents": "Nema dostupnih komponenti u biblioteci.",
     "title": "Tehnička",
     "titleHighlight": "Baza Znanja",
     "criticalSystemsIndexed": "{{count}} Kritičnih Sistema Indeksirano",
-    "performanceKpis": "KPI Performansi",
+    "performanceKpis": "Ključni Pokazatelji Učinka (KPI)",
     "riskVectors": "Vektori Rizika",
-    "noComponents": "Nema dostupnih komponenti u biblioteci."
-  }
-}
+    "components": {
+      "design": {
+        "title": "Dizajn i Inženjering Postrojenja",
+        "description": "Holistički inženjerski pristup koji pokriva građevinske strukture, izbor opreme, raspored i integraciju sistema. Ova faza diktira dugoročne performanse i predstavlja prvu priliku za zatvaranje Jaza u Izvršenju.",
+        "kpis": [
+          "Ukupna efikasnost postrojenja (voda-do-žice)",
+          "Faktori dostupnosti i pouzdanosti (>99%)",
+          "Troškovi izgradnje naspram budžeta (Tačnost CAPEX-a)",
+          "Poštovanje sigurnosnih i ekoloških mandata"
+        ],
+        "risks": [
+          {
+            "text": "Neispravan građevinski dizajn (zahvat/odvod)",
+            "level": "High"
+          },
+          {
+            "text": "Loša specifikacija opreme (poddimenzionirane komponente)",
+            "level": "High"
+          },
+          {
+            "text": "Neefikasan hidraulički raspored koji povećava gubitke",
+            "level": "Medium"
+          },
+          {
+            "text": "Nedovoljne sigurnosne mjere (HSE rizici)",
+            "level": "High"
+          }
+        ]
+      },
+      "miv": {
+        "title": "Glavni Ulazni Ventil (MIV)",
+        "description": "Primarni sigurnosni ventil. Njegova pouzdanost je neupitna za sigurnost postrojenja i izolaciju radi održavanja. Kvar ovdje predstavlja katastrofalan rizik.",
+        "kpis": [
+          "Vrijeme zatvaranja u hitnim slučajevima (<60 sekundi)",
+          "Efikasnost zaptivanja (Mandat nultog curenja)",
+          "Pouzdanost (broj uspješnih operacija)",
+          "Integritet pritiska hidrauličkog aktuatora"
+        ],
+        "risks": [
+          {
+            "text": "Neuspjeh zatvaranja (Katastrofalan sigurnosni rizik)",
+            "level": "High"
+          },
+          {
+            "text": "Neuspjeh otvaranja (Gubitak proizvodnje)",
+            "level": "High"
+          },
+          {
+            "text": "Curenje zaptivača uzrokuje gubitak vode i eroziju",
+            "level": "Medium"
+          },
+          {
+            "text": "Kvar hidrauličkog aktuatora ili protutega",
+            "level": "High"
+          }
+        ]
+      },
+      "rotor": {
+        "title": "Radno Kolo Turbine i Lopatiće",
+        "description": "Srce konverzije energije. Lopatiće moraju biti dizajnirane za maksimalnu efikasnost i tretirane sa 13Cr4Ni kako bi se osigurao imunitet na kavitaciju i eroziju.",
+        "kpis": [
+          "Efikasnost konverzije energije (>94%)",
+          "Nivoi vibracija (ISO 20816 usklađenost)",
+          "Stopa kavitacije/erozije (mm/godišnje)",
+          "Srednje vrijeme između remonta (MTBO)"
+        ],
+        "risks": [
+          {
+            "text": "Zamorne pukotine na lopaticama radnog kola",
+            "level": "High"
+          },
+          {
+            "text": "Neravnoteža radnog kola uzrokuje sistemske vibracije",
+            "level": "Medium"
+          },
+          {
+            "text": "Oštećenje od kavitacije smanjuje efikasnost",
+            "level": "High"
+          },
+          {
+            "text": "Sedimentna erozija na vodećim ivicama",
+            "level": "Medium"
+          }
+        ]
+      },
+      "guide_vanes": {
+        "title": "Sprovodni Aparat (Wicket Gate)",
+        "description": "Regulacijski mehanizam koji kontroliše protok i snagu. Preciznost u povezivanju i zazorima je vitalna za sprečavanje curenja i osiguranje odgovorne regulacije mreže.",
+        "kpis": [
+          "Tačnost pozicioniranja i histereza",
+          "Curenje u zatvorenom položaju (nulti protok)",
+          "Stopa habanja na čeonim pločama i pivotima",
+          "Integritet sigurnosnih klinova"
+        ],
+        "risks": [
+          {
+            "text": "Zaglavljivanje zbog krhotina ili sedimenta",
+            "level": "High"
+          },
+          {
+            "text": "Prekomjerno curenje uzrokuje rotaciju puzanja",
+            "level": "Medium"
+          },
+          {
+            "text": "Prijevremeni kvar sigurnosnog klina",
+            "level": "Medium"
+          },
+          {
+            "text": "Habanje mehanizma povezivanja i zazor",
+            "level": "High"
+          }
+        ]
+      },
+      "shaft_sealing": {
+        "title": "Sistem Zaptivanja Osovine",
+        "description": "Barijera između rijeke i mašinske hale. Moderni mehanički ili karbonski zaptivači moraju se pratiti kako bi se spriječilo poplavljivanje i osigurala ekološka usklađenost.",
+        "kpis": [
+          "Stopa curenja vode (L/min)",
+          "Potrošnja vode za hlađenje/ispiranje",
+          "Temperatura lica zaptivača",
+          "Životni vijek zaptivnih elemenata"
+        ],
+        "risks": [
+          {
+            "text": "Katastrofalno curenje vodi do poplavljivanja",
+            "level": "High"
+          },
+          {
+            "text": "Gubitak vakuuma u sifonskoj cijevi (Reakcijske turbine)",
+            "level": "Medium"
+          },
+          {
+            "text": "Habanje rukavca osovine na mjestu zaptivanja",
+            "level": "Medium"
+          },
+          {
+            "text": "Kvar vode za hlađenje uzrokuje pregrijavanje",
+            "level": "High"
+          }
+        ]
+      },
+      "bearings": {
+        "title": "Ležajevi (Vodeći i Potisni)",
+        "description": "Oni podržavaju rotirajuću masu i hidraulički potisak. Njihovo zdravlje je direktno povezano sa mandatom poravnanja \"0.05 mm/m\". Kvar ovdje je često simptom lošeg poravnanja.",
+        "kpis": [
+          "Radna temperatura (<65°C)",
+          "Debljina i pritisak uljnog filma",
+          "Nivoi vibracija na kućištu ležaja",
+          "Čistoća ulja (ISO 4406)"
+        ],
+        "risks": [
+          {
+            "text": "Brisanje bijelog metala (Babbitt) zbog pregrijavanja",
+            "level": "High"
+          },
+          {
+            "text": "Habanje zbog kontaminacije ulja",
+            "level": "Medium"
+          },
+          {
+            "text": "Kvar pumpe za podmazivanje",
+            "level": "High"
+          },
+          {
+            "text": "Nestabilnost uljnog filma (Uljni Vrtlog)",
+            "level": "Medium"
+          }
+        ]
+      },
+      "generator": {
+        "title": "Generator",
+        "description": "Pretvara mehanički moment u električnu energiju. Njegovi sistemi izolacije i hlađenja su kritični za dugovječnost i efikasnost.",
+        "kpis": [
+          "Efikasnost generatora (>98%)",
+          "Temperatura namotaja statora",
+          "Trendovi parcijalnog pražnjenja (PD)",
+          "Otpor izolacije (IR)"
+        ],
+        "risks": [
+          {
+            "text": "Proboj izolacije namotaja statora",
+            "level": "High"
+          },
+          {
+            "text": "Zemljospojevi rotora",
+            "level": "High"
+          },
+          {
+            "text": "Struje ležaja uzrokuju jamičenje",
+            "level": "Medium"
+          },
+          {
+            "text": "Kvar sistema uzbude",
+            "level": "Medium"
+          }
+        ]
+      },
+      "control_system": {
+        "title": "Kontrolni Sistem (SCADA i PLC)",
+        "description": "Mozak postrojenja. Omogućava \"Digitalnog Blizanca\", prediktivno održavanje (AI) i daljinsko upravljanje. Zastarijevanje ovdje je veliki strateški rizik.",
+        "kpis": [
+          "Vrijeme odziva sistema (<500ms)",
+          "Dostupnost mreže i redundantnost",
+          "Tačnost senzora i kalibracija",
+          "Skor revizije kibernetičke sigurnosti"
+        ],
+        "risks": [
+          {
+            "text": "Povrede kibernetičke sigurnosti",
+            "level": "High"
+          },
+          {
+            "text": "Zastarijevanje hardvera/softvera (Nema podrške)",
+            "level": "Medium"
+          },
+          {
+            "text": "Gubitak podataka (Nedostatak historijskog bilježenja)",
+            "level": "Medium"
+          },
+          {
+            "text": "Drift senzora vodi do lažnih operacija",
+            "level": "Low"
+          }
+        ]
+      },
+      "hydraulic_system": {
+        "title": "Hidraulički Agregat (HPU) i Regulator",
+        "description": "Mišić regulacijskog sistema. Pokreće MIV, Sprovodne lopatice i Lopatiće radnog kola. Čistoća ulja je jedini najkritičniji faktor za pouzdanost.",
+        "kpis": [
+          "Vrijeme držanja pritiska akumulatora",
+          "Čistoća ulja (NAS/ISO klasa)",
+          "Radni ciklus pumpe",
+          "Vrijeme odziva serva"
+        ],
+        "risks": [
+          {
+            "text": "Curenje ulja (Ekološki rizik)",
+            "level": "Medium"
+          },
+          {
+            "text": "Zaglavljivanje servo ventila (Gubitak kontrole)",
+            "level": "High"
+          },
+          {
+            "text": "Gubitak pritiska akumulatora (Sigurnosni kvar)",
+            "level": "High"
+          },
+          {
+            "text": "Nakupljanje laka u ventilima",
+            "level": "Medium"
+          }
+        ]
+      },
+      "lubrication_system": {
+        "title": "Centralizirani Sistem Podmazivanja",
+        "description": "Krvotok mehaničkih komponenti. Automatizovana isporuka ulja/masti ležajevima i čaurama osigurava rad bez trenja potreban za optimizaciju LCC-a.",
+        "kpis": [
+          "Dosljednost sistemskog pritiska",
+          "Stopa potrošnje maziva",
+          "Diferencijalni pritisak filtera",
+          "Verifikacija tačke isporuke"
+        ],
+        "risks": [
+          {
+            "text": "Blokada linije uzrokuje gladovanje",
+            "level": "High"
+          },
+          {
+            "text": "Kvar pumpe",
+            "level": "High"
+          },
+          {
+            "text": "Upotreba nekompatibilnog maziva",
+            "level": "Medium"
+          },
+          {
+            "text": "Prodor vode u ulje",
+            "level": "Medium"
+          }
+        ]
+      },
+      "cooling_system": {
+        "title": "Sistem Hlađenja",
+        "description": "Upravlja toplotnim opterećenjima generatora i ležajeva. Obično sirova voda ili zatvorena petlja. Efikasnost ovdje direktno utiče na životni vijek izolacije i ulja.",
+        "kpis": [
+          "Delta temperature (Ulaz vs Izlaz)",
+          "Dosljednost protoka",
+          "Efikasnost izmjenjivača topline (Faktor prljanja)",
+          "Status redundantnosti pumpi"
+        ],
+        "risks": [
+          {
+            "text": "Prljanje/začepljenje izmjenjivača topline",
+            "level": "High"
+          },
+          {
+            "text": "Kvar pumpe za hlađenje",
+            "level": "High"
+          },
+          {
+            "text": "Unutrašnje curenje u generator",
+            "level": "Medium"
+          },
+          {
+            "text": "Nedovoljan kapacitet pri vršnim ljetnim temperaturama",
+            "level": "High"
+          }
+        ]
+      }
+    }
+  },
+  "digitalIntegrity": {
+    "title": "Nepromjenjivi Registar Povjerenja",
+    "nodeStatus": "STATUS ČVORA",
+    "height": "VISINA",
+    "blocks": "BLOKOVI",
+    "miningConsole": "Rudarska Konzola",
+    "noAssetTitle": "Potrebna Ciljna Imovina",
+    "noAssetDesc": "Odaberite projekat iznad da omogućite rudarske operacije.",
+    "targetAsset": "Ciljna Imovina",
+    "opType": "Tip Operacije",
+    "resultLabel": "Izmjerena Vrijednost / Rezultat",
+    "btnSeal": "PEČATIRAJ NA BLOCKCHAIN",
+    "btnHashing": "HASHIRANJE BLOKA...",
+    "latestBlocks": "Najnoviji Blokovi",
+    "btnVerify": "POTVRDI INTEGRITET",
+    "btnVerifying": "POTVRĐIVANJE...",
+    "btnSecure": "LANAC SIGURAN",
+    "operations": {
+      "alignment": "Provjera Poravnanja Osovine",
+      "vibration": "Analiza Vibracija",
+      "replacement": "Zamjena Komponente",
+      "firmware": "Ažuriranje Firmvera",
+      "audit": "Revizija Sigurnosnih Protokola"
+    },
+    "toast": {
+      "selectAsset": "Molimo prvo odaberite Ciljnu Imovinu.",
+      "mined": "Blok #{{index}} uspješno izrudaren na lancu.",
+      "verified": "Kriptografski integritet potvrđen. Registar je nepromjenjiv."
+    }
+  },
+  "digitalIntro": {
+    "abort": "Prekini Sekvencu",
+    "visionLog": "Dnevnik Vizije v1.0",
+    "heroTitleTop": "Arhitekti",
+    "heroTitleHighlight": "Imuniteta",
+    "heroText": "Mi ne samo da pregledamo elektrane. Mi rješavamo fundamentalnu jednačinu Dinamičkog Rizika naspram Operativne Izvijesnosti.",
+    "quote": "Godinama sam gledao kako industrija prihvata stopu kvarova od 48% kao 'neizbježno habanje'. Shvatio sam da standardno održavanje nije dovoljno. Trebao nam je forenzički pristup. Trebali smo tretirati hidroelektranu ne kao statičnu zgradu, već kao živi organizam sa imunološkim sistemom.",
+    "card1": {
+      "title": "Forenzička Istina",
+      "desc": "Mi ne nagađamo. Mi mjerimo. Koristeći NDT ispod površine i 3D metrologiju, pružamo podatke koji prolaze na sudu.",
+      "footer": "Ulaz: NDT Ispod Površine"
+    },
+    "card2": {
+      "title": "Prljave Ruke. Čisti Podaci.",
+      "desc": "Mi ne generišemo samo izvještaje. Mi okrećemo ključeve, obrađujemo čelik i zavarujemo kavitaciju. Od banalnih osnova do napredne forenzike.",
+      "footer": "Opseg: Izvršenje Od Kraja Do Kraja"
+    },
+    "card3": {
+      "title": "Kulturološka Izdaja",
+      "desc": "Zašto je Politika Najniže Ponude čin korporativnog nasilja nad imovinom. Mi se zalažemo za Protokol Nulte Tolerancije.",
+      "footer": "Neprijatelj: Jaz u Izvršenju"
+    },
+    "mastery": {
+      "title": "Majstorstvo Kroz Arhitekture",
+      "francis": "FRANCIS",
+      "francisDesc": "Zvijer Pritiska",
+      "kaplan": "KAPLAN",
+      "kaplanDesc": "Gospodar Protoka",
+      "pelton": "PELTON",
+      "peltonDesc": "Kralj Kinetike"
+    },
+    "activation": {
+      "unlockedTitle": "Sistem Otključan",
+      "loading": "Učitavanje Komandnog Centra...",
+      "lockedText1": "Vidjeli Ste Viziju. Sada Vidite Logiku.",
+      "lockedText2": "PROTOKOL PRISTUPA: INŽENJERSKI IMUNITET",
+      "enterBtn": "UĐI U KOMANDNI CENTAR",
+      "toastParams": "Protokol Imuniteta Aktiviran. Dobrodošli u Komandni Centar."
+    }
+  },
+  "genderEquity": {
+    "title": "Analitika Inkluzivnosti",
+    "desc": "Praćenje metrika u realnom vremenu o raznolikosti radne snage i usklađenosti sa ESG.",
+    "tabDashboard": "Kontrolna Ploča",
+    "tabStrategy": "Strateški Okvir",
+    "totalRep": "Ukupna Zastupljenost",
+    "employees": "Zaposlenici",
+    "leadership": "Liderske Uloge",
+    "leadershipDesc": "Iznad Prosjeka Industrije",
+    "payGap": "Prilagođeni Jaz u Platama",
+    "payGapDesc": "Cilj Ravnopravnosti Ispunjen",
+    "deptBreakdown": "Pregled po Odjelima",
+    "strategy": {
+      "impTitle": "Strateški Imperativ",
+      "impSub": "Organizacijski Nedostaci Stvaraju Sistemski Rizik",
+      "impContent": "Prava inženjerska preciznost seže dalje od mehaničkih tolerancija do preciznosti upravljanja ljudskim kapitalom. Organizacija koja ne uspijeva privući, zadržati i promovisati raznolik talenat pati od dubokog, sistemskog kvara.",
+      "impQuote": "Ovo nije samo HR inicijativa; ovo je strateški imperativ za eliminaciju kritičnog izvora sistemskog rizika i zatvaranje Jaza u Izvršenju.",
+      "redefTitle": "Redefinisanje 'Izvrsnosti'",
+      "redefSub": "Inkluzivni Rast kao Tehnički Standard",
+      "card1Title": "Neizbježna Analogija",
+      "card1Content": "Ako tolerišemo 10% pristrasnosti pri zapošljavanju, to je ekvivalentno izgradnji turbine sa tolerancijom od 10%. Obje su svjesne odluke koje svjesno garantuju budući kvar sistema.",
+      "card2Title": "Mandat Holističke Preciznosti",
+      "card2Content": "Baš kao što je tehnička preciznost potrebna do 0.05 mm/m, organizacijska preciznost zahtijeva politiku nulte tolerancije prema pristrasnosti."
+    }
+  },
+  "hppImprovements": {
+    "title": "HPP Ino-Hub",
+    "subtitle": "Kolaborativna Inženjerska Inteligencija. Uhvatite probojne ideje.",
+    "logTitle": "Zabilježi Novi Koncept",
+    "contributor": "Saradnik: {{name}}",
+    "conceptLabel": "Naslov Koncepta",
+    "conceptPlaceholder": "npr. Biomimetički Premaz",
+    "discipline": "Disciplina",
+    "descLabel": "Tehnički Opis",
+    "descPlaceholder": "Opišite predloženo poboljšanje...",
+    "submit": "Pošalji na Pregled",
+    "loading": "Sinhronizacija Baze Inovacija...",
+    "emptyTitle": "Nema ideja u ovoj kategoriji.",
+    "emptyDesc": "Budite prvi koji će inovirati!",
+    "toastSuccess": "Inovacija uspješno zabilježena!",
+    "toastError": "Neuspješno glasanje.",
+    "categories": {
+      "all": "Sve",
+      "mech": "Mehanički",
+      "digi": "Digitalni",
+      "eco": "Ekološki",
+      "sys": "Sistemski"
+    }
+  },
+  "installationGuarantee": {
+    "title": "Garancija Instalacije",
+    "subtitle": "Protokol 0.05 mm/m. Mandat preciznosti o kojem se ne pregovara tokom montaže.",
+    "activeAudit": "Aktivna Revizija Za",
+    "selectAsset": "--- Odaberi Imovinu ---",
+    "liveStatus": "Status Uživo",
+    "passed": "PROŠAO",
+    "failed": "PAO",
+    "pending": "NA ČEKANJU",
+    "checkpoints": "Obavezne Tačke Provjere",
+    "inputPlaceholder": "Unesite Izmjerenu Vrijednost...",
+    "statusOptions": {
+      "pending": "Na čekanju",
+      "pass": "Prolaz",
+      "fail": "Pad"
+    },
+    "remarksTitle": "Napomene Inženjera",
+    "remarksPlaceholder": "Dokumentujte sva odstupanja, rizike ili korektivne mjere...",
+    "sealBtn": "Pečatiraj Reviziju na Cloud",
+    "selectBtn": "Odaberi Imovinu za Početak",
+    "toastSelect": "Molimo prvo odaberite Ciljnu Imovinu prije spremanja revizije.",
+    "toastSuccess": "Revizija uspješno pečatirana! Status: {{status}}",
+    "toastError": "Neuspješno spremanje revizije: {{error}}",
+    "checks": {
+      "foundation": "Poravnanje Temelja",
+      "foundationReq": "< 0.05 mm/m (Vertikalnost)",
+      "shaft": "Odstupanje Glavne Osovine",
+      "shaftReq": "< 0.02 mm (Statičko)",
+      "bearing": "Zazor Vodećeg Ležaja",
+      "bearingReq": "OEM Tolerancija",
+      "wicket": "Sinhronizacija Sprovodnog Aparata",
+      "wicketReq": "< 1% Odstupanja",
+      "vibration": "Osnovna Linija Vibracija",
+      "vibrationReq": "< 2.5 mm/s (Ukupno)"
+    }
+  },
+  "feedback": {
+    "thankYouTitle": "Hvala Vam!",
+    "thankYouDesc": "Vaše povratne informacije su neprocjenjive za usavršavanje Standarda Izvrsnosti.",
+    "rateTitle": "Ocijenite Svoje Iskustvo",
+    "rateDesc": "Pomozite nam da inženjeringom stvorimo bolju platformu.",
+    "placeholder": "Opcionalno: Šta možemo poboljšati da zatvorimo Jaz u Izvršenju?",
+    "submitBtn": "Pošalji Povratne Informacije"
+  },
+  "onboarding": {
+    "skip": "Preskoči Uvod",
+    "back": "Nazad",
+    "next": "Dalje",
+    "initialize": "Inicijaliziraj Sistem",
+    "steps": {
+      "0": {
+        "title": "Dobrodošli u AnoHUB",
+        "subtitle": "Sistemski Rizik i Platforma Izvrsnosti",
+        "content": "Vaša centralna komanda za strateško upravljanje hidroelektranama. Premošćujemo jaz između inženjerske preciznosti i operativne stvarnosti."
+      },
+      "1": {
+        "title": "Strateški Arsenal",
+        "subtitle": "Alati za Nultu Toleranciju",
+        "content": "Pristupite 'Alatu za Procjenu Rizika' da kvantifikujete Jaz u Izvršenju i 'Standardu Instalacije' da sprovedete mandat od 0.05 mm/m."
+      },
+      "2": {
+        "title": "Inovacijski Motor",
+        "subtitle": "Konfiguracija i Optimizacija",
+        "content": "Modelirajte izlaznu snagu pomoću 'HE Kalkulatora' i zabilježite revolucionarne ideje u 'Ino-Hub'. Inovacija susreće disciplinu."
+      },
+      "3": {
+        "title": "Sistemi Online",
+        "subtitle": "Spremno za Implementaciju",
+        "content": "Platforma je kalibrirana i spremna. Angažujte alate kako biste osigurali garanciju i optimizirali troškove životnog ciklusa."
+      }
+    }
+  },
+  "projectPhase": {
+    "title": "Izvođenje Faze Projekta",
+    "subtitle": "Korak-po-korak sprovođenje Tri Postulata kroz životni ciklus imovine. Eliminisanje Jaza u Izvršenju na svakoj prekretnici.",
+    "phase1": {
+      "tag": "Planiranje i Tenderisanje",
+      "title": "Definisanje Nenagodivih Stavki",
+      "desc": "Jaz u Izvršenju počinje ovdje. Nejasni ugovori vode ka nejasnim rezultatima. Mandatiramo specifične ISO tolerancije i certifikate materijala direktno u tenderskoj dokumentaciji.",
+      "mandatesTitle": "Ključni Mandati",
+      "m1": "Eksplicitno definisati toleranciju poravnanja '0.05 mm/m'.",
+      "m2": "Zahtijevati EN 10204 3.1 certifikate za sav kritični čelik.",
+      "m3": "Uključiti penale za kršenje E-Protoka."
+    },
+    "phase2": {
+      "tag": "Instalacija",
+      "title": "Montaža Bez Tolerancije",
+      "desc": "Tačka bez povratka. Jednom kada se beton izlije i osovine spoje, greške postaju trajne obaveze. Digitalna verifikacija je obavezna.",
+      "mandatesTitle": "Ključni Mandati",
+      "m1": "Protokol laserske verifikacije poravnanja (Digitalni Zapis).",
+      "m2": "Nadzor pritezanja temeljnih vijaka (provjera na 500h).",
+      "m3": "Provjere kompenzacije Hladnog vs. Toplog poravnanja."
+    },
+    "phase3": {
+      "tag": "Operacije",
+      "title": "Prediktivna Disciplina",
+      "desc": "Prelazak sa 'Popravi kad se pokvari' na 'Popravi prije nego što odstupi'. M-E Sinergijski Jaz se zatvara integracijom SCADA podataka sa mehaničkom stvarnošću.",
+      "mandatesTitle": "Ključni Mandati",
+      "m1": "Spektralna analiza vibracija u realnom vremenu (FFT).",
+      "m2": "Praćenje trendova tribologije (analiza ulja).",
+      "m3": "Automatsko evidentiranje usklađenosti E-Protoka."
+    }
+  },
+  "revitalization": {
+    "title": "Revitalizacija Imovine i Zastarijevanje",
+    "context": "Kontekst:",
+    "desc": "Odlučivanje vođeno podacima: Produženje životnog vijeka vs. Zamjena. Osiguravanje optimizacije LCC-a zatvaranjem M-E Sinergijskog Jaza.",
+    "lea": {
+      "title": "Analiza Produženja Života (LEA)",
+      "subtitle": "Okvir Strateškog Odlučivanja",
+      "content": "Uvodimo <strong class=\"text-white font-bold\">Skor Sistemske Degradacije</strong>. Ovo integriše RCFA podatke, odstupanja vibracija i troškove zastoja kako bi se utvrdilo da li je komponenta zaista na Kraju Životnog Vijeka (EOL).",
+      "matrix": "Matrica Odluke",
+      "lcc": "LCC Optimizacija",
+      "refurbish": "Reparacija",
+      "replace": "Zamjena",
+      "quote": "Puna zamjena je prihvatljiva samo kada sistemski rizik to nalaže, ne kada tržište to zahtijeva. Etika na prvom mjestu."
+    },
+    "twin": {
+      "title": "Retrospektivni Digitalni Blizanac",
+      "desc": "Mapiranje Naslijeđene Imovine koristeći <strong class=\"text-white\">3D skeniranje i termalno snimanje</strong>.",
+      "tag": "Ključno za hidrauličko modeliranje i uklapanje"
+    },
+    "risk": {
+      "title": "Matrica Rizika Zastarijevanja",
+      "subtitle": "Ciljevi Revizije: SCADA, Regulatori, Releji",
+      "content": "Tehnologija se kreće brže od hidro imovine. Pratimo jaz između vaše instalirane baze i životnih ciklusa podrške prodavača.",
+      "alertTitle": "Kritično: Nedostatak Dokumentacije",
+      "alertContent": "Najveći rizik nije kvar hardvera, već <strong class=\"text-white font-bold\">Gubitak Informacija</strong>. Kada podrška prodavača prestane, a znanje nije preneseno na Digitalnog Blizanca, suočavate se s ogromnim Jazom u Izvršenju.",
+      "control": "Kontrolni Sistemi (ciklus 5-10 god)",
+      "mech": "Mehanička Imovina (ciklus 30-50 god)",
+      "gap": "M-E Sinergijski Jaz se javlja ovdje."
+    },
+    "cta": {
+      "title": "Penzionisanje ili Ponovno Pronalaženje?",
+      "desc": "Zakažite stručnu reviziju kako biste naučno utvrdili budućnost vaše imovine.",
+      "btn": "Zakažite Reviziju Zastarijevanja"
+    },
+    "riskAssessment": {
+      "protocol": "Dijagnostički Protokol v2.0",
+      "initTitle": "Inicijaliziraj Dijagnostiku",
+      "standbyDesc": "Sistem je u stanju pripravnosti. Molimo odaberite <strong class=\"text-cyan-400 font-bold\">Ciljnu Imovinu</strong> iznad za početak analize Jaza u Izvršenju."
+    },
+    "riverWildlife": {
+      "title": "Ekološki Inženjering",
+      "context": "Primijenjeni Kontekst:",
+      "subtitle": "Tehnologije o kojima se ne pregovara ispunjavaju etički mandat za Zaštitu Ekosistema.",
+      "mandate": "Postulat Etike",
+      "mandateDesc": "Mi ne ublažavamo samo uticaj; mi aktivno štitimo ekosistem. <strong class=\"text-white font-bold block mt-1\">Automatsko mjerenje E-Protoka je osnovni zahtjev Standarda Izvrsnosti.</strong>",
+      "sections": {
+        "fish_passage": {
+          "title": "Tehnologije Ribljih Staza",
+          "subtitle": "Bio-Inženjering za Migraciju",
+          "intro": "Moderne tehnologije fokusiraju se na siguran, efikasan i minimalno stresan prolaz oko brana radi očuvanja biodiverziteta.",
+          "ladders": {
+            "title": "Riblje Ljestve i Stepeništa",
+            "desc": "Kanali tipa Pool-and-Weir ili Denil sa nagibima (1:8 do 1:12) dizajnirani da vode ribe bez iscrpljivanja."
+          },
+          "lifts": {
+            "title": "Riblji Liftovi i Elevatori",
+            "desc": "Mehanički spremnici za visoke brane gdje su ljestve nepraktične. Automatizovano prikupljanje i puštanje."
+          },
+          "bypass": {
+            "title": "Prirolika Obilaznica",
+            "desc": "Vještački kanali koji oponašaju prirodne potoke. Ekološki najefikasnije rješenje sa malim nagibom."
+          },
+          "turbines": {
+            "title": "Riblje-Prijateljske Turbine",
+            "desc": "Napredni dizajni (npr. Alden) sa manje lopatica i širim razmacima za smanjenje smrtnosti od udara lopatica."
+          }
+        },
+        "sediment_management": {
+          "title": "Upravljanje Sedimentom i Erozijom",
+          "subtitle": "Zaštita Kapaciteta Rezervoara i Opreme",
+          "intro": "Brane zarobljavaju sediment, smanjujući kapacitet i uzrokujući abraziju turbina. Proaktivno upravljanje je ključno.",
+          "bypass": {
+            "title": "Obilazni Tuneli",
+            "desc": "Preusmjeravanje vode pune sedimenta tokom poplava."
+          },
+          "flushing": {
+            "title": "Ispiranje",
+            "desc": "Otvaranje niskih ispusta za čišćenje nakupljanja."
+          },
+          "watershed": {
+            "title": "Upravljanje Slivom",
+            "desc": "Pošumljavanje radi smanjenja dotoka na izvoru."
+          },
+          "vis": {
+            "title": "Vizualizacija",
+            "l1": "Batimetrijska Snimanja: Vizualizacija gubitka kapaciteta.",
+            "l2": "3D Skeniranje Habanja: Kvantificiranje gubitka materijala radnog kola."
+          },
+          "rcfa": {
+            "title": "RCFA Kritično: Dijagnoza",
+            "abrasion": "Abrazija (Simptom): Glatko, polirano habanje.",
+            "cavitation": "Kavitacija (Osnovni Uzrok): Jamičasta, spužvasta površina.",
+            "quote": "Tretiranje abrazije bez rješavanja kavitacije vodi do ponovnog kvara."
+          }
+        },
+        "water_quality": {
+          "title": "Kvalitet Vode i E-Protok",
+          "subtitle": "Etički Mandat",
+          "intro": "Održavanje prirodnih režima toka, temperature i nivoa kiseonika za staništa nizvodno.",
+          "eflow": {
+            "title": "Ekološki Protok (E-tok)",
+            "desc": "Upravljano ispuštanje vode radi oponašanja prirodne varijabilnosti.",
+            "mandate": "Mandat: Automatsko, kontinuirano mjerenje i digitalna dokumentacija se ne pregovaraju."
+          },
+          "aerating": {
+            "title": "Aerirajuće Turbine",
+            "desc": "Prozračivanje turbina radi povećanja nivoa rastvorenog kiseonika."
+          },
+          "withdrawal": {
+            "title": "Selektivno Zahvatanje",
+            "desc": "Ulazi na više nivoa za upravljanje temperaturom vode."
+          }
+        },
+        "habitat_restoration": {
+          "title": "Restauracija Staništa",
+          "subtitle": "Više od Ublažavanja",
+          "intro": "Proaktivne mjere za stvaranje neto pozitivnog ekološkog ishoda.",
+          "gravel": {
+            "title": "Dodavanje Šljunka",
+            "desc": "Postavljanje čistog šljunka za mrijestilišta riba."
+          },
+          "riparian": {
+            "title": "Obalna Zona",
+            "desc": "Ponovna sadnja autohtone vegetacije za stabilizaciju obala i zasjenjivanje vode."
+          },
+          "structures": {
+            "title": "Strukture u Toku",
+            "desc": "Stijene i debla koja stvaraju složena staništa toka."
+          }
+        }
+      }
+    },
+    "standardOfExcellence": {
+      "title": "Standard Izvrsnosti",
+      "subtitle": "Definišući ustav AnoHUB operacija.",
+      "subtitle2": "Ovi principi su <span class=\"text-white font-bold\">nenagodivi</span>.",
+      "principles": {
+        "p1": {
+          "title": "Imperativ 0.05 mm/m",
+          "desc": "Apsolutna preciznost poravnanja. Odstupanja vertikalnosti i horizontalnosti veća od 0.05 mm po metru predstavljaju kritičnu neusaglašenost. Odstupanja se ne prihvataju bez obzira na dozvole OEM-a.",
+          "quote": "\"Preciznost nije opcija; to je osnova.\""
+        },
+        "p2": {
+          "title": "Nula \"Vozi-do-Kvara\"",
+          "desc": "Prediktivno održavanje je obavezno. Rad imovine do kvara komponente je kršenje Protokola o Upravljanju Imovinom. Senzori moraju biti aktivni i praćeni.",
+          "quote": "\"Popravljamo prije nego što se pokvari.\""
+        },
+        "p3": {
+          "title": "Integritet Podataka",
+          "desc": "Svi operativni podaci, zapisi i procjene rizika moraju biti nepromjenjivi i arhivirani. Prikrivanje operativnih rizika ili \"friziranje\" brojeva je osnova za trenutni raskid ugovora.",
+          "quote": "\"Istina je jedina sigurnosna mreža.\""
+        },
+        "p4": {
+          "title": "Vlasničko Održavanje",
+          "desc": "Operateri djeluju kao vlasnici. Čišćenje, pritezanje i osnovne inspekcije su dnevni rituali, ne zakazani poslovi. Vizuelne inspekcije moraju biti digitalno evidentirane.",
+          "quote": "\"Ako upravljaš time, posjeduješ to.\""
+        }
+      },
+      "oath": {
+        "title": "Zakletva Inženjera",
+        "desc": "Aktivacijom ovog protokola, vežete svoj digitalni identitet za ove standarde.",
+        "identity": "IDENTITET:",
+        "date": "DATUM:",
+        "status": "STATUS:",
+        "ratified": "RATIFICIRANO",
+        "pending": "NA ČEKANJU",
+        "btnCommit": "POSVEĆUJEM SE IZVRSNOSTI",
+        "btnActive": "PROTOKOL AKTIVAN",
+        "sync": "Sinhronizacija sa HR Bazom... OK",
+        "toast": "Protokol ratificiran od strane inženjera"
+      },
+      "poweredBy": "POKREĆE"
+    },
+    "turbineDetail": {
+      "notFoundTitle": "Konfiguracija nije pronađena",
+      "notFoundDesc": "Nema tehničkih podataka za ID sredstva:",
+      "returnButton": "Povratak na Nadzornu Ploču",
+      "specification": "Specifikacija",
+      "subtitle": "Tehnička analiza kritičnih podsistema i načina kvara.",
+      "mechanicalSystems": "Mehanički Sistemi",
+      "rotatingParts": "Rotirajući Sklop i Ležajevi",
+      "electricalComponents": "Električne Komponente",
+      "generatorControl": "Generator i Kontrolni Sistemi",
+      "criticalityNote": "PROCJENA KRITIČNOSTI NA OSNOVU RCFA HISTORIJSKIH PODATAKA",
+      "rev": "Sistemska Specifikacija • Rev 2.4",
+      "badges": {
+        "critical": "KRITIČNO",
+        "attention": "PAŽNJA",
+        "standard": "STANDARD"
+      }
+    },
+    "interventionCTA": {
+      "label": "POTREBNA INTERVENCIJA NA SREDSTVU"
+    },
+    "ui": {
+      "select": "Odaberi"
+    }
+  }}

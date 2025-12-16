@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // IMPORT
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { AssetPicker } from './AssetPicker.tsx'; 
-// Ispravka: useAssetContext se uvozi izravno iz konteksta, a ne iz AssetPicker.tsx
-import { useAssetContext } from '../contexts/AssetContext.tsx'; 
-import { GlassCard } from './ui/GlassCard.tsx'; 
-import { ModernInput } from './ui/ModernInput.tsx'; 
-import { ModernButton } from './ui/ModernButton.tsx'; 
+import { AssetPicker } from './AssetPicker.tsx';
+import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernInput } from './ui/ModernInput.tsx';
+import { ModernButton } from './ui/ModernButton.tsx';
 
 // --- TYPES ---
 interface Block {
@@ -19,7 +19,7 @@ interface Block {
     hash: string;
     prev_hash: string;
     status: string;
-    asset_id?: string;    
+    asset_id?: string;
     engineer_id?: string;
 }
 
@@ -33,18 +33,19 @@ const generateHash = async (message: string): Promise<string> => {
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const DigitalIntegrity: React.FC = () => {
+    const { t } = useTranslation(); // HOOK
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
-    
+
     // --- STATE ---
     const [ledger, setLedger] = useState<Block[]>([]);
-    
+
     // Form Inputs
     const [operation, setOperation] = useState('Shaft Alignment Check');
     const [value, setValue] = useState('0.04 mm/m');
     const [engineer, setEngineer] = useState(user?.email || 'Eng. Unknown');
-    
+
     // UI States
     const [isMining, setIsMining] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
@@ -61,10 +62,10 @@ export const DigitalIntegrity: React.FC = () => {
                 .from('digital_integrity_ledger')
                 .select('*')
                 .order('block_index', { ascending: false })
-                .limit(50); 
+                .limit(50);
 
             if (error) throw error;
-            
+
             if (data && data.length > 0) {
                 setLedger(data);
             } else {
@@ -77,13 +78,13 @@ export const DigitalIntegrity: React.FC = () => {
 
     useEffect(() => {
         fetchLedger();
-        
+
         const sub = supabase.channel('public:digital_integrity_ledger')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
                 const newBlock = payload.new as Block;
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
             }).subscribe();
-            
+
         return () => { supabase.removeChannel(sub); };
     }, []);
 
@@ -106,22 +107,22 @@ export const DigitalIntegrity: React.FC = () => {
 
     // --- 3. MINING NEW BLOCK (Write) ---
     const handleSealRecord = async () => {
-        if (!selectedAsset) { 
-            showToast('Please select a Target Asset first.', 'error'); 
-            return; 
+        if (!selectedAsset) {
+            showToast(t('digitalIntegrity.toast.selectAsset', 'Please select a Target Asset first.'), 'error');
+            return;
         }
-        
+
         setIsMining(true);
-        
+
         const dataString = `${selectedAsset.id}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
-        const prevBlock = ledger[0]; 
-        
+        const prevBlock = ledger[0];
+
         try {
-            await new Promise(r => setTimeout(r, 1000)); 
+            await new Promise(r => setTimeout(r, 1000));
 
             const rawContent = prevBlock.hash + dataString + new Date().toISOString();
             const newHash = await generateHash(rawContent);
-            
+
             const newBlock = {
                 block_index: prevBlock.block_index + 1,
                 timestamp: new Date().toISOString(),
@@ -136,7 +137,7 @@ export const DigitalIntegrity: React.FC = () => {
             const { error } = await supabase.from('digital_integrity_ledger').insert([newBlock]);
 
             if (error) throw error;
-            showToast(`Block #${newBlock.block_index} successfully mined on-chain.`, 'success');
+            showToast(t('digitalIntegrity.toast.mined', { index: newBlock.block_index, defaultValue: `Block #${newBlock.block_index} successfully mined on-chain.` }), 'success');
 
         } catch (error: any) {
             console.error('Mining failed:', error);
@@ -151,30 +152,30 @@ export const DigitalIntegrity: React.FC = () => {
         setVerificationStatus('VERIFYING');
         setTimeout(() => {
             setVerificationStatus('SECURE');
-            showToast('Cryptographic integrity confirmed. Ledger is immutable.', 'success');
+            showToast(t('digitalIntegrity.toast.verified', 'Cryptographic integrity confirmed. Ledger is immutable.'), 'success');
         }, 2000);
     };
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-            
+
             {/* HERO HEADER */}
             <div className="text-center space-y-6 pt-6 relative">
                 <div className="flex justify-between items-center absolute top-0 w-full max-w-7xl px-4">
-                    <BackButton text="Back to Hub" />
+                    <BackButton text={t('actions.back', 'Back to Hub')} />
                 </div>
-                
+
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
-                        Immutable <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Trust Ledger</span>
+                        {t('digitalIntegrity.title', 'Immutable Trust Ledger')}
                     </h2>
                     <div className="flex justify-center gap-4">
                         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700 shadow-lg">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span className="text-xs font-mono text-slate-400">NODE STATUS: <span className="text-emerald-400 font-bold">ACTIVE</span></span>
+                            <span className="text-xs font-mono text-slate-400">{t('digitalIntegrity.nodeStatus', 'NODE STATUS')}: <span className="text-emerald-400 font-bold">{t('common.active', 'ACTIVE')}</span></span>
                         </div>
                         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-700 shadow-lg">
-                            <span className="text-xs font-mono text-slate-400">HEIGHT: <span className="text-cyan-400 font-bold">{ledger.length} BLOCKS</span></span>
+                            <span className="text-xs font-mono text-slate-400">{t('digitalIntegrity.height', 'HEIGHT')}: <span className="text-cyan-400 font-bold">{ledger.length} {t('digitalIntegrity.blocks', 'BLOCKS')}</span></span>
                         </div>
                     </div>
                 </div>
@@ -185,23 +186,23 @@ export const DigitalIntegrity: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {/* LEFT: MINING CONSOLE */}
                 <GlassCard className="h-fit border-l-4 border-l-blue-500">
                     <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
                         <span className="text-2xl">⛏️</span>
-                        <h3 className="text-lg font-bold text-white uppercase tracking-wider">Mining Console</h3>
+                        <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('digitalIntegrity.miningConsole', 'Mining Console')}</h3>
                     </div>
-                    
+
                     {!selectedAsset ? (
                         <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-xl text-center">
-                            <p className="text-sm text-red-400 font-bold uppercase tracking-wide mb-1">Target Asset Required</p>
-                            <p className="text-xs text-red-200/70">Select a project above to enable mining operations.</p>
+                            <p className="text-sm text-red-400 font-bold uppercase tracking-wide mb-1">{t('digitalIntegrity.noAssetTitle', 'Target Asset Required')}</p>
+                            <p className="text-xs text-red-200/70">{t('digitalIntegrity.noAssetDesc', 'Select a project above to enable mining operations.')}</p>
                         </div>
                     ) : (
                         <div className="space-y-5 animate-fade-in">
                             <div className="bg-slate-900/50 p-4 rounded-xl border border-white/5">
-                                <label className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block mb-1">Target Asset</label>
+                                <label className="text-[10px] text-slate-500 uppercase font-bold tracking-wider block mb-1">{t('digitalIntegrity.targetAsset', 'Target Asset')}</label>
                                 <div className="text-cyan-400 font-mono text-sm font-bold flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full"></span>
                                     {selectedAsset.name}
@@ -209,38 +210,38 @@ export const DigitalIntegrity: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="text-xs text-slate-500 uppercase font-bold mb-2 block ml-1">Operation Type</label>
-                                <select 
-                                    value={operation} 
-                                    onChange={e => setOperation(e.target.value)} 
+                                <label className="text-xs text-slate-500 uppercase font-bold mb-2 block ml-1">{t('digitalIntegrity.opType', 'Operation Type')}</label>
+                                <select
+                                    value={operation}
+                                    onChange={e => setOperation(e.target.value)}
                                     className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:border-cyan-500 outline-none transition-colors cursor-pointer"
                                 >
-                                    <option>Shaft Alignment Check</option>
-                                    <option>Vibration Analysis</option>
-                                    <option>Component Replacement</option>
-                                    <option>Firmware Update</option>
-                                    <option>Safety Protocol Audit</option>
+                                    <option value="Shaft Alignment Check">{t('digitalIntegrity.operations.alignment', 'Shaft Alignment Check')}</option>
+                                    <option value="Vibration Analysis">{t('digitalIntegrity.operations.vibration', 'Vibration Analysis')}</option>
+                                    <option value="Component Replacement">{t('digitalIntegrity.operations.replacement', 'Component Replacement')}</option>
+                                    <option value="Firmware Update">{t('digitalIntegrity.operations.firmware', 'Firmware Update')}</option>
+                                    <option value="Safety Protocol Audit">{t('digitalIntegrity.operations.audit', 'Safety Protocol Audit')}</option>
                                 </select>
                             </div>
 
-                            <ModernInput 
-                                label="Measured Value / Result"
-                                value={value} 
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)} 
+                            <ModernInput
+                                label={t('digitalIntegrity.resultLabel', 'Measured Value / Result')}
+                                value={value}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
                                 className="font-mono"
                             />
 
                             <div className="pt-4">
-                                <ModernButton 
-                                    onClick={handleSealRecord} 
-                                    disabled={isMining} 
+                                <ModernButton
+                                    onClick={handleSealRecord}
+                                    disabled={isMining}
                                     variant="primary"
                                     fullWidth
                                     isLoading={isMining}
                                     className="h-14 shadow-cyan-500/20"
                                     icon={!isMining && <span>🔒</span>}
                                 >
-                                    {isMining ? 'HASHING BLOCK...' : 'SEAL TO BLOCKCHAIN'}
+                                    {isMining ? t('digitalIntegrity.btnHashing', 'HASHING BLOCK...') : t('digitalIntegrity.btnSeal', 'SEAL TO BLOCKCHAIN')}
                                 </ModernButton>
                             </div>
                         </div>
@@ -250,27 +251,31 @@ export const DigitalIntegrity: React.FC = () => {
                 {/* RIGHT: LEDGER VISUALIZER */}
                 <div className="lg:col-span-2 space-y-4">
                     <div className="flex justify-between items-center bg-slate-900/60 p-4 rounded-2xl border border-slate-700 backdrop-blur-md">
-                        <h3 className="text-sm font-bold text-white pl-2 uppercase tracking-wider">Latest Blocks</h3>
-                        <button 
-                            onClick={handleVerifyChain} 
+                        <h3 className="text-sm font-bold text-white pl-2 uppercase tracking-wider">{t('digitalIntegrity.latestBlocks', 'Latest Blocks')}</h3>
+                        <button
+                            onClick={handleVerifyChain}
                             className={`
                                 text-[10px] px-4 py-2 rounded-lg font-bold border transition-all uppercase tracking-widest
-                                ${verificationStatus === 'SECURE' 
-                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
+                                ${verificationStatus === 'SECURE'
+                                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
                                     : 'bg-slate-800 text-slate-400 border-slate-600 hover:bg-slate-700 hover:text-white'}
                             `}
                         >
-                            {verificationStatus === 'VERIFYING' ? 'VERIFYING SIGNATURES...' : verificationStatus === 'SECURE' ? '✅ CHAIN SECURE' : '🔍 VERIFY INTEGRITY'}
+                            {verificationStatus === 'VERIFYING'
+                                ? t('digitalIntegrity.btnVerifying', 'VERIFYING SIGNATURES...')
+                                : verificationStatus === 'SECURE'
+                                    ? t('digitalIntegrity.btnSecure', '✅ CHAIN SECURE')
+                                    : t('digitalIntegrity.btnVerify', '🔍 VERIFY INTEGRITY')}
                         </button>
                     </div>
 
                     <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
                         {ledger.map((block) => (
                             <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
-                                
+
                                 {/* Connector Line */}
                                 {block.block_index > 0 && <div className="absolute -top-6 left-[27px] w-0.5 h-10 bg-slate-800 z-0"></div>}
-                                
+
                                 <div className="flex justify-between items-start relative z-10">
                                     <div className="flex gap-5">
                                         {/* Block Index */}
@@ -292,13 +297,13 @@ export const DigitalIntegrity: React.FC = () => {
                                                     </span>
                                                 )}
                                             </div>
-                                            
+
                                             <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wide">
                                                 <span>{new Date(block.timestamp).toLocaleString()}</span>
                                                 <span className="w-1 h-1 bg-slate-600 rounded-full"></span>
                                                 <span>{block.engineer_id?.split('@')[0] || 'System'}</span>
                                             </div>
-                                            
+
                                             {/* Hash Visualizer */}
                                             <div className="bg-black/40 p-3 rounded-lg border border-white/5 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
                                                 <div className="flex gap-3 mb-1">

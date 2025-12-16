@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { componentData } from '../data/componentData.ts';
+
 import { GlassCard } from './ui/GlassCard.tsx';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const ComponentLibrary: React.FC = () => {
     const { t } = useTranslation();
-    // Ensure we have data before rendering
-    if (!componentData || componentData.length === 0) {
-        return <div className="text-center p-10 text-slate-500">{t('componentLibrary.noComponents', 'No components available in the library.')}</div>;
-    }
 
-    const [selectedId, setSelectedId] = useState<string>(componentData[0].id);
+    const COMPONENT_IDS = [
+        'design', 'miv', 'rotor', 'guide_vanes', 'shaft_sealing',
+        'bearings', 'generator', 'control_system', 'hydraulic_system',
+        'lubrication_system', 'cooling_system'
+    ];
 
-    // Safe find with fallback
-    const selectedComponent = componentData.find((c) => c.id === selectedId) || componentData[0];
+    const [selectedId, setSelectedId] = useState<string>(COMPONENT_IDS[0]);
+
+    // Data fetching via i18n
+    const getComponentData = (id: string) => {
+        const kpis = t(`componentLibrary.components.${id}.kpis`, { returnObjects: true });
+        const risks = t(`componentLibrary.components.${id}.risks`, { returnObjects: true });
+
+        return {
+            id,
+            title: t(`componentLibrary.components.${id}.title`),
+            description: t(`componentLibrary.components.${id}.description`),
+            kpis: Array.isArray(kpis) ? kpis as string[] : [],
+            risks: Array.isArray(risks) ? risks as { text: string; level: 'High' | 'Medium' | 'Low' }[] : []
+        };
+    };
+
+    const selectedComponent = getComponentData(selectedId);
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-6 h-[calc(100vh-120px)] flex flex-col">
@@ -25,11 +40,11 @@ export const ComponentLibrary: React.FC = () => {
                 <div className="flex items-center gap-4">
                     <BackButton text={t('actions.back', 'Back to Hub')} />
                     <h2 className="text-3xl font-bold text-white tracking-tight hidden md:block">
-                        {t('componentLibrary.title', 'Technical')} <span className="text-cyan-400">{t('componentLibrary.titleHighlight', 'Knowledge Base')}</span>
+                        {t('componentLibrary.title')} <span className="text-cyan-400">{t('componentLibrary.titleHighlight')}</span>
                     </h2>
                 </div>
                 <div className="px-4 py-1.5 bg-slate-900/50 rounded-full border border-slate-700 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
-                    {t('componentLibrary.criticalSystemsIndexed', { count: componentData.length, defaultValue: `${componentData.length} Critical Systems Indexed` })}
+                    {t('componentLibrary.criticalSystemsIndexed', { count: COMPONENT_IDS.length })}
                 </div>
             </div>
 
@@ -38,25 +53,25 @@ export const ComponentLibrary: React.FC = () => {
 
                 {/* LEFT SIDEBAR (LIST) */}
                 <div className="lg:col-span-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar pr-2 h-full">
-                    {componentData.map((comp) => (
+                    {COMPONENT_IDS.map((id) => (
                         <button
-                            key={comp.id}
-                            onClick={() => setSelectedId(comp.id)}
+                            key={id}
+                            onClick={() => setSelectedId(id)}
                             className={`
                                 text-left p-4 rounded-xl border transition-all duration-300 group relative overflow-hidden
-                                ${selectedId === comp.id
+                                ${selectedId === id
                                     ? 'bg-gradient-to-r from-cyan-900/40 to-slate-900 border-cyan-500/50 shadow-lg'
                                     : 'bg-slate-900/40 border-white/5 hover:bg-slate-800 hover:border-white/10'}
                             `}
                         >
                             <div className="flex justify-between items-center relative z-10">
-                                <h3 className={`font-bold text-sm transition-colors ${selectedId === comp.id ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
-                                    {comp.title}
+                                <h3 className={`font-bold text-sm transition-colors ${selectedId === id ? 'text-white' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                                    {t(`componentLibrary.components.${id}.title`)}
                                 </h3>
-                                {selectedId === comp.id && <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_cyan]"></div>}
+                                {selectedId === id && <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_cyan]"></div>}
                             </div>
                             {/* Hover Effect */}
-                            <div className={`absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 transition-all duration-300 ${selectedId === comp.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`}></div>
+                            <div className={`absolute left-0 top-0 bottom-0 w-1 bg-cyan-500 transition-all duration-300 ${selectedId === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`}></div>
                         </button>
                     ))}
                 </div>
@@ -78,7 +93,7 @@ export const ComponentLibrary: React.FC = () => {
                             {/* KPIS */}
                             <div className="space-y-4">
                                 <h4 className="text-cyan-400 font-bold uppercase text-xs tracking-[0.2em] flex items-center gap-2 mb-2">
-                                    <span className="text-lg">📊</span> {t('componentLibrary.performanceKpis', 'Performance KPIs')}
+                                    <span className="text-lg">📊</span> {t('componentLibrary.performanceKpis')}
                                 </h4>
                                 <ul className="space-y-2">
                                     {selectedComponent.kpis.map((kpi, idx) => (
@@ -93,7 +108,7 @@ export const ComponentLibrary: React.FC = () => {
                             {/* RISKS */}
                             <div className="space-y-4">
                                 <h4 className="text-red-400 font-bold uppercase text-xs tracking-[0.2em] flex items-center gap-2 mb-2">
-                                    <span className="text-lg">⚠️</span> {t('componentLibrary.riskVectors', 'Risk Vectors')}
+                                    <span className="text-lg">⚠️</span> {t('componentLibrary.riskVectors')}
                                 </h4>
                                 <ul className="space-y-2">
                                     {selectedComponent.risks.map((risk, idx) => (

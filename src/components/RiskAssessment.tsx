@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 // ISPRAVKA IMPORTA: Uvozimo Questionnaire kao Named Export
@@ -11,15 +12,16 @@ import { AssetPicker } from './AssetPicker.tsx';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShowSummary }) => {
+    const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const { updateRiskState } = useRisk();
 
     // Ova funkcija se aktivira kada korisnik klikne "Finalize Analysis" u upitniku
     const handleRiskSync = (score: number, criticalCount: number) => {
-        
+
         // 1. Pošalji podatke u 'Neural Link' (ažuriraj globalno stanje rizika)
         updateRiskState(score, criticalCount);
-        
+
         // 2. Nastavi na ekran sa sažetkom (postojeća navigacija)
         onShowSummary();
     };
@@ -28,17 +30,17 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
         <div className="animate-fade-in space-y-8 pb-12 max-w-6xl mx-auto">
             {/* HEADER */}
             <div className="flex items-center justify-between">
-                <BackButton text="Return to Hub" />
+                <BackButton text={t('actions.back')} />
                 <div className="text-[10px] uppercase tracking-widest text-slate-500 font-bold hidden sm:block">
-                    Diagnostic Protocol v2.0
+                    {t('riskAssessment.protocol')}
                 </div>
             </div>
-            
+
             {/* 1. ASSET PICKER (Global) */}
             <div className="relative z-20">
                 <AssetPicker />
             </div>
-            
+
             {/* 2. LOGIC DISPLAY */}
             <div className="animate-fade-in-up" style={{ animationDelay: '100ms' }}>
                 {!selectedAsset ? (
@@ -48,13 +50,13 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                             <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full animate-pulse"></div>
                             <span className="relative text-6xl opacity-90 grayscale">🏗️</span>
                         </div>
-                        
+
                         <h2 className="text-3xl font-black text-white mb-3 tracking-tight">
-                            Initialize Diagnostics
+                            {t('riskAssessment.initTitle')}
                         </h2>
-                        
+
                         <p className="text-slate-400 max-w-lg mx-auto text-lg font-light leading-relaxed">
-                            System is in standby. Please select a <strong className="text-cyan-400 font-bold">Target Asset</strong> above to begin the Execution Gap analysis.
+                            <Trans i18nKey="riskAssessment.standbyDesc" components={{ strong: <strong className="text-cyan-400 font-bold" /> }} />
                         </p>
 
                         <div className="mt-8 flex justify-center gap-2 opacity-50">
@@ -65,8 +67,8 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                     </GlassCard>
                 ) : (
                     // ACTIVE MODULE (Prikazujemo Upitnik i prosljeđujemo Neural Link handler)
-                    <Questionnaire 
-                        onShowSummary={onShowSummary} 
+                    <Questionnaire
+                        onShowSummary={onShowSummary}
                         onRiskSync={handleRiskSync} // <--- KLJUČNO: Ovdje spajamo Upitnik s Contextom
                     />
                 )}

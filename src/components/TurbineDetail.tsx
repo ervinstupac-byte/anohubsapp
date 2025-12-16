@@ -11,21 +11,22 @@ interface TurbineDetailProps {
 
 // --- MODERN CRITICALITY BADGE (Neon Style) ---
 const CriticalityBadge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) => {
+    const { t } = useTranslation();
     let style = '';
     let icon = '';
-    
+
     switch (level) {
-        case 'High': 
-            style = 'bg-red-500/10 text-red-400 border-red-500/20 shadow-[0_0_15px_rgba(248,113,113,0.25)]'; 
-            icon = '⚠️ CRITICAL';
+        case 'High':
+            style = 'bg-red-500/10 text-red-400 border-red-500/20 shadow-[0_0_15px_rgba(248,113,113,0.25)]';
+            icon = `⚠️ ${t('turbineDetail.badges.critical')}`;
             break;
-        case 'Medium': 
-            style = 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.2)]'; 
-            icon = '⚡ ATTENTION';
+        case 'Medium':
+            style = 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_rgba(251,191,36,0.2)]';
+            icon = `⚡ ${t('turbineDetail.badges.attention')}`;
             break;
-        case 'Low': 
-            style = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.2)]'; 
-            icon = '✓ STANDARD';
+        case 'Low':
+            style = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(52,211,153,0.2)]';
+            icon = `✓ ${t('turbineDetail.badges.standard')}`;
             break;
     }
 
@@ -40,8 +41,8 @@ const CriticalityBadge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ leve
 const ComponentCard: React.FC<TurbineComponent> = ({ name, description, criticality }) => (
     <div className={`
         group relative p-5 rounded-2xl border transition-all duration-300
-        ${criticality === 'High' 
-            ? 'bg-gradient-to-br from-slate-900/60 to-red-950/30 border-red-500/20 hover:border-red-500/50' 
+        ${criticality === 'High'
+            ? 'bg-gradient-to-br from-slate-900/60 to-red-950/30 border-red-500/20 hover:border-red-500/50'
             : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-cyan-500/30'}
         backdrop-blur-sm
     `}>
@@ -54,7 +55,7 @@ const ComponentCard: React.FC<TurbineComponent> = ({ name, description, critical
             </h4>
             <CriticalityBadge level={criticality} />
         </div>
-        
+
         <p className="text-sm text-slate-400 leading-relaxed font-medium group-hover:text-slate-300 transition-colors relative z-10">
             {description}
         </p>
@@ -86,12 +87,12 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
         <div className="animate-fade-in pb-12 space-y-8">
             {/* Top Navigation */}
             <div className="flex items-center justify-between">
-                <BackButton text={t('actions.back', 'Back')} />
+                <BackButton text={t('actions.back')} />
                 <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest hidden sm:block">
-                    System Specification • Rev 2.4
+                    {t('turbineDetail.rev')}
                 </div>
             </div>
-            
+
             {/* HERO HEADER */}
             <div className="text-center space-y-4 animate-fade-in-up py-4">
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter uppercase drop-shadow-lg">
@@ -104,11 +105,11 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
 
             {/* MAIN GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
+
                 {/* MECHANICAL COLUMN */}
                 <div className="animate-slide-in-left">
-                    <GlassCard 
-                        title={t('turbineDetail.mechanicalSystems')} 
+                    <GlassCard
+                        title={t('turbineDetail.mechanicalSystems')}
                         subtitle={t('turbineDetail.rotatingParts')}
                         className="h-full shadow-cyan-900/10"
                         action={<span className="text-2xl p-2 bg-cyan-500/10 rounded-lg text-cyan-400">⚙️</span>}
@@ -123,8 +124,8 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
 
                 {/* ELECTRICAL COLUMN */}
                 <div className="animate-slide-in-right" style={{ animationDelay: '100ms' }}>
-                    <GlassCard 
-                        title={t('turbineDetail.electricalComponents')} 
+                    <GlassCard
+                        title={t('turbineDetail.electricalComponents')}
                         subtitle={t('turbineDetail.generatorControl')}
                         className="h-full shadow-purple-900/10"
                         action={<span className="text-2xl p-2 bg-purple-500/10 rounded-lg text-purple-400">⚡</span>}
@@ -138,7 +139,7 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
                 </div>
 
             </div>
-            
+
             {/* FOOTER NOTE */}
             <div className="text-center pt-8 border-t border-white/5">
                 <p className="text-xs text-slate-500 font-mono flex items-center justify-center gap-2">

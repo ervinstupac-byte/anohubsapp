@@ -1,11 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
-import { useAssetContext } from '../contexts/AssetContext.tsx'; 
+import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const InterventionCTA: React.FC = () => {
+    const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const { navigateTo } = useNavigation();
 
@@ -20,7 +22,7 @@ export const InterventionCTA: React.FC = () => {
                 className="px-6 py-3 font-bold tracking-widest text-sm shadow-[0_0_30px_rgba(239,68,68,0.5)]"
                 icon={<span>🚨</span>}
             >
-                ASSET INTERVENTION REQUIRED ({selectedAsset.name})
+                {t('interventionCTA.label')} ({selectedAsset.name})
             </ModernButton>
         </div>
     );

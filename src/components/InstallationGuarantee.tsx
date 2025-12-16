@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 // ISPRAVKA IMPORTA: Uvozimo AssetPicker kao komponentu
-import { AssetPicker } from './AssetPicker.tsx'; 
+import { AssetPicker } from './AssetPicker.tsx';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
-import { useAssetContext } from '../contexts/AssetContext.tsx'; 
+import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 
@@ -31,15 +32,16 @@ const AUDIT_STAGES = [
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const InstallationGuarantee: React.FC = () => {
+    const { t } = useTranslation();
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
-    
+
     // Inicijalizacija stanja
     const [audit, setAudit] = useState<AuditState>({
-        stageStatus: AUDIT_STAGES.reduce((acc, stage) => ({ 
-            ...acc, 
-            [stage.id]: { value: '', status: 'N/A' } 
+        stageStatus: AUDIT_STAGES.reduce((acc, stage) => ({
+            ...acc,
+            [stage.id]: { value: '', status: 'N/A' }
         }), {} as Record<string, StageStatus>),
         finalNotes: '',
     });
@@ -59,7 +61,7 @@ export const InstallationGuarantee: React.FC = () => {
 
     const handleSaveAudit = async () => {
         if (!selectedAsset) {
-            showToast('Please select a Target Asset before saving the audit.', 'error');
+            showToast(t('installationGuarantee.toastSelect'), 'error');
             return;
         }
 
@@ -77,21 +79,21 @@ export const InstallationGuarantee: React.FC = () => {
         try {
             const { error } = await supabase.from('installation_audits').insert([payload]);
             if (error) throw error;
-            showToast(`Audit sealed successfully! Status: ${overallStatus}`, overallStatus === 'PASSED' ? 'success' : 'warning');
+            showToast(t('installationGuarantee.toastSuccess', { status: t(`installationGuarantee.${overallStatus.toLowerCase()}`) }), overallStatus === 'PASSED' ? 'success' : 'warning');
         } catch (error: any) {
             console.error('Save Audit Error:', error);
-            showToast(`Failed to save audit: ${error.message}`, 'error');
+            showToast(t('installationGuarantee.toastError', { error: error.message }), 'error');
         }
     };
 
     // Logika za status trake
-    const overallStatus = Object.values(audit.stageStatus).some((s) => s.status === 'FAIL') ? 'FAILED' : 
-                          Object.values(audit.stageStatus).some((s) => s.status === 'PASS') ? 'PASSED' : 'PENDING';
+    const overallStatus = Object.values(audit.stageStatus).some((s) => s.status === 'FAIL') ? 'FAILED' :
+        Object.values(audit.stageStatus).some((s) => s.status === 'PASS') ? 'PASSED' : 'PENDING';
 
     return (
         <div className="animate-fade-in pb-12 max-w-6xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6">
-                <BackButton text="Back to Hub" />
+                <BackButton text={t('actions.back')} />
                 <div className="w-full max-w-xs">
                     <AssetPicker />
                 </div>
@@ -99,10 +101,10 @@ export const InstallationGuarantee: React.FC = () => {
 
             <div className="text-center space-y-2 mb-8">
                 <h2 className="text-4xl font-black text-white tracking-tighter uppercase">
-                    Installation <span className="text-cyan-400">Guarantee</span>
+                    {t('installationGuarantee.title').split(' ')[0]} <span className="text-cyan-400">{t('installationGuarantee.title').split(' ')[1]}</span>
                 </h2>
                 <p className="text-slate-400 text-lg max-w-3xl mx-auto font-light">
-                    The 0.05 mm/m Protocol. Non-negotiable precision mandate during assembly.
+                    {t('installationGuarantee.subtitle')}
                 </p>
             </div>
 
@@ -114,18 +116,17 @@ export const InstallationGuarantee: React.FC = () => {
                             <span className="text-2xl">🏗️</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active Audit For</p>
-                            <p className="text-lg font-bold text-white">{selectedAsset?.name || '--- Select Asset ---'}</p>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('installationGuarantee.activeAudit')}</p>
+                            <p className="text-lg font-bold text-white">{selectedAsset?.name || t('installationGuarantee.selectAsset')}</p>
                         </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 bg-black/20 px-6 py-3 rounded-xl border border-white/5">
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Live Status</span>
-                        <span className={`text-xl font-black uppercase tracking-wider ${
-                            overallStatus === 'FAILED' ? 'text-red-500' : 
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('installationGuarantee.liveStatus')}</span>
+                        <span className={`text-xl font-black uppercase tracking-wider ${overallStatus === 'FAILED' ? 'text-red-500' :
                             overallStatus === 'PASSED' ? 'text-emerald-400' : 'text-amber-400'
-                        }`}>
-                            {overallStatus}
+                            }`}>
+                            {t(`installationGuarantee.${overallStatus.toLowerCase()}`)}
                         </span>
                     </div>
                 </div>
@@ -134,7 +135,7 @@ export const InstallationGuarantee: React.FC = () => {
                 <div className="p-6 md:p-8 space-y-4">
                     <div className="flex items-center gap-2 mb-6">
                         <span className="h-px w-8 bg-cyan-500"></span>
-                        <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest">Mandatory Checkpoints</h3>
+                        <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-widest">{t('installationGuarantee.checkpoints')}</h3>
                     </div>
 
                     {AUDIT_STAGES.map((stage, index) => (
@@ -143,8 +144,8 @@ export const InstallationGuarantee: React.FC = () => {
                                 <div className="flex items-center gap-3">
                                     <span className="text-xs font-mono text-slate-600">0{index + 1}</span>
                                     <div>
-                                        <p className="text-sm font-bold text-slate-200">{stage.name}</p>
-                                        <p className="text-[10px] text-cyan-400/80 font-mono mt-0.5">{stage.requirement}</p>
+                                        <p className="text-sm font-bold text-slate-200">{t(`installationGuarantee.checks.${stage.id}`)}</p>
+                                        <p className="text-[10px] text-cyan-400/80 font-mono mt-0.5">{t(`installationGuarantee.checks.${stage.id}Req`)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +153,7 @@ export const InstallationGuarantee: React.FC = () => {
                             <div className="md:col-span-4">
                                 <input
                                     type="text"
-                                    placeholder="Enter Measured Value..."
+                                    placeholder={t('installationGuarantee.inputPlaceholder')}
                                     value={audit.stageStatus[stage.id].value}
                                     onChange={(e) => handleStageUpdate(stage.id, 'value', e.target.value)}
                                     className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition-all placeholder-slate-600"
@@ -163,15 +164,14 @@ export const InstallationGuarantee: React.FC = () => {
                                 <select
                                     value={audit.stageStatus[stage.id].status}
                                     onChange={(e) => handleStageUpdate(stage.id, 'status', e.target.value as any)}
-                                    className={`w-full border rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors outline-none appearance-none text-center ${
-                                        audit.stageStatus[stage.id].status === 'PASS' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' :
+                                    className={`w-full border rounded-lg px-3 py-2 text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors outline-none appearance-none text-center ${audit.stageStatus[stage.id].status === 'PASS' ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400' :
                                         audit.stageStatus[stage.id].status === 'FAIL' ? 'bg-red-500/20 border-red-500/50 text-red-400' :
-                                        'bg-slate-800 border-slate-600 text-slate-400'
-                                    }`}
+                                            'bg-slate-800 border-slate-600 text-slate-400'
+                                        }`}
                                 >
-                                    <option value="N/A">Pending</option>
-                                    <option value="PASS">Pass</option>
-                                    <option value="FAIL">Fail</option>
+                                    <option value="N/A">{t('installationGuarantee.statusOptions.pending')}</option>
+                                    <option value="PASS">{t('installationGuarantee.statusOptions.pass')}</option>
+                                    <option value="FAIL">{t('installationGuarantee.statusOptions.fail')}</option>
                                 </select>
                             </div>
                         </div>
@@ -180,24 +180,24 @@ export const InstallationGuarantee: React.FC = () => {
 
                 {/* NOTES & FOOTER */}
                 <div className="p-6 md:p-8 bg-slate-900/30 border-t border-white/5">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Engineer's Remarks</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{t('installationGuarantee.remarksTitle')}</h3>
                     <textarea
                         rows={3}
                         value={audit.finalNotes}
                         onChange={(e) => setAudit(prev => ({ ...prev, finalNotes: e.target.value }))}
                         className="w-full bg-slate-950/50 border border-slate-700 rounded-xl p-4 text-slate-300 text-sm resize-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all"
-                        placeholder="Document any deviations, risks, or corrective actions taken..."
+                        placeholder={t('installationGuarantee.remarksPlaceholder')}
                     />
 
                     <div className="flex justify-end mt-6">
-                        <ModernButton 
-                            onClick={handleSaveAudit} 
-                            disabled={!selectedAsset} 
+                        <ModernButton
+                            onClick={handleSaveAudit}
+                            disabled={!selectedAsset}
                             variant="primary"
                             className="px-8 shadow-lg shadow-cyan-900/20"
                             icon={<span>🔒</span>}
                         >
-                            {selectedAsset ? 'Seal Audit to Cloud' : 'Select Asset to Begin'}
+                            {selectedAsset ? t('installationGuarantee.sealBtn') : t('installationGuarantee.selectBtn')}
                         </ModernButton>
                     </div>
                 </div>

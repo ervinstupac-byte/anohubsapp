@@ -309,59 +309,6 @@
     "noUser": "No user logged in!",
     "back": "Back to Dashboard"
   },
-  "turbineDetail": {
-    "specification": "Specification",
-    "subtitle": "Technical breakdown of critical subsystems and LCC vulnerabilities.",
-    "mechanicalSystems": "Mechanical Systems",
-    "rotatingParts": "Rotating Parts & Hydraulics",
-    "electricalComponents": "Electrical Components",
-    "generatorControl": "Generator & Control",
-    "criticalityNote": "* Criticality assessment based on statistical failure rates and LCC impact analysis.",
-    "notFoundTitle": "System Data Not Found",
-    "notFoundDesc": "Configuration parameters for this turbine are missing.",
-    "returnButton": "Return to Design Studio"
-  },
-  "standardOfExcellence": {
-    "title": "The Standard of Excellence",
-    "subtitle": "Masterclass modules for transitioning from simple protocol adherence to systemic mastery.",
-    "modules": {
-      "m1": {
-        "title": "Hydrodynamic Immunity",
-        "problem": "Eliminating Cavitation & Erosion by Design",
-        "content": "The mandatory use of 13Cr4Ni steel and advanced blade design to create inherent plant immunity to chronic hydrodynamic failures. This is a foundational step in LCC Optimization."
-      },
-      "m2": {
-        "title": "Flawless Execution",
-        "problem": "Enforcing the 0.05 mm/m Precision Mandate",
-        "content": "A system of digital verification (3D scanning), laser alignment mandates (0.05 mm/m), and documented torque protocols that bridge the Execution Gap between plan and reality."
-      },
-      "m3": {
-        "title": "Operational Resilience",
-        "problem": "Predictive Analytics vs. Reactive Repair",
-        "content": "Using AI-driven acoustic monitoring and baseline 'fingerprints' to apply Root Cause Failure Analysis (RCFA), detecting instability at 60% of ISO limits before damage occurs."
-      },
-      "m4": {
-        "title": "Cultural Mandate",
-        "problem": "Closing the Human Capital Execution Gap",
-        "content": "Integrating technical precision with a culture of excellence, where Gender Equity and diverse teams are recognized as critical assets for closing the Execution Gap in human capital."
-      },
-      "m5": {
-        "title": "Knowledge Retention",
-        "problem": "The 'Living Standard' Database",
-        "content": "A mandate for a digital knowledge base where all Root Cause Analyses and field data are documented, ensuring continuous, closed-loop learning to prevent recurring failures."
-      },
-      "m6": {
-        "title": "Supply Chain Excellence",
-        "problem": "Material Integrity & Traceability",
-        "content": "A Certified Partner Program and a non-negotiable Material Traceability Mandate (EN 10204 3.1) to eliminate a critical source of systemic risk and ensure long-term LCC performance."
-      }
-    },
-    "partnerMandate": {
-      "title": "The Certified Partner Mandate",
-      "text": "The Material Traceability Mandate (EN 10204 3.1) is non-negotiable. It represents the ultimate ethical defense against financial risk and premature failure caused by counterfeit materials.",
-      "badge": "Official Requirement • ISO 9001 Compliant"
-    }
-  },
   "questions": {
     "q1": {
       "text": "Do you verify intake velocity profiles using CFD or physical scale models?",
@@ -568,11 +515,741 @@
     }
   },
   "componentLibrary": {
+    "noComponents": "No components available in the library.",
     "title": "Technical",
     "titleHighlight": "Knowledge Base",
     "criticalSystemsIndexed": "{{count}} Critical Systems Indexed",
     "performanceKpis": "Performance KPIs",
     "riskVectors": "Risk Vectors",
-    "noComponents": "No components available in the library."
+    "components": {
+      "design": {
+        "title": "Overall Plant Design & Engineering",
+        "description": "A holistic engineering approach covering civil structures, equipment selection, layout, and system integration. This phase dictates the long-term performance and represents the first opportunity to close the Execution Gap.",
+        "kpis": [
+          "Overall plant efficiency (water-to-wire)",
+          "Availability and reliability factors (>99%)",
+          "Construction costs versus budget (CAPEX accuracy)",
+          "Adherence to safety and environmental mandates"
+        ],
+        "risks": [
+          {
+            "text": "Incorrect civil engineering design (intake/tailrace)",
+            "level": "High"
+          },
+          {
+            "text": "Poor equipment specification (undersized components)",
+            "level": "High"
+          },
+          {
+            "text": "Inefficient hydraulic layout increasing losses",
+            "level": "Medium"
+          },
+          {
+            "text": "Insufficient safety considerations (HSE risks)",
+            "level": "High"
+          }
+        ]
+      },
+      "miv": {
+        "title": "Main Inlet Valve (MIV)",
+        "description": "The primary safety shut-off valve. Its reliability is non-negotiable for plant safety and maintenance isolation. Failure here represents a catastrophic risk.",
+        "kpis": [
+          "Closing time in emergencies (<60 seconds)",
+          "Sealing efficiency (Zero leakage mandate)",
+          "Reliability (successful operations count)",
+          "Hydraulic actuator pressure integrity"
+        ],
+        "risks": [
+          {
+            "text": "Failure to close (Catastrophic safety risk)",
+            "level": "High"
+          },
+          {
+            "text": "Failure to open (Production loss)",
+            "level": "High"
+          },
+          {
+            "text": "Seal leakage causing water loss and erosion",
+            "level": "Medium"
+          },
+          {
+            "text": "Hydraulic actuator or counterweight failure",
+            "level": "High"
+          }
+        ]
+      },
+      "rotor": {
+        "title": "Turbine Runner and Blades",
+        "description": "The heart of energy conversion. Blades must be designed for maximum efficiency and treated with 13Cr4Ni to ensure immunity against cavitation and erosion.",
+        "kpis": [
+          "Energy conversion efficiency (>94%)",
+          "Vibration levels (ISO 20816 compliance)",
+          "Cavitation/Erosion rate (mm/year)",
+          "Mean Time Between Overhauls (MTBO)"
+        ],
+        "risks": [
+          {
+            "text": "Fatigue cracks on runner blades",
+            "level": "High"
+          },
+          {
+            "text": "Runner imbalance causing systemic vibration",
+            "level": "Medium"
+          },
+          {
+            "text": "Cavitation damage reducing efficiency",
+            "level": "High"
+          },
+          {
+            "text": "Sediment erosion on leading edges",
+            "level": "Medium"
+          }
+        ]
+      },
+      "guide_vanes": {
+        "title": "Guide Vane Apparatus (Wicket Gate)",
+        "description": "The regulation mechanism controlling flow and power. Precision in linkage and clearances is vital to prevent leakage and ensure responsive grid regulation.",
+        "kpis": [
+          "Positioning accuracy and hysteresis",
+          "Leakage in the closed position (zero-flow)",
+          "Wear rate on facing plates and pivots",
+          "Shear pin integrity"
+        ],
+        "risks": [
+          {
+            "text": "Jamming due to debris or sediment wedge",
+            "level": "High"
+          },
+          {
+            "text": "Excessive leakage causing creep rotation",
+            "level": "Medium"
+          },
+          {
+            "text": "Premature shear pin failure",
+            "level": "Medium"
+          },
+          {
+            "text": "Linkage mechanism wear and backlash",
+            "level": "High"
+          }
+        ]
+      },
+      "shaft_sealing": {
+        "title": "Shaft Sealing System",
+        "description": "The barrier between the river and the powerhouse. Modern mechanical or carbon seals must be monitored to prevent flooding and ensure environmental compliance.",
+        "kpis": [
+          "Water leakage rate (L/min)",
+          "Cooling/flushing water consumption",
+          "Seal face temperature",
+          "Lifespan of sealing elements"
+        ],
+        "risks": [
+          {
+            "text": "Catastrophic leakage leading to flooding",
+            "level": "High"
+          },
+          {
+            "text": "Loss of vacuum in draft tube (Reaction turbines)",
+            "level": "Medium"
+          },
+          {
+            "text": "Shaft sleeve wear at sealing location",
+            "level": "Medium"
+          },
+          {
+            "text": "Cooling water failure causing burnout",
+            "level": "High"
+          }
+        ]
+      },
+      "bearings": {
+        "title": "Bearings (Guide and Thrust)",
+        "description": "These support the rotating mass and hydraulic thrust. Their health is directly linked to the \"0.05 mm/m\" alignment mandate. Failure here is often a symptom of poor alignment.",
+        "kpis": [
+          "Operating temperature (<65°C)",
+          "Oil film thickness and pressure",
+          "Vibration levels on bearing housing",
+          "Oil cleanliness (ISO 4406)"
+        ],
+        "risks": [
+          {
+            "text": "Wiping of white metal (Babbitt) due to overheating",
+            "level": "High"
+          },
+          {
+            "text": "Wear due to oil contamination",
+            "level": "Medium"
+          },
+          {
+            "text": "Lubrication pump failure",
+            "level": "High"
+          },
+          {
+            "text": "Oil film instability (Oil Whirl/Whip)",
+            "level": "Medium"
+          }
+        ]
+      },
+      "generator": {
+        "title": "Generator",
+        "description": "Converts mechanical torque into electrical power. Its insulation and cooling systems are critical for longevity and efficiency.",
+        "kpis": [
+          "Generator efficiency (>98%)",
+          "Stator winding temperature",
+          "Partial Discharge (PD) trends",
+          "Insulation Resistance (IR)"
+        ],
+        "risks": [
+          {
+            "text": "Stator winding insulation breakdown",
+            "level": "High"
+          },
+          {
+            "text": "Rotor earth faults",
+            "level": "High"
+          },
+          {
+            "text": "Bearing currents causing pitting",
+            "level": "Medium"
+          },
+          {
+            "text": "Excitation system failure",
+            "level": "Medium"
+          }
+        ]
+      },
+      "control_system": {
+        "title": "Control System (SCADA & PLC)",
+        "description": "The brain of the plant. It enables the \"Digital Twin\", predictive maintenance (AI), and remote operation. Obsolescence here is a major strategic risk.",
+        "kpis": [
+          "System response time (<500ms)",
+          "Network uptime and redundancy",
+          "Sensor accuracy and calibration",
+          "Cybersecurity audit score"
+        ],
+        "risks": [
+          {
+            "text": "Cybersecurity breaches",
+            "level": "High"
+          },
+          {
+            "text": "Hardware/Software obsolescence (No support)",
+            "level": "Medium"
+          },
+          {
+            "text": "Data loss (Lack of historic logging)",
+            "level": "Medium"
+          },
+          {
+            "text": "Sensor drift leading to false operations",
+            "level": "Low"
+          }
+        ]
+      },
+      "hydraulic_system": {
+        "title": "Hydraulic Power Unit (HPU) & Governor",
+        "description": "The muscle of the regulation system. It actuates the MIV, Guide Vanes, and Blades. Oil cleanliness is the single most critical factor for reliability.",
+        "kpis": [
+          "Accumulator pressure holding time",
+          "Oil cleanliness (NAS/ISO class)",
+          "Pump duty cycle",
+          "Servo response time"
+        ],
+        "risks": [
+          {
+            "text": "Oil leakage (Environmental risk)",
+            "level": "Medium"
+          },
+          {
+            "text": "Servo valve sticking (Loss of control)",
+            "level": "High"
+          },
+          {
+            "text": "Loss of accumulator pressure (Safety fail)",
+            "level": "High"
+          },
+          {
+            "text": "Varnish build-up in valves",
+            "level": "Medium"
+          }
+        ]
+      },
+      "lubrication_system": {
+        "title": "Centralized Lubrication System",
+        "description": "The lifeblood of mechanical components. Automated delivery of oil/grease to bearings and bushings ensures the friction-free operation required for LCC optimization.",
+        "kpis": [
+          "System pressure consistency",
+          "Lubricant consumption rate",
+          "Filter differential pressure",
+          "Point-of-delivery verification"
+        ],
+        "risks": [
+          {
+            "text": "Line blockage causing starvation",
+            "level": "High"
+          },
+          {
+            "text": "Pump failure",
+            "level": "High"
+          },
+          {
+            "text": "Incompatible lubricant usage",
+            "level": "Medium"
+          },
+          {
+            "text": "Water ingress into oil",
+            "level": "Medium"
+          }
+        ]
+      },
+      "cooling_system": {
+        "title": "Cooling System",
+        "description": "Manages thermal loads from the generator and bearings. Typically raw water or closed-loop. Efficiency here directly impacts the lifespan of insulation and oil.",
+        "kpis": [
+          "Temperature delta (Inlet vs Outlet)",
+          "Flow rate consistency",
+          "Heat exchanger efficiency (Fouling factor)",
+          "Pump redundancy status"
+        ],
+        "risks": [
+          {
+            "text": "Heat exchanger fouling/clogging",
+            "level": "High"
+          },
+          {
+            "text": "Cooling pump failure",
+            "level": "High"
+          },
+          {
+            "text": "Internal leakage into generator",
+            "level": "Medium"
+          },
+          {
+            "text": "Insufficient capacity at peak summer temps",
+            "level": "High"
+          }
+        ]
+      }
+    }
+  },
+  "digitalIntegrity": {
+    "title": "Immutable Trust Ledger",
+    "nodeStatus": "NODE STATUS",
+    "height": "HEIGHT",
+    "blocks": "BLOCKS",
+    "miningConsole": "Mining Console",
+    "noAssetTitle": "Target Asset Required",
+    "noAssetDesc": "Select a project above to enable mining operations.",
+    "targetAsset": "Target Asset",
+    "opType": "Operation Type",
+    "resultLabel": "Measured Value / Result",
+    "btnSeal": "SEAL TO BLOCKCHAIN",
+    "btnHashing": "HASHING BLOCK...",
+    "latestBlocks": "Latest Blocks",
+    "btnVerify": "VERIFY INTEGRITY",
+    "btnVerifying": "VERIFYING...",
+    "btnSecure": "CHAIN SECURE",
+    "operations": {
+      "alignment": "Shaft Alignment Check",
+      "vibration": "Vibration Analysis",
+      "replacement": "Component Replacement",
+      "firmware": "Firmware Update",
+      "audit": "Safety Protocol Audit"
+    },
+    "toast": {
+      "selectAsset": "Please select a Target Asset first.",
+      "mined": "Block #{{index}} successfully mined on-chain.",
+      "verified": "Cryptographic integrity confirmed. Ledger is immutable."
+    }
+  },
+  "digitalIntro": {
+    "abort": "Abort Sequence",
+    "visionLog": "Vision Log v1.0",
+    "heroTitleTop": "Architects of",
+    "heroTitleHighlight": "Immunity",
+    "heroText": "We don't just inspect power plants. We solve the fundamental equation of Dynamic Risk versus Operational Certainty.",
+    "quote": "For years, I watched the industry accept a 48% failure rate as 'unavoidable wear and tear'. I realized standard maintenance wasn't enough. We needed a forensic approach. We needed to treat a hydropower plant not like a static building, but like a living organism with an immune system.",
+    "card1": {
+      "title": "Forensic Truth",
+      "desc": "We don't guess. We measure. Using sub-surface NDT and 3D metrology, we provide data that holds up in a court of law.",
+      "footer": "Input: Sub-Surface NDT"
+    },
+    "card2": {
+      "title": "Dirty Hands. Clean Data.",
+      "desc": "We don't just generate reports. We turn wrenches, machine steel, and weld cavitation. From the banal basics to advanced forensics.",
+      "footer": "Scope: End-to-End Execution"
+    },
+    "card3": {
+      "title": "The Cultural Betrayal",
+      "desc": "Why the Low-Bid Policy is an act of corporate violence against assets. We stand for the Zero-Tolerance Protocol.",
+      "footer": "Enemy: The Execution Gap"
+    },
+    "mastery": {
+      "title": "Mastery Across Architectures",
+      "francis": "FRANCIS",
+      "francisDesc": "The Pressure Beast",
+      "kaplan": "KAPLAN",
+      "kaplanDesc": "The Flow Master",
+      "pelton": "PELTON",
+      "peltonDesc": "The Kinetic King"
+    },
+    "activation": {
+      "unlockedTitle": "System Unlocked",
+      "loading": "Loading Command Center...",
+      "lockedText1": "You've Seen The Vision. Now See The Logic.",
+      "lockedText2": "ACCESS PROTOCOL: ENGINEERING IMMUNITY",
+      "enterBtn": "ENTER COMMAND CENTER",
+      "toastParams": "Immunity Protocol Activated. Welcome to the Command Center."
+    }
+  },
+  "genderEquity": {
+    "title": "Inclusivity Analytics",
+    "desc": "Tracking real-time metrics on workforce diversity and ESG compliance.",
+    "tabDashboard": "Live Dashboard",
+    "tabStrategy": "Strategic Framework",
+    "totalRep": "Total Representation",
+    "employees": "Employees",
+    "leadership": "Leadership Roles",
+    "leadershipDesc": "Above Industry Avg",
+    "payGap": "Adjusted Pay Gap",
+    "payGapDesc": "Parity Target Met",
+    "deptBreakdown": "Departmental Breakdown",
+    "strategy": {
+      "impTitle": "The Strategic Imperative",
+      "impSub": "Organizational Flaws Create Systemic Risk",
+      "impContent": "True engineering precision extends beyond mechanical tolerances to the precision of human capital management. An organization that fails to attract, retain, and promote diverse talent suffers from a deep, systemic failure.",
+      "impQuote": "This is not just an HR initiative; it is a strategic imperative for eliminating a critical source of systemic risk and closing the Execution Gap.",
+      "redefTitle": "Redefining 'Excellence'",
+      "redefSub": "Inclusive Growth as a Technical Standard",
+      "card1Title": "The Inescapable Analogy",
+      "card1Content": "If we tolerate 10% bias in our hiring, that is equivalent to building a turbine with a 10% tolerance gap. Both are conscious decisions that knowingly guarantee future system failure.",
+      "card2Title": "Holistic Precision Mandate",
+      "card2Content": "Just as technical precision is required to 0.05 mm/m, organizational precision requires a zero-tolerance policy for bias."
+    }
+  },
+  "hppImprovements": {
+    "title": "HPP Ino-Hub",
+    "subtitle": "Collaborative Engineering Intelligence. Capture breakthrough ideas.",
+    "logTitle": "Log New Concept",
+    "contributor": "Contributor: {{name}}",
+    "conceptLabel": "Concept Title",
+    "conceptPlaceholder": "e.g. Biomimetic Coating",
+    "discipline": "Discipline",
+    "descLabel": "Technical Description",
+    "descPlaceholder": "Describe the proposed improvement...",
+    "submit": "Submit for Review",
+    "loading": "Syncing Innovation Database...",
+    "emptyTitle": "No ideas found in this category.",
+    "emptyDesc": "Be the first to innovate!",
+    "toastSuccess": "Innovation logged successfully!",
+    "toastError": "Failed to register vote.",
+    "categories": {
+      "all": "All",
+      "mech": "Mechanical",
+      "digi": "Digital",
+      "eco": "Ecological",
+      "sys": "Systemic"
+    }
+  },
+  "installationGuarantee": {
+    "title": "Installation Guarantee",
+    "subtitle": "The 0.05 mm/m Protocol. Non-negotiable precision mandate during assembly.",
+    "activeAudit": "Active Audit For",
+    "selectAsset": "--- Select Asset ---",
+    "liveStatus": "Live Status",
+    "passed": "PASSED",
+    "failed": "FAILED",
+    "pending": "PENDING",
+    "checkpoints": "Mandatory Checkpoints",
+    "inputPlaceholder": "Enter Measured Value...",
+    "statusOptions": {
+      "pending": "Pending",
+      "pass": "Pass",
+      "fail": "Fail"
+    },
+    "remarksTitle": "Engineer's Remarks",
+    "remarksPlaceholder": "Document any deviations, risks, or corrective actions taken...",
+    "sealBtn": "Seal Audit to Cloud",
+    "selectBtn": "Select Asset to Begin",
+    "toastSelect": "Please select a Target Asset before saving the audit.",
+    "toastSuccess": "Audit sealed successfully! Status: {{status}}",
+    "toastError": "Failed to save audit: {{error}}",
+    "checks": {
+      "foundation": "Foundation Alignment",
+      "foundationReq": "< 0.05 mm/m (Verticality)",
+      "shaft": "Main Shaft Run-Out",
+      "shaftReq": "< 0.02 mm (Static)",
+      "bearing": "Guide Bearing Clearance",
+      "bearingReq": "OEM Tolerance",
+      "wicket": "Wicket Gate Sync",
+      "wicketReq": "< 1% Deviation",
+      "vibration": "Vibration Baseline",
+      "vibrationReq": "< 2.5 mm/s (Overall)"
+    }
+  },
+  "feedback": {
+    "thankYouTitle": "Thank You!",
+    "thankYouDesc": "Your feedback is invaluable for refining the Standard of Excellence.",
+    "rateTitle": "Rate Your Experience",
+    "rateDesc": "Help us engineer a better platform.",
+    "placeholder": "Optional: What can we improve to close the Execution Gap?",
+    "submitBtn": "Submit Feedback"
+  },
+  "onboarding": {
+    "skip": "Skip Intro",
+    "back": "Back",
+    "next": "Next",
+    "initialize": "Initialize System",
+    "steps": {
+      "0": {
+        "title": "Welcome to AnoHUB",
+        "subtitle": "Systemic Risk & Excellence Platform",
+        "content": "Your central command for strategic hydropower management. We bridge the gap between engineering precision and operational reality."
+      },
+      "1": {
+        "title": "Strategic Arsenal",
+        "subtitle": "Tools for Zero-Tolerance",
+        "content": "Access the 'Risk Assessment Tool' to quantify the Execution Gap and the 'Installation Standard' to enforce the 0.05 mm/m mandate."
+      },
+      "2": {
+        "title": "Innovation Engine",
+        "subtitle": "Configure & Optimize",
+        "content": "Model power output with the 'HPP Calculator' and capture breakthrough ideas in the 'Ino-Hub'. Innovation meets discipline."
+      },
+      "3": {
+        "title": "Systems Online",
+        "subtitle": "Ready for Deployment",
+        "content": "The platform is calibrated and ready. Engage with the tools to secure your warranty and optimize Life Cycle Costs."
+      }
+    }
+  },
+  "projectPhase": {
+    "title": "Project Phase Execution",
+    "subtitle": "Step-by-step enforcement of the Three Postulates across the asset lifecycle. Eliminating the Execution Gap at every milestone.",
+    "phase1": {
+      "tag": "Planning & Tendering",
+      "title": "Defining the Non-Negotiables",
+      "desc": "The Execution Gap begins here. Vague contracts lead to vague results. We mandate specific ISO tolerances and material certificates directly in the tender documents.",
+      "mandatesTitle": "Key Mandates",
+      "m1": "Define '0.05 mm/m' alignment tolerance explicitly.",
+      "m2": "Require EN 10204 3.1 certificates for all critical steel.",
+      "m3": "Include penalties for E-Flow violations."
+    },
+    "phase2": {
+      "tag": "Installation",
+      "title": "Zero Tolerance Assembly",
+      "desc": "The point of no return. Once concrete is poured and shafts are coupled, errors become permanent liabilities. Digital verification is mandatory.",
+      "mandatesTitle": "Key Mandates",
+      "m1": "Laser alignment verification protocol (Digital Log).",
+      "m2": "Foundation bolt torquing supervision (500h check).",
+      "m3": "Cold vs. Hot alignment compensation checks."
+    },
+    "phase3": {
+      "tag": "Operations",
+      "title": "Predictive Discipline",
+      "desc": "Moving from 'Fix it when it breaks' to 'Fix it before it deviates'. The M-E Synergy Gap is closed by integrating SCADA data with mechanical reality.",
+      "mandatesTitle": "Key Mandates",
+      "m1": "Real-time vibration spectral analysis (FFT).",
+      "m2": "Tribology (Oil Analysis) trend monitoring.",
+      "m3": "Automatic E-Flow compliance logging."
+    }
+  },
+  "revitalization": {
+    "title": "Asset Revitalization & Obsolescence",
+    "context": "Context:",
+    "desc": "Data-driven decision making: Life extension vs. Replacement. Ensuring LCC Optimization by closing the M-E Synergy Gap.",
+    "lea": {
+      "title": "Life Extension Analysis (LEA)",
+      "subtitle": "Strategic Decision Framework",
+      "content": "We introduce the <strong class=\"text-white font-bold\">Systemic Degradation Score</strong>. This integrates RCFA data, vibration deviations, and outage costs to determine if a component is truly at End-of-Life (EOL).",
+      "matrix": "Decision Matrix",
+      "lcc": "LCC Optimization",
+      "refurbish": "Refurbish",
+      "replace": "Replace",
+      "quote": "A full replacement is only acceptable when systemic risk dictates it, not when the market demands it. Ethics first."
+    },
+    "twin": {
+      "title": "The Retrospective Digital Twin",
+      "desc": "Mapping a Legacy Asset using <strong class=\"text-white\">3D scanning & thermal imaging</strong>.",
+      "tag": "Crucial for hydraulic modeling & fitment"
+    },
+    "risk": {
+      "title": "Obsolescence Risk Matrix",
+      "subtitle": "Audit Targets: SCADA, Governors, Relays",
+      "content": "Technology moves faster than hydro assets. We track the gap between your installed base and vendor support lifecycles.",
+      "alertTitle": "Critical: Documentation Gap",
+      "alertContent": "The biggest risk is not hardware failure, but <strong class=\"text-white font-bold\">Information Loss</strong>. When vendor support ends and knowledge hasn't been transferred to a Digital Twin, you face a massive Execution Gap.",
+      "control": "Control Systems (5-10 yr cycle)",
+      "mech": "Mechanical Assets (30-50 yr cycle)",
+      "gap": "The M-E Synergy Gap occurs here."
+    },
+    "cta": {
+      "title": "Retirement or Reinvention?",
+      "desc": "Schedule an expert audit to scientifically determine the future of your asset.",
+      "btn": "Schedule Obsolescence Audit"
+    }
+  },
+  "riskAssessment": {
+    "protocol": "Diagnostic Protocol v2.0",
+    "initTitle": "Initialize Diagnostics",
+    "standbyDesc": "System is in standby. Please select a <strong class=\"text-cyan-400 font-bold\">Target Asset</strong> above to begin the Execution Gap analysis."
+  },
+  "riverWildlife": {
+    "title": "Ecological Engineering",
+    "context": "Applied Context:",
+    "subtitle": "Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.",
+    "mandate": "The Postulate of Ethics",
+    "mandateDesc": "We do not just mitigate impact; we actively protect the ecosystem. <strong class=\"text-white font-bold block mt-1\">Automatic E-Flow measurement is a core requirement of the Standard of Excellence.</strong>",
+    "sections": {
+      "fish_passage": {
+        "title": "Fish Passage Technologies",
+        "subtitle": "Bio-Engineering for Migration",
+        "intro": "Modern technologies focus on safe, effective, and minimally stressful passage around dams to maintain biodiversity.",
+        "ladders": {
+          "title": "Fish Ladders & Stairways",
+          "desc": "Pool-and-Weir or Denil channels with gradients (1:8 to 1:12) designed to guide fish without exhaustion."
+        },
+        "lifts": {
+          "title": "Fish Lifts & Elevators",
+          "desc": "Mechanical hoppers for high dams where ladders are impractical. Automated collection and release."
+        },
+        "bypass": {
+          "title": "Nature-Like Bypass",
+          "desc": "Man-made channels mimicking natural streams. The most ecologically effective, low-gradient solution."
+        },
+        "turbines": {
+          "title": "Fish-Friendly Turbines",
+          "desc": "Advanced designs (e.g. Alden) with fewer blades and wider gaps to reduce blade-strike mortality."
+        }
+      },
+      "sediment_management": {
+        "title": "Sediment & Erosion Control",
+        "subtitle": "Protecting Reservoir Capacity & Equipment",
+        "intro": "Dams trap sediment, reducing capacity and causing turbine abrasion. Proactive management is essential.",
+        "bypass": {
+          "title": "Bypass Tunnels",
+          "desc": "Diverting sediment-laden water during floods."
+        },
+        "flushing": {
+          "title": "Flushing",
+          "desc": "Opening low-level outlets to clear accumulation."
+        },
+        "watershed": {
+          "title": "Watershed Mgmt",
+          "desc": "Reforestation to reduce inflow at source."
+        },
+        "vis": {
+          "title": "Visualization",
+          "l1": "Bathymetric Surveys: Visualizing capacity loss.",
+          "l2": "3D Wear Scans: Quantifying runner material loss."
+        },
+        "rcfa": {
+          "title": "RCFA Critical: Diagnosis",
+          "abrasion": "Abrasion (Symptom): Smooth, polished wear.",
+          "cavitation": "Cavitation (Root Cause): Pitted, spongy surface.",
+          "quote": "Treating abrasion without fixing cavitation leads to recurring failure."
+        }
+      },
+      "water_quality": {
+        "title": "Water Quality & E-Flow",
+        "subtitle": "The Ethical Mandate",
+        "intro": "Maintaining natural flow regimes, temperature, and oxygen levels for downstream habitats.",
+        "eflow": {
+          "title": "Environmental Flow (E-flow)",
+          "desc": "The managed release of water to mimic natural variability.",
+          "mandate": "Mandate: Automatic, continuous measurement and digital documentation is non-negotiable."
+        },
+        "aerating": {
+          "title": "Aerating Turbines",
+          "desc": "Venting turbines to increase dissolved oxygen levels."
+        },
+        "withdrawal": {
+          "title": "Selective Withdrawal",
+          "desc": "Multi-level intakes to manage water temperature."
+        }
+      },
+      "habitat_restoration": {
+        "title": "Habitat Restoration",
+        "subtitle": "Beyond Mitigation",
+        "intro": "Proactive measures to create a net positive environmental outcome.",
+        "gravel": {
+          "title": "Gravel Augmentation",
+          "desc": "Placing clean gravels for fish spawning habitats."
+        },
+        "riparian": {
+          "title": "Riparian Zone",
+          "desc": "Re-planting native vegetation to stabilize banks and shade water."
+        },
+        "structures": {
+          "title": "In-stream Structures",
+          "desc": "Boulders and logs creating complex flow habitats."
+        }
+      }
+    }
+  },
+  "standardOfExcellence": {
+    "title": "Standard of Excellence",
+    "subtitle": "The defining constitution of AnoHUB operations.",
+    "subtitle2": "These principles are <span class=\"text-white font-bold\">non-negotiable</span>.",
+    "principles": {
+      "p1": {
+        "title": "The 0.05 mm/m Imperative",
+        "desc": "Absolute alignment precision. Verticality and horizontality deviations exceeding 0.05 mm per meter constitute a critical non-conformity. No deviations accepted regardless of OEM allowances.",
+        "quote": "\"Precision is not an option; it is the baseline.\""
+      },
+      "p2": {
+        "title": "Zero \"Run-to-Failure\"",
+        "desc": "Predictive maintenance is mandatory. Operating an asset until component failure is a violation of the Asset Stewardship Protocol. Sensors must be active and monitored.",
+        "quote": "\"We fix it before it breaks.\""
+      },
+      "p3": {
+        "title": "Data Integrity",
+        "desc": "All operational data, logs, and risk assessments must be immutable and archived. concealing operational risks or \"massaging\" numbers is grounds for immediate contract termination.",
+        "quote": "\"Truth is the only safety net.\""
+      },
+      "p4": {
+        "title": "Ownership Maintenance",
+        "desc": "Operators act as owners. Cleaning, tightening, and basic inspections are daily rituals, not scheduled chores. Visual inspections must be logged digitally.",
+        "quote": "\"If you operate it, you own it.\""
+      }
+    },
+    "oath": {
+      "title": "Engineer's Oath",
+      "desc": "By activating this protocol, you bind your digital identity to these standards.",
+      "identity": "IDENTITY:",
+      "date": "DATE:",
+      "status": "STATUS:",
+      "ratified": "RATIFIED",
+      "pending": "PENDING",
+      "btnCommit": "I COMMIT TO EXCELLENCE",
+      "btnActive": "PROTOCOL ACTIVE",
+      "sync": "Synchronization with HR Database... OK",
+      "toast": "Protocol ratified by Engineer"
+    },
+    "poweredBy": "POWERED BY"
+  },
+  "turbineDetail": {
+    "notFoundTitle": "Asset Configuration Not Found",
+    "notFoundDesc": "No engineering data available for asset ID:",
+    "returnButton": "Return to Dashboard",
+    "specification": "Specification",
+    "subtitle": "Technical breakdown of critical subsystems and failure modes.",
+    "mechanicalSystems": "Mechanical Systems",
+    "rotatingParts": "Rotating Assembly & Bearings",
+    "electricalComponents": "Electrical Components",
+    "generatorControl": "Generator & Control Systems",
+    "criticalityNote": "CRITICALITY ASSESSMENT BASED ON RCFA HISTORICAL DATA",
+    "rev": "System Specification • Rev 2.4",
+    "badges": {
+      "critical": "CRITICAL",
+      "attention": "ATTENTION",
+      "standard": "STANDARD"
+    }
+  },
+  "interventionCTA": {
+    "label": "ASSET INTERVENTION REQUIRED"
+  },
+  "ui": {
+    "select": "Select"
   }
 }
