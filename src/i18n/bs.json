@@ -6,7 +6,10 @@
     "systemStatusConnecting": "POVEZIVANJE...",
     "systemStatusOperational": "OPERATIVAN",
     "risks": "Detektirani Rizici",
-    "designs": "Spremljeni Dizajni"
+    "designs": "Spremljeni Dizajni",
+    "footerText": "Engineered for Perfection",
+    "copyright": "© 2025 Anohubs Inc.",
+    "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
   "modules": {
     "riskAssessment": "Procjena Rizika",
@@ -157,6 +160,28 @@
     "validationError": "Molimo ispunite sva polja ispravno, uključujući pozitivan kapacitet.",
     "successToast": "Nova elektrana uspješno registrovana",
     "failToast": "Neuspješno kreiranje elektrane"
+  },
+  "assetWizard": {
+    "title": "Registruj Novu Elektranu",
+    "steps": {
+      "identity": "Identitet",
+      "specs": "Tehničke Specifikacije",
+      "risk": "Kalibracija Rizika"
+    },
+    "fields": {
+      "name": "Naziv Elektrane",
+      "type": "Tip Elektrane",
+      "location": "Lokacija",
+      "capacity": "Kapacitet (MW)",
+      "units": "Broj Jedinica",
+      "kpi": "Kritični KPI"
+    },
+    "buttons": {
+      "next": "Sljedeći Korak",
+      "prev": "Prethodni",
+      "register": "Registruj Elektranu"
+    },
+    "success": "Elektrana uspješno registrovana i inicijalizirana u floti."
   },
   "hppBuilder": {
     "title": "HPP Dizajn Studio",
@@ -1293,4 +1318,5 @@
     "ui": {
       "select": "Odaberi"
     }
-  }}
+  }
+}

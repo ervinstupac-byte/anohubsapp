@@ -17,7 +17,9 @@
     "footerText": "Engineered for Perfection",
     "operatorId": "Operator ID",
     "tagline": "Architects of Immunity",
-    "info": "INFO"
+    "info": "INFO",
+    "copyright": "© 2025 Anohubs Inc.",
+    "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
   "modules": {
     "riskAssessment": "Risk Assessment",
@@ -168,6 +170,28 @@
     "validationError": "Please fill all fields correctly, including a valid positive capacity.",
     "successToast": "New asset registered successfully",
     "failToast": "Failed to create asset"
+  },
+  "assetWizard": {
+    "title": "Register New Asset",
+    "steps": {
+      "identity": "Identity",
+      "specs": "Technical Specs",
+      "risk": "Risk Calibration"
+    },
+    "fields": {
+      "name": "Asset Name",
+      "type": "Asset Type",
+      "location": "Location",
+      "capacity": "Capacity (MW)",
+      "units": "Number of Units",
+      "kpi": "Critical KPI"
+    },
+    "buttons": {
+      "next": "Next Step",
+      "prev": "Previous",
+      "register": "Register Asset"
+    },
+    "success": "Asset registered successfully and initialized in fleet."
   },
   "hppBuilder": {
     "title": "HPP Design Studio",
