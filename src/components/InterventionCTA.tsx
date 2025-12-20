@@ -12,7 +12,7 @@ export const InterventionCTA: React.FC = () => {
     const { navigateTo } = useNavigation();
 
     // Ova komponenta bi trebala biti minimalistički CTA
-    if (!selectedAsset) return null;
+    if (!selectedAsset || selectedAsset.status !== 'Critical') return null;
 
     return (
         <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in-up">

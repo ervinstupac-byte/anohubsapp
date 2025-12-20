@@ -20,9 +20,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     return (
         <div
             className={`
-                bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 
+                bg-[#020617]/90 backdrop-blur-md border border-white/5 rounded-2xl p-6 
                 shadow-[0_4px_24px_rgba(0,0,0,0.5)] 
-                ring-1 ring-white/5
                 ${className}
             `}
             {...props}

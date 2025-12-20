@@ -8,7 +8,7 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
 import { HPPDesignProvider } from './contexts/HPPDesignContext.tsx';
 import { RiskProvider, useRisk } from './contexts/RiskContext.tsx';
-import { ToastProvider } from './contexts/ToastContext.tsx';
+import { ToastProvider, useToast } from './contexts/ToastContext.tsx';
 import { AssetProvider } from './contexts/AssetContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { TelemetryProvider } from './contexts/TelemetryContext.tsx';
@@ -30,7 +30,6 @@ import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
 
 // --- 3. ASSETS & TYPES ---
-import bgImage from './assets/digital_cfd_mesh.png';
 import type { AppView } from './contexts/NavigationContext.tsx';
 
 // --- 4. LAZY LOADED MODULES (KONAČAN NAMED EXPORT FORMAT) ---
@@ -87,12 +86,16 @@ const AppLayout: React.FC = () => {
     const { riskState } = useRisk();
     const { logAction } = useAudit();
     const { user } = useAuth();
+    const { showToast } = useToast();
 
     // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
+    const [commitmentStatus, setCommitmentStatus] = useState<'PENDING' | 'ACTIVE'>(() => {
+        return (localStorage.getItem('commitmentStatus') as 'PENDING' | 'ACTIVE') || 'PENDING';
+    });
 
     const isHub = location.pathname === '/';
 
@@ -104,6 +107,11 @@ const AppLayout: React.FC = () => {
     const handleOnboardingComplete = () => {
         localStorage.setItem('hasCompletedOnboarding', 'true');
         setShowOnboarding(false);
+    };
+
+    const handleCommit = () => {
+        setCommitmentStatus('ACTIVE');
+        localStorage.setItem('commitmentStatus', 'ACTIVE');
     };
 
     const navigateTo = (view: AppView) => {
@@ -170,14 +178,9 @@ const AppLayout: React.FC = () => {
             completeOnboarding: handleOnboardingComplete,
             showFeedbackModal: () => setIsFeedbackVisible(true)
         }}>
-            <div className="min-h-screen text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden flex relative bg-[#020617]"
-                style={{
-                    backgroundImage: `radial-gradient(circle at 50% 0%, rgba(34, 211, 238, 0.05) 0%, transparent 40%), url(${bgImage})`,
-                    backgroundSize: 'cover',
-                    backgroundAttachment: 'fixed',
-                    backgroundPosition: 'center top'
-                }}
-            >
+            <div className="min-h-screen text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden flex relative bg-[#020617]">
+                <div className="noise-overlay" />
+
                 {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
                 {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
 
@@ -191,45 +194,64 @@ const AppLayout: React.FC = () => {
                             setIsSidebarOpen(false);
                         }}
                     />
-                    <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
                         <div className="px-4 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">OPERATIONS</div>
                         {operationalModules.map(mod => (
                             <button
                                 key={mod.id}
                                 onClick={() => { logAction('MODULE_OPEN', mod.title, 'SUCCESS'); navigateTo(mod.id as AppView); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) || (isHub && mod.id === 'hub') ? 'bg-cyan-900/20 border-cyan-400 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500'}`}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) || (isHub && mod.id === 'hub') ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                             >
-                                <span className="text-lg">{mod.icon}</span>
+                                <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'}`}>{mod.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                             </button>
                         ))}
                         <div className="my-4 border-t border-white/5 mx-4"></div>
                         <div className="px-4 py-2 text-[10px] font-black text-slate-700 uppercase tracking-widest">KNOWLEDGE</div>
-                        {secondaryModules.map(mod => (
-                            <button
-                                key={mod.id}
-                                onClick={() => { logAction('MODULE_OPEN', mod.title, 'SUCCESS'); navigateTo(mod.id as AppView); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-cyan-400 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500'}`}
-                            >
-                                <span className="text-lg">{mod.icon}</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
-                            </button>
-                        ))}
+                        {secondaryModules.map(mod => {
+                            // Check if this module is inactive (locked)
+                            const isLocked = mod.id === 'hppBuilder'; // Example: HPP Builder is complex, maybe locked for some? Wait, user mentioned HPP Design Studio.
+                            // User said: "voda i blato..." no wait, "moduli koji nisu aktivni (npr. 'HPP Dizajn Studio') moraju imati interakciju"
+                            return (
+                                <button
+                                    key={mod.id}
+                                    onClick={() => {
+                                        if (isLocked) {
+                                            logAction('MODULE_LOCKED_ACCESS', mod.title, 'FAILURE');
+                                            showToast('MODUL KRIPTOVAN - NIVO PRISTUPA 4 POTREBAN', 'warning');
+                                            return;
+                                        }
+                                        logAction('MODULE_OPEN', mod.title, 'SUCCESS');
+                                        navigateTo(mod.id as AppView);
+                                        setIsSidebarOpen(false);
+                                    }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                                >
+                                    <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
+                                    <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
+                                </button>
+                            );
+                        })}
                     </div>
-                    <div className="p-4 border-t border-white/5 bg-slate-950/50 backdrop-blur-md text-xs text-slate-600 font-mono">
-                        <div>OP: {user?.email?.split('@')[0].toUpperCase() || 'GUEST'}</div>
+                    <div className="p-4 border-t border-white/5 bg-slate-950/50 backdrop-blur-md text-xs text-slate-600 font-mono relative z-10">
+                        <div className="flex justify-between items-center">
+                            <div>OP: {user?.email?.split('@')[0].toUpperCase() || 'GUEST'}</div>
+                            <div className={`px-2 py-0.5 rounded text-[8px] font-black ${commitmentStatus === 'ACTIVE' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}`}>
+                                {commitmentStatus}
+                            </div>
+                        </div>
                         <div className="text-[10px] mt-1 opacity-50 font-black">v2.6.0 ENTERPRISE</div>
                     </div>
                 </Sidebar>
 
                 {/* MAIN AREA */}
-                <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px]">
+                <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px] relative z-20">
                     {/* UNIFIED HEADER */}
                     <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6">
                         <div className="flex items-center gap-4">
                             <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
                             <h1 className="text-xl font-black text-white tracking-widest uppercase">
-                                AnoHUB <span className="text-cyan-500">SCADA</span>
+                                AnoHUB <span className="text-h-cyan">SCADA</span>
                             </h1>
                         </div>
                         <div className="flex items-center gap-4">
@@ -257,7 +279,7 @@ const AppLayout: React.FC = () => {
                                         <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
                                         <Route path="risk-report" element={<RiskReport />} />
                                         <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                        <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
+                                        <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={handleCommit} />} />
                                         <Route path="digital-introduction" element={<DigitalIntroduction />} />
                                         <Route path="hpp-improvements" element={<HPPImprovements />} />
                                         <Route path="installation-guarantee" element={<InstallationGuarantee />} />
@@ -278,14 +300,24 @@ const AppLayout: React.FC = () => {
                         </Suspense>
                     </main>
 
-                    <footer className="text-center py-6 text-[10px] text-slate-600 uppercase tracking-widest no-print border-t border-white/5">
-                        <p>&copy; {new Date().getFullYear()} Anohubs Inc. | ENGINEERING IMMUNITY PROTOCOL</p>
+                    <footer className="py-6 px-8 flex justify-between items-center text-[10px] text-slate-500 font-mono no-print border-t border-white/5">
+                        <div className="flex gap-4">
+                            <span className="text-white font-bold tracking-widest">v2.6.0 ENTERPRISE</span>
+                            <span className="opacity-30">|</span>
+                            <span className="tracking-[0.2em] font-black text-slate-400">ENGINEERING IMMUNITY PROTOCOL</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="opacity-30 uppercase">Operational Status:</span>
+                            <span className={commitmentStatus === 'ACTIVE' ? 'text-emerald-500 font-bold' : 'text-amber-500 font-bold animate-pulse'}>
+                                {commitmentStatus}
+                            </span>
+                        </div>
                     </footer>
                 </div>
 
                 <InterventionCTA />
 
-                <button onClick={() => setIsFeedbackVisible(true)} className="fixed bottom-6 right-6 group flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500 text-white shadow-lg hover:scale-110 transition-all z-50">
+                <button onClick={() => setIsFeedbackVisible(true)} className="fixed bottom-6 right-6 group flex items-center justify-center w-12 h-12 rounded-full bg-h-cyan text-white shadow-lg hover:scale-110 transition-all z-50">
                     <span className="text-xl group-hover:rotate-12 transition-transform">💬</span>
                 </button>
 

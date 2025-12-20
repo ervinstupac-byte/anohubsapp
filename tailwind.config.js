@@ -11,8 +11,11 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
+        'h-cyan': '#06b6d4',
+        'h-gold': '#FFB800',
+        'h-dark': '#020617',
         slate: {
-          950: '#020617', // Custom deep background
+          950: '#020617',
         }
       }
     },

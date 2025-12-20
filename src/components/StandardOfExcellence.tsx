@@ -9,7 +9,7 @@ import { ModernButton } from './ui/ModernButton.tsx';
 // Data moved inside component
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
-export const StandardOfExcellence: React.FC = () => {
+export const StandardOfExcellence: React.FC<{ onCommit?: () => void }> = ({ onCommit }) => {
     const { t } = useTranslation();
     const { user } = useAuth();
     const { showToast } = useToast();
@@ -18,6 +18,7 @@ export const StandardOfExcellence: React.FC = () => {
 
     // --- THE CONSTITUTION (Moved inside for translations) ---
     const PRINCIPLES = [
+        // ... rest of the component ...
         {
             id: 'p1',
             title: t('standardOfExcellence.principles.p1.title'),
@@ -52,6 +53,7 @@ export const StandardOfExcellence: React.FC = () => {
 
     const handleCommit = () => {
         setSigned(true);
+        if (onCommit) onCommit();
         showToast(`${t('standardOfExcellence.oath.toast')} ${user?.email?.split('@')[0].toUpperCase()}`, 'success');
     };
 
