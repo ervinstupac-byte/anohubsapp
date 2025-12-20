@@ -98,6 +98,7 @@ const AppLayout: React.FC = () => {
     });
 
     const isHub = location.pathname === '/';
+    const isFullPage = isHub || location.pathname === '/map';
 
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
@@ -232,6 +233,17 @@ const AppLayout: React.FC = () => {
                                 </button>
                             );
                         })}
+
+                        <div className="my-4 border-t border-white/5 mx-4"></div>
+                        <a
+                            href="https://www.anohubs.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full flex items-center gap-3 px-4 py-3 border-l-2 border-transparent hover:bg-slate-900 text-slate-500 hover:text-white transition-all group"
+                        >
+                            <span className="text-lg group-hover:scale-110 transition-transform">🌐</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest">Exit to Main Site</span>
+                        </a>
                     </div>
                     <div className="p-4 border-t border-white/5 bg-slate-950/50 backdrop-blur-md text-xs text-slate-600 font-mono relative z-10">
                         <div className="flex justify-between items-center">
@@ -263,12 +275,19 @@ const AppLayout: React.FC = () => {
                                 />
                             </div>
                             <LanguageSelector />
+                            <a
+                                href="https://www.anohubs.com"
+                                className="px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all text-[10px] font-black tracking-widest text-slate-400 hover:text-white uppercase flex items-center gap-2"
+                            >
+                                <span>EXIT</span>
+                                <span className="opacity-50 group-hover:translate-x-0.5 transition-transform">↗</span>
+                            </a>
                         </div>
                     </header>
 
-                    <main className="flex-grow w-full relative z-10">
+                    <main className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}>
                         <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING MODULE...</span></div>}>
-                            <div className={!isHub ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "w-full h-full animate-fade-in"}>
+                            <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
                                 {!isHub && <Breadcrumbs />}
                                 <ErrorBoundary>
                                     <Routes>
