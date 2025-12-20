@@ -237,7 +237,6 @@ const AppLayout: React.FC = () => {
                         <div className="my-4 border-t border-white/5 mx-4"></div>
                         <a
                             href="https://www.anohubs.com"
-                            target="_blank"
                             rel="noopener noreferrer"
                             className="w-full flex items-center gap-3 px-4 py-3 border-l-2 border-transparent hover:bg-slate-900 text-slate-500 hover:text-white transition-all group"
                         >
