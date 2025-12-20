@@ -18,7 +18,6 @@ import { AuditProvider, useAudit } from './contexts/AuditContext.tsx';
 import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
 import { Onboarding } from './components/Onboarding.tsx';
-import { InterventionCTA } from './components/InterventionCTA.tsx';
 import { Spinner } from './components/Spinner.tsx';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { Hub } from './components/Hub.tsx';
@@ -196,7 +195,7 @@ const AppLayout: React.FC = () => {
                         }}
                     />
                     <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
-                        <div className="px-4 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">OPERATIONS</div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">OPERATIONS</div>
                         {operationalModules.map(mod => (
                             <button
                                 key={mod.id}
@@ -208,7 +207,7 @@ const AppLayout: React.FC = () => {
                             </button>
                         ))}
                         <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[10px] font-black text-slate-700 uppercase tracking-widest">KNOWLEDGE</div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">KNOWLEDGE</div>
                         {secondaryModules.map(mod => {
                             // Check if this module is inactive (locked)
                             const isLocked = mod.id === 'hppBuilder'; // Example: HPP Builder is complex, maybe locked for some? Wait, user mentioned HPP Design Studio.
@@ -266,12 +265,19 @@ const AppLayout: React.FC = () => {
                             </h1>
                         </div>
                         <div className="flex items-center gap-4">
+                            <div className="hidden md:flex items-center px-3 py-1 rounded border border-h-gold/30 bg-h-gold/5">
+                                <span className="text-h-gold text-[10px] font-mono font-bold tracking-widest">[ STANDARD: 0.05 mm/m ]</span>
+                            </div>
                             <div className="hidden sm:block">
                                 <DigitalPanel
                                     label="RISK STATUS"
                                     value={riskState.criticalFlags > 0 ? "CRITICAL" : "OPTIMAL"}
                                     status={riskState.criticalFlags > 0 ? "critical" : "normal"}
                                 />
+                            </div>
+                            <div className="flex items-center gap-2 px-2 py-1 bg-white/5 rounded-lg border border-white/5">
+                                <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-slate-400">👤</div>
+                                <span className="text-[10px] font-bold text-slate-300 hidden lg:block">{user?.email?.split('@')[0].toUpperCase()}</span>
                             </div>
                             <LanguageSelector />
                             <a
@@ -318,22 +324,32 @@ const AppLayout: React.FC = () => {
                         </Suspense>
                     </main>
 
-                    <footer className="py-6 px-8 flex justify-between items-center text-[10px] text-slate-500 font-mono no-print border-t border-white/5">
-                        <div className="flex gap-4">
-                            <span className="text-white font-bold tracking-widest">v2.6.0 ENTERPRISE</span>
-                            <span className="opacity-30">|</span>
-                            <span className="tracking-[0.2em] font-black text-slate-400">ENGINEERING IMMUNITY PROTOCOL</span>
+                    <footer className="py-4 px-8 flex justify-between items-center text-[10px] text-slate-400 font-mono no-print border-t border-white/5 bg-slate-950/50">
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="font-bold tracking-[0.1em]">SYSTEM STATUS: NOMINAL</span>
+                            </div>
+                            <span className="opacity-20">//</span>
+                            <span className="opacity-60 tracking-wider">ENCRYPTED CONNECTION ACTIVE</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <span className="opacity-30 uppercase">Operational Status:</span>
-                            <span className={commitmentStatus === 'ACTIVE' ? 'text-emerald-500 font-bold' : 'text-amber-500 font-bold animate-pulse'}>
-                                {commitmentStatus}
-                            </span>
+                        <div className="flex items-center gap-6">
+                            <div className="hidden sm:flex gap-4 opacity-40">
+                                <span>v2.6.0 ENTERPRISE</span>
+                                <span>|</span>
+                                <span className="tracking-[0.2em]">ENGINEERING IMMUNITY PROTOCOL</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="opacity-30 uppercase">OP:</span>
+                                <span className={commitmentStatus === 'ACTIVE' ? 'text-emerald-500 font-bold' : 'text-amber-500 font-bold animate-pulse'}>
+                                    {commitmentStatus}
+                                </span>
+                            </div>
                         </div>
                     </footer>
                 </div>
 
-                <InterventionCTA />
+                {/* <InterventionCTA /> removed as per Phase 1 */}
 
                 <button onClick={() => setIsFeedbackVisible(true)} className="fixed bottom-6 right-6 group flex items-center justify-center w-12 h-12 rounded-full bg-h-cyan text-white shadow-lg hover:scale-110 transition-all z-50">
                     <span className="text-xl group-hover:rotate-12 transition-transform">💬</span>

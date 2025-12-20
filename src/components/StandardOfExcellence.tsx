@@ -51,7 +51,35 @@ export const StandardOfExcellence: React.FC<{ onCommit?: () => void }> = ({ onCo
 
     const toggle = (id: string) => setActiveId(activeId === id ? null : id);
 
+    const playMechanicalClick = () => {
+        try {
+            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioContext) return;
+            const ctx = new AudioContext();
+
+            // Oscillator for the "click" frequency
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(800, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+        } catch (e) {
+            console.warn('Audio feedback failed', e);
+        }
+    };
+
     const handleCommit = () => {
+        playMechanicalClick();
         setSigned(true);
         if (onCommit) onCommit();
         showToast(`${t('standardOfExcellence.oath.toast')} ${user?.email?.split('@')[0].toUpperCase()}`, 'success');
@@ -122,10 +150,12 @@ export const StandardOfExcellence: React.FC<{ onCommit?: () => void }> = ({ onCo
 
                 {/* RIGHT: COMMITMENT CARD */}
                 <div className="lg:col-span-5 sticky top-24">
-                    <GlassCard className="text-center border-t-4 border-t-amber-500 bg-slate-900/80 backdrop-blur-xl">
-                        <div className="mb-6">
-                            <div className="w-20 h-20 mx-auto bg-amber-500/10 rounded-full flex items-center justify-center border border-amber-500/30 mb-4">
-                                <span className="text-4xl">📜</span>
+                    <GlassCard className="text-center border-t-4 border-t-amber-500 bg-slate-900/80 backdrop-blur-xl group/card overflow-hidden">
+                        <div className={`absolute inset-0 bg-amber-500/5 transition-opacity duration-1000 ${signed ? 'opacity-100' : 'opacity-0'}`} />
+
+                        <div className="mb-6 relative z-10">
+                            <div className={`w-20 h-20 mx-auto bg-amber-500/10 rounded-full flex items-center justify-center border border-amber-500/30 mb-4 transition-all duration-500 ${signed ? 'scale-110 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : ''}`}>
+                                <span className={`text-4xl transition-transform duration-500 ${signed ? 'rotate-12 scale-110' : ''}`}>{signed ? '📜' : '✒️'}</span>
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-2">{t('standardOfExcellence.oath.title')}</h3>
                             <p className="text-sm text-slate-400">
@@ -133,7 +163,7 @@ export const StandardOfExcellence: React.FC<{ onCommit?: () => void }> = ({ onCo
                             </p>
                         </div>
 
-                        <div className="bg-black/30 rounded-lg p-4 mb-6 text-left font-mono text-xs text-slate-500 space-y-2 border border-white/5">
+                        <div className="bg-black/30 rounded-lg p-4 mb-6 text-left font-mono text-xs text-slate-500 space-y-2 border border-white/5 relative z-10">
                             <div className="flex justify-between">
                                 <span>{t('standardOfExcellence.oath.identity')}</span>
                                 <span className="text-white">{user?.email || 'GUEST_USER'}</span>
@@ -144,7 +174,7 @@ export const StandardOfExcellence: React.FC<{ onCommit?: () => void }> = ({ onCo
                             </div>
                             <div className="flex justify-between">
                                 <span>{t('standardOfExcellence.oath.status')}</span>
-                                <span className={signed ? "text-emerald-400 font-bold" : "text-amber-500 font-bold"}>
+                                <span className={`${signed ? "text-emerald-400 font-bold glow-oath" : "text-amber-500 font-bold"}`}>
                                     {signed ? t('standardOfExcellence.oath.ratified') : t('standardOfExcellence.oath.pending')}
                                 </span>
                             </div>
