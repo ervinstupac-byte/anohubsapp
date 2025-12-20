@@ -20,11 +20,12 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     return (
         <div
             className={`
-                bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 
-                shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] 
+                bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 
+                shadow-[0_4px_24px_rgba(0,0,0,0.5)] 
+                ring-1 ring-white/5
                 ${className}
             `}
-            {...props} // Prosljeđujemo sve ostale props-e div-u
+            {...props}
         >
             {(title || action) && (
                 <div className="flex justify-between items-start mb-4">

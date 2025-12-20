@@ -36,16 +36,24 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
 
 export const ScadaMimic: React.FC = React.memo(() => {
     const { selectedAsset } = useAssetContext();
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Mock Data - deterministic random based on asset ID to simulate different states
+    // Mock Data
     const seed = selectedAsset ? selectedAsset.id.charCodeAt(0) : 0;
     const baseMw = 200 + (seed % 50);
 
     const [t1Mw, setT1Mw] = useState(baseMw);
     const [t2Mw, setT2Mw] = useState(baseMw);
 
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => setIsLoading(false), 1200);
+        return () => clearTimeout(timer);
+    }, [selectedAsset]);
+
     // Simulate subtle fluctuation
     useEffect(() => {
+        if (isLoading) return;
         setT1Mw(baseMw);
         setT2Mw(baseMw);
 
@@ -54,7 +62,22 @@ export const ScadaMimic: React.FC = React.memo(() => {
             setT2Mw(prev => +(prev + (Math.random() - 0.5) * 0.2).toFixed(1));
         }, 2000);
         return () => clearInterval(interval);
-    }, [baseMw]);
+    }, [baseMw, isLoading]);
+
+    if (isLoading) {
+        return (
+            <div className="flex-1 flex flex-col items-center justify-center p-8">
+                <div className="w-full max-w-4xl space-y-8 animate-pulse">
+                    <div className="h-12 w-48 bg-slate-900/50 rounded-lg"></div>
+                    <div className="grid grid-cols-2 gap-12">
+                        <div className="h-64 bg-slate-900/50 rounded-2xl"></div>
+                        <div className="h-64 bg-slate-900/50 rounded-2xl"></div>
+                    </div>
+                    <div className="h-16 w-full bg-slate-900/50 rounded-xl"></div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-4 md:p-8">
