@@ -11,8 +11,9 @@ import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenera
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
+import { Skeleton } from './ui/Skeleton.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
-import { Spinner } from './Spinner.tsx';
+// Spinner removed as it's replaced by Skeleton
 import { QUESTIONS } from '../constants.ts';
 
 export const RiskReport: React.FC = () => {
@@ -254,8 +255,17 @@ export const RiskReport: React.FC = () => {
                     <ModernButton onClick={() => navigateTo('globalMap')} variant="secondary">{t('hub.operationalModules', 'Select Asset')}</ModernButton>
                 </GlassCard>
             ) : loading ? (
-                <div className="h-96 flex items-center justify-center">
-                    <Spinner text={t('riskReport.loading', 'Compiling Data...')} size="lg" />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <GlassCard className="h-64 space-y-4">
+                        <Skeleton height="1.5rem" width="60%" />
+                        <Skeleton height="4rem" />
+                        <Skeleton height="1rem" width="40%" />
+                    </GlassCard>
+                    <GlassCard className="h-64 space-y-4">
+                        <Skeleton height="1.5rem" width="60%" />
+                        <Skeleton height="4rem" />
+                        <Skeleton height="1rem" width="40%" />
+                    </GlassCard>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in-up">

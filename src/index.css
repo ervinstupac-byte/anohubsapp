@@ -8,55 +8,72 @@
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #020617; /* Slate 950 base */
-  color: #e2e8f0; /* Slate 200 */
+  background-color: #020617;
+  /* Slate 950 base */
+  color: #e2e8f0;
+  /* Slate 200 */
   overflow-x: hidden;
 
   /* --- CYBERPUNK GRID BACKGROUND --- */
   /* Ovo dodaje dubinu i tech osjećaj */
-  background-image: 
-    radial-gradient(circle at 50% 0%, #164e63 0%, transparent 40%), /* Glow na vrhu */
-    linear-gradient(#1e293b 1px, transparent 1px), /* Horizontalne linije */
-    linear-gradient(90deg, #1e293b 1px, transparent 1px); /* Vertikalne linije */
-  background-size: 100% 100%, 40px 40px, 40px 40px; /* Veličina mreže */
+  background-image:
+    radial-gradient(circle at 50% 0%, #164e63 0%, transparent 40%),
+    /* Glow na vrhu */
+    linear-gradient(#1e293b 1px, transparent 1px),
+    /* Horizontalne linije */
+    linear-gradient(90deg, #1e293b 1px, transparent 1px);
+  /* Vertikalne linije */
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  /* Veličina mreže */
   min-height: 100vh;
 }
 
 /* --- AUTOMATIC FORM STYLING (Popravak za Login) --- */
 /* Ovo automatski stilizira sva input polja da budu tamna/staklena */
-input[type="text"], 
-input[type="password"], 
-input[type="email"], 
+input[type="text"],
+input[type="password"],
+input[type="email"],
 input[type="number"],
 input[type="search"],
-select, 
+select,
 textarea {
-  background-color: rgba(15, 23, 42, 0.6) !important; /* Tamna prozirna */
-  border: 1px solid rgba(51, 65, 85, 0.5) !important; /* Slate border */
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  /* Tamna prozirna */
+  border: 1px solid rgba(51, 65, 85, 0.5) !important;
+  /* Slate border */
   color: white !important;
-  border-radius: 0.5rem; /* Zaobljeni rubovi */
+  border-radius: 0.5rem;
+  /* Zaobljeni rubovi */
   padding: 0.6rem 1rem;
   outline: none;
   transition: all 0.3s ease;
 }
 
 /* Glow efekt kada kliknete na polje */
-input:focus, select:focus, textarea:focus {
-  border-color: #06b6d4 !important; /* Cyan border */
-  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important; /* Cyan glow prsten */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #06b6d4 !important;
+  /* Cyan border */
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+  /* Cyan glow prsten */
   background-color: rgba(15, 23, 42, 0.9) !important;
 }
 
 /* Placeholder tekst da bude čitljiv ali suptilan */
-input::placeholder, textarea::placeholder {
-  color: #94a3b8; /* Slate 400 */
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+  /* Slate 400 */
 }
 
 /* Globalna selekcija teksta (Cyberpunk Highlighting) */
 ::selection {
-  background: rgba(34, 211, 238, 0.2); /* Cyan sa prozirnošću */
+  background: rgba(34, 211, 238, 0.2);
+  /* Cyan sa prozirnošću */
   color: #fff;
   text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
 }
@@ -95,7 +112,8 @@ input::placeholder, textarea::placeholder {
 /* 2. Hover Glass (za interaktivne elemente) */
 .glass-panel-hover:hover {
   background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(6, 182, 212, 0.3); /* Cyan border tint */
+  border-color: rgba(6, 182, 212, 0.3);
+  /* Cyan border tint */
   box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
   transform: translateY(-2px);
 }
@@ -118,27 +136,57 @@ input::placeholder, textarea::placeholder {
 
 /* --- ANIMATIONS --- */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes shine {
-  100% { left: 125%; }
+  100% {
+    left: 125%;
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(6, 182, 212, 0.2); }
-  50% { opacity: 0.7; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+  }
+
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  }
 }
 
 /* --- ANIMATION CLASSES --- */
@@ -167,6 +215,7 @@ input::placeholder, textarea::placeholder {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -177,18 +226,21 @@ input::placeholder, textarea::placeholder {
   .no-print {
     display: none !important;
   }
+
   body {
     background: white !important;
     color: black !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
   .print-container {
     background: white !important;
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
   }
+
   .print-main {
     box-shadow: none !important;
     border: none !important;
@@ -196,9 +248,10 @@ input::placeholder, textarea::placeholder {
     color: black !important;
     backdrop-filter: none !important;
   }
-  
+
   /* Reset glass effects for crisp printing */
-  .glass-panel, .glass-input {
+  .glass-panel,
+  .glass-input {
     background: white !important;
     border: 1px solid #ddd !important;
     color: black !important;
@@ -229,12 +282,21 @@ input::placeholder, textarea::placeholder {
   content: 'ESTABLISHING SECURE CONNECTION...';
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.2em;
-  color: #06b6d4; /* Cyan */
+  color: #06b6d4;
+  /* Cyan */
   animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }

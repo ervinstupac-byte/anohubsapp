@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { HashRouter, useLocation, useNavigate, Route, Routes, useParams } from 'react-router-dom';
 
 // --- 1. CONTEXTS ---
@@ -9,6 +10,7 @@ import { HPPDesignProvider } from './contexts/HPPDesignContext.tsx';
 import { RiskProvider } from './contexts/RiskContext.tsx';
 import { ToastProvider } from './contexts/ToastContext.tsx';
 import { AssetProvider } from './contexts/AssetContext.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { TelemetryProvider } from './contexts/TelemetryContext.tsx';
 import { AuditProvider } from './contexts/AuditContext.tsx';
 
@@ -74,6 +76,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // --- 8. APP LAYOUT ---
 const AppLayout: React.FC = () => {
     const location = useLocation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
@@ -152,9 +155,15 @@ const AppLayout: React.FC = () => {
 
                 {!isHub && (
                     <header className="sticky top-0 z-50 w-full backdrop-blur-md border-b border-white/5 bg-[#0f172a]/80 h-16 flex items-center px-6 justify-between">
-                        <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-                            <span>←</span> <span className="text-xs font-bold uppercase tracking-widest">Return to Command</span>
-                        </button>
+                        <div className="flex items-center gap-6">
+                            <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                                <span>←</span> <span className="text-xs font-bold uppercase tracking-widest">Return to Command</span>
+                            </button>
+                            <div className="h-4 w-px bg-white/10 hidden sm:block"></div>
+                            <a href="https://anohubs.com" className="text-[10px] font-bold text-cyan-500/80 hover:text-cyan-400 uppercase tracking-widest transition-colors flex items-center gap-2">
+                                <span>🌐</span> {t('hub.backToSite', 'Back to Site')}
+                            </a>
+                        </div>
                         <LanguageSelector />
                     </header>
                 )}
@@ -162,30 +171,32 @@ const AppLayout: React.FC = () => {
                 <main className="flex-grow w-full relative z-10">
                     <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING MODULE...</span></div>}>
                         <div className={!isHub ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "w-full h-full animate-fade-in"}>
-                            <Routes>
-                                <Route index element={<CommandCentreDashboard />} />
+                            <ErrorBoundary>
+                                <Routes>
+                                    <Route index element={<CommandCentreDashboard />} />
 
-                                <Route path="profile" element={<UserProfile />} />
-                                <Route path="map" element={<GlobalMap />} />
-                                <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                                <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                                <Route path="risk-report" element={<RiskReport />} />
-                                <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
-                                <Route path="digital-introduction" element={<DigitalIntroduction />} />
-                                <Route path="hpp-improvements" element={<HPPImprovements />} />
-                                <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                                <Route path="gender-equity" element={<GenderEquity />} />
-                                <Route path="hpp-builder" element={<HPPBuilder />} />
-                                <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                                <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                                <Route path="river-wildlife" element={<RiverWildlife />} />
-                                <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                                <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                                <Route path="contract-management" element={<ContractManagement />} />
-                                <Route path="library" element={<ComponentLibrary />} />
-                                <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500"><div className="text-4xl mb-2">🚧</div><div className="text-xl">404: Sector Not Found</div></div>} />
-                            </Routes>
+                                    <Route path="profile" element={<UserProfile />} />
+                                    <Route path="map" element={<GlobalMap />} />
+                                    <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                                    <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                                    <Route path="risk-report" element={<RiskReport />} />
+                                    <Route path="investor-briefing" element={<InvestorBriefing />} />
+                                    <Route path="standard-of-excellence" element={<StandardOfExcellence />} />
+                                    <Route path="digital-introduction" element={<DigitalIntroduction />} />
+                                    <Route path="hpp-improvements" element={<HPPImprovements />} />
+                                    <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                                    <Route path="gender-equity" element={<GenderEquity />} />
+                                    <Route path="hpp-builder" element={<HPPBuilder />} />
+                                    <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                                    <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                                    <Route path="river-wildlife" element={<RiverWildlife />} />
+                                    <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                                    <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                                    <Route path="contract-management" element={<ContractManagement />} />
+                                    <Route path="library" element={<ComponentLibrary />} />
+                                    <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500"><div className="text-4xl mb-2">🚧</div><div className="text-xl">404: Sector Not Found</div></div>} />
+                                </Routes>
+                            </ErrorBoundary>
                         </div>
                     </Suspense>
                 </main>

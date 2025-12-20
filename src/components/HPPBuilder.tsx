@@ -13,9 +13,12 @@ import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 import { GlassCard } from './ui/GlassCard.tsx';
+import { StatCard } from './ui/StatCard.tsx';
+import { ControlPanel } from './ui/ControlPanel.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
 import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
+import { Tooltip } from './ui/Tooltip.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -250,69 +253,66 @@ export const HPPBuilder: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 {/* LEFT: PARAMETERS */}
-                <GlassCard className="h-fit">
-                    <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
-                        <span className="text-2xl">🎛️</span>
-                        <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('hppBuilder.parameters')}</h3>
-                    </div>
-
+                <ControlPanel
+                    title={t('hppBuilder.parameters')}
+                    icon={<span>🎛️</span>}
+                    action={
+                        <Tooltip content={t('hppBuilder.saveTooltip', 'Save current configuration to cloud')}>
+                            <button onClick={() => setSaveModalOpen(true)} className="text-[10px] bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 px-2 py-1 rounded hover:bg-cyan-600 hover:text-white transition-all flex items-center gap-1 uppercase font-bold">
+                                <span>💾</span> {t('hppBuilder.save')}
+                            </button>
+                        </Tooltip>
+                    }
+                >
                     <div className="space-y-8">
                         {/* Sliders */}
                         <div>
                             <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
-                                <span>{t('hppBuilder.netHead')}</span>
+                                <Tooltip content={t('hppBuilder.netHeadDesc', 'Vertical distance water falls')}>
+                                    <span>{t('hppBuilder.netHead')}</span>
+                                </Tooltip>
                                 <span className="text-cyan-400 font-mono bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/20">{settings.head} m</span>
                             </div>
-                            {/* TypeScript Range fix */}
                             <input type="range" min="2" max="1000" step="1" value={settings.head} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('head', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
                         </div>
                         <div>
                             <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
-                                <span>{t('hppBuilder.flowRate')}</span>
+                                <Tooltip content={t('hppBuilder.flowRateDesc', 'Volume of water passing through')}>
+                                    <span>{t('hppBuilder.flowRate')}</span>
+                                </Tooltip>
                                 <span className="text-cyan-400 font-mono bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/20">{settings.flow} m³/s</span>
                             </div>
-                            {/* TypeScript Range fix */}
                             <input type="range" min="0.1" max="200" step="0.1" value={settings.flow} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('flow', parseFloat(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500 hover:accent-cyan-400 transition-all" />
-                        </div>
-                        <div>
-                            <div className="flex justify-between text-xs font-bold text-slate-400 uppercase mb-2">
-                                <span>{t('hppBuilder.efficiency')}</span>
-                                <span className="text-emerald-400 font-mono bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-500/20">{settings.efficiency}%</span>
-                            </div>
-                            {/* TypeScript Range fix */}
-                            <input type="range" min="70" max="98" step="1" value={settings.efficiency} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateSettings('efficiency', parseInt(e.target.value))} className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all" />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 pt-6 mt-6 border-t border-white/5">
-                        <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">{t('hppBuilder.hydrologyType')}</label>
-                            {/* TypeScript Select fix */}
-                            <select value={settings.flowVariation} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateSettings('flowVariation', e.target.value as HPPSettings['flowVariation'])} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
-                                <option value="stable">{t('hppBuilder.hydrology.stable')}</option>
-                                <option value="seasonal">{t('hppBuilder.hydrology.seasonal')}</option>
-                                <option value="variable">{t('hppBuilder.hydrology.variable')}</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">{t('hppBuilder.waterCondition')}</label>
-                            {/* TypeScript Select fix */}
-                            <select value={settings.waterQuality} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateSettings('waterQuality', e.target.value as HPPSettings['waterQuality'])} className="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white outline-none focus:border-cyan-500 transition-colors cursor-pointer">
-                                <option value="clean">{t('hppBuilder.water.clean')}</option>
-                                <option value="suspended">{t('hppBuilder.water.suspended')}</option>
-                                <option value="abrasive">{t('hppBuilder.water.abrasive')}</option>
-                            </select>
-                        </div>
+                        <ModernInput
+                            label={t('hppBuilder.hydrologyType')}
+                            as="select"
+                            value={settings.flowVariation}
+                            onChange={(e: any) => updateSettings('flowVariation', e.target.value)}
+                        >
+                            <option value="stable">{t('hppBuilder.hydrology.stable')}</option>
+                            <option value="seasonal">{t('hppBuilder.hydrology.seasonal')}</option>
+                            <option value="variable">{t('hppBuilder.hydrology.variable')}</option>
+                        </ModernInput>
+
+                        <ModernInput
+                            label={t('hppBuilder.waterCondition')}
+                            as="select"
+                            value={settings.waterQuality}
+                            onChange={(e: any) => updateSettings('waterQuality', e.target.value)}
+                        >
+                            <option value="clean">{t('hppBuilder.water.clean')}</option>
+                            <option value="suspended">{t('hppBuilder.water.suspended')}</option>
+                            <option value="abrasive">{t('hppBuilder.water.abrasive')}</option>
+                        </ModernInput>
                     </div>
 
-                    {/* CLOUD CONFIGS */}
+                    {/* TEAM DESIGNS */}
                     <div className="border-t border-white/5 pt-4 mt-6">
-                        <div className="flex justify-between items-center mb-3">
-                            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">{t('hppBuilder.teamDesigns')}</h4>
-                            <button onClick={() => setSaveModalOpen(true)} className="text-[10px] bg-cyan-600/20 text-cyan-400 border border-cyan-500/30 px-2 py-1 rounded hover:bg-cyan-600 hover:text-white transition-all flex items-center gap-1 uppercase font-bold">
-                                <span>💾</span> {t('hppBuilder.save')}
-                            </button>
-                        </div>
+                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{t('hppBuilder.teamDesigns')}</h4>
                         <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar pr-1">
                             {isLoading && <p className="text-xs text-slate-500 animate-pulse">{t('hppBuilder.syncing')}</p>}
                             {!isLoading && savedConfigs.length === 0 && <p className="text-xs text-slate-600 italic text-center py-2">{t('hppBuilder.noDesigns')}</p>}
@@ -327,54 +327,49 @@ export const HPPBuilder: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                </GlassCard>
+                </ControlPanel>
 
                 {/* MIDDLE: PHYSICS ENGINE */}
-                <div className="relative">
+                <div className="relative flex flex-col gap-6">
                     <div className="absolute inset-0 bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-                    <GlassCard className="p-0 border-cyan-500/30 shadow-2xl shadow-cyan-900/20 relative z-10 h-full flex flex-col">
-                        <div className="p-6 pb-0 flex-grow">
-                            <TurbineChart head={settings.head} flow={settings.flow} />
 
-                            <div className="grid grid-cols-2 gap-4 mt-6">
-                                <div className="text-center p-4 bg-slate-900/50 rounded-xl border border-white/5">
-                                    <p className="text-[9px] text-slate-500 uppercase tracking-[0.1em] font-bold mb-1">{t('hppBuilder.topologyIndex')} ($n_s$)</p>
-                                    <div className="text-3xl font-mono text-white font-black tracking-tighter">{calculations.n_sq}</div>
-                                    <p className="text-[9px] text-slate-600 mt-1">{t('hppBuilder.physicsDeterminant')}</p>
-                                </div>
-                                <div className="text-center p-4 bg-slate-900/50 rounded-xl border border-white/5">
-                                    <p className="text-[9px] text-slate-500 uppercase tracking-[0.1em] font-bold mb-1">{t('hppBuilder.estGeneration')}</p>
-                                    <div className="text-3xl font-mono text-emerald-400 font-black tracking-tighter">{calculations.energyGWh}</div>
-                                    <p className="text-[9px] text-emerald-500/50 mt-1">{t('hppBuilder.units.gwhYear')}</p>
-                                </div>
-                            </div>
+                    <ControlPanel title="Simulator" icon={<span>⚙️</span>} className="flex-grow flex flex-col">
+                        <TurbineChart head={settings.head} flow={settings.flow} />
 
-                            <div className="mt-8 text-center">
-                                <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] font-bold mb-2">{t('hppBuilder.calcPower')}</p>
-                                <h3 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 tracking-tighter drop-shadow-sm">
-                                    {calculations.powerMW}<span className="text-2xl text-slate-600 ml-1">MW</span>
-                                </h3>
-                            </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <StatCard
+                                label={t('hppBuilder.topologyIndex')}
+                                value={calculations.n_sq}
+                                subtitle={t('hppBuilder.physicsDeterminant')}
+                            />
+                            <StatCard
+                                label={t('hppBuilder.estGeneration')}
+                                value={calculations.energyGWh}
+                                unit="GWh"
+                                subtitle={t('hppBuilder.units.gwhYear')}
+                            />
                         </div>
 
-                        <div className="p-6 mt-auto">
-                            <ModernButton onClick={handleGeneratePDF} variant="primary" className="shadow-cyan-500/20" icon={<span>📄</span>} fullWidth>
-                                {t('hppBuilder.downloadReport')}
-                            </ModernButton>
+                        <div className="text-center py-6">
+                            <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] font-bold mb-2">{t('hppBuilder.calcPower')}</p>
+                            <h3 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 tracking-tighter drop-shadow-sm">
+                                {calculations.powerMW}<span className="text-2xl text-slate-600 ml-1">MW</span>
+                            </h3>
                         </div>
-                    </GlassCard>
+
+                        <ModernButton onClick={handleGeneratePDF} variant="primary" className="shadow-cyan-500/20 mt-auto" icon={<span>📄</span>} fullWidth>
+                            {t('hppBuilder.downloadReport')}
+                        </ModernButton>
+                    </ControlPanel>
                 </div>
 
                 {/* RIGHT: RECOMMENDATIONS */}
-                <GlassCard className="h-fit max-h-[800px] overflow-hidden flex flex-col">
-                    <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
-                        <span className="text-2xl">🏆</span>
-                        <div>
-                            <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('hppBuilder.engineeringSelection')}</h3>
-                            <p className="text-[10px] text-slate-500 uppercase tracking-widest">{t('hppBuilder.rankedBy')}</p>
-                        </div>
-                    </div>
-
+                <ControlPanel
+                    title={t('hppBuilder.engineeringSelection')}
+                    icon={<span>🏆</span>}
+                    subtitle={t('hppBuilder.rankedBy')}
+                    className="max-h-[800px] overflow-hidden flex flex-col"
+                >
                     <div className="space-y-3 overflow-y-auto custom-scrollbar pr-1 flex-grow">
                         {recommendations.map((rec) => {
                             const turbineName = TURBINE_CATEGORIES[rec.key]?.name || rec.key.toUpperCase();
@@ -393,7 +388,7 @@ export const HPPBuilder: React.FC = () => {
                                 >
                                     {rec.isBest && (
                                         <div className="absolute top-0 right-0 bg-emerald-500 text-[#020617] text-[9px] font-black uppercase px-2 py-1 rounded-bl-lg shadow-sm tracking-wide">
-                                            {t('hppBuilder.optimalMatch', 'Optimal Match')}
+                                            {t('hppBuilder.optimalMatch')}
                                         </div>
                                     )}
 
@@ -417,7 +412,7 @@ export const HPPBuilder: React.FC = () => {
                                     {rec.score > 0 && (
                                         <div className="pt-3 border-t border-white/5 flex justify-end">
                                             <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 group-hover:text-cyan-400 transition-colors flex items-center gap-1">
-                                                {t('hppBuilder.specs', 'Specs')} <span className="text-lg leading-none">→</span>
+                                                {t('hppBuilder.specs')} <span className="text-lg leading-none">→</span>
                                             </span>
                                         </div>
                                     )}
@@ -425,7 +420,7 @@ export const HPPBuilder: React.FC = () => {
                             );
                         })}
                     </div>
-                </GlassCard>
+                </ControlPanel>
             </div>
 
             {/* SAVE MODAL (Minimalist) */}
@@ -443,8 +438,7 @@ export const HPPBuilder: React.FC = () => {
 
                         <ModernInput
                             value={configName}
-                            // ISPRAVKA: Dodan eksplicitni tip za rješavanje TS7006
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfigName(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setConfigName(e.target.value)}
                             placeholder={t('hppBuilder.designNamePlaceholder', 'e.g. Run-of-River Concept V1')}
                             autoFocus
                         />

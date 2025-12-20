@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
+import { Tooltip } from '../ui/Tooltip.tsx';
 
 const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'stopped'; mw: number }> = React.memo(({ name, status, mw }) => (
     <div className="relative group">
-        {/* Generator Housing */}
-        <div className={`
-            w-32 h-32 rounded-full border-4 flex items-center justify-center relative translate-y-8 transition-all duration-500
-            ${status === 'running'
-                ? 'border-emerald-500 bg-emerald-900/20 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
-                : 'border-slate-600 bg-slate-800/50'}
-        `}>
-            <div className={`w-24 h-24 rounded-full border-2 border-dashed ${status === 'running' ? 'border-emerald-400/50 animate-spin-slow' : 'border-slate-700'}`}></div>
-            <div className="absolute text-center">
-                <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">{name}</div>
-                <div className={`text-xl font-mono font-bold ${status === 'running' ? 'text-white' : 'text-slate-500'}`}>{mw} MW</div>
+        <Tooltip content={`${name} is currently ${status === 'running' ? 'Active & Generating' : 'Standby'}`}>
+            <div className={`
+                w-32 h-32 rounded-full border-4 flex items-center justify-center relative translate-y-8 transition-all duration-500
+                ${status === 'running'
+                    ? 'border-emerald-500 bg-emerald-900/20 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
+                    : 'border-slate-600 bg-slate-800/50'}
+            `}>
+                <div className={`w-24 h-24 rounded-full border-2 border-dashed ${status === 'running' ? 'border-emerald-400/50 animate-spin-slow' : 'border-slate-700'}`}></div>
+                <div className="absolute text-center">
+                    <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">{name}</div>
+                    <div className={`text-xl font-mono font-bold ${status === 'running' ? 'text-white' : 'text-slate-500'}`}>{mw} MW</div>
+                </div>
             </div>
-        </div>
+        </Tooltip>
 
         {/* Shaft */}
         <div className="w-4 h-16 bg-gradient-to-r from-slate-700 to-slate-600 mx-auto relative -z-10"></div>
@@ -72,11 +74,13 @@ export const ScadaMimic: React.FC = React.memo(() => {
                     </div>
                 </div>
 
-                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[9px] sm:text-xs font-mono text-emerald-500 bg-emerald-950/30 border border-emerald-900 px-2 py-1 rounded flex items-center gap-1 sm:gap-2">
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span className="hidden sm:inline">SYSTEM OPTIMAL</span>
-                    <span className="sm:hidden">OK</span>
-                </div>
+                <Tooltip content="Infrastructure Status: All metrics within operational thresholds.">
+                    <div className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[9px] sm:text-xs font-mono text-emerald-500 bg-emerald-950/30 border border-emerald-900 px-2 py-1 rounded flex items-center gap-1 sm:gap-2">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span className="hidden sm:inline">SYSTEM OPTIMAL</span>
+                        <span className="sm:hidden">OK</span>
+                    </div>
+                </Tooltip>
 
                 <div className="flex flex-col sm:flex-row justify-around items-center sm:items-end pt-12 sm:pt-8 pb-8 sm:pb-12 relative gap-4 sm:gap-0">
                     {/* INTAKE / PENSTOCK VISUAL (Simplified) */}

@@ -9,6 +9,7 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
+import { FetchSkeleton } from './ui/FetchSkeleton.tsx';
 
 // --- TYPES ---
 interface Block {
@@ -47,6 +48,7 @@ export const DigitalIntegrity: React.FC = () => {
     const [engineer, setEngineer] = useState(user?.email || 'Eng. Unknown');
 
     // UI States
+    const [isLoading, setIsLoading] = useState(true);
     const [isMining, setIsMining] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'IDLE' | 'VERIFYING' | 'SECURE' | 'COMPROMISED'>('IDLE');
 
@@ -73,6 +75,8 @@ export const DigitalIntegrity: React.FC = () => {
             }
         } catch (error) {
             console.error('Error fetching ledger:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -270,61 +274,63 @@ export const DigitalIntegrity: React.FC = () => {
                     </div>
 
                     <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar pr-2">
-                        {ledger.map((block) => (
-                            <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
+                        <FetchSkeleton loading={isLoading} count={5}>
+                            {ledger.map((block) => (
+                                <div key={block.block_index} className="relative p-5 bg-slate-900/40 rounded-2xl border border-white/5 hover:border-cyan-500/30 hover:bg-slate-800/60 transition-all group overflow-hidden">
 
-                                {/* Connector Line */}
-                                {block.block_index > 0 && <div className="absolute -top-6 left-[27px] w-0.5 h-10 bg-slate-800 z-0"></div>}
+                                    {/* Connector Line */}
+                                    {block.block_index > 0 && <div className="absolute -top-6 left-[27px] w-0.5 h-10 bg-slate-800 z-0"></div>}
 
-                                <div className="flex justify-between items-start relative z-10">
-                                    <div className="flex gap-5">
-                                        {/* Block Index */}
-                                        <div className="flex flex-col items-center pt-1">
-                                            <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-xs font-mono font-bold text-slate-500 border border-slate-800 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors shadow-inner">
-                                                #{block.block_index}
+                                    <div className="flex justify-between items-start relative z-10">
+                                        <div className="flex gap-5">
+                                            {/* Block Index */}
+                                            <div className="flex flex-col items-center pt-1">
+                                                <div className="w-12 h-12 bg-slate-950 rounded-xl flex items-center justify-center text-xs font-mono font-bold text-slate-500 border border-slate-800 group-hover:border-cyan-500/50 group-hover:text-cyan-400 transition-colors shadow-inner">
+                                                    #{block.block_index}
+                                                </div>
+                                            </div>
+
+                                            {/* Block Data */}
+                                            <div className="flex-grow">
+                                                <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+                                                    <p className="text-base font-bold text-white tracking-tight">
+                                                        {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
+                                                    </p>
+                                                    {block.asset_id && block.asset_id !== 'ROOT' && (
+                                                        <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-cyan-200 border border-slate-700 font-mono w-fit">
+                                                            ASSET ID: {block.asset_id}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wide">
+                                                    <span>{new Date(block.timestamp).toLocaleString()}</span>
+                                                    <span className="w-1 h-1 bg-slate-600 rounded-full"></span>
+                                                    <span>{block.engineer_id?.split('@')[0] || 'System'}</span>
+                                                </div>
+
+                                                {/* Hash Visualizer */}
+                                                <div className="bg-black/40 p-3 rounded-lg border border-white/5 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
+                                                    <div className="flex gap-3 mb-1">
+                                                        <span className="text-slate-600 select-none font-bold w-8 text-right">HASH:</span>
+                                                        <span className="truncate w-full text-emerald-500/80">{block.hash}</span>
+                                                    </div>
+                                                    <div className="flex gap-3">
+                                                        <span className="text-slate-600 select-none font-bold w-8 text-right">PREV:</span>
+                                                        <span className="truncate w-full">{block.prev_hash}</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        {/* Block Data */}
-                                        <div className="flex-grow">
-                                            <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
-                                                <p className="text-base font-bold text-white tracking-tight">
-                                                    {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
-                                                </p>
-                                                {block.asset_id && block.asset_id !== 'ROOT' && (
-                                                    <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-cyan-200 border border-slate-700 font-mono w-fit">
-                                                        ASSET ID: {block.asset_id}
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            <div className="flex items-center gap-3 text-[10px] text-slate-500 font-mono mb-3 uppercase tracking-wide">
-                                                <span>{new Date(block.timestamp).toLocaleString()}</span>
-                                                <span className="w-1 h-1 bg-slate-600 rounded-full"></span>
-                                                <span>{block.engineer_id?.split('@')[0] || 'System'}</span>
-                                            </div>
-
-                                            {/* Hash Visualizer */}
-                                            <div className="bg-black/40 p-3 rounded-lg border border-white/5 font-mono text-[9px] text-slate-500 group-hover:text-slate-400 transition-colors">
-                                                <div className="flex gap-3 mb-1">
-                                                    <span className="text-slate-600 select-none font-bold w-8 text-right">HASH:</span>
-                                                    <span className="truncate w-full text-emerald-500/80">{block.hash}</span>
-                                                </div>
-                                                <div className="flex gap-3">
-                                                    <span className="text-slate-600 select-none font-bold w-8 text-right">PREV:</span>
-                                                    <span className="truncate w-full">{block.prev_hash}</span>
-                                                </div>
-                                            </div>
+                                        {/* Icon */}
+                                        <div className="text-slate-800 group-hover:text-cyan-500/10 transition-colors text-5xl select-none absolute right-4 top-4 pointer-events-none">
+                                            🔗
                                         </div>
-                                    </div>
-
-                                    {/* Icon */}
-                                    <div className="text-slate-800 group-hover:text-cyan-500/10 transition-colors text-5xl select-none absolute right-4 top-4 pointer-events-none">
-                                        🔗
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </FetchSkeleton>
                     </div>
                 </div>
             </div>

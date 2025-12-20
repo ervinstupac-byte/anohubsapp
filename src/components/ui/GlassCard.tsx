@@ -9,16 +9,16 @@ interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
     action?: React.ReactNode;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = ({ 
-    children, 
-    className = "", 
-    title, 
-    subtitle, 
+export const GlassCard: React.FC<GlassCardProps> = ({
+    children,
+    className = "",
+    title,
+    subtitle,
     action,
     ...props // Ovdje hvatamo 'style', 'onClick', itd.
 }) => {
     return (
-        <div 
+        <div
             className={`
                 bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6 
                 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] 

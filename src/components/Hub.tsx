@@ -141,6 +141,14 @@ export const Hub: React.FC = () => {
 
                 {/* Sidebar Footer */}
                 <div className="p-4 border-t border-slate-900 bg-slate-950 text-xs text-slate-600 font-mono">
+                    <div className="mb-3">
+                        <a
+                            href="https://anohubs.com"
+                            className="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 transition-colors py-1 px-2 border border-cyan-500/30 rounded bg-cyan-500/5 hover:bg-cyan-500/10"
+                        >
+                            <span>←</span> {t('hub.backToSite', 'Back to Site')}
+                        </a>
+                    </div>
                     <div>OP: {user?.email?.split('@')[0].toUpperCase() || 'GUEST'}</div>
                     <div className="text-[10px] mt-1 opacity-50">v2.5.0 ENTERPRISE</div>
                 </div>
@@ -152,9 +160,11 @@ export const Hub: React.FC = () => {
                 {/* SCADA HEADER (Digital Panel) - Hide on mobile */}
                 <header className="hidden lg:flex h-20 border-b border-slate-800 bg-slate-950 items-center justify-between px-8 shadow-sm z-30">
                     <div className="flex items-center gap-4">
-                        <div className="text-right">
-                            <h1 className="text-2xl font-black text-white tracking-tighter">AnoHUB <span className="text-cyan-600">SCADA</span></h1>
-                        </div>
+                        <a href="https://anohubs.com" className="group">
+                            <h1 className="text-2xl font-black text-white tracking-tighter group-hover:text-cyan-400 transition-colors">
+                                AnoHUB <span className="text-cyan-600 group-hover:text-cyan-300">SCADA</span>
+                            </h1>
+                        </a>
                     </div>
 
                     <div className="flex gap-4">

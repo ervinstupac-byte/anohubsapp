@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
 
     return {
         // Relativna putanja za siguran build (radi i u podfolderima)
-        base: './',
+        base: '/',
 
         server: {
             port: 3000,
