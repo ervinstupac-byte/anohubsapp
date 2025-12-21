@@ -1,233 +1,275 @@
-// Strategic Planning Dashboard
-// Pre-construction consulting & Procurement interface
+// Strategic Planning Dashboard (CEREBRO EDITION)
+// Integrated Project Environment with Contextual Advisory & Granular Control
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Calculator, Truck, FileCheck, AlertTriangle, TrendingUp, DollarSign } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calculator, Truck, FileCheck, AlertTriangle, TrendingUp, DollarSign, Activity, Anchor, Zap, Shield, Settings, Info } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
-import { StrategicPlanningService, SiteParameters, Bid, REGULATORY_STEPS } from '../services/StrategicPlanningService';
+import { StrategicPlanningService, SiteParameters, Bid, ImpactAnalysis } from '../services/StrategicPlanningService';
+import { LifecycleManager } from '../services/LifecycleManager';
+
+const THEME = {
+    bg: 'bg-[#121212]',
+    accent: 'text-[#2dd4bf]',
+    border: 'border-white/10',
+    glass: 'backdrop-blur-md bg-white/5 border-white/10',
+    highlight: 'bg-[#2dd4bf]/10 border-[#2dd4bf]/50'
+};
+
+import { ComponentTree } from './cerebro/ComponentTree';
+import { MechanicalPanel } from './cerebro/panels/MechanicalPanel';
+import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel'; // Assuming this exists or using placeholder
+
 
 export const StrategicPlanningDashboard: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'FEASIBILITY' | 'BIDS' | 'REGULATORY' | 'LOGISTICS'>('FEASIBILITY');
+    // TABS: Deep Granularity
+    const [activeTab, setActiveTab] = useState<'LOCATION' | 'HYDRAULICS' | 'TURBINE' | 'ELECTRO' | 'ECONOMY'>('HYDRAULICS');
+    const [isCalibrating, setIsCalibrating] = useState(false);
 
-    // Mock Data State
-    const [siteParams, setSiteParams] = useState<SiteParameters>({
-        grossHead: 45, // m
-        pipeLength: 1200, // m
-        pipeDiameter: 1600, // mm
-        pipeMaterial: 'GRP',
-        waterQuality: 'CLEAN',
-        ecologicalFlow: 0.5,
-        flowDurationCurve: [
-            { flow: 15, probability: 0 },
-            { flow: 12, probability: 20 },
-            { flow: 8, probability: 50 },
-            { flow: 4, probability: 80 },
-            { flow: 1, probability: 100 }
-        ]
+    // Initial Load
+    const [siteParams, setSiteParams] = useState<SiteParameters>(() => {
+        const stored = LifecycleManager.getActiveProject()?.genesis?.siteParams;
+        const defaults: SiteParameters = {
+            grossHead: 45, pipeLength: 1200, pipeDiameter: 1600, pipeMaterial: 'GRP',
+            wallThickness: 12, boltClass: '8.8', corrosionProtection: 'PAINT',
+            waterQuality: 'CLEAN', ecologicalFlow: 0.5, flowDurationCurve: []
+        };
+        return stored ? { ...defaults, ...stored } : defaults;
+        // Merge defaults to ensure new fields (wallThickness etc) exist if loading old DNA.
     });
 
-    const [mockBid] = useState<Bid>({
-        manufacturer: 'HydroTech Global',
-        turbineType: 'kaplan',
-        ratedPowerMW: 3.5,
-        efficiencyAtBestPoint: 94.2,
-        runnerDiameter: 2200,
-        price: 2800000,
-        guaranteedIncluded: true
-    });
+    // Math & Impact State
+    const [feasibility, setFeasibility] = useState(StrategicPlanningService.calculateFeasibility(siteParams));
+    const [impact, setImpact] = useState<ImpactAnalysis>(StrategicPlanningService.validateImpact(siteParams));
 
-    // Calculations
-    const feasibility = StrategicPlanningService.calculateFeasibility(siteParams);
-    const bidEval = StrategicPlanningService.evaluateBid(mockBid, siteParams);
+    // --- CEREBRO LOGIC LOOP ---
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const featResults = StrategicPlanningService.calculateFeasibility(siteParams);
+            const impactResults = StrategicPlanningService.validateImpact(siteParams);
+
+            setFeasibility(featResults);
+            setImpact(impactResults);
+
+            // Persist to DNA (Memory Loop)
+            const proj = LifecycleManager.getActiveProject();
+            if (proj) {
+                proj.genesis.siteParams = siteParams;
+                proj.genesis.feasibility = featResults;
+            }
+            setIsCalibrating(false);
+        }, 300);
+
+        setIsCalibrating(true);
+        return () => clearTimeout(timer);
+    }, [
+        siteParams.grossHead, siteParams.pipeDiameter, siteParams.pipeLength, siteParams.wallThickness,
+        siteParams.boltClass, siteParams.corrosionProtection, siteParams.pipeMaterial
+    ]);
+
+    // Handlers
+    const handleParamChange = (name: keyof SiteParameters, value: any) => {
+        setSiteParams(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+        handleParamChange(e.target.name as any, parseFloat(e.target.value));
+    };
 
     return (
-        <div className="min-h-screen p-6 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
-            {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
-                    Strategic <span className="text-cyan-400">Planning</span>
-                </h1>
-                <p className="text-slate-400">Pre-construction Consulting & Procurement Engine</p>
-            </div>
+        <div className={`min-h-screen grid grid-cols-12 gap-0 ${THEME.bg} text-slate-200 font-sans overflow-hidden`}>
 
-            {/* Navigation */}
-            <div className="flex gap-4 mb-6 border-b border-slate-700 pb-1">
-                <TabButton icon={Calculator} label="Hydraulic Feasibility" active={activeTab === 'FEASIBILITY'} onClick={() => setActiveTab('FEASIBILITY')} />
-                <TabButton icon={DollarSign} label="Bid Evaluator" active={activeTab === 'BIDS'} onClick={() => setActiveTab('BIDS')} />
-                <TabButton icon={FileCheck} label="Regulatory Roadmap" active={activeTab === 'REGULATORY'} onClick={() => setActiveTab('REGULATORY')} />
-                <TabButton icon={Truck} label="Logistics" active={activeTab === 'LOGISTICS'} onClick={() => setActiveTab('LOGISTICS')} />
-            </div>
+            {/* LEFT: MAIN WORKSPACE (Cols 1-9) */}
+            <div className={`col-span-9 p-8 flex flex-col h-screen overflow-y-auto ${THEME.bg}`}>
 
-            {/* CONTENT AREA */}
-            <div className="grid grid-cols-12 gap-6">
-
-                {/* === FEASIBILITY TAB === */}
-                {activeTab === 'FEASIBILITY' && (
-                    <>
-                        <div className="col-span-12 lg:col-span-4 space-y-4">
-                            <GlassCard className="p-6">
-                                <h3 className="text-sm font-bold text-white uppercase mb-4">Site Parameters</h3>
-                                <div className="space-y-3">
-                                    <InputRow label="Gross Head (m)" value={siteParams.grossHead} unit="m" />
-                                    <InputRow label="Pipe Length (m)" value={siteParams.pipeLength} unit="m" />
-                                    <InputRow label="Diameter (mm)" value={siteParams.pipeDiameter} unit="mm" />
-                                    <InputRow label="Eco Flow (m³/s)" value={siteParams.ecologicalFlow} unit="m³/s" />
-                                </div>
-                            </GlassCard>
-
-                            <GlassCard className="p-6 bg-emerald-950/20 border-emerald-500/30">
-                                <h3 className="text-sm font-bold text-emerald-400 uppercase mb-2">AI Recommendation</h3>
-                                <div className="text-2xl font-black text-white mb-1">
-                                    {feasibility.recommendedAggregates.count}x {feasibility.recommendedAggregates.type}
-                                </div>
-                                <p className="text-xs text-slate-300">
-                                    {feasibility.recommendedAggregates.reasoning}
-                                </p>
-                            </GlassCard>
-                        </div>
-
-                        <div className="col-span-12 lg:col-span-8">
-                            <GlassCard className="p-6 mb-4">
-                                <h3 className="text-lg font-bold text-white mb-6">Hydraulic Calculation Results</h3>
-                                <div className="grid grid-cols-3 gap-6 text-center">
-                                    <MetricBox
-                                        label="Net Head"
-                                        value={feasibility.netHead.toFixed(2)}
-                                        unit="m"
-                                        subtext={`Loss: ${feasibility.frictionLoss.toFixed(2)}m (${((feasibility.frictionLoss / siteParams.grossHead) * 100).toFixed(1)}%)`}
-                                    />
-                                    <MetricBox
-                                        label="Design Flow"
-                                        value={feasibility.optimalFlow.toFixed(2)}
-                                        unit="m³/s"
-                                    />
-                                    <MetricBox
-                                        label="Annual Production"
-                                        value={feasibility.annualProductionMWh.toFixed(0)}
-                                        unit="MWh/yr"
-                                        highlight
-                                    />
-                                </div>
-                            </GlassCard>
-
-                            {/* Flow Duration Curve Viz Placeholder */}
-                            <GlassCard className="p-6 h-64 flex items-center justify-center bg-black/20">
-                                <p className="text-slate-500 italic">Flow Duration Curve Visualization would go here</p>
-                            </GlassCard>
-                        </div>
-                    </>
-                )}
-
-                {/* === BID EVALUATOR TAB === */}
-                {activeTab === 'BIDS' && (
-                    <>
-                        <div className="col-span-12 lg:col-span-6">
-                            <GlassCard className="p-6">
-                                <h3 className="text-white font-bold mb-4">Manufacturer Offer</h3>
-                                <div className="space-y-4 p-4 bg-slate-800/50 rounded-lg">
-                                    <div className="flex justify-between"><span>Manufacturer:</span> <span className="font-bold text-white">{mockBid.manufacturer}</span></div>
-                                    <div className="flex justify-between"><span>Type:</span> <span className="font-bold text-white uppercase">{mockBid.turbineType}</span></div>
-                                    <div className="flex justify-between"><span>Efficiency:</span> <span className="font-bold text-white">{mockBid.efficiencyAtBestPoint}%</span></div>
-                                    <div className="flex justify-between"><span>Price:</span> <span className="font-bold text-white">{mockBid.price.toLocaleString()} €</span></div>
-                                </div>
-                            </GlassCard>
-                        </div>
-
-                        <div className="col-span-12 lg:col-span-6">
-                            <GlassCard className={`p-6 border-2 ${bidEval.score > 80 ? 'border-emerald-500' : 'border-amber-500'}`}>
-                                <div className="flex justify-between items-start mb-4">
-                                    <h3 className="text-lg font-black uppercase text-white">AI Cross-Check</h3>
-                                    <div className={`px-3 py-1 rounded font-bold text-xs ${bidEval.score > 80 ? 'bg-emerald-500 text-black' : 'bg-amber-500 text-black'}`}>
-                                        SCORE: {bidEval.score}/100
-                                    </div>
-                                </div>
-
-                                <div className="text-center py-4 mb-4">
-                                    <div className="text-sm text-slate-400 uppercase font-bold">Recommendation</div>
-                                    <div className={`text-4xl font-black ${bidEval.recommendation === 'SHORTLIST' ? 'text-emerald-400' : 'text-amber-400'}`}>
-                                        {bidEval.recommendation}
-                                    </div>
-                                </div>
-
-                                {bidEval.risks.length > 0 && (
-                                    <div className="space-y-2 mt-4">
-                                        <div className="text-xs text-red-400 font-bold uppercase">Detected Risks</div>
-                                        {bidEval.risks.map((risk, i) => (
-                                            <div key={i} className="flex gap-2 items-start p-2 bg-red-950/20 rounded">
-                                                <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                                                <p className="text-xs text-slate-300">{risk}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </GlassCard>
-                        </div>
-                    </>
-                )}
-
-                {/* === REGULATORY TAB === */}
-                {activeTab === 'REGULATORY' && (
-                    <div className="col-span-12">
-                        <GlassCard className="p-8">
-                            <h3 className="text-xl font-bold text-white mb-8 text-center">Project Regulatory Roadmap (Balkan Region)</h3>
-                            <div className="relative">
-                                {/* Timeline Line */}
-                                <div className="absolute top-1/2 left-0 w-full h-1 bg-slate-700 -translate-y-1/2 z-0"></div>
-
-                                <div className="flex justify-between relative z-10">
-                                    {REGULATORY_STEPS.map((step, i) => (
-                                        <div key={step.id} className="flex flex-col items-center group">
-                                            <motion.div
-                                                whileHover={{ scale: 1.1 }}
-                                                className={`w-12 h-12 rounded-full border-4 flex items-center justify-center bg-slate-900 ${i < 2 ? 'border-emerald-500 text-emerald-500' : 'border-slate-600 text-slate-600'}`}
-                                            >
-                                                <span className="font-bold">{i + 1}</span>
-                                            </motion.div>
-                                            <div className="mt-4 text-center w-32">
-                                                <p className={`text-sm font-bold ${i < 2 ? 'text-white' : 'text-slate-500'}`}>{step.name}</p>
-                                                <p className="text-xs text-slate-500">{step.durationMonths} months</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="mt-12 p-4 bg-amber-950/20 border border-amber-500/30 rounded flex items-center gap-3">
-                                <AlertTriangle className="text-amber-400" />
-                                <div>
-                                    <p className="text-white font-bold text-sm">Inventory Block Active</p>
-                                    <p className="text-slate-400 text-xs">Turbine orders are blocked until "Građevinska Dozvola" status is GREEN.</p>
-                                </div>
-                            </div>
-                        </GlassCard>
+                {/* HEADER (Keep KPIs) */}
+                <header className="mb-6 flex justify-between items-end border-b border-white/5 pb-4">
+                    <div>
+                        <h1 className="text-3xl font-black uppercase tracking-tighter text-white mb-1">
+                            Project <span className={THEME.accent}>Cerebro</span>
+                        </h1>
+                        <p className="text-[10px] text-slate-500 font-mono tracking-widest uppercase flex items-center gap-2">
+                            <span className={isCalibrating ? "text-amber-500 animate-pulse" : "text-emerald-500"}>
+                                {isCalibrating ? "PHYSICS ENGINE RECALCULATING..." : "SYSTEM READY"}
+                            </span>
+                        </p>
                     </div>
-                )}
+                </header>
+
+                {/* NEW SPLIT LAYOUT: TREE + WORKBENCH */}
+                <div className="flex h-[calc(100vh-160px)] border border-white/5 rounded-lg overflow-hidden">
+
+                    {/* LEFT: COMPONENT TREE */}
+                    <ComponentTree
+                        selectedId={activeTab}
+                        onSelect={(id: any) => setActiveTab(id)}
+                    />
+
+                    {/* CENTER: WORKBENCH PANEL */}
+                    <div className="flex-1 bg-black/20 p-8 overflow-y-auto relative">
+                        <AnimatePresence mode="wait">
+
+                            {/* HYDRAULICS / PENSTOCK */}
+                            {(activeTab === 'HYDRAULICS' || activeTab === 'PENSTOCK') && (
+                                <motion.div
+                                    key="HYDRAULICS"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="h-full"
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Hydraulic Geometry</h2>
+                                        <p className="text-sm text-slate-400">Define head, flow, and material physics.</p>
+                                    </div>
+                                    <HydraulicsPanel />
+
+                                    {/* Keep the Slider Group as 'Quick Adjust' below the panel if needed, or integrate into Panel */}
+                                    <div className="mt-8 pt-8 border-t border-white/10">
+                                        <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Quick Adjust</h3>
+                                        <div className="grid grid-cols-2 gap-8">
+                                            <SliderGroup label="Gross Head (m)" name="grossHead" value={siteParams.grossHead} min={1} max={500} onChange={handleSlider} />
+                                            <SliderGroup label="Diameter (mm)" name="pipeDiameter" value={siteParams.pipeDiameter} min={200} max={2500} step={50} onChange={handleSlider} />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* MECHANICAL / BOLTS  */}
+                            {(activeTab === 'MECHANICAL' || activeTab === 'BOLTS') && (
+                                <motion.div
+                                    key="MECHANICAL"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                >
+                                    <div className="mb-4">
+                                        <h2 className="text-xl font-bold text-white uppercase tracking-tight">Mechanical Integrity</h2>
+                                        <p className="text-sm text-slate-400">Manage connections, bolts, and alignment tolerances.</p>
+                                    </div>
+                                    <MechanicalPanel />
+                                </motion.div>
+                            )}
+
+                            {/* DEFAULT EMPTY STATE */}
+                            {!['HYDRAULICS', 'PENSTOCK', 'MECHANICAL', 'BOLTS'].includes(activeTab) && (
+                                <div className="flex flex-col items-center justify-center h-full text-slate-600">
+                                    <Settings className="w-12 h-12 mb-4 opacity-20" />
+                                    <h3 className="text-lg font-bold uppercase tracking-widest">Select Component</h3>
+                                    <p className="text-xs">Choose a node from the system tree to inspect.</p>
+                                </div>
+                            )}
+
+                        </AnimatePresence>
+                    </div>
+
+                </div>
+
+                {/* DYNAMIC WORKSPACE CONTENT */}
+                {/* Replaced by Split Layout above */}
             </div>
+
+            {/* RIGHT: CONTEXTUAL ADVISORY (Side-Brain) (Cols 10-12) */}
+            <div className="col-span-3 border-l border-white/10 bg-[#0a0a0a] p-0 flex flex-col h-screen">
+                <div className="p-6 border-b border-white/5 bg-[#121212]">
+                    <h2 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-amber-500" /> Live Advisory
+                    </h2>
+                </div>
+
+                <div className="flex-grow overflow-y-auto p-6 space-y-4">
+
+                    {/* AI Recommendation */}
+                    <div className="p-4 rounded bg-slate-900 border border-slate-800">
+                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-2">Aggregates</div>
+                        <div className="text-xl font-black text-white">{feasibility.recommendedAggregates.count}x {feasibility.recommendedAggregates.type}</div>
+                        <div className="text-xs text-slate-400 mt-2 leading-relaxed opacity-80">{feasibility.recommendedAggregates.reasoning}</div>
+                    </div>
+
+                    {/* Impact Warnings */}
+                    {impact.warnings.map((warn, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="p-4 rounded bg-red-950/10 border border-red-500/30 flex gap-3 items-start"
+                        >
+                            <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                            <p className="text-xs text-red-200 leading-relaxed font-medium">{warn}</p>
+                        </motion.div>
+                    ))}
+
+                    {/* Pro Tips (Contextual) */}
+                    {siteParams.pipeMaterial === 'STEEL' && siteParams.corrosionProtection === 'NONE' && (
+                        <div className="p-4 rounded bg-blue-950/10 border border-blue-500/30 flex gap-3 items-start">
+                            <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                            <p className="text-xs text-blue-200 leading-relaxed">
+                                <b>Engineer's Note:</b> Bare steel is rarely used in Balkans due to moderate acidity in mountain streams. Highly recommend at least Epoxy Paint.
+                            </p>
+                        </div>
+                    )}
+
+                    {siteParams.boltClass === '4.6' && (
+                        <div className="p-4 rounded bg-amber-950/10 border border-amber-500/30 flex gap-3 items-start">
+                            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                            <p className="text-xs text-amber-200 leading-relaxed">
+                                <b>Legacy Case #22:</b> Class 4.6 bolts sheared during testing at 'Mala Rijeka'. Ensure strict torque control if budget prevents upgrade to 8.8.
+                            </p>
+                        </div>
+                    )}
+
+                </div>
+
+                <div className="p-4 border-t border-white/5 bg-[#121212] text-center">
+                    <p className="text-[10px] text-slate-600 font-mono">ANOHUB CEREBRO V2.4 Connected</p>
+                </div>
+            </div>
+
         </div>
     );
 };
 
-// Helper Components
-const TabButton = ({ icon: Icon, label, active, onClick }: any) => (
-    <button onClick={onClick} className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-all ${active ? 'border-cyan-400 text-cyan-400' : 'border-transparent text-slate-500 hover:text-white'}`}>
-        <Icon className="w-4 h-4" />
-        <span className="font-bold text-sm uppercase">{label}</span>
-    </button>
-);
+// --- COMPONENTS ---
 
-const InputRow = ({ label, value, unit }: any) => (
-    <div className="flex justify-between items-center py-2 border-b border-slate-700/50">
-        <span className="text-sm text-slate-400">{label}</span>
-        <span className="text-sm font-bold text-white">{value} <span className="text-xs text-slate-500">{unit}</span></span>
+const KPIMini = ({ label, value, unit, color = "text-white" }: any) => (
+    <div className="flex flex-col">
+        <span className="text-[10px] uppercase text-slate-500 font-bold">{label}</span>
+        <span className={`text-lg font-black font-mono ${color}`}>{value} <span className="text-xs text-slate-600">{unit}</span></span>
     </div>
 );
 
-const MetricBox = ({ label, value, unit, subtext, highlight }: any) => (
-    <div className={`p-4 rounded-lg border ${highlight ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-700 bg-slate-800/30'}`}>
-        <div className="text-xs text-slate-400 uppercase font-bold mb-1">{label}</div>
-        <div className="text-2xl font-black text-white">{value}</div>
-        <div className="text-xs text-slate-500">{unit}</div>
-        {subtext && <div className="text-xs text-slate-400 mt-2 pt-2 border-t border-slate-700/50">{subtext}</div>}
+const SectionHeader = ({ icon: Icon, title }: any) => (
+    <div className="flex items-center gap-2 border-b border-white/10 pb-2 mb-4">
+        <Icon className="w-4 h-4 text-[#2dd4bf]" />
+        <h3 className="text-sm font-bold text-white uppercase tracking-wider">{title}</h3>
+    </div>
+);
+
+const SliderGroup = ({ label, value, min, max, step = 1, onChange, name }: any) => (
+    <div className="space-y-3">
+        <div className="flex justify-between text-xs">
+            <span className="text-slate-400 font-bold uppercase">{label}</span>
+            <span className="text-[#2dd4bf] font-mono">{value}</span>
+        </div>
+        <input
+            type="range" name={name} min={min} max={max} step={step} value={value} onChange={onChange}
+            className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#2dd4bf] hover:accent-emerald-400 transition-colors"
+        />
+    </div>
+);
+
+const Selector = ({ label, value, options, onChange }: any) => (
+    <div className="space-y-2">
+        <label className="text-xs font-bold text-slate-500 uppercase">{label}</label>
+        <div className="flex flex-wrap gap-2">
+            {options.map((opt: string) => (
+                <button
+                    key={opt}
+                    onClick={() => onChange(opt)}
+                    className={`px-3 py-2 rounded text-[10px] font-bold uppercase transition-all border ${value === opt
+                        ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-[#2dd4bf]'
+                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-600'
+                        }`}
+                >
+                    {opt}
+                </button>
+            ))}
+        </div>
     </div>
 );

@@ -8,9 +8,23 @@ export interface SiteParameters {
     pipeLength: number; // m
     pipeDiameter: number; // mm
     pipeMaterial: PipeMaterial;
+    // Granular Control (Cerebro Upgrade)
+    wallThickness: number; // mm
+    boltClass: '4.6' | '5.6' | '8.8' | '10.9';
+    corrosionProtection: 'PAINT' | 'GALVANIZED' | 'CATHODIC' | 'NONE';
+
     waterQuality: 'CLEAN' | 'SILT' | 'SAND' | 'GLACIAL'; // Added for Knowledge Bridge
     flowDurationCurve: { flow: number; probability: number }[]; // Q vs % exceedance
     ecologicalFlow: number; // m3/s (Must remain in river)
+}
+
+export interface ImpactAnalysis {
+    safetyFactor: number; // > 2.0 is Good
+    hoopStressMPa: number;
+    boltStressStatus: 'OK' | 'CRITICAL' | 'FAIL';
+    corrosionRisk: 'LOW' | 'MEDIUM' | 'HIGH';
+    lifespanEstimateyears: number;
+    warnings: string[];
 }
 
 export interface FeasibilityResult {
@@ -57,86 +71,168 @@ export class StrategicPlanningService {
      * Calculates Net Head and Annual Production
      */
     static calculateFeasibility(site: SiteParameters): FeasibilityResult {
-        // 1. Calculate Friction Head Loss (Darcy-Weisbach approximation or Hazen-Williams)
-        // Simplified using specific roughness approximation
-
-        const roughness = {
-            'STEEL': 0.045, // mm
-            'GRP': 0.01,
-            'PEHD': 0.005,
-            'CONCRETE': 1.5
-        }[site.pipeMaterial];
-
-        const D = site.pipeDiameter / 1000; // m
-        const L = site.pipeLength;
-        const A = Math.PI * Math.pow(D / 2, 2);
-
-        // Find optimal design flow (simplified: usually between Q30 and Q40 on curve)
-        // Let's assume Q_design is set based on Q30 for calculation
-        // In real app, we iterate to find NPV max. Here we pick Q30.
-        const qDesign = site.flowDurationCurve.find(p => p.probability >= 30)?.flow || 10;
-        const usefulFlow = Math.max(0, qDesign - site.ecologicalFlow);
-
-        const velocity = usefulFlow / A;
-
-        // Darcy-Weisbach: hf = f * (L/D) * (v^2/2g)
-        // f approximation (Swamee-Jain is better, but constant for demo)
-        const f = 0.02; // Placeholder, would depend on Reynolds number
-
-        const hLoss = f * (L / D) * (Math.pow(velocity, 2) / (2 * 9.81));
-        const hNet = site.grossHead - hLoss;
-
-        // 2. Annual Production Calculation (Integration of FDC)
-        let totalEnergyKWh = 0;
-        const efficiency = 0.91; // Global system efficiency estimate
-
-        // Iterate through probability steps (e.g. 10% steps)
-        for (let i = 0; i < site.flowDurationCurve.length - 1; i++) {
-            const p1 = site.flowDurationCurve[i];
-            const p2 = site.flowDurationCurve[i + 1];
-
-            const probDiff = (p2.probability - p1.probability) / 100; // fraction of year
-            const hours = probDiff * 8760;
-
-            const avgFlow = (p1.flow + p2.flow) / 2;
-            const turbineFlow = Math.min(avgFlow - site.ecologicalFlow, qDesign);
-
-            if (turbineFlow > 0) {
-                // Power P = rho * g * Q * H * eta
-                const powerKW = 1000 * 9.81 * turbineFlow * hNet * efficiency / 1000;
-                totalEnergyKWh += powerKW * hours;
+        try {
+            // SAFEGUARD: Basic Input Validation
+            if (!site || site.grossHead <= 0 || site.pipeDiameter <= 0) {
+                return {
+                    netHead: 0,
+                    frictionLoss: 0,
+                    optimalFlow: 0,
+                    annualProductionMWh: 0,
+                    recommendedAggregates: { count: 0, type: 'N/A', reasoning: 'Insufficient data' }
+                };
             }
+
+            // 1. Calculate Friction Head Loss (Darcy-Weisbach approximation or Hazen-Williams)
+            // Simplified using specific roughness approximation
+
+            const roughness = {
+                'STEEL': 0.045, // mm
+                'GRP': 0.01,
+                'PEHD': 0.005,
+                'CONCRETE': 1.5
+            }[site.pipeMaterial] || 0.045; // Default to Steel if undefined
+
+            const D = site.pipeDiameter / 1000; // m
+            const L = site.pipeLength || 100; // Default length
+            const A = Math.PI * Math.pow(D / 2, 2);
+
+            // Find optimal design flow (simplified: usually between Q30 and Q40 on curve)
+            // Let's assume Q_design is set based on Q30 for calculation
+            // In real app, we iterate to find NPV max. Here we pick Q30.
+            const qDesign = (site.flowDurationCurve || []).find(p => p.probability >= 30)?.flow || 10;
+            const usefulFlow = Math.max(0, qDesign - (site.ecologicalFlow || 0));
+
+            const velocity = usefulFlow / A;
+
+            // Darcy-Weisbach: hf = f * (L/D) * (v^2/2g)
+            // f approximation (Swamee-Jain is better, but constant for demo)
+            const f = 0.02; // Placeholder, would depend on Reynolds number
+
+            const hLoss = f * (L / D) * (Math.pow(velocity, 2) / (2 * 9.81));
+            const hNet = Math.max(0, site.grossHead - hLoss); // Prevent negative head
+
+            // 2. Annual Production Calculation (Integration of FDC)
+            let totalEnergyKWh = 0;
+            const efficiency = 0.91; // Global system efficiency estimate
+
+            // Iterate through probability steps (e.g. 10% steps)
+            const fdc = site.flowDurationCurve || [];
+            for (let i = 0; i < fdc.length - 1; i++) {
+                const p1 = fdc[i];
+                const p2 = fdc[i + 1];
+
+                const probDiff = (p2.probability - p1.probability) / 100; // fraction of year
+                const hours = probDiff * 8760;
+
+                const avgFlow = (p1.flow + p2.flow) / 2;
+                const turbineFlow = Math.min(avgFlow - (site.ecologicalFlow || 0), qDesign);
+
+                if (turbineFlow > 0) {
+                    // Power P = rho * g * Q * H * eta
+                    const powerKW = 1000 * 9.81 * turbineFlow * hNet * efficiency / 1000;
+                    totalEnergyKWh += powerKW * hours;
+                }
+            }
+
+            // 3. Aggregate Recommendation
+            // If Q_min / Q_max ratio is small (< 10%), a single turbine struggles.
+            const fdcSafe = site.flowDurationCurve && site.flowDurationCurve.length > 0 ? site.flowDurationCurve : [{ flow: 10, probability: 0 }, { flow: 1, probability: 100 }];
+            const variability = fdcSafe[fdcSafe.length - 1].flow / fdcSafe[0].flow;
+            let recommendation = { count: 1, type: 'Unknown', reasoning: '' };
+
+            if (hNet < 30) {
+                recommendation.type = 'Kaplan';
+                if (variability < 0.2) {
+                    recommendation.count = 2;
+                    recommendation.reasoning = 'Velike varijacije protoka. Kaplan double-regulated je dobar, ali 2 jedinice (1/3 + 2/3) pokrivaju minimum bolje.';
+                } else {
+                    recommendation.reasoning = 'Stabilan protok, 1 velika Kaplan turbina je najjeftinija opcija.';
+                }
+            } else if (hNet < 400) {
+                recommendation.type = 'Francis';
+                if (usefulFlow < 0.3 * qDesign) { // If often running part load
+                    recommendation.count = 2;
+                    recommendation.reasoning = 'Francis ima lošu efikasnost ispod 40%. Bolje 2 manje jedinice za pokrivanje niskih voda.';
+                }
+            } else {
+                recommendation.type = 'Pelton';
+            }
+
+            return {
+                netHead: isNaN(hNet) ? 0 : hNet,
+                frictionLoss: isNaN(hLoss) ? 0 : hLoss,
+                optimalFlow: isNaN(usefulFlow) ? 0 : usefulFlow,
+                annualProductionMWh: isNaN(totalEnergyKWh) ? 0 : (totalEnergyKWh / 1000),
+                recommendedAggregates: recommendation
+            };
+        } catch (error) {
+            console.error("CRITICAL MATH ERROR in Feasibility Calc:", error);
+            // Fallback to safe 0 values to prevent UI crash
+            return {
+                netHead: 0,
+                frictionLoss: 0,
+                optimalFlow: 0,
+                annualProductionMWh: 0,
+                recommendedAggregates: { count: 0, type: 'Error', reasoning: 'Calculation Failed' }
+            };
+        }
+    }
+
+    /**
+     * IMPACT ENGINE (CEREBRO)
+     * Validates granular choices against physics (Stress, Corrosion, etc.)
+     */
+    static validateImpact(site: SiteParameters): ImpactAnalysis {
+        const warnings: string[] = [];
+
+        // 1. Hoop Stress Calculation (Barlow's Formula)
+        // P = rho * g * H
+        const staticHead = site.grossHead * 1.2; // +20% surge allowance
+        const pressureMPa = (1000 * 9.81 * staticHead) / 1000000;
+
+        const r_outer = site.pipeDiameter / 2;
+        const thickness = site.wallThickness || 10; // Default safety
+
+        // sigma = (P * D) / (2 * t)
+        const hoopStressMPa = (pressureMPa * site.pipeDiameter) / (2 * thickness);
+
+        let yieldStrength = 235; // Default Steel S235
+        if (site.pipeMaterial === 'GRP') yieldStrength = 60; // Approx
+        if (site.pipeMaterial === 'PEHD') yieldStrength = 20;
+
+        const safetyFactor = yieldStrength / hoopStressMPa;
+
+        if (safetyFactor < 1.5) {
+            warnings.push(`CRITICAL: Wall thickness ${thickness}mm insufficient for ${staticHead.toFixed(0)}m surge head. Safety Factor: ${safetyFactor.toFixed(2)} (Min 1.5). Risk of BURST.`);
         }
 
-        // 3. Aggregate Recommendation
-        // If Q_min / Q_max ratio is small (< 10%), a single turbine struggles.
-        const variability = site.flowDurationCurve[site.flowDurationCurve.length - 1].flow / site.flowDurationCurve[0].flow;
-        let recommendation = { count: 1, type: 'Unknown', reasoning: '' };
+        // 2. Bolt Class Validation
+        // Higher pressure requires stronger bolts
+        let boltStatus: 'OK' | 'CRITICAL' | 'FAIL' = 'OK';
+        if (pressureMPa > 2.5 && site.boltClass === '4.6') {
+            warnings.push('BOLT FAILURE RISK: Class 4.6 bolts cannot withstand pressures > 25 bar. Upgrade to 8.8.');
+            boltStatus = 'FAIL';
+        }
 
-        if (hNet < 30) {
-            recommendation.type = 'Kaplan';
-            if (variability < 0.2) {
-                recommendation.count = 2;
-                recommendation.reasoning = 'Velike varijacije protoka. Kaplan double-regulated je dobar, ali 2 jedinice (1/3 + 2/3) pokrivaju minimum bolje.';
-            } else {
-                recommendation.reasoning = 'Stabilan protok, 1 velika Kaplan turbina je najjeftinija opcija.';
-            }
-        } else if (hNet < 400) {
-            recommendation.type = 'Francis';
-            if (usefulFlow < 0.3 * qDesign) { // If often running part load
-                recommendation.count = 2;
-                recommendation.reasoning = 'Francis ima lošu efikasnost ispod 40%. Bolje 2 manje jedinice za pokrivanje niskih voda.';
-            }
-        } else {
-            recommendation.type = 'Pelton';
+        // 3. Corrosion & Lifespan Logic
+        let lifespan = 50;
+        if (site.waterQuality !== 'CLEAN' && site.corrosionProtection === 'NONE' && site.pipeMaterial === 'STEEL') {
+            lifespan = 10;
+            warnings.push('RAPID CORROSION: Unprotected steel in abrasive/dirty water will fail in < 10 years.');
+        }
+        if (site.corrosionProtection === 'PAINT' && site.waterQuality === 'SILT') {
+            lifespan = 20;
+            warnings.push('Maintenance Heavy: Paint will strip quickly in silty water. Consider Galvanization.');
         }
 
         return {
-            netHead: hNet,
-            frictionLoss: hLoss,
-            optimalFlow: usefulFlow,
-            annualProductionMWh: totalEnergyKWh / 1000,
-            recommendedAggregates: recommendation
+            safetyFactor,
+            hoopStressMPa,
+            boltStressStatus: boltStatus,
+            corrosionRisk: lifespan < 25 ? 'HIGH' : lifespan < 40 ? 'MEDIUM' : 'LOW',
+            lifespanEstimateyears: lifespan,
+            warnings
         };
     }
 

@@ -9,6 +9,7 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
+import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -196,7 +197,7 @@ const AppLayout: React.FC = () => {
 
                 {/* UNIFIED SIDEBAR */}
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
-                    <ErrorBoundary>
+                    <ErrorBoundary fallback={<div className="p-4 text-xs text-red-500 bg-red-950/30 border border-red-500/30 rounded">Fleet Overview Unavailable</div>}>
                         <FleetOverview
                             onToggleMap={() => navigate('/map')}
                             showMap={location.pathname === '/map'}
@@ -300,7 +301,25 @@ const AppLayout: React.FC = () => {
                         <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
                             <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
                                 {!isHub && <Breadcrumbs />}
-                                <ErrorBoundary>
+                                {!isHub && <Breadcrumbs />}
+                                <ErrorBoundary fallback={
+                                    <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+                                        <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20 animate-pulse">
+                                            <span className="text-4xl">⚠️</span>
+                                        </div>
+                                        <h2 className="text-xl font-black text-white uppercase tracking-widest">Module System Failure</h2>
+                                        <p className="text-slate-400 max-w-md text-center">
+                                            The requested module encountered a critical runtime error.
+                                            Diagnostic data has been logged to the black box.
+                                        </p>
+                                        <button
+                                            onClick={() => window.location.reload()}
+                                            className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
+                                        >
+                                            System Reboot
+                                        </button>
+                                    </div>
+                                }>
                                     <Routes>
                                         <Route index element={<CommandCentreDashboard />} />
                                         <Route path="profile" element={<UserProfile />} />
@@ -350,11 +369,13 @@ const AppLayout: React.FC = () => {
 const App: React.FC = () => {
     return (
         <GlobalProvider>
-            <HashRouter>
-                <Routes>
-                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                </Routes>
-            </HashRouter>
+            <ProjectProvider> {/* Technical Backbone */}
+                <HashRouter>
+                    <Routes>
+                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                    </Routes>
+                </HashRouter>
+            </ProjectProvider>
         </GlobalProvider>
     );
 };

@@ -33,9 +33,16 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     }));
                     setAssets(mappedAssets);
 
-                    if (mappedAssets.length > 0 && !selectedAssetId) {
-                        setSelectedAssetId(mappedAssets[0].id);
+                    // --- PERSISTENCE LOGIC START ---
+                    const savedAssetId = localStorage.getItem('activeAssetId');
+                    const initialAsset = savedAssetId
+                        ? mappedAssets.find(a => a.id === savedAssetId)
+                        : mappedAssets[0];
+
+                    if (initialAsset && !selectedAssetId) {
+                        setSelectedAssetId(initialAsset.id);
                     }
+                    // --- PERSISTENCE LOGIC END ---
                 }
             } catch (error) {
                 console.error('Error fetching assets:', error);
@@ -57,6 +64,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const selectAsset = (id: string) => {
         setSelectedAssetId(id);
+        localStorage.setItem('activeAssetId', id); // Save to local storage
         const asset = assets.find(a => a.id === id);
         if (asset) {
             // Call the debounced function instead of direct logAction

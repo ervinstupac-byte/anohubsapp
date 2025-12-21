@@ -28,7 +28,14 @@ export class LifecycleManager {
                     grossHead: 50,
                     pipeLength: 500,
                     pipeDiameter: 1200,
+                    pipeLength: 500,
+                    pipeDiameter: 1200,
                     pipeMaterial: 'STEEL',
+                    // Cerebro Defaults
+                    wallThickness: 12,
+                    boltClass: '8.8',
+                    corrosionProtection: 'PAINT',
+
                     waterQuality: 'CLEAN',
                     flowDurationCurve: [],
                     ecologicalFlow: 0.1
@@ -68,13 +75,35 @@ export class LifecycleManager {
             }
         };
 
+        this.saveState();
         return this.currentProject;
+    }
+
+    private static saveState() {
+        if (this.currentProject) {
+            localStorage.setItem('ProjectDNA', JSON.stringify(this.currentProject));
+        }
+    }
+
+    private static loadState() {
+        const saved = localStorage.getItem('ProjectDNA');
+        if (saved) {
+            try {
+                this.currentProject = JSON.parse(saved);
+            } catch (e) {
+                console.error('Failed to load ProjectDNA', e);
+            }
+        }
     }
 
     /**
      * GET ACTIVE PROJECT
      */
     static getActiveProject(): ProjectDNA {
+        if (!this.currentProject) {
+            this.loadState();
+        }
+
         if (!this.currentProject) {
             // Auto-create if missing (for demo purposes)
             return this.initializeProject('Demo Hydro Plant', { lat: 43.85, lng: 18.41, region: 'Balkan' });
@@ -99,6 +128,7 @@ export class LifecycleManager {
 
         if (errors.length === 0) {
             proj.currentPhase = 'PROCUREMENT';
+            this.saveState();
             return { success: true, errors: [] };
         }
 
@@ -129,6 +159,7 @@ export class LifecycleManager {
         };
 
         proj.currentPhase = 'CONSTRUCTION';
+        this.saveState();
         return true;
     }
 
@@ -155,6 +186,7 @@ export class LifecycleManager {
         };
 
         proj.currentPhase = 'OPERATIONS';
+        this.saveState();
         return true;
     }
 
