@@ -28,8 +28,6 @@ export class LifecycleManager {
                     grossHead: 50,
                     pipeLength: 500,
                     pipeDiameter: 1200,
-                    pipeLength: 500,
-                    pipeDiameter: 1200,
                     pipeMaterial: 'STEEL',
                     // Cerebro Defaults
                     wallThickness: 12,

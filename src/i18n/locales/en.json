@@ -1,0 +1,93 @@
+{
+    "common": {
+        "switchLanguage": "Switch Language",
+        "simulate": "Simulate",
+        "reset": "Reset",
+        "confidence": "Confidence",
+        "advice": "Actionable Advice"
+    },
+    "hpp": {
+        "title": "Project Cerebro",
+        "physics_ready": "SYSTEM READY",
+        "recalculating": "PHYSICS ENGINE RECALCULATING...",
+        "hydraulics": "Hydraulics",
+        "mechanical": "Mechanical",
+        "electro": "Electro",
+        "penstock": "Penstock",
+        "bolts": "Bolts",
+        "shaft": "Shaft",
+        "turbine": "Turbine",
+        "generator": "Generator"
+    },
+    "physics": {
+        "grossHead": "Gross Head",
+        "flow": "Design Flow",
+        "netHead": "Net Head",
+        "efficiency": "Efficiency",
+        "powerOutput": "Power Output",
+        "annualProd": "Annual Production",
+        "roi": "ROI Period",
+        "waterHammer": "Water Hammer Surge",
+        "hoopStress": "Hoop Stress",
+        "boltSafety": "Bolt Safety Factor",
+        "boltLoad": "Bolt Load",
+        "boltCapacity": "Bolt Capacity",
+        "torque": "Torque",
+        "grade": "Grade",
+        "material": "Material",
+        "wallThickness": "Wall Thickness"
+    },
+    "forensics": {
+        "title": "Diagnostic Forensics",
+        "subtitle": "Field Analysis Unit • Machine Health • Root Cause",
+        "vision_title": "Texture Forensics",
+        "audio_title": "Acoustic Signature",
+        "post_mortem": "Post-Mortem Watchdog",
+        "drag_drop": "Drag drop damage photos to analyze texture.",
+        "scanning": "SCANNING TEXTURE...",
+        "diagnosis_cavitation": "CAVITATION",
+        "diagnosis_erosion": "ABRASIVE EROSION",
+        "advice_cavitation": "Critical: Surface micro-jets have removed material. Recommended: Stellite Welding overlay immediately.",
+        "advice_erosion": "Warning: Sand particles polishing the surface. Recommended: Apply Ceramic Coating (Tungsten Carbide).",
+        "sand_hiss": "High Frequency Hiss (15kHz+)",
+        "sand_diagnosis": "Diagnosis: Silica Sand detected in Pelton Nozzle. Check desanding basin filters immediately.",
+        "emergency_cooling": "EMERGENCY PROTOCOL",
+        "seizure_risk": "RISK OF SHAFT SEIZURE DETECTED. AUTO-DEPLOYING AUX COOLING PUMPS."
+    },
+    "glossary": {
+        "water_hammer": "Water Hammer",
+        "bearing_clearance": "Bearing Clearance",
+        "cavitation": "Cavitation",
+        "erosion": "Erosion",
+        "bolt_grade": "Bolt Grade"
+    },
+    "insights": {
+        "kaplan_risk": "LEGACY WARNING: Kaplan on head > 70m carries huge cavitation risk. Deep submergence (negative elevation) required.",
+        "francis_inefficient": "Economic Viability: Francis on head < 20m requires massive spiral case.",
+        "price_suspicious": "Price significantly below market. Check steel origin and reference list.",
+        "efficiency_high": "Suspiciously high efficiency ({{value}}%). Physical limit is around {{limit}}%. Request IEC 60041 test report.",
+        "rotor_height": "Rotor ({{diameter}}m) is higher than tunnel ({{height}}m).",
+        "rotor_width": "Rotor is wider than access road.",
+        "bridge_capacity": "Weight ({{weight}}t) exceeds bridge capacity ({{limit}}t).",
+        "split_rotor_required": "Mandatory \"Split Rotor\" design (two parts) or on-site welding.",
+        "transport_standard": "Standard transport feasible.",
+        "kaplan_double_reg": "Large flow variations. Kaplan double-regulated is good, but 2 units (1/3 + 2/3) cover minimum better.",
+        "kaplan_single": "Stable flow, 1 large Kaplan turbine is the cheapest option.",
+        "francis_part_load": "Francis has poor efficiency below 40%. Better 2 smaller units to cover low waters."
+    },
+    "warnings": {
+        "wall_thin_burst": "CRITICAL: Wall thickness {{thickness}}mm insufficient for {{head}}m surge head. Safety Factor: {{sf}} (Min 1.5). Risk of BURST.",
+        "bolt_failure_46": "BOLT FAILURE RISK: Class 4.6 bolts cannot withstand pressures > 25 bar. Upgrade to 8.8.",
+        "corrosion_steel": "RAPID CORROSION: Unprotected steel in abrasive/dirty water will fail in < 10 years.",
+        "corrosion_paint": "Maintenance Heavy: Paint will strip quickly in silty water. Consider Galvanization."
+    },
+    "notifications": {
+        "title": "Notification Center",
+        "settings": "Notification Settings",
+        "markAllRead": "Mark all as read",
+        "empty": "No new notifications.",
+        "tempSpike": "CRITICAL: Shaft stoppage detected but Temperature rising! Current: {{temp}}°C (Limit: {{limit}}°C)",
+        "vibrationWarning": "Warning: Vibration levels approaching Zone B.",
+        "maintenanceDue": "Info: Scheduled maintenance in 3 days."
+    }
+}

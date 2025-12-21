@@ -10,13 +10,20 @@ import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
 import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
+import { ClientProvider } from './contexts/ClientContext.tsx'; // Client Portal
+import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
+import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
+import { ClientDashboard } from './components/ClientDashboard.tsx'; // Portal
+import { MaintenanceLogbook } from './components/MaintenanceLogbook.tsx'; // Logbook
 import { Onboarding } from './components/Onboarding.tsx';
 import { Spinner } from './components/Spinner.tsx';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
+import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
+
 import { Hub } from './components/Hub.tsx';
 import { Sidebar } from './components/scada/Sidebar.tsx';
 import { FleetOverview } from './components/scada/FleetOverview.tsx';
@@ -59,6 +66,7 @@ const SOPManager = lazy(() => import('./components/SOPManager').then(m => ({ def
 const ShiftLog = lazy(() => import('./components/ShiftLog').then(m => ({ default: m.ShiftLog })));
 const AdminApproval = lazy(() => import('./components/AdminApproval').then(m => ({ default: m.AdminApproval })));
 const ARManager = lazy(() => import('./components/ARManager').then(m => ({ default: m.ARManager })));
+const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
 // --- 5. COMMAND CENTER DASHBOARD ---
 const CommandCentreDashboard: React.FC = () => <Hub />;
@@ -152,7 +160,9 @@ const AppLayout: React.FC = () => {
             'boltTorque': '/bolt-torque',
             'shadowEngineer': '/shadow-engineer',
             'intuitionLog': '/intuition-log',
-            'adminApproval': '/admin-approval'
+            'adminApproval': '/admin-approval',
+            'clientPortal': '/client-portal',
+            'logbook': '/logbook'
         };
         const target = routeMap[view];
         if (target) navigate(target);
@@ -220,6 +230,13 @@ const AppLayout: React.FC = () => {
                                     <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                                 </button>
                             ))}
+                            <button
+                                onClick={() => { logAction('MODULE_OPEN', 'Logbook', 'SUCCESS'); navigateTo('logbook'); setIsSidebarOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/logbook' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            >
+                                <span className={`text-lg ${location.pathname === '/logbook' ? 'text-[#2dd4bf]' : 'group-hover:text-[#2dd4bf] transition-colors'}`}>🛡️</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">Logbook</span>
+                            </button>
                         </ErrorBoundary>
                         <div className="my-4 border-t border-white/5 mx-4"></div>
                         <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">STRATEGY</div>
@@ -264,6 +281,18 @@ const AppLayout: React.FC = () => {
                                     </button>
                                 );
                             })}
+                        </ErrorBoundary>
+
+                        <div className="my-4 border-t border-white/5 mx-4"></div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">CLIENT ACCESS</div>
+                        <ErrorBoundary>
+                            <button
+                                onClick={() => { logAction('MODULE_OPEN', 'Client Portal', 'SUCCESS'); navigateTo('clientPortal'); setIsSidebarOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/client-portal' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            >
+                                <span className={`text-lg ${location.pathname === '/client-portal' ? 'text-[#2dd4bf]' : 'group-hover:text-[#2dd4bf] transition-colors'}`}>🔐</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">Client Portal</span>
+                            </button>
                         </ErrorBoundary>
 
                         <div className="my-4 border-t border-white/5 mx-4"></div>
@@ -352,6 +381,9 @@ const AppLayout: React.FC = () => {
                                         <Route path="structural-integrity" element={<StructuralIntegrity />} />
                                         <Route path="admin-approval" element={<AdminApproval />} />
                                         <Route path="ar-guide" element={<ARManager />} />
+                                        <Route path="/forensics" element={<ForensicDashboard />} />
+                                        <Route path="logbook" element={<MaintenanceLogbook />} />
+                                        <Route path="stress-test" element={<SystemStressTest />} />
                                         <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500">404</div>} />
                                     </Routes>
                                 </ErrorBoundary>
@@ -370,11 +402,17 @@ const App: React.FC = () => {
     return (
         <GlobalProvider>
             <ProjectProvider> {/* Technical Backbone */}
-                <HashRouter>
-                    <Routes>
-                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                    </Routes>
-                </HashRouter>
+                <ClientProvider>
+                    <NotificationProvider>
+                        <MaintenanceProvider>
+                            <HashRouter>
+                                <Routes>
+                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                </Routes>
+                            </HashRouter>
+                        </MaintenanceProvider>
+                    </NotificationProvider>
+                </ClientProvider>
             </ProjectProvider>
         </GlobalProvider>
     );

@@ -2,10 +2,13 @@
 // Integrated Project Environment with Contextual Advisory & Granular Control
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // i18n
+import { formatNumber } from '../utils/i18nUtils'; // Data Localization
+import { ProfessionalReportEngine } from '../services/ProfessionalReportEngine';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calculator, Truck, FileCheck, AlertTriangle, TrendingUp, DollarSign, Activity, Anchor, Zap, Shield, Settings, Info } from 'lucide-react';
+import { Calculator, Truck, FileCheck, AlertTriangle, TrendingUp, DollarSign, Activity, Anchor, Zap, Shield, Settings, Info, FileText } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
-import { StrategicPlanningService, SiteParameters, Bid, ImpactAnalysis } from '../services/StrategicPlanningService';
+import { StrategicPlanningService, SiteParameters, Bid, ImpactAnalysis, FeasibilityResult } from '../services/StrategicPlanningService';
 import { LifecycleManager } from '../services/LifecycleManager';
 
 const THEME = {
@@ -18,62 +21,85 @@ const THEME = {
 
 import { ComponentTree } from './cerebro/ComponentTree';
 import { MechanicalPanel } from './cerebro/panels/MechanicalPanel';
-import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel'; // Assuming this exists or using placeholder
-
+import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel';
+import { LiveMathSync, SystemHealth } from '../services/LiveMathSync'; // Engine
+import { LiveHUD } from './cerebro/LiveHUD'; // HUD
+import { ToastSystem } from './ui/ToastSystem'; // Legacy Guard
+import { useProjectEngine } from '../contexts/ProjectContext'; // Context
 
 export const StrategicPlanningDashboard: React.FC = () => {
+    // Context Hook (Replaces local state for granular parts)
+    const { siteParams, updateSiteConditions, technicalState } = useProjectEngine();
+    const { t, i18n: { language } } = useTranslation();
+
+    const [feasibility, setFeasibility] = useState<FeasibilityResult | null>(null);
+
     // TABS: Deep Granularity
-    const [activeTab, setActiveTab] = useState<'LOCATION' | 'HYDRAULICS' | 'TURBINE' | 'ELECTRO' | 'ECONOMY'>('HYDRAULICS');
+    const [activeTab, setActiveTab] = useState<string>('HYDRAULICS');
     const [isCalibrating, setIsCalibrating] = useState(false);
 
-    // Initial Load
-    const [siteParams, setSiteParams] = useState<SiteParameters>(() => {
-        const stored = LifecycleManager.getActiveProject()?.genesis?.siteParams;
-        const defaults: SiteParameters = {
-            grossHead: 45, pipeLength: 1200, pipeDiameter: 1600, pipeMaterial: 'GRP',
-            wallThickness: 12, boltClass: '8.8', corrosionProtection: 'PAINT',
-            waterQuality: 'CLEAN', ecologicalFlow: 0.5, flowDurationCurve: []
-        };
-        return stored ? { ...defaults, ...stored } : defaults;
-        // Merge defaults to ensure new fields (wallThickness etc) exist if loading old DNA.
-    });
-
-    // Math & Impact State
-    const [feasibility, setFeasibility] = useState(StrategicPlanningService.calculateFeasibility(siteParams));
-    const [impact, setImpact] = useState<ImpactAnalysis>(StrategicPlanningService.validateImpact(siteParams));
-
-    // --- CEREBRO LOGIC LOOP ---
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            const featResults = StrategicPlanningService.calculateFeasibility(siteParams);
-            const impactResults = StrategicPlanningService.validateImpact(siteParams);
-
-            setFeasibility(featResults);
-            setImpact(impactResults);
-
-            // Persist to DNA (Memory Loop)
-            const proj = LifecycleManager.getActiveProject();
-            if (proj) {
-                proj.genesis.siteParams = siteParams;
-                proj.genesis.feasibility = featResults;
-            }
-            setIsCalibrating(false);
-        }, 300);
-
+    // LiveMathSync Hook (Reactive Physics)
+    const systemHealth = React.useMemo(() => {
         setIsCalibrating(true);
-        return () => clearTimeout(timer);
-    }, [
-        siteParams.grossHead, siteParams.pipeDiameter, siteParams.pipeLength, siteParams.wallThickness,
-        siteParams.boltClass, siteParams.corrosionProtection, siteParams.pipeMaterial
-    ]);
+        // Use a timeout to simulate calculation "effort" if needed.
+        const health = LiveMathSync.calculateSystemHealth(
+            {
+                grossHead: technicalState.siteConditions.grossHead,
+                pipeLength: technicalState.penstock.length,
+                pipeDiameter: technicalState.penstock.diameter,
+                pipeMaterial: technicalState.penstock.material,
+                wallThickness: technicalState.penstock.wallThickness,
+                boltClass: technicalState.mechanical.boltSpecs.grade,
+                corrosionProtection: 'PAINT',
+                waterQuality: technicalState.siteConditions.waterQuality,
+                ecologicalFlow: 0.5,
+                flowDurationCurve: []
+            },
+            technicalState as any // Cast for now until Schema is fully synced
+        );
+        setTimeout(() => setIsCalibrating(false), 300); // Visual debounce
+        return health;
+    }, [technicalState]);
+
+    // Toast Alerts (Legacy Guard)
+    const activeAlerts = React.useMemo(() => {
+        const alerts = [];
+        if (systemHealth.analysis.cavitationRisk) alerts.push("Potential Cavitation detected! High velocity at low head.");
+        if (technicalState.physics.boltSafetyFactor < 1.5) alerts.push("Bolt Safety Factor Critical (<1.5). Increase Grade or Torque.");
+        return alerts;
+    }, [systemHealth, technicalState.physics.boltSafetyFactor]);
+
+
+    // Initial Load - Managed by Context now, but keeping local feasibility sync for legacy parts
+    useEffect(() => {
+        // Create temporary siteParams from technicalState to feed legacy service
+        const tempParams: SiteParameters = {
+            grossHead: technicalState.siteConditions.grossHead,
+            pipeLength: technicalState.penstock.length,
+            pipeDiameter: technicalState.penstock.diameter,
+            pipeMaterial: technicalState.penstock.material,
+            wallThickness: technicalState.penstock.wallThickness,
+            boltClass: technicalState.mechanical.boltSpecs.grade,
+            corrosionProtection: 'PAINT', // Default
+            waterQuality: technicalState.siteConditions.waterQuality,
+            ecologicalFlow: 0.5,
+            flowDurationCurve: []
+        };
+
+        setFeasibility(StrategicPlanningService.calculateFeasibility(tempParams));
+        setImpact(StrategicPlanningService.validateImpact(tempParams));
+
+    }, [technicalState]);
+
+    const [impact, setImpact] = useState<ImpactAnalysis & { recommendations?: any[] }>({ warnings: [], recommendations: [], safetyFactor: 0, hoopStressMPa: 0, boltStressStatus: 'OK', corrosionRisk: 'LOW', lifespanEstimateyears: 50 });
 
     // Handlers
-    const handleParamChange = (name: keyof SiteParameters, value: any) => {
-        setSiteParams(prev => ({ ...prev, [name]: value }));
-    };
-
     const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-        handleParamChange(e.target.name as any, parseFloat(e.target.value));
+        // Map slider changes to context updates
+        const name = e.target.name;
+        const val = parseFloat(e.target.value);
+        if (name === 'grossHead') updateSiteConditions({ grossHead: val });
+        // Add other mappings as needed
     };
 
     return (
@@ -86,11 +112,11 @@ export const StrategicPlanningDashboard: React.FC = () => {
                 <header className="mb-6 flex justify-between items-end border-b border-white/5 pb-4">
                     <div>
                         <h1 className="text-3xl font-black uppercase tracking-tighter text-white mb-1">
-                            Project <span className={THEME.accent}>Cerebro</span>
+                            {t('hpp.title', 'Project Cerebro')} <span className={THEME.accent}>V2.5</span>
                         </h1>
                         <p className="text-[10px] text-slate-500 font-mono tracking-widest uppercase flex items-center gap-2">
                             <span className={isCalibrating ? "text-amber-500 animate-pulse" : "text-emerald-500"}>
-                                {isCalibrating ? "PHYSICS ENGINE RECALCULATING..." : "SYSTEM READY"}
+                                {isCalibrating ? t('hpp.recalculating', 'PHYSICS ENGINE RECALCULATING...') : t('hpp.physics_ready', 'SYSTEM READY')}
                             </span>
                         </p>
                     </div>
@@ -126,8 +152,8 @@ export const StrategicPlanningDashboard: React.FC = () => {
                                     <div className="mt-8 pt-8 border-t border-white/10">
                                         <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Quick Adjust</h3>
                                         <div className="grid grid-cols-2 gap-8">
-                                            <SliderGroup label="Gross Head (m)" name="grossHead" value={siteParams.grossHead} min={1} max={500} onChange={handleSlider} />
-                                            <SliderGroup label="Diameter (mm)" name="pipeDiameter" value={siteParams.pipeDiameter} min={200} max={2500} step={50} onChange={handleSlider} />
+                                            <SliderGroup label="Gross Head (m)" name="grossHead" value={technicalState.siteConditions.grossHead} min={1} max={500} onChange={handleSlider} />
+                                            {/* Diameter is now in Penstock panel mostly, but keeping for quick access if needed */}
                                         </div>
                                     </div>
                                 </motion.div>
@@ -149,11 +175,24 @@ export const StrategicPlanningDashboard: React.FC = () => {
 
                             {/* DEFAULT EMPTY STATE */}
                             {!['HYDRAULICS', 'PENSTOCK', 'MECHANICAL', 'BOLTS'].includes(activeTab) && (
-                                <div className="flex flex-col items-center justify-center h-full text-slate-600">
-                                    <Settings className="w-12 h-12 mb-4 opacity-20" />
-                                    <h3 className="text-lg font-bold uppercase tracking-widest">Select Component</h3>
-                                    <p className="text-xs">Choose a node from the system tree to inspect.</p>
-                                </div>
+                                <motion.div
+                                    key="EMPTY_STATE"
+                                    initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
+                                    className="flex flex-col items-center justify-center h-full text-slate-600"
+                                >
+                                    <div className="flex flex-col items-center justify-center h-full text-slate-600">
+                                        <span className="text-2xl font-black text-white font-mono">
+                                            {formatNumber(feasibility?.annualProductionMWh || 0, language, 1)} <span className="text-sm text-slate-500">GWh</span>
+                                        </span>
+                                        <div className="text-[10px] text-slate-500 uppercase mt-1">{t('physics.annualProd', 'Annual Production')}</div>
+                                    </div>
+                                    <div className="p-4 bg-slate-900/50 rounded border border-white/5 mt-4">
+                                        <span className="text-2xl font-black text-white font-mono">
+                                            {formatNumber(impact?.safetyFactor || 0, language, 2)}x
+                                        </span>
+                                        <div className="text-[10px] text-slate-500 uppercase mt-1">Global Safety Factor</div>
+                                    </div>
+                                </motion.div>
                             )}
 
                         </AnimatePresence>
@@ -175,28 +214,54 @@ export const StrategicPlanningDashboard: React.FC = () => {
 
                 <div className="flex-grow overflow-y-auto p-6 space-y-4">
 
-                    {/* AI Recommendation */}
-                    <div className="p-4 rounded bg-slate-900 border border-slate-800">
-                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-2">Aggregates</div>
-                        <div className="text-xl font-black text-white">{feasibility.recommendedAggregates.count}x {feasibility.recommendedAggregates.type}</div>
-                        <div className="text-xs text-slate-400 mt-2 leading-relaxed opacity-80">{feasibility.recommendedAggregates.reasoning}</div>
+                    <div className="md:col-span-1">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => ProfessionalReportEngine.generateTechnicalAudit(technicalState)}
+                            className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 px-6 rounded-xl border border-slate-700 flex flex-col items-center gap-2 group"
+                        >
+                            <FileText className="w-8 h-8 text-blue-400 group-hover:text-blue-300" />
+                            <span className="text-xs uppercase tracking-widest">{t('common.generatePDF', 'PDF Generieren')}</span>
+                        </motion.button>
+
+                        <div className="mt-4 bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+                            <h3 className="text-xs font-bold text-slate-400 uppercase mb-2">Live Status</h3>
+                        </div>
                     </div>
 
-                    {/* Impact Warnings */}
-                    {impact.warnings.map((warn, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="p-4 rounded bg-red-950/10 border border-red-500/30 flex gap-3 items-start"
-                        >
-                            <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-                            <p className="text-xs text-red-200 leading-relaxed font-medium">{warn}</p>
-                        </motion.div>
-                    ))}
+                    {/* Recommendation & Alerts */}
+                    <div className="bg-slate-900 border border-white/10 p-6 rounded-lg">
+                        <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 tracking-widest">{t('common.advice', 'Actionable Advice')}</h3>
 
-                    {/* Pro Tips (Contextual) */}
-                    {siteParams.pipeMaterial === 'STEEL' && siteParams.corrosionProtection === 'NONE' && (
+                        <div className="flex items-start gap-4 mb-6">
+                            <div className="p-3 bg-emerald-500/10 rounded-full">
+                                <Truck className="w-5 h-5 text-emerald-500" />
+                            </div>
+                            <div>
+                                <div className="text-lg font-bold text-emerald-400 mb-1">
+                                    {feasibility?.recommendedAggregates.count}x {feasibility?.recommendedAggregates.type}
+                                </div>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    {t(feasibility?.recommendedAggregates.reasoning || '')}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {impact?.warnings.map((w, i) => (
+                                <div key={i} className="flex items-start gap-3 p-3 bg-red-500/10 border border-red-500/20 rounded">
+                                    <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                                    <p className="text-xs text-red-300 font-mono">
+                                        {typeof w === 'string' ? w : String(t(w.key, w.params))}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Pro Tips (Contextual) - Accessing deep state */}
+                    {technicalState.penstock.material === 'STEEL' && technicalState.siteConditions.waterQuality !== 'CLEAN' && (
                         <div className="p-4 rounded bg-blue-950/10 border border-blue-500/30 flex gap-3 items-start">
                             <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                             <p className="text-xs text-blue-200 leading-relaxed">
@@ -205,7 +270,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
                         </div>
                     )}
 
-                    {siteParams.boltClass === '4.6' && (
+                    {technicalState.mechanical.boltSpecs.grade === '4.6' && (
                         <div className="p-4 rounded bg-amber-950/10 border border-amber-500/30 flex gap-3 items-start">
                             <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                             <p className="text-xs text-amber-200 leading-relaxed">
@@ -217,9 +282,15 @@ export const StrategicPlanningDashboard: React.FC = () => {
                 </div>
 
                 <div className="p-4 border-t border-white/5 bg-[#121212] text-center">
-                    <p className="text-[10px] text-slate-600 font-mono">ANOHUB CEREBRO V2.4 Connected</p>
+                    <p className="text-[10px] text-slate-600 font-mono">ANOHUB CEREBRO V2.5 LiveMath</p>
                 </div>
             </div>
+
+            {/* LIVE HUD OVERLAY */}
+            <LiveHUD health={systemHealth} />
+
+            {/* LEGACY GUARD TOASTS */}
+            <ToastSystem alerts={activeAlerts} />
 
         </div>
     );

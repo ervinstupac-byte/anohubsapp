@@ -1,132 +1,182 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Settings, Zap, Droplets, ChevronRight, ChevronDown, AlertTriangle } from 'lucide-react';
+import { ChevronRight, ChevronDown, Hexagon, Circle, Zap, Anchor, Camera, Sparkles, Activity, FileCheck, Droplet, Settings, AlertTriangle } from 'lucide-react';
 import { useProjectEngine } from '../../contexts/ProjectContext';
+import { InspectionImage } from '../../services/StrategicPlanningService';
+import { useTranslation } from 'react-i18next';
 
 interface TreeNodeProps {
     id: string;
     label: string;
-    icon: React.ElementType;
+    icon: string;
     children?: TreeNodeProps[];
     hasAlert?: boolean;
 }
 
-const TREE_DATA: TreeNodeProps[] = [
-    {
-        id: 'HYDRAULICS',
-        label: 'Hydraulics',
-        icon: Droplets,
-        children: [
-            { id: 'PENSTOCK', label: 'Penstock', icon: Droplets, hasAlert: false }, // Dynamic check needed
-            { id: 'INTAKE', label: 'Intake', icon: Droplets, hasAlert: false }
-        ]
-    },
-    {
-        id: 'MECHANICAL',
-        label: 'Mechanical',
-        icon: Settings,
-        children: [
-            { id: 'BOLTS', label: 'Flanges & Bolts', icon: Settings, hasAlert: false },
-            { id: 'TURBINE_SHAFT', label: 'Turbine Shaft', icon: Settings, hasAlert: false }
-        ]
-    },
-    {
-        id: 'ELECTRO',
-        label: 'Electro',
-        icon: Zap,
-        children: [
-            { id: 'GENERATOR', label: 'Generator', icon: Zap, hasAlert: false }
-        ]
-    }
-];
-
 interface ComponentTreeProps {
-    onSelect: (nodeId: string) => void;
     selectedId: string;
+    onSelect: (id: string) => void;
 }
 
-export const ComponentTree: React.FC<ComponentTreeProps> = ({ onSelect, selectedId }) => {
-    const { technicalState } = useProjectEngine();
+export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSelect }) => {
+    const { technicalState, addInspectionImage } = useProjectEngine();
+    const { t } = useTranslation();
 
-    // Check for alerts to propagate up the tree
-    const hasBoltAlert = technicalState.physics.criticalAlerts.some(a => a.includes('BOLT'));
-    const hasPipeAlert = technicalState.physics.criticalAlerts.some(a => a.includes('Pipe'));
+    // Recursive Tree Node Component
+    const TreeNode = ({ node, level = 0 }: { node: TreeNodeProps, level?: number }) => {
+        const [expanded, setExpanded] = useState<Record<string, boolean>>({ 'ROOT': true, 'HPP': true });
+
+        // Local toggle for specific node if needed, or use global state
+        const [isExpanded, setIsExpanded] = useState(true);
+
+        const hasChildren = node.children && node.children.length > 0;
+        const isSelected = selectedId === node.id;
+
+        // Upload Logic
+        const handleImageUpload = (nodeId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+            if (!e.target.files?.length) return;
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (ev) => {
+                const src = ev.target?.result as string;
+
+                // SIMULATE AI ANALYSIS (Gemini Vision Mock)
+                // In real app, we'd send 'src' to API. Here we mock specific tags for 'Radno kolo'.
+                let caption = "Standardinspektion.";
+                let tags = ['General'];
+
+                if (nodeId === 'TURBINE') {
+                    caption = "KI-ANALYSE: Materialabtrag an der Eintrittskante. Diagnose: Kavitationsfraß (mittel). Empfehlung: Schleifen.";
+                    tags = ['Kavitation', 'Materialabtrag'];
+                }
+
+                const newImg: InspectionImage = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    componentId: nodeId,
+                    src: src,
+                    description: caption,
+                    aiTags: tags,
+                    metadata: {
+                        timestamp: new Date().toLocaleString('de-DE'),
+                        gps: "44.123N, 18.456E" // Mock GPS
+                    }
+                };
+
+                addInspectionImage(newImg);
+                alert(`Bild hochgeladen für ${nodeId}! KI-Diagnose: ${tags.join(', ')}`);
+            };
+
+            reader.readAsDataURL(file);
+        };
+
+        const toggle = () => setIsExpanded(!isExpanded);
+
+        return (
+            <div className="select-none">
+                {/* Content Line */}
+                <div
+                    className={`flex items-center gap-2 py-2 px-3 cursor-pointer transition-colors ${isSelected
+                            ? 'bg-[#2dd4bf]/10 text-[#2dd4bf] border-r-2 border-[#2dd4bf]'
+                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        }`}
+                    style={{ paddingLeft: `${level * 16 + 12}px` }}
+                    onClick={() => {
+                        onSelect(node.id);
+                        if (hasChildren) toggle();
+                    }}
+                >
+                    {hasChildren && (
+                        <div className="text-slate-600">
+                            {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                        </div>
+                    )}
+
+                    {!hasChildren && <div className="w-3" />}
+
+                    {node.icon === 'droplet' && <Droplet className="w-3 h-3" />}
+                    {node.icon === 'zap' && <Zap className="w-3 h-3" />}
+                    {node.icon === 'anchor' && <Anchor className="w-3 h-3" />}
+                    {node.icon === 'settings' && <Settings className="w-3 h-3" />}
+
+                    <span className="text-xs font-bold uppercase tracking-wider flex-1">
+                        {t(`hpp.${node.id.toLowerCase()}`, node.label)}
+                    </span>
+
+                    {/* CAMERA UPLOAD (Only for Leaves or Specific Nodes like Turbine) */}
+                    {(node.id === 'TURBINE' || node.id === 'PENSTOCK' || node.id === 'MECHANICAL') && (
+                        <label className="p-1 hover:bg-white/10 rounded-full cursor-pointer group relative" onClick={(e) => e.stopPropagation()}>
+                            <Camera className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handleImageUpload(node.id, e)}
+                            />
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full opacity-0 group-hover:opacity-100 animate-ping" />
+                        </label>
+                    )}
+
+                    {node.hasAlert && (
+                        <motion.div
+                            initial={{ scale: 0 }} animate={{ scale: 1 }}
+                            className="bg-red-500/20 p-1 rounded-full animate-pulse"
+                        >
+                            <AlertTriangle className="w-3 h-3 text-red-500" />
+                        </motion.div>
+                    )}
+                </div>
+
+                <AnimatePresence>
+                    {isExpanded && hasChildren && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                        >
+                            {node.children!.map((child) => (
+                                <TreeNode key={child.id} node={child} level={level + 1} />
+                            ))}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        );
+    };
+
+    const TREE_DATA: TreeNodeProps[] = [
+        {
+            id: 'HYDRAULICS', label: 'Hydraulics', icon: 'droplet', children: [
+                { id: 'PENSTOCK', label: 'Penstock', icon: 'droplet' },
+                { id: 'VALVES', label: 'Valves', icon: 'droplet' }
+            ]
+        },
+        {
+            id: 'MECHANICAL', label: 'Mechanical', icon: 'anchor', children: [
+                { id: 'TURBINE', label: 'Turbine', icon: 'anchor' },
+                { id: 'BOLTS', label: 'Bolts & Flanges', icon: 'anchor' },
+                { id: 'SHAFT', label: 'Shaft Line', icon: 'anchor' }
+            ]
+        },
+        {
+            id: 'ELECTRO', label: 'Electro', icon: 'zap', children: [
+                { id: 'GENERATOR', label: 'Generator', icon: 'zap' },
+                { id: 'SCADA', label: 'SCADA', icon: 'zap' }
+            ]
+        }
+    ];
 
     return (
-        <div className="w-64 bg-[#0a0a0a] border-r border-white/10 h-full flex flex-col p-4">
-            <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6 px-2">
-                System Hierarchy
+        <div className="w-64 bg-[#0a0a0a] border-r border-white/10 flex flex-col">
+            <div className="p-4 border-b border-white/5">
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{t('common.navigation', 'Components')}</span>
             </div>
-
-            <div className="space-y-1">
-                {TREE_DATA.map(node => (
-                    <TreeNode
-                        key={node.id}
-                        node={node}
-                        selectedId={selectedId}
-                        onSelect={onSelect}
-                        boltAlert={hasBoltAlert} // Propagate specific alerts
-                        pipeAlert={hasPipeAlert}
-                    />
+            <div className="flex-1 overflow-y-auto py-2">
+                {TREE_DATA.map((node) => (
+                    <TreeNode key={node.id} node={node} />
                 ))}
             </div>
-        </div>
-    );
-};
-
-const TreeNode: React.FC<{ node: TreeNodeProps, selectedId: string, onSelect: (id: string) => void, boltAlert: boolean, pipeAlert: boolean }> = ({ node, selectedId, onSelect, boltAlert, pipeAlert }) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const hasChildren = node.children && node.children.length > 0;
-
-    // Determine Alert State for this Node
-    let isCritical = false;
-    if (node.id === 'MECHANICAL' && boltAlert) isCritical = true;
-    if (node.id === 'BOLTS' && boltAlert) isCritical = true;
-    if (node.id === 'HYDRAULICS' && pipeAlert) isCritical = true;
-
-    const isSelected = selectedId === node.id || node.children?.some(c => c.id === selectedId);
-
-    return (
-        <div className="ml-2">
-            <button
-                onClick={() => hasChildren ? setIsOpen(!isOpen) : onSelect(node.id)}
-                className={`flex items-center gap-2 w-full p-2 rounded-md transition-colors text-sm ${selectedId === node.id
-                        ? 'bg-[#2dd4bf]/10 text-[#2dd4bf] font-bold'
-                        : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                    }`}
-            >
-                {hasChildren && (
-                    <span className="opacity-50">
-                        {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    </span>
-                )}
-                <node.icon size={16} className={isCritical ? 'text-red-500 animate-pulse' : ''} />
-                <span className="flex-grow text-left">{node.label}</span>
-
-                {isCritical && <AlertTriangle size={14} className="text-red-500" />}
-            </button>
-
-            <AnimatePresence>
-                {isOpen && hasChildren && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden border-l border-white/5 ml-3"
-                    >
-                        {node.children!.map(child => (
-                            <TreeNode
-                                key={child.id}
-                                node={child}
-                                selectedId={selectedId}
-                                onSelect={onSelect}
-                                boltAlert={boltAlert}
-                                pipeAlert={pipeAlert}
-                            />
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

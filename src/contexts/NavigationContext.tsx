@@ -42,7 +42,9 @@ export type AppView =
     | 'boltTorque'
     | 'shadowEngineer'
     | 'intuitionLog'
-    | 'adminApproval';
+    | 'adminApproval'
+    | 'clientPortal'
+    | 'logbook';
 
 interface NavigationContextType {
     currentPage: AppView;

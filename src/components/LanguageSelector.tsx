@@ -1,44 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Globe } from 'lucide-react';
 
 export const LanguageSelector: React.FC = () => {
     const { i18n } = useTranslation();
+    const [isOpen, setIsOpen] = useState(false);
 
-    const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
-        // Čuvamo izbor u memoriju preglednika da ostane nakon refresha
-        localStorage.setItem('appLanguage', lng);
+    const toggleLanguage = () => {
+        const nextLang = i18n.language === 'en' ? 'de' : i18n.language === 'de' ? 'bs' : 'en';
+        i18n.changeLanguage(nextLang);
+        localStorage.setItem('appLanguage', nextLang);
+        setIsOpen(false);
     };
 
-    const btnClass = (lng: string) => `
-        px-3 py-1 text-[10px] font-bold rounded-full transition-all duration-300 uppercase cursor-pointer
-        ${i18n.language === lng
-            ? 'bg-cyan-500 text-white shadow-[0_0_10px_rgba(6,182,212,0.5)]'
-            : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}
-    `;
+    const currentLang = i18n.language || 'en';
+    const getFlag = (lang: string) => {
+        switch (lang) {
+            case 'en': return '🇬🇧';
+            case 'de': return '🇩🇪';
+            case 'bs': return '🇧🇦';
+            default: return '🇬🇧';
+        }
+    };
 
     return (
-        <div className="flex gap-1 items-center bg-slate-900/80 backdrop-blur-md p-1 rounded-full border border-slate-700/50 shadow-lg">
+        <div className="relative">
             <button
-                onClick={() => changeLanguage('en')}
-                className={btnClass('en')}
-                title="English"
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 hover:bg-slate-700 transition-colors border border-slate-700"
             >
-                EN
-            </button>
-            <button
-                onClick={() => changeLanguage('bs')}
-                className={btnClass('bs')}
-                title="Bosanski"
-            >
-                BS
-            </button>
-            <button
-                onClick={() => changeLanguage('de')}
-                className={btnClass('de')}
-                title="Deutsch"
-            >
-                DE
+                <span className="text-sm">{getFlag(currentLang)}</span>
+                <span className="text-xs font-bold text-slate-300 uppercase">{currentLang}</span>
             </button>
         </div>
     );

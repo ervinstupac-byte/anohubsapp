@@ -58,6 +58,9 @@ export const ProjectGenesisForm: React.FC = () => {
             grossHead: parseFloat(formData.grossHead) || 0,
             pipeDiameter: parseFloat(formData.pipeDiameter) || 0,
             pipeMaterial: formData.pipeMaterial as any,
+            wallThickness: parseFloat(formData.wallThickness) || 12,
+            boltClass: '8.8',
+            corrosionProtection: 'PAINT',
             ecologicalFlow: parseFloat(formData.qEcological) || 0,
             waterQuality: 'CLEAN', // Default for now
             pipeLength: 0, // Not in this form but needed for type

@@ -1,0 +1,93 @@
+{
+    "common": {
+        "switchLanguage": "Promijeni jezik",
+        "simulate": "Simuliraj",
+        "reset": "Resetuj",
+        "confidence": "Pouzdano",
+        "advice": "Preporuka"
+    },
+    "hpp": {
+        "title": "Projekt Cerebro",
+        "physics_ready": "SISTEM SPREMAN",
+        "recalculating": "PRORAČUN U TOKU...",
+        "hydraulics": "Hidraulika",
+        "mechanical": "Mehanika",
+        "electro": "Elektro",
+        "penstock": "Cjevovod",
+        "bolts": "Vijci",
+        "shaft": "Osovina",
+        "turbine": "Turbina",
+        "generator": "Generator"
+    },
+    "physics": {
+        "grossHead": "Bruto pad",
+        "flow": "Instalisani protok",
+        "netHead": "Neto pad",
+        "efficiency": "Stepen iskorištenja",
+        "powerOutput": "Snaga",
+        "annualProd": "Godišnja proizvodnja",
+        "roi": "Povrat investicije",
+        "waterHammer": "Hidraulički udar",
+        "hoopStress": "Obodno naprezanje",
+        "boltSafety": "Faktor sigurnosti vijaka",
+        "boltLoad": "Opterećenje vijka",
+        "boltCapacity": "Nosivost vijka",
+        "torque": "Moment pritezanja",
+        "grade": "Klasa čvrstoće",
+        "material": "Materijal",
+        "wallThickness": "Debljina stijenke"
+    },
+    "forensics": {
+        "title": "Dijagnostička Forenzika",
+        "subtitle": "Terenska Analiza • Zdravlje Mašine • Uzrok Kvara",
+        "vision_title": "Analiza Teksture",
+        "audio_title": "Zvučni Potpis",
+        "post_mortem": "Post-Mortem Nadzor",
+        "drag_drop": "Prevucite slike oštećenja za analizu.",
+        "scanning": "SKENIRANJE TEKSTURE...",
+        "diagnosis_cavitation": "KAVITACIJA",
+        "diagnosis_erosion": "ABRAZIVNA EROZIJA",
+        "advice_cavitation": "Kritično: Mikro-mlazovi su uklonili materijal. Preporučeno: Odmah navarivanje Stelitom.",
+        "advice_erosion": "Upozorenje: Pijesak polira površinu. Preporučeno: Nanijeti keramički premaz (Volfram Karbid).",
+        "sand_hiss": "Visokofrekventno šištanje (15kHz+)",
+        "sand_diagnosis": "Dijagnoza: Detektovan kvarcni pijesak u Pelton mlaznici. Odmah provjeriti filtere taložnice.",
+        "emergency_cooling": "HITNI PROTOKOL",
+        "seizure_risk": "RIZIK OD ZARIBAVANJA OSOVINE. POKRENUTE POMOĆNE PUMPE ZA HLAĐENJE."
+    },
+    "glossary": {
+        "water_hammer": "Hidraulički udar",
+        "bearing_clearance": "Zazor ležaja",
+        "cavitation": "Kavitacija",
+        "erosion": "Erozija",
+        "bolt_grade": "Klasa vijka"
+    },
+    "insights": {
+        "kaplan_risk": "LEGACY UPOZORENJE: Kaplan na padu > 70m nosi ogroman rizik od kavitacije. Potrebna duboka potopljenost (negativna kota).",
+        "francis_inefficient": "Ekonomska neisplativost: Francis na padu < 20m zahtijeva ogroman spiralni cjevovod.",
+        "price_suspicious": "Cijena značajno ispod tržišne. Provjeriti porijeklo čelika i referentnu listu.",
+        "efficiency_high": "Sumnjivo visoka efikasnost ({{value}}%). Fizički limit je oko {{limit}}%. Tražiti IEC 60041 test izvještaj.",
+        "rotor_height": "Rotor ({{diameter}}m) je viši od tunela ({{height}}m).",
+        "rotor_width": "Rotor je širi od pristupnog puta.",
+        "bridge_capacity": "Težina ({{weight}}t) prelazi nosivost mosta ({{limit}}t).",
+        "split_rotor_required": "Obavezan \"Split Rotor\" dizajn (iz dva dijela) ili zavarivanje na licu mjesta.",
+        "transport_standard": "Standardni transport moguć.",
+        "kaplan_double_reg": "Velike varijacije protoka. Kaplan double-regulated je dobar, ali 2 jedinice (1/3 + 2/3) pokrivaju minimum bolje.",
+        "kaplan_single": "Stabilan protok, 1 velika Kaplan turbina je najjeftinija opcija.",
+        "francis_part_load": "Francis ima lošu efikasnost ispod 40%. Bolje 2 manje jedinice za pokrivanje niskih voda."
+    },
+    "warnings": {
+        "wall_thin_burst": "KRITIČNO: Debljina stijenke {{thickness}}mm nedovoljna za {{head}}m udarnog pritiska. Faktor sigurnosti: {{sf}} (Min 1.5). RIZIK OD PUCANJA.",
+        "bolt_failure_46": "OTKAZIVANJE VIJAKA: Vijci klase 4.6 ne mogu izdržati pritiske > 25 bara. Nadograditi na 8.8.",
+        "corrosion_steel": "BRZA KOROZIJA: Nezaštićeni čelik u abrazivnoj/prljavoj vodi će propasti za < 10 godina.",
+        "corrosion_paint": "Teško Održavanje: Boja će se brzo skidati u muljevitoj vodi. Razmotriti Pocinčavanje."
+    },
+    "notifications": {
+        "title": "Centar za Obavijesti",
+        "settings": "Postavke",
+        "markAllRead": "Označi sve kao pročitano",
+        "empty": "Nema novih obavijesti.",
+        "tempSpike": "KRITIČNO: Zastoj osovine detektovan, ali temperatura raste! Trenutno: {{temp}}°C (Limit: {{limit}}°C)",
+        "vibrationWarning": "Upozorenje: Nivo vibracija se približava Zoni B.",
+        "maintenanceDue": "Info: Planirano održavanje za 3 dana."
+    }
+}

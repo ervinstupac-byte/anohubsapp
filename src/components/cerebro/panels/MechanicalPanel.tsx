@@ -3,9 +3,12 @@ import { Settings, AlertTriangle, Info, Zap } from 'lucide-react';
 import { useProjectEngine } from '../../../contexts/ProjectContext';
 import { GlassCard } from '../../ui/GlassCard';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../../utils/i18nUtils';
 
 export const MechanicalPanel: React.FC = () => {
     const { technicalState, updateMechanicalDetails } = useProjectEngine();
+    const { t, i18n: { language } } = useTranslation();
     const { mechanical, physics } = technicalState;
 
     const handleParamChange = (key: keyof typeof mechanical.boltSpecs, value: any) => {
@@ -18,21 +21,21 @@ export const MechanicalPanel: React.FC = () => {
         <div className="space-y-6 animate-fade-in">
             <GlassCard className="p-6 border-l-4 border-[#2dd4bf]">
                 <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Settings className="w-4 h-4 text-[#2dd4bf]" /> Bolt Configuration
+                    <Settings className="w-4 h-4 text-[#2dd4bf]" /> {t('hpp.mechanical', 'Mechanical Integrity')}
                 </h3>
 
                 <div className="grid grid-cols-2 gap-6">
                     {/* Bolt Grade Selector */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase">Bolt Grade (ISO)</label>
+                        <label className="text-xs font-bold text-slate-500 uppercase">{t('glossary.bolt_grade', 'Bolt Grade')} (ISO)</label>
                         <div className="flex gap-2">
                             {['4.6', '5.6', '8.8', '10.9'].map((grade) => (
                                 <button
                                     key={grade}
                                     onClick={() => handleParamChange('grade', grade)}
                                     className={`px-3 py-1 text-xs font-bold rounded border transition-all ${mechanical.boltSpecs.grade === grade
-                                            ? 'bg-[#2dd4bf] text-black border-[#2dd4bf]'
-                                            : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
+                                        ? 'bg-[#2dd4bf] text-black border-[#2dd4bf]'
+                                        : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                                         }`}
                                 >
                                     {grade}
@@ -43,7 +46,7 @@ export const MechanicalPanel: React.FC = () => {
 
                     {/* Torque Settings */}
                     <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase">Torque (Nm)</label>
+                        <label className="text-xs font-bold text-slate-500 uppercase">{t('physics.torque', 'Torque')} (Nm)</label>
                         <input
                             type="number"
                             value={mechanical.boltSpecs.torque}
@@ -56,19 +59,19 @@ export const MechanicalPanel: React.FC = () => {
                 {/* Real-time Physics Feedback */}
                 <div className="mt-6 p-4 rounded bg-black/20 border border-white/5">
                     <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs text-slate-400 font-mono">CALCULATED LOAD PER BOLT</span>
-                        <span className="text-sm text-white font-mono font-bold">{physics.boltLoadKN.toFixed(2)} kN</span>
+                        <span className="text-xs text-slate-400 font-mono uppercase">{t('physics.boltLoad', 'Calculated Load')}</span>
+                        <span className="text-sm text-white font-mono font-bold">{formatNumber(physics.boltLoadKN, language, 2)} kN</span>
                     </div>
                     <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs text-slate-400 font-mono">BOLT CAPACITY</span>
-                        <span className="text-sm text-white font-mono font-bold">{physics.boltCapacityKN.toFixed(2)} kN</span>
+                        <span className="text-xs text-slate-400 font-mono uppercase">{t('physics.boltCapacity', 'Bolt Capacity')}</span>
+                        <span className="text-sm text-white font-mono font-bold">{formatNumber(physics.boltCapacityKN, language, 2)} kN</span>
                     </div>
                     <div className="h-px bg-white/10 my-2" />
                     <div className="flex justify-between items-center">
                         <span className="text-xs text-slate-400 font-mono uppercase">Safety Factor</span>
                         <span className={`text-lg font-black font-mono ${physics.boltSafetyFactor < 1.5 ? 'text-red-500' : 'text-emerald-500'
                             }`}>
-                            {physics.boltSafetyFactor.toFixed(2)}x
+                            {formatNumber(physics.boltSafetyFactor, language, 2)}x
                         </span>
                     </div>
                     {physics.boltSafetyFactor < 1.5 && (
@@ -86,7 +89,7 @@ export const MechanicalPanel: React.FC = () => {
             <GlassCard className="p-6">
                 <div className="flex justify-between items-start">
                     <div>
-                        <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-2">Shaft Alignment (Legacy)</h3>
+                        <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-2">{t('physics.shaftAlignment', 'Shaft Alignment')}</h3>
                         <p className="text-xs text-slate-400 mb-4">
                             Max allowed radial runout based on bearing type <b>{mechanical.bearingType}</b>.
                         </p>
@@ -105,7 +108,7 @@ export const MechanicalPanel: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
                     <span>0 mm</span>
-                    <span>Limit: {mechanical.shaftAlignmentLimit} mm</span>
+                    <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit, language, 3)} mm</span>
                 </div>
             </GlassCard>
         </div>
