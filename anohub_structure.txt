@@ -1,0 +1,30 @@
+AnoHUB Ecosystem Project Structure
+==================================
+
+ROOT/
+├── backend/
+│   ├── models.py           # SQLAlchemy Database Schema (Plants, Turbines, LegacyIncidents)
+│   ├── core_logic.py       # Intelligence Engine (LegacyWatcher, AuditEngine, Physics)
+│   └── __init__.py         # Package init
+│
+├── scripts/
+│   ├── anohub_core_db.py   # DB Initialization Script
+│   ├── bid_evaluator.py    # Standalone Bid Analysis Tool
+│   ├── hydraulic_integrity.py
+│   └── intelligence_guard.py
+│
+├── src/
+│   ├── components/
+│   │   ├── AnoHubOS.tsx        # Main Desktop OS UI
+│   │   ├── SmartStartChecklist.tsx  # Mobile Expert UI (blocks start)
+│   │   ├── TechnicalAuditReportModule.tsx # PDF Report Generator Interface
+│   │   ├── PostShutdownWatchdog.tsx # Thermal Inertia Monitor
+│   │   └── ... (Dashboards)
+│   │
+│   ├── services/
+│   │   ├── ReportGenerator.ts  # PDF Generation Logic (Client-side)
+│   │   ├── SmartStartService.ts
+│   │   ├── LifecycleManager.ts
+│   │   └── ... (Business Logic)
+│
+└── supabase/               # Optional Real-time Database layer

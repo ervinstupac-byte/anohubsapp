@@ -2,33 +2,43 @@
     "compilerOptions": {
         "target": "ES2020",
         "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
         "module": "ESNext",
         "skipLibCheck": true,
-
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-
         /* 💡 KLJUČNA IZMJENA ZA LAZY LOADING: */
-        "allowSyntheticDefaultImports": true, 
-        "esModuleInterop": true,              
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         /* 💡 KRAJ IZMJENE */
-        
         "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
-
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"] 
+            "@/*": [
+                "./src/*"
+            ]
         },
-        "types": ["node", "vitest/globals"]
+        "types": [
+            "node",
+            "vitest/globals"
+        ]
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

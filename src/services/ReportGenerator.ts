@@ -60,6 +60,44 @@ export interface PurchaseOrderData {
     }[];
 }
 
+export interface TechnicalAuditData {
+    assetDetails: {
+        name: string;
+        location: string;
+        timestamp: string;
+    };
+    executiveSummary: {
+        status: 'GREEN' | 'YELLOW' | 'RED';
+        score: number;
+        summaryText: string;
+    };
+    mechanicalIntegrity: {
+        component: string;
+        nominalClearance: number;
+        measuredClearance: number;
+        deviation: number;
+        tolerance: number; // 0.05
+    }[];
+    legacyRisk: {
+        detected: boolean;
+        legacyId: string; // "LEGACY #3"
+        description: string;
+        preventedDamageEur: number;
+    };
+    visualAnalysis: {
+        diagnosis: string; // "Cavitation"
+        textureDescription: string; // "Swiss-cheese effect"
+        recommendation: string;
+    };
+    thermalValidation: {
+        ambientTemp: number;
+        operatingTemp: number;
+        thermalExpansion: number;
+        appliedOffset: number;
+        validationStatus: string;
+    };
+}
+
 export interface ExecutiveBriefingData {
     fleetHealth: number;
     totalMoneyAtRisk: number;
@@ -423,6 +461,148 @@ export class ReportGenerator {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+    }
+
+    public generateTechnicalAuditReport(data: TechnicalAuditData): Blob {
+        this.applyProfessionalHeader('Technical Audit Report');
+        const doc = this.doc;
+
+        const { assetDetails, executiveSummary, mechanicalIntegrity, legacyRisk, visualAnalysis, thermalValidation } = data;
+
+        // 1. EXECUTIVE SUMMARY
+        doc.setFontSize(14);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`AUDIT TARGET: ${assetDetails.name}`, 14, 60);
+
+        // Status Badge
+        let statusColor = [34, 197, 94]; // Green
+        if (executiveSummary.status === 'YELLOW') statusColor = [234, 179, 8];
+        if (executiveSummary.status === 'RED') statusColor = [239, 68, 68];
+
+        doc.setFillColor(statusColor[0], statusColor[1], statusColor[2]);
+        doc.rect(150, 52, 45, 12, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(10);
+        doc.text(executiveSummary.status, 172.5, 59, { align: 'center' });
+
+        doc.setFontSize(10);
+        doc.setTextColor(71, 85, 105);
+        doc.text(executiveSummary.summaryText, 14, 70);
+
+        // 2. MECHANICAL INTEGRITY (0.05mm Standard)
+        let currentY = 85;
+        doc.setFontSize(12);
+        doc.setTextColor(6, 182, 212); // Cyan
+        doc.text('MECHANICAL INTEGRITY (PRECISION 0.05 mm)', 14, currentY);
+
+        currentY += 10;
+        // Draw Simple Chart
+        mechanicalIntegrity.forEach((item, index) => {
+            const y = currentY + (index * 15);
+            doc.setFontSize(9);
+            doc.setTextColor(30, 41, 59);
+            doc.text(`${item.component}`, 14, y);
+
+            // Bar background
+            doc.setFillColor(241, 245, 249);
+            doc.rect(60, y - 4, 100, 6, 'F');
+
+            // Bar Data (Nominal vs Measured)
+            // Center is 110. Deviation is deviation from 110.
+            // Scale: 1mm = 50 units (very magnified)
+            const centerX = 110;
+            const barWidth = item.deviation * 200; // Magnify dev
+
+            if (Math.abs(item.deviation) > item.tolerance) {
+                doc.setFillColor(239, 68, 68); // Red
+            } else {
+                doc.setFillColor(34, 197, 94); // Green
+            }
+
+            doc.rect(centerX, y - 4, barWidth, 6, 'F');
+            doc.text(`${item.measuredClearance.toFixed(3)}mm (Dev: ${item.deviation > 0 ? '+' : ''}${item.deviation.toFixed(3)})`, 165, y);
+        });
+        currentY += (mechanicalIntegrity.length * 15) + 10;
+
+        // 3. LEGACY RISK ALERT
+        if (legacyRisk.detected) {
+            doc.setFillColor(254, 242, 242); // Light Red
+            doc.setDrawColor(239, 68, 68);
+            doc.rect(14, currentY, 182, 35, 'FD');
+
+            doc.setTextColor(153, 27, 27);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`⚠ ALGORITAM 15 GODINA ISKUSTVA: ${legacyRisk.legacyId}`, 20, currentY + 8);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(185, 28, 28);
+            doc.text(doc.splitTextToSize(legacyRisk.description, 170), 20, currentY + 16);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text(`PREVENTED DAMAGE VALUE: €${legacyRisk.preventedDamageEur.toLocaleString()}`, 20, currentY + 30);
+
+            currentY += 45;
+        }
+
+        // 4. CAVITATION VS EROSION
+        doc.setFontSize(12);
+        doc.setTextColor(6, 182, 212);
+        doc.text('FORENSICS: CAVITATION vs EROSION', 14, currentY);
+        currentY += 8;
+
+        const forensicData = [
+            ['Analysis Type', 'AI Vision Diagnosis'],
+            ['Texture Signature', visualAnalysis.textureDescription],
+            ['Verdict', visualAnalysis.diagnosis.toUpperCase()],
+            ['Action', visualAnalysis.recommendation]
+        ];
+
+        autoTable(doc, {
+            startY: currentY,
+            head: [['Metric', 'AI Finding']],
+            body: forensicData,
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: { fontSize: 9 }
+        });
+
+        currentY = (doc as any).lastAutoTable.finalY + 15;
+
+        // 5. THERMAL DRIFT VALIDATION
+        doc.setFontSize(12);
+        doc.setTextColor(6, 182, 212);
+        doc.text('THERMAL DRIFT VALIDATION', 14, currentY);
+        currentY += 8;
+
+        const thermData = [
+            ['Operating Delta T', `${(thermalValidation.operatingTemp - thermalValidation.ambientTemp).toFixed(1)} °C`],
+            ['Material Expansion (Calc)', `${thermalValidation.thermalExpansion.toFixed(3)} mm`],
+            ['Applied Offset (Cold)', `${thermalValidation.appliedOffset.toFixed(3)} mm`],
+            ['Validation', thermalValidation.validationStatus]
+        ];
+
+        autoTable(doc, {
+            startY: currentY,
+            head: [['Parameter', 'Value']],
+            body: thermData,
+            theme: 'striped',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: { fontSize: 9 }
+        });
+
+        // SIGNATURE
+        const finalY = (doc as any).lastAutoTable.finalY + 30;
+        doc.setDrawColor(148, 163, 184);
+        doc.line(14, finalY, 80, finalY);
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text('Digital Signature / Auth Token', 14, finalY + 5);
+        doc.text('AnoHUB Core Engine', 14, finalY + 10);
+
+        this.applyFooter();
+        return doc.output('blob');
     }
 }
 

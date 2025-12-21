@@ -14,6 +14,8 @@ import { DiagnosticProvider } from './DiagnosticContext.tsx';
 import { FleetProvider } from './FleetContext.tsx';
 import { VoiceAssistantProvider } from './VoiceAssistantContext.tsx';
 import { ForensicsProvider } from './ForensicsContext.tsx';
+import { AIPredictionProvider } from './AIPredictionContext.tsx';
+import { CommissioningProvider } from './CommissioningContext.tsx';
 
 interface GlobalProviderProps {
     children: React.ReactNode;
@@ -33,13 +35,15 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                                             <InventoryProvider>
                                                 <WorkOrderProvider>
                                                     <DiagnosticProvider>
-                                                        <FleetProvider>
-                                                            <VoiceAssistantProvider>
-                                                                <ForensicsProvider>
-                                                                    {children}
-                                                                </ForensicsProvider>
-                                                            </VoiceAssistantProvider>
-                                                        </FleetProvider>
+                                                        <AIPredictionProvider>
+                                                            <FleetProvider>
+                                                                <VoiceAssistantProvider>
+                                                                    <ForensicsProvider>
+                                                                        {children}
+                                                                    </ForensicsProvider>
+                                                                </VoiceAssistantProvider>
+                                                            </FleetProvider>
+                                                        </AIPredictionProvider>
                                                     </DiagnosticProvider>
                                                 </WorkOrderProvider>
                                             </InventoryProvider>

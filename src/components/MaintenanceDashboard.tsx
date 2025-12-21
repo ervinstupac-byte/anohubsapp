@@ -21,6 +21,7 @@ import { ForensicDepthAnalyzer } from './ForensicDepthAnalyzer.tsx';
 import { OrbitPlotter } from './OrbitPlotter.tsx';
 import { MagneticPullAnalytics } from './MagneticPullAnalytics.tsx';
 import { AcousticDiagnosticModule } from './AcousticDiagnosticModule.tsx';
+import { AIPredictiveModule } from './AIPredictiveModule.tsx';
 
 // --- HEATMAP GENERATOR ---
 const Heatmap: React.FC<{ data: number[] }> = ({ data }) => {
@@ -96,156 +97,163 @@ export const MaintenanceDashboard: React.FC = () => {
                     <p className="text-slate-500 uppercase tracking-widest font-bold">Select an Asset to view Maintenance Schedule</p>
                 </GlassCard>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* LEFT: STATUS CARD */}
-                    <div className="space-y-6">
-                        <GlassCard className="bg-slate-900/60 border-l-4 border-l-emerald-500">
-                            <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">Total Operating Hours</p>
-                            <div className="text-5xl font-black text-white tracking-tighter mb-2">
-                                {hours.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}h
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-slate-500 uppercase font-bold">Current Load:</span>
-                                <span className="text-[10px] text-emerald-400 font-mono font-bold animate-pulse">RUNNING • 98.4% EFFICIENCY</span>
-                            </div>
-                        </GlassCard>
+                <>
+                    {/* AI PREDICTIVE MODULE - Full Width */}
+                    <div className="mb-8">
+                        <AIPredictiveModule />
+                    </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
-                                <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Last Service</p>
-                                <p className="text-xs text-white font-bold">22 Oct 2023</p>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* LEFT: STATUS CARD */}
+                        <div className="space-y-6">
+                            <GlassCard className="bg-slate-900/60 border-l-4 border-l-emerald-500">
+                                <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">Total Operating Hours</p>
+                                <div className="text-5xl font-black text-white tracking-tighter mb-2">
+                                    {hours.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}h
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] text-slate-500 uppercase font-bold">Current Load:</span>
+                                    <span className="text-[10px] text-emerald-400 font-mono font-bold animate-pulse">RUNNING • 98.4% EFFICIENCY</span>
+                                </div>
+                            </GlassCard>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
+                                    <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Last Service</p>
+                                    <p className="text-xs text-white font-bold">22 Oct 2023</p>
+                                </div>
+                                <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
+                                    <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Node Integrity</p>
+                                    <p className="text-xs text-cyan-400 font-bold">VERIFIED</p>
+                                </div>
                             </div>
-                            <div className="bg-slate-900/40 p-4 rounded-2xl border border-white/5">
-                                <p className="text-[9px] text-slate-500 uppercase font-black mb-1">Node Integrity</p>
-                                <p className="text-xs text-cyan-400 font-bold">VERIFIED</p>
-                            </div>
+
+                            <SealingIntegrity />
+                            <SystemResponseAnalytics />
+                            <StressCycleCounter />
+                            <MachineProtectionSystem />
+                            <FluidForceDiagnostics />
+                            <OrbitPlotter />
+                            <MagneticPullAnalytics />
+                            <AcousticDiagnosticModule />
+                            <ForensicDepthAnalyzer />
                         </div>
 
-                        <SealingIntegrity />
-                        <SystemResponseAnalytics />
-                        <StressCycleCounter />
-                        <MachineProtectionSystem />
-                        <FluidForceDiagnostics />
-                        <OrbitPlotter />
-                        <MagneticPullAnalytics />
-                        <AcousticDiagnosticModule />
-                        <ForensicDepthAnalyzer />
-                    </div>
+                        {/* MIDDLE: PROTOCOLS & PREDICTIONS */}
+                        <div className="lg:col-span-2 space-y-6">
+                            <GlassCard title="Service Protocols & Predictions" className="bg-slate-900/80">
+                                <div className="space-y-4">
+                                    {protocols.map(proto => {
+                                        const nextDate = predictServiceDate(selectedAsset.id, proto.threshold);
+                                        const progress = (hours % proto.threshold) / proto.threshold * 100;
 
-                    {/* MIDDLE: PROTOCOLS & PREDICTIONS */}
-                    <div className="lg:col-span-2 space-y-6">
-                        <GlassCard title="Service Protocols & Predictions" className="bg-slate-900/80">
-                            <div className="space-y-4">
-                                {protocols.map(proto => {
-                                    const nextDate = predictServiceDate(selectedAsset.id, proto.threshold);
-                                    const progress = (hours % proto.threshold) / proto.threshold * 100;
+                                        return (
+                                            <div key={proto.id} className="p-4 rounded-xl bg-slate-950/50 border border-white/5 group hover:border-emerald-500/30 transition-all">
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div>
+                                                        <h4 className="font-bold text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{proto.name}</h4>
+                                                        <p className="text-[10px] text-slate-500 max-w-sm">{proto.description}</p>
 
-                                    return (
-                                        <div key={proto.id} className="p-4 rounded-xl bg-slate-950/50 border border-white/5 group hover:border-emerald-500/30 transition-all">
-                                            <div className="flex justify-between items-start mb-3">
-                                                <div>
-                                                    <h4 className="font-bold text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{proto.name}</h4>
-                                                    <p className="text-[10px] text-slate-500 max-w-sm">{proto.description}</p>
+                                                        {(() => {
+                                                            const missingParts = getMissingParts(selectedAsset.turbine_type || 'francis');
+                                                            const hasShortage = missingParts.length > 0 && progress > 50;
 
-                                                    {(() => {
-                                                        const missingParts = getMissingParts(selectedAsset.turbine_type || 'francis');
-                                                        const hasShortage = missingParts.length > 0 && progress > 50;
+                                                            if (!hasShortage) return null;
 
-                                                        if (!hasShortage) return null;
+                                                            const handleGenerateOrder = (e: React.MouseEvent) => {
+                                                                e.stopPropagation();
+                                                                const blob = reportGenerator.generatePurchaseOrder({
+                                                                    vendorName: 'ANO_LOGISTICS_BHD',
+                                                                    parts: missingParts.map((p: any) => ({
+                                                                        name: p.name,
+                                                                        partNumber: p.partNumber,
+                                                                        quantity: p.minStockThreshold * 2,
+                                                                        unitPrice: p.unitPrice
+                                                                    }))
+                                                                });
+                                                                reportGenerator.downloadReport(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`);
+                                                            };
 
-                                                        const handleGenerateOrder = (e: React.MouseEvent) => {
-                                                            e.stopPropagation();
-                                                            const blob = reportGenerator.generatePurchaseOrder({
-                                                                vendorName: 'ANO_LOGISTICS_BHD',
-                                                                parts: missingParts.map((p: any) => ({
-                                                                    name: p.name,
-                                                                    partNumber: p.partNumber,
-                                                                    quantity: p.minStockThreshold * 2,
-                                                                    unitPrice: p.unitPrice
-                                                                }))
-                                                            });
-                                                            reportGenerator.downloadReport(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`);
-                                                        };
-
-                                                        return (
-                                                            <div className="mt-2 flex items-center gap-2">
-                                                                <div className="px-2 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-[9px] font-black text-red-500 animate-pulse tracking-widest uppercase">
-                                                                    ! INSUFFICIENT STOCK: Order required
+                                                            return (
+                                                                <div className="mt-2 flex items-center gap-2">
+                                                                    <div className="px-2 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-[9px] font-black text-red-500 animate-pulse tracking-widest uppercase">
+                                                                        ! INSUFFICIENT STOCK: Order required
+                                                                    </div>
+                                                                    <button
+                                                                        onClick={handleGenerateOrder}
+                                                                        className="text-[9px] font-black text-cyan-400 hover:text-white underline decoration-cyan-500/30 underline-offset-2 uppercase tracking-widest"
+                                                                    >
+                                                                        Download Order Draft
+                                                                    </button>
                                                                 </div>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className={`text-xs font-mono font-black ${progress > 80 ? 'text-orange-400 animate-pulse' : 'text-slate-300'}`}>
+                                                            {nextDate ? nextDate.toLocaleDateString() : 'STATIONARY'}
+                                                        </p>
+                                                        {progress > 80 && (
+                                                            <div className="flex flex-col gap-2 mt-2">
                                                                 <button
-                                                                    onClick={handleGenerateOrder}
-                                                                    className="text-[9px] font-black text-cyan-400 hover:text-white underline decoration-cyan-500/30 underline-offset-2 uppercase tracking-widest"
+                                                                    onClick={async () => {
+                                                                        showToast("SYSTEM ALERT: Bearing Overheat likely. Initializing Work Order...", "info");
+                                                                        await startWorkOrder('seeded-id-placeholder');
+                                                                    }}
+                                                                    className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded text-[9px] font-black text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all uppercase tracking-widest"
                                                                 >
-                                                                    Download Order Draft
+                                                                    Initiate Tactical Maintenance
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => window.location.hash = '/ar-guide'}
+                                                                    className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded text-[9px] font-black text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                                                                >
+                                                                    <span>📷</span> AR FIELD GUIDE & VISUAL EXPERT
                                                                 </button>
                                                             </div>
-                                                        );
-                                                    })()}
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <p className={`text-xs font-mono font-black ${progress > 80 ? 'text-orange-400 animate-pulse' : 'text-slate-300'}`}>
-                                                        {nextDate ? nextDate.toLocaleDateString() : 'STATIONARY'}
-                                                    </p>
-                                                    {progress > 80 && (
-                                                        <div className="flex flex-col gap-2 mt-2">
-                                                            <button
-                                                                onClick={async () => {
-                                                                    showToast("SYSTEM ALERT: Bearing Overheat likely. Initializing Work Order...", "info");
-                                                                    await startWorkOrder('seeded-id-placeholder');
-                                                                }}
-                                                                className="px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded text-[9px] font-black text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all uppercase tracking-widest"
-                                                            >
-                                                                Initiate Tactical Maintenance
-                                                            </button>
-                                                            <button
-                                                                onClick={() => window.location.hash = '/ar-guide'}
-                                                                className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded text-[9px] font-black text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all uppercase tracking-widest flex items-center justify-center gap-2"
-                                                            >
-                                                                <span>📷</span> AR FIELD GUIDE & VISUAL EXPERT
-                                                            </button>
-                                                        </div>
-                                                    )}
+
+                                                <div className="space-y-1">
+                                                    <div className="flex justify-between text-[9px] font-bold uppercase">
+                                                        <span className="text-slate-500">Service Threshold: {proto.threshold}h</span>
+                                                        <span className={progress > 80 ? 'text-orange-400' : 'text-emerald-500'}>{progress.toFixed(1)}%</span>
+                                                    </div>
+                                                    <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                                                        <div
+                                                            className={`h-full rounded-full transition-all duration-1000 ${progress > 80 ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]'}`}
+                                                            style={{ width: `${progress}%` }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
+                                        );
+                                    })}
+                                </div>
+                            </GlassCard>
 
-                                            <div className="space-y-1">
-                                                <div className="flex justify-between text-[9px] font-bold uppercase">
-                                                    <span className="text-slate-500">Service Threshold: {proto.threshold}h</span>
-                                                    <span className={progress > 80 ? 'text-orange-400' : 'text-emerald-500'}>{progress.toFixed(1)}%</span>
-                                                </div>
-                                                <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                                                    <div
-                                                        className={`h-full rounded-full transition-all duration-1000 ${progress > 80 ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]'}`}
-                                                        style={{ width: `${progress}%` }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </GlassCard>
-
-                        <GlassCard title="Operational Intensity Heatmap" className="bg-slate-900/80">
-                            <p className="text-xs text-slate-500 mb-4">Historical turbine load distribution and thermal stress analysis per operational cycle.</p>
-                            <Heatmap data={heatmapData} />
-                            <div className="flex items-center gap-4 mt-6">
-                                <div className="flex items-center gap-1.5">
-                                    <div className="w-2 h-2 rounded-[1px] bg-slate-800"></div>
-                                    <span className="text-[9px] text-slate-500 uppercase font-black">Standby</span>
+                            <GlassCard title="Operational Intensity Heatmap" className="bg-slate-900/80">
+                                <p className="text-xs text-slate-500 mb-4">Historical turbine load distribution and thermal stress analysis per operational cycle.</p>
+                                <Heatmap data={heatmapData} />
+                                <div className="flex items-center gap-4 mt-6">
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-2 h-2 rounded-[1px] bg-slate-800"></div>
+                                        <span className="text-[9px] text-slate-500 uppercase font-black">Standby</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-2 h-2 rounded-[1px] bg-emerald-500 opacity-30"></div>
+                                        <span className="text-[9px] text-slate-500 uppercase font-black">Optimal</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-2 h-2 rounded-[1px] bg-emerald-500"></div>
+                                        <span className="text-[9px] text-slate-500 uppercase font-black">Peak Load</span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-1.5">
-                                    <div className="w-2 h-2 rounded-[1px] bg-emerald-500 opacity-30"></div>
-                                    <span className="text-[9px] text-slate-500 uppercase font-black">Optimal</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <div className="w-2 h-2 rounded-[1px] bg-emerald-500"></div>
-                                    <span className="text-[9px] text-slate-500 uppercase font-black">Peak Load</span>
-                                </div>
-                            </div>
-                        </GlassCard>
+                            </GlassCard>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
 
             {activeQuery && <GuidedDiagnosisModal query={activeQuery} />}
