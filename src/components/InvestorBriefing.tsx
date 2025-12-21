@@ -2,32 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { createFinancialReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
-// ISPRAVKA IMPORTA: Uvozimo AssetPicker kao komponentu
+import { reportGenerator } from '../services/ReportGenerator.ts';
 import { AssetPicker } from './AssetPicker.tsx';
-// ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
+import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
+import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import { useInventory } from '../contexts/InventoryContext.tsx';
 
-// Ključ koji koristi HPP Builder za spremanje
-const LOCAL_STORAGE_KEY_HPP = 'hpp-builder-settings';
-
-// OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const InvestorBriefing: React.FC = () => {
     const { showToast } = useToast();
     const { selectedAsset } = useAssetContext();
     const { t } = useTranslation();
-
-    // --- STATE ---
-    const [importedDesign, setImportedDesign] = useState<any>(null);
+    const { currentDesign } = useHPPDesign();
+    const { telemetry, activeIncident } = useTelemetry();
+    const { getTotalInventoryValue } = useInventory();
 
     const [params, setParams] = useState({
-        electricityPrice: 80, // EUR/MWh
-        interestRate: 5,      // %
-        lifespan: 30,         // Years
-        opexPercent: 2        // % of CAPEX
+        electricityPrice: 80,
+        interestRate: 5,
+        lifespan: 30,
+        opexPercent: 2
     });
 
     const [kpis, setKpis] = useState({
@@ -41,53 +38,16 @@ export const InvestorBriefing: React.FC = () => {
         energyGWh: 0
     });
 
-    // --- 1. IMPORT HPP DESIGN (Auto-Link) ---
     useEffect(() => {
-        try {
-            const savedHPP = localStorage.getItem(LOCAL_STORAGE_KEY_HPP);
-            if (savedHPP) {
-                const design = JSON.parse(savedHPP);
-                setImportedDesign(design);
-                console.log("🔗 Financial Module linked with HPP Design Studio.");
-            }
-        } catch (e) {
-            console.error("Failed to link HPP Design", e);
-        }
-    }, []);
+        const powerMW = selectedAsset?.capacity || currentDesign?.calculations.powerMW || 10;
+        let annualGenerationGWh = currentDesign?.calculations.energyGWh || (powerMW * 8760 * 0.5 / 1000);
 
-    // --- 2. TECHNO-ECONOMIC CALCULATION ENGINE ---
-    useEffect(() => {
-        // Ako imamo odabran asset, koristimo njegov kapacitet.
-        // AKO NEMAMO, ali imamo HPP Dizajn, koristimo dizajn! (Smart Fallback)
-
-        let powerMW = selectedAsset?.capacity || 0;
-        let annualGenerationGWh = 0;
-
-        // "Neural Link" logika: Preuzmi podatke iz HPP Buildera ako postoje
-        if (importedDesign && !selectedAsset) {
-            // Ponovni izračun fizike iz HPP parametara
-            const { head, flow, efficiency } = importedDesign;
-            powerMW = (9.81 * head * flow * (efficiency / 100)) / 1000;
+        if (selectedAsset && !currentDesign) {
+            annualGenerationGWh = selectedAsset.capacity * 8760 * 0.5 / 1000;
         }
 
-        // Ako i dalje nemamo snagu, koristi default
-        const effectivePower = powerMW > 0 ? powerMW : 10;
-
-        // Izračun energije (GWh)
-        if (importedDesign && !selectedAsset) {
-            // Koristimo logiku iz HPP Buildera za GWh
-            const capacityFactor = importedDesign.flowVariation === 'stable' ? 0.85 : 0.6;
-            annualGenerationGWh = (effectivePower * 8760 * capacityFactor) / 1000;
-        } else {
-            // Generička procjena (50% capacity factor)
-            annualGenerationGWh = effectivePower * 8760 * 0.5 / 1000;
-        }
-
-        // FINANCIJSKA MATEMATIKA
         const totalRevenue = annualGenerationGWh * 1000 * params.electricityPrice;
-
-        // Empirijska formula za CAPEX (1.8M EUR po MW)
-        const estimatedCapex = effectivePower * 1800000;
+        const estimatedCapex = powerMW * 1800000;
         const annualOpex = estimatedCapex * (params.opexPercent / 100);
 
         const cashFlow = totalRevenue - annualOpex;
@@ -105,37 +65,44 @@ export const InvestorBriefing: React.FC = () => {
             roi: roi,
             lcoe: lcoe,
             payback: paybackPeriod,
-            powerMW: effectivePower,
+            powerMW: powerMW,
             energyGWh: annualGenerationGWh
         });
 
-    }, [selectedAsset, params, importedDesign]);
+    }, [selectedAsset, params, currentDesign]);
 
-    // --- PDF GENERATION ---
     const handleDownloadReport = () => {
-        const assetName = selectedAsset?.name || (importedDesign ? t('investorBriefing.hppConceptDesign', "HPP Concept Design") : t('investorBriefing.genericProject', "Generic Project"));
-
-        const blob = createFinancialReportBlob(
+        const assetName = selectedAsset?.name || (currentDesign ? t('investorBriefing.hppConceptDesign', "HPP Concept Design") : t('investorBriefing.genericProject', "Generic Project"));
+        const blob = reportGenerator.generateFinancialProspectus({
             assetName,
-            {
-                lcoe: `€${kpis.lcoe.toFixed(2)} / MWh`,
-                roi: `${kpis.roi.toFixed(1)}%`,
-                capex: `€${(kpis.capex / 1000000).toFixed(1)}M`
-            }
-        );
-        openAndDownloadBlob(blob, 'financial_briefing.pdf');
+            kpis,
+            assumptions: params
+        });
+        reportGenerator.downloadReport(blob, `AnoHUB_Financial_Briefing_${assetName}.pdf`);
         showToast(t('investorBriefing.downloaded', 'Financial Briefing Downloaded'), 'success');
+    };
+
+    const handleDownloadIncidentReport = () => {
+        if (!selectedAsset) return;
+        const liveData = telemetry[selectedAsset.id];
+
+        const blob = reportGenerator.generateIncidentReport({
+            assetName: selectedAsset.name,
+            incidentType: activeIncident?.type || 'Unknown Failure',
+            deviation: liveData?.incidentDetails || 'Out of tolerance',
+            timestamp: new Date().toISOString(),
+            status: 'CRITICAL'
+        });
+        reportGenerator.downloadReport(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`);
+        showToast('CRITICAL: Incident Report Exported', 'error');
     };
 
     return (
         <div className="animate-fade-in pb-12 max-w-7xl mx-auto space-y-8">
-
-            {/* HERO HEADER */}
             <div className="text-center space-y-6 pt-6">
                 <div className="flex justify-between items-center absolute top-0 w-full max-w-7xl px-4">
                     <BackButton text={t('actions.back', 'Back to Hub')} />
                 </div>
-
                 <div>
                     <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
                         {t('investorBriefing.title', 'Investor Briefing').split(' ')[0]} <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">{t('investorBriefing.title', 'Investor Briefing').split(' ')[1]}</span>
@@ -144,106 +111,66 @@ export const InvestorBriefing: React.FC = () => {
                         {t('investorBriefing.subtitle', 'Financial KPIs and Risk Impact Analysis.')}
                     </p>
                 </div>
-
                 <div className="max-w-md mx-auto">
                     <AssetPicker />
                 </div>
             </div>
 
-            {/* MAIN GRID */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in-up">
-
-                {/* LEFT COLUMN: ASSUMPTIONS */}
                 <div className="space-y-6">
-                    <GlassCard
-                        title={t('investorBriefing.marketAssumptions')}
-                        className="bg-slate-900/60"
-                        action={<span className="text-xl">🎚️</span>}
-                    >
+                    <GlassCard title={t('investorBriefing.marketAssumptions')} className="bg-slate-900/60" action={<span className="text-xl">🎚️</span>}>
                         <div className="space-y-4">
-                            <ModernInput
-                                label={t('investorBriefing.electricityPrice')}
-                                type="number"
-                                value={params.electricityPrice}
-                                onChange={(e) => setParams({ ...params, electricityPrice: parseFloat(e.target.value) || 0 })}
-                                icon={<span>€</span>}
-                            />
-                            <ModernInput
-                                label={t('investorBriefing.interestRate')}
-                                type="number"
-                                value={params.interestRate}
-                                onChange={(e) => setParams({ ...params, interestRate: parseFloat(e.target.value) || 0 })}
-                                icon={<span>%</span>}
-                            />
-                            <ModernInput
-                                label={t('investorBriefing.projectLifespan')}
-                                type="number"
-                                value={params.lifespan}
-                                onChange={(e) => setParams({ ...params, lifespan: parseFloat(e.target.value) || 0 })}
-                                icon={<span>📅</span>}
-                            />
+                            <ModernInput label={t('investorBriefing.electricityPrice')} type="number" value={params.electricityPrice} onChange={(e) => setParams({ ...params, electricityPrice: parseFloat(e.target.value) || 0 })} icon={<span>€</span>} />
+                            <ModernInput label={t('investorBriefing.interestRate')} type="number" value={params.interestRate} onChange={(e) => setParams({ ...params, interestRate: parseFloat(e.target.value) || 0 })} icon={<span>%</span>} />
+                            <ModernInput label={t('investorBriefing.projectLifespan')} type="number" value={params.lifespan} onChange={(e) => setParams({ ...params, lifespan: parseFloat(e.target.value) || 0 })} icon={<span>📅</span>} />
                         </div>
-
-                        {/* CONTEXT INFO BOX */}
                         <div className="mt-6 p-4 rounded-xl border flex items-start gap-3 transition-colors bg-slate-900/50 border-slate-700">
-                            <div className="text-2xl mt-1">
-                                {selectedAsset ? '🏭' : (importedDesign ? '⚡' : '📝')}
-                            </div>
+                            <div className="text-2xl mt-1">{selectedAsset ? '🏭' : (currentDesign ? '⚡' : '📝')}</div>
                             <div>
                                 <h4 className="text-slate-300 font-bold text-xs uppercase tracking-wider mb-1">
-                                    {selectedAsset ? t('investorBriefing.activeAssetData', 'Active Asset Data') : (importedDesign ? t('investorBriefing.designLink', 'HPP Design Studio Link') : t('investorBriefing.genericModel', 'Generic Model'))}
+                                    {selectedAsset ? t('investorBriefing.activeAssetData', 'Active Asset Data') : (currentDesign ? t('investorBriefing.designLink', 'HPP Design Studio Link') : t('investorBriefing.genericModel', 'Generic Model'))}
                                 </h4>
                                 <p className="text-xs text-slate-400 leading-relaxed">
                                     <Trans i18nKey="investorBriefing.calculatingBasedOn" values={{ power: kpis.powerMW.toFixed(1), energy: kpis.energyGWh.toFixed(1) }}>
-                                        Calculating based on
-                                        <strong className="text-white ml-1">0 MW</strong> capacity
-                                        and <strong className="text-white">0 GWh/yr</strong> output.
+                                        Calculating based on <strong className="text-white ml-1">0 MW</strong> capacity and <strong className="text-white">0 GWh/yr</strong> output.
                                     </Trans>
                                 </p>
-                                {importedDesign && !selectedAsset && (
-                                    <div className="mt-2 text-[9px] text-cyan-400 bg-cyan-900/20 px-2 py-1 rounded border border-cyan-500/20 inline-block animate-pulse">
-                                        ● {t('investorBriefing.liveSync', 'LIVE SYNC WITH HPP BUILDER')}
-                                    </div>
-                                )}
                             </div>
                         </div>
                     </GlassCard>
                 </div>
 
-                {/* RIGHT COLUMN: KPI DASHBOARD */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                        {/* ROI CARD (Premium) */}
                         <GlassCard className="bg-gradient-to-br from-purple-900/40 to-slate-900 border-purple-500/30">
                             <p className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">{t('investorBriefing.roi')}</p>
                             <div className="text-5xl font-black text-white tracking-tighter mb-1">{kpis.roi.toFixed(1)}%</div>
                             <p className="text-xs text-slate-400">{t('investorBriefing.annualizedYield')}</p>
                         </GlassCard>
-
-                        {/* LCOE CARD */}
                         <GlassCard>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{t('investorBriefing.lcoe')}</p>
                             <div className="text-4xl font-black text-white mb-1">€{kpis.lcoe.toFixed(2)}</div>
                             <p className="text-xs text-slate-500">{t('investorBriefing.perMwh')}</p>
                         </GlassCard>
-
-                        {/* REVENUE CARD */}
                         <GlassCard>
                             <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">{t('investorBriefing.annualRevenue')}</p>
                             <div className="text-3xl font-black text-white mb-1">€{(kpis.revenue / 1000000).toFixed(2)}M</div>
                             <p className="text-xs text-slate-500">{t('investorBriefing.grossIncome')}</p>
                         </GlassCard>
-
-                        {/* CAPEX ESTIMATE CARD (NEW) */}
                         <GlassCard>
                             <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">{t('investorBriefing.estimatedCapex', 'Estimated CAPEX')}</p>
                             <div className="text-3xl font-black text-white mb-1">€{(kpis.capex / 1000000).toFixed(1)}M</div>
                             <p className="text-xs text-slate-500">{t('investorBriefing.capexBasis', 'Based on €1.8M/MW avg.')}</p>
                         </GlassCard>
+
+                        {/* NEW: Inventory Value Card */}
+                        <GlassCard className="border-cyan-500/20 bg-cyan-950/10">
+                            <p className="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-2">Stored Asset Capital</p>
+                            <div className="text-3xl font-black text-white mb-1">€{(getTotalInventoryValue() / 1000).toFixed(1)}k</div>
+                            <p className="text-xs text-slate-500">Value locked in Spare Parts Inventory</p>
+                        </GlassCard>
                     </div>
 
-                    {/* FINANCIAL STRUCTURE & DOWNLOAD */}
                     <GlassCard className="flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="w-full space-y-4">
                             <div>
@@ -266,19 +193,20 @@ export const InvestorBriefing: React.FC = () => {
                             </div>
                         </div>
 
-                        <ModernButton
-                            onClick={handleDownloadReport}
-                            variant="primary"
-                            className="min-w-[220px] shadow-purple-500/20"
-                            icon={<span>📄</span>}
-                            fullWidth
-                        >
-                            {t('investorBriefing.generateProspectus')}
-                        </ModernButton>
+                        <div className="flex flex-col gap-4 w-full md:w-auto">
+                            <ModernButton onClick={handleDownloadReport} variant="primary" className="min-w-[220px] shadow-purple-500/20" icon={<span>📄</span>} fullWidth>
+                                {t('investorBriefing.generateProspectus')}
+                            </ModernButton>
+
+                            {activeIncident && activeIncident.assetId === selectedAsset?.id && (
+                                <ModernButton onClick={handleDownloadIncidentReport} variant="secondary" className="min-w-[220px] border-red-500 text-red-500 hover:bg-red-500 hover:text-white shadow-red-500/20 animate-pulse" icon={<span>🚨</span>} fullWidth>
+                                    GENERATE INCIDENT REPORT
+                                </ModernButton>
+                            )}
+                        </div>
                     </GlassCard>
                 </div>
             </div>
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.

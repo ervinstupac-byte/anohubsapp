@@ -60,11 +60,17 @@ export const DigitalIntegrity: React.FC = () => {
     // --- 1. FETCH LEDGER (REAL-TIME) ---
     const fetchLedger = async () => {
         try {
-            const { data, error } = await supabase
+            let query = supabase
                 .from('digital_integrity_ledger')
                 .select('*')
                 .order('block_index', { ascending: false })
                 .limit(50);
+
+            if (selectedAsset) {
+                query = query.eq('asset_id', selectedAsset.id);
+            }
+
+            const { data, error } = await query;
 
             if (error) throw error;
 
@@ -84,13 +90,18 @@ export const DigitalIntegrity: React.FC = () => {
         fetchLedger();
 
         const sub = supabase.channel('public:digital_integrity_ledger')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'digital_integrity_ledger' }, (payload) => {
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'digital_integrity_ledger',
+                filter: selectedAsset ? `asset_id=eq.${selectedAsset.id}` : undefined
+            }, (payload) => {
                 const newBlock = payload.new as Block;
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
             }).subscribe();
 
         return () => { supabase.removeChannel(sub); };
-    }, []);
+    }, [selectedAsset]);
 
     // --- 2. GENESIS BLOCK (First Block) ---
     const createGenesisBlock = async () => {
@@ -221,6 +232,8 @@ export const DigitalIntegrity: React.FC = () => {
                                     className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:border-cyan-500 outline-none transition-colors cursor-pointer"
                                 >
                                     <option value="Shaft Alignment Check">{t('digitalIntegrity.operations.alignment', 'Shaft Alignment Check')}</option>
+                                    <option value="Maintenance Protocol Seal">{t('digitalIntegrity.operations.maintenance', 'Maintenance Protocol Seal')}</option>
+                                    <option value="Part Installation (QR Confirmed)">{t('digitalIntegrity.operations.partInstallation', 'Part Installation (QR Confirmed)')}</option>
                                     <option value="Vibration Analysis">{t('digitalIntegrity.operations.vibration', 'Vibration Analysis')}</option>
                                     <option value="Component Replacement">{t('digitalIntegrity.operations.replacement', 'Component Replacement')}</option>
                                     <option value="Firmware Update">{t('digitalIntegrity.operations.firmware', 'Firmware Update')}</option>

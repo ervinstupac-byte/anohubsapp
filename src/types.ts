@@ -32,7 +32,9 @@ export type AppView =
   | 'genderEquity'
   | 'gender' // Alias
   | 'digitalIntroduction'
-  | 'turbineDetail';
+  | 'turbineDetail'
+  | 'maintenanceDashboard'
+  | 'adminApproval';
 
 // --- SHARED DATA TYPES ---
 export type Answers = Record<string, string>;
@@ -47,6 +49,7 @@ export interface Asset {
   capacity: number; // MW
   status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
+  turbine_type?: string;
 }
 
 export interface AssetContextType {

@@ -1,24 +1,30 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { createCalculationReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
+import { reportGenerator } from '../services/ReportGenerator.ts';
 import { TURBINE_CATEGORIES } from '../constants.ts';
 // ISPRAVKA 1: Uvezi AssetPicker kao komponentu
 import { AssetPicker } from './AssetPicker.tsx';
 // ISPRAVKA 2: Uvezi hook izravno iz konteksta (Ispravlja TS2459)
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { StatCard } from './ui/StatCard.tsx';
 import { ControlPanel } from './ui/ControlPanel.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
+import { HPPSettingsSchema } from '../schemas/engineering.ts';
 import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
+import { useHPPData } from '../contexts/useHPPData.ts';
 import { Tooltip } from './ui/Tooltip.tsx';
+import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
+import { EngineeringError } from '../lib/engines/types.ts';
+import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -59,12 +65,16 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
 };
 
 export const HPPBuilder: React.FC = () => {
+    useHPPData(); // Enable cross-module synchronization
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
+    const { telemetry } = useTelemetry();
     const { t } = useTranslation();
     const { setDesign } = useHPPDesign();
+    const { triggerVoiceAlert } = useVoiceAssistant();
+    const lastAlertTime = useRef<number>(0);
 
     // --- STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
@@ -81,67 +91,97 @@ export const HPPBuilder: React.FC = () => {
     const [configName, setConfigName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => { fetchCloudConfigs(); }, [selectedAsset, user]); // Dodan user u dependency
+    useEffect(() => {
+        fetchCloudConfigs();
+        autoLoadLatestConfig();
+    }, [selectedAsset, user]);
     useEffect(() => { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings)); }, [settings]);
 
     // --- PHYSICS CALCULATIONS ---
     const calculations = useMemo(() => {
-        // g = 9.81 m/s²
-        const powerMW = (9.81 * settings.head * settings.flow * (settings.efficiency / 100)) / 1000;
-        const hours = 8760;
-        const capacityFactor = settings.flowVariation === 'stable' ? 0.85 : settings.flowVariation === 'seasonal' ? 0.6 : 0.45;
-        const annualGWh = (powerMW * hours * capacityFactor) / 1000;
-        // Specifična brzina: Ns = N * sqrt(Q) / H^(3/4)
-        // Pretpostavljamo tipičnu brzinu N=1000, pa koristimo pojednostavljeni indeks.
-        const specificSpeedIndex = (1000 * Math.sqrt(settings.flow)) / Math.pow(settings.head, 0.75);
+        try {
+            // Re-fetch correct engine type from factory based on selected asset
+            const turbineType = selectedAsset?.turbine_type || 'kaplan';
+            const engine = TurbineFactory.getEngine(turbineType);
 
-        return {
-            powerMW: parseFloat(powerMW.toFixed(2)),
-            energyGWh: parseFloat(annualGWh.toFixed(2)),
-            annualGWh: annualGWh.toFixed(2),
-            n_sq: specificSpeedIndex.toFixed(0)
-        };
-    }, [settings]);
+            const powerMW = engine.calculatePower(settings.head, settings.flow, settings.efficiency);
+            const annualGWh = engine.calculateEnergy(powerMW, settings.flowVariation);
+            const specificSpeedIndex = engine.calculateSpecificSpeed(settings.head, settings.flow);
+
+            const results = {
+                powerMW: powerMW,
+                energyGWh: annualGWh,
+                annualGWh: annualGWh.toFixed(2),
+                n_sq: specificSpeedIndex.toString()
+            };
+
+            // Sync with Global Design Context for cross-module integration
+            setDesign({
+                design_name: configName || 'Active Design',
+                recommended_turbine: 'Calculating...',
+                parameters: settings,
+                calculations: results,
+                asset_id: selectedAsset?.id
+            });
+
+            return results;
+        } catch (error) {
+            if (error instanceof EngineeringError) {
+                showToast(`ENGINE_ERROR: ${error.message}`, 'error');
+            }
+            return { powerMW: 0, energyGWh: 0, annualGWh: '0.00', n_sq: '0' };
+        }
+    }, [settings, selectedAsset, configName, setDesign]);
+
+    // --- NPSH & CAVITATION MONITORING ---
+    const npshAvailable = useMemo(() => {
+        if (!selectedAsset) return 10;
+        const tele = telemetry[selectedAsset.id];
+        if (!tele) return 10;
+
+        // Simplified NPSH Calculation: Atmospheric P (10.3m) - Vapor P (0.3m) + (Tailwater - Inlet Elevation)
+        // For simulation, we assume Inlet Elevation is 100m.
+        return (10.3 - 0.3) + (tele.tailwaterLevel - 100);
+    }, [telemetry, selectedAsset]);
+
+    useEffect(() => {
+        if (!selectedAsset) return;
+        const tele = telemetry[selectedAsset.id];
+        if (!tele) return;
+
+        // Forbidden Zone: Wicket Gate > 85% AND NPSH < 4m
+        const inForbiddenZone = tele.wicketGatePosition > 85 && npshAvailable < 6.5;
+
+        if (inForbiddenZone) {
+            const now = Date.now();
+            if (now - lastAlertTime.current > 15000) { // Throttling alerts
+                triggerVoiceAlert("Ulazite u kavitacionu zonu. Preporučeno smanjenje opterećenja za 5 MW.");
+                lastAlertTime.current = now;
+                showToast("CAVITATION ALERT: Dangerous Operation Zone", "warning");
+            }
+        }
+    }, [telemetry, npshAvailable, selectedAsset, triggerVoiceAlert, showToast]);
 
     // --- RECOMMENDATIONS ---
     const recommendations = useMemo((): TurbineRecommendation[] => {
         const { head, flow, flowVariation, waterQuality } = settings;
-        const n_sq = parseFloat(calculations.n_sq);
-        const recs: TurbineRecommendation[] = [];
+        const engines = TurbineFactory.getAllEngines();
 
-        // Pelton
-        let peltonScore = 0; let peltonReasons = [];
-        if (n_sq < 30) { peltonScore += 30; peltonReasons.push(`+ ${t('hppBuilder.reasons.pelton.idealSpeed', { n: n_sq })}`); }
-        else if (n_sq < 70) { peltonScore += 15; peltonReasons.push(`+ ${t('hppBuilder.reasons.pelton.multiJet')}`); } else { peltonScore -= 20; }
-        if (head > 200) { peltonScore += 15; peltonReasons.push(`+ ${t('hppBuilder.reasons.pelton.optimalHead')}`); } else if (head < 50) { peltonScore -= 100; peltonReasons.push(`- ${t('hppBuilder.reasons.pelton.lowHead')}`); }
-        if (waterQuality === 'abrasive') { peltonScore += 10; peltonReasons.push(`+ ${t('hppBuilder.reasons.pelton.erosion')}`); }
-        recs.push({ key: 'pelton', score: peltonScore, reasons: peltonReasons, isBest: false });
-
-        // Francis
-        let francisScore = 0; let francisReasons = [];
-        if (n_sq >= 70 && n_sq <= 350) { francisScore += 30; francisReasons.push(`+ ${t('hppBuilder.reasons.francis.idealZone', { n: n_sq })}`); }
-        if (head >= 40 && head <= 400) { francisScore += 10; francisReasons.push(`+ ${t('hppBuilder.reasons.francis.standard')}`); }
-        if (flowVariation === 'variable') { francisScore -= 10; francisReasons.push(`- ${t('hppBuilder.reasons.francis.variableFlow')}`); }
-        if (waterQuality === 'abrasive') { francisScore -= 15; francisReasons.push(`- ${t('hppBuilder.reasons.francis.erosion')}`); }
-        recs.push({ key: 'francis', score: francisScore, reasons: francisReasons, isBest: false });
-
-        // Kaplan
-        let kaplanScore = 0; let kaplanReasons = [];
-        if (n_sq > 350) { kaplanScore += 30; kaplanReasons.push(`+ ${t('hppBuilder.reasons.kaplan.highSpeed')}`); }
-        if (head < 40) { kaplanScore += 15; kaplanReasons.push(`+ ${t('hppBuilder.reasons.kaplan.lowHead')}`); }
-        if (head > 70) { kaplanScore -= 50; kaplanReasons.push(`- ${t('hppBuilder.reasons.kaplan.highHead')}`); }
-        if (flowVariation === 'variable') { kaplanScore += 20; kaplanReasons.push(`+ ${t('hppBuilder.reasons.kaplan.doubleReg')}`); }
-        recs.push({ key: 'kaplan', score: kaplanScore, reasons: kaplanReasons, isBest: false });
-
-        // Crossflow
-        let crossScore = 0; let crossReasons = [];
-        if (head < 100 && flow < 5) { crossScore += 20; crossReasons.push(`+ ${t('hppBuilder.reasons.crossflow.efficiency')}`); }
-        if (waterQuality === 'abrasive') { crossScore += 20; crossReasons.push(`+ ${t('hppBuilder.reasons.crossflow.selfCleaning')}`); }
-        recs.push({ key: 'crossflow', score: crossScore, reasons: crossReasons, isBest: false });
+        const recs: TurbineRecommendation[] = engines.map(engine => {
+            const { score, reasons } = engine.getRecommendationScore(head, flow, flowVariation, waterQuality);
+            return {
+                key: engine.type,
+                score,
+                reasons: reasons.map(r => r.startsWith('+') || r.startsWith('-') ? r : `+ ${r}`), // Normalize reasons format
+                isBest: false
+            };
+        });
 
         const maxScore = Math.max(...recs.map(r => r.score));
-        return recs.map(r => ({ ...r, isBest: r.score === maxScore && r.score > 0 })).sort((a, b) => b.score - a.score);
-    }, [settings, calculations, t]);
+        return recs
+            .map(r => ({ ...r, isBest: r.score === maxScore && r.score > 0 }))
+            .sort((a, b) => b.score - a.score);
+    }, [settings]);
 
     // --- SAVE TO CONTEXT WHENEVER CALCULATIONS CHANGE ---
     useEffect(() => {
@@ -157,8 +197,48 @@ export const HPPBuilder: React.FC = () => {
         }
     }, [calculations, recommendations, settings, selectedAsset, setDesign]);
 
+    // --- AUDIT TRAIL HELPER ---
+    const logParameterChange = useCallback(async (field: string, newValue: any, oldValue: any) => {
+        if (!selectedAsset) return;
+
+        try {
+            const { data: prevBlocks } = await supabase
+                .from('digital_integrity_ledger')
+                .select('hash, block_index')
+                .order('block_index', { ascending: false })
+                .limit(1);
+
+            const prevBlock = prevBlocks?.[0] || { hash: '0', block_index: -1 };
+            const dataString = `CHANGE|${selectedAsset.id}|${field}|${oldValue}->${newValue}|${user?.email || 'System'}`;
+            const rawContent = prevBlock.hash + dataString + new Date().toISOString();
+
+            const msgBuffer = new TextEncoder().encode(rawContent);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const newHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            await supabase.from('digital_integrity_ledger').insert([{
+                block_index: prevBlock.block_index + 1,
+                timestamp: new Date().toISOString(),
+                data: dataString,
+                hash: newHash,
+                prev_hash: prevBlock.hash,
+                status: 'Verified',
+                engineer_id: user?.email || 'System',
+                asset_id: selectedAsset.id.toString()
+            }]);
+        } catch (err) {
+            console.error('Audit Trail Logging Failed:', err);
+        }
+    }, [selectedAsset, user]);
+
     const updateSettings = (key: keyof HPPSettings, value: any) => {
+        const oldValue = settings[key];
         setSettings(prev => ({ ...prev, [key]: value }));
+
+        if (oldValue !== value && selectedAsset) {
+            logParameterChange(key, value, oldValue);
+        }
     };
 
     // --- CLOUD ACTIONS ---
@@ -183,9 +263,34 @@ export const HPPBuilder: React.FC = () => {
         setIsLoading(false);
     };
 
+    const autoLoadLatestConfig = async () => {
+        if (!user || !selectedAsset) return;
+
+        const { data, error } = await supabase
+            .from('turbine_designs')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('asset_id', selectedAsset.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+
+        if (!error && data) {
+            setSettings(data.parameters);
+            showToast(t('hppBuilder.toasts.autoLoaded', { name: selectedAsset.name, defaultValue: `Loaded latest config for ${selectedAsset.name}` }), 'info');
+        }
+    };
+
     const handleSaveConfiguration = async () => {
         if (!configName) { showToast(t('hppBuilder.toasts.enterName'), 'warning'); return; }
         if (!selectedAsset) { showToast(t('hppBuilder.toasts.selectAsset'), 'error'); return; }
+
+        // Zod Guardrail
+        const validation = HPPSettingsSchema.safeParse(settings);
+        if (!validation.success) {
+            showToast(`VALIDATION_ERROR: ${validation.error.issues[0].message}`, 'error');
+            return;
+        }
 
         setIsLoading(true);
         try {
@@ -221,13 +326,34 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const handleGeneratePDF = () => {
-        const blob = createCalculationReportBlob(settings, calculations, recommendations, selectedAsset?.name);
-        openAndDownloadBlob(blob, 'hpp_design_report.pdf');
+        const best = recommendations.find(r => r.isBest);
+        const blob = reportGenerator.generateTechnicalReport({
+            assetName: selectedAsset?.name || 'Concept Design',
+            parameters: settings,
+            calculations: calculations,
+            recommendedTurbine: best?.key || 'Unknown'
+        });
+        reportGenerator.downloadReport(blob, `AnoHUB_Technical_Report_${selectedAsset?.name || 'Draft'}.pdf`);
         showToast(t('hppBuilder.toasts.pdfGenerated'), 'success');
     };
 
+    const isCritical = selectedAsset ? telemetry[selectedAsset.id]?.status === 'CRITICAL' : false;
+
     return (
-        <div className="animate-fade-in space-y-8 pb-12 max-w-7xl mx-auto">
+        <div className="animate-fade-in space-y-8 pb-12 max-w-7xl mx-auto relative">
+            {/* EMERGENCY OVERLAY */}
+            {isCritical && (
+                <div className="absolute inset-x-0 top-0 z-[100] h-full bg-red-950/40 backdrop-blur-[2px] rounded-2xl flex items-center justify-center p-8 border border-red-500/30">
+                    <div className="bg-slate-900 border-2 border-red-500 p-8 rounded-2xl shadow-[0_0_50px_rgba(239,68,68,0.3)] text-center max-w-md animate-pulse">
+                        <span className="text-6xl mb-4 block">🚫</span>
+                        <h2 className="text-2xl font-black text-red-500 uppercase tracking-tighter mb-2">SYSTEM LOCKED</h2>
+                        <p className="text-slate-200 font-bold mb-4 uppercase text-xs tracking-widest">Critical Deviation Detected</p>
+                        <p className="text-slate-400 text-xs leading-relaxed italic">
+                            All engineering calculations have been suspended for safety. Please resolve the active project emergency via Risk Assessment protocols.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             {/* HERO HEADER */}
             <div className="text-center space-y-4 pt-6">
@@ -355,6 +481,26 @@ export const HPPBuilder: React.FC = () => {
                             <h3 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400 tracking-tighter drop-shadow-sm">
                                 {calculations.powerMW}<span className="text-2xl text-slate-600 ml-1">MW</span>
                             </h3>
+                        </div>
+
+                        {/* NPSH INDICATOR */}
+                        <div className="px-6 py-4 bg-slate-900/60 rounded-2xl border border-white/5 mb-6">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">NPSH Available</span>
+                                <span className={`text-[10px] font-black ${npshAvailable < 6.5 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>
+                                    {npshAvailable < 6.5 ? 'CAVITATION RISK' : 'STABLE SUCTION'}
+                                </span>
+                            </div>
+                            <div className="flex items-end gap-2">
+                                <span className="text-2xl font-black text-white">{npshAvailable.toFixed(2)}</span>
+                                <span className="text-[10px] text-slate-600 mb-1 font-bold">m (Head)</span>
+                            </div>
+                            <div className="mt-3 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div
+                                    className={`h-full transition-all duration-500 ${npshAvailable < 6.5 ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-emerald-500'}`}
+                                    style={{ width: `${Math.min(100, (npshAvailable / 15) * 100)}%` }}
+                                />
+                            </div>
                         </div>
 
                         <ModernButton onClick={handleGeneratePDF} variant="primary" className="shadow-cyan-500/20 mt-auto" icon={<span>📄</span>} fullWidth>

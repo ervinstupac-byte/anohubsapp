@@ -9,12 +9,52 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 // DODANO: Import AssetPicker-a koji je nedostajao
 import { AssetPicker } from './AssetPicker.tsx';
+import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 
-// OVO JE JEDINA DEKLARACIJA I EKSPORT
+// --- EMERGENCY PROTOCOL ACTIONS ---
+const EmergencyProtocol: React.FC<{ type: string }> = ({ type }) => {
+    const protocols: Record<string, string[]> = {
+        vibration_excess: [
+            'Immediate load rejection across all units.',
+            'Disengage primary guide bearings for inspection.',
+            'Perform laser alignment audit of main shaft.',
+            'Deploy vibration dampening countermeasures.'
+        ],
+        bearing_overheat: [
+            'Forced shutdown of affected turbine unit.',
+            'Verify cooling system flow and pressure.',
+            'Analyze oil lubrication for contamination.',
+            'Initiate backup thermal heat exchangers.'
+        ]
+    };
+
+    const steps = protocols[type] || ['Initiate general emergency shutdown.', 'Notify regional maintenance center.'];
+
+    return (
+        <div className="mt-8 space-y-4 animate-fade-in">
+            <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-2xl">
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="text-2xl animate-pulse">☢️</span>
+                    <h3 className="text-lg font-black text-red-500 uppercase tracking-tighter">ACTIVE EMERGENCY PROTOCOL</h3>
+                </div>
+                <div className="grid gap-2">
+                    {steps.map((step, i) => (
+                        <div key={i} className="flex gap-3 bg-slate-900 border border-white/5 p-4 rounded-xl group hover:border-red-500/30 transition-colors">
+                            <span className="text-red-500 font-mono font-bold">0{i + 1}</span>
+                            <span className="text-slate-200 text-sm font-bold uppercase tracking-wide">{step}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShowSummary }) => {
     const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const { updateRiskState } = useRisk();
+    const { activeIncident } = useTelemetry();
 
     // Ova funkcija se aktivira kada korisnik klikne "Finalize Analysis" u upitniku
     const handleRiskSync = (score: number, criticalCount: number) => {
@@ -66,11 +106,17 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                         </div>
                     </GlassCard>
                 ) : (
-                    // ACTIVE MODULE (Prikazujemo Upitnik i prosljeđujemo Neural Link handler)
-                    <Questionnaire
-                        onShowSummary={onShowSummary}
-                        onRiskSync={handleRiskSync} // <--- KLJUČNO: Ovdje spajamo Upitnik s Contextom
-                    />
+                    // ACTIVE MODULE
+                    <div className="space-y-8">
+                        {activeIncident && activeIncident.assetId === selectedAsset.id && (
+                            <EmergencyProtocol type={activeIncident.type} />
+                        )}
+
+                        <Questionnaire
+                            onShowSummary={onShowSummary}
+                            onRiskSync={handleRiskSync}
+                        />
+                    </div>
                 )}
             </div>
         </div>

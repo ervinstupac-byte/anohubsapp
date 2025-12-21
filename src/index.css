@@ -356,3 +356,34 @@ textarea::placeholder {
     opacity: 1;
   }
 }
+
+/* Pulsing Markers */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.marker-pin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50% 50% 50% 0;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -10px 0 0 -10px;
+}
+
+.marker-pin::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin: 4px 0 0 4px;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  border-radius: 50%;
+}
+
+.shadow-neon {
+  box-shadow: 0 0 15px currentColor;
+}

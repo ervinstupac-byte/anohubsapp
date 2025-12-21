@@ -10,13 +10,22 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-let DefaultIcon = L.icon({
+// Custom Pulsing Icon Generator
+export const createPulsingIcon = (status: string) => {
+    const color = status === 'CRITICAL' ? '#ff0033' : status === 'WARNING' ? '#ffaa00' : '#00f3ff';
+    return L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div style="background-color: ${color};" class="marker-pin ${status === 'CRITICAL' || status === 'WARNING' ? 'animate-pulse shadow-neon' : ''}"></div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+};
+L.Marker.prototype.options.icon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
     iconSize: [25, 41],
     iconAnchor: [12, 41]
 });
-L.Marker.prototype.options.icon = DefaultIcon;
 
 const MapAutoResize: React.FC<{ center: [number, number] }> = ({ center }) => {
     const map = useMap();
@@ -123,7 +132,11 @@ export const GlobalMap: React.FC = () => {
                         : t('globalMap.syncing');
 
                     return (
-                        <Marker key={asset.id} position={asset.coordinates}>
+                        <Marker
+                            key={asset.id}
+                            position={asset.coordinates}
+                            icon={createPulsingIcon(liveData?.status || 'OPTIMAL')}
+                        >
                             <Popup className="custom-popup" closeButton={false}>
                                 <div className={`bg-slate-900 text-white p-4 rounded-xl border shadow-2xl min-w-[260px] relative overflow-hidden ${isCritical ? 'border-red-500 shadow-red-900/50' :
                                     isWarning ? 'border-amber-500' : 'border-slate-600'

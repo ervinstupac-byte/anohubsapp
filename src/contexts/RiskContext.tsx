@@ -1,22 +1,23 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import type { Answers, } from '../types.ts'; // Preimenujemo import da ne bude sukoba
+import type { Answers, } from '../types.ts';
+import { useToast } from './ToastContext.tsx';
 
 // --- RISK CONFIGURATION ---
 const riskKeywords: Record<string, { high: string[], medium: string[] }> = {
-    q1: { high: ['no'], medium: ['not documented'] }, 
+    q1: { high: ['no'], medium: ['not documented'] },
     q2: { high: ['no'], medium: ['partially'] },
-    q4: { high: ['no'], medium: ['sometimes'] }, 
+    q4: { high: ['no'], medium: ['sometimes'] },
     q5: { high: ['frequently'], medium: ['occasionally'] },
     q6: { high: ['not maintained'], medium: ['partially filled'] },
     q7: { high: ['often we only fix the symptom'], medium: ['sometimes we only fix the symptom'] },
-    q8: { high: ['no'], medium: ['in testing phase'] }, 
+    q8: { high: ['no'], medium: ['in testing phase'] },
     q9: { high: ['no'], medium: ['limited access'] },
     q10: { high: ['not monitored'], medium: ['monitored periodically'] },
-    q11: { high: ['no', 'do not measure'], medium: [] }, 
+    q11: { high: ['no', 'do not measure'], medium: [] },
     q12: { high: ['only replacement', 'no, only replacement is offered'], medium: ['sometimes'] },
-    q13: { high: ['no'], medium: ['periodically'] }, 
+    q13: { high: ['no'], medium: ['periodically'] },
     q14: { high: ['not installed/functional'], medium: ['some require checking'] },
-    q15: { high: ['no'], medium: ['outdated'] }, 
+    q15: { high: ['no'], medium: ['outdated'] },
     q16: { high: ['manual'], medium: ['semi-automatic'] },
     q17: { high: ['major service needed'], medium: ['requires minor maintenance'] },
 };
@@ -28,21 +29,31 @@ interface ExtendedRiskContextType {
     disciplineRiskScore: number;
     updateDisciplineRiskScore: (points: number, action: 'add' | 'set' | 'reset') => void;
     calculateAndSetQuestionnaireRisk: (answers: Answers) => void;
-    
+
     // NOVO: Neural Link State
     riskState: {
         isAssessmentComplete: boolean;
         riskScore: number;
         criticalFlags: number;
         lastAssessmentDate: number | null;
+        thresholds: Record<string, { high: string[], medium: string[] }>;
+    };
+    engineeringHealthState: {
+        isAuditComplete: boolean;
+        status: 'PENDING' | 'PASSED' | 'FAILED';
+        criticalDeviations: number;
     };
     updateRiskState: (score: number, criticalCount: number) => void;
+    updateEngineeringHealth: (status: 'PENDING' | 'PASSED' | 'FAILED', deviations: number) => void;
+    updateThresholds: (thresholds: Record<string, { high: string[], medium: string[] }>) => void;
     resetRiskState: () => void;
+    checkCoolingHealth: (deltaT: number) => boolean;
 }
 
 const RiskContext = createContext<ExtendedRiskContextType | undefined>(undefined);
 
 export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const { showToast } = useToast();
     // --- 1. POSTOJEĆA LOGIKA (Discipline Score) ---
     const [disciplineRiskScore, setDisciplineRiskScore] = useState<number>(() => {
         try {
@@ -78,16 +89,45 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         isAssessmentComplete: false,
         riskScore: 0,
         criticalFlags: 0,
-        lastAssessmentDate: null as number | null
+        lastAssessmentDate: null as number | null,
+        thresholds: riskKeywords
+    });
+
+    const [engineeringHealthState, setEngineeringHealthState] = useState({
+        isAuditComplete: false,
+        status: 'PENDING' as 'PENDING' | 'PASSED' | 'FAILED',
+        criticalDeviations: 0
     });
 
     const updateRiskState = (score: number, criticalCount: number) => {
-        setRiskState({
+        setRiskState(prev => ({
+            ...prev,
             isAssessmentComplete: true,
             riskScore: score,
-            criticalFlags: criticalCount,
+            criticalFlags: criticalCount + engineeringHealthState.criticalDeviations, // Merge structural and operational risk
             lastAssessmentDate: Date.now()
+        }));
+    };
+
+    const updateEngineeringHealth = (status: 'PENDING' | 'PASSED' | 'FAILED', deviations: number) => {
+        setEngineeringHealthState({
+            isAuditComplete: true,
+            status,
+            criticalDeviations: deviations
         });
+
+        // Sync back to riskState if assessment was already done
+        setRiskState(prev => ({
+            ...prev,
+            criticalFlags: (prev.isAssessmentComplete ? 0 : 0) + (riskState.criticalFlags - engineeringHealthState.criticalDeviations) + deviations
+        }));
+    };
+
+    const updateThresholds = (newThresholds: Record<string, { high: string[], medium: string[] }>) => {
+        setRiskState(prev => ({
+            ...prev,
+            thresholds: { ...prev.thresholds, ...newThresholds }
+        }));
     };
 
     const resetRiskState = () => {
@@ -95,18 +135,29 @@ export const RiskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             isAssessmentComplete: false,
             riskScore: 0,
             criticalFlags: 0,
-            lastAssessmentDate: null
+            lastAssessmentDate: null,
+            thresholds: riskKeywords
         });
     };
 
     return (
-        <RiskContext.Provider value={{ 
-            disciplineRiskScore, 
-            updateDisciplineRiskScore, 
+        <RiskContext.Provider value={{
+            disciplineRiskScore,
+            updateDisciplineRiskScore,
             calculateAndSetQuestionnaireRisk,
-            riskState, 
-            updateRiskState, 
-            resetRiskState 
+            riskState,
+            engineeringHealthState,
+            updateRiskState,
+            updateThresholds,
+            updateEngineeringHealth,
+            resetRiskState,
+            checkCoolingHealth: (deltaT: number) => {
+                if (deltaT > 15) {
+                    showToast('PREDICTIVE ALARM: Delta T excessive - Scaling detected in Cooling Unit.', 'error');
+                    return false;
+                }
+                return true;
+            }
         }}>
             {children}
         </RiskContext.Provider>

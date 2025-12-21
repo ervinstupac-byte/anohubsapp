@@ -1,18 +1,14 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, useLocation, useNavigate, Route, Routes, useParams } from 'react-router-dom';
 
 // --- 1. CONTEXTS ---
-import { AuthProvider, useAuth } from './contexts/AuthContext.tsx';
+import { GlobalProvider } from './contexts/GlobalProvider.tsx';
+import { useAuth } from './contexts/AuthContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
-import { QuestionnaireProvider } from './contexts/QuestionnaireContext.tsx';
-import { HPPDesignProvider } from './contexts/HPPDesignContext.tsx';
-import { RiskProvider, useRisk } from './contexts/RiskContext.tsx';
-import { ToastProvider, useToast } from './contexts/ToastContext.tsx';
-import { AssetProvider } from './contexts/AssetContext.tsx';
+import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
-import { TelemetryProvider } from './contexts/TelemetryContext.tsx';
-import { AuditProvider, useAudit } from './contexts/AuditContext.tsx';
+import { useAudit } from './contexts/AuditContext.tsx';
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -27,36 +23,44 @@ import { DigitalPanel } from './components/scada/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
+import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
 
-// --- 4. LAZY LOADED MODULES (KONAČAN NAMED EXPORT FORMAT) ---
-// Očekujemo da su SVE komponente u svojim fajlovima exportovane kao 'export const ImeKomponente = ...'
-const UserProfile = React.lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
-const GlobalMap = React.lazy(() => import('./components/GlobalMap.tsx').then(m => ({ default: m.GlobalMap })));
-const RiskAssessment = React.lazy(() => import('./components/RiskAssessment.tsx').then(m => ({ default: m.RiskAssessment })));
-const InvestorBriefing = React.lazy(() => import('./components/InvestorBriefing.tsx').then(m => ({ default: m.InvestorBriefing })));
-const TurbineDetail = React.lazy(() => import('./components/TurbineDetail.tsx').then(m => ({ default: m.TurbineDetail })));
-const QuestionnaireSummary = React.lazy(() => import('./components/QuestionnaireSummary.tsx').then(m => ({ default: m.QuestionnaireSummary })));
-const RiskReport = React.lazy(() => import('./components/RiskReport.tsx').then(m => ({ default: m.RiskReport })));
-const StandardOfExcellence = React.lazy(() => import('./components/StandardOfExcellence.tsx').then(m => ({ default: m.StandardOfExcellence })));
-const DigitalIntroduction = React.lazy(() => import('./components/DigitalIntroduction.tsx').then(m => ({ default: m.DigitalIntroduction })));
-const HPPImprovements = React.lazy(() => import('./components/HPPImprovements.tsx').then(m => ({ default: m.HPPImprovements })));
-const InstallationGuarantee = React.lazy(() => import('./components/InstallationGuarantee.tsx').then(m => ({ default: m.InstallationGuarantee })));
-const GenderEquity = React.lazy(() => import('./components/GenderEquity.tsx').then(m => ({ default: m.GenderEquity })));
-const HPPBuilder = React.lazy(() => import('./components/HPPBuilder.tsx').then(m => ({ default: m.HPPBuilder })));
-const ProjectPhaseGuide = React.lazy(() => import('./components/ProjectPhaseGuide.tsx').then(m => ({ default: m.ProjectPhaseGuide })));
-const RiverWildlife = React.lazy(() => import('./components/RiverWildlife.tsx').then(m => ({ default: m.RiverWildlife })));
-const RevitalizationStrategy = React.lazy(() => import('./components/RevitalizationStrategy.tsx').then(m => ({ default: m.RevitalizationStrategy })));
-const DigitalIntegrity = React.lazy(() => import('./components/DigitalIntegrity.tsx').then(m => ({ default: m.DigitalIntegrity })));
-const ContractManagement = React.lazy(() => import('./components/ContractManagement.tsx').then(m => ({ default: m.ContractManagement })));
-const ComponentLibrary = React.lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
-
+// --- 4. LAZY LOADED MODULES ---
+const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
+const GlobalMap = lazy(() => import('./components/GlobalMap.tsx').then(m => ({ default: m.GlobalMap })));
+const RiskAssessment = lazy(() => import('./components/RiskAssessment.tsx').then(m => ({ default: m.RiskAssessment })));
+const InvestorBriefing = lazy(() => import('./components/InvestorBriefing.tsx').then(m => ({ default: m.InvestorBriefing })));
+const TurbineDetail = lazy(() => import('./components/TurbineDetail.tsx').then(m => ({ default: m.TurbineDetail })));
+const QuestionnaireSummary = lazy(() => import('./components/QuestionnaireSummary.tsx').then(m => ({ default: m.QuestionnaireSummary })));
+const RiskReport = lazy(() => import('./components/RiskReport.tsx').then(m => ({ default: m.RiskReport })));
+const StandardOfExcellence = lazy(() => import('./components/StandardOfExcellence.tsx').then(m => ({ default: m.StandardOfExcellence })));
+const DigitalIntroduction = lazy(() => import('./components/DigitalIntroduction.tsx').then(m => ({ default: m.DigitalIntroduction })));
+const HPPImprovements = lazy(() => import('./components/HPPImprovements.tsx').then(m => ({ default: m.HPPImprovements })));
+const InstallationGuarantee = lazy(() => import('./components/InstallationGuarantee.tsx').then(m => ({ default: m.InstallationGuarantee })));
+const GenderEquity = lazy(() => import('./components/GenderEquity.tsx').then(m => ({ default: m.GenderEquity })));
+const HPPBuilder = lazy(() => import('./components/HPPBuilder.tsx').then(m => ({ default: m.HPPBuilder })));
+const ProjectPhaseGuide = lazy(() => import('./components/ProjectPhaseGuide.tsx').then(m => ({ default: m.ProjectPhaseGuide })));
+const RiverWildlife = lazy(() => import('./components/RiverWildlife.tsx').then(m => ({ default: m.RiverWildlife })));
+const RevitalizationStrategy = lazy(() => import('./components/RevitalizationStrategy.tsx').then(m => ({ default: m.RevitalizationStrategy })));
+const DigitalIntegrity = lazy(() => import('./components/DigitalIntegrity.tsx').then(m => ({ default: m.DigitalIntegrity })));
+const ContractManagement = lazy(() => import('./components/ContractManagement.tsx').then(m => ({ default: m.ContractManagement })));
+const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
+const MaintenanceDashboard = lazy(() => import('./components/MaintenanceDashboard.tsx').then(m => ({ default: m.MaintenanceDashboard })));
+const ExecutiveDashboard = lazy(() => import('./components/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
+const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
+const ShaftAlignment = lazy(() => import('./components/ShaftAlignment').then(m => ({ default: m.ShaftAlignment })));
+const HydraulicMaintenance = lazy(() => import('./components/HydraulicMaintenance').then(m => ({ default: m.HydraulicMaintenance })));
+const BoltTorqueCalculator = lazy(() => import('./components/BoltTorqueCalculator').then(m => ({ default: m.BoltTorqueCalculator })));
+const SOPManager = lazy(() => import('./components/SOPManager').then(m => ({ default: m.SOPManager })));
+const ShiftLog = lazy(() => import('./components/ShiftLog').then(m => ({ default: m.ShiftLog })));
+const AdminApproval = lazy(() => import('./components/AdminApproval').then(m => ({ default: m.AdminApproval })));
+const ARManager = lazy(() => import('./components/ARManager').then(m => ({ default: m.ARManager })));
 
 // --- 5. COMMAND CENTER DASHBOARD ---
 const CommandCentreDashboard: React.FC = () => <Hub />;
-
 
 // --- 6. WRAPPERS ---
 const TurbineDetailWrapper = () => {
@@ -84,17 +88,12 @@ const AppLayout: React.FC = () => {
     const navigate = useNavigate();
     const { riskState } = useRisk();
     const { logAction } = useAudit();
-    const { user } = useAuth();
-    const { showToast } = useToast();
 
     // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
-    const [commitmentStatus, setCommitmentStatus] = useState<'PENDING' | 'ACTIVE'>(() => {
-        return (localStorage.getItem('commitmentStatus') as 'PENDING' | 'ACTIVE') || 'PENDING';
-    });
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
@@ -107,11 +106,6 @@ const AppLayout: React.FC = () => {
     const handleOnboardingComplete = () => {
         localStorage.setItem('hasCompletedOnboarding', 'true');
         setShowOnboarding(false);
-    };
-
-    const handleCommit = () => {
-        setCommitmentStatus('ACTIVE');
-        localStorage.setItem('commitmentStatus', 'ACTIVE');
     };
 
     const navigateTo = (view: AppView) => {
@@ -148,7 +142,16 @@ const AppLayout: React.FC = () => {
             'revitalizationStrategy': '/revitalization-strategy',
             'turbineDetail': '/turbine',
             'activeContext': '/vision',
-            'vision': '/vision'
+            'vision': '/vision',
+            'maintenanceDashboard': '/maintenance',
+            'executiveDashboard': '/executive',
+            'structuralIntegrity': '/structural-integrity',
+            'shaftAlignment': '/shaft-alignment',
+            'hydraulicMaintenance': '/hydraulic-maintenance',
+            'boltTorque': '/bolt-torque',
+            'shadowEngineer': '/shadow-engineer',
+            'intuitionLog': '/intuition-log',
+            'adminApproval': '/admin-approval'
         };
         const target = routeMap[view];
         if (target) navigate(target);
@@ -156,7 +159,14 @@ const AppLayout: React.FC = () => {
 
     const operationalModules = [
         { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️' },
-        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '🏗️' },
+        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️' },
+        { id: 'shaftAlignment', title: 'Shaft Alignment', icon: '🔄' },
+        { id: 'hydraulicMaintenance', title: 'Hydraulic Maintenance', icon: '🚰' },
+        { id: 'boltTorque', title: 'Bolt Torque', icon: '🔩' },
+        { id: 'shadowEngineer', title: 'Shadow Engineer', icon: '👻' },
+        { id: 'intuitionLog', title: 'Intuition Log', icon: '👂' },
+        { id: 'structuralIntegrity', title: 'Structural Integrity', icon: '🏗️' },
+        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏' },
         { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡' },
     ];
 
@@ -186,52 +196,74 @@ const AppLayout: React.FC = () => {
 
                 {/* UNIFIED SIDEBAR */}
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
-                    <FleetOverview
-                        onToggleMap={() => navigate('/map')}
-                        showMap={location.pathname === '/map'}
-                        onRegisterAsset={() => {
-                            setIsWizardOpen(true);
-                            setIsSidebarOpen(false);
-                        }}
-                    />
+                    <ErrorBoundary>
+                        <FleetOverview
+                            onToggleMap={() => navigate('/map')}
+                            showMap={location.pathname === '/map'}
+                            onRegisterAsset={() => {
+                                setIsWizardOpen(true);
+                                setIsSidebarOpen(false);
+                            }}
+                        />
+                    </ErrorBoundary>
                     <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
                         <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">OPERATIONS</div>
-                        {operationalModules.map(mod => (
-                            <button
-                                key={mod.id}
-                                onClick={() => { logAction('MODULE_OPEN', mod.title, 'SUCCESS'); navigateTo(mod.id as AppView); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) || (isHub && mod.id === 'hub') ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                            >
-                                <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'}`}>{mod.icon}</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
-                            </button>
-                        ))}
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">KNOWLEDGE</div>
-                        {secondaryModules.map(mod => {
-                            // Check if this module is inactive (locked)
-                            const isLocked = mod.id === 'hppBuilder'; // Example: HPP Builder is complex, maybe locked for some? Wait, user mentioned HPP Design Studio.
-                            // User said: "voda i blato..." no wait, "moduli koji nisu aktivni (npr. 'HPP Dizajn Studio') moraju imati interakciju"
-                            return (
+                        <ErrorBoundary>
+                            {operationalModules.map(mod => (
                                 <button
                                     key={mod.id}
-                                    onClick={() => {
-                                        if (isLocked) {
-                                            logAction('MODULE_LOCKED_ACCESS', mod.title, 'FAILURE');
-                                            showToast('MODUL KRIPTOVAN - NIVO PRISTUPA 4 POTREBAN', 'warning');
-                                            return;
-                                        }
-                                        logAction('MODULE_OPEN', mod.title, 'SUCCESS');
-                                        navigateTo(mod.id as AppView);
-                                        setIsSidebarOpen(false);
-                                    }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                                    onClick={() => { logAction('MODULE_OPEN', mod.title, 'SUCCESS'); navigateTo(mod.id as AppView); setIsSidebarOpen(false); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id.replace('Dashboard', '')) || (location.pathname.includes('shadow-engineer') && mod.id === 'shadowEngineer') || (location.pathname.includes('intuition-log') && mod.id === 'intuitionLog') ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                                 >
-                                    <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
+                                    <span className={`text-lg ${location.pathname.includes(mod.id.replace('Dashboard', '')) ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'}`}>{mod.icon}</span>
                                     <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                                 </button>
-                            );
-                        })}
+                            ))}
+                        </ErrorBoundary>
+                        <div className="my-4 border-t border-white/5 mx-4"></div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">STRATEGY</div>
+                        <ErrorBoundary>
+                            <button
+                                onClick={() => { logAction('MODULE_OPEN', 'Executive Intelligence', 'SUCCESS'); navigateTo('executiveDashboard'); setIsSidebarOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/executive' ? 'bg-cyan-900/20 border-cyan-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            >
+                                <span className={`text-lg ${location.pathname === '/executive' ? 'text-cyan-500' : 'group-hover:text-cyan-400 transition-colors'}`}>🧠</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">Executive Intelligence</span>
+                            </button>
+                        </ErrorBoundary>
+
+                        <div className="my-4 border-t border-white/5 mx-4"></div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">ADMINISTRATION</div>
+                        <ErrorBoundary>
+                            <button
+                                onClick={() => { logAction('MODULE_OPEN', 'Admin Approval', 'SUCCESS'); navigateTo('adminApproval'); setIsSidebarOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/admin-approval' ? 'bg-amber-900/20 border-amber-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            >
+                                <span className={`text-lg ${location.pathname === '/admin-approval' ? 'text-amber-500' : 'group-hover:text-amber-400 transition-colors'}`}>⚖️</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">Admin Approval</span>
+                            </button>
+                        </ErrorBoundary>
+
+                        <div className="my-4 border-t border-white/5 mx-4"></div>
+                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">KNOWLEDGE</div>
+                        <ErrorBoundary>
+                            {secondaryModules.map(mod => {
+                                return (
+                                    <button
+                                        key={mod.id}
+                                        onClick={() => {
+                                            logAction('MODULE_OPEN', mod.title, 'SUCCESS');
+                                            navigateTo(mod.id as AppView);
+                                            setIsSidebarOpen(false);
+                                        }}
+                                        className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                                    >
+                                        <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
+                                        <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
+                                    </button>
+                                );
+                            })}
+                        </ErrorBoundary>
 
                         <div className="my-4 border-t border-white/5 mx-4"></div>
                         <a
@@ -243,20 +275,10 @@ const AppLayout: React.FC = () => {
                             <span className="text-[10px] font-black uppercase tracking-widest">Exit to Main Site</span>
                         </a>
                     </div>
-                    <div className="p-4 border-t border-white/5 bg-slate-950/50 backdrop-blur-md text-xs text-slate-600 font-mono relative z-10">
-                        <div className="flex justify-between items-center">
-                            <div>OP: {user?.email?.split('@')[0].toUpperCase() || 'GUEST'}</div>
-                            <div className={`px-2 py-0.5 rounded text-[8px] font-black ${commitmentStatus === 'ACTIVE' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}`}>
-                                {commitmentStatus}
-                            </div>
-                        </div>
-                        <div className="text-[10px] mt-1 opacity-50 font-black">v2.6.0 ENTERPRISE</div>
-                    </div>
                 </Sidebar>
 
                 {/* MAIN AREA */}
                 <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px] relative z-20">
-                    {/* UNIFIED HEADER */}
                     <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6">
                         <div className="flex items-center gap-4">
                             <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
@@ -265,33 +287,17 @@ const AppLayout: React.FC = () => {
                             </h1>
                         </div>
                         <div className="flex items-center gap-4">
-                            <div className="hidden md:flex items-center px-3 py-1 rounded border border-h-gold/30 bg-h-gold/5">
-                                <span className="text-h-gold text-[10px] font-mono font-bold tracking-widest">[ STANDARD: 0.05 mm/m ]</span>
-                            </div>
-                            <div className="hidden sm:block">
-                                <DigitalPanel
-                                    label="RISK STATUS"
-                                    value={riskState.criticalFlags > 0 ? "CRITICAL" : "OPTIMAL"}
-                                    status={riskState.criticalFlags > 0 ? "critical" : "normal"}
-                                />
-                            </div>
-                            <div className="flex items-center gap-2 px-2 py-1 bg-white/5 rounded-lg border border-white/5">
-                                <div className="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-slate-400">👤</div>
-                                <span className="text-[10px] font-bold text-slate-300 hidden lg:block">{user?.email?.split('@')[0].toUpperCase()}</span>
-                            </div>
+                            <DigitalPanel
+                                label="RISK STATUS"
+                                value={riskState.criticalFlags > 0 ? "CRITICAL" : "OPTIMAL"}
+                                status={riskState.criticalFlags > 0 ? "critical" : "normal"}
+                            />
                             <LanguageSelector />
-                            <a
-                                href="https://www.anohubs.com"
-                                className="px-3 py-1.5 rounded border border-white/10 hover:bg-white/5 transition-all text-[10px] font-black tracking-widest text-slate-400 hover:text-white uppercase flex items-center gap-2"
-                            >
-                                <span>EXIT</span>
-                                <span className="opacity-50 group-hover:translate-x-0.5 transition-transform">↗</span>
-                            </a>
                         </div>
                     </header>
 
                     <main className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}>
-                        <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING MODULE...</span></div>}>
+                        <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
                             <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
                                 {!isHub && <Breadcrumbs />}
                                 <ErrorBoundary>
@@ -303,7 +309,7 @@ const AppLayout: React.FC = () => {
                                         <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
                                         <Route path="risk-report" element={<RiskReport />} />
                                         <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                        <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={handleCommit} />} />
+                                        <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
                                         <Route path="digital-introduction" element={<DigitalIntroduction />} />
                                         <Route path="hpp-improvements" element={<HPPImprovements />} />
                                         <Route path="installation-guarantee" element={<InstallationGuarantee />} />
@@ -317,74 +323,39 @@ const AppLayout: React.FC = () => {
                                         <Route path="contract-management" element={<ContractManagement />} />
                                         <Route path="library" element={<ComponentLibrary />} />
                                         <Route path="vision" element={<UnderConstruction />} />
-                                        <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500"><div className="text-4xl mb-2">🚧</div><div className="text-xl">404: Sector Not Found</div></div>} />
+                                        <Route path="maintenance" element={<MaintenanceDashboard />} />
+                                        <Route path="shaft-alignment" element={<ShaftAlignment />} />
+                                        <Route path="hydraulic-maintenance" element={<HydraulicMaintenance />} />
+                                        <Route path="bolt-torque" element={<BoltTorqueCalculator />} />
+                                        <Route path="shadow-engineer" element={<SOPManager />} />
+                                        <Route path="intuition-log" element={<ShiftLog />} />
+                                        <Route path="executive" element={<ExecutiveDashboard />} />
+                                        <Route path="structural-integrity" element={<StructuralIntegrity />} />
+                                        <Route path="admin-approval" element={<AdminApproval />} />
+                                        <Route path="ar-guide" element={<ARManager />} />
+                                        <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500">404</div>} />
                                     </Routes>
                                 </ErrorBoundary>
                             </div>
                         </Suspense>
                     </main>
-
-                    <footer className="py-4 px-8 flex justify-between items-center text-[10px] text-slate-400 font-mono no-print border-t border-white/5 bg-slate-950/50">
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="font-bold tracking-[0.1em]">SYSTEM STATUS: NOMINAL</span>
-                            </div>
-                            <span className="opacity-20">//</span>
-                            <span className="opacity-60 tracking-wider">ENCRYPTED CONNECTION ACTIVE</span>
-                        </div>
-                        <div className="flex items-center gap-6">
-                            <div className="hidden sm:flex gap-4 opacity-40">
-                                <span>v2.6.0 ENTERPRISE</span>
-                                <span>|</span>
-                                <span className="tracking-[0.2em]">ENGINEERING IMMUNITY PROTOCOL</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="opacity-30 uppercase">OP:</span>
-                                <span className={commitmentStatus === 'ACTIVE' ? 'text-emerald-500 font-bold' : 'text-amber-500 font-bold animate-pulse'}>
-                                    {commitmentStatus}
-                                </span>
-                            </div>
-                        </div>
-                    </footer>
                 </div>
-
-                {/* <InterventionCTA /> removed as per Phase 1 */}
-
-                <button onClick={() => setIsFeedbackVisible(true)} className="fixed bottom-6 right-6 group flex items-center justify-center w-12 h-12 rounded-full bg-h-cyan text-white shadow-lg hover:scale-110 transition-all z-50">
-                    <span className="text-xl group-hover:rotate-12 transition-transform">💬</span>
-                </button>
-
+                <VoiceAssistant />
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
             </div>
         </NavigationProvider>
     );
 };
 
-// --- 9. APP ENTRY POINT ---
 const App: React.FC = () => {
     return (
-        <ToastProvider>
-            <AuditProvider>
-                <AuthProvider>
-                    <QuestionnaireProvider>
-                        <HPPDesignProvider>
-                            <RiskProvider>
-                                <AssetProvider>
-                                    <TelemetryProvider>
-                                        <HashRouter>
-                                            <Routes>
-                                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                            </Routes>
-                                        </HashRouter>
-                                    </TelemetryProvider>
-                                </AssetProvider>
-                            </RiskProvider>
-                        </HPPDesignProvider>
-                    </QuestionnaireProvider>
-                </AuthProvider>
-            </AuditProvider>
-        </ToastProvider>
+        <GlobalProvider>
+            <HashRouter>
+                <Routes>
+                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                </Routes>
+            </HashRouter>
+        </GlobalProvider>
     );
 };
 

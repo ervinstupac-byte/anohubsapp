@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { QUESTIONS } from '../constants.ts';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
+import { useRisk } from '../contexts/RiskContext.tsx';
+import { supabase } from '../services/supabaseClient.ts';
+import { useAuth } from '../contexts/AuthContext.tsx';
+import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 
 interface QuestionnaireProps {
     onShowSummary: () => void;
@@ -13,7 +18,58 @@ interface QuestionnaireProps {
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onRiskSync }) => {
     const { t } = useTranslation();
-    const { answers, setAnswer } = useQuestionnaire(); // ✅ Koristi Context umjesto lokalnog state-a
+    const { user } = useAuth();
+    const { selectedAsset } = useAssetContext();
+    const { answers, setAnswer } = useQuestionnaire();
+    const { riskState } = useRisk();
+
+    // LOAD DRAFT LOGIC
+    useEffect(() => {
+        const loadDraft = async () => {
+            if (!user || !selectedAsset) return;
+
+            const { data, error } = await supabase
+                .from('diagnostic_drafts')
+                .select('answers')
+                .eq('user_id', user.id)
+                .eq('asset_id', selectedAsset.id)
+                .maybeSingle();
+
+            if (!error && data && data.answers) {
+                // If we found a draft, we should probably set it in the context
+                // But wait, the context should be managed globally if possible.
+                // For now, let's just set individual answers.
+                Object.keys(data.answers).forEach(qId => {
+                    setAnswer(qId, data.answers[qId]);
+                });
+                console.log('✅ Draft loaded for asset:', selectedAsset.id);
+            }
+        };
+
+        loadDraft();
+    }, [selectedAsset, user]);
+
+    // DEBOUNCED UPSERT LOGIC
+    useEffect(() => {
+        if (!user || !selectedAsset || Object.keys(answers).length === 0) return;
+
+        const timer = setTimeout(async () => {
+            console.log('💾 Saving draft to Supabase...');
+            const { error } = await supabase
+                .from('diagnostic_drafts')
+                .upsert({
+                    user_id: user.id,
+                    asset_id: selectedAsset.id,
+                    answers: answers,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id,asset_id' });
+
+            if (error) console.error('❌ Draft save failed:', error.message);
+            else console.log('✅ Draft saved successfully');
+        }, 2000);
+
+        return () => clearTimeout(timer);
+    }, [answers, user, selectedAsset]);
 
     const [currentStep, setCurrentStep] = useState(0);
 
@@ -25,19 +81,17 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
     const progress = ((currentStep + 1) / QUESTIONS.length) * 100;
 
     // Reset fokusa kod promjene pitanja
-    React.useEffect(() => {
+    useEffect(() => {
         setFocusedOptionIndex(-1);
     }, [currentStep]);
 
     // Upravljanje tastaturom
-    React.useEffect(() => {
+    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
-                // PRIORITET 1: Ako je pitanje već odgovoreno, idi na sljedeće
                 if (answers[currentQ.id]) {
                     handleNext();
                 }
-                // PRIORITET 2: Ako opcija je fokusirana, odaberi je
                 else if (focusedOptionIndex !== -1) {
                     handleAnswer(currentQ.options[focusedOptionIndex]);
                 }
@@ -59,7 +113,7 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
     }, [focusedOptionIndex, answers, currentQ, currentStep]);
 
     const handleAnswer = (option: string) => {
-        setAnswer(QUESTIONS[currentStep].id, option); // ✅ Spremi u Context
+        setAnswer(QUESTIONS[currentStep].id, option);
     };
 
     const handleNext = () => {
@@ -71,29 +125,15 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
     };
 
     const handleComplete = () => {
-        // 1. IZRAČUN REZULTATA (LOGIKA)
-        let calculatedScore = 0;
-        let criticalCount = 0;
+        const turbineType = selectedAsset?.turbine_type || 'pelton'; // Default to pelton for risk if unknown
+        const engine = TurbineFactory.getEngine(turbineType);
 
-        QUESTIONS.forEach((q) => {
-            const answer = answers[q.id];
+        const { score, criticalCount } = engine.calculateRisk(answers, riskState.thresholds);
 
-            // Logika bodovanja
-            if (answer && answer === q.critical) {
-                calculatedScore += 20; // Puno bodova za loš odgovor
-                criticalCount++;      // Zabilježi kritičnu grešku
-            } else if (answer && (answer.includes('No') || answer.includes('Unknown') || answer.includes('Partial'))) {
-                calculatedScore += 10; // Srednji rizik
-            }
-        });
-
-        // 2. AKTIVACIJA NEURAL LINKA (Šaljemo podatke u System Core)
         if (onRiskSync) {
-            console.log(`🧠 Neural Link Transmitting: Score ${calculatedScore}, Flags: ${criticalCount}`);
-            onRiskSync(calculatedScore, criticalCount);
+            onRiskSync(score, criticalCount);
         }
 
-        // 3. PRIKAZI SAŽETAK
         onShowSummary();
     };
 
@@ -188,4 +228,3 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.

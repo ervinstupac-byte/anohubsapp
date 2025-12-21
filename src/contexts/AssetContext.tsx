@@ -28,7 +28,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         location: item.location,
                         coordinates: [item.lat || 0, item.lng || 0],
                         capacity: parseFloat(item.power_output) || 0,
-                        status: item.status || 'Operational'
+                        status: item.status || 'Operational',
+                        turbine_type: item.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(item.type?.toLowerCase()) ? item.type.toLowerCase() : 'francis')
                     }));
                     setAssets(mappedAssets);
 
@@ -113,7 +114,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     location: data.location,
                     coordinates: [data.lat, data.lng],
                     capacity: parseFloat(data.power_output),
-                    status: data.status
+                    status: data.status,
+                    turbine_type: data.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(data.type?.toLowerCase()) ? data.type.toLowerCase() : 'francis')
                 };
             }
 

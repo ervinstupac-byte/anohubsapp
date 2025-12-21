@@ -140,6 +140,64 @@ export const TurbineDetail: React.FC<TurbineDetailProps> = ({ turbineKey }) => {
 
             </div>
 
+            {/* COOLING SYSTEM MONITORING (MASTER LINKAGE) */}
+            <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <GlassCard
+                    title={t('turbineDetail.coolingSystemTitle', 'Cooling System Monitoring')}
+                    subtitle={t('turbineDetail.coolingSystemSubtitle', 'Real-time Heat Exchanger Performance')}
+                    className="border-l-4 border-l-emerald-500"
+                    action={<span className="text-2xl p-2 bg-emerald-500/10 rounded-lg text-emerald-400">💧</span>}
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                        <div className="bg-slate-900/40 p-5 rounded-2xl border border-white/5 space-y-4">
+                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('turbineDetail.coolingPressure', 'Pressure Dynamics')}</h4>
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <p className="text-[9px] text-slate-400 uppercase font-bold">{t('turbineDetail.inlet', 'Inlet')}</p>
+                                    <p className="text-2xl font-black text-white">4.2 <span className="text-xs text-slate-500">bar</span></p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[9px] text-slate-400 uppercase font-bold">{t('turbineDetail.outlet', 'Outlet')}</p>
+                                    <p className="text-2xl font-black text-white">3.8 <span className="text-xs text-slate-500">bar</span></p>
+                                </div>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-cyan-500 w-[90%] shadow-[0_0_10px_rgba(6,182,212,0.5)]"></div>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-900/40 p-5 rounded-2xl border border-white/5 space-y-4">
+                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('turbineDetail.coolingTemp', 'Thermal Gradient')}</h4>
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <p className="text-[9px] text-slate-400 uppercase font-bold">{t('turbineDetail.inlet', 'Inlet')}</p>
+                                    <p className="text-2xl font-black text-white">12.4 <span className="text-xs text-slate-500">°C</span></p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-[9px] text-slate-400 uppercase font-bold">{t('turbineDetail.outlet', 'Outlet')}</p>
+                                    <p className="text-2xl font-black text-white">24.6 <span className="text-xs text-slate-500">°C</span></p>
+                                </div>
+                            </div>
+                            <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-emerald-500 w-[45%]"></div>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-900/60 p-5 rounded-2xl border-2 border-emerald-500/20 flex flex-col justify-center items-center text-center">
+                            <h4 className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-2">{t('turbineDetail.deltaT', 'SYSTEM DELTA T')}</h4>
+                            <div className="text-4xl font-black text-white mb-1">12.2°C</div>
+                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="text-[10px] font-bold text-emerald-400 uppercase">{t('turbineDetail.optimal', 'OPTIMAL')}</span>
+                            </div>
+                            <p className="text-[9px] text-slate-500 mt-2 font-medium italic">
+                                {t('turbineDetail.coolingEfficiencyNote', 'Efficiency within TurbineFactory parameters (+/- 0.5%)')}
+                            </p>
+                        </div>
+                    </div>
+                </GlassCard>
+            </div>
+
             {/* FOOTER NOTE */}
             <div className="text-center pt-8 border-t border-white/5">
                 <p className="text-xs text-slate-500 font-mono flex items-center justify-center gap-2">
