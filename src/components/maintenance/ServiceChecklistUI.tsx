@@ -7,11 +7,15 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, Camera, Mic, MicOff } from 'lucide-react';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
+import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ServiceChecklistEngine } from '../../services/ServiceChecklistEngine';
 import { ChecklistItem } from '../../types/checklist';
+import { PrecisionInput } from '../precision/PrecisionInput';
+import { HistoricalMeasurement, PrecisionMeasurement } from '../../types/trends';
 
 export const ServiceChecklistUI: React.FC = () => {
     const { activeChecklist, updateChecklistItem, addFieldNote } = useMaintenance();
+    const { addMeasurement, addPrecisionMeasurement } = useProjectEngine();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 
@@ -24,11 +28,7 @@ export const ServiceChecklistUI: React.FC = () => {
     const currentItem = allItems[currentIndex];
     const response = activeChecklist.items.find(r => r.itemId === currentItem.id);
 
-    const handleNext = () => {
-        if (currentIndex < allItems.length - 1) {
-            setCurrentIndex(prev => prev + 1);
-        }
-    };
+
 
     const handlePrevious = () => {
         if (currentIndex > 0) {
@@ -36,10 +36,70 @@ export const ServiceChecklistUI: React.FC = () => {
         }
     };
 
-    const handleMeasurementChange = (value: string) => {
-        const numValue = parseFloat(value);
-        if (!isNaN(numValue)) {
-            updateChecklistItem(currentItem.id, numValue);
+    const handleMeasurementChange = (value: number) => {
+        updateChecklistItem(currentItem.id, value);
+    };
+
+    const commitMeasurementToHistory = () => {
+        if (!response || response.measurementValue === undefined) return;
+        if (!activeChecklist) return;
+
+        // Create standard historical measurement
+        const measurement: HistoricalMeasurement = {
+            timestamp: new Date().toISOString(),
+            value: response.measurementValue,
+            technicianName: "Service Technician", // Placeholder or from auth context
+            checklistId: activeChecklist.id
+        };
+
+        // 1. Send to Project Context (Trend Analyzer)
+        addMeasurement(currentItem.id, measurement);
+
+        // 2. If it's a precision item or explicitly marked, add to Engineering Log
+        // Assuming tolerance < 0.1mm implies precision requirement
+        const isPrecision = currentItem.measurementConfig && currentItem.measurementConfig.tolerance < 0.1;
+
+        if (isPrecision) {
+            // Calculate display strings properly
+            const val = response.measurementValue;
+            const hundredths = Math.round(val * 100);
+
+            const precisionMeasurement: PrecisionMeasurement = {
+                id: `pm_${Date.now()}_${currentItem.id}`,
+                parameterId: currentItem.id,
+                parameterName: currentItem.label,
+                valueMM: val,
+                displayValue: `${val.toFixed(2)}${currentItem.measurementConfig?.unit}`,
+                precisionValue: `${hundredths} hundredths`,
+
+                measuredAt: new Date().toISOString(),
+                measuredBy: "Service Technician",
+
+                // Digital Signature Placeholder
+                signature: {
+                    engineerName: "Service Technician",
+                    engineerLicense: "PENDING",
+                    signedAt: new Date().toISOString(),
+                    signatureHash: "PENDING_HASH"
+                },
+
+                // Context
+                temperature: 20, // Default or ideally from sensor context
+                measurementMethod: 'MICROMETER'
+            };
+
+            addPrecisionMeasurement(precisionMeasurement);
+        }
+    };
+
+    const handleNext = () => {
+        // Sync measurement when moving to next item
+        if (currentItem.type === 'MEASUREMENT') {
+            commitMeasurementToHistory();
+        }
+
+        if (currentIndex < allItems.length - 1) {
+            setCurrentIndex(prev => prev + 1);
         }
     };
 
@@ -103,15 +163,15 @@ export const ServiceChecklistUI: React.FC = () => {
                     {/* Item Input based on type */}
                     {currentItem.type === 'MEASUREMENT' && currentItem.measurementConfig && (
                         <div className="space-y-4">
-                            <div className="flex items-center gap-4">
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    placeholder={`Nominal: ${currentItem.measurementConfig.nominalValue}`}
-                                    onChange={(e) => handleMeasurementChange(e.target.value)}
-                                    className="flex-1 bg-slate-800 border border-slate-700 rounded p-3 text-white text-xl font-mono text-center"
+                            <div className="flex flex-col gap-6">
+                                <PrecisionInput
+                                    value={response?.measurementValue || currentItem.measurementConfig.nominalValue}
+                                    onChange={handleMeasurementChange}
+                                    unit={currentItem.measurementConfig.unit as 'mm'}
+                                    min={currentItem.measurementConfig.minValue}
+                                    max={currentItem.measurementConfig.maxValue}
+                                    label={`Measured Value (${currentItem.measurementConfig.unit})`}
                                 />
-                                <span className="text-slate-400">{currentItem.measurementConfig.unit}</span>
                             </div>
 
                             {/* Validation Feedback */}
@@ -120,10 +180,10 @@ export const ServiceChecklistUI: React.FC = () => {
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className={`p-4 rounded border ${response.validationResult.severity === 'OK'
-                                            ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-300'
-                                            : response.validationResult.severity === 'WARNING'
-                                                ? 'bg-amber-950/30 border-amber-500/50 text-amber-300'
-                                                : 'bg-red-950/30 border-red-500/50 text-red-300'
+                                        ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-300'
+                                        : response.validationResult.severity === 'WARNING'
+                                            ? 'bg-amber-950/30 border-amber-500/50 text-amber-300'
+                                            : 'bg-red-950/30 border-red-500/50 text-red-300'
                                         }`}
                                 >
                                     <div className="flex items-center gap-2 mb-2">
@@ -153,8 +213,8 @@ export const ServiceChecklistUI: React.FC = () => {
                             <button
                                 onClick={() => handleBooleanChange(true)}
                                 className={`flex-1 py-4 rounded font-bold transition-all ${response?.booleanValue === true
-                                        ? 'bg-emerald-600 text-white'
-                                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                    ? 'bg-emerald-600 text-white'
+                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 ✓ YES / JA
@@ -162,8 +222,8 @@ export const ServiceChecklistUI: React.FC = () => {
                             <button
                                 onClick={() => handleBooleanChange(false)}
                                 className={`flex-1 py-4 rounded font-bold transition-all ${response?.booleanValue === false
-                                        ? 'bg-red-600 text-white'
-                                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                    ? 'bg-red-600 text-white'
+                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                     }`}
                             >
                                 ✗ NO / NEIN
@@ -192,8 +252,8 @@ export const ServiceChecklistUI: React.FC = () => {
                         onClick={handleVoiceNote}
                         disabled={isRecording}
                         className={`mt-4 w-full py-3 rounded flex items-center justify-center gap-2 transition-all ${isRecording
-                                ? 'bg-red-600 text-white animate-pulse'
-                                : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                            ? 'bg-red-600 text-white animate-pulse'
+                            : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
                             }`}
                     >
                         {isRecording ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}

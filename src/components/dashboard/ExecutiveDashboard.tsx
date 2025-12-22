@@ -13,11 +13,10 @@ import { ServiceCountdown, ServiceItem } from './ServiceCountdown';
 type ViewMode = 'ENGINEERING' | 'EXECUTIVE';
 
 export const ExecutiveDashboard: React.FC = () => {
-    const {
-        technicalState,
-        aiDiagnosis,
-        financials
-    } = useProjectEngine();
+    const { technicalState } = useProjectEngine();
+
+    // Destructure needed state from unified technicalState
+    const { aiDiagnosis, financials } = technicalState;
 
     const [viewMode, setViewMode] = useState<ViewMode>('EXECUTIVE');
 
@@ -123,8 +122,8 @@ export const ExecutiveDashboard: React.FC = () => {
                     <button
                         onClick={() => setViewMode('ENGINEERING')}
                         className={`flex-1 py-3 px-6 rounded font-bold transition-all ${viewMode === 'ENGINEERING'
-                                ? 'bg-[#2dd4bf] text-black shadow-lg shadow-[#2dd4bf]/30'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            ? 'bg-[#2dd4bf] text-black shadow-lg shadow-[#2dd4bf]/30'
+                            : 'text-slate-400 hover:text-white hover:bg-slate-800'
                             }`}
                     >
                         🔧 Engineering View
@@ -132,8 +131,8 @@ export const ExecutiveDashboard: React.FC = () => {
                     <button
                         onClick={() => setViewMode('EXECUTIVE')}
                         className={`flex-1 py-3 px-6 rounded font-bold transition-all ${viewMode === 'EXECUTIVE'
-                                ? 'bg-[#2dd4bf] text-black shadow-lg shadow-[#2dd4bf]/30'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                            ? 'bg-[#2dd4bf] text-black shadow-lg shadow-[#2dd4bf]/30'
+                            : 'text-slate-400 hover:text-white hover:bg-slate-800'
                             }`}
                     >
                         💼 Executive View
@@ -185,7 +184,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div>
                                     <div className="text-slate-400">Lubrication</div>
                                     <div className="text-white font-mono">
-                                        {technicalState.assetIdentity.machineConfig.lubricationType}
+                                        {technicalState.assetIdentity.fluidIntelligence.oilSystem.oilType}
                                     </div>
                                 </div>
                             </div>
@@ -228,9 +227,9 @@ export const ExecutiveDashboard: React.FC = () => {
                                                 <span className="font-bold text-white">{finding.analysisType}</span>
                                             </div>
                                             <span className={`px-2 py-1 rounded text-xs font-bold ${finding.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400'
-                                                    : finding.severity === 'HIGH' ? 'bg-orange-500/20 text-orange-400'
-                                                        : finding.severity === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400'
-                                                            : 'bg-blue-500/20 text-blue-400'
+                                                : finding.severity === 'HIGH' ? 'bg-orange-500/20 text-orange-400'
+                                                    : finding.severity === 'MEDIUM' ? 'bg-yellow-500/20 text-yellow-400'
+                                                        : 'bg-blue-500/20 text-blue-400'
                                                 }`}>
                                                 {finding.severity}
                                             </span>
