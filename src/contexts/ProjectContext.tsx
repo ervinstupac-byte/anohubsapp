@@ -18,6 +18,7 @@ import { AIFinding } from '../types/aiFinding';
 import { MeasurementHistory, HistoricalMeasurement, PrecisionMeasurement } from '../types/trends';
 import { HistoricalTrendAnalyzer } from '../services/HistoricalTrendAnalyzer';
 import { FineEngineeringLogService } from '../services/FineEngineeringLogService';
+import { ServiceChecklistEngine } from '../services/ServiceChecklistEngine';
 
 // MASTER DEMO DATA
 const PELTON_DEMO_STATE: TechnicalProjectState = {
@@ -63,10 +64,14 @@ interface ProjectContextType {
 
     addMeasurement: (parameterId: string, measurement: HistoricalMeasurement) => void;
     getMeasurementHistory: (parameterId: string) => MeasurementHistory | undefined;
+    getTrend: (parameterId: string) => any; // Exposed for Dashboard
 
     addPrecisionMeasurement: (measurement: PrecisionMeasurement) => void;
 
     updateFinancialSettings: (settings: Partial<FinancialSettings>) => void;
+
+    // Phase 13: Service Checklist
+    getRecommendedChecklist: () => any;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -226,6 +231,11 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         return technicalState.maintenanceHistory.measurements.get(parameterId);
     };
 
+    const getTrend = (parameterId: string) => {
+        const history = technicalState.maintenanceHistory.measurements.get(parameterId);
+        return history?.trend || null;
+    };
+
     // Phase 13: Precision Measurement Management
     const addPrecisionMeasurement = (measurement: PrecisionMeasurement) => {
         setTechnicalState(prev => {
@@ -254,6 +264,16 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
                 ...settings
             }
         }));
+    };
+
+    // Phase 13: Service Checklist Integration
+    const getRecommendedChecklist = () => {
+        if (!technicalState.assetIdentity) return null;
+
+        // Use Expert Engine to derive risk profile first (if needed)
+        // For now, satisfy request: "Checklist for Francis"
+        const engineType = technicalState.assetIdentity.turbineType;
+        return ServiceChecklistEngine.getTemplateForTurbine(engineType);
     };
 
     // Legacy compatibility: siteParams computed from technicalState
@@ -293,7 +313,9 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         addMeasurement,
         getMeasurementHistory,
         addPrecisionMeasurement,
-        updateFinancialSettings
+        updateFinancialSettings,
+        getRecommendedChecklist,
+        getTrend
     };
 
     return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;

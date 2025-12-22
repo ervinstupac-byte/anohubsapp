@@ -46,6 +46,14 @@ export interface JackingRisk {
     alarmDE: string;
 }
 
+export interface GridRisk {
+    detected: boolean;
+    frequencyHz: number;
+    severity: RiskSeverity;
+    message: string;
+    messageDE: string;
+}
+
 export interface Risk {
     type: 'THERMAL' | 'MECHANICAL' | 'HYDRAULIC' | 'SENSORY' | 'STARTUP';
     severity: RiskSeverity;
@@ -80,6 +88,9 @@ export interface DiagnosticResults {
     axialThrustRisk?: AxialThrustRisk;
     sensorCoverage: SensorCoverageRisk;
     jackingRisk?: JackingRisk;
+    gridRisk?: GridRisk;
+    financialImpact?: FinancialImpact;
+    cavitationRisk?: { severity: RiskSeverity; message: string };
     timestamp: string;
 }
 

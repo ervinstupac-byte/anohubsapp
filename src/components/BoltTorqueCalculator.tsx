@@ -3,6 +3,7 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import { StatCard } from './ui/StatCard.tsx';
 import { BackButton } from './BackButton.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
+import { useProjectEngine } from '../contexts/ProjectContext.tsx'; // Connected
 
 
 
@@ -19,6 +20,7 @@ const MACHINE_PARTS = [
 ];
 
 export const BoltTorqueCalculator: React.FC = () => {
+    const { technicalState } = useProjectEngine(); // Use Central State
     const [selectedPartId, setSelectedPartId] = useState(MACHINE_PARTS[0].id);
     const [measuredElongation, setMeasuredElongation] = useState<number>(0);
 
@@ -28,7 +30,12 @@ export const BoltTorqueCalculator: React.FC = () => {
 
     const calculations = useMemo(() => {
         // Extract diameter from size (e.g., "M36" -> 36)
-        const d = parseInt(activePart.size.replace('M', ''));
+        // If technicalState has updated bolt specs, use them, otherwise fallback to static
+        const projectBoltSize = technicalState.mechanical.boltSpecs.diameter;
+        const isDefault = selectedPartId === 'coupling'; // Assuming coupling uses project standard
+
+        // Logic: Use Project Context specs if valid, else static list
+        const d = isDefault && projectBoltSize ? projectBoltSize : parseInt(activePart.size.replace('M', ''));
         const gradeYield = BOLT_GRADES[activePart.grade];
 
         // Target Stress = 75% of Yield

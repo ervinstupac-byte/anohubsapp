@@ -7,7 +7,8 @@
 import { useMemo } from 'react';
 import { useProjectEngine } from '../contexts/ProjectContext';
 import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
-import { calculateFinancialRisk } from '../components/dashboard/FinancialRiskTicker'; // Reusing the logic
+import { injectExpertInsights } from '../services/KnowledgeInjector';
+// import { calculateFinancialRisk } from '../components/dashboard/FinancialRiskTicker'; // Removed in favor of KnowledgeInjector
 import { AIFinding } from '../types/aiFinding';
 import { HealthScore } from '../types/diagnostics';
 
@@ -26,67 +27,55 @@ export const useHPPDiagnostics = () => {
         const baseDiagnostics = ExpertDiagnosisEngine.runDiagnostics(
             assetIdentity,
             technicalState.site.temperature,
-            assetIdentity.fluidIntelligence.oilSystem.oilType === 'MINERAL_ISO_VG_46' ? 'OIL' : 'GREASE', // Simplified
-            50 // Rotor weight default
+            assetIdentity.fluidIntelligence.oilSystem.oilType === 'MINERAL_ISO_VG_46' ? 'OIL' : 'GREASE',
+            50, // Rotor weight default
+            technicalState.assetIdentity?.operationalMapping?.currentPoint?.flowM3S ?? 0, // Pass Live Flow
+            technicalState.assetIdentity?.operationalMapping?.currentPoint?.headM ?? 0, // Pass Live Head
+            50.0 // Grid Frequency (Default to 50, could be live if available)
         );
 
         let health = ExpertDiagnosisEngine.calculateHealthScore(baseDiagnostics);
         let likelyCause = "System Optimal";
         let symptoms: string[] = [];
 
-        // 2. PRECISE PHYSICS CHECK: Cavitation Risk
-        // User Metric: Head_Pres (152m) vs Flow Rate
-        const currentHead = assetIdentity.operationalMapping.currentPoint?.headM
-            || assetIdentity.machineConfig.ratedHeadM;
-        const currentFlow = assetIdentity.operationalMapping.currentPoint?.flowM3S
-            || assetIdentity.machineConfig.ratedFlowM3S;
+        // 2. INJECT EXPERT INSIGHTS (The Final Layer)
+        // Replaces manual logic with Knowledge Base rules
+        const insights = injectExpertInsights(
+            health,
+            assetIdentity.operationalMapping.currentPoint?.flowM3S || assetIdentity.machineConfig.ratedFlowM3S,
+            assetIdentity.operationalMapping.currentPoint?.headM || assetIdentity.machineConfig.ratedHeadM,
+            assetIdentity.francisAdvanced?.frontRunnerClearanceMM || 0.35
+        );
 
-        const ratedHead = assetIdentity.machineConfig.ratedHeadM;
-
-        // Rule: Low Head + High Flow = Cavitation Risk
-        // If Head is < 90% of Rated but Flow is > 90% of Rated -> High Velocity, Low Pressure areas
-        const isCavitationRisk = (currentHead < ratedHead * 0.9) && (currentFlow > assetIdentity.machineConfig.ratedFlowM3S * 0.9);
-
-        if (isCavitationRisk) {
-            health.overall = Math.min(health.overall, 75);
-            health.breakdown.hydraulic = Math.min(health.breakdown.hydraulic, 60);
-            likelyCause = "Rizik kavitacije na kašikama (Low Head / High Flow)";
-            symptoms.push("Moguća kavitaciona erozija");
-
-            // Add as AI Finding if not exists
-            // (Note: In a real reducer we would dispatch this, here we likely just derive it for display)
-        }
-
-        // 3. MECHANICAL TOLERANCE CHECK: Clearances
-        // User Rule: If frontClearance > 0.45mm -> Health < 70%
-        if (assetIdentity.francisAdvanced) {
-            const frontClearance = assetIdentity.francisAdvanced.frontRunnerClearanceMM;
-            const backClearance = assetIdentity.francisAdvanced.backRunnerClearanceMM;
-
-            if (frontClearance > 0.45) {
-                // FORCE HEALTH DOWNGRADE
-                health.overall = Math.min(health.overall, 68); // Below 70% as requested
-                health.breakdown.mechanical = Math.min(health.breakdown.mechanical, 50);
-                likelyCause = `Excessive Labyrinth Clearance (${frontClearance.toFixed(2)}mm)`;
-                symptoms.push("Efficiency Loss detected", "Hydraulic Instability");
+        // Apply Insights
+        if (insights.expertDiagnosis) {
+            likelyCause = insights.expertDiagnosis;
+            if (insights.expertAction) {
+                symptoms.push(insights.expertAction);
             }
         }
 
-        // 4. Update Financial Risk Calculation
-        // Now using actual Rated Power from config
-        const riskCalculation = calculateFinancialRisk(
-            health.overall,
-            aiDiagnosis.findings.filter(f => f.severity === 'CRITICAL').length,
-            financials.electricityPriceEURperMWh,
-            assetIdentity.machineConfig.ratedPowerMW
-        );
+        // Use Augmented Health
+        health = insights.augmentedHealth;
+
+        // 3. Financial Risk from Expert Engine
+        const riskCalculation = {
+            totalRevenueAtRisk: Math.round(insights.financialLossEUR * 24),
+            breakdown: {
+                downtime: 0,
+                efficiency: Math.round(insights.financialLossEUR * 24),
+                emergency: 0
+            },
+            criticalFindings: aiDiagnosis.findings.filter(f => f.severity === 'CRITICAL').length,
+            daysToAction: 15
+        };
 
         return {
             health,
             riskCalculation,
             likelyCause,
             symptoms,
-            isCavitationRisk,
+            isCavitationRisk: likelyCause?.includes('kavitacije') ?? false,
             baseDiagnostics
         };
     }, [technicalState]);

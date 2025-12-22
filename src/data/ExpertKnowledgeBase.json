@@ -1,0 +1,56 @@
+{
+    "meta": {
+        "version": "1.0.0",
+        "lastUpdated": "2025-12-22",
+        "plant": "HPP Varaždin - Unit A",
+        "turbineType": "FRANCIS_VERTICAL_249MW"
+    },
+    "engineeringParameters": {
+        "ratedHeadM": 152,
+        "ratedFlowM3S": 180,
+        "ratedPowerMW": 249
+    },
+    "cavitationMatrix": {
+        "description": "Operating zones derived from Hill Chart analysis",
+        "zones": [
+            {
+                "name": "Part Load Vortex",
+                "condition": "flow < 0.35 * ratedFlow",
+                "riskLevel": "CRITICAL",
+                "diagnosis": "Rizik nestabilnog vrtloga u draft tube-u (Draft Tube Vortex Rope)",
+                "action": "Increase load or shut down immediately to prevent structural vibration.",
+                "actionDE": "Last erhöhen oder sofort abschalten, um strukturelle Vibrationen zu vermeiden."
+            },
+            {
+                "name": "Best Efficiency Point",
+                "condition": "flow > 0.85 * ratedFlow && flow < 0.95 * ratedFlow",
+                "riskLevel": "OK",
+                "diagnosis": "Optimal Operation Zone",
+                "action": "Maintain clear operation.",
+                "actionDE": "Betrieb fortsetzen."
+            }
+        ]
+    },
+    "precisionRules": {
+        "labyrinths": {
+            "component": "Front Runner Seal",
+            "criticalThresholdMM": 0.40,
+            "diagnosis": "Labyrinth Seal Degradation",
+            "action": "HITNO: Provjera koncentriteta rotora i labirintnih zaptivki",
+            "actionDE": "DRINGEND: Rundlauf des Rotors und Labyrinthdichtungen prüfen",
+            "impact": "Volumetric efficiency loss > 2.5%"
+        }
+    },
+    "financialLogic": {
+        "baseEnergyPriceEUR": 150,
+        "healthImpactFormula": "loss = ( (100 - healthScore) / 100 ) * 0.05 * ratedPowerMW * energyPrice",
+        "explanation": "Assumes 5% efficiency drop per 100% health degradation linear approx."
+    },
+    "pdfTemplates": {
+        "executiveSummary": {
+            "bs": "UPOZORENJE: Analiza ukazuje na kritičan pad efikasnosti. Ako se servis ne izvrši u narednih 15 dana, procijenjeni finansijski gubitak će premašiti troškove održavanja. Preporučuje se hitna intervencija na labirintnim zaptivkama.",
+            "de": "ACHTUNG: Die Analyse zeigt einen kritischen Effizienzabfall. Wenn die Wartung nicht innerhalb der nächsten 15 Tage durchgeführt wird, übersteigt der geschätzte finanzielle Verlust die Wartungskosten. Dringende Intervention an den Labyrinthdichtungen empfohlen.",
+            "en": "WARNING: Analysis indicates critical efficiency drop. If service is not performed within the next 15 days, estimated financial loss will exceed maintenance costs. Urgent intervention on labyrinth seals recommended."
+        }
+    }
+}

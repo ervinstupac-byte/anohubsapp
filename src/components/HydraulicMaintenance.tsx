@@ -78,6 +78,19 @@ export const HydraulicMaintenance: React.FC = () => {
                 lastRiverAlert.current = now;
             }
         }
+
+        // 3. FLUID TEMPERATURE ALARM (>55°C)
+        // Simulated reading from telemetry
+        const fluidTemp = assetTele.temperature || 45; // Default safe
+        if (fluidTemp > 55) {
+            const now = Date.now();
+            // Debounce 30s
+            if (now - lastRiverAlert.current > 30000) {
+                showToast("HEAT WARNING: Hydraulic Fluid > 55°C. Oil degradation risk!", "warning");
+                triggerVoiceAlert("Temperatura ulja visoka. Rizik od degradacije viskoznosti.");
+                lastRiverAlert.current = now;
+            }
+        }
     }, [assetTele, selectedAsset, triggerEmergency, shutdownExcitation, showToast, triggerVoiceAlert]);
 
     const handleApplyChange = () => {

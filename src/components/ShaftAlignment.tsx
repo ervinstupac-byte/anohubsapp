@@ -42,7 +42,36 @@ export const ShaftAlignment: React.FC = () => {
             horizDiff,
             isCritical: runout > 0.05
         };
+        return {
+            runout,
+            vertDiff,
+            horizDiff,
+            isCritical: runout > 0.05
+        };
     }, [measurements, pointsCount]);
+
+    // JACKING PRESSURE CALCULATOR
+    const jackingStats = useMemo(() => {
+        const rotorWeightTons = 450; // Approx for 249 MW
+        const numberOfPads = 6;
+        const padDiameterCM = 25;
+        const areaPerPad = Math.PI * Math.pow(padDiameterCM / 2, 2);
+        const totalAreaCM2 = numberOfPads * areaPerPad;
+
+        // P = F/A. F = m*g.
+        // Weight (kg) = 450 * 1000. Force (N) = 450000 * 9.81.
+        // Area (cm2) -> m2 = / 10000.
+        // Bar = N/m2 / 100000. 
+        // Shortcut: P (bar) = (Weight_kg * 9.81) / (Area_cm2 * 10) ?? No.
+        // Let's use standard:  Force (kgf) / Area (cm2). 1 bar ~ 1 kgf/cm2.
+        const effectivePressureBar = (rotorWeightTons * 1000) / totalAreaCM2;
+
+        return {
+            weight: rotorWeightTons,
+            pressure: effectivePressureBar.toFixed(1),
+            required: (effectivePressureBar * 1.1).toFixed(1) // +10% lift
+        };
+    }, []);
 
     const updateMeasurement = (index: number, val: string) => {
         const num = parseFloat(val) || 0;
@@ -176,6 +205,28 @@ export const ShaftAlignment: React.FC = () => {
                     </div>
                 </GlassCard>
 
+
+
+                {/* JACKING SYSTEM CALCULATOR */}
+                <GlassCard title="Jacking System (Start-up)" className="lg:col-span-1 border-t-4 border-t-amber-500">
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs text-slate-400 uppercase">Rotor Weight</span>
+                            <span className="text-xl font-mono font-bold text-white">{jackingStats.weight} t</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-xs text-slate-400 uppercase">Lift Pressure</span>
+                            <span className="text-2xl font-mono font-black text-amber-500">{jackingStats.pressure} bar</span>
+                        </div>
+                        <div className="p-3 bg-slate-950 rounded-lg border border-white/10">
+                            <p className="text-[10px] text-slate-500 mb-1">RECOMMENDATION</p>
+                            <p className="text-xs text-white">
+                                Pressurize to <span className="text-emerald-400 font-bold">{jackingStats.required} bar</span> before brake release to establish oil film.
+                            </p>
+                        </div>
+                    </div>
+                </GlassCard>
+
                 {/* VISUALIZATION SECTION */}
                 <GlassCard title="Runout Analysis" className="lg:col-span-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -251,6 +302,6 @@ export const ShaftAlignment: React.FC = () => {
                     </div>
                 </GlassCard>
             </div>
-        </div>
+        </div >
     );
 };

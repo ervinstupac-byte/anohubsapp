@@ -103,14 +103,23 @@ export function calculateFinancialRisk(
     healthScore: number,
     criticalFindingsCount: number,
     electricityPriceEURperMWh: number,
-    ratedPowerMW: number
+    ratedPowerMW: number,
+    isCriticalServiceForce: boolean = false // New flag for Service Alarms
 ): FinancialRisk {
     let downtimeRisk = 0;
     let efficiencyRisk = 0;
     let emergencyRisk = 0;
 
-    // Health score impact on downtime
-    if (healthScore < 70) {
+    // USER RULE: If ANY Critical Service status -> Immediate Downtime Risk
+    if (isCriticalServiceForce || healthScore < 50) {
+        // Force full downtime calculation
+        // 150 EUR/MWh (assumed price if not passed, but passed as electricityPriceEURperMWh)
+        // Assume 7 days minimum impact for critical failure
+        downtimeRisk = 7 * 24 * ratedPowerMW * electricityPriceEURperMWh;
+        emergencyRisk = 50000; // Immediate mobilization
+    }
+    // Health score impact on downtime (if not already forced)
+    else if (healthScore < 70) {
         // RED zone: 7 days downtime risk
         downtimeRisk = 7 * 20 * ratedPowerMW * electricityPriceEURperMWh;
         emergencyRisk = 25000;  // Base emergency repair cost
