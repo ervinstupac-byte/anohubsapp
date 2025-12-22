@@ -57,7 +57,7 @@ const DigitalIntegrity = lazy(() => import('./components/DigitalIntegrity.tsx').
 const ContractManagement = lazy(() => import('./components/ContractManagement.tsx').then(m => ({ default: m.ContractManagement })));
 const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
 const MaintenanceDashboard = lazy(() => import('./components/MaintenanceDashboard.tsx').then(m => ({ default: m.MaintenanceDashboard })));
-const ExecutiveDashboard = lazy(() => import('./components/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
+const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
 const ShaftAlignment = lazy(() => import('./components/ShaftAlignment').then(m => ({ default: m.ShaftAlignment })));
 const HydraulicMaintenance = lazy(() => import('./components/HydraulicMaintenance').then(m => ({ default: m.HydraulicMaintenance })));

@@ -7,8 +7,10 @@ import React, { useState, useMemo } from 'react';
 import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ExpertDiagnosisEngine } from '../../services/ExpertDiagnosisEngine';
 import { HPPHealthDial } from './HPPHealthDial';
-import { FinancialRiskTicker, calculateFinancialRisk } from './FinancialRiskTicker';
+import { FinancialRiskTicker } from './FinancialRiskTicker';
 import { ServiceCountdown, ServiceItem } from './ServiceCountdown';
+import { InteractiveAssetSilhouette } from './InteractiveAssetSilhouette';
+import { useHPPDiagnostics } from '../../hooks/useHPPDiagnostics';
 
 type ViewMode = 'ENGINEERING' | 'EXECUTIVE';
 
@@ -20,47 +22,22 @@ export const ExecutiveDashboard: React.FC = () => {
 
     const [viewMode, setViewMode] = useState<ViewMode>('EXECUTIVE');
 
-    // Real-time Health Score calculation
-    const healthScore = useMemo(() => {
-        if (!technicalState.assetIdentity) {
-            return {
-                overall: 100,
-                breakdown: {
-                    thermal: 100,
-                    mechanical: 100,
-                    hydraulic: 100,
-                    sensory: 100
-                }
-            };
-        }
+    // Advanced Diagnostics Hook
+    const diagnostics = useHPPDiagnostics();
 
-        const diagnostics = ExpertDiagnosisEngine.runDiagnostics(
-            technicalState.assetIdentity,
-            technicalState.site.temperature,
-            'OIL',  // Default lubrication
-            50      // Default rotor weight
-        );
+    // Determine values to display (fallback if diagnostics not ready)
+    const displayHealth = diagnostics?.health || {
+        overall: 100,
+        breakdown: { thermal: 100, mechanical: 100, hydraulic: 100, sensory: 100 }
+    };
 
-        return ExpertDiagnosisEngine.calculateHealthScore(diagnostics);
-    }, [technicalState.assetIdentity, technicalState.site.temperature]);
-
-    // Real-time Financial Risk calculation
-    const financialRisk = useMemo(() => {
-        const criticalFindingsCount = technicalState.aiDiagnosis.findings.filter(
-            f => f.severity === 'CRITICAL'
-        ).length;
-
-        return calculateFinancialRisk(
-            healthScore.overall,
-            criticalFindingsCount,
-            technicalState.financials.electricityPriceEURperMWh,
-            10  // Rated power MW - should come from asset identity
-        );
-    }, [
-        healthScore.overall,
-        technicalState.aiDiagnosis.findings,
-        technicalState.financials.electricityPriceEURperMWh
-    ]);
+    // Financial Risk is now calculated in the hook with correct MW
+    const displayRisk = diagnostics?.riskCalculation || {
+        totalRevenueAtRisk: 0,
+        breakdown: { downtime: 0, efficiency: 0, emergency: 0 },
+        criticalFindings: 0,
+        daysToAction: 90
+    };
 
     // Real-time Service Items from Oil Life Clock
     const serviceItems: ServiceItem[] = useMemo(() => {
@@ -145,49 +122,42 @@ export const ExecutiveDashboard: React.FC = () => {
                 {/* Health Dial - Always visible */}
                 <div className="col-span-12 lg:col-span-4">
                     <HPPHealthDial
-                        healthScore={healthScore.overall}
-                        breakdown={healthScore.breakdown}
+                        healthScore={displayHealth.overall}
+                        breakdown={displayHealth.breakdown}
                     />
                 </div>
 
                 {/* Financial Risk - Executive View Only */}
                 {viewMode === 'EXECUTIVE' && (
                     <div className="col-span-12 lg:col-span-8">
-                        <FinancialRiskTicker risk={financialRisk} />
+                        <FinancialRiskTicker risk={displayRisk} />
                     </div>
                 )}
 
                 {/* Engineering Details - Engineering View Only */}
                 {viewMode === 'ENGINEERING' && technicalState.assetIdentity && (
                     <div className="col-span-12 lg:col-span-8">
-                        <div className="bg-slate-900 border border-slate-700 rounded-lg p-6">
-                            <h3 className="text-lg font-bold text-white mb-4">Technical Parameters</h3>
-                            <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 h-full">
+                            <div className="flex justify-between items-start mb-6">
                                 <div>
-                                    <div className="text-slate-400">Orientation</div>
-                                    <div className="text-white font-mono">
-                                        {technicalState.assetIdentity.machineConfig.orientation}
-                                    </div>
+                                    <h3 className="text-lg font-bold text-white">Digital Twin Status</h3>
+                                    <p className="text-sm text-slate-400">Interactive Component Analysis</p>
                                 </div>
-                                <div>
-                                    <div className="text-slate-400">Transmission</div>
-                                    <div className="text-white font-mono">
-                                        {technicalState.assetIdentity.machineConfig.transmissionType}
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="text-slate-400">Rated Power</div>
-                                    <div className="text-white font-mono">
+                                <div className="text-right">
+                                    <div className="text-2xl font-mono font-bold text-[#2dd4bf]">
                                         {technicalState.assetIdentity.machineConfig.ratedPowerMW} MW
                                     </div>
-                                </div>
-                                <div>
-                                    <div className="text-slate-400">Lubrication</div>
-                                    <div className="text-white font-mono">
-                                        {technicalState.assetIdentity.fluidIntelligence.oilSystem.oilType}
+                                    <div className="text-xs text-slate-500 uppercase tracking-wider">
+                                        {technicalState.assetIdentity.machineConfig.orientation} • {technicalState.assetIdentity.fluidIntelligence.oilSystem.oilType}
                                     </div>
                                 </div>
                             </div>
+
+                            <InteractiveAssetSilhouette
+                                turbineType={technicalState.assetIdentity.turbineType}
+                                health={displayHealth.breakdown}
+                                findings={technicalState.aiDiagnosis.findings}
+                            />
                         </div>
                     </div>
                 )}
@@ -199,7 +169,7 @@ export const ExecutiveDashboard: React.FC = () => {
 
                 {/* AI Findings Summary */}
                 <div className="col-span-12 lg:col-span-7">
-                    <div className="bg-slate-900 border border-slate-700 rounded-lg p-6">
+                    <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 h-full">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-bold text-white">AI Analysis Summary</h3>
                             {technicalState.aiDiagnosis.unverifiedCount > 0 && (
@@ -213,6 +183,24 @@ export const ExecutiveDashboard: React.FC = () => {
                             <div className="text-center py-8 text-slate-400">
                                 <span className="text-4xl mb-2 block">✨</span>
                                 <p>No AI findings yet. System is monitoring.</p>
+                                {diagnostics?.likelyCause !== "System Optimal" && (
+                                    <div className="mt-6 p-4 bg-gradient-to-r from-orange-950/50 to-red-950/50 border border-orange-500/30 rounded-lg text-left">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className="text-xl">🩺</span>
+                                            <h4 className="text-orange-300 font-bold uppercase tracking-wider text-xs">Dr. Turbine Diagnosis</h4>
+                                        </div>
+                                        <p className="text-white font-mono font-bold text-lg leading-tight mb-2">
+                                            {diagnostics?.likelyCause}
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {diagnostics?.symptoms.map((s, i) => (
+                                                <span key={i} className="px-2 py-1 bg-black/40 rounded text-xs text-orange-200/70 border border-orange-500/10">
+                                                    {s}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="space-y-3">
