@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { TechnicalState } from '../contexts/ProjectContext';
+import { TechnicalProjectState } from '../models/TechnicalSchema';
 import { InspectionImage } from './StrategicPlanningService';
 
 // Standard A4
@@ -9,7 +9,7 @@ const PAGE_HEIGHT = 297;
 const MARGIN = 20;
 
 export const ProfessionalReportEngine = {
-    generateTechnicalAudit: (state: TechnicalState, projectID: string = 'ANOHUB-2025-X') => {
+    generateTechnicalAudit: (state: TechnicalProjectState, projectID: string = 'ANOHUB-2025-X') => {
         const doc = new jsPDF();
 
         // --- PAGE 1: ANALYSIS ---
@@ -23,8 +23,7 @@ export const ProfessionalReportEngine = {
         doc.setTextColor(100, 100, 100);
         doc.text(`Generiert am: ${new Date().toLocaleDateString('de-DE')}`, MARGIN, 70);
 
-        // Calculate if we have severe cavitation findings from images
-        const hasCavitation = state.images.some(img => img.aiTags.includes('Kavitation'));
+        const hasCavitation = (state as any).images?.some((img: any) => img.aiTags.includes('Kavitation')) || false;
 
         drawFinancialImpact(doc, state, hasCavitation);
         drawTechnicalDetails(doc, state);
@@ -40,7 +39,7 @@ export const ProfessionalReportEngine = {
         // Let's assume Page 2 is more content using drawFooter(doc, 2) if we had it.
 
         // --- PAGE 3: BILDERGALERIE ---
-        if (state.images.length > 0) {
+        if ((state as any).images && (state as any).images.length > 0) {
             doc.addPage();
             drawHeader(doc, projectID); // Repeat header
             doc.setFontSize(18);
@@ -53,7 +52,7 @@ export const ProfessionalReportEngine = {
             const imgWidth = 80;
             const imgHeight = 60;
 
-            state.images.forEach((img, index) => {
+            (state as any).images.forEach((img: any, index: number) => {
                 // Layout: 2 images per row or list style? 
                 // Let's do list style: Image Left, Caption Right
 
@@ -122,7 +121,7 @@ const drawHeader = (doc: jsPDF, id: string) => {
     doc.text(`PROJEKT-ID: ${id}`, PAGE_WIDTH - MARGIN - 40, 20);
 };
 
-const drawFinancialImpact = (doc: jsPDF, state: TechnicalState, hasCavitation: boolean) => {
+const drawFinancialImpact = (doc: jsPDF, state: TechnicalProjectState, hasCavitation: boolean) => {
     const annualProductionGWh = 45;
     const pricePerMWh = 85;
     let efficiencyDrop = 1.2;
@@ -165,7 +164,7 @@ const drawFinancialImpact = (doc: jsPDF, state: TechnicalState, hasCavitation: b
     doc.text(descLines, MARGIN + 5, 135);
 };
 
-const drawTechnicalDetails = (doc: jsPDF, state: TechnicalState) => {
+const drawTechnicalDetails = (doc: jsPDF, state: TechnicalProjectState) => {
     const startY = 160;
 
     doc.setFontSize(14);
@@ -192,7 +191,7 @@ const drawTechnicalDetails = (doc: jsPDF, state: TechnicalState) => {
     });
 };
 
-const drawExpertInsights = (doc: jsPDF, state: TechnicalState) => {
+const drawExpertInsights = (doc: jsPDF, state: TechnicalProjectState) => {
     const startY = 230;
 
     // Expert Box Background

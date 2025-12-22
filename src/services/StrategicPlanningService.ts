@@ -10,7 +10,7 @@ export interface SiteParameters {
     pipeMaterial: 'GRP' | 'STEEL' | 'CONCRETE' | 'PEHD';
     // Granular Control (Cerebro Upgrade)
     wallThickness: number; // mm
-    boltClass: '4.6' | '8.8' | '10.9';
+    boltClass: '4.6' | '5.6' | '8.8' | '10.9'; // Synced with TechnicalSchema BoltGrade
     corrosionProtection: 'NONE' | 'PAINT' | 'GALVANIZED';
 
     waterQuality: 'CLEAN' | 'SILT' | 'SAND' | 'GLACIAL'; // Synced with TechnicalSchema

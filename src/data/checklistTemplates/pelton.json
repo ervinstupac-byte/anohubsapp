@@ -1,0 +1,138 @@
+{
+    "turbineType": "PELTON",
+    "version": "1.0",
+    "estimatedDurationMinutes": 120,
+    "requiredPhotos": 5,
+    "categories": [
+        {
+            "id": "nozzles",
+            "name": "Nozzle System",
+            "nameDE": "Düsensystem",
+            "items": [
+                {
+                    "id": "nozzle_diameter",
+                    "label": "Nozzle Outlet Diameter",
+                    "labelDE": "Düsenaustrittsdurchmesser",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 85.0,
+                        "tolerance": 0.05,
+                        "minValue": 84.0,
+                        "maxValue": 86.0
+                    },
+                    "expertNotes": "Critical for jet formation. Erosion > 0.5mm requires nozzle replacement."
+                },
+                {
+                    "id": "deflector_clearance",
+                    "label": "Deflector Clearance",
+                    "labelDE": "Deflektorspiel",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 2.0,
+                        "tolerance": 0.05,
+                        "minValue": 1.5,
+                        "maxValue": 3.0
+                    },
+                    "expertNotes": "Excessive clearance causes water spillage and efficiency loss."
+                },
+                {
+                    "id": "nozzle_photo",
+                    "label": "Nozzle Condition Photos",
+                    "labelDE": "Düsenzustand Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 2,
+                        "maxPhotos": 4,
+                        "tags": [
+                            "before",
+                            "after",
+                            "erosion"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "buckets",
+            "name": "Runner Buckets (Cavitation Check)",
+            "nameDE": "Laufschaufeln (Kavitationsprüfung)",
+            "items": [
+                {
+                    "id": "bucket_cavitation",
+                    "label": "Cavitation Detected",
+                    "labelDE": "Kavitation festgestellt",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "If YES, immediate repair scheduling required. Cavitation progresses exponentially."
+                },
+                {
+                    "id": "bucket_thickness",
+                    "label": "Bucket Tip Thickness",
+                    "labelDE": "Schaufelspitze Dicke",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 12.0,
+                        "tolerance": 0.5,
+                        "minValue": 10.0,
+                        "maxValue": 13.0
+                    },
+                    "expertNotes": "Material loss > 1mm from cavitation or erosion. Replace if < 11mm."
+                },
+                {
+                    "id": "bucket_photo",
+                    "label": "Bucket Surface Photos",
+                    "labelDE": "Schaufeloberfläche Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 3,
+                        "maxPhotos": 6,
+                        "tags": [
+                            "splitter",
+                            "tip",
+                            "root",
+                            "cavitation_damage"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "bearings",
+            "name": "Bearing System",
+            "nameDE": "Lagersystem",
+            "items": [
+                {
+                    "id": "bearing_temp",
+                    "label": "Bearing Operating Temperature",
+                    "labelDE": "Lager-Betriebstemperatur",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "celsius",
+                        "nominalValue": 45.0,
+                        "tolerance": 10.0,
+                        "minValue": 30.0,
+                        "maxValue": 70.0
+                    },
+                    "expertNotes": "Temperature > 65°C indicates insufficient lubrication or bearing damage."
+                },
+                {
+                    "id": "bearing_vibration",
+                    "label": "Vibration Level Check",
+                    "labelDE": "Vibrationspegel-Prüfung",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Excessive vibration often precedes bearing failure by 2-4 weeks."
+                }
+            ]
+        }
+    ]
+}

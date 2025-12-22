@@ -68,35 +68,98 @@ export interface TechnicalAuditData {
     };
     executiveSummary: {
         status: 'GREEN' | 'YELLOW' | 'RED';
-        score: number;
-        summaryText: string;
+        overallHealth: number; // 0-100
+        criticalIssues: number;
+        recommendedActions: string[];
     };
-    mechanicalIntegrity: {
-        component: string;
-        nominalClearance: number;
-        measuredClearance: number;
-        deviation: number;
-        tolerance: number; // 0.05
-    }[];
-    legacyRisk: {
-        detected: boolean;
-        legacyId: string; // "LEGACY #3"
-        description: string;
-        preventedDamageEur: number;
+    siteConditions: {
+        grossHead: number;
+        waterQuality: string;
+        flowRate: number;
+        designFlow: number;
     };
-    visualAnalysis: {
-        diagnosis: string; // "Cavitation"
-        textureDescription: string; // "Swiss-cheese effect"
-        recommendation: string;
+    hydraulics: {
+        staticPressure: number;
+        surgePressure: number;
+        flowVelocity: number;
+        frictionLoss: number;
+        netHead: number;
     };
-    thermalValidation: {
+    mechanical: {
+        boltGrade: string;
+        boltCount: number;
+        torqueApplied: number;
+        bearingType: string;
+        alignment: number;
+    };
+    thermalAdjustment: {
         ambientTemp: number;
         operatingTemp: number;
         thermalExpansion: number;
         appliedOffset: number;
         validationStatus: string;
     };
+    // NEW: Vision Analysis Integration
+    visionInsights?: VisionAnalysisResult;
 }
+
+// Vision Analysis Data Model (Phase 3 Integration)
+export interface VisionAnalysisResult {
+    totalImages: number;
+    analyzedAt: string;
+    overallRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    aiConfidence: number; // 0-100%
+
+    // Detected Issues
+    detectedIssues: {
+        cavitation: {
+            detected: boolean;
+            severity: number; // 0-10
+            affectedComponents: string[];
+            location: string;
+        };
+        corrosion: {
+            detected: boolean;
+            type: 'PITTING' | 'UNIFORM' | 'GALVANIC' | 'NONE';
+            severity: number; // 0-10
+            estimatedDepthMM: number;
+        };
+        erosion: {
+            detected: boolean;
+            pattern: 'LINEAR' | 'CIRCULAR' | 'RANDOM' | 'NONE';
+            severity: number; // 0-10
+            materialLossMM: number;
+        };
+        cracks: {
+            detected: boolean;
+            count: number;
+            maxLengthMM: number;
+            propagationRisk: 'LOW' | 'MEDIUM' | 'HIGH';
+        };
+        vibrationDamage: {
+            detected: boolean;
+            indicators: string[]; // e.g., "Fretting marks", "Loosened bolts"
+        };
+    };
+
+    // AI Recommendations
+    recommendations: {
+        immediate: string[]; // Actions required within 48h
+        shortTerm: string[]; // Actions within 1 month
+        longTerm: string[]; // Actions within 1 year
+        estimatedCost: number; // EUR
+    };
+
+    // Image Evidence
+    evidenceImages: {
+        id: string;
+        componentId: string;
+        issueType: string;
+        aiTagsDetected: string[];
+        thumbnailSrc: string;
+    }[];
+}
+
 
 export interface ExecutiveBriefingData {
     fleetHealth: number;
@@ -463,11 +526,15 @@ export class ReportGenerator {
         URL.revokeObjectURL(url);
     }
 
+    /**
+     * DEPRECATED: Use VisionReportGenerator.generateVisionEnhancedAudit() instead
+     * Legacy function maintained for backward compatibility
+     */
     public generateTechnicalAuditReport(data: TechnicalAuditData): Blob {
         this.applyProfessionalHeader('Technical Audit Report');
         const doc = this.doc;
 
-        const { assetDetails, executiveSummary, mechanicalIntegrity, legacyRisk, visualAnalysis, thermalValidation } = data;
+        const { assetDetails, executiveSummary, siteConditions, mechanical, thermalAdjustment, visionInsights } = data;
 
         // 1. EXECUTIVE SUMMARY
         doc.setFontSize(14);
@@ -488,81 +555,27 @@ export class ReportGenerator {
 
         doc.setFontSize(10);
         doc.setTextColor(71, 85, 105);
-        doc.text(executiveSummary.summaryText, 14, 70);
+        doc.text(`Overall Health: ${executiveSummary.overallHealth}%`, 14, 70);
 
-        // 2. MECHANICAL INTEGRITY (0.05mm Standard)
+        // 2. SIMPLIFIED TECHNICAL DETAILS
         let currentY = 85;
         doc.setFontSize(12);
         doc.setTextColor(6, 182, 212); // Cyan
-        doc.text('MECHANICAL INTEGRITY (PRECISION 0.05 mm)', 14, currentY);
+        doc.text('MECHANICAL INTEGRITY', 14, currentY);
+        currentY += 15;
 
-        currentY += 10;
-        // Draw Simple Chart
-        mechanicalIntegrity.forEach((item, index) => {
-            const y = currentY + (index * 15);
-            doc.setFontSize(9);
-            doc.setTextColor(30, 41, 59);
-            doc.text(`${item.component}`, 14, y);
-
-            // Bar background
-            doc.setFillColor(241, 245, 249);
-            doc.rect(60, y - 4, 100, 6, 'F');
-
-            // Bar Data (Nominal vs Measured)
-            // Center is 110. Deviation is deviation from 110.
-            // Scale: 1mm = 50 units (very magnified)
-            const centerX = 110;
-            const barWidth = item.deviation * 200; // Magnify dev
-
-            if (Math.abs(item.deviation) > item.tolerance) {
-                doc.setFillColor(239, 68, 68); // Red
-            } else {
-                doc.setFillColor(34, 197, 94); // Green
-            }
-
-            doc.rect(centerX, y - 4, barWidth, 6, 'F');
-            doc.text(`${item.measuredClearance.toFixed(3)}mm (Dev: ${item.deviation > 0 ? '+' : ''}${item.deviation.toFixed(3)})`, 165, y);
-        });
-        currentY += (mechanicalIntegrity.length * 15) + 10;
-
-        // 3. LEGACY RISK ALERT
-        if (legacyRisk.detected) {
-            doc.setFillColor(254, 242, 242); // Light Red
-            doc.setDrawColor(239, 68, 68);
-            doc.rect(14, currentY, 182, 35, 'FD');
-
-            doc.setTextColor(153, 27, 27);
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'bold');
-            doc.text(`⚠ ALGORITAM 15 GODINA ISKUSTVA: ${legacyRisk.legacyId}`, 20, currentY + 8);
-
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(185, 28, 28);
-            doc.text(doc.splitTextToSize(legacyRisk.description, 170), 20, currentY + 16);
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(`PREVENTED DAMAGE VALUE: €${legacyRisk.preventedDamageEur.toLocaleString()}`, 20, currentY + 30);
-
-            currentY += 45;
-        }
-
-        // 4. CAVITATION VS EROSION
-        doc.setFontSize(12);
-        doc.setTextColor(6, 182, 212);
-        doc.text('FORENSICS: CAVITATION vs EROSION', 14, currentY);
-        currentY += 8;
-
-        const forensicData = [
-            ['Analysis Type', 'AI Vision Diagnosis'],
-            ['Texture Signature', visualAnalysis.textureDescription],
-            ['Verdict', visualAnalysis.diagnosis.toUpperCase()],
-            ['Action', visualAnalysis.recommendation]
+        const techData = [
+            ['Parameter', 'Value'],
+            ['Bolt Grade', mechanical.boltGrade],
+            ['Torque Applied', `${mechanical.torqueApplied} Nm`],
+            ['Bearing Type', mechanical.bearingType],
+            ['Alignment', `${mechanical.alignment.toFixed(3)} mm`]
         ];
 
         autoTable(doc, {
             startY: currentY,
-            head: [['Metric', 'AI Finding']],
-            body: forensicData,
+            head: [techData[0]],
+            body: techData.slice(1),
             theme: 'grid',
             headStyles: { fillColor: [15, 23, 42] },
             styles: { fontSize: 9 }
@@ -570,30 +583,25 @@ export class ReportGenerator {
 
         currentY = (doc as any).lastAutoTable.finalY + 15;
 
-        // 5. THERMAL DRIFT VALIDATION
-        doc.setFontSize(12);
-        doc.setTextColor(6, 182, 212);
-        doc.text('THERMAL DRIFT VALIDATION', 14, currentY);
-        currentY += 8;
+        // 3. VISION INSIGHTS (if available)
+        if (visionInsights) {
+            doc.setFontSize(12);
+            doc.setTextColor(45, 212, 191);
+            doc.text('AI VISION ANALYSIS', 14, currentY);
+            currentY += 8;
 
-        const thermData = [
-            ['Operating Delta T', `${(thermalValidation.operatingTemp - thermalValidation.ambientTemp).toFixed(1)} °C`],
-            ['Material Expansion (Calc)', `${thermalValidation.thermalExpansion.toFixed(3)} mm`],
-            ['Applied Offset (Cold)', `${thermalValidation.appliedOffset.toFixed(3)} mm`],
-            ['Validation', thermalValidation.validationStatus]
-        ];
-
-        autoTable(doc, {
-            startY: currentY,
-            head: [['Parameter', 'Value']],
-            body: thermData,
-            theme: 'striped',
-            headStyles: { fillColor: [15, 23, 42] },
-            styles: { fontSize: 9 }
-        });
+            doc.setFontSize(9);
+            doc.setTextColor(30, 41, 59);
+            doc.text(`Risk Level: ${visionInsights.overallRiskLevel}`, 14, currentY);
+            currentY += 6;
+            doc.text(`AI Confidence: ${visionInsights.aiConfidence}%`, 14, currentY);
+            currentY += 6;
+            doc.text(`Images Analyzed: ${visionInsights.totalImages}`, 14, currentY);
+            currentY += 15;
+        }
 
         // SIGNATURE
-        const finalY = (doc as any).lastAutoTable.finalY + 30;
+        const finalY = Math.max(currentY, 240);
         doc.setDrawColor(148, 163, 184);
         doc.line(14, finalY, 80, finalY);
         doc.setFontSize(8);

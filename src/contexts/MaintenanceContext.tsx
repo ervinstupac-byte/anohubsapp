@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { InspectionImage } from '../services/StrategicPlanningService';
+import {
+    ActiveChecklist,
+    TurbineType,
+    ServiceAlert,
+    ChecklistItemResponse,
+    FieldNote,
+    ChecklistTemplate
+} from '../types/checklist';
+import { ServiceChecklistEngine } from '../services/ServiceChecklistEngine';
 
 export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'VERIFIED';
 
@@ -34,6 +43,15 @@ interface MaintenanceContextType {
     validateEntry: (taskId: string, value: number) => { valid: boolean; message: string };
     getTasksByComponent: (componentId: string) => MaintenanceTask[];
     predictServiceDate: (assetId: string, threshold: number) => Date | null;
+
+    // NEW: Service Checklist Functions
+    activeChecklist: ActiveChecklist | null;
+    serviceAlerts: ServiceAlert[];
+    startChecklist: (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => void;
+    updateChecklistItem: (itemId: string, value: any) => void;
+    addFieldNote: (itemId: string, transcript: string, audioSrc?: string) => void;
+    completeChecklist: () => void;
+    acknowledgeAlert: (alertId: string) => void;
 }
 
 export const protocols = [
@@ -72,6 +90,10 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
     const [tasks, setTasks] = useState<MaintenanceTask[]>(INITIAL_TASKS);
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const [operatingHours, setOperatingHours] = useState<Record<string, number>>({ 'DEFAULT_ASSET': 1250 });
+
+    // NEW: ServiceChecklist State
+    const [activeChecklist, setActiveChecklist] = useState<ActiveChecklist | null>(null);
+    const [serviceAlerts, setServiceAlerts] = useState<ServiceAlert[]>([]);
 
     const predictServiceDate = (assetId: string, threshold: number) => {
         const hours = operatingHours[assetId] || 0;
@@ -129,6 +151,150 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     const getTasksByComponent = (id: string) => tasks.filter(t => t.componentId === id);
 
+    // NEW: Service Checklist Functions
+    const startChecklist = (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => {
+        const template = ServiceChecklistEngine.getTemplateForTurbine(turbineType);
+
+        const newChecklist: ActiveChecklist = {
+            id: `checklist_${Date.now()}`,
+            templateId: `${turbineType}_${template.version}`,
+            turbineType,
+            assetId,
+            assetName,
+            startedAt: new Date().toISOString(),
+            technicianName,
+            items: [],
+            fieldNotes: [],
+            generatedAlerts: [],
+            progress: {
+                totalItems: ServiceChecklistEngine.getAllItems(template).length,
+                completedItems: 0,
+                photosTaken: 0,
+                requiredPhotos: template.requiredPhotos,
+                alertsGenerated: 0
+            }
+        };
+
+        setActiveChecklist(newChecklist);
+    };
+
+    const updateChecklistItem = (itemId: string, value: any) => {
+        if (!activeChecklist) return;
+
+        const template = ServiceChecklistEngine.getTemplateForTurbine(activeChecklist.turbineType);
+        const item = ServiceChecklistEngine.getItemById(template, itemId);
+        if (!item) return;
+
+        // Validate the value
+        const validationResult = ServiceChecklistEngine.validateChecklistItem(item, value);
+
+        // Create response
+        const response: ChecklistItemResponse = {
+            itemId,
+            timestamp: new Date().toISOString(),
+            validationResult
+        };
+
+        // Store value based on type
+        if (item.type === 'BOOLEAN') {
+            response.booleanValue = Boolean(value);
+        } else if (item.type === 'MEASUREMENT') {
+            response.measurementValue = Number(value);
+        } else if (item.type === 'PHOTO') {
+            response.photos = value;
+        }
+
+        // Generate Service Alert if validation failed
+        if (!validationResult.isValid && validationResult.severity === 'CRITICAL') {
+            const alert = ServiceChecklistEngine.generateServiceAlert(
+                activeChecklist.id,
+                activeChecklist.assetId,
+                activeChecklist.assetName,
+                item,
+                response,
+                activeChecklist.technicianName
+            );
+
+            if (alert) {
+                setServiceAlerts(prev => [...prev, alert]);
+                setActiveChecklist(prev => prev ? {
+                    ...prev,
+                    generatedAlerts: [...prev.generatedAlerts, alert]
+                } : null);
+            }
+        }
+
+        // Update checklist with response
+        setActiveChecklist(prev => {
+            if (!prev) return null;
+
+            const existingIndex = prev.items.findIndex(r => r.itemId === itemId);
+            let newItems;
+
+            if (existingIndex >= 0) {
+                // Update existing
+                newItems = [...prev.items];
+                newItems[existingIndex] = response;
+            } else {
+                // Add new
+                newItems = [...prev.items, response];
+            }
+
+            // Recalculate progress
+            const progress = ServiceChecklistEngine.calculateProgress(template, newItems);
+
+            return {
+                ...prev,
+                items: newItems,
+                progress: {
+                    ...progress,
+                    alertsGenerated: prev.generatedAlerts.length
+                }
+            };
+        });
+    };
+
+    const addFieldNote = async (itemId: string, transcript: string, audioSrc?: string) => {
+        if (!activeChecklist) return;
+
+        // Auto-translate to German (placeholder)
+        const transcriptDE = await ServiceChecklistEngine.translateFieldNotes(transcript, 'de');
+
+        const note: FieldNote = {
+            id: `note_${Date.now()}`,
+            itemId,
+            audioSrc,
+            transcriptOriginal: transcript,
+            transcriptDE,
+            recordedAt: new Date().toISOString()
+        };
+
+        setActiveChecklist(prev => prev ? {
+            ...prev,
+            fieldNotes: [...prev.fieldNotes, note]
+        } : null);
+    };
+
+    const completeChecklist = () => {
+        if (!activeChecklist) return;
+
+        setActiveChecklist(prev => prev ? {
+            ...prev,
+            completedAt: new Date().toISOString()
+        } : null);
+
+        // TODO: Save to database
+        console.log('Checklist completed:', activeChecklist);
+    };
+
+    const acknowledgeAlert = (alertId: string) => {
+        setServiceAlerts(prev => prev.map(alert =>
+            alert.id === alertId
+                ? { ...alert, acknowledgedAt: new Date().toISOString() }
+                : alert
+        ));
+    };
+
     return (
         <MaintenanceContext.Provider value={{
             tasks,
@@ -137,7 +303,15 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             createLogEntry,
             validateEntry,
             getTasksByComponent,
-            predictServiceDate
+            predictServiceDate,
+            // NEW: ServiceChecklist
+            activeChecklist,
+            serviceAlerts,
+            startChecklist,
+            updateChecklistItem,
+            addFieldNote,
+            completeChecklist,
+            acknowledgeAlert
         }}>
             {children}
         </MaintenanceContext.Provider>

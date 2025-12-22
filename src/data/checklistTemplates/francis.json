@@ -1,0 +1,184 @@
+{
+    "turbineType": "FRANCIS",
+    "version": "1.0",
+    "estimatedDurationMinutes": 150,
+    "requiredPhotos": 6,
+    "categories": [
+        {
+            "id": "labyrinths",
+            "name": "Labyrinth Seals",
+            "nameDE": "Labyrinthdichtungen",
+            "items": [
+                {
+                    "id": "upper_labyrinth_clearance",
+                    "label": "Upper Labyrinth Radial Clearance",
+                    "labelDE": "Oberes Labyrinth Radialspiel",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.40,
+                        "tolerance": 0.05,
+                        "minValue": 0.30,
+                        "maxValue": 0.60
+                    },
+                    "expertNotes": "Excessive clearance causes efficiency loss through internal water recirculation."
+                },
+                {
+                    "id": "lower_labyrinth_clearance",
+                    "label": "Lower Labyrinth Radial Clearance",
+                    "labelDE": "Unteres Labyrinth Radialspiel",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.40,
+                        "tolerance": 0.05,
+                        "minValue": 0.30,
+                        "maxValue": 0.60
+                    },
+                    "expertNotes": "Lower labyrinth more critical due to higher pressure differential."
+                },
+                {
+                    "id": "labyrinth_photo",
+                    "label": "Labyrinth Seal Photos",
+                    "labelDE": "Labyrinthdichtung Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 2,
+                        "maxPhotos": 3,
+                        "tags": [
+                            "upper",
+                            "lower",
+                            "wear_pattern"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "guide_vanes",
+            "name": "Guide Vanes (Stator Blades)",
+            "nameDE": "Leitschaufeln (Statorschaufeln)",
+            "items": [
+                {
+                    "id": "guide_vane_play",
+                    "label": "Guide Vane Pin Clearance",
+                    "labelDE": "Leitschaufenbolzen-Spiel",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.05,
+                        "tolerance": 0.05,
+                        "minValue": 0.0,
+                        "maxValue": 0.15
+                    },
+                    "expertNotes": "Play > 0.10mm causes vane flutter and potential cracking at pin hole."
+                },
+                {
+                    "id": "vane_erosion",
+                    "label": "Guide Vane Erosion Check",
+                    "labelDE": "Leitschaufel-Erosionsprüfung",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Erosion typically starts at trailing edge with sandy water."
+                },
+                {
+                    "id": "guide_vane_photo",
+                    "label": "Guide Vane Surface Photos",
+                    "labelDE": "Leitschaufel-Oberflächen Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 2,
+                        "maxPhotos": 4,
+                        "tags": [
+                            "inlet_edge",
+                            "outlet_edge",
+                            "erosion"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "runner_outlet",
+            "name": "Runner Outlet (Cavitation Zone)",
+            "nameDE": "Laufrad-Austritt (Kavitationszone)",
+            "items": [
+                {
+                    "id": "outlet_cavitation",
+                    "label": "Cavitation Detected at Outlet",
+                    "labelDE": "Kavitation am Austritt festgestellt",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Outlet cavitation indicates excessive suction head or tailwater drop. Requires hydraulic analysis."
+                },
+                {
+                    "id": "draft_tube_pressure",
+                    "label": "Draft Tube Pressure",
+                    "labelDE": "Saugrohr-Druck",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "bar",
+                        "nominalValue": -0.3,
+                        "tolerance": 0.1,
+                        "minValue": -0.6,
+                        "maxValue": 0.0
+                    },
+                    "expertNotes": "More negative pressure increases cavitation risk. Check tailwater level if < -0.4 bar."
+                },
+                {
+                    "id": "runner_outlet_photo",
+                    "label": "Runner Outlet Photos",
+                    "labelDE": "Laufrad-Austritt Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 3,
+                        "maxPhotos": 5,
+                        "tags": [
+                            "crown",
+                            "band",
+                            "vane_outlet",
+                            "cavitation_damage"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "shaft_alignment",
+            "name": "Shaft Alignment",
+            "nameDE": "Wellenausrichtung",
+            "items": [
+                {
+                    "id": "shaft_runout",
+                    "label": "Shaft Radial Runout",
+                    "labelDE": "Wellen-Radialschlag",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.02,
+                        "tolerance": 0.05,
+                        "minValue": 0.0,
+                        "maxValue": 0.10
+                    },
+                    "expertNotes": "CRITICAL: Runout > 0.05mm causes bearing damage and vibration. Re-align if exceeded."
+                },
+                {
+                    "id": "coupling_alignment",
+                    "label": "Generator Coupling Alignment",
+                    "labelDE": "Generator-Kupplungsausrichtung",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Misalignment causes premature bearing wear on both turbine and generator."
+                }
+            ]
+        }
+    ]
+}

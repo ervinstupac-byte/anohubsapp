@@ -29,7 +29,7 @@ export const SystemStressTest: React.FC = () => {
             // STEP 1: INITIALIZATION
             log('1. Initialization', 'PENDING', 'Setting: Head 50m, Flow 2m3/s, Bolts 8.8');
             project.updateSiteConditions({ grossHead: 50 }); // Flow is derived or fixed in mock
-            project.updateMechanicalDetails({ boltSpecs: { grade: '8.8', diameter: 24, torque: 450 } });
+            project.updateMechanicalDetails({ boltSpecs: { count: 16, diameter: 24, grade: '8.8', torque: 450 } });
 
             await new Promise(r => setTimeout(r, 1000));
 

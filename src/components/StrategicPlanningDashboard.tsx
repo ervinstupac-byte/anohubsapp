@@ -44,14 +44,14 @@ export const StrategicPlanningDashboard: React.FC = () => {
         // Use a timeout to simulate calculation "effort" if needed.
         const health = LiveMathSync.calculateSystemHealth(
             {
-                grossHead: technicalState.siteConditions.grossHead,
+                grossHead: technicalState.site.grossHead,
                 pipeLength: technicalState.penstock.length,
                 pipeDiameter: technicalState.penstock.diameter,
                 pipeMaterial: technicalState.penstock.material,
                 wallThickness: technicalState.penstock.wallThickness,
                 boltClass: technicalState.mechanical.boltSpecs.grade,
                 corrosionProtection: 'PAINT',
-                waterQuality: technicalState.siteConditions.waterQuality,
+                waterQuality: technicalState.site.waterQuality,
                 ecologicalFlow: 0.5,
                 flowDurationCurve: []
             },
@@ -74,14 +74,14 @@ export const StrategicPlanningDashboard: React.FC = () => {
     useEffect(() => {
         // Create temporary siteParams from technicalState to feed legacy service
         const tempParams: SiteParameters = {
-            grossHead: technicalState.siteConditions.grossHead,
+            grossHead: technicalState.site.grossHead,
             pipeLength: technicalState.penstock.length,
             pipeDiameter: technicalState.penstock.diameter,
             pipeMaterial: technicalState.penstock.material,
             wallThickness: technicalState.penstock.wallThickness,
             boltClass: technicalState.mechanical.boltSpecs.grade,
             corrosionProtection: 'PAINT', // Default
-            waterQuality: technicalState.siteConditions.waterQuality,
+            waterQuality: technicalState.site.waterQuality,
             ecologicalFlow: 0.5,
             flowDurationCurve: []
         };
@@ -152,7 +152,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
                                     <div className="mt-8 pt-8 border-t border-white/10">
                                         <h3 className="text-sm font-bold text-slate-500 uppercase mb-4">Quick Adjust</h3>
                                         <div className="grid grid-cols-2 gap-8">
-                                            <SliderGroup label="Gross Head (m)" name="grossHead" value={technicalState.siteConditions.grossHead} min={1} max={500} onChange={handleSlider} />
+                                            <SliderGroup label="Gross Head (m)" name="grossHead" value={technicalState.site.grossHead} min={1} max={500} onChange={handleSlider} />
                                             {/* Diameter is now in Penstock panel mostly, but keeping for quick access if needed */}
                                         </div>
                                     </div>
@@ -261,7 +261,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
                     </div>
 
                     {/* Pro Tips (Contextual) - Accessing deep state */}
-                    {technicalState.penstock.material === 'STEEL' && technicalState.siteConditions.waterQuality !== 'CLEAN' && (
+                    {technicalState.penstock.material === 'STEEL' && technicalState.site.waterQuality !== 'CLEAN' && (
                         <div className="p-4 rounded bg-blue-950/10 border border-blue-500/30 flex gap-3 items-start">
                             <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                             <p className="text-xs text-blue-200 leading-relaxed">

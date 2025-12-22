@@ -1,195 +1,308 @@
-// Project Context - The "Backbone"
-// Provides global access to Technical State and Reactively recalculates physics
+// Project Context - "CEREBRO" Master State - Phase 13 Unified
+// Central nervous system for ALL AnoHUB data
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { PhysicsEngine } from '../services/PhysicsEngine';
+import {
+    TechnicalProjectState,
+    DEFAULT_TECHNICAL_STATE,
+    SiteConditions,
+    PenstockSpecs,
+    MechanicalDetails,
+    Tolerances,
+    FinancialSettings
+} from '../models/TechnicalSchema';
 import { InspectionImage, SiteParameters } from '../services/StrategicPlanningService';
+import { AssetIdentity } from '../types/assetIdentity';
+import { AIFinding } from '../types/aiFinding';
+import { MeasurementHistory, HistoricalMeasurement, PrecisionMeasurement } from '../types/trends';
+import { HistoricalTrendAnalyzer } from '../services/HistoricalTrendAnalyzer';
+import { FineEngineeringLogService } from '../services/FineEngineeringLogService';
 
-// Define the shape of our Technical State (Cerebro Edition)
-export interface TechnicalState {
-    siteConditions: {
-        grossHead: number;
-        waterQuality: 'CLEAN' | 'SILT' | 'SAND' | 'GLACIAL';
-    };
+// MASTER DEMO DATA
+const PELTON_DEMO_STATE: TechnicalProjectState = {
+    ...DEFAULT_TECHNICAL_STATE,
+    site: {
+        grossHead: 450,
+        designFlow: 2.5,
+        waterQuality: 'CLEAN',
+        temperature: 15
+    },
     penstock: {
-        material: 'GRP' | 'STEEL' | 'CONCRETE' | 'PEHD';
-        length: number;
-        diameter: number;
-        wallThickness: number;
-    };
-    mechanical: {
-        boltSpecs: {
-            grade: '4.6' | '8.8' | '10.9';
-            diameter: number;
-            torque: number;
-        };
-        radialClearance: number; // mm
-        bearingType: 'Segmental' | 'Cylindrical' | 'Roller';
-        shaftAlignmentLimit: number;
-    };
-    physics: {
-        boltSafetyFactor: number;
-        waterHammerPressureBar: number;
-        hoopStressMPa: number;
-        boltLoadKN: number;
-        boltCapacityKN: number;
-    };
-    tolerances: { // Added to satisfy original interface calls if any, or just consistent structure
-        alignment: number;
-        roundness: number;
-    };
-    images: InspectionImage[]; // Image Gallery
-}
-
-// Initial State
-const INITIAL_STATE: TechnicalState = {
-    siteConditions: { grossHead: 45, waterQuality: 'CLEAN' },
-    penstock: { material: 'GRP', length: 1200, diameter: 1600, wallThickness: 12 },
-    mechanical: {
-        boltSpecs: { grade: '8.8', diameter: 24, torque: 450 },
-        radialClearance: 0.1,
-        bearingType: 'Cylindrical',
-        shaftAlignmentLimit: 0.05
-    },
-    physics: {
-        boltSafetyFactor: 2.5,
-        waterHammerPressureBar: 0,
-        hoopStressMPa: 0,
-        boltLoadKN: 0,
-        boltCapacityKN: 0
-    },
-    tolerances: { alignment: 0.05, roundness: 0.5 },
-    images: [] // Empty Gallery
-};
-
-// MASTER DEMO DATA: Pelton Turbine ("Gold Standard")
-const PELTON_DEMO_STATE: TechnicalState = {
-    siteConditions: { grossHead: 450, waterQuality: 'CLEAN' }, // High Head for Pelton
-    penstock: { material: 'STEEL', length: 2500, diameter: 1200, wallThickness: 25 },
-    mechanical: {
-        boltSpecs: { grade: '10.9', diameter: 36, torque: 850 },
-        radialClearance: 0.05,
-        bearingType: 'Segmental',
-        shaftAlignmentLimit: 0.02
-    },
-    physics: {
-        boltSafetyFactor: 3.2,
-        waterHammerPressureBar: 0,
-        hoopStressMPa: 0,
-        boltLoadKN: 0,
-        boltCapacityKN: 0
-    },
-    tolerances: { alignment: 0.02, roundness: 0.1 },
-    images: []
+        material: 'STEEL',
+        length: 2500,
+        diameter: 1200,
+        wallThickness: 25,
+        roughness: 0.045,
+        youngsModulus: 210
+    }
 };
 
 interface ProjectContextType {
-    technicalState: TechnicalState;
-    siteParams: SiteParameters; // Computed for legacy compat
-    activeProject: any; // Placeholder for legacy compatibility
+    // Core Technical State
+    technicalState: TechnicalProjectState;
+    siteParams: SiteParameters;
+    activeProject: any;
+    images: InspectionImage[];
 
-    // Setters
-    updateSiteConditions: (updates: Partial<TechnicalState['siteConditions']>) => void;
-    updatePenstockSpecs: (updates: Partial<TechnicalState['penstock']>) => void;
-    updateMechanicalDetails: (updates: Partial<TechnicalState['mechanical']>) => void;
-    updateTolerances: (updates: Partial<TechnicalState['tolerances']>) => void;
+    // Legacy setters (physics-reactive)
+    updateSiteConditions: (updates: Partial<SiteConditions>) => void;
+    updatePenstockSpecs: (updates: Partial<PenstockSpecs>) => void;
+    updateMechanicalDetails: (updates: Partial<MechanicalDetails>) => void;
+    updateTolerances: (updates: Partial<Tolerances>) => void;
     addInspectionImage: (img: InspectionImage) => void;
-
     recalculate: () => void;
     loadDemoData: () => void;
+
+    // Phase 13: Unified State Management
+    setAssetIdentity: (identity: AssetIdentity) => void;
+    updateAssetIdentity: (updates: Partial<AssetIdentity>) => void;
+
+    addAIFinding: (finding: AIFinding) => void;
+    updateAIFinding: (findingId: string, updates: Partial<AIFinding>) => void;
+
+    addMeasurement: (parameterId: string, measurement: HistoricalMeasurement) => void;
+    getMeasurementHistory: (parameterId: string) => MeasurementHistory | undefined;
+
+    addPrecisionMeasurement: (measurement: PrecisionMeasurement) => void;
+
+    updateFinancialSettings: (settings: Partial<FinancialSettings>) => void;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [technicalState, setTechnicalState] = useState<TechnicalState>(PELTON_DEMO_STATE); // Start with Demo Data for "Wow" factor OR keep INITIAL and add explicit load. 
-    // User requested "Initialize Master Demo". Let's default to it or provide robust loader.
-    // Decided: Default to PELTON_DEMO_STATE for that "Premium" feel out of the box.
+    // Initialize with physics pre-calculated
+    const [technicalState, setTechnicalState] = useState<TechnicalProjectState>(() =>
+        PhysicsEngine.recalculateProjectPhysics(PELTON_DEMO_STATE)
+    );
+    const [images, setImages] = useState<InspectionImage[]>([]);
 
     const loadDemoData = () => {
-        setTechnicalState(PELTON_DEMO_STATE);
+        const recalculated = PhysicsEngine.recalculateProjectPhysics(PELTON_DEMO_STATE);
+        setTechnicalState(recalculated);
     };
 
-    // Helpers to convert to SiteParameters for legacy services
-    // kept in sync with technicalState
-    const convertToSiteParams = (state: TechnicalState): SiteParameters => ({
-        grossHead: state.siteConditions.grossHead,
-        pipeLength: state.penstock.length,
-        pipeDiameter: state.penstock.diameter,
-        pipeMaterial: state.penstock.material,
-        wallThickness: state.penstock.wallThickness,
-        boltClass: state.mechanical.boltSpecs.grade,
-        corrosionProtection: 'PAINT', // Defaulting for now
-        waterQuality: state.siteConditions.waterQuality,
-        ecologicalFlow: 0.5,
-        flowDurationCurve: []
-    });
-
-    const recalculate = () => {
-        // Here we would call PhysicsEngine.recalculateProjectPhysics(technicalState)
-        // But since we are using a simplified TechnicalState here vs the full legacy one, 
-        // we might just let the UI derive values. 
-        // For now, no-op or simple log as the UI uses real-time getters.
-        console.log("Recalculating Physics...");
+    // Legacy setters (maintain backward compatibility)
+    const updateSiteConditions = (updates: Partial<SiteConditions>) => {
+        setTechnicalState(prev => {
+            const updated = {
+                ...prev,
+                site: { ...prev.site, ...updates }
+            };
+            return PhysicsEngine.recalculateProjectPhysics(updated);
+        });
     };
 
-    const updateSiteConditions = (updates: Partial<TechnicalState['siteConditions']>) => {
-        setTechnicalState(prev => ({
-            ...prev,
-            siteConditions: { ...prev.siteConditions, ...updates }
-        }));
+    const updatePenstockSpecs = (updates: Partial<PenstockSpecs>) => {
+        setTechnicalState(prev => {
+            const updated = {
+                ...prev,
+                penstock: { ...prev.penstock, ...updates }
+            };
+            return PhysicsEngine.recalculateProjectPhysics(updated);
+        });
     };
 
-    const updatePenstockSpecs = (updates: Partial<TechnicalState['penstock']>) => {
-        setTechnicalState(prev => ({
-            ...prev,
-            penstock: { ...prev.penstock, ...updates }
-        }));
-    };
-
-    const updateMechanicalDetails = (updates: Partial<TechnicalState['mechanical']>) => {
+    const updateMechanicalDetails = (updates: Partial<MechanicalDetails>) => {
         setTechnicalState(prev => ({
             ...prev,
             mechanical: { ...prev.mechanical, ...updates }
         }));
     };
 
-    const updateTolerances = (updates: Partial<TechnicalState['tolerances']>) => {
+    const updateTolerances = (updates: Partial<Tolerances>) => {
         setTechnicalState(prev => ({
             ...prev,
             tolerances: { ...prev.tolerances, ...updates }
         }));
     };
 
+    const recalculate = () => {
+        setTechnicalState(prev => PhysicsEngine.recalculateProjectPhysics(prev));
+    };
+
     const addInspectionImage = (img: InspectionImage) => {
+        setImages(prev => [...prev, img]);
+    };
+
+    // Phase 13: Asset Identity Management
+    const setAssetIdentity = (identity: AssetIdentity) => {
         setTechnicalState(prev => ({
             ...prev,
-            images: [...prev.images, img]
+            assetIdentity: identity
         }));
     };
 
-    return (
-        <ProjectContext.Provider value={{
-            technicalState,
-            siteParams: convertToSiteParams(technicalState),
-            activeProject: { id: 'ANOHUB-2025-X', name: 'Mala Rijeka' },
-            updateSiteConditions,
-            updatePenstockSpecs,
-            updateMechanicalDetails,
-            updateTolerances,
-            addInspectionImage,
-            recalculate,
-            loadDemoData
-        }}>
-            {children}
-        </ProjectContext.Provider>
-    );
+    const updateAssetIdentity = (updates: Partial<AssetIdentity>) => {
+        setTechnicalState(prev => {
+            if (!prev.assetIdentity) return prev;
+            return {
+                ...prev,
+                assetIdentity: {
+                    ...prev.assetIdentity,
+                    ...updates,
+                    lastUpdatedAt: new Date().toISOString()
+                }
+            };
+        });
+    };
+
+    // Phase 13: AI Findings Management
+    const addAIFinding = (finding: AIFinding) => {
+        setTechnicalState(prev => ({
+            ...prev,
+            aiDiagnosis: {
+                findings: [...prev.aiDiagnosis.findings, finding],
+                unverifiedCount: finding.verifiedByExpert
+                    ? prev.aiDiagnosis.unverifiedCount
+                    : prev.aiDiagnosis.unverifiedCount + 1,
+                lastUpdated: new Date().toISOString()
+            }
+        }));
+    };
+
+    const updateAIFinding = (findingId: string, updates: Partial<AIFinding>) => {
+        setTechnicalState(prev => {
+            const findings = prev.aiDiagnosis.findings.map(f =>
+                f.id === findingId ? { ...f, ...updates } : f
+            );
+
+            const unverifiedCount = findings.filter(f => !f.verifiedByExpert).length;
+
+            return {
+                ...prev,
+                aiDiagnosis: {
+                    findings,
+                    unverifiedCount,
+                    lastUpdated: new Date().toISOString()
+                }
+            };
+        });
+    };
+
+    // Phase 13: Measurement History Management
+    const addMeasurement = (parameterId: string, measurement: HistoricalMeasurement) => {
+        setTechnicalState(prev => {
+            const measurements = new Map(prev.maintenanceHistory.measurements);
+            const existing = measurements.get(parameterId);
+
+            if (existing) {
+                // Add to existing history
+                const updated = HistoricalTrendAnalyzer.addMeasurement(
+                    existing,
+                    measurement,
+                    existing.trend?.criticalThreshold || 0.60  // Default critical threshold
+                );
+                measurements.set(parameterId, updated);
+            } else {
+                // Create new history
+                const newHistory: MeasurementHistory = {
+                    parameterId,
+                    parameterName: parameterId.replace(/_/g, ' '),
+                    unit: 'mm',
+                    measurements: [measurement]
+                };
+
+                // Calculate initial trend
+                const trend = HistoricalTrendAnalyzer.analyzeTrend(newHistory, 0.60);
+                newHistory.trend = trend;
+
+                measurements.set(parameterId, newHistory);
+            }
+
+            return {
+                ...prev,
+                maintenanceHistory: {
+                    ...prev.maintenanceHistory,
+                    measurements,
+                    lastUpdated: new Date().toISOString()
+                }
+            };
+        });
+    };
+
+    const getMeasurementHistory = (parameterId: string): MeasurementHistory | undefined => {
+        return technicalState.maintenanceHistory.measurements.get(parameterId);
+    };
+
+    // Phase 13: Precision Measurement Management
+    const addPrecisionMeasurement = (measurement: PrecisionMeasurement) => {
+        setTechnicalState(prev => {
+            const engineeringLog = FineEngineeringLogService.addMeasurement(
+                prev.maintenanceHistory.engineeringLog,
+                measurement
+            );
+
+            return {
+                ...prev,
+                maintenanceHistory: {
+                    ...prev.maintenanceHistory,
+                    engineeringLog,
+                    lastUpdated: new Date().toISOString()
+                }
+            };
+        });
+    };
+
+    // Phase 13: Financial Settings Management
+    const updateFinancialSettings = (settings: Partial<FinancialSettings>) => {
+        setTechnicalState(prev => ({
+            ...prev,
+            financials: {
+                ...prev.financials,
+                ...settings
+            }
+        }));
+    };
+
+    // Legacy compatibility: siteParams computed from technicalState
+    const siteParams: SiteParameters = {
+        grossHead: technicalState.site.grossHead,
+        pipeLength: technicalState.penstock.length,
+        pipeDiameter: technicalState.penstock.diameter,
+        pipeMaterial: technicalState.penstock.material,
+        wallThickness: technicalState.penstock.wallThickness,
+        boltClass: technicalState.mechanical.boltSpecs.grade,
+        corrosionProtection: 'NONE',
+        waterQuality: technicalState.site.waterQuality,
+        flowDurationCurve: [],
+        ecologicalFlow: 0
+    };
+
+    const value: ProjectContextType = {
+        technicalState,
+        siteParams,
+        activeProject: null,
+        images,
+
+        // Legacy setters
+        updateSiteConditions,
+        updatePenstockSpecs,
+        updateMechanicalDetails,
+        updateTolerances,
+        addInspectionImage,
+        recalculate,
+        loadDemoData,
+
+        // Phase 13: Unified methods
+        setAssetIdentity,
+        updateAssetIdentity,
+        addAIFinding,
+        updateAIFinding,
+        addMeasurement,
+        getMeasurementHistory,
+        addPrecisionMeasurement,
+        updateFinancialSettings
+    };
+
+    return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
 };
 
 export const useProjectEngine = () => {
     const context = useContext(ProjectContext);
     if (!context) {
-        throw new Error('useProjectEngine must be used within a ProjectProvider');
+        throw new Error('useProjectEngine must be used within ProjectProvider');
     }
     return context;
 };

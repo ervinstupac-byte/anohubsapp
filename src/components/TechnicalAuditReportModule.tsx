@@ -18,31 +18,38 @@ export const TechnicalAuditReportModule: React.FC = () => {
             },
             executiveSummary: {
                 status: 'YELLOW' as const,
-                score: 78,
-                summaryText: "General integrity is acceptable, but Critical Legacy Alert #3 requires immediate addressing. Mechanical clearances are within 0.05mm tolerance."
+                overallHealth: 78,
+                criticalIssues: 1,
+                recommendedActions: [
+                    'Address Legacy Alert #3: Grease Overfill',
+                    'Verify Guide Vane Upper clearance (0.06mm deviation)'
+                ]
             },
-            mechanicalIntegrity: [
-                { component: 'Runner Clearance (N)', nominalClearance: 0.80, measuredClearance: 0.82, deviation: 0.02, tolerance: 0.05 },
-                { component: 'Runner Clearance (S)', nominalClearance: 0.80, measuredClearance: 0.84, deviation: 0.04, tolerance: 0.05 },
-                { component: 'Guide Vane Upper', nominalClearance: 0.30, measuredClearance: 0.36, deviation: 0.06, tolerance: 0.05 }, // RED
-                { component: 'Thrust Bearing Pad', nominalClearance: 0.05, measuredClearance: 0.05, deviation: 0.00, tolerance: 0.05 },
-            ],
-            legacyRisk: {
-                detected: true,
-                legacyId: "LEGACY #3 (Grease Overfill)",
-                description: "Na osnovu baze od 15 godina iskustva, detektovali smo anomaliju [LEGACY #3] - Višak masti u zaptivci (45 ciklusa u stajanju). Visok rizik od izbijanja zaptivke pri startu.",
-                preventedDamageEur: 45000
+            siteConditions: {
+                grossHead: 45.5,
+                waterQuality: 'CLEAN',
+                flowRate: 12.5,
+                designFlow: 12.5
             },
-            visualAnalysis: {
-                diagnosis: "CAVITATION",
-                textureDescription: "Oštri rubovi potvrđuju kavitaciju (Swiss-cheese effect). Potrebna optimizacija nivoa donje vode.",
-                recommendation: "Increase Tailwater Level by +0.5m"
+            hydraulics: {
+                staticPressure: 4.5,
+                surgePressure: 5.8,
+                flowVelocity: 3.2,
+                frictionLoss: 0.8,
+                netHead: 44.7
             },
-            thermalValidation: {
+            mechanical: {
+                boltGrade: '10.9',
+                boltCount: 24,
+                torqueApplied: 850,
+                bearingType: 'Segmental Thrust',
+                alignment: 0.04
+            },
+            thermalAdjustment: {
                 ambientTemp: 12,
                 operatingTemp: 55,
-                thermalExpansion: 0.12, // mm
-                appliedOffset: -0.12, // mm
+                thermalExpansion: 0.12,
+                appliedOffset: -0.12,
                 validationStatus: "COMPLIANT (Physics Model Verified)"
             }
         };
