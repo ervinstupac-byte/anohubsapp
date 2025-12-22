@@ -54,8 +54,10 @@ export interface GridRisk {
     messageDE: string;
 }
 
+export type RiskType = 'THERMAL' | 'MECHANICAL' | 'HYDRAULIC' | 'SENSORY' | 'STARTUP' | 'ELECTRICAL';
+
 export interface Risk {
-    type: 'THERMAL' | 'MECHANICAL' | 'HYDRAULIC' | 'SENSORY' | 'STARTUP';
+    type: RiskType;
     severity: RiskSeverity;
     description: string;
     descriptionDE?: string;

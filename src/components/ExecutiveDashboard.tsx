@@ -76,8 +76,8 @@ export const ExecutiveDashboard: React.FC = () => {
     useEffect(() => {
         if (technicalState.assetIdentity && liveTelemetry) {
             // Live Grid Freq simulation 
-            // (In a real app, this comes from liveTelemetry, we default to 50 if missing)
-            const freq = 50.0;
+            // Type-cast safe access for RPM if needed, or default
+            const freq = (liveTelemetry as any)?.rpm || 50.0;
 
             const consultation = DrTurbineAI.consult(
                 technicalState.assetIdentity,
@@ -117,7 +117,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                         ANOHUB <span className="text-cyan-400">PRIME</span>
                     </h1>
-                    <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">Executive Engineering interface // v1.0.4</p>
+                    <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">Executive Engineering interface // v1.0.5 UNIFIED</p>
                 </div>
                 <div className="flex gap-4">
                     <select
@@ -159,7 +159,10 @@ export const ExecutiveDashboard: React.FC = () => {
                                 </div>
                                 <div className="bg-black/40 p-3 rounded border border-white/5">
                                     <span className="text-[9px] text-slate-500 uppercase block">Grid Freq</span>
-                                    <span className={`text-xl font-mono ${((liveTelemetry as any)?.rpm || 50) < 49.5 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>50.00 Hz</span>
+                                    {/* 98.2 Hz Pulsing Alarm */}
+                                    <span className={`text-xl font-mono ${((liveTelemetry as any)?.rpm || 50) < 49.5 || ((liveTelemetry as any)?.rpm || 50) > 55 ? 'text-red-500 animate-pulse drop-shadow-[0_0_10px_red]' : 'text-emerald-400'}`}>
+                                        {((liveTelemetry as any)?.rpm || 50).toFixed(2)} Hz
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -169,13 +172,13 @@ export const ExecutiveDashboard: React.FC = () => {
                 {/* MIDDLE: KPIS & STRATEGY (5 Columns) */}
                 <div className="lg:col-span-5 flex flex-col gap-8">
 
-                    {/* GIANT KPI ROW */}
+                    {/* GIANT KPI ROW (3x Size as requested) */}
                     <div className="grid grid-cols-2 gap-6">
                         <GlassCard className="border-t-4 border-t-cyan-500 bg-gradient-to-br from-slate-900/90 to-slate-950/90 hover:scale-[1.02] transition-transform">
                             <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-4">Unit Health</p>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-7xl font-black text-white tracking-tighter">{selectedReport.healthScore.toFixed(0)}</span>
-                                <span className="text-2xl text-slate-600 font-bold">%</span>
+                                <span className="text-8xl font-black text-white tracking-tighter drop-shadow-xl">{selectedReport.healthScore.toFixed(0)}</span>
+                                <span className="text-3xl text-slate-600 font-bold">%</span>
                             </div>
                             <div className="mt-4 h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                 <div className="h-full bg-cyan-500 shadow-[0_0_15px_cyan]" style={{ width: `${selectedReport.healthScore}%` }}></div>
@@ -185,8 +188,8 @@ export const ExecutiveDashboard: React.FC = () => {
                         <GlassCard className="border-t-4 border-t-red-500 bg-gradient-to-br from-slate-900/90 to-slate-950/90 hover:scale-[1.02] transition-transform">
                             <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-4">Financial Risk</p>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-7xl font-black text-red-500 tracking-tighter">{(selectedReport.moneyAtRisk / 1000).toFixed(0)}</span>
-                                <span className="text-2xl text-slate-600 font-bold">k€</span>
+                                <span className="text-8xl font-black text-red-500 tracking-tighter drop-shadow-xl">{(selectedReport.moneyAtRisk / 1000).toFixed(0)}</span>
+                                <span className="text-3xl text-slate-600 font-bold">k€</span>
                             </div>
                             <p className="text-[10px] text-red-400/60 mt-4 uppercase font-mono">Projected Loss (30d)</p>
                         </GlassCard>

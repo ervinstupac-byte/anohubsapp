@@ -1,6 +1,4 @@
-// Project Context - "CEREBRO" Master State - Phase 13 Unified
-// Central nervous system for ALL AnoHUB data
-
+// Project Context - "CEREBRO" Master State - Final Unified
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { PhysicsEngine } from '../services/PhysicsEngine';
 import {
@@ -16,9 +14,12 @@ import { InspectionImage, SiteParameters } from '../services/StrategicPlanningSe
 import { AssetIdentity } from '../types/assetIdentity';
 import { AIFinding } from '../types/aiFinding';
 import { MeasurementHistory, HistoricalMeasurement, PrecisionMeasurement } from '../types/trends';
+
+// --- FORCE IMPORT OF MODULES ---
 import { HistoricalTrendAnalyzer } from '../services/HistoricalTrendAnalyzer';
 import { FineEngineeringLogService } from '../services/FineEngineeringLogService';
 import { ServiceChecklistEngine } from '../services/ServiceChecklistEngine';
+import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
 
 // MASTER DEMO DATA
 const PELTON_DEMO_STATE: TechnicalProjectState = {
@@ -72,6 +73,9 @@ interface ProjectContextType {
 
     // Phase 13: Service Checklist
     getRecommendedChecklist: () => any;
+
+    // Financial Risk Calculator (Integrated)
+    calculateFinancialRisk: (healthScore: number, powerMW: number) => any;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -197,7 +201,7 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
                 const updated = HistoricalTrendAnalyzer.addMeasurement(
                     existing,
                     measurement,
-                    existing.trend?.criticalThreshold || 0.60  // Default critical threshold
+                    existing.trend?.criticalThreshold || 0.60
                 );
                 measurements.set(parameterId, updated);
             } else {
@@ -269,11 +273,15 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     // Phase 13: Service Checklist Integration
     const getRecommendedChecklist = () => {
         if (!technicalState.assetIdentity) return null;
-
-        // Use Expert Engine to derive risk profile first (if needed)
-        // For now, satisfy request: "Checklist for Francis"
         const engineType = technicalState.assetIdentity.turbineType;
         return ServiceChecklistEngine.getTemplateForTurbine(engineType);
+    };
+
+    // Phase 13: Financial Risk Calculator Integration
+    const calculateFinancialRisk = (healthScore: number, powerMW: number) => {
+        // Assume default price if not set
+        const price = technicalState.financials.electricityPriceEURperMWh || 80;
+        return ExpertDiagnosisEngine.calculateFinancialImpact(healthScore, powerMW, price);
     };
 
     // Legacy compatibility: siteParams computed from technicalState
@@ -315,7 +323,8 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         addPrecisionMeasurement,
         updateFinancialSettings,
         getRecommendedChecklist,
-        getTrend
+        getTrend,
+        calculateFinancialRisk
     };
 
     return <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>;
