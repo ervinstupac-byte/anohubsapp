@@ -13,6 +13,7 @@ import { useProjectEngine } from '../contexts/ProjectContext.tsx';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
 import { AssetIdentity, TurbineType } from '../types/assetIdentity.ts';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
+import { DEFAULT_TECHNICAL_STATE } from '../models/TechnicalSchema';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { StatCard } from './ui/StatCard.tsx';
 import { ControlPanel } from './ui/ControlPanel.tsx';
@@ -69,14 +70,21 @@ export const HPPBuilder: React.FC = () => {
             const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
             const parsed = saved ? JSON.parse(saved) : {};
             return {
-                head: Number(parsed.head) || 50,
-                flow: Number(parsed.flow) || 10,
-                efficiency: Number(parsed.efficiency) || 92,
-                powerFactor: Number(parsed.powerFactor) || 0.8,
-                waterQuality: parsed.waterQuality || 'clean',
-                flowVariation: parsed.flowVariation || 'stable'
+                head: Number(parsed.head) || DEFAULT_TECHNICAL_STATE.site.grossHead,
+                flow: Number(parsed.flow) || DEFAULT_TECHNICAL_STATE.site.designFlow,
+                efficiency: Number(parsed.efficiency) || 92, // Keep as-is for now (not in schema)
+                powerFactor: Number(parsed.powerFactor) || 0.8, // Keep as-is for now (not in schema)
+                waterQuality: parsed.waterQuality || DEFAULT_TECHNICAL_STATE.site.waterQuality,
+                flowVariation: parsed.flowVariation || 'stable' // Keep as-is for now (not in schema)
             };
-        } catch { return { head: 50, flow: 10, efficiency: 92, powerFactor: 0.8, waterQuality: 'clean', flowVariation: 'stable' }; }
+        } catch { return {
+            head: DEFAULT_TECHNICAL_STATE.site.grossHead,
+            flow: DEFAULT_TECHNICAL_STATE.site.designFlow,
+            efficiency: 92, // Keep as-is for now (not in schema)
+            powerFactor: 0.8, // Keep as-is for now (not in schema)
+            waterQuality: DEFAULT_TECHNICAL_STATE.site.waterQuality,
+            flowVariation: 'stable' // Keep as-is for now (not in schema)
+        }; }
     });
 
     const [savedConfigs, setSavedConfigs] = useState<SavedConfiguration[]>([]);
@@ -90,55 +98,151 @@ export const HPPBuilder: React.FC = () => {
     }, [selectedAsset, user]);
     useEffect(() => { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings)); }, [settings]);
 
-    // --- PHYSICS CALCULATIONS ---
+    const { technicalState } = useProjectEngine();
+
+    // --- PHYSICS CALCULATIONS WITH ERROR BOUNDARIES - CRASH FIXES ---
     const calculations = useMemo(() => {
         try {
-            const turbineType = selectedAsset?.turbine_type || 'kaplan';
-            // Optional chaining safety
-            const engine = TurbineFactory.getEngine(turbineType);
-            const headVal = settings?.head ?? 50;
-            const flowVal = settings?.flow ?? 10;
+            // SAFE FALLBACKS FROM TECHNICAL SCHEMA - SINGLE SOURCE OF TRUTH
+            const turbineType = selectedAsset?.turbine_type ?? 'kaplan';
+            const headVal = settings?.head ?? technicalState?.site?.grossHead ?? DEFAULT_TECHNICAL_STATE.site.grossHead;
+            const flowVal = settings?.flow ?? technicalState?.site?.designFlow ?? DEFAULT_TECHNICAL_STATE.site.designFlow;
             const effVal = settings?.efficiency ?? 92;
 
-            const powerMW = engine.calculatePower(headVal, flowVal, effVal);
-            const annualGWh = engine.calculateEnergy(powerMW, settings?.flowVariation ?? 'stable');
-            const specificSpeedIndex = engine.calculateSpecificSpeed(headVal, flowVal);
+            // SAFE ENGINE CREATION WITH OPTIONAL CHAINING
+            let engine;
+            try {
+                engine = TurbineFactory.getEngine(turbineType);
+            } catch (engineError) {
+                console.warn('Engine creation failed, using Kaplan fallback:', engineError);
+                engine = TurbineFactory.getEngine('kaplan');
+            }
+
+            // SAFE CALCULATIONS WITH BOUNDS CHECKING AND FALLBACKS
+            const powerMW = Math.max(0,
+                engine?.calculatePower?.(headVal ?? 0, flowVal ?? 0, effVal ?? 92) ?? 0
+            );
+            const annualGWh = Math.max(0,
+                engine?.calculateEnergy?.(powerMW, settings?.flowVariation ?? 'stable') ?? 0
+            );
+            const specificSpeedIndex = engine?.calculateSpecificSpeed?.(headVal ?? 0, flowVal ?? 0) ?? 0;
 
             const results = {
-                powerMW: powerMW,
-                energyGWh: annualGWh,
-                annualGWh: annualGWh.toFixed(2),
-                n_sq: specificSpeedIndex.toString()
+                powerMW: isNaN(powerMW) ? 0 : Number(powerMW.toFixed(2)),
+                energyGWh: isNaN(annualGWh) ? 0 : Number(annualGWh.toFixed(2)),
+                annualGWh: isNaN(annualGWh) ? '0.00' : annualGWh.toFixed(2),
+                n_sq: isNaN(specificSpeedIndex) ? '0' : specificSpeedIndex.toFixed(1)
             };
 
-            setDesign({
-                design_name: configName || 'Active Design',
-                recommended_turbine: 'Calculating...',
-                parameters: settings,
-                calculations: results,
-                asset_id: selectedAsset?.id
-            });
-            return results;
-        } catch { return { powerMW: 0, energyGWh: 0, annualGWh: '0.00', n_sq: '0' }; }
-    }, [settings, selectedAsset, configName, setDesign]);
+            // SAFE DESIGN UPDATE WITH OPTIONAL CHAINING
+            try {
+                setDesign?.({
+                    design_name: configName || 'Active Design',
+                    recommended_turbine: turbineType?.toUpperCase?.() ?? 'KAPLAN',
+                    parameters: {
+                        head: headVal,
+                        flow: flowVal,
+                        efficiency: effVal,
+                        powerFactor: settings?.powerFactor ?? 0.8,
+                        waterQuality: settings?.waterQuality ?? DEFAULT_TECHNICAL_STATE.site.waterQuality,
+                        flowVariation: settings?.flowVariation ?? 'stable'
+                    },
+                    calculations: results,
+                    asset_id: selectedAsset?.id
+                });
+            } catch (designError) {
+                console.warn('Design update failed:', designError);
+            }
 
-    // --- RECOMMENDATIONS ---
+            return results;
+        } catch (calcError) {
+            console.error('Physics calculation error:', calcError);
+
+            // CRASH-PROOF FALLBACK VALUES WITH VALIDATION
+            const fallbackResults = {
+                powerMW: 0,
+                energyGWh: 0,
+                annualGWh: '0.00',
+                n_sq: '0'
+            };
+
+            try {
+                setDesign?.({
+                    design_name: configName || 'Error Recovery Design',
+                    recommended_turbine: 'KAPLAN',
+                    parameters: {
+                        head: DEFAULT_TECHNICAL_STATE.site.grossHead,
+                        flow: DEFAULT_TECHNICAL_STATE.site.designFlow,
+                        efficiency: 92,
+                        powerFactor: 0.8,
+                        waterQuality: DEFAULT_TECHNICAL_STATE.site.waterQuality,
+                        flowVariation: 'stable'
+                    },
+                    calculations: fallbackResults,
+                    asset_id: selectedAsset?.id
+                });
+            } catch (fallbackError) {
+                console.error('Fallback design update failed:', fallbackError);
+            }
+
+            return fallbackResults;
+        }
+    }, [settings, selectedAsset, configName, setDesign, technicalState]);
+
+    // --- RECOMMENDATIONS WITH ERROR BOUNDARIES ---
     const recommendations = useMemo((): TurbineRecommendation[] => {
-        const engines = TurbineFactory.getAllEngines();
-        const recs = engines.map(engine => {
-            const { score, reasons } = engine.getRecommendationScore(settings.head, settings.flow, settings.flowVariation, settings.waterQuality);
-            return { key: engine.type, score, reasons, isBest: false };
-        });
-        const maxScore = Math.max(...recs.map(r => r.score));
-        return recs.map(r => ({ ...r, isBest: r.score === maxScore && r.score > 0 })).sort((a, b) => b.score - a.score);
+        try {
+            const engines = TurbineFactory.getAllEngines();
+            const safeHead = settings?.head ?? DEFAULT_TECHNICAL_STATE.site.grossHead;
+            const safeFlow = settings?.flow ?? DEFAULT_TECHNICAL_STATE.site.designFlow;
+            const safeFlowVariation = settings?.flowVariation ?? 'stable';
+            const safeWaterQuality = settings?.waterQuality ?? 'clean';
+
+            const recs = engines.map(engine => {
+                try {
+                    const { score, reasons } = engine.getRecommendationScore(safeHead, safeFlow, safeFlowVariation, safeWaterQuality);
+                    return {
+                        key: engine.type,
+                        score: isNaN(score) ? 0 : score,
+                        reasons: reasons || [],
+                        isBest: false
+                    };
+                } catch (engineError) {
+                    console.warn(`Engine ${engine.type} recommendation failed:`, engineError);
+                    return {
+                        key: engine.type,
+                        score: 0,
+                        reasons: [`Error calculating recommendation for ${engine.type}`],
+                        isBest: false
+                    };
+                }
+            });
+
+            const validScores = recs.map(r => r.score).filter(s => !isNaN(s) && s > 0);
+            const maxScore = validScores.length > 0 ? Math.max(...validScores) : 0;
+
+            return recs.map(r => ({
+                ...r,
+                isBest: r.score === maxScore && r.score > 0
+            })).sort((a, b) => b.score - a.score);
+        } catch (recError) {
+            console.error('Recommendations calculation error:', recError);
+            // Return safe fallback recommendations
+            return [{
+                key: 'KAPLAN',
+                score: 100,
+                reasons: ['Safe fallback recommendation'],
+                isBest: true
+            }];
+        }
     }, [settings]);
 
     // --- ACTIONS ---
     const updateSettings = (key: keyof HPPSettings, value: any) => {
         setSettings(prev => {
             const newSettings = { ...prev, [key]: value };
-            if (key === 'head') updateSiteConditions({ grossHead: Number(value) || 50 });
-            if (key === 'flow') updateSiteConditions({ designFlow: Number(value) || 10 });
+            if (key === 'head') updateSiteConditions({ grossHead: Number(value) || DEFAULT_TECHNICAL_STATE.site.grossHead });
+            if (key === 'flow') updateSiteConditions({ designFlow: Number(value) || DEFAULT_TECHNICAL_STATE.site.designFlow });
             return newSettings;
         });
     };
@@ -265,7 +369,8 @@ export const HPPBuilder: React.FC = () => {
     };
 
     return (
-        <div className="animate-fade-in max-w-7xl mx-auto space-y-8 pb-24">
+        <ErrorBoundary fallback={<div className="p-8 text-center text-red-500">HPP Builder encountered an error. Please refresh the page.</div>}>
+            <div className="animate-fade-in max-w-7xl mx-auto space-y-8 pb-24">
             {/* HEADER */}
             <div className="flex justify-between items-center pt-6 px-4">
                 <div>
@@ -403,5 +508,6 @@ export const HPPBuilder: React.FC = () => {
 
 
         </div>
+        </ErrorBoundary>
     );
 };

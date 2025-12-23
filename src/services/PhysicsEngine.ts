@@ -10,14 +10,14 @@ export const PhysicsEngine = {
      * Pure function: Input State -> Output Physics Parameters
      */
     recalculateProjectPhysics: (state: TechnicalProjectState): TechnicalProjectState => {
-        const { site, penstock, mechanical, tolerances } = state;
+        const { site, penstock, mechanical, tolerances, constants } = state;
         const newState = { ...state };
         const alerts: string[] = [];
 
-        // 1. Hydraulic Pressure Physics
+        // 1. Hydraulic Pressure Physics - Using reactive constants from schema
         // Static P = rho * g * H
-        const rho = 1000; // kg/m3
-        const g = 9.81;
+        const rho = constants.physics.waterDensity; // From schema constants
+        const g = constants.physics.gravity; // From schema constants
         const staticHead = site.grossHead;
         const staticPressurePa = rho * g * staticHead;
         const staticPressureBar = staticPressurePa / 100000;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 import { useTelemetry } from '../../contexts/TelemetryContext.tsx';
+import { useProjectEngine } from '../../contexts/ProjectContext.tsx';
 import { Tooltip } from '../ui/Tooltip.tsx';
 
 import { DigitalDisplay } from './DigitalDisplay.tsx';
@@ -43,7 +44,9 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
 export const ScadaMimic: React.FC = React.memo(() => {
     const { selectedAsset } = useAssetContext();
     const { telemetry } = useTelemetry();
+    const { connectSCADAToExpertEngine } = useProjectEngine();
     const [isLoading, setIsLoading] = useState(true);
+    const [scadaAlarms, setScadaAlarms] = useState<any[]>([]);
 
     const liveData = selectedAsset ? telemetry[selectedAsset.id] : null;
     const isCritical = liveData?.status === 'CRITICAL';
@@ -73,6 +76,32 @@ export const ScadaMimic: React.FC = React.memo(() => {
         }, 2000);
         return () => clearInterval(interval);
     }, [baseMw, isLoading]);
+
+    // SCADA TO EXPERT ENGINE INTEGRATION
+    useEffect(() => {
+        if (!selectedAsset || isLoading) return;
+
+        // Extract SCADA values from display (simulated critical condition: 98.2 Hz)
+        const flowRate = 42.5; // m³/s from display
+        const headPressure = 152.0; // m from display
+        const gridFreq = 98.2; // Hz from display (CRITICAL!)
+
+        // Connect to ExpertDiagnosisEngine
+        const scadaConnection = connectSCADAToExpertEngine(flowRate, headPressure, gridFreq);
+
+        if (scadaConnection?.criticalAlarms?.length > 0) {
+            setScadaAlarms(scadaConnection.criticalAlarms);
+            console.warn('SCADA CRITICAL ALARMS:', scadaConnection.criticalAlarms);
+        } else {
+            setScadaAlarms([]);
+        }
+
+        // Trigger visual alarm for frequency 98.2 Hz (massive deviation)
+        if (gridFreq >= 98.0) {
+            // Could trigger emergency shutdown here
+            console.error('CRITICAL: Grid frequency at', gridFreq, 'Hz - Risk of mechanical destruction!');
+        }
+    }, [selectedAsset, isLoading, connectSCADAToExpertEngine]);
 
     if (isLoading) {
         return (
@@ -129,13 +158,25 @@ export const ScadaMimic: React.FC = React.memo(() => {
                     <TurbineUnit id="t2" name="GEN T2" status="running" mw={t2Mw} />
                 </div>
 
-                {/* FLOW_STATS PANEL */}
+                {/* FLOW_STATS PANEL WITH EXPERT ENGINE INTEGRATION */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                    <DigitalDisplay value={isCritical ? "ALARM" : "42.5"} label="FLOW_RATE" unit={isCritical ? "" : "m³/s"} color={isCritical ? 'red' : 'cyan'} className="glass" />
-                    <DigitalDisplay value={isCritical ? "FAIL" : "152.0"} label="HEAD_PRES" unit={isCritical ? "" : "m"} color={isCritical ? 'red' : 'cyan'} className="glass" />
-                    <DigitalDisplay value={isCritical ? "TRIP" : "98.2"} label="GRID_FREQ" unit={isCritical ? "" : "Hz"} color={isCritical ? 'red' : 'cyan'} className="glass" />
-                    <DigitalDisplay value={isCritical ? "ALERT" : "12.2"} label="COOLING_ΔT" unit={isCritical ? "" : "°C"} color={isCritical ? 'red' : 'cyan'} className="glass" />
+                    <DigitalDisplay value={scadaAlarms.find(a => a.type === 'CAVITATION_CRITICAL') ? "CAVITATE" : "42.5"} label="FLOW_RATE" unit="m³/s" color={scadaAlarms.find(a => a.type === 'CAVITATION_CRITICAL') ? 'red' : 'cyan'} className="glass" />
+                    <DigitalDisplay value={scadaAlarms.find(a => a.type === 'CAVITATION_CRITICAL') ? "CAVITATE" : "152.0"} label="HEAD_PRES" unit="m" color={scadaAlarms.find(a => a.type === 'CAVITATION_CRITICAL') ? 'red' : 'cyan'} className="glass" />
+                    <DigitalDisplay value={scadaAlarms.find(a => a.type === 'GRID_FREQUENCY_CRITICAL') ? "DESTRUCT" : "98.2"} label="GRID_FREQ" unit="Hz" color={scadaAlarms.find(a => a.type === 'GRID_FREQUENCY_CRITICAL') ? 'red' : 'cyan'} className="glass animate-pulse" />
+                    <DigitalDisplay value={isCritical ? "ALERT" : "12.2"} label="COOLING_ΔT" unit="°C" color={isCritical ? 'red' : 'cyan'} className="glass" />
                 </div>
+
+                {/* SCADA ALARMS DISPLAY */}
+                {scadaAlarms.length > 0 && (
+                    <div className="mt-4 p-4 bg-red-950/40 border border-red-500/50 rounded-lg">
+                        <h4 className="text-red-400 font-bold uppercase text-sm mb-2">⚠️ EXPERT ENGINE ALARMS</h4>
+                        {scadaAlarms.map((alarm, idx) => (
+                            <div key={idx} className="text-red-300 text-xs mb-1 animate-pulse">
+                                • {alarm.message}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

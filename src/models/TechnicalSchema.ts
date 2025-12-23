@@ -72,6 +72,33 @@ export interface FinancialSettings {
     targetAvailability: number;  // 0-100%
 }
 
+// Engineering Constants - Single Source of Truth
+export interface EngineeringConstants {
+    physics: {
+        waterDensity: number; // kg/m³
+        gravity: number; // m/s²
+        atmosphericPressure: number; // Pa
+    };
+    thermal: {
+        criticalAmbientTemp: number; // °C
+        minClearanceForGrease: number; // mm
+    };
+    electrical: {
+        nominalGridFrequency: number; // Hz
+        gridFrequencyTolerance: number; // ± Hz
+        criticalFrequencyThreshold: number; // Hz (e.g., 98.2 triggers critical alarm)
+    };
+    hydraulic: {
+        cavitationFlowThreshold: number; // m³/s
+        cavitationHeadThreshold: number; // m
+        targetRunnerClearance: number; // mm
+    };
+    maintenance: {
+        efficiencyLossPerHealthPoint: number; // % loss per point below 100
+        jackingSafetyFactor: number;
+    };
+}
+
 export interface MaintenanceHistoryState {
     measurements: Map<string, MeasurementHistory>;
     engineeringLog: FineEngineeringLog;
@@ -90,6 +117,9 @@ export interface TechnicalProjectState {
     aiDiagnosis: AIDiagnosisState;
     financials: FinancialSettings;
     maintenanceHistory: MaintenanceHistoryState;
+
+    // Engineering Constants - Single Source of Truth
+    constants: EngineeringConstants;
 }
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
@@ -128,5 +158,32 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
             lastUpdated: new Date().toISOString()
         },
         lastUpdated: new Date().toISOString()
+    },
+
+    // Engineering Constants - Reactive Configuration
+    constants: {
+        physics: {
+            waterDensity: 1000, // kg/m³
+            gravity: 9.81, // m/s²
+            atmosphericPressure: 101325 // Pa
+        },
+        thermal: {
+            criticalAmbientTemp: 30, // °C
+            minClearanceForGrease: 0.10 // mm
+        },
+        electrical: {
+            nominalGridFrequency: 50.0, // Hz
+            gridFrequencyTolerance: 0.5, // ± Hz
+            criticalFrequencyThreshold: 98.2 // Hz - triggers critical alarm
+        },
+        hydraulic: {
+            cavitationFlowThreshold: 42.5, // m³/s
+            cavitationHeadThreshold: 152.0, // m
+            targetRunnerClearance: 0.40 // mm
+        },
+        maintenance: {
+            efficiencyLossPerHealthPoint: 0.0005, // 0.05% per point
+            jackingSafetyFactor: 1.5
+        }
     }
 };

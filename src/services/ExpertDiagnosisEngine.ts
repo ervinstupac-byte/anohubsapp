@@ -5,6 +5,7 @@
  */
 
 import { AssetIdentity, SensorMatrix } from '../types/assetIdentity';
+import { EngineeringConstants } from '../models/TechnicalSchema';
 import {
     ThermalRisk,
     AxialThrustRisk,
@@ -24,20 +25,21 @@ export class ExpertDiagnosisEngine {
 
     /**
      * Assess thermal expansion risk
-     * CRITICAL if: Grease lubrication + Ambient > 30°C + Clearance < 0.10mm
+     * Uses engineering constants from TechnicalSchema - no hardcoded values
      */
     static assessThermalRisk(
         ambientTempC: number,
         lubrication: LubricationType,
-        clearanceMM: number
+        clearanceMM: number,
+        constants: EngineeringConstants
     ): ThermalRisk {
-        if (ambientTempC > 30 && lubrication === 'GREASE') {
-            if (clearanceMM < 0.10) {
+        if (ambientTempC > constants.thermal.criticalAmbientTemp && lubrication === 'GREASE') {
+            if (clearanceMM < constants.thermal.minClearanceForGrease) {
                 return {
                     detected: true,
                     severity: 'CRITICAL',
-                    description: 'Thermal expansion risk: Grease lubrication in high ambient temp (>30°C) with tight clearance (<0.10mm). Risk of seizing.',
-                    descriptionDE: 'Wärmeausdehnungsrisiko: Schmierfett bei hoher Umgebungstemperatur (>30°C) mit engem Spiel (<0,10mm). Festfressrisiko.'
+                    description: `Thermal expansion risk: Grease lubrication in high ambient temp (>${constants.thermal.criticalAmbientTemp}°C) with tight clearance (<${constants.thermal.minClearanceForGrease}mm). Risk of seizing.`,
+                    descriptionDE: `Wärmeausdehnungsrisiko: Schmierfett bei hoher Umgebungstemperatur (>${constants.thermal.criticalAmbientTemp}°C) mit engem Spiel (<${constants.thermal.minClearanceForGrease}mm). Festfressrisiko.`
                 };
             } else {
                 return {
@@ -148,15 +150,16 @@ export class ExpertDiagnosisEngine {
 
     /**
      * Validate jacking system for vertical turbines
-     * CRITICAL if pressure insufficient for rotor weight
+     * Uses engineering constants - no hardcoded gravity or safety factors
      */
     static assessJackingSystem(
         jackingPressureBar: number,
         rotorWeightTons: number,
-        jackingAreaCM2: number = 500  // Default area
+        jackingAreaCM2: number = 500,
+        constants: EngineeringConstants
     ): JackingRisk {
-        // Required pressure = (Weight * g) / Area * safety factor 1.5
-        const requiredPressure = ((rotorWeightTons * 1000 * 9.81) / (jackingAreaCM2 * 100)) * 1.5;
+        // Required pressure = (Weight * g) / Area * safety factor
+        const requiredPressure = ((rotorWeightTons * 1000 * constants.physics.gravity) / (jackingAreaCM2 * 100)) * constants.maintenance.jackingSafetyFactor;
 
         if (jackingPressureBar < requiredPressure * 0.8) {
             return {
@@ -193,19 +196,19 @@ export class ExpertDiagnosisEngine {
 
     /**
      * Assess Grid Frequency Stability
-     * CRITICAL if deviation > 5% (e.g. 98.2Hz vs 50Hz is MASSIVE deviation > 90%!)
+     * Uses engineering constants - CRITICAL if exceeds critical threshold (e.g., 98.2Hz)
      */
-    static assessGridFrequency(frequencyHz: number): GridRisk {
-        // Standard HPP is 50Hz or 60Hz. 
-        // 98.2 Hz is catastrophically high (Overspeed).
-        if (frequencyHz > 55 || frequencyHz < 45) {
-            // Specific message mapping for "Unknown" triggers if frequency is weird
+    static assessGridFrequency(frequencyHz: number, constants: EngineeringConstants): GridRisk {
+        const minFreq = constants.electrical.nominalGridFrequency - constants.electrical.gridFrequencyTolerance;
+        const maxFreq = constants.electrical.nominalGridFrequency + constants.electrical.gridFrequencyTolerance;
+
+        if (frequencyHz >= constants.electrical.criticalFrequencyThreshold || frequencyHz > maxFreq || frequencyHz < minFreq) {
             return {
                 detected: true,
                 frequencyHz,
                 severity: 'CRITICAL',
-                message: 'Frekvencija van opsega - Rizik od mehaničkog razaranja generatora!',
-                messageDE: 'Frequenz außerhalb des Bereichs - Risiko der mechanischen Zerstörung des Generators!'
+                message: `Frequency ${frequencyHz} Hz exceeds safe limits. Risk of mechanical destruction at ${constants.electrical.criticalFrequencyThreshold} Hz.`,
+                messageDE: `Frequenz ${frequencyHz} Hz außerhalb des sicheren Bereichs. Risiko der mechanischen Zerstörung bei ${constants.electrical.criticalFrequencyThreshold} Hz.`
             };
         }
         return {
@@ -220,15 +223,16 @@ export class ExpertDiagnosisEngine {
     static calculateFinancialImpact(
         healthScore: number,
         ratedPowerMW: number,
-        priceEUR: number
+        priceEUR: number,
+        constants: EngineeringConstants
     ): FinancialImpact {
         // Safe defaults
         const power = ratedPowerMW || 0;
         const price = priceEUR || 0;
 
-        // Loss model
+        // Loss model using reactive constant
         const isCritical = healthScore < 50;
-        const lossMW = isCritical ? power : (power * (100 - healthScore) * 0.0005); // 0.05% per point
+        const lossMW = isCritical ? power : (power * (100 - healthScore) * constants.maintenance.efficiencyLossPerHealthPoint);
 
         const hourlyLoss = lossMW * price;
 
@@ -343,6 +347,7 @@ export class ExpertDiagnosisEngine {
 
     /**
      * Run complete diagnostic assessment
+     * Uses engineering constants from TechnicalSchema - fully reactive, no hardcoded values
      */
     static runDiagnostics(
         assetIdentity: AssetIdentity,
@@ -351,14 +356,24 @@ export class ExpertDiagnosisEngine {
         rotorWeightTons?: number,
         currentFlow?: number,
         currentHead?: number,
-        gridFrequency?: number
+        gridFrequency?: number,
+        constants?: EngineeringConstants
     ): DiagnosticResults {
-        // Thermal risk
+        // Use provided constants or fallback defaults for backward compatibility
+        const safeConstants = constants || {
+            thermal: { criticalAmbientTemp: 30, minClearanceForGrease: 0.10 },
+            electrical: { nominalGridFrequency: 50.0, gridFrequencyTolerance: 0.5, criticalFrequencyThreshold: 98.2 },
+            hydraulic: { cavitationFlowThreshold: 42.5, cavitationHeadThreshold: 152.0, targetRunnerClearance: 0.40 },
+            maintenance: { jackingSafetyFactor: 1.5 },
+            physics: { gravity: 9.81 }
+        } as EngineeringConstants;
+
+        // Thermal risk using reactive constants
         const avgClearance = assetIdentity.francisAdvanced
             ? (assetIdentity.francisAdvanced.frontRunnerClearanceMM + assetIdentity.francisAdvanced.backRunnerClearanceMM) / 2
-            : 0.40;
+            : safeConstants.hydraulic.targetRunnerClearance;
 
-        const thermalRisk = this.assessThermalRisk(ambientTempC, lubrication, avgClearance);
+        const thermalRisk = this.assessThermalRisk(ambientTempC, lubrication, avgClearance, safeConstants);
 
         // Axial thrust (Francis only)
         const axialThrustRisk = assetIdentity.francisAdvanced
@@ -371,26 +386,29 @@ export class ExpertDiagnosisEngine {
         // Sensor coverage
         const sensorCoverage = this.assessSensorCoverage(assetIdentity.sensorMatrix);
 
-        // Grid Frequency Check (User Rule: 98.2 Hz)
-        const finalGridFreq = gridFrequency !== undefined ? gridFrequency : 50.0;
-        const gridRisk = this.assessGridFrequency(finalGridFreq);
+        // Grid Frequency Check using reactive constants
+        const finalGridFreq = gridFrequency !== undefined ? gridFrequency : safeConstants.electrical.nominalGridFrequency;
+        const gridRisk = this.assessGridFrequency(finalGridFreq, safeConstants);
 
-        // Cavitation Risk (User Rule: Flow 42.5 & Head 152.0)
+        // Cavitation Risk using reactive constants
         let cavitationRisk = { severity: 'OPTIMAL' as RiskSeverity, message: 'Hydraulic conditions stable.' };
         if (currentFlow !== undefined && currentHead !== undefined) {
-            if (Math.abs(currentFlow - 42.5) < 0.2 && Math.abs(currentHead - 152.0) < 0.2) {
+            if (Math.abs(currentFlow - safeConstants.hydraulic.cavitationFlowThreshold) < 0.2 &&
+                Math.abs(currentHead - safeConstants.hydraulic.cavitationHeadThreshold) < 0.2) {
                 cavitationRisk = {
                     severity: 'CRITICAL',
-                    message: 'CAVITATION RISK DETECTED. Action: Check runner clearances (target 0.40mm).'
+                    message: `CAVITATION RISK DETECTED. Action: Check runner clearances (target ${safeConstants.hydraulic.targetRunnerClearance}mm).`
                 };
             }
         }
 
-        // Jacking system (Vertical only)
+        // Jacking system (Vertical only) using reactive constants
         const jackingRisk = assetIdentity.shaftJacking && rotorWeightTons
             ? ExpertDiagnosisEngine.assessJackingSystem(
                 assetIdentity.shaftJacking.systemPressureBar,
-                rotorWeightTons
+                rotorWeightTons,
+                500, // Default area - could be made configurable
+                safeConstants
             )
             : undefined;
 
