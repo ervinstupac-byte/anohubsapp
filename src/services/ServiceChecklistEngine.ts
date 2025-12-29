@@ -16,6 +16,7 @@ import {
     ValidationResult,
     ServiceAlert,
     MeasurementConfig,
+    MeasurementUnit,
     AlertSeverity
 } from '../types/checklist';
 
@@ -337,5 +338,213 @@ export class ServiceChecklistEngine {
         });
 
         return auditText;
+    }
+
+    /**
+     * Add a standard measurement with validation
+     * Returns validation result and formatted data for state updates
+     */
+    static addMeasurement(
+        assetId: string,
+        component: string,
+        measuredValue: number,
+        unit: MeasurementUnit,
+        nominalValue: number,
+        minValue: number,
+        maxValue: number,
+        tolerance: number
+    ): {
+        isValid: boolean;
+        validationResult: ValidationResult;
+        measurementData: {
+            assetId: string;
+            component: string;
+            value: number;
+            unit: string;
+            healthScore: number;
+            timestamp: string;
+        };
+    } {
+        const config: MeasurementConfig = {
+            unit,
+            nominalValue,
+            minValue,
+            maxValue,
+            tolerance
+        };
+
+        const validationResult = this.validateMeasurement(measuredValue, config);
+
+        // Calculate health score based on deviation
+        // 100 = perfect, 0 = critical failure
+        let healthScore = 100;
+        if (validationResult.deviation !== undefined) {
+            const deviationRatio = validationResult.deviation / tolerance;
+
+            if (deviationRatio > 2.0) {
+                healthScore = 0; // Critical - beyond 2x tolerance
+            } else if (deviationRatio > 1.5) {
+                healthScore = 25; // Severe - beyond 1.5x tolerance
+            } else if (deviationRatio > 1.0) {
+                healthScore = 50; // Poor - beyond tolerance
+            } else if (deviationRatio > 0.75) {
+                healthScore = 75; // Fair - approaching tolerance
+            } else {
+                healthScore = 100 - Math.round(deviationRatio * 25); // Good to Excellent
+            }
+        }
+
+        const measurementData = {
+            assetId,
+            component,
+            value: measuredValue,
+            unit,
+            healthScore,
+            timestamp: new Date().toISOString()
+        };
+
+        return {
+            isValid: validationResult.isValid,
+            validationResult,
+            measurementData
+        };
+    }
+
+    /**
+     * Add a precision measurement (0.05mm tolerance level)
+     * Enhanced validation for high-precision measurements
+     */
+    static addPrecisionMeasurement(
+        assetId: string,
+        component: string,
+        measuredValue: number,
+        nominalValue: number,
+        precisionTolerance: number = 0.05 // Default 0.05mm
+    ): {
+        isValid: boolean;
+        validationResult: ValidationResult;
+        measurementData: {
+            assetId: string;
+            component: string;
+            value: number;
+            unit: string;
+            healthScore: number;
+            precision: string;
+            timestamp: string;
+        };
+        deviationReport: {
+            absoluteDeviation: number;
+            percentageOfTolerance: number;
+            status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
+            recommendation: string;
+        };
+    } {
+        // Use stricter validation ranges for precision measurements
+        const minValue = nominalValue - (precisionTolerance * 3); // 3x tolerance for absolute limits
+        const maxValue = nominalValue + (precisionTolerance * 3);
+
+        const config: MeasurementConfig = {
+            unit: 'mm',
+            nominalValue,
+            minValue,
+            maxValue,
+            tolerance: precisionTolerance
+        };
+
+        const validationResult = this.validateMeasurement(measuredValue, config);
+        const absoluteDeviation = Math.abs(measuredValue - nominalValue);
+        const percentageOfTolerance = (absoluteDeviation / precisionTolerance) * 100;
+
+        // Determine status and recommendation
+        let status: 'EXCELLENT' | 'GOOD' | 'WARNING' | 'CRITICAL';
+        let recommendation: string;
+        let healthScore: number;
+
+        if (percentageOfTolerance <= 50) {
+            status = 'EXCELLENT';
+            recommendation = 'Component within optimal tolerance. Continue normal operation.';
+            healthScore = 100;
+        } else if (percentageOfTolerance <= 75) {
+            status = 'GOOD';
+            recommendation = 'Component acceptable. Monitor during next service interval.';
+            healthScore = 90;
+        } else if (percentageOfTolerance <= 100) {
+            status = 'WARNING';
+            recommendation = 'Approaching tolerance limit. Schedule inspection within 48 hours.';
+            healthScore = 60;
+        } else {
+            status = 'CRITICAL';
+            recommendation = 'TOLERANCE EXCEEDED. Immediate intervention required. Stop operation if safety-critical.';
+            healthScore = Math.max(0, 50 - Math.round((percentageOfTolerance - 100) * 2));
+        }
+
+        const measurementData = {
+            assetId,
+            component,
+            value: measuredValue,
+            unit: 'mm',
+            healthScore,
+            precision: `±${precisionTolerance}mm`,
+            timestamp: new Date().toISOString()
+        };
+
+        const deviationReport = {
+            absoluteDeviation,
+            percentageOfTolerance: Math.round(percentageOfTolerance * 10) / 10, // Round to 1 decimal
+            status,
+            recommendation
+        };
+
+        return {
+            isValid: validationResult.isValid,
+            validationResult,
+            measurementData,
+            deviationReport
+        };
+    }
+
+    /**
+     * Helper to format measurement data for ProjectContext health updates
+     * Maps measurement results to CEREBRO-compatible state updates
+     */
+    static syncMeasurementToAssetHealth(
+        measurementData: {
+            assetId: string;
+            component: string;
+            healthScore: number;
+            timestamp: string;
+        }
+    ): {
+        assetId: string;
+        componentHealth: {
+            [component: string]: {
+                score: number;
+                lastMeasured: string;
+                status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
+            };
+        };
+    } {
+        let status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
+
+        if (measurementData.healthScore >= 90) {
+            status = 'OPTIMAL';
+        } else if (measurementData.healthScore >= 70) {
+            status = 'GOOD';
+        } else if (measurementData.healthScore >= 40) {
+            status = 'WARNING';
+        } else {
+            status = 'CRITICAL';
+        }
+
+        return {
+            assetId: measurementData.assetId,
+            componentHealth: {
+                [measurementData.component]: {
+                    score: measurementData.healthScore,
+                    lastMeasured: measurementData.timestamp,
+                    status
+                }
+            }
+        };
     }
 }

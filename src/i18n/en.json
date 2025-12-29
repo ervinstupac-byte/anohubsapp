@@ -107,6 +107,73 @@
     "footer": "Authorized Personnel Only",
     "guestWelcome": "Welcome, Visiting Engineer!"
   },
+  "hppStudio": {
+    "title": "HPP BUILDER STUDIO",
+    "subtitle": "Advanced Engineering Wizard v2.0",
+    "exitStudio": "Exit Studio",
+    "steps": {
+      "hydrology": "Hydrology Setup",
+      "selection": "Turbine Selection",
+      "export": "Financial & Export"
+    },
+    "labels": {
+      "grossHead": "Gross Head",
+      "flowRate": "Flow Rate",
+      "waterType": "Water Type",
+      "flowProfile": "Flow Profile",
+      "specificSpeed": "Specific Speed (Nq)",
+      "topologyIndex": "Topology Index",
+      "potentialPower": "Potential Power",
+      "calculatedCapacity": "Calculated Capacity",
+      "siteConditions": "Site Conditions",
+      "recommendedMatches": "Recommended Engineering Matches",
+      "bestMatch": "Best Match",
+      "matchScore": "Match Score",
+      "projectExport": "Project Export",
+      "configName": "Configuration Name"
+    },
+    "waterTypes": {
+      "clean": "Clean",
+      "suspended": "Suspended Solids",
+      "abrasive": "Glacial Silt (Abrasive)"
+    },
+    "flowProfiles": {
+      "stable": "Stable (Run-of-River)",
+      "seasonal": "Seasonal Storage"
+    },
+    "buttons": {
+      "continue": "CONTINUE TO SELECTION →",
+      "back": "← Back",
+      "skipToExport": "Skip to Export →",
+      "backToSelection": "← Back to Selection",
+      "saveToCloud": "Save to Cloud",
+      "generateReport": "Generate Report"
+    },
+    "placeholders": {
+      "configName": "e.g. Iron Gorge - Francis V1"
+    },
+    "toasts": {
+      "turbineInitialized": "Initialized Wizard for {{type}}",
+      "invalidCombination": "Invalid head/flow combination. Please adjust values.",
+      "savingDesign": "Saving design configuration...",
+      "saveSuccess": "Design saved successfully!",
+      "enterConfigName": "Please enter a configuration name",
+      "selectAssetFirst": "Please select an asset first",
+      "physicsError": "Physics calculation error - using fallback values",
+      "cloudSyncFailed": "Failed to sync with cloud: {{error}}"
+    },
+    "errors": {
+      "crashRecovery": "HPP Builder encountered an error. Please refresh the page.",
+      "noAssetSelected": "No asset selected"
+    }
+  },
+  "auth": {
+    "signOut": "Sign Out",
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "signOutSuccess": "Successfully signed out",
+    "accessDenied": "Access Denied - Please Log In",
+    "loading": "Authenticating..."
+  },
   "riskReport": {
     "title": "Project",
     "dossier": "Dossier",

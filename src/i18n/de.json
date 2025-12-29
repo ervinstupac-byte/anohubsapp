@@ -107,6 +107,73 @@
     "footer": "Nur für autorisiertes Personal",
     "guestWelcome": "Willkommen, Ingenieur!"
   },
+  "auth": {
+    "signOut": "Abmelden",
+    "signOutConfirm": "Möchten Sie sich wirklich abmelden?",
+    "signOutSuccess": "Erfolgreich abgemeldet",
+    "accessDenied": "Zugriff verweigert - Bitte anmelden",
+    "loading": "Authentifizierung..."
+  },
+  "hppStudio": {
+    "title": "HPP BUILDER STUDIO",
+    "subtitle": "Fortschrittlicher Engineering-Assistent v2.0",
+    "exitStudio": "Studio Verlassen",
+    "steps": {
+      "hydrology": "Hydrologie-Setup",
+      "selection": "Turbinenauswahl",
+      "export": "Finanzen & Export"
+    },
+    "labels": {
+      "grossHead": "Bruttofallhöhe",
+      "flowRate": "Durchflussrate",
+      "waterType": "Wassertyp",
+      "flowProfile": "Durchflussprofil",
+      "specificSpeed": "Spezifische Drehzahl (Nq)",
+      "topologyIndex": "Topologie-Index",
+      "potentialPower": "Potenzielle Leistung",
+      "calculatedCapacity": "Berechnete Kapazität",
+      "siteConditions": "Standortbedingungen",
+      "recommendedMatches": "Empfohlene Engineering-Übereinstimmungen",
+      "bestMatch": "Beste Übereinstimmung",
+      "matchScore": "Übereinstimmungs-Score",
+      "projectExport": "Projektexport",
+      "configName": "Konfigurationsname"
+    },
+    "waterTypes": {
+      "clean": "Sauber",
+      "suspended": "Schwebstoffe",
+      "abrasive": "Gletscherschlick (Abrasiv)"
+    },
+    "flowProfiles": {
+      "stable": "Stabil (Laufwasser)",
+      "seasonal": "Saisonaler Speicher"
+    },
+    "buttons": {
+      "continue": "WEITER ZUR AUSWAHL →",
+      "back": "← Zurück",
+      "skipToExport": "Zu Export Springen →",
+      "backToSelection": "← Zurück zur Auswahl",
+      "saveToCloud": "In Cloud Speichern",
+      "generateReport": "Bericht Erstellen"
+    },
+    "placeholders": {
+      "configName": "z.B. Iron Gorge - Francis V1"
+    },
+    "toasts": {
+      "turbineInitialized": "Assistent für {{type}} initialisiert",
+      "invalidCombination": "Ungültige Fallhöhe/Durchfluss-Kombination. Bitte Werte anpassen.",
+      "savingDesign": "Speichere Design-Konfiguration...",
+      "saveSuccess": "Design erfolgreich gespeichert!",
+      "enterConfigName": "Bitte geben Sie einen Konfigurationsnamen ein",
+      "selectAssetFirst": "Bitte wählen Sie zuerst ein Asset aus",
+      "physicsError": "Fehler bei Physikberechnung - verwende Fallback-Werte",
+      "cloudSyncFailed": "Cloud-Synchronisierung fehlgeschlagen: {{error}}"
+    },
+    "errors": {
+      "crashRecovery": "HPP Builder hat einen Fehler festgestellt. Bitte Seite neu laden.",
+      "noAssetSelected": "Kein Asset ausgewählt"
+    }
+  },
   "actions": {
     "back": "Zurück zum Hub",
     "previewPrint": "Vorschau & Drucken",

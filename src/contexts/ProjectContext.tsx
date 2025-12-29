@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { TechnicalProjectState, ProjectAction } from '../models/TechnicalSchema';
+import { TechnicalProjectState, ProjectAction, ComponentHealthData } from '../models/TechnicalSchema';
 import { PhysicsEngine } from '../services/PhysicsEngine';
 import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
 import { DrTurbineAI } from '../services/DrTurbineAI';
@@ -29,6 +29,22 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
             });
         case 'SET_ASSET':
             return { ...state, identity: action.payload };
+        case 'UPDATE_COMPONENT_HEALTH': {
+            const { assetId, componentId, healthData } = action.payload;
+            const currentHealth = state.componentHealth || {};
+            const assetHealth = currentHealth[assetId] || {};
+
+            return {
+                ...state,
+                componentHealth: {
+                    ...currentHealth,
+                    [assetId]: {
+                        ...assetHealth,
+                        [componentId]: healthData
+                    }
+                }
+            };
+        }
         case 'RESET_TO_DEMO':
             return PhysicsEngine.recalculateProjectPhysics(state); // Re-validate
         default:
@@ -157,12 +173,129 @@ export const useProjectEngine = () => {
         return DrTurbineAI.consult(complexIdentity, flow, head, frequency);
     };
 
+    /**
+     * Add inspection image to asset documentation
+     * Called from ComponentTree and other inspection UIs
+     */
+    const addInspectionImage = (
+        assetId: string,
+        component: string,
+        imageData: {
+            src: string; // base64 or blob URL
+            tag: string;
+            timestamp: string;
+            notes?: string;
+        }
+    ): { success: boolean; imageId: string } => {
+        // Generate unique ID for image
+        const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+        console.log(`[ProjectContext] Adding inspection image for ${assetId}/${component}:`, {
+            imageId,
+            tag: imageData.tag,
+            timestamp: imageData.timestamp
+        });
+
+        // TODO: Dispatch action to store image in technical state
+        // dispatch({ type: 'ADD_INSPECTION_IMAGE', payload: { assetId, component, imageData } });
+
+        return {
+            success: true,
+            imageId
+        };
+    };
+
+    /**
+     * Add measurement using ServiceChecklistEngine
+     * Facade that integrates with ServiceChecklistEngine and updates asset health
+     */
+    const addMeasurement = (
+        assetId: string,
+        component: string,
+        measuredValue: number,
+        unit: 'mm' | 'bar' | 'rpm' | 'celsius',
+        nominalValue: number,
+        tolerance: number
+    ): {
+        success: boolean;
+        validationResult: any;
+        healthScore: number;
+    } => {
+        // Import ServiceChecklistEngine dynamically to avoid circular deps
+        const { ServiceChecklistEngine } = require('../services/ServiceChecklistEngine');
+
+        // Calculate min/max as nominal ± 3x tolerance for safe operating range
+        const minValue = nominalValue - (tolerance * 3);
+        const maxValue = nominalValue + (tolerance * 3);
+
+        const result = ServiceChecklistEngine.addMeasurement(
+            assetId,
+            component,
+            measuredValue,
+            unit,
+            nominalValue,
+            minValue,
+            maxValue,
+            tolerance
+        );
+
+        // Update asset health score in state
+        if (result.measurementData) {
+            updateAssetHealth(
+                assetId,
+                component,
+                result.measurementData.healthScore
+            );
+        }
+
+        return {
+            success: result.isValid,
+            validationResult: result.validationResult,
+            healthScore: result.measurementData.healthScore
+        };
+    };
+
+    /**
+     * Update asset component health score
+     * Integrates measurement results into CEREBRO state
+     */
+    const updateAssetHealth = (
+        assetId: string,
+        component: string,
+        healthScore: number
+    ): void => {
+        let status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
+
+        if (healthScore >= 90) status = 'OPTIMAL';
+        else if (healthScore >= 70) status = 'GOOD';
+        else if (healthScore >= 40) status = 'WARNING';
+        else status = 'CRITICAL';
+
+        const healthData: ComponentHealthData = {
+            score: healthScore,
+            status,
+            lastMeasured: new Date().toISOString(),
+            component
+        };
+
+        dispatch({
+            type: 'UPDATE_COMPONENT_HEALTH',
+            payload: { assetId, componentId: component, healthData }
+        });
+
+        console.log(`[ProjectContext] Component health dispatched: ${assetId}/${component} = ${healthScore} (${status})`);
+    };
+
     return {
         technicalState: state,
         dispatch,
         connectSCADAToExpertEngine,
         getDrTurbineConsultation,
         createComplexIdentity, // Exposed for internal hooks
+        // NEW: Measurement and Inspection Integration
+        addInspectionImage,
+        addMeasurement,
+        updateAssetHealth,
         // Legacy Compatibility
         siteParams: state.site,
         updateSiteConditions: (updates: any) => dispatch({ type: 'UPDATE_HYDRAULIC', payload: updates }), // Best effort mapping

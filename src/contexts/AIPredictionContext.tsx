@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useAssetContext } from './AssetContext.tsx';
 import { useToast } from './ToastContext.tsx';
+import { useMaintenance } from './MaintenanceContext.tsx';
 import {
     aiPredictionService,
     SynergeticRisk,
@@ -9,6 +10,28 @@ import {
     IncidentPattern,
     PrescriptiveRecommendation
 } from '../services/AIPredictionService.ts';
+
+// NEW: Sensor aggregation types
+export interface AggregatedSensorData {
+    assetId: string;
+    timeWindow: { start: number; end: number };
+    vibration: { mean: number; max: number; trend: number };
+    temperature: { mean: number; max: number; trend: number };
+    efficiency: { mean: number; min: number; trend: number };
+    pressure: { mean: number; max: number; trend: number };
+    cavitationIntensity: { mean: number; max: number; trend: number };
+    sampleCount: number;
+}
+
+export interface FailurePrediction {
+    assetId: string;
+    component: string;
+    probability: number;
+    confidence: number;
+    contributingFactors: string[];
+    timestamp: number;
+    recommendedAction: string;
+}
 
 export interface AutonomousWorkOrder {
     id: string;
@@ -40,6 +63,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
     const { telemetry } = useTelemetry();
     const { assets } = useAssetContext();
     const { showToast } = useToast();
+    const maintenanceContext = useMaintenance();
+    const { telemetry: telemetryContext } = useTelemetry() as any; // Expose for executeAction
 
     const [synergeticRisks, setSynergeticRisks] = useState<Record<string, SynergeticRisk>>({});
     const [rulEstimates, setRulEstimates] = useState<Record<string, RULEstimate[]>>({});
@@ -71,7 +96,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
                 // 2. RUL ESTIMATION
                 const asset = assets.find(a => a.id === assetId);
-                const operatingHours = 5000; // TODO: Get from MaintenanceContext
+                const operatingHours = maintenanceContext.operatingHours[assetId] || 5000;
 
                 const rulEstimatesForAsset: RULEstimate[] = [
                     aiPredictionService.calculateRUL('bearing', operatingHours, tData),
@@ -139,8 +164,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                     'error'
                                 );
 
-                                // TODO: Send mobile notification
-                                // notificationService.sendMobile(engineerId, `Autonomous work order ${orderId} created...`);
+                                // Send mobile notification (placeholder for future integration)
+                                sendMobileNotification(orderId, assetId, rul.componentType, failureProbability);
                             }
                         }
                     }
@@ -181,10 +206,20 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
         switch (action) {
             case 'REDUCE_PRESSURE':
                 showToast(`Reducing pressure by ${value}% on ${assetId}...`, 'info');
-                // TODO: Integrate with TelemetryContext to actually change setpoint
+                // Integrate with TelemetryContext to update setpoint
+                if (value) {
+                    const newDiameter = 1000 + (value * 10); // Convert percentage to diameter adjustment
+                    telemetryContext.updatePipeDiameter(assetId, newDiameter);
+                }
                 break;
             case 'REDUCE_LOAD':
                 showToast(`Reducing load by ${value}% on ${assetId}...`, 'info');
+                // Reduce load by adjusting wicket gate setpoint
+                if (value) {
+                    const currentSetpoint = 100; // Would come from telemetry in production
+                    const newSetpoint = currentSetpoint - value;
+                    telemetryContext.updateWicketGateSetpoint(assetId, newSetpoint);
+                }
                 break;
             case 'ACTIVATE_HYDROSTATIC_LIFT':
                 showToast(`Activating hydrostatic lift on ${assetId}...`, 'success');
@@ -232,4 +267,19 @@ function getRequiredParts(componentType: string): string[] {
         wicket_gate: ['WICKET-GATE-BEARING-WGB12', 'SERVO-MOTOR-SM450']
     };
     return partsMap[componentType] || [];
+}
+
+/**
+ * Placeholder for mobile notification service
+ * In production, this would integrate with push notification provider
+ */
+function sendMobileNotification(
+    orderId: string,
+    assetId: string,
+    component: string,
+    failureProbability: number
+): void {
+    console.log(`[Mobile Notification] Work Order ${orderId} for ${assetId}`);
+    console.log(`Component: ${component}, Failure Probability: ${failureProbability.toFixed(1)}%`);
+    // TODO: Integrate with Firebase Cloud Messaging or similar service
 }

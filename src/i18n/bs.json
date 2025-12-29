@@ -97,6 +97,73 @@
     "footer": "Samo za ovlašteno osoblje",
     "guestWelcome": "Dobrodošli, gostujući inženjeru!"
   },
+  "auth": {
+    "signOut": "Odjavi se",
+    "signOutConfirm": "Jeste li sigurni da želite da se odjavite?",
+    "signOutSuccess": "Uspješno odjavljeni",
+    "accessDenied": "Pristup Odbijen - Molimo Prijavite Se",
+    "loading": "Autentifikacija..."
+  },
+  "hppStudio": {
+    "title": "HPP BUILDER STUDIO",
+    "subtitle": "Napredni Inženjerski Čarobnjak v2.0",
+    "exitStudio": "Napusti Studio",
+    "steps": {
+      "hydrology": "Postavljanje Hidrologije",
+      "selection": "Izbor Turbine",
+      "export": "Finansije & Eksport"
+    },
+    "labels": {
+      "grossHead": "Bruto Pad",
+      "flowRate": "Protok",
+      "waterType": "Tip Vode",
+      "flowProfile": "Profil Protoka",
+      "specificSpeed": "Specifična Brzina (Nq)",
+      "topologyIndex": "Indeks Topologije",
+      "potentialPower": "Potencijalna Snaga",
+      "calculatedCapacity": "Izračunati Kapacitet",
+      "siteConditions": "Uvjeti Lokacije",
+      "recommendedMatches": "Preporučena Inženjerska Podudaranja",
+      "bestMatch": "Najbolje Podudaranje",
+      "matchScore": "Skor Podudaranja",
+      "projectExport": "Eksport Projekta",
+      "configName": "Naziv Konfiguracije"
+    },
+    "waterTypes": {
+      "clean": "Čista",
+      "suspended": "Suspendirane Čestice",
+      "abrasive": "Glečerski Mulj (Abrazivna)"
+    },
+    "flowProfiles": {
+      "stable": "Stabilan (Protočna Rijeka)",
+      "seasonal": "Sezonsko Skladište"
+    },
+    "buttons": {
+      "continue": "NASTAVI NA IZBOR →",
+      "back": "← Nazad",
+      "skipToExport": "Preskoči na Eksport →",
+      "backToSelection": "← Nazad na Izbor",
+      "saveToCloud": "Spremi u Cloud",
+      "generateReport": "Generiši Izvještaj"
+    },
+    "placeholders": {
+      "configName": "npr. Iron Gorge - Francis V1"
+    },
+    "toasts": {
+      "turbineInitialized": "Pokrenut Čarobnjak za {{type}}",
+      "invalidCombination": "Neispravna kombinacija pada/protoka. Molimo prilagodite vrijednosti.",
+      "savingDesign": "Spremanje konfiguracije dizajna...",
+      "saveSuccess": "Dizajn uspješno spremljen!",
+      "enterConfigName": "Molimo unesite naziv konfiguracije",
+      "selectAssetFirst": "Molimo prvo odaberite elektranu",
+      "physicsError": "Greška pri fizičkim izračunima - koriste se rezervne vrijednosti",
+      "cloudSyncFailed": "Cloud sinhronizacija neuspješna: {{error}}"
+    },
+    "errors": {
+      "crashRecovery": "HPP Builder je naišao na grešku. Molimo osvježite stranicu.",
+      "noAssetSelected": "Nije odabrana elektrana"
+    }
+  },
   "riskReport": {
     "title": "Projektni",
     "dossier": "Dosje",

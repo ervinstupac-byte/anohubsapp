@@ -86,8 +86,17 @@ const QuestionnaireWrapper = () => {
 // --- 7. AUTH GUARD ---
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user, loading } = useAuth();
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login');
+        }
+    }, [loading, user, navigate]);
+
     if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#0B0F19]"><Spinner /></div>;
-    if (!user) return <Login />;
+    if (!user) return <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] text-slate-400">{t('auth.accessDenied', 'Access Denied')}</div>;
     return <>{children}</>;
 };
 
@@ -98,6 +107,7 @@ const AppLayout: React.FC = () => {
     const navigate = useNavigate();
     const { riskState } = useRisk();
     const { logAction } = useAudit();
+    const { user, signOut } = useAuth(); // Auth integration
 
     // Unified Navigation States
     const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
@@ -110,6 +120,7 @@ const AppLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
+    const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
@@ -342,9 +353,47 @@ const AppLayout: React.FC = () => {
                                 value={riskState.criticalFlags > 0 ? "CRITICAL" : "OPTIMAL"}
                                 status={riskState.criticalFlags > 0 ? "critical" : "normal"}
                             />
+                            {/* Sign Out Button */}
+                            {user && (
+                                <button
+                                    onClick={() => setShowSignOutDialog(true)}
+                                    className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-slate-800/50 hover:bg-red-900/30 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500/50 rounded transition-all"
+                                    title={t('auth.signOut', 'Sign Out')}
+                                >
+                                    {t('auth.signOut', 'Sign Out')}
+                                </button>
+                            )}
                             <LanguageSelector />
                         </div>
                     </header>
+
+                    {/* Sign Out Confirmation Dialog */}
+                    {showSignOutDialog && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+                            <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl animate-scale-in">
+                                <h3 className="text-xl font-bold text-white mb-2">{t('auth.signOut', 'Sign Out')}</h3>
+                                <p className="text-slate-400 text-sm mb-6">{t('auth.signOutConfirm', 'Are you sure you want to sign out?')}</p>
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setShowSignOutDialog(false)}
+                                        className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded font-bold transition-colors"
+                                    >
+                                        {t('actions.cancel', 'Cancel')}
+                                    </button>
+                                    <button
+                                        onClick={async () => {
+                                            await signOut();
+                                            setShowSignOutDialog(false);
+                                            navigate('/login');
+                                        }}
+                                        className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-bold transition-colors"
+                                    >
+                                        {t('auth.signOut', 'Sign Out')}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
                         <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
@@ -426,6 +475,7 @@ const App: React.FC = () => {
                         <MaintenanceProvider>
                             <HashRouter>
                                 <Routes>
+                                    <Route path="/login" element={<Login />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
                                 </Routes>
                             </HashRouter>

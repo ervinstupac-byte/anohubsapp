@@ -29,6 +29,24 @@ export interface MechanicalStream {
     bearingType?: string;
 }
 
+/**
+ * Component Health Tracking System
+ * Stores health scores and status for individual turbine components
+ */
+export interface ComponentHealthData {
+    score: number;              // 0-100 health score from measurements
+    status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
+    lastMeasured: string;       // ISO timestamp of last measurement
+    lastMeasurementValue?: number;  // Actual measured value
+    component: string;          // Component identifier (e.g., 'bearing', 'runnerClearance')
+}
+
+export interface ComponentHealthRegistry {
+    [assetId: string]: {
+        [componentId: string]: ComponentHealthData;
+    };
+}
+
 export interface TechnicalProjectState {
     identity: AssetIdentity;
     hydraulic: HydraulicStream;
@@ -55,6 +73,7 @@ export interface TechnicalProjectState {
         surgePressureBar: number;
         waterHammerPressureBar: number; // Added
     };
+    componentHealth?: ComponentHealthRegistry;  // NEW: Component health tracking
     riskScore: number;
     lastRecalculation: string;
 }
@@ -92,6 +111,7 @@ export type ProjectAction =
     | { type: 'UPDATE_MECHANICAL'; payload: Partial<MechanicalStream> }
     | { type: 'UPDATE_PENSTOCK'; payload: Partial<PenstockSpecs> }
     | { type: 'SET_ASSET'; payload: AssetIdentity }
+    | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: string; componentId: string; healthData: ComponentHealthData } }
     | { type: 'RESET_TO_DEMO' };
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {

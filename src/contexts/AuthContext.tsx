@@ -71,13 +71,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(guestUser);
         logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
-        // Ensure state propagates
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // State sets synchronously - removed artificial delay
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)
     const signOut = async () => {
-        const { logAction } = useAudit();
         const currentUser = user?.email || 'unknown';
 
         if (isGuest) {

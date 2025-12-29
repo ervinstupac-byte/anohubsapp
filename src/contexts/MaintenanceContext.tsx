@@ -32,19 +32,44 @@ export interface LogEntry {
     commentBS: string; // "Zategnuto na 450 Nm, zazor provjeren."
     summaryDE: string; // "Auf 450 Nm angezogen, Spiel geprüft." (Auto-generated)
     proofImage?: InspectionImage;
-    pass: boolean; // Validation result
+    pass: boolean; // Validation result;
+}
+
+export type WorkOrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+
+export interface WorkOrder {
+    id: string;
+    assetId: string;
+    assetName: string;
+    trigger: 'MANUAL' | 'AI_PREDICTION' | 'SERVICE_ALERT';
+    component: string;
+    description: string;
+    priority: 'HIGH' | 'MEDIUM' | 'LOW';
+    status: WorkOrderStatus;
+    assignedTechnician?: string;
+    requiredParts?: string[];
+    estimatedHoursToComplete?: number;
+    createdAt: Date;
+    updatedAt: Date;
+    completedAt?: Date;
+    completionNotes?: string;
 }
 
 interface MaintenanceContextType {
     tasks: MaintenanceTask[];
     logs: LogEntry[];
     operatingHours: Record<string, number>;
+    workOrders: WorkOrder[];
     createLogEntry: (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => void;
     validateEntry: (taskId: string, value: number) => { valid: boolean; message: string };
     getTasksByComponent: (componentId: string) => MaintenanceTask[];
     predictServiceDate: (assetId: string, threshold: number) => Date | null;
-
-    // NEW: Service Checklist Functions
+    // Work Order Management
+    createWorkOrder: (order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>) => WorkOrder;
+    updateWorkOrder: (orderId: string, updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>) => void;
+    completeWorkOrder: (orderId: string, completionNotes: string) => void;
+    updateOperatingHours: (assetId: string, hours: number) => void;
+    // Service Checklist Functions
     activeChecklist: ActiveChecklist | null;
     serviceAlerts: ServiceAlert[];
     startChecklist: (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => void;
@@ -90,8 +115,9 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
     const [tasks, setTasks] = useState<MaintenanceTask[]>(INITIAL_TASKS);
     const [logs, setLogs] = useState<LogEntry[]>([]);
     const [operatingHours, setOperatingHours] = useState<Record<string, number>>({ 'DEFAULT_ASSET': 1250 });
+    const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
 
-    // NEW: ServiceChecklist State
+    // Service Checklist State
     const [activeChecklist, setActiveChecklist] = useState<ActiveChecklist | null>(null);
     const [serviceAlerts, setServiceAlerts] = useState<ServiceAlert[]>([]);
 
@@ -283,8 +309,125 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             completedAt: new Date().toISOString()
         } : null);
 
-        // TODO: Save to database
-        console.log('Checklist completed:', activeChecklist);
+        // Save completed checklist to localStorage
+        if (activeChecklist) {
+            try {
+                const savedChecklists = JSON.parse(localStorage.getItem('maintenanceChecklists') || '[]');
+                savedChecklists.push({ ...activeChecklist, completedAt: new Date().toISOString() });
+                localStorage.setItem('maintenanceChecklists', JSON.stringify(savedChecklists));
+                console.log('[MaintenanceContext] Checklist saved to localStorage:', activeChecklist.id);
+            } catch (error) {
+                console.error('[MaintenanceContext] Failed to save checklist:', error);
+            }
+        }
+    };
+
+    /**
+     * Create a new work order
+     * Supports manual creation, AI triggers, and service alert escalation
+     */
+    const createWorkOrder = (
+        order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>
+    ): WorkOrder => {
+        const newOrder: WorkOrder = {
+            ...order,
+            id: `WO-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+            status: 'PENDING',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+
+        setWorkOrders(prev => [...prev, newOrder]);
+
+        // Persist to localStorage
+        try {
+            const savedOrders = JSON.parse(localStorage.getItem('workOrders') || '[]');
+            savedOrders.push(newOrder);
+            localStorage.setItem('workOrders', JSON.stringify(savedOrders));
+        } catch (error) {
+            console.error('[MaintenanceContext] Failed to save work order:', error);
+        }
+
+        console.log(`[MaintenanceContext] Work Order Created: ${newOrder.id} for ${order.component}`);
+        return newOrder;
+    };
+
+    /**
+     * Update existing work order status and metadata
+     */
+    const updateWorkOrder = (
+        orderId: string,
+        updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>
+    ): void => {
+        setWorkOrders(prev =>
+            prev.map(order =>
+                order.id === orderId
+                    ? { ...order, ...updates, updatedAt: new Date() }
+                    : order
+            )
+        );
+
+        // Persist to localStorage
+        try {
+            const updatedOrders = workOrders.map(order =>
+                order.id === orderId
+                    ? { ...order, ...updates, updatedAt: new Date() }
+                    : order
+            );
+            localStorage.setItem('workOrders', JSON.stringify(updatedOrders));
+        } catch (error) {
+            console.error('[MaintenanceContext] Failed to update work order:', error);
+        }
+
+        console.log(`[MaintenanceContext] Work Order Updated: ${orderId}`, updates);
+    };
+
+    /**
+     * Complete work order and record completion notes
+     */
+    const completeWorkOrder = (orderId: string, completionNotes: string): void => {
+        setWorkOrders(prev =>
+            prev.map(order =>
+                order.id === orderId
+                    ? {
+                        ...order,
+                        status: 'COMPLETED' as WorkOrderStatus,
+                        completedAt: new Date(),
+                        completionNotes,
+                        updatedAt: new Date()
+                    }
+                    : order
+            )
+        );
+
+        // Persist to localStorage
+        try {
+            const updatedOrders = workOrders.map(order =>
+                order.id === orderId
+                    ? {
+                        ...order,
+                        status: 'COMPLETED' as WorkOrderStatus,
+                        completedAt: new Date(),
+                        completionNotes,
+                        updatedAt: new Date()
+                    }
+                    : order
+            );
+            localStorage.setItem('workOrders', JSON.stringify(updatedOrders));
+        } catch (error) {
+            console.error('[MaintenanceContext] Failed to complete work order:', error);
+        }
+
+        console.log(`[MaintenanceContext] Work Order Completed: ${orderId}`);
+    };
+
+    /**
+     * Update operating hours for asset tracking
+     * Used by AI Prediction Context for RUL calculations
+     */
+    const updateOperatingHours = (assetId: string, hours: number): void => {
+        setOperatingHours(prev => ({ ...prev, [assetId]: hours }));
+        console.log(`[MaintenanceContext] Operating hours updated: ${assetId} = ${hours}h`);
     };
 
     const acknowledgeAlert = (alertId: string) => {
@@ -300,11 +443,17 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             tasks,
             logs,
             operatingHours,
+            workOrders,
             createLogEntry,
             validateEntry,
             getTasksByComponent,
             predictServiceDate,
-            // NEW: ServiceChecklist
+            // Work Order Management
+            createWorkOrder,
+            updateWorkOrder,
+            completeWorkOrder,
+            updateOperatingHours,
+            // ServiceChecklist
             activeChecklist,
             serviceAlerts,
             startChecklist,
