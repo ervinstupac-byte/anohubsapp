@@ -72,8 +72,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } as User;
 
         setUser(guestUser);
+        setLoading(false); // CRITICAL: Allow AuthProvider to render children
         logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
-        // State sets synchronously - removed artificial delay
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)
