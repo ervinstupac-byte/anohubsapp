@@ -23,12 +23,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Provjeri pravu sesiju
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
+        // Provjeri pravu sesiju SAMO ako nismo u guest modu
+        if (!isGuest) {
+            supabase.auth.getSession().then(({ data: { session } }) => {
+                setSession(session);
+                setUser(session?.user ?? null);
+                setLoading(false);
+            });
+        }
 
         // Slušaj promjene
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
