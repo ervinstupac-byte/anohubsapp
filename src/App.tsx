@@ -125,6 +125,12 @@ const AppLayout: React.FC = () => {
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
 
+    // Initialize demo data on first load
+    useEffect(() => {
+        const { initializeDemoData } = require('../utils/demoSeeder');
+        initializeDemoData();
+    }, []);
+
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
         if (!hasCompleted) setShowOnboarding(true);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Settings, AlertTriangle, Info, Zap } from 'lucide-react';
-import { useProjectEngine } from '../../../contexts/ProjectContext';
+import { Settings, AlertTriangle, Info, Zap, Activity } from 'lucide-react';
+import { useProjectEngine, useCerebro } from '../../../contexts/ProjectContext';
 import { GlassCard } from '../../ui/GlassCard';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +8,12 @@ import { formatNumber } from '../../../utils/i18nUtils';
 
 export const MechanicalPanel: React.FC = () => {
     const { technicalState, updateMechanicalDetails } = useProjectEngine();
+    const { state: cerebroState } = useCerebro();
     const { t, i18n: { language } } = useTranslation();
-    const { mechanical, physics } = technicalState;
+    const { mechanical, physics, identity } = technicalState;
+
+    // Get component health data from CEREBRO
+    const componentHealth = cerebroState.componentHealth?.[identity.id] || {};
 
     const handleParamChange = (key: keyof typeof mechanical.boltSpecs, value: any) => {
         updateMechanicalDetails({
@@ -111,6 +115,76 @@ export const MechanicalPanel: React.FC = () => {
                     <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit || 1.0, language, 3)} mm</span>
                 </div>
             </GlassCard>
+
+            {/* Component Health Status */}
+            {Object.keys(componentHealth).length > 0 && (
+                <GlassCard className="p-6 border-l-4 border-cyan-500">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <Activity className="w-4 h-4 text-cyan-400" /> Component Health Monitor
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {Object.entries(componentHealth).map(([compId, health]) => {
+                            const statusColors = {
+                                OPTIMAL: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50',
+                                GOOD: 'bg-green-500/20 text-green-400 border-green-500/50',
+                                WARNING: 'bg-amber-500/20 text-amber-400 border-amber-500/50',
+                                CRITICAL: 'bg-red-500/20 text-red-400 border-red-500/50'
+                            };
+
+                            const statusIcons = {
+                                OPTIMAL: '✓',
+                                GOOD: '●',
+                                WARNING: '⚠',
+                                CRITICAL: '⚠'
+                            };
+
+                            return (
+                                <motion.div
+                                    key={compId}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-3 bg-slate-950/50 rounded-lg border border-white/5 hover:border-cyan-500/30 transition-all"
+                                >
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h4 className="text-xs font-bold text-white uppercase tracking-wide">
+                                                {health.component.replace(/([A-Z])/g, ' $1').trim()}
+                                            </h4>
+                                            <p className="text-[10px] text-slate-500 mt-0.5">
+                                                Last: {new Date(health.lastMeasured).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        <div className={`px-2 py-1 rounded border text-xs font-bold flex items-center gap-1 ${statusColors[health.status]}`}>
+                                            {statusIcons[health.status]} {health.score}%
+                                        </div>
+                                    </div>
+                                    <div className="relative h-2 bg-slate-900 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${health.score}%` }}
+                                            transition={{ duration: 0.8, delay: 0.2 }}
+                                            className={`h-full rounded-full ${health.status === 'OPTIMAL' ? 'bg-emerald-500' :
+                                                    health.status === 'GOOD' ? 'bg-green-500' :
+                                                        health.status === 'WARNING' ? 'bg-amber-500' : 'bg-red-500'
+                                                }`}
+                                        />
+                                    </div>
+                                    {health.status === 'CRITICAL' && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="mt-2 flex items-center gap-1 text-[10px] text-red-400"
+                                        >
+                                            <AlertTriangle className="w-3 h-3" />
+                                            CRITICAL: Immediate attention required
+                                        </motion.div>
+                                    )}
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </GlassCard>
+            )}
         </div>
     );
 };

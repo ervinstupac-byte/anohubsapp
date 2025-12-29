@@ -114,8 +114,25 @@ const MaintenanceContext = createContext<MaintenanceContextType | undefined>(und
 export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [tasks, setTasks] = useState<MaintenanceTask[]>(INITIAL_TASKS);
     const [logs, setLogs] = useState<LogEntry[]>([]);
-    const [operatingHours, setOperatingHours] = useState<Record<string, number>>({ 'DEFAULT_ASSET': 1250 });
-    const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+
+    // Load from localStorage if available
+    const [operatingHours, setOperatingHours] = useState<Record<string, number>>(() => {
+        try {
+            const stored = localStorage.getItem('operatingHours');
+            return stored ? JSON.parse(stored) : { 'DEFAULT_ASSET': 1250 };
+        } catch {
+            return { 'DEFAULT_ASSET': 1250 };
+        }
+    });
+
+    const [workOrders, setWorkOrders] = useState<WorkOrder[]>(() => {
+        try {
+            const stored = localStorage.getItem('workOrders');
+            return stored ? JSON.parse(stored) : [];
+        } catch {
+            return [];
+        }
+    });
 
     // Service Checklist State
     const [activeChecklist, setActiveChecklist] = useState<ActiveChecklist | null>(null);
