@@ -245,6 +245,28 @@ export const UserProfile: React.FC = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Developer/Admin Tools Section */}
+                    <div className="mt-8 p-6 border-t border-white/5 bg-slate-950/30">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span>⚙️</span> Developer Tools
+                        </h3>
+                        <p className="text-xs text-slate-500 mb-4">
+                            Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.
+                        </p>
+                        <button
+                            onClick={() => {
+                                if (confirm('Reset all demo data? This will clear localStorage and reload the page.')) {
+                                    const { resetDemoData } = require('../utils/demoSeeder');
+                                    resetDemoData();
+                                    window.location.reload();
+                                }
+                            }}
+                            className="px-4 py-2 bg-amber-500/20 border-2 border-amber-500/50 rounded-lg text-amber-400 hover:bg-amber-500/30 hover:border-amber-500/70 transition-all text-sm font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-amber-900/20"
+                        >
+                            <span>🔄</span> Reset Demo Data
+                        </button>
+                    </div>
                 </div>
             </GlassCard>
         </div>

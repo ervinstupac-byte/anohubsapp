@@ -131,6 +131,13 @@ const AppLayout: React.FC = () => {
         initializeDemoData();
     }, []);
 
+    // Listen for custom wizard trigger event from ScadaMimic
+    useEffect(() => {
+        const handleOpenWizard = () => setIsWizardOpen(true);
+        window.addEventListener('openAssetWizard', handleOpenWizard);
+        return () => window.removeEventListener('openAssetWizard', handleOpenWizard);
+    }, []);
+
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
         if (!hasCompleted) setShowOnboarding(true);

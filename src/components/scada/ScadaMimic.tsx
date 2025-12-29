@@ -3,6 +3,8 @@ import { useAssetContext } from '../../contexts/AssetContext.tsx';
 import { useTelemetry } from '../../contexts/TelemetryContext.tsx';
 import { useProjectEngine } from '../../contexts/ProjectContext.tsx';
 import { Tooltip } from '../ui/Tooltip.tsx';
+import { ModernButton } from '../ui/ModernButton.tsx';
+import { useNavigate } from 'react-router-dom';
 
 import { DigitalDisplay } from './DigitalDisplay.tsx';
 
@@ -118,12 +120,92 @@ export const ScadaMimic: React.FC = React.memo(() => {
         );
     }
 
+    // Empty State: No Asset Selected (Priority CTA)
+    if (!selectedAsset) {
+        return (
+            <div className="flex-1 bg-[#020617] relative overflow-hidden flex flex-col items-center justify-center p-8">
+                {/* Grid Background */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                    style={{ backgroundImage: 'linear-gradient(#00f3ff 1px, transparent 1px), linear-gradient(90deg, #00f3ff 1px, transparent 1px)', backgroundSize: '60px 60px' }}>
+                </div>
+
+                <div className="relative z-10 max-w-2xl text-center space-y-8 animate-fade-in">
+                    {/* Headline */}
+                    <div className="space-y-4">
+                        <div className="inline-block px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm font-bold uppercase tracking-wider mb-4">
+                            ⚡ Get Started
+                        </div>
+                        <h1 className="text-5xl md:text-6xl font-black tracking-tighter">
+                            Register Your
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400"> Hydropower Plant</span>
+                        </h1>
+                        <p className="text-xl text-slate-400 max-w-xl mx-auto font-light">
+                            Connect your turbines to AnoHUB's advanced monitoring and diagnostic platform in minutes.
+                        </p>
+                    </div>
+
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <ModernButton
+                            variant="primary"
+                            icon={<span>🏭</span>}
+                            onClick={() => {
+                                // Trigger registration wizard (same as sidebar)
+                                const event = new CustomEvent('openAssetWizard');
+                                window.dispatchEvent(event);
+                            }}
+                            className="px-8 py-4 text-lg shadow-cyan-500/30 shadow-2xl"
+                        >
+                            Create Your Plant
+                        </ModernButton>
+
+                        <button
+                            onClick={() => window.location.hash = '#/map'}
+                            className="px-6 py-3 border-2 border-slate-700 hover:border-cyan-500/50 text-slate-300 hover:text-white rounded-xl font-bold transition-all"
+                        >
+                            📍 View Global Map
+                        </button>
+                    </div>
+
+                    {/* Features List */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-12 border-t border-white/5">
+                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all">
+                            <div className="text-3xl mb-3">📊</div>
+                            <h3 className="text-white font-bold mb-2">Real-Time SCADA</h3>
+                            <p className="text-sm text-slate-500">Live telemetry and performance monitoring</p>
+                        </div>
+                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all">
+                            <div className="text-3xl mb-3">🤖</div>
+                            <h3 className="text-white font-bold mb-2">AI Diagnostics</h3>
+                            <p className="text-sm text-slate-500">Predictive failure detection & RUL estimation</p>
+                        </div>
+                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all">
+                            <div className="text-3xl mb-3">⚙️</div>
+                            <h3 className="text-white font-bold mb-2">Maintenance Hub</h3>
+                            <p className="text-sm text-slate-500">Automated work orders & service tracking</p>
+                        </div>
+                    </div>
+
+                    {/* Subtle Examples Note */}
+                    <p className="text-xs text-slate-600 mt-8">
+                        💡 Demo mode active - Example data available for exploration
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex-1 bg-[#020617] relative overflow-hidden flex flex-col items-center justify-center p-2 sm:p-4 md:p-8">
 
-            {/* Grid Background */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+            {/* Grid Background - More subtle */}
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
                 style={{ backgroundImage: 'linear-gradient(#00f3ff 1px, transparent 1px), linear-gradient(90deg, #00f3ff 1px, transparent 1px)', backgroundSize: '60px 60px' }}>
+            </div>
+
+            {/* Subtle Demo Indicator */}
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-[10px] text-slate-600 font-mono uppercase tracking-widest opacity-40">
+                Demo Example: {selectedAsset?.name}
             </div>
 
             <div className="relative z-10 w-full max-w-5xl border border-white/5 bg-black/40 p-4 sm:p-6 md:p-12 rounded-2xl backdrop-blur-xl shadow-2xl overflow-hidden self-center">
