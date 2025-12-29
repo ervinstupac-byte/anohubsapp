@@ -289,7 +289,7 @@ export const QuestionnaireSummary: React.FC = () => {
                         <div className="flex items-center gap-3 mb-4">
                             <span className="text-3xl">💡</span>
                             <h4 className="font-bold text-teal-300 text-sm uppercase tracking-wide">
-                                {t('consultation.title', 'AI Consultation')}
+                                {t('consultation.title', 'Expert Consultation')}
                             </h4>
                         </div>
                         <p className="text-sm text-teal-100/80 leading-relaxed font-medium border-l-4 border-teal-400 pl-4">

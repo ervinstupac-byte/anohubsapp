@@ -285,11 +285,11 @@ const AppLayout: React.FC = () => {
                         <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">STRATEGY</div>
                         <ErrorBoundary>
                             <button
-                                onClick={() => { logAction('MODULE_OPEN', 'Executive Intelligence', 'SUCCESS'); navigateTo('executiveDashboard'); setIsSidebarOpen(false); }}
+                                onClick={() => { logAction('MODULE_OPEN', 'Toolbox Analytics', 'SUCCESS'); navigateTo('executiveDashboard'); setIsSidebarOpen(false); }}
                                 className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/executive' ? 'bg-cyan-900/20 border-cyan-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                             >
-                                <span className={`text-lg ${location.pathname === '/executive' ? 'text-cyan-500' : 'group-hover:text-cyan-400 transition-colors'}`}>🧠</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">Executive Intelligence</span>
+                                <span className={`text-lg ${location.pathname === '/executive' ? 'text-cyan-500' : 'group-hover:text-cyan-400 transition-colors'}`}>📊</span>
+                                <span className="text-xs font-bold uppercase tracking-wider">Toolbox Analytics</span>
                             </button>
                         </ErrorBoundary>
 

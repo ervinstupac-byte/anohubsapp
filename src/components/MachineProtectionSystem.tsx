@@ -91,7 +91,7 @@ export const MachineProtectionSystem: React.FC = () => {
                 {insights.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-8 text-emerald-500 opacity-60">
                         <span className="text-4xl mb-2">🛡️</span>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-center">System Protected<br />AI Analytics Nominal</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-center">System Protected<br />Analytics Nominal</p>
                     </div>
                 ) : (
                     <div className="space-y-3">

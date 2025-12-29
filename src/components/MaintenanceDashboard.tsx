@@ -57,10 +57,8 @@ export const MaintenanceDashboard: React.FC = () => {
 
     const hours = selectedAsset ? operatingHours[selectedAsset.id] || 0 : 0;
 
-    // Simulate heatmap data based on asset
-    const heatmapData = useMemo(() => {
-        return Array.from({ length: 150 }, () => Math.random());
-    }, [selectedAsset]);
+    // Heatmap removed - showing real data only
+    const heatmapData: number[] = [];
 
     if (activeWorkOrder) {
         return (
@@ -84,7 +82,7 @@ export const MaintenanceDashboard: React.FC = () => {
                         Maintenance <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Engine</span>
                     </h2>
                     <p className="text-slate-400 text-lg max-w-2xl mx-auto font-light">
-                        Predictive service intervals and operational integrity ledger.
+                        Service intervals and operational integrity ledger.
                     </p>
                 </div>
                 <div className="max-w-md mx-auto">
@@ -136,9 +134,9 @@ export const MaintenanceDashboard: React.FC = () => {
                             <ForensicDepthAnalyzer />
                         </div>
 
-                        {/* MIDDLE: PROTOCOLS & PREDICTIONS */}
+                        {/* MIDDLE: PROTOCOLS & SCHEDULE */}
                         <div className="lg:col-span-2 space-y-6">
-                            <GlassCard title="Service Protocols & Predictions" className="bg-slate-900/80">
+                            <GlassCard title="Service Protocols & Schedule" className="bg-slate-900/80">
                                 <div className="space-y-4">
                                     {protocols.map(proto => {
                                         const nextDate = predictServiceDate(selectedAsset.id, proto.threshold);
@@ -230,23 +228,15 @@ export const MaintenanceDashboard: React.FC = () => {
                                 </div>
                             </GlassCard>
 
-                            <GlassCard title="Operational Intensity Heatmap" className="bg-slate-900/80">
-                                <p className="text-xs text-slate-500 mb-4">Historical turbine load distribution and thermal stress analysis per operational cycle.</p>
-                                <Heatmap data={heatmapData} />
-                                <div className="flex items-center gap-4 mt-6">
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-2 h-2 rounded-[1px] bg-slate-800"></div>
-                                        <span className="text-[9px] text-slate-500 uppercase font-black">Standby</span>
+                            <GlassCard title="Operational Intensity Log" className="bg-slate-900/80">
+                                <p className="text-xs text-slate-500 mb-4">Historical turbine load distribution.</p>
+                                {heatmapData.length > 0 ? (
+                                    <Heatmap data={heatmapData} />
+                                ) : (
+                                    <div className="py-8 text-center border border-dashed border-slate-800 rounded-lg">
+                                        <p className="text-xs text-slate-500 uppercase tracking-widest">No operational data logged yet</p>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-2 h-2 rounded-[1px] bg-emerald-500 opacity-30"></div>
-                                        <span className="text-[9px] text-slate-500 uppercase font-black">Optimal</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-2 h-2 rounded-[1px] bg-emerald-500"></div>
-                                        <span className="text-[9px] text-slate-500 uppercase font-black">Peak Load</span>
-                                    </div>
-                                </div>
+                                )}
                             </GlassCard>
                         </div>
                     </div>

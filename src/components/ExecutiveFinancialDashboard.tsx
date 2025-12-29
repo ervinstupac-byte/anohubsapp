@@ -89,7 +89,7 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                         status="COMPLETED"
                     />
                     <ROICard
-                        title="Predictive Maintenance System"
+                        title="Condition Monitoring System"
                         investment={180000}
                         returns={540000}
                         roi={200}

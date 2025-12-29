@@ -66,7 +66,7 @@ export const ParticleFerographyViewer: React.FC = () => {
                     </span>
                 </h2>
                 <p className="text-sm text-slate-400">
-                    AI Visual Classification - Metal Wear Detection
+                    Visual Classification - Metal Wear Detection
                 </p>
             </div>
 
@@ -205,7 +205,7 @@ export const ParticleFerographyViewer: React.FC = () => {
                                         <p className="text-sm text-purple-400">{selectedParticle.source}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-xs text-slate-400 uppercase font-bold">AI Confidence</p>
+                                        <p className="text-xs text-slate-400 uppercase font-bold">Confidence Score</p>
                                         <p className="text-2xl font-black text-white">{selectedParticle.confidence}%</p>
                                     </div>
                                 </div>
@@ -231,15 +231,15 @@ export const ParticleFerographyViewer: React.FC = () => {
 
                                 {/* Severity Badge */}
                                 <div className={`p-3 rounded-lg border-2 ${selectedParticle.severity === 'CRITICAL' ? 'border-red-500 bg-red-950/20' :
-                                        selectedParticle.severity === 'HIGH' ? 'border-amber-500 bg-amber-950/20' :
-                                            selectedParticle.severity === 'MEDIUM' ? 'border-orange-500 bg-orange-950/20' :
-                                                'border-emerald-500 bg-emerald-950/20'
+                                    selectedParticle.severity === 'HIGH' ? 'border-amber-500 bg-amber-950/20' :
+                                        selectedParticle.severity === 'MEDIUM' ? 'border-orange-500 bg-orange-950/20' :
+                                            'border-emerald-500 bg-emerald-950/20'
                                     }`}>
                                     <p className="text-xs font-bold uppercase text-slate-400 mb-1">Severity Assessment</p>
                                     <p className={`text-lg font-black ${selectedParticle.severity === 'CRITICAL' ? 'text-red-400' :
-                                            selectedParticle.severity === 'HIGH' ? 'text-amber-400' :
-                                                selectedParticle.severity === 'MEDIUM' ? 'text-orange-400' :
-                                                    'text-emerald-400'
+                                        selectedParticle.severity === 'HIGH' ? 'text-amber-400' :
+                                            selectedParticle.severity === 'MEDIUM' ? 'text-orange-400' :
+                                                'text-emerald-400'
                                         }`}>
                                         {selectedParticle.severity}
                                     </p>
@@ -286,9 +286,9 @@ const ParticleCard: React.FC<{
                     {particle.particleType.replace('_', ' ')}
                 </span>
                 <Icon className={`w-4 h-4 ${particle.severity === 'CRITICAL' ? 'text-red-400' :
-                        particle.severity === 'HIGH' ? 'text-amber-400' :
-                            particle.severity === 'MEDIUM' ? 'text-orange-400' :
-                                'text-emerald-400'
+                    particle.severity === 'HIGH' ? 'text-amber-400' :
+                        particle.severity === 'MEDIUM' ? 'text-orange-400' :
+                            'text-emerald-400'
                     }`} />
             </div>
             <p className="text-xs text-slate-400">{particle.characteristics.count} particles</p>

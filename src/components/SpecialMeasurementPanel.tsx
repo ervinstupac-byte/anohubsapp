@@ -90,8 +90,8 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                                     key={format}
                                     onClick={() => setImportFormat(format)}
                                     className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${importFormat === format
-                                            ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
-                                            : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
+                                        ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
+                                        : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                         }`}
                                 >
                                     {format}
@@ -110,8 +110,8 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                             disabled={isProcessing}
                         />
                         <div className={`p-8 border-2 border-dashed rounded-lg transition-all ${isProcessing
-                                ? 'border-cyan-500 bg-cyan-500/10 animate-pulse'
-                                : 'border-slate-700 bg-slate-800/30 hover:border-cyan-500/50 hover:bg-slate-800/50'
+                            ? 'border-cyan-500 bg-cyan-500/10 animate-pulse'
+                            : 'border-slate-700 bg-slate-800/30 hover:border-cyan-500/50 hover:bg-slate-800/50'
                             }`}>
                             <div className="text-center">
                                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-500" />
@@ -157,7 +157,7 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                         <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50 text-center">
                             <p className="text-xs text-slate-400 uppercase font-bold mb-1">Avg Deviation</p>
                             <p className={`text-2xl font-black ${comparison.averageDeviation > 2 ? 'text-red-400' :
-                                    comparison.averageDeviation > 1 ? 'text-amber-400' : 'text-emerald-400'
+                                comparison.averageDeviation > 1 ? 'text-amber-400' : 'text-emerald-400'
                                 }`}>
                                 {comparison.averageDeviation.toFixed(2)}mm
                             </p>
@@ -167,16 +167,16 @@ export const SpecialMeasurementPanel: React.FC<SpecialMeasurementPanelProps> = (
                     {/* Efficiency Impact */}
                     {efficiencyGap && (
                         <div className={`p-4 rounded-lg border-2 ${efficiencyGap.predictedEfficiencyLoss > 1
-                                ? 'bg-red-950/20 border-red-500'
-                                : efficiencyGap.predictedEfficiencyLoss > 0.5
-                                    ? 'bg-amber-950/20 border-amber-500'
-                                    : 'bg-emerald-950/20 border-emerald-500'
+                            ? 'bg-red-950/20 border-red-500'
+                            : efficiencyGap.predictedEfficiencyLoss > 0.5
+                                ? 'bg-amber-950/20 border-amber-500'
+                                : 'bg-emerald-950/20 border-emerald-500'
                             }`}>
                             <p className="text-sm font-bold text-white mb-3">💰 Efficiency Impact Analysis</p>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <p className="text-xs text-slate-400 uppercase font-bold mb-1">Predicted Efficiency Loss</p>
+                                    <p className="text-xs text-slate-400 uppercase font-bold mb-1">Calculated Efficiency Loss</p>
                                     <p className="text-3xl font-black text-white">
                                         {efficiencyGap.predictedEfficiencyLoss.toFixed(2)}%
                                     </p>

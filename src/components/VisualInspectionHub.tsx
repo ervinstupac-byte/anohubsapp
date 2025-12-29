@@ -156,7 +156,7 @@ export const VisualInspectionHub: React.FC = () => {
 
                                 {/* RECOMMENDATIONS */}
                                 <div className="pt-4 border-t border-slate-700/50">
-                                    <div className="text-xs font-bold text-slate-500 uppercase mb-2">AI Prescriptions</div>
+                                    <div className="text-xs font-bold text-slate-500 uppercase mb-2">Recommendations</div>
                                     <ul className="space-y-1">
                                         {result.recommendations.map((rec, i) => (
                                             <li key={i} className="text-sm text-slate-300 flex items-start gap-2">

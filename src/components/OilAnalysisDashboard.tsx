@@ -68,7 +68,7 @@ export const OilAnalysisDashboard: React.FC = () => {
                         <p className="text-sm text-slate-400 uppercase font-bold mb-1">Oil Health Status</p>
                         <p className="text-4xl font-black text-white">{analysis.overallHealth}</p>
                         <p className="text-sm text-slate-400 mt-1">
-                            Predicted oil life: {(analysis.predictedOilLife / 730).toFixed(0)} months
+                            Estimated oil life: {(analysis.predictedOilLife / 730).toFixed(0)} months
                         </p>
                     </div>
                     <div className="text-center">
@@ -156,7 +156,7 @@ export const OilAnalysisDashboard: React.FC = () => {
 
             {/* AI Findings */}
             <GlassCard className="p-6">
-                <h3 className="text-lg font-black text-white mb-4">🤖 AI Analysis Findings</h3>
+                <h3 className="text-lg font-black text-white mb-4">🧪 Lab Analysis Findings</h3>
                 <div className="space-y-3">
                     {analysis.findings.length === 0 ? (
                         <div className="text-center py-6">
