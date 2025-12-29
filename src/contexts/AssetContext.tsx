@@ -1,15 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { supabase } from '../services/supabaseClient.ts';
-import type { Asset, AssetContextType } from '../types.ts';
+import type { Asset, AssetContextType, AssetHistoryEntry } from '../types.ts';
 import { useAudit } from './AuditContext.tsx';
 import { useAuth } from './AuthContext.tsx';
 import { debounce } from '../utils/performance.ts';
+import { loadFromStorage, saveToStorage } from '../utils/storageUtils.ts'; // <--- NEW: Import Storage Utils
 
 const AssetContext = createContext<AssetContextType | undefined>(undefined);
 
 export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { logAction } = useAudit();
     const [assets, setAssets] = useState<Asset[]>([]);
+    const [assetLogs, setAssetLogs] = useState<AssetHistoryEntry[]>([]); // <--- NEW: Separate Logs State
     const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -18,8 +20,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const fetchAssets = async () => {
             try {
                 // Check for guest assets in local storage first
-                const localAssetsStr = localStorage.getItem('guest_assets');
-                const localAssets: Asset[] = localAssetsStr ? JSON.parse(localAssetsStr) : [];
+                const localAssets = loadFromStorage<Asset[]>('guest_assets') || [];
 
                 if (localAssets.length > 0) {
                     setAssets(localAssets);
@@ -73,7 +74,46 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         };
 
         fetchAssets();
+        fetchAssets();
     }, []);
+
+    // --- NEW: Optimistic Update function ---
+    const updateAsset = (id: string, updates: Partial<Asset>) => {
+        setAssets(prevAssets => {
+            const newAssets = prevAssets.map(asset => {
+                if (asset.id === id) {
+                    return { ...asset, ...updates };
+                }
+                return asset;
+            });
+
+            // Persist to Local Storage Immediately
+            if (isGuest) {
+                saveToStorage('guest_assets', newAssets);
+            }
+
+            return newAssets;
+        });
+
+        // TODO: Fire Toast Notification (need to integrate useToast)
+    };
+
+    // --- NEW: Log Activity Function ---
+    const logActivity = (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
+        const newLog: AssetHistoryEntry = {
+            id: crypto.randomUUID(),
+            assetId,
+            date: new Date().toISOString(),
+            category,
+            message,
+            author: 'CurrentUser', // TODO: Get actual user
+            changes
+        };
+
+        setAssetLogs(prev => [newLog, ...prev]);
+
+        // console.log('[AssetLog]', newLog); 
+    };
 
     // Create a ref to hold the debounced logging function
     // We use a ref so the debounce timer persists across renders
@@ -131,10 +171,9 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
                 // --- GUEST PERSISTENCE ---
                 // Update Local Storage immediately so refresh works
-                const existingGuestAssetsStr = localStorage.getItem('guest_assets');
-                const existingGuestAssets: Asset[] = existingGuestAssetsStr ? JSON.parse(existingGuestAssetsStr) : [];
+                const existingGuestAssets = loadFromStorage<Asset[]>('guest_assets') || [];
                 const updatedGuestAssets = [...existingGuestAssets, newAsset];
-                localStorage.setItem('guest_assets', JSON.stringify(updatedGuestAssets));
+                saveToStorage('guest_assets', updatedGuestAssets);
                 // -------------------------
             } else {
                 // --- REAL MODE: SUPABASE INSERT ---
@@ -173,7 +212,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     return (
         // Ne zaboravi dodati addAsset u value objekt!
-        <AssetContext.Provider value={{ assets, selectedAsset, selectAsset, loading, addAsset }}>
+        <AssetContext.Provider value={{ assets, selectedAsset, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs }}>
             {children}
         </AssetContext.Provider>
     );

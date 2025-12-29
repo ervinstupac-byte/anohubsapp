@@ -58,7 +58,20 @@ export interface AssetContextType {
   selectedAsset: Asset | null;
   selectAsset: (id: string) => void;
   loading: boolean;
-  addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>; // <--- NOVO: Za dodavanje
+  addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
+  updateAsset: (id: string, updates: Partial<Asset>) => void; // <--- NEW: Update Asset
+  logActivity: (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void; // <--- NEW: Log Activity
+  assetLogs: AssetHistoryEntry[]; // <--- NEW: Expose Logs
+}
+
+export interface AssetHistoryEntry {
+  id: string;
+  assetId: string;
+  date: string;
+  category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM';
+  message: string;
+  author: string;
+  changes?: { oldVal: any, newVal: any };
 }
 
 // --- RISK & QUESTIONNAIRE ---

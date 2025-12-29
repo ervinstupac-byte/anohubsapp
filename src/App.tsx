@@ -15,6 +15,9 @@ import { DEFAULT_TECHNICAL_STATE } from './models/TechnicalSchema.ts';
 // ClientProvider removed (Simulation)
 import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
 import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
+import { AssetProvider } from './contexts/AssetContext.tsx'; // <--- NEW
+import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring it exists)
+import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -113,14 +116,13 @@ const AppLayout: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { riskState } = useRisk();
+    const { riskState: questionnaireRisk } = useRisk(); // Renamed Risk Context
+    const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator(); // Calculated Asset Risk
     const { logAction } = useAudit();
     const { user, signOut } = useAuth(); // Auth integration
 
     // Unified Navigation States
     const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
-
-    // ... (existing imports)
 
     // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
@@ -133,7 +135,19 @@ const AppLayout: React.FC = () => {
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
 
-    // Demo data seeder removed - app now uses only real user data
+    // RISK CALCULATION LOGIC
+    const isCritical = questionnaireRisk.criticalFlags > 0 || assetRiskStatus === 'CRITICAL';
+    const isWarning = assetRiskStatus === 'WARNING';
+
+    const badgeLabel = isCritical ? "CRITICAL" : isWarning ? "WARNING" : "OPTIMAL";
+    const badgeStatus = isCritical ? "critical" : isWarning ? "warning" : "normal";
+
+    const handleBadgeClick = () => {
+        if (assetRiskStatus !== 'SAFE') {
+            console.log("Risk Reasons:", riskReasons);
+        }
+        navigateTo('riskAssessment');
+    };
 
     // Listen for custom wizard trigger event from ScadaMimic
     useEffect(() => {
@@ -255,11 +269,17 @@ const AppLayout: React.FC = () => {
                             </h1>
                         </div>
                         <div className="flex items-center gap-4">
-                            <DigitalPanel
-                                label="RISK STATUS"
-                                value={riskState.criticalFlags > 0 ? "CRITICAL" : "OPTIMAL"}
-                                status={riskState.criticalFlags > 0 ? "critical" : "normal"}
-                            />
+                            <div
+                                onClick={handleBadgeClick}
+                                className="cursor-pointer hover:scale-105 transition-transform"
+                                title={`Risk Status: ${badgeLabel}\n${riskReasons.join('\n')}`}
+                            >
+                                <DigitalPanel
+                                    label="RISK STATUS"
+                                    value={badgeLabel}
+                                    status={badgeStatus}
+                                />
+                            </div>
                             {/* Sign Out Button */}
                             {user && (
                                 <button
@@ -380,12 +400,16 @@ const App: React.FC = () => {
             <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}> {/* Technical Backbone */}
                 <NotificationProvider>
                     <MaintenanceProvider>
-                        <HashRouter>
-                            <Routes>
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                            </Routes>
-                        </HashRouter>
+                        <AssetProvider> {/* Centralized Asset State */}
+                            <RiskProvider>
+                                <HashRouter>
+                                    <Routes>
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                    </Routes>
+                                </HashRouter>
+                            </RiskProvider>
+                        </AssetProvider>
                     </MaintenanceProvider>
                 </NotificationProvider>
             </ProjectProvider>

@@ -1,7 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { Asset } from '../types';
-import { LogEntry } from '../contexts/MaintenanceContext';
+import { Asset, AssetHistoryEntry } from '../types';
 
 // --- SHARED UTILS ---
 
@@ -21,7 +20,7 @@ export const openAndDownloadBlob = (blob: Blob, filename: string, openPreview: b
 
 // --- NEW FEATURES (ASSET PASSPORT) ---
 
-export const generateAssetPassport = (asset: Asset, logs: LogEntry[]) => {
+export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[]) => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
 
@@ -114,16 +113,15 @@ export const generateAssetPassport = (asset: Asset, logs: LogEntry[]) => {
 
     if (logs && logs.length > 0) {
         const tableData = logs.map(log => [
-            new Date(log.timestamp).toLocaleDateString(),
-            log.technician,
-            log.summaryDE,
-            log.measuredValue ? `${log.measuredValue}` : '-',
-            log.pass ? 'PASS' : 'FAIL'
+            new Date(log.date).toLocaleDateString() + ' ' + new Date(log.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            log.category,
+            log.message,
+            log.author
         ]);
 
         autoTable(doc, {
             startY: yPos,
-            head: [['Date', 'Technician', 'Action / Summary', 'Value', 'Result']],
+            head: [['Date', 'Category', 'Action / Summary', 'User']],
             body: tableData,
             headStyles: { fillColor: [15, 23, 42], textColor: [34, 211, 238] },
             alternateRowStyles: { fillColor: [241, 245, 249] },

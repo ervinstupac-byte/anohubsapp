@@ -15,7 +15,7 @@ import { Calendar, AlertCircle } from 'lucide-react';
 export const ToolboxLaunchpad: React.FC = () => {
     const navigate = useNavigate();
     const { workOrders } = useMaintenance();
-    const { assets, selectedAsset } = useAssetContext();
+    const { assets, selectedAsset, assetLogs } = useAssetContext();
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -91,17 +91,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                             onClick={() => {
                                 // Dynamic Import to avoid SSR/Build issues with jspdf if any, though standard import works
                                 import('../utils/pdfGenerator').then(mod => {
-                                    // Filter logs for this asset? 
-                                    // Currently logs don't have assetId strictly linked in the types shown (LogEntry has taskId, Task has componentId).
-                                    // Assuming for this prototype we dump all logs or we need to filter.
-                                    // Looking at MaintenanceContext, logs don't seem to have assetId directly.
-                                    // However, WorkOrder has assetId.
-                                    // For now, we will pass all logs as a "Fleet Log" or Upgrade context.
-                                    // Wait, LogEntry is linked to Task. Tasks are generic? 
-                                    // Let's check MaintenanceContext again. 
-                                    // Logs seem generic in this prototype data. 
-                                    // We'll pass the logs we have.
-                                    mod.generateAssetPassport(selectedAsset, workOrders.filter(wo => wo.assetId === selectedAsset.id) as any);
+                                    // Filter logs for this asset from the Centralized Asset Log
+                                    const relevantLogs = assetLogs.filter(log => log.assetId === selectedAsset.id);
+
+                                    mod.generateAssetPassport(selectedAsset, relevantLogs);
                                 });
                             }}
                             className="text-white hover:text-cyan-400 border border-white/10"

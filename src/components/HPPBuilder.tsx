@@ -49,7 +49,7 @@ export const HPPBuilder: React.FC = () => {
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
     const { user } = useAuth();
-    const { selectedAsset } = useAssetContext();
+    const { selectedAsset, updateAsset, logActivity } = useAssetContext();
     const { telemetry } = useTelemetry();
     const { t } = useTranslation();
     const { state, dispatch } = useCerebro(); // Only CEREBRO - no broken contexts!
@@ -278,6 +278,30 @@ export const HPPBuilder: React.FC = () => {
             };
             const { error } = await supabase.from('turbine_designs').insert([payload]);
             if (error) throw error;
+
+            // --- CENTRALIZED ASSET UPDATE & LOGGING ---
+            const oldSpecs = selectedAsset.specs || {};
+            const newSpecs = {
+                ...oldSpecs,
+                designName: configName,
+                head: settings.head,
+                flow: settings.flow,
+                powerMW: calculations.powerMW,
+                recommendedTurbine: bestTurbine,
+                lastDesignUpdate: new Date().toISOString()
+            };
+
+            // 1. Update Global Asset State
+            updateAsset(selectedAsset.id, { specs: newSpecs });
+
+            // 2. Log Activity
+            logActivity(
+                selectedAsset.id,
+                'DESIGN',
+                `Updated Turbine Design: ${configName} (${bestTurbine})`,
+                { oldVal: oldSpecs, newVal: newSpecs }
+            );
+            // ------------------------------------------
 
             showToast(t('hppStudio.toasts.saveSuccess'), 'success');
             setSaveModalOpen(false);
