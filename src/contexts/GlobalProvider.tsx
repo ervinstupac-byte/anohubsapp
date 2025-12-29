@@ -14,7 +14,7 @@ import { DiagnosticProvider } from './DiagnosticContext.tsx';
 import { FleetProvider } from './FleetContext.tsx';
 import { VoiceAssistantProvider } from './VoiceAssistantContext.tsx';
 import { ForensicsProvider } from './ForensicsContext.tsx';
-import { AIPredictionProvider } from './AIPredictionContext.tsx';
+// import { AIPredictionProvider } from './AIPredictionContext.tsx'; // REMOVED: AI predictions disabled for authentic data only
 import { CommissioningProvider } from './CommissioningContext.tsx';
 
 interface GlobalProviderProps {
@@ -35,15 +35,16 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                                             <InventoryProvider>
                                                 <WorkOrderProvider>
                                                     <DiagnosticProvider>
-                                                        <AIPredictionProvider>
-                                                            <FleetProvider>
-                                                                <VoiceAssistantProvider>
-                                                                    <ForensicsProvider>
+                                                        {/* AIPredictionProvider removed - AI predictions disabled */}
+                                                        <FleetProvider>
+                                                            <VoiceAssistantProvider>
+                                                                <ForensicsProvider>
+                                                                    <CommissioningProvider>
                                                                         {children}
-                                                                    </ForensicsProvider>
-                                                                </VoiceAssistantProvider>
-                                                            </FleetProvider>
-                                                        </AIPredictionProvider>
+                                                                    </CommissioningProvider>
+                                                                </ForensicsProvider>
+                                                            </VoiceAssistantProvider>
+                                                        </FleetProvider>
                                                     </DiagnosticProvider>
                                                 </WorkOrderProvider>
                                             </InventoryProvider>

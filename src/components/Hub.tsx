@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { AlarmBar } from './scada/AlarmBar.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
-import { ExpertDiagnosticPanel } from './ExpertDiagnosticPanel.tsx';
+// import { ExpertDiagnosticPanel } from './ExpertDiagnosticPanel.tsx'; // REMOVED: simulation feature
 import { ModernButton } from './ui/ModernButton.tsx';
 
 // --- PERFORMANCE: CODE SPLITTING ---
@@ -54,12 +54,7 @@ export const Hub: React.FC = () => {
                 <IncidentSimulator />
             </Suspense>
 
-            {/* DIAGNOSTIC OVERLAY (Optional toggle) */}
-            <div className="absolute right-6 top-24 z-50 pointer-events-none">
-                <div className="pointer-events-auto">
-                    <ExpertDiagnosticPanel />
-                </div>
-            </div>
+            {/* DIAGNOSTIC OVERLAY REMOVED - simulation feature */}
 
             {/* BOTTOM: Process Mimic / Map - Lazy Loaded */}
             <div className="flex-1 relative overflow-hidden">

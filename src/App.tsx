@@ -69,8 +69,11 @@ const AdminApproval = lazy(() => import('./components/AdminApproval').then(m => 
 const ARManager = lazy(() => import('./components/ARManager').then(m => ({ default: m.ARManager })));
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
+const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
+
 // --- 5. COMMAND CENTER DASHBOARD ---
-const CommandCentreDashboard: React.FC = () => <Hub />;
+// Replaced with Toolbox Launchpad for authentic engineering focus
+// const CommandCentreDashboard: React.FC = () => <Hub />;
 
 // --- 6. WRAPPERS ---
 const TurbineDetailWrapper = () => {
@@ -125,12 +128,7 @@ const AppLayout: React.FC = () => {
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
 
-    // Initialize demo data on first load
-    useEffect(() => {
-        import('./utils/demoSeeder').then(({ initializeDemoData }) => {
-            initializeDemoData();
-        });
-    }, []);
+    // Demo data seeder removed - app now uses only real user data
 
     // Listen for custom wizard trigger event from ScadaMimic
     useEffect(() => {
@@ -432,7 +430,7 @@ const AppLayout: React.FC = () => {
                                     </div>
                                 }>
                                     <Routes>
-                                        <Route index element={<CommandCentreDashboard />} />
+                                        <Route index element={<ToolboxLaunchpad />} />
                                         <Route path="profile" element={<UserProfile />} />
                                         <Route path="map" element={<GlobalMap />} />
                                         <Route path="risk-assessment" element={<QuestionnaireWrapper />} />

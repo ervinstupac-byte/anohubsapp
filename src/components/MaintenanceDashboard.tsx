@@ -21,7 +21,7 @@ import { ForensicDepthAnalyzer } from './ForensicDepthAnalyzer.tsx';
 import { OrbitPlotter } from './OrbitPlotter.tsx';
 import { MagneticPullAnalytics } from './MagneticPullAnalytics.tsx';
 import { AcousticDiagnosticModule } from './AcousticDiagnosticModule.tsx';
-import { AIPredictiveModule } from './AIPredictiveModule.tsx';
+// import { AIPredictiveModule } from './AIPredictiveModule.tsx'; // REMOVED: simulation feature
 
 // --- HEATMAP GENERATOR ---
 const Heatmap: React.FC<{ data: number[] }> = ({ data }) => {
@@ -98,10 +98,7 @@ export const MaintenanceDashboard: React.FC = () => {
                 </GlassCard>
             ) : (
                 <>
-                    {/* AI PREDICTIVE MODULE - Full Width */}
-                    <div className="mb-8">
-                        <AIPredictiveModule />
-                    </div>
+                    {/* AI PREDICTIVE MODULE REMOVED - simulation feature */}
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* LEFT: STATUS CARD */}
