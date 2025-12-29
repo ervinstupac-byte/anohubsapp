@@ -77,9 +77,38 @@ export const ToolboxLaunchpad: React.FC = () => {
                     <p className="text-slate-400 font-mono flex items-center gap-2">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                         System Operational • {assets.length} Assets Online
+                        {selectedAsset && (
+                            <span className="ml-4 text-xs text-slate-500 bg-slate-900 px-2 py-1 rounded border border-white/5">
+                                Active: {selectedAsset.name}
+                            </span>
+                        )}
                     </p>
                 </div>
-                <div>
+                <div className="flex gap-3">
+                    {selectedAsset && (
+                        <ModernButton
+                            variant="ghost"
+                            onClick={() => {
+                                // Dynamic Import to avoid SSR/Build issues with jspdf if any, though standard import works
+                                import('../utils/pdfGenerator').then(mod => {
+                                    // Filter logs for this asset? 
+                                    // Currently logs don't have assetId strictly linked in the types shown (LogEntry has taskId, Task has componentId).
+                                    // Assuming for this prototype we dump all logs or we need to filter.
+                                    // Looking at MaintenanceContext, logs don't seem to have assetId directly.
+                                    // However, WorkOrder has assetId.
+                                    // For now, we will pass all logs as a "Fleet Log" or Upgrade context.
+                                    // Wait, LogEntry is linked to Task. Tasks are generic? 
+                                    // Let's check MaintenanceContext again. 
+                                    // Logs seem generic in this prototype data. 
+                                    // We'll pass the logs we have.
+                                    mod.generateAssetPassport(selectedAsset, workOrders.filter(wo => wo.assetId === selectedAsset.id) as any);
+                                });
+                            }}
+                            className="text-white hover:text-cyan-400 border border-white/10"
+                        >
+                            📄 Passport
+                        </ModernButton>
+                    )}
                     <ModernButton
                         variant="secondary"
                         onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}

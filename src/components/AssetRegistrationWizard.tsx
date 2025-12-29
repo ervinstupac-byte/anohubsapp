@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Orbit, Fan, Droplets, CircleDotDashed, Zap, RefreshCcw, Sun, Wind } from 'lucide-react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
@@ -102,24 +103,61 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">
                                 {t('assetWizard.fields.type', 'Asset Type')}
                             </label>
-                            <div className="grid grid-cols-3 gap-2">
-                                {(['Kaplan', 'Francis', 'Pelton', 'Pumping', 'Solar', 'Wind'] as const).map((label) => {
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                {(['Kaplan', 'Francis', 'Pelton', 'Bulb', 'Pumping', 'Solar', 'Wind'] as const).map((label) => {
                                     const isSelected = specificType === label;
+
+                                    // Icon Mapping
+                                    let Icon = Zap; // Default
+                                    let desc = "Energy Source";
+
+                                    switch (label) {
+                                        case 'Francis': Icon = Orbit; desc = "Reaction / Spiral"; break;
+                                        case 'Pelton': Icon = Droplets; desc = "Impulse / Jet"; break;
+                                        case 'Kaplan': Icon = Fan; desc = "Axial / Propeller"; break;
+                                        case 'Bulb': Icon = CircleDotDashed; desc = "Submersible / Tube"; break;
+                                        case 'Pumping': Icon = RefreshCcw; desc = "Reversible Storage"; break;
+                                        case 'Solar': Icon = Sun; desc = "PV Array"; break;
+                                        case 'Wind': Icon = Wind; desc = "Turbine Generator"; break;
+                                    }
+
                                     return (
-                                        <button
+                                        <div
                                             key={label}
                                             onClick={() => {
-                                                const isHpp = ['Kaplan', 'Francis', 'Pelton', 'Pumping'].includes(label);
+                                                const isHpp = ['Kaplan', 'Francis', 'Pelton', 'Bulb', 'Pumping'].includes(label);
                                                 setSpecificType(label);
                                                 setFormData({ ...formData, type: isHpp ? 'HPP' : (label as Asset['type']) });
                                             }}
-                                            className={`px-2 py-2 rounded-lg border text-[10px] font-bold transition-all uppercase ${isSelected
-                                                ? 'bg-cyan-500 text-white border-cyan-400 shadow-lg shadow-cyan-500/20'
-                                                : 'bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700'
-                                                }`}
+                                            className={`
+                                                relative group cursor-pointer p-3 rounded-xl border transition-all duration-300 flex flex-col items-center justify-center gap-2
+                                                ${isSelected
+                                                    ? 'bg-cyan-500/10 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.2)]'
+                                                    : 'bg-slate-900/50 border-white/5 hover:border-white/20 hover:bg-slate-800'
+                                                }
+                                            `}
                                         >
-                                            {label}
-                                        </button>
+                                            <div className={`
+                                                p-2 rounded-full transition-colors duration-300
+                                                ${isSelected ? 'bg-cyan-500 text-black' : 'bg-slate-800 text-slate-400 group-hover:text-cyan-400 group-hover:bg-slate-700'}
+                                            `}>
+                                                <Icon size={20} strokeWidth={isSelected ? 2.5 : 2} />
+                                            </div>
+
+                                            <div className="text-center">
+                                                <span className={`block text-xs font-black uppercase tracking-wider ${isSelected ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
+                                                    {label}
+                                                </span>
+                                                <span className="block text-[9px] text-slate-500 font-medium leading-tight mt-0.5">
+                                                    {desc}
+                                                </span>
+                                            </div>
+
+                                            {/* Active Indicator Dot */}
+                                            {isSelected && (
+                                                <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(34,211,238,1)] animate-pulse" />
+                                            )}
+                                        </div>
                                     );
                                 })}
                             </div>

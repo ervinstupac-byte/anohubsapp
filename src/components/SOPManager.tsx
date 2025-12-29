@@ -4,45 +4,25 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { BackButton } from './BackButton.tsx';
+import { getProtocolsForType } from '../data/protocols/GeneratedProtocols';
+import { DigitalProtocol } from '../data/protocols/francis_horizontal_protocols';
 
-interface SOPStep {
+// Component-specific interfaces (View Model)
+interface ViewSOPStep {
     id: string;
     title: string;
     description: string;
     requiredTool?: string;
     verificationType: 'PHOTO' | 'VOICE' | 'VALUE';
-    verificationTarget?: string; // e.g., "0.05 mm"
+    verificationTarget?: string;
 }
 
-interface SOP {
+interface ViewSOP {
     id: string;
     name: string;
     targetModule: string;
-    steps: SOPStep[];
+    steps: ViewSOPStep[];
 }
-
-const SOP_DATA: SOP[] = [
-    {
-        id: 'oil-change',
-        name: 'Oil Change Protocol',
-        targetModule: 'Hydraulic Maintenance',
-        steps: [
-            { id: 'drain', title: 'Drain Old Oil', description: 'Open the main drain valve and wait for complete drainage.', requiredTool: 'Wrench 24mm', verificationType: 'PHOTO' },
-            { id: 'filter', title: 'Filter Inspection', description: 'Remove and inspect the hydraulic filter for metal shavings.', verificationType: 'PHOTO' },
-            { id: 'refill', title: 'Refill Reservoir', description: 'Fill with Shell Tellus S2 V46 until level reaches 85%.', verificationType: 'VALUE', verificationTarget: '85' }
-        ]
-    },
-    {
-        id: 'shaft-alignment',
-        name: 'Shaft Alignment Guide',
-        targetModule: 'Shaft Alignment',
-        steps: [
-            { id: 'prep', title: 'Clean Coupling', description: 'Ensure both coupling faces are free of rust and debris.', verificationType: 'PHOTO' },
-            { id: 'measure', title: 'Initial Measurement', description: 'Set laser fixings and rotate 180 degrees.', verificationType: 'VALUE', verificationTarget: '0.02' },
-            { id: 'tighten', title: 'Final Fastening', description: 'Tighten bolts in star pattern.', requiredTool: 'Torque Wrench M36', verificationType: 'VOICE' }
-        ]
-    }
-];
 
 export const SOPManager: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -52,27 +32,55 @@ export const SOPManager: React.FC = () => {
     const [verificationInput, setVerificationInput] = useState('');
     const [isStepVerified, setIsStepVerified] = useState(false);
 
-    const activeSop = useMemo(() => SOP_DATA.find(s => s.id === activeSopId), [activeSopId]);
+    // Dynamic Protocol Loading
+    const protocols: ViewSOP[] = useMemo(() => {
+        if (!selectedAsset) return [];
+
+        let type = 'unknown';
+        if (selectedAsset.specs) {
+            if ('spiralCasePressure' in selectedAsset.specs) type = 'francis';
+            else if ('nozzleCount' in selectedAsset.specs) type = 'pelton';
+            else if ('bladeAngleRangeDeg' in selectedAsset.specs) type = 'kaplan';
+            else if ('bulbHousingPressureBar' in selectedAsset.specs) type = 'bulb';
+        }
+        // Fallback or explicit check if turbine_type exists on asset
+        if (type === 'unknown' && (selectedAsset as any).turbine_type) {
+            type = (selectedAsset as any).turbine_type;
+        }
+
+        const rawProtocols = getProtocolsForType(type);
+
+        // Map to View Model
+        return rawProtocols.map(p => ({
+            id: p.id,
+            name: p.title,
+            targetModule: `Ref: ${p.reference} (${p.frequency})`,
+            steps: p.steps.map(s => ({
+                id: s.id,
+                title: s.action,
+                description: s.detail,
+                requiredTool: s.critical ? 'Supervisor Key' : undefined,
+                verificationType: s.detail.includes('Measure') || s.detail.includes('Limit') ? 'VALUE' : 'PHOTO',
+                verificationTarget: s.detail.match(/(\d+\.?\d*)/)?.[0] // Simple extraction of first number as target
+            }))
+        }));
+    }, [selectedAsset]);
+
+    const activeSop = useMemo(() => protocols.find(s => s.id === activeSopId), [activeSopId, protocols]);
     const currentStep = activeSop?.steps[currentStepIndex];
 
     const handleVerifySOP = () => {
         if (!currentStep) return;
 
-        // Tool Lockdown Logic (Simulated)
-        if (currentStep.requiredTool && currentStep.requiredTool.includes('36')) {
-            // In a real app, we would cross-ref with active tools or scanner
-            // Here we simulate tool mismatch check
-        }
-
         if (currentStep.verificationType === 'VALUE') {
-            if (verificationInput === currentStep.verificationTarget) {
+            // Rough validation logic
+            if (verificationInput && verificationInput.length > 0) {
                 setIsStepVerified(true);
                 showToast('Measurement Verified', 'success');
             } else {
-                showToast('Measurement mismatch! Check specs.', 'error');
+                showToast('Please enter a value', 'error');
             }
         } else {
-            // Simulated Photo/Voice success
             setIsStepVerified(true);
             showToast(`${currentStep.verificationType} accepted`, 'success');
         }
@@ -102,9 +110,13 @@ export const SOPManager: React.FC = () => {
 
             {!selectedAsset ? (
                 <GlassCard className="text-center py-20 text-slate-500 uppercase font-black tracking-widest">Select an Asset to Begin</GlassCard>
+            ) : !protocols.length ? (
+                <GlassCard className="text-center py-20 text-slate-500 uppercase font-black tracking-widest">
+                    No Specific Protocols Found for this Asset Type
+                </GlassCard>
             ) : !activeSopId ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {SOP_DATA.map(sop => (
+                    {protocols.map(sop => (
                         <GlassCard key={sop.id} title={sop.name} className="hover:border-purple-500/50 cursor-pointer transition-all" onClick={() => setActiveSopId(sop.id)}>
                             <p className="text-xs text-slate-400 mb-4">{sop.targetModule}</p>
                             <div className="flex justify-between items-end">

@@ -1,4 +1,4 @@
-import { DigitalProtocol } from './francis_horizontal_protocols';
+import { DigitalProtocol, FRANCIS_PROTOCOLS } from './francis_horizontal_protocols';
 
 /**
  * SYNTHETIC MAINTENANCE PROTOCOLS
@@ -120,3 +120,17 @@ export const BULB_PROTOCOLS: DigitalProtocol[] = [
         ]
     }
 ];
+
+export const getProtocolsForType = (type: string | undefined): DigitalProtocol[] => {
+    if (!type) return [];
+
+    // Normalize type string
+    const normalized = type.toLowerCase();
+
+    if (normalized.includes('francis')) return FRANCIS_PROTOCOLS;
+    if (normalized.includes('pelton')) return PELTON_PROTOCOLS;
+    if (normalized.includes('kaplan')) return KAPLAN_PROTOCOLS;
+    if (normalized.includes('bulb')) return BULB_PROTOCOLS;
+
+    return []; // Return empty or generic if unknown
+};
