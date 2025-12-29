@@ -18,9 +18,12 @@ import { ModernButton } from './ui/ModernButton';
 import { ModernInput } from './ui/ModernInput';
 import { diagnoseFrancisFault, FrancisTelemetry, DiagnosticResult } from '../lib/francis_logic';
 
+import { useNotifications } from '../contexts/NotificationContext';
+
 export const FrancisDiagnostics: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { pushNotification } = useNotifications();
 
     // -- STATE --
     const [inputs, setInputs] = useState<FrancisTelemetry>({
@@ -38,6 +41,7 @@ export const FrancisDiagnostics: React.FC = () => {
     const handleRunDiagnostics = () => {
         const outcomes = diagnoseFrancisFault(inputs);
         setResults(outcomes);
+        pushNotification('INFO', 'Francis Logic Engine: Analysis Complete');
     };
 
     const handleInputChange = (field: keyof FrancisTelemetry, value: string) => {
@@ -89,6 +93,9 @@ export const FrancisDiagnostics: React.FC = () => {
                         value={inputs.bearingTemp}
                         onChange={(e) => handleInputChange('bearingTemp', e.target.value)}
                         type="number"
+                        min={0}
+                        max={150}
+                        helperText="Nominal: < 60°C"
                         placeholder="e.g. 45.0"
                         icon={<Thermometer className="w-4 h-4 text-emerald-500" />}
                     />
@@ -98,6 +105,10 @@ export const FrancisDiagnostics: React.FC = () => {
                         value={inputs.vibration}
                         onChange={(e) => handleInputChange('vibration', e.target.value)}
                         type="number"
+                        min={0}
+                        max={50}
+                        step={0.1}
+                        helperText="Nominal: < 2.5 mm/s"
                         placeholder="e.g. 0.5"
                         icon={<Activity className="w-4 h-4 text-purple-500" />}
                     />
@@ -107,6 +118,9 @@ export const FrancisDiagnostics: React.FC = () => {
                         value={inputs.siltPpm}
                         onChange={(e) => handleInputChange('siltPpm', e.target.value)}
                         type="number"
+                        min={0}
+                        max={50000}
+                        helperText="Nominal: < 3000 ppm"
                         placeholder="e.g. 50"
                         icon={<Droplets className="w-4 h-4 text-amber-500" />}
                     />
@@ -117,6 +131,9 @@ export const FrancisDiagnostics: React.FC = () => {
                         onChange={(e) => handleInputChange('gridFreq', e.target.value)}
                         type="number"
                         step="0.01"
+                        min={45.0}
+                        max={55.0}
+                        helperText="Nominal: 50.00 Hz ± 1%"
                         placeholder="e.g. 50.00"
                         icon={<Zap className="w-4 h-4 text-blue-500" />}
                     />

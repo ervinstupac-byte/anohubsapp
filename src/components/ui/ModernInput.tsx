@@ -3,6 +3,7 @@ import React, { InputHTMLAttributes } from 'react';
 interface ModernInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLSelectElement> {
     label?: string;
     error?: string;
+    helperText?: string;
     icon?: React.ReactNode;
     fullWidth?: boolean;
     as?: 'input' | 'select' | 'textarea';
@@ -11,6 +12,7 @@ interface ModernInputProps extends InputHTMLAttributes<HTMLInputElement | HTMLSe
 export const ModernInput: React.FC<ModernInputProps> = ({
     label,
     error,
+    helperText,
     icon,
     fullWidth = true,
     className = '',
@@ -53,6 +55,12 @@ export const ModernInput: React.FC<ModernInputProps> = ({
                 {/* Subtle shine effect on focus */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 opacity-0 group-focus-within:opacity-100 pointer-events-none transition-opacity duration-500" />
             </div>
+
+            {helperText && !error && (
+                <p className="mt-1 ml-1 text-xs text-slate-500 font-mono tracking-wide">
+                    {helperText}
+                </p>
+            )}
 
             {error && (
                 <p className="mt-1 ml-1 text-xs text-red-400 font-medium animate-fade-in">

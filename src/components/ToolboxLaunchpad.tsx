@@ -4,7 +4,8 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { useMaintenance } from '../contexts/MaintenanceContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { Calendar, AlertCircle } from 'lucide-react';
+import { useNotifications } from '../contexts/NotificationContext.tsx';
+import { Calendar, AlertCircle, Power } from 'lucide-react';
 
 /**
  * Toolbox Launchpad
@@ -16,6 +17,7 @@ export const ToolboxLaunchpad: React.FC = () => {
     const navigate = useNavigate();
     const { workOrders } = useMaintenance();
     const { assets, selectedAsset, assetLogs } = useAssetContext();
+    const { pushNotification } = useNotifications();
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -29,36 +31,34 @@ export const ToolboxLaunchpad: React.FC = () => {
     if (assets.length === 0) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-8 flex items-center justify-center">
-                <div className="max-w-4xl w-full space-y-8">
-                    <div className="text-center mb-12">
-                        <h1 className="text-5xl md:text-6xl font-black text-white tracking-tighter mb-4">
-                            Welcome to AnoHUB <span className="text-cyan-400">Engineering Toolbox</span>
-                        </h1>
-                        <p className="text-slate-400 text-lg font-mono">
-                            To begin, please register your first hydropower asset.
-                        </p>
-                    </div>
+                <div className="max-w-4xl w-full space-y-8 animate-fade-in">
 
-                    <GlassCard className="p-8 border-cyan-500/30 max-w-xl mx-auto text-center" >
-                        <div className="w-20 h-20 bg-cyan-500/10 rounded-full flex items-center justify-center border border-cyan-500/50 mx-auto mb-6">
-                            <span className="text-4xl">Start</span>
+                    <GlassCard className="p-12 border-slate-800 max-w-xl mx-auto text-center shadow-2xl relative overflow-hidden group">
+                        {/* Pulse Effect */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent animate-pulse-slow" />
+
+                        <div className="w-24 h-24 bg-slate-900 rounded-full flex items-center justify-center border border-slate-700 mx-auto mb-8 shadow-inner relative">
+                            <Power className="w-12 h-12 text-slate-600 group-hover:text-cyan-400 transition-colors duration-500" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-4">Setup Your Fleet</h3>
-                        <p className="text-slate-400 mb-8 leading-relaxed">
-                            This offline-first utility requires asset data to initialize the physics engine and logbook.
-                            Your data remains local to this device.
+
+                        <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">
+                            System Standby
+                        </h3>
+                        <p className="text-slate-500 font-mono text-sm mb-10 tracking-widest uppercase">
+                            No Active Assets Detected
                         </p>
+
                         <ModernButton
                             variant="primary"
-                            className="w-full py-4 text-lg"
+                            className="w-full py-4 text-lg font-bold shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:shadow-[0_0_40px_rgba(6,182,212,0.4)] transition-shadow"
                             onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
                         >
-                            Register New Asset
+                            Initialize First Asset
                         </ModernButton>
                     </GlassCard>
 
-                    <p className="text-center text-xs text-slate-600 font-mono mt-8 uppercase tracking-widest">
-                        Secure Local Storage Environment • v2.4.0
+                    <p className="text-center text-[10px] text-slate-700 font-mono uppercase tracking-[0.2em]">
+                        AnoHUB Secure Environment • v2.5.0
                     </p>
                 </div>
             </div>
@@ -89,6 +89,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <ModernButton
                             variant="ghost"
                             onClick={() => {
+                                pushNotification('INFO', `Generating Passport for ${selectedAsset.name}...`);
                                 // Dynamic Import to avoid SSR/Build issues with jspdf if any, though standard import works
                                 import('../utils/pdfGenerator').then(mod => {
                                     // Filter logs for this asset from the Centralized Asset Log
