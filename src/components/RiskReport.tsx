@@ -132,7 +132,8 @@ export const RiskReport: React.FC = () => {
                 selectedAsset.name,
                 riskData,
                 designData,
-                user?.email || 'AnoHUB Engineer'
+                user?.email || 'AnoHUB Engineer',
+                t
             );
 
             const filename = `${selectedAsset.name.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
@@ -170,7 +171,8 @@ export const RiskReport: React.FC = () => {
                 selectedAsset.name,
                 riskData,
                 designData,
-                user.email || 'Engineer'
+                user.email || 'Engineer',
+                t
             );
 
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');

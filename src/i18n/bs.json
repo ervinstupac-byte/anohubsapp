@@ -42,7 +42,8 @@
     "riverWildlifeDesc": "Ekološki mandat.",
     "genderEquity": "Rodna Ravnopravnost",
     "genderEquityDesc": "HR Strategija i Kultura.",
-    "digitalIntroduction": "Digitalni Uvod"
+    "digitalIntroduction": "Digitalni Uvod",
+    "maintenance": "Motor Održavanja"
   },
   "common": {
     "launch": "POKRENI",
@@ -240,7 +241,7 @@
       "type": "Tip Elektrane",
       "location": "Lokacija",
       "capacity": "Kapacitet (MW)",
-      "units": "Broj Jedinica",
+      "units": "Broj Agregata",
       "kpi": "Kritični KPI"
     },
     "buttons": {
@@ -1385,5 +1386,218 @@
     "ui": {
       "select": "Odaberi"
     }
+  },
+  "francis": {
+    "title": "Francis Turbina • Izolacija Kvara",
+    "subtitle": "Unesite trenutnu telemetriju za validaciju prema SOP limitima (Ref: SOP-ROT-001).",
+    "inputs": {
+      "bearingTemp": "Temperatura Ležaja (°C)",
+      "vibration": "Vibracija (mm/s)",
+      "silt": "Koncentracija Mulja (ppm)",
+      "gridFreq": "Mrežna Frekvencija (Hz)",
+      "nominalTemp": "Nominalno: < 60°C",
+      "nominalVib": "Nominalno: < 2.5 mm/s",
+      "nominalSilt": "Nominalno: < 3000 ppm",
+      "nominalFreq": "Nominalno: 50.00 Hz ± 1%"
+    },
+    "actions": {
+      "run": "POKRENI DIJAGNOSTIKU",
+      "back": "Nazad na Alate"
+    },
+    "status": {
+      "normal": "Svi Parametri Nominalni",
+      "normalDesc": "Sistem radi unutar dizajnerskih granica."
+    }
+  },
+  "toolbox": {
+    "zeroState": {
+      "title": "Sistem u Pripravnosti",
+      "noAssets": "Nisu detektirane aktivne elektrane",
+      "initialize": "Inicijaliziraj Prvu Elektranu"
+    },
+    "greeting": {
+      "morning": "Dobro jutro",
+      "afternoon": "Dobar dan",
+      "evening": "Dobro veče"
+    },
+    "engineer": "Inženjeru",
+    "systemOperational": "Sistem Operativan",
+    "assetsOnline": "Agregati Online",
+    "activeAsset": "Aktivno: {{name}}",
+    "passport": "Pasoš",
+    "addAsset": "Dodaj Elektranu",
+    "sections": {
+      "utilities": "Inženjerski Alati",
+      "designAnalysis": "Dizajn i Analiza",
+      "operationalModules": "Operativni Moduli",
+      "recentActivity": "Nedavna Aktivnost"
+    },
+    "activity": {
+      "none": "Nema nedavnih aktivnosti.",
+      "open": "Otvori Dnevnik",
+      "view": "Pogledaj Dnevnik"
+    },
+    "toast": {
+      "generatingPassport": "Generisanje Pasoša za {{asset}}..."
+    }
+  },
+  "emergency": {
+    "activeProtocol": "AKTIVNI HITNI PROTOKOL",
+    "protocols": {
+      "vibration_excess": {
+        "0": "Hitno odbacivanje tereta na svim jedinicama.",
+        "1": "Odvojiti primarne vodeće ležajeve za inspekciju.",
+        "2": "Izvršiti lasersku reviziju poravnanja vratila.",
+        "3": "Aktivirati protumjere za prigušivanje vibracija."
+      },
+      "bearing_overheat": {
+        "0": "Prisilno isključenje zahvaćene turbinske jedinice.",
+        "1": "Provjeriti protok i pritisak sistema za hlađenje.",
+        "2": "Analizirati ulje za podmazivanje na kontaminaciju.",
+        "3": "Pokrenuti rezervne izmjenjivače toplote."
+      },
+      "default": {
+        "0": "Pokrenuti opšti hitni isključni niz.",
+        "1": "Obavijestiti regionalni centar za održavanje."
+      }
+    }
+  },
+  "pdf": {
+    "passport": {
+      "title": "Pasoš Agregata",
+      "generated": "Generisano",
+      "id": "ID",
+      "assetIdentity": "Identitet Elektrane",
+      "assetName": "Naziv Elektrane",
+      "type": "Tip",
+      "location": "Lokacija",
+      "capacity": "Kapacitet",
+      "status": "Status",
+      "technicalSpecs": "Tehničke Specifikacije",
+      "noSpecs": "Nisu zabilježeni specifični tehnički parametri.",
+      "page": "Stranica",
+      "maintenanceLog": "Dnevnik Historije Održavanja",
+      "date": "Datum",
+      "category": "Kategorija",
+      "action": "Akcija / Sažetak",
+      "user": "Korisnik",
+      "noMaintenance": "Nema zabilježene historije održavanja za ovu elektranu."
+    }
+  },
+  "engines": {
+    "pelton": {
+      "idealNsq": "+ Idealan nizak specifični broj okretaja ({{n_sq}})",
+      "highNsq": "+ Visok specifični broj okretaja za Pelton (zahtijeva više mlazova)",
+      "highHead": "+ Visok pad pruža optimalnu kinetičku energiju",
+      "lowPressure": "- Nedovoljan pritisak za impulsni dizajn",
+      "silt": "+ Laka zamjena posuda bolje podnosi mulj"
+    },
+    "francis": {
+      "optimalNsq": "+ Optimalan specifični broj okretaja za Francis ({{n_sq}})",
+      "mediumHead": "+ Pad je unutar standardnog srednjeg raspona",
+      "fixedBlade": "- Fiksna geometrija lopatica manje efikasna za varijabilni protok",
+      "siltErosion": "- Potopljeno kolo podložno eroziji muljem"
+    },
+    "kaplan": {
+      "highNsq": "+ Detektovan visok specifični broj okretaja ({{n_sq}})",
+      "lowHead": "+ Idealno za primjene sa niskim padom",
+      "headExceeded": "- Pad prelazi optimalni Kaplan raspon",
+      "variableFlow": "+ Dvostruka regulacija efikasno upravlja varijabilnim protokom"
+    },
+    "crossflow": {
+      "runOfRiver": "+ Visoka efikasnost za male protočne elektrane",
+      "selfCleaning": "+ Samočisteće kolo dobro podnosi krhotine i mulj"
+    }
+  },
+  "profile": {
+    "title": "Inženjerski Profil",
+    "subtitle": "Upravljajte svojim identitetom i nivoima pristupa.",
+    "back": "Nazad",
+    "noUser": "Korisnik nije pronađen",
+    "updateSuccess": "Profil uspješno ažuriran",
+    "uploadError": "Morate odabrati sliku za slanje.",
+    "avatarSuccess": "Avatar poslan!",
+    "fullName": "Puno Ime",
+    "fullNamePlaceholder": "npr. Ivan Horvat",
+    "role": "Pozicija / Uloga",
+    "rolePlaceholder": "npr. Glavni Inženjer",
+    "company": "Organizacija",
+    "companyPlaceholder": "npr. Global Hydropower Inc.",
+    "saveButton": "Sačuvaj Promjene",
+    "unassignedRole": "Nedodijeljena Uloga",
+    "guestSaveWarning": "Gostujući profili se ne mogu sačuvati",
+    "guestUploadWarning": "Gostujući profili ne mogu slati avatare",
+    "developerTools": "Razvojni Alati",
+    "resetData": "Resetuj Demo Podatke",
+    "resetDataDesc": "Resetuj demo podatke da vratiš podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo će ponovo učitati aplikaciju.",
+    "resetDataConfirm": "Resetovati sve demo podatke? Ovo će očistiti localStorage i ponovo učitati stranicu."
+  },
+  "executive": {
+    "subtitle": "Izvršni Inženjerski Interfejs // v1.0.5 UNIFIED",
+    "status": {
+      "scadaActive": "SCADA AKTIVAN"
+    },
+    "actions": {
+      "downloadBrief": "PREUZMI IZVJEŠTAJ"
+    },
+    "twin": {
+      "label": "BLIZANAC",
+      "topology": "Topologija Imovine Uživo"
+    },
+    "sensors": {
+      "activePower": "Aktivna Snaga",
+      "gridFrequency": "Mrežna Frekvencija"
+    },
+    "kpi": {
+      "unitHealth": "Zdravlje Jedinice",
+      "financialRisk": "Finansijski Rizik",
+      "projectedLoss": "Predviđeni Gubitak (30d)"
+    },
+    "ai": {
+      "title": "Dr. Turbina AI",
+      "analyzing": "Dr. Turbina analizira hidrauličke potpise...",
+      "nominal": {
+        "title": "SVI SISTEMI NOMINALNI",
+        "desc": "Hidraulički parametri unutar optimalnog opsega.",
+        "details": "Rizik od kavitacije: NIZAK • Temp. ležaja: NORMALNA • Vibracije: PRIHVATLJIVE"
+      },
+      "physicsAnalysis": "FIZIČKA ANALIZA:",
+      "gridRisk": "Odstupanje frekvencije >5% ukazuje na potencijalno odvajanje generatora. Rizik od mehaničke rezonance na {{freq}}Hz.",
+      "cavitationRisk": "Protok: {{flow}} m³/s, Pad: {{head}}m prelazi prag kavitacije. Zazor rotora može biti nedovoljan.",
+      "acceptable": "Sistemski parametri unutar prihvatljivog opsega. Praćenje se nastavlja."
+    },
+    "control": {
+      "emergencyProtocols": "Protokoli za Hitne Slučajeve",
+      "scramButton": "🚨 HITNO ZAUSTAVLJANJE 🚨",
+      "scramConfirm": "POKRENUTI HITNO ZAUSTAVLJANJE? Ovo će isključiti turbinu i može uzrokovati zastoje.",
+      "safetyDisengaged": "SIGURNOSNA BRAVA ISKLJUČENA",
+      "scadaControls": "SCADA Kontrole",
+      "flowRate": "Protok (m³/s)",
+      "head": "Pad (m)",
+      "gridFrequencyInput": "Mrežna Frekvencija (Hz)",
+      "criticalFreq": "⚠️ DETEKTOVANA KRITIČNA FREKVENCIJA"
+    },
+    "silhouette": {
+      "bearingTemp": "TEMP. LEŽAJA",
+      "vibration": "VIBRACIJE",
+      "gridFreq": "MREŽNA FREQ",
+      "healthScore": "OCJENA ZDRAVLJA",
+      "criticalAlarms": "🚨 KRITIČNI ALARMI"
+    }
+  },
+  "sidebar": {
+    "fleetOverview": "PREGLED FLOTE",
+    "shaftAlignment": "Poravnanje Osovine",
+    "hydraulicMaintenance": "Hidrauličko Održavanje",
+    "boltTorque": "Moment Zatezanja Vijaka",
+    "shadowEngineer": "Shadow Engineer",
+    "intuitionLog": "Dnevnik Intuicije",
+    "structuralIntegrity": "Strukturalni Integritet",
+    "operations": "OPERACIJE",
+    "maintenanceLogbook": "Dnevnik Održavanja",
+    "strategy": "STRATEGIJA",
+    "toolboxAnalytics": "Analitika Alata",
+    "knowledge": "ZNANJE",
+    "exitToSite": "Nazad na Stranicu"
   }
 }

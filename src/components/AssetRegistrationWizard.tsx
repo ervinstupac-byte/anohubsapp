@@ -70,7 +70,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 specs: formData.specs
             });
 
-            showToast(t('assetWizard.success', 'Asset registered successfully.'), 'success');
+            showToast(t('assetWizard.success'), 'success');
             onClose();
         } catch (error) {
             console.error(error);
@@ -86,14 +86,14 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 return (
                     <div className="space-y-4 animate-fade-in">
                         <ModernInput
-                            label={t('assetWizard.fields.name', 'Asset Name')}
+                            label={t('assetWizard.fields.name')}
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             placeholder="e.g. HEPP Mostar"
                             fullWidth
                         />
                         <ModernInput
-                            label={t('assetWizard.fields.location', 'Location')}
+                            label={t('assetWizard.fields.location')}
                             value={formData.location}
                             onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                             placeholder="River, Country"
@@ -101,7 +101,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                         />
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 ml-1">
-                                {t('assetWizard.fields.type', 'Asset Type')}
+                                {t('assetWizard.fields.type')}
                             </label>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 {(['Kaplan', 'Francis', 'Pelton', 'Bulb', 'Pumping', 'Solar', 'Wind'] as const).map((label) => {
@@ -109,16 +109,15 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
 
                                     // Icon Mapping
                                     let Icon = Zap; // Default
-                                    let desc = "Energy Source";
 
                                     switch (label) {
-                                        case 'Francis': Icon = Orbit; desc = "Reaction / Spiral"; break;
-                                        case 'Pelton': Icon = Droplets; desc = "Impulse / Jet"; break;
-                                        case 'Kaplan': Icon = Fan; desc = "Axial / Propeller"; break;
-                                        case 'Bulb': Icon = CircleDotDashed; desc = "Submersible / Tube"; break;
-                                        case 'Pumping': Icon = RefreshCcw; desc = "Reversible Storage"; break;
-                                        case 'Solar': Icon = Sun; desc = "PV Array"; break;
-                                        case 'Wind': Icon = Wind; desc = "Turbine Generator"; break;
+                                        case 'Francis': Icon = Orbit; break;
+                                        case 'Pelton': Icon = Droplets; break;
+                                        case 'Kaplan': Icon = Fan; break;
+                                        case 'Bulb': Icon = CircleDotDashed; break;
+                                        case 'Pumping': Icon = RefreshCcw; break;
+                                        case 'Solar': Icon = Sun; break;
+                                        case 'Wind': Icon = Wind; break;
                                     }
 
                                     return (
@@ -149,7 +148,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                                                     {label}
                                                 </span>
                                                 <span className="block text-[9px] text-slate-500 font-medium leading-tight mt-0.5">
-                                                    {desc}
+                                                    {t(`assetWizard.types.${label.toLowerCase()}Desc`)}
                                                 </span>
                                             </div>
 
@@ -168,7 +167,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 return (
                     <div className="space-y-4 animate-fade-in">
                         <ModernInput
-                            label={t('assetWizard.fields.capacity', 'Capacity (MW)')}
+                            label={t('assetWizard.fields.capacity')}
                             type="number"
                             value={formData.capacity}
                             onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
@@ -176,7 +175,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                             fullWidth
                         />
                         <ModernInput
-                            label={t('assetWizard.fields.units', 'Number of Units')}
+                            label={t('assetWizard.fields.units')}
                             type="number"
                             value={formData.units}
                             onChange={(e) => setFormData({ ...formData, units: e.target.value })}
@@ -193,7 +192,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <ModernInput
-                                        label="Spiral Case Pressure (bar)"
+                                        label={t('assetWizard.specs.spiralCasePressure')}
                                         type="number"
                                         placeholder="e.g. 16.5"
                                         className="bg-slate-900"
@@ -203,7 +202,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                                         }))}
                                     />
                                     <ModernInput
-                                        label="Guide Vane Count"
+                                        label={t('assetWizard.specs.guideVaneCount')}
                                         type="number"
                                         placeholder="e.g. 12"
                                         className="bg-slate-900"
@@ -213,7 +212,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                                         }))}
                                     />
                                     <ModernInput
-                                        label="Runner Diameter (mm)"
+                                        label={t('assetWizard.specs.runnerDiameter')}
                                         type="number"
                                         placeholder="e.g. 850"
                                         className="bg-slate-900"
@@ -223,7 +222,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                                         }))}
                                     />
                                     <div className="flex flex-col gap-2">
-                                        <label className="text-xs font-bold text-slate-400">Draft Tube Vacuum (bar)</label>
+                                        <label className="text-xs font-bold text-slate-400">{t('assetWizard.specs.draftTubeVacuum')}</label>
                                         <input
                                             type="number"
                                             step="0.01"
@@ -238,7 +237,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-xs font-bold text-slate-400">Bearing Type</label>
+                                    <label className="text-xs font-bold text-slate-400">{t('assetWizard.specs.bearingType')}</label>
                                     <div className="flex gap-2">
                                         {['Roller', 'Slide'].map(bt => (
                                             <button
@@ -262,7 +261,7 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 return (
                     <div className="space-y-4 animate-fade-in">
                         <div className="p-4 bg-slate-800/50 rounded-lg border border-slate-700">
-                            <h4 className="text-white font-bold mb-2">{t('assetWizard.fields.kpi', 'Critical KPI')}</h4>
+                            <h4 className="text-white font-bold mb-2">{t('assetWizard.fields.kpi')}</h4>
                             <select
                                 className="w-full bg-slate-900 border border-slate-600 rounded p-2 text-white"
                                 value={formData.criticalKpi}

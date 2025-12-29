@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next'; // <--- IMPORT ADDED
 import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ExpertDiagnosisEngine } from '../../services/ExpertDiagnosisEngine';
 import { DrTurbineAI, ActionCard } from '../../services/DrTurbineAI';
@@ -15,6 +16,7 @@ const TurbineSilhouette: React.FC<{
     frequency?: number;
     alarms?: string[]
 }> = ({ health, vibration, temp, flow, head, frequency, alarms = [] }) => {
+    const { t } = useTranslation(); // <--- HOOK ADDED
     // Dynamic styles based on sensor data with glassmorphism effects
     const isCritical = health < 50 || (frequency || 0) > 55 || (temp || 0) > 80;
     const bearingColor = (temp || 0) > 60 ? '#EF4444' : health > 80 ? '#10B981' : '#F59E0B';
@@ -94,28 +96,28 @@ const TurbineSilhouette: React.FC<{
 
             {/* GLASSMORPHISM SENSOR OVERLAYS */}
             <div className="absolute top-[25%] right-[15%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">BEARING TEMP</div>
+                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.bearingTemp')}</div>
                 <div className={`text-lg font-black ${isCritical ? 'text-red-400 animate-pulse' : 'text-white'}`}>
                     {temp?.toFixed(1) || '--'}°C
                 </div>
             </div>
 
             <div className="absolute top-[60%] left-[15%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">VIBRATION</div>
+                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.vibration')}</div>
                 <div className={`text-lg font-black ${isCritical ? 'text-red-400 animate-pulse' : 'text-white'}`}>
                     {vibration?.toFixed(3) || '--'} mm/s
                 </div>
             </div>
 
             <div className="absolute bottom-[20%] left-[10%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">GRID FREQ</div>
+                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.gridFreq')}</div>
                 <div className={`text-lg font-black ${(frequency || 0) > 55 ? 'text-red-400 animate-pulse' : 'text-white'}`}>
                     {frequency?.toFixed(1) || '--'} Hz
                 </div>
             </div>
 
             <div className="absolute bottom-[20%] right-[10%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">HEALTH SCORE</div>
+                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.healthScore')}</div>
                 <div className={`text-lg font-black ${health < 50 ? 'text-red-400 animate-pulse' : health > 80 ? 'text-green-400' : 'text-yellow-400'}`}>
                     {health.toFixed(0)}%
                 </div>
@@ -124,7 +126,7 @@ const TurbineSilhouette: React.FC<{
             {/* CRITICAL ALARMS OVERLAY */}
             {alarms.length > 0 && (
                 <div className="absolute top-4 left-4 right-4 bg-red-900/30 backdrop-blur-md border border-red-500/50 rounded-lg p-3 animate-pulse">
-                    <div className="text-red-300 font-bold text-sm mb-1">🚨 CRITICAL ALARMS</div>
+                    <div className="text-red-300 font-bold text-sm mb-1">{t('executive.silhouette.criticalAlarms')}</div>
                     {alarms.slice(0, 2).map((alarm, idx) => (
                         <div key={idx} className="text-red-200 text-xs">{alarm}</div>
                     ))}
@@ -135,6 +137,7 @@ const TurbineSilhouette: React.FC<{
 };
 
 export const ExecutiveDashboard: React.FC = () => {
+    const { t } = useTranslation(); // <--- HOOK ADDED
     const { technicalState, connectSCADAToExpertEngine, getDrTurbineConsultation, createComplexIdentity } = useProjectEngine();
 
     // Use Adapter to get full Asset Identity
@@ -180,14 +183,14 @@ export const ExecutiveDashboard: React.FC = () => {
                     <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] relative z-10">
                         ANOHUB <span className="text-cyan-400">PRIME</span>
                     </h1>
-                    <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">Executive Engineering interface // v1.0.5 UNIFIED</p>
+                    <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">{t('executive.subtitle')}</p>
                 </div>
                 <div className="flex gap-4">
                     <div className="backdrop-blur-md bg-black/20 border border-white/20 rounded-xl px-6 py-3 text-sm text-white font-bold uppercase">
-                        SCADA ACTIVE
+                        {t('executive.status.scadaActive')}
                     </div>
                     <ModernButton variant="primary" className="backdrop-blur-md bg-cyan-500/20 border-cyan-400/30 hover:bg-cyan-500/30">
-                        DOWNLOAD BRIEF
+                        {t('executive.actions.downloadBrief')}
                     </ModernButton>
                 </div>
             </div>
@@ -198,12 +201,12 @@ export const ExecutiveDashboard: React.FC = () => {
                 {/* LEFT: DIGITAL TWIN (4 Columns) */}
                 <div className="lg:col-span-4 flex flex-col gap-6">
                     <div className="h-full backdrop-blur-xl bg-white/5 border border-cyan-500/30 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.1)] relative overflow-hidden p-6">
-                        <div className="absolute top-0 right-0 p-4 opacity-30 font-black text-8xl text-cyan-400/10 select-none z-0">TWIN</div>
+                        <div className="absolute top-0 right-0 p-4 opacity-30 font-black text-8xl text-cyan-400/10 select-none z-0">{t('executive.twin.label')}</div>
 
                         <div className="relative z-10 flex flex-col h-full">
                             <h3 className="text-xl font-bold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
-                                Live Asset Topology
+                                {t('executive.twin.topology')}
                             </h3>
                             <div className="flex-grow flex items-center justify-center py-8">
                                 <TurbineSilhouette
@@ -220,11 +223,11 @@ export const ExecutiveDashboard: React.FC = () => {
                             {/* GLASSMORPHISM SENSOR READOUT */}
                             <div className="grid grid-cols-2 gap-3 mt-auto">
                                 <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
-                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">Active Power</span>
+                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">{t('executive.sensors.activePower')}</span>
                                     <span className="text-2xl font-mono text-white font-black">{(assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
                                 </div>
                                 <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
-                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">Grid Frequency</span>
+                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">{t('executive.sensors.gridFrequency')}</span>
                                     {/* CRITICAL FREQUENCY ALARM */}
                                     <span className={`text-2xl font-mono font-black ${scadaFrequency > 55 || scadaFrequency < 45
                                         ? 'text-red-400 animate-pulse drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]'
@@ -245,7 +248,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     <div className="grid grid-cols-2 gap-6">
                         <div className="backdrop-blur-xl bg-white/5 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">Unit Health</p>
+                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">{t('executive.kpi.unitHealth')}</p>
                             <div className="flex items-baseline gap-2">
                                 <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-400' :
                                     (scadaDiagnostics?.healthScore || 85) > 80 ? 'text-cyan-400' : 'text-yellow-400'
@@ -263,14 +266,14 @@ export const ExecutiveDashboard: React.FC = () => {
 
                         <div className="backdrop-blur-xl bg-white/5 border border-red-500/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(239,68,68,0.1)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-400 to-transparent"></div>
-                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">Financial Risk</p>
+                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">{t('executive.kpi.financialRisk')}</p>
                             <div className="flex items-baseline gap-2">
                                 <span className="text-8xl font-black text-red-400 tracking-tighter drop-shadow-xl animate-pulse">
                                     {Math.floor((scadaDiagnostics?.diagnostics?.cavitationRisk ? 150 : 85) / 10)}
                                 </span>
                                 <span className="text-3xl text-slate-400 font-bold">k€</span>
                             </div>
-                            <p className="text-[10px] text-red-400/60 mt-6 uppercase font-mono">Projected Loss (30d)</p>
+                            <p className="text-[10px] text-red-400/60 mt-6 uppercase font-mono">{t('executive.kpi.projectedLoss')}</p>
                         </div>
                     </div>
 
@@ -283,7 +286,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <span className="text-xl">🧠</span>
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold text-white">Dr. Turbine AI</h3>
+                                <h3 className="text-xl font-bold text-white">{t('executive.ai.title')}</h3>
                                 <p className="text-sm text-cyan-400/90 font-mono animate-pulse tracking-wider">{aiMessage}</p>
                             </div>
                         </div>
@@ -295,9 +298,9 @@ export const ExecutiveDashboard: React.FC = () => {
                                     <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
                                         <span className="text-2xl">✅</span>
                                     </div>
-                                    <p className="text-green-400 text-lg font-bold mb-2">ALL SYSTEMS NOMINAL</p>
-                                    <p className="text-slate-400 text-sm">Hydraulic parameters within optimal range.</p>
-                                    <p className="text-slate-500 text-xs">Cavitation risk: LOW • Bearing temp: NORMAL • Vibration: ACCEPTABLE</p>
+                                    <p className="text-green-400 text-lg font-bold mb-2">{t('executive.ai.nominal.title')}</p>
+                                    <p className="text-slate-400 text-sm">{t('executive.ai.nominal.desc')}</p>
+                                    <p className="text-slate-500 text-xs">{t('executive.ai.nominal.details')}</p>
                                 </div>
                             )}
 
@@ -326,13 +329,13 @@ export const ExecutiveDashboard: React.FC = () => {
 
                                         {/* Physics-based explanation */}
                                         <div className="bg-black/20 rounded-lg p-3 mb-4 border border-white/10">
-                                            <p className="text-xs text-cyan-300 font-mono mb-1">PHYSICS ANALYSIS:</p>
+                                            <p className="text-xs text-cyan-300 font-mono mb-1">{t('executive.ai.physicsAnalysis')}</p>
                                             <p className="text-xs text-slate-300">
                                                 {card.severity === 'CRITICAL' && card.title.includes('GRID')
-                                                    ? `Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at ${scadaFrequency}Hz.`
+                                                    ? t('executive.ai.gridRisk', { freq: scadaFrequency })
                                                     : card.severity === 'CRITICAL' && card.title.includes('CAVITATION')
-                                                        ? `Flow: ${scadaFlow} m³/s, Head: ${scadaHead}m exceeds cavitation threshold. Runner clearance may be insufficient.`
-                                                        : 'System parameters within acceptable range. Monitoring continues.'
+                                                        ? t('executive.ai.cavitationRisk', { flow: scadaFlow, head: scadaHead })
+                                                        : t('executive.ai.acceptable')
                                                 }
                                             </p>
                                         </div>
@@ -344,7 +347,6 @@ export const ExecutiveDashboard: React.FC = () => {
                                                 : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
                                                 }`}
                                             onClick={() => {
-                                                // Could trigger work orders, emergency protocols, etc.
                                                 console.log('Action triggered:', card.actionFunction);
                                             }}
                                         >
@@ -359,7 +361,7 @@ export const ExecutiveDashboard: React.FC = () => {
                             {aiCards.length > 0 && (
                                 <div className="flex items-center gap-3 text-cyan-400 text-sm animate-pulse">
                                     <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                                    <span className="font-mono">Dr. Turbine analyzing hydraulic signatures...</span>
+                                    <span className="font-mono">{t('executive.ai.analyzing')}</span>
                                 </div>
                             )}
                         </div>
@@ -372,30 +374,30 @@ export const ExecutiveDashboard: React.FC = () => {
                     <div className="backdrop-blur-xl bg-red-950/10 border border-red-500/30 rounded-2xl p-6 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
                         <h4 className="text-red-400 font-bold uppercase text-sm mb-6 flex items-center gap-2">
                             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                            Emergency Protocols
+                            {t('executive.control.emergencyProtocols')}
                         </h4>
                         <button
                             className="w-full py-5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all active:scale-95 border border-red-500/30"
                             onClick={() => {
-                                if (confirm("INITIATE EMERGENCY SCRAM? This will trip the turbine and may cause downtime.")) {
+                                if (confirm(t('executive.control.scramConfirm'))) {
                                     console.log('Emergency shutdown initiated');
                                 }
                             }}
                         >
-                            🚨 SCRAM UNIT 🚨
+                            {t('executive.control.scramButton')}
                         </button>
-                        <p className="text-[10px] text-red-400/80 mt-4 text-center font-mono tracking-wider">SAFETY LOCK DISENGAGED</p>
+                        <p className="text-[10px] text-red-400/80 mt-4 text-center font-mono tracking-wider">{t('executive.control.safetyDisengaged')}</p>
                     </div>
 
                     {/* SCADA CONTROLS */}
                     <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl">
                         <h4 className="text-white font-bold uppercase text-sm mb-6 flex items-center gap-2">
                             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                            SCADA Controls
+                            {t('executive.control.scadaControls')}
                         </h4>
                         <div className="space-y-4">
                             <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">Flow Rate (m³/s)</label>
+                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.flowRate')}</label>
                                 <input
                                     type="number"
                                     value={scadaFlow}
@@ -405,7 +407,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 />
                             </div>
                             <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">Head (m)</label>
+                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.head')}</label>
                                 <input
                                     type="number"
                                     value={scadaHead}
@@ -415,7 +417,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 />
                             </div>
                             <div className={`bg-slate-900/50 p-4 rounded-lg border ${scadaFrequency > 55 ? 'border-red-500' : 'border-slate-700'}`}>
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">Grid Frequency (Hz)</label>
+                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.gridFrequencyInput')}</label>
                                 <input
                                     type="number"
                                     value={scadaFrequency}
@@ -425,7 +427,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     step="0.1"
                                 />
                                 {scadaFrequency > 55 && (
-                                    <p className="text-red-400 text-xs mt-2 animate-pulse">⚠️ CRITICAL FREQUENCY DETECTED</p>
+                                    <p className="text-red-400 text-xs mt-2 animate-pulse">{t('executive.control.criticalFreq')}</p>
                                 )}
                             </div>
                         </div>

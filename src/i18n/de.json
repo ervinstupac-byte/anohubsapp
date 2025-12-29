@@ -52,7 +52,8 @@
     "riverWildlifeDesc": "Umweltmandat.",
     "genderEquity": "Geschlechtergerechtigkeit",
     "genderEquityDesc": "HR-Strategie & Kultur.",
-    "digitalIntroduction": "Digitale Einführung"
+    "digitalIntroduction": "Digitale Einführung",
+    "maintenance": "Wartungs-Engine"
   },
   "common": {
     "launch": "STARTEN",
@@ -194,6 +195,29 @@
     "successToast": "Neues Asset erfolgreich registriert",
     "failToast": "Fehler beim Erstellen des Assets"
   },
+  "profile": {
+    "title": "Engineer Profile",
+    "subtitle": "Manage your identity and access levels.",
+    "back": "Back",
+    "noUser": "No user found",
+    "updateSuccess": "Profile updated successfully",
+    "uploadError": "You must select an image to upload.",
+    "avatarSuccess": "Avatar uploaded!",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "e.g. John Doe",
+    "role": "Position / Role",
+    "rolePlaceholder": "e.g. Lead Engineer",
+    "company": "Organization",
+    "companyPlaceholder": "e.g. Global Hydropower Inc.",
+    "saveButton": "Save Changes",
+    "unassignedRole": "Unassigned Role",
+    "guestSaveWarning": "Guest profiles cannot be saved",
+    "guestUploadWarning": "Guest profiles cannot upload avatars",
+    "developerTools": "Developer Tools",
+    "resetData": "Reset Demo Data",
+    "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
+    "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page."
+  },
   "assetWizard": {
     "title": "Neues Asset registrieren",
     "steps": {
@@ -214,7 +238,23 @@
       "prev": "Zurück",
       "register": "Asset registrieren"
     },
-    "success": "Asset erfolgreich registriert und in der Flotte initialisiert."
+    "success": "Asset erfolgreich registriert und in der Flotte initialisiert.",
+    "types": {
+      "francisDesc": "Reaction / Spiral",
+      "peltonDesc": "Impulse / Jet",
+      "kaplanDesc": "Axial / Propeller",
+      "bulbDesc": "Submersible / Tube",
+      "pumpingDesc": "Reversible Storage",
+      "solarDesc": "PV Array",
+      "windDesc": "Turbine Generator"
+    },
+    "specs": {
+      "spiralCasePressure": "Spiral Case Pressure (bar)",
+      "guideVaneCount": "Guide Vane Count",
+      "runnerDiameter": "Runner Diameter (mm)",
+      "draftTubeVacuum": "Draft Tube Vacuum (bar)",
+      "bearingType": "Bearing Type"
+    }
   },
   "globalMap": {
     "fleet": "Flotte",
@@ -225,5 +265,165 @@
       "critical": "KRITISCH",
       "warning": "WARNUNG"
     }
+  },
+  "toolbox": {
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "engineer": "Ingenieur",
+    "systemOperational": "System Betriebsbereit",
+    "assetsOnline": "Anlagen Online",
+    "activeAsset": "Aktiv: {{name}}",
+    "passport": "Dossier",
+    "addAsset": "Anlage Hinzufügen",
+    "sections": {
+      "utilities": "Ingenieur-Werkzeuge",
+      "designAnalysis": "Design & Analyse",
+      "operationalModules": "Betriebsmodule",
+      "recentActivity": "Letzte Aktivitäten"
+    },
+    "activity": {
+      "none": "Keine aktuellen Aktivitäten.",
+      "open": "Logbuch Öffnen",
+      "view": "Logbuch Ansehen"
+    }
+  },
+  "emergency": {
+    "activeProtocol": "AKTIVES NOTFALLPROTOKOLL",
+    "protocols": {
+      "vibration_excess": {
+        "0": "Vibrationsanstieg bestätigt.",
+        "1": "Last auf 50% reduzieren.",
+        "2": "Alle Lagertemperaturen prüfen.",
+        "3": "Bericht an Ingenieure senden."
+      },
+      "bearing_overheat": {
+        "0": "Temperaturanstieg bestätigt.",
+        "1": "Kühlwasserdurchfluss erhöhen.",
+        "2": "Öldruck prüfen.",
+        "3": "Auf Abschaltung vorbereiten, wenn Temp. nicht sinkt."
+      },
+      "default": {
+        "0": "Anomalie erkannt.",
+        "1": "Regionales Wartungszentrum benachrichtigen."
+      }
+    }
+  },
+  "pdf": {
+    "passport": {
+      "title": "Ingenieur-Dossier",
+      "generated": "Generiert",
+      "id": "ID",
+      "assetIdentity": "Anlagen-Identität",
+      "assetName": "Anlagenname",
+      "type": "Typ",
+      "location": "Standort",
+      "capacity": "Kapazität",
+      "status": "Status",
+      "technicalSpecs": "Technische Spezifikationen",
+      "noSpecs": "Keine spezifischen technischen Parameter aufgezeichnet.",
+      "page": "Seite",
+      "maintenanceLog": "Wartungshistorie",
+      "date": "Datum",
+      "category": "Kategorie",
+      "action": "Aktion / Zusammenfassung",
+      "user": "Benutzer",
+      "noMaintenance": "Keine Wartungshistorie für diese Anlage aufgezeichnet."
+    }
+  },
+  "engines": {
+    "pelton": {
+      "idealNsq": "+ Ideale niedrige spezifische Drehzahl ({{n_sq}})",
+      "highNsq": "+ Hohe spezifische Drehzahl für Pelton (erfordert mehrere Düsen)",
+      "highHead": "+ Hohe Fallhöhe bietet optimale kinetische Energie",
+      "lowPressure": "- Unzureichender Druck für Impulsdesign",
+      "silt": "+ Einfacher Becherwechsel toleriert Schlick besser"
+    },
+    "francis": {
+      "optimalNsq": "+ Optimale spezifische Drehzahl für Francis ({{n_sq}})",
+      "mediumHead": "+ Fallhöhe im Standard-Mitteldruckbereich",
+      "fixedBlade": "- Feste Schaufelgeometrie weniger effizient bei variablen Durchflüssen",
+      "siltErosion": "- Untergetauchtes Laufrad anfällig für Schlickerosion"
+    },
+    "kaplan": {
+      "highNsq": "+ Hohe spezifische Drehzahl erkannt ({{n_sq}})",
+      "lowHead": "+ Ideal für Niederdruckanwendungen",
+      "headExceeded": "- Fallhöhe überschreitet optimalen Kaplan-Bereich",
+      "variableFlow": "+ Doppelte Regulierung bewältigt variablen Durchfluss effizient"
+    },
+    "crossflow": {
+      "runOfRiver": "+ Hohe Effizienz für kleine Laufwasserkraftwerke",
+      "selfCleaning": "+ Selbstreinigendes Laufrad toleriert Schmutz und Schlick gut"
+    }
+  },
+  "executive": {
+    "subtitle": "Leitende Ingenieurschnittstelle // v1.0.5 UNIFIED",
+    "status": {
+      "scadaActive": "SCADA AKTIV"
+    },
+    "actions": {
+      "downloadBrief": "BERICHT HERUNTERLADEN"
+    },
+    "twin": {
+      "label": "ZWILLING",
+      "topology": "Live-Anlagentopologie"
+    },
+    "sensors": {
+      "activePower": "Wirkleistung",
+      "gridFrequency": "Netzfrequenz"
+    },
+    "kpi": {
+      "unitHealth": "Anlagengesundheit",
+      "financialRisk": "Finanzielles Risiko",
+      "projectedLoss": "Prognostizierter Verlust (30t)"
+    },
+    "ai": {
+      "title": "Dr. Turbine KI",
+      "analyzing": "Dr. Turbine analysiert hydraulische Signaturen...",
+      "nominal": {
+        "title": "ALLE SYSTEME NOMINAL",
+        "desc": "Hydraulische Parameter im optimalen Bereich.",
+        "details": "Kavitationsrisiko: NIEDRIG • Lagertemp: NORMAL • Vibration: AKZEPTABEL"
+      },
+      "physicsAnalysis": "PHYSIKALISCHE ANALYSE:",
+      "gridRisk": "Frequenzabweichung >5% deutet auf mögliche Generatorentkopplung hin. Risiko mechanischer Resonanz bei {{freq}} Hz.",
+      "cavitationRisk": "Durchflussrate: {{flow}} m³/s, Fallhöhe: {{head}}m überschreitet Kavitationsschwelle. Laufradspalt möglicherweise unzureichend.",
+      "acceptable": "Systemparameter im akzeptablen Bereich. Überwachung läuft."
+    },
+    "control": {
+      "emergencyProtocols": "Notfallprotokolle",
+      "scramButton": "🚨 NOTABSCHALTUNG 🚨",
+      "scramConfirm": "NOTABSCHALTUNG EINLEITEN? Dies stoppt die Turbine und kann zu Ausfallzeiten führen.",
+      "safetyDisengaged": "SICHERHEITSSPERRE DEAKTIVIERT",
+      "scadaControls": "SCADA-Steuerung",
+      "flowRate": "Durchflussrate (m³/s)",
+      "head": "Fallhöhe (m)",
+      "gridFrequencyInput": "Netzfrequenz (Hz)",
+      "criticalFreq": "⚠️ KRITISCHE FREQUENZ ERKANNT"
+    },
+    "silhouette": {
+      "bearingTemp": "LAGERTEMP",
+      "vibration": "VIBRATION",
+      "gridFreq": "NETZFREQ",
+      "healthScore": "GESUNDHEIT",
+      "criticalAlarms": "🚨 KRITISCHE ALARME"
+    }
+  },
+  "sidebar": {
+    "fleetOverview": "FLOTTENÜBERSICHT",
+    "shaftAlignment": "Wellenausrichtung",
+    "hydraulicMaintenance": "Hydraulische Wartung",
+    "boltTorque": "Bolzendrehmoment",
+    "shadowEngineer": "Schatteningenieur",
+    "intuitionLog": "Intuitions-Logbuch",
+    "structuralIntegrity": "Strukturelle Integrität",
+    "operations": "OPERATIONEN",
+    "maintenanceLogbook": "Wartungsbuch",
+    "strategy": "STRATEGIE",
+    "toolboxAnalytics": "Werkzeugkasten-Analytik",
+    "knowledge": "WISSEN",
+    "exitToSite": "Zurück zur Website"
   }
 }

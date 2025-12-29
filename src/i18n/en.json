@@ -52,7 +52,23 @@
     "riverWildlifeDesc": "Environmental mandate.",
     "genderEquity": "Gender Equity",
     "genderEquityDesc": "HR Strategy & Culture.",
-    "digitalIntroduction": "Digital Introduction"
+    "digitalIntroduction": "Digital Introduction",
+    "maintenance": "Maintenance Engine"
+  },
+  "sidebar": {
+    "fleetOverview": "FLEET OVERVIEW",
+    "shaftAlignment": "Shaft Alignment",
+    "hydraulicMaintenance": "Hydraulic Maintenance",
+    "boltTorque": "Bolt Torque",
+    "shadowEngineer": "Shadow Engineer",
+    "intuitionLog": "Intuition Log",
+    "structuralIntegrity": "Structural Integrity",
+    "operations": "OPERATIONS",
+    "maintenanceLogbook": "Logbook",
+    "strategy": "STRATEGY",
+    "toolboxAnalytics": "Toolbox Analytics",
+    "knowledge": "KNOWLEDGE",
+    "exitToSite": "Exit to Site"
   },
   "common": {
     "launch": "LAUNCH",
@@ -1342,5 +1358,183 @@
   },
   "ui": {
     "select": "Select"
+  },
+  "francis": {
+    "title": "Francis Turbine • Fault Isolation",
+    "subtitle": "Enter current telemetry to validate against SOP limits (Ref: SOP-ROT-001).",
+    "inputs": {
+      "bearingTemp": "Bearing Temperature (°C)",
+      "vibration": "Vibration (mm/s)",
+      "silt": "Silt Concentration (ppm)",
+      "gridFreq": "Grid Frequency (Hz)",
+      "nominalTemp": "Nominal: < 60°C",
+      "nominalVib": "Nominal: < 2.5 mm/s",
+      "nominalSilt": "Nominal: < 3000 ppm",
+      "nominalFreq": "Nominal: 50.00 Hz ± 1%"
+    },
+    "actions": {
+      "run": "RUN DIAGNOSTICS",
+      "back": "Back to Toolbox"
+    },
+    "status": {
+      "normal": "All Parameters Nominal",
+      "normalDesc": "System operating within design limits."
+    }
+  },
+  "toolbox": {
+    "zeroState": {
+      "title": "System Standby",
+      "noAssets": "No Active Assets Detected",
+      "initialize": "Initialize First Asset"
+    },
+    "greeting": {
+      "morning": "Good Morning",
+      "afternoon": "Good Afternoon",
+      "evening": "Good Evening"
+    },
+    "engineer": "Engineer",
+    "systemOperational": "System Operational",
+    "assetsOnline": "Assets Online",
+    "activeAsset": "Active: {{name}}",
+    "passport": "Passport",
+    "addAsset": "Add Asset",
+    "sections": {
+      "utilities": "Engineering Utilities",
+      "designAnalysis": "Design & Analysis",
+      "operationalModules": "Operational Modules",
+      "recentActivity": "Recent Activity"
+    },
+    "activity": {
+      "none": "No recent activity.",
+      "open": "Open Logbook",
+      "view": "View Logbook"
+    },
+    "toast": {
+      "generatingPassport": "Generating Passport for {{asset}}..."
+    }
+  },
+  "emergency": {
+    "activeProtocol": "ACTIVE EMERGENCY PROTOCOL",
+    "protocols": {
+      "vibration_excess": {
+        "0": "Immediate load rejection across all units.",
+        "1": "Disengage primary guide bearings for inspection.",
+        "2": "Perform laser alignment audit of main shaft.",
+        "3": "Deploy vibration dampening countermeasures."
+      },
+      "bearing_overheat": {
+        "0": "Forced shutdown of affected turbine unit.",
+        "1": "Verify cooling system flow and pressure.",
+        "2": "Analyze oil lubrication for contamination.",
+        "3": "Initiate backup thermal heat exchangers."
+      },
+      "default": {
+        "0": "Initiate general emergency shutdown.",
+        "1": "Notify regional maintenance center."
+      }
+    }
+  },
+  "pdf": {
+    "passport": {
+      "title": "Engineering Dossier",
+      "generated": "Generated",
+      "id": "ID",
+      "assetIdentity": "Asset Identity",
+      "assetName": "Asset Name",
+      "type": "Type",
+      "location": "Location",
+      "capacity": "Capacity",
+      "status": "Status",
+      "technicalSpecs": "Technical Specifications",
+      "noSpecs": "No specific technical parameters recorded.",
+      "page": "Page",
+      "maintenanceLog": "Maintenance History Log",
+      "date": "Date",
+      "category": "Category",
+      "action": "Action / Summary",
+      "user": "User",
+      "noMaintenance": "No maintenance history recorded for this asset."
+    }
+  },
+  "engines": {
+    "pelton": {
+      "idealNsq": "+ Ideal low specific speed ({{n_sq}})",
+      "highNsq": "+ High specific speed for Pelton (requires multi-jet)",
+      "highHead": "+ High head provides optimal kinetic energy",
+      "lowPressure": "- Insufficient pressure for impulse design",
+      "silt": "+ Ease of bucket replacement handles silt better"
+    },
+    "francis": {
+      "optimalNsq": "+ Optimal specific speed for Francis ({{n_sq}})",
+      "mediumHead": "+ Head is within standard medium-head range",
+      "fixedBlade": "- Fixed blade geometry less efficient for flow variations",
+      "siltErosion": "- Submerged runner susceptible to silt erosion"
+    },
+    "kaplan": {
+      "highNsq": "+ High specific speed detected ({{n_sq}})",
+      "lowHead": "+ Ideal for low head applications",
+      "headExceeded": "- Head exceeds optimal Kaplan range",
+      "variableFlow": "+ Double regulation handles variable flow efficiently"
+    },
+    "crossflow": {
+      "runOfRiver": "+ High efficiency for small-scale run-of-river",
+      "selfCleaning": "+ Self-cleaning runner handles debris and silt well"
+    }
+  },
+  "resetData": "Reset Demo Data",
+  "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
+  "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page.",
+  "executive": {
+    "subtitle": "Executive Engineering interface // v1.0.5 UNIFIED",
+    "status": {
+      "scadaActive": "SCADA ACTIVE"
+    },
+    "actions": {
+      "downloadBrief": "DOWNLOAD BRIEF"
+    },
+    "twin": {
+      "label": "TWIN",
+      "topology": "Live Asset Topology"
+    },
+    "sensors": {
+      "activePower": "Active Power",
+      "gridFrequency": "Grid Frequency"
+    },
+    "kpi": {
+      "unitHealth": "Unit Health",
+      "financialRisk": "Financial Risk",
+      "projectedLoss": "Projected Loss (30d)"
+    },
+    "ai": {
+      "title": "Dr. Turbine AI",
+      "analyzing": "Dr. Turbine analyzing hydraulic signatures...",
+      "nominal": {
+        "title": "ALL SYSTEMS NOMINAL",
+        "desc": "Hydraulic parameters within optimal range.",
+        "details": "Cavitation risk: LOW • Bearing temp: NORMAL • Vibration: ACCEPTABLE"
+      },
+      "physicsAnalysis": "PHYSICS ANALYSIS:",
+      "gridRisk": "Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at {{freq}}Hz.",
+      "cavitationRisk": "Flow: {{flow}} m³/s, Head: {{head}}m exceeds cavitation threshold. Runner clearance may be insufficient.",
+      "acceptable": "System parameters within acceptable range. Monitoring continues."
+    },
+    "control": {
+      "emergencyProtocols": "Emergency Protocols",
+      "scramButton": "🚨 SCRAM UNIT 🚨",
+      "scramConfirm": "INITIATE EMERGENCY SCRAM? This will trip the turbine and may cause downtime.",
+      "safetyDisengaged": "SAFETY LOCK DISENGAGED",
+      "scadaControls": "SCADA Controls",
+      "flowRate": "Flow Rate (m³/s)",
+      "head": "Head (m)",
+      "gridFrequencyInput": "Grid Frequency (Hz)",
+      "criticalFreq": "⚠️ CRITICAL FREQUENCY DETECTED"
+    },
+    "silhouette": {
+      "bearingTemp": "BEARING TEMP",
+      "vibration": "VIBRATION",
+      "gridFreq": "GRID FREQ",
+      "healthScore": "HEALTH SCORE",
+      "criticalAlarms": "🚨 CRITICAL ALARMS"
+    }
   }
 }

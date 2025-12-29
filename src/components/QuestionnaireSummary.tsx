@@ -199,6 +199,7 @@ export const QuestionnaireSummary: React.FC = () => {
             riskDataForPDF,
             user?.email || 'AnoHUB Engineer',
             riskDataForPDF.assetName,
+            t,
             description
         );
 

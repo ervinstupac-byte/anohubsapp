@@ -5,6 +5,9 @@ import { initReactI18next } from 'react-i18next';
 import en from './en.json';
 import bs from './bs.json';
 import de from './de.json';
+import tr from './tr.json';
+import ms from './ms.json';
+import si from './si.json';
 
 // Provjeri da li postoji sačuvani jezik u memoriji preglednika
 const savedLanguage = localStorage.getItem('appLanguage') || 'en';
@@ -13,7 +16,10 @@ i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     bs: { translation: bs },
-    de: { translation: de }
+    de: { translation: de },
+    tr: { translation: tr },
+    ms: { translation: ms },
+    si: { translation: si }
   },
   lng: savedLanguage, // Koristi sačuvani jezik ili default (en)
   fallbackLng: 'en',

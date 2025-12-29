@@ -9,26 +9,26 @@ export class KaplanEngine extends BaseEngine {
         return head < 40 ? 94 : 90;
     }
 
-    getRecommendationScore(head: number, flow: number, variation: string, _quality: string): RecommendationResult {
+    getRecommendationScore(head: number, flow: number, variation: string, _quality: string, t: import('i18next').TFunction): RecommendationResult {
         let score = 0;
         const reasons: string[] = [];
         const n_sq = this.calculateSpecificSpeed(head, flow);
 
         if (n_sq > 350) {
             score += 30;
-            reasons.push(`+ High specific speed detected (${n_sq})`);
+            reasons.push(t('engines.kaplan.highNsq', { n_sq }));
         }
         if (head < 40) {
             score += 15;
-            reasons.push('+ Ideal for low head applications');
+            reasons.push(t('engines.kaplan.lowHead'));
         }
         if (head > 70) {
             score -= 50;
-            reasons.push('- Head exceeds optimal Kaplan range');
+            reasons.push(t('engines.kaplan.headExceeded'));
         }
         if (variation === 'variable') {
             score += 20;
-            reasons.push('+ Double regulation handles variable flow efficiently');
+            reasons.push(t('engines.kaplan.variableFlow'));
         }
 
         return { score, reasons };

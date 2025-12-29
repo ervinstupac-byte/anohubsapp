@@ -67,7 +67,7 @@ export const FrancisDiagnostics: React.FC = () => {
                     className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors uppercase text-xs font-bold tracking-widest"
                 >
                     <ArrowLeft className="w-4 h-4" />
-                    Back to Toolbox
+                    {t('actions.back')}
                 </button>
             </div>
 
@@ -79,61 +79,61 @@ export const FrancisDiagnostics: React.FC = () => {
                         <Activity className="w-8 h-8 text-cyan-400" />
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-2">
-                        Francis Turbine <span className="text-cyan-400">Fault Isolation</span>
+                        {t('francis.title').split('•')[0]} <span className="text-cyan-400">{t('francis.title').split('•')[1] || 'Fault Isolation'}</span>
                     </h1>
                     <p className="text-slate-400 text-sm font-mono max-w-md mx-auto">
-                        Enter current telemetry to validate against SOP limits (Ref: SOP-ROT-001, FR-EP-001).
+                        {t('francis.subtitle')}
                     </p>
                 </div>
 
                 {/* INPUT GRID */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <ModernInput
-                        label="Bearing Temperature (°C)"
+                        label={t('francis.inputs.bearingTemp')}
                         value={inputs.bearingTemp}
                         onChange={(e) => handleInputChange('bearingTemp', e.target.value)}
                         type="number"
                         min={0}
                         max={150}
-                        helperText="Nominal: < 60°C"
+                        helperText={t('francis.inputs.nominalTemp')}
                         placeholder="e.g. 45.0"
                         icon={<Thermometer className="w-4 h-4 text-emerald-500" />}
                     />
 
                     <ModernInput
-                        label="Vibration (mm/s)"
+                        label={t('francis.inputs.vibration')}
                         value={inputs.vibration}
                         onChange={(e) => handleInputChange('vibration', e.target.value)}
                         type="number"
                         min={0}
                         max={50}
                         step={0.1}
-                        helperText="Nominal: < 2.5 mm/s"
+                        helperText={t('francis.inputs.nominalVib')}
                         placeholder="e.g. 0.5"
                         icon={<Activity className="w-4 h-4 text-purple-500" />}
                     />
 
                     <ModernInput
-                        label="Silt Concentration (ppm)"
+                        label={t('francis.inputs.silt')}
                         value={inputs.siltPpm}
                         onChange={(e) => handleInputChange('siltPpm', e.target.value)}
                         type="number"
                         min={0}
                         max={50000}
-                        helperText="Nominal: < 3000 ppm"
+                        helperText={t('francis.inputs.nominalSilt')}
                         placeholder="e.g. 50"
                         icon={<Droplets className="w-4 h-4 text-amber-500" />}
                     />
 
                     <ModernInput
-                        label="Grid Frequency (Hz)"
+                        label={t('francis.inputs.gridFreq')}
                         value={inputs.gridFreq}
                         onChange={(e) => handleInputChange('gridFreq', e.target.value)}
                         type="number"
                         step="0.01"
                         min={45.0}
                         max={55.0}
-                        helperText="Nominal: 50.00 Hz ± 1%"
+                        helperText={t('francis.inputs.nominalFreq')}
                         placeholder="e.g. 50.00"
                         icon={<Zap className="w-4 h-4 text-blue-500" />}
                     />
@@ -145,7 +145,7 @@ export const FrancisDiagnostics: React.FC = () => {
                     className="w-full py-4 text-lg font-black bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_20px_rgba(8,145,178,0.4)] mb-8"
                 >
                     <Play className="w-5 h-5 mr-2 fill-current" />
-                    RUN DIAGNOSTICS
+                    {t('francis.actions.run')}
                 </ModernButton>
 
                 {/* RESULTS SECTION */}
@@ -158,9 +158,9 @@ export const FrancisDiagnostics: React.FC = () => {
                         {results.length === 0 || (results.length === 1 && results[0].status === 'NORMAL') ? (
                             <div className="p-4 bg-emerald-900/10 border border-emerald-500/30 rounded-lg flex items-center gap-4">
                                 <CheckCircle className="w-8 h-8 text-emerald-500 flex-shrink-0" />
-                                <div>
-                                    <h4 className="text-emerald-400 font-bold uppercase text-sm">All Parameters Nominal</h4>
-                                    <p className="text-slate-400 text-xs">System operating within design limits.</p>
+                                <div className="">
+                                    <h4 className="text-emerald-400 font-bold uppercase text-sm">{t('francis.status.normal')}</h4>
+                                    <p className="text-slate-400 text-xs">{t('francis.status.normalDesc')}</p>
                                 </div>
                             </div>
                         ) : (

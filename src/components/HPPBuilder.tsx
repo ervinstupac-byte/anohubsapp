@@ -199,7 +199,7 @@ export const HPPBuilder: React.FC = () => {
 
             const recs = engines.map(engine => {
                 try {
-                    const { score, reasons } = engine.getRecommendationScore(safeHead, safeFlow, safeFlowVariation, safeWaterQuality);
+                    const { score, reasons } = engine.getRecommendationScore(safeHead, safeFlow, safeFlowVariation, safeWaterQuality, t);
                     return {
                         key: engine.type,
                         score: isNaN(score) ? 0 : score,

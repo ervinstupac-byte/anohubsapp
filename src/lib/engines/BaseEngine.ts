@@ -36,7 +36,7 @@ export abstract class BaseEngine implements ITurbineEngine {
     }
 
     abstract calculateEfficiency(head: number, flow: number): number;
-    abstract getRecommendationScore(head: number, flow: number, variation: string, quality: string): RecommendationResult;
+    abstract getRecommendationScore(head: number, flow: number, variation: string, quality: string, t: import('i18next').TFunction): RecommendationResult;
     abstract getToleranceThresholds(): Record<string, number>;
     abstract generateSpecs(head: number, flow: number): import('./types.ts').TurbineSpecs;
 

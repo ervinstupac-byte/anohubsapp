@@ -275,8 +275,8 @@ const AppLayout: React.FC = () => {
                                 title={`Risk Status: ${badgeLabel}\n${riskReasons.join('\n')}`}
                             >
                                 <DigitalPanel
-                                    label="RISK STATUS"
-                                    value={badgeLabel}
+                                    label={t('dashboard.riskStatus.label', 'RISK STATUS')}
+                                    value={t(`dashboard.riskStatus.${badgeStatus}`, badgeLabel)}
                                     status={badgeStatus}
                                 />
                             </div>

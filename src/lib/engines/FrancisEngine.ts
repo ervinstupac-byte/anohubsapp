@@ -8,26 +8,26 @@ export class FrancisEngine extends BaseEngine {
         return (head >= 40 && head <= 400) ? 92 : 88;
     }
 
-    getRecommendationScore(head: number, flow: number, variation: string, quality: string): RecommendationResult {
+    getRecommendationScore(head: number, flow: number, variation: string, quality: string, t: import('i18next').TFunction): RecommendationResult {
         let score = 0;
         const reasons: string[] = [];
         const n_sq = this.calculateSpecificSpeed(head, flow);
 
         if (n_sq >= 70 && n_sq <= 350) {
             score += 30;
-            reasons.push(`+ Optimal specific speed for Francis (${n_sq})`);
+            reasons.push(t('engines.francis.optimalNsq', { n_sq }));
         }
         if (head >= 40 && head <= 400) {
             score += 10;
-            reasons.push('+ Head is within standard medium-head range');
+            reasons.push(t('engines.francis.mediumHead'));
         }
         if (variation === 'variable') {
             score -= 10;
-            reasons.push('- Fixed blade geometry less efficient for flow variations');
+            reasons.push(t('engines.francis.fixedBlade'));
         }
         if (quality === 'abrasive') {
             score -= 15;
-            reasons.push('- Submerged runner susceptible to silt erosion');
+            reasons.push(t('engines.francis.siltErosion'));
         }
 
         return { score, reasons };

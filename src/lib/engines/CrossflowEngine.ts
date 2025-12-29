@@ -8,17 +8,18 @@ export class CrossflowEngine extends BaseEngine {
         return 82; // Flat efficiency curve is a key feature
     }
 
-    getRecommendationScore(head: number, flow: number, _variation: string, quality: string): RecommendationResult {
+    getRecommendationScore(head: number, flow: number, _variation: string, quality: string, t: import('i18next').TFunction): RecommendationResult {
         let score = 0;
         const reasons: string[] = [];
+        const n_sq = this.calculateSpecificSpeed(head, flow); // Calculated but unused in reasons, keeping logic
 
         if (head < 100 && flow < 5) {
             score += 20;
-            reasons.push('+ High efficiency for small-scale run-of-river');
+            reasons.push(t('engines.crossflow.runOfRiver'));
         }
         if (quality === 'abrasive') {
             score += 20;
-            reasons.push('+ Self-cleaning runner handles debris and silt well');
+            reasons.push(t('engines.crossflow.selfCleaning'));
         }
 
         return { score, reasons };

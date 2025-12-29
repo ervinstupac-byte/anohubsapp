@@ -13,29 +13,22 @@ import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 
 // --- EMERGENCY PROTOCOL ACTIONS ---
 const EmergencyProtocol: React.FC<{ type: string }> = ({ type }) => {
-    const protocols: Record<string, string[]> = {
-        vibration_excess: [
-            'Immediate load rejection across all units.',
-            'Disengage primary guide bearings for inspection.',
-            'Perform laser alignment audit of main shaft.',
-            'Deploy vibration dampening countermeasures.'
-        ],
-        bearing_overheat: [
-            'Forced shutdown of affected turbine unit.',
-            'Verify cooling system flow and pressure.',
-            'Analyze oil lubrication for contamination.',
-            'Initiate backup thermal heat exchangers.'
-        ]
-    };
+    const { t } = useTranslation();
 
-    const steps = protocols[type] || ['Initiate general emergency shutdown.', 'Notify regional maintenance center.'];
+    // Use translation keys for protocols
+    const steps = [
+        t(`emergency.protocols.${type}.0`, t('emergency.protocols.default.0')),
+        t(`emergency.protocols.${type}.1`, t('emergency.protocols.default.1')),
+        t(`emergency.protocols.${type}.2`, ''),
+        t(`emergency.protocols.${type}.3`, '')
+    ].filter(s => s !== '');
 
     return (
         <div className="mt-8 space-y-4 animate-fade-in">
             <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-2xl">
                 <div className="flex items-center gap-3 mb-4">
                     <span className="text-2xl animate-pulse">☢️</span>
-                    <h3 className="text-lg font-black text-red-500 uppercase tracking-tighter">ACTIVE EMERGENCY PROTOCOL</h3>
+                    <h3 className="text-lg font-black text-red-500 uppercase tracking-tighter">{t('emergency.activeProtocol')}</h3>
                 </div>
                 <div className="grid gap-2">
                     {steps.map((step, i) => (

@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next';
+
 export class EngineeringError extends Error {
     constructor(public message: string, public turbineType?: string) {
         super(message);
@@ -39,7 +41,7 @@ export interface ITurbineEngine {
     calculateEnergy(powerMW: number, flowVariation: string): number;
     calculateSpecificSpeed(head: number, flow: number): number;
     calculateEfficiency(head: number, flow: number): number;
-    getRecommendationScore(head: number, flow: number, variation: string, quality: string): RecommendationResult;
+    getRecommendationScore(head: number, flow: number, variation: string, quality: string, t: TFunction): RecommendationResult;
     getToleranceThresholds(): Record<string, number>;
     generateSpecs(head: number, flow: number): TurbineSpecs;
     calculateRisk(answers: Record<string, string>, thresholds: Record<string, TurbineThresholds>): RiskResult;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { useMaintenance } from '../contexts/MaintenanceContext.tsx';
@@ -15,6 +16,7 @@ import { Calendar, AlertCircle, Power } from 'lucide-react';
  */
 export const ToolboxLaunchpad: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const { workOrders } = useMaintenance();
     const { assets, selectedAsset, assetLogs } = useAssetContext();
     const { pushNotification } = useNotifications();
@@ -22,10 +24,10 @@ export const ToolboxLaunchpad: React.FC = () => {
 
     useEffect(() => {
         const hour = new Date().getHours();
-        if (hour < 12) setGreeting('Good Morning');
-        else if (hour < 18) setGreeting('Good Afternoon');
-        else setGreeting('Good Evening');
-    }, []);
+        if (hour < 12) setGreeting(t('toolbox.greeting.morning'));
+        else if (hour < 18) setGreeting(t('toolbox.greeting.afternoon'));
+        else setGreeting(t('toolbox.greeting.evening'));
+    }, [t]);
 
     // ZERO STATE: ONBOARDING GUIDE
     if (assets.length === 0) {
@@ -42,10 +44,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                         </div>
 
                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">
-                            System Standby
+                            {t('toolbox.zeroState.title')}
                         </h3>
                         <p className="text-slate-500 font-mono text-sm mb-10 tracking-widest uppercase">
-                            No Active Assets Detected
+                            {t('toolbox.zeroState.noAssets')}
                         </p>
 
                         <ModernButton
@@ -53,7 +55,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             className="w-full py-4 text-lg font-bold shadow-[0_0_30px_rgba(6,182,212,0.15)] hover:shadow-[0_0_40px_rgba(6,182,212,0.4)] transition-shadow"
                             onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
                         >
-                            Initialize First Asset
+                            {t('toolbox.zeroState.initialize')}
                         </ModernButton>
                     </GlassCard>
 
@@ -72,14 +74,14 @@ export const ToolboxLaunchpad: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pb-6 border-b border-white/5">
                 <div>
                     <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2">
-                        {greeting}, <span className="text-cyan-400">Engineer</span>
+                        {greeting}, <span className="text-cyan-400">{t('toolbox.engineer')}</span>
                     </h1>
                     <p className="text-slate-400 font-mono flex items-center gap-2">
                         <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        System Operational • {assets.length} Assets Online
+                        {t('toolbox.systemOperational')} • {assets.length} {t('toolbox.assetsOnline')}
                         {selectedAsset && (
                             <span className="ml-4 text-xs text-slate-500 bg-slate-900 px-2 py-1 rounded border border-white/5">
-                                Active: {selectedAsset.name}
+                                {t('toolbox.activeAsset', { name: selectedAsset.name })}
                             </span>
                         )}
                     </p>
@@ -89,18 +91,18 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <ModernButton
                             variant="ghost"
                             onClick={() => {
-                                pushNotification('INFO', `Generating Passport for ${selectedAsset.name}...`);
+                                pushNotification('INFO', t('toolbox.toast.generatingPassport', { asset: selectedAsset.name }));
                                 // Dynamic Import to avoid SSR/Build issues with jspdf if any, though standard import works
                                 import('../utils/pdfGenerator').then(mod => {
                                     // Filter logs for this asset from the Centralized Asset Log
                                     const relevantLogs = assetLogs.filter(log => log.assetId === selectedAsset.id);
 
-                                    mod.generateAssetPassport(selectedAsset, relevantLogs);
+                                    mod.generateAssetPassport(selectedAsset, relevantLogs, t);
                                 });
                             }}
                             className="text-white hover:text-cyan-400 border border-white/10"
                         >
-                            📄 Passport
+                            📄 {t('toolbox.passport')}
                         </ModernButton>
                     )}
                     <ModernButton
@@ -108,7 +110,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                         onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
                         className="text-xs"
                     >
-                        + Add Asset
+                        + {t('toolbox.addAsset')}
                     </ModernButton>
                 </div>
             </div>
@@ -120,12 +122,12 @@ export const ToolboxLaunchpad: React.FC = () => {
 
                     {/* CALCULATORS */}
                     <section>
-                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Engineering Utilities</h2>
+                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.utilities')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {[
-                                { name: 'Bolt Torque', icon: '🔩', path: '/bolt-torque' },
-                                { name: 'Shaft Align', icon: '🔄', path: '/shaft-alignment' },
-                                { name: 'Hydraulics', icon: '🚰', path: '/hydraulic-maintenance' },
+                                { name: t('sidebar.boltTorque'), icon: '🔩', path: '/bolt-torque' },
+                                { name: t('sidebar.shaftAlignment'), icon: '🔄', path: '/shaft-alignment' },
+                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: '/hydraulic-maintenance' },
                             ].map(tool => (
                                 <GlassCard
                                     key={tool.name}
@@ -143,7 +145,7 @@ export const ToolboxLaunchpad: React.FC = () => {
 
                     {/* DESIGN STUDIO */}
                     <section>
-                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Design & Analysis</h2>
+                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.designAnalysis')}</h2>
                         <GlassCard
                             onClick={() => navigate('/hpp-builder')}
                             className="p-6 cursor-pointer hover:border-emerald-500/50 transition-colors group border-l-4 border-l-emerald-500"
@@ -154,8 +156,8 @@ export const ToolboxLaunchpad: React.FC = () => {
                                         ⚡
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-white mb-1">HPP Design Studio</h3>
-                                        <p className="text-slate-400 text-sm">Advanced physics modeling and plant dimensioning</p>
+                                        <h3 className="text-xl font-bold text-white mb-1">{t('modules.hppBuilder')}</h3>
+                                        <p className="text-slate-400 text-sm">{t('modules.hppBuilderDesc')}</p>
                                     </div>
                                 </div>
                                 <div className="hidden md:block">
@@ -167,13 +169,13 @@ export const ToolboxLaunchpad: React.FC = () => {
 
                     {/* OPERATIONS GRID */}
                     <section>
-                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Operational Modules</h2>
+                        <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.operationalModules')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
                                 { name: 'Maintenance Logbook', icon: '📝', path: '/logbook', desc: 'Digital logs & tracking' },
-                                { name: 'Structural Integrity', icon: '🏗️', path: '/structural-integrity', desc: 'Civil works analysis' },
-                                { name: 'SOP Manager', icon: '🛠️', path: '/shadow-engineer', desc: 'Standard procedures' },
-                                { name: 'Toolbox Analytics', icon: '📊', path: '/executive', desc: 'Fleet performance' },
+                                { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: '/structural-integrity', desc: 'Civil works analysis' },
+                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: '/shadow-engineer', desc: 'Standard procedures' },
+                                { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: '/executive', desc: 'Fleet performance' },
                             ].map(item => (
                                 <GlassCard
                                     key={item.name}
@@ -270,7 +272,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                     {/* RECENT ACTIVITY STREAM */}
                     <div className="bg-slate-900/50 border border-white/5 rounded-xl p-6 h-full">
                         <h2 className="text-sm font-bold text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-cyan-400" /> Recent Activity
+                            <Calendar className="w-4 h-4 text-cyan-400" /> {t('toolbox.sections.recentActivity')}
                         </h2>
 
                         <div className="space-y-6 relative">
@@ -282,12 +284,12 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3">
                                         <AlertCircle className="w-6 h-6 text-slate-600" />
                                     </div>
-                                    <p className="text-slate-500 text-sm">No recent activity.</p>
+                                    <p className="text-slate-500 text-sm">{t('toolbox.activity.none')}</p>
                                     <button
                                         onClick={() => navigate('/logbook')}
                                         className="text-cyan-400 text-xs font-bold uppercase tracking-wider mt-2 hover:underline"
                                     >
-                                        Open Logbook
+                                        {t('toolbox.activity.open')}
                                     </button>
                                 </div>
                             ) : (
@@ -320,7 +322,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                 onClick={() => navigate('/logbook')}
                                 className="w-full mt-6 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider rounded transition-colors"
                             >
-                                View Logbook
+                                {t('toolbox.activity.view')}
                             </button>
                         )}
                     </div>
