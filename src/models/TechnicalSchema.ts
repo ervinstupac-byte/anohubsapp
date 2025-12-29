@@ -1,189 +1,143 @@
-// Technical Data Schema for HPP Design Deep Link
-// Defines the granular engineering parameters for the Project Backbone
-// PHASE 13: Extended with AI, Financial, and Maintenance data
 
-export type PipeMaterial = 'STEEL' | 'GRP' | 'PEHD' | 'CONCRETE';
-export type BoltGrade = '4.6' | '5.6' | '8.8' | '10.9';
+export type TurbineType = 'Pelton' | 'Kaplan' | 'Francis';
 
-export interface SiteConditions {
-    grossHead: number; // m
-    designFlow: number; // m3/s
-    waterQuality: 'CLEAN' | 'SILT' | 'SAND' | 'GLACIAL';
-    temperature: number; // deg C
+export interface AssetIdentity {
+    id: string;
+    name: string;
+    location: string;
+    type: TurbineType;
 }
 
-export interface PenstockSpecs {
-    length: number; // m
-    diameter: number; // mm
-    wallThickness: number; // mm
-    material: PipeMaterial;
-    roughness: number; // mm (k)
-    youngsModulus: number; // GPa
+export interface HydraulicStream {
+    head: number;
+    flow: number;
+    efficiency: number;
 }
 
-export interface MechanicalDetails {
-    // Flange & Connection
-    flangeType: 'FLAT' | 'RAISED_FACE' | 'RING_JOINT';
+export interface MechanicalStream {
+    alignment: number;
+    vibration: number;
+    bearingTemp: number;
+    radialClearance: number; // Added for ProfessionalReportEngine
+    shaftAlignmentLimit?: number; // Added for MechanicalPanel
     boltSpecs: {
+        grade: string;
         count: number;
-        diameter: number; // M16, M20 etc -> 16, 20
-        grade: BoltGrade;
-        torque: number; // Nm
+        torque: number;
+        diameter?: number; // Added for BoltTorqueCalculator
     };
-    sealMaterial: 'EPDM' | 'NBR' | 'VITON';
-
-    // Turbine Mechanicals
-    bearingType: 'Segmental' | 'Cylindrical' | 'Roller';
-    shaftAlignmentLimit: number; // mm (e.g., 0.05)
-    radialClearance: number; // mm
-}
-
-export interface Tolerances {
-    maxSurgePressure: number; // % of static
-    minSafetyFactor: number;
-    maxVibration: number; // mm/s
-}
-
-export interface PhysicsState {
-    staticPressureBar: number;
-    surgePressureBar: number;
-    waterHammerPressureBar: number;
-    hoopStressMPa: number;
-    boltLoadKN: number;
-    boltCapacityKN: number;
-    boltSafetyFactor: number;
-    criticalAlerts: string[];
-}
-
-// Phase 13: Extended State Interfaces
-import type { AssetIdentity } from '../types/assetIdentity';
-import type { AIFinding } from '../types/aiFinding';
-import type { MeasurementHistory, FineEngineeringLog } from '../types/trends';
-
-export interface AIDiagnosisState {
-    findings: AIFinding[];
-    unverifiedCount: number;
-    lastUpdated: string;
-}
-
-export interface FinancialSettings {
-    electricityPriceEURperMWh: number;
-    averageMaintenanceCostEURperHour: number;
-    targetAvailability: number;  // 0-100%
-}
-
-// Engineering Constants - Single Source of Truth
-export interface EngineeringConstants {
-    physics: {
-        waterDensity: number; // kg/m³
-        gravity: number; // m/s²
-        atmosphericPressure: number; // Pa
-    };
-    thermal: {
-        criticalAmbientTemp: number; // °C
-        minClearanceForGrease: number; // mm
-    };
-    electrical: {
-        nominalGridFrequency: number; // Hz
-        gridFrequencyTolerance: number; // ± Hz
-        criticalFrequencyThreshold: number; // Hz (e.g., 98.2 triggers critical alarm)
-    };
-    hydraulic: {
-        cavitationFlowThreshold: number; // m³/s
-        cavitationHeadThreshold: number; // m
-        targetRunnerClearance: number; // mm
-    };
-    maintenance: {
-        efficiencyLossPerHealthPoint: number; // % loss per point below 100
-        jackingSafetyFactor: number;
-    };
-}
-
-export interface MaintenanceHistoryState {
-    measurements: Map<string, MeasurementHistory>;
-    engineeringLog: FineEngineeringLog;
-    lastUpdated: string;
+    bearingType?: string;
 }
 
 export interface TechnicalProjectState {
-    site: SiteConditions;
-    penstock: PenstockSpecs;
-    mechanical: MechanicalDetails;
-    tolerances: Tolerances;
-    physics: PhysicsState;
-
-    // Phase 13: Unified State
-    assetIdentity: AssetIdentity | null;
-    aiDiagnosis: AIDiagnosisState;
-    financials: FinancialSettings;
-    maintenanceHistory: MaintenanceHistoryState;
-
-    // Engineering Constants - Single Source of Truth
-    constants: EngineeringConstants;
+    identity: AssetIdentity;
+    hydraulic: HydraulicStream;
+    mechanical: MechanicalStream;
+    // Added back to fix VisionAnalysis & LiveMathSync
+    site: {
+        grossHead: number;
+        designFlow: number;
+        waterQuality: string;
+        temperature: number;
+    };
+    penstock: {
+        diameter: number;
+        length: number;
+        material: string;
+        wallThickness: number;
+    };
+    physics: {
+        boltSafetyFactor: number;
+        boltLoadKN: number; // Added
+        boltCapacityKN: number; // Added
+        hoopStressMPa: number;
+        staticPressureBar: number;
+        surgePressureBar: number;
+        waterHammerPressureBar: number; // Added
+    };
+    riskScore: number;
+    lastRecalculation: string;
 }
 
-export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
-    site: { grossHead: 50, designFlow: 2.5, waterQuality: 'CLEAN', temperature: 15 },
-    penstock: { length: 500, diameter: 1200, wallThickness: 10, material: 'STEEL', roughness: 0.045, youngsModulus: 210 },
-    mechanical: {
-        flangeType: 'RAISED_FACE',
-        boltSpecs: { count: 12, diameter: 20, grade: '8.8', torque: 350 },
-        sealMaterial: 'NBR',
-        bearingType: 'Cylindrical',
-        shaftAlignmentLimit: 0.05,
-        radialClearance: 0.8
-    },
-    tolerances: { maxSurgePressure: 30, minSafetyFactor: 1.5, maxVibration: 2.5 },
-    physics: {
-        staticPressureBar: 0, surgePressureBar: 0, waterHammerPressureBar: 0,
-        hoopStressMPa: 0, boltLoadKN: 0, boltCapacityKN: 0, boltSafetyFactor: 0, criticalAlerts: []
-    },
-    // Phase 13: Default values
-    assetIdentity: null,
-    aiDiagnosis: {
-        findings: [],
-        unverifiedCount: 0,
-        lastUpdated: new Date().toISOString()
-    },
-    financials: {
-        electricityPriceEURperMWh: 120,
-        averageMaintenanceCostEURperHour: 150,
-        targetAvailability: 95
-    },
-    maintenanceHistory: {
-        measurements: new Map(),
-        engineeringLog: {
-            assetId: '',
-            measurements: [],
-            lastUpdated: new Date().toISOString()
-        },
-        lastUpdated: new Date().toISOString()
-    },
+export interface EngineeringConstants {
+    thermal: { criticalAmbientTemp: number; minClearanceForGrease: number };
+    electrical: { nominalGridFrequency: number; gridFrequencyTolerance: number; criticalFrequencyThreshold: number };
+    hydraulic: { cavitationFlowThreshold: number; cavitationHeadThreshold: number; targetRunnerClearance: number };
+    maintenance: { jackingSafetyFactor: number; efficiencyLossPerHealthPoint: number };
+    physics: { gravity: number; waterDensity: number };
+}
 
-    // Engineering Constants - Reactive Configuration
-    constants: {
-        physics: {
-            waterDensity: 1000, // kg/m³
-            gravity: 9.81, // m/s²
-            atmosphericPressure: 101325 // Pa
-        },
-        thermal: {
-            criticalAmbientTemp: 30, // °C
-            minClearanceForGrease: 0.10 // mm
-        },
-        electrical: {
-            nominalGridFrequency: 50.0, // Hz
-            gridFrequencyTolerance: 0.5, // ± Hz
-            criticalFrequencyThreshold: 98.2 // Hz - triggers critical alarm
-        },
-        hydraulic: {
-            cavitationFlowThreshold: 42.5, // m³/s
-            cavitationHeadThreshold: 152.0, // m
-            targetRunnerClearance: 0.40 // mm
-        },
-        maintenance: {
-            efficiencyLossPerHealthPoint: 0.0005, // 0.05% per point
-            jackingSafetyFactor: 1.5
+export const ENGINEERING_CONSTANTS: EngineeringConstants = {
+    thermal: { criticalAmbientTemp: 30, minClearanceForGrease: 0.10 },
+    electrical: { nominalGridFrequency: 50.0, gridFrequencyTolerance: 0.5, criticalFrequencyThreshold: 98.2 },
+    hydraulic: { cavitationFlowThreshold: 42.5, cavitationHeadThreshold: 152.0, targetRunnerClearance: 0.40 },
+    maintenance: { jackingSafetyFactor: 1.5, efficiencyLossPerHealthPoint: 0.005 },
+    physics: { gravity: 9.81, waterDensity: 1000 }
+};
+
+// Backwards compatibility for implicit "EngineeringConstants" used as value
+export const EngineeringConstants = ENGINEERING_CONSTANTS;
+
+export type PipeMaterial = 'STEEL' | 'GRP' | 'CONCRETE';
+
+export interface PenstockSpecs {
+    diameter: number;
+    length: number;
+    material: string;
+    wallThickness: number;
+}
+
+export type ProjectAction =
+    | { type: 'UPDATE_HYDRAULIC'; payload: Partial<HydraulicStream> }
+    | { type: 'UPDATE_MECHANICAL'; payload: Partial<MechanicalStream> }
+    | { type: 'UPDATE_PENSTOCK'; payload: Partial<PenstockSpecs> }
+    | { type: 'SET_ASSET'; payload: AssetIdentity }
+    | { type: 'RESET_TO_DEMO' };
+
+export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
+    identity: {
+        id: 'demo-1',
+        name: 'HPP Demo',
+        location: 'Virtual River',
+        type: 'Pelton'
+    },
+    hydraulic: {
+        head: 450,
+        flow: 2.5,
+        efficiency: 0.92
+    },
+    mechanical: {
+        alignment: 0.02,
+        vibration: 2.5,
+        bearingTemp: 45,
+        radialClearance: 0.5,
+        boltSpecs: {
+            grade: '8.8',
+            count: 12,
+            torque: 450
         }
-    }
+    },
+    site: {
+        grossHead: 455,
+        designFlow: 3.0,
+        waterQuality: 'Clear',
+        temperature: 15
+    },
+    penstock: {
+        diameter: 1.5,
+        length: 200,
+        material: 'STEEL',
+        wallThickness: 0.02
+    },
+    physics: {
+        boltSafetyFactor: 1.5,
+        boltLoadKN: 350, // Added
+        boltCapacityKN: 550, // Added
+        hoopStressMPa: 120,
+        staticPressureBar: 45,
+        surgePressureBar: 55,
+        waterHammerPressureBar: 12.5 // Added
+    },
+    riskScore: 0,
+    lastRecalculation: new Date().toISOString()
 };

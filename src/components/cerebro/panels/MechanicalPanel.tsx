@@ -102,13 +102,13 @@ export const MechanicalPanel: React.FC = () => {
                 <div className="relative h-4 bg-slate-800 rounded-full overflow-hidden">
                     <div
                         className="absolute top-0 bottom-0 left-0 bg-emerald-500"
-                        style={{ width: `${(mechanical.radialClearance / mechanical.shaftAlignmentLimit) * 50}%` }}
+                        style={{ width: `${(mechanical.radialClearance / (mechanical.shaftAlignmentLimit || 1.0)) * 50}%` }}
                     />
                     <div className="absolute top-0 bottom-0 w-0.5 bg-red-500 left-[80%]" /> {/* Limit Marker */}
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
                     <span>0 mm</span>
-                    <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit, language, 3)} mm</span>
+                    <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit || 1.0, language, 3)} mm</span>
                 </div>
             </GlassCard>
         </div>

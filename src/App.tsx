@@ -10,6 +10,7 @@ import { useRisk } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
 import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
+import { DEFAULT_TECHNICAL_STATE } from './models/TechnicalSchema.ts';
 import { ClientProvider } from './contexts/ClientContext.tsx'; // Client Portal
 import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
 import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
@@ -99,10 +100,16 @@ const AppLayout: React.FC = () => {
     const { logAction } = useAudit();
 
     // Unified Navigation States
+    const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
+
+    // ... (existing imports)
+
+    // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
+    const [isMapOpen, setIsMapOpen] = useState(false); // Map State
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
@@ -199,18 +206,29 @@ const AppLayout: React.FC = () => {
             completeOnboarding: handleOnboardingComplete,
             showFeedbackModal: () => setIsFeedbackVisible(true)
         }}>
-            <div className="min-h-screen text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden flex relative bg-[#020617]">
-                <div className="noise-overlay" />
+            {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
+            <main className="min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617]">
+                {/* The "Elite" Background Glows */}
+                <div className="fixed inset-0 pointer-events-none z-0">
+                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
+                    <div className="noise-overlay opacity-20" />
+                </div>
 
                 {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
                 {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
+
+                {/* GLOBAL MAP MODAL */}
+                <Suspense fallback={<Spinner />}>
+                    <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+                </Suspense>
 
                 {/* UNIFIED SIDEBAR */}
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
                     <ErrorBoundary fallback={<div className="p-4 text-xs text-red-500 bg-red-950/30 border border-red-500/30 rounded">Fleet Overview Unavailable</div>}>
                         <FleetOverview
-                            onToggleMap={() => navigate('/map')}
-                            showMap={location.pathname === '/map'}
+                            onToggleMap={() => setIsMapOpen(!isMapOpen)}
+                            showMap={isMapOpen}
                             onRegisterAsset={() => {
                                 setIsWizardOpen(true);
                                 setIsSidebarOpen(false);
@@ -218,6 +236,7 @@ const AppLayout: React.FC = () => {
                         />
                     </ErrorBoundary>
                     <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
+                        {/* ... Sidebar Content ... */}
                         <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">OPERATIONS</div>
                         <ErrorBoundary>
                             {operationalModules.map(mod => (
@@ -230,6 +249,7 @@ const AppLayout: React.FC = () => {
                                     <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                                 </button>
                             ))}
+                            {/* ... Logbook and others ... */}
                             <button
                                 onClick={() => { logAction('MODULE_OPEN', 'Logbook', 'SUCCESS'); navigateTo('logbook'); setIsSidebarOpen(false); }}
                                 className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/logbook' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
@@ -326,10 +346,9 @@ const AppLayout: React.FC = () => {
                         </div>
                     </header>
 
-                    <main className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}>
+                    <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
                         <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
                             <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
-                                {!isHub && <Breadcrumbs />}
                                 {!isHub && <Breadcrumbs />}
                                 <ErrorBoundary fallback={
                                     <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
@@ -389,11 +408,11 @@ const AppLayout: React.FC = () => {
                                 </ErrorBoundary>
                             </div>
                         </Suspense>
-                    </main>
+                    </div>
                 </div>
                 <VoiceAssistant />
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
-            </div>
+            </main>
         </NavigationProvider>
     );
 };
@@ -401,7 +420,7 @@ const AppLayout: React.FC = () => {
 const App: React.FC = () => {
     return (
         <GlobalProvider>
-            <ProjectProvider> {/* Technical Backbone */}
+            <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}> {/* Technical Backbone */}
                 <ClientProvider>
                     <NotificationProvider>
                         <MaintenanceProvider>

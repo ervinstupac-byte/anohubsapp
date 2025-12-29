@@ -89,9 +89,9 @@ export const ScadaMimic: React.FC = React.memo(() => {
         // Connect to ExpertDiagnosisEngine
         const scadaConnection = connectSCADAToExpertEngine(flowRate, headPressure, gridFreq);
 
-        if (scadaConnection?.criticalAlarms?.length > 0) {
-            setScadaAlarms(scadaConnection.criticalAlarms);
-            console.warn('SCADA CRITICAL ALARMS:', scadaConnection.criticalAlarms);
+        if (scadaConnection?.criticalAlarms?.length && scadaConnection.criticalAlarms.length > 0) {
+            setScadaAlarms(scadaConnection?.criticalAlarms || []);
+            console.warn('SCADA CRITICAL ALARMS:', scadaConnection?.criticalAlarms);
         } else {
             setScadaAlarms([]);
         }

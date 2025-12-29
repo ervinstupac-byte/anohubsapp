@@ -47,11 +47,11 @@ export const StrategicPlanningDashboard: React.FC = () => {
                 grossHead: technicalState.site.grossHead,
                 pipeLength: technicalState.penstock.length,
                 pipeDiameter: technicalState.penstock.diameter,
-                pipeMaterial: technicalState.penstock.material,
+                pipeMaterial: technicalState.penstock.material as any,
                 wallThickness: technicalState.penstock.wallThickness,
-                boltClass: technicalState.mechanical.boltSpecs.grade,
+                boltClass: technicalState.mechanical.boltSpecs.grade as any,
                 corrosionProtection: 'PAINT',
-                waterQuality: technicalState.site.waterQuality,
+                waterQuality: technicalState.site.waterQuality as any,
                 ecologicalFlow: 0.5,
                 flowDurationCurve: []
             },
@@ -77,11 +77,11 @@ export const StrategicPlanningDashboard: React.FC = () => {
             grossHead: technicalState.site.grossHead,
             pipeLength: technicalState.penstock.length,
             pipeDiameter: technicalState.penstock.diameter,
-            pipeMaterial: technicalState.penstock.material,
+            pipeMaterial: technicalState.penstock.material as any,
             wallThickness: technicalState.penstock.wallThickness,
-            boltClass: technicalState.mechanical.boltSpecs.grade,
+            boltClass: technicalState.mechanical.boltSpecs.grade as any,
             corrosionProtection: 'PAINT', // Default
-            waterQuality: technicalState.site.waterQuality,
+            waterQuality: technicalState.site.waterQuality as any,
             ecologicalFlow: 0.5,
             flowDurationCurve: []
         };

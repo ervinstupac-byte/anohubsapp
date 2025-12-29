@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext'; // Pazi da putanja odgovara tvojoj strukturi
 import { useToast } from '../contexts/ToastContext';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from './LanguageSelector';
 import { GlassCard } from './ui/GlassCard'; // Provjeri putanje importa
@@ -29,9 +30,16 @@ export const Login: React.FC = () => {
         }
     };
 
-    const handleGuestLogin = () => {
-        signInAsGuest();
-        showToast(t('login.guestWelcome', "Welcome, Guest Engineer!"), "success");
+    const navigate = useNavigate();
+
+    const handleGuestLogin = async () => {
+        try {
+            await signInAsGuest();
+            showToast(t('login.guestWelcome', "Welcome, Guest Engineer!"), "success");
+            navigate('/'); // Navigate to dashboard/hub
+        } catch (error) {
+            console.error("Auth Transition Failure:", error);
+        }
     };
 
     return (
@@ -48,7 +56,7 @@ export const Login: React.FC = () => {
             </div>
 
             <div className="w-full max-w-md relative z-10 animate-fade-in-up">
-                
+
                 <div className="text-center mb-8">
                     <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2 tracking-tighter drop-shadow-sm">
                         AnoHUB
@@ -74,7 +82,7 @@ export const Login: React.FC = () => {
                             icon={<span className="text-lg">📧</span>}
                             required
                         />
-                        
+
                         <ModernInput
                             label={t('login.passwordLabel', 'Password')}
                             type="password"
@@ -86,10 +94,10 @@ export const Login: React.FC = () => {
                         />
 
                         <div className="pt-2 space-y-3">
-                            <ModernButton 
-                                type="submit" 
-                                fullWidth 
-                                variant="primary" 
+                            <ModernButton
+                                type="submit"
+                                fullWidth
+                                variant="primary"
                                 isLoading={loading}
                                 className="shadow-lg shadow-cyan-500/20"
                             >
@@ -105,11 +113,11 @@ export const Login: React.FC = () => {
                                 <div className="flex-grow border-t border-slate-700"></div>
                             </div>
 
-                            <ModernButton 
+                            <ModernButton
                                 type="button"
                                 onClick={handleGuestLogin}
-                                fullWidth 
-                                variant="secondary" 
+                                fullWidth
+                                variant="secondary"
                                 icon={<span>👤</span>}
                             >
                                 {t('login.guestButton', 'Continue as Guest')}

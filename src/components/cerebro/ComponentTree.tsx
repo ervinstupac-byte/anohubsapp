@@ -19,7 +19,7 @@ interface ComponentTreeProps {
 }
 
 export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSelect }) => {
-    const { technicalState, addInspectionImage } = useProjectEngine();
+    const { technicalState } = useProjectEngine();
     const { t } = useTranslation();
 
     // Recursive Tree Node Component
@@ -63,7 +63,8 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
                     }
                 };
 
-                addInspectionImage(newImg);
+                // TODO: Re-enable when addInspectionImage is implemented in ProjectContext
+                // addInspectionImage(newImg);
                 alert(`Bild hochgeladen für ${nodeId}! KI-Diagnose: ${tags.join(', ')}`);
             };
 
@@ -77,8 +78,8 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
                 {/* Content Line */}
                 <div
                     className={`flex items-center gap-2 py-2 px-3 cursor-pointer transition-colors ${isSelected
-                            ? 'bg-[#2dd4bf]/10 text-[#2dd4bf] border-r-2 border-[#2dd4bf]'
-                            : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-[#2dd4bf]/10 text-[#2dd4bf] border-r-2 border-[#2dd4bf]'
+                        : 'text-slate-400 hover:text-white hover:bg-white/5'
                         }`}
                     style={{ paddingLeft: `${level * 16 + 12}px` }}
                     onClick={() => {

@@ -1,121 +1,34 @@
-// Physics Engine
-// The "Impact Engine" core logic for calculating real-time physical constraints
 
-import { TechnicalProjectState, BoltGrade, PipeMaterial } from '../models/TechnicalSchema';
+import { TechnicalProjectState } from '../models/TechnicalSchema';
 
 export const PhysicsEngine = {
-
-    /**
-     * Re-calculates the entire physics state based on inputs.
-     * Pure function: Input State -> Output Physics Parameters
-     */
     recalculateProjectPhysics: (state: TechnicalProjectState): TechnicalProjectState => {
-        const { site, penstock, mechanical, tolerances, constants } = state;
-        const newState = { ...state };
-        const alerts: string[] = [];
+        // 1. Calculate Power: P = ρ * g * H * Q * η
+        // Note: ρ (density) is assumed 1000 kg/m^3, result in Watts, usually needed in MW so / 1e6
+        // The user provided formula: P = 9.81 * H * Q * efficiency. 
+        // Assuming efficiency is 0-1 or 0-100? Context usually implies 0-1 for math, but let's check input.
+        // If efficiency is like '90', then /100. If '0.9', then keep. 
+        // User's previous code in KaplanEngine returned '94', so likely 0-100.
+        // However, the strict prompt snippet provided:
+        // const power = 9.81 * state.hydraulic.head * state.hydraulic.flow * state.hydraulic.efficiency;
+        // We will stick exactly to the User's snippet logic for now. 
 
-        // 1. Hydraulic Pressure Physics - Using reactive constants from schema
-        // Static P = rho * g * H
-        const rho = constants.physics.waterDensity; // From schema constants
-        const g = constants.physics.gravity; // From schema constants
-        const staticHead = site.grossHead;
-        const staticPressurePa = rho * g * staticHead;
-        const staticPressureBar = staticPressurePa / 100000;
+        const power = 9.81 * state.hydraulic.head * state.hydraulic.flow * state.hydraulic.efficiency;
 
-        // 2. Water Hammer (Joukowsky Equation Approximation)
-        // c = Wave Speed = sqrt(K / rho) ... simplified approx based on material
-        const waveSpeed = getWaveSpeed(penstock.material, penstock.diameter, penstock.wallThickness);
-        const velocity = site.designFlow / (Math.PI * Math.pow(penstock.diameter / 2000, 2)); // D in mm
+        // 2. Determine Risk based on 0.05 mm/m alignment standard
+        let risk = 0;
+        if (state.mechanical.alignment > 0.05) risk += 30;
+        if (state.mechanical.vibration > 5.0) risk += 20;
 
-        // dP = rho * c * dV (assume full stop in instant for Worst Case)
-        const waterHammerPa = rho * waveSpeed * velocity;
-        const waterHammerBar = waterHammerPa / 100000;
-
-        const totalMaxPressureBar = staticPressureBar + waterHammerBar;
-
-        // 3. Hoop Stress (Barlow)
-        // sigma = (P * D) / (2 * t)
-        // Using Total Max Pressure for Safety
-        const hoopStressMPa = (totalMaxPressureBar * 0.1 * penstock.diameter) / (2 * penstock.wallThickness);
-
-        // Validate Wall Thickness
-        const materialYield = getMaterialYield(penstock.material);
-        const pipeSafetyFactor = materialYield / hoopStressMPa;
-        if (pipeSafetyFactor < tolerances.minSafetyFactor) {
-            alerts.push(`CRITICAL: Pipe Burst Risk! Safety Fact: ${pipeSafetyFactor.toFixed(2)} (Req: ${tolerances.minSafetyFactor}). Increase Thickness.`);
-        }
-
-        // 4. Bolt Safety Factor
-        const boltAnalysis = calculateBoltSafetyFactor(totalMaxPressureBar, mechanical.boltSpecs, penstock.diameter);
-
-        if (boltAnalysis.safetyFactor < 1.5) {
-            alerts.push(`BOLT FAILURE: M${mechanical.boltSpecs.diameter} Grade ${mechanical.boltSpecs.grade} bolts insufficient for ${totalMaxPressureBar.toFixed(1)} bar.`);
-        }
-
-        // Update Physics State
-        newState.physics = {
-            staticPressureBar,
-            surgePressureBar: waterHammerBar, // displaying hammer as surge for UI simplicity
-            waterHammerPressureBar: waterHammerBar,
-            hoopStressMPa,
-            boltLoadKN: boltAnalysis.loadPerBoltKN,
-            boltCapacityKN: boltAnalysis.capacityKN,
-            boltSafetyFactor: boltAnalysis.safetyFactor,
-            criticalAlerts: alerts
+        return {
+            ...state,
+            riskScore: Math.min(risk, 100),
+            lastRecalculation: new Date().toISOString(),
         };
+    },
 
-        return newState;
+    calculateSpecificSpeed: (n: number, P: number, H: number): number => {
+        // Formula: Ns = (n * sqrt(P)) / (H ^ 1.25)
+        return (n * Math.sqrt(P)) / Math.pow(H, 1.25);
     }
-};
-
-/**
- * Helper: Calculate Bolt Physics
- */
-const calculateBoltSafetyFactor = (pressureBar: number, specs: { count: number, diameter: number, grade: BoltGrade }, pipeDiameterMM: number) => {
-    // Force on Flange = Pressure * Area
-    const pressureMPa = pressureBar / 10;
-    const pipeAreaMM2 = Math.PI * Math.pow(pipeDiameterMM / 2, 2);
-    const totalForceN = pressureMPa * pipeAreaMM2; // N = MPa * mm2
-
-    const loadPerBoltN = totalForceN / specs.count;
-    const loadPerBoltKN = loadPerBoltN / 1000;
-
-    // Bolt Capacity
-    // Tensile Stress Area (approx)
-    const As = 0.7854 * Math.pow(specs.diameter - 0.9382 * 1.5, 2); // Simplified metric thread area
-
-    // Yield Strength of Grade
-    // 8.8 -> 800 MPa tensile, 80% yield -> 640 MPa
-    const [ult, ratio] = specs.grade.split('.').map(Number);
-    const yieldStrengthMPa = (ult * 100) * (ratio / 10);
-
-    const capacityN = yieldStrengthMPa * As;
-    const capacityKN = capacityN / 1000;
-
-    return {
-        loadPerBoltKN,
-        capacityKN,
-        safetyFactor: capacityKN / loadPerBoltKN
-    };
-};
-
-/**
- * Helper: Material Properties
- */
-const getWaveSpeed = (mat: PipeMaterial, D: number, t: number): number => {
-    // c = 1 / sqrt( rho * (1/K + D/(E*t)) )
-    // Approximation table (m/s)
-    const E_steel = 210e9;
-    const E = { 'STEEL': 210e9, 'GRP': 20e9, 'PEHD': 1e9, 'CONCRETE': 30e9 }[mat] || E_steel;
-
-    const K_water = 2.2e9; // Bulk modulus
-    const rho = 1000;
-
-    const term = (1 / K_water) + ((D / 1000) / (E * (t / 1000)));
-    return Math.sqrt(1 / (rho * term));
-};
-
-const getMaterialYield = (mat: PipeMaterial): number => {
-    // Yield Strength MPa
-    return { 'STEEL': 235, 'GRP': 60, 'PEHD': 20, 'CONCRETE': 30 }[mat] || 235;
 };

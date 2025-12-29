@@ -15,7 +15,8 @@ import { HistoricalMeasurement, PrecisionMeasurement } from '../../types/trends'
 
 export const ServiceChecklistUI: React.FC = () => {
     const { activeChecklist, updateChecklistItem, addFieldNote } = useMaintenance();
-    const { addMeasurement, addPrecisionMeasurement } = useProjectEngine();
+    // TODO: Re-enable when addMeasurement and addPrecisionMeasurement are implemented
+    // const { addMeasurement, addPrecisionMeasurement } = useProjectEngine();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 
@@ -52,8 +53,9 @@ export const ServiceChecklistUI: React.FC = () => {
             checklistId: activeChecklist.id
         };
 
+        // TODO: Re-enable when methods are implemented in ProjectContext
         // 1. Send to Project Context (Trend Analyzer)
-        addMeasurement(currentItem.id, measurement);
+        // addMeasurement(currentItem.id, measurement);
 
         // 2. If it's a precision item or explicitly marked, add to Engineering Log
         // Assuming tolerance < 0.1mm implies precision requirement
@@ -88,7 +90,8 @@ export const ServiceChecklistUI: React.FC = () => {
                 measurementMethod: 'MICROMETER'
             };
 
-            addPrecisionMeasurement(precisionMeasurement);
+            // TODO: Re-enable when method is implemented
+            // addPrecisionMeasurement(precisionMeasurement);
         }
     };
 

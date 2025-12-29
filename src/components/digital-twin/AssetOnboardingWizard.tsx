@@ -14,7 +14,7 @@ import { AssetIdentityService } from '../../services/AssetIdentityService';
 type WizardStep = 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
 
 export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-    const { setAssetIdentity } = useProjectEngine();
+    const { dispatch } = useProjectEngine();
     const [currentStep, setCurrentStep] = useState<WizardStep>('physical');
     const [assetData, setAssetData] = useState<Partial<AssetIdentity>>({});
 
@@ -181,7 +181,15 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
         // Calculate HPU Health
         identity.fluidIntelligence.healthScore = AssetIdentityService.calculateHPUHealth(identity.fluidIntelligence);
 
-        setAssetIdentity(identity);
+        // Convert turbineType to proper case for TechnicalSchema compatibility
+        const typeMap: Record<string, 'Pelton' | 'Kaplan' | 'Francis'> = {
+            'PELTON': 'Pelton',
+            'KAPLAN': 'Kaplan',
+            'FRANCIS': 'Francis'
+        };
+        const properCaseType = typeMap[turbineType] || 'Francis';
+
+        dispatch({ type: 'SET_ASSET', payload: { id: identity.assetId, name: identity.assetName, location: 'New Asset', type: properCaseType } });
         onComplete();
     };
 
@@ -229,8 +237,8 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                             key={type}
                                             onClick={() => setTurbineType(type)}
                                             className={`py-3 rounded font-bold transition-all ${turbineType === type
-                                                    ? 'bg-[#2dd4bf] text-black'
-                                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                                ? 'bg-[#2dd4bf] text-black'
+                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                                 }`}
                                         >
                                             {type}
@@ -248,8 +256,8 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                             key={orient}
                                             onClick={() => setOrientation(orient)}
                                             className={`py-3 rounded font-bold transition-all ${orientation === orient
-                                                    ? 'bg-[#2dd4bf] text-black'
-                                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                                ? 'bg-[#2dd4bf] text-black'
+                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                                 }`}
                                         >
                                             {orient}
@@ -272,8 +280,8 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                             key={trans}
                                             onClick={() => setTransmission(trans)}
                                             className={`py-3 rounded font-bold transition-all ${transmission === trans
-                                                    ? 'bg-[#2dd4bf] text-black'
-                                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                                ? 'bg-[#2dd4bf] text-black'
+                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                                 }`}
                                         >
                                             {trans}
@@ -296,8 +304,8 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                             key={mat}
                                             onClick={() => setPenstockType(mat)}
                                             className={`py-2 px-3 rounded text-sm font-bold transition-all ${penstockType === mat
-                                                    ? 'bg-[#2dd4bf] text-black'
-                                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                                ? 'bg-[#2dd4bf] text-black'
+                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                                 }`}
                                         >
                                             {mat}
@@ -482,8 +490,8 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                             key={opt.label}
                                             onClick={() => setHasSludgeCleaner(opt.value)}
                                             className={`py-3 rounded font-bold transition-all ${hasSludgeCleaner === opt.value
-                                                    ? 'bg-[#2dd4bf] text-black'
-                                                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                                ? 'bg-[#2dd4bf] text-black'
+                                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                                                 }`}
                                         >
                                             {opt.label}

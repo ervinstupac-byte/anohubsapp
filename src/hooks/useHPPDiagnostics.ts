@@ -17,8 +17,9 @@ const GRAVITY = 9.81;
 export const THOMA_SIGMA_CRITICAL = 0.12; // Typical for high specific speed Francis
 
 export const useHPPDiagnostics = () => {
-    const { technicalState } = useProjectEngine();
-    const { assetIdentity, financials, aiDiagnosis } = technicalState;
+    const { technicalState, createComplexIdentity } = useProjectEngine();
+    const { identity } = technicalState;
+    const assetIdentity = createComplexIdentity(); // Use the COMPLEX ONE for the engine
 
     const diagnostics = useMemo(() => {
         if (!assetIdentity) return null;
@@ -29,8 +30,8 @@ export const useHPPDiagnostics = () => {
             technicalState.site.temperature,
             assetIdentity.fluidIntelligence.oilSystem.oilType === 'MINERAL_ISO_VG_46' ? 'OIL' : 'GREASE',
             50, // Rotor weight default
-            technicalState.assetIdentity?.operationalMapping?.currentPoint?.flowM3S ?? 0, // Pass Live Flow
-            technicalState.assetIdentity?.operationalMapping?.currentPoint?.headM ?? 0, // Pass Live Head
+            assetIdentity.operationalMapping?.currentPoint?.flowM3S ?? 0, // Pass Live Flow
+            assetIdentity.operationalMapping?.currentPoint?.headM ?? 0, // Pass Live Head
             50.0 // Grid Frequency (Default to 50, could be live if available)
         );
 
@@ -58,6 +59,14 @@ export const useHPPDiagnostics = () => {
         // Use Augmented Health
         health = insights.augmentedHealth;
 
+        // Calculate Critical Findings from Base Diagnostics
+        const criticalCount = [
+            baseDiagnostics.thermalRisk,
+            baseDiagnostics.gridRisk,
+            baseDiagnostics.cavitationRisk,
+            baseDiagnostics.jackingRisk
+        ].filter(r => r?.severity === 'CRITICAL').length;
+
         // 3. Financial Risk from Expert Engine
         const riskCalculation = {
             totalRevenueAtRisk: Math.round(insights.financialLossEUR * 24),
@@ -66,7 +75,7 @@ export const useHPPDiagnostics = () => {
                 efficiency: Math.round(insights.financialLossEUR * 24),
                 emergency: 0
             },
-            criticalFindings: aiDiagnosis.findings.filter(f => f.severity === 'CRITICAL').length,
+            criticalFindings: criticalCount,
             daysToAction: 15
         };
 

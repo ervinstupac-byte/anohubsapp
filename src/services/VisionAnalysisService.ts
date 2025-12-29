@@ -197,7 +197,7 @@ export class VisionAnalysisService {
                 boltGrade: technicalState.mechanical.boltSpecs.grade,
                 boltCount: technicalState.mechanical.boltSpecs.count,
                 torqueApplied: technicalState.mechanical.boltSpecs.torque,
-                bearingType: technicalState.mechanical.bearingType,
+                bearingType: technicalState.mechanical.bearingType || 'Unknown',
                 alignment: technicalState.mechanical.radialClearance
             },
             thermalAdjustment: {

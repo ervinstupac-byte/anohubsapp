@@ -66,7 +66,7 @@ export interface TelemetryData {
 interface TelemetryContextType {
     telemetry: Record<string, TelemetryData>;
     activeIncident: { type: string, assetId: string, timestamp: number } | null;
-    triggerEmergency: (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping') => void;
+    triggerEmergency: (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => void;
     clearEmergency: () => void;
     forceUpdate: () => void;
     updatePipeDiameter: (assetId: string, diameter: number) => void;
@@ -82,7 +82,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [telemetry, setTelemetry] = useState<Record<string, TelemetryData>>({});
     const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: string, timestamp: number } | null>(null);
 
-    const triggerEmergency = (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping') => {
+    const triggerEmergency = (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
         const timestamp = Date.now();
         setActiveIncident({ type, assetId, timestamp });
 

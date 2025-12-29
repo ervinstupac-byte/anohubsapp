@@ -30,65 +30,65 @@ const TurbineSilhouette: React.FC<{
             <svg viewBox="0 0 250 400" className="h-full relative z-10 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]">
                 <defs>
                     <filter id="glassGlow">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                     <filter id="alarmPulse">
-                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-                        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                     <linearGradient id="metalGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#E2E8F0"/>
-                        <stop offset="50%" stopColor="#CBD5E1"/>
-                        <stop offset="100%" stopColor="#94A3B8"/>
+                        <stop offset="0%" stopColor="#E2E8F0" />
+                        <stop offset="50%" stopColor="#CBD5E1" />
+                        <stop offset="100%" stopColor="#94A3B8" />
                     </linearGradient>
                     <linearGradient id="glassGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(255,255,255,0.1)"/>
-                        <stop offset="100%" stopColor="rgba(255,255,255,0.05)"/>
+                        <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
+                        <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
                     </linearGradient>
                 </defs>
 
                 {/* Generator Housing */}
-                <rect x="50" y="30" width="150" height="60" rx="8" fill="url(#glassGradient)" stroke="#64748B" strokeWidth="1.5" opacity="0.8"/>
+                <rect x="50" y="30" width="150" height="60" rx="8" fill="url(#glassGradient)" stroke="#64748B" strokeWidth="1.5" opacity="0.8" />
 
                 {/* Shaft with Vibration Indicator */}
                 <rect x="115" y="90" width="20" height="180" fill={shaftColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9" rx="2">
-                    {(vibration || 0) > 0.05 && <animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.8s" repeatCount="indefinite"/>}
+                    {(vibration || 0) > 0.05 && <animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.8s" repeatCount="indefinite" />}
                 </rect>
 
                 {/* Upper Bearing */}
                 <circle cx="125" cy="120" r="15" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9">
-                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite"/>}
+                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
                 </circle>
 
                 {/* Lower Bearing */}
                 <circle cx="125" cy="240" r="15" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9">
-                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite"/>}
+                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
                 </circle>
 
                 {/* Francis Runner (Technical Detail) */}
                 <g transform="translate(125,280)">
                     <path d="M-40,-20 C -40,-20 -20,-50 0,-45 C 20,-50 40,-20 40,-20 L 40,20 C 40,20 20,50 0,45 C -20,50 -40,20 -40,20 Z"
-                          fill={runnerColor}
-                          filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"}
-                          opacity="0.9"/>
+                        fill={runnerColor}
+                        filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"}
+                        opacity="0.9" />
                     {/* Runner Blades */}
-                    <path d="M-35,-15 L 0,-40 L 35,-15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6"/>
-                    <path d="M-35,0 L 0,-25 L 35,0" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6"/>
-                    <path d="M-35,15 L 0,-10 L 35,15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6"/>
+                    <path d="M-35,-15 L 0,-40 L 35,-15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
+                    <path d="M-35,0 L 0,-25 L 35,0" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
+                    <path d="M-35,15 L 0,-10 L 35,15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
                 </g>
 
                 {/* Water Flow Animation */}
                 <path d="M30 320 Q 125 380 220 320" fill="none" stroke={isCritical ? "#EF4444" : "#06B6D4"} strokeWidth="3" strokeDasharray="8,4" opacity="0.7">
-                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite" />
                 </path>
 
                 {/* Head Pressure Indicator */}
-                <rect x="20" y="340" width="20" height={(head || 0) / 5} fill={isCritical ? "#EF4444" : "#10B981"} opacity="0.8" rx="2"/>
+                <rect x="20" y="340" width="20" height={(head || 0) / 5} fill={isCritical ? "#EF4444" : "#10B981"} opacity="0.8" rx="2" />
                 <text x="30" y="375" textAnchor="middle" fontSize="8" fill="#64748B">H</text>
 
                 {/* Flow Rate Indicator */}
-                <rect x="210" y="340" width="20" height={(flow || 0) / 2} fill={isCritical ? "#EF4444" : "#3B82F6"} opacity="0.8" rx="2"/>
+                <rect x="210" y="340" width="20" height={(flow || 0) / 2} fill={isCritical ? "#EF4444" : "#3B82F6"} opacity="0.8" rx="2" />
                 <text x="220" y="375" textAnchor="middle" fontSize="8" fill="#64748B">Q</text>
             </svg>
 
@@ -135,16 +135,22 @@ const TurbineSilhouette: React.FC<{
 };
 
 export const ExecutiveDashboard: React.FC = () => {
-    const { technicalState, connectSCADAToExpertEngine, getDrTurbineConsultation } = useProjectEngine();
+    const { technicalState, connectSCADAToExpertEngine, getDrTurbineConsultation, createComplexIdentity } = useProjectEngine();
 
-    // Dr. Turbine AI State
-    const [aiCards, setAiCards] = useState<ActionCard[]>([]);
-    const [aiMessage, setAiMessage] = useState("System analyzing...");
+    // Use Adapter to get full Asset Identity
+    const assetIdentity = useMemo(() => {
+        return createComplexIdentity && createComplexIdentity() ? createComplexIdentity() : null;
+    }, [createComplexIdentity, technicalState]);
 
     // SCADA Integration State
     const [scadaFlow, setScadaFlow] = useState(42.5);
-    const [scadaHead, setScadaHead] = useState(152.0);
-    const [scadaFrequency, setScadaFrequency] = useState(98.2); // CRITICAL FREQUENCY
+    const [scadaHead, setScadaHead] = useState(452.0);
+    const [scadaFrequency, setScadaFrequency] = useState(50.0);
+    const [viewMode, setViewMode] = useState<'SCADA' | 'DIGITAL_TWIN' | 'AI_CONSULTANT'>('SCADA');
+
+    // AI Consultant State
+    const [aiCards, setAiCards] = useState<ActionCard[]>([]);
+    const [aiMessage, setAiMessage] = useState<string>('');
 
     // Get diagnostics from SCADA inputs
     const scadaDiagnostics = useMemo(() => {
@@ -153,17 +159,17 @@ export const ExecutiveDashboard: React.FC = () => {
 
     // --- EFFECT: Consult Dr. Turbine ---
     useEffect(() => {
-        if (technicalState.assetIdentity) {
+        if (assetIdentity) {
             const consultation = getDrTurbineConsultation(scadaFlow, scadaHead, scadaFrequency);
             setAiCards(consultation.cards);
             setAiMessage(consultation.voiceMessage);
         }
-    }, [technicalState, getDrTurbineConsultation, scadaFlow, scadaHead, scadaFrequency]);
+    }, [assetIdentity, getDrTurbineConsultation, scadaFlow, scadaHead, scadaFrequency]);
 
     return (
         <div className="p-8 pb-32 space-y-12 animate-fade-in max-w-[1600px] mx-auto min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
             {/* GLASSMORPHISM BACKGROUND EFFECTS */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+            <div className={`absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50`}></div>
             <div className="absolute top-0 left-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
 
@@ -207,7 +213,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     flow={scadaFlow}
                                     head={scadaHead}
                                     frequency={scadaFrequency}
-                                    alarms={scadaDiagnostics?.criticalAlarms?.map(a => a.message) || []}
+                                    alarms={scadaDiagnostics?.criticalAlarms?.map((a: { message: string }) => a.message) || []}
                                 />
                             </div>
 
@@ -215,16 +221,15 @@ export const ExecutiveDashboard: React.FC = () => {
                             <div className="grid grid-cols-2 gap-3 mt-auto">
                                 <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
                                     <span className="text-[10px] text-slate-400 uppercase block font-bold">Active Power</span>
-                                    <span className="text-2xl font-mono text-white font-black">{(technicalState.assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
+                                    <span className="text-2xl font-mono text-white font-black">{(assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
                                 </div>
                                 <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
                                     <span className="text-[10px] text-slate-400 uppercase block font-bold">Grid Frequency</span>
                                     {/* CRITICAL FREQUENCY ALARM */}
-                                    <span className={`text-2xl font-mono font-black ${
-                                        scadaFrequency > 55 || scadaFrequency < 45
-                                            ? 'text-red-400 animate-pulse drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]'
-                                            : 'text-emerald-400'
-                                    }`}>
+                                    <span className={`text-2xl font-mono font-black ${scadaFrequency > 55 || scadaFrequency < 45
+                                        ? 'text-red-400 animate-pulse drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]'
+                                        : 'text-emerald-400'
+                                        }`}>
                                         {scadaFrequency.toFixed(1)} <span className="text-cyan-400 text-sm">Hz</span>
                                     </span>
                                 </div>
@@ -242,19 +247,17 @@ export const ExecutiveDashboard: React.FC = () => {
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                             <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">Unit Health</p>
                             <div className="flex items-baseline gap-2">
-                                <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${
-                                    (scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-400' :
+                                <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-400' :
                                     (scadaDiagnostics?.healthScore || 85) > 80 ? 'text-cyan-400' : 'text-yellow-400'
-                                }`}>
+                                    }`}>
                                     {scadaDiagnostics?.healthScore || 85}
                                 </span>
                                 <span className="text-3xl text-slate-400 font-bold">%</span>
                             </div>
                             <div className="mt-6 h-3 w-full bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
-                                <div className={`h-full shadow-[0_0_15px_cyan] transition-all duration-1000 ${
-                                    (scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500' :
+                                <div className={`h-full shadow-[0_0_15px_cyan] transition-all duration-1000 ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500' :
                                     (scadaDiagnostics?.healthScore || 85) > 80 ? 'bg-cyan-500' : 'bg-yellow-500'
-                                }`} style={{ width: `${scadaDiagnostics?.healthScore || 85}%` }}></div>
+                                    }`} style={{ width: `${scadaDiagnostics?.healthScore || 85}%` }}></div>
                             </div>
                         </div>
 
@@ -299,11 +302,10 @@ export const ExecutiveDashboard: React.FC = () => {
                             )}
 
                             {aiCards.map((card, index) => (
-                                <div key={card.id} className={`backdrop-blur-md p-5 rounded-xl border-l-4 animate-fade-in relative overflow-hidden ${
-                                    card.severity === 'CRITICAL'
-                                        ? 'bg-red-950/20 border-l-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
-                                        : 'bg-amber-950/20 border-l-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
-                                }`}>
+                                <div key={card.id} className={`backdrop-blur-md p-5 rounded-xl border-l-4 animate-fade-in relative overflow-hidden ${card.severity === 'CRITICAL'
+                                    ? 'bg-red-950/20 border-l-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
+                                    : 'bg-amber-950/20 border-l-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
+                                    }`}>
                                     {/* Animated background for critical alerts */}
                                     {card.severity === 'CRITICAL' && (
                                         <div className="absolute inset-0 bg-red-500/5 animate-pulse"></div>
@@ -311,14 +313,12 @@ export const ExecutiveDashboard: React.FC = () => {
 
                                     <div className="relative z-10">
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className={`font-bold uppercase text-base ${
-                                                card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'
-                                            }`}>{card.title}</h4>
-                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full backdrop-blur-md ${
-                                                card.severity === 'CRITICAL'
-                                                    ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                                                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                            } animate-pulse`}>
+                                            <h4 className={`font-bold uppercase text-base ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'
+                                                }`}>{card.title}</h4>
+                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full backdrop-blur-md ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                                } animate-pulse`}>
                                                 {card.severity}
                                             </span>
                                         </div>
@@ -331,19 +331,18 @@ export const ExecutiveDashboard: React.FC = () => {
                                                 {card.severity === 'CRITICAL' && card.title.includes('GRID')
                                                     ? `Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at ${scadaFrequency}Hz.`
                                                     : card.severity === 'CRITICAL' && card.title.includes('CAVITATION')
-                                                    ? `Flow: ${scadaFlow} m³/s, Head: ${scadaHead}m exceeds cavitation threshold. Runner clearance may be insufficient.`
-                                                    : 'System parameters within acceptable range. Monitoring continues.'
+                                                        ? `Flow: ${scadaFlow} m³/s, Head: ${scadaHead}m exceeds cavitation threshold. Runner clearance may be insufficient.`
+                                                        : 'System parameters within acceptable range. Monitoring continues.'
                                                 }
                                             </p>
                                         </div>
 
                                         <ModernButton
                                             variant="secondary"
-                                            className={`w-full text-sm h-10 backdrop-blur-md ${
-                                                card.severity === 'CRITICAL'
-                                                    ? 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300'
-                                                    : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
-                                            }`}
+                                            className={`w-full text-sm h-10 backdrop-blur-md ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300'
+                                                : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
+                                                }`}
                                             onClick={() => {
                                                 // Could trigger work orders, emergency protocols, etc.
                                                 console.log('Action triggered:', card.actionFunction);
@@ -421,9 +420,8 @@ export const ExecutiveDashboard: React.FC = () => {
                                     type="number"
                                     value={scadaFrequency}
                                     onChange={(e) => setScadaFrequency(parseFloat(e.target.value))}
-                                    className={`w-full bg-transparent border-b text-white text-lg font-mono focus:outline-none ${
-                                        scadaFrequency > 55 ? 'border-red-400 text-red-400' : 'border-slate-600 focus:border-cyan-400'
-                                    }`}
+                                    className={`w-full bg-transparent border-b text-white text-lg font-mono focus:outline-none ${scadaFrequency > 55 ? 'border-red-400 text-red-400' : 'border-slate-600 focus:border-cyan-400'
+                                        }`}
                                     step="0.1"
                                 />
                                 {scadaFrequency > 55 && (

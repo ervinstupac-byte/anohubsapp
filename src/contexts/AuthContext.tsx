@@ -8,7 +8,7 @@ interface AuthContextType {
     user: User | null;
     isGuest: boolean; // <--- NOVO
     signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
-    signInAsGuest: () => void; // <--- NOVO
+    signInAsGuest: () => Promise<void>; // <--- NOVO
     signOut: () => Promise<void>;
     loading: boolean;
 }
@@ -50,7 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // 2. GUEST LOGIN (Lažiramo korisnika)
-    const signInAsGuest = () => {
+    const signInAsGuest = async () => {
         setIsGuest(true);
         // Kreiramo lažni User objekt da zavaramo TypeScript i UI
         const guestUser = {
@@ -71,6 +71,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(guestUser);
         logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
+        // Ensure state propagates
+        await new Promise(resolve => setTimeout(resolve, 100));
     };
 
     // 3. LOGOUT (Pokriva i Guest i Pravi logout)

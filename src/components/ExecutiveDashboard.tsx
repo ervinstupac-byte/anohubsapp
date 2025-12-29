@@ -33,68 +33,68 @@ const TurbineSilhouette: React.FC<{
             <svg viewBox="0 0 300 450" className="h-full relative z-10 drop-shadow-[0_0_40px_rgba(6,182,212,0.4)]">
                 <defs>
                     <filter id="glassGlow">
-                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
                         <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                     <filter id="alarmPulse">
-                        <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                        <feGaussianBlur stdDeviation="6" result="coloredBlur" />
                         <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                     <filter id="neonGlow">
-                        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                        <feGaussianBlur stdDeviation="8" result="coloredBlur" />
                         <feMerge>
-                            <feMergeNode in="coloredBlur"/>
-                            <feMergeNode in="SourceGraphic"/>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
                     <radialGradient id="metalGradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#F1F5F9"/>
-                        <stop offset="30%" stopColor="#CBD5E1"/>
-                        <stop offset="70%" stopColor="#94A3B8"/>
-                        <stop offset="100%" stopColor="#64748B"/>
+                        <stop offset="0%" stopColor="#F1F5F9" />
+                        <stop offset="30%" stopColor="#CBD5E1" />
+                        <stop offset="70%" stopColor="#94A3B8" />
+                        <stop offset="100%" stopColor="#64748B" />
                     </radialGradient>
                     <linearGradient id="glassGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(255,255,255,0.15)"/>
-                        <stop offset="50%" stopColor="rgba(255,255,255,0.08)"/>
-                        <stop offset="100%" stopColor="rgba(255,255,255,0.03)"/>
+                        <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
+                        <stop offset="50%" stopColor="rgba(255,255,255,0.08)" />
+                        <stop offset="100%" stopColor="rgba(255,255,255,0.03)" />
                     </linearGradient>
                     <linearGradient id="waterGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#06B6D4"/>
-                        <stop offset="50%" stopColor="#0891B2"/>
-                        <stop offset="100%" stopColor="#0E7490"/>
+                        <stop offset="0%" stopColor="#06B6D4" />
+                        <stop offset="50%" stopColor="#0891B2" />
+                        <stop offset="100%" stopColor="#0E7490" />
                     </linearGradient>
                 </defs>
 
                 {/* Generator Housing - Enhanced Glass Effect */}
-                <rect x="75" y="40" width="150" height="70" rx="12" fill="url(#glassGradient)" stroke="#64748B" strokeWidth="2" opacity="0.9" filter="url(#glassGlow)"/>
-                <rect x="85" y="50" width="130" height="50" rx="8" fill="url(#metalGradient)" opacity="0.7"/>
+                <rect x="75" y="40" width="150" height="70" rx="12" fill="url(#glassGradient)" stroke="#64748B" strokeWidth="2" opacity="0.9" filter="url(#glassGlow)" />
+                <rect x="85" y="50" width="130" height="50" rx="8" fill="url(#metalGradient)" opacity="0.7" />
 
                 {/* Shaft with Vibration Indicator - Enhanced */}
                 <rect x="140" y="110" width="20" height="220" fill={shaftColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.95" rx="3">
-                    {(vibration || 0) > 0.05 && <animate attributeName="opacity" values="0.95;0.6;0.95" dur="0.8s" repeatCount="indefinite"/>}
+                    {(vibration || 0) > 0.05 && <animate attributeName="opacity" values="0.95;0.6;0.95" dur="0.8s" repeatCount="indefinite" />}
                 </rect>
 
                 {/* Upper Bearing - Enhanced with Detail */}
-                <circle cx="150" cy="145" r="18" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.95" stroke="#64748B" strokeWidth="1"/>
-                <circle cx="150" cy="145" r="12" fill="url(#metalGradient)" opacity="0.8"/>
-                {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite"/>}
+                <circle cx="150" cy="145" r="18" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.95" stroke="#64748B" strokeWidth="1" />
+                <circle cx="150" cy="145" r="12" fill="url(#metalGradient)" opacity="0.8" />
+                {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
 
                 {/* Lower Bearing - Enhanced with Detail */}
-                <circle cx="150" cy="290" r="18" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.95" stroke="#64748B" strokeWidth="1"/>
-                <circle cx="150" cy="290" r="12" fill="url(#metalGradient)" opacity="0.8"/>
-                {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite"/>}
+                <circle cx="150" cy="290" r="18" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.95" stroke="#64748B" strokeWidth="1" />
+                <circle cx="150" cy="290" r="12" fill="url(#metalGradient)" opacity="0.8" />
+                {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
 
                 {/* Francis Runner - Highly Detailed Technical Representation */}
                 <g transform="translate(150,330)">
                     {/* Outer Runner Ring */}
-                    <circle cx="0" cy="0" r="45" fill={runnerColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9" stroke="#64748B" strokeWidth="1"/>
-                    <circle cx="0" cy="0" r="38" fill="url(#metalGradient)" opacity="0.8"/>
+                    <circle cx="0" cy="0" r="45" fill={runnerColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9" stroke="#64748B" strokeWidth="1" />
+                    <circle cx="0" cy="0" r="38" fill="url(#metalGradient)" opacity="0.8" />
 
                     {/* Runner Blades - Technical Detail */}
                     {Array.from({ length: 16 }, (_, i) => {
@@ -113,43 +113,43 @@ const TurbineSilhouette: React.FC<{
                     })}
 
                     {/* Crown and Band Detail */}
-                    <circle cx="0" cy="0" r="42" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="2,2" opacity="0.6"/>
-                    <circle cx="0" cy="0" r="18" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="2,2" opacity="0.6"/>
+                    <circle cx="0" cy="0" r="42" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="2,2" opacity="0.6" />
+                    <circle cx="0" cy="0" r="18" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="2,2" opacity="0.6" />
                 </g>
 
                 {/* Enhanced Water Flow Animation */}
                 <path d="M45 380 Q 150 420 255 380" fill="none" stroke={isCritical ? "#EF4444" : "url(#waterGradient)"} strokeWidth="4" strokeDasharray="12,6" opacity="0.8">
-                    <animate attributeName="stroke-dashoffset" from="120" to="0" dur="2s" repeatCount="indefinite"/>
+                    <animate attributeName="stroke-dashoffset" from="120" to="0" dur="2s" repeatCount="indefinite" />
                 </path>
 
                 {/* Water Particles Effect */}
                 <g opacity="0.6">
                     <circle cx="100" cy="390" r="2" fill="#06B6D4">
                         <animateMotion dur="3s" repeatCount="indefinite">
-                            <path d="M0,0 Q50,10 100,0"/>
+                            <path d="M0,0 Q50,10 100,0" />
                         </animateMotion>
                     </circle>
                     <circle cx="150" cy="385" r="1.5" fill="#0891B2">
                         <animateMotion dur="2.5s" repeatCount="indefinite">
-                            <path d="M0,0 Q50,-5 100,0"/>
+                            <path d="M0,0 Q50,-5 100,0" />
                         </animateMotion>
                     </circle>
                     <circle cx="200" cy="392" r="2.5" fill="#0E7490">
                         <animateMotion dur="3.5s" repeatCount="indefinite">
-                            <path d="M0,0 Q50,8 100,0"/>
+                            <path d="M0,0 Q50,8 100,0" />
                         </animateMotion>
                     </circle>
                 </g>
 
                 {/* Head Pressure Indicator - Enhanced */}
-                <rect x="30" y="410" width="25" height={Math.max(10, Math.min(60, (head || 0) / 5))} fill={isCritical ? "#EF4444" : "#10B981"} opacity="0.9" rx="3" filter="url(#glassGlow)"/>
-                <rect x="35" y="415" width="15" height={Math.max(5, Math.min(50, (head || 0) / 6))} fill={isCritical ? "#DC2626" : "#059669"} opacity="0.7"/>
+                <rect x="30" y="410" width="25" height={Math.max(10, Math.min(60, (head || 0) / 5))} fill={isCritical ? "#EF4444" : "#10B981"} opacity="0.9" rx="3" filter="url(#glassGlow)" />
+                <rect x="35" y="415" width="15" height={Math.max(5, Math.min(50, (head || 0) / 6))} fill={isCritical ? "#DC2626" : "#059669"} opacity="0.7" />
                 <text x="42.5" y="440" textAnchor="middle" fontSize="9" fill="#64748B" fontWeight="bold">HEAD</text>
                 <text x="42.5" y="452" textAnchor="middle" fontSize="8" fill="#475569">{(head || 0).toFixed(0)}m</text>
 
                 {/* Flow Rate Indicator - Enhanced */}
-                <rect x="245" y="410" width="25" height={Math.max(10, Math.min(60, (flow || 0) / 3))} fill={isCritical ? "#EF4444" : "#3B82F6"} opacity="0.9" rx="3" filter="url(#glassGlow)"/>
-                <rect x="250" y="415" width="15" height={Math.max(5, Math.min(50, (flow || 0) / 4))} fill={isCritical ? "#DC2626" : "#2563EB"} opacity="0.7"/>
+                <rect x="245" y="410" width="25" height={Math.max(10, Math.min(60, (flow || 0) / 3))} fill={isCritical ? "#EF4444" : "#3B82F6"} opacity="0.9" rx="3" filter="url(#glassGlow)" />
+                <rect x="250" y="415" width="15" height={Math.max(5, Math.min(50, (flow || 0) / 4))} fill={isCritical ? "#DC2626" : "#2563EB"} opacity="0.7" />
                 <text x="257.5" y="440" textAnchor="middle" fontSize="9" fill="#64748B" fontWeight="bold">FLOW</text>
                 <text x="257.5" y="452" textAnchor="middle" fontSize="8" fill="#475569">{(flow || 0).toFixed(1)}m³/s</text>
             </svg>
@@ -215,7 +215,7 @@ const TurbineSilhouette: React.FC<{
 export const ExecutiveDashboard: React.FC = () => {
     const { fleetReports, totalMoneyAtRisk, globalFleetHealth } = useFleet();
     const { triggerEmergency, telemetry } = useTelemetry();
-    const { technicalState, connectSCADAToExpertEngine, calculateIntegratedFinancialRisk } = useProjectEngine();
+    const { technicalState, connectSCADAToExpertEngine, calculateIntegratedFinancialRisk, createComplexIdentity } = useProjectEngine();
     const [selectedAssetId, setSelectedAssetId] = useState<string | null>(fleetReports[0]?.assetId || null);
 
     // SCADA Integration State
@@ -237,14 +237,15 @@ export const ExecutiveDashboard: React.FC = () => {
 
     // --- EFFECT: SCADA Integration with Expert Diagnosis Engine ---
     useEffect(() => {
-        if (technicalState.assetIdentity) {
+        if (technicalState.identity) {
             // Connect SCADA inputs to Expert Diagnosis Engine
             const diagnostics = connectSCADAToExpertEngine(scadaFlow, scadaHead, scadaFreq);
             setScadaDiagnostics(diagnostics);
 
             // Enhanced Dr. Turbine consultation with SCADA data
             const consultation = DrTurbineAI.consult(
-                technicalState.assetIdentity,
+                createComplexIdentity(), // Use adapter instead of direct property access
+
                 scadaFlow,
                 scadaHead,
                 scadaFreq
@@ -378,9 +379,8 @@ export const ExecutiveDashboard: React.FC = () => {
                                             type="number"
                                             value={scadaFreq}
                                             onChange={(e) => setScadaFreq(Number(e.target.value))}
-                                            className={`w-full bg-transparent text-lg font-mono font-black text-center focus:outline-none ${
-                                                scadaFreq >= 98.2 ? 'text-red-400 animate-pulse' : 'text-white'
-                                            }`}
+                                            className={`w-full bg-transparent text-lg font-mono font-black text-center focus:outline-none ${scadaFreq >= 98.2 ? 'text-red-400 animate-pulse' : 'text-white'
+                                                }`}
                                             step="0.1"
                                             min="45"
                                             max="120"
@@ -397,10 +397,9 @@ export const ExecutiveDashboard: React.FC = () => {
                                     </div>
                                     <div className="backdrop-blur-xl bg-black/25 p-4 rounded-xl border border-white/15 shadow-lg">
                                         <span className="text-[10px] text-slate-400 uppercase block font-bold">Health Score</span>
-                                        <span className={`text-2xl font-mono font-black ${
-                                            scadaDiagnostics?.healthScore < 50 ? 'text-red-400 animate-pulse' :
+                                        <span className={`text-2xl font-mono font-black ${scadaDiagnostics?.healthScore < 50 ? 'text-red-400 animate-pulse' :
                                             scadaDiagnostics?.healthScore > 80 ? 'text-green-400' : 'text-yellow-400'
-                                        }`}>
+                                            }`}>
                                             {scadaDiagnostics?.healthScore?.toFixed(0) ?? selectedReport.healthScore.toFixed(0)}<span className="text-cyan-400 text-sm">%</span>
                                         </span>
                                     </div>
@@ -419,19 +418,17 @@ export const ExecutiveDashboard: React.FC = () => {
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                             <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">Unit Health</p>
                             <div className="flex items-baseline gap-2">
-                                <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${
-                                    selectedReport.healthScore < 50 ? 'text-red-400' :
+                                <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${selectedReport.healthScore < 50 ? 'text-red-400' :
                                     selectedReport.healthScore > 80 ? 'text-cyan-400' : 'text-yellow-400'
-                                }`}>
+                                    }`}>
                                     {selectedReport.healthScore.toFixed(0)}
                                 </span>
                                 <span className="text-3xl text-slate-400 font-bold">%</span>
                             </div>
                             <div className="mt-6 h-3 w-full bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
-                                <div className={`h-full shadow-[0_0_15px_cyan] transition-all duration-1000 ${
-                                    selectedReport.healthScore < 50 ? 'bg-red-500' :
+                                <div className={`h-full shadow-[0_0_15px_cyan] transition-all duration-1000 ${selectedReport.healthScore < 50 ? 'bg-red-500' :
                                     selectedReport.healthScore > 80 ? 'bg-cyan-500' : 'bg-yellow-500'
-                                }`} style={{ width: `${selectedReport.healthScore}%` }}></div>
+                                    }`} style={{ width: `${selectedReport.healthScore}%` }}></div>
                             </div>
                         </div>
 
@@ -509,11 +506,10 @@ export const ExecutiveDashboard: React.FC = () => {
                             )}
 
                             {aiCards.map((card, index) => (
-                                <div key={card.id} className={`backdrop-blur-md p-5 rounded-xl border-l-4 animate-fade-in relative overflow-hidden ${
-                                    card.severity === 'CRITICAL'
-                                        ? 'bg-red-950/20 border-l-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
-                                        : 'bg-amber-950/20 border-l-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
-                                }`}>
+                                <div key={card.id} className={`backdrop-blur-md p-5 rounded-xl border-l-4 animate-fade-in relative overflow-hidden ${card.severity === 'CRITICAL'
+                                    ? 'bg-red-950/20 border-l-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
+                                    : 'bg-amber-950/20 border-l-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
+                                    }`}>
                                     {/* Animated background for critical alerts */}
                                     {card.severity === 'CRITICAL' && (
                                         <div className="absolute inset-0 bg-red-500/5 animate-pulse"></div>
@@ -521,14 +517,12 @@ export const ExecutiveDashboard: React.FC = () => {
 
                                     <div className="relative z-10">
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className={`font-bold uppercase text-base ${
-                                                card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'
-                                            }`}>{card.title}</h4>
-                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full backdrop-blur-md ${
-                                                card.severity === 'CRITICAL'
-                                                    ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                                                    : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                            } animate-pulse`}>
+                                            <h4 className={`font-bold uppercase text-base ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'
+                                                }`}>{card.title}</h4>
+                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full backdrop-blur-md ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                                                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                                                } animate-pulse`}>
                                                 {card.severity}
                                             </span>
                                         </div>
@@ -566,11 +560,10 @@ export const ExecutiveDashboard: React.FC = () => {
 
                                         <ModernButton
                                             variant="secondary"
-                                            className={`w-full text-sm h-10 backdrop-blur-md ${
-                                                card.severity === 'CRITICAL'
-                                                    ? 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300'
-                                                    : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
-                                            }`}
+                                            className={`w-full text-sm h-10 backdrop-blur-md ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300'
+                                                : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
+                                                }`}
                                             onClick={() => {
                                                 if (card.actionFunction === 'emergency_shutdown') {
                                                     if (confirm("INITIATE EMERGENCY SHUTDOWN? This will stop the turbine.")) {
@@ -633,12 +626,11 @@ export const ExecutiveDashboard: React.FC = () => {
                                 { time: '08:30', msg: 'Daily market bid accepted @ €150/MWh', type: 'info' },
                                 { time: '07:45', msg: 'SCADA: Critical frequency alarm at Unit T1', type: 'critical' }
                             ].map((log, i) => (
-                                <div key={i} className={`flex gap-3 text-sm backdrop-blur-md p-3 rounded-lg border ${
-                                    log.type === 'critical' ? 'bg-red-950/20 border-red-500/20 text-red-300' :
+                                <div key={i} className={`flex gap-3 text-sm backdrop-blur-md p-3 rounded-lg border ${log.type === 'critical' ? 'bg-red-950/20 border-red-500/20 text-red-300' :
                                     log.type === 'warning' ? 'bg-amber-950/20 border-amber-500/20 text-amber-300' :
-                                    log.type === 'success' ? 'bg-green-950/20 border-green-500/20 text-green-300' :
-                                    'bg-slate-950/20 border-white/10 text-slate-300'
-                                }`}>
+                                        log.type === 'success' ? 'bg-green-950/20 border-green-500/20 text-green-300' :
+                                            'bg-slate-950/20 border-white/10 text-slate-300'
+                                    }`}>
                                     <span className="text-slate-500 font-mono text-xs">{log.time}</span>
                                     <span className="flex-1">{log.msg}</span>
                                     {log.type === 'critical' && <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>}
