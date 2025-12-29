@@ -51,17 +51,17 @@ export const diagnoseFrancisFault = (data: FrancisTelemetry): DiagnosticResult[]
     }
 
     // 3. SILT FLASH FLOOD LOGIC (from Francis_Emergency_Protocols.html)
-    if (data.siltPpm > 5000) {
+    if (data.siltPpm > FRANCIS_CONSTANTS.SILT_CRITICAL_PPM) {
         results.push({
             status: 'EMERGENCY',
-            message: 'SILT FLASH FLOOD (>5000 ppm)',
+            message: `SILT FLASH FLOOD (>${FRANCIS_CONSTANTS.SILT_CRITICAL_PPM} ppm)`,
             action: 'IMMEDIATE SHUTDOWN. Prevent runner erosion.',
             referenceProtocol: 'P-02'
         });
-    } else if (data.siltPpm > FRANCIS_CONSTANTS.CRITICAL_SILT_PPM) {
+    } else if (data.siltPpm > FRANCIS_CONSTANTS.SILT_WARNING_PPM) {
         results.push({
             status: 'CRITICAL',
-            message: 'Critical Silt Concentration (>3000 ppm)',
+            message: `Critical Silt Concentration (>${FRANCIS_CONSTANTS.SILT_WARNING_PPM} ppm)`,
             action: 'Reduce load to minimum. Plan shutdown < 2h.',
             referenceProtocol: 'P-02'
         });

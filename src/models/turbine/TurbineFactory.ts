@@ -86,6 +86,9 @@ export class KaplanTurbine implements TurbineFamily {
     }
 }
 
+// Import logic engine
+import { diagnoseFrancisFault } from '../../lib/francis_logic';
+
 // === FRANCIS IMPLEMENTATION ===
 export class FrancisTurbine implements TurbineFamily {
     type: TurbineType = 'francis';
@@ -119,19 +122,23 @@ export class FrancisTurbine implements TurbineFamily {
     }
 
     analyzeSpecificRisks(data: any): string[] {
-        const risks = [];
+        // Map any generic data to FrancisTelemetry if needed
+        // Assuming data structure matches or we overlap
+        const telemetry = {
+            bearingTemp: data.bearingTemp || 45,
+            vibration: data.vibration || 0.5,
+            siltPpm: data.siltPpm || 0,
+            gridFreq: data.gridFreq || 50.0,
+            loadMw: data.load || 0,
+            mivStatus: (data.mivStatus || 'OPEN') as 'OPEN' | 'CLOSED'
+        };
 
-        // 1. Part Load Vortex Rope
-        if (data.load > 30 && data.load < 60) {
-            risks.push('Vortex Rope Zone: Monitor draft tube pressure pulsation');
-        }
+        const findings = diagnoseFrancisFault(telemetry);
 
-        // 2. Labyrinth Seal Leakage
-        if (data.headCoverPressure > data.tailWaterLevel + 10) {
-            risks.push('High Head Cover Pressure: Labyrinth seal wear suspected');
-        }
-
-        return risks;
+        // Convert structured findings to string array for simple consumers
+        return findings
+            .filter(f => f.status !== 'NORMAL')
+            .map(f => `${f.status}: ${f.message} [Ref: ${f.referenceProtocol || 'N/A'}]`);
     }
 }
 

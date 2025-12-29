@@ -28,12 +28,24 @@ export interface FrancisHorizontalSpecs {
 }
 
 // Default Constants based on "Francis_Horizontal.html"
+// Mined from Francis_H Reference Docs
 export const FRANCIS_CONSTANTS = {
-    MAX_BEARING_TEMP: 60, // Celsius
-    TRIP_BEARING_TEMP: 70, // Celsius
-    MAX_VIBRATION_ISO: 2.5, // mm/s
-    CRITICAL_SILT_PPM: 3000,
-    ALIGNMENT_LIMIT_MM: 0.05
+    // Bearings (SOP-ROT-001)
+    MAX_BEARING_TEMP: 60, // Celsius (Warning)
+    TRIP_BEARING_TEMP: 70, // Celsius (Trip)
+
+    // Braking (SOP-MECH-003)
+    BRAKE_AIR_PRESSURE_BAR: 7.0,
+    BRAKE_PERMISSIVE_SPEED_PCT: 20, // < 20% to apply
+
+    // Physics & Silt (FR-EP-001)
+    MAX_VIBRATION_ISO: 5.0, // mm/s (Francis Horizontal Limit)
+    SILT_WARNING_PPM: 3000,
+    SILT_CRITICAL_PPM: 5000, // Immediate Shutdown
+
+    // Grid (FR-EP-001)
+    MIN_FREQ_HZ: 98.2, // ESD Limit
+    MAX_OVERSPEED_PCT: 120 // Evacuate
 };
 
 /**
