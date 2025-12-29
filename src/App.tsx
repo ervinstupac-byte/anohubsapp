@@ -127,8 +127,9 @@ const AppLayout: React.FC = () => {
 
     // Initialize demo data on first load
     useEffect(() => {
-        const { initializeDemoData } = require('../utils/demoSeeder');
-        initializeDemoData();
+        import('./utils/demoSeeder').then(({ initializeDemoData }) => {
+            initializeDemoData();
+        });
     }, []);
 
     // Listen for custom wizard trigger event from ScadaMimic
