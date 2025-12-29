@@ -50,6 +50,7 @@ export interface Asset {
   status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
   turbine_type?: string;
+  specs?: Record<string, any>; // Flexible storage for turbine-specific data (e.g. FrancisHorizontalSpecs)
 }
 
 export interface AssetContextType {

@@ -13,10 +13,31 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Load assets from Supabase
+    // Load assets from Supabase or LocalStorage (Guest)
     useEffect(() => {
         const fetchAssets = async () => {
             try {
+                // Check for guest assets in local storage first
+                const localAssetsStr = localStorage.getItem('guest_assets');
+                const localAssets: Asset[] = localAssetsStr ? JSON.parse(localAssetsStr) : [];
+
+                if (localAssets.length > 0) {
+                    setAssets(localAssets);
+
+                    // Persistence Logic
+                    const savedAssetId = localStorage.getItem('activeAssetId');
+                    const initialAsset = savedAssetId
+                        ? localAssets.find(a => a.id === savedAssetId)
+                        : localAssets[0];
+
+                    if (initialAsset && !selectedAssetId) {
+                        setSelectedAssetId(initialAsset.id);
+                    }
+
+                    setLoading(false);
+                    return;
+                }
+
                 const { data, error } = await supabase.from('assets').select('*');
                 if (error) throw error;
 
@@ -85,7 +106,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 lat: newAssetData.coordinates[0],
                 lng: newAssetData.coordinates[1],
                 power_output: newAssetData.capacity,
-                status: 'Operational' // Default status
+                status: 'Operational', // Default status
+                specs: newAssetData.specs || {}
             };
 
             let newAsset: Asset;
@@ -102,9 +124,18 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     location: dbPayload.location,
                     coordinates: [dbPayload.lat, dbPayload.lng],
                     capacity: dbPayload.power_output,
-                    status: dbPayload.status as Asset['status']
+                    status: dbPayload.status as Asset['status'],
+                    specs: dbPayload.specs
                 };
                 console.log('[AssetContext] Guest Mode: Simulating asset creation', newAsset);
+
+                // --- GUEST PERSISTENCE ---
+                // Update Local Storage immediately so refresh works
+                const existingGuestAssetsStr = localStorage.getItem('guest_assets');
+                const existingGuestAssets: Asset[] = existingGuestAssetsStr ? JSON.parse(existingGuestAssetsStr) : [];
+                const updatedGuestAssets = [...existingGuestAssets, newAsset];
+                localStorage.setItem('guest_assets', JSON.stringify(updatedGuestAssets));
+                // -------------------------
             } else {
                 // --- REAL MODE: SUPABASE INSERT ---
                 const { data, error } = await supabase
@@ -123,7 +154,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     coordinates: [data.lat, data.lng],
                     capacity: parseFloat(data.power_output),
                     status: data.status,
-                    turbine_type: data.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(data.type?.toLowerCase()) ? data.type.toLowerCase() : 'francis')
+                    turbine_type: data.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(data.type?.toLowerCase()) ? data.type.toLowerCase() : 'francis'),
+                    specs: data.specs || {}
                 };
             }
 

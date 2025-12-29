@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HashRouter, useLocation, useNavigate, Route, Routes, useParams } from 'react-router-dom';
+import { HashRouter, useLocation, useNavigate, Route, Routes, useParams, Navigate } from 'react-router-dom';
+import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
 
 // --- 1. CONTEXTS ---
 import { GlobalProvider } from './contexts/GlobalProvider.tsx';
@@ -11,14 +12,14 @@ import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
 import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
 import { DEFAULT_TECHNICAL_STATE } from './models/TechnicalSchema.ts';
-import { ClientProvider } from './contexts/ClientContext.tsx'; // Client Portal
+// ClientProvider removed (Simulation)
 import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
 import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
-import { ClientDashboard } from './components/ClientDashboard.tsx'; // Portal
+// ClientDashboard removed (Simulation)
 import { MaintenanceLogbook } from './components/MaintenanceLogbook.tsx'; // Logbook
 import { Onboarding } from './components/Onboarding.tsx';
 import { Spinner } from './components/Spinner.tsx';
@@ -70,6 +71,7 @@ const ARManager = lazy(() => import('./components/ARManager').then(m => ({ defau
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
+const FrancisDiagnostics = lazy(() => import('./components/FrancisDiagnostics.tsx').then(m => ({ default: m.FrancisDiagnostics })));
 
 // --- 5. COMMAND CENTER DASHBOARD ---
 // Replaced with Toolbox Launchpad for authentic engineering focus
@@ -104,6 +106,9 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 };
 
 // --- 8. APP LAYOUT ---
+
+// New component for collapsible fleet section
+// FleetSection removed - Moved to Sidebar.tsx
 const AppLayout: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
@@ -198,25 +203,7 @@ const AppLayout: React.FC = () => {
         if (target) navigate(target);
     };
 
-    const operationalModules = [
-        { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️' },
-        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️' },
-        { id: 'shaftAlignment', title: 'Shaft Alignment', icon: '🔄' },
-        { id: 'hydraulicMaintenance', title: 'Hydraulic Maintenance', icon: '🚰' },
-        { id: 'boltTorque', title: 'Bolt Torque', icon: '🔩' },
-        { id: 'shadowEngineer', title: 'Shadow Engineer', icon: '👻' },
-        { id: 'intuitionLog', title: 'Intuition Log', icon: '👂' },
-        { id: 'structuralIntegrity', title: 'Structural Integrity', icon: '🏗️' },
-        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏' },
-        { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡' },
-    ];
-
-    const secondaryModules = [
-        { id: 'riskReport', title: t('modules.riskReport', 'Dossier Archive'), icon: '📂' },
-        { id: 'library', title: t('modules.library', 'Tech Library'), icon: '📚' },
-        { id: 'standardOfExcellence', title: 'Standard', icon: '🏅' },
-        { id: 'activeContext', title: 'Vision', icon: '👁️' }
-    ];
+    // Modules list moved to Sidebar.tsx
 
     return (
         <NavigationProvider value={{
@@ -247,108 +234,16 @@ const AppLayout: React.FC = () => {
                 </Suspense>
 
                 {/* UNIFIED SIDEBAR */}
-                <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)}>
-                    <ErrorBoundary fallback={<div className="p-4 text-xs text-red-500 bg-red-950/30 border border-red-500/30 rounded">Fleet Overview Unavailable</div>}>
-                        <FleetOverview
-                            onToggleMap={() => setIsMapOpen(!isMapOpen)}
-                            showMap={isMapOpen}
-                            onRegisterAsset={() => {
-                                setIsWizardOpen(true);
-                                setIsSidebarOpen(false);
-                            }}
-                        />
-                    </ErrorBoundary>
-                    <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
-                        {/* ... Sidebar Content ... */}
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">OPERATIONS</div>
-                        <ErrorBoundary>
-                            {operationalModules.map(mod => (
-                                <button
-                                    key={mod.id}
-                                    onClick={() => { logAction('MODULE_OPEN', mod.title, 'SUCCESS'); navigateTo(mod.id as AppView); setIsSidebarOpen(false); }}
-                                    className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id.replace('Dashboard', '')) || (location.pathname.includes('shadow-engineer') && mod.id === 'shadowEngineer') || (location.pathname.includes('intuition-log') && mod.id === 'intuitionLog') ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                                >
-                                    <span className={`text-lg ${location.pathname.includes(mod.id.replace('Dashboard', '')) ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'}`}>{mod.icon}</span>
-                                    <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
-                                </button>
-                            ))}
-                            {/* ... Logbook and others ... */}
-                            <button
-                                onClick={() => { logAction('MODULE_OPEN', 'Logbook', 'SUCCESS'); navigateTo('logbook'); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/logbook' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                            >
-                                <span className={`text-lg ${location.pathname === '/logbook' ? 'text-[#2dd4bf]' : 'group-hover:text-[#2dd4bf] transition-colors'}`}>🛡️</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">Logbook</span>
-                            </button>
-                        </ErrorBoundary>
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">STRATEGY</div>
-                        <ErrorBoundary>
-                            <button
-                                onClick={() => { logAction('MODULE_OPEN', 'Toolbox Analytics', 'SUCCESS'); navigateTo('executiveDashboard'); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/executive' ? 'bg-cyan-900/20 border-cyan-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                            >
-                                <span className={`text-lg ${location.pathname === '/executive' ? 'text-cyan-500' : 'group-hover:text-cyan-400 transition-colors'}`}>📊</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">Toolbox Analytics</span>
-                            </button>
-                        </ErrorBoundary>
-
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">ADMINISTRATION</div>
-                        <ErrorBoundary>
-                            <button
-                                onClick={() => { logAction('MODULE_OPEN', 'Admin Approval', 'SUCCESS'); navigateTo('adminApproval'); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/admin-approval' ? 'bg-amber-900/20 border-amber-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                            >
-                                <span className={`text-lg ${location.pathname === '/admin-approval' ? 'text-amber-500' : 'group-hover:text-amber-400 transition-colors'}`}>⚖️</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">Admin Approval</span>
-                            </button>
-                        </ErrorBoundary>
-
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">KNOWLEDGE</div>
-                        <ErrorBoundary>
-                            {secondaryModules.map(mod => {
-                                return (
-                                    <button
-                                        key={mod.id}
-                                        onClick={() => {
-                                            logAction('MODULE_OPEN', mod.title, 'SUCCESS');
-                                            navigateTo(mod.id as AppView);
-                                            setIsSidebarOpen(false);
-                                        }}
-                                        className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                                    >
-                                        <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
-                                        <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
-                                    </button>
-                                );
-                            })}
-                        </ErrorBoundary>
-
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">CLIENT ACCESS</div>
-                        <ErrorBoundary>
-                            <button
-                                onClick={() => { logAction('MODULE_OPEN', 'Client Portal', 'SUCCESS'); navigateTo('clientPortal'); setIsSidebarOpen(false); }}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/client-portal' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
-                            >
-                                <span className={`text-lg ${location.pathname === '/client-portal' ? 'text-[#2dd4bf]' : 'group-hover:text-[#2dd4bf] transition-colors'}`}>🔐</span>
-                                <span className="text-xs font-bold uppercase tracking-wider">Client Portal</span>
-                            </button>
-                        </ErrorBoundary>
-
-                        <div className="my-4 border-t border-white/5 mx-4"></div>
-                        <a
-                            href="https://www.anohubs.com"
-                            rel="noopener noreferrer"
-                            className="w-full flex items-center gap-3 px-4 py-3 border-l-2 border-transparent hover:bg-slate-900 text-slate-500 hover:text-white transition-all group"
-                        >
-                            <span className="text-lg group-hover:scale-110 transition-transform">🌐</span>
-                            <span className="text-[10px] font-black uppercase tracking-widest">Exit to Main Site</span>
-                        </a>
-                    </div>
-                </Sidebar>
+                <Sidebar
+                    isOpen={isSidebarOpen}
+                    onClose={() => setIsSidebarOpen(false)}
+                    showMap={isMapOpen}
+                    onToggleMap={() => setIsMapOpen(!isMapOpen)}
+                    onRegisterAsset={() => {
+                        setIsWizardOpen(true);
+                        setIsSidebarOpen(false);
+                    }}
+                />
 
                 {/* MAIN AREA */}
                 <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px] relative z-20">
@@ -431,6 +326,7 @@ const AppLayout: React.FC = () => {
                                 }>
                                     <Routes>
                                         <Route index element={<ToolboxLaunchpad />} />
+                                        <Route path="francis-diagnostics" element={<FrancisDiagnostics />} />
                                         <Route path="profile" element={<UserProfile />} />
                                         <Route path="map" element={<GlobalMap />} />
                                         <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
@@ -464,7 +360,7 @@ const AppLayout: React.FC = () => {
                                         <Route path="/forensics" element={<ForensicDashboard />} />
                                         <Route path="logbook" element={<MaintenanceLogbook />} />
                                         <Route path="stress-test" element={<SystemStressTest />} />
-                                        <Route path="*" element={<div className="flex flex-col items-center justify-center pt-20 text-slate-500">404</div>} />
+                                        <Route path="*" element={<Navigate to="/" replace />} />
                                     </Routes>
                                 </ErrorBoundary>
                             </div>
@@ -482,18 +378,16 @@ const App: React.FC = () => {
     return (
         <GlobalProvider>
             <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}> {/* Technical Backbone */}
-                <ClientProvider>
-                    <NotificationProvider>
-                        <MaintenanceProvider>
-                            <HashRouter>
-                                <Routes>
-                                    <Route path="/login" element={<Login />} />
-                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                </Routes>
-                            </HashRouter>
-                        </MaintenanceProvider>
-                    </NotificationProvider>
-                </ClientProvider>
+                <NotificationProvider>
+                    <MaintenanceProvider>
+                        <HashRouter>
+                            <Routes>
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                            </Routes>
+                        </HashRouter>
+                    </MaintenanceProvider>
+                </NotificationProvider>
             </ProjectProvider>
         </GlobalProvider>
     );

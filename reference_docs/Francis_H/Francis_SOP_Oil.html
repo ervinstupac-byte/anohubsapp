@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Hydraulic Fluid Management</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .formula-box {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Critical SOP: Hydraulic Fluid Management</h1>
+            <h2 data-i18n="subtitle">Viscosity, Temperature & Hygiene Standards</h2>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <!-- INTRO MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="silt_threat">⚠️ THE SILT THREAT</h3>
+            <p><strong data-i18n="mechanism">Mechanism:</strong> <span data-i18n="mech_desc">Micro-particles
+                    (quartz/silt) suspended in oil act like sandpaper on valve spools.</span></p>
+            <ul>
+                <li><strong data-i18n="consq">Consequence:</strong> <span data-i18n="consq_desc">"Stiction" (Static
+                        Friction). Valve blocks, then releases suddenly.</span></li>
+                <li><strong data-i18n="danger">Danger:</strong> <span data-i18n="danger_desc">This unpredictable
+                        movement destroys closing time logic, leading to <strong>Hydraulic Hammer</strong>.</span></li>
+            </ul>
+            <div class="formula-box">
+                Risk: P = ρ · c · Δv (Rapid Δv = Pipe Burst)
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="sop1_title">SOP 1: Fluid Specification Standards</div>
+        <div class="module technical">
+            <p data-i18n="fluid_intro">Not all hydraulic oil is equal. You must match fluid to system pressure.</p>
+
+            <h3 data-i18n="visc_select">1.1 Viscosity & Class Selection</h3>
+            <ul>
+                <li><strong data-i18n="role">Role:</strong> <span data-i18n="role_desc">Oil must transmit power,
+                        lubricate moving parts, and dissipate heat.</span></li>
+                <li><strong data-i18n="rule">Selection Rule:</strong>
+                    <ul>
+                        <li data-i18n="low_press"><strong>Pressure &le; 12.5 MPa:</strong> Use <strong>L-HL</strong>
+                            (Oxidation & Rust protection).</li>
+                        <li data-i18n="high_press"><strong>Pressure > 12.5 MPa:</strong> Use <strong>L-HM</strong>
+                            (Anti-wear additives mandatory).</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop2_title">SOP 2: Hygiene & Filtration Protocol</div>
+        <div class="module technical">
+            <p data-i18n="filter_intro">Filtration system (kidney loop) or high-quality pressure filters are the only
+                defense against silt.</p>
+
+            <h3 data-i18n="monthly_chk">2.1 Monthly Filter Check</h3>
+            <ol>
+                <li><strong data-i18n="insp">Inspection:</strong> <span data-i18n="insp_desc">Check "Differential
+                        Pressure" (Delta-P) indicator on filter housing.</span></li>
+                <li><strong data-i18n="trigger">Trigger:</strong> <span data-i18n="trigger_desc">If indicator enters
+                        <strong>RED zone</strong> (typically > 3-5 bar drop), element is saturated.</span></li>
+                <li><strong data-i18n="action">Action:</strong> <span data-i18n="action_desc">Replace immediately. Do
+                        not clean disposable elements.</span></li>
+            </ol>
+
+            <h3 data-i18n="annual_lab">2.2 Annual Lab Analysis (ISO 4406)</h3>
+            <ul>
+                <li><strong data-i18n="sample">Sample:</strong> <span data-i18n="sample_desc">Take 100ml from middle of
+                        tank (warm oil).</span></li>
+                <li><strong data-i18n="analyze">Analyze For:</strong>
+                    <ol>
+                        <li><strong data-i18n="part_count">Particle Count:</strong> <span data-i18n="target_iso">Target
+                                ISO 18/16/13.</span></li>
+                        <li><strong data-i18n="water_cont">Water Content:</strong> <span data-i18n="max_ppm">Max 500
+                                ppm.</span></li>
+                        <li><strong data-i18n="tan">TAN (Total Acid Number):</strong> <span
+                                data-i18n="oxid_chk">Oxidation check.</span></li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop3_title">SOP 3: Temperature Operating Window</div>
+        <div class="module diagnostic">
+            <p data-i18n="temp_intro">Oil viscosity changes with heat. Too hot = too thin (leakage). Too cold = too
+                thick (cavitation/sluggish).</p>
+            <ul>
+                <li><strong data-i18n="gold_win">Golden Window:</strong> <span data-i18n="gold_desc">Maintain bearing
+                        and tank temperature between <strong>18°C and 60°C</strong>.</span></li>
+                <li><strong data-i18n="cold_start">Cold Start:</strong> <span data-i18n="cold_desc">If temp &lt; 15°C,
+                        use tank heaters before starting pumps.</span></li>
+                <li><strong data-i18n="overheat">Overheating:</strong> <span data-i18n="overheat_desc">If temp > 60°C,
+                        oil degrades rapidly (oxidation doubles every 10°C). Check cooling water flow.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="audit_table">Technical Audit Table</div>
+        <div class="module">
+            <p data-i18n="audit_intro">Use this table for regular rounds.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="param">Parameter</th>
+                        <th data-i18n="freq">Frequency</th>
+                        <th data-i18n="method">Method / Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-i18n="oil_lvl"><strong>Oil Level</strong></td>
+                        <td data-i18n="daily">Daily</td>
+                        <td data-i18n="lvl_act">Check sight glass. Top up if below halfway.</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="filt_stat"><strong>Filter Status</strong></td>
+                        <td data-i18n="monthly">Monthly</td>
+                        <td data-i18n="filt_act">Check Delta-P indicator. Replace if Red.</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="h2o_cont"><strong>Water Contamination</strong></td>
+                        <td data-i18n="annually">Annually</td>
+                        <td data-i18n="h2o_act">Lab Analysis or "Crackle Test" on hot plate.</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="temp"><strong>Temperature</strong></td>
+                        <td data-i18n="daily">Daily</td>
+                        <td data-i18n="temp_act">Log HPU & Bearing temp. Target: 18°C - 60°C.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Critical SOP: Hydraulic Fluid Management",
+                subtitle: "Viscosity, Temperature & Hygiene Standards",
+                silt_threat: "⚠️ THE SILT THREAT",
+                mechanism: "Mechanism:",
+                mech_desc: "Micro-particles (quartz/silt) suspended in oil act like sandpaper on valve spools.",
+                consq: "Consequence:",
+                consq_desc: "\"Stiction\" (Static Friction). Valve blocks, then releases suddenly.",
+                danger: "Danger:",
+                danger_desc: "This unpredictable movement destroys closing time logic, leading to <strong>Hydraulic Hammer</strong>.",
+                sop1_title: "SOP 1: Fluid Specification Standards",
+                fluid_intro: "Not all hydraulic oil is equal. You must match fluid to system pressure.",
+                visc_select: "1.1 Viscosity & Class Selection",
+                role: "Role:",
+                role_desc: "Oil must transmit power, lubricate moving parts, and dissipate heat.",
+                rule: "Selection Rule:",
+                low_press: "<strong>Pressure &le; 12.5 MPa:</strong> Use <strong>L-HL</strong> (Oxidation & Rust protection).",
+                high_press: "<strong>Pressure > 12.5 MPa:</strong> Use <strong>L-HM</strong> (Anti-wear additives mandatory).",
+                sop2_title: "SOP 2: Hygiene & Filtration Protocol",
+                filter_intro: "Filtration system (kidney loop) or high-quality pressure filters are the only defense against silt.",
+                monthly_chk: "2.1 Monthly Filter Check",
+                insp: "Inspection:",
+                insp_desc: "Check \"Differential Pressure\" (Delta-P) indicator on filter housing.",
+                trigger: "Trigger:",
+                trigger_desc: "If indicator enters <strong>RED zone</strong> (typically > 3-5 bar drop), element is saturated.",
+                action: "Action:",
+                action_desc: "Replace immediately. Do not clean disposable elements.",
+                annual_lab: "2.2 Annual Lab Analysis (ISO 4406)",
+                sample: "Sample:",
+                sample_desc: "Take 100ml from middle of tank (warm oil).",
+                analyze: "Analyze For:",
+                part_count: "Particle Count:",
+                target_iso: "Target ISO 18/16/13.",
+                water_cont: "Water Content:",
+                max_ppm: "Max 500 ppm.",
+                tan: "TAN (Total Acid Number):",
+                oxid_chk: "Oxidation check.",
+                sop3_title: "SOP 3: Temperature Operating Window",
+                temp_intro: "Oil viscosity changes with heat. Too hot = too thin (leakage). Too cold = too thick (cavitation/sluggish).",
+                gold_win: "Golden Window:",
+                gold_desc: "Maintain bearing and tank temperature between <strong>18°C and 60°C</strong>.",
+                cold_start: "Cold Start:",
+                cold_desc: "If temp &lt; 15°C, use tank heaters before starting pumps.",
+                overheat: "Overheating:",
+                overheat_desc: "If temp > 60°C, oil degrades rapidly (oxidation doubles every 10°C). Check cooling water flow.",
+                audit_table: "Technical Audit Table",
+                audit_intro: "Use this table for regular rounds.",
+                param: "Parameter",
+                freq: "Frequency",
+                method: "Method / Action",
+                oil_lvl: "<strong>Oil Level</strong>",
+                daily: "Daily",
+                lvl_act: "Check sight glass. Top up if below halfway.",
+                filt_stat: "<strong>Filter Status</strong>",
+                monthly: "Monthly",
+                filt_act: "Check Delta-P indicator. Replace if Red.",
+                h2o_cont: "<strong>Water Contamination</strong>",
+                annually: "Annually",
+                h2o_act: "Lab Analysis or \"Crackle Test\" on hot plate.",
+                temp: "<strong>Temperature</strong>",
+                temp_act: "Log HPU & Bearing temp. Target: 18°C - 60°C.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "Kritični SOP: Upravljanje Hidrauličnim Fluidom",
+                subtitle: "Viskozitet, Temperatura & Higijenski Standardi",
+                silt_threat: "⚠️ PRIJETNJA OD MULJA (SILT)",
+                mechanism: "Mehanizam:",
+                mech_desc: "Mikročestice (kvarc/mulj) suspendovane u ulju djeluju kao brusni papir na klipove ventila.",
+                consq: "Posljedica:",
+                consq_desc: "\"Stiction\" (Statičko Trenje). Ventil blokira, zatim naglo popusti.",
+                danger: "Opasnost:",
+                danger_desc: "Ovo nepredvidivo kretanje uništava logiku vremena zatvaranja, vodeći do <strong>Hidrauličnog Udara</strong>.",
+                sop1_title: "SOP 1: Standardi Specifikacije Fluida",
+                fluid_intro: "Nije svako hidraulično ulje isto. Morate upariti fluid sa pritiskom sistema.",
+                visc_select: "1.1 Izbor Viskoziteta & Klase",
+                role: "Uloga:",
+                role_desc: "Ulje mora prenositi snagu, podmazivati pokretne dijelove i odvoditi toplotu.",
+                rule: "Pravilo Odabira:",
+                low_press: "<strong>Pritisak &le; 12.5 MPa:</strong> Koristi <strong>L-HL</strong> (Zaštita od oksidacije i hrđe).",
+                high_press: "<strong>Pritisak > 12.5 MPa:</strong> Koristi <strong>L-HM</strong> (Anti-wear aditivi obavezni).",
+                sop2_title: "SOP 2: Protokol Higijene & Filtracije",
+                filter_intro: "Sistem filtracije (bubrežna petlja) ili visokokvalitetni potisni filteri su jedina odbrana od mulja.",
+                monthly_chk: "2.1 Mjesečna Provjera Filtera",
+                insp: "Inspekcija:",
+                insp_desc: "Provjeri indikator \"Diferencijalnog Pritiska\" (Delta-P) na kućištu filtera.",
+                trigger: "Okidač:",
+                trigger_desc: "Ako indikator uđe u <strong>CRVENU zonu</strong> (tipično > 3-5 bar pad), element je zasićen.",
+                action: "Akcija:",
+                action_desc: "Zamijeni odmah. Ne čisti jednokratne elemente.",
+                annual_lab: "2.2 Godišnja Laboratorijska Analiza (ISO 4406)",
+                sample: "Uzorak:",
+                sample_desc: "Uzmi 100ml iz sredine rezervoara (toplo ulje).",
+                analyze: "Analiziraj Za:",
+                part_count: "Broj Čestica:",
+                target_iso: "Cilj ISO 18/16/13.",
+                water_cont: "Sadržaj Vode:",
+                max_ppm: "Max 500 ppm.",
+                tan: "TAN (Ukupni Kiselinski Broj):",
+                oxid_chk: "Provjera oksidacije.",
+                sop3_title: "SOP 3: Radni Prozor Temperature",
+                temp_intro: "Viskozitet ulja se mijenja sa toplotom. Prevruće = prerijetko (curenje). Prehladno = pregusto (kavitacija/usporenost).",
+                gold_win: "Zlatni Prozor:",
+                gold_desc: "Održavaj temperaturu ležajeva i rezervoara između <strong>18°C i 60°C</strong>.",
+                cold_start: "Hladni Start:",
+                cold_desc: "Ako je temp &lt; 15°C, koristi grijače rezervoara prije starta pumpi.",
+                overheat: "Pregrijavanje:",
+                overheat_desc: "Ako je temp > 60°C, ulje degradira brzo (oksidacija se udvostručuje svakih 10°C). Provjeri protok rashladne vode.",
+                audit_table: "Tabela Tehničke Revizije",
+                audit_intro: "Koristi ovu tabelu za redovne obilaske.",
+                param: "Parametar",
+                freq: "Frekvencija",
+                method: "Metoda / Akcija",
+                oil_lvl: "<strong>Nivo Ulja</strong>",
+                daily: "Dnevno",
+                lvl_act: "Provjeri staklo. Dopuni ako je ispod sredine.",
+                filt_stat: "<strong>Status Filtera</strong>",
+                monthly: "Mjesečno",
+                filt_act: "Provjeri Delta-P indikator. Zamijeni ako je Crven.",
+                h2o_cont: "<strong>Kontaminacija Vode</strong>",
+                annually: "Godišnje",
+                h2o_act: "Lab Analiza ili \"Crackle Test\" na vrućoj ploči.",
+                temp: "<strong>Temperatura</strong>",
+                temp_act: "Bilježi temp HPU & Ležajeva. Cilj: 18°C - 60°C.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

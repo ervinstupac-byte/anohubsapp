@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: HPU & Nitrogen Systems</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .formula-box {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Critical SOP: HPU & Nitrogen Systems</h1>
+            <h2 data-i18n="subtitle">Ref: 1.3 MW Francis Units | Pressure Hygiene & ESD Protocol</h2>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <!-- SAFETY MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ HIGH PRESSURE DANGER</h3>
+            <p><strong data-i18n="danger">DANGER:</strong> <span data-i18n="danger_desc">Hydraulic oil at 100+ bar is
+                    lethal.</span></p>
+            <ul>
+                <li><strong data-i18n="de_energize">De-Energization:</strong> <span data-i18n="de_en_desc">Before any
+                        HPU disassembly, open manual ball valves to drain Accumulators back to tank. Manometer must show
+                        0 bar.</span></li>
+                <li><strong data-i18n="inject_risk">Injection Risk:</strong> <span data-i18n="inject_desc">Never use
+                        hands to check for leaks. Pressurized leak can inject oil into bloodstream.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop1_title">SOP 1: Nitrogen Accumulator Protocol</div>
+        <div class="module technical">
+            <p data-i18n="acc_desc">Accumulators are the "Battery" of the safety system. They allow MIV closing even if
+                power (pumps) fails.</p>
+
+            <h3 data-i18n="esd_title">1.1 ESD Energy Verification (Quarterly)</h3>
+            <p><strong data-i18n="objective">Objective:</strong> <span data-i18n="obj_desc">Ensure sufficient stored
+                    energy for Emergency Shutdown (ESD).</span></p>
+            <ol>
+                <li><strong data-i18n="isolation">Isolation and Drainage:</strong> <span data-i18n="iso_desc">Isolate
+                        one accumulator bank. Drain oil side to tank.</span></li>
+                <li><strong data-i18n="connect">Connect Kit:</strong> <span data-i18n="conn_desc">Attach nitrogen
+                        charging kit to top bladder valve.</span></li>
+                <li><strong data-i18n="meas_p0">Measure Pre-Charge (P0):</strong>
+                    <ul>
+                        <li data-i18n="p0_rule">P0 should be approx. <strong>90% of Minimum Operating Pressure
+                                (Pmin)</strong>.</li>
+                        <li data-i18n="p0_ex"><em>Example:</em> If MIV needs 80 bar to close, P0 should be ~72 bar.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="pass_crit">Pass Criteria:</strong> <span data-i18n="pass_desc">Pressure > 90% of
+                        Target.</span></li>
+                <li><strong data-i18n="fail_crit">Fail Criteria:</strong> <span data-i18n="fail_desc">Bladder empty or
+                        collapsed. Recharge immediately.</span></li>
+            </ol>
+            <div class="module diagnostic">
+                <strong data-i18n="tech_note">💡 Technical Note:</strong> <span data-i18n="tech_note_desc">If nitrogen
+                    requires frequent recharging, the rubber bladder is likely porous and needs replacement.</span>
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="sop2_title">SOP 2: Oil Hygiene Standards</div>
+        <div class="module technical">
+            <p data-i18n="sludge_desc">Sludge is the enemy of hydraulic precision. "Stiction" in valves causes jerky MIV
+                movement.</p>
+
+            <h3 data-i18n="iso_prot">2.1 ISO Cleanliness Protocol</h3>
+            <ul>
+                <li><strong data-i18n="oil_type">Oil Type:</strong> <span data-i18n="type_desc">Use only high-quality
+                        <strong>L-HL</strong> or <strong>L-HM</strong> hydraulic oil (ISO VG 46/68).</span></li>
+                <li><strong data-i18n="clean_target">Target Cleanliness:</strong> <span data-i18n="iso_target">maintain
+                        <strong>ISO 4406 18/16/13</strong> or better.</span></li>
+                <li><strong data-i18n="sampling">Sampling:</strong> <span data-i18n="samp_desc">Take samples from middle
+                        zone of tank (not bottom sludge) annually.</span></li>
+            </ul>
+
+            <h3 data-i18n="filter_repl">2.2 High Pressure Filter Replacement</h3>
+            <ol>
+                <li data-i18n="check_ind">Check "Clogging Indicator" on pressure filter housing daily.</li>
+                <li data-i18n="red_flag"><strong>Red Flag = Stop & Replace.</strong> Do not bypass.</li>
+                <li><strong data-i18n="procedure">Procedure:</strong>
+                    <ul>
+                        <li data-i18n="step_1">Switch to duplex standby filter (if exists) or shutdown HPU.</li>
+                        <li data-i18n="step_2">Bleed pressure. Unscrew bowl.</li>
+                        <li data-i18n="step_3">Install new cartridge (Do not clean disposable elements).</li>
+                        <li data-i18n="step_4">Check O-ring condition.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="sop3_title">SOP 3: Hydraulic Hammer & Stroke Time</div>
+        <div class="module critical">
+            <p data-i18n="hammer_desc">Dirty oil leads to valve sticking. If valve sticks then releases suddenly, MIV
+                can slam shut.</p>
+
+            <h3 data-i18n="zhuk_title">3.1 Zhukovsky Equation (Water Hammer)</h3>
+            <div class="formula-box">
+                ΔP = ρ · c · Δv
+            </div>
+            <ul>
+                <li><strong>ΔP:</strong> <span data-i18n="dp_desc">Pressure Rise ("Hammer").</span></li>
+                <li><strong>ρ (Rho):</strong> <span data-i18n="rho_desc">Water density.</span></li>
+                <li><strong>c:</strong> <span data-i18n="c_desc">Speed of sound in water (~1200 m/s).</span></li>
+                <li><strong>Δv:</strong> <span data-i18n="dv_desc">Change in velocity (Water stop).</span></li>
+            </ul>
+
+            <h3 data-i18n="hygiene_link">3.2 Link to Hygiene</h3>
+            <p><strong data-i18n="scenario">Scenario:</strong> <span data-i18n="scen_desc">Sludge causes proportional
+                    valve to stick. MIV doesn't move 5 seconds, then snaps (closes) in 1 second.</span></p>
+            <ul>
+                <li><strong data-i18n="result">Result:</strong> <span data-i18n="res_desc">$\Delta v$ becomes
+                        instantaneous. $\Delta P$ spikes to 50+ bar.</span></li>
+                <li><strong data-i18n="conseq">Consequence:</strong> <span data-i18n="cons_desc">Penstock rupture or
+                        spiral case fracture.</span></li>
+                <li><strong data-i18n="prevent">Prevention:</strong> <span data-i18n="prev_desc">Clean oil ensures
+                        smooth, linear actuation (e.g. controlled 40-second closure).</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="checklist">Checklist</div>
+        <div class="module">
+            <ul>
+                <li><strong data-i18n="quarterly">Quarterly:</strong> <span data-i18n="check_nitro">Check Nitrogen
+                        Pre-Charge.</span></li>
+                <li><strong data-i18n="daily">Daily:</strong> <span data-i18n="check_filt">Check Filter Clogging
+                        Indicators.</span></li>
+                <li><strong data-i18n="annually">Annually:</strong> <span data-i18n="lab_anal">Lab analysis of L-HM Oil
+                        (ISO 4406).</span></li>
+                <li><strong data-i18n="safe_note">Safety:</strong> <span data-i18n="safe_desc">Never work on pressurized
+                        accumulators.</span></li>
+            </ul>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Critical SOP: HPU & Nitrogen Systems",
+                subtitle: "Ref: 1.3 MW Francis Units | Pressure Hygiene & ESD Protocol",
+                safety_title: "⚠️ HIGH PRESSURE DANGER",
+                danger: "DANGER:",
+                danger_desc: "Hydraulic oil at 100+ bar is lethal.",
+                de_energize: "De-Energization:",
+                de_en_desc: "Before any HPU disassembly, open manual ball valves to drain Accumulators back to tank. Manometer must show 0 bar.",
+                inject_risk: "Injection Risk:",
+                inject_desc: "Never use hands to check for leaks. Pressurized leak can inject oil into bloodstream.",
+                sop1_title: "SOP 1: Nitrogen Accumulator Protocol",
+                acc_desc: "Accumulators are the \"Battery\" of the safety system. They allow MIV closing even if power (pumps) fails.",
+                esd_title: "1.1 ESD Energy Verification (Quarterly)",
+                objective: "Objective:",
+                obj_desc: "Ensure sufficient stored energy for Emergency Shutdown (ESD).",
+                isolation: "Isolation and Drainage:",
+                iso_desc: "Isolate one accumulator bank. Drain oil side to tank.",
+                connect: "Connect Kit:",
+                conn_desc: "Attach nitrogen charging kit to top bladder valve.",
+                meas_p0: "Measure Pre-Charge (P0):",
+                p0_rule: "P0 should be approx. <strong>90% of Minimum Operating Pressure (Pmin)</strong>.",
+                p0_ex: "<em>Example:</em> If MIV needs 80 bar to close, P0 should be ~72 bar.",
+                pass_crit: "Pass Criteria:",
+                pass_desc: "Pressure > 90% of Target.",
+                fail_crit: "Fail Criteria:",
+                fail_desc: "Bladder empty or collapsed. Recharge immediately.",
+                tech_note: "💡 Technical Note:",
+                tech_note_desc: "If nitrogen requires frequent recharging, the rubber bladder is likely porous and needs replacement.",
+                sop2_title: "SOP 2: Oil Hygiene Standards",
+                sludge_desc: "Sludge is the enemy of hydraulic precision. \"Stiction\" in valves causes jerky MIV movement.",
+                iso_prot: "2.1 ISO Cleanliness Protocol",
+                oil_type: "Oil Type:",
+                type_desc: "Use only high-quality <strong>L-HL</strong> or <strong>L-HM</strong> hydraulic oil (ISO VG 46/68).",
+                clean_target: "Target Cleanliness:",
+                iso_target: "maintain <strong>ISO 4406 18/16/13</strong> or better.",
+                sampling: "Sampling:",
+                samp_desc: "Take samples from middle zone of tank (not bottom sludge) annually.",
+                filter_repl: "2.2 High Pressure Filter Replacement",
+                check_ind: "Check \"Clogging Indicator\" on pressure filter housing daily.",
+                red_flag: "Red Flag = Stop & Replace. Do not bypass.",
+                procedure: "Procedure:",
+                step_1: "Switch to duplex standby filter (if exists) or shutdown HPU.",
+                step_2: "Bleed pressure. Unscrew bowl.",
+                step_3: "Install new cartridge (Do not clean disposable elements).",
+                step_4: "Check O-ring condition.",
+                sop3_title: "SOP 3: Hydraulic Hammer & Stroke Time",
+                hammer_desc: "Dirty oil leads to valve sticking. If valve sticks then releases suddenly, MIV can slam shut.",
+                zhuk_title: "3.1 Zhukovsky Equation (Water Hammer)",
+                dp_desc: "Pressure Rise (\"Hammer\").",
+                rho_desc: "Water density.",
+                c_desc: "Speed of sound in water (~1200 m/s).",
+                dv_desc: "Change in velocity (Water stop).",
+                hygiene_link: "3.2 Link to Hygiene",
+                scenario: "Scenario:",
+                scen_desc: "Sludge causes proportional valve to stick. MIV doesn't move 5 seconds, then snaps (closes) in 1 second.",
+                result: "Result:",
+                res_desc: "$\Delta v$ becomes instantaneous. $\Delta P$ spikes to 50+ bar.",
+                conseq: "Consequence:",
+                cons_desc: "Penstock rupture or spiral case fracture.",
+                prevent: "Prevention:",
+                prev_desc: "Clean oil ensures smooth, linear actuation (e.g. controlled 40-second closure).",
+                checklist: "Checklist",
+                quarterly: "Quarterly:",
+                check_nitro: "Check Nitrogen Pre-Charge.",
+                daily: "Daily:",
+                check_filt: "Check Filter Clogging Indicators.",
+                annually: "Annually:",
+                lab_anal: "Lab analysis of L-HM Oil (ISO 4406).",
+                safe_note: "Safety:",
+                safe_desc: "Never work on pressurized accumulators.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "Kritični SOP: HPU & Azotni Sistemi",
+                subtitle: "Ref: 1.3 MW Francis Agregati | Higijena Pritiska & ESD Protokol",
+                safety_title: "⚠️ OPASNOST VISOKOG PRITISKA",
+                danger: "OPASNOST:",
+                danger_desc: "Hidraulično ulje na 100+ bara je smrtonosno.",
+                de_energize: "De-Energizacija:",
+                de_en_desc: "Prije bilo kakvog rastavljanja HPU-a, otvorite ručne kuglaste ventile da drenažu Akumulatora nazad u rezervoar. Manometar mora pokazivati 0 bara.",
+                inject_risk: "Rizik Ubrizgavanja:",
+                inject_desc: "Nikada ne koristite ruke za provjeru curenja. Curenje pod pritiskom može ubrizgati ulje u krvotok.",
+                sop1_title: "SOP 1: Protokol Azotnih Akumulatora",
+                acc_desc: "Akumulatori su \"Baterija\" sigurnosnog sistema. Omogućavaju zatvaranje GUV-a čak i ako struja (pumpe) zakaže.",
+                esd_title: "1.1 ESD Verifikacija Energije (Kvartalno)",
+                objective: "Cilj:",
+                obj_desc: "Osigurati dovoljno pohranjene energije za Hitno Zaustavljanje (ESD).",
+                isolation: "Izolacija i Drenaža:",
+                iso_desc: "Izolujte jednu bateriju akumulatora. Drenirajte stranu ulja u rezervoar.",
+                connect: "Spojite Kit:",
+                conn_desc: "Priključite komplet za punjenje azota na gornji ventil mijeha.",
+                meas_p0: "Izmjeri Pred-Punjenje (P0):",
+                p0_rule: "P0 treba biti cca. <strong>90% Minimalnog Radnog Pritiska (Pmin)</strong>.",
+                p0_ex: "<em>Primjer:</em> Ako GUV treba 80 bara za zatvaranje, P0 treba biti ~72 bara.",
+                pass_crit: "Kriterij Prolaza:",
+                pass_desc: "Pritisak > 90% Ciljanog.",
+                fail_crit: "Kriterij Pada:",
+                fail_desc: "Mijeh je prazan ili kolabirao. Odmah dopuniti.",
+                tech_note: "💡 Tehnička Bilješka:",
+                tech_note_desc: "Ako azot zahtijeva često dopunjavanje, gumeni mijeh je vjerovatno porozan i treba zamjenu.",
+                sop2_title: "SOP 2: Standardi Higijene Ulja",
+                sludge_desc: "Mulj je neprijatelj hidrauličke preciznosti. \"Stiction\" (Statičko Trenje) u ventilima uzrokuje trzavo kretanje GUV-a.",
+                iso_prot: "2.1 ISO Protokol Čistoće",
+                oil_type: "Tip Ulja:",
+                type_desc: "Koristite samo visokokvalitetno <strong>L-HL</strong> ili <strong>L-HM</strong> hidraulično ulje (ISO VG 46/68).",
+                clean_target: "Ciljana Čistoća:",
+                iso_target: "održavati <strong>ISO 4406 18/16/13</strong> ili bolje.",
+                sampling: "Uzorkovanje:",
+                samp_desc: "Uzimajte uzorke iz srednje zone rezervoara (ne talog sa dna) godišnje.",
+                filter_repl: "2.2 Zamjena Filtera Visokog Pritiska",
+                check_ind: "Provjerite \"Indikator Začepljenja\" na kućištu tlačnog filtera dnevno.",
+                red_flag: "Crvena Zastavica = Stop & Zamijeni. Ne premoštavajte (bypass).",
+                procedure: "Procedura:",
+                step_1: "Prebacite na dupleks standby filter (ako postoji) ili ugasite HPU.",
+                step_2: "Odzračite pritisak. Odvrnite čašu.",
+                step_3: "Instalirajte novi uložak (Ne čistite jednokratne elemente).",
+                step_4: "Provjerite stanje O-ringa.",
+                sop3_title: "SOP 3: Hidraulički Udar & Vrijeme Hoda",
+                hammer_desc: "Prljavo ulje dovodi do lijepljenja ventila. Ako ventil zaglavi pa naglo otpusti, GUV se može naglo zatvoriti.",
+                zhuk_title: "3.1 Žukovski Jednačina (Hidraulički Udar)",
+                dp_desc: "Porast Pritiska (\"Udar\").",
+                rho_desc: "Gustoća vode.",
+                c_desc: "Brzina zvuka u vodi (~1200 m/s).",
+                dv_desc: "Promjena brzine (Zaustavljanje vode).",
+                hygiene_link: "3.2 Veza sa Higijenom",
+                scenario: "Scenario:",
+                scen_desc: "Mulj uzrokuje da proporcionalni ventil zaglavi. GUV se ne pomjera 5 sekundi, zatim pukne (zatvori) za 1 sekundu.",
+                result: "Rezultat:",
+                res_desc: "$\Delta v$ postaje trenutan. $\Delta P$ skače na 50+ bara.",
+                conseq: "Posljedica:",
+                cons_desc: "Pucanje cjevovoda ili lom spirale.",
+                prevent: "Prevencija:",
+                prev_desc: "Čisto ulje osigurava glatku, linearnu aktuaciju (npr. kontrolisano zatvaranje od 40 sekundi).",
+                checklist: "Kontrolna Lista",
+                quarterly: "Kvartalno:",
+                check_nitro: "Provjeri Pred-Punjenje Azota.",
+                daily: "Dnevno:",
+                check_filt: "Provjeri Indikatore Začepljenja Filtera.",
+                annually: "Godišnje:",
+                lab_anal: "Lab analiza L-HM Ulja (ISO 4406).",
+                safe_note: "Sigurnost:",
+                safe_desc: "Nikada ne radite na presuriziranim akumulatorima.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+
+</body>
+
+</html>

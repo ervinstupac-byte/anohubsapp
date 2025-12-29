@@ -30,7 +30,8 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
         location: '',
         capacity: '',
         units: '',
-        criticalKpi: 'Availability'
+        criticalKpi: 'Availability',
+        specs: {} as any
     });
 
     if (!isOpen) return null;
@@ -64,7 +65,8 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                 location: formData.location,
                 coordinates: [45.0 + Math.random(), 16.0 + Math.random()], // Simulation
                 capacity: capacityValue,
-                status: 'Operational'
+                status: 'Operational',
+                specs: formData.specs
             });
 
             showToast(t('assetWizard.success', 'Asset registered successfully.'), 'success');
@@ -143,6 +145,79 @@ export const AssetRegistrationWizard: React.FC<AssetRegistrationWizardProps> = (
                             placeholder="1"
                             fullWidth
                         />
+
+                        {/* FRANCIS HORIZONTAL SPECIFIC FIELDS */}
+                        {specificType === 'Francis' && (
+                            <div className="p-4 bg-slate-800/50 rounded-lg border border-cyan-900/50 space-y-4 animate-in slide-in-from-right-4">
+                                <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-widest border-b border-cyan-900/30 pb-2">
+                                    Francis Horizontal Specs
+                                </h4>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <ModernInput
+                                        label="Spiral Case Pressure (bar)"
+                                        type="number"
+                                        placeholder="e.g. 16.5"
+                                        className="bg-slate-900"
+                                        onChange={(e) => setFormData(prev => ({
+                                            ...prev,
+                                            specs: { ...prev.specs, spiralCasePressure: parseFloat(e.target.value) }
+                                        }))}
+                                    />
+                                    <ModernInput
+                                        label="Guide Vane Count"
+                                        type="number"
+                                        placeholder="e.g. 12"
+                                        className="bg-slate-900"
+                                        onChange={(e) => setFormData(prev => ({
+                                            ...prev,
+                                            specs: { ...prev.specs, guideVaneCount: parseInt(e.target.value) }
+                                        }))}
+                                    />
+                                    <ModernInput
+                                        label="Runner Diameter (mm)"
+                                        type="number"
+                                        placeholder="e.g. 850"
+                                        className="bg-slate-900"
+                                        onChange={(e) => setFormData(prev => ({
+                                            ...prev,
+                                            specs: { ...prev.specs, runnerDiameter: parseFloat(e.target.value) }
+                                        }))}
+                                    />
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-xs font-bold text-slate-400">Draft Tube Vacuum (bar)</label>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            placeholder="-0.3"
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                                            onChange={(e) => setFormData(prev => ({
+                                                ...prev,
+                                                specs: { ...prev.specs, draftTubeVacuum: parseFloat(e.target.value) }
+                                            }))}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xs font-bold text-slate-400">Bearing Type</label>
+                                    <div className="flex gap-2">
+                                        {['Roller', 'Slide'].map(bt => (
+                                            <button
+                                                key={bt}
+                                                onClick={() => setFormData(prev => ({
+                                                    ...prev,
+                                                    specs: { ...prev.specs, bearingType: bt }
+                                                }))}
+                                                className={`flex-1 py-2 text-xs font-bold uppercase rounded border ${formData.specs?.bearingType === bt ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500' : 'bg-slate-900 text-slate-500 border-slate-700 hover:border-slate-500'}`}
+                                            >
+                                                {bt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 );
             case 2: // Risk / KPI (Conceptual)

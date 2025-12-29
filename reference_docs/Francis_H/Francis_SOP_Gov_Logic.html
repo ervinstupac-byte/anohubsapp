@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: GOVERNOR LOGIC | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #10b981;
+            /* Emerald for Advanced Technical Cluster */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #064e3b 0%, #0c0a09 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: black !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .droop-line {
+            height: 2px;
+            background: #10b981;
+            position: relative;
+            transform-origin: left center;
+        }
+
+        .tech-table th {
+            background: #064e3b;
+            color: white;
+            padding: 12px;
+            font-size: 10px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .tech-table td {
+            padding: 12px;
+            font-size: 10px;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-emerald-600 rounded-lg border border-emerald-400/30 text-white">
+                    <i data-lucide="cpu" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-emerald-900/40 text-emerald-300 text-[10px] font-bold border border-emerald-800 uppercase">SOP-CTRL-019</span>
+                        <span class="text-[10px] text-stone-500 uppercase font-bold">REV 3.3</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        GOVERNOR LOGIC & FREQUENCY</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-emerald-50 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-emerald-50 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-emerald-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8 space-y-8">
+
+        <!-- 1. Sync Risk Warning -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-red-600 bg-red-950/5">
+            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8 flex items-center gap-3"
+                data-i18n="crit_title">
+                <i data-lucide="zap-off" class="text-red-500"></i> GRID SYNCHRONIZATION RISK
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-5 bg-black/40 border border-red-900/30 rounded-xl">
+                    <strong class="text-red-400 text-[10px] uppercase font-black block mb-2" data-i18n="crit_1_head">NO
+                        LIVE ADJUSTMENTS</strong>
+                    <p class="text-[10px] text-slate-400" data-i18n="crit_1">Never adjust Droop settings while synced to
+                        the grid. Immediate load shock or trip will occur.</p>
+                </div>
+                <div class="p-5 bg-black/40 border border-red-900/30 rounded-xl">
+                    <strong class="text-red-400 text-[10px] uppercase font-black block mb-2"
+                        data-i18n="crit_2_head">ISLAND MODE</strong>
+                    <p class="text-[10px] text-slate-400" data-i18n="crit_2">Manual intervention is strictly required
+                        before separating from the national grid. No auto-switching permitted.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Droop Logic -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-emerald-600">
+            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="s2_title">DROOP LOGIC
+                (THE 4-6% RULE)</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center mb-8">
+                <div>
+                    <p class="text-[11px] text-slate-400 leading-relaxed mb-6" data-i18n="droop_desc">Droop determines
+                        how much the turbine helps the grid. A 4% droop means the unit changes 100% of its load for a
+                        2Hz frequency shift.</p>
+                    <div class="p-5 bg-slate-900/60 rounded-xl border border-slate-800 font-mono">
+                        <div class="text-[9px] text-slate-500 uppercase font-black mb-2">Formula</div>
+                        <div class="text-[12px] text-emerald-500 font-bold tracking-tighter">Droop (%) = (Δf / f_nom) x
+                            100</div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-xl">
+                        <span class="text-emerald-400 text-[9px] font-black uppercase block mb-1"
+                            data-i18n="ex_title">EXAMPLE (4%)</span>
+                        <p class="text-[10px] text-slate-400" data-i18n="ex_4">At 48.0 Hz unit goes 100% Load. At 52.0
+                            Hz unit goes 0% Load.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-hidden rounded-xl border border-emerald-900/30">
+                <table class="w-full tech-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="th_m">OPERATING MODE</th>
+                            <th data-i18n="th_s">SETTING</th>
+                            <th data-i18n="th_p">PURPOSE</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-black/20">
+                        <tr>
+                            <td class="text-emerald-400 font-bold" data-i18n="m_grid">Parallel (Grid Sync)</td>
+                            <td class="text-white font-black">4 - 6%</td>
+                            <td data-i18n="r_grid">Stable load sharing with national grid.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-emerald-400 font-bold" data-i18n="m_unit">Parallel (Unit 1+2)</td>
+                            <td class="text-white font-black">MATCHED</td>
+                            <td data-i18n="r_unit">Ensures symmetric load distribution.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-emerald-400 font-bold" data-i18n="m_isl">Island Mode (Solo)</td>
+                            <td class="text-emerald-500 font-black">0% (Iso)</td>
+                            <td data-i18n="r_isl">Unit controls local frequency precisely.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3. Vortex & Dead-Time -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-emerald-600">
+            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="s3_title">ROUGH ZONES &
+                DEAD-TIME</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h4 class="text-emerald-400 text-[10px] font-black uppercase tracking-widest" data-i18n="h3_1">
+                        VORTEX ROUGH ZONES</h4>
+                    <p class="text-[10px] text-slate-500 italic mb-4" data-i18n="s3_desc">Draft tube vortex induces
+                        frequency hunting (±0.1 Hz) regardless of PID tuning.</p>
+                    <ul class="space-y-2">
+                        <li
+                            class="flex justify-between p-3 bg-red-950/20 border border-red-900/30 rounded-lg text-[10px]">
+                            <span class="text-white font-bold">0 → 0.5 MW</span>
+                            <span class="text-red-500 font-black uppercase" data-i18n="v_crit">CRITICAL VORTEX</span>
+                        </li>
+                        <li
+                            class="flex justify-between p-3 bg-emerald-950/20 border border-emerald-900/30 rounded-lg text-[10px]">
+                            <span class="text-white font-bold">0.9 → 1.3 MW</span>
+                            <span class="text-emerald-500 font-black uppercase" data-i18n="v_stable">STABLE ZONE</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-black/40 border border-slate-800 p-6 rounded-2xl">
+                    <h4 class="text-white text-[10px] font-black uppercase mb-4" data-i18n="h3_2">DEAD-TIME ANALYSIS
+                    </h4>
+                    <p class="text-[10px] text-slate-400 mb-6" data-i18n="s4_desc">Lag between frequency drop and guide
+                        vane corrective stroke.</p>
+                    <div class="flex items-end justify-between gap-2 h-20 mb-4">
+                        <div class="w-1/3 bg-emerald-500/20 border-t-4 border-emerald-500 p-2 text-center rounded-t-lg">
+                            <span class="text-[10px] font-black text-emerald-500">&lt;500ms</span>
+                        </div>
+                        <div class="w-1/3 bg-amber-500/20 border-t-4 border-amber-500 p-2 text-center rounded-t-lg">
+                            <span class="text-[10px] font-black text-amber-500">800ms</span>
+                        </div>
+                        <div class="w-1/3 bg-red-500/20 border-t-4 border-red-500 p-2 text-center rounded-t-lg">
+                            <span class="text-[10px] font-black text-red-500">&gt;800ms</span>
+                        </div>
+                    </div>
+                    <p class="text-[9px] text-slate-500 text-center" data-i18n="s4_note">If Poor (>800ms): Check oil
+                        aeration or linkage backlash.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "GOVERNOR LOGIC & FREQUENCY",
+                return: "BACK TO DASHBOARD",
+                crit_title: "GRID SYNCHRONIZATION RISK",
+                crit_1_head: "NO LIVE ADJUSTMENTS",
+                crit_1: "Never adjust Droop settings while synced to the grid. Immediate load shock or trip will occur.",
+                crit_2_head: "ISLAND MODE",
+                crit_2: "Manual intervention is strictly required before separating from the national grid. No auto-switching permitted.",
+                s2_title: "DROOP LOGIC (THE 4-6% RULE)",
+                droop_desc: "Droop determines how much the turbine helps the grid. A 4% droop means the unit changes 100% of its load for a 2Hz frequency shift.",
+                ex_title: "EXAMPLE (4%)",
+                ex_4: "At 48.0 Hz unit goes 100% Load. At 52.0 Hz unit goes 0% Load.",
+                th_m: "OPERATING MODE", th_s: "SETTING", th_p: "PURPOSE",
+                m_grid: "Parallel (Grid Sync)", r_grid: "Stable load sharing with national grid.",
+                m_unit: "Parallel (Unit 1+2)", r_unit: "Ensures symmetric load distribution.",
+                m_isl: "Island Mode (Solo)", r_isl: "Unit controls local frequency precisely.",
+                s3_title: "ROUGH ZONES & DEAD-TIME",
+                h3_1: "VORTEX ROUGH ZONES",
+                s3_desc: "Draft tube vortex induces frequency hunting (±0.1 Hz) regardless of PID tuning.",
+                v_crit: "CRITICAL VORTEX",
+                v_stable: "STABLE ZONE",
+                h3_2: "DEAD-TIME ANALYSIS",
+                s4_desc: "Lag between frequency drop and guide vane corrective stroke.",
+                s4_note: "If Poor (>800ms): Check oil aeration or linkage backlash."
+            },
+            bs: {
+                title: "ODZIV REGULATORA I LOGIKA",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                crit_title: "RIZIK SINHRONIZACIJE MREŽE",
+                crit_1_head: "BEZ PODEŠAVANJA U RADU",
+                crit_1: "Nikada ne podešavajte statiku dok ste na mreži. Uzrokuje momentalni udar tereta ili ispad.",
+                crit_2_head: "OSTRVSKI RAD",
+                crit_2: "Ručna intervencija je strogo obavezna prije odvajanja od nacionalne mreže.",
+                s2_title: "LOGIKA STATIKE (PRAVILO 4-6%)",
+                droop_desc: "Statika određuje koliko turbina 'pomaže' mreži. 4% statike znači promjenu 100% snage za 2Hz frekvencije.",
+                ex_title: "PRIMJER (4%)",
+                ex_4: "Na 48.0 Hz mašina ide 100% snage. Na 52.0 Hz ide 0%.",
+                th_m: "REŽIM RADA", th_s: "POSTAVKA", th_p: "SVRHA",
+                m_grid: "Paralelno (Mreža)", r_grid: "Stabilna raspodjela tereta sa mrežom.",
+                m_unit: "Paralelno (Jedinice 1+2)", r_unit: "Osigurava simetričnu podjelu tereta.",
+                m_isl: "Ostrvski Rad (Solo)", r_isl: "Jedinica precizno kontroliše lokalnu frekvenciju.",
+                s3_title: "ZONE GRUBOG RADA I MRTVO VRIJEME",
+                h3_1: "ZONE VRTLOŽENJA",
+                s3_desc: "Vrtlog u sifonu uzrokuje 'lov' frekvencije (±0.1 Hz) bez obzira na PID.",
+                v_crit: "KRITIČNI VRTLOG",
+                v_stable: "STABILNA ZONA",
+                h3_2: "ANALIZA MRTVOG VREMENA",
+                s4_desc: "Kašnjenje između pada frekvencije i reakcije lopatica distributora.",
+                s4_note: "Ako je loše (>800ms): Provjeri aeraciju ulja ili luft u polužju."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+        setLang(localStorage.getItem('anohub_lang_pref') || 'en');
+    </script>
+</body>
+
+</html>
