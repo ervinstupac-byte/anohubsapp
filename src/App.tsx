@@ -354,7 +354,7 @@ const AppLayout: React.FC = () => {
                                     <Routes>
                                         <Route index element={<ToolboxLaunchpad />} />
                                         {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
-                                        <Route path="/francis-*" element={<FrancisRouter />} />
+                                        <Route path="/francis/*" element={<FrancisRouter />} />
                                         <Route path="profile" element={<UserProfile />} />
                                         <Route path="map" element={<GlobalMap />} />
                                         <Route path="risk-assessment" element={<QuestionnaireWrapper />} />

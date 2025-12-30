@@ -198,7 +198,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     {(selectedAsset.turbine_type === 'francis' || selectedAsset.specs?.spiralCasePressure) && (
                                         <>
                                             <GlassCard
-                                                onClick={() => navigate('/francis-diagnostics')}
+                                                onClick={() => navigate('/francis/diagnostics')}
                                                 className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
                                             >
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🩺</span>
@@ -212,7 +212,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                             </GlassCard>
 
                                             <GlassCard
-                                                onClick={() => navigate('/francis-hub')}
+                                                onClick={() => navigate('/francis/hub')}
                                                 className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2 mt-2"
                                             >
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🗺️</span>

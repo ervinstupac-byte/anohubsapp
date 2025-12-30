@@ -266,7 +266,7 @@ export const FrancisHub: React.FC = () => {
                     {/* Quick Actions */}
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button
-                            onClick={() => navigate('/francis-mission-control')}
+                            onClick={() => navigate('/francis/mission-control')}
                             className="px-5 py-3 bg-gradient-to-br from-orange-900/40 to-orange-950/60 border border-orange-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-orange-800/50 hover:to-orange-900/70 hover:border-orange-400 transition-all group shadow-lg shadow-orange-900/20"
                         >
                             <Power className="text-red-400 w-5 h-5 group-hover:scale-110 transition" />
@@ -277,7 +277,7 @@ export const FrancisHub: React.FC = () => {
                         </button>
 
                         <button
-                            onClick={() => navigate('/francis-emergency-protocols')}
+                            onClick={() => navigate('/francis/emergency-protocols')}
                             className="px-5 py-3 bg-gradient-to-br from-indigo-900/40 to-indigo-950/60 border border-indigo-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-indigo-800/50 hover:to-indigo-900/70 hover:border-indigo-400 transition-all group shadow-lg shadow-indigo-900/20"
                         >
                             <AlertTriangle className="text-orange-400 w-5 h-5 group-hover:scale-110 transition" />
@@ -288,7 +288,7 @@ export const FrancisHub: React.FC = () => {
                         </button>
 
                         <button
-                            onClick={() => navigate('/francis-flowchart-startup')}
+                            onClick={() => navigate('/francis/flowchart-startup')}
                             className="px-5 py-3 bg-gradient-to-br from-green-900/40 to-green-950/60 border border-green-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-green-800/50 hover:to-green-900/70 hover:border-green-400 transition-all group shadow-lg shadow-green-900/20"
                         >
                             <GitBranch className="text-green-400 w-5 h-5 group-hover:scale-110 transition" />
@@ -347,31 +347,31 @@ export const FrancisHub: React.FC = () => {
                         icon={AlertTriangle}
                         label={t('francis.waterHammer.title', 'Water Hammer')}
                         status={moduleStates.hpu}
-                        onClick={() => navigate('/francis-sop-water-hammer')}
+                        onClick={() => navigate('/francis/sop-water-hammer')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Power}
                         label={t('francis.emergencyProtocols.title', 'Emergency Protocols')}
-                        onClick={() => navigate('/francis-emergency-protocols')}
+                        onClick={() => navigate('/francis/emergency-protocols')}
                         href="#"
                     />
                     <ModuleLink
                         icon={ZapOff}
                         label={t('francis.loadRejection.title', 'Load Rejection Logic')}
-                        onClick={() => navigate('/francis-logic-load-rejection')}
+                        onClick={() => navigate('/francis/logic-load-rejection')}
                         href="#"
                     />
                     <ModuleLink
                         icon={GitBranch}
                         label={t('francis.startupFlowchart.title', 'Startup Flowchart')}
-                        onClick={() => navigate('/francis-flowchart-startup')}
+                        onClick={() => navigate('/francis/flowchart-startup')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Cpu}
                         label={t('francis.missionControl.title', 'Mission Control')}
-                        onClick={() => navigate('/francis-mission-control')}
+                        onClick={() => navigate('/francis/mission-control')}
                         href="#"
                     />
                 </AccordionSector>
@@ -389,70 +389,70 @@ export const FrancisHub: React.FC = () => {
                         icon={Disc}
                         label={t('francis.modules.bearings')}
                         status={moduleStates.bearings}
-                        onClick={() => navigate('/francis-sop-bearings')}
+                        onClick={() => navigate('/francis/sop-bearings')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Crosshair}
                         label={t('francis.modules.alignment')}
                         status={moduleStates.alignment}
-                        onClick={() => navigate('/francis-sop-shaft-alignment')}
+                        onClick={() => navigate('/francis/sop-shaft-alignment')}
                         href="#"
                     />
                     <ModuleLink
                         icon={ArrowRightLeft}
                         label={t('francis.thrustBalance.title', 'Thrust Balance')}
                         status={moduleStates.bearings}
-                        onClick={() => navigate('/francis-sop-thrust-balance')}
+                        onClick={() => navigate('/francis/sop-thrust-balance')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Wind}
                         label={t('francis.vortex.title', 'Vortex Control')}
                         status={moduleStates.bearings}
-                        onClick={() => navigate('/francis-sop-vortex-control')}
+                        onClick={() => navigate('/francis/sop-vortex-control')}
                         href="#"
                     />
                     <ModuleLink
                         icon={GitPullRequest}
                         label={t('francis.modules.miv')}
                         status={moduleStates.miv}
-                        onClick={() => navigate('/francis-sop-miv-distributor')}
+                        onClick={() => navigate('/francis/sop-miv-distributor')}
                         href="#"
                     />
                     <ModuleLink
                         icon={RefreshCw}
                         label={t('francis.modules.regRing', 'Regulating Ring')}
                         status={moduleStates.brakes}
-                        onClick={() => navigate('/francis-sop-regulating-ring')}
+                        onClick={() => navigate('/francis/sop-regulating-ring')}
                         href="#"
                     />
                     <ModuleLink
                         icon={LinkIcon}
                         label={t('francis.modules.linkage', 'Linkage')}
                         status={moduleStates.brakes}
-                        onClick={() => navigate('/francis-sop-linkage')}
+                        onClick={() => navigate('/francis/sop-linkage')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Wifi}
                         label={t('francis.modules.coupling', 'Coupling')}
                         status={moduleStates.alignment}
-                        onClick={() => navigate('/francis-sop-coupling')}
+                        onClick={() => navigate('/francis/sop-coupling')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Octagon}
                         label={t('francis.modules.brakes')}
                         status={moduleStates.brakes}
-                        onClick={() => navigate('/francis-sop-braking-system')}
+                        onClick={() => navigate('/francis/sop-braking-system')}
                         href="#"
                     />
                     <ModuleLink
                         icon={LifeBuoy}
                         label={t('francis.modules.recovery', 'Seal Recovery')}
                         status={moduleStates.recovery}
-                        onClick={() => navigate('/francis-sop-recovery')}
+                        onClick={() => navigate('/francis/sop-recovery')}
                         href="#"
                     />
                 </AccordionSector>
@@ -470,35 +470,35 @@ export const FrancisHub: React.FC = () => {
                         icon={Droplet}
                         label={t('francis.oilHealth.label', 'Oil Health')}
                         status={moduleStates.hpu}
-                        onClick={() => navigate('/francis-sop-oil-health')}
+                        onClick={() => navigate('/francis/sop-oil-health')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Snowflake}
                         label={t('francis.modules.cooling')}
                         status={moduleStates.cooling}
-                        onClick={() => navigate('/francis-sop-cooling-water')}
+                        onClick={() => navigate('/francis/sop-cooling-water')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Waves}
                         label={t('francis.modules.drainage')}
                         status={moduleStates.drainage}
-                        onClick={() => navigate('/francis-sop-drainage-pumps')}
+                        onClick={() => navigate('/francis/sop-drainage-pumps')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Droplet}
                         label={t('francis.modules.lube')}
                         status={moduleStates.lube}
-                        onClick={() => navigate('/francis-sop-lubrication')}
+                        onClick={() => navigate('/francis/sop-lubrication')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Lock}
                         label={t('francis.modules.hpu')}
                         status={moduleStates.hpu}
-                        onClick={() => navigate('/francis-sop-hpu')}
+                        onClick={() => navigate('/francis/sop-hpu')}
                         href="#"
                     />
                 </AccordionSector>
@@ -516,54 +516,54 @@ export const FrancisHub: React.FC = () => {
                         icon={ZapOff}
                         label={t('francis.modules.generator', 'Generator Integrity')}
                         status={moduleStates.pid}
-                        onClick={() => navigate('/francis-sop-generator-integrity')}
+                        onClick={() => navigate('/francis/sop-generator-integrity')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Activity}
                         label={t('francis.modules.elecHealth', 'Electrical Health')}
                         status={moduleStates.pid}
-                        onClick={() => navigate('/francis-sop-electrical-health')}
+                        onClick={() => navigate('/francis/sop-electrical-health')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Cpu}
                         label={t('francis.modules.pid', 'Governor PID')}
                         status={moduleStates.pid}
-                        onClick={() => navigate('/francis-sop-governor-pid')}
+                        onClick={() => navigate('/francis/sop-governor-pid')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Merge}
                         label={t('francis.modules.gridSync', 'Grid Synchronization')}
                         status={moduleStates.pid}
-                        onClick={() => navigate('/francis-sop-grid-sync')}
+                        onClick={() => navigate('/francis/sop-grid-sync')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Settings2}
                         label={t('francis.modules.distributorSync', 'Distributor Sync')}
                         status={moduleStates.miv}
-                        onClick={() => navigate('/francis-sop-distributor-sync')}
+                        onClick={() => navigate('/francis/sop-distributor-sync')}
                         href="#"
                     />
                     <ModuleLink
                         icon={BatteryCharging}
                         label={t('francis.modules.dc', 'DC Control Systems')}
                         status={moduleStates.hpu}
-                        onClick={() => navigate('/francis-sop-dc-systems')}
+                        onClick={() => navigate('/francis/sop-dc-systems')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Zap}
                         label="Excitation & AVR"
-                        onClick={() => navigate('/francis-sop-excitation')}
+                        onClick={() => navigate('/francis/sop-excitation')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Zap}
                         label="Transformer Integrity"
-                        onClick={() => navigate('/francis-sop-transformer')}
+                        onClick={() => navigate('/francis/sop-transformer')}
                         href="#"
                     />
                 </AccordionSector>
@@ -581,28 +581,28 @@ export const FrancisHub: React.FC = () => {
                         icon={Activity}
                         label={t('francis.modules.penstock', 'Penstock Integrity')}
                         status={moduleStates.penstock}
-                        onClick={() => navigate('/francis-sop-penstock')}
+                        onClick={() => navigate('/francis/sop-penstock')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Filter}
                         label={t('francis.modules.intake', 'Intake & Sediment')}
                         status={moduleStates.penstock}
-                        onClick={() => navigate('/francis-sop-intake')}
+                        onClick={() => navigate('/francis/sop-intake')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Radio}
                         label={t('francis.modules.cathodic', 'Cathodic Protection')}
                         status={moduleStates.alignment}
-                        onClick={() => navigate('/francis-sop-cathodic')}
+                        onClick={() => navigate('/francis/sop-cathodic')}
                         href="#"
                     />
                     <ModuleLink
                         icon={Filter}
                         label={t('francis.modules.auxiliary', 'Auxiliary Systems')}
                         status={moduleStates.drainage}
-                        onClick={() => navigate('/francis-sop-auxiliary')}
+                        onClick={() => navigate('/francis/sop-auxiliary')}
                         href="#"
                     />
                 </AccordionSector>
