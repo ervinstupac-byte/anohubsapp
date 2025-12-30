@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMaintenance, MaintenanceTask } from '../contexts/MaintenanceContext';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertCircle, Camera, Upload, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,24 @@ export const MaintenanceLogbook: React.FC = () => {
     const { tasks, createLogEntry, validateEntry } = useMaintenance();
     const { t } = useTranslation();
     const [selectedTask, setSelectedTask] = useState<string | null>(null);
+
+    // Synapse Integration: Handle incoming observations from SOPs
+    const location = useLocation();
+
+    // Ad-Hoc Mode State
+    const [isAdHoc, setIsAdHoc] = useState(false);
+    const [adHocSource, setAdHocSource] = useState('');
+
+    React.useEffect(() => {
+        if (location.state && location.state.source) {
+            setIsAdHoc(true);
+            setAdHocSource(location.state.source);
+            setFormState(prev => ({
+                ...prev,
+                commentBS: location.state.reason ? `[${location.state.reason}] ` : ''
+            }));
+        }
+    }, [location.state]);
 
     // Form State
     const [formState, setFormState] = useState({
@@ -62,7 +81,36 @@ export const MaintenanceLogbook: React.FC = () => {
             }
         });
 
-        setSelectedTask(null);
+        setProofImage(null);
+    };
+
+    const handleAdHocSubmit = () => {
+        if (!proofImage) {
+            alert("Proof of Work (Photo) is required for ad-hoc logs!");
+            return;
+        }
+
+        // For Ad-Hoc, we create a generic entry
+        // In a real app, we might use a specific 'AD-HOC' task ID or a different create method
+        // Here we simulate it by using a placeholder componentId
+
+        createLogEntry('ADHOC-' + Date.now(), {
+            taskId: 'ADHOC',
+            commentBS: `[${adHocSource}] ${formState.commentBS}`,
+            technician: formState.technician,
+            measuredValue: parseFloat(formState.measuredValue) || 0,
+            proofImage: {
+                id: 'IMG-' + Date.now(),
+                componentId: adHocSource, // Use the source as component ID
+                src: proofImage,
+                description: formState.commentBS,
+                aiTags: ['Observation', 'Ad-Hoc'],
+                metadata: { timestamp: new Date().toISOString(), gps: 'N/A' }
+            }
+        });
+
+        setIsAdHoc(false);
+        setAdHocSource('');
         setFormState({ measuredValue: '', commentBS: '', technician: 'Amir H.' });
         setProofImage(null);
     };
@@ -113,7 +161,72 @@ export const MaintenanceLogbook: React.FC = () => {
                 {/* ACTION PANEL */}
                 <div className="bg-[#121212] border border-white/5 rounded-lg p-6 h-fit sticky top-6">
                     <AnimatePresence mode="wait">
-                        {activeTask ? (
+                        {isAdHoc ? (
+                            <motion.div
+                                key="adhoc-form"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="space-y-6"
+                            >
+                                <div className="border-b border-amber-500/30 pb-4">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                                        <h3 className="text-lg font-bold text-white">Log Observation</h3>
+                                    </div>
+                                    <p className="text-xs text-amber-500/80 font-mono">Source: {adHocSource}</p>
+                                </div>
+
+                                {/* Technician & Comment Only for Ad-Hoc (Simplified) */}
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-400 uppercase">Description (Observation)</label>
+                                    <textarea
+                                        value={formState.commentBS}
+                                        onChange={(e) => setFormState({ ...formState, commentBS: e.target.value })}
+                                        className="w-full bg-[#050505] border border-white/10 rounded p-3 text-white h-32 text-sm focus:border-amber-500 transition-colors"
+                                        placeholder="Describe the issue or observation..."
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-400 uppercase">Measured Value (Optional)</label>
+                                    <input
+                                        type="number"
+                                        value={formState.measuredValue}
+                                        onChange={(e) => setFormState({ ...formState, measuredValue: e.target.value })}
+                                        className="w-full bg-[#050505] border border-white/10 rounded p-3 text-white font-mono"
+                                        placeholder="e.g. 85.5"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-400 uppercase">Proof of Work</label>
+                                    <div className="flex items-center gap-4">
+                                        <label className="flex items-center gap-2 cursor-pointer bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded border border-white/5 transition-colors">
+                                            <Camera className="w-4 h-4 text-amber-500" />
+                                            <span className="text-xs font-bold text-white">Attach Photo</span>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
+                                        </label>
+                                        {proofImage && <span className="text-xs text-emerald-500 font-bold flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Ready</span>}
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setIsAdHoc(false)}
+                                        className="flex-1 py-4 bg-slate-800 text-slate-400 font-bold text-sm uppercase tracking-widest hover:bg-slate-700 transition-colors rounded"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleAdHocSubmit}
+                                        className="flex-[2] py-4 bg-amber-600 text-white font-bold text-sm uppercase tracking-widest hover:bg-amber-500 transition-colors rounded"
+                                    >
+                                        Log Observation
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ) : activeTask ? (
                             <motion.div
                                 key="form"
                                 initial={{ opacity: 0, x: 20 }}

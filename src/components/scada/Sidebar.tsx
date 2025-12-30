@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ROUTES } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
 import { useTranslation } from 'react-i18next';
@@ -137,9 +138,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             <button
                                 key={mod.id}
                                 onClick={() => handleNavigation(mod.id, mod.title)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${location.pathname.includes(mod.id.replace('Dashboard', '')) || (location.pathname.includes('shadow-engineer') && mod.id === 'shadowEngineer') || (location.pathname.includes('intuition-log') && mod.id === 'intuitionLog') ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
+                                        (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
+                                        (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
+                                        (mod.id === 'shadowEngineer' && location.pathname.includes(ROUTES.MAINTENANCE.SHADOW_ENGINEER)) ||
+                                        (mod.id === 'intuitionLog' && location.pathname.includes(ROUTES.MAINTENANCE.INTUITION_LOG)) ||
+                                        (mod.id === 'ar-guide' && location.pathname.includes(ROUTES.MAINTENANCE.AR_GUIDE)) ||
+                                        // Fallback for others
+                                        (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque', 'shadowEngineer', 'intuitionLog', 'ar-guide'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                        ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'
+                                    }`}
                             >
-                                <span className={`text-lg ${location.pathname.includes(mod.id.replace('Dashboard', '')) ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'}`}>{mod.icon}</span>
+                                <span className={`text-lg ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
+                                        (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
+                                        (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
+                                        (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                        ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'
+                                    }`}>{mod.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                             </button>
                         ))}

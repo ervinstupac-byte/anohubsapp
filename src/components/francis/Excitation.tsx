@@ -1,110 +1,171 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Rocket, ZapOff } from 'lucide-react';
+import { ArrowLeft, Zap, Activity, ToggleLeft, ToggleRight, AlertTriangle, CheckCircle } from 'lucide-react';
+import { ROUTES } from '../../routes/paths';
 
 export const Excitation: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    return (
-        <div className="min-h-screen bg-[#020617] text-[#cbd5e1] font-mono pb-12 overflow-x-hidden">
-            {/* Header */}
-            <header className="bg-gradient-to-br from-[#312e81] to-[#0c0a09] border-b-2 border-indigo-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 shadow-2xl">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-indigo-600 rounded-lg border border-indigo-400/30">
-                            <ZapOff className="text-white w-8 h-8" />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-indigo-900/40 text-indigo-300 text-[10px] font-bold border border-indigo-800 uppercase">SOP-ELEC-008</span>
-                                <span className="text-[10px] text-stone-500 uppercase font-bold">REV 1.0</span>
-                            </div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase relative z-10">
-                                {t('francis.excitation.title')}
-                            </h1>
-                        </div>
-                    </div>
+    // States
+    const [mode, setMode] = useState<'AUTO' | 'MANUAL'>('AUTO'); // AVR vs FCR
+    const [fieldBreaker, setFieldBreaker] = useState(false);
+    const [fieldFlashing, setFieldFlashing] = useState(false);
+    const [voltage, setVoltage] = useState(0); // 0 to 100%
 
-                    <button
-                        onClick={() => navigate('/francis-hub')}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
-                    >
-                        <ArrowLeft className="w-3 h-3 text-indigo-500 group-hover:-translate-x-1 transition" />
-                        <span>{t('francis.excitation.return')}</span>
-                    </button>
+    // Simulation logic
+    const toggleFieldBreaker = () => {
+        const newState = !fieldBreaker;
+        setFieldBreaker(newState);
+        if (!newState) {
+            setVoltage(0);
+            setFieldFlashing(false);
+        }
+    };
+
+    const activateFlashing = () => {
+        if (!fieldBreaker) return;
+        setFieldFlashing(true);
+        // Simulate voltage buildup
+        setTimeout(() => setVoltage(20), 500);
+        setTimeout(() => setVoltage(60), 1000);
+        setTimeout(() => setVoltage(100), 1500);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#020617] text-slate-300 font-mono p-4 md:p-8">
+            <button onClick={() => navigate(`/francis/${ROUTES.FRANCIS.HUB}`)} className="flex items-center gap-2 mb-6 hover:text-cyan-400 transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+                <span>{t('actions.back', 'Back to Hub')}</span>
+            </button>
+
+            <header className="mb-8 border-b border-slate-800 pb-6">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-yellow-900/30 rounded-lg border border-yellow-500/30">
+                        <Zap className="w-8 h-8 text-yellow-400" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-black text-white uppercase tracking-tight">{t('francis.excitation.title', 'Excitation System')}</h1>
+                        <p className="text-slate-500 text-xs tracking-widest">{t('francis.excitation.subtitle', 'AVR & Field Current Regulation')}</p>
+                    </div>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 md:px-8">
-                <div className="grid grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Control Panel */}
+                <div className="space-y-6">
+                    {/* Mode Selector */}
+                    <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">{t('francis.excitation.mode', 'Control Mode')}</h3>
+                        <div className="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
+                            <button
+                                onClick={() => setMode('AUTO')}
+                                className={`flex-1 py-2 text-xs font-bold rounded transition-all ${mode === 'AUTO' ? 'bg-cyan-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                            >
+                                AUTO (AVR)
+                            </button>
+                            <button
+                                onClick={() => setMode('MANUAL')}
+                                className={`flex-1 py-2 text-xs font-bold rounded transition-all ${mode === 'MANUAL' ? 'bg-amber-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                            >
+                                MANUAL (FCR)
+                            </button>
+                        </div>
+                    </div>
 
-                    {/* 1. Bootstrap / Field Flashing */}
-                    <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-indigo-600 border border-indigo-500/20">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8 flex items-center gap-2">
-                            <Rocket className="w-6 h-6 text-indigo-400" /> {t('francis.excitation.s1Title')}
-                        </h2>
-
-                        <div className="grid md:grid-cols-2 gap-8 items-center border-l-2 border-slate-800 pl-6 ml-2">
-                            <div>
-                                <p className="text-[11px] text-slate-400 leading-relaxed mb-6">
-                                    {t('francis.excitation.s1Desc')}
-                                </p>
-                                <ul className="space-y-4">
-                                    <li className="flex items-start gap-4">
-                                        <div className="w-6 h-6 rounded bg-slate-900 border border-slate-800 flex items-center justify-center text-[10px] font-black shrink-0">01</div>
-                                        <span className="text-[10px] text-slate-300">{t('francis.excitation.f1')}</span>
-                                    </li>
-                                    <li className="flex items-start gap-4">
-                                        <div className="w-6 h-6 rounded bg-indigo-600 border border-indigo-400 flex items-center justify-center text-[10px] font-black shrink-0">02</div>
-                                        <span className="text-[10px] text-slate-300 font-bold">{t('francis.excitation.f2')}</span>
-                                    </li>
-                                    <li className="flex items-start gap-4">
-                                        <div className="w-6 h-6 rounded bg-slate-900 border border-slate-800 flex items-center justify-center text-[10px] font-black shrink-0">03</div>
-                                        <span className="text-[10px] text-slate-300">{t('francis.excitation.f3')}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="p-6 bg-red-950/20 border border-red-900/30 rounded-2xl">
-                                <h4 className="text-red-500 text-[10px] font-black uppercase mb-4 tracking-widest">{t('francis.excitation.critTimer')}</h4>
-                                <p className="text-[10px] text-slate-400 mb-4">
-                                    {t('francis.excitation.critDesc')}
-                                </p>
+                    {/* Field Breaker */}
+                    <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700 flex items-center justify-between">
+                        <div>
+                            <h3 className="text-sm font-bold text-slate-400 uppercase">{t('francis.excitation.fieldBreaker', 'Field Breaker')}</h3>
+                            <div className={`text-xs mt-1 ${fieldBreaker ? 'text-green-400' : 'text-red-400'}`}>
+                                {fieldBreaker ? 'CLOSED (ACTIVE)' : 'OPEN (ISOLATED)'}
                             </div>
                         </div>
-                    </section>
+                        <button onClick={toggleFieldBreaker} className="focus:outline-none">
+                            {fieldBreaker ? (
+                                <ToggleRight className="w-10 h-10 text-green-500 cursor-pointer hover:text-green-400" />
+                            ) : (
+                                <ToggleLeft className="w-10 h-10 text-slate-600 cursor-pointer hover:text-slate-500" />
+                            )}
+                        </button>
+                    </div>
 
-                    {/* 2. AVR Logic */}
-                    <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-slate-700 border border-slate-500/20">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8">
-                            {t('francis.excitation.s2Title')}
-                        </h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                            <div>
-                                <h4 className="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-widest">{t('francis.excitation.firing')}</h4>
-                                <div className="p-6 bg-black/40 border border-slate-800 rounded-2xl">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-xs text-slate-300">Alpha (&alpha;)</span>
-                                        <span className="text-xs font-black text-indigo-400">150&deg; &rarr; 10&deg;</span>
-                                    </div>
-                                    <div className="w-full h-8 bg-slate-900 border border-slate-800 rounded flex overflow-hidden">
-                                        <div className="w-1/4 bg-red-600/20 border-r border-red-600/30 flex items-center justify-center text-[8px] font-black text-red-500">INVERT</div>
-                                        <div className="w-3/4 bg-green-600/20 flex items-center justify-center text-[8px] font-black text-green-500 uppercase">Rectify (Pulse Active)</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 className="text-slate-500 text-[10px] font-black uppercase mb-4 tracking-widest">{t('francis.excitation.lim')}</h4>
-                                <p className="text-[10px] text-slate-400 leading-relaxed">
-                                    {t('francis.excitation.limDesc')}
-                                </p>
-                            </div>
+                    {/* Field Flashing */}
+                    <div className={`bg-slate-900/50 p-6 rounded-xl border border-slate-700 transition-all ${fieldBreaker ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-sm font-bold text-slate-400 uppercase">{t('francis.excitation.flashing', 'Field Flashing')}</h3>
+                            {fieldFlashing && <span className="px-2 py-0.5 bg-yellow-900/50 text-yellow-400 text-[10px] border border-yellow-500/30 rounded">ACTIVE</span>}
                         </div>
-                    </section>
+                        <p className="text-xs text-slate-500 mb-4">Required for initial voltage buildup if residual magnetism is low.</p>
+                        <button
+                            onClick={activateFlashing}
+                            disabled={fieldFlashing || voltage > 10}
+                            className={`w-full py-3 rounded border text-xs font-bold uppercase tracking-wider transition-all
+                                ${fieldFlashing ? 'bg-green-900/20 text-green-500 border-green-500/30 cursor-default' : 'bg-yellow-600 hover:bg-yellow-500 text-white border-transparent'}`}
+                        >
+                            {fieldFlashing ? 'Flashing Complete' : 'Activate Flash'}
+                        </button>
+                    </div>
+
+                    {/* Synapse Link */}
+                    <button
+                        onClick={() => navigate(`/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`, {
+                            state: { source: 'Excitation System', reason: voltage < 90 ? 'Low Voltage Buildup' : 'Routine Check' }
+                        })}
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider rounded border border-slate-600 transition-colors"
+                    >
+                        <Activity className="w-4 h-4" />
+                        {t('actions.logObservation', 'Log Observation')}
+                    </button>
                 </div>
-            </main>
+
+                {/* Status Monitor */}
+                <div className="bg-slate-900/80 p-6 rounded-xl border border-slate-700 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Activity className="w-32 h-32" />
+                    </div>
+
+                    <h3 className="text-sm font-bold text-slate-400 uppercase mb-6">{t('francis.excitation.monitor', 'System Monitor')}</h3>
+
+                    <div className="space-y-6">
+                        {/* Voltage Meter */}
+                        <div>
+                            <div className="flex justify-between text-xs mb-2">
+                                <span>Generator Voltage</span>
+                                <span className={voltage >= 95 ? 'text-green-400' : 'text-yellow-400'}>{voltage.toFixed(1)}%</span>
+                            </div>
+                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div
+                                    className={`h-full transition-all duration-1000 ${voltage >= 95 ? 'bg-green-500' : 'bg-yellow-500'}`}
+                                    style={{ width: `${voltage}%` }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Status Grid */}
+                        <div className="grid grid-cols-2 gap-4 mt-8">
+                            <div className="p-3 bg-slate-950 rounded border border-slate-800">
+                                <div className="text-[10px] text-slate-500 uppercase">Excitation Current</div>
+                                <div className="text-lg font-mono text-cyan-400">{voltage > 0 ? (voltage * 8.5).toFixed(0) : 0} A</div>
+                            </div>
+                            <div className="p-3 bg-slate-950 rounded border border-slate-800">
+                                <div className="text-[10px] text-slate-500 uppercase">Thyristor Temp</div>
+                                <div className="text-lg font-mono text-white">42°C</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {voltage >= 95 && (
+                        <div className="mt-6 flex items-center gap-3 p-3 bg-green-900/20 border border-green-500/30 rounded text-green-400">
+                            <CheckCircle className="w-5 h-5" />
+                            <span className="text-xs font-bold">VOLTAGE STABLE - READY FOR SYNCHRONIZATION</span>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
+
+export default Excitation;

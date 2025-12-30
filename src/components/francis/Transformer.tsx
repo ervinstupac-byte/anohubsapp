@@ -1,135 +1,192 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Box, Droplets, Info, ShieldAlert, ThermometerSnowflake } from 'lucide-react';
+import { ArrowLeft, Zap, Thermometer, Fan, AlertTriangle, AlertOctagon, Activity } from 'lucide-react';
+import { ROUTES } from '../../routes/paths';
 
 export const Transformer: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    return (
-        <div className="min-h-screen bg-[#020617] text-[#cbd5e1] font-mono pb-12 overflow-x-hidden">
-            {/* Header */}
-            <header className="bg-gradient-to-br from-[#312e81] to-[#0c0a09] border-b-2 border-indigo-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 shadow-2xl">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-indigo-600 rounded-lg border border-indigo-400/30">
-                            <Box className="text-white w-8 h-8" />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-indigo-900/40 text-indigo-300 text-[10px] font-bold border border-indigo-800 uppercase">SOP-ELEC-006</span>
-                                <span className="text-[10px] text-stone-500 uppercase font-bold">REV 1.0</span>
-                            </div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase relative z-10">
-                                {t('francis.transformer.title')}
-                            </h1>
-                        </div>
-                    </div>
+    // Simulation Config
+    const OIL_ALARM = 85;
+    const OIL_TRIP = 95;
+    const WINDING_ALARM = 95;
+    const WINDING_TRIP = 105;
 
-                    <button
-                        onClick={() => navigate('/francis-hub')}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
-                    >
-                        <ArrowLeft className="w-3 h-3 text-indigo-500 group-hover:-translate-x-1 transition" />
-                        <span>{t('francis.transformer.return')}</span>
-                    </button>
+    // States
+    const [oilTemp, setOilTemp] = useState(65);
+    const [liWindingTemp, setLiWindingTemp] = useState(70);
+    const [buchholzState, setBuchholzState] = useState<'NORMAL' | 'ALARM' | 'TRIP'>('NORMAL');
+    const [fansRunning, setFansRunning] = useState(false);
+
+    const getTempStatus = (val: number, alarm: number, trip: number) => {
+        if (val >= trip) return 'TRIP';
+        if (val >= alarm) return 'ALARM';
+        return 'NORMAL';
+    };
+
+    const oilStatus = getTempStatus(oilTemp, OIL_ALARM, OIL_TRIP);
+    const windingStatus = getTempStatus(liWindingTemp, WINDING_ALARM, WINDING_TRIP);
+
+    const triggerBuchholz = (state: 'ALARM' | 'TRIP') => {
+        setBuchholzState(state);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#020617] text-slate-300 font-mono p-4 md:p-8">
+            <button onClick={() => navigate(`/francis/${ROUTES.FRANCIS.HUB}`)} className="flex items-center gap-2 mb-6 hover:text-cyan-400 transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+                <span>{t('actions.back', 'Back to Hub')}</span>
+            </button>
+
+            <header className="mb-8 border-b border-slate-800 pb-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-indigo-900/30 rounded-lg border border-indigo-500/30">
+                        <Zap className="w-8 h-8 text-indigo-400" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-black text-white uppercase tracking-tight">{t('francis.transformer.title', 'Transformer Integrity')}</h1>
+                        <p className="text-slate-500 text-xs tracking-widest">{t('francis.transformer.subtitle', 'Thermal & Gas Protection')}</p>
+                    </div>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 md:px-8">
-                <div className="grid grid-cols-1 gap-8">
-
-                    {/* 1. Oil Status */}
-                    <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-indigo-600 border border-indigo-500/20">
-                        <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
-                            <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-2">
-                                <Droplets className="w-5 h-5 text-indigo-400" /> {t('francis.transformer.s1Title')}
-                            </h2>
-                            <div className="flex flex-col items-end">
-                                <span className="text-[9px] text-slate-500 uppercase font-black">{t('francis.transformer.lastTest')}</span>
-                                <span className="text-xs font-black text-indigo-400 uppercase tracking-widest">DEC 2025 - PASS</span>
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                {/* 1. Thermal Monitoring */}
+                <div className="xl:col-span-2 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Oil Temp */}
+                        <div className={`p-6 rounded-xl border transition-all ${oilStatus === 'TRIP' ? 'bg-red-950/30 border-red-500' : oilStatus === 'ALARM' ? 'bg-yellow-950/30 border-yellow-500' : 'bg-slate-900/50 border-slate-700'}`}>
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-3">
+                                    <Thermometer className={`w-6 h-6 ${oilStatus === 'NORMAL' ? 'text-cyan-400' : 'text-white'}`} />
+                                    <h3 className="font-bold text-slate-300">Oil Temperature</h3>
+                                </div>
+                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${oilStatus === 'NORMAL' ? 'bg-green-900/30 text-green-400' : 'bg-white/10 text-white'}`}>
+                                    {oilStatus}
+                                </span>
                             </div>
+                            <div className="text-4xl font-black text-white mb-4 flex items-baseline gap-2">
+                                {oilTemp}°C
+                                <span className="text-xs text-slate-500 font-normal">Trip @ {OIL_TRIP}°C</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="20"
+                                max="110"
+                                value={oilTemp}
+                                onChange={(e) => setOilTemp(parseInt(e.target.value))}
+                                className="w-full accent-cyan-500"
+                            />
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-6 mb-8">
-                            <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-xl text-center">
-                                <span className="text-[9px] text-slate-500 font-black uppercase block mb-1">{t('francis.transformer.gasH2')}</span>
-                                <div className="text-lg font-black text-green-500">12 ppm</div>
-                                <span className="text-[8px] text-slate-600 uppercase">Limit: 100</span>
+                        {/* Winding Temp */}
+                        <div className={`p-6 rounded-xl border transition-all ${windingStatus === 'TRIP' ? 'bg-red-950/30 border-red-500' : windingStatus === 'ALARM' ? 'bg-yellow-950/30 border-yellow-500' : 'bg-slate-900/50 border-slate-700'}`}>
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-3">
+                                    <Activity className={`w-6 h-6 ${windingStatus === 'NORMAL' ? 'text-cyan-400' : 'text-white'}`} />
+                                    <h3 className="font-bold text-slate-300">Winding Temp</h3>
+                                </div>
+                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded ${windingStatus === 'NORMAL' ? 'bg-green-900/30 text-green-400' : 'bg-white/10 text-white'}`}>
+                                    {windingStatus}
+                                </span>
                             </div>
-                            <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-xl text-center">
-                                <span className="text-[9px] text-slate-500 font-black uppercase block mb-1">{t('francis.transformer.gasC2h2')}</span>
-                                <div className="text-lg font-black text-white font-mono tracking-tighter">ND</div>
-                                <span className="text-[8px] text-slate-600 uppercase">LIMIT: 1</span>
+                            <div className="text-4xl font-black text-white mb-4 flex items-baseline gap-2">
+                                {liWindingTemp}°C
+                                <span className="text-xs text-slate-500 font-normal">Trip @ {WINDING_TRIP}°C</span>
                             </div>
-                            <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-xl text-center">
-                                <span className="text-[9px] text-slate-500 font-black uppercase block mb-1">{t('francis.transformer.oilBdv')}</span>
-                                <div className="text-lg font-black text-green-500">62 kV</div>
-                                <span className="text-[8px] text-slate-600 uppercase">MIN: 40 kV</span>
-                            </div>
+                            <input
+                                type="range"
+                                min="20"
+                                max="120"
+                                value={liWindingTemp}
+                                onChange={(e) => setLiWindingTemp(parseInt(e.target.value))}
+                                className="w-full accent-cyan-500"
+                            />
                         </div>
-
-                        <div className="p-4 bg-indigo-950/20 border border-indigo-800/30 rounded-xl flex gap-4 items-center">
-                            <Info className="text-indigo-500 w-6 h-6 flex-shrink-0" />
-                            <p className="text-[10px] text-slate-400 leading-relaxed">
-                                {t('francis.transformer.dgaDesc')}
-                            </p>
-                        </div>
-                    </section>
-
-                    {/* 2. Buchholz & Pressure */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Buchholz Relay */}
-                        <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-amber-600 border border-amber-500/20">
-                            <h2 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-2">
-                                <ShieldAlert className="w-5 h-5 text-amber-500" /> <span>{t('francis.transformer.buTitle')}</span>
-                            </h2>
-
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center p-3 bg-slate-900 border border-slate-800 rounded-lg">
-                                    <span className="text-[10px] text-slate-400">{t('francis.transformer.buGas')}</span>
-                                    <div className="w-3 h-3 rounded-sm bg-[#1e293b]"></div>
-                                </div>
-                                <div className="flex justify-between items-center p-3 bg-slate-900 border border-slate-800 rounded-lg">
-                                    <span className="text-[10px] text-slate-400">{t('francis.transformer.buSurge')}</span>
-                                    <div className="w-3 h-3 rounded-sm bg-[#1e293b]"></div>
-                                </div>
-                                <p className="text-[9px] text-slate-500 italic mt-4">
-                                    {t('francis.transformer.buDesc')}
-                                </p>
-                            </div>
-                        </section>
-
-                        {/* Cooling Status */}
-                        <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-indigo-600 border border-indigo-500/20">
-                            <h2 className="text-lg font-black text-white uppercase tracking-tight mb-8 flex items-center gap-2">
-                                <ThermometerSnowflake className="w-5 h-5 text-indigo-400" /> <span>{t('francis.transformer.coolTitle')}</span>
-                            </h2>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 bg-black/40 border border-slate-800 rounded-xl text-center">
-                                    <div className="text-[8px] text-slate-500 uppercase font-black mb-1">{t('francis.transformer.topOil')}</div>
-                                    <div className="text-xl font-black text-white">52°C</div>
-                                </div>
-                                <div className="p-4 bg-black/40 border border-slate-800 rounded-xl text-center">
-                                    <div className="text-[8px] text-slate-500 uppercase font-black mb-1">{t('francis.transformer.windTemp')}</div>
-                                    <div className="text-xl font-black text-white">64°C</div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex items-center justify-between px-2">
-                                <span className="text-[9px] text-slate-500 font-black uppercase">{t('francis.transformer.fanStat')}</span>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                    <span className="text-[10px] font-black text-green-500 uppercase">AUTO-RUN</span>
-                                </div>
-                            </div>
-                        </section>
                     </div>
 
+                    {/* Cooling System */}
+                    <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className={`p-3 rounded-full ${fansRunning ? 'bg-cyan-500/20 animate-pulse' : 'bg-slate-800'}`}>
+                                <Fan className={`w-6 h-6 ${fansRunning ? 'text-cyan-400 animate-spin' : 'text-slate-600'}`} />
+                            </div>
+                            <div>
+                                <div className="font-bold text-white">Cooling Fans</div>
+                                <div className="text-xs text-slate-500">Auto-start at 75°C Oil Temp</div>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => setFansRunning(!fansRunning)}
+                            className={`px-4 py-2 text-xs font-bold rounded border ${fansRunning ? 'bg-cyan-600 border-cyan-400 text-white' : 'bg-slate-800 border-slate-600 text-slate-400'}`}
+                        >
+                            {fansRunning ? 'RUNNING' : 'STOPPED'}
+                        </button>
+                    </div>
                 </div>
-            </main>
+
+                {/* 2. Buchholz Protection */}
+                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-700">
+                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <AlertTriangle className="text-orange-500" />
+                        Buchholz Relay
+                    </h3>
+
+                    <div className="space-y-4">
+                        <div className={`p-4 rounded border transition-all ${buchholzState === 'NORMAL' ? 'bg-green-900/10 border-green-900/30' : 'opacity-50 border-slate-800'}`}>
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-bold text-green-400">Normal Operation</span>
+                                {buchholzState === 'NORMAL' && <div className="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_10px_currentColor]" />}
+                            </div>
+                        </div>
+
+                        <div className={`p-4 rounded border transition-all ${buchholzState === 'ALARM' ? 'bg-yellow-900/20 border-yellow-500' : 'bg-slate-950 border-slate-800 hover:border-slate-600'}`}>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className={`text-sm font-bold ${buchholzState === 'ALARM' ? 'text-yellow-400' : 'text-slate-400'}`}>Gas Accumulation</span>
+                                <button onClick={() => triggerBuchholz('ALARM')} className="text-[10px] px-2 py-1 bg-yellow-900/40 text-yellow-500 border border-yellow-700 rounded hover:bg-yellow-900/60">TEST ALARM</button>
+                            </div>
+                            {buchholzState === 'ALARM' && <p className="text-xs text-yellow-200/70">Warning: Slow gas buildup detected. Check oil level and gas composition.</p>}
+                        </div>
+
+                        <div className={`p-4 rounded border transition-all ${buchholzState === 'TRIP' ? 'bg-red-900/20 border-red-500 animate-pulse' : 'bg-slate-950 border-slate-800 hover:border-slate-600'}`}>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className={`text-sm font-bold ${buchholzState === 'TRIP' ? 'text-red-400' : 'text-slate-400'}`}>Oil Surge</span>
+                                <button onClick={() => triggerBuchholz('TRIP')} className="text-[10px] px-2 py-1 bg-red-900/40 text-red-500 border border-red-700 rounded hover:bg-red-900/60">TEST TRIP</button>
+                            </div>
+                            {buchholzState === 'TRIP' && (
+                                <div className="flex gap-2 items-center text-red-400 mt-2">
+                                    <AlertOctagon className="w-4 h-4" />
+                                    <span className="text-xs font-black">CRITICAL: IMMEDIATE TRANSFORMER ISOLATION TRIGGERED</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {buchholzState !== 'NORMAL' && (
+                            <button
+                                onClick={() => setBuchholzState('NORMAL')}
+                                className="w-full py-3 mt-4 text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-600"
+                            >
+                                Reset Relay
+                            </button>
+                        )}
+
+                        {/* Synapse Link */}
+                        <button
+                            onClick={() => navigate(`/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`, {
+                                state: { source: 'Transformer Buchholz', reason: buchholzState !== 'NORMAL' ? `Buchholz ${buchholzState}` : 'Routine Check' }
+                            })}
+                            className="w-full mt-4 flex items-center justify-center gap-2 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs uppercase tracking-wider rounded border border-slate-600 transition-colors"
+                        >
+                            <Activity className="w-4 h-4" />
+                            {t('actions.logObservation', 'Log Observation')}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
+
+export default Transformer;

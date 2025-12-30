@@ -37,9 +37,11 @@ import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.ts
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
+import { DashboardHeader } from './components/DashboardHeader.tsx';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
+import { ROUTES } from './routes/paths.ts';
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -61,16 +63,12 @@ const RevitalizationStrategy = lazy(() => import('./components/RevitalizationStr
 const DigitalIntegrity = lazy(() => import('./components/DigitalIntegrity.tsx').then(m => ({ default: m.DigitalIntegrity })));
 const ContractManagement = lazy(() => import('./components/ContractManagement.tsx').then(m => ({ default: m.ContractManagement })));
 const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
-const MaintenanceDashboard = lazy(() => import('./components/MaintenanceDashboard.tsx').then(m => ({ default: m.MaintenanceDashboard })));
 const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
+const ShaftAlignment = lazy(() => import('./components/ShaftAlignment.tsx').then(m => ({ default: m.ShaftAlignment })));
+const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 
-const HydraulicMaintenance = lazy(() => import('./components/HydraulicMaintenance').then(m => ({ default: m.HydraulicMaintenance })));
-const BoltTorqueCalculator = lazy(() => import('./components/BoltTorqueCalculator').then(m => ({ default: m.BoltTorqueCalculator })));
-const SOPManager = lazy(() => import('./components/SOPManager').then(m => ({ default: m.SOPManager })));
-const ShiftLog = lazy(() => import('./components/ShiftLog').then(m => ({ default: m.ShiftLog })));
-const AdminApproval = lazy(() => import('./components/AdminApproval').then(m => ({ default: m.AdminApproval })));
-const ARManager = lazy(() => import('./components/ARManager').then(m => ({ default: m.ARManager })));
+// Maintenance components moved to MaintenanceRouter
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
@@ -78,7 +76,11 @@ const FrancisDiagnostics = lazy(() => import('./components/FrancisDiagnostics.ts
 const FrancisHub = React.lazy(() => import('./components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 // Francis Turbine Module - All routes extracted to dedicated sub-router
+// Francis Turbine Module - All routes extracted to dedicated sub-router
 const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
+
+// Maintenance Module - Extracted to dedicated sub-router
+const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.tsx'));
 
 
 
@@ -207,17 +209,20 @@ const AppLayout: React.FC = () => {
             'turbineDetail': '/turbine',
             'activeContext': '/vision',
             'vision': '/vision',
-            'maintenanceDashboard': '/maintenance',
+            // Maintenance Routes
+            'maintenanceDashboard': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DASHBOARD}`,
+            'hydraulicMaintenance': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}`,
+            'boltTorque': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}`,
+            'shadowEngineer': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`,
+            'intuitionLog': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.INTUITION_LOG}`,
+            'ar-guide': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.AR_GUIDE}`,
+            'logbook': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`,
+
             'executiveDashboard': '/executive',
             'structuralIntegrity': '/structural-integrity',
             'shaftAlignment': '/shaft-alignment',
-            'hydraulicMaintenance': '/hydraulic-maintenance',
-            'boltTorque': '/bolt-torque',
-            'shadowEngineer': '/shadow-engineer',
-            'intuitionLog': '/intuition-log',
             'adminApproval': '/admin-approval',
             'clientPortal': '/client-portal',
-            'logbook': '/logbook',
             'francisHub': '/francis/hub'
         };
         const target = routeMap[view];
@@ -268,66 +273,17 @@ const AppLayout: React.FC = () => {
 
                 {/* MAIN AREA */}
                 <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px] relative z-20">
-                    <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6">
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
-                            <h1 className="text-xl font-black text-white tracking-widest uppercase">
-                                AnoHUB <span className="text-h-cyan">SCADA</span>
-                            </h1>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div
-                                onClick={handleBadgeClick}
-                                className="cursor-pointer hover:scale-105 transition-transform"
-                                title={`Risk Status: ${badgeLabel}\n${riskReasons.join('\n')}`}
-                            >
-                                <DigitalPanel
-                                    label={t('dashboard.riskStatus.label', 'RISK STATUS')}
-                                    value={t(`dashboard.riskStatus.${badgeStatus}`, badgeLabel)}
-                                    status={badgeStatus}
-                                />
-                            </div>
-                            {/* Sign Out Button */}
-                            {user && (
-                                <button
-                                    onClick={() => setShowSignOutDialog(true)}
-                                    className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider bg-slate-800/50 hover:bg-red-900/30 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500/50 rounded transition-all"
-                                    title={t('auth.signOut', 'Sign Out')}
-                                >
-                                    {t('auth.signOut', 'Sign Out')}
-                                </button>
-                            )}
-                            <LanguageSelector />
-                        </div>
-                    </header>
 
-                    {/* Sign Out Confirmation Dialog */}
-                    {showSignOutDialog && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-                            <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl animate-scale-in">
-                                <h3 className="text-xl font-bold text-white mb-2">{t('auth.signOut', 'Sign Out')}</h3>
-                                <p className="text-slate-400 text-sm mb-6">{t('auth.signOutConfirm', 'Are you sure you want to sign out?')}</p>
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={() => setShowSignOutDialog(false)}
-                                        className="flex-1 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded font-bold transition-colors"
-                                    >
-                                        {t('actions.cancel', 'Cancel')}
-                                    </button>
-                                    <button
-                                        onClick={async () => {
-                                            await signOut();
-                                            setShowSignOutDialog(false);
-                                            navigate('/login');
-                                        }}
-                                        className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-bold transition-colors"
-                                    >
-                                        {t('auth.signOut', 'Sign Out')}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    <DashboardHeader
+                        onToggleSidebar={() => setIsSidebarOpen(true)}
+                        title="AnoHUB SCADA"
+                    />
+
+                    {/* Sign Out Dialog handled within DashboardHeader now to avoid prop drilling or dupes, 
+                        BUT keeping App-level state if needed. 
+                        Actually DashboardHeader handles its own SignOut Dialog. 
+                        Removing inline Header and inline Dialog from App.tsx. 
+                    */}
 
                     <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
                         <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
@@ -375,17 +331,15 @@ const AppLayout: React.FC = () => {
                                         <Route path="contract-management" element={<ContractManagement />} />
                                         <Route path="library" element={<ComponentLibrary />} />
                                         <Route path="vision" element={<UnderConstruction />} />
-                                        <Route path="maintenance" element={<MaintenanceDashboard />} />
-                                        <Route path="hydraulic-maintenance" element={<HydraulicMaintenance />} />
-                                        <Route path="bolt-torque" element={<BoltTorqueCalculator />} />
-                                        <Route path="shadow-engineer" element={<SOPManager />} />
-                                        <Route path="intuition-log" element={<ShiftLog />} />
+
+                                        {/* Maintenance Sub-Router */}
+                                        <Route path="/maintenance/*" element={<MaintenanceRouter />} />
+
                                         <Route path="executive" element={<ExecutiveDashboard />} />
                                         <Route path="structural-integrity" element={<StructuralIntegrity />} />
+                                        <Route path="shaft-alignment" element={<ShaftAlignment />} />
                                         <Route path="admin-approval" element={<AdminApproval />} />
-                                        <Route path="ar-guide" element={<ARManager />} />
                                         <Route path="/forensics" element={<ForensicDashboard />} />
-                                        <Route path="logbook" element={<MaintenanceLogbook />} />
                                         <Route path="stress-test" element={<SystemStressTest />} />
                                         <Route path="*" element={<Navigate to="/" replace />} />
                                     </Routes>

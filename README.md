@@ -1,61 +1,64 @@
-<div align="center">
-  <img src="https://i.imgur.com/your-logo-placeholder.png" alt="AnoHUB Banner" width="100%" height="auto" />
-  <h1>AnoHUB Enterprise Platform</h1>
-  <p><strong>Systemic Risk Mitigation & LCC Optimization for Hydropower Assets</strong></p>
-  
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#tech-stack">Tech Stack</a> •
-    <a href="#getting-started">Getting Started</a> •
-    <a href="#architecture">Architecture</a>
-  </p>
-</div>
+# AnoHUB SCADA System
 
----
+## State of the Union (v1.0.0 - Synapse Integration)
 
-## ⚡ Overview
+**AnoHUB** is a next-generation Hydroelectric Power Plant (HPP) SCADA and Maintenance application. It bridges the gap between traditional industrial control and modern intuitive UX.
 
-AnoHUB is a specialized "Operating System" for hydropower engineering teams. It bridges the **Execution Gap** between theoretical design and operational reality. By enforcing the **0.05 mm/m Precision Mandate** and integrating **AI-driven diagnostics**, AnoHUB helps asset owners extend the lifespan of their turbines and optimize Life Cycle Costs (LCC).
+### 🌟 Key Features
 
-## 🚀 Key Features
+#### 1. The "Francis Hub" (Turbine Friend)
+A centralized ecosystem of 22 interactive Standard Operating Procedures (SOPs), categorized into 5 critical sectors:
+*   **Safety & Critical**: Shaft Alignment, Bearings, Vibration Analysis.
+*   **Mechanical**: Governor PID, Linkage, Braking.
+*   **Fluid & Chemical**: Oil Health, Cooling Water.
+*   **Electrical**: Excitation (AVR/FCR), Transformer Integrity, Grid Sync.
+*   **Civil**: Penstock (Joukowsky Water Hammer), Intake (Trash Rack).
 
-### 🛡️ Core Operations
-- **Execution Gap Diagnostic:** A 17-point risk assessment tool quantifying systemic vulnerabilities.
-- **Installation Guarantee:** Digital sign-off protocol for assembly precision (<0.05 mm/m).
-- **HPP Design Studio:** Physics-based calculator for sizing Kaplan, Francis, and Pelton turbines.
-- **Global Asset Map:** Geospatial intelligence for tracking fleet status.
+#### 2. Synapse Integration (The "Golden Thread")
+Modules are no longer isolated. The system features a "Golden Thread" workflow:
+*   **Detection**: An engineer identifies a risk in an SOP (e.g., Water Hammer > 20 bar).
+*   **Action**: A unified "Log Observation" button instantly creates a ticket.
+*   **Routing**: The system navigates to the `Maintenance Logbook`, pre-filling context (Source & Reason).
+*   **Ad-Hoc Logging**: Allows unplanned observations to be captured seamlessly.
 
-### 🧠 Strategic Intelligence
-- **Investor Briefing:** Auto-generated financial reports and risk profiles.
-- **Digital Integrity:** Blockchain-based ledger for immutable maintenance history.
-- **Revitalization Strategy:** Decision matrix for "Repair vs. Replace" (Obsolescence Management).
+#### 3. Maintenance Intelligence
+*   **Ad-Hoc Logbook**: Dynamic entry creation for observations outside scheduled tasks.
+*   **MaintenanceRouter**: Dedicated routing structure for all maintenance modules.
+*   **AR & Shadow Engineer**: (Planned) Advanced assistance layers.
 
-### 📚 Knowledge & Culture
-- **Standard of Excellence:** Interactive masterclass on technical discipline.
-- **Component Library:** Encyclopedia of KPIs and failure modes for critical subsystems.
-- **Ecological Engineering:** Protocols for E-Flow and fish passage compliance.
+#### 4. Enterprise-Grade Foundation
+*   **Global Command Palette**: `Ctrl+K` navigation to any module instantly.
+*   **Internationalization (i18n)**: Full support for 6 languages (EN, ES, FR, DE, ZH, BS).
+*   **PDF Generation**: Local-first PDF report generation with embedded custom fonts (Roboto).
+*   **Modular Architecture**: Clean separation of routes (`FrancisRouter`, `MaintenanceRouter`).
 
----
+### 🛠 Tech Stack
+*   **Frontend**: React, TypeScript, Vite.
+*   **Styling**: Tailwind CSS (Executive/Dark Industrial Theme).
+*   **Animation**: Framer Motion.
+*   **State Management**: React Context (Maintenance, Auth, Risk).
+*   **Routing**: React Router v6.
+*   **Icons**: Lucide React.
+*   **Build Tool**: Vite.
 
-## 🛠️ Tech Stack
+### 🚀 Getting Started
 
-- **Frontend:** React 18 (TypeScript), Vite
-- **Styling:** Tailwind CSS (Glassmorphism UI)
-- **State Management:** React Context API (Modular Architecture)
-- **Backend / Database:** Supabase (PostgreSQL, Auth, Storage)
-- **PDF Generation:** `jspdf` & `jspdf-autotable`
-- **Routing:** React Router DOM (v6)
-
----
-
-## 🏁 Getting Started
-
-### Prerequisites
-- Node.js (v16+)
-- A Supabase project (for backend)
-
-### 1. Clone & Install
 ```bash
-git clone [https://github.com/your-username/anohub-platform.git](https://github.com/your-username/anohub-platform.git)
-cd anohub-platform
+# Install dependencies
 npm install
+
+# Run development server
+npm run dev
+```
+
+### 📂 Architecture Overview
+
+*   `src/components/francis/*`: SOP Implementation (Visual & Interactive).
+*   `src/routes/paths.ts`: Centralized Route Constants.
+*   `src/routes/*Router.tsx`: Modular Routers.
+*   `src/i18n/*`: Localization files.
+*   `src/models/*`: Physics & Engineering Types.
+
+---
+*Built by the AnoHUB Engineering Team (Deepmind + User Pair Programming)* 
+*Status: READY FOR DEPLOYMENT*

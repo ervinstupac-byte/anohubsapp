@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../routes/paths.ts';
 import { useMaintenance, protocols } from '../contexts/MaintenanceContext.tsx';
 import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
@@ -202,7 +203,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                                                     Initiate Tactical Maintenance
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => navigate('/ar-guide')}
+                                                                    onClick={() => navigate(`/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.AR_GUIDE}`)}
                                                                     className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded text-[9px] font-black text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all uppercase tracking-widest flex items-center justify-center gap-2"
                                                                 >
                                                                     <span>📷</span> AR FIELD GUIDE & VISUAL EXPERT
