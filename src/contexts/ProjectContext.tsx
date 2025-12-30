@@ -45,6 +45,34 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 }
             };
         }
+        case 'UPDATE_FRANCIS_MODULE': {
+            const { moduleId, status } = action.payload;
+            const currentFrancis = state.francis || {
+                modules: {},
+                healthScore: 100,
+                activeRisks: []
+            };
+
+            const updatedModules = {
+                ...currentFrancis.modules,
+                [moduleId]: status
+            };
+
+            // Recalculate Logic (Ideally this logic should live in FrancisModel, but for state sync we do it here or via effect)
+            // For now, we update the state, and let the Component consuming it trigger the model recalculation
+            // OR we can invoke the FrancisModel logic here if we want pure business logic separation.
+            // Let's adhere to the pattern: Reducer updates state, Engine logic recalculates derived data.
+            // Since the Health Score in FrancisHub is driven by the model inside the component, we just update the module state here.
+            // However, to make it "Core", we should ideally run the calculation here.
+
+            return {
+                ...state,
+                francis: {
+                    ...currentFrancis,
+                    modules: updatedModules
+                }
+            };
+        }
         case 'RESET_TO_DEMO':
             return PhysicsEngine.recalculateProjectPhysics(state); // Re-validate
         default:

@@ -7,7 +7,6 @@ import {
     ArrowLeft,
     CheckCircle,
     Droplets,
-    Gauge,
     Play,
     Thermometer,
     Zap,
@@ -16,9 +15,28 @@ import {
 import { GlassCard } from './ui/GlassCard';
 import { ModernButton } from './ui/ModernButton';
 import { ModernInput } from './ui/ModernInput';
-import { diagnoseFrancisFault, FrancisTelemetry, DiagnosticResult } from '../lib/francis_logic';
+import { FrancisModel } from '../models/turbine/FrancisModel';
+import { CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
 
 import { useNotifications } from '../contexts/NotificationContext';
+
+// Local UI State Interface
+interface FrancisTelemetry {
+    bearingTemp: number;
+    vibration: number;
+    siltPpm: number;
+    gridFreq: number;
+    loadMw: number;
+    mivStatus: string;
+}
+
+// Adapted Result for UI
+interface DiagnosticOutcome {
+    status: 'NORMAL' | 'WARNING' | 'CRITICAL' | 'EMERGENCY';
+    message: string;
+    action?: string;
+    referenceProtocol?: string;
+}
 
 export const FrancisDiagnostics: React.FC = () => {
     const navigate = useNavigate();
@@ -35,12 +53,51 @@ export const FrancisDiagnostics: React.FC = () => {
         mivStatus: 'OPEN'
     });
 
-    const [results, setResults] = useState<DiagnosticResult[] | null>(null);
+    const [results, setResults] = useState<DiagnosticOutcome[] | null>(null);
 
     // -- HANDLERS --
     const handleRunDiagnostics = () => {
-        const outcomes = diagnoseFrancisFault(inputs);
-        setResults(outcomes);
+        // Instantiate Engineering Model
+        const model = new FrancisModel('francis_horizontal', {} as any);
+
+        // Construct Sensor Data from Form Inputs
+        const sensorData: CompleteSensorData = {
+            timestamp: Date.now(),
+            assetId: 'manual-diag',
+            turbineFamily: 'francis',
+            common: {
+                vibration: inputs.vibration,
+                temperature: inputs.bearingTemp, // Mapping bearing temp to common temp for now
+                output_power: inputs.loadMw,
+                efficiency: 90,
+                status: 'OPTIMAL'
+            },
+            francis: {
+                // Inferring some values for the sake of the model check
+                guide_vane_opening: inputs.loadMw > 10 ? 60 : 30, // Rough inference
+                runner_clearance: 1.0,
+                draft_tube_pressure: -0.2, // Default healthy
+                spiral_case_pressure: 5.0
+            } as FrancisSensorData
+        };
+
+        // Run Detection
+        const anomalies = model.detectAnomalies([sensorData]);
+
+        // Map Anomalies to UI Outcomes
+        if (anomalies.length === 0) {
+            setResults([{ status: 'NORMAL', message: 'System Nominal', referenceProtocol: 'SOP-GEN-001' }]);
+        } else {
+            const mappedResults: DiagnosticOutcome[] = anomalies.map(a => ({
+                // Map Severity to UI Status
+                status: a.severity === 'CRITICAL' ? 'CRITICAL' : a.severity === 'HIGH' ? 'CRITICAL' : 'WARNING',
+                message: a.type.replace(/_/g, ' '),
+                action: a.recommendation,
+                referenceProtocol: 'REF-ENG-LOGIC' // Generic ref for dynamic logic
+            }));
+            setResults(mappedResults);
+        }
+
         pushNotification('INFO', 'Francis Logic Engine: Analysis Complete');
     };
 

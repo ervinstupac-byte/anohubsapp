@@ -196,19 +196,35 @@ export const ToolboxLaunchpad: React.FC = () => {
                                 <>
                                     {/* FRANCIS */}
                                     {(selectedAsset.turbine_type === 'francis' || selectedAsset.specs?.spiralCasePressure) && (
-                                        <GlassCard
-                                            onClick={() => navigate('/francis-diagnostics')}
-                                            className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
-                                        >
-                                            <span className="text-2xl group-hover:scale-110 transition-transform">🩺</span>
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <h4 className="font-bold text-cyan-400 text-sm">Francis Diagnostics</h4>
-                                                    <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">Active</span>
+                                        <>
+                                            <GlassCard
+                                                onClick={() => navigate('/francis-diagnostics')}
+                                                className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
+                                            >
+                                                <span className="text-2xl group-hover:scale-110 transition-transform">🩺</span>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-bold text-cyan-400 text-sm">Francis Diagnostics</h4>
+                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">Active</span>
+                                                    </div>
+                                                    <p className="text-xs text-slate-400">Run troubleshooting engine for {selectedAsset.name}</p>
                                                 </div>
-                                                <p className="text-xs text-slate-400">Run troubleshooting engine for {selectedAsset.name}</p>
-                                            </div>
-                                        </GlassCard>
+                                            </GlassCard>
+
+                                            <GlassCard
+                                                onClick={() => navigate('/francis-hub')}
+                                                className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2 mt-2"
+                                            >
+                                                <span className="text-2xl group-hover:scale-110 transition-transform">🗺️</span>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-bold text-cyan-400 text-sm">Francis Logic Hub (Reference)</h4>
+                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">NEW</span>
+                                                    </div>
+                                                    <p className="text-xs text-slate-400">System Map & Logic Interlocks for Unit 1</p>
+                                                </div>
+                                            </GlassCard>
+                                        </>
                                     )}
 
                                     {/* PELTON */}

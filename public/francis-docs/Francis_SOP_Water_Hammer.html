@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: HYDRAULIC SHOCK / WATER HAMMER | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #ef4444;
+            /* Critical Red for Water Hammer */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #7f1d1d 0%, #0c0a09 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .chart-bg {
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(239, 68, 68, 0.05) 20px),
+                repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 19px,
+                    rgba(239, 68, 68, 0.05) 20px);
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: white !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .alert-pulse {
+            animation: alert-pulse 2s infinite;
+        }
+
+        @keyframes alert-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-red-600 rounded-lg border border-red-400/30">
+                    <i data-lucide="zap-off" class="text-white w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-red-900/30 text-red-400 text-[10px] font-bold border border-red-900 uppercase">SOP-W-04</span>
+                        <span class="text-[10px] text-stone-500 uppercase font-bold">CRITICAL SAFETY</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        HYDRAULIC SHOCK PROTOCOL</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-red-500 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-red-500 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-red-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8">
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- 1. Closing Law -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-red-600 alert-pulse">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2"
+                    data-i18n="sec1_title">
+                    <span class="text-red-500">01.</span> CLOSING LAW (2-STAGE LOGIC)
+                </h2>
+                <p class="text-sm text-slate-400 mb-8" data-i18n="sec1_desc">
+                    To prevent penstock rupture during Load Rejection, the Main Inlet Valve (MIV) MUST close in two
+                    distinct stages.
+                </p>
+
+                <!-- Chart Visualization -->
+                <div class="relative h-48 w-full border-l-2 border-b-2 border-slate-700 mb-8 chart-bg">
+                    <div class="absolute left-2 top-2 text-[9px] text-green-500 font-bold uppercase">100% OPEN</div>
+                    <div class="absolute bottom-2 right-2 text-[9px] text-red-500 font-bold uppercase">0% CLOSED</div>
+
+                    <svg class="absolute inset-0 w-full h-full overflow-visible">
+                        <!-- Phase 1 Line -->
+                        <line x1="0" y1="0" x2="60%" y2="80%" stroke="#ef4444" stroke-width="4"
+                            stroke-linecap="round" />
+                        <!-- Phase 2 Line -->
+                        <line x1="60%" y1="80%" x2="100%" y2="100%" stroke="#ef4444" stroke-width="4"
+                            stroke-dasharray="8,8" stroke-linecap="round" />
+                        <!-- Intersection Point -->
+                        <circle cx="60%" cy="80%" r="4" fill="white" />
+                    </svg>
+
+                    <div
+                        class="absolute left-[30%] top-[45%] text-[10px] text-white font-black -rotate-15 uppercase whitespace-nowrap">
+                        Fast Phase (80%)</div>
+                    <div
+                        class="absolute left-[65%] top-[85%] text-[10px] text-slate-500 font-black uppercase whitespace-nowrap">
+                        Cushion Phase</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-black/40 p-4 rounded border border-slate-800">
+                        <div class="text-[9px] text-slate-500 uppercase font-black mb-1" data-i18n="phase1">PHASE 1
+                            (FAST)</div>
+                        <div class="text-sm font-black text-white">100% → 20% in 45s</div>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded border border-slate-800">
+                        <div class="text-[9px] text-slate-500 uppercase font-black mb-1" data-i18n="phase2">PHASE 2
+                            (CUSHION)</div>
+                        <div class="text-sm font-black text-white">20% → 0% in 120s</div>
+                    </div>
+                    <div class="bg-red-950/40 p-4 rounded border border-red-900/50">
+                        <div class="text-[9px] text-red-500 uppercase font-black mb-1" data-i18n="trip_limit">TRIP LIMIT
+                        </div>
+                        <div class="text-sm font-black text-red-500">TIMER < 165s=ALERT</div>
+                        </div>
+                    </div>
+            </section>
+
+            <!-- 2. Pressure & Vacuum -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Pressure Limits -->
+                <section class="glass-card rounded-2xl p-8 border-l-4 border-l-orange-600">
+                    <h2 class="text-lg font-black text-white uppercase tracking-tight mb-6" data-i18n="sec2_title">02.
+                        PRESSURE HARD STOPS</h2>
+                    <div class="space-y-4">
+                        <div class="bg-slate-900/50 p-4 border border-slate-800 rounded-xl text-center">
+                            <div class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1"
+                                data-i18n="nom_head">Nominal Head</div>
+                            <div class="text-2xl font-black text-white">14.5 <span
+                                    class="text-xs font-normal text-slate-500">Bar</span></div>
+                        </div>
+                        <div class="bg-red-950/30 border-2 border-red-500 p-4 rounded-xl text-center">
+                            <div class="text-[9px] text-red-500 uppercase font-black tracking-widest mb-1"
+                                data-i18n="max_surge">MAX SURGE LIMIT (+25%)</div>
+                            <div class="text-3xl font-black text-red-500">18.1 <span
+                                    class="text-xs font-normal text-red-900">Bar</span></div>
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-relaxed italic" data-i18n="sec2_note">
+                            If Delta-P exceeds 25%, immediate evacuation of the spiral case gallery is mandatory.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Vacuum Breaker -->
+                <section class="glass-card rounded-2xl p-8 border-l-4 border-l-blue-600">
+                    <h2 class="text-lg font-black text-white uppercase tracking-tight mb-4" data-i18n="sec3_title">03.
+                        VACUUM BREAKER CHECK</h2>
+                    <p class="text-sm text-slate-400 mb-6" data-i18n="sec3_desc">
+                        During rapid closure, water column separation may create a vacuum. Air valves MUST open to
+                        prevent pipe collapse.
+                    </p>
+                    <div class="flex items-center gap-4 bg-black/60 p-5 rounded-xl border border-blue-900/30">
+                        <div class="w-4 h-4 bg-green-500 rounded-full shadow-[0_0_15px_rgba(34,197,94,0.6)]"></div>
+                        <span class="text-xs font-black text-green-400 uppercase tracking-widest"
+                            data-i18n="valve_status">VALVE STATUS: FREE / CLEAR</span>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 4. Post Event -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-slate-600 bg-slate-950/20">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-2"
+                    data-i18n="sec4_title">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 text-slate-400"></i> 04. POST-EVENT AUDIT
+                </h2>
+                <p class="text-sm text-slate-300 leading-relaxed" data-i18n="sec4_desc">
+                    After any W-04-WH Alarm event, visually inspect the Spiral Case Anchor Blocks (M-04-ANC) for
+                    concrete cracking or displacement.
+                </p>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "HYDRAULIC SHOCK PROTOCOL",
+                return: "BACK TO DASHBOARD",
+                sec1_title: "CLOSING LAW (2-STAGE LOGIC)",
+                sec1_desc: "To prevent penstock rupture during Load Rejection, the Main Inlet Valve (MIV) MUST close in two distinct stages.",
+                phase1: "PHASE 1 (FAST)",
+                phase2: "PHASE 2 (CUSHION)",
+                trip_limit: "TRIP LIMIT",
+                sec2_title: "02. PRESSURE HARD STOPS",
+                nom_head: "Nominal Head",
+                max_surge: "MAX SURGE LIMIT (+25%)",
+                sec2_note: "If Delta-P exceeds 25%, immediate evacuation of the spiral case gallery is mandatory.",
+                sec3_title: "03. VACUUM BREAKER CHECK",
+                sec3_desc: "During rapid closure, water column separation may create a vacuum. Air valves MUST open to prevent pipe collapse.",
+                valve_status: "VALVE STATUS: FREE / CLEAR",
+                sec4_title: "04. POST-EVENT AUDIT",
+                sec4_desc: "After any W-04-WH Alarm event, visually inspect the Spiral Case Anchor Blocks (M-04-ANC) for concrete cracking or displacement."
+            },
+            bs: {
+                title: "HITNI SOP: HIDRAULIČKI UDAR",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                sec1_title: "ZAKON ZATVARANJA (LOGIKA 2 FAZE)",
+                sec1_desc: "Da bi se spriječilo pucanje cjevovoda tokom Ispada Tereta, Glavni Ulazni Ventil (GUV) se MORA zatvoriti u dvije različite faze.",
+                phase1: "FAZA 1 (BRZA)",
+                phase2: "FAZA 2 (JASTUK)",
+                trip_limit: "KRITIČNA BLOKADA",
+                sec2_title: "02. GRANICE PRITISKA (TVRDI STOP)",
+                nom_head: "Nominalni Pad",
+                max_surge: "MAX LIMIT UDARA (+25%)",
+                sec2_note: "AKO JE Delta-P > 25% -> OBAVEZNA EVAKUACIJA PROSTORIJE SPIRALE.",
+                sec3_title: "03. PROVJERA VAZDUŠNOG VENTILA",
+                sec3_desc: "Tokom brzog zatvaranja, separacija vodenog stuba može stvoriti vakuum. Vazdušni ventili se MORAJU otvoriti da spriječe kolaps cijevi.",
+                valve_status: "STATUS VENTILA: SLOBODAN / ČIST",
+                sec4_title: "04. REVIZIJA NAKON DOGAĐAJA",
+                sec4_desc: "Nakon bilo kojeg W-04-WH Alarm događaja, vizuelno pregledaj anker blokove Spirale (M-04-ANC) na pomjeranje ili pucanje betona."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

@@ -64,7 +64,7 @@ const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').
 const MaintenanceDashboard = lazy(() => import('./components/MaintenanceDashboard.tsx').then(m => ({ default: m.MaintenanceDashboard })));
 const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
-const ShaftAlignment = lazy(() => import('./components/ShaftAlignment').then(m => ({ default: m.ShaftAlignment })));
+
 const HydraulicMaintenance = lazy(() => import('./components/HydraulicMaintenance').then(m => ({ default: m.HydraulicMaintenance })));
 const BoltTorqueCalculator = lazy(() => import('./components/BoltTorqueCalculator').then(m => ({ default: m.BoltTorqueCalculator })));
 const SOPManager = lazy(() => import('./components/SOPManager').then(m => ({ default: m.SOPManager })));
@@ -75,6 +75,12 @@ const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDash
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const FrancisDiagnostics = lazy(() => import('./components/FrancisDiagnostics.tsx').then(m => ({ default: m.FrancisDiagnostics })));
+const FrancisHub = React.lazy(() => import('./components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
+const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
+// Francis Turbine Module - All routes extracted to dedicated sub-router
+const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
+
+
 
 // --- 5. COMMAND CENTER DASHBOARD ---
 // Replaced with Toolbox Launchpad for authentic engineering focus
@@ -211,7 +217,8 @@ const AppLayout: React.FC = () => {
             'intuitionLog': '/intuition-log',
             'adminApproval': '/admin-approval',
             'clientPortal': '/client-portal',
-            'logbook': '/logbook'
+            'logbook': '/logbook',
+            'francisHub': '/francis-hub'
         };
         const target = routeMap[view];
         if (target) navigate(target);
@@ -346,7 +353,8 @@ const AppLayout: React.FC = () => {
                                 }>
                                     <Routes>
                                         <Route index element={<ToolboxLaunchpad />} />
-                                        <Route path="francis-diagnostics" element={<FrancisDiagnostics />} />
+                                        {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
+                                        <Route path="/francis-*" element={<FrancisRouter />} />
                                         <Route path="profile" element={<UserProfile />} />
                                         <Route path="map" element={<GlobalMap />} />
                                         <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
@@ -368,7 +376,6 @@ const AppLayout: React.FC = () => {
                                         <Route path="library" element={<ComponentLibrary />} />
                                         <Route path="vision" element={<UnderConstruction />} />
                                         <Route path="maintenance" element={<MaintenanceDashboard />} />
-                                        <Route path="shaft-alignment" element={<ShaftAlignment />} />
                                         <Route path="hydraulic-maintenance" element={<HydraulicMaintenance />} />
                                         <Route path="bolt-torque" element={<BoltTorqueCalculator />} />
                                         <Route path="shadow-engineer" element={<SOPManager />} />

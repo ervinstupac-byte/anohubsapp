@@ -87,7 +87,10 @@ export class KaplanTurbine implements TurbineFamily {
 }
 
 // Import logic engine
-import { diagnoseFrancisFault } from '../../lib/francis_logic';
+// Import logic engine
+import { FrancisModel } from './FrancisModel';
+import { CompleteSensorData, FrancisSensorData } from './types';
+
 
 // === FRANCIS IMPLEMENTATION ===
 export class FrancisTurbine implements TurbineFamily {
@@ -122,23 +125,35 @@ export class FrancisTurbine implements TurbineFamily {
     }
 
     analyzeSpecificRisks(data: any): string[] {
-        // Map any generic data to FrancisTelemetry if needed
-        // Assuming data structure matches or we overlap
-        const telemetry = {
-            bearingTemp: data.bearingTemp || 45,
-            vibration: data.vibration || 0.5,
-            siltPpm: data.siltPpm || 0,
-            gridFreq: data.gridFreq || 50.0,
-            loadMw: data.load || 0,
-            mivStatus: (data.mivStatus || 'OPEN') as 'OPEN' | 'CLOSED'
+        // Adapt generic data to internal FrancisModel
+        const model = new FrancisModel('francis_horizontal', {} as any);
+
+        // Mock historical data snapshot
+        const sensorData: CompleteSensorData = {
+            timestamp: Date.now(),
+            assetId: 'mock',
+            turbineFamily: 'francis',
+            common: {
+                vibration: data.vibration || 0.5,
+                temperature: data.bearingTemp || 45,
+                output_power: data.load || 12, // Mw
+                efficiency: 92,
+                status: 'OPTIMAL'
+            },
+            francis: {
+                guide_vane_opening: data.guideVaneOpening || 50,
+                // Map legacy MIV status if needed, though model focuses on sensors
+                runner_clearance: 1.0,
+                draft_tube_pressure: data.draftTubePressure || -0.2,
+                spiral_case_pressure: 5.0
+            } as FrancisSensorData
         };
 
-        const findings = diagnoseFrancisFault(telemetry);
+        const anomalies = model.detectAnomalies([sensorData]);
 
-        // Convert structured findings to string array for simple consumers
-        return findings
-            .filter(f => f.status !== 'NORMAL')
-            .map(f => `${f.status}: ${f.message} [Ref: ${f.referenceProtocol || 'N/A'}]`);
+        return anomalies.map(a =>
+            `${a.severity}: ${a.type} - ${a.recommendation}`
+        );
     }
 }
 

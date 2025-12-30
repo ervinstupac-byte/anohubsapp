@@ -44,7 +44,8 @@ export type AppView =
     | 'intuitionLog'
     | 'adminApproval'
     | 'clientPortal'
-    | 'logbook';
+    | 'logbook'
+    | 'francisHub';
 
 interface NavigationContextType {
     currentPage: AppView;

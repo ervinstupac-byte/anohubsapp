@@ -95,6 +95,11 @@ export interface FrancisSensorData {
     spiral_case_pressure?: number;
     // Slow runner specific
     runner_tip_clearance?: number;
+    // Added to support FrancisHub default sensor data
+    bearingTemp?: number;
+    vibration?: number;
+    siltConc?: number;
+    gridFrequency?: number;
 }
 
 export interface PeltonSensorData {

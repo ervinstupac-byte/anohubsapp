@@ -66,14 +66,15 @@ export interface TechnicalProjectState {
     };
     physics: {
         boltSafetyFactor: number;
-        boltLoadKN: number; // Added
-        boltCapacityKN: number; // Added
+        boltLoadKN: number;
+        boltCapacityKN: number;
         hoopStressMPa: number;
         staticPressureBar: number;
         surgePressureBar: number;
-        waterHammerPressureBar: number; // Added
+        waterHammerPressureBar: number;
     };
-    componentHealth?: ComponentHealthRegistry;  // NEW: Component health tracking
+    francis?: FrancisState; // NEW: Francis Hub State
+    componentHealth?: ComponentHealthRegistry;
     riskScore: number;
     lastRecalculation: string;
 }
@@ -106,12 +107,21 @@ export interface PenstockSpecs {
     wallThickness: number;
 }
 
+export type FrancisModuleStatus = 'green' | 'yellow' | 'red';
+
+export interface FrancisState {
+    modules: Record<string, FrancisModuleStatus>;
+    healthScore: number;
+    activeRisks: string[];
+}
+
 export type ProjectAction =
     | { type: 'UPDATE_HYDRAULIC'; payload: Partial<HydraulicStream> }
     | { type: 'UPDATE_MECHANICAL'; payload: Partial<MechanicalStream> }
     | { type: 'UPDATE_PENSTOCK'; payload: Partial<PenstockSpecs> }
     | { type: 'SET_ASSET'; payload: AssetIdentity }
     | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: string; componentId: string; healthData: ComponentHealthData } }
+    | { type: 'UPDATE_FRANCIS_MODULE'; payload: { moduleId: string; status: FrancisModuleStatus } }
     | { type: 'RESET_TO_DEMO' };
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
@@ -151,12 +161,29 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     },
     physics: {
         boltSafetyFactor: 1.5,
-        boltLoadKN: 350, // Added
-        boltCapacityKN: 550, // Added
+        boltLoadKN: 350,
+        boltCapacityKN: 550,
         hoopStressMPa: 120,
         staticPressureBar: 45,
         surgePressureBar: 55,
-        waterHammerPressureBar: 12.5 // Added
+        waterHammerPressureBar: 12.5
+    },
+    francis: {
+        modules: {
+            miv: 'green',
+            penstock: 'green',
+            cooling: 'green',
+            drainage: 'green',
+            bearings: 'red',
+            alignment: 'green',
+            lube: 'green',
+            brakes: 'green',
+            hpu: 'green',
+            pid: 'green',
+            dc: 'green'
+        },
+        healthScore: 88,
+        activeRisks: ['Seal Leakage', 'PEAK SURGE DETECT']
     },
     riskScore: 0,
     lastRecalculation: new Date().toISOString()
