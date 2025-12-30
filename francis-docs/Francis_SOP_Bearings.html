@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: MAIN BEARINGS & COOLING | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #f59e0b;
+            /* Amber/Gold for Rotation */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #78350f 0%, #0c0a09 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: black !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .alert-pulse {
+            animation: alert-pulse 2s infinite;
+        }
+
+        @keyframes alert-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        .table-alt tr:nth-child(even) {
+            background: rgba(30, 41, 59, 0.4);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-amber-600 rounded-lg border border-amber-400/30">
+                    <i data-lucide="refresh-cw" class="text-white w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-amber-900/30 text-amber-400 text-[10px] font-bold border border-amber-900 uppercase">SOP-ROT-001</span>
+                        <span class="text-[10px] text-stone-500 uppercase font-bold">REV 3.1</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        MAIN BEARINGS & COOLING</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-amber-50 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-amber-50 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-amber-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8">
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- 1. Oil Film Criticality -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-red-600 alert-pulse">
+                <div class="flex items-center gap-4 mb-6">
+                    <i data-lucide="shield-alert" class="text-red-500 w-8 h-8"></i>
+                    <h2 class="text-xl font-black text-white uppercase tracking-tight" data-i18n="s1_title">OIL FILM IS
+                        THE BEARING</h2>
+                </div>
+                <div class="bg-red-950/20 p-4 rounded-xl border border-red-900/40 mb-6">
+                    <p class="text-sm text-red-200/80 leading-relaxed" data-i18n="s1_desc">
+                        The heavy rotating mass floats on a microscopic film of oil.
+                        If temperature exceeds 60°C, viscosity drops—thin oil cannot carry the shaft.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-lg">
+                        <strong class="text-red-400 text-[11px] uppercase block mb-1" data-i18n="danger">Danger</strong>
+                        <p class="text-[10px] text-slate-400" data-i18n="s1_li1">Metal-to-metal contact leads to
+                            catastrophic babbit melting.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-lg">
+                        <strong class="text-amber-400 text-[11px] uppercase block mb-1"
+                            data-i18n="result">Result</strong>
+                        <p class="text-[10px] text-slate-400" data-i18n="s1_li2">Prolonged outage and extremely
+                            expensive repair costs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Heat Exchange Logic -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-amber-600">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8 flex items-center gap-2"
+                    data-i18n="s2_title">
+                    <i data-lucide="thermometer-snowflake" class="w-5 h-5 text-amber-400"></i> HEAT EXCHANGE LOGIC
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="bg-slate-900/40 p-5 rounded-xl border border-slate-800">
+                            <h4 class="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest">1.1 Intake
+                                Filtration</h4>
+                            <div class="flex gap-4">
+                                <i data-lucide="filter" class="w-8 h-8 text-slate-500 flex-shrink-0"></i>
+                                <ul class="text-[10px] text-slate-400 space-y-2">
+                                    <li data-i18n="s2_li1">Inspect mesh filters daily for river silt.</li>
+                                    <li data-i18n="s2_li2">High differential pressure (dP) means flow blockage.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/40 p-5 rounded-xl border border-slate-800">
+                            <h4 class="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest">1.2
+                                "Backflush" Protocol</h4>
+                            <div class="flex gap-4">
+                                <i data-lucide="undo-2" class="w-8 h-8 text-slate-500 flex-shrink-0"></i>
+                                <ul class="text-[10px] text-slate-400 space-y-2">
+                                    <li data-i18n="s3_li1">Reverse flow direction for 5 minutes every week.</li>
+                                    <li data-i18n="s3_li2">Eject deposited sediment acting as insulator.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-amber-950/10 border border-amber-900/30 rounded-xl">
+                        <h4 class="text-white text-[11px] font-black uppercase mb-4 tracking-widest"
+                            data-i18n="s4_title">2.1 Water Contamination</h4>
+                        <div class="flex gap-4 mb-4">
+                            <div
+                                class="w-16 h-16 bg-amber-600/30 border border-amber-500/50 rounded-full flex items-center justify-center">
+                                <i data-lucide="droplet" class="text-amber-400 w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <strong class="text-amber-400 text-xs block mb-1" data-i18n="symptom">Symptom: Milky
+                                    Oil</strong>
+                                <p class="text-[10px] text-slate-500" data-i18n="s4_li1">Oil in sight glass looks cloudy
+                                    or mliječno.</p>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-black/40 rounded border border-slate-800 text-[10px] text-slate-400">
+                            <strong class="text-red-500 mr-1 uppercase" data-i18n="action">ACTION:</strong>
+                            <span data-i18n="s4_li3">EMERGENCY STOP. Centrifuge or replace oil.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Limits & Triggers -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-slate-600">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="tbl_title">THERMAL
+                    OPERATING LIMITS</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs table-alt border-collapse">
+                        <thead>
+                            <tr class="bg-amber-900/40 text-amber-400 uppercase font-black text-[9px] tracking-widest">
+                                <th class="p-4 border-b border-amber-500/30" data-i18n="tbl_condition">Condition</th>
+                                <th class="p-4 border-b border-amber-500/30" data-i18n="tbl_temp">Temp Range</th>
+                                <th class="p-4 border-b border-amber-500/30" data-i18n="tbl_action">Action Required</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-300">
+                            <tr>
+                                <td class="p-4 border-b border-slate-800 font-bold" data-i18n="tbl_normal">NORMAL</td>
+                                <td class="p-4 border-b border-slate-800">18°C - 55°C</td>
+                                <td class="p-4 border-b border-slate-800" data-i18n="tbl_monitor">Routine monitoring.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 border-b border-slate-800 font-bold text-orange-500"
+                                    data-i18n="tbl_alarm">ALARM</td>
+                                <td class="p-4 border-b border-slate-800 font-black">60°C</td>
+                                <td class="p-4 border-b border-slate-800" data-i18n="tbl_check">Check cooling water flow
+                                    & clean filters.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 border-b border-slate-800 font-bold text-red-500" data-i18n="tbl_trip">
+                                    TRIP (SHUTDOWN)</td>
+                                <td class="p-4 border-b border-slate-800 font-black text-red-500">70°C</td>
+                                <td class="p-4 border-b border-slate-800">
+                                    <strong class="uppercase" data-i18n="tbl_esd">Emergency Stop</strong>.
+                                    <p class="text-[10px] text-slate-500" data-i18n="tbl_norestart">Inspect for babbit
+                                        damage before restart.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Checklist -->
+            <section class="glass-card rounded-2xl p-8 bg-amber-950/5 border-amber-500/20">
+                <h2 class="text-lg font-black text-amber-400 uppercase tracking-tight mb-6" data-i18n="cl_title">
+                    MAINTENANCE CYCLE</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="flex gap-3">
+                        <i data-lucide="clock-1" class="text-amber-500 w-5 h-5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-white text-[11px] uppercase block mb-1" data-i18n="daily">Daily</strong>
+                            <p class="text-[10px] text-slate-500" data-i18n="daily_desc">Scrub mesh filters on intake
+                                lines.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <i data-lucide="calendar" class="text-amber-500 w-5 h-5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-white text-[11px] uppercase block mb-1"
+                                data-i18n="weekly">Weekly</strong>
+                            <p class="text-[10px] text-slate-500" data-i18n="weekly_desc">5-minute backflush of all
+                                exchangers.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <i data-lucide="alert-circle" class="text-red-500 w-5 h-5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-red-500 text-[11px] uppercase block mb-1" data-i18n="on_alarm">On
+                                Alarm</strong>
+                            <p class="text-[10px] text-slate-500" data-i18n="alarm_desc">Immediate sight glass audit for
+                                water ingress.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "MAIN BEARINGS & COOLING",
+                return: "BACK TO DASHBOARD",
+                s1_title: "OIL FILM IS THE BEARING",
+                s1_desc: "The heavy rotating mass floats on a microscopic film of oil. If temperature exceeds 60°C, viscosity drops—thin oil cannot carry the shaft.",
+                danger: "Danger",
+                s1_li1: "Metal-to-metal contact leads to catastrophic babbit melting.",
+                result: "Result",
+                s1_li2: "Prolonged outage and extremely expensive repair costs.",
+                s2_title: "HEAT EXCHANGE LOGIC",
+                s2_li1: "Inspect mesh filters daily for river silt.",
+                s2_li2: "High differential pressure (dP) means flow blockage.",
+                s3_li1: "Reverse flow direction for 5 minutes every week.",
+                s3_li2: "Eject deposited sediment acting as insulator.",
+                s4_title: "2.1 Water Contamination",
+                symptom: "Symptom: Milky Oil",
+                s4_li1: "Oil in sight glass looks cloudy or mliječno.",
+                action: "ACTION",
+                s4_li3: "EMERGENCY STOP. Centrifuge or replace oil.",
+                tbl_title: "THERMAL OPERATING LIMITS",
+                tbl_condition: "Condition",
+                tbl_temp: "Temp Range",
+                tbl_action: "Action Required",
+                tbl_normal: "NORMAL",
+                tbl_monitor: "Routine monitoring.",
+                tbl_alarm: "ALARM",
+                tbl_check: "Check cooling water flow & clean filters.",
+                tbl_trip: "TRIP (SHUTDOWN)",
+                tbl_esd: "Emergency Stop",
+                tbl_norestart: "Inspect for babbit damage before restart.",
+                cl_title: "MAINTENANCE CYCLE",
+                daily: "Daily",
+                daily_desc: "Scrub mesh filters on intake lines.",
+                weekly: "Weekly",
+                weekly_desc: "5-minute backflush of all exchangers.",
+                on_alarm: "On Alarm",
+                alarm_desc: "Immediate sight glass audit for water ingress."
+            },
+            bs: {
+                title: "GLAVNI LEŽAJEVI I HLAĐENJE",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                s1_title: "ULJNI FILM JE LEŽAJ",
+                s1_desc: "Teška rotirajuća masa pluta na mikroskopskom filmu ulja. Ako temperatura pređe 60°C, viskozitet pada—rijetko ulje ne može nositi vratilo.",
+                danger: "Opasnost",
+                s1_li1: "Kontakt metal-o-metal dovodi do katastrofalnog topljenja babita.",
+                result: "Rezultat",
+                s1_li2: "Dugotrajni zastoj i ekstremno visoki troškovi popravke.",
+                s2_title: "LOGIKA RAZMJENE TOPLOTE",
+                s2_li1: "Svakodnevno pregledajte mrežaste filtere na mulj.",
+                s2_li2: "Visok diferencijalni pritisak (dP) znači blokadu protoka.",
+                s3_li1: "Okrenite smjer toka na 5 minuta svake sedmice.",
+                s3_li2: "Izbacite nataloženi sediment koji djeluje kao izolator.",
+                s4_title: "2.1 Kontaminacija Vodom",
+                symptom: "Simptom: Mliječno Ulje",
+                s4_li1: "Ulje u kontrolnom staklu izgleda mutno ili mliječno.",
+                action: "AKCIJA",
+                s4_li3: "HITNO ZAUSTAVLJANJE. Centrifugirajte ili zamijenite ulje.",
+                tbl_title: "TERMALNE GRANICE RADA",
+                tbl_condition: "Stanje",
+                tbl_temp: "Temp Opseg",
+                tbl_action: "Potrebna Akcija",
+                tbl_normal: "NORMALNO",
+                tbl_monitor: "Rutinski nadzor.",
+                tbl_alarm: "ALARM",
+                tbl_check: "Provjerite protok vode i očistite filtere.",
+                tbl_trip: "TRIP (ISKLJUČENJE)",
+                tbl_esd: "Hitno Zaustavljanje",
+                tbl_norestart: "Pregledajte oštećenja babita prije restarta.",
+                cl_title: "CIKLUS ODRŽAVANJA",
+                daily: "Dnevno",
+                daily_desc: "Očistite mrežaste filtere na usisnim linijama.",
+                weekly: "Sedmično",
+                weekly_desc: "5-minutno povratno ispiranje svih izmjenjivača.",
+                on_alarm: "Na Alarm",
+                alarm_desc: "Odmah provjerite kontrolno staklo na prodor vode."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

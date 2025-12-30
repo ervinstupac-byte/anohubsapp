@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sensory Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', monospace;
+        }
+
+        .sense-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sense-card:hover {
+            transform: translateX(5px);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .sense-hearing:hover {
+            border-color: #3b82f6;
+        }
+
+        .sense-smell:hover {
+            border-color: #eab308;
+        }
+
+        .sense-sight:hover {
+            border-color: #22c55e;
+        }
+
+        .sense-touch:hover {
+            border-color: #ef4444;
+        }
+
+        .check-btn {
+            transition: all 0.2s;
+        }
+
+        .check-btn.checked {
+            background-color: #22c55e;
+            border-color: #22c55e;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body class="p-8 max-w-4xl mx-auto">
+
+    <header class="mb-10 border-b border-slate-800 pb-6 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-black text-white tracking-widest uppercase flex items-center gap-3">
+                <i data-lucide="scan-face" class="text-purple-400"></i>
+                Sensory <span class="text-purple-400">Checklist</span>
+            </h1>
+            <p class="text-slate-500 font-mono text-xs mt-2">Daily Human-Machine Interface Audit</p>
+        </div>
+        <a href="./Francis_Horizontal_Dashboard.html"
+            class="px-4 py-2 border border-slate-600 rounded text-xs font-bold hover:bg-slate-800 transition">EXIT TO
+            DASHBOARD</a>
+    </header>
+
+    <div class="space-y-6">
+
+        <!-- AUDIT SLUHA (HEARING) -->
+        <div class="sense-card sense-hearing bg-slate-900/50 p-6 rounded border border-slate-800">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-blue-900/20 rounded-full">
+                    <i data-lucide="ear" class="w-8 h-8 text-blue-400"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-blue-300">AUDIT SLUHA (SOUND)</h2>
+                    <p class="text-slate-400 text-sm mb-4">Listen for the machine's "voice".</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 p-3 rounded">
+                            <div class="text-[10px] text-green-500 font-bold uppercase mb-1">NORMAL</div>
+                            <div class="text-sm tex-slate-300">Uniform Generator 'Humm' + Water Rush</div>
+                        </div>
+                        <div class="bg-black/30 p-3 rounded border border-red-900/30">
+                            <div class="text-[10px] text-red-500 font-bold uppercase mb-1">ALARM SIGNS</div>
+                            <ul class="text-sm text-slate-300 space-y-1 list-disc list-inside">
+                                <li><strong>Metal Click:</strong> Loose distributor bolt/linkage.</li>
+                                <li><strong>Hissing:</strong> HPU valve bypass/leak.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleCheck(this)"
+                    class="check-btn w-12 h-12 rounded border border-slate-600 flex items-center justify-center hover:bg-slate-800">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- AUDIT MIRISA (SMELL) -->
+        <div class="sense-card sense-smell bg-slate-900/50 p-6 rounded border border-slate-800">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-yellow-900/20 rounded-full">
+                    <i data-lucide="wind" class="w-8 h-8 text-yellow-400"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-yellow-300">AUDIT MIRISA (SMELL)</h2>
+                    <p class="text-slate-400 text-sm mb-4">Detect chemical changes in the air.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-black/30 p-3 rounded border border-red-900/30">
+                            <div class="text-[10px] text-purple-400 font-bold uppercase mb-1">OZON (THUNDERSTORM SMELL)
+                            </div>
+                            <div class="text-sm text-slate-300">Indicates Corona Discharge / Insulation Failure in
+                                Stator.</div>
+                        </div>
+                        <div class="bg-black/30 p-3 rounded border border-red-900/30">
+                            <div class="text-[10px] text-orange-400 font-bold uppercase mb-1">BURNT OIL</div>
+                            <div class="text-sm text-slate-300">Overheating Bearings or HPU pump friction.</div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleCheck(this)"
+                    class="check-btn w-12 h-12 rounded border border-slate-600 flex items-center justify-center hover:bg-slate-800">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- AUDIT VIDA (SIGHT) -->
+        <div class="sense-card sense-sight bg-slate-900/50 p-6 rounded border border-slate-800">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-green-900/20 rounded-full">
+                    <i data-lucide="eye" class="w-8 h-8 text-green-400"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-green-300">AUDIT VIDA (SIGHT)</h2>
+                    <p class="text-slate-400 text-sm mb-4">Verify mechanical geometry and fluid health.</p>
+
+                    <ul class="space-y-2 text-sm text-slate-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-green-500"></i>
+                            <strong>MIV Angle:</strong> Lever arm visually at 80° (Parallel to flow).
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-green-500"></i>
+                            <strong>Oil Color (HPU):</strong> Clear Amber. <span class="text-red-400 ml-1">Milky =
+                                Water/Air Contamination.</span>
+                        </li>
+                    </ul>
+                </div>
+                <button onclick="toggleCheck(this)"
+                    class="check-btn w-12 h-12 rounded border border-slate-600 flex items-center justify-center hover:bg-slate-800">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- AUDIT DODIRA (TOUCH) -->
+        <div class="sense-card sense-touch bg-slate-900/50 p-6 rounded border border-slate-800">
+            <div class="flex items-start gap-4">
+                <div class="p-3 bg-red-900/20 rounded-full">
+                    <i data-lucide="hand" class="w-8 h-8 text-red-400"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-xl font-bold text-red-300">AUDIT DODIRA (VIBRATION/HEAT)</h2>
+                    <p class="text-slate-400 text-sm mb-4">Physical feedback from the machine.</p>
+
+                    <div class="bg-black/30 p-3 rounded border border-red-900/30">
+                        <div class="text-[10px] text-red-400 font-bold uppercase mb-1">HEAT THRESHOLD</div>
+                        <div class="text-sm text-slate-300">
+                            Place hand on Bearing Housing coverage. <br>
+                            <strong>Rule:</strong> If you can't hold your hand for 5 seconds, it is > 60°C. <span
+                                class="text-red-500 font-bold">REPORT IMMEDIATELY.</span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleCheck(this)"
+                    class="check-btn w-12 h-12 rounded border border-slate-600 flex items-center justify-center hover:bg-slate-800">
+                    <i data-lucide="check" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+        function toggleCheck(btn) {
+            btn.classList.toggle('checked');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Governor Linkage & Distributor</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .visual-aid {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* === PRINT CSS FOR PDF EXPORT === */
+        @media print {
+            body {
+                background: white;
+                color: black;
+                font-size: 11pt;
+                line-height: 1.4;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                border: none;
+                padding: 20px;
+            }
+
+            header {
+                border-bottom: 2px solid black;
+                page-break-after: avoid;
+            }
+
+            .section-title {
+                background: white !important;
+                color: black !important;
+                border: 2px solid black;
+                page-break-after: avoid;
+            }
+
+            .module {
+                page-break-inside: avoid;
+                border: 1px solid #333;
+            }
+
+            .back-btn {
+                display: none;
+                /* Hide navigation in print */
+            }
+
+            /* Ensure tables don't break across pages */
+            table {
+                page-break-inside: avoid;
+            }
+
+            /* Add page numbers */
+            @page {
+                margin: 2cm;
+
+                @bottom-right {
+                    content: "Page " counter(page) " of " counter(pages);
+                }
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Critical SOP: Governor Linkage & Distributor</h1>
+            <h2 data-i18n="subtitle">Mechanical Synchronization & Transmission</h2>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <!-- INTRO MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="warn_title">⚠️ THE COST OF BACKLASH</h3>
+            <p><strong data-i18n="context">Context:</strong> <span data-i18n="context_desc">Hydraulic piston
+                    (Servomotor) pushes the Regulating Ring, which rotates all 20 wicket gates simultaneously to control
+                    water flow.</span></p>
+            <ul>
+                <li><strong data-i18n="risk">Risk:</strong> <span data-i18n="risk_desc">If linkage pins have "play"
+                        (wear), gates will flutter.</span></li>
+                <li><strong data-i18n="equation">Equation:</strong> <span data-i18n="eq_desc">1mm pin wear = ~5% loss in
+                        gate synchronization. This leads to efficiency loss and hunting.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop1_title">SOP 1: Linkage Logic & Inspection</div>
+        <div class="module technical">
+            <p data-i18n="chain_logic">The system is a chain. A chain is only as strong as its weakest link (pin).</p>
+
+            <h3 data-i18n="trans_path">1.1 Transmission Path</h3>
+            <p>Servomotor → Regulating Ring → Links (20x) → Wicket Gate Shaft.</p>
+
+            <h3 data-i18n="check_bush">1.2 Bushing & Pin Check</h3>
+            <ol>
+                <li><strong data-i18n="static_check">Static Check:</strong> <span data-i18n="static_desc">With unit
+                        crossed out and pressure released, grab each link arm by hand.</span></li>
+                <li><strong data-i18n="push_pull">Push/Pull:</strong> <span data-i18n="push_desc">Try to shake the
+                        arm.</span></li>
+                <li><strong data-i18n="result">Result:</strong>
+                    <ul>
+                        <li><strong data-i18n="pass">Pass:</strong> <span data-i18n="pass_desc">Zero tangible movement.
+                                Solid.</span></li>
+                        <li><strong data-i18n="fail">Fail:</strong> <span data-i18n="fail_desc">"Clicking" sound or
+                                visible movement. Replace bushing immediately.</span></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="sop2_title">SOP 2: Lubrication Audit</div>
+        <div class="module technical">
+            <p data-i18n="frict_desc">Friction causes governor hunting (unstable power). Grease is the stabilizer.</p>
+
+            <h3 data-i18n="cent_lube">2.1 Central Lubrication System</h3>
+            <ul>
+                <li><strong data-i18n="audit">Audit:</strong> <span data-i18n="audit_desc">Check central pump builds
+                        pressure (typically 150-200 bar).</span></li>
+                <li><strong data-i18n="vis_conf">Visual Confirmation:</strong> <span data-i18n="vis_desc">Inspect all 20
+                        gate shafts. You should see a <strong>fresh ring of grease</strong> purging from seals.</span>
+                </li>
+                <li><strong data-i18n="blockage">Blockage:</strong> <span data-i18n="block_desc">If one bearing is dry
+                        while others purge, distributor block is clogged. Clean manually.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop3_title">SOP 3: Friction "Swing Test"</div>
+        <div class="module diagnostic">
+            <p data-i18n="swing_desc">This test confirms the entire mechanism "floats" freely.</p>
+
+            <h3 data-i18n="proc_3">3.1 Procedure</h3>
+            <ol>
+                <li><strong data-i18n="safety">Safety:</strong> <span data-i18n="safe_desc">Unit stopped. MIV Closed.
+                        <strong>Mechanical Safety Pin REMOVED</strong> (Control risk!).</span></li>
+                <li><strong data-i18n="detach">Detach:</strong> <span data-i18n="detach_desc">Disconnect servomotor
+                        piston from regulating ring.</span></li>
+                <li><strong data-i18n="man_swing">Manual Swing:</strong> <span data-i18n="swing_act">Two technicians
+                        should be able to push the regulating ring by hand from 0% to 100% opening.</span></li>
+                <li><strong data-i18n="crit_swing">Criteria:</strong> <span data-i18n="crit_desc">Movement must be
+                        smooth. No "binding", "hard spots", or "jumping".</span></li>
+            </ol>
+            <div class="visual-aid" data-i18n="vis_diag">
+                Diagnosis: If ring binds at specific spot, a wicket gate is bent or a stone is jammed in housing.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="checklist">Checklist</div>
+        <div class="module">
+            <ul>
+                <li><strong data-i18n="monthly">Monthly:</strong> <span data-i18n="chk_grease">Check "Grease Rings" on
+                        all 20 gates.</span></li>
+                <li><strong data-i18n="annually">Annually:</strong> <span data-i18n="chk_swing">Perform Manual "Swing
+                        Test" for friction.</span></li>
+                <li><strong data-i18n="overhaul">At Overhaul:</strong> <span data-i18n="chk_pins">Replace all safety
+                        pins and bushings if > 0.1mm play detected.</span></li>
+            </ul>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Critical SOP: Governor Linkage & Distributor",
+                subtitle: "Mechanical Synchronization & Transmission",
+                warn_title: "⚠️ THE COST OF BACKLASH",
+                context: "Context:",
+                context_desc: "Hydraulic piston (Servomotor) pushes the Regulating Ring, which rotates all 20 wicket gates simultaneously to control water flow.",
+                risk: "Risk:",
+                risk_desc: "If linkage pins have \"play\" (wear), gates will flutter.",
+                equation: "Equation:",
+                eq_desc: "1mm pin wear = ~5% loss in gate synchronization. This leads to efficiency loss and hunting.",
+                sop1_title: "SOP 1: Linkage Logic & Inspection",
+                chain_logic: "The system is a chain. A chain is only as strong as its weakest link (pin).",
+                trans_path: "1.1 Transmission Path",
+                check_bush: "1.2 Bushing & Pin Check",
+                static_check: "Static Check:",
+                static_desc: "With unit crossed out and pressure released, grab each link arm by hand.",
+                push_pull: "Push/Pull:",
+                push_desc: "Try to shake the arm.",
+                result: "Result:",
+                pass: "Pass:",
+                pass_desc: "Zero tangible movement. Solid.",
+                fail: "Fail:",
+                fail_desc: "\"Clicking\" sound or visible movement. Replace bushing immediately.",
+                sop2_title: "SOP 2: Lubrication Audit",
+                frict_desc: "Friction causes governor hunting (unstable power). Grease is the stabilizer.",
+                cent_lube: "2.1 Central Lubrication System",
+                audit: "Audit:",
+                audit_desc: "Check central pump builds pressure (typically 150-200 bar).",
+                vis_conf: "Visual Confirmation:",
+                vis_desc: "Inspect all 20 gate shafts. You should see a <strong>fresh ring of grease</strong> purging from seals.",
+                blockage: "Blockage:",
+                block_desc: "If one bearing is dry while others purge, distributor block is clogged. Clean manually.",
+                sop3_title: "SOP 3: Friction \"Swing Test\"",
+                swing_desc: "This test confirms the entire mechanism \"floats\" freely.",
+                proc_3: "3.1 Procedure",
+                safety: "Safety:",
+                safe_desc: "Unit stopped. MIV Closed. <strong>Mechanical Safety Pin REMOVED</strong> (Control risk!).",
+                detach: "Detach:",
+                detach_desc: "Disconnect servomotor piston from regulating ring.",
+                man_swing: "Manual Swing:",
+                swing_act: "Two technicians should be able to push the regulating ring by hand from 0% to 100% opening.",
+                crit_swing: "Criteria:",
+                crit_desc: "Movement must be smooth. No \"binding\", \"hard spots\", or \"jumping\".",
+                vis_diag: "Diagnosis: If ring binds at specific spot, a wicket gate is bent or a stone is jammed in housing.",
+                checklist: "Checklist",
+                monthly: "Monthly:",
+                chk_grease: "Check \"Grease Rings\" on all 20 gates.",
+                annually: "Annually:",
+                chk_swing: "Perform Manual \"Swing Test\" for friction.",
+                overhaul: "At Overhaul:",
+                chk_pins: "Replace all safety pins and bushings if > 0.1mm play detected.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "Kritični SOP: Polužje Regulatora & Sprovodnog Aparata",
+                subtitle: "Mehanička Sinhronizacija & Transmisija",
+                warn_title: "⚠️ CIJENA ZRAČNOSTI (BACKLASH)",
+                context: "Kontekst:",
+                context_desc: "Hidraulični klip (Servomotor) gura Regulacioni Prsten, koji rotira svih 20 lopatica istovremeno za kontrolu protoka vode.",
+                risk: "Rizik:",
+                risk_desc: "Ako bolcne polužja imaju \"lufta\" (istrošenost), lopatice će lepršati.",
+                equation: "Jednačina:",
+                eq_desc: "1mm istrošenosti bolcne = ~5% gubitka u sinhronizaciji lopatica. Ovo vodi do gubitka efikasnosti i \"šetanja\" (hunting) agregata.",
+                sop1_title: "SOP 1: Logika Polužja i Inspekcija",
+                chain_logic: "Sistem je lanac. Lanac je jak koliko i njegova najslabija karika (bolcna).",
+                trans_path: "1.1 Putanja Transmisije",
+                check_bush: "1.2 Provjera Čahura & Bolcni",
+                static_check: "Statička Provjera:",
+                static_desc: "Sa zaustavljenim agregatom i otpuštenim pritiskom, uhvatite svaku polugu rukom.",
+                push_pull: "Gurni/Povuci:",
+                push_desc: "Pokušajte prodrmati ruku.",
+                result: "Rezultat:",
+                pass: "Prolaz:",
+                pass_desc: "Nula opipljivog pomjeranja. Čvrsto.",
+                fail: "Pad:",
+                fail_desc: "Zvuk \"klikanja\" ili vidljivo pomjeranje. Zamijenite čahuru odmah.",
+                sop2_title: "SOP 2: Audit Podmazivanja",
+                frict_desc: "Trenje uzrokuje da regulator \"šeta\" (nestabilna snaga). Mast je stabilizator.",
+                cent_lube: "2.1 Centralni Sistem Podmazivanja",
+                audit: "Audit:",
+                audit_desc: "Provjerite da li centralna pumpa nabija pritisak (tipično 150-200 bar).",
+                vis_conf: "Vizuelna Potvrda:",
+                vis_desc: "Pregledajte svih 20 osovina lopatica. Trebate vidjeti <strong>svjež prsten masti</strong> kako izlazi iz zaptivača.",
+                blockage: "Blokada:",
+                block_desc: "Ako je jedan ležaj suh dok ostali cure, dozator je blokiran. Očistite ga ručno.",
+                sop3_title: "SOP 3: \"Swing Test\" Trenja",
+                swing_desc: "Ovaj test potvrđuje da čitav mehanizam \"pluta\" slobodno.",
+                proc_3: "3.1 Procedura",
+                safety: "Sigurnost:",
+                safe_desc: "Agregat zaustavljen. GUV Zatvoren. <strong>Mehanička Sigurnosna Čivija UKLONJENA</strong> (Rizik kontrole!).",
+                detach: "Odvajanje:",
+                detach_desc: "Odvojite klip servomotora od regulacionog prstena.",
+                man_swing: "Ručno Njihanje:",
+                swing_act: "Dva tehničara bi trebala moći gurnuti regulacioni prsten rukom od 0% do 100% otvora.",
+                crit_swing: "Kriterij:",
+                crit_desc: "Kretanje mora biti glatko. Bez \"kočenja\", \"tvrdih tačaka\" ili \"skakanja\".",
+                vis_diag: "Dijagnoza: Ako prsten koči na određenom mjestu, sprovodna lopatica je savijena ili je kamen zaglavljen u kućištu.",
+                checklist: "Kontrolna Lista",
+                monthly: "Mjesečno:",
+                chk_grease: "Provjeri \"Prstenove Masti\" na svih 20 lopatica.",
+                annually: "Godišnje:",
+                chk_swing: "Izvrši Ručni \"Swing Test\" za provjeru trenja.",
+                overhaul: "Na Remontu:",
+                chk_pins: "Zamijeni sve sigurnosne čivije i čahure ako je detektovan luft > 0.1mm.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

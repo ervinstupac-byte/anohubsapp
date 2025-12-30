@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIC LOGGER - DETERMINISTIC DIAGNOSTICS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0c0a09;
+            color: #d6d3d1;
+        }
+
+        /* Warm dark grey */
+
+        .logic-panel {
+            background: #1c1917;
+            border: 1px solid #44403c;
+        }
+
+        .code-input {
+            background: #292524;
+            color: #fdba74;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid #57534e;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+        }
+
+        .terminal-output {
+            background: #000;
+            border-left: 4px solid #f97316;
+            color: #22c55e;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .blink-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            color: #f97316;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .btn-exec {
+            background: linear-gradient(to right, #ea580c, #c2410c);
+        }
+
+        .btn-exec:hover {
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+
+<body class="p-6 md:p-10 flex flex-col items-center min-h-screen">
+
+    <!-- Header -->
+    <header class="w-full max-w-5xl mb-10 flex justify-between items-end border-b border-orange-900/50 pb-4">
+        <div>
+            <h1 class="text-3xl font-black text-orange-500 tracking-tighter uppercase flex items-center gap-3">
+                <i data-lucide="binary"></i> Logic Logger
+            </h1>
+            <p class="text-xs text-stone-500 mt-1 font-bold tracking-widest">DETERMINISTIC FAULT MATRIX V1.4</p>
+        </div>
+        <div class="text-right">
+            <a href="Francis_Horizontal_Dashboard.html"
+                class="text-xs text-stone-500 hover:text-orange-400 transition flex items-center gap-1 justify-end">
+                <i data-lucide="arrow-left"></i> DASHBOARD
+            </a>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-5xl">
+
+        <!-- LEFT: INPUT MATRIX -->
+        <div class="logic-panel rounded-lg p-8 shadow-2xl">
+            <h2 class="text-xl font-bold text-stone-300 mb-6 border-b border-stone-800 pb-2">INPUT VECTORS</h2>
+
+            <div class="space-y-6">
+                <!-- Logic Input 1: ZONE -->
+                <div>
+                    <label class="block text-xs font-bold text-stone-500 mb-2 uppercase">Input Vector 01 [ZONE]</label>
+                    <select id="zoneInput" class="w-full p-4 rounded code-input text-sm">
+                        <option value="">-- NULL --</option>
+                        <option value="MIV">MIV [Main Inlet Valve]</option>
+                        <option value="HPU">HPU [Hydraulic Power]</option>
+                        <option value="DIST">DIST [Distributor/Wickett]</option>
+                        <option value="BEAR">BEAR [Guide Bearing]</option>
+                        <option value="GEN">GEN [Generator Stator]</option>
+                    </select>
+                </div>
+
+                <!-- Logic Input 2: ERROR CODE -->
+                <div>
+                    <label class="block text-xs font-bold text-stone-500 mb-2 uppercase">Input Vector 02 [SYMPTOM
+                        CODE]</label>
+                    <select id="codeInput" class="w-full p-4 rounded code-input text-sm">
+                        <option value="">-- NULL --</option>
+                        <option value="ERR_LEAK_01">ERR_LEAK_01 (Shaft/Seal Leakage)</option>
+                        <option value="ERR_VIB_LOW">ERR_VIB_LOW (Low Freq Pulsation)</option>
+                        <option value="ERR_N2_PRESS">ERR_N2_PRESS (Nitrogen < 12.5 MPa)</option>
+                        <option value="ERR_SYNC_VAR">ERR_SYNC_VAR (Vane Sync > 0.5mm)</option>
+                        <option value="ERR_TEMP_HI">ERR_TEMP_HI (Temp > Alarm Limit)</option>
+                    </select>
+                </div>
+
+                <!-- Execute Button -->
+                <button onclick="runLogic()"
+                    class="w-full py-5 rounded text-white font-bold tracking-widest uppercase btn-exec flex justify-center items-center gap-3 shadow-lg shadow-orange-900/20 mt-4">
+                    <i data-lucide="play"></i> RESTORE LOGIC
+                </button>
+            </div>
+        </div>
+
+        <!-- RIGHT: TERMINAL OUTPUT -->
+        <div class="logic-panel rounded-lg p-0 overflow-hidden flex flex-col h-full bg-black shadow-2xl">
+            <div class="bg-stone-900 px-4 py-2 border-b border-stone-800 flex justify-between items-center">
+                <span class="text-[10px] font-bold text-stone-500">TERMINAL OUTPUT</span>
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 rounded-full bg-stone-700"></div>
+                    <div class="w-2 h-2 rounded-full bg-stone-700"></div>
+                </div>
+            </div>
+
+            <div id="terminalBody" class="p-6 terminal-output font-mono h-full overflow-y-auto">
+                <p class="text-stone-600 mb-2">> System Ready...</p>
+                <p class="text-stone-600 mb-2">> Waiting for deterministic input...</p>
+                <span class="blink-cursor"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Action Card (Generated Dynamically) -->
+    <div id="actionCard" class="w-full max-w-5xl mt-8 hidden">
+        <div class="p-6 bg-orange-900/10 border border-orange-500/50 rounded flex justify-between items-center">
+            <div>
+                <h3 class="text-orange-500 font-bold text-lg mb-1">LOGIC MATCH FOUND</h3>
+                <p id="actionText" class="text-stone-300 text-sm">Recommended procedure loaded into memory.</p>
+            </div>
+            <a id="actionLink" href="#"
+                class="px-6 py-3 bg-stone-800 hover:bg-stone-700 text-white text-xs font-bold uppercase rounded border border-stone-600">
+                Execute Procedure
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function runLogic() {
+            const zone = document.getElementById('zoneInput').value;
+            const code = document.getElementById('codeInput').value;
+            const term = document.getElementById('terminalBody');
+            const actionCard = document.getElementById('actionCard');
+
+            if (!zone || !code) {
+                term.innerHTML += `<p class="text-red-500">> ERROR: NULL INPUT VECTOR</p>`;
+                return;
+            }
+
+            // Save to LocalStorage for Report Generator
+            const timestamp = new Date().toLocaleString();
+            const logEntry = {
+                zone: zone,
+                code: code,
+                timestamp: timestamp,
+                status: 'ACTIVE'
+            };
+
+            // Get existing history or init empty array
+            let history = JSON.parse(localStorage.getItem('turbine_logic_history') || '[]');
+            // Add new entry to top
+            history.unshift(logEntry);
+            // Limit to last 10 entries
+            if (history.length > 10) history = history.slice(0, 10);
+            localStorage.setItem('turbine_logic_history', JSON.stringify(history));
+
+
+            // Output Simulation
+            term.innerHTML += `<p class="text-stone-400 mt-2">> PROCESSING ${zone} + ${code} ...</p>`;
+            term.innerHTML += `<p class="text-blue-500">> MEMORY: Stored in Local Retention [REF: ${timestamp}]</p>`;
+
+            setTimeout(() => {
+                let response = "";
+                let link = "#";
+                let cmd = "";
+
+                // Deterministic Logic Map
+                if (code === 'ERR_N2_PRESS') {
+                    cmd = `IF (N2_PRESS < 12.5) THEN BLOCK_START_SEQ`;
+                    response = `CRITICAL: HPU Energy Insufficient. Accumulator pre-charge required.`;
+                    link = "Francis_SOP_HPU_Energy.html";
+                } else if (code === 'ERR_SYNC_VAR') {
+                    cmd = `IF (SYNC_VAR > 0.5) THEN RECALIBRATE_LINKAGE`;
+                    response = `WARNING: Distributor asymmetry detected. Risk of shear pin failure.`;
+                    link = "Francis_SOP_Distributor_Sync.html";
+                } else if (code === 'ERR_LEAK_01') {
+                    cmd = `IF (LEAK_RATE > LIMIT) THEN INITIATE_SEAL_RECOVERY`;
+                    response = `ALERT: Shaft seal integrity compromised. recovery protocol active.`;
+                    link = "Francis_SOP_Recovery.html";
+                } else if (code === 'ERR_VIB_LOW') {
+                    cmd = `IF (FREQ < 3.5Hz) THEN CHECK_DRAFT_TUBE_VORTEX`;
+                    response = `ADVISORY: Rheingans detected. Aeration recommended.`;
+                    link = "Francis_SOP_Vortex_Control.html";
+                } else if (code === 'ERR_TEMP_HI') {
+                    cmd = `IF (BEARING_TEMP > 65) THEN CHECK_COOLING_FLOW`;
+                    response = `ALARM: Thermal threshold exceeded. Verify cooling loop.`;
+                    link = "Francis_SOP_Cooling_Water.html";
+                } else {
+                    cmd = `SEARCHING_DATABASE...`;
+                    response = `Code recognized. Standard diagnostics recommended.`;
+                    link = "Francis_Horizontal_Dashboard.html";
+                }
+
+                term.innerHTML += `<p class="text-orange-400">> LOGIC: ${cmd}</p>`;
+                term.innerHTML += `<p class="text-green-500">> OUTPUT: ${response}</p>`;
+
+                // Show Action Card
+                document.getElementById('actionText').innerText = response;
+                document.getElementById('actionLink').href = link;
+                actionCard.classList.remove('hidden');
+
+                // Scroll to bottom
+                term.scrollTop = term.scrollHeight;
+                lucide.createIcons();
+
+            }, 600);
+        }
+    </script>
+</body>
+
+</html>

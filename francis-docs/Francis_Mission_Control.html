@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francis Agregat 1: Kontrola Misije V3 - Logika Integrisana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #0b1121;
+            /* Darker navy */
+            color: #e2e8f0;
+            font-family: 'Segoe UI', monospace;
+        }
+
+        /* Timeline Connector Line */
+        .timeline-line {
+            position: absolute;
+            left: 2rem;
+            top: 4rem;
+            bottom: 4rem;
+            width: 3px;
+            background: #1e293b;
+            z-index: 0;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 0%;
+            background: #22c55e;
+            /* Green fill */
+            box-shadow: 0 0 10px #22c55e;
+            transition: height 0.8s ease-in-out;
+        }
+
+        /* Nodes */
+        .node-container {
+            position: relative;
+            margin-left: 4.5rem;
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .node-container.active {
+            opacity: 1;
+            pointer-events: all;
+            border-color: #0ea5e9;
+            /* Sky blue */
+            background: rgba(15, 23, 42, 0.9);
+            transform: translateX(5px);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
+        }
+
+        .node-container.blocked {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake {
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
+        .node-container.completed {
+            opacity: 1;
+            pointer-events: none;
+            border-color: #22c55e;
+            background: rgba(2, 6, 23, 0.8);
+        }
+
+        /* Node Circle on Timeline */
+        .node-circle {
+            position: absolute;
+            left: -3.35rem;
+            /* Aligned with line */
+            top: 1.5rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0f172a;
+            border: 3px solid #475569;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .node-container.active .node-circle {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 10px #0ea5e9;
+            transform: scale(1.2);
+        }
+
+        .node-container.completed .node-circle {
+            background: #22c55e;
+            border-color: #22c55e;
+            box-shadow: 0 0 15px #22c55e;
+        }
+
+        .node-container.blocked .node-circle {
+            background: #ef4444 !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 15px #ef4444 !important;
+        }
+
+
+        /* ESD Panel */
+        .esd-panel {
+            border: 2px solid #ef4444;
+            /* Red */
+            background: linear-gradient(45deg, rgba(69, 10, 10, 0.9), rgba(153, 27, 27, 0.2));
+            animation: pulse-red 3s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 5px rgba(239, 68, 68, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(239, 68, 68, 0.2);
+            }
+        }
+
+        .toggle-sim {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #64748b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-sim.active {
+            background: #3b0764;
+            border-color: #a855f7;
+            color: #d8b4fe;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+    </style>
+</head>
+
+<body class="p-8">
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-6 border-b border-slate-800 pb-6 transition-all"
+            id="mainHeader">
+            <div>
+                <h1 class="text-4xl font-black text-white tracking-widest uppercase flex items-center gap-3">
+                    <i data-lucide="activity" class="text-cyan-400"></i>
+                    Francis <span class="text-cyan-400" data-i18n="title_main">Kontrola Misije</span>
+                </h1>
+                <p class="text-slate-500 font-mono text-sm mt-2 ml-11" data-i18n="subtitle">Sigurnosni Interlock Gates
+                    Aktivni</p>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] text-slate-500 font-bold uppercase" data-i18n="system_status_label">Status
+                    Sistema</div>
+                <div id="systemState" class="text-amber-500 font-bold text-xl animate-pulse">SEKVENCA NA ČEKANJU</div>
+                <div class="flex gap-2 mt-3">
+                    <button onclick="setLang('en')" id="btnEn"
+                        style="padding: 4px 10px; font-size: 10px; font-weight: bold; background: #0ea5e9; color: white; border: none; border-radius: 3px; cursor: pointer;">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        style="padding: 4px 10px; font-size: 10px; font-weight: bold; background: #475569; color: #94a3b8; border: none; border-radius: 3px; cursor: pointer;">BS</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- LOGIC SIMULATION PANEL -->
+        <div class="mb-12 p-4 bg-slate-900/50 rounded border border-slate-700/50 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+                class="text-[10px] font-bold text-slate-500 uppercase col-span-full border-b border-slate-800 pb-2 mb-2 flex justify-between">
+                <span data-i18n="sim_title">Simulacija Logičkih Kvarova (Ubaci Grešku)</span>
+                <span class="text-purple-400">DEV MODE</span>
+            </div>
+
+            <button onclick="toggleFault('n2')" id="btn-n2" class="toggle-sim">
+                [GATE 1] Sim Nizak Pritisak N2
+            </button>
+            <button onclick="toggleFault('sync')" id="btn-sync" class="toggle-sim">
+                [GATE 2] Sim Greška Sinhronizacije
+            </button>
+            <button onclick="toggleFault('dp')" id="btn-dp" class="toggle-sim">
+                [GATE 3] Sim Visok Delta-P
+            </button>
+            <button onclick="toggleFault('angle')" id="btn-angle" class="toggle-sim">
+                [GATE 4] Sim GUV Ugao Greška
+            </button>
+        </div>
+
+        <div class="relative">
+            <!-- Vertical Timeline -->
+            <div class="timeline-line">
+                <div id="timelineFill" class="timeline-progress"></div>
+            </div>
+
+            <!-- NODE 1: HPU & ENERGY (GATE 1) -->
+            <div id="node1" class="node-container active">
+                <div class="node-circle"></div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-bold text-cyan-400 mb-1" data-i18n="node1_title">1. Status HPU i
+                            Energije</h3>
+                        <p class="text-slate-400 text-xs mb-4" data-i18n="node1_desc">GATE 1: N2 > 12.5 MPa Potreban.
+                        </p>
+
+                        <div class="bg-black/40 rounded p-3 mb-4 font-mono text-xs border border-slate-700/50">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-slate-500">Pritisak Ulja:</span>
+                                <span id="val-oil" class="text-white">14.2 MPa</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">N2 Pred-Punjenje:</span>
+                                <span id="val-n2" class="text-green-400">NORMALNO</span>
+                            </div>
+                        </div>
+                        <div id="err-n2"
+                            class="hidden text-red-500 text-xs font-bold mb-2 bg-red-900/20 p-2 rounded border border-red-500/50">
+                            ⚠ BLOKADA: N2 PRITISAK KRITIČAN (10.1 MPa)
+                        </div>
+                    </div>
+                    <i data-lucide="zap" class="w-8 h-8 text-cyan-500/20"></i>
+                </div>
+                <button onclick="confirmStep(1)" id="btn-step-1"
+                    class="w-full py-2 bg-cyan-900/50 hover:bg-cyan-600 border border-cyan-700 hover:border-cyan-400 text-cyan-100 font-bold rounded transition text-sm uppercase tracking-wider">
+                    Potvrdi Uslove (12.5 - 16 MPa)
+                </button>
+            </div>
+
+            <!-- NODE 2: DISTRIBUTOR ZERO (GATE 2) -->
+            <div id="node2" class="node-container">
+                <div class="node-circle"></div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-bold text-cyan-400 mb-1" data-i18n="node2_title">2. Nulto Zaptivanje
+                            Sprovodnog Aparata</h3>
+                        <p class="text-slate-400 text-xs mb-4" data-i18n="node2_desc">GATE 2: Odstupanje < 0.5mm. 0%
+                                Curenja.</p>
+
+                                <div class="bg-black/40 rounded p-3 mb-4 font-mono text-xs border border-slate-700/50">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-slate-500">Lopatice (1-20):</span>
+                                        <span id="val-sync" class="text-green-400">0.0% [ZAKLJUČANO]</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-500">Pritisak Stiskanja:</span>
+                                        <span class="text-green-400">AKTIVAN</span>
+                                    </div>
+                                </div>
+                                <div id="err-sync"
+                                    class="hidden text-red-500 text-xs font-bold mb-2 bg-red-900/20 p-2 rounded border border-red-500/50">
+                                    ⚠ BLOKADA: LOPATICA 4 ODSTUPANJE (+2.1mm)
+                                </div>
+                    </div>
+                    <i data-lucide="lock" class="w-8 h-8 text-cyan-500/20"></i>
+                </div>
+                <button onclick="confirmStep(2)" id="btn-step-2"
+                    class="w-full py-2 bg-cyan-900/50 hover:bg-cyan-600 border border-cyan-700 hover:border-cyan-400 text-cyan-100 font-bold rounded transition text-sm uppercase tracking-wider">
+                    Potvrdi 0% Zaptivanje
+                </button>
+            </div>
+
+            <!-- NODE 3: BYPASS EQUALIZATION (GATE 3) -->
+            <div id="node3" class="node-container">
+                <div class="node-circle"></div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-bold text-cyan-400 mb-1" data-i18n="node3_title">3. Izjednačavanje
+                            Bajpasa</h3>
+                        <p class="text-slate-400 text-xs mb-4" data-i18n="node3_desc">GATE 3: Delta P < 10% (1 Bar).</p>
+
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="text-center">
+                                        <div class="text-center">
+                                            <div class="text-[10px] text-slate-500">UZVODNO</div>
+                                            <div class="text-lg font-bold text-white">14.5 Bar</div>
+                                        </div>
+                                    </div>
+                                    <div id="loadingBarContainer"
+                                        class="flex-1 h-2 bg-slate-800 rounded overflow-hidden">
+                                        <div id="loadingBar"
+                                            class="h-full bg-blue-500 w-0 transition-all duration-[3000ms]"></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[10px] text-slate-500">SPIRALA</div>
+                                        <div id="spiralVal" class="text-lg font-bold text-red-500">0.0 Bar</div>
+                                    </div>
+                                </div>
+                                <div id="err-dp"
+                                    class="hidden text-red-500 text-xs font-bold mb-2 bg-red-900/20 p-2 rounded border border-red-500/50">
+                                    ⚠ BLOKADA: DELTA P > 3 BAR. GUV ZATVOREN.
+                                </div>
+                    </div>
+                    <i data-lucide="scale" class="w-8 h-8 text-cyan-500/20"></i>
+                </div>
+
+                <button id="btnBypass" onclick="startFilling()"
+                    class="w-full py-2 bg-blue-900/50 hover:bg-blue-600 border border-blue-700 hover:border-blue-400 text-blue-100 font-bold rounded transition text-sm uppercase tracking-wider">
+                    Pokreni Punjenje Spirale
+                </button>
+                <button id="btnBypassConfirm" onclick="confirmStep(3)"
+                    class="hidden w-full py-2 bg-green-900/50 hover:bg-green-600 border border-green-700 hover:border-green-400 text-green-100 font-bold rounded transition text-sm uppercase tracking-wider animate-pulse">
+                    Izjednačavanje Završeno (Potvrdi)
+                </button>
+            </div>
+
+            <!-- NODE 4: MIV RELEASE (GATE 4) -->
+            <div id="node4" class="node-container">
+                <div class="node-circle"></div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-lg font-bold text-cyan-400 mb-1" data-i18n="node4_title">4. Otvaranje GUV-a</h3>
+                        <p class="text-slate-400 text-xs mb-4" data-i18n="node4_desc">GATE 4: Ugao == 80.0°. Interlock
+                            Otpušten.</p>
+
+                        <div class="bg-black/40 rounded p-3 mb-4 font-mono text-xs border border-slate-700/50">
+                            <div class="flex justify-between mb-1">
+                                <span class="text-slate-500">Interlock:</span>
+                                <span class="text-green-400">OTPUŠTEN</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Ciljani Ugao:</span>
+                                <span id="val-angle" class="text-white">80.0°</span>
+                            </div>
+                        </div>
+                        <div id="err-angle"
+                            class="hidden text-red-500 text-xs font-bold mb-2 bg-red-900/20 p-2 rounded border border-red-500/50">
+                            ⚠ BLOKADA: VENTIL ZAGLAVLJEN @ 45°. RIZIK EROZIJE.
+                        </div>
+                    </div>
+                    <i data-lucide="door-open" class="w-8 h-8 text-cyan-500/20"></i>
+                </div>
+                <button id="btnMIV" onclick="confirmStep(4)"
+                    class="w-full py-2 bg-cyan-900/50 hover:bg-cyan-600 border border-cyan-700 hover:border-cyan-400 text-cyan-100 font-bold rounded transition text-sm uppercase tracking-wider">
+                    KOMANDA GUV OTVORI
+                </button>
+            </div>
+
+        </div>
+
+        <!-- FAIL-SAFE / ESD PANEL -->
+        <div class="esd-panel mt-12 rounded-lg p-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-20">
+                <i data-lucide="alert-triangle" class="w-24 h-24 text-red-500"></i>
+            </div>
+
+            <h3 class="text-xl font-black text-red-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <i data-lucide="shield-alert"></i>
+                <span data-i18n="esd_title">Hitno Zaustavljanje (ESD) Spremno</span>
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-red-200">Gravitacioni Tegovi: NAORUŽANI</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-red-200">Integritet Hidraulike: OK</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-red-200">Baterija Pilot Ventila: OK</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- RETURN LINK -->
+        <div class="text-center mt-12">
+            <a href="Francis_Horizontal_Dashboard.html"
+                class="text-slate-500 hover:text-white text-xs font-bold uppercase tracking-widest transition"
+                data-i18n="back_btn">
+                ← Povratak u Operativni Centar
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const steps = 4;
+
+        let faults = {
+            n2: false,
+            sync: false,
+            dp: false,
+            angle: false
+        };
+
+        function toggleFault(type) {
+            faults[type] = !faults[type];
+            // Toggle Visuals
+            document.getElementById('btn-' + type).classList.toggle('active');
+
+            // Update Data Displays based on faults
+            if (type === 'n2') {
+                if (faults.n2) {
+                    document.getElementById('val-n2').innerText = "NISKO (10.1 MPa)";
+                    document.getElementById('val-n2').className = "text-red-500 animate-pulse";
+                    document.getElementById('err-n2').classList.remove('hidden');
+                } else {
+                    document.getElementById('val-n2').innerText = "NORMALNO";
+                    document.getElementById('val-n2').className = "text-green-400";
+                    document.getElementById('err-n2').classList.add('hidden');
+                }
+            }
+            if (type === 'sync') {
+                if (faults.sync) {
+                    document.getElementById('val-sync').innerText = "GREŠKA [LOP 4]";
+                    document.getElementById('val-sync').className = "text-red-500 animate-pulse";
+                    document.getElementById('err-sync').classList.remove('hidden');
+                } else {
+                    document.getElementById('val-sync').innerText = "0.0% [ZAKLJUČANO]";
+                    document.getElementById('val-sync').className = "text-green-400";
+                    document.getElementById('err-sync').classList.add('hidden');
+                }
+            }
+            if (type === 'dp') {
+                if (faults.dp) {
+                    document.getElementById('err-dp').classList.remove('hidden');
+                } else {
+                    document.getElementById('err-dp').classList.add('hidden');
+                }
+            }
+            if (type === 'angle') {
+                if (faults.angle) {
+                    document.getElementById('val-angle').innerText = "45.0° [ZAGLAVLJEN]";
+                    document.getElementById('val-angle').className = "text-red-500 animate-pulse";
+                    document.getElementById('err-angle').classList.remove('hidden');
+                } else {
+                    document.getElementById('val-angle').innerText = "80.0°";
+                    document.getElementById('val-angle').className = "text-white";
+                    document.getElementById('err-angle').classList.add('hidden');
+                }
+            }
+        }
+
+        function updateTimeline(level) {
+            const percent = ((level) / steps) * 100;
+            document.getElementById('timelineFill').style.height = percent + '%';
+        }
+
+        function blockStep(stepId) {
+            const node = document.getElementById('node' + stepId);
+            node.classList.add('blocked');
+            setTimeout(() => { node.classList.remove('blocked'); }, 600);
+        }
+
+        function confirmStep(stepId) {
+            // Logic Gate Validation
+            if (stepId === 1 && faults.n2) { blockStep(1); return; }
+            if (stepId === 2 && faults.sync) { blockStep(2); return; }
+            if (stepId === 3 && faults.dp) { blockStep(3); return; }
+            if (stepId === 4 && faults.angle) { blockStep(4); return; }
+
+            // Success Transition
+            const node = document.getElementById('node' + stepId);
+            const btn = document.getElementById(stepId === 1 || stepId === 2 ? 'btn-step-' + stepId :
+                stepId === 3 ? 'btnBypassConfirm' : 'btnMIV');
+
+            if (btn) {
+                btn.innerText = "USLOV ZADOVOLJEN [OK]";
+                btn.classList.add('bg-green-600', 'border-green-500');
+            }
+
+            if (stepId === 4) {
+                node.classList.remove('active');
+                node.classList.add('completed');
+                updateTimeline(3.6); // Fill to bottom
+                document.getElementById('systemState').innerText = "AGREGAT SPREMAN ZA START (SPEED-NO-LOAD)";
+                document.getElementById('systemState').classList.remove('text-amber-500');
+                document.getElementById('systemState').classList.add('text-green-500');
+                return;
+            }
+
+            node.classList.remove('active');
+            node.classList.add('completed');
+
+            // Activate next
+            const nextNode = document.getElementById('node' + (stepId + 1));
+            if (nextNode) {
+                nextNode.classList.add('active');
+                updateTimeline(stepId);
+            }
+        }
+
+        function startFilling() {
+            document.getElementById('btnBypass').classList.add('hidden');
+            document.getElementById('loadingBar').style.width = '100%';
+
+            let press = 0.0;
+            const target = 14.5;
+            // IF DP FAULT IS ON, WE SIMULATE STUCK PRESSURE
+            const limit = faults.dp ? 11.0 : 14.5;
+
+            const interval = setInterval(() => {
+                press += 0.2;
+                if (press >= limit) {
+                    press = limit;
+                    clearInterval(interval);
+                    if (!faults.dp) {
+                        document.getElementById('spiralVal').className = "text-lg font-bold text-green-400";
+                        document.getElementById('btnBypassConfirm').classList.remove('hidden');
+                    } else {
+                        // Stuck
+                        document.getElementById('spiralVal').className = "text-lg font-bold text-red-500 animate-pulse";
+                        document.getElementById('err-dp').classList.remove('hidden');
+                    }
+                }
+                document.getElementById('spiralVal').innerText = press.toFixed(1) + " Bar";
+            }, 50);
+        }
+
+        // i18n translations
+        const i18n = {
+            en: {
+                title_main: "Mission Control",
+                subtitle: "Safety Interlock Gates Active",
+                system_status_label: "System Status",
+                sim_title: "Logic Fault Simulation (Inject Error)",
+                node1_title: "1. HPU & Energy Status",
+                node1_desc: "GATE 1: N2 > 12.5 MPa Required.",
+                node2_title: "2. Distributor Zero Sealing",
+                node2_desc: "GATE 2: Deviation < 0.5mm. 0% Leakage.",
+                node3_title: "3. Bypass Equalization",
+                node3_desc: "GATE 3: Delta P < 10% (1 Bar).",
+                node4_title: "4. MIV Opening",
+                node4_desc: "GATE 4: Angle == 80.0°. Interlock Released.",
+                esd_title: "Emergency Shutdown (ESD) Ready",
+                back_btn: "← Return to Operations Center",
+                state_waiting: "SEQUENCE ON HOLD",
+                state_ready: "UNIT READY FOR START (SPEED-NO-LOAD)"
+            },
+            bs: {
+                title_main: "Kontrola Misije",
+                subtitle: "Sigurnosni Interlock Gates Aktivni",
+                system_status_label: "Status Sistema",
+                sim_title: "Simulacija Logičkih Kvarova (Ubaci Grešku)",
+                node1_title: "1. Status HPU i Energije",
+                node1_desc: "GATE 1: N2 > 12.5 MPa Potreban.",
+                node2_title: "2. Nulto Zaptivanje Sprovodnog Aparata",
+                node2_desc: "GATE 2: Odstupanje < 0.5mm. 0% Curenja.",
+                node3_title: "3. Izjednačavanje Bajpasa",
+                node3_desc: "GATE 3: Delta P < 10% (1 Bar).",
+                node4_title: "4. Otvaranje GUV-a",
+                node4_desc: "GATE 4: Ugao == 80.0°. Interlock Otpušten.",
+                esd_title: "Hitno Zaustavljanje (ESD) Spremno",
+                back_btn: "← Povratak u Operativni Centar",
+                state_waiting: "SEKVENCA NA ČEKANJU",
+                state_ready: "AGREGAT SPREMAN ZA START (SPEED-NO-LOAD)"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            if (lang === 'en') {
+                document.getElementById('btnEn').style.background = '#0ea5e9';
+                document.getElementById('btnEn').style.color = 'white';
+                document.getElementById('btnBs').style.background = '#475569';
+                document.getElementById('btnBs').style.color = '#94a3b8';
+            } else {
+                document.getElementById('btnBs').style.background = '#0ea5e9';
+                document.getElementById('btnBs').style.color = 'white';
+                document.getElementById('btnEn').style.background = '#475569';
+                document.getElementById('btnEn').style.color = '#94a3b8';
+            }
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+            // Update system state if it's in initial state
+            const stateEl = document.getElementById('systemState');
+            if (stateEl.innerText.includes('SEKVENCA') || stateEl.innerText.includes('SEQUENCE')) {
+                stateEl.innerText = i18n[lang].state_waiting;
+            } else if (stateEl.innerText.includes('AGREGAT') || stateEl.innerText.includes('UNIT READY')) {
+                stateEl.innerText = i18n[lang].state_ready;
+            }
+        }
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

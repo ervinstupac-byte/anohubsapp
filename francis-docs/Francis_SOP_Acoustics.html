@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: ACOUSTIC DIAGNOSTICS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0c0a09;
+            /* Industrial Dark Mode */
+            color: #d6d3d1;
+        }
+
+        .procedure-card {
+            background: #1c1917;
+            border: 1px solid #292524;
+            padding: 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid #44403c;
+        }
+
+        .procedure-card.critical {
+            border-left-color: #dc2626;
+            background: #2a1210;
+        }
+
+        .procedure-card.sonar {
+            border-left-color: #7c3aed;
+            background: #16122a;
+        }
+
+        .step-num {
+            color: #3b82f6;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .btn-return {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1c1917;
+            border: 1px solid #44403c;
+            color: #78716c;
+            padding: 8px 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn-return:hover {
+            border-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="p-6 md:p-12 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <header class="mb-10 pb-6 border-b border-stone-800 flex justify-between items-start">
+        <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span
+                    class="px-2 py-1 rounded bg-purple-900/30 text-purple-400 text-[10px] font-bold border border-purple-900 uppercase">SOP-DIAG-001</span>
+                <span class="text-[10px] text-stone-500 uppercase font-bold">REV 2.0</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2" data-i18n="title">ACOUSTIC DIAGNOSTICS</h1>
+            <p class="text-stone-500 text-sm" data-i18n="subtitle">The Sensory Analysis Protocol: Sound Signature
+                Diagnostics</p>
+
+            <!-- Language Toggle -->
+            <div class="flex gap-2 mt-4">
+                <button onclick="setLang('en')" id="btnEn"
+                    class="px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded">EN</button>
+                <button onclick="setLang('bs')" id="btnBs"
+                    class="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white">BS</button>
+            </div>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="btn-return">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="return">Back to Dashboard</span>
+        </a>
+    </header>
+
+    <!-- 1. Safety & Sonar Intro -->
+    <div class="procedure-card critical">
+        <h3 class="text-red-500 font-bold mb-2 flex items-center gap-2" data-i18n="s1_title">
+            <i data-lucide="shield-alert"></i> LISTENING SAFETY PROTOCOL
+        </h3>
+        <ul class="text-sm text-stone-400 space-y-2 list-disc list-inside">
+            <li data-i18n="s1_l1"><strong>Hearing Protection:</strong> Mandatory at all times. Brief removal only for
+                diagnostic listening.</li>
+            <li data-i18n="s1_l2"><strong>Safe Zones:</strong> Never approach rotating components. Use listening posts.
+            </li>
+            <li data-i18n="s1_l3"><strong>Baseline:</strong> Compare against "Healthy" commissioning audio files.</li>
+        </ul>
+    </div>
+
+    <!-- 2. The Acoustic Map -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Zone A/B -->
+        <div class="procedure-card sonar">
+            <h3 class="text-purple-400 font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="waves"></i> <span data-i18n="map_title">ACOUSTIC ZONES A & B</span>
+            </h3>
+
+            <div class="space-y-4 text-xs">
+                <div class="p-3 bg-black/40 rounded border border-stone-800">
+                    <strong class="text-stone-300 block mb-1" data-i18n="z1">ZONE A: INTAKE & SPIRAL</strong>
+                    <p class="text-stone-500" data-i18n="z1_desc">Normal: Smooth Rush. Abnormal: Clunk/Bang (Debris),
+                        Whistling (MIV Leak).</p>
+                </div>
+                <div class="p-3 bg-black/40 rounded border border-stone-800">
+                    <strong class="text-stone-300 block mb-1" data-i18n="z2">ZONE B: RUNNER & VANES</strong>
+                    <p class="text-stone-500" data-i18n="z2_desc">Normal: Deep Hum (8.3Hz). Abnormal: Rock-Crushing
+                        (Cavitation), Grinding (Seal Contact).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone C/D -->
+        <div class="procedure-card sonar">
+            <h3 class="text-purple-400 font-bold mb-4 flex items-center gap-2">
+                <i data-lucide="activity"></i> <span data-i18n="map2_title">ACOUSTIC ZONES C & D</span>
+            </h3>
+            <div class="space-y-4 text-xs">
+                <div class="p-3 bg-black/40 rounded border border-stone-800">
+                    <strong class="text-stone-300 block mb-1" data-i18n="z3">ZONE C: DRAFT TUBE</strong>
+                    <p class="text-stone-500" data-i18n="z3_desc">Normal: Muffled Roar. Abnormal: Thumping/Pulsing
+                        (Vortex Rope 0.2-2Hz).</p>
+                </div>
+                <div class="p-3 bg-black/40 rounded border border-stone-800">
+                    <strong class="text-stone-300 block mb-1" data-i18n="z4">ZONE D: BEARINGS/GEN</strong>
+                    <p class="text-stone-500" data-i18n="z4_desc">Normal: Smooth Whirr. Abnormal: High-Pitched Squeal
+                        (Oil Collapse), Crackling (Brushes).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Seasonal Logic - Critical for Rwanda -->
+    <div class="procedure-card critical">
+        <h3 class="text-amber-500 font-bold mb-2 flex items-center gap-2" data-i18n="season_title">
+            <i data-lucide="cloud-rain"></i> WET SEASON BIAS (RWANDA)
+        </h3>
+        <p class="text-sm text-stone-400 mb-4" data-i18n="season_desc">
+            High turbidity (>500 NTU) amplifies sound levels. Silt particles hitting metal create a "grinding" overlay.
+        </p>
+        <div class="bg-amber-900/10 p-3 rounded border border-amber-900/30 text-[10px]">
+            <strong class="text-amber-400 block mb-1" data-i18n="rule">PRECISION RULE:</strong>
+            <span data-i18n="rule_desc">Apply +20% tolerance to cavitation intensity thresholds during March-May
+                floods.</span>
+        </div>
+    </div>
+
+    <!-- 4. Recognition Table -->
+    <div class="procedure-card">
+        <h3 class="text-white font-bold mb-4 flex items-center gap-2" data-i18n="tab_title">
+            <i data-lucide="list"></i> FREQUENCY RECOGNITION
+        </h3>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-stone-900 text-stone-500 uppercase">
+                    <tr>
+                        <th class="p-2" data-i18n="th1">Signature</th>
+                        <th class="p-2" data-i18n="th2">Likely Cause</th>
+                        <th class="p-2" data-i18n="th3">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-stone-400">
+                    <tr class="border-b border-stone-800">
+                        <td class="p-2 text-white">Rock-Crushing</td>
+                        <td class="p-2">Cavitation (Runner)</td>
+                        <td class="p-2">Inspect Blades</td>
+                    </tr>
+                    <tr class="border-b border-stone-800">
+                        <td class="p-2 text-white">High Squeal</td>
+                        <td class="p-2">Oil Film Failure</td>
+                        <td class="p-2 text-red-400 font-bold">EMERGENCY STOP</td>
+                    </tr>
+                    <tr>
+                        <td class="p-2 text-white">Chugging</td>
+                        <td class="p-2">Draft Tube Vortex</td>
+                        <td class="p-2">Adjust Air/Load</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Hidden Translation Data -->
+    <script>
+        lucide.createIcons();
+        const ml = localStorage.getItem('anohub_lang_pref') || 'en';
+
+        const i18n = {
+            en: {
+                title: "ACOUSTIC DIAGNOSTICS",
+                subtitle: "The Sensory Analysis Protocol: Sound Signature Diagnostics",
+                return: "Back to Dashboard",
+
+                s1_title: "LISTENING SAFETY PROTOCOL",
+                s1_l1: "Hearing Protection: Mandatory at all times. Brief removal only for diagnostic listening.",
+                s1_l2: "Safe Zones: Never approach rotating components. Use listening posts.",
+                s1_l3: "Baseline: Compare against 'Healthy' commissioning audio files.",
+
+                map_title: "ACOUSTIC ZONES A & B",
+                z1: "ZONE A: INTAKE & SPIRAL", z1_desc: "Normal: Smooth Rush. Abnormal: Clunk/Bang (Debris), Whistling (MIV Leak).",
+                z2: "ZONE B: RUNNER & VANES", z2_desc: "Normal: Deep Hum (8.3Hz). Abnormal: Rock-Crushing (Cavitation), Grinding (Seal Contact).",
+
+                map2_title: "ACOUSTIC ZONES C & D",
+                z3: "ZONE C: DRAFT TUBE", z3_desc: "Normal: Muffled Roar. Abnormal: Thumping/Pulsing (Vortex Rope 0.2-2Hz).",
+                z4: "ZONE D: BEARINGS/GEN", z4_desc: "Normal: Smooth Whirr. Abnormal: High-Pitched Squeal (Oil Collapse), Crackling (Brushes).",
+
+                season_title: "WET SEASON BIAS (RWANDA)",
+                season_desc: "High turbidity (>500 NTU) amplifies sound levels. Silt particles hitting metal create a 'grinding' overlay.",
+                rule: "PRECISION RULE:",
+                rule_desc: "Apply +20% tolerance to cavitation intensity thresholds during March-May floods.",
+
+                tab_title: "FREQUENCY RECOGNITION",
+                th1: "Signature", th2: "Likely Cause", th3: "Action"
+            },
+            bs: {
+                title: "AKUSTIČNA DIJAGNOSTIKA",
+                subtitle: "Senzorni Protokol Analize: Dijagnostika Zvučnih Signatura",
+                return: "Povratak na Kontrolnu Tablu",
+
+                s1_title: "SIGURNOSNI PROTOKOL SLUŠANJA",
+                s1_l1: "Zaštita sluha: Obavezna cijelo vrijeme. Kratko uklanjanje samo za dijagnostiku.",
+                s1_l2: "Sigurne zone: Nikada ne prilazite rotirajućim dijelovima. Koristite mjerne tačke.",
+                s1_l3: "Baseline: Poredite sa 'Zdravim' snimcima iz puštanja u rad.",
+
+                map_title: "AKUSTIČNE ZONE A & B",
+                z1: "ZONA A: ZAHVAT & SPIRALA", z1_desc: "Normalno: Ravnomjerno šuštanje. Abnormalno: Udarci (otpad), Zviždanje (curenje GUV).",
+                z2: "ZONA B: RADNO KOLO & LOPATICE", z2_desc: "Normalno: Duboki hum (8.3Hz). Abnormalno: Lomljenje kamenja (Kavitacija), Struganje (Labirint).",
+
+                map2_title: "AKUSTIČNE ZONE C & D",
+                z3: "ZONA C: SIFON (DFT)", z3_desc: "Normalno: Prigušena rika. Abnormalno: Pulsiranje/Dahtanje (Vrtlog 0.2-2Hz).",
+                z4: "ZONA D: LEŽAJEVI/GEN", z4_desc: "Normalno: Mirno brujanje. Abnormalno: Visoki vrisak (Slom uljnog filma), Pucketanje (Četkice).",
+
+                season_title: "UTICAJ KIŠNE SEZONE (RWANDA)",
+                season_desc: "Visoka mutnoća (>500 NTU) pojačava nivoe zvuka. Čestice mulja koje udaraju u metal stvaraju 'stružući' sloj.",
+                rule: "PRAVILO PRECIZNOSTI:",
+                rule_desc: "Primijenite +20% tolerancije na pragove intenziteta kavitacije tokom poplava mart-maj.",
+
+                tab_title: "PREPOZNAVANJE FREKVENCIJA",
+                th1: "Signatura", th2: "Vjerovatan Uzrok", th3: "Akcija"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            // Update button styles
+            if (lang === 'en') {
+                document.getElementById('btnEn').className = "px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded";
+                document.getElementById('btnBs').className = "px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white";
+            } else {
+                document.getElementById('btnBs').className = "px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded";
+                document.getElementById('btnEn').className = "px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white";
+            }
+
+            // Apply translations
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        // Initialize on page load
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

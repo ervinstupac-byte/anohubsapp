@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: GRID SYNCHRONIZATION | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #818cf8;
+            /* Purple/Indigo for Power & Grid */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(129, 140, 248, 0.5);
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #312e81 0%, #0c0a09 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: black !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .sync-gauge {
+            width: 120px;
+            height: 120px;
+            border: 4px solid #1e293b;
+            border-radius: 50%;
+            position: relative;
+            background: black;
+        }
+
+        .sync-needle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 45%;
+            background: var(--accent-color);
+            transform-origin: top center;
+            transform: translate(-50%, 0) rotate(180deg);
+            transition: transform 0.1s linear;
+        }
+
+        .sync-window {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            width: 20%;
+            height: 10%;
+            background: rgba(34, 197, 94, 0.3);
+            transform: translateX(-50%);
+            border: 1px solid #22c55e;
+            border-radius: 2px;
+        }
+
+        @keyframes rotate-needle {
+            0% {
+                transform: translate(-50%, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, 0) rotate(360deg);
+            }
+        }
+
+        .anim-rotate {
+            animation: rotate-needle 4s infinite linear;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-indigo-600 rounded-lg border border-indigo-400/30">
+                    <i data-lucide="merge" class="text-white w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-indigo-900/40 text-indigo-300 text-[10px] font-bold border border-indigo-800 uppercase">SOP-OPS-009</span>
+                        <span class="text-[10px] text-stone-500 uppercase font-bold">REV 1.0</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        GRID SYNCHRONIZATION</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-indigo-50 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-indigo-50 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-indigo-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8">
+
+        <div class="grid grid-cols-1 gap-8">
+
+            <!-- 1. The Sync Window -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-indigo-600">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div class="flex-1">
+                        <h2 class="text-xl font-black text-white uppercase tracking-tight mb-6 flex items-center gap-2"
+                            data-i18n="s1_title">
+                            <i data-lucide="crosshair" class="w-5 h-5 text-indigo-400"></i> THE SYNCHRONIZATION WINDOW
+                        </h2>
+                        <p class="text-[11px] text-slate-400 leading-relaxed mb-6" data-i18n="s1_desc">To close the GCB
+                            (Generator Circuit Breaker), three parameters must be matched perfectly between the unit and
+                            the grid.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+                                <span class="text-[8px] text-slate-500 font-black uppercase mb-1 block"
+                                    data-i18n="p1">Voltage Difference</span>
+                                <span class="text-xs font-black text-white">&plusmn; 5%</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
+                                <span class="text-[8px] text-slate-500 font-black uppercase mb-1 block"
+                                    data-i18n="p2">Freq Difference</span>
+                                <span class="text-xs font-black text-white">&plusmn; 0.1 Hz</span>
+                            </div>
+                            <div class="p-3 bg-slate-900/50 border border-indigo-900/50 rounded-lg">
+                                <span class="text-[8px] text-indigo-400 font-black uppercase mb-1 block"
+                                    data-i18n="p3">Phase Angle</span>
+                                <span class="text-xs font-black text-indigo-400">&plusmn; 10&deg;</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="sync-gauge">
+                            <div class="sync-window"></div>
+                            <div class="sync-needle anim-rotate"></div>
+                            <div
+                                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-indigo-400 shadow-lg shadow-indigo-500">
+                            </div>
+                        </div>
+                        <span class="text-[9px] text-slate-500 font-black uppercase tracking-widest"
+                            data-i18n="synch_scope">SYCHRONOSCOPE</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Manual Protocol -->
+            <section class="glass-card rounded-2xl p-8 border-l-4 border-l-amber-600 bg-amber-950/5">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="s2_title">MANUAL SYNC
+                    PROTOCOL (DARK-LAMP)</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-[10px] text-slate-400 mb-6" data-i18n="s2_desc">If the automatic sync relay (25G)
+                            fails, use the three-lamp method. Connect lamps between generator and bus phases.</p>
+                        <div class="space-y-3">
+                            <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl relative group">
+                                <div
+                                    class="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-red-600 rounded flex items-center justify-center text-[10px] font-black text-white shadow-lg shadow-red-950">
+                                    !</div>
+                                <h4 class="text-xs font-black text-white uppercase ml-4" data-i18n="rule_dark">ALL LAMPS
+                                    DARK = OK</h4>
+                                <p class="text-[9px] text-slate-500 ml-4 mt-1" data-i18n="rule_desc">Lamps go dark when
+                                    phase difference is zero. Close breaker at peak of darkness.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-red-950/20 border border-red-900/40 rounded-2xl">
+                        <h4 class="text-red-500 text-[10px] font-black uppercase mb-4 tracking-widest"
+                            data-i18n="sync_fail">GCB OUT-OF-SYNC STRIKE</h4>
+                        <p class="text-[10px] text-slate-400 leading-relaxed" data-i18n="fail_desc">Closing the breaker
+                            out-of-sync creates a massive torque pulse (slugging). This can sheer shaft coupling bolts
+                            or twist the generator windings. NEVER force a manual sync if parameters are moving fast.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "GRID SYNCHRONIZATION",
+                return: "BACK TO DASHBOARD",
+                s1_title: "THE SYNCHRONIZATION WINDOW",
+                s1_desc: "To close the GCB (Generator Circuit Breaker), three parameters must be matched perfectly between the unit and the grid.",
+                p1: "Voltage Difference",
+                p2: "Freq Difference",
+                p3: "Phase Angle",
+                synch_scope: "SYCHRONOSCOPE",
+                s2_title: "MANUAL SYNC PROTOCOL (DARK-LAMP)",
+                s2_desc: "If the automatic sync relay (25G) fails, use the three-lamp method. Connect lamps between generator and bus phases.",
+                rule_dark: "ALL LAMPS DARK = OK",
+                rule_desc: "Lamps go dark when phase difference is zero. Close breaker at peak of darkness.",
+                sync_fail: "GCB OUT-OF-SYNC STRIKE",
+                fail_desc: "Closing the breaker out-of-sync creates a massive torque pulse (slugging). This can sheer shaft coupling bolts or twist the generator windings. NEVER force a manual sync if parameters are moving fast."
+            },
+            bs: {
+                title: "SINHRONIZACIJA NA MREŽU",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                s1_title: "PROZOR SINHRONIZACIJE",
+                s1_desc: "Da bi se zatvorio glavni prekidač (GCB), tri parametra se moraju savršeno poklopiti između mreže i agregata.",
+                p1: "Razlika Napona",
+                p2: "Razlika Frekvencije",
+                p3: "Ugao Faze",
+                synch_scope: "SINHRONOSKOP",
+                s2_title: "RUČNI PROTOKOL (TAMNE LAMPE)",
+                s2_desc: "Ako automatski relej (25G) zakaže, koristi se metoda tri lampe. Lampe se vežu između faza generatora i sabirnica.",
+                rule_dark: "TRENUTAK GAŠENJA LAMPI = OK",
+                rule_desc: "Lampe se gase kada je razlika faza nula. Zatvoriti prekidač u trenutku potpune tame.",
+                sync_fail: "UDAR PRI LOŠOJ SINHRONIZACIJI",
+                fail_desc: "Zatvaranje prekidača van faze uzrokuje ogroman torzioni udar. To može pokidati vijke spojnice ili uvrnuti namotaje. NIKADA ne forsirajte uključenje ako se parametri brzo mijenjaju."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
