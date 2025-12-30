@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useMaintenance, protocols } from '../contexts/MaintenanceContext.tsx';
 import { useInventory } from '../contexts/InventoryContext.tsx';
@@ -47,6 +48,7 @@ const Heatmap: React.FC<{ data: number[] }> = ({ data }) => {
 };
 
 export const MaintenanceDashboard: React.FC = () => {
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const { operatingHours, predictServiceDate } = useMaintenance();
@@ -200,7 +202,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                                                     Initiate Tactical Maintenance
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => window.location.hash = '/ar-guide'}
+                                                                    onClick={() => navigate('/ar-guide')}
                                                                     className="px-3 py-1 bg-emerald-500/20 border border-emerald-500/50 rounded text-[9px] font-black text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all uppercase tracking-widest flex items-center justify-center gap-2"
                                                                 >
                                                                     <span>📷</span> AR FIELD GUIDE & VISUAL EXPERT

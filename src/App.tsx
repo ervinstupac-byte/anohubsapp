@@ -218,7 +218,7 @@ const AppLayout: React.FC = () => {
             'adminApproval': '/admin-approval',
             'clientPortal': '/client-portal',
             'logbook': '/logbook',
-            'francisHub': '/francis-hub'
+            'francisHub': '/francis/hub'
         };
         const target = routeMap[view];
         if (target) navigate(target);
