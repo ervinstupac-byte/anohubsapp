@@ -5,8 +5,8 @@ import { useMaintenance } from '../contexts/MaintenanceContext';
 import { KnowledgeNode, ContextTrigger } from '../models/knowledge/ContextTypes';
 import { KNOWLEDGE_BASE } from '../data/knowledge/KnowledgeBase';
 import { getComponentIdFromRoute } from '../data/knowledge/ComponentTaxonomy';
-// import { supabase } from '../services/supabaseClient'; // Removed: Using MaintenanceContext instead
-import { evaluateDiagnostics } from '../utils/DiagnosticEngine';
+import { SentinelKernel, SENTINEL_PATTERNS } from '../utils/SentinelKernel';
+import { IndustrialDataBridge } from '../services/IndustrialDataBridge';
 
 export interface DiagnosticInsight {
     id: string;
@@ -14,6 +14,16 @@ export interface DiagnosticInsight {
     messageKey: string;
     param?: string;
     value?: string | number;
+    slogan?: string; // New: Physics Slogan
+    vectors?: string[]; // New: Logic Vectors
+    precedent?: any; // New: Historical Precedent
+    actions?: any[]; // New: Contextual Gravity Payload
+    verification?: { // New: Human-Machine Agreement
+        author: string;
+        id: string;
+        text: string;
+        timestamp: string;
+    };
 }
 
 /**
@@ -31,16 +41,14 @@ export const useContextEngine = () => {
     const [activeComponentId, setActiveComponentId] = useState<string | null>(null);
     const [metricHistory, setMetricHistory] = useState<Record<string, number[]>>({});
 
+    // Track time at state for heuristics (mocked for now)
+    const [timeAtState, setTimeAtState] = useState(0);
+
     // Helper: Evaluation Logic for Knowledge Graph
     const evaluateTrigger = (trigger: ContextTrigger, currentRoute: string, sensors: any): boolean => {
-        // 1. Route Matcher
         if (trigger.routeMatcher) {
             if (currentRoute.includes(trigger.routeMatcher)) return true;
         }
-
-        // 2. Sensor Data Matcher (if applicable, though typically handled via techState)
-        // ... (simplified for now as data source is techState)
-
         return false;
     };
 
@@ -52,8 +60,6 @@ export const useContextEngine = () => {
 
         // Resolve Component ID
         const resolvedId = getComponentIdFromRoute(engineCurrentRoute);
-        // Debug
-        console.log('[ContextEngine] Route:', engineCurrentRoute, 'ID:', resolvedId);
         setActiveComponentId(resolvedId);
 
         // Filter Knowledge Nodes
@@ -88,7 +94,6 @@ export const useContextEngine = () => {
         );
 
         // Filter Logs (LIMIT 3)
-        // Matches either a relevant task ID OR the task ID string itself contains the keyword (legacy/fallback)
         const relevantLogs = logs
             .filter(l => relevantTaskIds.has(l.taskId) || l.taskId.toLowerCase().includes(keyword))
             .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -117,136 +122,181 @@ export const useContextEngine = () => {
     }, [activeComponentId, workOrders]);
 
 
-    // 4. METRIC HISTORY SIMULATION (Sparklines)
+    // 4. REAL-WORLD DATA BRIDGE & TIME TRAVEL (Depth of Truth)
+    const [activeLayer, setActiveLayer] = useState<'HUMAN' | 'HISTORY' | 'REALTIME'>('REALTIME');
+
+    // Time Machine State
+    const [fullDataset, setFullDataset] = useState<any[]>([]);
+    const [playbackIndex, setPlaybackIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    // Playback Loop ref
+    const playbackTimer = React.useRef<NodeJS.Timeout | null>(null);
+
+    const uploadLogData = async (file: File) => {
+        try {
+            if (playbackTimer.current) clearInterval(playbackTimer.current);
+            setMetricHistory({});
+
+            const data = await IndustrialDataBridge.parseCSV(file);
+            console.log(`[Bridge] Parsed ${data.length} points.`);
+
+            setFullDataset(data);
+            setPlaybackIndex(0);
+            setIsPlaying(true);
+
+        } catch (e) {
+            console.error("Bridge Error:", e);
+            alert("Failed to parse log file.");
+        }
+    };
+
+    // The Time Loop
     useEffect(() => {
-        if (!activeComponentId) return;
+        if (isPlaying && fullDataset.length > 0) {
+            playbackTimer.current = setInterval(() => {
+                setPlaybackIndex(prev => {
+                    if (prev >= fullDataset.length - 1) {
+                        setIsPlaying(false);
+                        return prev;
+                    }
+                    const nextIndex = prev + 1; // 10x speed logic handled by interval or skip
 
-        const interval = setInterval(() => {
-            setMetricHistory(prev => {
-                const next = { ...prev };
-                const sensors = techState.francis?.sensors || {};
+                    // Update History Helper
+                    const point = fullDataset[nextIndex];
+                    setMetricHistory(prevHist => {
+                        const next = { ...prevHist };
+                        Object.entries(point.values).forEach(([key, val]) => {
+                            const current = next[key] || [];
+                            // Keep last 50 points relative to CURRENT PLAYBACK TIME
+                            next[key] = [...current, val as number].slice(-50);
+                        });
+                        return next;
+                    });
 
-                // Helper to update history
-                const updateHist = (key: string, val: number, variance: number) => {
-                    const noise = (Math.random() - 0.5) * variance;
-                    const currentHist = prev[key] || Array(20).fill(val); // Initialize with 20 points
-                    // Keep last 20
-                    next[key] = [...currentHist.slice(1), val + noise];
-                };
+                    return nextIndex;
+                });
+            }, 100); // 100ms tick (approx 10Hz playback)
+        }
 
-                if (activeComponentId.includes('penstock')) {
-                    updateHist('hoop', sensors.hoopStressMPa || 142.5, 5);
-                    updateHist('flow', sensors.flowRate || 42.1, 1);
-                }
-                if (activeComponentId.includes('transformer')) {
-                    updateHist('oilTemp', sensors.transformerOilTemp || 62.1, 0.5);
-                    updateHist('load', 85, 2); // Mock load
-                }
-                if (activeComponentId.includes('generator')) {
-                    updateHist('power', sensors.activePowerMW || 142.5, 3);
-                    updateHist('voltage', sensors.voltageKV || 16.2, 0.1);
-                }
+        return () => {
+            if (playbackTimer.current) clearInterval(playbackTimer.current);
+        };
+    }, [isPlaying, fullDataset]);
 
-                return next;
+    // Scrubbing Logic
+    const scrubTo = (percent: number) => {
+        if (fullDataset.length === 0) return;
+        const targetIndex = Math.floor((percent / 100) * (fullDataset.length - 1));
+        setPlaybackIndex(targetIndex);
+
+        // When scrubbing, we need to rebuild the history buffer (traceback)
+        // to ensure charts look correct at that specific moment.
+        // We take the preceding 50 points from the target index.
+        const start = Math.max(0, targetIndex - 50);
+        const slice = fullDataset.slice(start, targetIndex + 1);
+
+        const newHist: Record<string, number[]> = {};
+        slice.forEach(pt => {
+            Object.entries(pt.values).forEach(([k, v]) => {
+                if (!newHist[k]) newHist[k] = [];
+                newHist[k].push(v as number);
             });
-        }, 1500); // Update every 1.5s
+        });
+        setMetricHistory(newHist);
+    };
 
-        return () => clearInterval(interval);
-    }, [activeComponentId, techState.francis?.sensors]);
+    const togglePlay = () => setIsPlaying(!isPlaying);
+
+    // Playback Interface
+    const currentTimestamp = fullDataset[playbackIndex]?.timestamp || Date.now();
+    const totalDuration = (fullDataset.length > 0)
+        ? (fullDataset[fullDataset.length - 1].timestamp - fullDataset[0].timestamp)
+        : 0;
+
+    // Progress calculation
+    const progress = (fullDataset.length > 0) ? (playbackIndex / (fullDataset.length - 1)) * 100 : 0;
 
 
-    // 5. LIVE METRICS FORMATION
+    // 5. LIVE METRICS FORMATION (For UI Display)
     const liveMetrics = useMemo(() => {
         if (!activeComponentId || !techState.francis?.sensors) return [];
-        const sensors = techState.francis.sensors;
         const metrics: any[] = [];
+        const hist = metricHistory;
 
-        // Helper: Determine Sparkline Color based on Trend
-        const getTrendColor = (hist: number[], type: 'rising_bad' | 'falling_bad' | 'neutral') => {
-            if (!hist || hist.length < 2) return '#22d3ee'; // Cyan default
-            const start = hist[0];
-            const end = hist[hist.length - 1];
-            const change = (end - start) / start;
-
-            // If rising is bad (e.g. Temp, Pressure)
-            if (type === 'rising_bad' && change > 0.05) return '#ef4444'; // Red (Dangerous Rise)
-            if (type === 'falling_bad' && change < -0.05) return '#ef4444'; // Red (Dangerous Drop)
-
-            return '#22d3ee'; // Stable/Safe Cyan
+        // Helper: Determine Sparkline Color
+        const getTrendColor = (h: number[]) => {
+            if (!h || h.length < 2) return '#22d3ee';
+            const start = h[0];
+            const end = h[h.length - 1];
+            return (end > start * 1.05) ? '#ef4444' : '#22d3ee';
         };
 
         if (activeComponentId.includes('penstock')) {
-            metrics.push({
-                label: 'Hoop Stress',
-                value: sensors.hoopStressMPa || 0,
-                unit: 'MPa',
-                status: (sensors.hoopStressMPa || 0) > 160 ? 'critical' : 'safe',
-                history: metricHistory['hoop'],
-                color: getTrendColor(metricHistory['hoop'], 'rising_bad')
-            });
-            metrics.push({
-                label: 'Flow Rate',
-                value: sensors.flowRate || 0,
-                unit: 'm³/s',
-                status: 'safe',
-                history: metricHistory['flow'],
-                color: getTrendColor(metricHistory['flow'], 'neutral')
-            });
-        }
-        else if (activeComponentId.includes('transformer')) {
-            metrics.push({
-                label: 'Oil Temp',
-                value: sensors.transformerOilTemp || 0,
-                unit: '°C',
-                status: (sensors.transformerOilTemp || 0) > 85 ? 'warning' : 'safe',
-                history: metricHistory['oilTemp'],
-                color: getTrendColor(metricHistory['oilTemp'], 'rising_bad')
-            });
-            metrics.push({
-                label: 'Load',
-                value: 85,
-                unit: '%',
-                status: 'safe',
-                history: metricHistory['load'],
-                color: '#22d3ee' // Neutral
-            });
-        }
-        else if (activeComponentId.includes('generator')) {
-            metrics.push({
-                label: 'Active Power',
-                value: sensors.activePowerMW || 0,
-                unit: 'MW',
-                status: 'safe',
-                history: metricHistory['power'],
-                color: '#22d3ee'
-            });
-            metrics.push({
-                label: 'Voltage',
-                value: sensors.voltageKV || 0,
-                unit: 'kV',
-                status: (sensors.voltageKV || 0) < 10 ? 'warning' : 'safe',
-                history: metricHistory['voltage'],
-                color: getTrendColor(metricHistory['voltage'], 'falling_bad')
-            });
+            metrics.push({ label: 'Vibration', value: hist['vibration']?.[hist['vibration'].length - 1] || 0, unit: 'mm/s', status: 'warning', history: hist['vibration'], color: getTrendColor(hist['vibration']), source: { id: 'VIB-901-A', cal: '12 Oct 2024' } });
+            metrics.push({ label: 'DT Pressure', value: hist['draftTubePressure']?.[hist['draftTubePressure'].length - 1] || 0, unit: 'bar', status: 'warning', history: hist['draftTubePressure'], color: '#ef4444', source: { id: 'PRE-202-B', cal: '05 Nov 2024' } });
+        } else if (activeComponentId.includes('generator')) {
+            metrics.push({ label: 'Bearing Temp', value: hist['bearingTemp']?.[hist['bearingTemp'].length - 1] || 0, unit: '°C', status: 'warning', history: hist['bearingTemp'], color: getTrendColor(hist['bearingTemp']), source: { id: 'TMP-404-X', cal: '01 Jan 2024' } });
+            metrics.push({ label: 'Oil Pressure', value: hist['oilPressure']?.[hist['oilPressure'].length - 1] || 0, unit: 'bar', status: 'safe', history: hist['oilPressure'], color: '#22d3ee', source: { id: 'PRE-101-Z', cal: '15 Dec 2023' } });
+        } else {
+            metrics.push({ label: 'System Load', value: 85, unit: '%', status: 'safe', history: hist['load'], color: '#22d3ee', source: { id: 'SCADA-MAIN', cal: 'Realtime' } });
         }
 
         return metrics;
 
-    }, [activeComponentId, techState.francis?.sensors, metricHistory]);
+    }, [activeComponentId, metricHistory]);
 
-    // 6. DIAGNOSTIC WHISPERER (Heuristics)
+
+    // 6. THE SENTINEL (Heuristic Engine) - REPLACES LEGACY DIAGNOSTICS
     const diagnostics = useMemo((): DiagnosticInsight[] => {
-        // Mock inputs that aren't in sensor state yet
-        const mockInputs = {
-            closureTime: 1.8, // Seconds (Simulated for Water Hammer rule)
-            load: 95 // % (Simulated for Transformer rule)
+        if (!activeComponentId) return [];
+
+        // Mock Baseline Data (The Archivist)
+        const mockBaselines = {
+            'bearingTemp_Loaded': { mean: 55, sigma: 1.5 }, // Normal: 55C. Simulating 60C (3.3 Sigma event)
+            'draftTubePressure': { mean: 2.0, sigma: 0.2 }
         };
 
-        // Import dynamically or use helper if imported at top
-        // Since we are inside the hook, we call the utility
-        return evaluateDiagnostics(activeComponentId || '', techState.francis?.sensors || {}, mockInputs);
+        // 1. Evaluate Sentinel Matrix
+        const sentinelResults = SentinelKernel.evaluateMatrix(
+            metricHistory,
+            SENTINEL_PATTERNS,
+            {
+                timeAtState: timeAtState,
+                baselines: mockBaselines
+            }
+        );
 
-    }, [activeComponentId, techState.francis?.sensors]);
+        // 2. Map to UI format and CROSS-VERIFY
+        return sentinelResults.map(res => {
+            // HUMAN CROSS-VERIFICATION LOGIC
+            // Check if any recent log matches the pattern keywords
+            const verificationMatch = activeLogs.find(log => {
+                const logContent = (log.summaryDE || log.commentBS || "").toLowerCase();
+                const patternTerms = res.name.toLowerCase().split(' ');
+                // Simple match: if log contains "vibration" or "cavitation" etc.
+                return patternTerms.some(term => term.length > 4 && logContent.includes(term));
+            });
+
+            return {
+                id: res.patternId,
+                type: res.severity === 'CRITICAL' ? 'critical' : 'warning',
+                messageKey: res.name,
+                value: `${(res.probability * 100).toFixed(0)}% Probability`,
+                slogan: res.slogan,
+                vectors: res.vectors, // Pass the logic trace
+                precedent: res.precedent, // Pass the precedent
+                actions: res.actions, // Pass the Tactical Actions
+                verification: verificationMatch ? {
+                    author: verificationMatch.technician,
+                    id: verificationMatch.id,
+                    text: verificationMatch.summaryDE || verificationMatch.commentBS, // Show the verification text
+                    timestamp: verificationMatch.timestamp
+                } : undefined
+            };
+        });
+
+    }, [activeComponentId, metricHistory, timeAtState, activeLogs]);
 
 
     return {
@@ -257,8 +307,20 @@ export const useContextEngine = () => {
         liveMetrics,
         diagnostics,
         totalInsights: activeNodes.reduce((acc, node) => acc + node.insights.length, 0),
-        hasCriticalRisks: (diagnostics.some(d => d.type === 'critical') || activeWorkOrders.some(w => w.priority === 'HIGH')),
-        isLoading: maintenanceLoading
+        hasCriticalRisks: (diagnostics.some(d => d.type === 'critical')),
+        isLoading: maintenanceLoading,
+        uploadLogData, // Exposed for Sidebar
+
+        // Depth & Time
+        activeLayer,
+        setActiveLayer,
+        playback: {
+            isPlaying,
+            currentTimestamp,
+            totalDuration,
+            progress,
+            scrubTo,
+            togglePlay
+        }
     };
 };
-

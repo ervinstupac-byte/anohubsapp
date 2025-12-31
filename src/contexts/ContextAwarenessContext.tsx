@@ -16,7 +16,22 @@ interface ContextAwarenessState {
 
     // Formatting
     hasContext: boolean;
+    hasCriticalRisks: boolean;
     isLoading: boolean;
+    uploadLogData: (file: File) => Promise<void>;
+
+    // Depth of Truth (Phase 3)
+    activeLayer: 'HUMAN' | 'HISTORY' | 'REALTIME';
+    setActiveLayer: (layer: 'HUMAN' | 'HISTORY' | 'REALTIME') => void;
+
+    playback: {
+        isPlaying: boolean;
+        currentTimestamp: number;
+        totalDuration: number;
+        progress: number; // 0-100%
+        scrubTo: (percent: number) => void;
+        togglePlay: () => void;
+    };
 }
 
 const ContextAwarenessContext = createContext<ContextAwarenessState | undefined>(undefined);
@@ -36,9 +51,16 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         activeLogs: engineData.activeLogs,
         activeWorkOrders: engineData.activeWorkOrders,
         liveMetrics: engineData.liveMetrics,
-        diagnostics: engineData.diagnostics, // New
+        diagnostics: engineData.diagnostics,
         hasContext: !!activeDefinition || engineData.activeContext.length > 0,
-        isLoading: engineData.isLoading
+        hasCriticalRisks: engineData.hasCriticalRisks || false,
+        isLoading: engineData.isLoading,
+        uploadLogData: engineData.uploadLogData,
+
+        // Depth Mapping
+        activeLayer: engineData.activeLayer,
+        setActiveLayer: engineData.setActiveLayer,
+        playback: engineData.playback
     };
 
     return (

@@ -65,7 +65,7 @@ const ContractManagement = lazy(() => import('./components/ContractManagement.ts
 const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
 const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
-const ShaftAlignment = lazy(() => import('./components/ShaftAlignment.tsx').then(m => ({ default: m.ShaftAlignment })));
+
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 
 // Maintenance components moved to MaintenanceRouter
@@ -175,6 +175,7 @@ const AppLayout: React.FC = () => {
     };
 
     const navigateTo = (view: AppView) => {
+        console.log('[Navigation] Navigating to:', view);
         const routeMap: Record<string, string> = {
             'home': '/',
             'hub': '/',
@@ -209,24 +210,30 @@ const AppLayout: React.FC = () => {
             'turbineDetail': '/turbine',
             'activeContext': '/vision',
             'vision': '/vision',
-            // Maintenance Routes
-            'maintenanceDashboard': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DASHBOARD}`,
-            'hydraulicMaintenance': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}`,
-            'boltTorque': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}`,
-            'shadowEngineer': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`,
-            'intuitionLog': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.INTUITION_LOG}`,
-            'ar-guide': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.AR_GUIDE}`,
-            'logbook': `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`,
+
+            // Maintenance Routes - Hardcoded for Stability
+            'maintenanceDashboard': '/maintenance/dashboard',
+            'hydraulicMaintenance': '/maintenance/hydraulic',
+            'boltTorque': '/maintenance/bolt-torque',
+            'shadowEngineer': '/maintenance/shadow-engineer',
+            'intuitionLog': '/maintenance/intuition-log',
+            'ar-guide': '/maintenance/ar-guide',
+            'logbook': '/maintenance/logbook',
 
             'executiveDashboard': '/executive',
             'structuralIntegrity': '/structural-integrity',
-            'shaftAlignment': '/shaft-alignment',
+            'shaftAlignment': '/francis/sop-shaft-alignment',
             'adminApproval': '/admin-approval',
             'clientPortal': '/client-portal',
             'francisHub': '/francis/hub'
         };
         const target = routeMap[view];
-        if (target) navigate(target);
+        if (target) {
+            console.log('[Navigation] Target found:', target);
+            navigate(target);
+        } else {
+            console.error('[Navigation] No route found for view:', view);
+        }
     };
 
     // Modules list moved to Sidebar.tsx
@@ -337,7 +344,7 @@ const AppLayout: React.FC = () => {
 
                                         <Route path="executive" element={<ExecutiveDashboard />} />
                                         <Route path="structural-integrity" element={<StructuralIntegrity />} />
-                                        <Route path="shaft-alignment" element={<ShaftAlignment />} />
+
                                         <Route path="admin-approval" element={<AdminApproval />} />
                                         <Route path="/forensics" element={<ForensicDashboard />} />
                                         <Route path="stress-test" element={<SystemStressTest />} />

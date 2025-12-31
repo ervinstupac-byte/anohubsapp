@@ -11,6 +11,7 @@ const SOPManager = lazy(() => import('../components/SOPManager').then(m => ({ de
 const ShiftLog = lazy(() => import('../components/ShiftLog').then(m => ({ default: m.ShiftLog }))); // Intuition Log
 const ARManager = lazy(() => import('../components/ARManager').then(m => ({ default: m.ARManager })));
 
+
 const MaintenanceRouter: React.FC = () => {
     return (
         <Routes>
@@ -24,6 +25,7 @@ const MaintenanceRouter: React.FC = () => {
             <Route path={ROUTES.MAINTENANCE.SHADOW_ENGINEER} element={<SOPManager />} />
             <Route path={ROUTES.MAINTENANCE.INTUITION_LOG} element={<ShiftLog />} />
             <Route path={ROUTES.MAINTENANCE.AR_GUIDE} element={<ARManager />} />
+
 
             {/* Catch-all */}
             <Route path="*" element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />

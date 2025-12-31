@@ -83,31 +83,58 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const { t } = useTranslation();
 
     const operationalModules = [
-        { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️' },
-        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠' },
-        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️' },
-        { id: 'shaftAlignment', title: t('sidebar.shaftAlignment', 'Shaft Alignment'), icon: '🔄' },
-        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰' },
-        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩' },
-        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻' },
-        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂' },
-        { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️' },
-        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏' },
-        { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡' },
+        { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️', route: ROUTES.RISK_ASSESSMENT },
+        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠', route: `${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.HUB}` },
+        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️', route: `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DASHBOARD}` },
+        // UNIFIED SHAFT ALIGNMENT: Pointing to Francis SOP
+        { id: 'shaftAlignment', title: t('sidebar.shaftAlignment', 'Shaft Alignment'), icon: '🔄', route: `${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
+        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰', route: `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}` },
+        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩', route: `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
+        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻', route: `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}` },
+        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂', route: `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.INTUITION_LOG}` },
+        { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: 'structural-integrity' }, // Assuming root route for now
+        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: 'installation-guarantee' },
+        { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: 'hpp-builder' },
     ];
 
     const secondaryModules = [
-        { id: 'riskReport', title: t('modules.riskReport', 'Dossier Archive'), icon: '📂' },
-        { id: 'library', title: t('modules.library', 'Tech Library'), icon: '📚' },
-        { id: 'standardOfExcellence', title: t('modules.standardOfExcellence'), icon: '🏅' },
-        { id: 'activeContext', title: t('hub.vision'), icon: '👁️' }
+        { id: 'riskReport', title: t('modules.riskReport', 'Dossier Archive'), icon: '📂', route: 'risk-report' },
+        { id: 'library', title: t('modules.library', 'Tech Library'), icon: '📚', route: 'library' },
+        { id: 'standardOfExcellence', title: t('modules.standardOfExcellence'), icon: '🏅', route: 'standard-of-excellence' },
+        { id: 'activeContext', title: t('hub.vision'), icon: '👁️', route: 'vision' }
     ];
 
-    const handleNavigation = (id: string, title: string) => {
-        logAction('MODULE_OPEN', title, 'SUCCESS');
-        navigateTo(id as AppView);
+    const handleNavigation = (id: string, route: string) => {
+        // logAction('MODULE_OPEN', title, 'SUCCESS'); // Need title?
+        // navigateTo(id as AppView); // Old way
+        // New robust way:
+        if (route.startsWith('/')) {
+            navigate(route);
+        } else {
+            // Handle root relative paths if any (e.g. 'library')
+            navigate('/' + route);
+        }
         onClose();
     };
+
+    // Robust Active Check
+    const isActive = (route: string) => {
+        // Remove leading slash for comparison consistency
+        const cleanRoute = route.startsWith('/') ? route.substring(1) : route;
+        const currentPath = location.pathname.startsWith('/') ? location.pathname.substring(1) : location.pathname;
+
+        // Exact match
+        if (currentPath === cleanRoute) return true;
+
+        // Sub-route match (e.g. maintenance/dashboard should match /maintenance/dashboard/details)
+        // But be careful not to match partials like /main vs /maintenance
+        if (currentPath.startsWith(cleanRoute + '/')) return true;
+
+        return false;
+    };
+
+    // Helper to get navigate function since we are replacing useNavigation() logic partially
+    const navigate = useNavigate();
 
     return (
         <>
@@ -139,32 +166,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         {operationalModules.map(mod => (
                             <button
                                 key={mod.id}
-                                onClick={() => handleNavigation(mod.id, mod.title)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
-                                    (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
-                                    (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
-                                    (mod.id === 'shadowEngineer' && location.pathname.includes(ROUTES.MAINTENANCE.SHADOW_ENGINEER)) ||
-                                    (mod.id === 'intuitionLog' && location.pathname.includes(ROUTES.MAINTENANCE.INTUITION_LOG)) ||
-                                    (mod.id === 'ar-guide' && location.pathname.includes(ROUTES.MAINTENANCE.AR_GUIDE)) ||
-                                    // Fallback for others
-                                    (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque', 'shadowEngineer', 'intuitionLog', 'ar-guide'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                onClick={() => handleNavigation(mod.id, mod.route)}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${isActive(mod.route)
                                     ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'
                                     }`}
                             >
-                                <span className={`text-lg ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
-                                    (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
-                                    (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
-                                    (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                <span className={`text-lg ${isActive(mod.route)
                                     ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'
                                     }`}>{mod.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                             </button>
+
                         ))}
 
                         {/* Logbook Special Case */}
                         <button
-                            onClick={() => handleNavigation('logbook', t('sidebar.maintenanceLogbook', 'Logbook'))}
-                            className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${location.pathname === '/logbook' ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            onClick={() => handleNavigation('logbook', `${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`)}
+                            className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group ${isActive(`${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`) ? 'bg-[#2dd4bf]/20 border-[#2dd4bf] text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                         >
                             <span className={`text-lg ${location.pathname === '/logbook' ? 'text-[#2dd4bf]' : 'group-hover:text-[#2dd4bf] transition-colors'}`}>🛡️</span>
                             <span className="text-xs font-bold uppercase tracking-wider">{t('sidebar.maintenanceLogbook', 'Logbook')}</span>
@@ -177,8 +195,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">{t('sidebar.strategy')}</div>
                     <ErrorBoundary>
                         <button
-                            onClick={() => handleNavigation('executiveDashboard', t('sidebar.toolboxAnalytics', 'Toolbox Analytics'))}
-                            className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${location.pathname === '/executive' ? 'bg-cyan-900/20 border-cyan-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                            onClick={() => handleNavigation('executiveDashboard', ROUTES.MAINTENANCE.EXECUTIVE)}
+                            className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${isActive(ROUTES.MAINTENANCE.EXECUTIVE) ? 'bg-cyan-900/20 border-cyan-500 text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                         >
                             <span className={`text-lg ${location.pathname === '/executive' ? 'text-cyan-500' : 'group-hover:text-cyan-400 transition-colors'}`}>📊</span>
                             <span className="text-xs font-bold uppercase tracking-wider">{t('sidebar.toolboxAnalytics', 'Toolbox Analytics')}</span>
@@ -193,10 +211,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         {secondaryModules.map(mod => (
                             <button
                                 key={mod.id}
-                                onClick={() => handleNavigation(mod.id, mod.title)}
-                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${location.pathname.includes(mod.id) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
+                                onClick={() => handleNavigation(mod.id, mod.route)}
+                                className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${isActive(mod.route) ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'}`}
                             >
-                                <span className={`text-lg ${location.pathname.includes(mod.id) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
+                                <span className={`text-lg ${isActive(mod.route) ? 'text-h-cyan' : 'group-hover:text-h-gold transition-colors'}`}>{mod.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                             </button>
                         ))}
@@ -218,7 +236,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         <span className="text-[10px] font-black uppercase tracking-widest">{t('sidebar.exitToSite')}</span>
                     </a>
                 </div>
-            </aside>
+            </aside >
         </>
     );
 };
@@ -226,16 +244,68 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 // --- INSIGHT PANEL COMPONENT ---
 // Replaced local hook with Global Context Provider
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
-import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap } from 'lucide-react';
+import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap, Download, History, Activity as BrainCircuit, ArrowRight, Database, UploadCloud, Layers, Play, Pause, Rewind } from 'lucide-react';
+import { PdfService } from '../../services/PdfService';
+import { PdfPreviewModal } from '../modals/PdfPreviewModal';
+import { useMaintenance } from '../../contexts/MaintenanceContext';
+
+
 
 
 const ContextPanel = () => {
     // Determine context from GLOBAL state
-    const { activeDefinition, activeContextNodes, activeLogs, activeWorkOrders, liveMetrics, hasContext, diagnostics, isLoading } = useContextAwareness();
+    const {
+        activeDefinition, activeContextNodes, activeLogs, activeWorkOrders, liveMetrics,
+        hasContext, diagnostics, isLoading, hasCriticalRisks, uploadLogData,
+        activeLayer, setActiveLayer, playback
+    } = useContextAwareness();
+
+    const { logs: allMaintenanceLogs } = useMaintenance(); // Get global logs
     const navigate = useNavigate();
     const { t } = useTranslation();
     const location = useLocation();
     const [selectedWO, setSelectedWO] = useState<any>(null);
+    const [previewBlob, setPreviewBlob] = React.useState<Blob | null>(null);
+    const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
+
+    // Filter logs for current context
+
+    const contextLogs = React.useMemo(() => {
+        if (!activeDefinition?.id) return [];
+        // Simple filter strategy: check if log task ID or component ID matches context
+        // Ideally we'd have a more robust tagging system, but this works for prototype
+        return allMaintenanceLogs.filter(log =>
+            // Mock matching logic
+            log.taskId.includes(activeDefinition.logCategory || 'GENERIC') ||
+            true // FOR DEMO: Show all logs if filtered list is empty, or better, just show last 2 global if no specific match
+        ).slice(0, 2);
+    }, [allMaintenanceLogs, activeDefinition]);
+
+    const handleGenerateReport = () => {
+        const blob = PdfService.generateAuditReport(
+            title,
+            slogan,
+            liveMetrics,
+            diagnostics,
+            contextLogs, // Only filtered logs for report
+            "Current User",
+            t
+        );
+        setPreviewBlob(blob);
+        setIsPreviewOpen(true);
+    };
+
+    // Calculate trend for Sparkline color
+
+    const getTrendColor = (history: number[]) => {
+        if (!history || history.length < 2) return '#22d3ee'; // Default Cyan
+        const start = history[0];
+        const end = history[history.length - 1];
+        if (end > start * 1.05) return '#ef4444'; // Red if > 5% increase
+        if (end < start * 0.95) return '#10b981'; // Green if < 5% decrease (good for temps?) - Let's stick to Cyan for stable
+        return '#22d3ee';
+    };
+
 
 
 
@@ -302,13 +372,48 @@ const ContextPanel = () => {
                                 {title}
                             </span>
                         </div>
-                        {/* Live Indicator */}
-                        <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                            </span>
-                            <span className="text-[9px] font-mono text-emerald-400 font-bold">LIVE</span>
+                        {/* Live Indicator & Upload */}
+                        <div className="flex items-center gap-2">
+                            {/* Layer Switcher */}
+                            <div className="flex bg-slate-900/80 rounded-lg p-0.5 border border-white/10 mr-2">
+                                {(['HUMAN', 'HISTORY', 'REALTIME'] as const).map(layer => (
+                                    <button
+                                        key={layer}
+                                        onClick={() => setActiveLayer(layer)}
+                                        className={`px-2 py-0.5 text-[9px] font-bold rounded-md transition-all ${activeLayer === layer
+                                            ? (layer === 'REALTIME' ? 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.2)]' : 'bg-white/10 text-white')
+                                            : 'text-slate-500 hover:text-slate-300'
+                                            }`}
+                                    >
+                                        {layer.slice(0, 3)}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Upload Button */}
+                            <label className="cursor-pointer group/upload">
+                                <input
+                                    type="file"
+                                    accept=".csv,.json"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        if (e.target.files?.[0]) {
+                                            uploadLogData(e.target.files[0]);
+                                        }
+                                    }}
+                                />
+                                <UploadCloud className="w-4 h-4 text-slate-500 hover:text-cyan-400 transition-colors" />
+                            </label>
+
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5">
+                                <span className="relative flex h-2 w-2">
+                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${playback.isPlaying ? 'bg-cyan-400' : 'bg-amber-400'}`}></span>
+                                    <span className={`relative inline-flex rounded-full h-2 w-2 ${playback.isPlaying ? 'bg-cyan-500' : 'bg-amber-500'}`}></span>
+                                </span>
+                                <span className={`text-[9px] font-mono font-bold ${playback.isPlaying ? 'text-cyan-400' : 'text-amber-400'}`}>
+                                    {playback.isPlaying ? 'LIVE' : 'PAUSED'}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -316,7 +421,14 @@ const ContextPanel = () => {
                     {liveMetrics && liveMetrics.length > 0 && (
                         <div className="grid grid-cols-2 gap-2 mb-4">
                             {liveMetrics.map((m: any, i: number) => (
-                                <div key={i} className="bg-black/40 rounded p-2 border border-white/10 shadow-sm flex flex-col items-center backdrop-blur-sm">
+                                <div
+                                    key={i}
+                                    className="bg-black/40 rounded p-2 border border-white/10 shadow-sm flex flex-col items-center backdrop-blur-sm relative group/metric"
+                                    title={m.source ? `Source: ${m.source.id} | Calibrated: ${m.source.cal}` : 'Source: Unknown'}
+                                >
+                                    {m.source && (
+                                        <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-slate-600 group-hover/metric:bg-cyan-400 transition-colors"></div>
+                                    )}
                                     <span className="text-[10px] text-slate-400 uppercase tracking-wider">{m.label}</span>
                                     <div className={`text-lg font-mono font-bold ${m.status === 'critical' ? 'text-red-500 animate-pulse' : m.status === 'warning' ? 'text-amber-400' : 'text-white'}`}>
                                         {typeof m.value === 'number' ? m.value.toFixed(1) : m.value} <span className="text-[10px] text-slate-500">{m.unit}</span>
@@ -327,7 +439,7 @@ const ContextPanel = () => {
                                             data={m.history}
                                             width={80}
                                             height={20}
-                                            color={m.color || '#22d3ee'}
+                                            color={getTrendColor(m.history)}
                                             className="mt-1 opacity-80"
                                         />
                                     )}
@@ -340,30 +452,115 @@ const ContextPanel = () => {
                     {diagnostics && diagnostics.length > 0 && (
                         <div className="mb-4 space-y-2 animate-in slide-in-from-left-4 duration-500">
                             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-white/5 pb-1 flex items-center gap-2">
-                                <Zap className="w-3 h-3 text-cyan-400" />
-                                Engineering Insight
+                                <BrainCircuit className={`w-3 h-3 ${hasCriticalRisks ? 'text-red-500 animate-pulse' : 'text-cyan-400'}`} />
+                                Sentinel Insights
                             </div>
                             {diagnostics.map((insight: any) => (
-                                <div key={insight.id} className={`p-2 rounded border-l-2 text-[10px] leading-tight transition-shadow duration-500 ${insight.type === 'critical' ? 'bg-red-950/30 border-red-500 text-red-200 shadow-[0_0_20px_rgba(220,38,38,0.2)]' : 'bg-amber-950/20 border-amber-500 text-amber-100'}`}>
-                                    <div className="font-bold flex items-center gap-1.5 mb-1">
-                                        {insight.type === 'critical' ? <AlertTriangle className="w-3 h-3 text-red-500" /> : <Info className="w-3 h-3 text-amber-500" />}
-                                        <span>{/* useTranslation().t(insight.messageKey) */ insight.messageKey /* Placeholder for now */}</span>
+                                <div key={insight.id} className={`p-2 rounded border-l-2 text-[10px] leading-tight transition-all duration-500 hover:bg-slate-800/50 ${insight.type === 'critical' ? 'bg-red-950/30 border-red-500 text-red-200 shadow-[0_0_20px_rgba(220,38,38,0.2)]' : 'bg-amber-950/20 border-amber-500 text-amber-100'}`}>
+                                    <div className="font-bold flex items-center justify-between gap-1.5 mb-1">
+                                        <div className="flex items-center gap-2">
+                                            {insight.type === 'critical' ? <AlertTriangle className="w-3 h-3 text-red-500" /> : <Info className="w-3 h-3 text-amber-500" />}
+                                            <span>{insight.messageKey}</span>
+                                        </div>
+                                        {insight.value && <span className="font-mono text-[9px] opacity-70 border border-white/20 px-1 rounded">{insight.value}</span>}
                                     </div>
+
+                                    {/* SENTINEL VOICE: Logic Trace */}
+                                    {insight.vectors && insight.vectors.length > 0 && (
+                                        <div className="mt-2 space-y-1 pl-1 border-l border-white/10">
+                                            <div className="text-[9px] font-mono opacity-50 uppercase tracking-wide mb-1">Logic Trace:</div>
+                                            {insight.vectors.map((vec: string, vIndex: number) => (
+                                                <div key={vIndex} className="flex items-center gap-1 text-[9px] font-mono opacity-80">
+                                                    <ArrowRight className="w-2 h-2 opacity-50" />
+                                                    {vec}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* THE ARCHIVIST: Historical Precedent */}
+                                    {insight.precedent && (
+                                        <div className="mt-3 bg-slate-900/40 rounded p-2 border border-blue-500/20">
+                                            <div className="flex items-center gap-1.5 text-[9px] font-bold text-blue-400 uppercase tracking-wider mb-1">
+                                                <Database className="w-3 h-3" />
+                                                Historical Precedent
+                                            </div>
+                                            <div className="text-[9px] text-slate-300">
+                                                Similar pattern detected on <span className="text-white font-mono">{insight.precedent.date}</span> leading to <span className="text-white">{insight.precedent.event}</span>.
+                                            </div>
+                                            <div className="text-[8px] text-slate-500 mt-1 font-mono">
+                                                Confidence: {(insight.precedent.confidence * 100).toFixed(0)}%
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* HUMAN VERIFICATION (The Check-And-Balance) */}
+                                    {insight.verification && (
+                                        <div className="mt-2 bg-emerald-950/40 rounded p-2 border border-emerald-500/30 animate-in slide-in-from-left-2 transition-all">
+                                            <div className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                                <ClipboardList className="w-3 h-3" />
+                                                Human Verification Confirmed
+                                            </div>
+                                            <div className="text-[9px] text-slate-300 italic mb-1">
+                                                "{insight.verification.text}"
+                                            </div>
+                                            <div className="flex justify-between text-[8px] text-slate-500 font-mono">
+                                                <span>Tech: {insight.verification.author}</span>
+                                                <span>Log #{insight.verification.id}</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {insight.slogan && (
+                                        <div className="mt-2 text-[9px] italic opacity-60 font-serif border-t border-white/10 pt-1">
+                                            "{insight.slogan}"
+                                        </div>
+                                    )}
+
+                                    {/* CONTEXTUAL GRAVITY: Tactical Actions */}
+                                    {insight.actions && insight.actions.length > 0 && (
+                                        <div className="mt-2 grid grid-cols-2 gap-2">
+                                            {insight.actions.map((action: any, i: number) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        console.log(`[Contextual Gravity] Executing: ${action.type} -> ${action.targetId}`);
+                                                        if (action.type === 'OPEN_SOP') {
+                                                            // Navigate to SOP if defined, roughly mapping IDs to routes
+                                                            if (action.targetId.includes('Drainage')) navigate('/francis/sop/drainage');
+                                                            else if (action.targetId.includes('Cooling')) navigate('/francis/sop/cooling');
+                                                            else navigate('/library'); // Fallback
+                                                        } else if (action.type === 'FOCUS_3D') {
+                                                            // Dispatch Custom Event for 3D Viewer to catch
+                                                            window.dispatchEvent(new CustomEvent('FOCUS_MESH', { detail: { meshId: action.targetId } }));
+                                                        }
+                                                    }}
+                                                    className="flex items-center justify-center gap-1 py-1.5 bg-slate-800 hover:bg-cyan-900/40 border border-white/10 hover:border-cyan-500/50 rounded text-[9px] font-bold text-slate-300 hover:text-cyan-300 transition-all uppercase tracking-wider shadow-sm"
+                                                >
+                                                    {action.type === 'FOCUS_3D' ? '📦' : action.type === 'OPEN_SOP' ? '📄' : '⚡'}
+                                                    {action.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
                     )}
 
-                    {/* Slogan / Physics Theory (Glass Card) */}
-                    <div className="relative p-3 bg-gradient-to-br from-cyan-950/30 to-slate-900/50 rounded-lg border border-cyan-500/20 mb-4 shadow-inner ring-1 ring-cyan-500/10 backdrop-blur-md">
-                        <div className="text-[10px] text-cyan-200/80 font-bold mb-1 uppercase text-xs flex items-center gap-1">
-                            <Lightbulb className="w-3 h-3" />
-                            Physics Engine
+                    {/* Slogan / Physics Theory (Glass Card) -> MOVED TO SENTINEL CARD, kept as System Info fallback */}
+                    {!hasCriticalRisks && (
+                        <div className="relative p-3 bg-gradient-to-br from-cyan-950/30 to-slate-900/50 rounded-lg border border-cyan-500/20 mb-4 shadow-inner ring-1 ring-cyan-500/10 backdrop-blur-md">
+                            <div className="text-[10px] text-cyan-200/80 font-bold mb-1 uppercase text-xs flex items-center gap-1">
+                                <Lightbulb className="w-3 h-3" />
+                                Physics Engine
+                            </div>
+                            <div className="text-[11px] text-slate-300 leading-relaxed font-light italic">
+                                "{slogan}"
+                            </div>
                         </div>
-                        <div className="text-[11px] text-slate-300 leading-relaxed font-light italic">
-                            "{slogan}"
-                        </div>
-                    </div>
+                    )}
 
                     <div className="space-y-4 relative z-10">
 
@@ -417,9 +614,68 @@ const ContextPanel = () => {
                             Log Observation
                         </button>
 
+                        {/* 4. HISTORICAL LOG (New) */}
+                        {contextLogs.length > 0 && (
+                            <div className="bg-slate-900/50 rounded border border-white/5 p-2 space-y-2">
+                                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                    <History className="w-3 h-3" />
+                                    {t('sidebar.analytics.historicalLog', 'Recent Activity')}
+                                </div>
+                                {contextLogs.map(log => (
+                                    <div key={log.id} className="text-[10px] text-slate-400 border-l border-white/10 pl-2">
+                                        <div className="flex justify-between">
+                                            <span className="text-slate-300">{new Date(log.timestamp).toLocaleDateString()}</span>
+                                            <span className="text-cyan-500/70">{log.technician}</span>
+                                        </div>
+                                        <div className="line-clamp-1 italic">{log.summaryDE || log.commentBS}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 5. AUDIT REPORT BUTTON (New) */}
+                        <button
+                            onClick={handleGenerateReport}
+                            className="w-full py-1.5 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-center gap-2 transition-all"
+                        >
+                            <Download className="w-3 h-3" />
+                            {t('sidebar.analytics.generateAudit', 'Generate Audit PDF')}
+                        </button>
+
+                        <PdfPreviewModal
+                            isOpen={isPreviewOpen}
+                            onClose={() => setIsPreviewOpen(false)}
+                            pdfBlob={previewBlob}
+                            filename={`Audit_${title.replace(/\s+/g, '_')}.pdf`}
+                        />
+
                     </div>
+
+                    {/* Timeline Slider (Depth of Truth) */}
+                    {playback.totalDuration > 0 && (
+                        <div className="bg-black/40 border-t border-white/10 p-2 backdrop-blur-md mt-2 rounded">
+                            <div className="flex items-center justify-between mb-1">
+                                <span className="text-[10px] font-mono text-cyan-400">
+                                    {new Date(playback.currentTimestamp).toLocaleTimeString()}
+                                </span>
+                                <button onClick={playback.togglePlay} className="text-cyan-400 hover:text-white">
+                                    {playback.isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                                </button>
+                            </div>
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                value={playback.progress}
+                                onChange={(e) => playback.scrubTo(parseFloat(e.target.value))}
+                                className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                            />
+                        </div>
+                    )}
                 </motion.div>
             )}
+
         </AnimatePresence>
     );
 };

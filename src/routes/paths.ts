@@ -10,6 +10,7 @@ export const ROUTES = {
         SHADOW_ENGINEER: 'shadow-engineer', // SOPManager
         INTUITION_LOG: 'intuition-log', // ShiftLog
         AR_GUIDE: 'ar-guide', // ARManager
+        /* SHAFT_ALIGNMENT: 'shaft-alignment',  <-- MOVED TO FRANCIS MODULE */
         EXECUTIVE: 'executive',
     },
     FRANCIS: {

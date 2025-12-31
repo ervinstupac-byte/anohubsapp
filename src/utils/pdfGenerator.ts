@@ -267,3 +267,122 @@ export const createMasterDossierBlob = (assetName: string, riskData: any, design
 
     return doc.output('blob');
 };
+
+// --- AUDIT REPORT (SIDEBAR SNAPSHOT) ---
+export const generateAuditReport = (
+    contextTitle: string,
+    slogan: string,
+    metrics: any[],
+    diagnostics: any[],
+    activeWorkOrders: any[],
+    logs: any[],
+    engineerName: string,
+    t: TFunction
+) => {
+    const doc = new jsPDF();
+    addCustomFont(doc);
+    const pageWidth = doc.internal.pageSize.width;
+
+    // Header (Industrial / Blueprint Style)
+    doc.setFillColor(15, 23, 42); // Dark Slate
+    doc.rect(0, 0, pageWidth, 35, 'F');
+
+    doc.setTextColor(34, 211, 238); // Cyan
+    doc.setFontSize(22);
+    doc.setFont('Roboto', 'normal');
+    doc.text("ANOHUB ENGINEERING AUDIT", 20, 18);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.text(`${t('common.generatedBy') || 'Engineer'}: ${engineerName}`, pageWidth - 20, 15, { align: 'right' });
+    doc.text(new Date().toLocaleString(), pageWidth - 20, 25, { align: 'right' });
+
+    // Context Title
+    let y = 50;
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(18);
+    doc.text(contextTitle.toUpperCase(), 20, y);
+    doc.setDrawColor(34, 211, 238);
+    doc.line(20, y + 2, pageWidth - 20, y + 2);
+
+    // Slogan / Physics Context
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('Roboto', 'italic');
+    doc.text(`"${slogan}"`, 20, y);
+    doc.setFont('Roboto', 'normal');
+
+    // 1. LIVE METRICS SNAPSHOT
+    y += 15;
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text(t('sidebar.analytics.liveSnapshot', "Live Context Snapshot"), 20, y);
+    y += 8;
+
+    if (metrics && metrics.length > 0) {
+        const tableData = metrics.map(m => [
+            m.label,
+            `${typeof m.value === 'number' ? m.value.toFixed(2) : m.value} ${m.unit}`,
+            m.status === 'critical' ? 'CRITICAL' : m.status === 'warning' ? 'WARNING' : 'NOMINAL'
+        ]);
+
+        autoTable(doc, {
+            startY: y,
+            head: [[t('common.metric', "Metric"), t('common.value', "Value"), t('common.status', "Status")]],
+            body: tableData,
+            headStyles: { fillColor: [15, 23, 42], textColor: [34, 211, 238] },
+            alternateRowStyles: { fillColor: [241, 245, 249] }
+        });
+        y = (doc as any).lastAutoTable.finalY + 15;
+    } else {
+        doc.setFontSize(10);
+        doc.setTextColor(150, 150, 150);
+        doc.text("No live metrics available for this context.", 20, y);
+        y += 15;
+    }
+
+    // 2. DIAGNOSTIC INSIGHTS
+    if (diagnostics && diagnostics.length > 0) {
+        doc.setFontSize(14);
+        doc.setTextColor(15, 23, 42);
+        doc.text(t('sidebar.analytics.diagnostics', "Active Engineering Insights"), 20, y);
+        y += 8;
+
+        diagnostics.forEach(diag => {
+            doc.setFillColor(diag.type === 'critical' ? 254 : 255, 242, 242); // Light red for critical
+            doc.rect(20, y, pageWidth - 40, 15, 'F');
+            doc.setDrawColor(200, 200, 200);
+            doc.rect(20, y, pageWidth - 40, 15, 'S');
+
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`${diag.type === 'critical' ? '⚠️ CRITICAL' : 'ℹ️ INFO'}: ${diag.messageKey || diag.message}`, 25, y + 9);
+            y += 18;
+        });
+        y += 10;
+    }
+
+    // 3. MAINTENANCE HISTORY
+    if (logs && logs.length > 0) {
+        doc.setFontSize(14);
+        doc.setTextColor(15, 23, 42);
+        doc.text(t('sidebar.analytics.history', "Context History"), 20, y);
+        y += 8;
+
+        const logData = logs.map(l => [
+            new Date(l.timestamp).toLocaleDateString(),
+            l.technician,
+            l.summaryDE || l.commentBS
+        ]);
+
+        autoTable(doc, {
+            startY: y,
+            head: [[t('pdf.passport.date'), t('pdf.passport.user'), t('pdf.passport.action')]],
+            body: logData,
+            headStyles: { fillColor: [71, 85, 105], textColor: [255, 255, 255] }
+        });
+    }
+
+    doc.save(`Audit_${contextTitle.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
+};

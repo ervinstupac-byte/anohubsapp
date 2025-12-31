@@ -89,6 +89,13 @@
       "unassigned": "Unassigned",
       "viewTicket": "Click \"View Full Ticket\" to manage this order.",
       "systemNominal": "System Nominal"
+    },
+    "analytics": {
+      "generateAudit": "Generate Audit PDF",
+      "historicalLog": "Recent Activity",
+      "liveSnapshot": "Live Context Snapshot",
+      "diagnostics": "Active Engineering Insights",
+      "history": "Context History"
     }
   },
   "common": {

@@ -45,6 +45,73 @@
     "digitalIntroduction": "Digitalni Uvod",
     "maintenance": "Motor Održavanja"
   },
+  "sidebar": {
+    "fleetOverview": "PREGLED FLOTE",
+    "shaftAlignment": "Poravnanje Osovine",
+    "hydraulicMaintenance": "Hidrauličko Održavanje",
+    "boltTorque": "Zatezni Moment",
+    "shadowEngineer": "Shadow Inženjer",
+    "intuitionLog": "Dnevnik Intuicije",
+    "structuralIntegrity": "Strukturalni Integritet",
+    "operations": "OPERACIJE",
+    "maintenanceLogbook": "Dnevnik Održavanja",
+    "strategy": "STRATEGIJA",
+    "toolboxAnalytics": "Toolbox Analitika",
+    "knowledge": "BAZA ZNANJA",
+    "exitToSite": "Izađi na Stranicu",
+    "francisLogic": "Francis Logička Mapa",
+    "insights": {
+      "title": "Inženjerski Uvid",
+      "highPressure": "Upozorenje: Visok obodni napon.",
+      "cavitation": "Rizik od kavitacije detektovan.",
+      "efficiency": "Efikasnost turbine opada."
+    },
+    "maintenance": {
+      "title": "Održavanje",
+      "pulse": "PULS ODRŽAVANJA",
+      "active": "AKTIVNO",
+      "systemNominal": "SISTEM NOMINALAN",
+      "modalTitle": "DETALJI RADNOG NALOGA",
+      "description": "Opis",
+      "priority": "Prioritet",
+      "assignee": "Dodijeljeno",
+      "unassigned": "Nije dodijeljeno",
+      "viewTicket": "Pogledaj puni tiket u Jira"
+    },
+    "analytics": {
+      "historicalLog": "NEDAVNA AKTIVNOST",
+      "generateAudit": "GENERIŠI REVIZIJU (PDF)"
+    },
+    "exitToSite": "Izlaz na Stranicu",
+    "francisLogic": "Francis Logička Mapa",
+    "insights": {
+      "title": "Inženjerski Uvid",
+      "highPressure": "Upozorenje: Detektiran visok obodni napon.",
+      "waterHammerRisk": "KRITIČNO: Rizik od vodenog udara.",
+      "waterHammerCritical": "KRITIČNO: Rizik od vodenog udara. Podesite brzinu zatvaranja.",
+      "thermalStress": "Obavijest: Termalni stres raste.",
+      "substationThermal": "OBAVIJEST: Termalno preopterećenje neizbježno. Provjeri pumpe.",
+      "fieldFlashing": "Potrebno Pobudu Polja"
+    },
+    "maintenance": {
+      "pulse": "Puls Održavanja",
+      "active": "Aktivno",
+      "modalTitle": "Detalji Radnog Naloga",
+      "description": "Opis",
+      "priority": "Prioritet",
+      "assignee": "Dodijeljeno",
+      "unassigned": "Nedodijeljeno",
+      "viewTicket": "Klikni \"Vidi Puni Tiket\" za upravljanje.",
+      "systemNominal": "Sistem Nominalan"
+    },
+    "analytics": {
+      "generateAudit": "Generiši Izvještaj Revizije",
+      "historicalLog": "Istorijski Zapis",
+      "liveSnapshot": "Snimak Stanja Konteksta",
+      "diagnostics": "Aktivni Inženjerski Uvidi",
+      "history": "Istorija Konteksta"
+    }
+  },
   "common": {
     "launch": "POKRENI",
     "back": "Nazad na Izbor Turbina",
