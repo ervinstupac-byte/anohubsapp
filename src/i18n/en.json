@@ -69,7 +69,27 @@
     "toolboxAnalytics": "Toolbox Analytics",
     "knowledge": "KNOWLEDGE",
     "exitToSite": "Exit to Site",
-    "francisLogic": "Francis Logic Map"
+    "francisLogic": "Francis Logic Map",
+    "insights": {
+      "title": "Engineering Insight",
+      "highPressure": "Warning: High Hoop Stress detected.",
+      "waterHammerRisk": "CRITICAL: Water Hammer Risk.",
+      "waterHammerCritical": "CRITICAL: Water hammer risk detected. Adjust guide vane closure rate.",
+      "thermalStress": "Notice: Thermal stress increasing.",
+      "substationThermal": "NOTICE: Thermal overload imminent. Verify cooling pump operation.",
+      "fieldFlashing": "Field Flashing Required"
+    },
+    "maintenance": {
+      "pulse": "Maintenance Pulse",
+      "active": "Active",
+      "modalTitle": "Work Order Details",
+      "description": "Description",
+      "priority": "Priority",
+      "assignee": "Assignee",
+      "unassigned": "Unassigned",
+      "viewTicket": "Click \"View Full Ticket\" to manage this order.",
+      "systemNominal": "System Nominal"
+    }
   },
   "common": {
     "launch": "LAUNCH",
@@ -1541,6 +1561,11 @@
     }
   },
   "francis": {
+    "diagnostics": {
+      "highPressure": "High Hoop Stress Detected",
+      "waterHammerRisk": "Water Hammer Risk High",
+      "thermalStress": "Thermal Stress - Check Cooling"
+    },
     "title": "FRANCIS • UNIT 1",
     "subtitle": "LOGIC HUB & SYSTEM MAP",
     "actions": {

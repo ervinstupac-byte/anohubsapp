@@ -1600,10 +1600,35 @@
     "strategy": "STRATEGIJA",
     "toolboxAnalytics": "Analitika Alata",
     "knowledge": "ZNANJE",
-    "exitToSite": "Nazad na Stranicu",
-    "francisLogic": "Francis Logička Mapa"
+    "exitToSite": "Izađi na Stranicu",
+    "francisLogic": "Francis Logička Mapa",
+    "insights": {
+      "title": "Inženjerski Uvid",
+      "highPressure": "Upozorenje: Visok obodni napon.",
+      "waterHammerRisk": "KRITIČNO: Rizik od hidrauličkog udara.",
+      "waterHammerCritical": "KRITIČNO: Otkriven rizik od hidrauličkog udara. Podesite brzinu zatvaranja sprovodnog aparata.",
+      "thermalStress": "Napomena: Termički stres raste.",
+      "substationThermal": "NAPOMENA: Predstoji termičko preopterećenje. Provjerite rad pumpe za hlađenje.",
+      "fieldFlashing": "Potrebna početna uzbuda"
+    },
+    "maintenance": {
+      "pulse": "Puls Održavanja",
+      "active": "Aktivno",
+      "modalTitle": "Detalji Radnog Naloga",
+      "description": "Opis",
+      "priority": "Prioritet",
+      "assignee": "Dodijeljeno",
+      "unassigned": "Nedodijeljeno",
+      "viewTicket": "Kliknite \"Pogledaj Puni Nalog\" za upravljanje.",
+      "systemNominal": "Sistem Nominalan"
+    }
   },
   "francis": {
+    "diagnostics": {
+      "highPressure": "Detektiran Visok Obodni Napon",
+      "waterHammerRisk": "Visok Rizik od Vodenog Udarca",
+      "thermalStress": "Termalni Stres - Provjeri Hlađenje"
+    },
     "title": "FRANCIS • AGREGAT 1",
     "subtitle": "LOGIČKI CENTAR & SISTEMSKA MAPA",
     "actions": {
@@ -2748,37 +2773,5 @@
       "samp_4": "Pošalji u laboratoriju na analizu.",
       "back_btn": "← Povratak u Operativni Centar"
     }
-  },
-  "toolbox": {
-    "greeting": {
-      "morning": "Dobro Jutro",
-      "afternoon": "Dobar Dan",
-      "evening": "Dobro Veče"
-    },
-    "engineer": "Inženjeru",
-    "systemOperational": "Sistem Operativan",
-    "assetsOnline": "Imovina Online",
-    "activeAsset": "Aktivni Kontekst: {{name}}",
-    "sections": {
-      "utilities": "Inženjerski Alati",
-      "designAnalysis": "Dizajn i Analiza",
-      "operationalModules": "Operativni Moduli",
-      "recentActivity": "Nedavna Aktivnost"
-    },
-    "activity": {
-      "none": "Nema nedavne aktivnosti.",
-      "open": "Otvori Dnevnik",
-      "view": "Pogledaj Sve Aktivnosti"
-    },
-    "zeroState": {
-      "title": "Dobrodošli u AnoHUB",
-      "noAssets": "Nema registrovane imovine u floti.",
-      "initialize": "Inicijaliziraj Prvu Elektranu"
-    },
-    "toast": {
-      "generatingPassport": "Generisanje Pasoša Imovine za {{asset}}..."
-    },
-    "passport": "Pasoš Imovine",
-    "addAsset": "Dodaj Elektranu"
   }
 }

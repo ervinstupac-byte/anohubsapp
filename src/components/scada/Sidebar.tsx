@@ -4,10 +4,12 @@ import { ROUTES } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, X } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import { LanguageSelector } from '../LanguageSelector.tsx';
+import { Sparkline } from '../ui/Sparkline';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // --- FLEET SECTION COMPONENT ---
 interface FleetSectionProps {
@@ -229,11 +231,13 @@ import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap } from 'l
 
 const ContextPanel = () => {
     // Determine context from GLOBAL state
-    const { activeDefinition, activeContextNodes, activeLogs, activeWorkOrders, liveMetrics, hasContext } = useContextAwareness();
+    const { activeDefinition, activeContextNodes, activeLogs, activeWorkOrders, liveMetrics, hasContext, diagnostics, isLoading } = useContextAwareness();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const location = useLocation();
+    const [selectedWO, setSelectedWO] = useState<any>(null);
 
-    if (!hasContext) return null;
+
 
     // Title from Definition (e.g. 'Penstock System') or Fallback
     const title = activeDefinition?.title || 'System Context';
@@ -248,8 +252,6 @@ const ContextPanel = () => {
     };
 
     const handleQuickLog = () => {
-        // Navigate to Logbook with State for pre-filling
-        // We look up the raw path from constants or hardcode since we have the ContextDefinition
         navigate('/maintenance/logbook', {
             state: {
                 source: activeDefinition?.id || 'Unknown Context',
@@ -259,96 +261,165 @@ const ContextPanel = () => {
     };
 
     return (
-        <div className="mx-3 mt-4 mb-2 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl animate-fade-in border-l-4 border-l-cyan-500 overflow-hidden relative group">
+        <AnimatePresence>
+            {hasContext && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.2 } }}
+                    layout
+                    className="mx-3 mt-4 mb-2 p-4 bg-gradient-to-b from-slate-800/80 to-slate-950/80 backdrop-blur-2xl border border-t-white/10 border-r-white/5 border-b-black/50 border-l-cyan-500 border-l-4 rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.7)] overflow-hidden relative group ring-1 ring-white/5"
+                >
 
-            {/* Glassmorphism Background Highlight */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
-
-            {/* Header */}
-            <div className="flex items-center justify-between mb-3 relative z-10">
-                <div className="flex items-center gap-2">
-                    {getPhysicsIcon()}
-                    <span className="text-xs font-black text-white uppercase tracking-widest shadow-black drop-shadow-md">
-                        {title}
-                    </span>
-                </div>
-                {/* Live Indicator */}
-                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-[9px] font-mono text-emerald-400 font-bold">LIVE</span>
-                </div>
-            </div>
-
-            {/* 1. LIVE STATUS METRICS */}
-            {liveMetrics && liveMetrics.length > 0 && (
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                    {liveMetrics.map((m: any, i: number) => (
-                        <div key={i} className="bg-black/20 rounded p-2 border border-white/5 flex flex-col items-center">
-                            <span className="text-[10px] text-slate-400 uppercase tracking-wider">{m.label}</span>
-                            <div className={`text-lg font-mono font-bold ${m.status === 'critical' ? 'text-red-500 animate-pulse' : m.status === 'warning' ? 'text-amber-400' : 'text-white'}`}>
-                                {m.value} <span className="text-[10px] text-slate-500">{m.unit}</span>
+                    {/* Modal Overlay for Work Orders */}
+                    {selectedWO && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedWO(null)}>
+                            <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/50 rounded-xl p-6 max-w-md w-full shadow-2xl relative ring-1 ring-amber-500/20 backdrop-blur-xl" onClick={e => e.stopPropagation()}>
+                                <button onClick={() => setSelectedWO(null)} className="absolute top-2 right-2 text-slate-400 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
+                                <h3 className="text-amber-500 font-bold uppercase tracking-wider mb-2 flex items-center gap-2 text-sm shadow-amber-500/20 drop-shadow-sm">
+                                    <AlertTriangle className="w-5 h-5" /> {t('sidebar.maintenance.modalTitle')}
+                                </h3>
+                                <div className="space-y-3 text-xs text-slate-300">
+                                    <p><strong className="text-slate-500 uppercase tracking-wider">{t('sidebar.maintenance.description')}:</strong><br /><span className="text-slate-200">{selectedWO.description}</span></p>
+                                    <p><strong className="text-slate-500 uppercase tracking-wider">{t('sidebar.maintenance.priority')}:</strong> <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${selectedWO.priority === 'HIGH' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>{selectedWO.priority}</span></p>
+                                    <p><strong className="text-slate-500 uppercase tracking-wider">{t('sidebar.maintenance.assignee')}:</strong> <span className="text-cyan-400 font-mono">{selectedWO.assignedTechnician || t('sidebar.maintenance.unassigned')}</span></p>
+                                    <p className="text-[10px] italic text-slate-500 mt-4 border-t border-white/5 pt-2 flex items-center gap-2">
+                                        <Info className="w-3 h-3" /> {t('sidebar.maintenance.viewTicket')}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    )}
+
+                    {/* Glassmorphism Background Highlight */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-3 relative z-10">
+                        <div className="flex items-center gap-2">
+                            {getPhysicsIcon()}
+                            <span className="text-xs font-black text-white uppercase tracking-widest shadow-black drop-shadow-md">
+                                {title}
+                            </span>
+                        </div>
+                        {/* Live Indicator */}
+                        <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            <span className="text-[9px] font-mono text-emerald-400 font-bold">LIVE</span>
+                        </div>
+                    </div>
+
+                    {/* 1. LIVE STATUS METRICS (With Sparklines) */}
+                    {liveMetrics && liveMetrics.length > 0 && (
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                            {liveMetrics.map((m: any, i: number) => (
+                                <div key={i} className="bg-black/40 rounded p-2 border border-white/10 shadow-sm flex flex-col items-center backdrop-blur-sm">
+                                    <span className="text-[10px] text-slate-400 uppercase tracking-wider">{m.label}</span>
+                                    <div className={`text-lg font-mono font-bold ${m.status === 'critical' ? 'text-red-500 animate-pulse' : m.status === 'warning' ? 'text-amber-400' : 'text-white'}`}>
+                                        {typeof m.value === 'number' ? m.value.toFixed(1) : m.value} <span className="text-[10px] text-slate-500">{m.unit}</span>
+                                    </div>
+                                    {/* Sparkline Integration */}
+                                    {m.history && (
+                                        <Sparkline
+                                            data={m.history}
+                                            width={80}
+                                            height={20}
+                                            color={m.color || '#22d3ee'}
+                                            className="mt-1 opacity-80"
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* 1.5 DIAGNOSTIC WHISPERER (Engineering Insights) */}
+                    {diagnostics && diagnostics.length > 0 && (
+                        <div className="mb-4 space-y-2 animate-in slide-in-from-left-4 duration-500">
+                            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-white/5 pb-1 flex items-center gap-2">
+                                <Zap className="w-3 h-3 text-cyan-400" />
+                                Engineering Insight
+                            </div>
+                            {diagnostics.map((insight: any) => (
+                                <div key={insight.id} className={`p-2 rounded border-l-2 text-[10px] leading-tight transition-shadow duration-500 ${insight.type === 'critical' ? 'bg-red-950/30 border-red-500 text-red-200 shadow-[0_0_20px_rgba(220,38,38,0.2)]' : 'bg-amber-950/20 border-amber-500 text-amber-100'}`}>
+                                    <div className="font-bold flex items-center gap-1.5 mb-1">
+                                        {insight.type === 'critical' ? <AlertTriangle className="w-3 h-3 text-red-500" /> : <Info className="w-3 h-3 text-amber-500" />}
+                                        <span>{/* useTranslation().t(insight.messageKey) */ insight.messageKey /* Placeholder for now */}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Slogan / Physics Theory (Glass Card) */}
+                    <div className="relative p-3 bg-gradient-to-br from-cyan-950/30 to-slate-900/50 rounded-lg border border-cyan-500/20 mb-4 shadow-inner ring-1 ring-cyan-500/10 backdrop-blur-md">
+                        <div className="text-[10px] text-cyan-200/80 font-bold mb-1 uppercase text-xs flex items-center gap-1">
+                            <Lightbulb className="w-3 h-3" />
+                            Physics Engine
+                        </div>
+                        <div className="text-[11px] text-slate-300 leading-relaxed font-light italic">
+                            "{slogan}"
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 relative z-10">
+
+                        {/* 2. MAINTENANCE PULSE (Enhanced - Clickable) */}
+                        {isLoading ? (
+                            <div className="space-y-2 py-2">
+                                <div className="h-3 bg-amber-900/20 rounded w-1/3 animate-pulse"></div>
+                                <div className="h-10 bg-amber-900/10 rounded w-full border-l-2 border-amber-900/30 animate-pulse"></div>
+                                <div className="h-10 bg-amber-900/10 rounded w-full border-l-2 border-amber-900/30 animate-pulse delay-75"></div>
+                            </div>
+                        ) : activeWorkOrders.length > 0 ? (
+                            <div className="space-y-1">
+                                <div className="flex items-center justify-between text-[10px] font-bold text-amber-500 uppercase border-b border-amber-500/20 pb-1">
+                                    <div className="flex items-center gap-1">
+                                        <AlertTriangle className="w-3 h-3" />
+                                        {t('sidebar.maintenance.pulse')}
+                                    </div>
+                                    <span className="bg-amber-500/20 text-amber-400 px-1.5 rounded text-[9px]">{activeWorkOrders.length} {t('sidebar.maintenance.active')}</span>
+                                </div>
+                                {activeWorkOrders.slice(0, 3).map((wo: any) => (
+                                    <div
+                                        key={wo.id}
+                                        onClick={() => setSelectedWO(wo)}
+                                        className="group/wo p-2 bg-amber-950/20 hover:bg-amber-950/40 border-l-2 border-amber-500/50 hover:border-amber-400 rounded-r transition-all cursor-pointer relative overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/0 to-amber-500/5 group-hover/wo:via-amber-500/10 transition-all duration-500" />
+                                        <div className="flex justify-between items-start mb-1 relative z-10">
+                                            <span className="text-[9px] font-bold text-amber-200">{wo.id}</span>
+                                            <span className={`text-[8px] px-1 rounded ${wo.priority === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-slate-700 text-slate-400'}`}>{wo.priority}</span>
+                                        </div>
+                                        <div className="text-[10px] text-amber-100/90 leading-tight group-hover/wo:text-white transition-colors relative z-10 line-clamp-2">
+                                            {wo.description}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-2 opacity-50">
+                                <span className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span>
+                                    {t('sidebar.maintenance.systemNominal')}
+                                </span>
+                            </div>
+                        )}
+
+                        {/* 3. QUICK ACTION */}
+                        <button
+                            onClick={handleQuickLog}
+                            className="w-full mt-2 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 border border-cyan-400/30 rounded shadow-lg shadow-cyan-900/20 text-[11px] font-bold text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98] group/btn">
+                            <ClipboardList className="w-4 h-4 text-cyan-100 group-hover/btn:rotate-12 transition-transform" />
+                            Log Observation
+                        </button>
+
+                    </div>
+                </motion.div>
             )}
-
-            {/* Slogan / Physics Theory (Glass Card) */}
-            <div className="relative p-3 bg-gradient-to-br from-white/5 to-white/0 rounded-lg border border-white/10 mb-4 shadow-inner">
-                <div className="text-[10px] text-cyan-200/80 font-bold mb-1 uppercase text-xs flex items-center gap-1">
-                    <Lightbulb className="w-3 h-3" />
-                    Physics Engine
-                </div>
-                <div className="text-[11px] text-slate-300 leading-relaxed font-light italic">
-                    "{slogan}"
-                </div>
-            </div>
-
-            <div className="space-y-4 relative z-10">
-
-                {/* 2. MAINTENANCE PULSE (Enhanced) */}
-                {activeWorkOrders.length > 0 ? (
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between text-[10px] font-bold text-amber-500 uppercase border-b border-amber-500/20 pb-1">
-                            <div className="flex items-center gap-1">
-                                <AlertTriangle className="w-3 h-3" />
-                                Maintenance Pulse
-                            </div>
-                            <span className="bg-amber-500/20 text-amber-400 px-1.5 rounded text-[9px]">{activeWorkOrders.length} Active</span>
-                        </div>
-                        {activeWorkOrders.slice(0, 3).map((wo: any) => (
-                            <div key={wo.id} className="group/wo p-2 bg-amber-950/20 hover:bg-amber-950/40 border-l-2 border-amber-500/50 hover:border-amber-400 rounded-r transition-all cursor-pointer">
-                                <div className="flex justify-between items-start mb-1">
-                                    <span className="text-[9px] font-bold text-amber-200">{wo.id}</span>
-                                    <span className={`text-[8px] px-1 rounded ${wo.priority === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-slate-700 text-slate-400'}`}>{wo.priority}</span>
-                                </div>
-                                <div className="text-[10px] text-amber-100/90 leading-tight group-hover/wo:text-white transition-colors">
-                                    {wo.description}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-2 opacity-50">
-                        <span className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            System Nominal
-                        </span>
-                    </div>
-                )}
-
-                {/* 3. QUICK ACTION */}
-                <button
-                    onClick={handleQuickLog}
-                    className="w-full mt-2 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 border border-cyan-400/30 rounded shadow-lg shadow-cyan-900/20 text-[11px] font-bold text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98] group/btn">
-                    <ClipboardList className="w-4 h-4 text-cyan-100 group-hover/btn:rotate-12 transition-transform" />
-                    Log Observation
-                </button>
-
-            </div>
-        </div>
+        </AnimatePresence>
     );
 };

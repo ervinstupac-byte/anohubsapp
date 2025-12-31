@@ -12,9 +12,11 @@ interface ContextAwarenessState {
     activeLogs: any[];
     activeWorkOrders: any[];
     liveMetrics: any[];
+    diagnostics: any[]; // DiagnosticInsight[]
 
     // Formatting
     hasContext: boolean;
+    isLoading: boolean;
 }
 
 const ContextAwarenessContext = createContext<ContextAwarenessState | undefined>(undefined);
@@ -34,7 +36,9 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         activeLogs: engineData.activeLogs,
         activeWorkOrders: engineData.activeWorkOrders,
         liveMetrics: engineData.liveMetrics,
-        hasContext: !!activeDefinition || engineData.activeContext.length > 0
+        diagnostics: engineData.diagnostics, // New
+        hasContext: !!activeDefinition || engineData.activeContext.length > 0,
+        isLoading: engineData.isLoading
     };
 
     return (

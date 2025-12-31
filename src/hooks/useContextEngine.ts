@@ -1,10 +1,20 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCerebro } from '../contexts/ProjectContext';
+import { useMaintenance } from '../contexts/MaintenanceContext';
 import { KnowledgeNode, ContextTrigger } from '../models/knowledge/ContextTypes';
 import { KNOWLEDGE_BASE } from '../data/knowledge/KnowledgeBase';
 import { getComponentIdFromRoute } from '../data/knowledge/ComponentTaxonomy';
-import { supabase } from '../services/supabaseClient';
+// import { supabase } from '../services/supabaseClient'; // Removed: Using MaintenanceContext instead
+import { evaluateDiagnostics } from '../utils/DiagnosticEngine';
+
+export interface DiagnosticInsight {
+    id: string;
+    type: 'safe' | 'warning' | 'critical';
+    messageKey: string;
+    param?: string;
+    value?: string | number;
+}
 
 /**
  * Context Engine Hook
@@ -13,18 +23,37 @@ import { supabase } from '../services/supabaseClient';
 export const useContextEngine = () => {
     const location = useLocation();
     const { state: techState } = useCerebro();
+    const { workOrders } = useMaintenance();
+
     const [activeNodes, setActiveNodes] = useState<KnowledgeNode[]>([]);
     const [activeLogs, setActiveLogs] = useState<any[]>([]);
     const [activeWorkOrders, setActiveWorkOrders] = useState<any[]>([]);
     const [activeComponentId, setActiveComponentId] = useState<string | null>(null);
+    const [metricHistory, setMetricHistory] = useState<Record<string, number[]>>({});
 
-    // 1. KNOWLEDGE GRAPH RESOLUTION
+    // Helper: Evaluation Logic for Knowledge Graph
+    const evaluateTrigger = (trigger: ContextTrigger, currentRoute: string, sensors: any): boolean => {
+        // 1. Route Matcher
+        if (trigger.routeMatcher) {
+            if (currentRoute.includes(trigger.routeMatcher)) return true;
+        }
+
+        // 2. Sensor Data Matcher (if applicable, though typically handled via techState)
+        // ... (simplified for now as data source is techState)
+
+        return false;
+    };
+
+
+    // 1. KNOWLEDGE GRAPH RESOLUTION & COMPONENT ID
     useEffect(() => {
         const engineCurrentRoute = location.pathname;
         const currentSensors = techState.francis?.sensors || {};
 
         // Resolve Component ID
         const resolvedId = getComponentIdFromRoute(engineCurrentRoute);
+        // Debug
+        console.log('[ContextEngine] Route:', engineCurrentRoute, 'ID:', resolvedId);
         setActiveComponentId(resolvedId);
 
         // Filter Knowledge Nodes
@@ -33,114 +62,203 @@ export const useContextEngine = () => {
         });
 
         setActiveNodes(relevantNodes);
+    }, [location.pathname, techState.francis?.sensors]);
 
-    }, [location.pathname, techState.francis?.sensors, techState.lastRecalculation]);
 
-    // 2. SUPABASE "NEURAL CONNECTION" (Fetch Logs/WO)
+    // 2. LOGS & WORK ORDERS (Unified Loading)
+    const { logs, tasks, isLoading: maintenanceLoading } = useMaintenance();
+
     useEffect(() => {
         if (!activeComponentId) {
             setActiveLogs([]);
-            setActiveWorkOrders([]);
             return;
         }
 
-        const fetchContextData = async () => {
-            // Extract a keyword from the ID (e.g. 'francis.civil.penstock' -> 'penstock')
-            // This allows fuzzy matching against legacy data
-            const keyword = activeComponentId.split('.').pop();
+        const keyword = activeComponentId.split('.').pop()?.toLowerCase();
+        if (!keyword) return;
 
-            if (!keyword) return;
+        // Filter Tasks related to this component
+        const relevantTaskIds = new Set(
+            tasks
+                .filter(t =>
+                    t.componentId.toLowerCase().includes(keyword) ||
+                    t.title.toLowerCase().includes(keyword)
+                )
+                .map(t => t.id)
+        );
 
-            // Fetch Work Orders
-            const { data: woData } = await supabase
-                .from('work_orders')
-                .select('*')
-                .ilike('component', `%${keyword}%`)
-                .neq('status', 'COMPLETED') // Only active
-                .limit(5);
+        // Filter Logs (LIMIT 3)
+        // Matches either a relevant task ID OR the task ID string itself contains the keyword (legacy/fallback)
+        const relevantLogs = logs
+            .filter(l => relevantTaskIds.has(l.taskId) || l.taskId.toLowerCase().includes(keyword))
+            .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+            .slice(0, 3);
 
-            if (woData) setActiveWorkOrders(woData);
+        setActiveLogs(relevantLogs);
 
-            // Fetch Maintenance Logs (Recent)
-            const { data: logData } = await supabase
-                .from('maintenance_logs')
-                .select('*')
-                .ilike('task_id', `%${keyword}%`)
-                .order('timestamp', { ascending: false })
-                .limit(3);
+    }, [activeComponentId, logs, tasks]);
 
-            if (logData) setActiveLogs(logData);
+    // 3. WORK ORDER FILTERING (From Context)
+    useEffect(() => {
+        if (!activeComponentId) {
+            setActiveWorkOrders([]);
+            return;
+        }
+        const keyword = activeComponentId.split('.').pop()?.toLowerCase();
+        if (!keyword) return;
+
+        const relevantWOs = workOrders.filter(wo =>
+            wo.assetName?.toLowerCase().includes(keyword) ||
+            wo.description?.toLowerCase().includes(keyword) ||
+            wo.component?.toLowerCase().includes(keyword)
+        );
+        setActiveWorkOrders(relevantWOs);
+
+    }, [activeComponentId, workOrders]);
+
+
+    // 4. METRIC HISTORY SIMULATION (Sparklines)
+    useEffect(() => {
+        if (!activeComponentId) return;
+
+        const interval = setInterval(() => {
+            setMetricHistory(prev => {
+                const next = { ...prev };
+                const sensors = techState.francis?.sensors || {};
+
+                // Helper to update history
+                const updateHist = (key: string, val: number, variance: number) => {
+                    const noise = (Math.random() - 0.5) * variance;
+                    const currentHist = prev[key] || Array(20).fill(val); // Initialize with 20 points
+                    // Keep last 20
+                    next[key] = [...currentHist.slice(1), val + noise];
+                };
+
+                if (activeComponentId.includes('penstock')) {
+                    updateHist('hoop', sensors.hoopStressMPa || 142.5, 5);
+                    updateHist('flow', sensors.flowRate || 42.1, 1);
+                }
+                if (activeComponentId.includes('transformer')) {
+                    updateHist('oilTemp', sensors.transformerOilTemp || 62.1, 0.5);
+                    updateHist('load', 85, 2); // Mock load
+                }
+                if (activeComponentId.includes('generator')) {
+                    updateHist('power', sensors.activePowerMW || 142.5, 3);
+                    updateHist('voltage', sensors.voltageKV || 16.2, 0.1);
+                }
+
+                return next;
+            });
+        }, 1500); // Update every 1.5s
+
+        return () => clearInterval(interval);
+    }, [activeComponentId, techState.francis?.sensors]);
+
+
+    // 5. LIVE METRICS FORMATION
+    const liveMetrics = useMemo(() => {
+        if (!activeComponentId || !techState.francis?.sensors) return [];
+        const sensors = techState.francis.sensors;
+        const metrics: any[] = [];
+
+        // Helper: Determine Sparkline Color based on Trend
+        const getTrendColor = (hist: number[], type: 'rising_bad' | 'falling_bad' | 'neutral') => {
+            if (!hist || hist.length < 2) return '#22d3ee'; // Cyan default
+            const start = hist[0];
+            const end = hist[hist.length - 1];
+            const change = (end - start) / start;
+
+            // If rising is bad (e.g. Temp, Pressure)
+            if (type === 'rising_bad' && change > 0.05) return '#ef4444'; // Red (Dangerous Rise)
+            if (type === 'falling_bad' && change < -0.05) return '#ef4444'; // Red (Dangerous Drop)
+
+            return '#22d3ee'; // Stable/Safe Cyan
         };
 
-        fetchContextData();
-    }, [activeComponentId]);
-
-    // 3. LIVE METRICS EXTRACTION
-    // Map active component to relevant sensors from the core physics engine
-    const [liveMetrics, setLiveMetrics] = useState<any[]>([]);
-
-    useEffect(() => {
-        if (!techState.francis?.sensors || !activeComponentId) return;
-
-        // Simple mapping based on component ID keywords
-        // In a real scenario, this would be a more robust lookup map
-        const sensors = techState.francis.sensors as Record<string, number>;
-        const metrics = [];
-
-        if (activeComponentId.includes('penstock') || activeComponentId.includes('water_hammer')) {
-            metrics.push({ label: 'Hoop Stress', value: (sensors.hoopStressMPa || 0).toFixed(1), unit: 'MPa', status: (sensors.hoopStressMPa || 0) > 150 ? 'warning' : 'safe' });
-            metrics.push({ label: 'Flow Rate', value: (sensors.flowRate || 0).toFixed(1), unit: 'm³/s', status: 'normal' });
-        } else if (activeComponentId.includes('bearing')) {
-            metrics.push({ label: 'Oil Temp', value: (sensors.bearingTemp || 0).toFixed(1), unit: '°C', status: (sensors.bearingTemp || 0) > 60 ? 'warning' : 'safe' });
-            metrics.push({ label: 'Vibration', value: (sensors.vibration || 0).toFixed(2), unit: 'mm/s', status: (sensors.vibration || 0) > 2.5 ? 'critical' : 'safe' });
-        } else if (activeComponentId.includes('generator') || activeComponentId.includes('excitation')) {
-            metrics.push({ label: 'Power', value: (sensors.activePowerMW || 0).toFixed(1), unit: 'MW', status: 'normal' });
-            metrics.push({ label: 'Voltage', value: (sensors.voltageKV || 0).toFixed(1), unit: 'kV', status: (sensors.voltageKV || 0) < 10 ? 'warning' : 'safe' });
-        } else if (activeComponentId.includes('transformer')) {
-            metrics.push({ label: 'Oil Temp', value: (sensors.transformerOilTemp || 55).toFixed(1), unit: '°C', status: 'normal' });
-            metrics.push({ label: 'Load', value: '85', unit: '%', status: 'normal' });
+        if (activeComponentId.includes('penstock')) {
+            metrics.push({
+                label: 'Hoop Stress',
+                value: sensors.hoopStressMPa || 0,
+                unit: 'MPa',
+                status: (sensors.hoopStressMPa || 0) > 160 ? 'critical' : 'safe',
+                history: metricHistory['hoop'],
+                color: getTrendColor(metricHistory['hoop'], 'rising_bad')
+            });
+            metrics.push({
+                label: 'Flow Rate',
+                value: sensors.flowRate || 0,
+                unit: 'm³/s',
+                status: 'safe',
+                history: metricHistory['flow'],
+                color: getTrendColor(metricHistory['flow'], 'neutral')
+            });
+        }
+        else if (activeComponentId.includes('transformer')) {
+            metrics.push({
+                label: 'Oil Temp',
+                value: sensors.transformerOilTemp || 0,
+                unit: '°C',
+                status: (sensors.transformerOilTemp || 0) > 85 ? 'warning' : 'safe',
+                history: metricHistory['oilTemp'],
+                color: getTrendColor(metricHistory['oilTemp'], 'rising_bad')
+            });
+            metrics.push({
+                label: 'Load',
+                value: 85,
+                unit: '%',
+                status: 'safe',
+                history: metricHistory['load'],
+                color: '#22d3ee' // Neutral
+            });
+        }
+        else if (activeComponentId.includes('generator')) {
+            metrics.push({
+                label: 'Active Power',
+                value: sensors.activePowerMW || 0,
+                unit: 'MW',
+                status: 'safe',
+                history: metricHistory['power'],
+                color: '#22d3ee'
+            });
+            metrics.push({
+                label: 'Voltage',
+                value: sensors.voltageKV || 0,
+                unit: 'kV',
+                status: (sensors.voltageKV || 0) < 10 ? 'warning' : 'safe',
+                history: metricHistory['voltage'],
+                color: getTrendColor(metricHistory['voltage'], 'falling_bad')
+            });
         }
 
-        setLiveMetrics(metrics);
+        return metrics;
+
+    }, [activeComponentId, techState.francis?.sensors, metricHistory]);
+
+    // 6. DIAGNOSTIC WHISPERER (Heuristics)
+    const diagnostics = useMemo((): DiagnosticInsight[] => {
+        // Mock inputs that aren't in sensor state yet
+        const mockInputs = {
+            closureTime: 1.8, // Seconds (Simulated for Water Hammer rule)
+            load: 95 // % (Simulated for Transformer rule)
+        };
+
+        // Import dynamically or use helper if imported at top
+        // Since we are inside the hook, we call the utility
+        return evaluateDiagnostics(activeComponentId || '', techState.francis?.sensors || {}, mockInputs);
+
     }, [activeComponentId, techState.francis?.sensors]);
+
 
     return {
         activeContext: activeNodes,
         activeComponentId,
         activeLogs,
         activeWorkOrders,
-        liveMetrics, // <--- EXPOSED
+        liveMetrics,
+        diagnostics,
         totalInsights: activeNodes.reduce((acc, node) => acc + node.insights.length, 0),
-        hasCriticalRisks: activeNodes.some(n => n.tags.includes('critical')) || activeWorkOrders.some(w => w.priority === 'HIGH')
+        hasCriticalRisks: (diagnostics.some(d => d.type === 'critical') || activeWorkOrders.some(w => w.priority === 'HIGH')),
+        isLoading: maintenanceLoading
     };
 };
 
-// ==========================================
-// EVALUATION LOGIC
-// ==========================================
-
-const evaluateTrigger = (trigger: ContextTrigger, currentRoute: string, sensors: any): boolean => {
-    // 1. Route Matcher
-    if (trigger.routeMatcher) {
-        if (currentRoute.includes(trigger.routeMatcher)) return true;
-    }
-
-    // 2. Sensor Data Matcher
-    if (trigger.sensorId && trigger.threshold) {
-        const key = trigger.sensorId.split('.').pop();
-        const value = sensors[key as string];
-
-        if (value !== undefined) {
-            const { min, max, condition } = trigger.threshold;
-
-            if (condition === 'GT' && min !== undefined && value > min) return true;
-            if (condition === 'LT' && max !== undefined && value < max) return true;
-            if (condition === 'EQ' && value === min) return true;
-            // Fallbacks
-            if (min !== undefined && value > min) return true;
-            if (max !== undefined && value < max) return true;
-        }
-    }
-
-    return false;
-};

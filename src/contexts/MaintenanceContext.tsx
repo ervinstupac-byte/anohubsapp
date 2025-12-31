@@ -78,6 +78,7 @@ interface MaintenanceContextType {
     addFieldNote: (itemId: string, transcript: string, audioSrc?: string) => void;
     completeChecklist: () => void;
     acknowledgeAlert: (alertId: string) => void;
+    isLoading: boolean;
 }
 
 export const protocols = [
@@ -584,7 +585,8 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             updateChecklistItem,
             addFieldNote,
             completeChecklist,
-            acknowledgeAlert
+            acknowledgeAlert,
+            isLoading
         }}>
             {children}
         </MaintenanceContext.Provider>
