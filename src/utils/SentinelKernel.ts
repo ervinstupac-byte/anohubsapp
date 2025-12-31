@@ -65,6 +65,7 @@ export interface SentinelInsight {
 export interface SentinelContext {
     timeAtState?: number;
     baselines?: Record<string, { mean: number; sigma: number }>; // Provided by Archivist
+    weights?: Record<string, number>; // Heuristic Feedback Weights
 }
 
 // --- MATH KERNEL ---
@@ -190,6 +191,15 @@ export class SentinelKernel {
                     if (context.timeAtState > 15) {
                         probability = Math.min(1.0, probability * 1.2);
                         contributingVectors.push(`Prolonged Exposure: ${context.timeAtState.toFixed(0)}m in critical zone.`);
+                    }
+                }
+
+                // --- NEURAL EVOLUTION: WEIGHTING ---
+                if (context?.weights && context.weights[pattern.id]) {
+                    const weight = context.weights[pattern.id];
+                    probability = Math.min(1.0, probability * weight);
+                    if (weight !== 1.0) {
+                        contributingVectors.push(`Neural feedback applied: ${weight.toFixed(2)}x weight`);
                     }
                 }
 

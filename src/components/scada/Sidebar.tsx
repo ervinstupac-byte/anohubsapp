@@ -4,7 +4,7 @@ import { ROUTES } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronRight, Plus, Info, X } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, X, Globe } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import { LanguageSelector } from '../LanguageSelector.tsx';
@@ -160,6 +160,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                 <div className="flex-1 overflow-y-auto custom-scrollbar py-4 space-y-1 relative z-10">
 
+                    {/* FLEET COMMANDER (The Hive Mind) */}
+                    <button
+                        onClick={() => handleNavigation('fleetCommander', `${ROUTES.MAINTENANCE.ROOT}/fleet-commander`)}
+                        className={`mx-3 mb-2 flex items-center gap-3 px-4 py-3 rounded-xl transition-all group border ${isActive(`${ROUTES.MAINTENANCE.ROOT}/fleet-commander`)
+                            ? 'bg-purple-900/20 border-purple-500/50 text-white shadow-[0_0_15px_rgba(168,85,247,0.15)]'
+                            : 'bg-gradient-to-r from-slate-900 to-slate-950 border-white/5 hover:border-purple-500/30 text-slate-400 hover:text-purple-300'
+                            }`}
+                    >
+                        <div className={`p-1.5 rounded-lg ${isActive(`${ROUTES.MAINTENANCE.ROOT}/fleet-commander`) ? 'bg-purple-500 text-white' : 'bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-white'} transition-colors`}>
+                            <Globe className="w-4 h-4" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                            <span className="text-[10px] font-black uppercase tracking-widest">Fleet Commander</span>
+                            <span className="text-[9px] font-mono opacity-60">Global Intelligence</span>
+                        </div>
+                    </button>
+
                     {/* OPERATIONS */}
                     <div className="px-4 py-2 text-[12px] font-mono font-black text-slate-500 uppercase tracking-[0.1em]">{t('sidebar.operations')}</div>
                     <ErrorBoundary>
@@ -244,7 +261,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 // --- INSIGHT PANEL COMPONENT ---
 // Replaced local hook with Global Context Provider
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
-import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap, Download, History, Activity as BrainCircuit, ArrowRight, Database, UploadCloud, Layers, Play, Pause, Rewind } from 'lucide-react';
+import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap, Download, History, Activity as BrainCircuit, ArrowRight, Database, UploadCloud, Layers, Play, Pause, Rewind, QrCode } from 'lucide-react';
 import { PdfService } from '../../services/PdfService';
 import { PdfPreviewModal } from '../modals/PdfPreviewModal';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
@@ -648,6 +665,24 @@ const ContextPanel = () => {
                             pdfBlob={previewBlob}
                             filename={`Audit_${title.replace(/\s+/g, '_')}.pdf`}
                         />
+
+                        {/* 6. FIELD-SYNC PROTOCOL (QR Bridge) */}
+                        <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between opacity-50 hover:opacity-100 transition-opacity cursor-pointer group/qr">
+                            <div className="flex items-center gap-2">
+                                <QrCode className="w-5 h-5 text-slate-500 group-hover/qr:text-purple-400 transition-colors" />
+                                <div className="flex flex-col">
+                                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest group-hover/qr:text-purple-300 transition-colors">Field Sync</span>
+                                    <span className="text-[8px] text-slate-600 font-mono group-hover/qr:text-purple-400/70">Scan to Transfer Context</span>
+                                </div>
+                            </div>
+                            <div className="w-8 h-8 bg-white p-0.5 rounded-sm shadow-[0_0_15px_rgba(192,132,252,0.1)] group-hover/qr:shadow-[0_0_15px_rgba(192,132,252,0.4)] transition-all">
+                                {/* Mock QR Visual */}
+                                <div className="w-full h-full bg-slate-900 flex flex-wrap gap-0.5 p-0.5">
+                                    <div className="w-2 h-2 bg-black"></div><div className="w-1 h-1 bg-black"></div>
+                                    <div className="w-1 h-2 bg-black"></div><div className="w-2 h-2 bg-black"></div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 

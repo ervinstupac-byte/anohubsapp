@@ -247,6 +247,18 @@ export const useContextEngine = () => {
     }, [activeComponentId, metricHistory]);
 
 
+    // 5.1 HEURISTIC LEARNING (The Feedback Loop)
+    const [patternWeights, setPatternWeights] = useState<Record<string, number>>({});
+
+    const reinforcePattern = (patternId: string, feedback: 'CONFIRM' | 'REJECT') => {
+        setPatternWeights(prev => {
+            const current = prev[patternId] || 1.0;
+            // Boost by 10% if confirmed, penalty if rejected (mute)
+            const newWeight = feedback === 'CONFIRM' ? current + 0.1 : current * 0.5;
+            return { ...prev, [patternId]: newWeight };
+        });
+    };
+
     // 6. THE SENTINEL (Heuristic Engine) - REPLACES LEGACY DIAGNOSTICS
     const diagnostics = useMemo((): DiagnosticInsight[] => {
         if (!activeComponentId) return [];
@@ -257,13 +269,14 @@ export const useContextEngine = () => {
             'draftTubePressure': { mean: 2.0, sigma: 0.2 }
         };
 
-        // 1. Evaluate Sentinel Matrix
+        // 1. Evaluate Sentinel Matrix with LEARNING WEIGHTS
         const sentinelResults = SentinelKernel.evaluateMatrix(
             metricHistory,
             SENTINEL_PATTERNS,
             {
                 timeAtState: timeAtState,
-                baselines: mockBaselines
+                baselines: mockBaselines,
+                weights: patternWeights // Inject the neural weights
             }
         );
 
@@ -277,6 +290,10 @@ export const useContextEngine = () => {
                 // Simple match: if log contains "vibration" or "cavitation" etc.
                 return patternTerms.some(term => term.length > 4 && logContent.includes(term));
             });
+
+            // Auto-Reinforce if Human log matches? 
+            // Optional: if (verificationMatch) reinforcePattern(res.patternId, 'CONFIRM'); 
+            // (Careful with infinite loops here, best done on explicit action)
 
             return {
                 id: res.patternId,
@@ -296,7 +313,7 @@ export const useContextEngine = () => {
             };
         });
 
-    }, [activeComponentId, metricHistory, timeAtState, activeLogs]);
+    }, [activeComponentId, metricHistory, timeAtState, activeLogs, patternWeights]);
 
 
     return {

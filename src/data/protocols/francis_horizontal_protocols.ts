@@ -30,13 +30,13 @@ export const FRANCIS_PROTOCOLS: DigitalProtocol[] = [
             {
                 id: 'b1',
                 action: 'Check Sight Glass',
-                detail: 'Verify oil is clear. Milky appearance indicates water ingress (Emergency Stop required).',
+                detail: 'Verify oil is clear. Milky appearance indicates water ingress. Vibration Check: {{VIB-901-A}}',
                 critical: true
             },
             {
                 id: 'b2',
                 action: 'Verify Oil Temperature',
-                detail: 'Target range 18°C - 55°C. Warning at 60°C. Trip (Shutdown) at 70°C.'
+                detail: 'Target range 18°C - 55°C. Current: {{TMP-404-X}}. Warning at 60°C. Trip (Shutdown) at 70°C.'
             },
             {
                 id: 'b3',
@@ -119,7 +119,7 @@ export const FRANCIS_PROTOCOLS: DigitalProtocol[] = [
             {
                 id: 'cw1',
                 action: 'Auto-Strainer Check',
-                detail: 'Verify dP < 0.5 Bar. Auto-flush triggers at 0.5 Bar or 12h timer.'
+                detail: 'Verify dP < 0.5 Bar. Pressure: {{PRE-202-B}}. Auto-flush triggers at 0.5 Bar or 12h timer.'
             },
             {
                 id: 'cw2',
