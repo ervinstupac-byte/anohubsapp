@@ -100,6 +100,14 @@ export interface FrancisSensorData {
     vibration?: number;
     siltConc?: number;
     gridFrequency?: number;
+    rpm?: number;
+    activePower?: number;
+    // Context Engine Extensions
+    hoopStressMPa?: number;
+    flowRate?: number;
+    voltageKV?: number;
+    transformerOilTemp?: number;
+    activePowerMW?: number; // Alias for explicit unit
 }
 
 export interface PeltonSensorData {

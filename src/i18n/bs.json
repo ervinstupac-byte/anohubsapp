@@ -2748,5 +2748,37 @@
       "samp_4": "Pošalji u laboratoriju na analizu.",
       "back_btn": "← Povratak u Operativni Centar"
     }
+  },
+  "toolbox": {
+    "greeting": {
+      "morning": "Dobro Jutro",
+      "afternoon": "Dobar Dan",
+      "evening": "Dobro Veče"
+    },
+    "engineer": "Inženjeru",
+    "systemOperational": "Sistem Operativan",
+    "assetsOnline": "Imovina Online",
+    "activeAsset": "Aktivni Kontekst: {{name}}",
+    "sections": {
+      "utilities": "Inženjerski Alati",
+      "designAnalysis": "Dizajn i Analiza",
+      "operationalModules": "Operativni Moduli",
+      "recentActivity": "Nedavna Aktivnost"
+    },
+    "activity": {
+      "none": "Nema nedavne aktivnosti.",
+      "open": "Otvori Dnevnik",
+      "view": "Pogledaj Sve Aktivnosti"
+    },
+    "zeroState": {
+      "title": "Dobrodošli u AnoHUB",
+      "noAssets": "Nema registrovane imovine u floti.",
+      "initialize": "Inicijaliziraj Prvu Elektranu"
+    },
+    "toast": {
+      "generatingPassport": "Generisanje Pasoša Imovine za {{asset}}..."
+    },
+    "passport": "Pasoš Imovine",
+    "addAsset": "Dodaj Elektranu"
   }
 }

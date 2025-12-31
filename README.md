@@ -7,39 +7,36 @@
 ### 🌟 Key Features
 
 #### 1. The "Francis Hub" (Turbine Friend)
-A centralized ecosystem of 22 interactive Standard Operating Procedures (SOPs), categorized into 5 critical sectors:
-*   **Safety & Critical**: Shaft Alignment, Bearings, Vibration Analysis.
-*   **Mechanical**: Governor PID, Linkage, Braking.
-*   **Fluid & Chemical**: Oil Health, Cooling Water.
-*   **Electrical**: Excitation (AVR/FCR), Transformer Integrity, Grid Sync.
-*   **Civil**: Penstock (Joukowsky Water Hammer), Intake (Trash Rack).
+A centralized ecosystem of 22 interactive Standard Operating Procedures (SOPs), categorized into 5 critical sectors.
+*   **3D Digital Twin**: Interactive, real-time 3D visualization of the Francis Runner using `react-three-fiber`.
+*   **Live Physics**: Real-time headers displaying RPM, Grid Frequency (Hz), and Active Power (MW).
 
-#### 2. Synapse Integration (The "Golden Thread")
+#### 2. Reality Bridge (Supabase Persistence)
+*   **Cloud Sync**: Infinite persistence for Maintenance Logs and Work Orders via Supabase.
+*   **Realtime Collaboration**: Instant updates across clients using Postgres Changes.
+*   **Optimistic UI**: Immediate interface feedback while data saves in the background.
+
+#### 3. Synapse Integration (The "Golden Thread")
 Modules are no longer isolated. The system features a "Golden Thread" workflow:
 *   **Detection**: An engineer identifies a risk in an SOP (e.g., Water Hammer > 20 bar).
 *   **Action**: A unified "Log Observation" button instantly creates a ticket.
-*   **Routing**: The system navigates to the `Maintenance Logbook`, pre-filling context (Source & Reason).
-*   **Ad-Hoc Logging**: Allows unplanned observations to be captured seamlessly.
-
-#### 3. Maintenance Intelligence
-*   **Ad-Hoc Logbook**: Dynamic entry creation for observations outside scheduled tasks.
-*   **MaintenanceRouter**: Dedicated routing structure for all maintenance modules.
-*   **AR & Shadow Engineer**: (Planned) Advanced assistance layers.
+*   **Routing**: The system navigates to the `Maintenance Logbook`, pre-filling context.
 
 #### 4. Enterprise-Grade Foundation
 *   **Global Command Palette**: `Ctrl+K` navigation to any module instantly.
 *   **Internationalization (i18n)**: Full support for 6 languages (EN, ES, FR, DE, ZH, BS).
-*   **PDF Generation**: Local-first PDF report generation with embedded custom fonts (Roboto).
+*   **PDF Generation**: Local-first PDF report generation with embedded custom fonts.
 *   **Modular Architecture**: Clean separation of routes (`FrancisRouter`, `MaintenanceRouter`).
 
 ### 🛠 Tech Stack
 *   **Frontend**: React, TypeScript, Vite.
+*   **3D Engine**: Three.js, React Three Fiber, Drei.
+*   **Backend**: Supabase (PostgreSQL, Realtime, Auth).
 *   **Styling**: Tailwind CSS (Executive/Dark Industrial Theme).
 *   **Animation**: Framer Motion.
-*   **State Management**: React Context (Maintenance, Auth, Risk).
+*   **State Management**: React Context + Supabase Subscription.
 *   **Routing**: React Router v6.
 *   **Icons**: Lucide React.
-*   **Build Tool**: Vite.
 
 ### 🚀 Getting Started
 
@@ -54,11 +51,13 @@ npm run dev
 ### 📂 Architecture Overview
 
 *   `src/components/francis/*`: SOP Implementation (Visual & Interactive).
+*   `src/components/three/*`: 3D Models and Visualization Components.
+*   `src/services/supabaseClient.ts`: Database Connection & Helpers.
+*   `src/contexts/MaintenanceContext.tsx`: Realtime State Management.
 *   `src/routes/paths.ts`: Centralized Route Constants.
-*   `src/routes/*Router.tsx`: Modular Routers.
 *   `src/i18n/*`: Localization files.
 *   `src/models/*`: Physics & Engineering Types.
 
 ---
 *Built by the AnoHUB Engineering Team (Deepmind + User Pair Programming)* 
-*Status: READY FOR DEPLOYMENT*
+*Status: READY FOR PHASE 5 (Context Engine)*

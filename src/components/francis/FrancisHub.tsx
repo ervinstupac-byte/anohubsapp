@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../routes/paths';
+import { TurbineRunner3D } from '../three/TurbineRunner3D';
+import { GlassCard } from '../ui/GlassCard';
 import {
     ArrowLeft, Cpu, Power, AlertTriangle, GitBranch,
     Droplets, GitPullRequest, Activity, Filter, Snowflake, Waves,
@@ -8,10 +11,8 @@ import {
     ShieldAlert, Lock, ZapOff, BatteryCharging, Printer, Settings2, Merge, ArrowRight, RefreshCw, Link as LinkIcon, ArrowRightLeft, Wind, Wifi, Radio,
     ChevronDown, ChevronRight, Zap, Building2, Wrench
 } from 'lucide-react';
-import { FrancisModel } from '../../models/turbine/FrancisModel';
-import { CompleteSensorData, FrancisSensorData } from '../../models/turbine/types';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { ROUTES } from '../../routes/paths';
+import { FrancisSensorData } from '../../models/turbine/types';
 
 
 // Status Dot Component
@@ -38,7 +39,7 @@ const ModuleLink = ({
     onClick,
     href
 }: {
-    icon: React.ElementType,
+    icon: React.ElementType<{ className?: string }>,
     label: string,
     status?: 'green' | 'yellow' | 'red',
     onClick?: () => void,
@@ -74,7 +75,7 @@ const ModuleLink = ({
 // Accordion Sector Component
 interface AccordionSectorProps {
     title: string;
-    icon: React.ElementType;
+    icon: React.ElementType<{ className?: string }>;
     iconColor: string;
     borderColor: string;
     isExpanded: boolean;
@@ -126,6 +127,13 @@ export const FrancisHub: React.FC = () => {
 
     // Connect to Global Engineering State
     const { state: techState, dispatch } = useCerebro();
+
+    // Live Physics Data Hook (Mock for now or derive from techState)
+    const simData: Partial<FrancisSensorData> = {
+        rpm: techState.francis?.sensors?.rpm || 428.5,
+        gridFrequency: techState.francis?.sensors?.gridFrequency || 50.02,
+        activePower: techState.francis?.sensors?.activePower || 142.5
+    };
 
     // Fallback if state.francis is undefined
     const moduleStates = techState.francis?.modules || {
@@ -301,6 +309,7 @@ export const FrancisHub: React.FC = () => {
                     </div>
 
                     {/* Health Score */}
+                    {/* Health Score */}
                     <div className="flex items-center gap-6 bg-slate-900/70 p-4 rounded-lg border border-slate-700/50 shadow-xl">
                         <div
                             className="w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_20px_rgba(0,0,0,0.5)] animate-[pulse-glow_3s_ease-in-out_infinite]"
@@ -310,12 +319,48 @@ export const FrancisHub: React.FC = () => {
                         >
                             <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center">
                                 <span className="text-2xl font-black text-white">{healthScore}%</span>
-                                <span className="text-[8px] text-slate-500 uppercase">{t('francis.health.label')}</span>
+                                <span className="text-sm text-slate-500 uppercase">{t('francis.health.label')}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
+
+            {/* 3D VISUALIZATION HEADER */}
+            <div className="relative h-96 w-full bg-[#050505] overflow-hidden rounded-b-3xl border-b border-white/5 shadow-2xl mb-8">
+                <div className="absolute inset-0 z-0 opacity-80">
+                    <TurbineRunner3D rpm={(simData as any).rpm || 428} />
+                </div>
+
+                {/* Overlay Content */}
+                <div className="absolute inset-0 z-10 p-8 flex flex-col justify-between pointer-events-none">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <span className="px-2 py-0.5 bg-[#2dd4bf]/10 border border-[#2dd4bf]/30 text-[#2dd4bf] text-[10px] font-bold uppercase tracking-widest rounded">
+                                    Machine Hall 1
+                                </span>
+                                <span className="px-2 py-0.5 bg-slate-800 border border-white/10 text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-1">
+                                    <Activity className="w-3 h-3" /> Live Physics
+                                </span>
+                            </div>
+                        </div>
+                        <GlassCard className="pointer-events-auto backdrop-blur-md bg-black/40 border-white/10">
+                            <div className="flex items-center gap-4">
+                                <div className="text-right">
+                                    <p className="text-[10px] text-slate-400 uppercase font-bold">Grid Frequency</p>
+                                    <p className="text-xl font-mono text-white font-bold">50.02 <span className="text-xs text-slate-500">Hz</span></p>
+                                </div>
+                                <div className="h-8 w-px bg-white/10" />
+                                <div className="text-right">
+                                    <p className="text-[10px] text-slate-400 uppercase font-bold">Active Power</p>
+                                    <p className="text-xl font-mono text-[#2dd4bf] font-bold">142.5 <span className="text-xs text-slate-500">MW</span></p>
+                                </div>
+                            </div>
+                        </GlassCard>
+                    </div>
+                </div>
+            </div>
 
             {/* Expand/Collapse All Toggle */}
             <div className="mb-6 flex justify-end gap-3">
@@ -332,7 +377,6 @@ export const FrancisHub: React.FC = () => {
                     Collapse All
                 </button>
             </div>
-
             {/* ACCORDION SECTORS */}
             <div className="space-y-4">
                 {/* SECTOR 1: CRITICAL SAFETY */}

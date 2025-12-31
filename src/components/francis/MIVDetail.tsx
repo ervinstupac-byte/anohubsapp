@@ -7,7 +7,7 @@ export const MIVDetail: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const SectionHeader = ({ icon: Icon, title, color = "text-blue-500" }: { icon: React.ElementType, title: string, color?: string }) => (
+    const SectionHeader = ({ icon: Icon, title, color = "text-blue-500" }: { icon: React.ElementType<{ className?: string }>, title: string, color?: string }) => (
         <h2 className="text-xl font-black text-white uppercase tracking-tight mb-6 flex items-center gap-2">
             <Icon className={`w-5 h-5 ${color}`} />
             {title}

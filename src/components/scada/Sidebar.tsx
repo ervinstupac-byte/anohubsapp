@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
@@ -139,21 +139,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 key={mod.id}
                                 onClick={() => handleNavigation(mod.id, mod.title)}
                                 className={`w-full flex items-center gap-3 px-4 py-3 border-l-2 transition-all group text-left whitespace-normal h-auto min-h-[48px] ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
-                                        (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
-                                        (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
-                                        (mod.id === 'shadowEngineer' && location.pathname.includes(ROUTES.MAINTENANCE.SHADOW_ENGINEER)) ||
-                                        (mod.id === 'intuitionLog' && location.pathname.includes(ROUTES.MAINTENANCE.INTUITION_LOG)) ||
-                                        (mod.id === 'ar-guide' && location.pathname.includes(ROUTES.MAINTENANCE.AR_GUIDE)) ||
-                                        // Fallback for others
-                                        (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque', 'shadowEngineer', 'intuitionLog', 'ar-guide'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
-                                        ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'
+                                    (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
+                                    (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
+                                    (mod.id === 'shadowEngineer' && location.pathname.includes(ROUTES.MAINTENANCE.SHADOW_ENGINEER)) ||
+                                    (mod.id === 'intuitionLog' && location.pathname.includes(ROUTES.MAINTENANCE.INTUITION_LOG)) ||
+                                    (mod.id === 'ar-guide' && location.pathname.includes(ROUTES.MAINTENANCE.AR_GUIDE)) ||
+                                    // Fallback for others
+                                    (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque', 'shadowEngineer', 'intuitionLog', 'ar-guide'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                    ? 'bg-cyan-900/20 border-h-cyan text-white' : 'border-transparent hover:bg-slate-900 text-slate-500 hover:text-white'
                                     }`}
                             >
                                 <span className={`text-lg ${(mod.id === 'maintenanceDashboard' && location.pathname.includes(ROUTES.MAINTENANCE.DASHBOARD)) ||
-                                        (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
-                                        (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
-                                        (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
-                                        ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'
+                                    (mod.id === 'hydraulicMaintenance' && location.pathname.includes(ROUTES.MAINTENANCE.HYDRAULIC)) ||
+                                    (mod.id === 'boltTorque' && location.pathname.includes(ROUTES.MAINTENANCE.BOLT_TORQUE)) ||
+                                    (!['maintenanceDashboard', 'hydraulicMaintenance', 'boltTorque'].includes(mod.id) && location.pathname.includes(mod.id.replace('Dashboard', '')))
+                                    ? 'text-h-cyan' : 'group-hover:text-h-cyan transition-colors'
                                     }`}>{mod.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider">{mod.title}</span>
                             </button>
@@ -202,6 +202,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                     <div className="my-4 border-t border-white/5 mx-4"></div>
 
+                    {/* CONTEXT ENGINE INSIGHTS */}
+                    <ContextPanel />
+
+                    <div className="my-4 border-t border-white/5 mx-4"></div>
+
                     <a
                         href="https://www.anohubs.com"
                         rel="noopener noreferrer"
@@ -213,5 +218,137 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 </div>
             </aside>
         </>
+    );
+};
+
+// --- INSIGHT PANEL COMPONENT ---
+// Replaced local hook with Global Context Provider
+import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
+import { Lightbulb, FileText, AlertTriangle, ClipboardList, Clock, Zap } from 'lucide-react';
+
+
+const ContextPanel = () => {
+    // Determine context from GLOBAL state
+    const { activeDefinition, activeContextNodes, activeLogs, activeWorkOrders, liveMetrics, hasContext } = useContextAwareness();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    if (!hasContext) return null;
+
+    // Title from Definition (e.g. 'Penstock System') or Fallback
+    const title = activeDefinition?.title || 'System Context';
+    const slogan = activeDefinition?.slogan || 'Analyzing system parameters...';
+
+    // Physics ID to Icon mapping (simplified)
+    const getPhysicsIcon = () => {
+        if (activeDefinition?.logCategory === 'ELEC') return <Zap className="w-5 h-5 text-amber-400" />;
+        if (activeDefinition?.logCategory === 'FLUID') return <div className="text-blue-400">💧</div>;
+        if (activeDefinition?.logCategory === 'MECH') return <div className="text-slate-300">⚙️</div>;
+        return <Lightbulb className="w-5 h-5 text-cyan-400" />;
+    };
+
+    const handleQuickLog = () => {
+        // Navigate to Logbook with State for pre-filling
+        // We look up the raw path from constants or hardcode since we have the ContextDefinition
+        navigate('/maintenance/logbook', {
+            state: {
+                source: activeDefinition?.id || 'Unknown Context',
+                reason: 'Smart Sidebar Shortcut'
+            }
+        });
+    };
+
+    return (
+        <div className="mx-3 mt-4 mb-2 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl animate-fade-in border-l-4 border-l-cyan-500 overflow-hidden relative group">
+
+            {/* Glassmorphism Background Highlight */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none" />
+
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3 relative z-10">
+                <div className="flex items-center gap-2">
+                    {getPhysicsIcon()}
+                    <span className="text-xs font-black text-white uppercase tracking-widest shadow-black drop-shadow-md">
+                        {title}
+                    </span>
+                </div>
+                {/* Live Indicator */}
+                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded-full border border-white/5">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-[9px] font-mono text-emerald-400 font-bold">LIVE</span>
+                </div>
+            </div>
+
+            {/* 1. LIVE STATUS METRICS */}
+            {liveMetrics && liveMetrics.length > 0 && (
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                    {liveMetrics.map((m: any, i: number) => (
+                        <div key={i} className="bg-black/20 rounded p-2 border border-white/5 flex flex-col items-center">
+                            <span className="text-[10px] text-slate-400 uppercase tracking-wider">{m.label}</span>
+                            <div className={`text-lg font-mono font-bold ${m.status === 'critical' ? 'text-red-500 animate-pulse' : m.status === 'warning' ? 'text-amber-400' : 'text-white'}`}>
+                                {m.value} <span className="text-[10px] text-slate-500">{m.unit}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Slogan / Physics Theory (Glass Card) */}
+            <div className="relative p-3 bg-gradient-to-br from-white/5 to-white/0 rounded-lg border border-white/10 mb-4 shadow-inner">
+                <div className="text-[10px] text-cyan-200/80 font-bold mb-1 uppercase text-xs flex items-center gap-1">
+                    <Lightbulb className="w-3 h-3" />
+                    Physics Engine
+                </div>
+                <div className="text-[11px] text-slate-300 leading-relaxed font-light italic">
+                    "{slogan}"
+                </div>
+            </div>
+
+            <div className="space-y-4 relative z-10">
+
+                {/* 2. MAINTENANCE PULSE (Enhanced) */}
+                {activeWorkOrders.length > 0 ? (
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between text-[10px] font-bold text-amber-500 uppercase border-b border-amber-500/20 pb-1">
+                            <div className="flex items-center gap-1">
+                                <AlertTriangle className="w-3 h-3" />
+                                Maintenance Pulse
+                            </div>
+                            <span className="bg-amber-500/20 text-amber-400 px-1.5 rounded text-[9px]">{activeWorkOrders.length} Active</span>
+                        </div>
+                        {activeWorkOrders.slice(0, 3).map((wo: any) => (
+                            <div key={wo.id} className="group/wo p-2 bg-amber-950/20 hover:bg-amber-950/40 border-l-2 border-amber-500/50 hover:border-amber-400 rounded-r transition-all cursor-pointer">
+                                <div className="flex justify-between items-start mb-1">
+                                    <span className="text-[9px] font-bold text-amber-200">{wo.id}</span>
+                                    <span className={`text-[8px] px-1 rounded ${wo.priority === 'HIGH' ? 'bg-red-500/20 text-red-400' : 'bg-slate-700 text-slate-400'}`}>{wo.priority}</span>
+                                </div>
+                                <div className="text-[10px] text-amber-100/90 leading-tight group-hover/wo:text-white transition-colors">
+                                    {wo.description}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-2 opacity-50">
+                        <span className="text-[10px] text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            System Nominal
+                        </span>
+                    </div>
+                )}
+
+                {/* 3. QUICK ACTION */}
+                <button
+                    onClick={handleQuickLog}
+                    className="w-full mt-2 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 border border-cyan-400/30 rounded shadow-lg shadow-cyan-900/20 text-[11px] font-bold text-white uppercase tracking-wider flex items-center justify-center gap-2 transition-all transform hover:scale-[1.02] active:scale-[0.98] group/btn">
+                    <ClipboardList className="w-4 h-4 text-cyan-100 group-hover/btn:rotate-12 transition-transform" />
+                    Log Observation
+                </button>
+
+            </div>
+        </div>
     );
 };

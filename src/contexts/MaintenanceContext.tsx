@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { supabase } from '../services/supabaseClient';
 import { InspectionImage } from '../services/StrategicPlanningService';
 import {
     ActiveChecklist,
@@ -60,14 +61,14 @@ interface MaintenanceContextType {
     logs: LogEntry[];
     operatingHours: Record<string, number>;
     workOrders: WorkOrder[];
-    createLogEntry: (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => void;
+    createLogEntry: (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => Promise<void>;
     validateEntry: (taskId: string, value: number) => { valid: boolean; message: string };
     getTasksByComponent: (componentId: string) => MaintenanceTask[];
     predictServiceDate: (assetId: string, threshold: number) => Date | null;
     // Work Order Management
-    createWorkOrder: (order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>) => WorkOrder;
-    updateWorkOrder: (orderId: string, updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>) => void;
-    completeWorkOrder: (orderId: string, completionNotes: string) => void;
+    createWorkOrder: (order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>) => Promise<WorkOrder>;
+    updateWorkOrder: (orderId: string, updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>) => Promise<void>;
+    completeWorkOrder: (orderId: string, completionNotes: string) => Promise<void>;
     updateOperatingHours: (assetId: string, hours: number) => void;
     // Service Checklist Functions
     activeChecklist: ActiveChecklist | null;
@@ -114,8 +115,9 @@ const MaintenanceContext = createContext<MaintenanceContextType | undefined>(und
 export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [tasks, setTasks] = useState<MaintenanceTask[]>(INITIAL_TASKS);
     const [logs, setLogs] = useState<LogEntry[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Load from localStorage if available
+    // Load from localStorage if available (Legacy/Fallback)
     const [operatingHours, setOperatingHours] = useState<Record<string, number>>(() => {
         try {
             const stored = localStorage.getItem('operatingHours');
@@ -125,18 +127,99 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     });
 
-    const [workOrders, setWorkOrders] = useState<WorkOrder[]>(() => {
-        try {
-            const stored = localStorage.getItem('workOrders');
-            return stored ? JSON.parse(stored) : [];
-        } catch {
-            return [];
-        }
-    });
+    const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
 
     // Service Checklist State
     const [activeChecklist, setActiveChecklist] = useState<ActiveChecklist | null>(null);
     const [serviceAlerts, setServiceAlerts] = useState<ServiceAlert[]>([]);
+
+    // --- SUPABASE SYNC ---
+    React.useEffect(() => {
+        fetchData();
+
+        // Realtime Subscription
+        const channel = supabase
+            .channel('maintenance_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'maintenance_logs' }, (payload) => {
+                console.log('⚡ Realtime Log Update:', payload);
+                fetchLogs(); // Refresh on simple change
+            })
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, (payload) => {
+                console.log('⚡ Realtime WO Update:', payload);
+                fetchWorkOrders();
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
+
+    const fetchData = async () => {
+        setIsLoading(true);
+        await Promise.all([fetchLogs(), fetchWorkOrders()]);
+        setIsLoading(false);
+    };
+
+    const fetchLogs = async () => {
+        const { data, error } = await supabase
+            .from('maintenance_logs')
+            .select('*')
+            .order('timestamp', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching logs:', error);
+            return;
+        }
+
+        if (data) {
+            // Map DB Types to App Types (Simple mapping)
+            const mappedLogs: LogEntry[] = data.map((row: any) => ({
+                id: row.id,
+                taskId: row.task_id,
+                technician: row.technician,
+                commentBS: row.comment_bs,
+                summaryDE: row.summary_de,
+                measuredValue: row.measured_value,
+                pass: row.pass,
+                timestamp: new Date(row.timestamp),
+                proofImage: row.proof_image_url ? { src: row.proof_image_url } as any : undefined
+            }));
+            setLogs(mappedLogs);
+        }
+    };
+
+    const fetchWorkOrders = async () => {
+        const { data, error } = await supabase
+            .from('work_orders')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching work orders:', error);
+            return;
+        }
+
+        if (data) {
+            const mappedOrders: WorkOrder[] = data.map((row: any) => ({
+                id: row.id,
+                assetId: row.asset_id,
+                assetName: row.asset_name,
+                component: row.component,
+                description: row.description,
+                priority: row.priority,
+                status: row.status,
+                trigger: row.trigger_source,
+                assignedTechnician: row.assigned_technician,
+                estimatedHoursToComplete: row.estimated_hours,
+                completionNotes: row.completion_notes,
+                createdAt: new Date(row.created_at),
+                updatedAt: new Date(row.updated_at),
+                completedAt: row.completed_at ? new Date(row.completed_at) : undefined
+            }));
+            setWorkOrders(mappedOrders);
+        }
+    };
 
     const predictServiceDate = (assetId: string, threshold: number) => {
         const hours = operatingHours[assetId] || 0;
@@ -160,7 +243,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         return { valid: true, message: 'OK' };
     };
 
-    const createLogEntry = (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => {
+    const createLogEntry = async (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => {
         // Validation Check
         const validation = entry.measuredValue ? validateEntry(taskId, entry.measuredValue) : { valid: true };
 
@@ -172,8 +255,10 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         };
         const summaryDE = translations[entry.commentBS] || "Wartung durchgeführt.";
 
+        // 1. Optimistic Update (UI feels instant)
+        const tempId = Math.random().toString(36).substr(2, 9);
         const newLog: LogEntry = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: tempId,
             taskId,
             timestamp: new Date(),
             technician: entry.technician,
@@ -183,8 +268,25 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             summaryDE,
             pass: validation.valid
         };
-
         setLogs(prev => [newLog, ...prev]);
+
+        // 2. Persist to Supabase
+        const { error } = await supabase.from('maintenance_logs').insert({
+            task_id: taskId,
+            technician: entry.technician,
+            comment_bs: entry.commentBS,
+            summary_de: summaryDE,
+            measured_value: entry.measuredValue,
+            pass: validation.valid,
+            proof_image_url: entry.proofImage?.src // Storing Base64 temporarily (Not ideal for prod but fits current architecture)
+        });
+
+        if (error) {
+            console.error('Failed to save log to Supabase:', error);
+            // Optionally revert optimistic update here
+        } else {
+            // Fetch real ID? Or just rely on subscription to refresh.
+        }
 
         // Update Task Status
         setTasks(prev => prev.map(t =>
@@ -343,39 +445,50 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
      * Create a new work order
      * Supports manual creation, AI triggers, and service alert escalation
      */
-    const createWorkOrder = (
+    const createWorkOrder = async (
         order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>
-    ): WorkOrder => {
+    ): Promise<WorkOrder> => {
+
+        // Optimistic UI
+        const tempId = `WO-${Date.now()}`;
         const newOrder: WorkOrder = {
             ...order,
-            id: `WO-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+            id: tempId,
             status: 'PENDING',
             createdAt: new Date(),
             updatedAt: new Date()
         };
-
         setWorkOrders(prev => [...prev, newOrder]);
 
-        // Persist to localStorage
-        try {
-            const savedOrders = JSON.parse(localStorage.getItem('workOrders') || '[]');
-            savedOrders.push(newOrder);
-            localStorage.setItem('workOrders', JSON.stringify(savedOrders));
-        } catch (error) {
-            console.error('[MaintenanceContext] Failed to save work order:', error);
+        // Supabase Insert
+        const { data, error } = await supabase.from('work_orders').insert({
+            asset_id: order.assetId,
+            asset_name: order.assetName,
+            component: order.component,
+            description: order.description,
+            priority: order.priority,
+            status: 'PENDING',
+            trigger_source: order.trigger
+        }).select().single();
+
+        if (error) {
+            console.error("Failed to create WO in DB:", error);
+            return newOrder;
         }
 
-        console.log(`[MaintenanceContext] Work Order Created: ${newOrder.id} for ${order.component}`);
-        return newOrder;
+        // Replace temp ID with real ID if needed, or rely on fetch refresh
+        return { ...newOrder, id: data.id };
     };
 
     /**
      * Update existing work order status and metadata
      */
-    const updateWorkOrder = (
+    const updateWorkOrder = async (
         orderId: string,
         updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>
-    ): void => {
+    ): Promise<void> => {
+
+        // Optimistic
         setWorkOrders(prev =>
             prev.map(order =>
                 order.id === orderId
@@ -384,25 +497,26 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             )
         );
 
-        // Persist to localStorage
-        try {
-            const updatedOrders = workOrders.map(order =>
-                order.id === orderId
-                    ? { ...order, ...updates, updatedAt: new Date() }
-                    : order
-            );
-            localStorage.setItem('workOrders', JSON.stringify(updatedOrders));
-        } catch (error) {
-            console.error('[MaintenanceContext] Failed to update work order:', error);
-        }
+        // DB Update
+        const dbUpdates: any = {};
+        if (updates.status) dbUpdates.status = updates.status;
+        if (updates.assignedTechnician) dbUpdates.assigned_technician = updates.assignedTechnician;
+        if (updates.estimatedHoursToComplete) dbUpdates.estimated_hours = updates.estimatedHoursToComplete;
+        dbUpdates.updated_at = new Date().toISOString();
 
-        console.log(`[MaintenanceContext] Work Order Updated: ${orderId}`, updates);
+        const { error } = await supabase
+            .from('work_orders')
+            .update(dbUpdates)
+            .eq('id', orderId);
+
+        if (error) console.error("Failed to update WO:", error);
     };
 
     /**
      * Complete work order and record completion notes
      */
-    const completeWorkOrder = (orderId: string, completionNotes: string): void => {
+    const completeWorkOrder = async (orderId: string, completionNotes: string): Promise<void> => {
+        // Optimistic
         setWorkOrders(prev =>
             prev.map(order =>
                 order.id === orderId
@@ -417,25 +531,18 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             )
         );
 
-        // Persist to localStorage
-        try {
-            const updatedOrders = workOrders.map(order =>
-                order.id === orderId
-                    ? {
-                        ...order,
-                        status: 'COMPLETED' as WorkOrderStatus,
-                        completedAt: new Date(),
-                        completionNotes,
-                        updatedAt: new Date()
-                    }
-                    : order
-            );
-            localStorage.setItem('workOrders', JSON.stringify(updatedOrders));
-        } catch (error) {
-            console.error('[MaintenanceContext] Failed to complete work order:', error);
-        }
+        // DB Update
+        const { error } = await supabase
+            .from('work_orders')
+            .update({
+                status: 'COMPLETED',
+                completion_notes: completionNotes,
+                completed_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', orderId);
 
-        console.log(`[MaintenanceContext] Work Order Completed: ${orderId}`);
+        if (error) console.error("Failed to complete WO:", error);
     };
 
     /**

@@ -2683,5 +2683,37 @@
       "samp_4": "Send to lab for analysis.",
       "back_btn": "← Return to Operations Center"
     }
+  },
+  "toolbox": {
+    "greeting": {
+      "morning": "Good Morning",
+      "afternoon": "Good Afternoon",
+      "evening": "Good Evening"
+    },
+    "engineer": "Engineer",
+    "systemOperational": "System Operational",
+    "assetsOnline": "Assets Online",
+    "activeAsset": "Active Context: {{name}}",
+    "sections": {
+      "utilities": "Engineering Utilities",
+      "designAnalysis": "Design & Analysis",
+      "operationalModules": "Operational Modules",
+      "recentActivity": "Recent Activity"
+    },
+    "activity": {
+      "none": "No recent activity logged.",
+      "open": "Open Logbook",
+      "view": "View All Activity"
+    },
+    "zeroState": {
+      "title": "Welcome to AnoHUB",
+      "noAssets": "No assets registered in the fleet.",
+      "initialize": "Initialize First Asset"
+    },
+    "toast": {
+      "generatingPassport": "Generating Asset Passport for {{asset}}..."
+    },
+    "passport": "Asset Passport",
+    "addAsset": "Add Asset"
   }
 }

@@ -355,6 +355,8 @@ const AppLayout: React.FC = () => {
     );
 };
 
+import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx'; // <--- NEW
+
 const App: React.FC = () => {
     return (
         <GlobalProvider>
@@ -364,10 +366,12 @@ const App: React.FC = () => {
                         <AssetProvider> {/* Centralized Asset State */}
                             <RiskProvider>
                                 <HashRouter>
-                                    <Routes>
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                    </Routes>
+                                    <ContextAwarenessProvider>
+                                        <Routes>
+                                            <Route path="/login" element={<Login />} />
+                                            <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                        </Routes>
+                                    </ContextAwarenessProvider>
                                 </HashRouter>
                             </RiskProvider>
                         </AssetProvider>

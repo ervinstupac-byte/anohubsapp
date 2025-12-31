@@ -109,10 +109,13 @@ export interface PenstockSpecs {
 
 export type FrancisModuleStatus = 'green' | 'yellow' | 'red';
 
+import { FrancisSensorData } from './turbine/types';
+
 export interface FrancisState {
     modules: Record<string, FrancisModuleStatus>;
     healthScore: number;
     activeRisks: string[];
+    sensors?: Partial<FrancisSensorData>;
 }
 
 export type ProjectAction =
@@ -183,7 +186,20 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
             dc: 'green'
         },
         healthScore: 88,
-        activeRisks: ['Seal Leakage', 'PEAK SURGE DETECT']
+        activeRisks: ['Seal Leakage', 'PEAK SURGE DETECT'],
+        sensors: {
+            // Mock Data for Context Engine
+            hoopStressMPa: 142.5,
+            flowRate: 3.2,
+            bearingTemp: 54.1,
+            vibration: 0.85,
+            activePowerMW: 125.4,
+            voltageKV: 11.2,
+            transformerOilTemp: 62.1,
+            draft_tube_pressure: 0.15,
+            guide_vane_opening: 85,
+            runner_clearance: 0.8
+        }
     },
     riskScore: 0,
     lastRecalculation: new Date().toISOString()
