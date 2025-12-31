@@ -32,6 +32,10 @@ interface ContextAwarenessState {
         scrubTo: (percent: number) => void;
         togglePlay: () => void;
     };
+
+    hiveStatus?: { connected: boolean; lastSync: number };
+    patternWeights?: Record<string, number>;
+    reinforcePattern?: (patternId: string, type: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => void;
 }
 
 const ContextAwarenessContext = createContext<ContextAwarenessState | undefined>(undefined);
@@ -60,7 +64,11 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         // Depth Mapping
         activeLayer: engineData.activeLayer,
         setActiveLayer: engineData.setActiveLayer,
-        playback: engineData.playback
+        playback: engineData.playback,
+
+        hiveStatus: engineData.hiveStatus,
+        patternWeights: engineData.patternWeights,
+        reinforcePattern: engineData.reinforcePattern
     };
 
     return (

@@ -58,30 +58,6 @@
     "strategy": "STRATEGIJA",
     "toolboxAnalytics": "Toolbox Analitika",
     "knowledge": "BAZA ZNANJA",
-    "exitToSite": "Izađi na Stranicu",
-    "francisLogic": "Francis Logička Mapa",
-    "insights": {
-      "title": "Inženjerski Uvid",
-      "highPressure": "Upozorenje: Visok obodni napon.",
-      "cavitation": "Rizik od kavitacije detektovan.",
-      "efficiency": "Efikasnost turbine opada."
-    },
-    "maintenance": {
-      "title": "Održavanje",
-      "pulse": "PULS ODRŽAVANJA",
-      "active": "AKTIVNO",
-      "systemNominal": "SISTEM NOMINALAN",
-      "modalTitle": "DETALJI RADNOG NALOGA",
-      "description": "Opis",
-      "priority": "Prioritet",
-      "assignee": "Dodijeljeno",
-      "unassigned": "Nije dodijeljeno",
-      "viewTicket": "Pogledaj puni tiket u Jira"
-    },
-    "analytics": {
-      "historicalLog": "NEDAVNA AKTIVNOST",
-      "generateAudit": "GENERIŠI REVIZIJU (PDF)"
-    },
     "exitToSite": "Izlaz na Stranicu",
     "francisLogic": "Francis Logička Mapa",
     "insights": {

@@ -60,6 +60,9 @@ export interface SentinelInsight {
     vectors: string[]; // "Voice" Logic Trace
     precedent?: HistoricalPrecedent; // The Archivist's Finding
     actions?: TacticalAction[]; // Contextual Gravity Payload
+
+    // NEW FOR PHASE 8 (XAI)
+    mathProof?: string; // "Vibration (4.2) * 0.4 + Temp (45) * 0.1 > Threshold (0.6)"
 }
 
 export interface SentinelContext {
@@ -115,6 +118,7 @@ export class SentinelKernel {
             let matchedWeight = 0;
             const contributingVectors: string[] = [];
             let synchronizedTrends = 0;
+            const proofParts: string[] = []; // XAI Proof
 
             pattern.conditions.forEach(cond => {
                 const history = sensorData[cond.variableId];
@@ -173,6 +177,7 @@ export class SentinelKernel {
                 if (isMatch) {
                     matchedWeight += cond.weight;
                     contributingVectors.push(triggerReason);
+                    proofParts.push(`${cond.variableId}[${currentValue.toFixed(1)}] * w(${cond.weight.toFixed(2)})`);
                 }
                 totalWeight += cond.weight;
             });
@@ -223,6 +228,8 @@ export class SentinelKernel {
                         };
                     }
 
+                    const proofString = `Prob = [${proofParts.join(' + ')}] / Total(${totalWeight.toFixed(2)}) = ${(probability * 100).toFixed(1)}%`;
+
                     insights.push({
                         patternId: pattern.id,
                         name: pattern.name,
@@ -231,13 +238,44 @@ export class SentinelKernel {
                         slogan: pattern.slogan,
                         vectors: contributingVectors,
                         precedent, // Attach archived memory
-                        actions: pattern.actions // Attach Tactical Actions (Contextual Gravity)
+                        actions: pattern.actions, // Attach Tactical Actions (Contextual Gravity)
+                        mathProof: proofString // XAI
                     });
                 }
             }
         });
 
         return insights;
+    }
+    /**
+     * EXPORT WEIGHT MAP (Privacy-Safe Knowledge Transfer)
+     * Strips all sensor data, keeping only learned coefficients.
+     */
+    static exportWeightMap(plantId: string, weights: Record<string, number>): any { // Returns WeightMap type
+        return {
+            plantId,
+            timestamp: Date.now(),
+            weights: { ...weights } // Clone to avoid mutation
+        };
+    }
+
+    /**
+     * MERGE WEIGHTS (Federated Learning Inflow)
+     * Blends local experience with global consensus.
+     * Logic: Local experience is primary (70%), but Hive nudges it (30%).
+     */
+    static mergeWeights(local: Record<string, number>, global: Record<string, number>): Record<string, number> {
+        const merged: Record<string, number> = { ...local };
+
+        Object.entries(global).forEach(([key, globalValue]) => {
+            const localValue = merged[key] || 1.0;
+            // Weighted blend: 0.7 Local, 0.3 Global
+            // This prevents external bad data from ruining a tuned local model,
+            // but allows valid global insights to slowly improve it.
+            merged[key] = (localValue * 0.7) + (globalValue * 0.3);
+        });
+
+        return merged;
     }
 }
 

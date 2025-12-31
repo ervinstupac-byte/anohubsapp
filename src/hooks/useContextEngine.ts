@@ -6,6 +6,7 @@ import { KnowledgeNode, ContextTrigger } from '../models/knowledge/ContextTypes'
 import { KNOWLEDGE_BASE } from '../data/knowledge/KnowledgeBase';
 import { getComponentIdFromRoute } from '../data/knowledge/ComponentTaxonomy';
 import { SentinelKernel, SENTINEL_PATTERNS } from '../utils/SentinelKernel';
+import { HiveRegistry } from '../services/HiveRegistry';
 import { IndustrialDataBridge } from '../services/IndustrialDataBridge';
 
 export interface DiagnosticInsight {
@@ -247,15 +248,51 @@ export const useContextEngine = () => {
     }, [activeComponentId, metricHistory]);
 
 
-    // 5.1 HEURISTIC LEARNING (The Feedback Loop)
+    // 5.1 HEURISTIC LEARNING (The Feedback Loop & Federated Learning)
     const [patternWeights, setPatternWeights] = useState<Record<string, number>>({});
+    const [hiveStatus, setHiveStatus] = useState<{ connected: boolean; lastSync: number }>({ connected: false, lastSync: 0 });
 
-    const reinforcePattern = (patternId: string, feedback: 'CONFIRM' | 'REJECT') => {
+    // HIVE INFLOW: Periodically pull global weights
+    useEffect(() => {
+        const syncHive = async () => {
+            // 1. Get Global Consensus
+            const globalConsensus = await HiveRegistry.getGlobalWeights();
+
+            // 2. Merge with Local
+            setPatternWeights(prev => {
+                const merged = SentinelKernel.mergeWeights(prev, globalConsensus.globalWeights);
+                return merged;
+            });
+
+            setHiveStatus({ connected: true, lastSync: Date.now() });
+        };
+
+        // Sync on mount and every 60s
+        syncHive();
+        const interval = setInterval(syncHive, 60000);
+        return () => clearInterval(interval);
+    }, []);
+
+
+    const reinforcePattern = async (patternId: string, feedback: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => {
         setPatternWeights(prev => {
             const current = prev[patternId] || 1.0;
-            // Boost by 10% if confirmed, penalty if rejected (mute)
-            const newWeight = feedback === 'CONFIRM' ? current + 0.1 : current * 0.5;
-            return { ...prev, [patternId]: newWeight };
+            // Boost by 10% if confirmed/override, penalty if rejected (mute)
+            let newWeight = current;
+
+            if (feedback === 'CONFIRMED' || feedback === 'OVERRIDE') {
+                newWeight = current + 0.1;
+            } else if (feedback === 'REJECTED') {
+                newWeight = current * 0.5;
+            }
+
+            const newWeights = { ...prev, [patternId]: newWeight };
+
+            // HIVE OUTFLOW: Share knowledge (Privacy-Safe)
+            const weightMap = SentinelKernel.exportWeightMap('Plant-A-Local', newWeights);
+            HiveRegistry.submitLocalWeights(weightMap);
+
+            return newWeights;
         });
     };
 
@@ -318,6 +355,8 @@ export const useContextEngine = () => {
 
     return {
         activeContext: activeNodes,
+        hiveStatus, // Exposed for Sidebar UI
+        patternWeights, // Exposed for Learning Lab
         activeComponentId,
         activeLogs,
         activeWorkOrders,
@@ -338,6 +377,7 @@ export const useContextEngine = () => {
             progress,
             scrubTo,
             togglePlay
-        }
+        },
+        reinforcePattern
     };
 };
