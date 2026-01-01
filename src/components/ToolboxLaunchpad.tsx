@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { FRANCIS_PATHS } from '../routes/paths';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { useMaintenance } from '../contexts/MaintenanceContext.tsx';
@@ -311,7 +312,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             ) : (
                                 workOrders.slice().reverse().slice(0, 3).map((order, idx) => (
                                     <div key={idx} className="relative pl-6">
-                                        <div className={`absolute left-0 top-1.5 w-3.5 h-3.5 bg-slate-900 border-2 rounded-full z-10 ${order.status === 'COMPLETED' ? 'border-emerald-500' : 'border-cyan-500'}`}></div>
+                                        <div className={`absolute left - 0 top - 1.5 w - 3.5 h - 3.5 bg - slate - 900 border - 2 rounded - full z - 10 ${order.status === 'COMPLETED' ? 'border-emerald-500' : 'border-cyan-500'} `}></div>
                                         <div className="flex flex-col">
                                             <span className="text-[10px] text-cyan-400 font-mono mb-0.5">
                                                 {new Date(order.createdAt).toLocaleDateString()}

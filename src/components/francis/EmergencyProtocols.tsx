@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertOctagon, LayoutDashboard, Megaphone, ZapOff, Hand, ChevronRight, AlertTriangle } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const EmergencyProtocols: React.FC = () => {
     const { t } = useTranslation();
@@ -42,7 +43,7 @@ export const EmergencyProtocols: React.FC = () => {
 
                     <div className="flex flex-col items-end gap-3">
                         <button
-                            onClick={() => navigate('/francis-hub')}
+                            onClick={() => navigate(FRANCIS_PATHS.HUB)}
                             className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-xs font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
                         >
                             <LayoutDashboard className="w-4 h-4 text-red-500" />

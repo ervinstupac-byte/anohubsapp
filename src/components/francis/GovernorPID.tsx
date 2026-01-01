@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Settings, ArrowLeft, AlertTriangle, Activity, Zap, ShieldAlert, Cpu, CheckCircle2, AlertOctagon } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const GovernorPID: React.FC = () => {
     const { t } = useTranslation();
@@ -23,7 +24,7 @@ export const GovernorPID: React.FC = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate('/francis-hub')}
+                        onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="flex items-center gap-2 px-6 py-2 bg-white border-2 border-blue-500 text-blue-600 rounded-full font-bold hover:bg-blue-50 hover:shadow-lg transition group uppercase text-sm"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />

@@ -10,13 +10,17 @@ export const ROUTES = {
         SHADOW_ENGINEER: 'shadow-engineer', // SOPManager
         INTUITION_LOG: 'intuition-log', // ShiftLog
         AR_GUIDE: 'ar-guide', // ARManager
-        /* SHAFT_ALIGNMENT: 'shaft-alignment',  <-- MOVED TO FRANCIS MODULE */
         EXECUTIVE: 'executive',
     },
     FRANCIS: {
         ROOT: 'francis',
         HUB: 'hub',
-        DIAGNOSTICS: 'diagnostics',
+        COMMAND_CENTER: 'command-center',
+        DIAGNOSTICS: {
+            ROOT: 'diagnostics',
+            HEATMAP: 'diagnostics/heatmap',
+            FORENSICS: 'diagnostics/forensics',
+        },
         MISSION_CONTROL: 'mission-control',
         EMERGENCY: 'emergency-protocols',
         LOGIC_LOAD_REJECTION: 'logic-load-rejection',
@@ -52,8 +56,20 @@ export const ROUTES = {
             AUXILIARY: 'sop-auxiliary',
         }
     },
-    // Add other high level routes
     MAP: 'map',
     PROFILE: 'profile',
     RISK_ASSESSMENT: 'risk-assessment',
+} as const;
+
+// Helper to build full Francis paths
+export const getFrancisPath = (subPath: string) => `/${ROUTES.FRANCIS.ROOT}/${subPath}`;
+
+// Commonly used full paths
+export const FRANCIS_PATHS = {
+    HUB: getFrancisPath(ROUTES.FRANCIS.HUB),
+    COMMAND_CENTER: getFrancisPath(ROUTES.FRANCIS.COMMAND_CENTER),
+    DIAGNOSTICS: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.ROOT),
+    HEATMAP: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.HEATMAP),
+    FORENSICS: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS),
+    MISSION_CONTROL: getFrancisPath(ROUTES.FRANCIS.MISSION_CONTROL),
 } as const;

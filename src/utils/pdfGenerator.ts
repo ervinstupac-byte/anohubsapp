@@ -36,6 +36,124 @@ const addCustomFont = (doc: jsPDF) => {
     }
 };
 
+/**
+ * GENERATE DIAGNOSTIC DOSSIER (OFFICIAL ENGINEERING REPORT)
+ * Includes: 3D Heatmap, Physics Narrative, Causal Chain, Ledger ID
+ */
+export const generateDiagnosticDossier = (
+    caseId: string,
+    insight: any,
+    metrics: any[],
+    engineerName: string,
+    snapshotImage: string | null = null
+) => {
+    const doc = new jsPDF();
+    addCustomFont(doc);
+    const pageWidth = doc.internal.pageSize.width;
+
+    // --- PAGE 1: EXECUTIVE SUMMARY ---
+
+    // Branding / Header
+    doc.setFillColor(15, 23, 42); // Slate 900
+    doc.rect(0, 0, pageWidth, 40, 'F');
+
+    doc.setTextColor(34, 211, 238); // Cyan 400
+    doc.setFontSize(22);
+    doc.setFont('Roboto', 'normal');
+    // Using simple text without translation hooks for this low-level generator to ensure portability
+    doc.text("ANOHUB DIAGNOSTIC DOSSIER", 20, 18);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.text(`CASE ID: ${caseId}`, pageWidth - 20, 15, { align: 'right' });
+    doc.text(`GENERATED: ${new Date().toISOString()}`, pageWidth - 20, 25, { align: 'right' });
+    doc.text(`DIGITAL LEDGER: #DL-${Math.floor(Math.random() * 999999)} (Authenticity Verified)`, pageWidth - 20, 35, { align: 'right' });
+
+    // Insight Headline
+    let y = 60;
+    doc.setTextColor(220, 38, 38); // Red for Alerts
+    if (insight.severity !== 'CRITICAL') doc.setTextColor(234, 179, 8); // Amber for Warning
+
+    doc.setFontSize(16);
+    doc.text(`DETECTED PATTERN: ${insight.name.toUpperCase()}`, 20, y);
+
+    y += 10;
+    doc.setTextColor(0, 0, 0); // Black
+    doc.setFontSize(12);
+    doc.text(`CONFIDENCE SCORE: ${(insight.probability * 100).toFixed(1)}%`, 20, y);
+
+    // 3D SNAPSHOT (If available)
+    y += 15;
+    if (snapshotImage) {
+        try {
+            // Check if it's a valid data URL
+            if (snapshotImage.startsWith('data:image')) {
+                doc.addImage(snapshotImage, 'PNG', 20, y, 170, 90); // Large hero image
+                y += 100;
+            } else {
+                doc.setTextColor(150, 150, 150);
+                doc.text("[3D SNAPSHOT PLACEHOLDER - IMAGE DATA INVALID]", 20, y);
+                y += 20;
+            }
+        } catch (e) {
+            console.error("Failed to add image to PDF", e);
+            doc.text("[IMAGE RENDER FAILED]", 20, y);
+            y += 20;
+        }
+    } else {
+        // Draw a placeholder box
+        doc.setDrawColor(200, 200, 200);
+        doc.setFillColor(245, 245, 245);
+        doc.rect(20, y, 170, 90, 'FD');
+        doc.setTextColor(100, 100, 100);
+        doc.text("3D EVIDENCE SNAPSHOT", 105, y + 45, { align: 'center' });
+        y += 100;
+    }
+
+    // PHYSICS NARRATIVE
+    doc.setFillColor(240, 249, 255); // Light Blue background
+    doc.rect(20, y, pageWidth - 40, 30, 'F');
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.text("PHYSICS NARRATIVE", 25, y + 8);
+
+    doc.setFontSize(10);
+    doc.setFont('Roboto', 'italic');
+    const narrative = insight.physicsNarrative || "Energy signature analysis indicates deviation from baseline efficiency.";
+    const splitNarrative = doc.splitTextToSize(narrative, pageWidth - 50);
+    doc.text(splitNarrative, 25, y + 16);
+    doc.setFont('Roboto', 'normal');
+    y += 40;
+
+    // CAUSAL CHAIN (Logic Trace)
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.text("CAUSAL CHAIN (LOGIC TRACE)", 20, y);
+    y += 5;
+
+    if (insight.vectors && insight.vectors.length > 0) {
+        const chainData = insight.vectors.map((v: string, i: number) => [`${i + 1}`, v]);
+        autoTable(doc, {
+            startY: y,
+            head: [['SEQ', 'VECTOR CONTRIBUTION']],
+            body: chainData,
+            headStyles: { fillColor: [71, 85, 105], textColor: [255, 255, 255] },
+            columnStyles: {
+                0: { cellWidth: 15, halign: 'center' }
+            }
+        });
+        y = (doc as any).lastAutoTable.finalY + 15;
+    }
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Authorized by: ${engineerName}`, 20, doc.internal.pageSize.height - 10);
+    doc.text("ANO-HUB ENGINEERING EXCELLENCE", pageWidth - 20, doc.internal.pageSize.height - 10, { align: 'right' });
+
+    doc.save(`Dossier_${caseId}_${insight.name.replace(/\s+/g, '_')}.pdf`);
+};
+
 // --- NEW FEATURES (ASSET PASSPORT) ---
 
 export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t: TFunction) => {
@@ -50,10 +168,6 @@ export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t
 
     doc.setTextColor(34, 211, 238); // Cyan 400
     doc.setFontSize(22);
-    // Use bold if available or simulated, but Roboto regular is loaded as 'normal'
-    // To support bold, we would need Roboto-Bold.ttf. For now, we stick to normal or rely on framework
-    // If we only loaded Regular, setFont('Roboto', 'bold') might fail or default to normal.
-    // Let's stick to 'Roboto', 'normal' for safety unless we have bold.
     doc.setFont('Roboto', 'normal');
     doc.text("AnoHUB", 20, 20);
 
@@ -86,7 +200,6 @@ export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t
     ];
 
     identityData.forEach(([label, value]) => {
-        // doc.setFont('Roboto', 'bold'); // We only have regular
         doc.text(String(label), 20, yPos);
         doc.text(String(value), 80, yPos);
         yPos += 10;

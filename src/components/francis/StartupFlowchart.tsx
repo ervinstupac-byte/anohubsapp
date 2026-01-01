@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowDown, CheckCircle, XCircle, Play, Pause, AlertTriangle } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const StartupFlowchart: React.FC = () => {
     const { t } = useTranslation();
@@ -138,7 +139,7 @@ export const StartupFlowchart: React.FC = () => {
 
                 {/* Footer */}
                 <button
-                    onClick={() => navigate('/francis-hub')}
+                    onClick={() => navigate(FRANCIS_PATHS.HUB)}
                     className="mt-16 text-xs font-bold text-slate-500 hover:text-white uppercase tracking-widest"
                 >
                     ← {t('francis.startupFlowchart.backBtn')}

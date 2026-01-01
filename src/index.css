@@ -1,5 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Sinhala:wght@100..900&display=swap');
 
+/* --- CSS CUSTOM PROPERTIES (Theme Variables) --- */
+:root[data-theme="tactical-cyan"],
+:root {
+  --accent-primary: 0, 240, 255;
+  /* Cyan */
+  --accent-glow: rgba(0, 240, 255, 0.5);
+  --bg-carbon: #050505;
+  --bg-carbon-dim: #030303;
+}
+
+:root[data-theme="tactical-red"] {
+  --accent-primary: 255, 0, 0;
+  /* Tactical Red */
+  --accent-glow: rgba(255, 0, 0, 0.5);
+  --bg-carbon: #030303;
+  /* Dimmer for night vision */
+  --bg-carbon-dim: #010101;
+}
+
 /* --- TYPOGRAPHY PRESETS --- */
 .font-mono {
   font-family: 'JetBrains Mono', monospace !important;
@@ -17,7 +36,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --- GLOBAL STYLES --- */
+/* --- TACTICAL COMMAND CENTER THEME --- */
 body {
   margin: 0;
   font-family: 'Inter', 'Noto Sans Sinhala', system-ui, -apple-system, sans-serif;
@@ -26,16 +45,18 @@ body {
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #020617;
+  background-color: var(--bg-carbon);
+  /* DEEP CARBON - Command Center */
   color: #f1f5f9;
   overflow-x: hidden;
 
-  /* --- PROFESSIONAL ENGINEERING GRID (Landing Page DNA) --- */
+  /* --- TACTICAL GRID (0.5px precision) --- */
   background-image:
-    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(var(--accent-primary), 0.03) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(var(--accent-primary), 0.03) 0.5px, transparent 0.5px);
   background-size: 40px 40px;
   min-height: 100vh;
+  transition: background-color 0.3s ease;
 }
 
 .noise-overlay {
@@ -44,7 +65,8 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.03;
+  /* Reduced for tactical clarity */
   z-index: 50;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
@@ -94,6 +116,56 @@ textarea::placeholder {
   /* Cyan sa prozirnošću */
   color: #fff;
   text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+/* --- TACTICAL MODULE BASE CLASS --- */
+.tactical-module {
+  border: 0.5px solid rgba(var(--accent-primary), 0.1);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.tactical-module:hover {
+  border-color: rgba(var(--accent-primary), 0.2);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+/* --- CONFLICT HIGHLIGHTING (Truth Delta) --- */
+.glow-purple {
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+  border-color: rgba(168, 85, 247, 0.5) !important;
+  animation: pulse-purple 2s ease-in-out infinite;
+}
+
+.glow-amber {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  border-color: rgba(245, 158, 11, 0.5) !important;
+  animation: pulse-amber 2s ease-in-out infinite;
+}
+
+@keyframes pulse-purple {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
+  }
+}
+
+@keyframes pulse-amber {
+
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+  }
 }
 
 /* --- CUSTOM SCROLLBAR (Stealth Mode) --- */

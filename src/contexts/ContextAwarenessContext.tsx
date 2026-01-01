@@ -20,6 +20,10 @@ interface ContextAwarenessState {
     isLoading: boolean;
     uploadLogData: (file: File) => Promise<void>;
 
+    // Bi-Directional Sync
+    setFocus: (componentId: string | null) => void;
+    activeComponentId: string | null;
+
     // Depth of Truth (Phase 3)
     activeLayer: 'HUMAN' | 'HISTORY' | 'REALTIME';
     setActiveLayer: (layer: 'HUMAN' | 'HISTORY' | 'REALTIME') => void;
@@ -68,7 +72,9 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
 
         hiveStatus: engineData.hiveStatus,
         patternWeights: engineData.patternWeights,
-        reinforcePattern: engineData.reinforcePattern
+        reinforcePattern: engineData.reinforcePattern,
+        setFocus: engineData.setFocus,
+        activeComponentId: engineData.activeComponentId
     };
 
     return (

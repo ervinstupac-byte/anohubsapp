@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle, Activity, Droplet, FileCheck } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const HPU: React.FC = () => {
     const { t } = useTranslation();
@@ -36,7 +37,7 @@ export const HPU: React.FC = () => {
                     </h2>
 
                     <button
-                        onClick={() => navigate('/francis-hub')}
+                        onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="inline-flex items-center gap-2 border border-[#0066cc] text-[#0066cc] px-5 py-2 rounded font-bold hover:bg-[#0066cc] hover:text-white transition-all text-sm"
                     >
                         <ArrowLeft className="w-4 h-4" />

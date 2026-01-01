@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Activity, Zap, Lock, Scale, DoorOpen, ShieldAlert, AlertTriangle } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 interface FaultState {
     n2: boolean;
@@ -102,8 +103,8 @@ export const MissionControl: React.FC = () => {
         <button
             onClick={() => toggleFault(id)}
             className={`text-[10px] px-2 py-1 rounded transition-all duration-200 border ${active
-                    ? 'bg-purple-900/80 border-purple-500 text-purple-200 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
-                    : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-slate-300'
+                ? 'bg-purple-900/80 border-purple-500 text-purple-200 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                : 'bg-slate-800 border-slate-700 text-slate-500 hover:text-slate-300'
                 }`}
         >
             {label}
@@ -121,8 +122,8 @@ export const MissionControl: React.FC = () => {
             <button
                 onClick={onClick}
                 className={`w-full py-2 border rounded transition text-sm uppercase tracking-wider font-bold ${isBlocked
-                        ? 'bg-red-900/20 border-red-500 text-red-500 animate-shake'
-                        : 'bg-cyan-900/50 hover:bg-cyan-600 border-cyan-700 hover:border-cyan-400 text-cyan-100'
+                    ? 'bg-red-900/20 border-red-500 text-red-500 animate-shake'
+                    : 'bg-cyan-900/50 hover:bg-cyan-600 border-cyan-700 hover:border-cyan-400 text-cyan-100'
                     }`}
             >
                 {label}
@@ -352,7 +353,7 @@ export const MissionControl: React.FC = () => {
                 {/* FOOTER */}
                 <div className="text-center mt-12">
                     <button
-                        onClick={() => navigate('/francis-hub')}
+                        onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="text-slate-500 hover:text-white text-xs font-bold uppercase tracking-widest transition"
                     >
                         ← {t('francis.missionControl.returnBtn')}

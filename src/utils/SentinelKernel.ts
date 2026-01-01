@@ -63,6 +63,9 @@ export interface SentinelInsight {
 
     // NEW FOR PHASE 8 (XAI)
     mathProof?: string; // "Vibration (4.2) * 0.4 + Temp (45) * 0.1 > Threshold (0.6)"
+
+    // NEW FOR PHASE 15 (MEMORY ASCENSION)
+    physicsNarrative?: string; // "Kinetic energy transforming to Heat..."
 }
 
 export interface SentinelContext {
@@ -74,6 +77,19 @@ export interface SentinelContext {
 // --- MATH KERNEL ---
 
 export class SentinelKernel {
+
+    /**
+     * GENERATES PHYSICS NARRATIVE (The Voice of the Machine)
+     */
+    static generatePhysicsNarrative(patternId: string, vectors: string[], probability: number): string {
+        if (patternId === 'bearing-thermal-instability') {
+            return `Anomaly detected: Kinetic energy at the Runner is disippating as friction-induced Heat in Bearing #2. Efficiency loss projected at ${(probability * 3.5).toFixed(1)}%.`;
+        }
+        if (patternId === 'cavitation-complex') {
+            return `Flow turbulence detected: Differential pressure in Draft Tube suggests vortex rope formation, transferring destructive energy to the Runner linkage.`;
+        }
+        return `System deviation detected. Energy transformation efficiency is compromised with ${(probability * 100).toFixed(0)}% confidence.`;
+    }
 
     static computeTrend(data: number[]): VariableTrend {
         if (!data || data.length < 2) {
@@ -239,7 +255,8 @@ export class SentinelKernel {
                         vectors: contributingVectors,
                         precedent, // Attach archived memory
                         actions: pattern.actions, // Attach Tactical Actions (Contextual Gravity)
-                        mathProof: proofString // XAI
+                        mathProof: proofString, // XAI
+                        physicsNarrative: this.generatePhysicsNarrative(pattern.id, contributingVectors, probability) // The Narrative
                     });
                 }
             }

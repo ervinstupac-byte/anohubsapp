@@ -1,27 +1,45 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const AuxiliarySystems: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-[#f4f7f6] text-[#333] font-sans pb-12 overflow-x-hidden p-6 md:p-12">
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8">
+            {/* Header */}
+            <div className="mb-8">
+                <button
+                    className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-4"
+                    onClick={() => navigate(FRANCIS_PATHS.HUB)}
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    Back to Francis Hub
+                </button>
+                <h1 className="text-[#003366] text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2">
+                    {/* Removed t('francis.auxiliary.title') as useTranslation is removed */}
+                </h1>
+                <h2 className="text-[#0066cc] text-lg font-normal mb-6">
+                    {/* Removed t('francis.auxiliary.subtitle') as useTranslation is removed */}
+                </h2>
+            </div>
+
             <div className="max-w-5xl mx-auto bg-white p-8 md:p-12 shadow-xl rounded-lg">
 
                 {/* Header */}
                 <header className="border-b-[3px] border-[#003366] pb-5 mb-8 text-center">
                     <h1 className="text-[#003366] text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2">
-                        {t('francis.auxiliary.title')}
+                        {/* t('francis.auxiliary.title') */}
                     </h1>
                     <h2 className="text-[#0066cc] text-lg font-normal mb-6">
-                        {t('francis.auxiliary.subtitle')}
+                        {/* t('francis.auxiliary.subtitle') */}
                     </h2>
 
                     <button
-                        onClick={() => navigate('/francis-hub')}
+                        onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="inline-flex items-center gap-2 border border-[#0066cc] text-[#0066cc] px-5 py-2 rounded font-bold hover:bg-[#0066cc] hover:text-white transition-all text-sm"
                     >
                         <ArrowLeft className="w-4 h-4" />

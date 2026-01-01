@@ -59,7 +59,6 @@
     "toolboxAnalytics": "Toolbox Analitika",
     "knowledge": "BAZA ZNANJA",
     "exitToSite": "Izlaz na Stranicu",
-    "francisLogic": "Francis Logička Mapa",
     "insights": {
       "title": "Inženjerski Uvid",
       "highPressure": "Upozorenje: Detektiran visok obodni napon.",
@@ -1628,42 +1627,6 @@
       "gridFreq": "MREŽNA FREQ",
       "healthScore": "OCJENA ZDRAVLJA",
       "criticalAlarms": "🚨 KRITIČNI ALARMI"
-    }
-  },
-  "sidebar": {
-    "fleetOverview": "PREGLED FLOTE",
-    "shaftAlignment": "Poravnanje Osovine",
-    "hydraulicMaintenance": "Hidrauličko Održavanje",
-    "boltTorque": "Moment Zatezanja Vijaka",
-    "shadowEngineer": "Shadow Engineer",
-    "intuitionLog": "Dnevnik Intuicije",
-    "structuralIntegrity": "Strukturalni Integritet",
-    "operations": "OPERACIJE",
-    "maintenanceLogbook": "Dnevnik Održavanja",
-    "strategy": "STRATEGIJA",
-    "toolboxAnalytics": "Analitika Alata",
-    "knowledge": "ZNANJE",
-    "exitToSite": "Izađi na Stranicu",
-    "francisLogic": "Francis Logička Mapa",
-    "insights": {
-      "title": "Inženjerski Uvid",
-      "highPressure": "Upozorenje: Visok obodni napon.",
-      "waterHammerRisk": "KRITIČNO: Rizik od hidrauličkog udara.",
-      "waterHammerCritical": "KRITIČNO: Otkriven rizik od hidrauličkog udara. Podesite brzinu zatvaranja sprovodnog aparata.",
-      "thermalStress": "Napomena: Termički stres raste.",
-      "substationThermal": "NAPOMENA: Predstoji termičko preopterećenje. Provjerite rad pumpe za hlađenje.",
-      "fieldFlashing": "Potrebna početna uzbuda"
-    },
-    "maintenance": {
-      "pulse": "Puls Održavanja",
-      "active": "Aktivno",
-      "modalTitle": "Detalji Radnog Naloga",
-      "description": "Opis",
-      "priority": "Prioritet",
-      "assignee": "Dodijeljeno",
-      "unassigned": "Nedodijeljeno",
-      "viewTicket": "Kliknite \"Pogledaj Puni Nalog\" za upravljanje.",
-      "systemNominal": "Sistem Nominalan"
     }
   },
   "francis": {

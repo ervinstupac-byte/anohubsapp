@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle, Layers, Split, Crosshair, HelpCircle, AlertCircle } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const Coupling: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +22,7 @@ export const Coupling: React.FC = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate('/francis-hub')}
+                    onClick={() => navigate(FRANCIS_PATHS.HUB)}
                     className="flex items-center gap-2 px-4 py-2 bg-[#1c1917] border border-[#44403c] text-[#78716c] text-xs font-bold uppercase rounded hover:border-blue-500 hover:text-white transition mt-4 md:mt-0"
                 >
                     <ArrowLeft className="w-4 h-4" />

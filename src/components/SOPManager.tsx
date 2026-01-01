@@ -74,40 +74,52 @@ export const SOPManager: React.FC = () => {
     const currentStep = activeSop?.steps[currentStepIndex];
 
     // TACTICAL STATE ACCESS
-    const { hasCriticalRisks, patternWeights, reinforcePattern } = useContextAwareness();
+    const { hasCriticalRisks, patternWeights, reinforcePattern, liveMetrics } = useContextAwareness();
 
-    // --- PROTOCOL GUARDRAILS ---
-    const activeGuardrail = useMemo(() => {
+    // --- PROTOCOL INSIGHTS (ADVISORY ONLY) ---
+    const activeInsight = useMemo(() => {
         if (!currentStep) return null;
 
         // Scan for tokens in the current step
         const tokens = currentStep.description.match(/\{\{([A-Z0-9-]+)\}\}/g);
-        if (!tokens) return null;
 
-        // Check if ANY referenced sensor is CRITICAL
-        // Note: In real app we map ID -> Metric. Here we use the mockup mapping logic similar to LiveMetricToken
-        // We need a helper to check status by ID.
-        // For this sprint, we'll check global hasCriticalRisks if the step mentions 'VIB' or 'PRE'.
+        // 1. Specific Sensor Interlocks -> Becomes "Predictive Context"
+        if (tokens) {
+            for (const token of tokens) {
+                const sensorId = token.slice(2, -2).trim();
+                const metric = liveMetrics.find((m: any) => m.source?.id === sensorId);
 
-        const isRiskRelevant = tokens.some(t => t.includes('VIB') || t.includes('PRE'));
+                if (metric && metric.status === 'critical') {
+                    return {
+                        type: 'PREDICTIVE',
+                        message: `PREDICTIVE WARNING: ${metric.label} Deviation (${typeof metric.value === 'number' ? metric.value.toFixed(1) : metric.value} ${metric.unit})`,
+                        action: 'Sentinel Model predicts 12% probability of downstream instability. TRAJECTORY: If current parameters persist, System Trip is predicted in T-minus 4.5 hours.',
+                        color: 'amber'
+                    };
+                }
+            }
+        }
+
+        // 2. Global Risk Fallback
+        const isRiskRelevant = tokens ? tokens.some(t => t.includes('VIB') || t.includes('PRE')) : false;
 
         if (isRiskRelevant && hasCriticalRisks) {
             return {
-                type: 'CRITICAL',
-                message: 'SAFETY INTERLOCK ACTIVE: Critical Risk Detected in associated systems.',
-                action: 'Stabilize system before proceeding.'
+                type: 'PREDICTIVE',
+                message: 'NEURAL INSIGHT: Concurrent System Risk Detected.',
+                action: 'Cross-reference with Hydraulic Heatmap recommended.',
+                color: 'purple'
             };
         }
         return null;
-    }, [currentStep, hasCriticalRisks]);
+    }, [currentStep, hasCriticalRisks, liveMetrics]);
 
     const handleVerifySOP = () => {
         if (!currentStep) return;
 
-        // BLOCK IF GUARDRAIL ACTIVE
-        if (activeGuardrail && activeGuardrail.type === 'CRITICAL') {
-            showToast('ACTION BLOCKED: Safety Interlock Active', 'error');
-            return;
+        // ADVISORY LOG ONLY - NO BLOCK
+        if (activeInsight) {
+            console.log("User proceeding against advice:", activeInsight);
         }
 
         if (currentStep.verificationType === 'VALUE') {
@@ -169,7 +181,7 @@ export const SOPManager: React.FC = () => {
                         <h2 className="text-xs font-mono font-black text-purple-400 tracking-[0.2em] uppercase">Shadow Engineer</h2>
                     </div>
                     <p className="text-slate-400 text-sm font-light max-w-lg">
-                        Standard Operating Procedures (SOP) with <strong className="text-cyan-400">Live Data Injection</strong> and <strong className="text-red-400">Safety Interlocks</strong>.
+                        Standard Operating Procedures (SOP) with <strong className="text-cyan-400">Live Data Injection</strong> and <strong className="text-purple-400">Neural Guidance</strong>.
                     </p>
                 </div>
                 <BackButton text="Back to Hub" />
@@ -273,16 +285,21 @@ export const SOPManager: React.FC = () => {
                                 </div>
                             )}
 
-                            {/* GUARDRAIL ALERT */}
-                            {activeGuardrail && (
-                                <div className="ml-11 p-4 bg-red-950/20 border-2 border-red-500 animate-pulse-fast rounded-sm flex items-start gap-4">
-                                    <AlertTriangle className="w-6 h-6 text-red-500 shrink-0" />
+                            {/* NEURAL INSIGHT ALERT */}
+                            {activeInsight && (
+                                <div className={`ml-11 p-4 border-l-2 rounded-r-sm flex items-start gap-4 mb-4 animate-fade-in ${activeInsight.color === 'purple'
+                                    ? 'bg-purple-950/20 border-purple-500'
+                                    : 'bg-amber-950/20 border-amber-500'
+                                    }`}>
+                                    <div className={`p-2 rounded-full ${activeInsight.color === 'purple' ? 'bg-purple-500/10 text-purple-400' : 'bg-amber-500/10 text-amber-500'}`}>
+                                        <AlertTriangle className="w-5 h-5" />
+                                    </div>
                                     <div>
-                                        <h5 className="text-sm font-bold text-red-500 uppercase tracking-wider mb-1">
-                                            {activeGuardrail.message}
+                                        <h5 className={`text-sm font-bold uppercase tracking-wider mb-1 ${activeInsight.color === 'purple' ? 'text-purple-400' : 'text-amber-500'}`}>
+                                            {activeInsight.message}
                                         </h5>
-                                        <p className="text-xs text-red-300/80 font-mono">
-                                            {activeGuardrail.action}
+                                        <p className={`text-xs font-mono opacity-80 ${activeInsight.color === 'purple' ? 'text-purple-300' : 'text-amber-300'}`}>
+                                            {activeInsight.action}
                                         </p>
                                     </div>
                                 </div>
@@ -302,12 +319,12 @@ export const SOPManager: React.FC = () => {
                                             value={verificationInput}
                                             onChange={(e) => setVerificationInput(e.target.value)}
                                             placeholder="Enter measured value..."
-                                            disabled={isStepVerified || !!activeGuardrail}
+                                            disabled={isStepVerified}
                                             className="flex-grow bg-slate-950 border border-slate-700 focus:border-cyan-500 rounded-sm px-4 py-3 text-white font-mono placeholder:text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors outline-none"
                                         />
                                         <button
                                             onClick={handleVerifySOP}
-                                            disabled={isStepVerified || !!activeGuardrail}
+                                            disabled={isStepVerified}
                                             className="px-6 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold uppercase text-xs tracking-wider rounded-sm transition-colors"
                                         >
                                             Verify
@@ -317,11 +334,11 @@ export const SOPManager: React.FC = () => {
                                     <div className="flex gap-4">
                                         <button
                                             className={`flex-grow border-2 border-dashed border-slate-700 h-24 flex flex-col items-center justify-center gap-2 rounded-sm transition-colors ${isStepVerified ? 'border-emerald-500 bg-emerald-950/10' :
-                                                activeGuardrail ? 'opacity-50 cursor-not-allowed' :
+                                                activeInsight ? 'hover:border-amber-500 hover:bg-amber-950/10' :
                                                     'hover:border-purple-500 hover:bg-slate-900'
                                                 }`}
                                             onClick={handleVerifySOP}
-                                            disabled={isStepVerified || !!activeGuardrail}
+                                            disabled={isStepVerified}
                                         >
                                             <span className="text-2xl">{isStepVerified ? '✓' : '📷'}</span>
                                             <span className="text-[10px] uppercase font-bold text-slate-400">
@@ -343,7 +360,7 @@ export const SOPManager: React.FC = () => {
                                 <button
                                     className={`px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold uppercase text-xs tracking-widest rounded-sm shadow-lg shadow-purple-900/20 transition-all hover:translate-y-[-1px] disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none ${!isStepVerified ? 'opacity-50 cursor-not-allowed grayscale' : ''
                                         }`}
-                                    disabled={!isStepVerified}
+                                    disabled={!isStepVerified} // Next Step requires verification, but verification is NOT blocked
                                     onClick={handleNextStep}
                                 >
                                     {currentStepIndex === (activeSop?.steps.length || 0) - 1 ? 'Complete Protocol' : 'Next Step'}

@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Link as LinkIcon, AlertOctagon, Microscope, Droplet, HandMetal, CheckSquare } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const Linkage: React.FC = () => {
     const { t } = useTranslation();
@@ -31,7 +32,7 @@ export const Linkage: React.FC = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate('/francis-hub')}
+                        onClick={() => navigate(FRANCIS_PATHS.HUB)}
                         className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-blue-500 transition group"
                     >
                         <ArrowLeft className="w-3 h-3 text-blue-500 group-hover:-translate-x-1 transition" />

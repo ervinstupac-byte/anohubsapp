@@ -38,6 +38,9 @@ const ThrustBalance = React.lazy(() => import('../components/francis/ThrustBalan
 const VortexControl = React.lazy(() => import('../components/francis/VortexControl').then(module => ({ default: module.VortexControl })));
 const WaterHammer = React.lazy(() => import('../components/francis/WaterHammer').then(module => ({ default: module.WaterHammer })));
 const SOPViewer = React.lazy(() => import('../components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
+const TruthHeatmapDemo = React.lazy(() => import('../components/TruthHeatmapDemo').then(module => ({ default: module.TruthHeatmapDemo })));
+const CommandCenter = React.lazy(() => import('../components/CommandCenter').then(module => ({ default: module.CommandCenter })));
+const ForensicLab = React.lazy(() => import('../components/ForensicLab').then(module => ({ default: module.ForensicLab })));
 
 /**
  * FrancisRouter - Dedicated sub-router for all Francis turbine modules
@@ -56,11 +59,16 @@ const FrancisRouter: React.FC = () => {
             </div>
         }>
             <Routes>
+                {/* Command Center (Main View) */}
+                <Route path="command-center" element={<CommandCenter />} />
+
                 {/* Main Hub */}
                 <Route path="hub" element={<FrancisHub />} />
 
                 {/* Diagnostics */}
                 <Route path="diagnostics" element={<FrancisDiagnostics />} />
+                <Route path="diagnostics/heatmap" element={<TruthHeatmapDemo />} />
+                <Route path="diagnostics/forensics" element={<ForensicLab />} />
 
                 {/* Mission Control & Logic */}
                 <Route path="mission-control" element={<MissionControl />} />

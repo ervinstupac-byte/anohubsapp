@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Skull, Settings2, Zap, Activity, ArrowLeft } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 export const DistributorSync: React.FC = () => {
     const { t } = useTranslation();
@@ -22,7 +23,7 @@ export const DistributorSync: React.FC = () => {
                 </div>
 
                 <button
-                    onClick={() => navigate('/francis-hub')}
+                    onClick={() => navigate(FRANCIS_PATHS.HUB)}
                     className="inline-flex items-center gap-2 bg-[#1c1917] border border-[#44403c] text-[#78716c] px-4 py-2 text-xs font-bold uppercase rounded hover:border-blue-500 hover:text-white transition-all"
                 >
                     <ArrowLeft className="w-4 h-4" /> <span>{t('francis.distributorSync.return')}</span>
