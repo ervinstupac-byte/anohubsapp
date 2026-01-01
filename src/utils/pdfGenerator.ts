@@ -43,10 +43,18 @@ const addCustomFont = (doc: jsPDF) => {
 export const generateDiagnosticDossier = (
     caseId: string,
     insight: any,
-    metrics: any[],
     engineerName: string,
-    snapshotImage: string | null = null
+    snapshotImage: string | null = null,
+    returnBlob: boolean = false
 ) => {
+    // HARDENING: Safe Defaults
+    const safeInsight = insight || {
+        name: 'Manual Report Generation',
+        severity: 'LOW',
+        probability: 1.0,
+        physicsNarrative: 'No specific pattern selected. Report generated manually by engineer.',
+        vectors: []
+    };
     const doc = new jsPDF();
     addCustomFont(doc);
     const pageWidth = doc.internal.pageSize.width;
@@ -72,15 +80,16 @@ export const generateDiagnosticDossier = (
     // Insight Headline
     let y = 60;
     doc.setTextColor(220, 38, 38); // Red for Alerts
-    if (insight.severity !== 'CRITICAL') doc.setTextColor(234, 179, 8); // Amber for Warning
+    doc.setTextColor(220, 38, 38); // Red for Alerts
+    if (safeInsight.severity !== 'CRITICAL') doc.setTextColor(234, 179, 8); // Amber for Warning
 
     doc.setFontSize(16);
-    doc.text(`DETECTED PATTERN: ${insight.name.toUpperCase()}`, 20, y);
+    doc.text(`DETECTED PATTERN: ${safeInsight.name?.toUpperCase() || 'UNKNOWN'}`, 20, y);
 
     y += 10;
     doc.setTextColor(0, 0, 0); // Black
     doc.setFontSize(12);
-    doc.text(`CONFIDENCE SCORE: ${(insight.probability * 100).toFixed(1)}%`, 20, y);
+    doc.text(`CONFIDENCE SCORE: ${((safeInsight.probability || 0) * 100).toFixed(1)}%`, 20, y);
 
     // 3D SNAPSHOT (If available)
     y += 15;
@@ -119,7 +128,7 @@ export const generateDiagnosticDossier = (
 
     doc.setFontSize(10);
     doc.setFont('Roboto', 'italic');
-    const narrative = insight.physicsNarrative || "Energy signature analysis indicates deviation from baseline efficiency.";
+    const narrative = safeInsight.physicsNarrative || "Energy signature analysis indicates deviation from baseline efficiency.";
     const splitNarrative = doc.splitTextToSize(narrative, pageWidth - 50);
     doc.text(splitNarrative, 25, y + 16);
     doc.setFont('Roboto', 'normal');
@@ -131,8 +140,8 @@ export const generateDiagnosticDossier = (
     doc.text("CAUSAL CHAIN (LOGIC TRACE)", 20, y);
     y += 5;
 
-    if (insight.vectors && insight.vectors.length > 0) {
-        const chainData = insight.vectors.map((v: string, i: number) => [`${i + 1}`, v]);
+    if (safeInsight.vectors && safeInsight.vectors.length > 0) {
+        const chainData = safeInsight.vectors.map((v: string, i: number) => [`${i + 1}`, v]);
         autoTable(doc, {
             startY: y,
             head: [['SEQ', 'VECTOR CONTRIBUTION']],
@@ -170,12 +179,14 @@ export const generateDiagnosticDossier = (
     doc.text(`Authorized by: ${engineerName}`, 20, doc.internal.pageSize.height - 10);
     doc.text("ANO-HUB ENGINEERING EXCELLENCE", pageWidth - 20, doc.internal.pageSize.height - 10, { align: 'right' });
 
-    doc.save(`Dossier_${caseId}_${insight.name.replace(/\s+/g, '_')}.pdf`);
+    if (returnBlob) return doc.output('blob');
+    doc.save(`Dossier_${caseId}_${(safeInsight.name || 'Report').replace(/\s+/g, '_')}.pdf`);
 };
+
 
 // --- NEW FEATURES (ASSET PASSPORT) ---
 
-export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t: TFunction) => {
+export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t: TFunction, returnBlob: boolean = false) => {
     const doc = new jsPDF();
     addCustomFont(doc);
 
@@ -287,6 +298,7 @@ export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t
     doc.text(`${t('pdf.passport.page')} 2 of 2`, pageWidth / 2, doc.internal.pageSize.height - 10, { align: 'center' });
 
     const safeName = asset.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    if (returnBlob) return doc.output('blob');
     doc.save(`Asset_Passport_${safeName}.pdf`);
 };
 
@@ -409,7 +421,8 @@ export const generateAuditReport = (
     activeWorkOrders: any[],
     logs: any[],
     engineerName: string,
-    t: TFunction
+    t: TFunction,
+    returnBlob: boolean = false
 ) => {
     const doc = new jsPDF();
     addCustomFont(doc);
@@ -516,5 +529,6 @@ export const generateAuditReport = (
         });
     }
 
+    if (returnBlob) return doc.output('blob');
     doc.save(`Audit_${contextTitle.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
 };

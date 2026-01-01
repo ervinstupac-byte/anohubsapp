@@ -13,6 +13,7 @@ import { useTheme } from '../stores/useTheme';
 import { Camera, Moon, Ghost, FileText } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 import { generateDiagnosticDossier } from '../utils/pdfGenerator';
+import { useDocumentViewer } from '../contexts/DocumentContext';
 
 const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
 
@@ -30,6 +31,7 @@ export const CommandCenter: React.FC = () => {
     const { addSnapshot } = useDigitalLedger();
     const { mode, toggleNightOps } = useTheme();
     const { showToast } = useToast();
+    const { viewDocument } = useDocumentViewer();
     const [ghostMode, setGhostMode] = React.useState(false);
     const turbineRef = useRef<HTMLDivElement>(null);
 
@@ -78,14 +80,18 @@ export const CommandCenter: React.FC = () => {
 
         // Generate Real PDF
         try {
-            generateDiagnosticDossier(
+            const blob = generateDiagnosticDossier(
                 'CASE-' + Math.floor(Math.random() * 10000),
                 primaryInsight,
-                liveMetrics,
                 'Senior Engineer', // In real app, get from UserContext
-                snapshotData
+                snapshotData,
+                true // Return Blob
             );
-            showToast('Forensic Dossier Generated successfully.', 'success');
+
+            if (blob instanceof Blob) {
+                viewDocument(blob, `Dossier: ${primaryInsight.name}`, `Dossier_${primaryInsight.name}.pdf`);
+                showToast('Forensic Dossier Ready for Review.', 'success');
+            }
         } catch (e) {
             console.error(e);
             showToast('Failed to generate Dossier.', 'error');
