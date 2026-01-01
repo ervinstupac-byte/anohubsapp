@@ -145,6 +145,25 @@ export const generateDiagnosticDossier = (
         y = (doc as any).lastAutoTable.finalY + 15;
     }
 
+    // SIGNATURE BLOCK
+    if (y + 40 > doc.internal.pageSize.height) {
+        doc.addPage();
+        y = 40;
+    } else {
+        y += 20;
+    }
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, y, 100, y); // Signature Line
+    doc.setFontSize(10);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`I, ${engineerName}, have reviewed the Sentinel's Logic Trace`, 20, y + 5);
+    doc.text(`and confirm the Root Cause Hypothesis.`, 20, y + 10);
+
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text("ENGINEERING SIGNATURE (CRYPTOGRAPHIC BINDING)", 20, y + 20);
+
     // Footer
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);

@@ -1,9 +1,11 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import { TurbineRunner3D } from './three/TurbineRunner3D';
 import { HeatmapLegend } from './ui/HeatmapLegend';
 import { NeuralPulse } from './ui/NeuralPulse';
 import { TacticalCard } from './ui/TacticalCard';
 import { LiveMetricToken } from './ui/LiveMetricToken';
+import { ShaftOrbitPlot } from './ui/ShaftOrbitPlot';
 import { TruthDeltaEngine } from '../utils/TruthDeltaEngine';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 import { useDigitalLedger } from '../stores/useDigitalLedger';
@@ -11,6 +13,9 @@ import { useTheme } from '../stores/useTheme';
 import { Camera, Moon, Ghost, FileText } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 import { generateDiagnosticDossier } from '../utils/pdfGenerator';
+
+const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
+
 
 export const CommandCenter: React.FC = () => {
     const {
@@ -26,6 +31,7 @@ export const CommandCenter: React.FC = () => {
     const { mode, toggleNightOps } = useTheme();
     const { showToast } = useToast();
     const [ghostMode, setGhostMode] = React.useState(false);
+    const turbineRef = useRef<HTMLDivElement>(null);
 
     // Calculate Performance Delta (Baseline vs Actual)
     // Design Baseline: 105.0 MW (Mock Design Spec)
@@ -36,8 +42,30 @@ export const CommandCenter: React.FC = () => {
     // Formula: (Actual - Baseline) / Baseline * 100
     const deltaPerf = activePowerVal > 0 ? ((activePowerVal - baselinePower) / baselinePower) * 100 : 0;
 
-    const handleExportDossier = () => {
-        showToast('Compiling Forensic Dossier (Case #9021)...', 'info');
+    const handleExportDossier = useCallback(async () => {
+        showToast('Initiating Forensic Capture...', 'info');
+
+        // Capture 3D Canvas
+        let snapshotData = null;
+        if (turbineRef.current) {
+            try {
+                // Wait for a frame render to ensure clarity (simple delay)
+                await new Promise(r => setTimeout(r, 100));
+
+                // We target the canvas inside the wrapper
+                const canvas = turbineRef.current.querySelector('canvas');
+                if (canvas) {
+                    snapshotData = canvas.toDataURL('image/png');
+                } else {
+                    // Fallback to html2canvas if direct extraction fails (unlikely with preserveDrawingBuffer: true)
+                    const canvasResult = await html2canvas(turbineRef.current, { backgroundColor: null });
+                    snapshotData = canvasResult.toDataURL('image/png');
+                }
+            } catch (e) {
+                console.error("Snapshot failed:", e);
+                showToast("Visual Evidence Capture Failed - Proceeding with Text Only", 'warning');
+            }
+        }
 
         // Use the first critical diagnostic or a default context
         const primaryInsight = diagnostics[0] || {
@@ -51,18 +79,27 @@ export const CommandCenter: React.FC = () => {
         // Generate Real PDF
         try {
             generateDiagnosticDossier(
-                'CASE-9021',
+                'CASE-' + Math.floor(Math.random() * 10000),
                 primaryInsight,
                 liveMetrics,
                 'Senior Engineer', // In real app, get from UserContext
-                null // Snapshot placeholder for now
+                snapshotData
             );
-            showToast('Hypothesis_Case_9021.pdf Downloaded successfully.', 'success');
+            showToast('Forensic Dossier Generated successfully.', 'success');
         } catch (e) {
             console.error(e);
             showToast('Failed to generate Dossier.', 'error');
         }
-    };
+    }, [diagnostics, liveMetrics, showToast]);
+
+    // LISTEN FOR SIDEBAR TRIGGER
+    React.useEffect(() => {
+        const handleTrigger = () => {
+            handleExportDossier();
+        };
+        window.addEventListener(TRIGGER_FORENSIC_EXPORT, handleTrigger);
+        return () => window.removeEventListener(TRIGGER_FORENSIC_EXPORT, handleTrigger);
+    }, [handleExportDossier]);
 
     // Calculate truth delta map
     const deltaMap = useMemo(() => {
@@ -214,6 +251,18 @@ export const CommandCenter: React.FC = () => {
                         </div>
                     </TacticalCard>
 
+                    {/* SHAFT ORBIT MONITOR */}
+                    <TacticalCard title="SHAFT ORBIT (X/Y)" status="nominal">
+                        <div className="flex justify-center p-2 bg-slate-900/40 rounded border border-white/5">
+                            <ShaftOrbitPlot
+                                vibrationX={2.4}
+                                vibrationY={2.1}
+                                size={140}
+                                deltaTemp={Math.abs(105 - 100)} // Mocking a 5 degree delta for visual
+                            />
+                        </div>
+                    </TacticalCard>
+
                     <TacticalCard title="RECENT HUMAN LOGS" status="nominal">
                         <div className="space-y-2">
                             {activeLogs.slice(0, 3).map((log) => (
@@ -239,6 +288,7 @@ export const CommandCenter: React.FC = () => {
                         <div className="relative h-full" style={{ transformStyle: 'preserve-3d' }}>
                             <div className="absolute inset-0" style={{ transform: 'rotateY(0deg)' }}>
                                 <TurbineRunner3D
+                                    ref={turbineRef}
                                     rpm={300}
                                     deltaMap={deltaMap}
                                     heatmapMode={true}

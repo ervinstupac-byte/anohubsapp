@@ -4,7 +4,7 @@ import { ROUTES } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronRight, Plus, Info, X, Globe, Activity as BrainCircuit, Upload, Play, Clock, Rewind, FastForward, CheckCircle, AlertTriangle, ArrowRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, X, Globe, Activity as BrainCircuit, Upload, Play, Clock, Rewind, FastForward, CheckCircle, AlertTriangle, ArrowRight, FileText } from 'lucide-react';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import { LanguageSelector } from '../LanguageSelector.tsx';
@@ -12,8 +12,11 @@ import { Sparkline } from '../ui/Sparkline';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
-import { IndustrialDataBridge } from '../../services/IndustrialDataBridge'; // Correct Import
+import { IndustrialDataBridge } from '../../services/IndustrialDataBridge';
 import { QrCode } from '../ui/QrCode';
+
+// GLOBAL EVENT FOR REMOTE TRIGGER
+export const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
 
 // --- FLEET SECTION COMPONENT ---
 interface FleetSectionProps {
@@ -398,6 +401,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        {/* QUICK ACTION: FORENSIC REPORT */}
+                        <div className="px-3 pt-2 pb-6">
+                            <button
+                                onClick={() => {
+                                    window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT));
+                                    if (window.innerWidth < 1024) onClose();
+                                }}
+                                className="w-full py-3 bg-red-950/30 hover:bg-red-900/40 border border-red-500/30 text-red-400 rounded flex items-center justify-center gap-2 group transition-all"
+                            >
+                                <div className="p-1 bg-red-500/10 rounded group-hover:bg-red-500/20">
+                                    <FileText className="w-4 h-4" />
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[10px] font-black uppercase tracking-wider">Generate 60s Forensic Report</span>
+                                    <span className="text-[8px] font-mono opacity-70">Capture Visuals + Logic Trace</span>
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>

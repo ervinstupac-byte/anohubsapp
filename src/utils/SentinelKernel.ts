@@ -37,7 +37,8 @@ export interface HeuristicPattern {
 
 export interface MatrixCondition {
     variableId: string;
-    operator: 'GREATER' | 'LESS' | 'TREND_MATCH' | 'VARIANCE_MATCH' | 'SLOPE_GREATER' | 'DYNAMIC_THRESHOLD';
+    operator: 'GREATER' | 'LESS' | 'TREND_MATCH' | 'VARIANCE_MATCH' | 'SLOPE_GREATER' | 'DYNAMIC_THRESHOLD' | 'DELTA_GREATER';
+    compareVariableId?: string; // For DELTA comparison
     threshold?: number;
     baselineId?: string; // Key to look up baseline in context
     sigmaMultiplier?: number; // e.g., 2.0 (Trigger if > Baseline + 2*Sigma)
@@ -87,6 +88,9 @@ export class SentinelKernel {
         }
         if (patternId === 'cavitation-complex') {
             return `Flow turbulence detected: Differential pressure in Draft Tube suggests vortex rope formation, transferring destructive energy to the Runner linkage.`;
+        }
+        if (patternId === 'shaft-misalignment') {
+            return `Differential thermal expansion detected (ΔT > 5°C). Asymmetric friction suggests shaft centerline deviation, risking coupling fatigue and seal degradation.`;
         }
         return `System deviation detected. Energy transformation efficiency is compromised with ${(probability * 100).toFixed(0)}% confidence.`;
     }
@@ -186,6 +190,18 @@ export class SentinelKernel {
                         if (currentValue > limit) {
                             isMatch = true;
                             triggerReason = `${cond.variableId} (${currentValue.toFixed(1)}) > Expected Baseline (${limit.toFixed(1)}) [${cond.sigmaMultiplier}σ]`;
+                        }
+                    }
+                }
+                // --- THE HORIZONTAL GUARDIAN: DELTA CHECK ---
+                else if (cond.operator === 'DELTA_GREATER' && cond.compareVariableId) {
+                    const compareHistory = sensorData[cond.compareVariableId];
+                    if (compareHistory && compareHistory.length > 0) {
+                        const compareValue = compareHistory[compareHistory.length - 1];
+                        const delta = Math.abs(currentValue - compareValue);
+                        if (delta > (cond.threshold || 0)) {
+                            isMatch = true;
+                            triggerReason = `Delta (${cond.variableId} vs ${cond.compareVariableId}) = ${delta.toFixed(1)} > ${cond.threshold}`;
                         }
                     }
                 }
@@ -331,6 +347,21 @@ export const SENTINEL_PATTERNS: HeuristicPattern[] = [
         actions: [
             { type: 'FOCUS_3D', label: 'Focus Guide Bearing', targetId: 'Mesh_GuideBearing_Pad3', icon: 'Box' },
             { type: 'OPEN_SOP', label: 'Active Cooling Reset', targetId: 'Francis_SOP_Cooling', icon: 'FileText' }
+        ]
+    },
+    {
+        id: 'shaft-misalignment',
+        name: 'Shaft Misalignment (Delta)',
+        description: 'Thermal asymmetry between T-Side and G-Side bearings.',
+        baseSeverity: 'HIGH',
+        slogan: 'Mechanical Drift: Shaft centerline deviation detected via thermal delta.',
+        conditions: [
+            { variableId: 'bearingTemp', operator: 'DELTA_GREATER', compareVariableId: 'generatorTemp', threshold: 5.0, weight: 0.6 },
+            { variableId: 'vibration', operator: 'TREND_MATCH', targetTrend: 'RISING', weight: 0.4 }
+        ],
+        actions: [
+            { type: 'FOCUS_3D', label: 'Inspect Coupling', targetId: 'Mesh_Shaft_Coupling', icon: 'Box' },
+            { type: 'OPEN_SOP', label: 'Alignment Protocol', targetId: 'Francis_SOP_Alignment', icon: 'FileText' }
         ]
     }
 ];

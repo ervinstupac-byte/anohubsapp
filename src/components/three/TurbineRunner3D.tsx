@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -226,7 +226,7 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
     );
 };
 
-export const TurbineRunner3D: React.FC<{
+export const TurbineRunner3D = forwardRef<HTMLDivElement, {
     rpm: number;
     className?: string;
     deltaMap?: TruthDeltaMap;
@@ -236,10 +236,10 @@ export const TurbineRunner3D: React.FC<{
     onSelect?: (id: string) => void;
     highlightId?: string | null;
     deltaIndex?: number;
-}> = ({ rpm, className, deltaMap, heatmapMode = false, ghostMode = false, baselineDelta, onSelect, highlightId, deltaIndex }) => {
+}>(({ rpm, className, deltaMap, heatmapMode = false, ghostMode = false, baselineDelta, onSelect, highlightId, deltaIndex }, ref) => {
     return (
-        <div className={className || "w-full h-full"}>
-            <Canvas gl={{ alpha: true, antialias: true }} dpr={[1, 2]}>
+        <div ref={ref} className={className || "w-full h-full"}>
+            <Canvas gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }} dpr={[1, 2]}>
                 <PerspectiveCamera makeDefault position={[8, 4, 8]} fov={50} />
                 <OrbitControls
                     enablePan={true}
@@ -270,4 +270,4 @@ export const TurbineRunner3D: React.FC<{
             </Canvas>
         </div>
     );
-};
+});

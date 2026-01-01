@@ -21,6 +21,7 @@
     "@types/three": "^0.160.0",
     "decimal.js": "^10.6.0",
     "framer-motion": "^12.23.26",
+    "html2canvas": "^1.4.1",
     "i18next": "^23.8.2",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
