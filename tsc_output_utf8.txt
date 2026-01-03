@@ -1,0 +1,2 @@
+﻿src/components/DataSyncBridge.tsx(25,29): error TS2532: Object is possibly 'undefined'.
+src/components/DataSyncBridge.tsx(25,83): error TS2532: Object is possibly 'undefined'.

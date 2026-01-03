@@ -1,0 +1,494 @@
+﻿--- Missing in bs.json (Keys from en.json) ---
+profile.loading: Loading Enterprise Profile...
+profile.changePhoto: CHANGE PHOTO
+profile.saving: Saving...
+riskAssessment.protocol: Diagnostic Protocol v2.0
+riskAssessment.initTitle: Initialize Diagnostics
+riskAssessment.standbyDesc: System is in standby. Please select a <strong class="text-cyan-400 font-bold">Target Asset</strong> above to begin the Execution Gap analysis.
+riverWildlife.title: Ecological Engineering
+riverWildlife.context: Applied Context:
+riverWildlife.subtitle: Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.
+riverWildlife.mandate: The Postulate of Ethics
+riverWildlife.mandateDesc: We do not just mitigate impact; we actively protect the ecosystem. <strong class="text-white font-bold block mt-1">Automatic E-Flow measurement is a core requirement of the Standard of Excellence.</strong>
+riverWildlife.sections.fish_passage.title: Fish Passage Technologies
+riverWildlife.sections.fish_passage.subtitle: Bio-Engineering for Migration
+riverWildlife.sections.fish_passage.intro: Modern technologies focus on safe, effective, and minimally stressful passage around dams to maintain biodiversity.
+riverWildlife.sections.fish_passage.ladders.title: Fish Ladders & Stairways
+riverWildlife.sections.fish_passage.ladders.desc: Pool-and-Weir or Denil channels with gradients (1:8 to 1:12) designed to guide fish without exhaustion.
+riverWildlife.sections.fish_passage.lifts.title: Fish Lifts & Elevators
+riverWildlife.sections.fish_passage.lifts.desc: Mechanical hoppers for high dams where ladders are impractical. Automated collection and release.
+riverWildlife.sections.fish_passage.bypass.title: Nature-Like Bypass
+riverWildlife.sections.fish_passage.bypass.desc: Man-made channels mimicking natural streams. The most ecologically effective, low-gradient solution.
+riverWildlife.sections.fish_passage.turbines.title: Fish-Friendly Turbines
+riverWildlife.sections.fish_passage.turbines.desc: Advanced designs (e.g. Alden) with fewer blades and wider gaps to reduce blade-strike mortality.
+riverWildlife.sections.sediment_management.title: Sediment & Erosion Control
+riverWildlife.sections.sediment_management.subtitle: Protecting Reservoir Capacity & Equipment
+riverWildlife.sections.sediment_management.intro: Dams trap sediment, reducing capacity and causing turbine abrasion. Proactive management is essential.
+riverWildlife.sections.sediment_management.bypass.title: Bypass Tunnels
+riverWildlife.sections.sediment_management.bypass.desc: Diverting sediment-laden water during floods.
+riverWildlife.sections.sediment_management.flushing.title: Flushing
+riverWildlife.sections.sediment_management.flushing.desc: Opening low-level outlets to clear accumulation.
+riverWildlife.sections.sediment_management.watershed.title: Watershed Mgmt
+riverWildlife.sections.sediment_management.watershed.desc: Reforestation to reduce inflow at source.
+riverWildlife.sections.sediment_management.vis.title: Visualization
+riverWildlife.sections.sediment_management.vis.l1: Bathymetric Surveys: Visualizing capacity loss.
+riverWildlife.sections.sediment_management.vis.l2: 3D Wear Scans: Quantifying runner material loss.
+riverWildlife.sections.sediment_management.rcfa.title: RCFA Critical: Diagnosis
+riverWildlife.sections.sediment_management.rcfa.abrasion: Abrasion (Symptom): Smooth, polished wear.
+riverWildlife.sections.sediment_management.rcfa.cavitation: Cavitation (Root Cause): Pitted, spongy surface.
+riverWildlife.sections.sediment_management.rcfa.quote: Treating abrasion without fixing cavitation leads to recurring failure.
+riverWildlife.sections.water_quality.title: Water Quality & E-Flow
+riverWildlife.sections.water_quality.subtitle: The Ethical Mandate
+riverWildlife.sections.water_quality.intro: Maintaining natural flow regimes, temperature, and oxygen levels for downstream habitats.
+riverWildlife.sections.water_quality.eflow.title: Environmental Flow (E-flow)
+riverWildlife.sections.water_quality.eflow.desc: The managed release of water to mimic natural variability.
+riverWildlife.sections.water_quality.eflow.mandate: Mandate: Automatic, continuous measurement and digital documentation is non-negotiable.
+riverWildlife.sections.water_quality.aerating.title: Aerating Turbines
+riverWildlife.sections.water_quality.aerating.desc: Venting turbines to increase dissolved oxygen levels.
+riverWildlife.sections.water_quality.withdrawal.title: Selective Withdrawal
+riverWildlife.sections.water_quality.withdrawal.desc: Multi-level intakes to manage water temperature.
+riverWildlife.sections.habitat_restoration.title: Habitat Restoration
+riverWildlife.sections.habitat_restoration.subtitle: Beyond Mitigation
+riverWildlife.sections.habitat_restoration.intro: Proactive measures to create a net positive environmental outcome.
+riverWildlife.sections.habitat_restoration.gravel.title: Gravel Augmentation
+riverWildlife.sections.habitat_restoration.gravel.desc: Placing clean gravels for fish spawning habitats.
+riverWildlife.sections.habitat_restoration.riparian.title: Riparian Zone
+riverWildlife.sections.habitat_restoration.riparian.desc: Re-planting native vegetation to stabilize banks and shade water.
+riverWildlife.sections.habitat_restoration.structures.title: In-stream Structures
+riverWildlife.sections.habitat_restoration.structures.desc: Boulders and logs creating complex flow habitats.
+standardOfExcellence.subtitle2: These principles are <span class="text-white font-bold">non-negotiable</span>.
+standardOfExcellence.masterclassSubtitle: Masterclass modules for moving from simple protocol compliance to systemic mastery.
+standardOfExcellence.principles.p1.title: The 0.05 mm/m Imperative
+standardOfExcellence.principles.p1.desc: Absolute alignment precision. Verticality and horizontality deviations exceeding 0.05 mm per meter constitute a critical non-conformity. No deviations accepted regardless of OEM allowances.
+standardOfExcellence.principles.p1.quote: "Precision is not an option; it is the baseline."
+standardOfExcellence.principles.p2.title: Zero "Run-to-Failure"
+standardOfExcellence.principles.p2.desc: Predictive maintenance is mandatory. Operating an asset until component failure is a violation of the Asset Stewardship Protocol. Sensors must be active and monitored.
+standardOfExcellence.principles.p2.quote: "We fix it before it breaks."
+standardOfExcellence.principles.p3.title: Data Integrity
+standardOfExcellence.principles.p3.desc: All operational data, logs, and risk assessments must be immutable and archived. concealing operational risks or "massaging" numbers is grounds for immediate contract termination.
+standardOfExcellence.principles.p3.quote: "Truth is the only safety net."
+standardOfExcellence.principles.p4.title: Ownership Maintenance
+standardOfExcellence.principles.p4.desc: Operators act as owners. Cleaning, tightening, and basic inspections are daily rituals, not scheduled chores. Visual inspections must be logged digitally.
+standardOfExcellence.principles.p4.quote: "If you operate it, you own it."
+standardOfExcellence.oath.title: Engineer's Oath
+standardOfExcellence.oath.desc: By activating this protocol, you bind your digital identity to these standards.
+standardOfExcellence.oath.identity: IDENTITY:
+standardOfExcellence.oath.date: DATE:
+standardOfExcellence.oath.status: STATUS:
+standardOfExcellence.oath.ratified: RATIFIED
+standardOfExcellence.oath.pending: PENDING
+standardOfExcellence.oath.btnCommit: I COMMIT TO EXCELLENCE
+standardOfExcellence.oath.btnActive: PROTOCOL ACTIVE
+standardOfExcellence.oath.sync: Synchronization with HR Database... OK
+standardOfExcellence.oath.toast: Protocol ratified by Engineer
+standardOfExcellence.poweredBy: POWERED BY
+turbineDetail.rev: System Specification ÔÇó Rev 2.4
+turbineDetail.badges.critical: CRITICAL
+turbineDetail.badges.attention: ATTENTION
+turbineDetail.badges.standard: STANDARD
+interventionCTA.label: ASSET INTERVENTION REQUIRED
+ui.select: Select
+ui.francis.title: Francis Turbine ÔÇó Fault Isolation
+ui.francis.subtitle: Enter current telemetry to validate against SOP limits (Ref: SOP-ROT-001).
+ui.francis.inputs.bearingTemp: Bearing Temperature (┬░C)
+ui.francis.inputs.vibration: Vibration (mm/s)
+ui.francis.inputs.silt: Silt Concentration (ppm)
+ui.francis.inputs.gridFreq: Grid Frequency (Hz)
+ui.francis.inputs.nominalTemp: Nominal: < 60┬░C
+ui.francis.inputs.nominalVib: Nominal: < 2.5 mm/s
+ui.francis.inputs.nominalSilt: Nominal: < 3000 ppm
+ui.francis.inputs.nominalFreq: Nominal: 50.00 Hz ┬▒ 1%
+ui.francis.actions.run: RUN DIAGNOSTICS
+ui.francis.actions.back: Back to Toolbox
+ui.francis.status.normal: All Parameters Nominal
+ui.francis.status.normalDesc: System operating within design limits.
+ui.toolbox.zeroState.title: System Standby
+ui.toolbox.zeroState.noAssets: No Active Assets Detected
+ui.toolbox.zeroState.initialize: Initialize First Asset
+ui.toolbox.greeting.morning: Good Morning
+ui.toolbox.greeting.afternoon: Good Afternoon
+ui.toolbox.greeting.evening: Good Evening
+ui.toolbox.engineer: Engineer
+ui.toolbox.systemOperational: System Operational
+ui.toolbox.assetsOnline: Assets Online
+ui.toolbox.activeAsset: Active: {{name}}
+ui.toolbox.passport: Passport
+ui.toolbox.addAsset: Add Asset
+ui.toolbox.sections.utilities: Engineering Utilities
+ui.toolbox.sections.designAnalysis: Design & Analysis
+ui.toolbox.sections.operationalModules: Operational Modules
+ui.toolbox.sections.recentActivity: Recent Activity
+ui.toolbox.activity.none: No recent activity.
+ui.toolbox.activity.open: Open Logbook
+ui.toolbox.activity.view: View Logbook
+ui.toolbox.toast.generatingPassport: Generating Passport for {{asset}}...
+ui.emergency.activeProtocol: ACTIVE EMERGENCY PROTOCOL
+ui.emergency.protocols.vibration_excess.0: Immediate load rejection across all units.
+ui.emergency.protocols.vibration_excess.1: Disengage primary guide bearings for inspection.
+ui.emergency.protocols.vibration_excess.2: Perform laser alignment audit of main shaft.
+ui.emergency.protocols.vibration_excess.3: Deploy vibration dampening countermeasures.
+ui.emergency.protocols.bearing_overheat.0: Forced shutdown of affected turbine unit.
+ui.emergency.protocols.bearing_overheat.1: Verify cooling system flow and pressure.
+ui.emergency.protocols.bearing_overheat.2: Analyze oil lubrication for contamination.
+ui.emergency.protocols.bearing_overheat.3: Initiate backup thermal heat exchangers.
+ui.emergency.protocols.default.0: Initiate general emergency shutdown.
+ui.emergency.protocols.default.1: Notify regional maintenance center.
+ui.pdf.passport.title: Engineering Dossier
+ui.pdf.passport.generated: Generated
+ui.pdf.passport.id: ID
+ui.pdf.passport.assetIdentity: Asset Identity
+ui.pdf.passport.assetName: Asset Name
+ui.pdf.passport.type: Type
+ui.pdf.passport.location: Location
+ui.pdf.passport.capacity: Capacity
+ui.pdf.passport.status: Status
+ui.pdf.passport.technicalSpecs: Technical Specifications
+ui.pdf.passport.noSpecs: No specific technical parameters recorded.
+ui.pdf.passport.page: Page
+ui.pdf.passport.maintenanceLog: Maintenance History Log
+ui.pdf.passport.date: Date
+ui.pdf.passport.category: Category
+ui.pdf.passport.action: Action / Summary
+ui.pdf.passport.user: User
+ui.pdf.passport.noMaintenance: No maintenance history recorded for this asset.
+ui.engines.pelton.idealNsq: + Ideal low specific speed ({{n_sq}})
+ui.engines.pelton.highNsq: + High specific speed for Pelton (requires multi-jet)
+ui.engines.pelton.highHead: + High head provides optimal kinetic energy
+ui.engines.pelton.lowPressure: - Insufficient pressure for impulse design
+ui.engines.pelton.silt: + Ease of bucket replacement handles silt better
+ui.engines.francis.optimalNsq: + Optimal specific speed for Francis ({{n_sq}})
+ui.engines.francis.mediumHead: + Head is within standard medium-head range
+ui.engines.francis.fixedBlade: - Fixed blade geometry less efficient for flow variations
+ui.engines.francis.siltErosion: - Submerged runner susceptible to silt erosion
+ui.engines.kaplan.highNsq: + High specific speed detected ({{n_sq}})
+ui.engines.kaplan.lowHead: + Ideal for low head applications
+ui.engines.kaplan.headExceeded: - Head exceeds optimal Kaplan range
+ui.engines.kaplan.variableFlow: + Double regulation handles variable flow efficiently
+ui.engines.crossflow.runOfRiver: + High efficiency for small-scale run-of-river
+ui.engines.crossflow.selfCleaning: + Self-cleaning runner handles debris and silt well
+ui.resetData: Reset Demo Data
+ui.resetDataDesc: Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.
+ui.resetDataConfirm: Reset all demo data? This will clear localStorage and reload the page.
+ui.executive.subtitle: Executive Engineering interface // v1.0.5 UNIFIED
+ui.executive.status.scadaActive: Neural Link Active
+ui.executive.actions.downloadBrief: DOWNLOAD BRIEF
+ui.executive.twin.label: TWIN
+ui.executive.twin.topology: Live Asset Topology
+ui.executive.sensors.activePower: Active Power
+ui.executive.sensors.gridFrequency: Grid Frequency
+ui.executive.kpi.unitHealth: Unit Health
+ui.executive.kpi.financialRisk: Financial Risk
+ui.executive.kpi.projectedLoss: Projected Loss (30d)
+ui.executive.ai.title: Dr. Turbine AI
+ui.executive.ai.analyzing: Dr. Turbine analyzing hydraulic signatures...
+ui.executive.ai.nominal.title: ALL SYSTEMS NOMINAL
+ui.executive.ai.nominal.desc: Hydraulic parameters within optimal range.
+ui.executive.ai.nominal.details: Cavitation risk: LOW ÔÇó Bearing temp: NORMAL ÔÇó Vibration: ACCEPTABLE
+ui.executive.ai.physicsAnalysis: PHYSICS ANALYSIS:
+ui.executive.ai.gridRisk: Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at {{freq}}Hz.
+ui.executive.ai.cavitationRisk: Flow: {{flow}} m┬│/s, Head: {{head}}m exceeds cavitation threshold. Runner clearance may be insufficient.
+ui.executive.ai.acceptable: System parameters within acceptable range. Monitoring continues.
+ui.executive.control.emergencyProtocols: Emergency Protocols
+ui.executive.control.scramButton: ­ƒÜ¿ SCRAM UNIT ­ƒÜ¿
+ui.executive.control.scramConfirm: INITIATE EMERGENCY SCRAM? This will trip the turbine and may cause downtime.
+ui.executive.control.safetyDisengaged: SAFETY LOCK DISENGAGED
+ui.executive.control.scadaControls: Twin Analytics
+ui.executive.control.flowRate: Flow Rate (m┬│/s)
+ui.executive.control.head: Head (m)
+ui.executive.control.gridFrequencyInput: Grid Frequency (Hz)
+ui.executive.control.criticalFreq: ÔÜá´©Å CRITICAL FREQUENCY DETECTED
+ui.executive.silhouette.bearingTemp: BEARING TEMP
+ui.executive.silhouette.vibration: VIBRATION
+ui.executive.silhouette.gridFreq: GRID FREQ
+ui.executive.silhouette.healthScore: HEALTH SCORE
+ui.executive.silhouette.criticalAlarms: ­ƒÜ¿ CRITICAL ALARMS
+report.title: Diagnostic Forensic Dossier
+report.status: System Status
+report.proof: IEC 60041 Math Proof (The Golden Thread)
+report.generated_by: Generated by AnoHUB NC-4.2 Neural Core
+report.hoopStress: Tangential Stress
+report.pressureForce: Pressure Force
+francis.waterHammer.title: Water Hammer Surge Analysis
+francis.waterHammer.subtitle: IEC 60041 Standard Pressure Transient Calculation
+francis.waterHammer.return: ÔåÉ Return to Hydraulics Dashboard
+francis.waterHammer.sec1Title: Wave Speed & Physics
+francis.waterHammer.sec1Desc: Elasticity of penstock and water compressibility determine wave propagation speed (a).
+francis.waterHammer.phase1Title: Pressure Phase
+francis.waterHammer.phase1Val: Reflection Time (2L/a)
+francis.waterHammer.phase2Title: Wave Speed
+francis.waterHammer.phase2Val: Speed of Sound in Penstock
+francis.waterHammer.tripLimit: Trip Limit
+francis.waterHammer.tripVal: 150% Nominal
+francis.waterHammer.sec2Title: Real-time Surge Monitor
+francis.waterHammer.nomHead: Design Head
+francis.waterHammer.maxSurge: Max Surge Head
+francis.waterHammer.sec2Note: Calculation uses Joukowsky's equation for sudden rejection.
+francis.waterHammer.sec3Title: Control Valve Status
+francis.waterHammer.sec3Desc: Synchronized closure between Guide Vane and MIV.
+francis.waterHammer.valveStatus: Solenoid: ENERGIZED
+francis.waterHammer.sec4Title: Structural Integrity Link
+francis.waterHammer.sec4Desc: Surge pressure compared against hoop stress of steel grade S235JR.
+francis.waterHammer.criticalSafety: CRITICAL SAFETY
+francis.waterHammer.open100: 100% OPEN
+francis.waterHammer.closed0: 0% CLOSED
+francis.waterHammer.fastPhase: Fast Phase
+francis.waterHammer.cushionPhase: Cushion Phase
+
+--- Missing in en.json (Keys from bs.json) ---
+profile_legacy.loading: U─ìitavanje Enterprise Profila...
+profile_legacy.title: In┼¥enjerski Profil
+profile_legacy.subtitle: Upravljajte svojim identitetom i AnoHub akreditivima.
+profile_legacy.changePhoto: PROMIJENI SLIKU
+profile_legacy.unassignedRole: Nedodijeljena Uloga
+profile_legacy.fullName: Puno Ime
+profile_legacy.role: Uloga / Titula
+profile_legacy.rolePlaceholder: npr. Vi┼íi Ma┼íinski In┼¥enjer
+profile_legacy.fullNamePlaceholder: npr. John Doe
+profile_legacy.company: Kompanija / Organizacija
+profile_legacy.companyPlaceholder: npr. AnoHub Enterprise Rje┼íenja
+profile_legacy.saveButton: Spremi Promjene Profila
+profile_legacy.saving: Spremanje...
+profile_legacy.uploadError: Morate odabrati sliku za slanje.
+profile_legacy.updateSuccess: Profil uspje┼íno a┼¥uriran!
+profile_legacy.avatarSuccess: Avatar postavljen!
+profile_legacy.noUser: Korisnik nije prijavljen!
+profile_legacy.back: Nazad na Kontrolnu Plo─ìu
+revitalization.riskAssessment.protocol: Dijagnosti─ìki Protokol v2.0
+revitalization.riskAssessment.initTitle: Inicijaliziraj Dijagnostiku
+revitalization.riskAssessment.standbyDesc: Sistem je u stanju pripravnosti. Molimo odaberite <strong class="text-cyan-400 font-bold">Ciljnu Imovinu</strong> iznad za po─ìetak analize Jaza u Izvr┼íenju.
+revitalization.riverWildlife.title: Ekolo┼íki In┼¥enjering
+revitalization.riverWildlife.context: Primijenjeni Kontekst:
+revitalization.riverWildlife.subtitle: Tehnologije o kojima se ne pregovara ispunjavaju eti─ìki mandat za Za┼ítitu Ekosistema.
+revitalization.riverWildlife.mandate: Postulat Etike
+revitalization.riverWildlife.mandateDesc: Mi ne ubla┼¥avamo samo uticaj; mi aktivno ┼ítitimo ekosistem. <strong class="text-white font-bold block mt-1">Automatsko mjerenje E-Protoka je osnovni zahtjev Standarda Izvrsnosti.</strong>
+revitalization.riverWildlife.sections.fish_passage.title: Tehnologije Ribljih Staza
+revitalization.riverWildlife.sections.fish_passage.subtitle: Bio-In┼¥enjering za Migraciju
+revitalization.riverWildlife.sections.fish_passage.intro: Moderne tehnologije fokusiraju se na siguran, efikasan i minimalno stresan prolaz oko brana radi o─ìuvanja biodiverziteta.
+revitalization.riverWildlife.sections.fish_passage.ladders.title: Riblje Ljestve i Stepeni┼íta
+revitalization.riverWildlife.sections.fish_passage.ladders.desc: Kanali tipa Pool-and-Weir ili Denil sa nagibima (1:8 do 1:12) dizajnirani da vode ribe bez iscrpljivanja.
+revitalization.riverWildlife.sections.fish_passage.lifts.title: Riblji Liftovi i Elevatori
+revitalization.riverWildlife.sections.fish_passage.lifts.desc: Mehani─ìki spremnici za visoke brane gdje su ljestve neprakti─ìne. Automatizovano prikupljanje i pu┼ítanje.
+revitalization.riverWildlife.sections.fish_passage.bypass.title: Prirolika Obilaznica
+revitalization.riverWildlife.sections.fish_passage.bypass.desc: Vje┼íta─ìki kanali koji opona┼íaju prirodne potoke. Ekolo┼íki najefikasnije rje┼íenje sa malim nagibom.
+revitalization.riverWildlife.sections.fish_passage.turbines.title: Riblje-Prijateljske Turbine
+revitalization.riverWildlife.sections.fish_passage.turbines.desc: Napredni dizajni (npr. Alden) sa manje lopatica i ┼íirim razmacima za smanjenje smrtnosti od udara lopatica.
+revitalization.riverWildlife.sections.sediment_management.title: Upravljanje Sedimentom i Erozijom
+revitalization.riverWildlife.sections.sediment_management.subtitle: Za┼ítita Kapaciteta Rezervoara i Opreme
+revitalization.riverWildlife.sections.sediment_management.intro: Brane zarobljavaju sediment, smanjuju─çi kapacitet i uzrokuju─çi abraziju turbina. Proaktivno upravljanje je klju─ìno.
+revitalization.riverWildlife.sections.sediment_management.bypass.title: Obilazni Tuneli
+revitalization.riverWildlife.sections.sediment_management.bypass.desc: Preusmjeravanje vode pune sedimenta tokom poplava.
+revitalization.riverWildlife.sections.sediment_management.flushing.title: Ispiranje
+revitalization.riverWildlife.sections.sediment_management.flushing.desc: Otvaranje niskih ispusta za ─ìi┼í─çenje nakupljanja.
+revitalization.riverWildlife.sections.sediment_management.watershed.title: Upravljanje Slivom
+revitalization.riverWildlife.sections.sediment_management.watershed.desc: Po┼íumljavanje radi smanjenja dotoka na izvoru.
+revitalization.riverWildlife.sections.sediment_management.vis.title: Vizualizacija
+revitalization.riverWildlife.sections.sediment_management.vis.l1: Batimetrijska Snimanja: Vizualizacija gubitka kapaciteta.
+revitalization.riverWildlife.sections.sediment_management.vis.l2: 3D Skeniranje Habanja: Kvantificiranje gubitka materijala radnog kola.
+revitalization.riverWildlife.sections.sediment_management.rcfa.title: RCFA Kriti─ìno: Dijagnoza
+revitalization.riverWildlife.sections.sediment_management.rcfa.abrasion: Abrazija (Simptom): Glatko, polirano habanje.
+revitalization.riverWildlife.sections.sediment_management.rcfa.cavitation: Kavitacija (Osnovni Uzrok): Jami─ìasta, spu┼¥vasta povr┼íina.
+revitalization.riverWildlife.sections.sediment_management.rcfa.quote: Tretiranje abrazije bez rje┼íavanja kavitacije vodi do ponovnog kvara.
+revitalization.riverWildlife.sections.water_quality.title: Kvalitet Vode i E-Protok
+revitalization.riverWildlife.sections.water_quality.subtitle: Eti─ìki Mandat
+revitalization.riverWildlife.sections.water_quality.intro: Odr┼¥avanje prirodnih re┼¥ima toka, temperature i nivoa kiseonika za stani┼íta nizvodno.
+revitalization.riverWildlife.sections.water_quality.eflow.title: Ekolo┼íki Protok (E-tok)
+revitalization.riverWildlife.sections.water_quality.eflow.desc: Upravljano ispu┼ítanje vode radi opona┼íanja prirodne varijabilnosti.
+revitalization.riverWildlife.sections.water_quality.eflow.mandate: Mandat: Automatsko, kontinuirano mjerenje i digitalna dokumentacija se ne pregovaraju.
+revitalization.riverWildlife.sections.water_quality.aerating.title: Aeriraju─çe Turbine
+revitalization.riverWildlife.sections.water_quality.aerating.desc: Prozra─ìivanje turbina radi pove─çanja nivoa rastvorenog kiseonika.
+revitalization.riverWildlife.sections.water_quality.withdrawal.title: Selektivno Zahvatanje
+revitalization.riverWildlife.sections.water_quality.withdrawal.desc: Ulazi na vi┼íe nivoa za upravljanje temperaturom vode.
+revitalization.riverWildlife.sections.habitat_restoration.title: Restauracija Stani┼íta
+revitalization.riverWildlife.sections.habitat_restoration.subtitle: Vi┼íe od Ubla┼¥avanja
+revitalization.riverWildlife.sections.habitat_restoration.intro: Proaktivne mjere za stvaranje neto pozitivnog ekolo┼íkog ishoda.
+revitalization.riverWildlife.sections.habitat_restoration.gravel.title: Dodavanje ┼áljunka
+revitalization.riverWildlife.sections.habitat_restoration.gravel.desc: Postavljanje ─ìistog ┼íljunka za mrijestili┼íta riba.
+revitalization.riverWildlife.sections.habitat_restoration.riparian.title: Obalna Zona
+revitalization.riverWildlife.sections.habitat_restoration.riparian.desc: Ponovna sadnja autohtone vegetacije za stabilizaciju obala i zasjenjivanje vode.
+revitalization.riverWildlife.sections.habitat_restoration.structures.title: Strukture u Toku
+revitalization.riverWildlife.sections.habitat_restoration.structures.desc: Stijene i debla koja stvaraju slo┼¥ena stani┼íta toka.
+revitalization.standardOfExcellence.title: Standard Izvrsnosti
+revitalization.standardOfExcellence.subtitle: Defini┼íu─çi ustav AnoHUB operacija.
+revitalization.standardOfExcellence.subtitle2: Ovi principi su <span class="text-white font-bold">nenagodivi</span>.
+revitalization.standardOfExcellence.principles.p1.title: Imperativ 0.05 mm/m
+revitalization.standardOfExcellence.principles.p1.desc: Apsolutna preciznost poravnanja. Odstupanja vertikalnosti i horizontalnosti ve─ça od 0.05 mm po metru predstavljaju kriti─ìnu neusagla┼íenost. Odstupanja se ne prihvataju bez obzira na dozvole OEM-a.
+revitalization.standardOfExcellence.principles.p1.quote: "Preciznost nije opcija; to je osnova."
+revitalization.standardOfExcellence.principles.p2.title: Nula "Vozi-do-Kvara"
+revitalization.standardOfExcellence.principles.p2.desc: Prediktivno odr┼¥avanje je obavezno. Rad imovine do kvara komponente je kr┼íenje Protokola o Upravljanju Imovinom. Senzori moraju biti aktivni i pra─çeni.
+revitalization.standardOfExcellence.principles.p2.quote: "Popravljamo prije nego ┼íto se pokvari."
+revitalization.standardOfExcellence.principles.p3.title: Integritet Podataka
+revitalization.standardOfExcellence.principles.p3.desc: Svi operativni podaci, zapisi i procjene rizika moraju biti nepromjenjivi i arhivirani. Prikrivanje operativnih rizika ili "friziranje" brojeva je osnova za trenutni raskid ugovora.
+revitalization.standardOfExcellence.principles.p3.quote: "Istina je jedina sigurnosna mre┼¥a."
+revitalization.standardOfExcellence.principles.p4.title: Vlasni─ìko Odr┼¥avanje
+revitalization.standardOfExcellence.principles.p4.desc: Operateri djeluju kao vlasnici. ─îi┼í─çenje, pritezanje i osnovne inspekcije su dnevni rituali, ne zakazani poslovi. Vizuelne inspekcije moraju biti digitalno evidentirane.
+revitalization.standardOfExcellence.principles.p4.quote: "Ako upravlja┼í time, posjeduje┼í to."
+revitalization.standardOfExcellence.oath.title: Zakletva In┼¥enjera
+revitalization.standardOfExcellence.oath.desc: Aktivacijom ovog protokola, ve┼¥ete svoj digitalni identitet za ove standarde.
+revitalization.standardOfExcellence.oath.identity: IDENTITET:
+revitalization.standardOfExcellence.oath.date: DATUM:
+revitalization.standardOfExcellence.oath.status: STATUS:
+revitalization.standardOfExcellence.oath.ratified: RATIFICIRANO
+revitalization.standardOfExcellence.oath.pending: NA ─îEKANJU
+revitalization.standardOfExcellence.oath.btnCommit: POSVE─åUJEM SE IZVRSNOSTI
+revitalization.standardOfExcellence.oath.btnActive: PROTOKOL AKTIVAN
+revitalization.standardOfExcellence.oath.sync: Sinhronizacija sa HR Bazom... OK
+revitalization.standardOfExcellence.oath.toast: Protokol ratificiran od strane in┼¥enjera
+revitalization.standardOfExcellence.poweredBy: POKRE─åE
+revitalization.turbineDetail.notFoundTitle: Konfiguracija nije prona─æena
+revitalization.turbineDetail.notFoundDesc: Nema tehni─ìkih podataka za ID sredstva:
+revitalization.turbineDetail.returnButton: Povratak na Nadzornu Plo─ìu
+revitalization.turbineDetail.specification: Specifikacija
+revitalization.turbineDetail.subtitle: Tehni─ìka analiza kriti─ìnih podsistema i na─ìina kvara.
+revitalization.turbineDetail.mechanicalSystems: Mehani─ìki Sistemi
+revitalization.turbineDetail.rotatingParts: Rotiraju─çi Sklop i Le┼¥ajevi
+revitalization.turbineDetail.electricalComponents: Elektri─ìne Komponente
+revitalization.turbineDetail.generatorControl: Generator i Kontrolni Sistemi
+revitalization.turbineDetail.criticalityNote: PROCJENA KRITI─îNOSTI NA OSNOVU RCFA HISTORIJSKIH PODATAKA
+revitalization.turbineDetail.rev: Sistemska Specifikacija ÔÇó Rev 2.4
+revitalization.turbineDetail.badges.critical: KRITI─îNO
+revitalization.turbineDetail.badges.attention: PA┼¢NJA
+revitalization.turbineDetail.badges.standard: STANDARD
+revitalization.interventionCTA.label: POTREBNA INTERVENCIJA NA SREDSTVU
+revitalization.ui.select: Odaberi
+francis_dashboard.title: Francis Turbina ÔÇó Izolacija Kvara
+francis_dashboard.subtitle: Unesite trenutnu telemetriju za validaciju prema SOP limitima (Ref: SOP-ROT-001).
+francis_dashboard.inputs.bearingTemp: Temperatura Le┼¥aja (┬░C)
+francis_dashboard.inputs.vibration: Vibracija (mm/s)
+francis_dashboard.inputs.silt: Koncentracija Mulja (ppm)
+francis_dashboard.inputs.gridFreq: Mre┼¥na Frekvencija (Hz)
+francis_dashboard.inputs.nominalTemp: Nominalno: < 60┬░C
+francis_dashboard.inputs.nominalVib: Nominalno: < 2.5 mm/s
+francis_dashboard.inputs.nominalSilt: Nominalno: < 3000 ppm
+francis_dashboard.inputs.nominalFreq: Nominalno: 50.00 Hz ┬▒ 1%
+francis_dashboard.actions.run: POKRENI DIJAGNOSTIKU
+francis_dashboard.actions.back: Nazad na Alate
+francis_dashboard.status.normal: Svi Parametri Nominalni
+francis_dashboard.status.normalDesc: Sistem radi unutar dizajnerskih granica.
+emergency.activeProtocol: AKTIVNI HITNI PROTOKOL
+emergency.protocols.vibration_excess.0: Hitno odbacivanje tereta na svim jedinicama.
+emergency.protocols.vibration_excess.1: Odvojiti primarne vode─çe le┼¥ajeve za inspekciju.
+emergency.protocols.vibration_excess.2: Izvr┼íiti lasersku reviziju poravnanja vratila.
+emergency.protocols.vibration_excess.3: Aktivirati protumjere za prigu┼íivanje vibracija.
+emergency.protocols.bearing_overheat.0: Prisilno isklju─ìenje zahva─çene turbinske jedinice.
+emergency.protocols.bearing_overheat.1: Provjeriti protok i pritisak sistema za hla─æenje.
+emergency.protocols.bearing_overheat.2: Analizirati ulje za podmazivanje na kontaminaciju.
+emergency.protocols.bearing_overheat.3: Pokrenuti rezervne izmjenjiva─ìe toplote.
+emergency.protocols.default.0: Pokrenuti op┼íti hitni isklju─ìni niz.
+emergency.protocols.default.1: Obavijestiti regionalni centar za odr┼¥avanje.
+pdf.passport.title: Paso┼í Agregata
+pdf.passport.generated: Generisano
+pdf.passport.id: ID
+pdf.passport.assetIdentity: Identitet Elektrane
+pdf.passport.assetName: Naziv Elektrane
+pdf.passport.type: Tip
+pdf.passport.location: Lokacija
+pdf.passport.capacity: Kapacitet
+pdf.passport.status: Status
+pdf.passport.technicalSpecs: Tehni─ìke Specifikacije
+pdf.passport.noSpecs: Nisu zabilje┼¥eni specifi─ìni tehni─ìki parametri.
+pdf.passport.page: Stranica
+pdf.passport.maintenanceLog: Dnevnik Historije Odr┼¥avanja
+pdf.passport.date: Datum
+pdf.passport.category: Kategorija
+pdf.passport.action: Akcija / Sa┼¥etak
+pdf.passport.user: Korisnik
+pdf.passport.noMaintenance: Nema zabilje┼¥ene historije odr┼¥avanja za ovu elektranu.
+engines.pelton.idealNsq: + Idealan nizak specifi─ìni broj okretaja ({{n_sq}})
+engines.pelton.highNsq: + Visok specifi─ìni broj okretaja za Pelton (zahtijeva vi┼íe mlazova)
+engines.pelton.highHead: + Visok pad pru┼¥a optimalnu kineti─ìku energiju
+engines.pelton.lowPressure: - Nedovoljan pritisak za impulsni dizajn
+engines.pelton.silt: + Laka zamjena posuda bolje podnosi mulj
+engines.francis.optimalNsq: + Optimalan specifi─ìni broj okretaja za Francis ({{n_sq}})
+engines.francis.mediumHead: + Pad je unutar standardnog srednjeg raspona
+engines.francis.fixedBlade: - Fiksna geometrija lopatica manje efikasna za varijabilni protok
+engines.francis.siltErosion: - Potopljeno kolo podlo┼¥no eroziji muljem
+engines.kaplan.highNsq: + Detektovan visok specifi─ìni broj okretaja ({{n_sq}})
+engines.kaplan.lowHead: + Idealno za primjene sa niskim padom
+engines.kaplan.headExceeded: - Pad prelazi optimalni Kaplan raspon
+engines.kaplan.variableFlow: + Dvostruka regulacija efikasno upravlja varijabilnim protokom
+engines.crossflow.runOfRiver: + Visoka efikasnost za male proto─ìne elektrane
+engines.crossflow.selfCleaning: + Samo─ìiste─çe kolo dobro podnosi krhotine i mulj
+profile.guestSaveWarning: Gostuju─çi profili se ne mogu sa─ìuvati
+profile.guestUploadWarning: Gostuju─çi profili ne mogu slati avatare
+profile.developerTools: Razvojni Alati
+profile.resetData: Resetuj Demo Podatke
+profile.resetDataDesc: Resetuj demo podatke da vrati┼í podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo ─çe ponovo u─ìitati aplikaciju.
+profile.resetDataConfirm: Resetovati sve demo podatke? Ovo ─çe o─ìistiti localStorage i ponovo u─ìitati stranicu.
+executive.subtitle: Izvr┼íni In┼¥enjerski Interfejs // v1.0.5 UNIFIED
+executive.status.scadaActive: Neuralna Veza Aktivna
+executive.actions.downloadBrief: PREUZMI IZVJE┼áTAJ
+executive.twin.label: BLIZANAC
+executive.twin.topology: Topologija Imovine U┼¥ivo
+executive.sensors.activePower: Aktivna Snaga
+executive.sensors.gridFrequency: Mre┼¥na Frekvencija
+executive.kpi.unitHealth: Zdravlje Jedinice
+executive.kpi.financialRisk: Finansijski Rizik
+executive.kpi.projectedLoss: Predvi─æeni Gubitak (30d)
+executive.ai.title: Dr. Turbina AI
+executive.ai.analyzing: Dr. Turbina analizira hidrauli─ìke potpise...
+executive.ai.nominal.title: SVI SISTEMI NOMINALNI
+executive.ai.nominal.desc: Hidrauli─ìki parametri unutar optimalnog opsega.
+executive.ai.nominal.details: Rizik od kavitacije: NIZAK ÔÇó Temp. le┼¥aja: NORMALNA ÔÇó Vibracije: PRIHVATLJIVE
+executive.ai.physicsAnalysis: FIZI─îKA ANALIZA:
+executive.ai.gridRisk: Odstupanje frekvencije >5% ukazuje na potencijalno odvajanje generatora. Rizik od mehani─ìke rezonance na {{freq}}Hz.
+executive.ai.cavitationRisk: Protok: {{flow}} m┬│/s, Pad: {{head}}m prelazi prag kavitacije. Zazor rotora mo┼¥e biti nedovoljan.
+executive.ai.acceptable: Sistemski parametri unutar prihvatljivog opsega. Pra─çenje se nastavlja.
+executive.control.emergencyProtocols: Protokoli za Hitne Slu─ìajeve
+executive.control.scramButton: ­ƒÜ¿ HITNO ZAUSTAVLJANJE ­ƒÜ¿
+executive.control.scramConfirm: POKRENUTI HITNO ZAUSTAVLJANJE? Ovo ─çe isklju─ìiti turbinu i mo┼¥e uzrokovati zastoje.
+executive.control.safetyDisengaged: SIGURNOSNA BRAVA ISKLJU─îENA
+executive.control.scadaControls: Analitika Blizanca
+executive.control.flowRate: Protok (m┬│/s)
+executive.control.head: Pad (m)
+executive.control.gridFrequencyInput: Mre┼¥na Frekvencija (Hz)
+executive.control.criticalFreq: ÔÜá´©Å DETEKTOVANA KRITI─îNA FREKVENCIJA
+executive.silhouette.bearingTemp: TEMP. LE┼¢AJA
+executive.silhouette.vibration: VIBRACIJE
+executive.silhouette.gridFreq: MRE┼¢NA FREQ
+executive.silhouette.healthScore: OCJENA ZDRAVLJA
+executive.silhouette.criticalAlarms: ­ƒÜ¿ KRITI─îNI ALARMI
+francis.oilHealth.waterHammer.title: Analiza Hidrauli─ìkog Udara
+francis.oilHealth.waterHammer.subtitle: Prora─ìun Prijelaznog Pritiska prema IEC 60041 Standardu
+francis.oilHealth.waterHammer.return: ÔåÉ Povratak na Kontrolnu Tablu Hidraulike
+francis.oilHealth.waterHammer.sec1Title: Brzina Talasa i Fizika
+francis.oilHealth.waterHammer.sec1Desc: Elasti─ìnost cjevovoda i sti┼íljivost vode odre─æuju brzinu propagacije talasa (a).
+francis.oilHealth.waterHammer.phase1Title: Vrijeme Pritiska
+francis.oilHealth.waterHammer.phase1Val: Vrijeme Refleksije (2L/a)
+francis.oilHealth.waterHammer.phase2Title: Brzina Talasa
+francis.oilHealth.waterHammer.phase2Val: Brzina Zvuka u Cjevovodu
+francis.oilHealth.waterHammer.tripLimit: Granica Ispada
+francis.oilHealth.waterHammer.tripVal: 150% Nominalnog
+francis.oilHealth.waterHammer.sec2Title: Monitor Udara u Realnom Vremenu
+francis.oilHealth.waterHammer.nomHead: Projektni Pad
+francis.oilHealth.waterHammer.maxSurge: Maksimalni Pritisak Udara
+francis.oilHealth.waterHammer.sec2Note: Prora─ìun koristi ┼¢ukovskijevu jedna─ìinu za naglo rastere─çenje.
+francis.oilHealth.waterHammer.sec3Title: Status Kontrolnog Ventila
+francis.oilHealth.waterHammer.sec3Desc: Sinhronizovano zatvaranje izme─æu sprovodnog aparata i MIV-a.
+francis.oilHealth.waterHammer.valveStatus: Solenoid: POD NAPONOM
+francis.oilHealth.waterHammer.sec4Title: Veza sa Strukturnim Integritetom
+francis.oilHealth.waterHammer.sec4Desc: Pritisak udara upore─æen sa naponom u zidu cijevi za ─ìelik razreda S235JR.
+francis.oilHealth.waterHammer.criticalSafety: KRITI─îNA SIGURNOST
+francis.oilHealth.waterHammer.open100: 100% OTVORENO
+francis.oilHealth.waterHammer.closed0: 0% ZATVORENO
+francis.oilHealth.waterHammer.fastPhase: Brza Faza
+francis.oilHealth.waterHammer.cushionPhase: Faza Prigu┼íenja
+francis.toolbox.greeting.morning: Dobro jutro
+francis.toolbox.greeting.afternoon: Dobar dan
+francis.toolbox.greeting.evening: Dobro ve─ìe
+francis.toolbox.engineer: In┼¥enjer
+francis.toolbox.systemOperational: Sistem Operativan
+francis.toolbox.assetsOnline: Agregati Online
+francis.toolbox.activeAsset: Aktivni Kontekst: {{name}}
+francis.toolbox.sections.utilities: In┼¥enjerski Alati
+francis.toolbox.sections.designAnalysis: Dizajn i Analiza
+francis.toolbox.sections.operationalModules: Operativni Moduli
+francis.toolbox.sections.recentActivity: Nedavna Aktivnost
+francis.toolbox.activity.none: Nema nedavnih logova.
+francis.toolbox.activity.open: Otvori Dnevnik
+francis.toolbox.activity.view: Pregledaj Svu Aktivnost
+francis.toolbox.zeroState.title: Dobrodo┼íli u AnoHUB
+francis.toolbox.zeroState.noAssets: Nema registrovanih agregata u floti.
+francis.toolbox.zeroState.initialize: Inicijalizuj Prvi Agregat
+francis.toolbox.toast.generatingPassport: Generisanje Paso┼ía Agregata za {{asset}}...
+francis.toolbox.passport: Paso┼í Agregata
+francis.toolbox.addAsset: Dodaj Agregat

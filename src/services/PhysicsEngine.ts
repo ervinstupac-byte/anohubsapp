@@ -14,7 +14,8 @@ export const PhysicsEngine = {
      * CORE PHYSICS: Recalculates the entire project state based on technical streams.
      */
     recalculatePhysics: (state: TechnicalProjectState): PhysicsResult => {
-        const { hydraulic, penstock, mechanical } = state;
+        const { hydraulic, penstock, mechanical, identity } = state;
+        const turbineType = identity.type;
 
         // High-Precision Decimal conversions
         const head = new Decimal(hydraulic.head);
@@ -51,12 +52,32 @@ export const PhysicsEngine = {
         const performanceDelta = powerMW.sub(baselinePower).div(baselinePower).mul(100);
 
         // 6. Orbit Eccentricity (e = sqrt(1 - (b^2 / a^2)))
-        // In this context, a/b are vibration amplitudes (X, Y)
         const vibX = new Decimal(mechanical.vibrationX || 0).abs();
         const vibY = new Decimal(mechanical.vibrationY || 0).abs();
-        const a = Decimal.max(vibX, vibY);
-        const b = Decimal.min(vibX, vibY);
+
+        // --- HYBRID PHYSICS ADAPTATION (NC-4.2 Directive) ---
+        // Pelton machines have different vibration signatures than Francis/Kaplan
+        let adjustedVibX = vibX;
+        let adjustedVibY = vibY;
+
+        if (turbineType === 'Pelton') {
+            // Pelton vibration is often impulse-driven (jet impact)
+            adjustedVibX = vibX.mul(1.1); // Add impulsive safety factor
+        } else if (turbineType === 'Kaplan') {
+            // Kaplan vibration often related to blade tip cavitation/vortex
+            adjustedVibY = vibY.mul(1.05);
+        }
+
+        const a = Decimal.max(adjustedVibX, adjustedVibY);
+        const b = Decimal.min(adjustedVibX, adjustedVibY);
         const eccentricity = a.isZero() ? new Decimal(0) : Decimal.sqrt(new Decimal(1).sub(b.pow(2).div(a.pow(2))));
+
+        // 7. Safety Status Assignment
+        let status: 'NOMINAL' | 'WARNING' | 'CRITICAL' = 'NOMINAL';
+        const hoopSF = new Decimal(penstock.materialYieldStrength).div(hoopStress.gt(0) ? hoopStress : 1);
+
+        if (hoopSF.lt(1.5) || eccentricity.gt(0.85)) status = 'CRITICAL';
+        else if (hoopSF.lt(2.0) || eccentricity.gt(0.75)) status = 'WARNING';
 
         return {
             hoopStress,
@@ -64,8 +85,7 @@ export const PhysicsEngine = {
             surgePressure: surgePressurePa.div(1e5), // Bar
             eccentricity,
             performanceDelta,
-            status: hoopStress.gt(new Decimal(penstock.materialYieldStrength).div(1.5)) ? 'CRITICAL' :
-                (hoopStress.gt(new Decimal(penstock.materialYieldStrength).div(2.0)) ? 'WARNING' : 'NOMINAL')
+            status
         };
     },
 
@@ -82,6 +102,7 @@ export const PhysicsEngine = {
                 staticPressureBar: new Decimal(state.hydraulic.head).div(10).toNumber(),
                 surgePressureBar: result.surgePressure.toNumber(),
                 waterHammerPressureBar: result.surgePressure.toNumber(),
+                eccentricity: result.eccentricity.toNumber(),
             },
             riskScore: result.status === 'CRITICAL' ? 100 : (result.status === 'WARNING' ? 50 : 0),
             lastRecalculation: new Date().toISOString(),

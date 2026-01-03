@@ -6,15 +6,15 @@ import { motion } from 'framer-motion';
 import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
-import { EnhancedAsset } from '../models/turbine/types';
+import { useProjectEngine } from '../contexts/ProjectContext';
 
 interface AlignmentWizardProps {
     sessionId: string;
-    asset: EnhancedAsset;
     onComplete: () => void;
 }
 
-export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, asset, onComplete }) => {
+export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onComplete }) => {
+    const { technicalState } = useProjectEngine(); // Linked to CEREBRO
     const [runoutPoints, setRunoutPoints] = useState<Array<{ angle: number; runout: number }>>([]);
     const [currentAngle, setCurrentAngle] = useState(0);
     const [manualRunout, setManualRunout] = useState('');
@@ -22,8 +22,8 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, ass
     const [finalAlignment, setFinalAlignment] = useState<number | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
 
-    const isHorizontal = asset.turbine_variant.includes('horizontal');
-    const bearingSpan = asset.turbine_config.bearing_span || 5.0; // meters
+    const isHorizontal = technicalState.identity.name.toLowerCase().includes('horizontal') || technicalState.identity.type === 'Pelton';
+    const bearingSpan = 5.0; // Default or from project site params
 
     const addRunoutPoint = async () => {
         const runout = parseFloat(manualRunout);
@@ -107,8 +107,8 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, ass
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className={`mt-4 p-4 rounded-lg border-2 ${finalAlignment <= 0.05
-                                    ? 'bg-emerald-950/20 border-emerald-500'
-                                    : 'bg-red-950/20 border-red-500'
+                                ? 'bg-emerald-950/20 border-emerald-500'
+                                : 'bg-red-950/20 border-red-500'
                                 }`}
                         >
                             <div className="flex items-center justify-between mb-2">
@@ -145,8 +145,8 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, ass
                                 <p className="text-sm font-bold text-white">Bluetooth Dial Indicator</p>
                             </div>
                             <div className={`px-2 py-1 rounded text-xs font-bold ${isBluetoothConnected
-                                    ? 'bg-cyan-500/20 text-cyan-400'
-                                    : 'bg-slate-700/50 text-slate-400'
+                                ? 'bg-cyan-500/20 text-cyan-400'
+                                : 'bg-slate-700/50 text-slate-400'
                                 }`}>
                                 {isBluetoothConnected ? 'CONNECTED' : 'DISCONNECTED'}
                             </div>
@@ -189,8 +189,8 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, ass
                                         key={angle}
                                         onClick={() => setCurrentAngle(angle)}
                                         className={`px-2 py-1 rounded text-xs font-bold transition-colors ${currentAngle === angle
-                                                ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500'
-                                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
+                                            ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500'
+                                            : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                             }`}
                                     >
                                         {angle}°

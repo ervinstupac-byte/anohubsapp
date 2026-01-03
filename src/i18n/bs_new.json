@@ -96,23 +96,7 @@
       "liveSnapshot": "Snapshot Live Konteksta",
       "diagnostics": "Aktivni Inženjerski Uvidi",
       "history": "Istorija Konteksta"
-    },
-    "learningLab": "Laboratorij za Učenje",
-    "version": "CDR_X_V4.2",
-    "operationalFocus": "Operativni Fokus",
-    "systemIdle": "Sistem u Mirovanju",
-    "monitoring": "Praćenje globalnih tokova...",
-    "playbackScrubber": "Pregled Arhive",
-    "insight": "UVID",
-    "operationalCommand": "Operativna Komanda",
-    "systemIntel": "Sistemska Inteligencija",
-    "neuralBridge": "Neuralni Most",
-    "syncHistory": "Sinhronizuj Historiju",
-    "generateForensic": "Generiši Forenzički Dnevnik",
-    "secureTrace": "Osiguraj Fizički Trag // 60s",
-    "hiveLink": "HIVE VEZA:",
-    "connected": "POVEZAN",
-    "offline": "OFFLINE"
+    }
   },
   "common": {
     "ok": "OK",
@@ -129,10 +113,7 @@
     "moderate": "UMJERENO",
     "stable": "STABILNO",
     "riskLevel": "Nivo Rizika",
-    "active": "Aktivno",
-    "detected": "Detektovano",
-    "new": "NOVO",
-    "statusLabel": "Status:"
+    "active": "Aktivan"
   },
   "questionnaire": {
     "title": "Dijagnostički Izvještaj",
@@ -451,10 +432,10 @@
     "liveSync": "LIVE SINHRONIZACIJA SA HPP BUILDEROM"
   },
   "profile": {
-    "loading": "Loading Enterprise Profile...",
+    "loading": "[BS] Loading Enterprise Profile...",
     "title": "Inženjerski Profil",
     "subtitle": "Upravljajte svojim identitetom i nivoima pristupa.",
-    "changePhoto": "CHANGE PHOTO",
+    "changePhoto": "[BS] CHANGE PHOTO",
     "unassignedRole": "Nedodijeljena Uloga",
     "fullName": "Puno Ime",
     "role": "Pozicija / Uloga",
@@ -463,7 +444,7 @@
     "company": "Organizacija",
     "companyPlaceholder": "npr. Global Hydropower Inc.",
     "saveButton": "Sačuvaj Promjene",
-    "saving": "Saving...",
+    "saving": "[BS] Saving...",
     "uploadError": "Morate odabrati sliku za slanje.",
     "updateSuccess": "Profil uspješno ažuriran",
     "avatarSuccess": "Avatar poslan!",
@@ -1420,99 +1401,99 @@
     }
   },
   "riskAssessment": {
-    "protocol": "Diagnostic Protocol v2.0",
-    "initTitle": "Initialize Diagnostics",
-    "standbyDesc": "System is in standby. Please select a <strong class=\"text-cyan-400 font-bold\">Target Asset</strong> above to begin the Execution Gap analysis."
+    "protocol": "[BS] Diagnostic Protocol v2.0",
+    "initTitle": "[BS] Initialize Diagnostics",
+    "standbyDesc": "[BS] System is in standby. Please select a <strong class=\"text-cyan-400 font-bold\">Target Asset</strong> above to begin the Execution Gap analysis."
   },
   "riverWildlife": {
-    "title": "Ecological Engineering",
-    "context": "Applied Context:",
-    "subtitle": "Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.",
-    "mandate": "The Postulate of Ethics",
-    "mandateDesc": "We do not just mitigate impact; we actively protect the ecosystem. <strong class=\"text-white font-bold block mt-1\">Automatic E-Flow measurement is a core requirement of the Standard of Excellence.</strong>",
+    "title": "[BS] Ecological Engineering",
+    "context": "[BS] Applied Context:",
+    "subtitle": "[BS] Non-negotiable technologies fulfilling the ethical mandate for Ecosystem Protection.",
+    "mandate": "[BS] The Postulate of Ethics",
+    "mandateDesc": "[BS] We do not just mitigate impact; we actively protect the ecosystem. <strong class=\"text-white font-bold block mt-1\">Automatic E-Flow measurement is a core requirement of the Standard of Excellence.</strong>",
     "sections": {
       "fish_passage": {
-        "title": "Fish Passage Technologies",
-        "subtitle": "Bio-Engineering for Migration",
-        "intro": "Modern technologies focus on safe, effective, and minimally stressful passage around dams to maintain biodiversity.",
+        "title": "[BS] Fish Passage Technologies",
+        "subtitle": "[BS] Bio-Engineering for Migration",
+        "intro": "[BS] Modern technologies focus on safe, effective, and minimally stressful passage around dams to maintain biodiversity.",
         "ladders": {
-          "title": "Fish Ladders & Stairways",
-          "desc": "Pool-and-Weir or Denil channels with gradients (1:8 to 1:12) designed to guide fish without exhaustion."
+          "title": "[BS] Fish Ladders & Stairways",
+          "desc": "[BS] Pool-and-Weir or Denil channels with gradients (1:8 to 1:12) designed to guide fish without exhaustion."
         },
         "lifts": {
-          "title": "Fish Lifts & Elevators",
-          "desc": "Mechanical hoppers for high dams where ladders are impractical. Automated collection and release."
+          "title": "[BS] Fish Lifts & Elevators",
+          "desc": "[BS] Mechanical hoppers for high dams where ladders are impractical. Automated collection and release."
         },
         "bypass": {
-          "title": "Nature-Like Bypass",
-          "desc": "Man-made channels mimicking natural streams. The most ecologically effective, low-gradient solution."
+          "title": "[BS] Nature-Like Bypass",
+          "desc": "[BS] Man-made channels mimicking natural streams. The most ecologically effective, low-gradient solution."
         },
         "turbines": {
-          "title": "Fish-Friendly Turbines",
-          "desc": "Advanced designs (e.g. Alden) with fewer blades and wider gaps to reduce blade-strike mortality."
+          "title": "[BS] Fish-Friendly Turbines",
+          "desc": "[BS] Advanced designs (e.g. Alden) with fewer blades and wider gaps to reduce blade-strike mortality."
         }
       },
       "sediment_management": {
-        "title": "Sediment & Erosion Control",
-        "subtitle": "Protecting Reservoir Capacity & Equipment",
-        "intro": "Dams trap sediment, reducing capacity and causing turbine abrasion. Proactive management is essential.",
+        "title": "[BS] Sediment & Erosion Control",
+        "subtitle": "[BS] Protecting Reservoir Capacity & Equipment",
+        "intro": "[BS] Dams trap sediment, reducing capacity and causing turbine abrasion. Proactive management is essential.",
         "bypass": {
-          "title": "Bypass Tunnels",
-          "desc": "Diverting sediment-laden water during floods."
+          "title": "[BS] Bypass Tunnels",
+          "desc": "[BS] Diverting sediment-laden water during floods."
         },
         "flushing": {
-          "title": "Flushing",
-          "desc": "Opening low-level outlets to clear accumulation."
+          "title": "[BS] Flushing",
+          "desc": "[BS] Opening low-level outlets to clear accumulation."
         },
         "watershed": {
-          "title": "Watershed Mgmt",
-          "desc": "Reforestation to reduce inflow at source."
+          "title": "[BS] Watershed Mgmt",
+          "desc": "[BS] Reforestation to reduce inflow at source."
         },
         "vis": {
-          "title": "Visualization",
-          "l1": "Bathymetric Surveys: Visualizing capacity loss.",
-          "l2": "3D Wear Scans: Quantifying runner material loss."
+          "title": "[BS] Visualization",
+          "l1": "[BS] Bathymetric Surveys: Visualizing capacity loss.",
+          "l2": "[BS] 3D Wear Scans: Quantifying runner material loss."
         },
         "rcfa": {
-          "title": "RCFA Critical: Diagnosis",
-          "abrasion": "Abrasion (Symptom): Smooth, polished wear.",
-          "cavitation": "Cavitation (Root Cause): Pitted, spongy surface.",
-          "quote": "Treating abrasion without fixing cavitation leads to recurring failure."
+          "title": "[BS] RCFA Critical: Diagnosis",
+          "abrasion": "[BS] Abrasion (Symptom): Smooth, polished wear.",
+          "cavitation": "[BS] Cavitation (Root Cause): Pitted, spongy surface.",
+          "quote": "[BS] Treating abrasion without fixing cavitation leads to recurring failure."
         }
       },
       "water_quality": {
-        "title": "Water Quality & E-Flow",
-        "subtitle": "The Ethical Mandate",
-        "intro": "Maintaining natural flow regimes, temperature, and oxygen levels for downstream habitats.",
+        "title": "[BS] Water Quality & E-Flow",
+        "subtitle": "[BS] The Ethical Mandate",
+        "intro": "[BS] Maintaining natural flow regimes, temperature, and oxygen levels for downstream habitats.",
         "eflow": {
-          "title": "Environmental Flow (E-flow)",
-          "desc": "The managed release of water to mimic natural variability.",
-          "mandate": "Mandate: Automatic, continuous measurement and digital documentation is non-negotiable."
+          "title": "[BS] Environmental Flow (E-flow)",
+          "desc": "[BS] The managed release of water to mimic natural variability.",
+          "mandate": "[BS] Mandate: Automatic, continuous measurement and digital documentation is non-negotiable."
         },
         "aerating": {
-          "title": "Aerating Turbines",
-          "desc": "Venting turbines to increase dissolved oxygen levels."
+          "title": "[BS] Aerating Turbines",
+          "desc": "[BS] Venting turbines to increase dissolved oxygen levels."
         },
         "withdrawal": {
-          "title": "Selective Withdrawal",
-          "desc": "Multi-level intakes to manage water temperature."
+          "title": "[BS] Selective Withdrawal",
+          "desc": "[BS] Multi-level intakes to manage water temperature."
         }
       },
       "habitat_restoration": {
-        "title": "Habitat Restoration",
-        "subtitle": "Beyond Mitigation",
-        "intro": "Proactive measures to create a net positive environmental outcome.",
+        "title": "[BS] Habitat Restoration",
+        "subtitle": "[BS] Beyond Mitigation",
+        "intro": "[BS] Proactive measures to create a net positive environmental outcome.",
         "gravel": {
-          "title": "Gravel Augmentation",
-          "desc": "Placing clean gravels for fish spawning habitats."
+          "title": "[BS] Gravel Augmentation",
+          "desc": "[BS] Placing clean gravels for fish spawning habitats."
         },
         "riparian": {
-          "title": "Riparian Zone",
-          "desc": "Re-planting native vegetation to stabilize banks and shade water."
+          "title": "[BS] Riparian Zone",
+          "desc": "[BS] Re-planting native vegetation to stabilize banks and shade water."
         },
         "structures": {
-          "title": "In-stream Structures",
-          "desc": "Boulders and logs creating complex flow habitats."
+          "title": "[BS] In-stream Structures",
+          "desc": "[BS] Boulders and logs creating complex flow habitats."
         }
       }
     }
@@ -1520,28 +1501,28 @@
   "standardOfExcellence": {
     "title": "Standard Izvrsnosti",
     "subtitle": "Masterclass moduli za prelazak sa jednostavnog pridržavanja protokola na sistemsko majstorstvo.",
-    "subtitle2": "These principles are <span class=\"text-white font-bold\">non-negotiable</span>.",
-    "masterclassSubtitle": "Masterclass modules for moving from simple protocol compliance to systemic mastery.",
+    "subtitle2": "[BS] These principles are <span class=\"text-white font-bold\">non-negotiable</span>.",
+    "masterclassSubtitle": "[BS] Masterclass modules for moving from simple protocol compliance to systemic mastery.",
     "principles": {
       "p1": {
-        "title": "The 0.05 mm/m Imperative",
-        "desc": "Absolute alignment precision. Verticality and horizontality deviations exceeding 0.05 mm per meter constitute a critical non-conformity. No deviations accepted regardless of OEM allowances.",
-        "quote": "\"Precision is not an option; it is the baseline.\""
+        "title": "[BS] The 0.05 mm/m Imperative",
+        "desc": "[BS] Absolute alignment precision. Verticality and horizontality deviations exceeding 0.05 mm per meter constitute a critical non-conformity. No deviations accepted regardless of OEM allowances.",
+        "quote": "[BS] \"Precision is not an option; it is the baseline.\""
       },
       "p2": {
-        "title": "Zero \"Run-to-Failure\"",
-        "desc": "Predictive maintenance is mandatory. Operating an asset until component failure is a violation of the Asset Stewardship Protocol. Sensors must be active and monitored.",
-        "quote": "\"We fix it before it breaks.\""
+        "title": "[BS] Zero \"Run-to-Failure\"",
+        "desc": "[BS] Predictive maintenance is mandatory. Operating an asset until component failure is a violation of the Asset Stewardship Protocol. Sensors must be active and monitored.",
+        "quote": "[BS] \"We fix it before it breaks.\""
       },
       "p3": {
-        "title": "Data Integrity",
-        "desc": "All operational data, logs, and risk assessments must be immutable and archived. concealing operational risks or \"massaging\" numbers is grounds for immediate contract termination.",
-        "quote": "\"Truth is the only safety net.\""
+        "title": "[BS] Data Integrity",
+        "desc": "[BS] All operational data, logs, and risk assessments must be immutable and archived. concealing operational risks or \"massaging\" numbers is grounds for immediate contract termination.",
+        "quote": "[BS] \"Truth is the only safety net.\""
       },
       "p4": {
-        "title": "Ownership Maintenance",
-        "desc": "Operators act as owners. Cleaning, tightening, and basic inspections are daily rituals, not scheduled chores. Visual inspections must be logged digitally.",
-        "quote": "\"If you operate it, you own it.\""
+        "title": "[BS] Ownership Maintenance",
+        "desc": "[BS] Operators act as owners. Cleaning, tightening, and basic inspections are daily rituals, not scheduled chores. Visual inspections must be logged digitally.",
+        "quote": "[BS] \"If you operate it, you own it.\""
       }
     },
     "modules": {
@@ -1582,19 +1563,19 @@
       "badge": "Službeni Zahtjev • ISO 9001 Usklađen"
     },
     "oath": {
-      "title": "Engineer's Oath",
-      "desc": "By activating this protocol, you bind your digital identity to these standards.",
-      "identity": "IDENTITY:",
-      "date": "DATE:",
-      "status": "STATUS:",
-      "ratified": "RATIFIED",
-      "pending": "PENDING",
-      "btnCommit": "I COMMIT TO EXCELLENCE",
-      "btnActive": "PROTOCOL ACTIVE",
-      "sync": "Synchronization with HR Database... OK",
-      "toast": "Protocol ratified by Engineer"
+      "title": "[BS] Engineer's Oath",
+      "desc": "[BS] By activating this protocol, you bind your digital identity to these standards.",
+      "identity": "[BS] IDENTITY:",
+      "date": "[BS] DATE:",
+      "status": "[BS] STATUS:",
+      "ratified": "[BS] RATIFIED",
+      "pending": "[BS] PENDING",
+      "btnCommit": "[BS] I COMMIT TO EXCELLENCE",
+      "btnActive": "[BS] PROTOCOL ACTIVE",
+      "sync": "[BS] Synchronization with HR Database... OK",
+      "toast": "[BS] Protocol ratified by Engineer"
     },
-    "poweredBy": "POWERED BY"
+    "poweredBy": "[BS] POWERED BY"
   },
   "turbineDetail": {
     "notFoundTitle": "Sistemski Podaci Nisu Pronađeni",
@@ -1607,204 +1588,204 @@
     "electricalComponents": "Električne Komponente",
     "generatorControl": "Generator i Upravljanje",
     "criticalityNote": "* Procjena kritičnosti bazirana na statističkim stopama kvarova i analizi utjecaja na LCC.",
-    "rev": "System Specification • Rev 2.4",
+    "rev": "[BS] System Specification • Rev 2.4",
     "badges": {
-      "critical": "CRITICAL",
-      "attention": "ATTENTION",
-      "standard": "STANDARD"
+      "critical": "[BS] CRITICAL",
+      "attention": "[BS] ATTENTION",
+      "standard": "[BS] STANDARD"
     }
   },
   "interventionCTA": {
-    "label": "ASSET INTERVENTION REQUIRED"
+    "label": "[BS] ASSET INTERVENTION REQUIRED"
   },
   "ui": {
-    "select": "Select",
+    "select": "[BS] Select",
     "francis": {
-      "title": "Francis Turbine • Fault Isolation",
-      "subtitle": "Enter current telemetry to validate against SOP limits (Ref: SOP-ROT-001).",
+      "title": "[BS] Francis Turbine • Fault Isolation",
+      "subtitle": "[BS] Enter current telemetry to validate against SOP limits (Ref: SOP-ROT-001).",
       "inputs": {
-        "bearingTemp": "Bearing Temperature (°C)",
-        "vibration": "Vibration (mm/s)",
-        "silt": "Silt Concentration (ppm)",
-        "gridFreq": "Grid Frequency (Hz)",
-        "nominalTemp": "Nominal: < 60°C",
-        "nominalVib": "Nominal: < 2.5 mm/s",
-        "nominalSilt": "Nominal: < 3000 ppm",
-        "nominalFreq": "Nominal: 50.00 Hz ± 1%"
+        "bearingTemp": "[BS] Bearing Temperature (°C)",
+        "vibration": "[BS] Vibration (mm/s)",
+        "silt": "[BS] Silt Concentration (ppm)",
+        "gridFreq": "[BS] Grid Frequency (Hz)",
+        "nominalTemp": "[BS] Nominal: < 60°C",
+        "nominalVib": "[BS] Nominal: < 2.5 mm/s",
+        "nominalSilt": "[BS] Nominal: < 3000 ppm",
+        "nominalFreq": "[BS] Nominal: 50.00 Hz ± 1%"
       },
       "actions": {
-        "run": "RUN DIAGNOSTICS",
-        "back": "Back to Toolbox"
+        "run": "[BS] RUN DIAGNOSTICS",
+        "back": "[BS] Back to Toolbox"
       },
       "status": {
-        "normal": "All Parameters Nominal",
-        "normalDesc": "System operating within design limits."
+        "normal": "[BS] All Parameters Nominal",
+        "normalDesc": "[BS] System operating within design limits."
       }
     },
     "toolbox": {
       "zeroState": {
-        "title": "System Standby",
-        "noAssets": "No Active Assets Detected",
-        "initialize": "Initialize First Asset"
+        "title": "[BS] System Standby",
+        "noAssets": "[BS] No Active Assets Detected",
+        "initialize": "[BS] Initialize First Asset"
       },
       "greeting": {
-        "morning": "Good Morning",
-        "afternoon": "Good Afternoon",
-        "evening": "Good Evening"
+        "morning": "[BS] Good Morning",
+        "afternoon": "[BS] Good Afternoon",
+        "evening": "[BS] Good Evening"
       },
-      "engineer": "Engineer",
-      "systemOperational": "System Operational",
-      "assetsOnline": "Assets Online",
-      "activeAsset": "Active: {{name}}",
-      "passport": "Passport",
-      "addAsset": "Add Asset",
+      "engineer": "[BS] Engineer",
+      "systemOperational": "[BS] System Operational",
+      "assetsOnline": "[BS] Assets Online",
+      "activeAsset": "[BS] Active: {{name}}",
+      "passport": "[BS] Passport",
+      "addAsset": "[BS] Add Asset",
       "sections": {
-        "utilities": "Engineering Utilities",
-        "designAnalysis": "Design & Analysis",
-        "operationalModules": "Operational Modules",
-        "recentActivity": "Recent Activity"
+        "utilities": "[BS] Engineering Utilities",
+        "designAnalysis": "[BS] Design & Analysis",
+        "operationalModules": "[BS] Operational Modules",
+        "recentActivity": "[BS] Recent Activity"
       },
       "activity": {
-        "none": "No recent activity.",
-        "open": "Open Logbook",
-        "view": "View Logbook"
+        "none": "[BS] No recent activity.",
+        "open": "[BS] Open Logbook",
+        "view": "[BS] View Logbook"
       },
       "toast": {
-        "generatingPassport": "Generating Passport for {{asset}}..."
+        "generatingPassport": "[BS] Generating Passport for {{asset}}..."
       }
     },
     "emergency": {
-      "activeProtocol": "ACTIVE EMERGENCY PROTOCOL",
+      "activeProtocol": "[BS] ACTIVE EMERGENCY PROTOCOL",
       "protocols": {
         "vibration_excess": {
-          "0": "Immediate load rejection across all units.",
-          "1": "Disengage primary guide bearings for inspection.",
-          "2": "Perform laser alignment audit of main shaft.",
-          "3": "Deploy vibration dampening countermeasures."
+          "0": "[BS] Immediate load rejection across all units.",
+          "1": "[BS] Disengage primary guide bearings for inspection.",
+          "2": "[BS] Perform laser alignment audit of main shaft.",
+          "3": "[BS] Deploy vibration dampening countermeasures."
         },
         "bearing_overheat": {
-          "0": "Forced shutdown of affected turbine unit.",
-          "1": "Verify cooling system flow and pressure.",
-          "2": "Analyze oil lubrication for contamination.",
-          "3": "Initiate backup thermal heat exchangers."
+          "0": "[BS] Forced shutdown of affected turbine unit.",
+          "1": "[BS] Verify cooling system flow and pressure.",
+          "2": "[BS] Analyze oil lubrication for contamination.",
+          "3": "[BS] Initiate backup thermal heat exchangers."
         },
         "default": {
-          "0": "Initiate general emergency shutdown.",
-          "1": "Notify regional maintenance center."
+          "0": "[BS] Initiate general emergency shutdown.",
+          "1": "[BS] Notify regional maintenance center."
         }
       }
     },
     "pdf": {
       "passport": {
-        "title": "Engineering Dossier",
-        "generated": "Generated",
-        "id": "ID",
-        "assetIdentity": "Asset Identity",
-        "assetName": "Asset Name",
-        "type": "Type",
-        "location": "Location",
-        "capacity": "Capacity",
-        "status": "Status",
-        "technicalSpecs": "Technical Specifications",
-        "noSpecs": "No specific technical parameters recorded.",
-        "page": "Page",
-        "maintenanceLog": "Maintenance History Log",
-        "date": "Date",
-        "category": "Category",
-        "action": "Action / Summary",
-        "user": "User",
-        "noMaintenance": "No maintenance history recorded for this asset."
+        "title": "[BS] Engineering Dossier",
+        "generated": "[BS] Generated",
+        "id": "[BS] ID",
+        "assetIdentity": "[BS] Asset Identity",
+        "assetName": "[BS] Asset Name",
+        "type": "[BS] Type",
+        "location": "[BS] Location",
+        "capacity": "[BS] Capacity",
+        "status": "[BS] Status",
+        "technicalSpecs": "[BS] Technical Specifications",
+        "noSpecs": "[BS] No specific technical parameters recorded.",
+        "page": "[BS] Page",
+        "maintenanceLog": "[BS] Maintenance History Log",
+        "date": "[BS] Date",
+        "category": "[BS] Category",
+        "action": "[BS] Action / Summary",
+        "user": "[BS] User",
+        "noMaintenance": "[BS] No maintenance history recorded for this asset."
       }
     },
     "engines": {
       "pelton": {
-        "idealNsq": "+ Ideal low specific speed ({{n_sq}})",
-        "highNsq": "+ High specific speed for Pelton (requires multi-jet)",
-        "highHead": "+ High head provides optimal kinetic energy",
-        "lowPressure": "- Insufficient pressure for impulse design",
-        "silt": "+ Ease of bucket replacement handles silt better"
+        "idealNsq": "[BS] + Ideal low specific speed ({{n_sq}})",
+        "highNsq": "[BS] + High specific speed for Pelton (requires multi-jet)",
+        "highHead": "[BS] + High head provides optimal kinetic energy",
+        "lowPressure": "[BS] - Insufficient pressure for impulse design",
+        "silt": "[BS] + Ease of bucket replacement handles silt better"
       },
       "francis": {
-        "optimalNsq": "+ Optimal specific speed for Francis ({{n_sq}})",
-        "mediumHead": "+ Head is within standard medium-head range",
-        "fixedBlade": "- Fixed blade geometry less efficient for flow variations",
-        "siltErosion": "- Submerged runner susceptible to silt erosion"
+        "optimalNsq": "[BS] + Optimal specific speed for Francis ({{n_sq}})",
+        "mediumHead": "[BS] + Head is within standard medium-head range",
+        "fixedBlade": "[BS] - Fixed blade geometry less efficient for flow variations",
+        "siltErosion": "[BS] - Submerged runner susceptible to silt erosion"
       },
       "kaplan": {
-        "highNsq": "+ High specific speed detected ({{n_sq}})",
-        "lowHead": "+ Ideal for low head applications",
-        "headExceeded": "- Head exceeds optimal Kaplan range",
-        "variableFlow": "+ Double regulation handles variable flow efficiently"
+        "highNsq": "[BS] + High specific speed detected ({{n_sq}})",
+        "lowHead": "[BS] + Ideal for low head applications",
+        "headExceeded": "[BS] - Head exceeds optimal Kaplan range",
+        "variableFlow": "[BS] + Double regulation handles variable flow efficiently"
       },
       "crossflow": {
-        "runOfRiver": "+ High efficiency for small-scale run-of-river",
-        "selfCleaning": "+ Self-cleaning runner handles debris and silt well"
+        "runOfRiver": "[BS] + High efficiency for small-scale run-of-river",
+        "selfCleaning": "[BS] + Self-cleaning runner handles debris and silt well"
       }
     },
-    "resetData": "Reset Demo Data",
-    "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
-    "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page.",
+    "resetData": "[BS] Reset Demo Data",
+    "resetDataDesc": "[BS] Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
+    "resetDataConfirm": "[BS] Reset all demo data? This will clear localStorage and reload the page.",
     "executive": {
-      "subtitle": "Executive Engineering interface // v1.0.5 UNIFIED",
+      "subtitle": "[BS] Executive Engineering interface // v1.0.5 UNIFIED",
       "status": {
-        "scadaActive": "Neural Link Active"
+        "scadaActive": "[BS] Neural Link Active"
       },
       "actions": {
-        "downloadBrief": "DOWNLOAD BRIEF"
+        "downloadBrief": "[BS] DOWNLOAD BRIEF"
       },
       "twin": {
-        "label": "TWIN",
-        "topology": "Live Asset Topology"
+        "label": "[BS] TWIN",
+        "topology": "[BS] Live Asset Topology"
       },
       "sensors": {
-        "activePower": "Active Power",
-        "gridFrequency": "Grid Frequency"
+        "activePower": "[BS] Active Power",
+        "gridFrequency": "[BS] Grid Frequency"
       },
       "kpi": {
-        "unitHealth": "Unit Health",
-        "financialRisk": "Financial Risk",
-        "projectedLoss": "Projected Loss (30d)"
+        "unitHealth": "[BS] Unit Health",
+        "financialRisk": "[BS] Financial Risk",
+        "projectedLoss": "[BS] Projected Loss (30d)"
       },
       "ai": {
-        "title": "Dr. Turbine AI",
-        "analyzing": "Dr. Turbine analyzing hydraulic signatures...",
+        "title": "[BS] Dr. Turbine AI",
+        "analyzing": "[BS] Dr. Turbine analyzing hydraulic signatures...",
         "nominal": {
-          "title": "ALL SYSTEMS NOMINAL",
-          "desc": "Hydraulic parameters within optimal range.",
-          "details": "Cavitation risk: LOW • Bearing temp: NORMAL • Vibration: ACCEPTABLE"
+          "title": "[BS] ALL SYSTEMS NOMINAL",
+          "desc": "[BS] Hydraulic parameters within optimal range.",
+          "details": "[BS] Cavitation risk: LOW • Bearing temp: NORMAL • Vibration: ACCEPTABLE"
         },
-        "physicsAnalysis": "PHYSICS ANALYSIS:",
-        "gridRisk": "Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at {{freq}}Hz.",
-        "cavitationRisk": "Flow: {{flow}} m³/s, Head: {{head}}m exceeds cavitation threshold. Runner clearance may be insufficient.",
-        "acceptable": "System parameters within acceptable range. Monitoring continues."
+        "physicsAnalysis": "[BS] PHYSICS ANALYSIS:",
+        "gridRisk": "[BS] Frequency deviation >5% indicates potential generator decoupling. Risk of mechanical resonance at {{freq}}Hz.",
+        "cavitationRisk": "[BS] Flow: {{flow}} m³/s, Head: {{head}}m exceeds cavitation threshold. Runner clearance may be insufficient.",
+        "acceptable": "[BS] System parameters within acceptable range. Monitoring continues."
       },
       "control": {
-        "emergencyProtocols": "Emergency Protocols",
-        "scramButton": "🚨 SCRAM UNIT 🚨",
-        "scramConfirm": "INITIATE EMERGENCY SCRAM? This will trip the turbine and may cause downtime.",
-        "safetyDisengaged": "SAFETY LOCK DISENGAGED",
-        "scadaControls": "Twin Analytics",
-        "flowRate": "Flow Rate (m³/s)",
-        "head": "Head (m)",
-        "gridFrequencyInput": "Grid Frequency (Hz)",
-        "criticalFreq": "⚠️ CRITICAL FREQUENCY DETECTED"
+        "emergencyProtocols": "[BS] Emergency Protocols",
+        "scramButton": "[BS] 🚨 SCRAM UNIT 🚨",
+        "scramConfirm": "[BS] INITIATE EMERGENCY SCRAM? This will trip the turbine and may cause downtime.",
+        "safetyDisengaged": "[BS] SAFETY LOCK DISENGAGED",
+        "scadaControls": "[BS] Twin Analytics",
+        "flowRate": "[BS] Flow Rate (m³/s)",
+        "head": "[BS] Head (m)",
+        "gridFrequencyInput": "[BS] Grid Frequency (Hz)",
+        "criticalFreq": "[BS] ⚠️ CRITICAL FREQUENCY DETECTED"
       },
       "silhouette": {
-        "bearingTemp": "BEARING TEMP",
-        "vibration": "VIBRATION",
-        "gridFreq": "GRID FREQ",
-        "healthScore": "HEALTH SCORE",
-        "criticalAlarms": "🚨 CRITICAL ALARMS"
+        "bearingTemp": "[BS] BEARING TEMP",
+        "vibration": "[BS] VIBRATION",
+        "gridFreq": "[BS] GRID FREQ",
+        "healthScore": "[BS] HEALTH SCORE",
+        "criticalAlarms": "[BS] 🚨 CRITICAL ALARMS"
       }
     }
   },
   "report": {
-    "title": "Diagnostic Forensic Dossier",
-    "status": "System Status",
-    "proof": "IEC 60041 Math Proof (The Golden Thread)",
-    "generated_by": "Generated by AnoHUB NC-4.2 Neural Core",
-    "hoopStress": "Tangential Stress",
-    "pressureForce": "Pressure Force"
+    "title": "[BS] Diagnostic Forensic Dossier",
+    "status": "[BS] System Status",
+    "proof": "[BS] IEC 60041 Math Proof (The Golden Thread)",
+    "generated_by": "[BS] Generated by AnoHUB NC-4.2 Neural Core",
+    "hoopStress": "[BS] Tangential Stress",
+    "pressureForce": "[BS] Pressure Force"
   },
   "francis": {
     "diagnostics": {
@@ -3013,31 +2994,31 @@
       }
     },
     "waterHammer": {
-      "title": "Water Hammer Surge Analysis",
-      "subtitle": "IEC 60041 Standard Pressure Transient Calculation",
-      "return": "← Return to Hydraulics Dashboard",
-      "sec1Title": "Wave Speed & Physics",
-      "sec1Desc": "Elasticity of penstock and water compressibility determine wave propagation speed (a).",
-      "phase1Title": "Pressure Phase",
-      "phase1Val": "Reflection Time (2L/a)",
-      "phase2Title": "Wave Speed",
-      "phase2Val": "Speed of Sound in Penstock",
-      "tripLimit": "Trip Limit",
-      "tripVal": "150% Nominal",
-      "sec2Title": "Real-time Surge Monitor",
-      "nomHead": "Design Head",
-      "maxSurge": "Max Surge Head",
-      "sec2Note": "Calculation uses Joukowsky's equation for sudden rejection.",
-      "sec3Title": "Control Valve Status",
-      "sec3Desc": "Synchronized closure between Guide Vane and MIV.",
-      "valveStatus": "Solenoid: ENERGIZED",
-      "sec4Title": "Structural Integrity Link",
-      "sec4Desc": "Surge pressure compared against hoop stress of steel grade S235JR.",
-      "criticalSafety": "CRITICAL SAFETY",
-      "open100": "100% OPEN",
-      "closed0": "0% CLOSED",
-      "fastPhase": "Fast Phase",
-      "cushionPhase": "Cushion Phase"
+      "title": "[BS] Water Hammer Surge Analysis",
+      "subtitle": "[BS] IEC 60041 Standard Pressure Transient Calculation",
+      "return": "[BS] ← Return to Hydraulics Dashboard",
+      "sec1Title": "[BS] Wave Speed & Physics",
+      "sec1Desc": "[BS] Elasticity of penstock and water compressibility determine wave propagation speed (a).",
+      "phase1Title": "[BS] Pressure Phase",
+      "phase1Val": "[BS] Reflection Time (2L/a)",
+      "phase2Title": "[BS] Wave Speed",
+      "phase2Val": "[BS] Speed of Sound in Penstock",
+      "tripLimit": "[BS] Trip Limit",
+      "tripVal": "[BS] 150% Nominal",
+      "sec2Title": "[BS] Real-time Surge Monitor",
+      "nomHead": "[BS] Design Head",
+      "maxSurge": "[BS] Max Surge Head",
+      "sec2Note": "[BS] Calculation uses Joukowsky's equation for sudden rejection.",
+      "sec3Title": "[BS] Control Valve Status",
+      "sec3Desc": "[BS] Synchronized closure between Guide Vane and MIV.",
+      "valveStatus": "[BS] Solenoid: ENERGIZED",
+      "sec4Title": "[BS] Structural Integrity Link",
+      "sec4Desc": "[BS] Surge pressure compared against hoop stress of steel grade S235JR.",
+      "criticalSafety": "[BS] CRITICAL SAFETY",
+      "open100": "[BS] 100% OPEN",
+      "closed0": "[BS] 0% CLOSED",
+      "fastPhase": "[BS] Fast Phase",
+      "cushionPhase": "[BS] Cushion Phase"
     },
     "vortex": {
       "title": "KONTROLA VRTLOGA I DINAMIKA SIFONA",
@@ -3146,11 +3127,7 @@
     "activity": {
       "none": "Nema nedavnih aktivnosti.",
       "open": "Otvori Dnevnik",
-      "view": "Pogledaj Dnevnik",
-      "descLogbook": "Digitalni dnevnici i praćenje",
-      "descStructural": "Analiza građevinskih radova",
-      "descShadow": "Standardne procedure",
-      "descAnalytics": "Performanse flote"
+      "view": "Pogledaj Dnevnik"
     },
     "zeroState": {
       "title": "Sistem u Pripravnosti",
@@ -3161,27 +3138,7 @@
       "generatingPassport": "Generisanje Pasoša za {{asset}}..."
     },
     "passport": "Pasoš",
-    "addAsset": "Dodaj Elektranu",
-    "diagnostics": {
-      "francisTitle": "Francis Dijagnostika",
-      "francisDesc": "Pokrenite motor za rješavanje problema za {{name}}"
-    },
-    "logicHub": {
-      "title": "Francis Logičko Čvorište",
-      "desc": "Mapa sistema i logičke blokade za Agregat 1"
-    },
-    "pelton": {
-      "title": "Pelton Protokoli",
-      "desc": "Provjere erozije mlaznica i MPI kontrolne liste kašika"
-    },
-    "kaplan": {
-      "title": "Kaplan Protokoli",
-      "desc": "Provjere integriteta brtvi lopatica i uljne glave"
-    },
-    "bulb": {
-      "title": "Protokoli Cjevnih Agregata",
-      "desc": "Revizije vodonepropusnosti i rashladnog zraka"
-    }
+    "addAsset": "Dodaj Elektranu"
   },
   "profile_legacy": {
     "loading": "Učitavanje Enterprise Profila...",
@@ -3345,58 +3302,5 @@
       "healthScore": "OCJENA ZDRAVLJA",
       "criticalAlarms": "🚨 KRITIČNI ALARMI"
     }
-  },
-  "commander": {
-    "title": "ANOHUB COMMANDER",
-    "verified": "DECIMAL.JS VERIFIKOVANO",
-    "neuralLink": "Neuralna Veza Aktivna",
-    "forensicLog": "Forenzički Dnevnik",
-    "lastSync": "Zadnja Sinhronizacija",
-    "latency": "Kašnjenje Neuralne Jezgre",
-    "dataIntegrity": "Integritet Podataka",
-    "verifiedStatus": "99.9% Verifikovano"
-  },
-  "neuralFlow": {
-    "physicsBreach": "Kršenje Fizike: Prekoračen Limit Vibracija",
-    "intelInit": "Inicijalizacija Inteligencije Agregata",
-    "diagnosticTwin": "Dijagnostički Blizanac",
-    "heroText": "Povežite visokovjerne terenske podatke za forenzičku analizu i prediktivnu sinhronizaciju fizike.",
-    "registerAsset": "Registruj Novi Agregat",
-    "flowTitle": "Neuralni Protok",
-    "flowDesc": "Sinhronizacija fizike u realnom vremenu",
-    "integrityTitle": "Forenzički Integritet",
-    "integrityDesc": "Certificirani dijagnostički tok",
-    "latencyTitle": "Nulto Kašnjenje",
-    "latencyDesc": "Fokus na neinvazivne metapodatke",
-    "coreTwin": "Neuralna Jezgra // Forenzički Blizanac",
-    "diagnosticBreach": "Dijagnostički Prekid",
-    "integrityVerified": "Integritet Verifikovan",
-    "detectionActive": "Forenzička Detekcija Aktivna"
-  },
-  "header": {
-    "title": "AnoHUB Dijagnostički Blizanac",
-    "searchPlaceholder": "Pretraži module...",
-    "modalPlaceholder": "IZVRŠI KOMANDU ILI PRETRAŽI MODULE...",
-    "jumpTo": "Pređi na",
-    "noResults": "Nema rezultata.",
-    "recentSuggested": "Nedavno / Predloženo",
-    "terminateTitle": "Prekid Sesije?"
-  },
-  "dashboard": {
-    "riskStatus": {
-      "label": "STATUS RIZIKA",
-      "normal": "OPTIMALNO",
-      "warning": "UPOZORENJE",
-      "critical": "KRITIČNO"
-    }
-  },
-  "engineering": {
-    "head": "Pad",
-    "surge": "Povratni udar",
-    "alignment": "Centriranje",
-    "guideVane": "Vodišni aparat",
-    "runner": "Radno kolo",
-    "thrustBearing": "Odrivni ležaj",
-    "shaft": "Vratilo"
   }
 }

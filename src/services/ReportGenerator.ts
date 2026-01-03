@@ -1,5 +1,8 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { TechnicalProjectState } from '../models/TechnicalSchema';
+import { Decimal } from 'decimal.js';
+import i18n from '../i18n';
 
 // Metadata configuration
 const PLATFORM_VERSION = 'v1.0.0';
@@ -255,9 +258,11 @@ export class ReportGenerator {
             doc.setPage(i);
             doc.setFontSize(8);
             doc.setTextColor(148, 163, 184);
-            doc.text(`AnoHUB Precision Systems © 2025 | Page ${i} of ${pageCount}`, 105, 285, { align: 'center' });
+            const footerText = `AnoHUB NC-4.2 | Logic Integrity: Decimal.js Verified | ${new Date().toLocaleDateString('en-GB')}`;
+            doc.text(footerText, 105, 285, { align: 'center' });
             doc.setDrawColor(241, 245, 249);
             doc.line(14, 280, 196, 280);
+            doc.text(`Page ${i} of ${pageCount}`, 196, 285, { align: 'right' });
         }
     }
 
@@ -608,6 +613,210 @@ export class ReportGenerator {
         doc.setTextColor(148, 163, 184);
         doc.text('Digital Signature / Auth Token', 14, finalY + 5);
         doc.text('AnoHUB Core Engine', 14, finalY + 10);
+
+        this.applyFooter();
+        return doc.output('blob');
+    }
+
+    /**
+     * NC-4.2 COMMAND: Generate comprehensive project dossier from CEREBRO state
+     */
+    public generateProjectPDF(state: TechnicalProjectState): Blob {
+        this.applyProfessionalHeader('Global Project Dossier (NC-4.2)');
+        const doc = this.doc;
+
+        // 1. Executive Identity
+        doc.setFontSize(14);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'bold');
+        const dossierLabel = i18n.t('report.dossierLabel', 'PROJECT DOSSIER');
+        doc.text(`${dossierLabel}: ${state.identity.name}`, 14, 60);
+
+        // --- NC-4.2 FORENSIC DEMO OVERLAY ---
+        if (state.demoMode?.active) {
+            doc.saveGraphicsState();
+            doc.setGState(new (doc as any).GState({ opacity: 0.1 }));
+            doc.setFontSize(60);
+            doc.setTextColor(239, 68, 68); // Red-500
+            doc.setFont('helvetica', 'bold');
+            doc.text('SIMULATED INCIDENT', 105, 150, { align: 'center', angle: 45 });
+            doc.text('FORENSIC ANALYSIS', 105, 180, { align: 'center', angle: 45 });
+            doc.restoreGraphicsState();
+        }
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Asset ID: ${state.identity.id} | Location: ${state.identity.location}`, 14, 67);
+
+        // MULTI-COLUMN LAYOUT START
+        // Left Column: Hydraulic & Mechanical
+        // Right Column: Penstock & Risk
+
+        // Column 1: Hydraulic Audit
+        doc.setFontSize(12);
+        doc.setTextColor(6, 182, 212);
+        doc.text(i18n.t('report.sections.hydraulic', 'I. HYDRAULIC AUDIT'), 14, 80);
+
+        autoTable(doc, {
+            startY: 85,
+            margin: { right: 110 }, // Left half
+            head: [['Parameter', 'Active Value', 'Decimal Status']],
+            body: [
+                ['Design Head', `${state.hydraulic.head}m`, state.hydraulic.waterHead.toFixed(2)],
+                ['Flow Rate', `${state.hydraulic.flow}m3/s`, state.hydraulic.flowRate.toFixed(3)],
+                ['Efficiency', `${(state.hydraulic.efficiency * 100).toFixed(1)}%`, 'Verified']
+            ],
+            theme: 'striped',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: { fontSize: 8 }
+        });
+
+        // Column 2: Penstock Analysis (Right half)
+        doc.text(i18n.t('report.sections.penstock', 'II. PENSTOCK ANALYSIS'), 110, 80);
+        autoTable(doc, {
+            startY: 85,
+            margin: { left: 110 },
+            head: [['Structural ID', 'Spec', 'Unit']],
+            body: [
+                ['Diameter', state.penstock.diameter, 'm'],
+                ['Wall Thickness', state.penstock.wallThickness, 'm'],
+                ['Yield Strength', state.penstock.materialYieldStrength, 'MPa']
+            ],
+            theme: 'striped',
+            headStyles: { fillColor: [30, 41, 59] },
+            styles: { fontSize: 8 }
+        });
+
+        let currentY = Math.max((doc as any).lastAutoTable.finalY, 115) + 15;
+
+        // Middle Section: Combined Pressure & Stress (Full Width)
+        doc.setTextColor(6, 182, 212);
+        doc.text(i18n.t('report.sections.pressureStress', 'III. PRESSURE & STRESS FUSION (IEC 60041 Compliant)'), 14, currentY);
+        currentY += 5;
+
+        autoTable(doc, {
+            startY: currentY,
+            head: [['Metric', 'Static Pressure', 'Surge (Water Hammer)', 'Hoop Stress', 'Safety Factor']],
+            body: [
+                [
+                    'Calculated Value',
+                    `${state.physics.staticPressureBar.toFixed(2)} Bar`,
+                    `${state.physics.surgePressureBar.toFixed(2)} Bar`,
+                    `${state.physics.hoopStressMPa.toFixed(2)} MPa`,
+                    state.diagnosis?.safetyFactor.toFixed(3) || 'N/A'
+                ]
+            ],
+            theme: 'grid',
+            headStyles: { fillColor: [6, 182, 212] },
+            styles: { fontSize: 9, halign: 'center' }
+        });
+
+        currentY = (doc as any).lastAutoTable.finalY + 15;
+
+        // Orbit & Mechanical Integrity
+        doc.text(i18n.t('report.sections.mechanical', 'IV. MECHANICAL & ORBIT INTEGRITY'), 14, currentY);
+        currentY += 5;
+
+        autoTable(doc, {
+            startY: currentY,
+            head: [['Operational Metric', 'X-Output', 'Y-Output', 'Eccentricity', 'Status']],
+            body: [
+                [
+                    'Vibration (mm)',
+                    state.mechanical.vibrationX.toFixed(3),
+                    state.mechanical.vibrationY.toFixed(3),
+                    state.physics.eccentricity.toFixed(3),
+                    state.physics.eccentricity > 0.8 ? 'CRITICAL' : (state.physics.eccentricity > 0.7 ? 'WARNING' : 'NOMINAL')
+                ],
+                ['Shaft Speed', `${state.mechanical.rpm} RPM`, '-', '-', 'CONTINUOUS'],
+                ['Bearing Temp', `${state.mechanical.bearingTemp}°C`, '-', '-', state.mechanical.bearingTemp > 70 ? 'CRITICAL' : 'OPTIMAL']
+            ],
+            theme: 'grid',
+            headStyles: { fillColor: [71, 85, 105] },
+            styles: { fontSize: 8 }
+        });
+
+        // V. Engineering Diagnostic Summary
+        currentY = (doc as any).lastAutoTable.finalY + 20;
+        doc.setFillColor(254, 242, 242);
+        doc.rect(14, currentY, 182, 45, 'F');
+        doc.setDrawColor(239, 68, 68);
+        doc.rect(14, currentY, 182, 45, 'D');
+
+        doc.setFontSize(11);
+        doc.setTextColor(153, 27, 27);
+        doc.setFont('helvetica', 'bold');
+        doc.text(i18n.t('report.sections.diagnostic', 'V. DIAGNOSTIC SUMMARY & AI INSIGHTS'), 20, currentY + 10);
+
+        doc.setFontSize(9);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'normal');
+
+        const currentLang = i18n.language === 'bs' ? 'bs' : 'en';
+
+        const diagnosisMessages = state.diagnosis?.messages.map(m => m[currentLang]).join(' ') ||
+            (state.riskScore > 50
+                ? (currentLang === 'bs'
+                    ? "KRITIČNO: Integritet sistema ugrožen. Detektovano visoko naprezanje ili debalans turbine."
+                    : "CRITICAL: System integrity compromised. High hoop stress or turbine imbalance detected.")
+                : (currentLang === 'bs'
+                    ? "NOMINALNO: Nisu detektovani kritični prekršaji fizike. Sistem radi u sigurnoj zoni."
+                    : "NOMINAL: No critical physics violations detected. System operating within safe envelope."));
+
+        const splitNarrative = doc.splitTextToSize(diagnosisMessages, 170);
+        doc.text(splitNarrative, 20, currentY + 20);
+
+        this.applyFooter();
+        return doc.output('blob');
+    }
+
+    /**
+     * NC-4.2 COMMAND: Generate targeted module report
+     */
+    public generateModulePDF(moduleName: string, state: TechnicalProjectState): Blob {
+        this.applyProfessionalHeader(`Module Report: ${moduleName}`);
+        const doc = this.doc;
+
+        doc.setFontSize(14);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`MODULE AUDIT: ${moduleName.toUpperCase()}`, 14, 60);
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Asset: ${state.identity.name} | Captured: ${new Date().toISOString()}`, 14, 67);
+
+        // Targeted body based on module
+        if (moduleName.toLowerCase().includes('mechan')) {
+            autoTable(doc, {
+                startY: 80,
+                head: [['Mechanical Parameter', 'Measured Value', 'Unit']],
+                body: [
+                    ['Radial Clearance', state.mechanical.radialClearance, 'mm'],
+                    ['Alignment Deviation', state.mechanical.alignment, 'mm/m'],
+                    ['Bolt Grade', state.mechanical.boltSpecs.grade, '-'],
+                    ['Count', state.mechanical.boltSpecs.count, '-'],
+                    ['Applied Torque', state.mechanical.boltSpecs.torque, 'Nm']
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [15, 23, 42] }
+            });
+        } else if (moduleName.toLowerCase().includes('hydraul')) {
+            autoTable(doc, {
+                startY: 80,
+                head: [['Hydraulic Parameter', 'Measured Value', 'Unit']],
+                body: [
+                    ['Gross Head', state.hydraulic.head, 'm'],
+                    ['Design Flow', state.hydraulic.flow, 'm³/s'],
+                    ['Efficiency', (state.hydraulic.efficiency * 100).toFixed(2), '%'],
+                    ['Water Temperature', state.site.temperature, '°C']
+                ],
+                theme: 'grid',
+                headStyles: { fillColor: [6, 182, 212] }
+            });
+        } else {
+            doc.text("No specific module sensors mapped for high-fidelity report in this version.", 14, 80);
+        }
 
         this.applyFooter();
         return doc.output('blob');

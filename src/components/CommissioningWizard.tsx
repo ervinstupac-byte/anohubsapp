@@ -181,7 +181,6 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     {currentStep === 'ALIGNMENT' && (
                         <AlignmentWizard
                             sessionId={session.id}
-                            asset={asset}
                             onComplete={() => completeStep('ALIGNMENT')}
                         />
                     )}
@@ -249,10 +248,10 @@ const StepIndicator: React.FC<{
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
             className={`p-3 rounded-lg border-2 transition-all ${active
-                    ? 'bg-cyan-500/20 border-cyan-500'
-                    : completed
-                        ? 'bg-emerald-500/20 border-emerald-500'
-                        : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
+                ? 'bg-cyan-500/20 border-cyan-500'
+                : completed
+                    ? 'bg-emerald-500/20 border-emerald-500'
+                    : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
                 }`}
         >
             <div className="flex items-center gap-2 mb-1">

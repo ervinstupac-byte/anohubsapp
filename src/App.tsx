@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, useLocation, useNavigate, Route, Routes, useParams, Navigate } from 'react-router-dom';
 import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
@@ -40,6 +41,12 @@ import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
 import { GlobalFooter } from './components/GlobalFooter.tsx';
+import { DataSyncBridge } from './components/DataSyncBridge';
+import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
+import { PrintPreviewModal } from './components/modals/PrintPreviewModal.tsx';
+import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostic-twin/Sidebar.tsx';
+import { useCerebro } from './contexts/ProjectContext';
+import { CommanderDemoHUD } from './components/diagnostic-twin/CommanderDemoHUD';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -59,7 +66,6 @@ const HPPImprovements = lazy(() => import('./components/HPPImprovements.tsx').th
 const InstallationGuarantee = lazy(() => import('./components/InstallationGuarantee.tsx').then(m => ({ default: m.InstallationGuarantee })));
 const GenderEquity = lazy(() => import('./components/GenderEquity.tsx').then(m => ({ default: m.GenderEquity })));
 const HPPBuilder = lazy(() => import('./components/HPPBuilder.tsx').then(m => ({ default: m.HPPBuilder })));
-const ProjectPhaseGuide = lazy(() => import('./components/ProjectPhaseGuide.tsx').then(m => ({ default: m.ProjectPhaseGuide })));
 const RiverWildlife = lazy(() => import('./components/RiverWildlife.tsx').then(m => ({ default: m.RiverWildlife })));
 const RevitalizationStrategy = lazy(() => import('./components/RevitalizationStrategy.tsx').then(m => ({ default: m.RevitalizationStrategy })));
 const DigitalIntegrity = lazy(() => import('./components/DigitalIntegrity.tsx').then(m => ({ default: m.DigitalIntegrity })));
@@ -141,6 +147,10 @@ const AppLayout: React.FC = () => {
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
     const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const { state: cerebroState } = useCerebro();
+    const isCriticalDemo = cerebroState?.demoMode?.active && cerebroState?.demoMode?.scenario !== 'NORMAL';
+    const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';
@@ -162,8 +172,15 @@ const AppLayout: React.FC = () => {
     // Listen for custom wizard trigger event from NeuralFlowMap
     useEffect(() => {
         const handleOpenWizard = () => setIsWizardOpen(true);
+        const handleOpenPreview = () => setIsPreviewOpen(true);
+
         window.addEventListener('openAssetWizard', handleOpenWizard);
-        return () => window.removeEventListener('openAssetWizard', handleOpenWizard);
+        window.addEventListener(TRIGGER_FORENSIC_EXPORT, handleOpenPreview);
+
+        return () => {
+            window.removeEventListener('openAssetWizard', handleOpenWizard);
+            window.removeEventListener(TRIGGER_FORENSIC_EXPORT, handleOpenPreview);
+        };
     }, []);
 
     useEffect(() => {
@@ -238,8 +255,6 @@ const AppLayout: React.FC = () => {
         }
     };
 
-    // Modules list moved to Sidebar.tsx
-
     return (
         <NavigationProvider value={{
             currentPage: isHub ? 'home' : 'intro',
@@ -252,7 +267,15 @@ const AppLayout: React.FC = () => {
             showFeedbackModal: () => setIsFeedbackVisible(true)
         }}>
             {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-            <main className="min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617]">
+            <main className={`min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                {isCriticalDemo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: [0.1, 0.2, 0.1] }}
+                        transition={{ repeat: Infinity, duration: 3 }}
+                        className="fixed inset-0 pointer-events-none z-[99] border-[16px] border-red-500/10"
+                    />
+                )}
                 {/* The "Elite" Background Glows */}
                 <div className="fixed inset-0 pointer-events-none z-0">
                     <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
@@ -267,6 +290,9 @@ const AppLayout: React.FC = () => {
                 <Suspense fallback={<Spinner />}>
                     <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
                 </Suspense>
+
+                {/* NEURAL BRIDGE (DATA SYNC V4.5) */}
+                <DataSyncBridge />
 
                 {/* UNIFIED SIDEBAR */}
                 <Sidebar
@@ -316,43 +342,57 @@ const AppLayout: React.FC = () => {
                                         </button>
                                     </div>
                                 }>
-                                    <Routes>
-                                        <Route index element={<ToolboxLaunchpad />} />
-                                        {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
-                                        <Route path="/francis/*" element={<FrancisRouter />} />
-                                        <Route path="profile" element={<UserProfile />} />
-                                        <Route path="map" element={<GlobalMap />} />
-                                        <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                                        <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                                        <Route path="risk-report" element={<RiskReport />} />
-                                        <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                        <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
-                                        <Route path="digital-introduction" element={<DigitalIntroduction />} />
-                                        <Route path="hpp-improvements" element={<HPPImprovements />} />
-                                        <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                                        <Route path="gender-equity" element={<GenderEquity />} />
-                                        <Route path="hpp-builder" element={<HPPBuilder />} />
-                                        <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                                        <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                                        <Route path="river-wildlife" element={<RiverWildlife />} />
-                                        <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                                        <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                                        <Route path="contract-management" element={<ContractManagement />} />
-                                        <Route path="library" element={<ComponentLibrary />} />
-                                        <Route path="vision" element={<UnderConstruction />} />
+                                    <AnimatePresence mode="wait">
+                                        <motion.div
+                                            key={location.pathname}
+                                            initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(20px)' }}
+                                            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                                            exit={{ opacity: 0, y: -30, scale: 1.02, filter: 'blur(20px)' }}
+                                            transition={{
+                                                duration: 0.5,
+                                                ease: [0.22, 1, 0.36, 1] // Custom hydraulic flow curve
+                                            }}
+                                            className="w-full"
+                                        >
+                                            <Routes location={location}>
+                                                <Route index element={<ToolboxLaunchpad />} />
+                                                {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
+                                                <Route path="/francis/*" element={<FrancisRouter />} />
+                                                <Route path="profile" element={<UserProfile />} />
+                                                <Route path="map" element={<GlobalMap />} />
+                                                <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                                                <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                                                <Route path="risk-report" element={<RiskReport />} />
+                                                <Route path="investor-briefing" element={<InvestorBriefing />} />
+                                                <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
+                                                <Route path="digital-introduction" element={<DigitalIntroduction />} />
+                                                <Route path="hpp-improvements" element={<HPPImprovements />} />
+                                                <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                                                <Route path="gender-equity" element={<GenderEquity />} />
+                                                <Route path="hpp-builder" element={<HPPBuilder />} />
+                                                <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                                                <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                                                <Route path="river-wildlife" element={<RiverWildlife />} />
+                                                <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                                                <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                                                <Route path="contract-management" element={<ContractManagement />} />
+                                                <Route path="library" element={<ComponentLibrary />} />
+                                                <Route path="vision" element={<UnderConstruction />} />
 
-                                        {/* Maintenance Sub-Router */}
-                                        <Route path="/maintenance/*" element={<MaintenanceRouter />} />
+                                                {/* Maintenance Sub-Router */}
+                                                <Route path="/maintenance/*" element={<MaintenanceRouter />} />
 
-                                        <Route path="executive" element={<ExecutiveDashboard />} />
-                                        <Route path="structural-integrity" element={<StructuralIntegrity />} />
+                                                <Route path="executive" element={<ExecutiveDashboard />} />
+                                                <Route path="structural-integrity" element={<StructuralIntegrity />} />
 
-                                        <Route path="admin-approval" element={<AdminApproval />} />
-                                        <Route path="/forensics" element={<ForensicDashboard />} />
-                                        <Route path="stress-test" element={<SystemStressTest />} />
-                                        <Route path="learning-lab" element={<UnderConstruction />} />
-                                        <Route path="*" element={<Navigate to="/" replace />} />
-                                    </Routes>
+                                                <Route path="admin-approval" element={<AdminApproval />} />
+                                                <Route path="/forensics" element={<ForensicDashboard />} />
+                                                <Route path="stress-test" element={<SystemStressTest />} />
+                                                <Route path="learning-lab" element={<UnderConstruction />} />
+                                                <Route path="*" element={<Navigate to="/" replace />} />
+                                            </Routes>
+                                        </motion.div>
+                                    </AnimatePresence>
                                 </ErrorBoundary>
                             </div>
                         </Suspense>
@@ -360,8 +400,14 @@ const AppLayout: React.FC = () => {
                 </div>
                 <VoiceAssistant />
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
+                <PrintPreviewModal
+                    isOpen={isPreviewOpen}
+                    onClose={() => setIsPreviewOpen(false)}
+                    state={technicalState}
+                />
                 <GlobalFooter />
             </main>
+            <CommanderDemoHUD />
         </NavigationProvider>
     );
 };

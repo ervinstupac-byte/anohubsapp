@@ -2,6 +2,13 @@ import Decimal from 'decimal.js';
 
 export type TurbineType = 'Pelton' | 'Kaplan' | 'Francis';
 
+export type DemoScenario = 'NORMAL' | 'SURGE' | 'THERMAL' | 'CAVITATION' | 'LEAK';
+
+export interface DemoState {
+    active: boolean;
+    scenario: DemoScenario | null;
+}
+
 export interface AssetIdentity {
     id: string;
     name: string;
@@ -97,12 +104,15 @@ export interface TechnicalProjectState {
         staticPressureBar: number;
         surgePressureBar: number;
         waterHammerPressureBar: number;
+        eccentricity: number; // NEW: Persisted eccentricity for reporting
     };
     governor: GovernorState; // NEW: High-precision PID state
     francis?: FrancisState; // NEW: Francis Hub State
     componentHealth?: ComponentHealthRegistry;
+    diagnosis?: DiagnosisReport;
     riskScore: number;
     lastRecalculation: string;
+    demoMode: DemoState;
 }
 
 export interface EngineeringConstants {
@@ -170,6 +180,7 @@ export type ProjectAction =
     | { type: 'UPDATE_ACOUSTIC_DATA'; payload: Partial<AcousticMetrics> }
     | { type: 'UPDATE_PARTICLE_DATA'; payload: any[] }
     | { type: 'UPDATE_GOVERNOR'; payload: Partial<GovernorState> }
+    | { type: 'SET_DEMO_MODE'; payload: DemoState }
     | { type: 'RESET_TO_DEMO' };
 
 /**
@@ -249,7 +260,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         hoopStressMPa: 120,
         staticPressureBar: 45,
         surgePressureBar: 55,
-        waterHammerPressureBar: 12.5
+        waterHammerPressureBar: 12.5,
+        eccentricity: 0.25
     },
     governor: {
         setpoint: new Decimal(50.0),
@@ -292,5 +304,9 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         }
     },
     riskScore: 0,
-    lastRecalculation: new Date().toISOString()
+    lastRecalculation: new Date().toISOString(),
+    demoMode: {
+        active: false,
+        scenario: null
+    }
 };

@@ -133,6 +133,11 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 }
             };
         }
+        case 'SET_DEMO_MODE':
+            return {
+                ...state,
+                demoMode: action.payload
+            };
         case 'UPDATE_TELEMETRY_SUCCESS':
             return action.payload; // payload is the fully recalculated state
         case 'RESET_TO_DEMO':
@@ -242,6 +247,7 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                     vibrationY: validatedData.data.vibrationY || 0,
                     baselineOrbitCenter: state.mechanical.baselineOrbitCenter || { x: 0, y: 0 }
                 },
+                diagnosis,
                 riskScore: diagnosis.severity === 'CRITICAL' ? 100 : (diagnosis.severity === 'WARNING' ? 50 : 0),
                 lastRecalculation: new Date().toISOString()
             };

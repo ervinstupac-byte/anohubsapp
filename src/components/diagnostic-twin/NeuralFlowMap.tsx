@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 import { useProjectEngine } from '../../contexts/ProjectContext.tsx';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath.ts';
 import { Tooltip } from '../ui/Tooltip.tsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { DigitalDisplay } from './DigitalDisplay.tsx';
-import { Activity, ShieldCheck, ZapOff, Sparkles } from 'lucide-react';
+import { Activity, ShieldCheck, ZapOff, Sparkles, ChevronRight } from 'lucide-react';
 
 const TurbineUnit: React.FC<{
     id: string;
@@ -15,6 +17,7 @@ const TurbineUnit: React.FC<{
     eccentricity: number;
     vibration: number;
 }> = React.memo(({ name, status, mw, eccentricity, vibration }) => {
+    const { t } = useTranslation();
     // NC-4.2 Reactive Color Logic: Base color on physics metrics
     // Vibration > 0.05 or Eccentricity > 0.8 triggers Warning/Critical aesthetics
     const isVibrationCritical = vibration > 0.06;
@@ -25,48 +28,55 @@ const TurbineUnit: React.FC<{
     else if (isEccentricityWarning) unitColor = 'orange';
 
     const colorMap = {
-        cyan: 'border-cyan-400 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent shadow-[0_0_60px_rgba(34,211,238,0.3),inset_0_0_40px_rgba(6,182,212,0.1)]',
-        orange: 'border-orange-400 bg-gradient-to-br from-orange-500/10 via-yellow-500/5 to-transparent shadow-[0_0_60px_rgba(251,146,60,0.3),inset_0_0_40px_rgba(245,158,11,0.1)]',
-        red: 'border-red-400 bg-gradient-to-br from-red-500/10 via-pink-500/5 to-transparent shadow-[0_0_60px_rgba(239,68,68,0.3),inset_0_0_40px_rgba(220,38,38,0.1)]'
+        cyan: 'border-cyan-400 group-hover:border-cyan-300 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent shadow-[0_0_60px_rgba(6,182,212,0.2),inset_0_0_40px_rgba(6,182,212,0.1)]',
+        orange: 'border-amber-400 group-hover:border-amber-300 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent shadow-[0_0_60px_rgba(245,158,11,0.2),inset_0_0_40px_rgba(245,158,11,0.1)]',
+        red: 'border-red-400 group-hover:border-red-300 bg-gradient-to-br from-red-500/10 via-pink-500/5 to-transparent shadow-[0_0_60px_rgba(239,68,68,0.2),inset_0_0_40px_rgba(220,38,38,0.1)]'
     };
 
     return (
-        <div className="relative group">
+        <div className="relative group perspective-1000">
             <Tooltip content={`${name}: Eccentricity ${(eccentricity).toFixed(3)} | Vibration ${(vibration * 1000).toFixed(1)}μm`}>
-                <div className={`
-                    w-52 h-52 rounded-full border-[6px] flex items-center justify-center relative translate-y-10 transition-all duration-700 backdrop-blur-sm
-                    ${status === 'running' ? colorMap[unitColor as keyof typeof colorMap] : 'border-slate-700 bg-gradient-to-br from-slate-800/50 to-slate-900/50 shadow-xl'}
-                `}>
-                    <div className={`w-40 h-40 rounded-full border-[3px] border-dashed ${status === 'running' ? 'border-cyan-400/40 animate-spin-slow' : 'border-slate-700'}`}></div>
+                <motion.div
+                    whileHover={{ rotateY: 10, scale: 1.05 }}
+                    className={`
+                        w-52 h-52 rounded-full border-[6px] flex items-center justify-center relative translate-y-10 transition-all duration-700 backdrop-blur-xl
+                        ${status === 'running' ? colorMap[unitColor as keyof typeof colorMap] : 'border-white/5 bg-white/5 shadow-2xl'}
+                    `}
+                >
+                    <div className="absolute inset-0 rounded-full noise-commander opacity-20"></div>
+                    <div className={`w-40 h-40 rounded-full border-[3px] border-dashed ${status === 'running' ? 'border-cyan-400/30 animate-[spin_8s_linear_infinite]' : 'border-white/5'}`}></div>
 
-                    <div className="absolute text-center">
+                    <div className="absolute text-center z-10">
                         <DigitalDisplay
                             value={mw.toFixed(1)}
                             label={name}
                             unit="MW"
                             color={unitColor as any}
-                            className="!bg-transparent !border-none !p-0 scale-110"
+                            className="!bg-transparent !border-none !p-0 scale-110 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                         />
                     </div>
 
                     {status === 'running' && unitColor === 'cyan' && (
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-cyan-500/5 to-transparent pointer-events-none"></div>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-t from-cyan-500/10 to-transparent pointer-events-none animate-pulse"></div>
                     )}
-                </div>
+                </motion.div>
             </Tooltip>
 
-            <div className="w-5 h-20 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 mx-auto relative -z-10 shadow-2xl" />
+            <div className="w-6 h-20 bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 mx-auto relative -z-10 shadow-2xl border-x border-white/5" />
 
             <div className={`
-                w-36 h-24 mx-auto rounded-b-2xl border-x-[3px] border-b-[3px] flex items-center justify-center overflow-hidden transition-all duration-700 backdrop-blur-sm
-                ${status === 'running' ? 'border-cyan-400/50 bg-gradient-to-b from-cyan-500/15 to-blue-500/10 shadow-[0_8px_30px_rgba(34,211,238,0.2)]' : 'border-slate-700 bg-gradient-to-b from-slate-800 to-slate-900 shadow-xl'}
-                ${isVibrationCritical ? 'bg-gradient-to-b from-red-500/20 to-red-600/10 border-red-500/50 shadow-[0_8px_30px_rgba(239,68,68,0.3)]' : ''}
+                w-40 h-24 mx-auto rounded-b-2xl border-x-[1px] border-b-[1px] flex items-center justify-center overflow-hidden transition-all duration-700 backdrop-blur-xl relative
+                ${status === 'running' ? 'border-white/10 bg-white/5 shadow-[0_10px_40px_rgba(0,0,0,0.5)]' : 'border-white/5 bg-white/5 shadow-xl'}
+                ${isVibrationCritical ? 'border-red-500/50 bg-red-500/10 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : ''}
             `}>
+                <div className="absolute inset-0 noise-commander opacity-10"></div>
                 {status === 'running' && !isVibrationCritical && (
-                    <div className="w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(34,211,238,0.15)_50%,transparent_75%)] bg-[length:24px_24px] animate-[slide_1s_linear_infinite]"></div>
+                    <div className="w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(6,182,212,0.1)_50%,transparent_75%)] bg-[length:32px_32px] animate-[slide_1.5s_linear_infinite]"></div>
                 )}
                 {isVibrationCritical && (
-                    <div className="text-[10px] font-black text-red-400 animate-pulse tracking-tight px-2 py-1 bg-red-950/50 rounded border border-red-500/30 uppercase">Thermal/Vib Threshold Breached</div>
+                    <div className="text-[10px] font-black text-red-400 animate-pulse tracking-tight px-3 py-1.5 bg-red-950/60 rounded-lg border border-red-500/30 uppercase z-10 mx-4 text-center">
+                        {t('neuralFlow.physicsBreach')}
+                    </div>
                 )}
             </div>
         </div>
@@ -74,9 +84,11 @@ const TurbineUnit: React.FC<{
 });
 
 export const NeuralFlowMap: React.FC = React.memo(() => {
+    const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const { connectTwinToExpertEngine, technicalState } = useProjectEngine();
     const { orbit, vibration, waterHammer } = useEngineeringMath();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [diagnosticAlerts, setDiagnosticAlerts] = useState<any[]>([]);
 
@@ -118,42 +130,52 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
 
     if (!selectedAsset) {
         return (
-            <div className="flex-1 bg-[#020617] relative overflow-hidden flex flex-col items-center justify-center p-8">
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                    style={{ backgroundImage: 'linear-gradient(#00f3ff 1px, transparent 1px), linear-gradient(90deg, #00f3ff 1px, transparent 1px)', backgroundSize: '60px 60px' }}>
-                </div>
-                <div className="relative z-10 max-w-2xl text-center space-y-8 animate-fade-in">
-                    <div className="inline-block px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm font-bold uppercase tracking-wider mb-4">
-                        <Sparkles className="w-4 h-4 inline mr-2" /> Asset Intelligence Initialization
+            <div className="flex-1 bg-slate-950 relative overflow-hidden flex flex-col items-center justify-center p-8">
+                <div className="absolute inset-0 opacity-10 noise-commander"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-500/5 via-transparent to-emerald-500/5"></div>
+
+                <div className="relative z-10 max-w-2xl text-center space-y-12 animate-fade-in">
+                    <div className="inline-flex items-center gap-3 px-6 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                        <Sparkles className="w-4 h-4 animate-pulse" /> {t('neuralFlow.intelInit')}
                     </div>
-                    <h1 className="text-5xl md:text-6xl font-black tracking-tighter">
-                        Deploy Your
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400"> Diagnostic Twin</span>
-                    </h1>
-                    <p className="text-xl text-slate-400 max-w-xl mx-auto font-light">
-                        Connect high-fidelity field data for forensic analysis and predictive maintenance.
-                    </p>
+                    <div>
+                        <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white mb-6 uppercase">
+                            Deploy Your <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-cyan-500 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+                                {t('neuralFlow.diagnosticTwin')}
+                            </span>
+                        </h1>
+                        <p className="text-xl text-slate-500 max-w-xl mx-auto font-medium leading-relaxed">
+                            {t('neuralFlow.heroText')}
+                        </p>
+                    </div>
+
                     <button
-                        className="px-8 py-4 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all active:scale-95"
+                        className="group relative px-10 py-5 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] transition-all active:scale-95 overflow-hidden"
                         onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
                     >
-                        Register New Asset
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                        <span className="relative z-10">{t('neuralFlow.registerAsset')}</span>
                     </button>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 pt-12 border-t border-white/5">
-                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all text-center">
-                            <Activity className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-                            <h3 className="text-white font-bold mb-2">Neural Flow</h3>
-                            <p className="text-xs text-slate-500">Real-time physics synchronization</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/5">
+                        <div className="p-8 bg-white/5 glass-panel border border-white/10 rounded-2xl hover:border-cyan-500/40 transition-all text-center group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <Activity className="w-8 h-8 text-cyan-400 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+                            <h3 className="text-white font-black uppercase tracking-tight mb-2">{t('neuralFlow.flowTitle')}</h3>
+                            <p className="text-xs text-slate-500 font-medium">{t('neuralFlow.flowDesc')}</p>
                         </div>
-                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all text-center">
-                            <ShieldCheck className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-                            <h3 className="text-white font-bold mb-2">Diagnostic Integrity</h3>
-                            <p className="text-xs text-slate-500">Certified forensic data stream</p>
+                        <div className="p-8 bg-white/5 glass-panel border border-white/10 rounded-2xl hover:border-emerald-500/40 transition-all text-center group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <ShieldCheck className="w-8 h-8 text-emerald-400 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]" />
+                            <h3 className="text-white font-black uppercase tracking-tight mb-2">{t('neuralFlow.integrityTitle')}</h3>
+                            <p className="text-xs text-slate-500 font-medium">{t('neuralFlow.integrityDesc')}</p>
                         </div>
-                        <div className="p-6 bg-slate-900/50 border border-white/5 rounded-xl hover:border-cyan-500/30 transition-all text-center">
-                            <ZapOff className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-                            <h3 className="text-white font-bold mb-2">Zero Control</h3>
-                            <p className="text-xs text-slate-500">Non-intrusive monitoring focus</p>
+                        <div className="p-8 bg-white/5 glass-panel border border-white/10 rounded-2xl hover:border-indigo-500/40 transition-all text-center group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <ZapOff className="w-8 h-8 text-indigo-400 mx-auto mb-4 drop-shadow-[0_0_10px_rgba(99,102,241,0.4)]" />
+                            <h3 className="text-white font-black uppercase tracking-tight mb-2">{t('neuralFlow.latencyTitle')}</h3>
+                            <p className="text-xs text-slate-500 font-medium">{t('neuralFlow.latencyDesc')}</p>
                         </div>
                     </div>
                 </div>
@@ -167,20 +189,28 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                 style={{ backgroundImage: 'linear-gradient(#06b6d4 1px, transparent 1px), linear-gradient(90deg, #06b6d4 1px, transparent 1px)', backgroundSize: '80px 80px' }}>
             </div>
 
-            <div className="relative z-10 w-full max-w-6xl border-2 border-white/10 bg-gradient-to-br from-slate-900/60 via-slate-800/40 to-black/60 p-6 sm:p-8 md:p-16 rounded-3xl backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.5)] overflow-hidden">
-                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                    <div className="text-xs sm:text-sm font-black text-slate-400 tracking-[0.25em] border-2 border-cyan-500/20 px-4 py-2 bg-slate-900/50 rounded-lg shadow-lg">
-                        NEURAL CORE // DIAGNOSTIC TWIN
+            <div className="relative z-10 w-full max-w-6xl border border-white/10 bg-slate-900/40 p-6 sm:p-8 md:p-16 rounded-[2.5rem] backdrop-blur-3xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden">
+                <div className="absolute inset-0 noise-commander opacity-20"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
+
+                <div className="absolute top-4 left-4 sm:top-8 sm:left-8 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 z-20">
+                    <div className="text-[10px] font-black text-cyan-400 tracking-[0.4em] border border-cyan-500/30 px-5 py-2.5 bg-cyan-500/5 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.1)] uppercase">
+                        {t('neuralFlow.coreTwin')}
                     </div>
                 </div>
 
-                <div className={`absolute top-4 right-4 sm:top-6 sm:right-6 text-xs sm:text-sm font-mono px-4 py-2.5 rounded-xl backdrop-blur-md flex items-center gap-3 border-2 transition-all ${diagnosticAlerts.length > 0
-                    ? 'text-red-400 bg-red-950/40 border-red-500/30'
-                    : 'text-emerald-400 bg-emerald-950/40 border-emerald-400/30'
+                <div className={`absolute top-4 right-4 sm:top-8 sm:right-8 text-[10px] font-mono px-5 py-2.5 rounded-full backdrop-blur-xl flex items-center gap-3 border transition-all z-20 ${diagnosticAlerts.length > 0
+                    ? 'text-red-400 bg-red-500/10 border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.1)]'
+                    : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
                     }`}>
-                    <ShieldCheck className={`w-4 h-4 ${diagnosticAlerts.length > 0 ? 'text-red-500' : 'text-emerald-400'}`} />
-                    <span className="font-black uppercase tracking-wider">
-                        {diagnosticAlerts.length > 0 ? 'DIAGNOSTIC ALARM' : 'INTEGRITY VERIFIED'}
+                    <motion.div
+                        animate={diagnosticAlerts.length > 0 ? { scale: [1, 1.2, 1], opacity: [1, 0.5, 1] } : {}}
+                        transition={{ repeat: Infinity, duration: 1 }}
+                    >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                    </motion.div>
+                    <span className="font-black uppercase tracking-widest">
+                        {diagnosticAlerts.length > 0 ? t('neuralFlow.diagnosticBreach') : t('neuralFlow.integrityVerified')}
                     </span>
                 </div>
 
@@ -211,11 +241,48 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
                 </div>
 
+                <AnimatePresence>
+                    {(orbit.eccentricity > 0.75 || vibration.x > 0.05) && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20, height: 0 }}
+                            animate={{ opacity: 1, y: 0, height: 'auto' }}
+                            exit={{ opacity: 0, y: 20, height: 0 }}
+                            className="mt-6 overflow-hidden"
+                        >
+                            <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-2xl shadow-[0_20px_40px_rgba(6,182,212,0.1)] relative group">
+                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                                            <Sparkles className="w-6 h-6 animate-pulse" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-white font-black uppercase text-sm tracking-widest">{t('neuralFlow.smartInsight')}</h4>
+                                            <p className="text-xs text-slate-400 font-medium max-w-md">
+                                                {orbit.eccentricity > 0.75
+                                                    ? t('neuralFlow.eccentricityInsight')
+                                                    : t('neuralFlow.vibrationInsight')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => navigate('/maintenance/shaft-alignment')}
+                                        className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
+                                    >
+                                        {t('neuralFlow.launchAlignmentWizard')}
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {diagnosticAlerts.length > 0 && (
                     <div className="mt-6 p-5 bg-red-950/30 border border-red-500/30 rounded-2xl animate-pulse">
                         <div className="flex items-center gap-3 mb-3">
                             <ZapOff className="w-5 h-5 text-red-500" />
-                            <h4 className="text-red-400 font-black uppercase text-sm tracking-widest text-white">Forensic Detection Active</h4>
+                            <h4 className="text-red-400 font-black uppercase text-sm tracking-widest text-white">{t('neuralFlow.detectionActive')}</h4>
                         </div>
                         <div className="space-y-1">
                             {diagnosticAlerts.map((alarm, idx) => (

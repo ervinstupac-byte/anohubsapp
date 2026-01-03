@@ -5,6 +5,9 @@ import { ExpertDiagnosisEngine } from '../../services/ExpertDiagnosisEngine';
 import { DrTurbineAI, ActionCard } from '../../services/DrTurbineAI';
 import { GlassCard } from '../ui/GlassCard';
 import { ModernButton } from '../ui/ModernButton';
+import { TypewriterText } from '../ui/TypewriterText';
+import { motion } from 'framer-motion';
+import { Activity, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
 
 // --- TECHNICAL TURBINE SILHOUETTE WITH GLASSMORPHISM ---
 const TurbineSilhouette: React.FC<{
@@ -16,122 +19,112 @@ const TurbineSilhouette: React.FC<{
     frequency?: number;
     alarms?: string[]
 }> = ({ health, vibration, temp, flow, head, frequency, alarms = [] }) => {
-    const { t } = useTranslation(); // <--- HOOK ADDED
-    // Dynamic styles based on sensor data with glassmorphism effects
+    const { t } = useTranslation();
     const isCritical = health < 50 || (frequency || 0) > 55 || (temp || 0) > 80;
-    const bearingColor = (temp || 0) > 60 ? '#EF4444' : health > 80 ? '#10B981' : '#F59E0B';
-    const shaftColor = (vibration || 0) > 0.05 ? '#EF4444' : health > 80 ? '#3B82F6' : '#F59E0B';
-    const runnerColor = isCritical ? '#EF4444' : health > 80 ? '#06B6D4' : '#F59E0B';
+    const bearingColor = (temp || 0) > 60 ? '#EF4444' : health > 80 ? '#22D3EE' : '#F59E0B';
+    const shaftColor = (vibration || 0) > 0.05 ? '#EF4444' : health > 80 ? '#06B6D4' : '#F59E0B';
+    const runnerColor = isCritical ? '#EF4444' : health > 80 ? '#0891B2' : '#F59E0B';
 
     return (
-        <div className="relative w-full h-[400px] flex items-center justify-center">
-            {/* GLASSMORPHISM BACKGROUND */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-white/1 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl"></div>
+        <div className="relative w-full h-[450px] flex items-center justify-center group">
+            {/* AMBIENT GLOW BEHIND TURBINE */}
+            <div className={`absolute w-64 h-64 rounded-full blur-[80px] transition-colors duration-1000 ${isCritical ? 'bg-red-500/10' : 'bg-cyan-500/10'}`}></div>
 
             {/* TECHNICAL TURBINE SILHOUETTE SVG */}
-            <svg viewBox="0 0 250 400" className="h-full relative z-10 drop-shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <svg viewBox="0 0 250 400" className="h-full relative z-10 drop-shadow-[0_0_40px_rgba(6,182,212,0.2)] transition-transform duration-700 group-hover:scale-105">
                 <defs>
-                    <filter id="glassGlow">
+                    <filter id="glassGlow" x="-20%" y="-20%" width="140%" height="140%">
                         <feGaussianBlur stdDeviation="3" result="coloredBlur" />
                         <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
-                    <filter id="alarmPulse">
-                        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                    </filter>
-                    <linearGradient id="metalGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#E2E8F0" />
-                        <stop offset="50%" stopColor="#CBD5E1" />
-                        <stop offset="100%" stopColor="#94A3B8" />
-                    </linearGradient>
-                    <linearGradient id="glassGradient" x1="0" x2="1" y1="0" y2="1">
-                        <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
-                        <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
+                    <linearGradient id="coolGradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="rgba(34, 211, 238, 0.4)" />
+                        <stop offset="100%" stopColor="rgba(8, 145, 178, 0.1)" />
                     </linearGradient>
                 </defs>
 
-                {/* Generator Housing */}
-                <rect x="50" y="30" width="150" height="60" rx="8" fill="url(#glassGradient)" stroke="#64748B" strokeWidth="1.5" opacity="0.8" />
+                {/* Generator Structure - More Industrial */}
+                <rect x="45" y="20" width="160" height="75" rx="4" fill="url(#coolGradient)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                <path d="M50 40 L200 40 M50 60 L200 60 M50 80 L200 80" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
 
-                {/* Shaft with Vibration Indicator */}
-                <rect x="115" y="90" width="20" height="180" fill={shaftColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9" rx="2">
-                    {(vibration || 0) > 0.05 && <animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.8s" repeatCount="indefinite" />}
-                </rect>
+                {/* Shaft - Dynamic Rotation Animation */}
+                <motion.rect
+                    x="118" y="95" width="14" height="180"
+                    fill={shaftColor}
+                    animate={{
+                        opacity: [0.7, 0.9, 0.7],
+                        boxShadow: isCritical ? ["0 0 10px red", "0 0 20px red", "0 0 10px red"] : ["0 0 5px cyan", "0 0 10px cyan", "0 0 5px cyan"]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    rx="1"
+                />
 
-                {/* Upper Bearing */}
-                <circle cx="125" cy="120" r="15" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9">
-                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
-                </circle>
+                {/* Bearings with Thermal Mapping */}
+                <circle cx="125" cy="120" r="16" fill="rgba(15, 23, 42, 0.8)" stroke={bearingColor} strokeWidth="2" filter="url(#glassGlow)" />
+                <circle cx="125" cy="245" r="16" fill="rgba(15, 23, 42, 0.8)" stroke={bearingColor} strokeWidth="2" filter="url(#glassGlow)" />
 
-                {/* Lower Bearing */}
-                <circle cx="125" cy="240" r="15" fill={bearingColor} filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"} opacity="0.9">
-                    {(temp || 0) > 60 && <animate attributeName="fill" values="#EF4444;#DC2626;#EF4444" dur="1.2s" repeatCount="indefinite" />}
-                </circle>
+                {/* Francis Runner - Enhanced Geometry */}
+                <g transform="translate(125,290)">
+                    <path d="M-45,-15 C -45,-15 -25,-45 0,-40 C 25,-45 45,-15 45,-15 L 45,25 C 45,25 25,55 0,50 C -25,55 -45,25 -45,25 Z"
+                        fill="rgba(15, 23, 42, 0.6)"
+                        stroke={runnerColor}
+                        strokeWidth="1.5"
+                        filter="url(#glassGlow)" />
 
-                {/* Francis Runner (Technical Detail) */}
-                <g transform="translate(125,280)">
-                    <path d="M-40,-20 C -40,-20 -20,-50 0,-45 C 20,-50 40,-20 40,-20 L 40,20 C 40,20 20,50 0,45 C -20,50 -40,20 -40,20 Z"
-                        fill={runnerColor}
-                        filter={isCritical ? "url(#alarmPulse)" : "url(#glassGlow)"}
-                        opacity="0.9" />
-                    {/* Runner Blades */}
-                    <path d="M-35,-15 L 0,-40 L 35,-15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
-                    <path d="M-35,0 L 0,-25 L 35,0" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
-                    <path d="M-35,15 L 0,-10 L 35,15" stroke="#64748B" strokeWidth="1" fill="none" opacity="0.6" />
+                    {/* Animated Blades */}
+                    <motion.path
+                        d="M-30,-10 L30,-10 M-35,5 L35,5 M-30,20 L30,20"
+                        stroke={runnerColor}
+                        strokeWidth="1"
+                        opacity="0.3"
+                        animate={{ opacity: [0.1, 0.4, 0.1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                    />
                 </g>
 
-                {/* Water Flow Animation */}
-                <path d="M30 320 Q 125 380 220 320" fill="none" stroke={isCritical ? "#EF4444" : "#06B6D4"} strokeWidth="3" strokeDasharray="8,4" opacity="0.7">
-                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite" />
-                </path>
-
-                {/* Head Pressure Indicator */}
-                <rect x="20" y="340" width="20" height={(head || 0) / 5} fill={isCritical ? "#EF4444" : "#10B981"} opacity="0.8" rx="2" />
-                <text x="30" y="375" textAnchor="middle" fontSize="8" fill="#64748B">H</text>
-
-                {/* Flow Rate Indicator */}
-                <rect x="210" y="340" width="20" height={(flow || 0) / 2} fill={isCritical ? "#EF4444" : "#3B82F6"} opacity="0.8" rx="2" />
-                <text x="220" y="375" textAnchor="middle" fontSize="8" fill="#64748B">Q</text>
+                {/* Energy Flow Synthesis */}
+                <motion.path
+                    d="M40 330 Q 125 390 210 330"
+                    fill="none"
+                    stroke={isCritical ? "#EF4444" : "#22D3EE"}
+                    strokeWidth="4"
+                    strokeDasharray="12,6"
+                    animate={{ strokeDashoffset: [100, 0] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
             </svg>
 
-            {/* GLASSMORPHISM SENSOR OVERLAYS */}
-            <div className="absolute top-[25%] right-[15%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.bearingTemp')}</div>
-                <div className={`text-lg font-black ${isCritical ? 'text-red-400 animate-pulse' : 'text-white'}`}>
-                    {temp?.toFixed(1) || '--'}°C
-                </div>
-            </div>
+            {/* FLOATING DATA NODES (UI HUD FEEL) */}
+            <motion.div
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                className="absolute top-[20%] right-[10%] glass-panel p-3 border-cyan-500/30"
+            >
+                <div className="text-[9px] text-cyan-400 font-black uppercase tracking-widest mb-1">{t('executive.silhouette.bearingTemp')}</div>
+                <div className={`text-xl font-mono font-black ${isCritical ? 'text-red-400' : 'text-white'}`}>{temp?.toFixed(1)}°C</div>
+            </motion.div>
 
-            <div className="absolute top-[60%] left-[15%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.vibration')}</div>
-                <div className={`text-lg font-black ${isCritical ? 'text-red-400 animate-pulse' : 'text-white'}`}>
-                    {vibration?.toFixed(3) || '--'} mm/s
-                </div>
-            </div>
+            <motion.div
+                initial={{ x: -20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="absolute top-[55%] left-[10%] glass-panel p-3 border-cyan-500/30"
+            >
+                <div className="text-[9px] text-cyan-400 font-black uppercase tracking-widest mb-1">{t('executive.silhouette.vibration')}</div>
+                <div className={`text-xl font-mono font-black ${isCritical ? 'text-red-400' : 'text-white'}`}>{vibration?.toFixed(3)} <span className="text-[10px]">mm/s</span></div>
+            </motion.div>
 
-            <div className="absolute bottom-[20%] left-[10%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.gridFreq')}</div>
-                <div className={`text-lg font-black ${(frequency || 0) > 55 ? 'text-red-400 animate-pulse' : 'text-white'}`}>
-                    {frequency?.toFixed(1) || '--'} Hz
+            <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="absolute bottom-[10%] flex gap-4"
+            >
+                <div className="glass-panel px-4 py-2 border-cyan-500/30">
+                    <div className="text-[8px] text-slate-400 font-black uppercase mb-1">{t('executive.silhouette.healthScore')}</div>
+                    <div className={`text-sm font-black ${health > 80 ? 'text-cyan-400' : 'text-amber-400'}`}>{health}%</div>
                 </div>
-            </div>
-
-            <div className="absolute bottom-[20%] right-[10%] bg-black/20 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
-                <div className="text-[10px] text-cyan-300 font-mono font-bold">{t('executive.silhouette.healthScore')}</div>
-                <div className={`text-lg font-black ${health < 50 ? 'text-red-400 animate-pulse' : health > 80 ? 'text-green-400' : 'text-yellow-400'}`}>
-                    {health.toFixed(0)}%
-                </div>
-            </div>
-
-            {/* CRITICAL ALARMS OVERLAY */}
-            {alarms.length > 0 && (
-                <div className="absolute top-4 left-4 right-4 bg-red-900/30 backdrop-blur-md border border-red-500/50 rounded-lg p-3 animate-pulse">
-                    <div className="text-red-300 font-bold text-sm mb-1">{t('executive.silhouette.criticalAlarms')}</div>
-                    {alarms.slice(0, 2).map((alarm, idx) => (
-                        <div key={idx} className="text-red-200 text-xs">{alarm}</div>
-                    ))}
-                </div>
-            )}
+            </motion.div>
         </div>
     );
 };
@@ -170,27 +163,37 @@ export const ExecutiveDashboard: React.FC = () => {
     }, [assetIdentity, getDrTurbineConsultation, scadaFlow, scadaHead, scadaFrequency]);
 
     return (
-        <div className="p-8 pb-32 space-y-12 animate-fade-in max-w-[1600px] mx-auto min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+        <div className="p-8 pb-32 space-y-12 animate-fade-in max-w-[1600px] mx-auto min-h-screen bg-slate-950 relative overflow-hidden">
             {/* GLASSMORPHISM BACKGROUND EFFECTS */}
-            <div className={`absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50`}></div>
-            <div className="absolute top-0 left-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+            <div className={`absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%2306b6d4" fill-opacity="0.02"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50`}></div>
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
 
             {/* GLASSMORPHISM HEADER */}
             <div className="flex justify-between items-end backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl mb-8">
                 <div className="relative">
-                    <div className="absolute -top-2 -left-2 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl"></div>
-                    <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] relative z-10">
-                        ANOHUB <span className="text-cyan-400">PRIME</span>
+                    <div className="absolute -top-2 -left-2 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl animate-pulse"></div>
+                    <h1 className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_rgba(6,182,212,0.5)] relative z-10 uppercase flex items-center gap-2">
+                        {t('commander.title').split(' ')[0]} <span className="text-cyan-400">{t('commander.title').split(' ')[1]}</span>
+                        <ShieldCheck className="w-8 h-8 text-cyan-400 animate-pulse" />
                     </h1>
-                    <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">{t('executive.subtitle')}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                        <p className="text-xs text-slate-400 font-mono tracking-[0.3em] uppercase">{t('executive.subtitle')}</p>
+                        <div className="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30 text-[10px] text-cyan-400 font-bold tracking-widest animate-pulse">
+                            {t('commander.verified')}
+                        </div>
+                    </div>
                 </div>
                 <div className="flex gap-4">
                     <div className="backdrop-blur-md bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-6 py-3 text-sm text-emerald-400 font-bold uppercase flex items-center gap-2">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                        Neural Link Active
+                        {t('commander.neuralLink')}
                     </div>
-                    <ModernButton variant="primary" className="backdrop-blur-md bg-cyan-500/20 border-cyan-400/30 hover:bg-cyan-500/30">
+                    <ModernButton
+                        variant="primary"
+                        className="backdrop-blur-md bg-cyan-500/20 border-cyan-400/30 hover:bg-cyan-500/30"
+                        onClick={() => window.dispatchEvent(new CustomEvent('ANOHUB_TRIGGER_FORENSIC_EXPORT'))}
+                    >
                         {t('executive.actions.downloadBrief')}
                     </ModernButton>
                 </div>
@@ -201,137 +204,167 @@ export const ExecutiveDashboard: React.FC = () => {
 
                 {/* LEFT: DIGITAL TWIN (4 Columns) */}
                 <div className="lg:col-span-4 flex flex-col gap-6">
-                    <div className="h-full backdrop-blur-xl bg-white/5 border border-cyan-500/30 rounded-2xl shadow-[0_0_50px_rgba(6,182,212,0.1)] relative overflow-hidden p-6">
-                        <div className="absolute top-0 right-0 p-4 opacity-30 font-black text-8xl text-cyan-400/10 select-none z-0">{t('executive.twin.label')}</div>
+                    <GlassCard
+                        variant="commander"
+                        title={t('executive.twin.topology')}
+                        subtitle={t('executive.twin.label')}
+                        className="h-full flex flex-col"
+                        noPadding
+                    >
+                        <div className="flex-grow flex items-center justify-center p-6">
+                            <TurbineSilhouette
+                                health={scadaDiagnostics?.healthScore || 85}
+                                vibration={0.032}
+                                temp={67.5}
+                                flow={scadaFlow}
+                                head={scadaHead}
+                                frequency={scadaFrequency}
+                                alarms={scadaDiagnostics?.criticalAlarms?.map((a: { message: string }) => a.message) || []}
+                            />
+                        </div>
 
-                        <div className="relative z-10 flex flex-col h-full">
-                            <h3 className="text-xl font-bold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <div className="w-3 h-3 bg-cyan-400 rounded-full animate-pulse"></div>
-                                {t('executive.twin.topology')}
-                            </h3>
-                            <div className="flex-grow flex items-center justify-center py-8">
-                                <TurbineSilhouette
-                                    health={scadaDiagnostics?.healthScore || 85}
-                                    vibration={0.032}
-                                    temp={67.5}
-                                    flow={scadaFlow}
-                                    head={scadaHead}
-                                    frequency={scadaFrequency}
-                                    alarms={scadaDiagnostics?.criticalAlarms?.map((a: { message: string }) => a.message) || []}
-                                />
+                        {/* SENSOR FOOTER */}
+                        <div className="grid grid-cols-2 gap-[1px] bg-white/5 border-t border-white/10">
+                            <div className="p-4 flex flex-col items-center">
+                                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">{t('executive.sensors.activePower')}</span>
+                                <span className="text-xl font-mono text-cyan-400 font-black">
+                                    {(assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)} <span className="text-[10px] text-slate-400">MW</span>
+                                </span>
                             </div>
-
-                            {/* GLASSMORPHISM SENSOR READOUT */}
-                            <div className="grid grid-cols-2 gap-3 mt-auto">
-                                <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
-                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">{t('executive.sensors.activePower')}</span>
-                                    <span className="text-2xl font-mono text-white font-black">{(assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
-                                </div>
-                                <div className="backdrop-blur-md bg-black/20 p-4 rounded-xl border border-white/10 shadow-lg">
-                                    <span className="text-[10px] text-slate-400 uppercase block font-bold">{t('executive.sensors.gridFrequency')}</span>
-                                    {/* CRITICAL FREQUENCY ALARM */}
-                                    <span className={`text-2xl font-mono font-black ${scadaFrequency > 55 || scadaFrequency < 45
-                                        ? 'text-red-400 animate-pulse drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]'
-                                        : 'text-emerald-400'
-                                        }`}>
-                                        {scadaFrequency.toFixed(1)} <span className="text-cyan-400 text-sm">Hz</span>
-                                    </span>
-                                </div>
+                            <div className="p-4 flex flex-col items-center border-l border-white/10">
+                                <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">{t('executive.sensors.gridFrequency')}</span>
+                                <span className={`text-xl font-mono font-black ${scadaFrequency > 55 || scadaFrequency < 45 ? 'text-red-400 animate-pulse' : 'text-emerald-400'}`}>
+                                    {scadaFrequency.toFixed(1)} <span className="text-[10px] text-slate-400">Hz</span>
+                                </span>
                             </div>
                         </div>
-                    </div>
+                    </GlassCard>
                 </div>
 
                 {/* MIDDLE: KPIS & STRATEGY (5 Columns) */}
                 <div className="lg:col-span-5 flex flex-col gap-8">
 
                     {/* GLASSMORPHISM KPI ROW */}
-                    <div className="grid grid-cols-2 gap-6">
-                        <div className="backdrop-blur-xl bg-white/5 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">{t('executive.kpi.unitHealth')}</p>
-                            <div className="flex items-baseline gap-2">
-                                <span className={`text-8xl font-black tracking-tighter drop-shadow-xl ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-400' :
-                                    (scadaDiagnostics?.healthScore || 85) > 80 ? 'text-cyan-400' : 'text-yellow-400'
-                                    }`}>
-                                    {scadaDiagnostics?.healthScore || 85}
-                                </span>
-                                <span className="text-3xl text-slate-400 font-bold">%</span>
+                    <div className="grid grid-cols-3 gap-6">
+                        {/* POWER KPI */}
+                        <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 animate-pulse"></div>
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-4">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Active Power</p>
+                                    <Zap className="w-4 h-4 text-cyan-400" />
+                                </div>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-5xl font-black text-white tracking-tighter group-hover:text-cyan-400 transition-colors">
+                                        {(assetIdentity?.machineConfig.ratedPowerMW || 0).toFixed(1)}
+                                    </span>
+                                    <span className="text-sm text-slate-500 font-bold font-mono">MW</span>
+                                </div>
+                                <div className="mt-4 px-2 py-1 rounded bg-cyan-500/10 border border-cyan-500/20 inline-flex items-center gap-1.5">
+                                    <ShieldCheck className="w-3 h-3 text-cyan-500" />
+                                    <span className="text-[9px] text-cyan-500/80 font-mono font-bold uppercase tracking-wider">Verified Precision</span>
+                                </div>
                             </div>
-                            <div className="mt-6 h-3 w-full bg-black/20 rounded-full overflow-hidden backdrop-blur-sm">
-                                <div className={`h-full shadow-[0_0_15px_cyan] transition-all duration-1000 ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500' :
-                                    (scadaDiagnostics?.healthScore || 85) > 80 ? 'bg-cyan-500' : 'bg-yellow-500'
-                                    }`} style={{ width: `${scadaDiagnostics?.healthScore || 85}%` }}></div>
-                            </div>
-                        </div>
+                        </GlassCard>
 
-                        <div className="backdrop-blur-xl bg-white/5 border border-red-500/30 rounded-2xl p-8 shadow-[0_0_30px_rgba(239,68,68,0.1)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-400 to-transparent"></div>
-                            <p className="text-xs text-slate-400 uppercase font-black tracking-widest mb-6">{t('executive.kpi.financialRisk')}</p>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-8xl font-black text-red-400 tracking-tighter drop-shadow-xl animate-pulse">
-                                    {Math.floor((scadaDiagnostics?.diagnostics?.cavitationRisk ? 150 : 85) / 10)}
-                                </span>
-                                <span className="text-3xl text-slate-400 font-bold">k€</span>
+                        {/* HEALTH KPI */}
+                        <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
+                            <div className={`absolute top-0 left-0 w-full h-1 transition-colors duration-500 ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500' : 'bg-emerald-400'}`}></div>
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-4">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">System Health</p>
+                                    <Activity className={`w-4 h-4 ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-500' : 'text-emerald-400'}`} />
+                                </div>
+                                <div className="flex items-baseline gap-1">
+                                    <span className={`text-5xl font-black tracking-tighter transition-colors ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'text-red-500' : 'text-emerald-400'}`}>
+                                        {scadaDiagnostics?.healthScore || 85}
+                                    </span>
+                                    <span className="text-sm text-slate-500 font-bold font-mono">%</span>
+                                </div>
+                                <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${scadaDiagnostics?.healthScore || 85}%` }}
+                                        className={`h-full shadow-[0_0_15px_currentColor] ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500 text-red-500' : 'bg-emerald-400 text-emerald-400'}`}
+                                    />
+                                </div>
                             </div>
-                            <p className="text-[10px] text-red-400/60 mt-6 uppercase font-mono">{t('executive.kpi.projectedLoss')}</p>
-                        </div>
+                        </GlassCard>
+
+                        {/* HEAD KPI */}
+                        <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                            <div className="p-6">
+                                <div className="flex justify-between items-start mb-4">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Net Head</p>
+                                    <TrendingUp className="w-4 h-4 text-blue-400" />
+                                </div>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-5xl font-black text-white tracking-tighter group-hover:text-blue-400 transition-colors">
+                                        {scadaHead.toFixed(1)}
+                                    </span>
+                                    <span className="text-sm text-slate-500 font-bold font-mono">m</span>
+                                </div>
+                                <div className="mt-4 flex items-center gap-2">
+                                    <div className="text-[10px] text-blue-400 font-mono font-bold uppercase tracking-wider">Flow: {scadaFlow.toFixed(1)} m³/s</div>
+                                </div>
+                            </div>
+                        </GlassCard>
                     </div>
 
                     {/* DR. TURBINE AI CHAT INTERFACE */}
-                    <div className="flex-grow backdrop-blur-xl bg-white/5 border border-cyan-500/20 rounded-2xl p-6 flex flex-col shadow-[0_0_40px_rgba(6,182,212,0.1)] relative overflow-hidden">
-                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-60"></div>
-
+                    <GlassCard variant="commander" className="flex-grow flex flex-col relative overflow-hidden">
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_25px_cyan] animate-pulse">
-                                <span className="text-xl">🧠</span>
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.4)] relative overflow-hidden">
+                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                <span className="text-2xl relative z-10">🧠</span>
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold text-white">{t('executive.ai.title')}</h3>
-                                <p className="text-sm text-cyan-400/90 font-mono animate-pulse tracking-wider">{aiMessage}</p>
+                                <h3 className="text-xl font-black text-white uppercase tracking-tighter">{t('executive.ai.title')}</h3>
+                                <div className="text-sm text-cyan-400/90 font-mono tracking-tight min-h-[1.5rem] mt-1">
+                                    <TypewriterText text={aiMessage} speed={25} />
+                                </div>
                             </div>
                         </div>
 
                         {/* PHYSICS-BASED DIAGNOSIS CHAT */}
                         <div className="flex-grow space-y-4 overflow-y-auto custom-scrollbar pr-2">
                             {aiCards.length === 0 && (
-                                <div className="text-center py-12 backdrop-blur-md bg-green-900/10 rounded-xl border border-green-500/20">
-                                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                                        <span className="text-2xl">✅</span>
+                                <div className="text-center py-12 glass-panel border-emerald-500/20 bg-emerald-500/5">
+                                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                                        <ShieldCheck className="w-8 h-8 text-emerald-400" />
                                     </div>
-                                    <p className="text-green-400 text-lg font-bold mb-2">{t('executive.ai.nominal.title')}</p>
-                                    <p className="text-slate-400 text-sm">{t('executive.ai.nominal.desc')}</p>
-                                    <p className="text-slate-500 text-xs">{t('executive.ai.nominal.details')}</p>
+                                    <p className="text-emerald-400 text-lg font-black mb-1 italic tracking-tight">{t('executive.ai.nominal.title')}</p>
+                                    <p className="text-slate-400 text-sm font-medium">{t('executive.ai.nominal.desc')}</p>
                                 </div>
                             )}
 
                             {aiCards.map((card, index) => (
-                                <div key={card.id} className={`backdrop-blur-md p-5 rounded-xl border-l-4 animate-fade-in relative overflow-hidden ${card.severity === 'CRITICAL'
-                                    ? 'bg-red-950/20 border-l-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
-                                    : 'bg-amber-950/20 border-l-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.2)]'
-                                    }`}>
-                                    {/* Animated background for critical alerts */}
-                                    {card.severity === 'CRITICAL' && (
-                                        <div className="absolute inset-0 bg-red-500/5 animate-pulse"></div>
-                                    )}
-
-                                    <div className="relative z-10">
+                                <GlassCard
+                                    key={card.id}
+                                    noPadding
+                                    variant="deep"
+                                    className={`border-l-4 animate-fade-in ${card.severity === 'CRITICAL' ? 'border-l-red-500 bg-red-500/5' : 'border-l-amber-500 bg-amber-500/5'
+                                        }`}
+                                >
+                                    <div className="p-5">
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className={`font-bold uppercase text-base ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'
-                                                }`}>{card.title}</h4>
-                                            <span className={`text-[10px] font-black px-3 py-1 rounded-full backdrop-blur-md ${card.severity === 'CRITICAL'
-                                                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                                                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                                                } animate-pulse`}>
+                                            <h4 className={`font-black uppercase text-sm tracking-tight ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'}`}>
+                                                {card.title}
+                                            </h4>
+                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded border ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 text-red-400 border-red-500/30'
+                                                : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                                                } animate-pulse font-mono`}>
                                                 {card.severity}
                                             </span>
                                         </div>
-                                        <p className="text-sm text-slate-200 mb-4 leading-relaxed">{card.message}</p>
+                                        <p className="text-sm text-slate-300 mb-4 leading-relaxed font-medium">{card.message}</p>
 
                                         {/* Physics-based explanation */}
-                                        <div className="bg-black/20 rounded-lg p-3 mb-4 border border-white/10">
-                                            <p className="text-xs text-cyan-300 font-mono mb-1">{t('executive.ai.physicsAnalysis')}</p>
-                                            <p className="text-xs text-slate-300">
+                                        <div className="bg-black/40 rounded-lg p-3 mb-4 border border-white/10 noise-commander">
+                                            <p className="text-[10px] text-cyan-400 font-black uppercase tracking-widest mb-1">{t('executive.ai.physicsAnalysis')}</p>
+                                            <p className="text-xs text-slate-400 font-mono leading-relaxed">
                                                 {card.severity === 'CRITICAL' && card.title.includes('GRID')
                                                     ? t('executive.ai.gridRisk', { freq: scadaFrequency })
                                                     : card.severity === 'CRITICAL' && card.title.includes('CAVITATION')
@@ -343,54 +376,43 @@ export const ExecutiveDashboard: React.FC = () => {
 
                                         <ModernButton
                                             variant="secondary"
-                                            className={`w-full text-sm h-10 backdrop-blur-md ${card.severity === 'CRITICAL'
-                                                ? 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300'
-                                                : 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/30 text-amber-300'
+                                            className={`w-full text-[11px] font-black uppercase tracking-widest h-10 ${card.severity === 'CRITICAL'
+                                                ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border-red-500/30'
+                                                : 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border-amber-500/30'
                                                 }`}
-                                            onClick={() => {
-                                                console.log('Action triggered:', card.actionFunction);
-                                            }}
                                         >
-                                            <span className="mr-2">⚡</span>
-                                            {card.actionLabel}
+                                            ⚡ {card.actionLabel}
                                         </ModernButton>
                                     </div>
-                                </div>
+                                </GlassCard>
                             ))}
-
-                            {/* AI Thinking Indicator */}
-                            {aiCards.length > 0 && (
-                                <div className="flex items-center gap-3 text-cyan-400 text-sm animate-pulse">
-                                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                                    <span className="font-mono">{t('executive.ai.analyzing')}</span>
-                                </div>
-                            )}
                         </div>
-                    </div>
+                    </GlassCard>
+                    {aiCards.length > 0 && (
+                        <div className="flex items-center gap-3 text-cyan-400 text-sm animate-pulse">
+                            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
+                            <span className="font-mono">{t('executive.ai.analyzing')}</span>
+                        </div>
+                    )}
                 </div>
-
                 {/* RIGHT: COMMAND & CONTROL REMOVED - NC-4.2 Directive */}
                 <div className="lg:col-span-3 flex flex-col gap-6">
-                    <div className="backdrop-blur-xl bg-cyan-950/10 border border-cyan-500/30 rounded-2xl p-6 shadow-2xl">
-                        <h4 className="text-cyan-400 font-bold uppercase text-sm mb-6 flex items-center gap-2">
-                            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                            Forensic Log
-                        </h4>
+                    <GlassCard variant="commander" title={t('commander.forensicLog')} icon={<ShieldCheck className="w-5 h-5 text-cyan-400" />}>
                         <div className="space-y-4">
-                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Last Sync</div>
+                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.lastSync')}</div>
                                 <div className="text-xs font-mono text-cyan-300">{new Date().toLocaleTimeString()}</div>
                             </div>
-                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Neural Core Latency</div>
-                                <div className="text-xs font-mono text-emerald-400">1.2ms</div>
+                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.latency')}</div>
+                                <div className="text-xs font-mono text-emerald-400">0.8ms</div>
                             </div>
-                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Data Integrity</div>
-                                <div className="text-xs font-mono text-emerald-400">99.9% VERIFIED</div>
+                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.dataIntegrity')}</div>
+                                <div className="text-xs font-mono text-emerald-400 uppercase">{t('commander.verifiedStatus')}</div>
                             </div>
                         </div>
-                    </div>
+                    </GlassCard>
                 </div>
             </div>
         </div>

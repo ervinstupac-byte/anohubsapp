@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface DigitalDisplayProps {
     value: number | string;
@@ -15,6 +16,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = React.memo(({
     color = 'cyan',
     className = ''
 }) => {
+    const { t } = useTranslation();
     const [isFlickering, setIsFlickering] = useState(false);
 
     useEffect(() => {
@@ -68,7 +70,7 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = React.memo(({
             {/* Decimal.js Verified Badge */}
             <div className="mt-3 px-2 py-0.5 rounded-full bg-slate-950/50 border border-white/5 flex items-center gap-1.5 self-end group-hover:border-cyan-500/30 transition-colors">
                 <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"></div>
-                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Decimal.js Verified</span>
+                <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">{t('commander.verified')}</span>
             </div>
         </div>
     );

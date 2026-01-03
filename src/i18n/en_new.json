@@ -96,23 +96,7 @@
       "liveSnapshot": "Live Context Snapshot",
       "diagnostics": "Active Engineering Insights",
       "history": "Context History"
-    },
-    "learningLab": "Learning Lab",
-    "version": "CDR_X_V4.2",
-    "operationalFocus": "Operational Focus",
-    "systemIdle": "System Idle",
-    "monitoring": "Monitoring global streams...",
-    "playbackScrubber": "Playback Scrubber",
-    "insight": "INSIGHT",
-    "operationalCommand": "Operational Command",
-    "systemIntel": "System Intel",
-    "neuralBridge": "Neural Bridge",
-    "syncHistory": "Sync History",
-    "generateForensic": "Generate Forensic Log",
-    "secureTrace": "Secure Physics Trace // 60s",
-    "hiveLink": "HIVE LINK:",
-    "connected": "CONNECTED",
-    "offline": "OFFLINE"
+    }
   },
   "common": {
     "ok": "OK",
@@ -129,10 +113,7 @@
     "moderate": "MODERATE",
     "stable": "STABLE",
     "riskLevel": "Risk Level",
-    "active": "Active",
-    "detected": "Detected",
-    "new": "NEW",
-    "statusLabel": "Status:"
+    "active": "Active"
   },
   "questionnaire": {
     "title": "Diagnostic Report",
@@ -469,12 +450,12 @@
     "avatarSuccess": "Avatar uploaded!",
     "noUser": "No user logged in!",
     "back": "Back to Dashboard",
-    "guestSaveWarning": "Gostujući profili se ne mogu sačuvati",
-    "guestUploadWarning": "Gostujući profili ne mogu slati avatare",
-    "developerTools": "Razvojni Alati",
-    "resetData": "Resetuj Demo Podatke",
-    "resetDataDesc": "Resetuj demo podatke da vratiš podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo će ponovo učitati aplikaciju.",
-    "resetDataConfirm": "Resetovati sve demo podatke? Ovo će očistiti localStorage i ponovo učitati stranicu."
+    "guestSaveWarning": "[EN] Gostujući profili se ne mogu sačuvati",
+    "guestUploadWarning": "[EN] Gostujući profili ne mogu slati avatare",
+    "developerTools": "[EN] Razvojni Alati",
+    "resetData": "[EN] Resetuj Demo Podatke",
+    "resetDataDesc": "[EN] Resetuj demo podatke da vratiš podrazumijevane radne naloge, zdravlje komponenti i radne sate. Ovo će ponovo učitati aplikaciju.",
+    "resetDataConfirm": "[EN] Resetovati sve demo podatke? Ovo će očistiti localStorage i ponovo učitati stranicu."
   },
   "questions": {
     "q1": {
@@ -1256,167 +1237,167 @@
       "btn": "Schedule Obsolescence Audit"
     },
     "riskAssessment": {
-      "protocol": "Dijagnostički Protokol v2.0",
-      "initTitle": "Inicijaliziraj Dijagnostiku",
-      "standbyDesc": "Sistem je u stanju pripravnosti. Molimo odaberite <strong class=\"text-cyan-400 font-bold\">Ciljnu Imovinu</strong> iznad za početak analize Jaza u Izvršenju."
+      "protocol": "[EN] Dijagnostički Protokol v2.0",
+      "initTitle": "[EN] Inicijaliziraj Dijagnostiku",
+      "standbyDesc": "[EN] Sistem je u stanju pripravnosti. Molimo odaberite <strong class=\"text-cyan-400 font-bold\">Ciljnu Imovinu</strong> iznad za početak analize Jaza u Izvršenju."
     },
     "riverWildlife": {
-      "title": "Ekološki Inženjering",
-      "context": "Primijenjeni Kontekst:",
-      "subtitle": "Tehnologije o kojima se ne pregovara ispunjavaju etički mandat za Zaštitu Ekosistema.",
-      "mandate": "Postulat Etike",
-      "mandateDesc": "Mi ne ublažavamo samo uticaj; mi aktivno štitimo ekosistem. <strong class=\"text-white font-bold block mt-1\">Automatsko mjerenje E-Protoka je osnovni zahtjev Standarda Izvrsnosti.</strong>",
+      "title": "[EN] Ekološki Inženjering",
+      "context": "[EN] Primijenjeni Kontekst:",
+      "subtitle": "[EN] Tehnologije o kojima se ne pregovara ispunjavaju etički mandat za Zaštitu Ekosistema.",
+      "mandate": "[EN] Postulat Etike",
+      "mandateDesc": "[EN] Mi ne ublažavamo samo uticaj; mi aktivno štitimo ekosistem. <strong class=\"text-white font-bold block mt-1\">Automatsko mjerenje E-Protoka je osnovni zahtjev Standarda Izvrsnosti.</strong>",
       "sections": {
         "fish_passage": {
-          "title": "Tehnologije Ribljih Staza",
-          "subtitle": "Bio-Inženjering za Migraciju",
-          "intro": "Moderne tehnologije fokusiraju se na siguran, efikasan i minimalno stresan prolaz oko brana radi očuvanja biodiverziteta.",
+          "title": "[EN] Tehnologije Ribljih Staza",
+          "subtitle": "[EN] Bio-Inženjering za Migraciju",
+          "intro": "[EN] Moderne tehnologije fokusiraju se na siguran, efikasan i minimalno stresan prolaz oko brana radi očuvanja biodiverziteta.",
           "ladders": {
-            "title": "Riblje Ljestve i Stepeništa",
-            "desc": "Kanali tipa Pool-and-Weir ili Denil sa nagibima (1:8 do 1:12) dizajnirani da vode ribe bez iscrpljivanja."
+            "title": "[EN] Riblje Ljestve i Stepeništa",
+            "desc": "[EN] Kanali tipa Pool-and-Weir ili Denil sa nagibima (1:8 do 1:12) dizajnirani da vode ribe bez iscrpljivanja."
           },
           "lifts": {
-            "title": "Riblji Liftovi i Elevatori",
-            "desc": "Mehanički spremnici za visoke brane gdje su ljestve nepraktične. Automatizovano prikupljanje i puštanje."
+            "title": "[EN] Riblji Liftovi i Elevatori",
+            "desc": "[EN] Mehanički spremnici za visoke brane gdje su ljestve nepraktične. Automatizovano prikupljanje i puštanje."
           },
           "bypass": {
-            "title": "Prirolika Obilaznica",
-            "desc": "Vještački kanali koji oponašaju prirodne potoke. Ekološki najefikasnije rješenje sa malim nagibom."
+            "title": "[EN] Prirolika Obilaznica",
+            "desc": "[EN] Vještački kanali koji oponašaju prirodne potoke. Ekološki najefikasnije rješenje sa malim nagibom."
           },
           "turbines": {
-            "title": "Riblje-Prijateljske Turbine",
-            "desc": "Napredni dizajni (npr. Alden) sa manje lopatica i širim razmacima za smanjenje smrtnosti od udara lopatica."
+            "title": "[EN] Riblje-Prijateljske Turbine",
+            "desc": "[EN] Napredni dizajni (npr. Alden) sa manje lopatica i širim razmacima za smanjenje smrtnosti od udara lopatica."
           }
         },
         "sediment_management": {
-          "title": "Upravljanje Sedimentom i Erozijom",
-          "subtitle": "Zaštita Kapaciteta Rezervoara i Opreme",
-          "intro": "Brane zarobljavaju sediment, smanjujući kapacitet i uzrokujući abraziju turbina. Proaktivno upravljanje je ključno.",
+          "title": "[EN] Upravljanje Sedimentom i Erozijom",
+          "subtitle": "[EN] Zaštita Kapaciteta Rezervoara i Opreme",
+          "intro": "[EN] Brane zarobljavaju sediment, smanjujući kapacitet i uzrokujući abraziju turbina. Proaktivno upravljanje je ključno.",
           "bypass": {
-            "title": "Obilazni Tuneli",
-            "desc": "Preusmjeravanje vode pune sedimenta tokom poplava."
+            "title": "[EN] Obilazni Tuneli",
+            "desc": "[EN] Preusmjeravanje vode pune sedimenta tokom poplava."
           },
           "flushing": {
-            "title": "Ispiranje",
-            "desc": "Otvaranje niskih ispusta za čišćenje nakupljanja."
+            "title": "[EN] Ispiranje",
+            "desc": "[EN] Otvaranje niskih ispusta za čišćenje nakupljanja."
           },
           "watershed": {
-            "title": "Upravljanje Slivom",
-            "desc": "Pošumljavanje radi smanjenja dotoka na izvoru."
+            "title": "[EN] Upravljanje Slivom",
+            "desc": "[EN] Pošumljavanje radi smanjenja dotoka na izvoru."
           },
           "vis": {
-            "title": "Vizualizacija",
-            "l1": "Batimetrijska Snimanja: Vizualizacija gubitka kapaciteta.",
-            "l2": "3D Skeniranje Habanja: Kvantificiranje gubitka materijala radnog kola."
+            "title": "[EN] Vizualizacija",
+            "l1": "[EN] Batimetrijska Snimanja: Vizualizacija gubitka kapaciteta.",
+            "l2": "[EN] 3D Skeniranje Habanja: Kvantificiranje gubitka materijala radnog kola."
           },
           "rcfa": {
-            "title": "RCFA Kritično: Dijagnoza",
-            "abrasion": "Abrazija (Simptom): Glatko, polirano habanje.",
-            "cavitation": "Kavitacija (Osnovni Uzrok): Jamičasta, spužvasta površina.",
-            "quote": "Tretiranje abrazije bez rješavanja kavitacije vodi do ponovnog kvara."
+            "title": "[EN] RCFA Kritično: Dijagnoza",
+            "abrasion": "[EN] Abrazija (Simptom): Glatko, polirano habanje.",
+            "cavitation": "[EN] Kavitacija (Osnovni Uzrok): Jamičasta, spužvasta površina.",
+            "quote": "[EN] Tretiranje abrazije bez rješavanja kavitacije vodi do ponovnog kvara."
           }
         },
         "water_quality": {
-          "title": "Kvalitet Vode i E-Protok",
-          "subtitle": "Etički Mandat",
-          "intro": "Održavanje prirodnih režima toka, temperature i nivoa kiseonika za staništa nizvodno.",
+          "title": "[EN] Kvalitet Vode i E-Protok",
+          "subtitle": "[EN] Etički Mandat",
+          "intro": "[EN] Održavanje prirodnih režima toka, temperature i nivoa kiseonika za staništa nizvodno.",
           "eflow": {
-            "title": "Ekološki Protok (E-tok)",
-            "desc": "Upravljano ispuštanje vode radi oponašanja prirodne varijabilnosti.",
-            "mandate": "Mandat: Automatsko, kontinuirano mjerenje i digitalna dokumentacija se ne pregovaraju."
+            "title": "[EN] Ekološki Protok (E-tok)",
+            "desc": "[EN] Upravljano ispuštanje vode radi oponašanja prirodne varijabilnosti.",
+            "mandate": "[EN] Mandat: Automatsko, kontinuirano mjerenje i digitalna dokumentacija se ne pregovaraju."
           },
           "aerating": {
-            "title": "Aerirajuće Turbine",
-            "desc": "Prozračivanje turbina radi povećanja nivoa rastvorenog kiseonika."
+            "title": "[EN] Aerirajuće Turbine",
+            "desc": "[EN] Prozračivanje turbina radi povećanja nivoa rastvorenog kiseonika."
           },
           "withdrawal": {
-            "title": "Selektivno Zahvatanje",
-            "desc": "Ulazi na više nivoa za upravljanje temperaturom vode."
+            "title": "[EN] Selektivno Zahvatanje",
+            "desc": "[EN] Ulazi na više nivoa za upravljanje temperaturom vode."
           }
         },
         "habitat_restoration": {
-          "title": "Restauracija Staništa",
-          "subtitle": "Više od Ublažavanja",
-          "intro": "Proaktivne mjere za stvaranje neto pozitivnog ekološkog ishoda.",
+          "title": "[EN] Restauracija Staništa",
+          "subtitle": "[EN] Više od Ublažavanja",
+          "intro": "[EN] Proaktivne mjere za stvaranje neto pozitivnog ekološkog ishoda.",
           "gravel": {
-            "title": "Dodavanje Šljunka",
-            "desc": "Postavljanje čistog šljunka za mrijestilišta riba."
+            "title": "[EN] Dodavanje Šljunka",
+            "desc": "[EN] Postavljanje čistog šljunka za mrijestilišta riba."
           },
           "riparian": {
-            "title": "Obalna Zona",
-            "desc": "Ponovna sadnja autohtone vegetacije za stabilizaciju obala i zasjenjivanje vode."
+            "title": "[EN] Obalna Zona",
+            "desc": "[EN] Ponovna sadnja autohtone vegetacije za stabilizaciju obala i zasjenjivanje vode."
           },
           "structures": {
-            "title": "Strukture u Toku",
-            "desc": "Stijene i debla koja stvaraju složena staništa toka."
+            "title": "[EN] Strukture u Toku",
+            "desc": "[EN] Stijene i debla koja stvaraju složena staništa toka."
           }
         }
       }
     },
     "standardOfExcellence": {
-      "title": "Standard Izvrsnosti",
-      "subtitle": "Definišući ustav AnoHUB operacija.",
-      "subtitle2": "Ovi principi su <span class=\"text-white font-bold\">nenagodivi</span>.",
+      "title": "[EN] Standard Izvrsnosti",
+      "subtitle": "[EN] Definišući ustav AnoHUB operacija.",
+      "subtitle2": "[EN] Ovi principi su <span class=\"text-white font-bold\">nenagodivi</span>.",
       "principles": {
         "p1": {
-          "title": "Imperativ 0.05 mm/m",
-          "desc": "Apsolutna preciznost poravnanja. Odstupanja vertikalnosti i horizontalnosti veća od 0.05 mm po metru predstavljaju kritičnu neusaglašenost. Odstupanja se ne prihvataju bez obzira na dozvole OEM-a.",
-          "quote": "\"Preciznost nije opcija; to je osnova.\""
+          "title": "[EN] Imperativ 0.05 mm/m",
+          "desc": "[EN] Apsolutna preciznost poravnanja. Odstupanja vertikalnosti i horizontalnosti veća od 0.05 mm po metru predstavljaju kritičnu neusaglašenost. Odstupanja se ne prihvataju bez obzira na dozvole OEM-a.",
+          "quote": "[EN] \"Preciznost nije opcija; to je osnova.\""
         },
         "p2": {
-          "title": "Nula \"Vozi-do-Kvara\"",
-          "desc": "Prediktivno održavanje je obavezno. Rad imovine do kvara komponente je kršenje Protokola o Upravljanju Imovinom. Senzori moraju biti aktivni i praćeni.",
-          "quote": "\"Popravljamo prije nego što se pokvari.\""
+          "title": "[EN] Nula \"Vozi-do-Kvara\"",
+          "desc": "[EN] Prediktivno održavanje je obavezno. Rad imovine do kvara komponente je kršenje Protokola o Upravljanju Imovinom. Senzori moraju biti aktivni i praćeni.",
+          "quote": "[EN] \"Popravljamo prije nego što se pokvari.\""
         },
         "p3": {
-          "title": "Integritet Podataka",
-          "desc": "Svi operativni podaci, zapisi i procjene rizika moraju biti nepromjenjivi i arhivirani. Prikrivanje operativnih rizika ili \"friziranje\" brojeva je osnova za trenutni raskid ugovora.",
-          "quote": "\"Istina je jedina sigurnosna mreža.\""
+          "title": "[EN] Integritet Podataka",
+          "desc": "[EN] Svi operativni podaci, zapisi i procjene rizika moraju biti nepromjenjivi i arhivirani. Prikrivanje operativnih rizika ili \"friziranje\" brojeva je osnova za trenutni raskid ugovora.",
+          "quote": "[EN] \"Istina je jedina sigurnosna mreža.\""
         },
         "p4": {
-          "title": "Vlasničko Održavanje",
-          "desc": "Operateri djeluju kao vlasnici. Čišćenje, pritezanje i osnovne inspekcije su dnevni rituali, ne zakazani poslovi. Vizuelne inspekcije moraju biti digitalno evidentirane.",
-          "quote": "\"Ako upravljaš time, posjeduješ to.\""
+          "title": "[EN] Vlasničko Održavanje",
+          "desc": "[EN] Operateri djeluju kao vlasnici. Čišćenje, pritezanje i osnovne inspekcije su dnevni rituali, ne zakazani poslovi. Vizuelne inspekcije moraju biti digitalno evidentirane.",
+          "quote": "[EN] \"Ako upravljaš time, posjeduješ to.\""
         }
       },
       "oath": {
-        "title": "Zakletva Inženjera",
-        "desc": "Aktivacijom ovog protokola, vežete svoj digitalni identitet za ove standarde.",
-        "identity": "IDENTITET:",
-        "date": "DATUM:",
-        "status": "STATUS:",
-        "ratified": "RATIFICIRANO",
-        "pending": "NA ČEKANJU",
-        "btnCommit": "POSVEĆUJEM SE IZVRSNOSTI",
-        "btnActive": "PROTOKOL AKTIVAN",
-        "sync": "Sinhronizacija sa HR Bazom... OK",
-        "toast": "Protokol ratificiran od strane inženjera"
+        "title": "[EN] Zakletva Inženjera",
+        "desc": "[EN] Aktivacijom ovog protokola, vežete svoj digitalni identitet za ove standarde.",
+        "identity": "[EN] IDENTITET:",
+        "date": "[EN] DATUM:",
+        "status": "[EN] STATUS:",
+        "ratified": "[EN] RATIFICIRANO",
+        "pending": "[EN] NA ČEKANJU",
+        "btnCommit": "[EN] POSVEĆUJEM SE IZVRSNOSTI",
+        "btnActive": "[EN] PROTOKOL AKTIVAN",
+        "sync": "[EN] Sinhronizacija sa HR Bazom... OK",
+        "toast": "[EN] Protokol ratificiran od strane inženjera"
       },
-      "poweredBy": "POKREĆE"
+      "poweredBy": "[EN] POKREĆE"
     },
     "turbineDetail": {
-      "notFoundTitle": "Konfiguracija nije pronađena",
-      "notFoundDesc": "Nema tehničkih podataka za ID sredstva:",
-      "returnButton": "Povratak na Nadzornu Ploču",
-      "specification": "Specifikacija",
-      "subtitle": "Tehnička analiza kritičnih podsistema i načina kvara.",
-      "mechanicalSystems": "Mehanički Sistemi",
-      "rotatingParts": "Rotirajući Sklop i Ležajevi",
-      "electricalComponents": "Električne Komponente",
-      "generatorControl": "Generator i Kontrolni Sistemi",
-      "criticalityNote": "PROCJENA KRITIČNOSTI NA OSNOVU RCFA HISTORIJSKIH PODATAKA",
-      "rev": "Sistemska Specifikacija • Rev 2.4",
+      "notFoundTitle": "[EN] Konfiguracija nije pronađena",
+      "notFoundDesc": "[EN] Nema tehničkih podataka za ID sredstva:",
+      "returnButton": "[EN] Povratak na Nadzornu Ploču",
+      "specification": "[EN] Specifikacija",
+      "subtitle": "[EN] Tehnička analiza kritičnih podsistema i načina kvara.",
+      "mechanicalSystems": "[EN] Mehanički Sistemi",
+      "rotatingParts": "[EN] Rotirajući Sklop i Ležajevi",
+      "electricalComponents": "[EN] Električne Komponente",
+      "generatorControl": "[EN] Generator i Kontrolni Sistemi",
+      "criticalityNote": "[EN] PROCJENA KRITIČNOSTI NA OSNOVU RCFA HISTORIJSKIH PODATAKA",
+      "rev": "[EN] Sistemska Specifikacija • Rev 2.4",
       "badges": {
-        "critical": "KRITIČNO",
-        "attention": "PAŽNJA",
-        "standard": "STANDARD"
+        "critical": "[EN] KRITIČNO",
+        "attention": "[EN] PAŽNJA",
+        "standard": "[EN] STANDARD"
       }
     },
     "interventionCTA": {
-      "label": "POTREBNA INTERVENCIJA NA SREDSTVU"
+      "label": "[EN] POTREBNA INTERVENCIJA NA SREDSTVU"
     },
     "ui": {
-      "select": "Odaberi"
+      "select": "[EN] Odaberi"
     }
   },
   "riskAssessment": {
@@ -2985,31 +2966,31 @@
       "samp_4": "Send to lab for analysis.",
       "back_btn": "← Return to Operations Center",
       "waterHammer": {
-        "title": "Analiza Hidrauličkog Udara",
-        "subtitle": "Proračun Prijelaznog Pritiska prema IEC 60041 Standardu",
-        "return": "← Povratak na Kontrolnu Tablu Hidraulike",
-        "sec1Title": "Brzina Talasa i Fizika",
-        "sec1Desc": "Elastičnost cjevovoda i stišljivost vode određuju brzinu propagacije talasa (a).",
-        "phase1Title": "Vrijeme Pritiska",
-        "phase1Val": "Vrijeme Refleksije (2L/a)",
-        "phase2Title": "Brzina Talasa",
-        "phase2Val": "Brzina Zvuka u Cjevovodu",
-        "tripLimit": "Granica Ispada",
-        "tripVal": "150% Nominalnog",
-        "sec2Title": "Monitor Udara u Realnom Vremenu",
-        "nomHead": "Projektni Pad",
-        "maxSurge": "Maksimalni Pritisak Udara",
-        "sec2Note": "Proračun koristi Žukovskijevu jednačinu za naglo rasterećenje.",
-        "sec3Title": "Status Kontrolnog Ventila",
-        "sec3Desc": "Sinhronizovano zatvaranje između sprovodnog aparata i MIV-a.",
-        "valveStatus": "Solenoid: POD NAPONOM",
-        "sec4Title": "Veza sa Strukturnim Integritetom",
-        "sec4Desc": "Pritisak udara upoređen sa naponom u zidu cijevi za čelik razreda S235JR.",
-        "criticalSafety": "KRITIČNA SIGURNOST",
-        "open100": "100% OTVORENO",
-        "closed0": "0% ZATVORENO",
-        "fastPhase": "Brza Faza",
-        "cushionPhase": "Faza Prigušenja"
+        "title": "[EN] Analiza Hidrauličkog Udara",
+        "subtitle": "[EN] Proračun Prijelaznog Pritiska prema IEC 60041 Standardu",
+        "return": "[EN] ← Povratak na Kontrolnu Tablu Hidraulike",
+        "sec1Title": "[EN] Brzina Talasa i Fizika",
+        "sec1Desc": "[EN] Elastičnost cjevovoda i stišljivost vode određuju brzinu propagacije talasa (a).",
+        "phase1Title": "[EN] Vrijeme Pritiska",
+        "phase1Val": "[EN] Vrijeme Refleksije (2L/a)",
+        "phase2Title": "[EN] Brzina Talasa",
+        "phase2Val": "[EN] Brzina Zvuka u Cjevovodu",
+        "tripLimit": "[EN] Granica Ispada",
+        "tripVal": "[EN] 150% Nominalnog",
+        "sec2Title": "[EN] Monitor Udara u Realnom Vremenu",
+        "nomHead": "[EN] Projektni Pad",
+        "maxSurge": "[EN] Maksimalni Pritisak Udara",
+        "sec2Note": "[EN] Proračun koristi Žukovskijevu jednačinu za naglo rasterećenje.",
+        "sec3Title": "[EN] Status Kontrolnog Ventila",
+        "sec3Desc": "[EN] Sinhronizovano zatvaranje između sprovodnog aparata i MIV-a.",
+        "valveStatus": "[EN] Solenoid: POD NAPONOM",
+        "sec4Title": "[EN] Veza sa Strukturnim Integritetom",
+        "sec4Desc": "[EN] Pritisak udara upoređen sa naponom u zidu cijevi za čelik razreda S235JR.",
+        "criticalSafety": "[EN] KRITIČNA SIGURNOST",
+        "open100": "[EN] 100% OTVORENO",
+        "closed0": "[EN] 0% ZATVORENO",
+        "fastPhase": "[EN] Brza Faza",
+        "cushionPhase": "[EN] Faza Prigušenja"
       }
     },
     "waterHammer": {
@@ -3096,35 +3077,35 @@
     },
     "toolbox": {
       "greeting": {
-        "morning": "Dobro jutro",
-        "afternoon": "Dobar dan",
-        "evening": "Dobro veče"
+        "morning": "[EN] Dobro jutro",
+        "afternoon": "[EN] Dobar dan",
+        "evening": "[EN] Dobro veče"
       },
-      "engineer": "Inženjer",
-      "systemOperational": "Sistem Operativan",
-      "assetsOnline": "Agregati Online",
-      "activeAsset": "Aktivni Kontekst: {{name}}",
+      "engineer": "[EN] Inženjer",
+      "systemOperational": "[EN] Sistem Operativan",
+      "assetsOnline": "[EN] Agregati Online",
+      "activeAsset": "[EN] Aktivni Kontekst: {{name}}",
       "sections": {
-        "utilities": "Inženjerski Alati",
-        "designAnalysis": "Dizajn i Analiza",
-        "operationalModules": "Operativni Moduli",
-        "recentActivity": "Nedavna Aktivnost"
+        "utilities": "[EN] Inženjerski Alati",
+        "designAnalysis": "[EN] Dizajn i Analiza",
+        "operationalModules": "[EN] Operativni Moduli",
+        "recentActivity": "[EN] Nedavna Aktivnost"
       },
       "activity": {
-        "none": "Nema nedavnih logova.",
-        "open": "Otvori Dnevnik",
-        "view": "Pregledaj Svu Aktivnost"
+        "none": "[EN] Nema nedavnih logova.",
+        "open": "[EN] Otvori Dnevnik",
+        "view": "[EN] Pregledaj Svu Aktivnost"
       },
       "zeroState": {
-        "title": "Dobrodošli u AnoHUB",
-        "noAssets": "Nema registrovanih agregata u floti.",
-        "initialize": "Inicijalizuj Prvi Agregat"
+        "title": "[EN] Dobrodošli u AnoHUB",
+        "noAssets": "[EN] Nema registrovanih agregata u floti.",
+        "initialize": "[EN] Inicijalizuj Prvi Agregat"
       },
       "toast": {
-        "generatingPassport": "Generisanje Pasoša Agregata za {{asset}}..."
+        "generatingPassport": "[EN] Generisanje Pasoša Agregata za {{asset}}..."
       },
-      "passport": "Pasoš Agregata",
-      "addAsset": "Dodaj Agregat"
+      "passport": "[EN] Pasoš Agregata",
+      "addAsset": "[EN] Dodaj Agregat"
     }
   },
   "toolbox": {
@@ -3146,11 +3127,7 @@
     "activity": {
       "none": "No recent activity logged.",
       "open": "Open Logbook",
-      "view": "View All Activity",
-      "descLogbook": "Digital logs & tracking",
-      "descStructural": "Civil works analysis",
-      "descShadow": "Standard procedures",
-      "descAnalytics": "Fleet performance"
+      "view": "View All Activity"
     },
     "zeroState": {
       "title": "Welcome to AnoHUB",
@@ -3161,242 +3138,169 @@
       "generatingPassport": "Generating Asset Passport for {{asset}}..."
     },
     "passport": "Asset Passport",
-    "addAsset": "Add Asset",
-    "diagnostics": {
-      "francisTitle": "Francis Diagnostics",
-      "francisDesc": "Run troubleshooting engine for {{name}}"
-    },
-    "logicHub": {
-      "title": "Francis Logic Hub",
-      "desc": "System Map & Logic Interlocks for Unit 1"
-    },
-    "pelton": {
-      "title": "Pelton Impulse Protocols",
-      "desc": "Nozzle erosion & bucket MPI checklists"
-    },
-    "kaplan": {
-      "title": "Kaplan Reaction Protocols",
-      "desc": "Blade seal & oil head integrity checks"
-    },
-    "bulb": {
-      "title": "Bulb Housing Protocols",
-      "desc": "Watertightness & cooling air audits"
-    }
+    "addAsset": "Add Asset"
   },
   "profile_legacy": {
-    "loading": "Učitavanje Enterprise Profila...",
-    "title": "Inženjerski Profil",
-    "subtitle": "Upravljajte svojim identitetom i AnoHub akreditivima.",
-    "changePhoto": "PROMIJENI SLIKU",
-    "unassignedRole": "Nedodijeljena Uloga",
-    "fullName": "Puno Ime",
-    "role": "Uloga / Titula",
-    "rolePlaceholder": "npr. Viši Mašinski Inženjer",
-    "fullNamePlaceholder": "npr. John Doe",
-    "company": "Kompanija / Organizacija",
-    "companyPlaceholder": "npr. AnoHub Enterprise Rješenja",
-    "saveButton": "Spremi Promjene Profila",
-    "saving": "Spremanje...",
-    "uploadError": "Morate odabrati sliku za slanje.",
-    "updateSuccess": "Profil uspješno ažuriran!",
-    "avatarSuccess": "Avatar postavljen!",
-    "noUser": "Korisnik nije prijavljen!",
-    "back": "Nazad na Kontrolnu Ploču"
+    "loading": "[EN] Učitavanje Enterprise Profila...",
+    "title": "[EN] Inženjerski Profil",
+    "subtitle": "[EN] Upravljajte svojim identitetom i AnoHub akreditivima.",
+    "changePhoto": "[EN] PROMIJENI SLIKU",
+    "unassignedRole": "[EN] Nedodijeljena Uloga",
+    "fullName": "[EN] Puno Ime",
+    "role": "[EN] Uloga / Titula",
+    "rolePlaceholder": "[EN] npr. Viši Mašinski Inženjer",
+    "fullNamePlaceholder": "[EN] npr. John Doe",
+    "company": "[EN] Kompanija / Organizacija",
+    "companyPlaceholder": "[EN] npr. AnoHub Enterprise Rješenja",
+    "saveButton": "[EN] Spremi Promjene Profila",
+    "saving": "[EN] Spremanje...",
+    "uploadError": "[EN] Morate odabrati sliku za slanje.",
+    "updateSuccess": "[EN] Profil uspješno ažuriran!",
+    "avatarSuccess": "[EN] Avatar postavljen!",
+    "noUser": "[EN] Korisnik nije prijavljen!",
+    "back": "[EN] Nazad na Kontrolnu Ploču"
   },
   "francis_dashboard": {
-    "title": "Francis Turbina • Izolacija Kvara",
-    "subtitle": "Unesite trenutnu telemetriju za validaciju prema SOP limitima (Ref: SOP-ROT-001).",
+    "title": "[EN] Francis Turbina • Izolacija Kvara",
+    "subtitle": "[EN] Unesite trenutnu telemetriju za validaciju prema SOP limitima (Ref: SOP-ROT-001).",
     "inputs": {
-      "bearingTemp": "Temperatura Ležaja (°C)",
-      "vibration": "Vibracija (mm/s)",
-      "silt": "Koncentracija Mulja (ppm)",
-      "gridFreq": "Mrežna Frekvencija (Hz)",
-      "nominalTemp": "Nominalno: < 60°C",
-      "nominalVib": "Nominalno: < 2.5 mm/s",
-      "nominalSilt": "Nominalno: < 3000 ppm",
-      "nominalFreq": "Nominalno: 50.00 Hz ± 1%"
+      "bearingTemp": "[EN] Temperatura Ležaja (°C)",
+      "vibration": "[EN] Vibracija (mm/s)",
+      "silt": "[EN] Koncentracija Mulja (ppm)",
+      "gridFreq": "[EN] Mrežna Frekvencija (Hz)",
+      "nominalTemp": "[EN] Nominalno: < 60°C",
+      "nominalVib": "[EN] Nominalno: < 2.5 mm/s",
+      "nominalSilt": "[EN] Nominalno: < 3000 ppm",
+      "nominalFreq": "[EN] Nominalno: 50.00 Hz ± 1%"
     },
     "actions": {
-      "run": "POKRENI DIJAGNOSTIKU",
-      "back": "Nazad na Alate"
+      "run": "[EN] POKRENI DIJAGNOSTIKU",
+      "back": "[EN] Nazad na Alate"
     },
     "status": {
-      "normal": "Svi Parametri Nominalni",
-      "normalDesc": "Sistem radi unutar dizajnerskih granica."
+      "normal": "[EN] Svi Parametri Nominalni",
+      "normalDesc": "[EN] Sistem radi unutar dizajnerskih granica."
     }
   },
   "emergency": {
-    "activeProtocol": "AKTIVNI HITNI PROTOKOL",
+    "activeProtocol": "[EN] AKTIVNI HITNI PROTOKOL",
     "protocols": {
       "vibration_excess": {
-        "0": "Hitno odbacivanje tereta na svim jedinicama.",
-        "1": "Odvojiti primarne vodeće ležajeve za inspekciju.",
-        "2": "Izvršiti lasersku reviziju poravnanja vratila.",
-        "3": "Aktivirati protumjere za prigušivanje vibracija."
+        "0": "[EN] Hitno odbacivanje tereta na svim jedinicama.",
+        "1": "[EN] Odvojiti primarne vodeće ležajeve za inspekciju.",
+        "2": "[EN] Izvršiti lasersku reviziju poravnanja vratila.",
+        "3": "[EN] Aktivirati protumjere za prigušivanje vibracija."
       },
       "bearing_overheat": {
-        "0": "Prisilno isključenje zahvaćene turbinske jedinice.",
-        "1": "Provjeriti protok i pritisak sistema za hlađenje.",
-        "2": "Analizirati ulje za podmazivanje na kontaminaciju.",
-        "3": "Pokrenuti rezervne izmjenjivače toplote."
+        "0": "[EN] Prisilno isključenje zahvaćene turbinske jedinice.",
+        "1": "[EN] Provjeriti protok i pritisak sistema za hlađenje.",
+        "2": "[EN] Analizirati ulje za podmazivanje na kontaminaciju.",
+        "3": "[EN] Pokrenuti rezervne izmjenjivače toplote."
       },
       "default": {
-        "0": "Pokrenuti opšti hitni isključni niz.",
-        "1": "Obavijestiti regionalni centar za održavanje."
+        "0": "[EN] Pokrenuti opšti hitni isključni niz.",
+        "1": "[EN] Obavijestiti regionalni centar za održavanje."
       }
     }
   },
   "pdf": {
     "passport": {
-      "title": "Pasoš Agregata",
-      "generated": "Generisano",
-      "id": "ID",
-      "assetIdentity": "Identitet Elektrane",
-      "assetName": "Naziv Elektrane",
-      "type": "Tip",
-      "location": "Lokacija",
-      "capacity": "Kapacitet",
-      "status": "Status",
-      "technicalSpecs": "Tehničke Specifikacije",
-      "noSpecs": "Nisu zabilježeni specifični tehnički parametri.",
-      "page": "Stranica",
-      "maintenanceLog": "Dnevnik Historije Održavanja",
-      "date": "Datum",
-      "category": "Kategorija",
-      "action": "Akcija / Sažetak",
-      "user": "Korisnik",
-      "noMaintenance": "Nema zabilježene historije održavanja za ovu elektranu."
+      "title": "[EN] Pasoš Agregata",
+      "generated": "[EN] Generisano",
+      "id": "[EN] ID",
+      "assetIdentity": "[EN] Identitet Elektrane",
+      "assetName": "[EN] Naziv Elektrane",
+      "type": "[EN] Tip",
+      "location": "[EN] Lokacija",
+      "capacity": "[EN] Kapacitet",
+      "status": "[EN] Status",
+      "technicalSpecs": "[EN] Tehničke Specifikacije",
+      "noSpecs": "[EN] Nisu zabilježeni specifični tehnički parametri.",
+      "page": "[EN] Stranica",
+      "maintenanceLog": "[EN] Dnevnik Historije Održavanja",
+      "date": "[EN] Datum",
+      "category": "[EN] Kategorija",
+      "action": "[EN] Akcija / Sažetak",
+      "user": "[EN] Korisnik",
+      "noMaintenance": "[EN] Nema zabilježene historije održavanja za ovu elektranu."
     }
   },
   "engines": {
     "pelton": {
-      "idealNsq": "+ Idealan nizak specifični broj okretaja ({{n_sq}})",
-      "highNsq": "+ Visok specifični broj okretaja za Pelton (zahtijeva više mlazova)",
-      "highHead": "+ Visok pad pruža optimalnu kinetičku energiju",
-      "lowPressure": "- Nedovoljan pritisak za impulsni dizajn",
-      "silt": "+ Laka zamjena posuda bolje podnosi mulj"
+      "idealNsq": "[EN] + Idealan nizak specifični broj okretaja ({{n_sq}})",
+      "highNsq": "[EN] + Visok specifični broj okretaja za Pelton (zahtijeva više mlazova)",
+      "highHead": "[EN] + Visok pad pruža optimalnu kinetičku energiju",
+      "lowPressure": "[EN] - Nedovoljan pritisak za impulsni dizajn",
+      "silt": "[EN] + Laka zamjena posuda bolje podnosi mulj"
     },
     "francis": {
-      "optimalNsq": "+ Optimalan specifični broj okretaja za Francis ({{n_sq}})",
-      "mediumHead": "+ Pad je unutar standardnog srednjeg raspona",
-      "fixedBlade": "- Fiksna geometrija lopatica manje efikasna za varijabilni protok",
-      "siltErosion": "- Potopljeno kolo podložno eroziji muljem"
+      "optimalNsq": "[EN] + Optimalan specifični broj okretaja za Francis ({{n_sq}})",
+      "mediumHead": "[EN] + Pad je unutar standardnog srednjeg raspona",
+      "fixedBlade": "[EN] - Fiksna geometrija lopatica manje efikasna za varijabilni protok",
+      "siltErosion": "[EN] - Potopljeno kolo podložno eroziji muljem"
     },
     "kaplan": {
-      "highNsq": "+ Detektovan visok specifični broj okretaja ({{n_sq}})",
-      "lowHead": "+ Idealno za primjene sa niskim padom",
-      "headExceeded": "- Pad prelazi optimalni Kaplan raspon",
-      "variableFlow": "+ Dvostruka regulacija efikasno upravlja varijabilnim protokom"
+      "highNsq": "[EN] + Detektovan visok specifični broj okretaja ({{n_sq}})",
+      "lowHead": "[EN] + Idealno za primjene sa niskim padom",
+      "headExceeded": "[EN] - Pad prelazi optimalni Kaplan raspon",
+      "variableFlow": "[EN] + Dvostruka regulacija efikasno upravlja varijabilnim protokom"
     },
     "crossflow": {
-      "runOfRiver": "+ Visoka efikasnost za male protočne elektrane",
-      "selfCleaning": "+ Samočisteće kolo dobro podnosi krhotine i mulj"
+      "runOfRiver": "[EN] + Visoka efikasnost za male protočne elektrane",
+      "selfCleaning": "[EN] + Samočisteće kolo dobro podnosi krhotine i mulj"
     }
   },
   "executive": {
-    "subtitle": "Izvršni Inženjerski Interfejs // v1.0.5 UNIFIED",
+    "subtitle": "[EN] Izvršni Inženjerski Interfejs // v1.0.5 UNIFIED",
     "status": {
-      "scadaActive": "Neuralna Veza Aktivna"
+      "scadaActive": "[EN] Neuralna Veza Aktivna"
     },
     "actions": {
-      "downloadBrief": "PREUZMI IZVJEŠTAJ"
+      "downloadBrief": "[EN] PREUZMI IZVJEŠTAJ"
     },
     "twin": {
-      "label": "BLIZANAC",
-      "topology": "Topologija Imovine Uživo"
+      "label": "[EN] BLIZANAC",
+      "topology": "[EN] Topologija Imovine Uživo"
     },
     "sensors": {
-      "activePower": "Aktivna Snaga",
-      "gridFrequency": "Mrežna Frekvencija"
+      "activePower": "[EN] Aktivna Snaga",
+      "gridFrequency": "[EN] Mrežna Frekvencija"
     },
     "kpi": {
-      "unitHealth": "Zdravlje Jedinice",
-      "financialRisk": "Finansijski Rizik",
-      "projectedLoss": "Predviđeni Gubitak (30d)"
+      "unitHealth": "[EN] Zdravlje Jedinice",
+      "financialRisk": "[EN] Finansijski Rizik",
+      "projectedLoss": "[EN] Predviđeni Gubitak (30d)"
     },
     "ai": {
-      "title": "Dr. Turbina AI",
-      "analyzing": "Dr. Turbina analizira hidrauličke potpise...",
+      "title": "[EN] Dr. Turbina AI",
+      "analyzing": "[EN] Dr. Turbina analizira hidrauličke potpise...",
       "nominal": {
-        "title": "SVI SISTEMI NOMINALNI",
-        "desc": "Hidraulički parametri unutar optimalnog opsega.",
-        "details": "Rizik od kavitacije: NIZAK • Temp. ležaja: NORMALNA • Vibracije: PRIHVATLJIVE"
+        "title": "[EN] SVI SISTEMI NOMINALNI",
+        "desc": "[EN] Hidraulički parametri unutar optimalnog opsega.",
+        "details": "[EN] Rizik od kavitacije: NIZAK • Temp. ležaja: NORMALNA • Vibracije: PRIHVATLJIVE"
       },
-      "physicsAnalysis": "FIZIČKA ANALIZA:",
-      "gridRisk": "Odstupanje frekvencije >5% ukazuje na potencijalno odvajanje generatora. Rizik od mehaničke rezonance na {{freq}}Hz.",
-      "cavitationRisk": "Protok: {{flow}} m³/s, Pad: {{head}}m prelazi prag kavitacije. Zazor rotora može biti nedovoljan.",
-      "acceptable": "Sistemski parametri unutar prihvatljivog opsega. Praćenje se nastavlja."
+      "physicsAnalysis": "[EN] FIZIČKA ANALIZA:",
+      "gridRisk": "[EN] Odstupanje frekvencije >5% ukazuje na potencijalno odvajanje generatora. Rizik od mehaničke rezonance na {{freq}}Hz.",
+      "cavitationRisk": "[EN] Protok: {{flow}} m³/s, Pad: {{head}}m prelazi prag kavitacije. Zazor rotora može biti nedovoljan.",
+      "acceptable": "[EN] Sistemski parametri unutar prihvatljivog opsega. Praćenje se nastavlja."
     },
     "control": {
-      "emergencyProtocols": "Protokoli za Hitne Slučajeve",
-      "scramButton": "🚨 HITNO ZAUSTAVLJANJE 🚨",
-      "scramConfirm": "POKRENUTI HITNO ZAUSTAVLJANJE? Ovo će isključiti turbinu i može uzrokovati zastoje.",
-      "safetyDisengaged": "SIGURNOSNA BRAVA ISKLJUČENA",
-      "scadaControls": "Analitika Blizanca",
-      "flowRate": "Protok (m³/s)",
-      "head": "Pad (m)",
-      "gridFrequencyInput": "Mrežna Frekvencija (Hz)",
-      "criticalFreq": "⚠️ DETEKTOVANA KRITIČNA FREKVENCIJA"
+      "emergencyProtocols": "[EN] Protokoli za Hitne Slučajeve",
+      "scramButton": "[EN] 🚨 HITNO ZAUSTAVLJANJE 🚨",
+      "scramConfirm": "[EN] POKRENUTI HITNO ZAUSTAVLJANJE? Ovo će isključiti turbinu i može uzrokovati zastoje.",
+      "safetyDisengaged": "[EN] SIGURNOSNA BRAVA ISKLJUČENA",
+      "scadaControls": "[EN] Analitika Blizanca",
+      "flowRate": "[EN] Protok (m³/s)",
+      "head": "[EN] Pad (m)",
+      "gridFrequencyInput": "[EN] Mrežna Frekvencija (Hz)",
+      "criticalFreq": "[EN] ⚠️ DETEKTOVANA KRITIČNA FREKVENCIJA"
     },
     "silhouette": {
-      "bearingTemp": "TEMP. LEŽAJA",
-      "vibration": "VIBRACIJE",
-      "gridFreq": "MREŽNA FREQ",
-      "healthScore": "OCJENA ZDRAVLJA",
-      "criticalAlarms": "🚨 KRITIČNI ALARMI"
+      "bearingTemp": "[EN] TEMP. LEŽAJA",
+      "vibration": "[EN] VIBRACIJE",
+      "gridFreq": "[EN] MREŽNA FREQ",
+      "healthScore": "[EN] OCJENA ZDRAVLJA",
+      "criticalAlarms": "[EN] 🚨 KRITIČNI ALARMI"
     }
-  },
-  "commander": {
-    "title": "ANOHUB COMMANDER",
-    "verified": "DECIMAL.JS VERIFIED",
-    "neuralLink": "Neural Link Active",
-    "forensicLog": "Forensic Log",
-    "lastSync": "Last Sync",
-    "latency": "Neural Core Latency",
-    "dataIntegrity": "Data Integrity",
-    "verifiedStatus": "99.9% Verified"
-  },
-  "neuralFlow": {
-    "physicsBreach": "Physics Breach: Vib Limit Exceeded",
-    "intelInit": "Asset Intelligence Initialization",
-    "diagnosticTwin": "Diagnostic Twin",
-    "heroText": "Connect high-fidelity field data for forensic analysis and predictive physics synchronization.",
-    "registerAsset": "Register New Asset",
-    "flowTitle": "Neural Flow",
-    "flowDesc": "Real-time physics synchronization",
-    "integrityTitle": "Forensic Integrity",
-    "integrityDesc": "Certified diagnostic stream",
-    "latencyTitle": "Zero Latency",
-    "latencyDesc": "Non-intrusive metadata focus",
-    "coreTwin": "Neural Core // Forensic Twin",
-    "diagnosticBreach": "Diagnostic Breach",
-    "integrityVerified": "Integrity Verified",
-    "detectionActive": "Forensic Detection Active"
-  },
-  "header": {
-    "title": "AnoHUB Diagnostic Twin",
-    "searchPlaceholder": "Search modules...",
-    "modalPlaceholder": "EXECUTE COMMAND OR SEARCH MODULES...",
-    "jumpTo": "Jump to",
-    "noResults": "No results found.",
-    "recentSuggested": "Recent / Suggested",
-    "terminateTitle": "Terminate Session?"
-  },
-  "dashboard": {
-    "riskStatus": {
-      "label": "RISK STATUS",
-      "normal": "OPTIMAL",
-      "warning": "WARNING",
-      "critical": "CRITICAL"
-    }
-  },
-  "engineering": {
-    "head": "Head",
-    "surge": "Surge",
-    "alignment": "Alignment",
-    "guideVane": "Guide Vane",
-    "runner": "Runner",
-    "thrustBearing": "Thrust Bearing",
-    "shaft": "Shaft"
   }
 }

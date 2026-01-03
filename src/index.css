@@ -1,13 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Sinhala:wght@100..900&display=swap');
 
-/* --- CSS CUSTOM PROPERTIES (Theme Variables) --- */
-:root[data-theme="tactical-cyan"],
 :root {
-  --accent-primary: 0, 240, 255;
-  /* Cyan */
-  --accent-glow: rgba(0, 240, 255, 0.5);
-  --bg-carbon: #050505;
-  --bg-carbon-dim: #030303;
+  --bg-slate-950: #020617;
+  --bg-slate-900: #0f172a;
+  --accent-cyan-500: #06b6d4;
+  --accent-emerald-400: #34d399;
+  --border-white-5: rgba(255, 255, 255, 0.05);
+  --glass-blur: 24px;
+  --glass-opacity: 0.45;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --commander-glow: 0 0 30px rgba(6, 182, 212, 0.2);
+  --deep-carbon: #010409;
+}
+
+:root[data-theme="commander"] {
+  --bg-carbon: var(--bg-slate-950);
+  --accent-primary: 6, 182, 212;
+  /* Cyan-500 RGB */
+  --accent-health: 52, 211, 153;
+  /* Emerald-400 RGB */
 }
 
 :root[data-theme="tactical-red"] {
@@ -192,19 +203,50 @@ textarea::placeholder {
 
 /* 1. Base Glass (za panele i kartice) */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  background: rgba(15, 23, 42, var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 8px 32px 0 rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  border-radius: 1.25rem;
+}
+
+.glass-panel-deep {
+  background: rgba(2, 6, 23, 0.6);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 20px 50px rgba(0, 0, 0, 0.9);
+  border-radius: 1.5rem;
+}
+
+.noise-commander {
+  position: relative;
+}
+
+.noise-commander::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* 2. Hover Glass (za interaktivne elemente) */
 .glass-panel-hover:hover {
   background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(6, 182, 212, 0.3);
+  border-color: rgba(6, 182, 212, 0.4);
   /* Cyan border tint */
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
+  box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05), 0 0 30px rgba(6, 182, 212, 0.2);
   transform: translateY(-2px);
 }
 

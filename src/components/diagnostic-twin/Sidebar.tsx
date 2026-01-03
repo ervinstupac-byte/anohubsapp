@@ -51,7 +51,7 @@ const FleetSection: React.FC<FleetSectionProps> = ({ showMap, onToggleMap, onReg
                             onRegisterAsset();
                         }}
                         className="p-1 rounded bg-emerald-900/20 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 border border-emerald-900/30"
-                        title="Register New Asset"
+                        title={t('neuralFlow.registerAsset')}
                     >
                         <Plus className="w-3 h-3" />
                     </button>
@@ -122,7 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     ];
 
     const secondaryModules = [
-        { id: 'learningLab', title: 'Learning Lab', icon: <BrainCircuit className="w-4 h-4 text-purple-400" />, route: `/${ROUTES.LEARNING_LAB}` }
+        { id: 'learningLab', title: t('sidebar.learningLab'), icon: <BrainCircuit className="w-4 h-4 text-purple-400" />, route: `/${ROUTES.LEARNING_LAB}` }
     ];
 
     const formatValue = (val: number | string | undefined) => {
@@ -161,66 +161,67 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
             {/* SIDEBAR CONTAINER */}
             <motion.div
-                className={`fixed top-0 left-0 h-full w-80 bg-slate-950 border-r border-cyan-900/30 z-40 transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl shadow-black ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+                className={`fixed top-0 left-0 h-full w-80 bg-slate-950/40 glass-panel-deep !rounded-none z-40 transform transition-transform duration-300 ease-in-out flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.8)] border-r border-white/5 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
             >
+                <div className="absolute inset-0 noise-commander opacity-20 pointer-events-none"></div>
                 {/* 1. HEADER & BRANDING */}
-                <div className="p-4 border-b border-cyan-900/30 flex items-center justify-between bg-slate-950 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-cyan-900/20 to-transparent opacity-50 pointer-events-none" />
+                <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-50 pointer-events-none" />
 
-                    <div className="flex items-center gap-3 relative z-10">
-                        <div className="w-10 h-10 bg-cyan-950 border border-cyan-500/30 rounded flex items-center justify-center relative">
-                            <div className="absolute inset-0 bg-cyan-500/10 animate-pulse-glow rounded" />
-                            <span className="text-xl font-black text-cyan-400 tracking-tighter">Ah</span>
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="w-12 h-12 bg-black/40 border border-cyan-500/30 rounded-xl flex items-center justify-center relative group overflow-hidden">
+                            <div className="absolute inset-0 bg-cyan-500/20 animate-pulse-glow" />
+                            <span className="text-2xl font-black text-cyan-400 tracking-tighter drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]">Ah</span>
                         </div>
                         <div>
-                            <h1 className="text-sm font-bold text-white tracking-[0.2em] uppercase">AnoHUB</h1>
+                            <h1 className="text-base font-black text-white tracking-[0.2em] uppercase drop-shadow-sm">AnoHUB</h1>
                             <div className="flex items-center gap-2">
-                                <span className="text-[10px] text-cyan-500 font-mono">v4.2.0-TACTICAL</span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                                <span className="text-[10px] text-cyan-500/80 font-mono font-bold tracking-widest">{t('sidebar.version')}</span>
+                                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(6,182,212,1)]" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* 2. CONTEXT AWARENESS PANEL */}
-                <div className="bg-slate-900/80 border-b border-cyan-900/30">
-                    <div className="p-4 space-y-4">
+                <div className="bg-black/20 border-b border-white/5 noise-commander">
+                    <div className="p-6 space-y-6">
 
-                        {/* A. LAYER SWITCHER (Fixed Strings) */}
-                        <div className="flex bg-slate-950 p-1 rounded-lg border border-cyan-900/30">
+                        {/* A. LAYER SWITCHER */}
+                        <div className="flex bg-black/40 p-1 rounded-xl border border-white/10 shadow-inner">
                             {(['HUMAN', 'HISTORY', 'REALTIME'] as const).map(layer => (
                                 <button
                                     key={layer}
                                     onClick={() => setActiveLayer(layer)}
-                                    className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded transition-all ${activeLayer === layer
-                                        ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]'
-                                        : 'text-slate-600 hover:text-cyan-200'
+                                    className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all duration-300 ${activeLayer === layer
+                                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                                        : 'text-slate-500 hover:text-slate-300'
                                         }`}
                                 >
-                                    {layer === 'REALTIME' ? 'LIVE' : layer}
+                                    {layer === 'REALTIME' ? t('sidebar.connected') : layer}
                                 </button>
                             ))}
                         </div>
 
                         {/* B. ACTIVE FOCUS */}
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             <div className="flex justify-between items-baseline">
-                                <h3 className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Active Focus</h3>
-                                <span className={`text-[10px] font-mono ${signalQuality >= 0.8 ? 'text-emerald-500' : 'text-amber-500'}`}>
-                                    SIG: {(signalQuality * 100).toFixed(0)}%
+                                <h3 className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em]">{t('sidebar.operationalFocus')}</h3>
+                                <span className={`text-[9px] font-mono font-bold ${signalQuality >= 0.8 ? 'text-emerald-500' : 'text-amber-500'}`}>
+                                    SIG_QUAL: {(signalQuality * 100).toFixed(0)}%
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 p-3 bg-slate-950 rounded border-l-2 border-cyan-500 shadow-inner shadow-black/50">
-                                <div className="p-2 bg-cyan-950/50 rounded-full border border-cyan-500/30">
-                                    <BrainCircuit className="w-4 h-4 text-cyan-400 animate-pulse" />
+                            <div className="flex items-center gap-4 p-4 bg-black/40 rounded-2xl border border-white/5 shadow-inner hover:border-cyan-500/30 transition-colors group">
+                                <div className="p-2.5 bg-cyan-500/10 rounded-xl border border-cyan-500/20 group-hover:bg-cyan-500/20 transition-all">
+                                    <BrainCircuit className="w-5 h-5 text-cyan-400 animate-pulse" />
                                 </div>
                                 <div className="overflow-hidden">
-                                    <h4 className="text-xs font-bold text-white uppercase truncate">
-                                        {activeDefinition?.title || 'System Idle'}
+                                    <h4 className="text-xs font-black text-white uppercase tracking-tight truncate group-hover:text-cyan-400 transition-colors">
+                                        {activeDefinition?.title || t('sidebar.systemIdle')}
                                     </h4>
                                     <div className="flex items-center gap-2">
-                                        <p className="text-[10px] text-cyan-400 font-mono truncate">
-                                            {activeDefinition?.slogan || 'Monitoring global streams...'}
+                                        <p className="text-[10px] text-slate-500 font-mono truncate">
+                                            {activeDefinition?.slogan || t('sidebar.monitoring')}
                                         </p>
                                         <div className="w-1 h-1 bg-cyan-400 rounded-full animate-ping" />
                                     </div>
@@ -232,7 +233,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         {activeLayer === 'HISTORY' && (
                             <div className="space-y-2 pt-2 border-t border-white/5 animate-in slide-in-from-top-2">
                                 <div className="flex justify-between text-[10px] font-mono text-cyan-300">
-                                    <span>Playback Scrubber</span>
+                                    <span>{t('sidebar.playbackScrubber')}</span>
                                     <span>{new Date(playback.currentTimestamp).toLocaleTimeString()}</span>
                                 </div>
                                 <input
@@ -283,7 +284,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                             <div className="flex items-center gap-1.5">
                                                 <BrainCircuit className={`w-3 h-3 ${insight.type === 'CRITICAL' ? 'text-red-400' : 'text-amber-400'}`} />
                                                 <span className={`text-[10px] font-bold uppercase ${insight.type === 'CRITICAL' ? 'text-red-400' : 'text-amber-400'}`}>
-                                                    {insight.messageKey || 'INSIGHT'}
+                                                    {insight.messageKey || t('sidebar.insight')}
                                                 </span>
                                             </div>
                                             <span className="text-[9px] font-mono opacity-70">
@@ -328,7 +329,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     <div className="p-2 space-y-0.5">
                         {/* OPERATIONAL COMMAND */}
                         <div className="px-3 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest mt-2">
-                            Operational Command
+                            {t('sidebar.operationalCommand')}
                         </div>
                         {operationalModules.map((item) => {
                             const isActive = location.pathname.includes(item.route);
@@ -340,15 +341,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         navigate(item.route);
                                         if (window.innerWidth < 1024) onClose();
                                     }}
-                                    className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-3 transition-all duration-200 group ${isActive
-                                        ? 'bg-cyan-950/30 text-cyan-400 border border-cyan-500/20 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]'
-                                        : 'text-slate-400 hover:bg-white/5 hover:text-cyan-200'
+                                    className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-4 transition-all duration-300 group relative overflow-hidden ${isActive
+                                        ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)]'
+                                        : 'text-slate-500 hover:bg-white/5 hover:text-cyan-200'
                                         }`}
                                 >
-                                    <span className="text-lg opacity-80 group-hover:scale-110 transition-transform filter grayscale group-hover:grayscale-0">{item.icon}</span>
-                                    <span className="text-xs font-bold tracking-wide">{item.title}</span>
+                                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <span className="text-xl filter drop-shadow-[0_0_5px_rgba(255,255,255,0.1)] group-hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] group-hover:scale-110 transition-transform">
+                                        {item.icon}
+                                    </span>
+                                    <span className="text-xs font-black uppercase tracking-wider group-hover:tracking-[0.1em] transition-all">
+                                        {item.title}
+                                    </span>
                                     {isActive && (
-                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
+                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,1)]" />
                                     )}
                                 </button>
                             );
@@ -356,7 +362,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                         {/* SYSTEM INTEL */}
                         <div className="px-3 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest mt-4">
-                            System Intel
+                            {t('sidebar.systemIntel')}
                         </div>
                         {secondaryModules.map((item) => (
                             <button
@@ -376,18 +382,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         ))}
 
                         <div className="px-3 pt-6 pb-2">
-                            <div className="bg-slate-900 border border-cyan-900/30 rounded p-3">
-                                <h4 className="text-[10px] font-bold text-cyan-500 mb-2 uppercase tracking-wider flex items-center gap-2">
+                            <div className="bg-black/40 border border-white/5 rounded-2xl p-4 noise-commander">
+                                <h4 className="text-[10px] font-black text-cyan-400 mb-3 uppercase tracking-[0.2em] flex items-center gap-2">
                                     <Upload className="w-3 h-3" />
-                                    Data Bridge
+                                    {t('sidebar.neuralBridge')}
                                 </h4>
                                 <div className="space-y-2">
                                     <button
-                                        className="w-full py-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"
+                                        className="w-full py-2.5 px-3 bg-white/5 hover:bg-white/10 text-[10px] text-slate-400 hover:text-white rounded-xl border border-white/5 flex items-center justify-center gap-2 transition-all font-black uppercase tracking-widest"
                                         onClick={() => document.getElementById('bridge-upload')?.click()}
                                     >
-                                        <Clock className="w-3 h-3" />
-                                        Load History (CSV)
+                                        <Clock className="w-3.5 h-3.5" />
+                                        {t('sidebar.syncHistory')}
                                     </button>
                                     <input
                                         id="bridge-upload"
@@ -396,8 +402,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         className="hidden"
                                         onChange={(e) => {
                                             if (e.target.files?.[0]) {
-                                                // In a real app we would call context.uploadLogData(file)
-                                                // ignoring for now to pass type check if context doesn't expose it directly here (it does expose uploadLogData though)
                                             }
                                         }}
                                     />
@@ -412,14 +416,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT));
                                     if (window.innerWidth < 1024) onClose();
                                 }}
-                                className="w-full py-3 bg-red-950/30 hover:bg-red-900/40 border border-red-500/30 text-red-400 rounded flex items-center justify-center gap-2 group transition-all"
+                                className="w-full py-4 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 rounded-2xl flex items-center justify-center gap-3 group transition-all shadow-[0_0_20px_rgba(239,68,68,0.05)]"
                             >
-                                <div className="p-1 bg-red-500/10 rounded group-hover:bg-red-500/20">
+                                <div className="p-2 bg-red-500/20 rounded-xl group-hover:scale-110 transition-transform shadow-[0_0_10px_rgba(239,68,68,0.2)]">
                                     <FileText className="w-4 h-4" />
                                 </div>
-                                <div className="flex flex-col items-start">
-                                    <span className="text-[10px] font-black uppercase tracking-wider">Generate 60s Forensic Report</span>
-                                    <span className="text-[8px] font-mono opacity-70">Capture Visuals + Logic Trace</span>
+                                <div className="flex flex-col items-start translate-y-[1px]">
+                                    <span className="text-[11px] font-black uppercase tracking-widest">{t('sidebar.generateForensic')}</span>
+                                    <span className="text-[8px] font-mono opacity-60 uppercase font-black">{t('sidebar.secureTrace')}</span>
                                 </div>
                             </button>
                         </div>
@@ -427,14 +431,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 </div>
 
                 {/* 4. FOOTER */}
-                <div className="p-4 border-t border-cyan-900/30 bg-slate-950">
+                <div className="p-6 border-t border-white/5 bg-white/5 noise-commander">
                     <LanguageSelector />
 
                     {/* HIVE STATUS INDICATOR */}
                     <div className="mt-3 text-[9px] font-mono text-slate-500 flex justify-between items-center">
-                        <span>HIVE LINK:</span>
+                        <span>{t('sidebar.hiveLink')}</span>
                         <span className={`font-bold ${hiveStatus?.connected ? 'text-emerald-500' : 'text-slate-600'}`}>
-                            {hiveStatus?.connected ? 'CONNECTED' : 'OFFLINE'}
+                            {hiveStatus?.connected ? t('sidebar.connected') : t('sidebar.offline')}
                         </span>
                     </div>
 

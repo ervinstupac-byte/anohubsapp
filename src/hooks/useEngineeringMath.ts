@@ -8,10 +8,12 @@ import Decimal from 'decimal.js';
  */
 export const useEngineeringMath = () => {
     const { state } = useCerebro();
-    const { mechanical, hydraulic, physics, penstock, governor } = state;
+    const { mechanical, hydraulic, physics, penstock, governor, identity } = state;
 
     return useMemo(() => {
         const PI = Decimal.acos(-1);
+        const turbineType = identity?.type || 'Francis';
+
         // --- ORBIT ANALYSIS ---
         const history = mechanical.vibrationHistory || [];
 
@@ -45,15 +47,18 @@ export const useEngineeringMath = () => {
         const isElliptical = eccentricity.greaterThan(0.75);
 
         // --- ACOUSTIC-ORBIT FUSION (Directive 2) ---
-        // Enhanced: If eccentricity > 0.8 AND (Cavitation > 7 OR Bearing Grind > 7)
+        // Enhanced: If eccentricity exceeds limit AND correlated acoustic signals are high
         const metrics = mechanical.acousticMetrics || {
             cavitationIntensity: 0,
             ultrasonicLeakIndex: 0,
             bearingGrindIndex: 0,
             acousticBaselineMatch: 1.0
         };
-        const isStructuralLoosenessConfirmed = eccentricity.greaterThan(0.8) &&
-            (metrics.cavitationIntensity > 7 || metrics.bearingGrindIndex > 7);
+
+        // Contextual thresholding based on turbine type
+        const eccentricityLimit = turbineType === 'Pelton' ? 0.82 : 0.78;
+        const isStructuralLoosenessConfirmed = eccentricity.greaterThan(eccentricityLimit) &&
+            (metrics.cavitationIntensity > 6 || metrics.bearingGrindIndex > 6);
 
         // --- CENTER MIGRATION ---
         let centerMigration = new Decimal(0);
@@ -73,29 +78,24 @@ export const useEngineeringMath = () => {
         }
 
         // --- WATER HAMMER (IEC 60041) ---
-        // a = sqrt((K/rho) / (1 + (K/E) * (d/e)))
-        const K = new Decimal(2.15e9); // Bulk modulus of water (Pa)
-        const rho = new Decimal(1000); // Water density (kg/m3)
-        const E = new Decimal(penstock.materialModulus).mul(1e9); // GPa to Pa
-        const d_pipe = new Decimal(penstock.diameter);
+        const K = new Decimal(2.15e9);
+        const rho = new Decimal(1000);
+        const E = new Decimal(penstock.materialModulus || 210).mul(1e9);
+        const d_pipe = new Decimal(penstock.diameter || 1.0);
         const e_wall = new Decimal(penstock.wallThickness || 0.01);
 
-        // a = wave speed
         const waveSpeed = Decimal.sqrt(
             K.div(rho).div(new Decimal(1).plus(K.div(E).mul(d_pipe.div(e_wall))))
         );
 
-        // Delta_V = change in velocity (assuming full rejection for worst case)
-        // v = Q / (pi * (d/2)^2)
         const area = PI.mul(d_pipe.div(2).pow(2));
-        const velocity = hydraulic.flowRate.div(area);
+        const velocity = new Decimal(hydraulic.flow).div(area);
 
-        // Pressure rise DeltaP = rho * a * v (Joukowsky)
         const deltaP_Pa = rho.mul(waveSpeed).mul(velocity);
         const deltaP_Bar = deltaP_Pa.div(100000);
 
-        // --- BURST SAFETY FACTOR (Task 3) ---
-        const yieldStrength = new Decimal(penstock.materialYieldStrength);
+        // --- BURST SAFETY FACTOR ---
+        const yieldStrength = new Decimal(penstock.materialYieldStrength || 250);
         const hoopStress = new Decimal(physics.hoopStressMPa || 1);
         const burstSafetyFactor = yieldStrength.div(hoopStress.greaterThan(0) ? hoopStress : new Decimal(1));
 
@@ -114,10 +114,9 @@ export const useEngineeringMath = () => {
         const controlSignal = p_term.plus(i_term).plus(d_term);
 
         // --- PERFORMANCE DELTA ---
-        // Delta_Perf = ((Actual - Baseline) / Baseline) * 100
         let performanceDelta = new Decimal(0);
-        const actualPower = new Decimal(physics.surgePressureBar); // Placeholder for actual power if not explicitly in state
-        const baselinePower = hydraulic.baselineOutputMW || new Decimal(100);
+        const actualPower = new Decimal(physics.surgePressureBar || 0);
+        const baselinePower = new Decimal(hydraulic.baselineOutputMW || 100);
 
         if (baselinePower.greaterThan(0)) {
             performanceDelta = actualPower.minus(baselinePower).div(baselinePower).mul(100);
@@ -137,8 +136,8 @@ export const useEngineeringMath = () => {
 
         return {
             thrust: {
-                totalKN: deltaP_Bar.mul(1.5).mul(new Decimal(0.4).plus(new Decimal(state.hydraulic.flow > 40 ? 0.1 : 0))).toNumber(), // Simplified reactive model
-                factor: new Decimal(0.94).minus(new Decimal(state.hydraulic.flow > 40 ? 0.05 : 0)).toNumber()
+                totalKN: deltaP_Bar.mul(1.5).mul(new Decimal(0.4).plus(new Decimal(hydraulic.flow > 40 ? 0.1 : 0))).toNumber(),
+                factor: new Decimal(0.94).minus(new Decimal(hydraulic.flow > 40 ? 0.05 : 0)).toNumber()
             },
             orbit: {
                 eccentricity: eccentricity.toNumber(),
@@ -170,5 +169,5 @@ export const useEngineeringMath = () => {
                 acousticNoise: metrics.cavitationIntensity
             }
         };
-    }, [mechanical, hydraulic, physics, penstock, governor]);
+    }, [mechanical, hydraulic, physics, penstock, governor, identity]);
 };

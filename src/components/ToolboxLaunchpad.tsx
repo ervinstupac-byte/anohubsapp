@@ -178,10 +178,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.operationalModules')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
-                                { name: 'Maintenance Logbook', icon: '📝', path: `/${ROUTES.MAINTENANCE.LOGBOOK}`, desc: 'Digital logs & tracking' },
-                                { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: `/${ROUTES.STRUCTURAL_INTEGRITY}`, desc: 'Civil works analysis' },
-                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`, desc: 'Standard procedures' },
-                                { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: `/${ROUTES.MAINTENANCE.EXECUTIVE}`, desc: 'Fleet performance' },
+                                { name: t('sidebar.maintenanceLogbook'), icon: '📝', path: `/${ROUTES.MAINTENANCE.LOGBOOK}`, desc: t('toolbox.activity.descLogbook') },
+                                { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: `/${ROUTES.STRUCTURAL_INTEGRITY}`, desc: t('toolbox.activity.descStructural') },
+                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`, desc: t('toolbox.activity.descShadow') },
+                                { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: `/${ROUTES.MAINTENANCE.EXECUTIVE}`, desc: t('toolbox.activity.descAnalytics') },
                             ].map(item => (
                                 <GlassCard
                                     key={item.name}
@@ -210,10 +210,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🩺</span>
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <h4 className="font-bold text-cyan-400 text-sm">Francis Diagnostics</h4>
-                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">Active</span>
+                                                        <h4 className="font-bold text-cyan-400 text-sm">{t('toolbox.diagnostics.francisTitle')}</h4>
+                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">{t('common.active')}</span>
                                                     </div>
-                                                    <p className="text-xs text-slate-400">Run troubleshooting engine for {selectedAsset.name}</p>
+                                                    <p className="text-xs text-slate-400">{t('toolbox.diagnostics.francisDesc', { name: selectedAsset.name })}</p>
                                                 </div>
                                             </GlassCard>
 
@@ -224,10 +224,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🗺️</span>
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <h4 className="font-bold text-cyan-400 text-sm">Francis Logic Hub (Reference)</h4>
-                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">NEW</span>
+                                                        <h4 className="font-bold text-cyan-400 text-sm">{t('toolbox.logicHub.title')}</h4>
+                                                        <span className="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30 uppercase">{t('common.new')}</span>
                                                     </div>
-                                                    <p className="text-xs text-slate-400">System Map & Logic Interlocks for Unit 1</p>
+                                                    <p className="text-xs text-slate-400">{t('toolbox.logicHub.desc')}</p>
                                                 </div>
                                             </GlassCard>
                                         </>
@@ -242,10 +242,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                             <span className="text-2xl group-hover:scale-110 transition-transform">💧</span>
                                             <div>
                                                 <div className="flex items-center gap-2">
-                                                    <h4 className="font-bold text-blue-400 text-sm">Pelton Impulse Protocols</h4>
-                                                    <span className="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30 uppercase">Detected</span>
+                                                    <h4 className="font-bold text-blue-400 text-sm">{t('toolbox.pelton.title')}</h4>
+                                                    <span className="text-[9px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30 uppercase">{t('common.detected')}</span>
                                                 </div>
-                                                <p className="text-xs text-slate-400">Nozzle erosion & bucket MPI checklists</p>
+                                                <p className="text-xs text-slate-400">{t('toolbox.pelton.desc')}</p>
                                             </div>
                                         </GlassCard>
                                     )}
@@ -259,10 +259,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                             <span className="text-2xl group-hover:scale-110 transition-transform">🌀</span>
                                             <div>
                                                 <div className="flex items-center gap-2">
-                                                    <h4 className="font-bold text-purple-400 text-sm">Kaplan Reaction Protocols</h4>
-                                                    <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30 uppercase">Detected</span>
+                                                    <h4 className="font-bold text-purple-400 text-sm">{t('toolbox.kaplan.title')}</h4>
+                                                    <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/30 uppercase">{t('common.detected')}</span>
                                                 </div>
-                                                <p className="text-xs text-slate-400">Blade seal & oil head integrity checks</p>
+                                                <p className="text-xs text-slate-400">{t('toolbox.kaplan.desc')}</p>
                                             </div>
                                         </GlassCard>
                                     )}
@@ -276,10 +276,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                             <span className="text-2xl group-hover:scale-110 transition-transform">💡</span>
                                             <div>
                                                 <div className="flex items-center gap-2">
-                                                    <h4 className="font-bold text-emerald-400 text-sm">Bulb Housing Protocols</h4>
-                                                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 uppercase">Detected</span>
+                                                    <h4 className="font-bold text-emerald-400 text-sm">{t('toolbox.bulb.title')}</h4>
+                                                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30 uppercase">{t('common.detected')}</span>
                                                 </div>
-                                                <p className="text-xs text-slate-400">Watertightness & cooling air audits</p>
+                                                <p className="text-xs text-slate-400">{t('toolbox.bulb.desc')}</p>
                                             </div>
                                         </GlassCard>
                                     )}
@@ -326,7 +326,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                                 {order.description}
                                             </h4>
                                             <p className="text-xs text-slate-500 line-clamp-2">
-                                                Status: {order.status}
+                                                {t('common.statusLabel')} {order.status}
                                             </p>
                                             <div className="flex items-center gap-2 mt-2">
                                                 <span className="text-[9px] px-1.5 py-0.5 bg-slate-800 rounded text-slate-400 uppercase tracking-wider">

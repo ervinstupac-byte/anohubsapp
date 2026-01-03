@@ -29,14 +29,12 @@ export const BoltTorqueCalculator: React.FC = () => {
         , [selectedPartId]);
 
     const calculations = useMemo(() => {
-        // Extract diameter from size (e.g., "M36" -> 36)
-        // If technicalState has updated bolt specs, use them, otherwise fallback to static
-        const projectBoltSize = technicalState.mechanical.boltSpecs.diameter;
-        const isDefault = selectedPartId === 'coupling'; // Assuming coupling uses project standard
+        // Source of Truth: technicalState from CEREBRO
+        const techBoltSpecs = technicalState.mechanical.boltSpecs;
 
-        // Logic: Use Project Context specs if valid, else static list
-        const d = isDefault && projectBoltSize ? projectBoltSize : parseInt(activePart.size.replace('M', ''));
-        const gradeYield = BOLT_GRADES[activePart.grade];
+        // Logic: Use technicalState specs which are now synced via DataSyncBridge
+        const d = techBoltSpecs.diameter || parseInt(activePart.size.replace('M', ''));
+        const gradeYield = BOLT_GRADES[techBoltSpecs.grade] || BOLT_GRADES[activePart.grade];
 
         // Target Stress = 75% of Yield
         const targetStress = gradeYield * 0.75;
@@ -62,7 +60,7 @@ export const BoltTorqueCalculator: React.FC = () => {
             elongation: targetElongation.toFixed(3),
             isElongationOk: Math.abs(measuredElongation - targetElongation) < 0.05
         };
-    }, [activePart, measuredElongation]);
+    }, [activePart, measuredElongation, technicalState.mechanical.boltSpecs]);
 
     // Star Pattern helper
     const starSteps = useMemo(() => {
@@ -113,20 +111,20 @@ export const BoltTorqueCalculator: React.FC = () => {
 
                         <div className="space-y-3 p-4 bg-white/5 rounded-2xl border border-white/5">
                             <div className="flex justify-between text-xs">
+                                <span className="text-slate-500">Project Identity</span>
+                                <span className="text-cyan-400 font-mono font-bold uppercase">{technicalState.identity.name}</span>
+                            </div>
+                            <div className="flex justify-between text-xs pt-2 border-t border-white/5">
                                 <span className="text-slate-500">Bolt Size</span>
-                                <span className="text-white font-mono font-bold">{activePart.size}</span>
+                                <span className="text-white font-mono font-bold">M{technicalState.mechanical.boltSpecs.diameter || activePart.size}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Material Grade</span>
-                                <span className="text-cyan-400 font-bold">{activePart.grade}</span>
+                                <span className="text-cyan-400 font-bold">{technicalState.mechanical.boltSpecs.grade || activePart.grade}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Total Bolts</span>
-                                <span className="text-white">{activePart.bolts}</span>
-                            </div>
-                            <div className="flex justify-between text-xs">
-                                <span className="text-slate-500">Grip Length</span>
-                                <span className="text-white">{activePart.length} mm</span>
+                                <span className="text-white">{technicalState.mechanical.boltSpecs.count || activePart.bolts}</span>
                             </div>
                         </div>
                     </GlassCard>

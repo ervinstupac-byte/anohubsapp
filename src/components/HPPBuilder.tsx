@@ -247,14 +247,7 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const handleGeneratePDF = () => {
-        const best = recommendations.find(r => r.isBest);
-        const blob = reportGenerator.generateTechnicalReport({
-            assetName: selectedAsset?.name || 'Concept Design',
-            parameters: settings,
-            calculations: calculations,
-            recommendedTurbine: best?.key || 'Unknown'
-        });
-        reportGenerator.downloadReport(blob, `AnoHUB_Technical_Report_${selectedAsset?.name || 'Draft'}.pdf`);
+        window.dispatchEvent(new CustomEvent('ANOHUB_TRIGGER_FORENSIC_EXPORT'));
         showToast(t('hppBuilder.toasts.pdfGenerated'), 'success');
     };
 

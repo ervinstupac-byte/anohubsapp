@@ -100,14 +100,7 @@ export const CommandCenter: React.FC = () => {
         }
     }, [diagnostics, liveMetrics, showToast]);
 
-    // LISTEN FOR SIDEBAR TRIGGER
-    React.useEffect(() => {
-        const handleTrigger = () => {
-            handleExportDossier();
-        };
-        window.addEventListener(TRIGGER_FORENSIC_EXPORT, handleTrigger);
-        return () => window.removeEventListener(TRIGGER_FORENSIC_EXPORT, handleTrigger);
-    }, [handleExportDossier]);
+    // Global listener removed - now handled by PrintPreviewModal in App.tsx
 
     // Calculate truth delta map
     const deltaMap = useMemo(() => {
@@ -193,7 +186,7 @@ export const CommandCenter: React.FC = () => {
 
                         {/* Forensic Dossier */}
                         <button
-                            onClick={handleExportDossier}
+                            onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
                             className="px-3 py-1.5 rounded-sm border border-slate-700/30 bg-slate-900/20 text-slate-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
                             title="Export Forensic Hypothesis as PDF"
                         >
