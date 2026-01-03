@@ -1,29 +1,50 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { RefreshCw, ArrowLeft, ShieldAlert, ThermometerSnowflake, Filter, Undo2, Droplet, Clock, Calendar, AlertCircle } from 'lucide-react';
+import {
+    RefreshCw,
+    ArrowLeft,
+    ShieldAlert,
+    ThermometerSnowflake,
+    Filter,
+    Undo2,
+    Droplet,
+    Clock,
+    Calendar,
+    AlertCircle,
+    Activity,
+    Thermometer
+} from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
+import { useCerebro } from '../../contexts/ProjectContext';
+import { GlassCard } from '../ui/GlassCard';
+import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const BearingsDetail: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { state } = useCerebro();
+
+    const bearingTemp = state.mechanical.bearingTemp;
+    const isHighTemp = bearingTemp > 60;
+    const isCriticalTemp = bearingTemp > 70;
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-mono pb-12">
+        <div className="min-h-screen bg-slate-950 text-slate-300 font-sans pb-12">
 
             {/* Header */}
-            <header className="bg-gradient-to-br from-[#78350f] to-[#0c0a09] border-b-2 border-amber-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 shadow-2xl">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-amber-600 rounded-lg border border-amber-400/30">
-                            <RefreshCw className="text-white w-8 h-8" />
+            <header className={`bg-black/40 border-b-2 ${isCriticalTemp ? 'border-red-600 animate-pulse' : 'border-amber-500'} py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl transition-all`}>
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-4 text-center md:text-left">
+                        <div className={`p-3 ${isCriticalTemp ? 'bg-red-600' : 'bg-amber-600'} rounded-2xl border border-white/10 shadow-lg`}>
+                            <RefreshCw className="text-white w-8 h-8 animate-spin-slow" />
                         </div>
                         <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-amber-900/30 text-amber-400 text-[10px] font-bold border border-amber-900 uppercase">SOP-ROT-001</span>
-                                <span className="text-[10px] text-stone-500 uppercase font-bold">REV 3.1</span>
+                            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                                <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-500 text-[10px] font-black border border-amber-900/50 uppercase tracking-widest">SOP-ROT-001</span>
+                                <NeuralPulse />
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+                            <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
                                 {t('francis.bearingsCheck.title')}
                             </h1>
                         </div>
@@ -31,172 +52,205 @@ export const BearingsDetail: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
-                        <ArrowLeft className="w-3 h-3 text-amber-500 group-hover:-translate-x-1 transition" />
+                        <ArrowLeft className="w-4 h-4 text-amber-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.bearingsCheck.return')}</span>
                     </button>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 md:px-8">
+            <main className="max-w-6xl mx-auto px-4 md:px-8 space-y-8">
 
-                <div className="grid grid-cols-1 gap-8">
+                {/* Real-time Status Card */}
+                <GlassCard title="Real-Time Thermal Intelligence" className="relative overflow-hidden group">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
+                        {/* Temp Viz */}
+                        <div className="lg:col-span-1 flex flex-col justify-center items-center p-6 bg-black/60 rounded-3xl border border-white/5 shadow-2xl">
+                            <div className="relative w-40 h-40 flex items-center justify-center">
+                                <svg className="w-full h-full transform -rotate-90">
+                                    <circle
+                                        cx="80" cy="80" r="70"
+                                        stroke="rgba(255,255,255,0.05)" strokeWidth="12"
+                                        fill="transparent"
+                                    />
+                                    <circle
+                                        cx="80" cy="80" r="70"
+                                        stroke="currentColor" strokeWidth="12"
+                                        strokeLinecap="round"
+                                        fill="transparent"
+                                        strokeDasharray={440}
+                                        style={{
+                                            strokeDashoffset: 440 * (1 - Math.min(1, bearingTemp / 100)),
+                                            transition: 'stroke-dashoffset 1s ease-in-out'
+                                        }}
+                                        className={isCriticalTemp ? 'text-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : isHighTemp ? 'text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]' : 'text-emerald-500'}
+                                    />
+                                </svg>
+                                <div className="absolute flex flex-col items-center">
+                                    <span className="text-4xl font-black font-mono text-white tracking-tighter">
+                                        {bearingTemp.toFixed(1)}
+                                    </span>
+                                    <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest text-[#00aaff]">°Celsius</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    {/* 1. Oil Film Criticality */}
-                    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-red-600 border border-amber-500/20 animate-[pulse_2s_infinite]">
+                        {/* Analysis Narrative */}
+                        <div className="lg:col-span-3 space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
+                                        <Thermometer className="w-3 h-3 text-cyan-400" /> Upper Guide Bearing
+                                    </p>
+                                    <p className="text-3xl font-black text-white font-mono tracking-tighter">
+                                        {bearingTemp.toFixed(1)} <span className="text-xs text-slate-500">°C</span>
+                                    </p>
+                                </div>
+                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
+                                        <Droplet className="w-3 h-3 text-blue-400" /> Oil Film Health
+                                    </p>
+                                    <p className={`text-3xl font-black font-mono tracking-tighter ${isCriticalTemp ? 'text-red-500' : 'text-emerald-400'}`}>
+                                        {isCriticalTemp ? 'CRITICAL' : 'OPTIMAL'}
+                                    </p>
+                                </div>
+                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                                    <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
+                                        <Activity className="w-3 h-3 text-purple-400" /> Vibration Sync
+                                    </p>
+                                    <p className="text-3xl font-black text-white font-mono tracking-tighter">
+                                        {state.mechanical.vibration.toFixed(2)} <span className="text-xs text-slate-500">mm/s</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className={`p-6 rounded-2xl border-2 transition-all ${isHighTemp ? 'bg-red-500/10 border-red-500/30 shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]' : 'bg-blue-500/10 border-blue-500/30 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]'}`}>
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className={`w-2 h-2 rounded-full ${isHighTemp ? 'bg-red-500 animate-ping' : 'bg-blue-400 animate-pulse'}`} />
+                                    <span className={`text-[10px] ${isHighTemp ? 'text-red-500' : 'text-blue-400'} font-black uppercase tracking-[0.2em]`}>Neural Diagnostic Engine</span>
+                                </div>
+                                <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-bold italic">
+                                    {isCriticalTemp
+                                        ? "🚨 CRITICAL ALERT: Bearing temperature exceeds 70°C. Oil film degradation imminent. Immediate load rejection and unit shutdown recommended."
+                                        : isHighTemp
+                                            ? "🚨 WARNING: Thermal rise detected (>60°C). Check cooling water flow and radiator efficiency. Verify thermocouple calibration."
+                                            : "🤖 SYSTEM STABLE: Thermal profile indicates laminar oil film flow. Cooling efficiency is within nominal range 18°C-55°C."}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </GlassCard>
+
+                {/* 1. Oil Film Criticality */}
+                <section className={`bg-slate-900/40 backdrop-blur-sm rounded-3xl p-8 border-l-[12px] ${isCriticalTemp ? 'border-red-600 animate-pulse' : 'border-red-600'} border border-white/5 shadow-2xl overflow-hidden relative`}>
+                    <div className="absolute inset-0 bg-red-600/5 animate-[pulse_3s_infinite]" />
+                    <div className="relative z-10">
                         <div className="flex items-center gap-4 mb-6">
-                            <ShieldAlert className="text-red-500 w-8 h-8" />
-                            <h2 className="text-xl font-black text-white uppercase tracking-tight">
+                            <ShieldAlert className="text-red-500 w-10 h-10" />
+                            <h2 className="text-2xl font-black text-white uppercase tracking-tighter">
                                 {t('francis.bearingsCheck.s1Title')}
                             </h2>
                         </div>
-                        <div className="bg-red-950/20 p-4 rounded-xl border border-red-900/40 mb-6">
-                            <p className="text-sm text-red-200/80 leading-relaxed">
-                                {t('francis.bearingsCheck.s1Desc')}
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-lg">
-                                <strong className="text-red-400 text-[11px] uppercase block mb-1">
+                        <p className="text-sm text-slate-300 leading-relaxed max-w-2xl mb-8 font-bold italic border-l-2 border-red-500/30 pl-6">
+                            {t('francis.bearingsCheck.s1Desc')}
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="p-6 bg-black/40 border border-red-500/20 rounded-2xl group hover:border-red-500/50 transition-colors">
+                                <strong className="text-red-500 text-xs font-black uppercase block mb-3 tracking-widest group-hover:scale-105 transition-transform origin-left">
                                     {t('francis.bearingsCheck.danger')}
                                 </strong>
-                                <p className="text-[10px] text-slate-400">
+                                <p className="text-xs text-slate-400 leading-relaxed">
                                     {t('francis.bearingsCheck.s1Li1')}
                                 </p>
                             </div>
-                            <div className="p-4 bg-slate-900/50 border border-slate-800 rounded-lg">
-                                <strong className="text-amber-400 text-[11px] uppercase block mb-1">
+                            <div className="p-6 bg-black/40 border border-amber-500/20 rounded-2xl group hover:border-amber-500/50 transition-colors">
+                                <strong className="text-amber-500 text-xs font-black uppercase block mb-3 tracking-widest group-hover:scale-105 transition-transform origin-left">
                                     {t('francis.bearingsCheck.result')}
                                 </strong>
-                                <p className="text-[10px] text-slate-400">
+                                <p className="text-xs text-slate-400 leading-relaxed">
                                     {t('francis.bearingsCheck.s1Li2')}
                                 </p>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    {/* 2. Heat Exchange Logic */}
-                    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-amber-600 border border-amber-500/20">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8 flex items-center gap-2">
-                            <ThermometerSnowflake className="w-5 h-5 text-amber-400" />
-                            {t('francis.bearingsCheck.s2Title')}
-                        </h2>
+                {/* 2. Heat Exchange & Action Plan */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8">
+                        <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                            <ThermometerSnowflake className="w-6 h-6 text-amber-500" />
+                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.bearingsCheck.s2Title')}</h2>
+                        </div>
 
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="space-y-6">
-                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800">
-                                    <h4 className="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest">1.1 Intake Filtration</h4>
-                                    <div className="flex gap-4">
-                                        <Filter className="w-8 h-8 text-slate-500 flex-shrink-0" />
-                                        <ul className="text-[10px] text-slate-400 space-y-2 list-disc ml-4">
-                                            <li>{t('francis.bearingsCheck.s2Li1')}</li>
-                                            <li>{t('francis.bearingsCheck.s2Li2')}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div className="bg-slate-900/40 p-5 rounded-xl border border-slate-800">
-                                    <h4 className="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest">1.2 "Backflush" Protocol</h4>
-                                    <div className="flex gap-4">
-                                        <Undo2 className="w-8 h-8 text-slate-500 flex-shrink-0" />
-                                        <ul className="text-[10px] text-slate-400 space-y-2 list-disc ml-4">
-                                            <li>{t('francis.bearingsCheck.s3Li1')}</li>
-                                            <li>{t('francis.bearingsCheck.s3Li2')}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-6 bg-amber-950/10 border border-amber-900/30 rounded-xl">
-                                <h4 className="text-white text-[11px] font-black uppercase mb-4 tracking-widest">
-                                    {t('francis.bearingsCheck.s4Title')}
+                        <div className="space-y-6">
+                            <div className="p-5 bg-white/5 rounded-2xl border border-white/10 group hover:bg-white/10 transition-colors">
+                                <h4 className="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest flex items-center gap-2">
+                                    <Filter className="w-3 h-3" /> {t('francis.bearingsCheck.s2Sub1')}
                                 </h4>
-                                <div className="flex gap-4 mb-4">
-                                    <div className="w-16 h-16 bg-amber-600/30 border border-amber-500/50 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <Droplet className="text-amber-400 w-8 h-8" />
-                                    </div>
-                                    <div>
-                                        <strong className="text-amber-400 text-xs block mb-1">{t('francis.bearingsCheck.symptom')}</strong>
-                                        <p className="text-[10px] text-slate-500">{t('francis.bearingsCheck.s4Li1')}</p>
-                                    </div>
-                                </div>
-                                <div className="p-3 bg-black/40 rounded border border-slate-800 text-[10px] text-slate-400">
-                                    <strong className="text-red-500 mr-1 uppercase">{t('francis.bearingsCheck.action')}:</strong>
-                                    <span>{t('francis.bearingsCheck.s4Li3')}</span>
-                                </div>
+                                <ul className="text-xs text-slate-400 space-y-3 font-bold">
+                                    <li className="flex gap-3"><span className="text-amber-500">▶</span> {t('francis.bearingsCheck.s2Li1')}</li>
+                                    <li className="flex gap-3"><span className="text-amber-500">▶</span> {t('francis.bearingsCheck.s2Li2')}</li>
+                                </ul>
+                            </div>
+
+                            <div className="p-5 bg-white/5 rounded-2xl border border-white/10 group hover:bg-white/10 transition-colors">
+                                <h4 className="text-amber-500 text-[10px] font-black uppercase mb-3 tracking-widest flex items-center gap-2">
+                                    <Undo2 className="w-3 h-3" /> {t('francis.bearingsCheck.s3Sub1')}
+                                </h4>
+                                <ul className="text-xs text-slate-400 space-y-3 font-bold">
+                                    <li className="flex gap-3"><span className="text-amber-500">▶</span> {t('francis.bearingsCheck.s3Li1')}</li>
+                                    <li className="flex gap-3"><span className="text-amber-500">▶</span> {t('francis.bearingsCheck.s3Li2')}</li>
+                                </ul>
                             </div>
                         </div>
                     </section>
 
-                    {/* 3. Limits & Triggers */}
-                    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-slate-600 border border-amber-500/20">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8">
-                            {t('francis.bearingsCheck.tblTitle')}
-                        </h2>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-xs border-collapse">
-                                <thead>
-                                    <tr className="bg-amber-900/40 text-amber-400 uppercase font-black text-[9px] tracking-widest">
-                                        <th className="p-4 border-b border-amber-500/30">{t('francis.bearingsCheck.tblCondition')}</th>
-                                        <th className="p-4 border-b border-amber-500/30">{t('francis.bearingsCheck.tblTemp')}</th>
-                                        <th className="p-4 border-b border-amber-500/30">{t('francis.bearingsCheck.tblAction')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-slate-300">
-                                    <tr>
-                                        <td className="p-4 border-b border-slate-800 font-bold">{t('francis.bearingsCheck.tblNormal')}</td>
-                                        <td className="p-4 border-b border-slate-800">18°C - 55°C</td>
-                                        <td className="p-4 border-b border-slate-800">{t('francis.bearingsCheck.tblMonitor')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="p-4 border-b border-slate-800 font-bold text-orange-500">{t('francis.bearingsCheck.tblAlarm')}</td>
-                                        <td className="p-4 border-b border-slate-800 font-black">60°C</td>
-                                        <td className="p-4 border-b border-slate-800">{t('francis.bearingsCheck.tblCheck')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="p-4 border-b border-slate-800 font-bold text-red-500">{t('francis.bearingsCheck.tblTrip')}</td>
-                                        <td className="p-4 border-b border-slate-800 font-black text-red-500">70°C</td>
-                                        <td className="p-4 border-b border-slate-800">
-                                            <strong className="uppercase block">{t('francis.bearingsCheck.tblEsd')}</strong>
-                                            <span className="text-[10px] text-slate-500">{t('francis.bearingsCheck.tblNoRestart')}</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 flex flex-col justify-between">
+                        <div className="flex items-center gap-3 border-b border-white/5 pb-4 mb-6">
+                            <AlertCircle className="w-6 h-6 text-red-500" />
+                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.bearingsCheck.s4Title')}</h2>
                         </div>
-                    </section>
 
-                    {/* Checklist */}
-                    <section className="bg-amber-950/5 backdrop-blur-sm rounded-2xl p-8 border border-amber-500/20">
-                        <h2 className="text-lg font-black text-amber-400 uppercase tracking-tight mb-6">
-                            {t('francis.bearingsCheck.clTitle')}
-                        </h2>
-                        <div className="grid md:grid-cols-3 gap-6">
-                            <div className="flex gap-3">
-                                <Clock className="text-amber-500 w-5 h-5 flex-shrink-0" />
+                        <div className="flex-grow space-y-8">
+                            <div className="flex gap-6 items-center">
+                                <div className="w-20 h-20 bg-amber-500/10 border-2 border-amber-500/30 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse">
+                                    <Droplet className="text-amber-500 w-10 h-10" />
+                                </div>
                                 <div>
-                                    <strong className="text-white text-[11px] uppercase block mb-1">{t('francis.bearingsCheck.daily')}</strong>
-                                    <p className="text-[10px] text-slate-500">{t('francis.bearingsCheck.dailyDesc')}</p>
+                                    <strong className="text-amber-400 text-xs font-black uppercase block mb-1 tracking-widest">{t('francis.bearingsCheck.symptom')}</strong>
+                                    <p className="text-xs text-slate-300 font-bold leading-relaxed">{t('francis.bearingsCheck.s4Li1')}</p>
                                 </div>
                             </div>
-                            <div className="flex gap-3">
-                                <Calendar className="text-amber-500 w-5 h-5 flex-shrink-0" />
-                                <div>
-                                    <strong className="text-white text-[11px] uppercase block mb-1">{t('francis.bearingsCheck.weekly')}</strong>
-                                    <p className="text-[10px] text-slate-500">{t('francis.bearingsCheck.weeklyDesc')}</p>
+
+                            <div className="p-6 bg-red-600/10 border-2 border-red-500/30 rounded-2xl shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <Activity className="w-4 h-4 text-red-500" />
+                                    <strong className="text-red-500 text-[10px] font-black uppercase tracking-widest">{t('francis.bearingsCheck.action')}</strong>
                                 </div>
-                            </div>
-                            <div className="flex gap-3">
-                                <AlertCircle className="text-red-500 w-5 h-5 flex-shrink-0" />
-                                <div>
-                                    <strong className="text-red-500 text-[11px] uppercase block mb-1">{t('francis.bearingsCheck.onAlarm')}</strong>
-                                    <p className="text-[10px] text-slate-500">{t('francis.bearingsCheck.alarmDesc')}</p>
-                                </div>
+                                <p className="text-xs text-slate-200 font-bold italic leading-relaxed">{t('francis.bearingsCheck.s4Li3')}</p>
                             </div>
                         </div>
                     </section>
+                </div>
 
+                {/* Checklist Summary */}
+                <div className="bg-black/60 p-8 rounded-3xl border border-white/5 flex flex-wrap gap-12 items-center justify-center shadow-2xl">
+                    <div className="flex items-center gap-4 border-r border-white/10 pr-12">
+                        <Clock className="w-8 h-8 text-amber-500" />
+                        <div>
+                            <span className="block text-[8px] text-slate-500 font-black uppercase tracking-tighter">{t('francis.bearingsCheck.daily')}</span>
+                            <span className="text-xs text-white font-black uppercase tracking-widest">{t('francis.bearingsCheck.dailyDesc')}</span>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <Calendar className="w-8 h-8 text-blue-500" />
+                        <div>
+                            <span className="block text-[8px] text-slate-500 font-black uppercase tracking-tighter">{t('francis.bearingsCheck.weekly')}</span>
+                            <span className="text-xs text-white font-black uppercase tracking-widest">{t('francis.bearingsCheck.weeklyDesc')}</span>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

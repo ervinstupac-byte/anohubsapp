@@ -23,6 +23,8 @@ export const HPPSettingsSchema = z.object({
     powerFactor: z.number().optional().default(0.8),
     waterQuality: z.enum(['clean', 'suspended', 'abrasive']).optional(),
     flowVariation: z.enum(['stable', 'seasonal', 'variable']).optional(),
+    vibrationX: z.number().optional().default(0),
+    vibrationY: z.number().optional().default(0),
 });
 
 export type EngineeringData = z.infer<typeof EngineeringSchema>;

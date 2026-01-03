@@ -8,7 +8,7 @@ interface SparklineProps {
     className?: string;
 }
 
-export const Sparkline: React.FC<SparklineProps> = ({
+export const Sparkline: React.FC<SparklineProps> = React.memo(({
     data,
     width = 60,
     height = 20,
@@ -52,4 +52,6 @@ export const Sparkline: React.FC<SparklineProps> = ({
             />
         </svg>
     );
-};
+});
+
+Sparkline.displayName = 'Sparkline';

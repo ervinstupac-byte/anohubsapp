@@ -14,6 +14,7 @@ import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
 import { IndustrialDataBridge } from '../../services/IndustrialDataBridge';
 import { QrCode } from '../ui/QrCode';
+import { useDocumentViewer } from '../../contexts/DocumentContext';
 
 // GLOBAL EVENT FOR REMOTE TRIGGER
 export const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
@@ -90,6 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const { logAction } = useAudit();
     // const { navigateTo } = useNavigation(); // Not used for path routing
     const { t } = useTranslation();
+    const { viewDocument } = useDocumentViewer();
 
     // TACTICAL STATE (Aligned with ContextAwarenessState)
     const {
@@ -107,20 +109,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
     const operationalModules = [
         { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️', route: `/${ROUTES.RISK_ASSESSMENT}` },
-        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠', route: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.HUB}` },
-        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DASHBOARD}` },
+        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠', route: `/${ROUTES.FRANCIS.HUB}` },
+        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️', route: `/${ROUTES.MAINTENANCE.DASHBOARD}` },
         { id: 'shaftAlignment', title: t('sidebar.shaftAlignment', 'Shaft Alignment'), icon: '🔄', route: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
-        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}` },
-        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
-        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}` },
-        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.INTUITION_LOG}` },
-        { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: '/structural-integrity' },
-        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: '/installation-guarantee' },
-        { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: '/hpp-builder' },
+        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰', route: `/${ROUTES.MAINTENANCE.HYDRAULIC}` },
+        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩', route: `/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
+        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻', route: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}` },
+        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂', route: `/${ROUTES.MAINTENANCE.INTUITION_LOG}` },
+        { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: `/${ROUTES.STRUCTURAL_INTEGRITY}` },
+        { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: `/${ROUTES.INSTALLATION_GUARANTEE}` },
+        { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: `/${ROUTES.HPP_BUILDER}` },
     ];
 
     const secondaryModules = [
-        { id: 'learningLab', title: 'Learning Lab', icon: <BrainCircuit className="w-4 h-4 text-purple-400" />, route: '/learning-lab' }
+        { id: 'learningLab', title: 'Learning Lab', icon: <BrainCircuit className="w-4 h-4 text-purple-400" />, route: `/${ROUTES.LEARNING_LAB}` }
     ];
 
     const formatValue = (val: number | string | undefined) => {
@@ -138,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             console.log(`[TACTICAL] Focusing 3D Mesh: ${action.targetId}`);
         } else if (action.type === 'OPEN_SOP') {
             console.log(`[TACTICAL] Opening SOP: ${action.targetId}`);
-            window.open(`/francis-turbine/sop/${action.targetId}`, '_blank');
+            navigate(`/${ROUTES.FRANCIS.ROOT}/sop-${action.targetId}`);
         }
     };
 

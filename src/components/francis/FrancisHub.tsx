@@ -338,23 +338,23 @@ export const FrancisHub: React.FC = () => {
                         <div>
                             <div className="flex items-center gap-2">
                                 <span className="px-2 py-0.5 bg-[#2dd4bf]/10 border border-[#2dd4bf]/30 text-[#2dd4bf] text-[10px] font-bold uppercase tracking-widest rounded">
-                                    Machine Hall 1
+                                    {t('francis.machineHall')}
                                 </span>
                                 <span className="px-2 py-0.5 bg-slate-800 border border-white/10 text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-1">
-                                    <Activity className="w-3 h-3" /> Live Physics
+                                    <Activity className="w-3 h-3" /> {t('common.status')} {t('common.stable')}
                                 </span>
                             </div>
                         </div>
                         <GlassCard className="pointer-events-auto backdrop-blur-md bg-black/40 border-white/10">
                             <div className="flex items-center gap-4">
                                 <div className="text-right">
-                                    <p className="text-[10px] text-slate-400 uppercase font-bold">Grid Frequency</p>
-                                    <p className="text-xl font-mono text-white font-bold">50.02 <span className="text-xs text-slate-500">Hz</span></p>
+                                    <p className="text-[10px] text-slate-400 uppercase font-bold">{t('executive.sensors.gridFrequency')}</p>
+                                    <p className="text-xl font-mono text-white font-bold">50.02 <span className="text-xs text-slate-500">{t('francis.units.hz')}</span></p>
                                 </div>
                                 <div className="h-8 w-px bg-white/10" />
                                 <div className="text-right">
-                                    <p className="text-[10px] text-slate-400 uppercase font-bold">Active Power</p>
-                                    <p className="text-xl font-mono text-[#2dd4bf] font-bold">142.5 <span className="text-xs text-slate-500">MW</span></p>
+                                    <p className="text-[10px] text-slate-400 uppercase font-bold">{t('executive.sensors.activePower')}</p>
+                                    <p className="text-xl font-mono text-[#2dd4bf] font-bold">142.5 <span className="text-xs text-slate-500">{t('francis.units.mw')}</span></p>
                                 </div>
                             </div>
                         </GlassCard>
@@ -368,20 +368,20 @@ export const FrancisHub: React.FC = () => {
                     onClick={expandAll}
                     className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-slate-800/50 hover:bg-cyan-900/30 text-slate-400 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 rounded transition-all"
                 >
-                    Expand All
+                    {t('francis.sectors.expandAll')}
                 </button>
                 <button
                     onClick={collapseAll}
                     className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-slate-800/50 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 hover:border-slate-600 rounded transition-all"
                 >
-                    Collapse All
+                    {t('francis.sectors.collapseAll')}
                 </button>
             </div>
             {/* ACCORDION SECTORS */}
             <div className="space-y-4">
                 {/* SECTOR 1: CRITICAL SAFETY */}
                 <AccordionSector
-                    title="🔴 Critical Safety"
+                    title={`🔴 ${t('francis.sectors.critical')}`}
                     icon={ShieldAlert}
                     iconColor="text-red-400"
                     borderColor="border-red-500/50"
@@ -423,7 +423,7 @@ export const FrancisHub: React.FC = () => {
 
                 {/* SECTOR 2: MECHANICAL SYSTEMS */}
                 <AccordionSector
-                    title="⚙️ Mechanical Systems"
+                    title={`⚙️ ${t('francis.sectors.mechanical')}`}
                     icon={Settings}
                     iconColor="text-amber-400"
                     borderColor="border-amber-500/50"
@@ -484,7 +484,7 @@ export const FrancisHub: React.FC = () => {
 
                 {/* SECTOR 3: FLUID & CHEMICAL INTEGRITY */}
                 <AccordionSector
-                    title="💧 Fluid & Chemical Integrity"
+                    title={`💧 ${t('francis.sectors.fluid')}`}
                     icon={Droplet}
                     iconColor="text-cyan-400"
                     borderColor="border-cyan-500/50"
@@ -531,7 +531,7 @@ export const FrancisHub: React.FC = () => {
 
                 {/* SECTOR 4: ELECTRICAL & GRID */}
                 <AccordionSector
-                    title="⚡ Electrical & Grid"
+                    title={`⚡ ${t('francis.sectors.electrical')}`}
                     icon={Zap}
                     iconColor="text-yellow-400"
                     borderColor="border-yellow-500/50"
@@ -582,13 +582,13 @@ export const FrancisHub: React.FC = () => {
                     />
                     <ModuleLink
                         icon={Zap}
-                        label="Excitation & AVR"
+                        label={t('francis.modules.excitation')}
                         onClick={() => navigate(`/francis/${ROUTES.FRANCIS.SOP.EXCITATION}`)}
                         href="#"
                     />
                     <ModuleLink
                         icon={Zap}
-                        label="Transformer Integrity"
+                        label={t('francis.modules.transformer')}
                         onClick={() => navigate(`/francis/${ROUTES.FRANCIS.SOP.TRANSFORMER}`)}
                         href="#"
                     />
@@ -596,7 +596,7 @@ export const FrancisHub: React.FC = () => {
 
                 {/* SECTOR 5: CIVIL & INFRASTRUCTURE */}
                 <AccordionSector
-                    title="🏗️ Civil & Infrastructure"
+                    title={`🏗️ ${t('francis.sectors.civil')}`}
                     icon={Building2}
                     iconColor="text-slate-400"
                     borderColor="border-slate-500/50"

@@ -1,28 +1,39 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Droplet, ArrowLeft, Settings, AlertTriangle, MapPin } from 'lucide-react';
+import { Droplet, ArrowLeft, Settings, AlertTriangle, MapPin, Activity, CheckCircle2, Info } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
+import { useCerebro } from '../../contexts/ProjectContext';
+import { GlassCard } from '../ui/GlassCard';
+import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const LubricationSystem: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { state } = useCerebro();
+
+    // Derived State from CEREBRO
+    const oilHealthScore = 92.4; // %
+    const isActiveCycle = true;
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-mono pb-12">
+        <div className="min-h-screen bg-slate-950 text-slate-300 font-sans pb-12">
             {/* Header */}
-            <header className="bg-gradient-to-br from-[#064e3b] to-[#0c0a09] border-b-2 border-emerald-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 shadow-2xl">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-emerald-600 rounded-lg border border-emerald-400/30 text-white relative">
-                            <Droplet className="w-8 h-8 animate-bounce" />
+            <header className="bg-black/40 border-b-2 border-emerald-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-4 text-center md:text-left">
+                        <div className="p-4 bg-emerald-600 rounded-3xl border border-white/10 shadow-lg relative group">
+                            <Droplet className="w-8 h-8 text-white group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center border-2 border-emerald-600">
+                                <Activity className="w-2 h-2 text-emerald-600 animate-pulse" />
+                            </div>
                         </div>
                         <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-emerald-900/40 text-emerald-300 text-[10px] font-bold border border-emerald-800 uppercase">SOP-MECH-020</span>
-                                <span className="text-[10px] text-stone-500 uppercase font-bold">REV 4.1</span>
+                            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-500 text-[10px] font-black border border-emerald-900/50 uppercase tracking-widest">SOP-MECH-020</span>
+                                <NeuralPulse />
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+                            <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
                                 {t('francis.lubrication.title')}
                             </h1>
                         </div>
@@ -30,122 +41,132 @@ export const LubricationSystem: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
-                        <ArrowLeft className="w-3 h-3 text-emerald-500 group-hover:-translate-x-1 transition" />
+                        <ArrowLeft className="w-4 h-4 text-emerald-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.lubrication.return')}</span>
                     </button>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 md:px-8 space-y-8">
-                {/* 1. Central Grease System */}
-                <section className="bg-amber-950/5 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-amber-600 border border-emerald-500/20">
-                    <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                            <Settings className="text-amber-500 w-5 h-5" />
-                            {t('francis.lubrication.s1Title')}
-                        </h2>
-                        <div className="flex gap-4">
-                            <div className="text-right">
-                                <span className="text-[9px] text-slate-500 uppercase font-black">
-                                    {t('francis.lubrication.interval')}
-                                </span>
-                                <div className="text-xs font-black text-amber-500 uppercase">12 CYCLES / DAY</div>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-[9px] text-slate-500 uppercase font-black">
-                                    {t('francis.lubrication.status')}
-                                </span>
-                                <div className="text-xs font-black text-emerald-500 uppercase">READY</div>
+            <main className="max-w-6xl mx-auto px-4 md:px-8 space-y-8">
+                {/* Real-time Status Hub */}
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <GlassCard className="lg:col-span-1 flex flex-col items-center justify-center text-center p-8 bg-black/60 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-emerald-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-700" />
+                        <span className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mb-2 relative z-10">System Status</span>
+                        <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-4 relative z-10 animate-pulse" />
+                        <span className="text-3xl font-black text-white uppercase tracking-tighter relative z-10">Active</span>
+                        <span className="text-[10px] text-slate-500 font-bold mt-2 relative z-10">Last Cycle: 12m ago</span>
+                    </GlassCard>
+
+                    <GlassCard className="lg:col-span-3 p-8">
+                        <div className="flex justify-between items-start mb-8 border-b border-white/5 pb-4">
+                            <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                                <Settings className="text-emerald-500 w-6 h-6 animate-spin-slow" />
+                                {t('francis.lubrication.s1Title')}
+                            </h2>
+                            <div className="flex gap-8">
+                                <div className="text-right">
+                                    <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">{t('francis.lubrication.interval')}</span>
+                                    <div className="text-xl font-black text-emerald-500 tabular-nums">12/24 <span className="text-[10px] opacity-60">Cycles</span></div>
+                                </div>
+                                <div className="text-right border-l border-white/5 pl-8">
+                                    <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest">Oil Health</span>
+                                    <div className="text-xl font-black text-blue-400 tabular-nums">{oilHealthScore}%</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="overflow-hidden rounded-xl border border-emerald-900/30 mb-8">
-                        <table className="w-full text-left text-xs">
-                            <thead>
-                                <tr className="bg-[#064e3b] text-white uppercase font-black text-[10px]">
-                                    <th className="p-3">{t('francis.lubrication.thZone')}</th>
-                                    <th className="p-3">{t('francis.lubrication.thPts')}</th>
-                                    <th className="p-3">{t('francis.lubrication.thDose')}</th>
-                                    <th className="p-3">{t('francis.lubrication.thFb')}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-black/20 text-slate-300">
-                                {[
-                                    { zone: 'tdReg', pts: '4 (Quadrants)', dose: '5cc', fb: 'fbSw', fbColor: 'text-emerald-500 font-black' },
-                                    { zone: 'tdTop', pts: '20 (Points)', dose: '2cc', fb: 'fbEof', fbColor: 'text-emerald-500 font-black' },
-                                    { zone: 'tdPins', pts: '40 (Joints)', dose: '1cc', fb: 'fbVis', fbColor: 'text-slate-500 italic' }
-                                ].map((row, idx) => (
-                                    <tr key={idx} className="border-b border-emerald-900/10">
-                                        <td className="p-3 text-emerald-400 font-bold">{t(`francis.lubrication.${row.zone}`)}</td>
-                                        <td className="p-3">{row.pts}</td>
-                                        <td className="p-3">{row.dose}</td>
-                                        <td className={`p-3 ${row.fbColor}`}>{t(`francis.lubrication.${row.fb}`)}</td>
+                        <div className="overflow-hidden rounded-3xl border border-white/10 shadow-2xl bg-black/40 mb-8">
+                            <table className="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr className="bg-emerald-900/40 text-emerald-400 uppercase font-black text-[9px] tracking-[0.2em]">
+                                        <th className="p-4 border-b border-white/5">{t('francis.lubrication.thZone')}</th>
+                                        <th className="p-4 border-b border-white/5">{t('francis.lubrication.thPts')}</th>
+                                        <th className="p-4 border-b border-white/5">{t('francis.lubrication.thDose')}</th>
+                                        <th className="p-4 border-b border-white/5 text-right font-black">{t('francis.lubrication.thFb')}</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="p-4 bg-amber-950/20 border border-amber-900/40 rounded-xl flex items-start gap-4">
-                        <AlertTriangle className="text-amber-500 w-6 h-6 flex-shrink-0" />
-                        <div>
-                            <span className="text-amber-500 text-[10px] font-black uppercase">
-                                {t('francis.lubrication.blockLogic')}
-                            </span>
-                            <p className="text-[10px] text-slate-400 mt-1">
-                                {t('francis.lubrication.blockDesc')}
-                            </p>
+                                </thead>
+                                <tbody className="text-slate-300">
+                                    {[
+                                        { zone: 'tdReg', pts: '4 (Quadrants)', dose: '5cc', fb: 'fbSw', fbColor: 'text-emerald-400 font-black' },
+                                        { zone: 'tdTop', pts: '20 (Points)', dose: '2cc', fb: 'fbEof', fbColor: 'text-emerald-400 font-black' },
+                                        { zone: 'tdPins', pts: '40 (Joints)', dose: '1cc', fb: 'fbVis', fbColor: 'text-slate-500 italic' }
+                                    ].map((row, idx) => (
+                                        <tr key={idx} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                                            <td className="p-4 text-emerald-500 font-black uppercase tracking-tighter group-hover:pl-6 transition-all">{t(`francis.lubrication.${row.zone}`)}</td>
+                                            <td className="p-4 font-bold">{row.pts}</td>
+                                            <td className="p-4 font-mono font-black">{row.dose}</td>
+                                            <td className={`p-4 text-right ${row.fbColor} uppercase text-[10px] tracking-widest`}>{t(`francis.lubrication.${row.fb}`)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-                </section>
 
-                {/* 2. Lubricant Inventory */}
-                <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-emerald-600 border border-emerald-500/20">
-                    <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8">
-                        {t('francis.lubrication.s2Title')}
-                    </h2>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((num) => (
-                            <div key={num} className="p-5 bg-slate-950/40 border border-slate-800 rounded-xl">
-                                <span className="text-emerald-500 text-[10px] font-black uppercase block mb-2">
-                                    {t(`francis.lubrication.l${num}Type`)}
+                        <div className="p-6 bg-amber-900/10 border-2 border-amber-600/30 rounded-3xl flex items-start gap-6 shadow-inner">
+                            <AlertTriangle className="text-amber-500 w-10 h-10 flex-shrink-0 animate-pulse" />
+                            <div>
+                                <span className="text-amber-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1 block">
+                                    {t('francis.lubrication.blockLogic')}
                                 </span>
-                                <p className="text-[10px] text-slate-300 font-bold mb-4">
-                                    {t(`francis.lubrication.l${num}Use`)}
+                                <p className="text-xs text-slate-300 font-bold italic leading-relaxed">
+                                    {t('francis.lubrication.blockDesc')}
                                 </p>
-                                {num === 2 ? (
-                                    <p className="text-[9px] text-white/40 italic">
-                                        {t(`francis.lubrication.l${num}St`)}
-                                    </p>
-                                ) : (
-                                    <div className="px-2 py-1 bg-emerald-900/30 text-emerald-400 border border-emerald-900/50 rounded inline-block text-[10px] font-black">
+                            </div>
+                        </div>
+                    </GlassCard>
+                </div>
+
+                {/* Inventory & Manual Route Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Inventory */}
+                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8">
+                        <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                            <Info className="w-6 h-6 text-blue-500" />
+                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.lubrication.s2Title')}</h2>
+                        </div>
+                        <div className="grid gap-6">
+                            {[1, 2, 3].map((num) => (
+                                <div key={num} className="p-5 bg-black/40 border border-white/5 rounded-2xl group hover:border-blue-500/30 transition-all flex justify-between items-center">
+                                    <div className="flex flex-col">
+                                        <span className="text-blue-400 text-[9px] font-black uppercase tracking-widest mb-1 group-hover:text-blue-300 transition-colors">
+                                            {t(`francis.lubrication.l${num}Type`)}
+                                        </span>
+                                        <p className="text-xs text-slate-400 font-bold">
+                                            {t(`francis.lubrication.l${num}Use`)}
+                                        </p>
+                                    </div>
+                                    <div className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${num === 2 ? 'bg-slate-800 text-slate-500 border-slate-700' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
                                         {t(`francis.lubrication.l${num}St`)}
                                     </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
 
-                {/* 3. Manual Route */}
-                <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-8 border-l-4 border-l-emerald-600 border border-emerald-500/20">
-                    <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8">
-                        {t('francis.lubrication.s3Title')}
-                    </h2>
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((num) => (
-                            <div key={num} className="flex items-center gap-3 p-4 bg-black/40 border border-slate-800 rounded-xl">
-                                <MapPin className="text-emerald-500 w-5 h-5 flex-shrink-0" />
-                                <span className="text-[11px] text-slate-300">
-                                    {t(`francis.lubrication.rt${num}`)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                    {/* Manual Route */}
+                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full -mr-32 -mt-32" />
+                        <div className="flex items-center gap-3 border-b border-white/5 pb-4 relative z-10">
+                            <MapPin className="w-6 h-6 text-emerald-500" />
+                            <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.lubrication.s3Title')}</h2>
+                        </div>
+                        <div className="grid gap-4 relative z-10">
+                            {[1, 2, 3].map((num) => (
+                                <div key={num} className="flex items-center gap-4 p-5 bg-black/60 border border-white/10 rounded-2xl hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group">
+                                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform">
+                                        <span className="text-emerald-500 font-black text-xs">P{num}</span>
+                                    </div>
+                                    <span className="text-xs text-slate-200 font-black uppercase tracking-widest">
+                                        {t(`francis.lubrication.rt${num}`)}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </div>
             </main>
         </div>
     );

@@ -1,7 +1,11 @@
 import React from 'react';
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
 
-export const NeuralPulse: React.FC = () => {
+interface NeuralPulseProps {
+    color?: 'cyan' | 'emerald' | 'blue' | 'purple' | 'slate' | 'indigo' | 'amber' | 'red' | 'white';
+}
+
+export const NeuralPulse: React.FC<NeuralPulseProps> = ({ color = 'cyan' }) => {
     const { patternWeights, hiveStatus } = useContextAwareness();
 
     // Calculate overall learning progress
@@ -16,8 +20,26 @@ export const NeuralPulse: React.FC = () => {
                 {/* Left: Sentinel Status */}
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                        <span className="text-[9px] font-black uppercase tracking-widest text-cyan-400">
+                        <div className={`w-2 h-2 rounded-full animate-pulse ${color === 'emerald' ? 'bg-emerald-500' :
+                            color === 'blue' ? 'bg-blue-500' :
+                                color === 'purple' ? 'bg-purple-500' :
+                                    color === 'slate' ? 'bg-slate-500' :
+                                        color === 'indigo' ? 'bg-indigo-500' :
+                                            color === 'amber' ? 'bg-amber-500' :
+                                                color === 'red' ? 'bg-red-500' :
+                                                    color === 'white' ? 'bg-white' :
+                                                        'bg-cyan-500'
+                            }`} />
+                        <span className={`text-[9px] font-black uppercase tracking-widest ${color === 'emerald' ? 'text-emerald-400' :
+                            color === 'blue' ? 'text-blue-400' :
+                                color === 'purple' ? 'text-purple-400' :
+                                    color === 'slate' ? 'text-slate-400' :
+                                        color === 'indigo' ? 'text-indigo-400' :
+                                            color === 'amber' ? 'text-amber-400' :
+                                                color === 'red' ? 'text-red-400' :
+                                                    color === 'white' ? 'text-white' :
+                                                        'text-cyan-400'
+                            }`}>
                             Sentinel Neural Pulse
                         </span>
                     </div>

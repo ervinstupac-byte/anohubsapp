@@ -3,38 +3,48 @@
     "welcome": "Dobrodošli, {{name}}",
     "subtitle": "Globalna platforma za provedbu standarda izvrsnosti.",
     "operationalModules": "Operativni Moduli",
+    "strategicIntelligence": "Strateška Inteligencija",
+    "knowledgeCulture": "Kultura Znanja",
     "systemStatusConnecting": "POVEZIVANJE...",
     "systemStatusOperational": "OPERATIVAN",
     "risks": "Detektirani Rizici",
     "designs": "Spremljeni Dizajni",
+    "fleetOutput": "Izlaz Flote",
+    "riskFactors": "Faktori Rizika",
+    "activeContext": "Aktivni Kontekst",
+    "vision": "Vizija",
+    "manifesto": "MANIFESTO",
     "footerText": "Engineered for Perfection",
+    "operatorId": "ID Operatera",
+    "tagline": "Arhitekti Imuniteta",
+    "info": "INFO",
     "copyright": "© 2025 Anohubs Inc.",
     "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
   "modules": {
     "riskAssessment": "Procjena Rizika",
-    "riskAssessmentDesc": "Identifikacija 'Jaza u Izvršenju' prije kvara.",
-    "riskReport": "Glavni Projektni Dosje",
-    "riskReportDesc": "Konsolidovani Enterprise Izvještaji.",
-    "hppBuilder": "HPP Dizajn Studio",
-    "hppBuilderDesc": "Fizikalni dizajn turbina i simulacija.",
-    "installationGuarantee": "Instalacijski Standard",
-    "installationGuaranteeDesc": "Provedba protokola 0.05 mm/m.",
-    "globalMap": "Globalna Mapa",
-    "globalMapDesc": "Geoprostorna inteligencija imovine.",
-    "investorBriefing": "Investitorski Briefing",
-    "investorBriefingDesc": "Finansijski KPI i utjecaj rizika.",
-    "contractManagement": "Ugovori i Pravo",
-    "contractManagementDesc": "Zaštita garancije kroz podatke.",
+    "riskAssessmentDesc": "Identifikacija 'Gaza u Izvršenju' prije kvara.",
+    "riskReport": "Glavni Dosije Projekta",
+    "riskReportDesc": "Konsolidovani Izvještaji.",
+    "hppBuilder": "HPP Design Studio",
+    "hppBuilderDesc": "Dizajn turbine i simulacija.",
+    "installationGuarantee": "Standard Instalacije",
+    "installationGuaranteeDesc": "Provedba 0.05 mm/m protokola.",
+    "globalMap": "Globalna Mapa Sredstava",
+    "globalMapDesc": "Geoprostorna inteligencija.",
+    "investorBriefing": "Briefing za Investitore",
+    "investorBriefingDesc": "Finansijski KPI i uticaj rizika.",
+    "contractManagement": "Ugovori i Pravna Dokumentacija",
+    "contractManagementDesc": "Zaštita garancije putem podataka.",
     "digitalIntegrity": "Digitalni Integritet",
     "digitalIntegrityDesc": "Blockchain nepromjenjivi dokaz.",
     "revitalizationStrategy": "Strategija Revitalizacije",
     "revitalizationStrategyDesc": "Strategije produženja životnog vijeka.",
     "library": "Biblioteka Komponenti",
-    "libraryDesc": "Načini kvara komponenti i KPI.",
+    "libraryDesc": "Modovi kvara komponenti i KPI.",
     "standardOfExcellence": "Standard Izvrsnosti",
-    "standardOfExcellenceDesc": "Manifest 0.05 mm/m.",
-    "phaseGuide": "Vodič kroz Faze",
+    "standardOfExcellenceDesc": "0.05 mm/m Manifesto.",
+    "phaseGuide": "Vodič kroz faze projekta",
     "phaseGuideDesc": "Provedba životnog ciklusa projekta.",
     "hppImprovements": "HPP Ino-Hub",
     "hppImprovementsDesc": "Praćenje inovacija.",
@@ -43,53 +53,58 @@
     "genderEquity": "Rodna Ravnopravnost",
     "genderEquityDesc": "HR Strategija i Kultura.",
     "digitalIntroduction": "Digitalni Uvod",
-    "maintenance": "Motor Održavanja"
+    "maintenance": "Maintenance Engine"
   },
   "sidebar": {
-    "fleetOverview": "PREGLED FLOTE",
-    "shaftAlignment": "Poravnanje Osovine",
-    "hydraulicMaintenance": "Hidrauličko Održavanje",
-    "boltTorque": "Zatezni Moment",
-    "shadowEngineer": "Shadow Inženjer",
+    "fleetOverview": "NEURALNA VIZUALIZACIJA",
+    "shaftAlignment": "Centriranje Vratila",
+    "hydraulicMaintenance": "Hidraulično Održavanje",
+    "boltTorque": "Moment Zatezanja",
+    "shadowEngineer": "Shadow Engineer",
     "intuitionLog": "Dnevnik Intuicije",
-    "structuralIntegrity": "Strukturalni Integritet",
+    "structuralIntegrity": "Integritet Strukture",
     "operations": "OPERACIJE",
-    "maintenanceLogbook": "Dnevnik Održavanja",
+    "maintenanceLogbook": "Dnevnik",
     "strategy": "STRATEGIJA",
-    "toolboxAnalytics": "Toolbox Analitika",
-    "knowledge": "BAZA ZNANJA",
+    "toolboxAnalytics": "Analitika Alata",
+    "knowledge": "ZNANJE",
     "exitToSite": "Izlaz na Stranicu",
+    "francisLogic": "Mapa Francis Logike",
     "insights": {
       "title": "Inženjerski Uvid",
-      "highPressure": "Upozorenje: Detektiran visok obodni napon.",
-      "waterHammerRisk": "KRITIČNO: Rizik od vodenog udara.",
-      "waterHammerCritical": "KRITIČNO: Rizik od vodenog udara. Podesite brzinu zatvaranja.",
-      "thermalStress": "Obavijest: Termalni stres raste.",
-      "substationThermal": "OBAVIJEST: Termalno preopterećenje neizbježno. Provjeri pumpe.",
-      "fieldFlashing": "Potrebno Pobudu Polja"
+      "highPressure": "Upozorenje: Visok Hoop Stress detektovan.",
+      "waterHammerRisk": "KRITIČNO: Rizik od Hidrauličkog Udara.",
+      "waterHammerCritical": "KRITIČNO: Detektovan rizik od udara. Podesite brzinu zatvaranja.",
+      "thermalStress": "Obavijest: Termički stres raste.",
+      "substationThermal": "OBAVIJEST: Termičko preopterećenje nemovno. Provjerite pumpu hlađenja.",
+      "fieldFlashing": "Potrebno Pobuđivanje"
     },
     "maintenance": {
       "pulse": "Puls Održavanja",
-      "active": "Aktivno",
+      "active": "Aktivan",
       "modalTitle": "Detalji Radnog Naloga",
       "description": "Opis",
       "priority": "Prioritet",
-      "assignee": "Dodijeljeno",
-      "unassigned": "Nedodijeljeno",
-      "viewTicket": "Klikni \"Vidi Puni Tiket\" za upravljanje.",
+      "assignee": "Izvršilac",
+      "unassigned": "Nije Dodijeljeno",
+      "viewTicket": "Kliknite na \"View Full Ticket\" za upravljanje.",
       "systemNominal": "Sistem Nominalan"
     },
     "analytics": {
-      "generateAudit": "Generiši Izvještaj Revizije",
-      "historicalLog": "Istorijski Zapis",
-      "liveSnapshot": "Snimak Stanja Konteksta",
+      "generateAudit": "Generiši Audit PDF",
+      "historicalLog": "Nedavna Aktivnost",
+      "liveSnapshot": "Snapshot Live Konteksta",
       "diagnostics": "Aktivni Inženjerski Uvidi",
       "history": "Istorija Konteksta"
     }
   },
   "common": {
+    "ok": "OK",
+    "fail": "PAD",
+    "rev": "REV",
+    "status": "STATUS",
     "launch": "POKRENI",
-    "back": "Nazad na Izbor Turbina",
+    "back": "Povratak na odabir turbine",
     "version": "v2.5.0 (Enterprise)",
     "system": "SISTEM",
     "immune": "IMUN",
@@ -205,7 +220,8 @@
     },
     "errors": {
       "crashRecovery": "HPP Builder je naišao na grešku. Molimo osvježite stranicu.",
-      "noAssetSelected": "Nije odabrana elektrana"
+      "noAssetSelected": "Nije odabrana elektrana",
+      "standard_excellence_violation": "Prekršen Standard Izvrsnosti: Integritet telemetrijskih podataka narušen. Detalji: {{details}}"
     }
   },
   "riskReport": {
@@ -1579,7 +1595,7 @@
   "executive": {
     "subtitle": "Izvršni Inženjerski Interfejs // v1.0.5 UNIFIED",
     "status": {
-      "scadaActive": "SCADA AKTIVAN"
+      "scadaActive": "Neuralna Veza Aktivna"
     },
     "actions": {
       "downloadBrief": "PREUZMI IZVJEŠTAJ"
@@ -1615,7 +1631,7 @@
       "scramButton": "🚨 HITNO ZAUSTAVLJANJE 🚨",
       "scramConfirm": "POKRENUTI HITNO ZAUSTAVLJANJE? Ovo će isključiti turbinu i može uzrokovati zastoje.",
       "safetyDisengaged": "SIGURNOSNA BRAVA ISKLJUČENA",
-      "scadaControls": "SCADA Kontrole",
+      "scadaControls": "Analitika Blizanca",
       "flowRate": "Protok (m³/s)",
       "head": "Pad (m)",
       "gridFrequencyInput": "Mrežna Frekvencija (Hz)",
@@ -1637,6 +1653,11 @@
     },
     "title": "FRANCIS • AGREGAT 1",
     "subtitle": "LOGIČKI CENTAR & SISTEMSKA MAPA",
+    "machineHall": "Mašinska Sala 1",
+    "units": {
+      "hz": "Hz",
+      "mw": "MW"
+    },
     "actions": {
       "run": "POKRENI DIJAGNOSTIKU",
       "missionControl": "KONTROLA MISIJE",
@@ -1652,12 +1673,17 @@
     "sectors": {
       "flow": "PROTOK I PRITISAK",
       "rotation": "ROTACIJA",
-      "safety": "SIGURNOST I KONTROLA"
+      "safety": "SIGURNOST I KONTROLA",
+      "critical": "Kritična Sigurnost",
+      "mechanical": "Mehanički Sistemi",
+      "fluid": "Integritet Fluida i Hemije",
+      "electrical": "Elektrika i Mreža",
+      "civil": "Civilna Infrastruktura",
+      "expandAll": "Proširi Sve",
+      "collapseAll": "Skupi Sve"
     },
     "modules": {
       "miv": "GUV i Bajpas",
-      "penstock": "Cjevovod",
-      "intake": "Zahvat",
       "cooling": "Rashladna Voda",
       "drainage": "Drenaža",
       "bearings": "Ležajevi (T/G)",
@@ -1884,6 +1910,7 @@
     "mivDistributor": {
       "title": "INTEGRITET GUV-A I DISTRIBUTORA",
       "return": "POVRATAK NA KONTROLNU TABLU",
+      "rev": "REV 2.1",
       "critical": {
         "title": "KRITIČNA BLOKADA (INTERLOCK)",
         "desc": "Ovaj modul je direktno vezan za Startnu Sekvencu. Bilo kakav kvar ovdje sprečava start jedinice."
@@ -1928,12 +1955,15 @@
         "thTag": "Oznaka",
         "thExp": "Ističe",
         "thStatus": "Status",
-        "crit": "KRITIČNO"
+        "crit": "KRITIČNO",
+        "expJan25": "Jan 2025",
+        "expJun27": "Jun 2027"
       }
     },
     "bearingsCheck": {
       "title": "GLAVNI LEŽAJEVI I HLAĐENJE",
       "return": "POVRATAK NA KONTROLNU TABLU",
+      "rev": "REV 3.1",
       "s1Title": "ULJNI FILM JE LEŽAJ",
       "s1Desc": "Teška rotirajuća masa pluta na mikroskopskom filmu ulja. Ako temperatura pređe 60°C, viskozitet pada—rijetko ulje ne može nositi vratilo.",
       "danger": "Opasnost",
@@ -1941,6 +1971,8 @@
       "result": "Rezultat",
       "s1Li2": "Dugotrajni zastoj i ekstremno visoki troškovi popravke.",
       "s2Title": "LOGIKA RAZMJENE TOPLOTE",
+      "s2Sub1": "1.1 Usis Filtracije",
+      "s3Sub1": "1.2 \"Backflush\" Protokol",
       "s2Li1": "Svakodnevno pregledajte mrežaste filtere na mulj.",
       "s2Li2": "Visok diferencijalni pritisak (dP) znači blokadu protoka.",
       "s3Li1": "Okrenite smjer toka na 5 minuta svake sedmice.",
@@ -1972,6 +2004,12 @@
     "shaftAlignment": {
       "title": "PROTOKOL CENTRIRANJA VRATILA",
       "return": "POVRATAK NA KONTROLNU TABLU",
+      "feedTitle": "Prijenos Vibracija",
+      "radialX": "Radijalno X",
+      "radialY": "Radijalno Y",
+      "zeroCal": "Nulta Kalibracija",
+      "sealed": "ZAPEČAÉENO U LEDGER",
+      "commit": "EVIDENTIRAJ U LEDGER",
       "runOut": {
         "title": "BACA (TIR) LIMITI",
         "thLoc": "Lokacija",
@@ -2106,6 +2144,11 @@
       "comm": "Komunikacija:",
       "commDesc": "Obavijesti operativni centar prije pokretanja testova odziva.",
       "basicsTitle": "Osnove PID-a: Tri Kontrolera",
+      "solPrefix": "Rješenje:",
+      "rpmRangeValue": "±0.05 - 0.15 RPM",
+      "overshootVal": "< 5%",
+      "settleTimeVal": "< 10s",
+      "oscillationsVal": "< 2",
       "govDesc": "Regulator kontroliše poziciju 20 sprovodnih lopatica kako bi održao konstantnu brzinu turbine (tipično 500 RPM za 12-polni generator na 50 Hz).",
       "loopTitle": "Kontrolna Petlja",
       "errEq": "Greška Brzine = Ciljna Brzina - Stvarna Brzina",
@@ -2345,6 +2388,7 @@
       "injectRisk": "Rizik Ubrizgavanja:",
       "injectDesc": "Nikada ne koristite ruke za provjeru curenja. Curenje pod pritiskom može ubrizgati ulje u krvotok.",
       "sop1Title": "1.1 ESD Verifikacija Energije",
+      "sub1_1": "1.1 ESD Verifikacija Energije (Kvartalno)",
       "accDesc": "Akumulatori su 'Baterija' sigurnosnog sistema. Omogućavaju zatvaranje GUV-a čak i ako struja (pumpe) zakaže.",
       "p0Rule": "P0 treba biti cca. 90% Minimalnog Radnog Pritiska (Pmin).",
       "techNote": "💡 Tehnička Bilješka:",
@@ -2353,6 +2397,7 @@
       "sludgeDesc": "Mulj je neprijatelj hidrauličke preciznosti. 'Stiction' u ventilima uzrokuje trzavo kretanje GUV-a.",
       "target": "Ciljana Čistoća: ISO 4406 18/16/13",
       "sop3Title": "3.1 Žukovski Jednačina (Hidraulički Udar)",
+      "sub3_1": "3.1 Žukovski Jednačina",
       "hammerDesc": "Prljavo ulje dovodi do lijepljenja ventila. Ako ventil zaglavi pa naglo otpusti, GUV se može naglo zatvoriti."
     },
     "dcSystems": {
@@ -2777,7 +2822,121 @@
       "samp_2": "Uzmi uzorak sa srednje dubine rezervoara (ne površina, ne dno) čistom špricom.",
       "samp_3": "Napuni bocu, označi datumom, ID jedinice, radnim satima.",
       "samp_4": "Pošalji u laboratoriju na analizu.",
-      "back_btn": "← Povratak u Operativni Centar"
+      "back_btn": "← Povratak u Operativni Centar",
+      "waterHammer": {
+        "title": "Analiza Hidrauličkog Udara",
+        "subtitle": "Proračun Prijelaznog Pritiska prema IEC 60041 Standardu",
+        "return": "← Povratak na Kontrolnu Tablu Hidraulike",
+        "sec1Title": "Brzina Talasa i Fizika",
+        "sec1Desc": "Elastičnost cjevovoda i stišljivost vode određuju brzinu propagacije talasa (a).",
+        "phase1Title": "Vrijeme Pritiska",
+        "phase1Val": "Vrijeme Refleksije (2L/a)",
+        "phase2Title": "Brzina Talasa",
+        "phase2Val": "Brzina Zvuka u Cjevovodu",
+        "tripLimit": "Granica Ispada",
+        "tripVal": "150% Nominalnog",
+        "sec2Title": "Monitor Udara u Realnom Vremenu",
+        "nomHead": "Projektni Pad",
+        "maxSurge": "Maksimalni Pritisak Udara",
+        "sec2Note": "Proračun koristi Žukovskijevu jednačinu za naglo rasterećenje.",
+        "sec3Title": "Status Kontrolnog Ventila",
+        "sec3Desc": "Sinhronizovano zatvaranje između sprovodnog aparata i MIV-a.",
+        "valveStatus": "Solenoid: POD NAPONOM",
+        "sec4Title": "Veza sa Strukturnim Integritetom",
+        "sec4Desc": "Pritisak udara upoređen sa naponom u zidu cijevi za čelik razreda S235JR.",
+        "criticalSafety": "KRITIČNA SIGURNOST",
+        "open100": "100% OTVORENO",
+        "closed0": "0% ZATVORENO",
+        "fastPhase": "Brza Faza",
+        "cushionPhase": "Faza Prigušenja"
+      }
+    },
+    "vortex": {
+      "title": "KONTROLA VRTLOGA I DINAMIKA SIFONA",
+      "return": "POVRATAK NA KONTROLNU TABLU",
+      "s1Title": "FIZIKA FORMIRANJA VRTLOGA",
+      "s1Desc": "Na 40-60% opterećenja, voda izlazi iz radnog kola s rezidualnim vrtloženjem, stvarajući spiralni vrtložni konopac. Ako frekvencija vrtloga odgovara strukturnoj rezonanci, oštećenja se brzo akumuliraju.",
+      "freqCalc": "IZRAČUN FREKVENCIJE",
+      "s2Title": "DIJAGNOSTIKA POMJERANJA OPTEREĆENJA",
+      "step1Title": "KORAK 1: PREGLED",
+      "step1Desc": "Povećavajte snagu od 20% do 100% u koracima od 5%.",
+      "step2Title": "KORAK 2: ZADRŽAVANJE",
+      "step2Desc": "Zadržite svako opterećenje 3 minute za stabilizaciju vrtloga.",
+      "step3Title": "KORAK 3: PRAGOVI",
+      "step3Desc": "Sigurno: <2.0mm/s | Upozorenje: 2-4mm/s | Kritično: >4mm/s.",
+      "opRule": "PRAVILO OPERATERA",
+      "ruleText": "Ograničite kontinuirani rad u Crvenoj Zoni (>4.0mm/s) na < 2 sata. Zatražite pomjeranje odmah.",
+      "s3Title": "PODEŠAVANJE UBRIZGAVANJA VAZDUHA",
+      "airDesc": "Prijem vazduha razbija koherentnost vrtloga. To je precizan alat, a ne samo 'odušak'.",
+      "tune1": "Otvarajte ventil u koracima od 10% na grubim opterećenjima.",
+      "tune2": "Pronađite 'slatku tačku' sa minimalnim vibracijama.",
+      "tune3": "Provjerite sezonske promjene pada (Monsun vs Suša).",
+      "compCheck": "KAPACITET KOMPRESORA",
+      "compSpecs": "50-100 Nm³/h @ 2.5 Bar",
+      "compWarn": "Ako pritisak padne < 1.5 Bar tokom ubrizgavanja, kompresor je preslab.",
+      "s4Title": "AKUSTIČNA DIFERENCIJALNA DIJAGNOZA",
+      "th1": "ZVUČNI POTPIS",
+      "th2": "VJEROVATNI UZROK",
+      "th3": "HITNA AKCIJA",
+      "td1_1": "Niski Hz 'Tup' (2-4Hz)",
+      "td1_2": "Vrtložni konopac u sifonu",
+      "td1_3": "Povećaj vazduh / Pomjeri load",
+      "td2_1": "Visoki Hz 'Zvižduk' (>100Hz)",
+      "td2_2": "Kavitacija / Oštećenje ležaja",
+      "td2_3": "Provjeri temp / Podmazivanje",
+      "td3_1": "Povremeni 'Udarac'",
+      "td3_2": "Udar otpada / Labav vijak",
+      "td3_3": "HITNO ZAUSTAVLJANJE - INSPEKCIJA"
+    },
+    "thrustBalance": {
+      "title": "AKSIJALNI LEŽAJ I HIDRAULIČKI BALANS",
+      "subtitle": "Logika Neutralizacije Aksijalne Sile",
+      "return": "POVRATAK NA KONTROLNU TABLU",
+      "s1Title": "TIHI UBICA",
+      "s1Desc": "Dok glavni ležajevi nose radijalnu težinu, aksijalni ležaj se suočava sa ogromnim horizontalnim silama. Ako se balansne rupe začepe, opterećenje se može utrostručiti.",
+      "vectorRunner": "RADKOLO",
+      "vectorThrust": "AKSIJALNA PLOČA",
+      "s2Title": "SISTEM BALANSNIH RUPA",
+      "designIntent": "NAMJENA DIZAJNA",
+      "intentDesc": "4-8 rupa u glavčini radnog kola omogućavaju visokopritisnoj vodi prolaz ka sifonu, smanjujući silu sa 220kN na sigurnih 80-100kN.",
+      "i1": "Izjednačava pritisak iza radnog kola.",
+      "i2": "Sprečava isparavanje Babbitt metala.",
+      "siltMgmt": "UPRAVLJANJE MULJEM",
+      "siltDesc": "Rijeka Jedinice 1 nosi visok mulj tokom monsuna. Začepljenje je zagarantovan faktor mehaničke degradacije.",
+      "critLimit": "KRITIČNI LIMIT",
+      "critVal": "> 30% Blokirano"
+    },
+    "toolbox": {
+      "greeting": {
+        "morning": "Dobro jutro",
+        "afternoon": "Dobar dan",
+        "evening": "Dobro veče"
+      },
+      "engineer": "Inženjer",
+      "systemOperational": "Sistem Operativan",
+      "assetsOnline": "Agregati Online",
+      "activeAsset": "Aktivni Kontekst: {{name}}",
+      "sections": {
+        "utilities": "Inženjerski Alati",
+        "designAnalysis": "Dizajn i Analiza",
+        "operationalModules": "Operativni Moduli",
+        "recentActivity": "Nedavna Aktivnost"
+      },
+      "activity": {
+        "none": "Nema nedavnih logova.",
+        "open": "Otvori Dnevnik",
+        "view": "Pregledaj Svu Aktivnost"
+      },
+      "zeroState": {
+        "title": "Dobrodošli u AnoHUB",
+        "noAssets": "Nema registrovanih agregata u floti.",
+        "initialize": "Inicijalizuj Prvi Agregat"
+      },
+      "toast": {
+        "generatingPassport": "Generisanje Pasoša Agregata za {{asset}}..."
+      },
+      "passport": "Pasoš Agregata",
+      "addAsset": "Dodaj Agregat"
     }
   }
 }

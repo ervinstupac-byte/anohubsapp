@@ -8,6 +8,7 @@ interface GlassCardProps {
     action?: ReactNode;
     style?: React.CSSProperties;
     onClick?: () => void;
+    icon?: ReactNode;
 }
 
 export const GlassCard = ({
@@ -17,7 +18,8 @@ export const GlassCard = ({
     className = "",
     action,
     style,
-    onClick
+    onClick,
+    icon
 }: GlassCardProps) => (
     <div
         onClick={onClick}
@@ -28,9 +30,12 @@ export const GlassCard = ({
     >
         {(title || action) && (
             <div className="flex justify-between items-start mb-4">
-                <div>
-                    {title && <h3 className="text-lg font-bold text-slate-100 tracking-tight">{title}</h3>}
-                    {subtitle && <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">{subtitle}</p>}
+                <div className="flex items-center gap-3">
+                    {icon && <div className="text-cyan-500">{icon}</div>}
+                    <div>
+                        {title && <h3 className="text-lg font-bold text-slate-100 tracking-tight">{title}</h3>}
+                        {subtitle && <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">{subtitle}</p>}
+                    </div>
                 </div>
                 {action && <div className="ml-4">{action}</div>}
             </div>

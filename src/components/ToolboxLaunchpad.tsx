@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FRANCIS_PATHS } from '../routes/paths';
+import { ROUTES, FRANCIS_PATHS } from '../routes/paths';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { useMaintenance } from '../contexts/MaintenanceContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useNotifications } from '../contexts/NotificationContext.tsx';
 import { Calendar, AlertCircle, Power } from 'lucide-react';
+import { useDocumentViewer } from '../contexts/DocumentContext';
 
 /**
  * Toolbox Launchpad
@@ -21,6 +22,7 @@ export const ToolboxLaunchpad: React.FC = () => {
     const { workOrders } = useMaintenance();
     const { assets, selectedAsset, assetLogs } = useAssetContext();
     const { pushNotification } = useNotifications();
+    const { viewDocument } = useDocumentViewer();
     const [greeting, setGreeting] = useState('');
 
     useEffect(() => {
@@ -98,7 +100,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     // Filter logs for this asset from the Centralized Asset Log
                                     const relevantLogs = assetLogs.filter(log => log.assetId === selectedAsset.id);
 
-                                    mod.generateAssetPassport(selectedAsset, relevantLogs, t);
+                                    const blob = mod.generateAssetPassport(selectedAsset, relevantLogs, t, true);
+                                    if (blob instanceof Blob) {
+                                        viewDocument(blob, `${selectedAsset.name} Passport`, `Passport_${selectedAsset.name}.pdf`);
+                                    }
                                 });
                             }}
                             className="text-white hover:text-cyan-400 border border-white/10"
@@ -126,9 +131,9 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.utilities')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {[
-                                { name: t('sidebar.boltTorque'), icon: '🔩', path: '/bolt-torque' },
-                                { name: t('sidebar.shaftAlignment'), icon: '🔄', path: '/shaft-alignment' },
-                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: '/hydraulic-maintenance' },
+                                { name: t('sidebar.boltTorque'), icon: '🔩', path: `/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
+                                { name: t('sidebar.shaftAlignment'), icon: '🔄', path: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
+                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: `/${ROUTES.MAINTENANCE.HYDRAULIC}` },
                             ].map(tool => (
                                 <GlassCard
                                     key={tool.name}
@@ -148,7 +153,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                     <section>
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.designAnalysis')}</h2>
                         <GlassCard
-                            onClick={() => navigate('/hpp-builder')}
+                            onClick={() => navigate(`/${ROUTES.HPP_BUILDER}`)}
                             className="p-6 cursor-pointer hover:border-emerald-500/50 transition-colors group border-l-4 border-l-emerald-500"
                         >
                             <div className="flex items-center justify-between">
@@ -173,10 +178,10 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.operationalModules')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
-                                { name: 'Maintenance Logbook', icon: '📝', path: '/logbook', desc: 'Digital logs & tracking' },
-                                { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: '/structural-integrity', desc: 'Civil works analysis' },
-                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: '/shadow-engineer', desc: 'Standard procedures' },
-                                { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: '/executive', desc: 'Fleet performance' },
+                                { name: 'Maintenance Logbook', icon: '📝', path: `/${ROUTES.MAINTENANCE.LOGBOOK}`, desc: 'Digital logs & tracking' },
+                                { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: `/${ROUTES.STRUCTURAL_INTEGRITY}`, desc: 'Civil works analysis' },
+                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`, desc: 'Standard procedures' },
+                                { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: `/${ROUTES.MAINTENANCE.EXECUTIVE}`, desc: 'Fleet performance' },
                             ].map(item => (
                                 <GlassCard
                                     key={item.name}
@@ -199,7 +204,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     {(selectedAsset.turbine_type === 'francis' || selectedAsset.specs?.spiralCasePressure) && (
                                         <>
                                             <GlassCard
-                                                onClick={() => navigate('/francis/diagnostics')}
+                                                onClick={() => navigate(`/${ROUTES.FRANCIS.DIAGNOSTICS.MAIN}`)}
                                                 className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
                                             >
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🩺</span>
@@ -213,7 +218,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                             </GlassCard>
 
                                             <GlassCard
-                                                onClick={() => navigate('/francis/hub')}
+                                                onClick={() => navigate(`/${ROUTES.FRANCIS.HUB}`)}
                                                 className="p-4 cursor-pointer bg-cyan-900/10 border-cyan-500/30 hover:bg-cyan-900/20 flex items-center gap-4 group col-span-1 md:col-span-2 mt-2"
                                             >
                                                 <span className="text-2xl group-hover:scale-110 transition-transform">🗺️</span>
@@ -231,7 +236,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     {/* PELTON */}
                                     {(selectedAsset.turbine_type === 'pelton' || selectedAsset.specs?.nozzleCount) && (
                                         <GlassCard
-                                            onClick={() => navigate('/shadow-engineer')} // Link to SOP Manager
+                                            onClick={() => navigate(`/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`)} // Link to SOP Manager
                                             className="p-4 cursor-pointer bg-blue-900/10 border-blue-500/30 hover:bg-blue-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
                                         >
                                             <span className="text-2xl group-hover:scale-110 transition-transform">💧</span>
@@ -248,7 +253,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     {/* KAPLAN */}
                                     {(selectedAsset.turbine_type === 'kaplan' || selectedAsset.specs?.bladeAngleRangeDeg) && (
                                         <GlassCard
-                                            onClick={() => navigate('/shadow-engineer')}
+                                            onClick={() => navigate(`/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`)}
                                             className="p-4 cursor-pointer bg-purple-900/10 border-purple-500/30 hover:bg-purple-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
                                         >
                                             <span className="text-2xl group-hover:scale-110 transition-transform">🌀</span>
@@ -265,8 +270,8 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     {/* BULB */}
                                     {(selectedAsset.turbine_type === 'bulb' || selectedAsset.specs?.bulbHousingPressureBar) && (
                                         <GlassCard
-                                            onClick={() => navigate('/shadow-engineer')}
-                                            className="p-4 cursor-pointer bg-emerald-900/10 border-emerald-500/30 hover:bg-emerald-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
+                                            onClick={() => navigate(`/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`)}
+                                            className="p-4 cursor-pointer bg-emerald-900/10 border-emerald-500/30 hover:bg-emerald-500/20 flex items-center gap-4 group col-span-1 md:col-span-2"
                                         >
                                             <span className="text-2xl group-hover:scale-110 transition-transform">💡</span>
                                             <div>
@@ -303,7 +308,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     </div>
                                     <p className="text-slate-500 text-sm">{t('toolbox.activity.none')}</p>
                                     <button
-                                        onClick={() => navigate('/logbook')}
+                                        onClick={() => navigate(`/${ROUTES.MAINTENANCE.LOGBOOK}`)}
                                         className="text-cyan-400 text-xs font-bold uppercase tracking-wider mt-2 hover:underline"
                                     >
                                         {t('toolbox.activity.open')}

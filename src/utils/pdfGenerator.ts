@@ -91,17 +91,45 @@ export const generateDiagnosticDossier = (
     doc.setFontSize(12);
     doc.text(`CONFIDENCE SCORE: ${((safeInsight.probability || 0) * 100).toFixed(1)}%`, 20, y);
 
-    // 3D SNAPSHOT (If available)
+    // 3D SNAPSHOT / ORBIT PLOT (If available)
     y += 15;
     if (snapshotImage) {
         try {
             // Check if it's a valid data URL
             if (snapshotImage.startsWith('data:image')) {
-                doc.addImage(snapshotImage, 'PNG', 20, y, 170, 90); // Large hero image
-                y += 100;
+                // Determine if this is an Orbit Plot based on title or context
+                const isOrbit = safeInsight.name?.toLowerCase().includes('orbit') || safeInsight.name?.toLowerCase().includes('stability');
+
+                if (isOrbit) {
+                    // Render Orbit Plot in a square tactical box
+                    doc.setDrawColor(34, 211, 238);
+                    doc.setLineWidth(0.5);
+
+                    if (safeInsight.baselineImage) {
+                        // SIDE-BY-SIDE: Baseline vs Current
+                        doc.rect(20, y, 80, 80, 'S');
+                        doc.addImage(safeInsight.baselineImage, 'PNG', 21, y + 1, 78, 78);
+                        doc.setFontSize(8);
+                        doc.setTextColor(148, 163, 184);
+                        doc.text("GHOST BASELINE (0MW)", 20, y + 85);
+
+                        doc.rect(110, y, 80, 80, 'S');
+                        doc.addImage(snapshotImage, 'PNG', 111, y + 1, 78, 78);
+                        doc.text("CURRENT LOAD PROFILE", 110, y + 85);
+                        y += 95;
+                    } else {
+                        // Single Orbit
+                        doc.rect(55, y, 100, 100, 'S');
+                        doc.addImage(snapshotImage, 'PNG', 56, y + 1, 98, 98);
+                        y += 110;
+                    }
+                } else {
+                    doc.addImage(snapshotImage, 'PNG', 20, y, 170, 90); // Large hero image
+                    y += 100;
+                }
             } else {
                 doc.setTextColor(150, 150, 150);
-                doc.text("[3D SNAPSHOT PLACEHOLDER - IMAGE DATA INVALID]", 20, y);
+                doc.text("[SNAPSHOT PLACEHOLDER - IMAGE DATA INVALID]", 20, y);
                 y += 20;
             }
         } catch (e) {
@@ -115,24 +143,57 @@ export const generateDiagnosticDossier = (
         doc.setFillColor(245, 245, 245);
         doc.rect(20, y, 170, 90, 'FD');
         doc.setTextColor(100, 100, 100);
-        doc.text("3D EVIDENCE SNAPSHOT", 105, y + 45, { align: 'center' });
+        doc.text("EVIDENCE SNAPSHOT", 105, y + 45, { align: 'center' });
         y += 100;
+    }
+
+    // MICRON STABILITY MATRIX (NC-4.2)
+    if (safeInsight.micronMetrics) {
+        const mm = safeInsight.micronMetrics;
+        doc.setFontSize(12);
+        doc.setTextColor(15, 23, 42);
+        doc.setFont('Roboto', 'bold');
+        doc.text("MICRON STABILITY MATRIX (NC-4.2)", 20, y);
+        y += 5;
+
+        autoTable(doc, {
+            startY: y,
+            head: [['VECTOR', 'BASELINE (μm)', 'ACTIVE (μm)', 'STATUS']],
+            body: [
+                ['CENTER X', mm.baselineX.toFixed(2), mm.activeX.toFixed(2), 'NOMINAL'],
+                ['CENTER Y', mm.baselineY.toFixed(2), mm.activeY.toFixed(2), 'NOMINAL'],
+                ['DRIFT (ΔC)', '---', mm.drift.toFixed(2), mm.drift > 50 ? 'CRITICAL' : 'STABLE']
+            ],
+            headStyles: { fillColor: [15, 23, 42], textColor: [34, 211, 238] },
+            bodyStyles: { font: 'Roboto' },
+            didParseCell: (data) => {
+                if (data.section === 'body' && data.column.index === 3 && data.cell.text[0] === 'CRITICAL') {
+                    data.cell.styles.textColor = [220, 38, 38];
+                    data.cell.styles.fontStyle = 'bold';
+                }
+            }
+        });
+        y = (doc as any).lastAutoTable.finalY + 15;
     }
 
     // PHYSICS NARRATIVE
     doc.setFillColor(240, 249, 255); // Light Blue background
-    doc.rect(20, y, pageWidth - 40, 30, 'F');
+    if (safeInsight.severity === 'CRITICAL') doc.setFillColor(254, 242, 242); // Light red for critical
+
+    doc.rect(20, y, pageWidth - 40, 35, 'F');
     doc.setTextColor(15, 23, 42);
     doc.setFontSize(14);
-    doc.text("PHYSICS NARRATIVE", 25, y + 8);
+    doc.setFont('Roboto', 'bold');
+    doc.text("PHYSICS NARRATIVE & DIAGNOSTIC HYPOTHESIS", 25, y + 8);
 
     doc.setFontSize(10);
     doc.setFont('Roboto', 'italic');
+    doc.setTextColor(50, 50, 50);
     const narrative = safeInsight.physicsNarrative || "Energy signature analysis indicates deviation from baseline efficiency.";
     const splitNarrative = doc.splitTextToSize(narrative, pageWidth - 50);
     doc.text(splitNarrative, 25, y + 16);
     doc.setFont('Roboto', 'normal');
-    y += 40;
+    y += 45;
 
     // CAUSAL CHAIN (Logic Trace)
     doc.setFontSize(14);

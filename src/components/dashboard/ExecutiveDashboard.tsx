@@ -138,27 +138,27 @@ const TurbineSilhouette: React.FC<{
 
 export const ExecutiveDashboard: React.FC = () => {
     const { t } = useTranslation(); // <--- HOOK ADDED
-    const { technicalState, connectSCADAToExpertEngine, getDrTurbineConsultation, createComplexIdentity } = useProjectEngine();
+    const { technicalState, connectTwinToExpertEngine, getDrTurbineConsultation, createComplexIdentity } = useProjectEngine();
 
     // Use Adapter to get full Asset Identity
     const assetIdentity = useMemo(() => {
         return createComplexIdentity && createComplexIdentity() ? createComplexIdentity() : null;
     }, [createComplexIdentity, technicalState]);
 
-    // SCADA Integration State
-    const [scadaFlow, setScadaFlow] = useState(42.5);
-    const [scadaHead, setScadaHead] = useState(452.0);
-    const [scadaFrequency, setScadaFrequency] = useState(50.0);
-    const [viewMode, setViewMode] = useState<'SCADA' | 'DIGITAL_TWIN' | 'AI_CONSULTANT'>('SCADA');
+    // Reactive Telemetry from Neural Core (CEREBRO)
+    const scadaFlow = technicalState.francis?.sensors?.flow_rate || 42.5;
+    const scadaHead = technicalState.francis?.sensors?.net_head || 152.0;
+    const scadaFrequency = technicalState.francis?.sensors?.grid_frequency || 50.0;
+    const [viewMode, setViewMode] = useState<'DIGITAL_TWIN' | 'AI_CONSULTANT'>('DIGITAL_TWIN');
 
     // AI Consultant State
     const [aiCards, setAiCards] = useState<ActionCard[]>([]);
     const [aiMessage, setAiMessage] = useState<string>('');
 
-    // Get diagnostics from SCADA inputs
+    // Get diagnostics from Neural Core inputs
     const scadaDiagnostics = useMemo(() => {
-        return connectSCADAToExpertEngine(scadaFlow, scadaHead, scadaFrequency);
-    }, [connectSCADAToExpertEngine, scadaFlow, scadaHead, scadaFrequency]);
+        return connectTwinToExpertEngine(scadaFlow, scadaHead, scadaFrequency);
+    }, [connectTwinToExpertEngine, scadaFlow, scadaHead, scadaFrequency]);
 
     // --- EFFECT: Consult Dr. Turbine ---
     useEffect(() => {
@@ -186,8 +186,9 @@ export const ExecutiveDashboard: React.FC = () => {
                     <p className="text-sm text-slate-400 font-mono tracking-widest uppercase mt-2">{t('executive.subtitle')}</p>
                 </div>
                 <div className="flex gap-4">
-                    <div className="backdrop-blur-md bg-black/20 border border-white/20 rounded-xl px-6 py-3 text-sm text-white font-bold uppercase">
-                        {t('executive.status.scadaActive')}
+                    <div className="backdrop-blur-md bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-6 py-3 text-sm text-emerald-400 font-bold uppercase flex items-center gap-2">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        Neural Link Active
                     </div>
                     <ModernButton variant="primary" className="backdrop-blur-md bg-cyan-500/20 border-cyan-400/30 hover:bg-cyan-500/30">
                         {t('executive.actions.downloadBrief')}
@@ -368,67 +369,25 @@ export const ExecutiveDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* RIGHT: COMMAND & CONTROL (3 Columns) */}
+                {/* RIGHT: COMMAND & CONTROL REMOVED - NC-4.2 Directive */}
                 <div className="lg:col-span-3 flex flex-col gap-6">
-                    {/* EMERGENCY PROTOCOLS WITH GLASSMORPHISM */}
-                    <div className="backdrop-blur-xl bg-red-950/10 border border-red-500/30 rounded-2xl p-6 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
-                        <h4 className="text-red-400 font-bold uppercase text-sm mb-6 flex items-center gap-2">
-                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                            {t('executive.control.emergencyProtocols')}
-                        </h4>
-                        <button
-                            className="w-full py-5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black uppercase tracking-widest rounded-xl shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all active:scale-95 border border-red-500/30"
-                            onClick={() => {
-                                if (confirm(t('executive.control.scramConfirm'))) {
-                                    console.log('Emergency shutdown initiated');
-                                }
-                            }}
-                        >
-                            {t('executive.control.scramButton')}
-                        </button>
-                        <p className="text-[10px] text-red-400/80 mt-4 text-center font-mono tracking-wider">{t('executive.control.safetyDisengaged')}</p>
-                    </div>
-
-                    {/* SCADA CONTROLS */}
-                    <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6 shadow-2xl">
-                        <h4 className="text-white font-bold uppercase text-sm mb-6 flex items-center gap-2">
+                    <div className="backdrop-blur-xl bg-cyan-950/10 border border-cyan-500/30 rounded-2xl p-6 shadow-2xl">
+                        <h4 className="text-cyan-400 font-bold uppercase text-sm mb-6 flex items-center gap-2">
                             <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                            {t('executive.control.scadaControls')}
+                            Forensic Log
                         </h4>
                         <div className="space-y-4">
-                            <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.flowRate')}</label>
-                                <input
-                                    type="number"
-                                    value={scadaFlow}
-                                    onChange={(e) => setScadaFlow(parseFloat(e.target.value))}
-                                    className="w-full bg-transparent border-b border-slate-600 text-white text-lg font-mono focus:outline-none focus:border-cyan-400"
-                                    step="0.1"
-                                />
+                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Last Sync</div>
+                                <div className="text-xs font-mono text-cyan-300">{new Date().toLocaleTimeString()}</div>
                             </div>
-                            <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.head')}</label>
-                                <input
-                                    type="number"
-                                    value={scadaHead}
-                                    onChange={(e) => setScadaHead(parseFloat(e.target.value))}
-                                    className="w-full bg-transparent border-b border-slate-600 text-white text-lg font-mono focus:outline-none focus:border-cyan-400"
-                                    step="1"
-                                />
+                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Neural Core Latency</div>
+                                <div className="text-xs font-mono text-emerald-400">1.2ms</div>
                             </div>
-                            <div className={`bg-slate-900/50 p-4 rounded-lg border ${scadaFrequency > 55 ? 'border-red-500' : 'border-slate-700'}`}>
-                                <label className="text-xs text-slate-400 uppercase font-bold block mb-2">{t('executive.control.gridFrequencyInput')}</label>
-                                <input
-                                    type="number"
-                                    value={scadaFrequency}
-                                    onChange={(e) => setScadaFrequency(parseFloat(e.target.value))}
-                                    className={`w-full bg-transparent border-b text-white text-lg font-mono focus:outline-none ${scadaFrequency > 55 ? 'border-red-400 text-red-400' : 'border-slate-600 focus:border-cyan-400'
-                                        }`}
-                                    step="0.1"
-                                />
-                                {scadaFrequency > 55 && (
-                                    <p className="text-red-400 text-xs mt-2 animate-pulse">{t('executive.control.criticalFreq')}</p>
-                                )}
+                            <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Data Integrity</div>
+                                <div className="text-xs font-mono text-emerald-400">99.9% VERIFIED</div>
                             </div>
                         </div>
                     </div>

@@ -4,9 +4,11 @@ import { motion } from 'framer-motion';
 import { Camera, Upload, AlertTriangle, CheckCircle, Microscope } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
 import { ParticleAnalysisService, ParticleClassification } from '../services/ParticleAnalysisService';
+import { useCerebro } from '../contexts/ProjectContext';
 
 export const ParticleFerographyViewer: React.FC = () => {
-    const [particles, setParticles] = useState<ParticleClassification[]>([
+    const { state } = useCerebro();
+    const particles: ParticleClassification[] = state.mechanical.particleAnalysis || [
         {
             particleType: 'BABBITT_FLAKE',
             confidence: 92,
@@ -43,7 +45,7 @@ export const ParticleFerographyViewer: React.FC = () => {
             source: 'Normalno trošenje (run-in period)',
             severity: 'LOW'
         }
-    ]);
+    ];
 
     const [selectedParticle, setSelectedParticle] = useState<ParticleClassification | null>(particles[0]);
 
@@ -51,7 +53,7 @@ export const ParticleFerographyViewer: React.FC = () => {
     const fatigueParticles = particles.filter(p => p.particleType === 'FATIGUE_CHUNK');
     const totalParticles = particles.reduce((sum, p) => sum + p.characteristics.count, 0);
 
-    const bearingTemp = 78; // °C
+    const bearingTemp = state.mechanical.bearingTemp;
     const baselineTemp = 65; // °C
     const correlation = ParticleAnalysisService.correlateTempAndParticles(particles, bearingTemp, baselineTemp);
 

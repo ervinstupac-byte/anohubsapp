@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 
 export type TurbineType = 'Pelton' | 'Kaplan' | 'Francis';
 
@@ -12,11 +13,26 @@ export interface HydraulicStream {
     head: number;
     flow: number;
     efficiency: number;
+    waterHead: Decimal; // High-precision Decimal for IEC 60041
+    flowRate: Decimal;  // High-precision Decimal for IEC 60041
+    cavitationThreshold: Decimal;
+    currentHoopStress?: Decimal; // High-precision for reporting
+    baselineOutputMW?: Decimal; // Performance benchmark
+}
+
+export interface AcousticMetrics {
+    cavitationIntensity: number;
+    ultrasonicLeakIndex: number;
+    bearingGrindIndex: number;
+    acousticBaselineMatch: number;
 }
 
 export interface MechanicalStream {
     alignment: number;
     vibration: number;
+    vibrationX: number; // Orbit X-axis 
+    vibrationY: number; // Orbit Y-axis
+    rpm: number; // Rotational speed
     bearingTemp: number;
     radialClearance: number; // Added for ProfessionalReportEngine
     shaftAlignmentLimit?: number; // Added for MechanicalPanel
@@ -27,6 +43,12 @@ export interface MechanicalStream {
         diameter?: number; // Added for BoltTorqueCalculator
     };
     bearingType?: string;
+    baselineOrbitCenter?: { x: number; y: number }; // For localStorage persistence
+    vibrationHistory?: { x: number; y: number }[]; // For centralized engineering math history
+    centerPath?: { x: number; y: number }[]; // For thermal drift visualization
+    acousticNoiseFloor?: number; // dB - Added for Acoustic-Orbit Fusion
+    acousticMetrics?: AcousticMetrics; // NEW: Real-time shadow acoustic data
+    particleAnalysis?: any[]; // NEW: Ferography classification history
 }
 
 /**
@@ -61,8 +83,11 @@ export interface TechnicalProjectState {
     penstock: {
         diameter: number;
         length: number;
+        index?: number;
         material: string;
         wallThickness: number;
+        materialModulus: number; // GPa
+        materialYieldStrength: number; // MPa
     };
     physics: {
         boltSafetyFactor: number;
@@ -73,6 +98,7 @@ export interface TechnicalProjectState {
         surgePressureBar: number;
         waterHammerPressureBar: number;
     };
+    governor: GovernorState; // NEW: High-precision PID state
     francis?: FrancisState; // NEW: Francis Hub State
     componentHealth?: ComponentHealthRegistry;
     riskScore: number;
@@ -105,6 +131,8 @@ export interface PenstockSpecs {
     length: number;
     material: string;
     wallThickness: number;
+    materialModulus: number;
+    materialYieldStrength: number;
 }
 
 export type FrancisModuleStatus = 'green' | 'yellow' | 'red';
@@ -118,6 +146,17 @@ export interface FrancisState {
     sensors?: Partial<FrancisSensorData>;
 }
 
+export interface GovernorState {
+    setpoint: Decimal;
+    actualValue: Decimal;
+    kp: Decimal;
+    ki: Decimal;
+    kd: Decimal;
+    integralError: Decimal;
+    previousError: Decimal;
+    outputSignal: Decimal;
+}
+
 export type ProjectAction =
     | { type: 'UPDATE_HYDRAULIC'; payload: Partial<HydraulicStream> }
     | { type: 'UPDATE_MECHANICAL'; payload: Partial<MechanicalStream> }
@@ -125,7 +164,37 @@ export type ProjectAction =
     | { type: 'SET_ASSET'; payload: AssetIdentity }
     | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: string; componentId: string; healthData: ComponentHealthData } }
     | { type: 'UPDATE_FRANCIS_MODULE'; payload: { moduleId: string; status: FrancisModuleStatus } }
+    | { type: 'UPDATE_TELEMETRY_SUCCESS'; payload: TechnicalProjectState }
+    | { type: 'UPDATE_VIBRATION_HISTORY'; payload: { x: number; y: number } }
+    | { type: 'UPDATE_CENTER_PATH'; payload: { x: number; y: number } }
+    | { type: 'UPDATE_ACOUSTIC_DATA'; payload: Partial<AcousticMetrics> }
+    | { type: 'UPDATE_PARTICLE_DATA'; payload: any[] }
+    | { type: 'UPDATE_GOVERNOR'; payload: Partial<GovernorState> }
     | { type: 'RESET_TO_DEMO' };
+
+/**
+ * HARDENING PHASE: IEC 60041 Result Types
+ */
+export interface PhysicsResult {
+    hoopStress: Decimal;
+    powerMW: Decimal;
+    surgePressure: Decimal;
+    eccentricity: Decimal; // e = sqrt(1 - (b^2 / a^2))
+    performanceDelta: Decimal; // Delta_Perf = ((Actual - Baseline) / Baseline) * 100
+    status: 'NOMINAL' | 'WARNING' | 'CRITICAL';
+}
+
+export interface DiagnosisMessage {
+    code: string;
+    en: string;
+    bs: string;
+}
+
+export interface DiagnosisReport {
+    severity: 'NOMINAL' | 'WARNING' | 'CRITICAL';
+    messages: DiagnosisMessage[];
+    safetyFactor: Decimal;
+}
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     identity: {
@@ -137,18 +206,27 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     hydraulic: {
         head: 450,
         flow: 2.5,
-        efficiency: 0.92
+        efficiency: 0.92,
+        waterHead: new Decimal(450),
+        flowRate: new Decimal(2.5),
+        cavitationThreshold: new Decimal(0.5)
     },
     mechanical: {
         alignment: 0.02,
         vibration: 2.5,
+        vibrationX: 0,
+        vibrationY: 0,
+        rpm: 500,
         bearingTemp: 45,
         radialClearance: 0.5,
         boltSpecs: {
             grade: '8.8',
             count: 12,
             torque: 450
-        }
+        },
+        baselineOrbitCenter: { x: 0, y: 0 },
+        vibrationHistory: [],
+        centerPath: []
     },
     site: {
         grossHead: 455,
@@ -160,7 +238,9 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         diameter: 1.5,
         length: 200,
         material: 'STEEL',
-        wallThickness: 0.02
+        wallThickness: 0.02,
+        materialModulus: 210, // GPa
+        materialYieldStrength: 250 // MPa
     },
     physics: {
         boltSafetyFactor: 1.5,
@@ -170,6 +250,16 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         staticPressureBar: 45,
         surgePressureBar: 55,
         waterHammerPressureBar: 12.5
+    },
+    governor: {
+        setpoint: new Decimal(50.0),
+        actualValue: new Decimal(50.0),
+        kp: new Decimal(1.2),
+        ki: new Decimal(0.5),
+        kd: new Decimal(0.1),
+        integralError: new Decimal(0),
+        previousError: new Decimal(0),
+        outputSignal: new Decimal(0)
     },
     francis: {
         modules: {

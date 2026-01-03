@@ -3,28 +3,29 @@ export const ROUTES = {
     LOGIN: '/login',
     MAINTENANCE: {
         ROOT: 'maintenance',
-        DASHBOARD: 'dashboard',
-        LOGBOOK: 'logbook',
-        HYDRAULIC: 'hydraulic',
-        BOLT_TORQUE: 'bolt-torque',
-        SHADOW_ENGINEER: 'shadow-engineer', // SOPManager
-        INTUITION_LOG: 'intuition-log', // ShiftLog
-        AR_GUIDE: 'ar-guide', // ARManager
-        EXECUTIVE: 'executive',
+        DASHBOARD: 'maintenance/dashboard',
+        LOGBOOK: 'maintenance/logbook',
+        HYDRAULIC: 'maintenance/hydraulic',
+        BOLT_TORQUE: 'maintenance/bolt-torque',
+        SHADOW_ENGINEER: 'maintenance/shadow-engineer', // SOPManager
+        INTUITION_LOG: 'maintenance/intuition-log', // ShiftLog
+        AR_GUIDE: 'maintenance/ar-guide', // ARManager
+        EXECUTIVE: 'maintenance/executive',
     },
     FRANCIS: {
         ROOT: 'francis',
-        HUB: 'hub',
-        COMMAND_CENTER: 'command-center',
+        HUB: 'francis/hub',
+        COMMAND_CENTER: 'francis/command-center',
         DIAGNOSTICS: {
             ROOT: 'diagnostics',
-            HEATMAP: 'diagnostics/heatmap',
-            FORENSICS: 'diagnostics/forensics',
+            MAIN: 'francis/diagnostics',
+            HEATMAP: 'francis/diagnostics/heatmap',
+            FORENSICS: 'francis/diagnostics/forensics',
         },
-        MISSION_CONTROL: 'mission-control',
-        EMERGENCY: 'emergency-protocols',
-        LOGIC_LOAD_REJECTION: 'logic-load-rejection',
-        FLOWCHART_STARTUP: 'flowchart-startup',
+        MISSION_CONTROL: 'francis/mission-control',
+        EMERGENCY: 'francis/emergency-protocols',
+        LOGIC_LOAD_REJECTION: 'francis/logic-load-rejection',
+        FLOWCHART_STARTUP: 'francis/flowchart-startup',
         SOP: {
             WATER_HAMMER: 'sop-water-hammer',
             BEARINGS: 'sop-bearings',
@@ -59,6 +60,10 @@ export const ROUTES = {
     MAP: 'map',
     PROFILE: 'profile',
     RISK_ASSESSMENT: 'risk-assessment',
+    HPP_BUILDER: 'hpp-builder',
+    STRUCTURAL_INTEGRITY: 'structural-integrity',
+    INSTALLATION_GUARANTEE: 'installation-guarantee',
+    LEARNING_LAB: 'learning-lab',
 } as const;
 
 // Helper to build full Francis paths

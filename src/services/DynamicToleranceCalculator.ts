@@ -2,6 +2,7 @@
 // Adjusts tolerances based on turbine physics: RPM, head, centrifugal forces
 
 import { TurbineFamily, TurbineVariant, ToleranceMap, Threshold } from '../models/turbine/types';
+import Decimal from 'decimal.js';
 
 export interface TurbinePhysics {
     runningSpeed: number; // RPM
@@ -31,26 +32,28 @@ export class DynamicToleranceCalculator {
         turbineFamily: TurbineFamily,
         physics: TurbinePhysics
     ): DynamicToleranceResult {
-        const BASE_TOLERANCE = 0.05; // mm/m - Industry standard
+        const BASE_TOLERANCE = new Decimal(0.05); // mm/m - Industry standard
         const reasons: string[] = [];
 
         // Calculate forces
-        const omega = (physics.runningSpeed * 2 * Math.PI) / 60; // rad/s
-        const centrifugalAccel = omega * omega * (physics.rotorDiameter / 2); // m/s²
+        // omega = (physics.runningSpeed * 2 * Math.PI) / 60
+        const PI = Decimal.acos(-1);
+        const omega = new Decimal(physics.runningSpeed).mul(2).mul(PI).div(60); // rad/s
+        const centrifugalAccel = omega.pow(2).mul(new Decimal(physics.rotorDiameter).div(2)); // m/s²
 
         // Normalized factors (0.5 - 2.0)
-        let centrifugalFactor = 1.0;
-        let headFactor = 1.0;
-        let speedFactor = 1.0;
+        let centrifugalFactor = new Decimal(1.0);
+        let headFactor = new Decimal(1.0);
+        let speedFactor = new Decimal(1.0);
 
         // ===== TURBINE-SPECIFIC ADJUSTMENTS =====
 
         switch (turbineFamily) {
             case 'pelton':
                 // High speed + high head = looser tolerance
-                centrifugalFactor = 1 + (centrifugalAccel / 1000); // Normalize to ~1-2
-                headFactor = 1 + (physics.head / 500); // Head effect
-                speedFactor = 1 + (physics.runningSpeed / 1000); // Speed effect
+                centrifugalFactor = new Decimal(1).plus(centrifugalAccel.div(1000)); // Normalize to ~1-2
+                headFactor = new Decimal(1).plus(new Decimal(physics.head).div(500)); // Head effect
+                speedFactor = new Decimal(1).plus(new Decimal(physics.runningSpeed).div(1000)); // Speed effect
 
                 reasons.push(`Pelton high centrifugal forces (${centrifugalAccel.toFixed(0)} m/s²)`);
                 reasons.push(`High head pressure (${physics.head}m)`);
@@ -59,14 +62,14 @@ export class DynamicToleranceCalculator {
 
             case 'kaplan':
                 // Low speed = tighter tolerance possible
-                speedFactor = 0.8 + (physics.runningSpeed / 200); // Slower = tighter
-                headFactor = 1 + (physics.head / 100); // Moderate head effect
+                speedFactor = new Decimal(0.8).plus(new Decimal(physics.runningSpeed).div(200)); // Slower = tighter
+                headFactor = new Decimal(1).plus(new Decimal(physics.head).div(100)); // Moderate head effect
 
                 reasons.push(`Kaplan low speed operation (${physics.runningSpeed} RPM)`);
 
                 // Bulb variant: underwater = thermal stability
                 if (physics.rotorDiameter < 2) { // Bulb turbines smaller
-                    centrifugalFactor = 0.9;
+                    centrifugalFactor = new Decimal(0.9);
                     reasons.push('Bulb configuration: better thermal stability');
                 }
 
@@ -74,8 +77,8 @@ export class DynamicToleranceCalculator {
 
             case 'francis':
                 // Medium speed, medium head = close to standard
-                speedFactor = 1 + (physics.runningSpeed - 500) / 500 * 0.2;
-                headFactor = 1 + (physics.head / 200);
+                speedFactor = new Decimal(1).plus(new Decimal(physics.runningSpeed).minus(500).div(500).mul(0.2));
+                headFactor = new Decimal(1).plus(new Decimal(physics.head).div(200));
 
                 reasons.push(`Francis medium-speed operation (${physics.runningSpeed} RPM)`);
 
@@ -83,18 +86,18 @@ export class DynamicToleranceCalculator {
         }
 
         // Combined adjustment factor
-        const adjustmentFactor = (centrifugalFactor + headFactor + speedFactor) / 3;
+        const adjustmentFactor = centrifugalFactor.plus(headFactor).plus(speedFactor).div(3);
 
         // Clamp to reasonable range (0.03 - 0.08 mm/m)
-        const adjustedTolerance = Math.max(
+        const adjustedTolerance = Decimal.max(
             0.03,
-            Math.min(0.08, BASE_TOLERANCE * adjustmentFactor)
+            Decimal.min(0.08, BASE_TOLERANCE.mul(adjustmentFactor))
         );
 
         return {
-            baseTolerance: BASE_TOLERANCE,
-            adjustedTolerance,
-            adjustmentFactor,
+            baseTolerance: BASE_TOLERANCE.toNumber(),
+            adjustedTolerance: adjustedTolerance.toNumber(),
+            adjustmentFactor: adjustmentFactor.toNumber(),
             adjustmentReasons: reasons
         };
     }
@@ -107,32 +110,32 @@ export class DynamicToleranceCalculator {
         turbineFamily: TurbineFamily,
         physics: TurbinePhysics
     ): DynamicToleranceResult {
-        const BASE_TOLERANCE = 4.5; // mm/s - ISO 10816
+        const BASE_TOLERANCE = new Decimal(4.5); // mm/s - ISO 10816
         const reasons: string[] = [];
 
-        let speedFactor = 1.0;
-        let sizeFactor = 1.0;
+        let speedFactor = new Decimal(1.0);
+        let sizeFactor = new Decimal(1.0);
 
         // Speed correlation: V_limit ∝ RPM^0.3 (empirical)
-        const speedExponent = 0.3;
-        const referenceSpeed = 500; // RPM
-        speedFactor = Math.pow(physics.runningSpeed / referenceSpeed, speedExponent);
+        const speedExponent = new Decimal(0.3);
+        const referenceSpeed = new Decimal(500); // RPM
+        speedFactor = new Decimal(physics.runningSpeed).div(referenceSpeed).pow(speedExponent);
 
         // Size correlation: Larger machines = more vibration acceptable
         if (physics.rotorDiameter > 4) {
-            sizeFactor = 1.2;
+            sizeFactor = new Decimal(1.2);
             reasons.push('Large rotor diameter: increased tolerance');
         }
 
-        const adjustmentFactor = speedFactor * sizeFactor;
-        const adjustedTolerance = BASE_TOLERANCE * adjustmentFactor;
+        const adjustmentFactor = speedFactor.mul(sizeFactor);
+        const adjustedTolerance = BASE_TOLERANCE.mul(adjustmentFactor);
 
         reasons.push(`Speed-adjusted for ${physics.runningSpeed} RPM`);
 
         return {
-            baseTolerance: BASE_TOLERANCE,
-            adjustedTolerance: Math.min(7.0, adjustedTolerance), // Cap at 7 mm/s
-            adjustmentFactor,
+            baseTolerance: BASE_TOLERANCE.toNumber(),
+            adjustedTolerance: Decimal.min(7.0, adjustedTolerance).toNumber(), // Cap at 7 mm/s
+            adjustmentFactor: adjustmentFactor.toNumber(),
             adjustmentReasons: reasons
         };
     }

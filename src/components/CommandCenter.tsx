@@ -14,6 +14,7 @@ import { Camera, Moon, Ghost, FileText } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 import { generateDiagnosticDossier } from '../utils/pdfGenerator';
 import { useDocumentViewer } from '../contexts/DocumentContext';
+import { useCerebro } from '../contexts/ProjectContext';
 
 const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
 
@@ -32,6 +33,7 @@ export const CommandCenter: React.FC = () => {
     const { mode, toggleNightOps } = useTheme();
     const { showToast } = useToast();
     const { viewDocument } = useDocumentViewer();
+    const { state: technicalState } = useCerebro();
     const [ghostMode, setGhostMode] = React.useState(false);
     const turbineRef = useRef<HTMLDivElement>(null);
 
@@ -261,10 +263,9 @@ export const CommandCenter: React.FC = () => {
                     <TacticalCard title="SHAFT ORBIT (X/Y)" status="nominal">
                         <div className="flex justify-center p-2 bg-slate-900/40 rounded border border-white/5">
                             <ShaftOrbitPlot
-                                vibrationX={2.4}
-                                vibrationY={2.1}
+                                vibrationX={technicalState.mechanical.vibrationX || 2.4}
+                                vibrationY={technicalState.mechanical.vibrationY || 2.1}
                                 size={140}
-                                deltaTemp={Math.abs(105 - 100)} // Mocking a 5 degree delta for visual
                             />
                         </div>
                     </TacticalCard>

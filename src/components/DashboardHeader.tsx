@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { DigitalPanel } from './scada/DigitalPanel';
+import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
 import { Search, Command, X } from 'lucide-react';
@@ -14,7 +14,7 @@ interface DashboardHeaderProps {
     title?: string;
 }
 
-export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, title = "AnoHUB SCADA" }) => {
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, title = "AnoHUB Diagnostic Twin" }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { user, signOut } = useAuth();

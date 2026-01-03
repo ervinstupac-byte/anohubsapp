@@ -18,6 +18,7 @@ import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logb
 import { AssetProvider } from './contexts/AssetContext.tsx'; // <--- NEW
 import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring it exists)
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
+import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -30,14 +31,15 @@ import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
 import { Hub } from './components/Hub.tsx';
-import { Sidebar } from './components/scada/Sidebar.tsx';
-import { FleetOverview } from './components/scada/FleetOverview.tsx';
-import { DigitalPanel } from './components/scada/DigitalPanel.tsx';
+import { Sidebar } from './components/diagnostic-twin/Sidebar.tsx';
+import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
+import { DigitalPanel } from './components/diagnostic-twin/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
+import { GlobalFooter } from './components/GlobalFooter.tsx';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -157,7 +159,7 @@ const AppLayout: React.FC = () => {
         navigateTo('riskAssessment');
     };
 
-    // Listen for custom wizard trigger event from ScadaMimic
+    // Listen for custom wizard trigger event from NeuralFlowMap
     useEffect(() => {
         const handleOpenWizard = () => setIsWizardOpen(true);
         window.addEventListener('openAssetWizard', handleOpenWizard);
@@ -283,7 +285,7 @@ const AppLayout: React.FC = () => {
 
                     <DashboardHeader
                         onToggleSidebar={() => setIsSidebarOpen(true)}
-                        title="AnoHUB SCADA"
+                        title="ANOHUB // NC-4.2 NEURAL CORE"
                     />
 
                     {/* Sign Out Dialog handled within DashboardHeader now to avoid prop drilling or dupes, 
@@ -348,6 +350,7 @@ const AppLayout: React.FC = () => {
                                         <Route path="admin-approval" element={<AdminApproval />} />
                                         <Route path="/forensics" element={<ForensicDashboard />} />
                                         <Route path="stress-test" element={<SystemStressTest />} />
+                                        <Route path="learning-lab" element={<UnderConstruction />} />
                                         <Route path="*" element={<Navigate to="/" replace />} />
                                     </Routes>
                                 </ErrorBoundary>
@@ -357,6 +360,7 @@ const AppLayout: React.FC = () => {
                 </div>
                 <VoiceAssistant />
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
+                <GlobalFooter />
             </main>
         </NavigationProvider>
     );
@@ -373,12 +377,14 @@ const App: React.FC = () => {
                         <AssetProvider> {/* Centralized Asset State */}
                             <RiskProvider>
                                 <HashRouter>
-                                    <ContextAwarenessProvider>
-                                        <Routes>
-                                            <Route path="/login" element={<Login />} />
-                                            <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                        </Routes>
-                                    </ContextAwarenessProvider>
+                                    <DocumentProvider>
+                                        <ContextAwarenessProvider>
+                                            <Routes>
+                                                <Route path="/login" element={<Login />} />
+                                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                            </Routes>
+                                        </ContextAwarenessProvider>
+                                    </DocumentProvider>
                                 </HashRouter>
                             </RiskProvider>
                         </AssetProvider>

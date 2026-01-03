@@ -1,37 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Merge, ArrowLeft, Crosshair, AlertTriangle } from 'lucide-react';
+import { Merge, ArrowLeft, Crosshair, AlertTriangle, Activity, Zap, ShieldCheck } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
+import { useCerebro } from '../../contexts/ProjectContext';
+import { GlassCard } from '../ui/GlassCard';
+import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const GridSync: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [rotation, setRotation] = useState(0);
+    const { state } = useCerebro();
 
-    // Simulate Synchroscope Rotation
+    // Synchroscope rotation simulation (Visual-only)
+    const [rotation, setRotation] = useState(0);
+    const [syncLocked, setSyncLocked] = useState(false);
+
+    // Mock constants from CEREBRO in future
+    const machineFreq = 50.02;
+    const gridFreq = 50.00;
+    const phaseDelta = 4.2; // Degrees
+
     useEffect(() => {
         const interval = setInterval(() => {
-            setRotation(prev => (prev + 2) % 360);
+            setRotation(prev => (prev + 1.5) % 360);
         }, 50);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-300 font-mono pb-12 overflow-x-hidden">
+        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-gradient-to-br from-[#312e81] to-[#0c0a09] border-b-2 border-indigo-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 shadow-2xl">
-                <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-indigo-600 rounded-lg border border-indigo-400/30">
-                            <Merge className="text-white w-8 h-8" />
+            <header className="bg-black/40 border-b-2 border-indigo-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl transition-all">
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-4 text-center md:text-left">
+                        <div className="p-4 bg-indigo-600 rounded-3xl border border-white/10 shadow-lg relative group overflow-hidden">
+                            <Merge className="text-white w-8 h-8 relative z-10 group-hover:rotate-180 transition-transform duration-700" />
                         </div>
                         <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-indigo-900/40 text-indigo-300 text-[10px] font-bold border border-indigo-800 uppercase">SOP-OPS-009</span>
-                                <span className="text-[10px] text-stone-500 uppercase font-bold">REV 1.0</span>
+                            <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                                <span className="px-2 py-0.5 rounded bg-indigo-950 text-indigo-500 text-[10px] font-black border border-indigo-900/50 uppercase tracking-widest">SOP-OPS-009</span>
+                                <NeuralPulse />
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+                            <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
                                 {t('francis.gridSync.title')}
                             </h1>
                         </div>
@@ -39,108 +50,146 @@ export const GridSync: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition group"
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
-                        <ArrowLeft className="w-3 h-3 text-indigo-500 group-hover:-translate-x-1 transition" />
+                        <ArrowLeft className="w-4 h-4 text-indigo-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.gridSync.return')}</span>
                     </button>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 md:px-8">
-                <div className="grid grid-cols-1 gap-8">
+            <main className="max-w-6xl mx-auto px-4 md:px-8 space-y-8">
 
-                    {/* 1. The Sync Window */}
-                    <section className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-indigo-600 border border-slate-800 shadow-lg hover:shadow-indigo-900/20 transition-all duration-300">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                            <div className="flex-1">
-                                <h2 className="text-xl font-black text-white uppercase tracking-tight mb-6 flex items-center gap-2">
-                                    <Crosshair className="w-5 h-5 text-indigo-400" />
-                                    {t('francis.gridSync.s1Title')}
-                                </h2>
-                                <p className="text-[11px] text-slate-400 leading-relaxed mb-6">
-                                    {t('francis.gridSync.s1Desc')}
-                                </p>
+                {/* 1. Synchroscope Hub */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <GlassCard title="Vector Alignment Matrix" className="lg:col-span-2 overflow-hidden relative group">
+                        <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
+                            {/* Synchroscope UI */}
+                            <div className="relative group/scope">
+                                <div className="w-64 h-64 rounded-full border-8 border-slate-900 bg-black shadow-[0_0_50px_rgba(79,70,229,0.1)] flex items-center justify-center relative overflow-hidden">
+                                    {/* Graduations */}
+                                    {[...Array(12)].map((_, i) => (
+                                        <div key={i} className="absolute w-1 h-3 bg-slate-800" style={{ transform: `rotate(${i * 30}deg) translateY(-110px)` }} />
+                                    ))}
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    <div className="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
-                                        <span className="text-[8px] text-slate-500 font-black uppercase mb-1 block">
-                                            {t('francis.gridSync.p1')}
-                                        </span>
-                                        <span className="text-xs font-black text-white">&plusmn; 5%</span>
+                                    {/* Sync Window */}
+                                    <div className="absolute top-2 w-16 h-8 bg-emerald-500/10 border-2 border-emerald-500/30 rounded-lg blur-[2px]" />
+                                    <div className="absolute top-2 w-16 h-8 border-2 border-emerald-500/50 rounded-lg z-10 flex items-center justify-center">
+                                        <div className="w-1 h-full bg-emerald-500 animate-pulse" />
                                     </div>
-                                    <div className="p-3 bg-slate-900/50 border border-slate-800 rounded-lg">
-                                        <span className="text-[8px] text-slate-500 font-black uppercase mb-1 block">
-                                            {t('francis.gridSync.p2')}
-                                        </span>
-                                        <span className="text-xs font-black text-white">&plusmn; 0.1 Hz</span>
-                                    </div>
-                                    <div className="p-3 bg-slate-900/50 border border-indigo-900/50 rounded-lg">
-                                        <span className="text-[8px] text-indigo-400 font-black uppercase mb-1 block">
-                                            {t('francis.gridSync.p3')}
-                                        </span>
-                                        <span className="text-xs font-black text-indigo-400">&plusmn; 10&deg;</span>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div className="flex flex-col items-center gap-4">
-                                {/* Synchroscope */}
-                                <div className="w-[120px] h-[120px] border-4 border-slate-800 rounded-full relative bg-black shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
-                                    {/* Sync Window Marker */}
-                                    <div className="absolute top-[5%] left-1/2 -translate-x-1/2 w-[20%] h-[10%] bg-green-500/30 border border-green-500 rounded-[2px] z-10 box-border"></div>
-
-                                    {/* Needle */}
+                                    {/* Rotating Vector */}
                                     <div
-                                        className="absolute top-1/2 left-1/2 w-[2px] h-[45%] bg-indigo-500 origin-top -translate-x-1/2"
-                                        style={{ transform: `translateX(-50%) rotate(${180 + rotation}deg)` }}
-                                    ></div>
+                                        className="absolute w-1 h-28 bg-indigo-500 origin-bottom rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-shadow duration-300"
+                                        style={{ transform: `rotate(${rotation}deg) translateY(-56px)` }}
+                                    />
 
-                                    {/* Center Dot */}
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-indigo-400 shadow-lg shadow-indigo-500 z-20"></div>
+                                    {/* Center Cap */}
+                                    <div className="w-4 h-4 rounded-full bg-slate-900 border-2 border-indigo-500 z-20" />
                                 </div>
-                                <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest">
+                                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
                                     {t('francis.gridSync.scope')}
-                                </span>
+                                </div>
                             </div>
-                        </div>
-                    </section>
 
-                    {/* 2. Manual Protocol */}
-                    <section className="bg-amber-950/10 backdrop-blur-md rounded-2xl p-8 border-l-4 border-l-amber-600 border border-amber-900/20">
-                        <h2 className="text-xl font-black text-white uppercase tracking-tight mb-8">
-                            {t('francis.gridSync.s2Title')}
-                        </h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <p className="text-[10px] text-slate-400 mb-6">
-                                    {t('francis.gridSync.s2Desc')}
-                                </p>
-                                <div className="space-y-3">
-                                    <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl relative group">
-                                        <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-red-600 rounded flex items-center justify-center text-[10px] font-black text-white shadow-lg shadow-red-950">
-                                            !
-                                        </div>
-                                        <h4 className="text-xs font-black text-white uppercase ml-4">
-                                            {t('francis.gridSync.ruleDark')}
-                                        </h4>
-                                        <p className="text-[9px] text-slate-500 ml-4 mt-1">
-                                            {t('francis.gridSync.ruleDesc')}
-                                        </p>
+                            <div className="flex-1 space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-6 bg-black/40 rounded-3xl border border-white/5">
+                                        <span className="text-[10px] text-slate-500 uppercase font-black block mb-2">{t('francis.gridSync.p1')}</span>
+                                        <div className="text-2xl font-black text-white font-mono tracking-tighter italic">98.2 <span className="text-xs opacity-40 italic">%</span></div>
+                                    </div>
+                                    <div className="p-6 bg-black/40 rounded-3xl border border-white/5">
+                                        <span className="text-[10px] text-slate-500 uppercase font-black block mb-2">{t('francis.gridSync.p2')}</span>
+                                        <div className="text-2xl font-black text-white font-mono tracking-tighter italic">{machineFreq.toFixed(2)} <span className="text-xs opacity-40 italic">Hz</span></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="p-6 bg-red-950/20 border border-red-900/40 rounded-2xl">
-                                <h4 className="text-red-500 text-[10px] font-black uppercase mb-4 tracking-widest">
-                                    {t('francis.gridSync.failTitle')}
-                                </h4>
-                                <p className="text-[10px] text-slate-400 leading-relaxed">
-                                    {t('francis.gridSync.failDesc')}
-                                </p>
+                                <div className="p-6 bg-emerald-950/10 border border-emerald-500/20 rounded-3xl flex items-center justify-between group/status">
+                                    <div>
+                                        <span className="text-[10px] text-emerald-500 uppercase font-black block mb-1 tracking-widest">{t('francis.gridSync.p3')}</span>
+                                        <div className="text-2xl font-black text-emerald-400 font-mono italic tracking-tighter">&plusmn; {phaseDelta}&deg;</div>
+                                    </div>
+                                    <ShieldCheck className="w-10 h-10 text-emerald-500 group-hover:scale-110 transition-transform" />
+                                </div>
                             </div>
                         </div>
-                    </section>
+                    </GlassCard>
+
+                    <div className="space-y-8">
+                        <div className="p-8 bg-indigo-950/20 border border-indigo-500/30 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <Crosshair className="w-24 h-24 text-indigo-400" />
+                            </div>
+                            <h3 className="text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <Crosshair className="w-4 h-4" /> {t('francis.gridSync.s1Title')}
+                            </h3>
+                            <p className="text-sm text-slate-300 font-bold italic leading-relaxed mb-6 border-l-2 border-indigo-500/30 pl-4 uppercase tracking-tighter">
+                                {t('francis.gridSync.s1Desc')}
+                            </p>
+                            <div className="text-[9px] text-indigo-300 bg-indigo-900/30 p-3 rounded-xl border border-indigo-800/30 uppercase font-black">
+                                Precision Sync Window Active
+                            </div>
+                        </div>
+
+                        <div className="p-8 bg-amber-950/10 border-l-[10px] border-amber-600 rounded-r-[2.5rem] border border-amber-900/20">
+                            <h4 className="text-amber-500 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4 animate-pulse" /> Safety Critical
+                            </h4>
+                            <p className="text-xs text-slate-400 font-bold leading-relaxed italic">
+                                {t('francis.gridSync.failDesc')}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Manual Procedure & Logic */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <GlassCard title={t('francis.gridSync.s2Title')} icon={<Activity className="text-indigo-400" />}>
+                        <div className="space-y-6">
+                            <p className="text-[11px] text-slate-500 font-black uppercase tracking-[0.2em] italic mb-4">
+                                {t('francis.gridSync.s2Desc')}
+                            </p>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div className="p-6 bg-slate-900/60 border border-white/5 rounded-[2rem] hover:border-indigo-500/30 transition-all group/rule">
+                                    <div className="flex items-start gap-4">
+                                        <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-black group-hover:scale-110 transition-transform">01</div>
+                                        <div>
+                                            <h4 className="text-white text-xs font-black uppercase tracking-tight mb-1">{t('francis.gridSync.ruleDark')}</h4>
+                                            <p className="text-[10px] text-slate-500 font-bold italic">{t('francis.gridSync.ruleDesc')}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-6 bg-red-950/20 border border-red-500/30 rounded-[2rem]">
+                                    <h4 className="text-red-500 text-[10px] font-black uppercase tracking-widest mb-2 italic">{t('francis.gridSync.failTitle')}</h4>
+                                    <p className="text-[10px] text-slate-300 font-bold leading-relaxed">System Lockout Triggered on 15&deg; Delta Breach.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </GlassCard>
+
+                    <div className="bg-black/40 border border-white/5 p-12 rounded-[3rem] shadow-3xl text-center flex flex-col justify-center items-center">
+                        <div className="w-24 h-24 rounded-full bg-indigo-600/10 border-4 border-indigo-500 flex items-center justify-center mb-8 relative">
+                            <div className="absolute inset-0 rounded-full border-2 border-indigo-400 animate-ping opacity-20" />
+                            <Zap className="text-indigo-500 w-10 h-10" />
+                        </div>
+                        <h3 className="text-white text-2xl font-black uppercase tracking-tighter mb-4">Breaker Permissive</h3>
+                        <div className="px-8 py-3 bg-indigo-600 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-[0_0_30px_rgba(79,70,229,0.3)]">
+                            Auto-Sync Ready
+                        </div>
+                        <div className="mt-8 grid grid-cols-3 gap-8 w-full">
+                            <div>
+                                <div className="text-[10px] text-slate-500 font-black uppercase mb-1">Grid V</div>
+                                <div className="text-sm font-black text-white font-mono">11.45 kV</div>
+                            </div>
+                            <div>
+                                <div className="text-[10px] text-slate-500 font-black uppercase mb-1">Gen V</div>
+                                <div className="text-sm font-black text-white font-mono">11.48 kV</div>
+                            </div>
+                            <div>
+                                <div className="text-[10px] text-slate-500 font-black uppercase mb-1">Sync T</div>
+                                <div className="text-sm font-black text-white font-mono">0.02s</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

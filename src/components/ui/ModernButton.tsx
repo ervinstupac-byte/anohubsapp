@@ -19,7 +19,7 @@ export const ModernButton: React.FC<ModernButtonProps> = ({
 }) => {
 
     // Base Styles
-    const baseStyles = "relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-3 px-6 text-sm";
+    const baseStyles = "relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm";
 
     // Variants
     const variants = {

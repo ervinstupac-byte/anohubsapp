@@ -14,7 +14,7 @@ interface StatCardProps {
     loading?: boolean;
 }
 
-export const StatCard: React.FC<StatCardProps> = ({
+export const StatCard: React.FC<StatCardProps> = React.memo(({
     label,
     value,
     unit,
@@ -65,4 +65,6 @@ export const StatCard: React.FC<StatCardProps> = ({
             )}
         </GlassCard>
     );
-};
+});
+
+StatCard.displayName = 'StatCard';

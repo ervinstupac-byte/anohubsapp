@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
+import { useTranslation } from 'react-i18next';
 
 interface FleetOverviewProps {
     onToggleMap: () => void;
@@ -9,11 +10,12 @@ interface FleetOverviewProps {
 
 export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggleMap, showMap, onRegisterAsset }) => {
     const { assets, selectedAsset, selectAsset } = useAssetContext();
+    const { t } = useTranslation();
 
     return (
         <div className="p-3 sm:p-4 border-b border-slate-800 bg-slate-900/50">
             <div className="flex justify-between items-center mb-3 sm:mb-4 gap-2">
-                <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest text-slate-400 truncate">FLEET OVERVIEW</h3>
+                <h3 className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-widest text-slate-400 truncate">{t('sidebar.fleetOverview')}</h3>
                 <button
                     onClick={onToggleMap}
                     className={`text-[9px] sm:text-[10px] font-bold px-2 py-1 rounded border transition-colors whitespace-nowrap ${showMap ? 'bg-cyan-900 text-cyan-400 border-cyan-700' : 'bg-slate-800 text-slate-500 border-slate-700 hover:text-white'}`}

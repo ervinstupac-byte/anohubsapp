@@ -4,10 +4,17 @@ import { TechnicalProjectState, ProjectAction, ComponentHealthData } from '../mo
 import { PhysicsEngine } from '../services/PhysicsEngine';
 import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
 import { DrTurbineAI } from '../services/DrTurbineAI';
+import { HPPSettingsSchema } from '../schemas/engineering';
+import i18n from '../i18n';
+import Decimal from 'decimal.js';
+
+const PERSISTENCE_KEY = 'ANOHUB_CORE_V4.2';
 
 const ProjectContext = createContext<{
     state: TechnicalProjectState;
     dispatch: React.Dispatch<ProjectAction>;
+    handleTelemetryUpdate: (rawPayload: unknown) => Promise<void>;
+    clearCoreState: () => void;
 } | undefined>(undefined);
 
 const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): TechnicalProjectState => {
@@ -58,13 +65,6 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 [moduleId]: status
             };
 
-            // Recalculate Logic (Ideally this logic should live in FrancisModel, but for state sync we do it here or via effect)
-            // For now, we update the state, and let the Component consuming it trigger the model recalculation
-            // OR we can invoke the FrancisModel logic here if we want pure business logic separation.
-            // Let's adhere to the pattern: Reducer updates state, Engine logic recalculates derived data.
-            // Since the Health Score in FrancisHub is driven by the model inside the component, we just update the module state here.
-            // However, to make it "Core", we should ideally run the calculation here.
-
             return {
                 ...state,
                 francis: {
@@ -73,6 +73,68 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 }
             };
         }
+        case 'UPDATE_VIBRATION_HISTORY': {
+            const history = state.mechanical.vibrationHistory || [];
+            const newHistory = [...history, action.payload].slice(-100);
+            return {
+                ...state,
+                mechanical: {
+                    ...state.mechanical,
+                    vibrationX: action.payload.x,
+                    vibrationY: action.payload.y,
+                    vibrationHistory: newHistory
+                }
+            };
+        }
+        case 'UPDATE_CENTER_PATH': {
+            const currentPath = state.mechanical.centerPath || [];
+            const newPath = [...currentPath, action.payload].slice(-10);
+            return {
+                ...state,
+                mechanical: {
+                    ...state.mechanical,
+                    centerPath: newPath
+                }
+            };
+        }
+        case 'UPDATE_ACOUSTIC_DATA': {
+            return {
+                ...state,
+                mechanical: {
+                    ...state.mechanical,
+                    acousticMetrics: {
+                        ...(state.mechanical.acousticMetrics || {
+                            cavitationIntensity: 0,
+                            ultrasonicLeakIndex: 0,
+                            bearingGrindIndex: 0,
+                            acousticBaselineMatch: 1.0
+                        }),
+                        ...action.payload
+                    },
+                    acousticNoiseFloor: action.payload.cavitationIntensity // Backward compatibility map
+                }
+            };
+        }
+        case 'UPDATE_PARTICLE_DATA': {
+            return {
+                ...state,
+                mechanical: {
+                    ...state.mechanical,
+                    particleAnalysis: action.payload
+                }
+            };
+        }
+        case 'UPDATE_GOVERNOR': {
+            return {
+                ...state,
+                governor: {
+                    ...state.governor,
+                    ...action.payload
+                }
+            };
+        }
+        case 'UPDATE_TELEMETRY_SUCCESS':
+            return action.payload; // payload is the fully recalculated state
         case 'RESET_TO_DEMO':
             return PhysicsEngine.recalculateProjectPhysics(state); // Re-validate
         default:
@@ -81,10 +143,123 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
 };
 
 export const ProjectProvider = ({ children, initialState }: { children: ReactNode, initialState: TechnicalProjectState }) => {
-    const [state, dispatch] = useReducer(cerebroReducer, initialState);
+    // Neural Core Initialization: Load from Persistence Anchor
+    const [state, dispatch] = useReducer(cerebroReducer, initialState, (initial) => {
+        try {
+            const saved = localStorage.getItem(PERSISTENCE_KEY);
+            if (saved) {
+                console.log(`[CEREBRO] Neural Core waking up from ${PERSISTENCE_KEY}`);
+                const parsed = JSON.parse(saved);
+                // Re-hydrate Decimal instances
+                if (parsed.hydraulic) {
+                    parsed.hydraulic.waterHead = new Decimal(parsed.hydraulic.waterHead);
+                    parsed.hydraulic.flowRate = new Decimal(parsed.hydraulic.flowRate);
+                    parsed.hydraulic.cavitationThreshold = new Decimal(parsed.hydraulic.cavitationThreshold);
+                    if (parsed.hydraulic.currentHoopStress) parsed.hydraulic.currentHoopStress = new Decimal(parsed.hydraulic.currentHoopStress);
+                    if (parsed.hydraulic.baselineOutputMW) parsed.hydraulic.baselineOutputMW = new Decimal(parsed.hydraulic.baselineOutputMW);
+                }
+                if (parsed.governor) {
+                    parsed.governor.setpoint = new Decimal(parsed.governor.setpoint);
+                    parsed.governor.actualValue = new Decimal(parsed.governor.actualValue);
+                    parsed.governor.kp = new Decimal(parsed.governor.kp);
+                    parsed.governor.ki = new Decimal(parsed.governor.ki);
+                    parsed.governor.kd = new Decimal(parsed.governor.kd);
+                    parsed.governor.integralError = new Decimal(parsed.governor.integralError);
+                    parsed.governor.previousError = new Decimal(parsed.governor.previousError);
+                    parsed.governor.outputSignal = new Decimal(parsed.governor.outputSignal);
+                }
+                return parsed as TechnicalProjectState;
+            }
+        } catch (e) {
+            console.error("[CEREBRO] Failed to re-hydrate Neural Core:", e);
+        }
+        return initial;
+    });
+
+    // Persistence Anchor: Sync with Storage
+    React.useEffect(() => {
+        localStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
+    }, [state]);
+
+    const clearCoreState = () => {
+        localStorage.removeItem(PERSISTENCE_KEY);
+        window.location.reload(); // Hard reset
+    };
+
+    /**
+     * CORE LOGIC: Centralized Telemetry Ingestion Pipeline
+     * Validates sensor data, converts to high-precision decimals, and updates CEREBRO.
+     */
+    const handleTelemetryUpdate = async (rawPayload: unknown) => {
+        try {
+            // 1. Zod Validation (Standard Excellence Guardrail)
+            const validatedData = HPPSettingsSchema.safeParse(rawPayload);
+
+            if (!validatedData.success) {
+                const errorMessage = i18n.t('errors.standard_excellence_violation', {
+                    details: JSON.stringify(validatedData.error.format())
+                });
+                console.error(`🚨 CRITICAL: ${errorMessage}`);
+                return; // Block update to preserve state integrity
+            }
+
+            // 2. High-Precision Preparation
+            const updatedHydraulic = {
+                ...state.hydraulic,
+                head: validatedData.data.head,
+                flow: validatedData.data.flow,
+                efficiency: validatedData.data.efficiency,
+                waterHead: new Decimal(validatedData.data.head),
+                flowRate: new Decimal(validatedData.data.flow)
+            };
+
+            const intermediateState: TechnicalProjectState = {
+                ...state,
+                hydraulic: updatedHydraulic
+            };
+
+            // 3. Global Recalculation (The Physics Engine Link)
+            const physicsResult = PhysicsEngine.recalculatePhysics(intermediateState);
+            const diagnosis = ExpertDiagnosisEngine.runExpertDiagnosis(physicsResult, intermediateState);
+
+            // 4. State Assembly
+            const nextState: TechnicalProjectState = {
+                ...intermediateState,
+                hydraulic: {
+                    ...updatedHydraulic,
+                    currentHoopStress: physicsResult.hoopStress
+                },
+                physics: {
+                    ...state.physics,
+                    hoopStressMPa: physicsResult.hoopStress.toNumber(),
+                    staticPressureBar: updatedHydraulic.head / 10,
+                    surgePressureBar: physicsResult.surgePressure.toNumber(),
+                    waterHammerPressureBar: physicsResult.surgePressure.toNumber()
+                },
+                mechanical: {
+                    ...state.mechanical,
+                    vibrationX: validatedData.data.vibrationX || 0,
+                    vibrationY: validatedData.data.vibrationY || 0,
+                    baselineOrbitCenter: state.mechanical.baselineOrbitCenter || { x: 0, y: 0 }
+                },
+                riskScore: diagnosis.severity === 'CRITICAL' ? 100 : (diagnosis.severity === 'WARNING' ? 50 : 0),
+                lastRecalculation: new Date().toISOString()
+            };
+
+            // 5. State Dispatch
+            dispatch({
+                type: 'UPDATE_TELEMETRY_SUCCESS',
+                payload: nextState
+            });
+
+            console.log(`[CEREBRO] Ingestion Success: Head=${validatedData.data.head}m, SF=${diagnosis.safetyFactor.toFixed(2)}`);
+        } catch (criticalError) {
+            console.error('SYSTEM_CRITICAL_FAILURE: PhysicsEngine desync during recalculation.', criticalError);
+        }
+    };
 
     return (
-        <ProjectContext.Provider value={{ state, dispatch }}>
+        <ProjectContext.Provider value={{ state, dispatch, handleTelemetryUpdate, clearCoreState }}>
             {children}
         </ProjectContext.Provider>
     );
@@ -97,7 +272,7 @@ export const useCerebro = () => {
 };
 
 // COMPATIBILITY HOOK FOR LEGACY COMPONENTS
-export const useProjectEngine = () => {
+export const useProjectEngine = (): any => {
     const { state, dispatch } = useCerebro();
 
     // Helper to bridge Simple Identity -> Complex AssetIdentity
@@ -163,35 +338,28 @@ export const useProjectEngine = () => {
         } as any; // Cast as any because AssetIdentity is very complex
     };
 
-    const connectSCADAToExpertEngine = (flow: number, head: number, frequency: number) => {
+    const connectTwinToExpertEngine = (flow: number, head: number, frequency: number) => {
         const complexIdentity = createComplexIdentity();
         if (!complexIdentity) return null;
 
-        // 1. Run Diagnostics
-        const diagnostics = ExpertDiagnosisEngine.runDiagnostics(
-            complexIdentity,
-            state.site?.temperature || 20,
-            'OIL',
-            50, // Default rotor weight tons
-            flow,
-            head,
-            frequency
-        );
+        // 1. Run Hardened Physics
+        const physicsResult = PhysicsEngine.recalculatePhysics(state);
 
-        // 2. Calculate Health
-        const health = ExpertDiagnosisEngine.calculateHealthScore(diagnostics);
+        // 2. Run Diagnostics
+        const diagnosis = ExpertDiagnosisEngine.runExpertDiagnosis(physicsResult, state);
 
         // 3. Aggregate Critical Alarms
         const criticalAlarms: { message: string }[] = [];
-        if (diagnostics.gridRisk?.severity === 'CRITICAL') criticalAlarms.push({ message: diagnostics.gridRisk.message });
-        if (diagnostics.cavitationRisk?.severity === 'CRITICAL') criticalAlarms.push({ message: diagnostics.cavitationRisk.message });
-        if (diagnostics.thermalRisk.severity === 'CRITICAL') criticalAlarms.push({ message: diagnostics.thermalRisk.description });
-        if (diagnostics.jackingRisk?.severity === 'CRITICAL') criticalAlarms.push({ message: diagnostics.jackingRisk.alarm });
+        diagnosis.messages.forEach(msg => {
+            if (diagnosis.severity === 'CRITICAL') {
+                criticalAlarms.push({ message: msg.en });
+            }
+        });
 
         return {
-            healthScore: health.overall,
+            healthScore: ExpertDiagnosisEngine.calculateHealthScore(diagnosis).overall,
             criticalAlarms,
-            diagnostics
+            diagnostics: diagnosis
         };
     };
 
@@ -317,7 +485,7 @@ export const useProjectEngine = () => {
     return {
         technicalState: state,
         dispatch,
-        connectSCADAToExpertEngine,
+        connectTwinToExpertEngine,
         getDrTurbineConsultation,
         createComplexIdentity, // Exposed for internal hooks
         // NEW: Measurement and Inspection Integration

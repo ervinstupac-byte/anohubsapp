@@ -1,6 +1,8 @@
 // Hydraulic Transient Safety - 12mm-to-16mm Safeguard
 // Simulation layer for validating hardware changes
 
+import Decimal from 'decimal.js';
+
 export interface HydraulicSpec {
     pipeDiameterMM: number;
     pipeLengthM: number;
@@ -38,33 +40,26 @@ export class HydraulicTransientSafety {
         // Simplified physics model for real-time check
 
         // Stiffness k ~ Area / Length (proportional to D^2)
-        const stiffnessOld = Math.pow(currentSpec.pipeDiameterMM, 2);
-        const stiffnessNew = Math.pow(proposedSpec.pipeDiameterMM, 2);
+        const stiffnessOld = new Decimal(currentSpec.pipeDiameterMM).pow(2);
+        const stiffnessNew = new Decimal(proposedSpec.pipeDiameterMM).pow(2);
 
-        const stiffnessRatio = stiffnessNew / stiffnessOld;
+        const stiffnessRatio = stiffnessNew.div(stiffnessOld);
 
         // 2. Natural Frequency Shift
         // Omega ~ sqrt(k/m). If k increases by factor of (16/12)^2 = 1.77, freq increases by sqrt(1.77) = 1.33
         // A 33% shift in natural frequency is HUGE for a PID controller trained on the old system.
 
-        const frequencyShiftPct = (Math.sqrt(stiffnessRatio) - 1) * 100;
+        const frequencyShiftPct = stiffnessRatio.sqrt().minus(1).mul(100);
 
         // 3. Water Hammer / Pressure Surge
         // Joukowsky equation: dP = rho * c * dV
-        // Larger pipe = slower velocity for same flow? Or same velocity?
-        // If flow is controlled by valve, larger pipe = lower velocity = lower water hammer.
-        // BUT, usually people upgrade pipe to allow HIGHER flow.
-        // If flow increases proportionally to Area, velocity stays same, but mass flow increases.
-        // Hazard: If valve closes at same speed, the mass deceleration is huge.
-
-        // Let's assume the servo valve is NOT changed, so it can close just as fast.
 
         const warnings: string[] = [];
         let approved = true;
         let reason = '';
 
         // CRITICAL CHECK: Natural Frequency Shift
-        if (Math.abs(frequencyShiftPct) > 15) {
+        if (frequencyShiftPct.abs().gt(15)) {
             approved = false;
             reason = `CRITICAL: Natural Frequency shift of ${frequencyShiftPct.toFixed(1)}% detected.`;
             warnings.push('PID Controller will become unstable (oscillations).');
@@ -93,10 +88,10 @@ export class HydraulicTransientSafety {
             warnings,
             metrics: {
                 naturalFrequencyOld: 100, // Normalized baseline
-                naturalFrequencyNew: 100 * (1 + frequencyShiftPct / 100),
-                systemStiffnessRatio: stiffnessRatio,
-                waterHammerPeak: proposedSpec.systemPressureBar * 1.5, // Estimated
-                responseTimeChange: stiffnessRatio * 10 // Faster response
+                naturalFrequencyNew: new Decimal(100).mul(new Decimal(1).plus(frequencyShiftPct.div(100))).toNumber(),
+                systemStiffnessRatio: stiffnessRatio.toNumber(),
+                waterHammerPeak: new Decimal(proposedSpec.systemPressureBar).mul(1.5).toNumber(), // Estimated
+                responseTimeChange: stiffnessRatio.mul(10).toNumber() // Faster response
             }
         };
     }

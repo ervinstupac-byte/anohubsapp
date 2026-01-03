@@ -1,117 +1,131 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Thermometer, Droplets, Activity, RefreshCw, AlertTriangle, Snowflake, Sun, StopCircle } from 'lucide-react';
+import {
+    ArrowLeft,
+    Thermometer,
+    Droplets,
+    Activity,
+    RefreshCw,
+    AlertTriangle,
+    Snowflake,
+    Sun,
+    StopCircle,
+    ShieldAlert,
+    Wind,
+    Waves
+} from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
+import { useCerebro } from '../../contexts/ProjectContext';
+import { GlassCard } from '../ui/GlassCard';
+import { NeuralPulse } from '../ui/NeuralPulse';
 
-const CoolingWater: React.FC = () => {
+export const CoolingWater: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { state } = useCerebro();
     const [activeTab, setActiveTab] = useState<'winter' | 'summer' | 'failure'>('winter');
 
+    // Telemetry from CEREBRO
+    const coolingFlow = 120; // L/s (Mock or from francis.sensors)
+    const coolingPressure = 4.2; // Bar
+    const inletTemp = state.site.temperature - 6.6; // Computed delta for cooling water
+
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30">
-            <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
-
-                {/* Header */}
-                <header className="border-b-4 border-cyan-500 pb-6 bg-gradient-to-r from-slate-900 to-slate-900/50 p-6 rounded-lg shadow-lg shadow-cyan-900/10">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-cyan-500/10 rounded-full">
-                            <Snowflake className="w-10 h-10 text-cyan-500" />
-                        </div>
-                        <div>
-                            <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-cyan-500 uppercase glitch-text">
-                                {t('francis.coolingWater.title')}
-                            </h1>
-                            <div className="flex gap-2 mt-2">
-                                <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 text-xs font-bold rounded tracking-wider border border-cyan-500/30">FLOW: 120 L/s</span>
-                                <span className="px-2 py-0.5 bg-green-500/20 text-green-300 text-xs font-bold rounded tracking-wider border border-green-500/30">P: 4.2 BAR</span>
-                            </div>
-                        </div>
+        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12 selection:bg-cyan-500/30">
+            {/* Header */}
+            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="text-center md:text-left">
+                        <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
+                            <Snowflake className="w-8 h-8 text-cyan-500 animate-pulse" />
+                            {t('francis.coolingWater.title')}
+                        </h1>
+                        <p className="text-cyan-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <NeuralPulse /> {t('francis.coolingWater.subtitle') || "THERMAL REJECTION LOGIC"} // NC-4.2 CRYOSYNC
+                        </p>
                     </div>
-                </header>
 
-                <div className="grid lg:grid-cols-2 gap-8">
+                    <div className="flex gap-4">
+                        <div className="bg-black/40 border border-cyan-500/30 px-4 py-2 rounded-2xl flex flex-col items-end">
+                            <span className="text-[8px] text-cyan-500 font-black uppercase tracking-tighter">Current Flow</span>
+                            <span className="text-xl font-black font-mono text-white">{coolingFlow} <span className="text-[10px] text-slate-500">L/s</span></span>
+                        </div>
+                        <button
+                            onClick={() => navigate(FRANCIS_PATHS.HUB)}
+                            className="flex items-center gap-2 px-6 py-2 bg-cyan-600/10 border-2 border-cyan-500/50 text-cyan-400 rounded-full font-black hover:bg-cyan-500 hover:text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all group uppercase text-xs tracking-tighter"
+                        >
+                            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
+                            <span>{t('francis.coolingWater.return') || "Return"}</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
 
+            <main className="max-w-6xl mx-auto px-4 md:px-8 space-y-8">
+                {/* Real-time Status Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Auto-Strainers */}
-                    <section className="bg-slate-900 rounded-lg p-6 border border-slate-700 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10">
-                            <RefreshCw className="w-32 h-32 text-cyan-500" />
+                    <GlassCard title={t('francis.coolingWater.s1Title')} className="relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <Waves className="w-48 h-48 text-cyan-500" />
                         </div>
 
-                        <h3 className="text-2xl font-bold text-cyan-100 mb-6 flex items-center gap-3 relative z-10">
-                            <RefreshCw className="w-6 h-6 text-cyan-400" />
-                            {t('francis.coolingWater.s1Title')}
-                        </h3>
-
-                        <div className="bg-slate-950 p-4 rounded-lg border border-slate-800 mb-6 relative z-10">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-slate-400 text-sm font-bold tracking-wider">{t('francis.coolingWater.dpVal')}</span>
-                                <span className="text-green-400 font-mono font-bold bg-green-900/20 px-2 rounded">0.12 Bar</span>
-                            </div>
-                            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div className="w-[24%] bg-green-500 h-full" />
-                            </div>
-                            <p className="text-xs text-slate-500 mt-2 italic">{t('francis.coolingWater.dpDesc')}</p>
-                        </div>
-
-                        <div className="space-y-4 relative z-10">
-                            <h4 className="text-cyan-400 font-bold text-sm uppercase tracking-widest border-b border-slate-800 pb-1">{t('francis.coolingWater.flushLogic')}</h4>
-
-                            <div className="grid gap-3">
-                                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded border border-slate-700/50">
-                                    <Activity className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                                    <div>
-                                        <strong className="block text-slate-200 text-sm">{t('francis.coolingWater.trig')}</strong>
-                                    </div>
+                        <div className="relative z-10 space-y-6">
+                            <div className="bg-black/40 p-6 rounded-3xl border border-white/5 mb-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="text-slate-400 text-xs font-black uppercase tracking-widest">{t('francis.coolingWater.dpVal')}</span>
+                                    <span className="text-emerald-400 font-mono font-black text-xl bg-emerald-900/20 px-4 py-1 rounded-full border border-emerald-500/20">0.12 BAR</span>
                                 </div>
-                                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded border border-slate-700/50">
-                                    <RefreshCw className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
-                                    <div>
-                                        <strong className="block text-slate-200 text-sm">{t('francis.coolingWater.act')}</strong>
-                                    </div>
+                                <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+                                    <div className="w-[24%] bg-gradient-to-r from-cyan-500 to-emerald-500 h-full shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
                                 </div>
-                                <div className="flex items-start gap-3 p-3 bg-red-950/20 rounded border border-red-500/20">
-                                    <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                                    <div>
-                                        <strong className="block text-red-300 text-sm">{t('francis.coolingWater.jam')}</strong>
+                                <p className="text-[10px] text-slate-500 mt-4 italic font-bold leading-relaxed">{t('francis.coolingWater.dpDesc')}</p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-cyan-400 font-black text-[10px] uppercase tracking-[0.2em] border-b border-white/5 pb-2">{t('francis.coolingWater.flushLogic')}</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+                                        <Activity className="w-5 h-5 text-cyan-400 mb-2" />
+                                        <strong className="block text-white text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.trig')}</strong>
+                                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">0.30 Bar Delta</span>
+                                    </div>
+                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+                                        <RefreshCw className="w-5 h-5 text-emerald-400 mb-2 animate-spin-slow" />
+                                        <strong className="block text-white text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.act')}</strong>
+                                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">60s Flush Cycle</span>
+                                    </div>
+                                    <div className="p-4 bg-red-900/10 rounded-2xl border border-red-500/20 hover:bg-red-900/20 transition-colors">
+                                        <AlertTriangle className="w-5 h-5 text-red-500 mb-2" />
+                                        <strong className="block text-red-400 text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.jam')}</strong>
+                                        <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">Manual Override</span>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="mt-4 text-center">
-                                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 text-sm font-bold">
-                                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                    {t('francis.coolingWater.statusClean')}
-                                </span>
-                            </div>
                         </div>
-                    </section>
+                    </GlassCard>
 
-                    {/* Coolers & Flow Rates */}
-                    <section className="bg-slate-900 rounded-lg p-6 border border-slate-700">
-                        <h3 className="text-2xl font-bold text-cyan-100 mb-6 flex items-center gap-3">
-                            <Thermometer className="w-6 h-6 text-cyan-400" />
-                            {t('francis.coolingWater.s2Title')}
-                        </h3>
-
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-sm">
+                    {/* Component Performance */}
+                    <GlassCard title={t('francis.coolingWater.s2Title')} icon={<Thermometer className="text-cyan-400" />}>
+                        <div className="overflow-hidden rounded-3xl border border-white/5 bg-black/40">
+                            <table className="w-full text-left text-xs border-collapse">
                                 <thead>
-                                    <tr className="text-slate-400 border-b border-slate-700">
-                                        <th className="pb-3 pl-2 font-medium">{t('francis.coolingWater.thCol')}</th>
-                                        <th className="pb-3 text-right font-medium">{t('francis.coolingWater.thFlow')}</th>
-                                        <th className="pb-3 pr-2 text-right font-medium">{t('francis.coolingWater.thStat')}</th>
+                                    <tr className="bg-cyan-900/40 text-cyan-400 font-black text-[9px] uppercase tracking-[0.2em]">
+                                        <th className="p-4 border-b border-white/5">{t('francis.coolingWater.thCol')}</th>
+                                        <th className="p-4 border-b border-white/5 text-right">{t('francis.coolingWater.thFlow')}</th>
+                                        <th className="p-4 border-b border-white/5 text-right font-black">{t('francis.coolingWater.thStat')}</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-800">
+                                <tbody className="text-slate-300">
                                     {[1, 2, 3].map((i) => (
-                                        <tr key={i} className="group hover:bg-slate-800/50 transition-colors">
-                                            <td className="py-4 pl-2 font-medium text-slate-200">{t(`francis.coolingWater.col${i}`)}</td>
-                                            <td className="py-4 text-right font-mono text-cyan-300">
+                                        <tr key={i} className="group hover:bg-white/5 transition-colors border-b border-white/5">
+                                            <td className="p-4 font-black uppercase tracking-tighter">{t(`francis.coolingWater.col${i}`)}</td>
+                                            <td className="p-4 text-right font-mono font-black text-cyan-300">
                                                 {i === 1 ? '850 m³/h' : i === 2 ? '45 L/min' : '30 L/min'}
                                             </td>
-                                            <td className="py-4 pr-2 text-right">
-                                                <span className="text-green-400 font-bold text-xs bg-green-900/20 px-2 py-1 rounded border border-green-500/20">
+                                            <td className="p-4 text-right">
+                                                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[9px] font-black rounded-full border border-emerald-500/20 uppercase tracking-widest">
                                                     {t('francis.coolingWater.healthy')}
                                                 </span>
                                             </td>
@@ -121,98 +135,80 @@ const CoolingWater: React.FC = () => {
                             </table>
                         </div>
 
-                        <div className="mt-6 bg-slate-950 p-4 rounded border border-slate-800 flex justify-between items-center">
-                            <span className="text-slate-400 font-bold text-xs uppercase tracking-widest">{t('francis.coolingWater.inletTemp')}</span>
-                            <span className="text-2xl font-mono text-cyan-400">8.4°C</span>
+                        <div className="mt-6 p-6 bg-gradient-to-br from-cyan-950/40 to-black rounded-3xl border border-cyan-500/20 flex justify-between items-center group overflow-hidden relative">
+                            <div className="absolute inset-0 bg-cyan-500/5 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
+                            <div className="relative z-10 flex flex-col">
+                                <span className="text-[10px] text-cyan-500 font-black uppercase tracking-[0.2em] mb-1">{t('francis.coolingWater.inletTemp')}</span>
+                                <span className="text-3xl font-black font-mono text-white tracking-tighter tabular-nums">{inletTemp.toFixed(1)}°C</span>
+                            </div>
+                            <Snowflake className="w-12 h-12 text-cyan-500 relative z-10 opacity-50 group-hover:rotate-180 transition-transform duration-1000" />
                         </div>
-                    </section>
+                    </GlassCard>
                 </div>
 
-                {/* Temp Regulation Logic */}
-                <section className="bg-slate-900 p-6 rounded-lg border border-slate-700">
-                    <h3 className="text-2xl font-bold text-cyan-100 mb-6 flex items-center gap-3">
+                {/* Thermal Regulation Logic Tabs */}
+                <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8">
+                    <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                         <Activity className="w-6 h-6 text-cyan-400" />
-                        {t('francis.coolingWater.s3Title')}
-                    </h3>
-
-                    <div className="flex flex-col md:flex-row gap-4 mb-6">
-                        <button
-                            onClick={() => setActiveTab('winter')}
-                            className={`flex-1 p-4 rounded-lg border transition-all duration-300 flex flex-col items-center gap-2 ${activeTab === 'winter'
-                                    ? 'bg-cyan-500/10 border-cyan-500 text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.1)]'
-                                    : 'bg-slate-950 border-slate-800 text-slate-500 hover:border-slate-700'
-                                }`}
-                        >
-                            <Snowflake className="w-6 h-6" />
-                            <span className="font-bold">{t('francis.coolingWater.modeWinter')}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('summer')}
-                            className={`flex-1 p-4 rounded-lg border transition-all duration-300 flex flex-col items-center gap-2 ${activeTab === 'summer'
-                                    ? 'bg-amber-500/10 border-amber-500 text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.1)]'
-                                    : 'bg-slate-950 border-slate-800 text-slate-500 hover:border-slate-700'
-                                }`}
-                        >
-                            <Sun className="w-6 h-6" />
-                            <span className="font-bold">{t('francis.coolingWater.modeSummer')}</span>
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('failure')}
-                            className={`flex-1 p-4 rounded-lg border transition-all duration-300 flex flex-col items-center gap-2 ${activeTab === 'failure'
-                                    ? 'bg-red-500/10 border-red-500 text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.1)]'
-                                    : 'bg-slate-950 border-slate-800 text-slate-500 hover:border-slate-700'
-                                }`}
-                        >
-                            <AlertTriangle className="w-6 h-6" />
-                            <span className="font-bold">{t('francis.coolingWater.modeFail')}</span>
-                        </button>
+                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{t('francis.coolingWater.s3Title')}</h2>
                     </div>
 
-                    <div className="bg-slate-950 p-6 rounded-lg border border-slate-800 min-h-[150px] flex items-center justify-center text-center">
+                    <div className="flex flex-col md:flex-row gap-6">
+                        {[
+                            { id: 'winter', icon: Snowflake, color: 'text-cyan-400', bg: 'bg-cyan-500/10', border: 'border-cyan-500/40', label: t('francis.coolingWater.modeWinter') },
+                            { id: 'summer', icon: Sun, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/40', label: t('francis.coolingWater.modeSummer') },
+                            { id: 'failure', icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/40', label: t('francis.coolingWater.modeFail') }
+                        ].map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as any)}
+                                className={`flex-1 p-6 rounded-3xl border-2 transition-all duration-500 flex flex-col items-center gap-4 group relative overflow-hidden ${activeTab === tab.id
+                                    ? `${tab.bg} ${tab.border} ${tab.color} shadow-[0_0_30px_rgba(6,182,212,0.15)]`
+                                    : 'bg-black/40 border-white/5 text-slate-500 hover:border-white/10'
+                                    }`}
+                            >
+                                <div className={`p-4 rounded-2xl ${activeTab === tab.id ? 'bg-white/10' : 'bg-white/5'} transition-colors`}>
+                                    <tab.icon className={`w-8 h-8 ${activeTab === tab.id ? tab.color : 'text-slate-600'}`} />
+                                </div>
+                                <span className={`font-black uppercase tracking-[0.2em] text-xs ${activeTab === tab.id ? 'text-white' : 'text-slate-500'}`}>{tab.label}</span>
+                                {activeTab === tab.id && <div className={`absolute bottom-0 left-0 right-0 h-1 ${tab.id === 'winter' ? 'bg-cyan-500' : tab.id === 'summer' ? 'bg-amber-500' : 'bg-red-500'}`} />}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="bg-black/60 p-8 rounded-3xl border border-white/5 min-h-[200px] flex items-center justify-center relative overflow-hidden shadow-2xl">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
+
                         {activeTab === 'winter' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 max-w-lg">
-                                <h4 className="text-xl font-bold text-cyan-400 mb-2">{t('francis.coolingWater.modeRec')}</h4>
-                                <p className="text-slate-300 text-lg">{t('francis.coolingWater.descWinter')}</p>
-                                <div className="mt-4 flex justify-center gap-2 opacity-60">
-                                    <div className="h-1 w-12 bg-cyan-500/20 rounded-full" />
-                                    <div className="h-1 w-12 bg-cyan-500 rounded-full" />
-                                    <div className="h-1 w-12 bg-cyan-500/20 rounded-full" />
+                            <div className="animate-in fade-in zoom-in-95 duration-500 max-w-2xl text-center space-y-4">
+                                <h4 className="text-2xl font-black text-cyan-400 uppercase tracking-tighter">{t('francis.coolingWater.modeRec')}</h4>
+                                <p className="text-slate-300 text-lg font-bold leading-relaxed">{t('francis.coolingWater.descWinter')}</p>
+                                <div className="flex justify-center gap-2 pt-4">
+                                    <NeuralPulse />
                                 </div>
                             </div>
                         )}
                         {activeTab === 'summer' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 max-w-lg">
-                                <h4 className="text-xl font-bold text-amber-400 mb-2">{t('francis.coolingWater.modeFull')}</h4>
-                                <p className="text-slate-300 text-lg">{t('francis.coolingWater.descSummer')}</p>
-                                <div className="mt-4 flex justify-center gap-2 opacity-60">
-                                    <div className="h-1 w-12 bg-amber-500 rounded-full" />
-                                    <div className="h-1 w-12 bg-amber-500/20 rounded-full" />
-                                    <div className="h-1 w-12 bg-amber-500/20 rounded-full" />
+                            <div className="animate-in fade-in zoom-in-95 duration-500 max-w-2xl text-center space-y-4">
+                                <h4 className="text-2xl font-black text-amber-400 uppercase tracking-tighter">{t('francis.coolingWater.modeFull')}</h4>
+                                <p className="text-slate-300 text-lg font-bold leading-relaxed">{t('francis.coolingWater.descSummer')}</p>
+                                <div className="flex justify-center gap-2 pt-4">
+                                    <div className="w-12 h-1 bg-amber-500 rounded-full animate-pulse" />
                                 </div>
                             </div>
                         )}
                         {activeTab === 'failure' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 max-w-lg">
-                                <h4 className="text-xl font-bold text-red-400 mb-2">{t('francis.coolingWater.modeMan')}</h4>
-                                <p className="text-red-200 text-lg">{t('francis.coolingWater.descFail')}</p>
-                                <div className="mt-4 flex justify-center gap-2 opacity-60">
-                                    <div className="h-1 w-12 bg-red-500/20 rounded-full" />
-                                    <div className="h-1 w-12 bg-red-500/20 rounded-full" />
-                                    <div className="h-1 w-12 bg-red-500 rounded-full" />
+                            <div className="animate-in fade-in zoom-in-95 duration-500 max-w-2xl text-center space-y-4">
+                                <h4 className="text-2xl font-black text-red-500 uppercase tracking-tighter">{t('francis.coolingWater.modeMan')}</h4>
+                                <p className="text-red-200 text-lg font-bold leading-relaxed italic">{t('francis.coolingWater.descFail')}</p>
+                                <div className="flex justify-center gap-2 pt-4">
+                                    <ShieldAlert className="w-8 h-8 text-red-600 animate-bounce" />
                                 </div>
                             </div>
                         )}
                     </div>
                 </section>
-
-                <button
-                    onClick={() => navigate('/francis')}
-                    className="mt-8 flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors group"
-                >
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    {t('francis.coolingWater.return')}
-                </button>
-            </div>
+            </main>
         </div>
     );
 };

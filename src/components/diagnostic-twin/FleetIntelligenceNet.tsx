@@ -63,7 +63,7 @@ const FleetMap = ({ plants, events }: { plants: PlantStatus[], events: any[] }) 
     );
 };
 
-export const FleetCommander = () => {
+export const FleetIntelligenceNet = () => {
     const { t } = useTranslation();
     const { plants, fleetRI, hiveEvents } = useFleetIntelligence();
 
@@ -78,7 +78,7 @@ export const FleetCommander = () => {
                     </div>
                     <div>
                         <h1 className="text-2xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-                            Fleet Commander
+                            Fleet Intelligence Net
                         </h1>
                         <p className="text-xs font-mono text-slate-500 uppercase tracking-widest">
                             The Hive Mind • Artificial Intelligence Network
