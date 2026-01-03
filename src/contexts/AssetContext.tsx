@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useMemo, useCallback, ReactNode, Suspense, lazy } from 'react';
 import { supabase } from '../services/supabaseClient.ts';
 import type { Asset, AssetContextType, AssetHistoryEntry } from '../types.ts';
 import { useAudit } from './AuditContext.tsx';
@@ -123,7 +123,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }, 1000) // 1 second delay
     ).current;
 
-    const selectAsset = (id: string) => {
+    const selectAsset = useCallback((id: string) => {
         setSelectedAssetId(id);
         localStorage.setItem('activeAssetId', id); // Save to local storage
         const asset = assets.find(a => a.id === id);
@@ -131,14 +131,13 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             // Call the debounced function instead of direct logAction
             debouncedLogContextSwitch(asset.name);
         }
-    };
+    }, [assets, debouncedLogContextSwitch]);
 
     const { isGuest } = useAuth(); // Hook to check guest status
 
     // --- NOVA FUNKCIJA: DODAVANJE NOVE TURBINE ---
-    const addAsset = async (newAssetData: Omit<Asset, 'id'>) => {
+    const addAsset = useCallback(async (newAssetData: Omit<Asset, 'id'>) => {
         try {
-            // 1. Pripremi podatke za Supabase (mapiraj Frontend -> Baza)
             const dbPayload = {
                 name: newAssetData.name,
                 type: newAssetData.type,
@@ -153,8 +152,6 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             let newAsset: Asset;
 
             if (isGuest) {
-                // --- GUEST MODE: MOCK INSERT ---
-                // Simuliramo mrežni zahtjev
                 await new Promise(resolve => setTimeout(resolve, 800));
 
                 newAsset = {
@@ -167,16 +164,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     status: dbPayload.status as Asset['status'],
                     specs: dbPayload.specs
                 };
-                console.log('[AssetContext] Guest Mode: Simulating asset creation', newAsset);
 
-                // --- GUEST PERSISTENCE ---
-                // Update Local Storage immediately so refresh works
                 const existingGuestAssets = loadFromStorage<Asset[]>('guest_assets') || [];
                 const updatedGuestAssets = [...existingGuestAssets, newAsset];
                 saveToStorage('guest_assets', updatedGuestAssets);
-                // -------------------------
             } else {
-                // --- REAL MODE: SUPABASE INSERT ---
                 const { data, error } = await supabase
                     .from('assets')
                     .insert([dbPayload])
@@ -204,15 +196,27 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         } catch (error) {
             console.error('Error creating asset:', error);
-            throw error; // Bacamo grešku da UI može prikazati poruku korisniku
+            throw error;
         }
-    };
+    }, [isGuest, logAction]);
 
-    const selectedAsset = assets.find(a => a.id === selectedAssetId) || null;
+    const selectedAsset = useMemo(() =>
+        assets.find(a => a.id === selectedAssetId) || null
+        , [assets, selectedAssetId]);
+
+    const value = useMemo(() => ({
+        assets,
+        selectedAsset,
+        selectAsset,
+        loading,
+        addAsset,
+        updateAsset,
+        logActivity,
+        assetLogs
+    }), [assets, selectedAsset, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs]);
 
     return (
-        // Ne zaboravi dodati addAsset u value objekt!
-        <AssetContext.Provider value={{ assets, selectedAsset, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs }}>
+        <AssetContext.Provider value={value}>
             {children}
         </AssetContext.Provider>
     );

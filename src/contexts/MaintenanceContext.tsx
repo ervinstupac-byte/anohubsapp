@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { supabase } from '../services/supabaseClient';
 import { InspectionImage } from '../services/StrategicPlanningService';
 import {
@@ -222,7 +222,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     };
 
-    const predictServiceDate = (assetId: string, threshold: number) => {
+    const predictServiceDate = useCallback((assetId: string, threshold: number) => {
         const hours = operatingHours[assetId] || 0;
         const remaining = threshold - (hours % threshold);
         const dailyHours = 20; // Assumption
@@ -230,9 +230,9 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         const date = new Date();
         date.setDate(date.getDate() + daysRemaining);
         return date;
-    };
+    }, [operatingHours]);
 
-    const validateEntry = (taskId: string, value: number) => {
+    const validateEntry = useCallback((taskId: string, value: number) => {
         const task = tasks.find(t => t.id === taskId);
         if (!task || task.recommendedSpec === undefined) return { valid: true, message: 'OK' };
 
@@ -242,9 +242,9 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
 
         return { valid: true, message: 'OK' };
-    };
+    }, [tasks]);
 
-    const createLogEntry = async (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => {
+    const createLogEntry = useCallback(async (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => {
         // Validation Check
         const validation = entry.measuredValue ? validateEntry(taskId, entry.measuredValue) : { valid: true };
 
@@ -279,23 +279,20 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             summary_de: summaryDE,
             measured_value: entry.measuredValue,
             pass: validation.valid,
-            proof_image_url: entry.proofImage?.src // Storing Base64 temporarily (Not ideal for prod but fits current architecture)
+            proof_image_url: entry.proofImage?.src
         });
 
         if (error) {
             console.error('Failed to save log to Supabase:', error);
-            // Optionally revert optimistic update here
-        } else {
-            // Fetch real ID? Or just rely on subscription to refresh.
         }
 
         // Update Task Status
         setTasks(prev => prev.map(t =>
             t.id === taskId ? { ...t, status: 'COMPLETED' } : t
         ));
-    };
+    }, [validateEntry]);
 
-    const getTasksByComponent = (id: string) => tasks.filter(t => t.componentId === id);
+    const getTasksByComponent = useCallback((id: string) => tasks.filter(t => t.componentId === id), [tasks]);
 
     // NEW: Service Checklist Functions
     const startChecklist = (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => {
@@ -446,7 +443,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
      * Create a new work order
      * Supports manual creation, AI triggers, and service alert escalation
      */
-    const createWorkOrder = async (
+    const createWorkOrder = useCallback(async (
         order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>
     ): Promise<WorkOrder> => {
 
@@ -477,14 +474,13 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             return newOrder;
         }
 
-        // Replace temp ID with real ID if needed, or rely on fetch refresh
         return { ...newOrder, id: data.id };
-    };
+    }, []);
 
     /**
      * Update existing work order status and metadata
      */
-    const updateWorkOrder = async (
+    const updateWorkOrder = useCallback(async (
         orderId: string,
         updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>
     ): Promise<void> => {
@@ -511,12 +507,12 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             .eq('id', orderId);
 
         if (error) console.error("Failed to update WO:", error);
-    };
+    }, []);
 
     /**
      * Complete work order and record completion notes
      */
-    const completeWorkOrder = async (orderId: string, completionNotes: string): Promise<void> => {
+    const completeWorkOrder = useCallback(async (orderId: string, completionNotes: string): Promise<void> => {
         // Optimistic
         setWorkOrders(prev =>
             prev.map(order =>
@@ -544,24 +540,24 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             .eq('id', orderId);
 
         if (error) console.error("Failed to complete WO:", error);
-    };
+    }, []);
 
     /**
      * Update operating hours for asset tracking
      * Used by AI Prediction Context for RUL calculations
      */
-    const updateOperatingHours = (assetId: string, hours: number): void => {
+    const updateOperatingHours = useCallback((assetId: string, hours: number): void => {
         setOperatingHours(prev => ({ ...prev, [assetId]: hours }));
         console.log(`[MaintenanceContext] Operating hours updated: ${assetId} = ${hours}h`);
-    };
+    }, []);
 
-    const acknowledgeAlert = (alertId: string) => {
+    const acknowledgeAlert = useCallback((alertId: string) => {
         setServiceAlerts(prev => prev.map(alert =>
             alert.id === alertId
                 ? { ...alert, acknowledgedAt: new Date().toISOString() }
                 : alert
         ));
-    };
+    }, []);
 
     return (
         <MaintenanceContext.Provider value={{

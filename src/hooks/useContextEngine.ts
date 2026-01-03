@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useMaintenance } from '../contexts/MaintenanceContext';
@@ -81,7 +81,7 @@ export const useContextEngine = () => {
     }, []);
 
 
-    const reinforcePattern = async (patternId: string, feedback: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => {
+    const reinforcePattern = useCallback(async (patternId: string, feedback: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => {
         setPatternWeights(prev => {
             const current = prev[patternId] || 1.0;
             // Boost by 10% if confirmed/override, penalty if rejected (mute)
@@ -101,7 +101,7 @@ export const useContextEngine = () => {
 
             return newWeights;
         });
-    };
+    }, []);
 
     // 6. THE SENTINEL (Heuristic Engine) - REPLACES LEGACY DIAGNOSTICS
     const diagnostics = useMemo((): DiagnosticInsight[] => {
@@ -183,10 +183,10 @@ export const useContextEngine = () => {
     }, [location.pathname, techState.francis?.sensors, manualFocus]);
 
     // Bi-Directional Focus Setter
-    const setFocus = (componentId: string | null) => {
+    const setFocus = useCallback((componentId: string | null) => {
         console.log(`[ContextEngine] Focusing on: ${componentId}`);
         setManualFocus(componentId);
-    };
+    }, []);
 
 
     // 2. LOGS & WORK ORDERS (Unified Loading)
@@ -290,7 +290,7 @@ export const useContextEngine = () => {
     // Playback Loop ref
     const playbackTimer = React.useRef<NodeJS.Timeout | null>(null);
 
-    const uploadLogData = async (file: File) => {
+    const uploadLogData = useCallback(async (file: File) => {
         try {
             if (playbackTimer.current) clearInterval(playbackTimer.current);
             setMetricHistory({});
@@ -306,7 +306,7 @@ export const useContextEngine = () => {
             console.error("Bridge Error:", e);
             alert("Failed to parse log file.");
         }
-    };
+    }, []);
 
     // The Time Loop
     useEffect(() => {
@@ -342,14 +342,12 @@ export const useContextEngine = () => {
     }, [isPlaying, fullDataset]);
 
     // Scrubbing Logic
-    const scrubTo = (percent: number) => {
+    const scrubTo = useCallback((percent: number) => {
         if (fullDataset.length === 0) return;
         const targetIndex = Math.floor((percent / 100) * (fullDataset.length - 1));
         setPlaybackIndex(targetIndex);
 
         // When scrubbing, we need to rebuild the history buffer (traceback)
-        // to ensure charts look correct at that specific moment.
-        // We take the preceding 50 points from the target index.
         const start = Math.max(0, targetIndex - 50);
         const slice = fullDataset.slice(start, targetIndex + 1);
 
@@ -361,9 +359,9 @@ export const useContextEngine = () => {
             });
         });
         setMetricHistory(newHist);
-    };
+    }, [fullDataset]);
 
-    const togglePlay = () => setIsPlaying(!isPlaying);
+    const togglePlay = useCallback(() => setIsPlaying(prev => !prev), []);
 
     // Playback Interface
     const currentTimestamp = fullDataset[playbackIndex]?.timestamp || Date.now();

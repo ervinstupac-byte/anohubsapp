@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { HashRouter, useLocation, useNavigate, Route, Routes, useParams, Navigate } from 'react-router-dom';
@@ -193,7 +193,7 @@ const AppLayout: React.FC = () => {
         setShowOnboarding(false);
     };
 
-    const navigateTo = (view: AppView) => {
+    const navigateTo = useCallback((view: AppView) => {
         console.log('[Navigation] Navigating to:', view);
         const routeMap: Record<string, string> = {
             'home': '/',
@@ -253,19 +253,21 @@ const AppLayout: React.FC = () => {
         } else {
             console.error('[Navigation] No route found for view:', view);
         }
-    };
+    }, [navigate]);
+
+    const navValue = useMemo(() => ({
+        currentPage: isHub ? 'home' : 'intro' as AppView,
+        navigateTo,
+        navigateBack: () => navigate(-1),
+        navigateToHub: () => navigate('/'),
+        navigateToTurbineDetail: (id: string) => navigate(`/turbine/${id}`),
+        showOnboarding,
+        completeOnboarding: handleOnboardingComplete,
+        showFeedbackModal: () => setIsFeedbackVisible(true)
+    }), [isHub, navigateTo, navigate, showOnboarding, handleOnboardingComplete]);
 
     return (
-        <NavigationProvider value={{
-            currentPage: isHub ? 'home' : 'intro',
-            navigateTo,
-            navigateBack: () => navigate(-1),
-            navigateToHub: () => navigate('/'),
-            navigateToTurbineDetail: (id) => navigate(`/turbine/${id}`),
-            showOnboarding,
-            completeOnboarding: handleOnboardingComplete,
-            showFeedbackModal: () => setIsFeedbackVisible(true)
-        }}>
+        <NavigationProvider value={navValue}>
             {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
             <main className={`min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
                 {isCriticalDemo && (

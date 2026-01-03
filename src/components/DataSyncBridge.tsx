@@ -42,43 +42,56 @@ export const DataSyncBridge: React.FC = () => {
 
             // Sync Hydraulic Stream
             if (specs.head || specs.flow) {
-                dispatch({
-                    type: 'UPDATE_HYDRAULIC',
-                    payload: {
-                        head: parseFloat(specs.head) || techState.hydraulic.head,
-                        flow: parseFloat(specs.flow) || techState.hydraulic.flow,
-                        waterHead: new Decimal(specs.head || techState.hydraulic.head),
-                        flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
-                    }
-                });
+                const headValue = parseFloat(specs.head);
+                const flowValue = parseFloat(specs.flow);
+
+                if (headValue !== techState.hydraulic.head || flowValue !== techState.hydraulic.flow) {
+                    dispatch({
+                        type: 'UPDATE_HYDRAULIC',
+                        payload: {
+                            head: headValue || techState.hydraulic.head,
+                            flow: flowValue || techState.hydraulic.flow,
+                            waterHead: new Decimal(specs.head || techState.hydraulic.head),
+                            flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
+                        }
+                    });
+                }
             }
 
             // Sync Mechanical (Bolt Specs, etc)
             if (specs.boltDiameter || specs.boltCount || specs.boltGrade) {
-                dispatch({
-                    type: 'UPDATE_MECHANICAL',
-                    payload: {
-                        boltSpecs: {
-                            ...techState.mechanical.boltSpecs,
-                            diameter: specs.boltDiameter || techState.mechanical.boltSpecs.diameter,
-                            count: specs.boltCount || techState.mechanical.boltSpecs.count,
-                            grade: specs.boltGrade || techState.mechanical.boltSpecs.grade
+                if (specs.boltDiameter !== techState.mechanical.boltSpecs.diameter ||
+                    specs.boltCount !== techState.mechanical.boltSpecs.count ||
+                    specs.boltGrade !== techState.mechanical.boltSpecs.grade) {
+                    dispatch({
+                        type: 'UPDATE_MECHANICAL',
+                        payload: {
+                            boltSpecs: {
+                                ...techState.mechanical.boltSpecs,
+                                diameter: specs.boltDiameter || techState.mechanical.boltSpecs.diameter,
+                                count: specs.boltCount || techState.mechanical.boltSpecs.count,
+                                grade: specs.boltGrade || techState.mechanical.boltSpecs.grade
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             // Sync Penstock
             if (specs.penstockDiameter || specs.penstockLength || specs.penstockMaterial) {
-                dispatch({
-                    type: 'UPDATE_PENSTOCK',
-                    payload: {
-                        diameter: specs.penstockDiameter || techState.penstock.diameter,
-                        length: specs.penstockLength || techState.penstock.length,
-                        material: specs.penstockMaterial || techState.penstock.material,
-                        wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
-                    }
-                });
+                if (specs.penstockDiameter !== techState.penstock.diameter ||
+                    specs.penstockLength !== techState.penstock.length ||
+                    specs.penstockMaterial !== techState.penstock.material) {
+                    dispatch({
+                        type: 'UPDATE_PENSTOCK',
+                        payload: {
+                            diameter: specs.penstockDiameter || techState.penstock.diameter,
+                            length: specs.penstockLength || techState.penstock.length,
+                            material: specs.penstockMaterial || techState.penstock.material,
+                            wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
+                        }
+                    });
+                }
             }
         }
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useContextEngine } from '../hooks/useContextEngine';
 import { getContextFromRoute, ContextDefinition } from '../data/knowledge/ContextMap';
 import { useLocation } from 'react-router-dom';
@@ -53,7 +53,7 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
     // 2. Get Static Definition (Title, Slogan)
     const activeDefinition = getContextFromRoute(location.pathname);
 
-    const value: ContextAwarenessState = {
+    const value: ContextAwarenessState = useMemo(() => ({
         activeDefinition,
         activeContextNodes: engineData.activeContext,
         activeLogs: engineData.activeLogs,
@@ -75,7 +75,7 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         reinforcePattern: engineData.reinforcePattern,
         setFocus: engineData.setFocus,
         activeComponentId: engineData.activeComponentId
-    };
+    }), [activeDefinition, engineData]);
 
     return (
         <ContextAwarenessContext.Provider value={value}>
