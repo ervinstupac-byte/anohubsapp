@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef } from 'react';
+import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import { TurbineRunner3D } from './three/TurbineRunner3D';
 import { HeatmapLegend } from './ui/HeatmapLegend';
@@ -141,6 +141,22 @@ export const CommandCenter: React.FC = () => {
         });
     }, [diagnostics, deltaMap, patternWeights, addSnapshot, systemHealth]);
 
+    // NC-4.2 Knowledge Wisdom Export
+    useEffect(() => {
+        console.group('%c ANOHUB NC-4.2 KNOWLEDGE AUDIT ', 'background: #0f172a; color: #38bdf8; font-weight: bold; padding: 4px;');
+        console.log('Maturity Rules:', {
+            Mechanical: ['Bearing Temp', 'Vibration', 'Megger', 'Axial Play'],
+            Hydraulic: ['Head', 'Flow', 'Efficiency'],
+            Structural: ['Barlow Margin', 'Cubic L-ext']
+        });
+        console.log('Standard Thresholds:', {
+            Vibration: 'ISO 10816-3',
+            Insulation: 'Megger (kV + 1)',
+            Structural: 'Barlow SF 1.5'
+        });
+        console.groupEnd();
+    }, []);
+
     const healthColor = {
         OPTIMAL: 'text-cyan-400',
         DEGRADED: 'text-amber-400',
@@ -156,11 +172,14 @@ export const CommandCenter: React.FC = () => {
                         <h1 className="text-sm font-black uppercase tracking-[0.3em] text-white font-mono">
                             ANOHUB <span className="text-cyan-400">//</span> NC-4.2
                         </h1>
-                        {activeDefinition && (
-                            <span className="text-[10px] text-slate-400 font-mono">
-                                / {activeDefinition.title}
-                            </span>
-                        )}
+                        <div className="flex flex-col">
+                            {activeDefinition && (
+                                <span className="text-[10px] text-slate-400 font-mono">
+                                    / {activeDefinition.title}
+                                </span>
+                            )}
+                            <span className="text-[8px] text-slate-600 font-mono italic">Pro-Bono Engineering // Fundamental Physics Engine</span>
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-3">

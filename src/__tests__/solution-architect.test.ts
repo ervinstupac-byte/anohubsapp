@@ -1,7 +1,8 @@
+import { LifeExtensionEngine } from '../services/LifeExtensionEngine';
 import { SolutionArchitect } from '../services/SolutionArchitect';
 import { TechnicalProjectState } from '../models/TechnicalSchema';
 
-describe('SolutionArchitect Life Extension Math', () => {
+describe('SolutionArchitect & LifeExtensionEngine Math', () => {
     test('calculateLifeExtension implements cubic formula correctly', () => {
         const Lrem = 10;
         const sigma_limit = 235;
@@ -9,34 +10,34 @@ describe('SolutionArchitect Life Extension Math', () => {
         const reductionFactor = 0.25; // 25% reduction
 
         // sigma_reduced = 200 * 0.75 = 150
-        // extension = 10 * (235 / 150)^3 - 10
-        // (235/150)^3 = (1.566)^3 = 3.84
-        // extension = 10 * 3.84 - 10 = 28.4
+        // extensionRatio = (200 / 150)^3 = (1.333)^3 = 2.37
+        // extension = 10 * 2.37 - 10 = 13.7
 
-        const extension = SolutionArchitect.calculateLifeExtension(Lrem, sigma_limit, sigma_actual, reductionFactor);
-        expect(extension).toBeGreaterThan(20);
-        expect(extension).toBeLessThan(35);
+        const extension = LifeExtensionEngine.calculateLifeExtension(Lrem, sigma_limit, sigma_actual, reductionFactor);
+        expect(extension).toBeGreaterThan(10);
+        expect(extension).toBeLessThan(20);
     });
 
     test('calculateTotalExtendedLife considers all applied mitigations', () => {
-        const mockState: Partial<TechnicalProjectState> = {
-            structural: { remainingLife: 50 } as any,
-            physics: { hoopStressMPa: 180 } as any,
-            appliedMitigations: ['STRUCTURAL_RISK', 'VIBRATION_CRITICAL']
+        const mockState: any = {
+            structural: { remainingLife: 50 },
+            physics: { hoopStressMPa: 180 },
+            appliedMitigations: ['VIBRATION_CRITICAL']
         };
 
-        const result = SolutionArchitect.calculateTotalExtendedLife(mockState as TechnicalProjectState);
+        const result = LifeExtensionEngine.calculateTotalExtendedLife(mockState as TechnicalProjectState);
         expect(result).toBeGreaterThan(0);
     });
 
-    test('getRecoveryPath returns correct tools', () => {
-        const mockState: Partial<TechnicalProjectState> = {
-            structural: { remainingLife: 50 } as any,
-            physics: { hoopStressMPa: 180 } as any,
+    test('getRecoveryPath returns correct tools from mitigation library', () => {
+        const mockState: any = {
+            structural: { remainingLife: 50 },
+            physics: { hoopStressMPa: 180 },
             appliedMitigations: []
         };
 
-        const path = SolutionArchitect.getRecoveryPath('VIBRATION_CRITICAL', mockState as TechnicalProjectState);
+        const path = LifeExtensionEngine.getRecoveryPath('VIBRATION_CRITICAL', mockState as TechnicalProjectState);
+        expect(path.actions.length).toBeGreaterThan(0);
         expect(path.actions[0].requiredTools).toContain('Torque Wrench for M16 bolts');
     });
 });

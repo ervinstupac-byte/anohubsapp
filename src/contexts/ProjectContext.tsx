@@ -9,7 +9,7 @@ import { ProfileLoader } from '../services/ProfileLoader';
 import { HPPSettingsSchema } from '../schemas/engineering';
 import i18n from '../i18n';
 import Decimal from 'decimal.js';
-import { SolutionArchitect } from '../services/SolutionArchitect';
+import { LifeExtensionEngine } from '../services/LifeExtensionEngine';
 
 const PERSISTENCE_KEY = 'ANOHUB_CORE_V4.2';
 
@@ -183,7 +183,7 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 ...nextStateWithMitigation,
                 structural: {
                     ...state.structural,
-                    extendedLifeYears: SolutionArchitect.calculateTotalExtendedLife(nextStateWithMitigation)
+                    extendedLifeYears: LifeExtensionEngine.calculateTotalExtendedLife(nextStateWithMitigation)
                 }
             };
         case 'UPDATE_TELEMETRY_SUCCESS':

@@ -15,6 +15,8 @@ export interface StructuralMetrics {
     fatigueCycles: number;
     estimatedFailureDate?: string;
     extendedLifeYears?: number;
+    drf?: number; // Dynamic Risk Factor (NC-4.2)
+    longevityLeak?: string; // Years lost (NC-4.2)
 }
 
 export interface HydrologyContext {
@@ -280,7 +282,17 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
             upgradeRecommendations: []
         },
         fluidIntelligence: {
-            oilSystem: { oilType: 'ISO VG 46', oilCapacityLiters: 200, currentHours: 0, changeIntervalHours: 4000, lastChangeDate: '', nextChangeDue: '' },
+            oilSystem: {
+                oilType: 'ISO VG 46',
+                oilCapacityLiters: 200,
+                currentHours: 0,
+                changeIntervalHours: 4000,
+                lastChangeDate: '',
+                nextChangeDue: '',
+                waterContentPPM: 150,
+                tan: 0.12,
+                viscosityCSt: 46
+            },
             filterSystem: { filterType: '10 Micron', installDate: '', deltaPBar: 0, deltaPAlarmBar: 1.5, filterClogged: false },
             temperatureCorrelation: { powerhouseAmbientC: 25, bearingTempsC: [], excessiveHeatDetected: false },
             healthScore: 100
@@ -409,7 +421,9 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     structural: {
         wearIndex: 5,
         remainingLife: 95,
-        fatigueCycles: 1240
+        fatigueCycles: 1240,
+        estimatedFailureDate: '2045-12-31',
+        extendedLifeYears: 0
     },
     hydrology: {
         upstreamLevel: 455.2,

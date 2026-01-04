@@ -9,10 +9,11 @@ import { SentinelKernel } from '../utils/SentinelKernel';
 import { useTranslation } from 'react-i18next';
 import {
     Thermometer, Activity, Gauge, Zap, Waves, Volume2, Save, Download,
-    AlertTriangle, Shield, Settings, History, Droplets, ZapOff
+    AlertTriangle, Shield, Settings, History, Droplets, ZapOff, Info, Book
 } from 'lucide-react';
 import { ProfessionalReportEngine } from '../services/ProfessionalReportEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
+import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 
 export const TechnicalPassport: React.FC = () => {
     const { t } = useTranslation();
@@ -86,7 +87,7 @@ export const TechnicalPassport: React.FC = () => {
         const urgencyLevel = PhysicsEngine.calculateMaintenanceUrgency(mockState as any);
         const totalHours = selectedAsset?.totalOperatingHours || 0;
         const hoursSinceOverhaul = selectedAsset?.hoursSinceLastOverhaul || 0;
-        const serviceThreshold = 8000;
+        const serviceThreshold = (masterKnowledge as any).standardThresholds.goldenStandards.maintenanceCycleHours || 8000;
         const hoursRemaining = Math.max(0, serviceThreshold - hoursSinceOverhaul);
         const countdownPercent = Math.min(100, (hoursSinceOverhaul / serviceThreshold) * 100);
 
@@ -167,20 +168,51 @@ export const TechnicalPassport: React.FC = () => {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-3">
                                 {section.fields.map((field) => (
-                                    <ModernInput
-                                        key={field.id}
-                                        label={`${field.label}${field.unit ? ` (${field.unit})` : ''}`}
-                                        type={field.type === 'select' ? undefined : field.type}
-                                        as={field.type === 'select' ? 'select' : undefined}
-                                        step={field.step}
-                                        value={(passportData as any)[section.id]?.[field.id] || ''}
-                                        onChange={(e) => handleChange(section.id, field.id, field.type === 'number' ? parseFloat(e.target.value) : e.target.value)}
-                                        className={field.id === 'draftTube' || field.id === 'acousticObservation' ? 'col-span-2' : ''}
-                                    >
-                                        {field.options?.map(opt => (
-                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </ModernInput>
+                                    <div key={field.id} className="relative group/field">
+                                        <ModernInput
+                                            label={`${field.label}${field.unit ? ` (${field.unit})` : ''}`}
+                                            type={field.type === 'select' ? undefined : field.type}
+                                            as={field.type === 'select' ? 'select' : undefined}
+                                            step={field.step}
+                                            value={(passportData as any)[section.id]?.[field.id] || ''}
+                                            onChange={(e) => handleChange(section.id, field.id, field.type === 'number' ? parseFloat(e.target.value) : e.target.value)}
+                                            className={field.id === 'draftTube' || field.id === 'acousticObservation' ? 'col-span-2' : ''}
+                                        >
+                                            {field.options?.map(opt => (
+                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                            ))}
+                                        </ModernInput>
+
+                                        {/* Heritage Insights Tooltip */}
+                                        {field.id === 'bearingScraping' && (
+                                            <div className="absolute top-0 right-0 p-1 cursor-help group-hover/field:text-cyan-400 text-slate-600 transition-colors" title="Heritage Insight: The 80% Rule">
+                                                <Info size={14} />
+                                                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-slate-900 border border-cyan-500/30 rounded-lg shadow-2xl opacity-0 scale-95 origin-bottom-right group-hover/field:opacity-100 group-hover/field:scale-100 transition-all z-50 pointer-events-none">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <Book size={10} className="text-cyan-400" />
+                                                        <span className="text-[10px] font-black uppercase text-cyan-400 tracking-tighter">The 80% Contact Law</span>
+                                                    </div>
+                                                    <p className="text-[9px] leading-tight text-slate-300 font-medium">
+                                                        Precision bearing scraping requires 80% contact area spotted with Prussian Blue. This ensures the "Roots of Engineering" foundation for a 50-year MTBF.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {field.id === 'runout' && (
+                                            <div className="absolute top-0 right-0 p-1 cursor-help group-hover/field:text-cyan-400 text-slate-600 transition-colors" title="Heritage Insight: The 0.05 Law">
+                                                <Info size={14} />
+                                                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-slate-900 border border-cyan-500/30 rounded-lg shadow-2xl opacity-0 scale-95 origin-bottom-right group-hover/field:opacity-100 group-hover/field:scale-100 transition-all z-50 pointer-events-none">
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <Book size={10} className="text-cyan-400" />
+                                                        <span className="text-[10px] font-black uppercase text-cyan-400 tracking-tighter">The 0.05 mm/m Law</span>
+                                                    </div>
+                                                    <p className="text-[9px] leading-tight text-slate-300 font-medium">
+                                                        Alignment exceeding 0.05 mm/m is not just a tolerance violation—it is an ethical failure. Precision is the anchor of structural longevity.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
 
@@ -240,8 +272,8 @@ export const TechnicalPassport: React.FC = () => {
                                     <div
                                         key={lvl}
                                         className={`h-8 flex-1 rounded-md flex items-center justify-center text-xs font-black transition-all ${lvl <= calculations.urgencyLevel
-                                                ? (calculations.urgencyLevel >= 4 ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-amber-500 text-white')
-                                                : 'bg-slate-800 text-slate-600'
+                                            ? (calculations.urgencyLevel >= 4 ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-amber-500 text-white')
+                                            : 'bg-slate-800 text-slate-600'
                                             }`}
                                     >
                                         {lvl}

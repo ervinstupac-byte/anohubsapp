@@ -1,92 +1,13 @@
-import { InferenceResult } from './ExpertInference';
 import { TechnicalProjectState } from '../models/TechnicalSchema';
-
-export interface RecoveryAction {
-    id: string;
-    title: string;
-    description: string;
-    mitigationImpact: string;
-    requiredTools: string[];
-    stressReductionFactor: number; // 0-1 (e.g., 0.2 means 20% reduction)
-}
-
-export interface RecoveryPath {
-    conclusion: string;
-    actions: RecoveryAction[];
-    estimatedLifeExtension: number; // Years
-}
+import { RecoveryAction, RecoveryPath, RevitalizationPlan } from '../models/RepairContext';
+import { LifeExtensionEngine } from './LifeExtensionEngine';
+import { MITIGATION_LIBRARY } from '../data/mitigationLibrary';
+import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 
 export class SolutionArchitect {
-    private static MITIGATION_LIBRARY: Record<string, RecoveryAction[]> = {
-        'VIBRATION_CRITICAL': [
-            {
-                id: 'VIB_MIT_01',
-                title: 'Limit Operation Zone',
-                description: 'Restriktivan rad: Zabraniti rad u zoni kavitacije (65-75% opterećenja). Provjeriti vijke spojnice.',
-                mitigationImpact: 'Reduces peak vibration by 40%',
-                requiredTools: ['AnoHUB Vibration Pen', 'Torque Wrench for M16 bolts', 'Laser Alignment Kit'],
-                stressReductionFactor: 0.4
-            }
-        ],
-        'CAVITATION_INFERRED': [
-            {
-                id: 'CAV_MIT_01',
-                title: 'Aeration Valve Optimization',
-                description: 'Open Air Admission Valve to 25% + Limit Wicket Gate to 70%.',
-                mitigationImpact: 'Collapses vortex rope and reduces cavitation impacts',
-                requiredTools: ['Wrench Set', 'Pressure Gauge', 'AnoHUB Acoustic Probe'],
-                stressReductionFactor: 0.25
-            }
-        ],
-        'STRUCTURAL_RISK': [
-            {
-                id: 'STR_MIT_01',
-                title: 'Load Shedding',
-                description: 'Reduce plant output by 15% to lower internal casing pressure and hoop stress.',
-                mitigationImpact: 'Reduces hoop stress by 20%',
-                requiredTools: ['Pressure Gauge', 'Ultrasonic Thickness Gauge'],
-                stressReductionFactor: 0.2
-            }
-        ],
-        'BEARING_TEMP_CRITICAL': [
-            {
-                id: 'TEMP_MIT_01',
-                title: 'Cooling Flow Increase',
-                description: 'Increase cooling water flow by 15% via bypass valve. Check lubrication oil level.',
-                mitigationImpact: 'Lowers bearing temperature by 8°C',
-                requiredTools: ['Infrared Thermometer', 'Flow Meter', 'Lubrication Oil Quality Kit'],
-                stressReductionFactor: 0.1
-            }
-        ]
-    };
-
-    /**
-     * Life Extension Formula (The Recovery Law)
-     * Lext = Lrem * (sigma_limit / sigma_actual)^3
-     */
-    static calculateLifeExtension(
-        remainingLifeYears: number,
-        sigma_limit: number,
-        sigma_actual: number,
-        reductionFactor: number
-    ): number {
-        if (remainingLifeYears <= 0) return 0;
-
-        // sigma_reduced = sigma_actual * (1 - reductionFactor)
-        const sigma_reduced = sigma_actual * (1 - reductionFactor);
-
-        // Ensure we don't divide by zero
-        if (sigma_reduced <= 0) return remainingLifeYears * 2;
-
-        // Lext = Lrem * (sigma_limit / sigma_reduced)^3
-        const extensionRatio = Math.pow(sigma_limit / sigma_reduced, 3);
-        const newLife = remainingLifeYears * extensionRatio;
-
-        return Math.max(0, newLife - remainingLifeYears);
-    }
 
     static getRecoveryPath(conclusion: string, state: TechnicalProjectState): RecoveryPath {
-        const actions = this.MITIGATION_LIBRARY[conclusion] || [];
+        const actions = MITIGATION_LIBRARY[conclusion] || [];
 
         // Mock remaining life calculation for now
         const Lrem = state.structural.remainingLife / 5; // 100% = 20 years approx
@@ -98,7 +19,7 @@ export class SolutionArchitect {
             totalReduction = Math.max(totalReduction, a.stressReductionFactor);
         });
 
-        const extension = this.calculateLifeExtension(Lrem, sigma_limit, sigma_current, totalReduction);
+        const extension = LifeExtensionEngine.calculateLifeExtension(Lrem, sigma_limit, sigma_current, totalReduction);
 
         return {
             conclusion,
@@ -108,20 +29,85 @@ export class SolutionArchitect {
     }
 
     static calculateTotalExtendedLife(state: TechnicalProjectState): number {
-        const Lrem = state.structural.remainingLife / 5;
-        const sigma_limit = 235;
-        const sigma_actual = state.physics.hoopStressMPa || 150;
+        return LifeExtensionEngine.calculateTotalExtendedLife(state);
+    }
 
-        let cumulativeReduction = 0;
-        state.appliedMitigations.forEach(sopCode => {
-            const actions = this.MITIGATION_LIBRARY[sopCode] || [];
-            actions.forEach(a => {
-                cumulativeReduction = Math.max(cumulativeReduction, a.stressReductionFactor);
+    static getRevitalizationPlan(state: TechnicalProjectState): RevitalizationPlan[] {
+        const roadmap: RevitalizationPlan[] = [];
+        const golden = (masterKnowledge as any).standardThresholds.goldenStandards;
+
+        // 1. Alignment (THE PRECISION CORE)
+        if (state.mechanical.alignment > golden.alignment.ideal) {
+            roadmap.push({
+                priority: 'HIGH',
+                category: 'Mechanical',
+                action: 'Re-alignment to 0.05 mm/m',
+                impact: 'Eliminates eccentric wear vectors; restores bearing fatigue headroom based on cubic wear law.',
+                roiRatio: 22.5,
+                isSmallGapHighImpact: true,
+                heritageTips: [
+                    "Check for Soft Foot (mekani oslonac) before final tightening.",
+                    "Use stainless steel shims only; avoid plastic or rusted spacers.",
+                    "Verify thermal growth (toplotno širenje) compensation for horizontal Francis units."
+                ]
             });
-        });
+        }
 
-        if (cumulativeReduction === 0) return 0;
+        // 2. Dynamic Balancing
+        if (state.mechanical.vibration > 1.1) {
+            roadmap.push({
+                priority: 'HIGH',
+                category: 'Mechanical',
+                action: 'In-situ Dynamic Balancing',
+                impact: 'Eliminates impulse vibration at source; prevents mechanical stress accumulation.',
+                roiRatio: 15.0,
+                isSmallGapHighImpact: true
+            });
+        }
 
-        return this.calculateLifeExtension(Lrem, sigma_limit, sigma_actual, cumulativeReduction);
+        // 3. Labyrinth / Axial Play Restoration
+        if ((state.mechanical.axialPlay || 0) > golden.axialPlay.max) {
+            roadmap.push({
+                priority: 'HIGH',
+                category: 'Mechanical',
+                action: 'Labyrinth Clearance Restoration',
+                impact: 'Restores volumetric efficiency; reduces parasitic thrust by 15%.',
+                roiRatio: 18.0,
+                isSmallGapHighImpact: true
+            });
+        }
+
+        // 4. Stator Cleaning & Megger Audit
+        if ((state.mechanical.insulationResistance || 0) < golden.insulation.min) {
+            roadmap.push({
+                priority: 'HIGH',
+                category: 'Electrical',
+                action: 'Stator Dry-Out & Cryogenic Cleaning',
+                impact: 'Restores insulation to 100 MOhm baseline; prevents electrical flashover.',
+                roiRatio: 45.0,
+                isSmallGapHighImpact: false
+            });
+        }
+
+        // 5. Babbitt Bearing Restoration (Heritage Tribology)
+        const water = state.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
+        const tan = state.identity.fluidIntelligence.oilSystem.tan || 0;
+        if (water > 500 || tan > 0.5) {
+            roadmap.push({
+                priority: 'CRITICAL',
+                category: 'Mechanical',
+                action: 'Babbitt Surface Reclamation (Scraping & Blueing)',
+                impact: 'Restores 80% bearing contact area; eliminates chemical erosion pits.',
+                roiRatio: 35.0,
+                isSmallGapHighImpact: true,
+                heritageTips: [
+                    "Scraping & Blueing: Use Prussian Blue to identify high spots.",
+                    "Aim for minimum 15-20 spots per square inch (80% contact).",
+                    "Mirror-finish journals to reduce starting friction (dry-friction bypass)."
+                ]
+            });
+        }
+
+        return roadmap.sort((a, b) => b.roiRatio - a.roiRatio);
     }
 }

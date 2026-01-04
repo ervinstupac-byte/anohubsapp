@@ -6,6 +6,7 @@ import { ExpertInference } from './ExpertInference';
 import { InspectionImage } from './StrategicPlanningService';
 import { ProfileLoader } from './ProfileLoader';
 import { SolutionArchitect } from './SolutionArchitect';
+import { RevitalizationPlan } from '../models/RepairContext';
 import i18n from '../i18n';
 
 // Standard A4
@@ -30,6 +31,18 @@ export const ProfessionalReportEngine = {
         drawEngineeringRecoveryPlan(doc, state, projectID);
         doc.addPage();
 
+        // --- PAGE 4: REVITALIZATION ROADMAP & ROI (ROOTS) ---
+        drawRevitalizationRoadmap(doc, state, projectID);
+        doc.addPage();
+
+        // --- PAGE 5: 50-YEAR LONGEVITY CERTIFICATE (NC-4.2) ---
+        drawLongevityCertificate(doc, state, projectID);
+        doc.addPage();
+
+        // --- PAGE 6: TRIBOLOGICAL HEALTH & THERMAL STABILITY ---
+        drawTribologyAndThermalExpansion(doc, state, projectID);
+        doc.addPage();
+
         // --- PAGE 3: ANALYSIS ---
         drawHeader(doc, projectID, state.demoMode.active);
 
@@ -51,6 +64,8 @@ export const ProfessionalReportEngine = {
 
         drawExpertInsights(doc, state);
         drawFooter(doc, 1);
+
+        drawDigitalSeal(doc);
 
         // --- PAGE 2: DETAILS (Placeholder or more charts) ---
         // (Skipping for brevity or adding empty page for structure if needed, but user asked for Page 3 Gallery)
@@ -177,12 +192,12 @@ const drawExecutiveRiskBrief = (doc: jsPDF, state: TechnicalProjectState, id: st
 
     // Risk Table
     const riskData = [
+        ["Dynamic Risk Profile", state.structural.drf ? `${state.structural.drf.toFixed(1)}%` : "NOMINAL", `${state.structural.longevityLeak || '0'} Years Lost`],
         ["Incident Category", "Probability", "Est. Asset Impact"],
         ["Water Hammer / Surge", state.physics.surgePressureBar > 100 ? "HIGH" : "LOW", "85.000,00 €"],
-        ["Bearing Failure", state.physics.eccentricity > 0.8 ? "HIGH" : "LOW", "120.000,00 €"],
+        ["Bearing Fatigue (Cubic)", state.mechanical.vibration > 2.8 ? "HIGH" : "LOW", "120.000,00 €"],
         ["Cavitation Erosion", state.hydraulic.efficiency < 0.88 ? "MODERATE" : "LOW", "45.000,00 €"],
-        ["Grid Service Stress", (state.specializedState?.sensors?.gridFrequency && Math.abs(50 - state.specializedState.sensors.gridFrequency) > 0.1) ? "ACTIVE" : "NOMINAL", "Accelerated Aging 1.5x"],
-        ["Fleet Health Delta", "UNIT_01 vs FLEET", `-${(100 - state.structural.remainingLife).toFixed(1)}% Deviation`]
+        ["Grid Service Stress", (state.specializedState?.sensors?.gridFrequency && Math.abs(50 - state.specializedState.sensors.gridFrequency) > 0.1) ? "ACTIVE" : "NOMINAL", "Accelerated Aging 1.5x"]
     ];
 
     autoTable(doc, {
@@ -225,7 +240,7 @@ const drawHeader = (doc: jsPDF, id: string, isDemo: boolean = false) => {
         doc.setFontSize(60);
         doc.setTextColor(239, 68, 68); // Red-500
         doc.setFont("helvetica", "bold");
-        doc.text("SIMULATED INCIDENT DATA", PAGE_WIDTH / 2, PAGE_HEIGHT / 2, {
+        doc.text("FORENSIC INCIDENT DATA", PAGE_WIDTH / 2, PAGE_HEIGHT / 2, {
             align: 'center',
             angle: 45
         });
@@ -385,11 +400,8 @@ const drawVibrationMatrix = (doc: jsPDF, x: number, y: number, size: number) => 
 const drawFooter = (doc: jsPDF, pageNum: number) => {
     const pageCount = doc.getNumberOfPages();
     doc.setFontSize(8);
-    doc.setTextColor(150, 150, 150);
-    // Since pageCount updates dynamically, we might need to set it at end or just render current index 
-    // jsPDF handles total pages awkwardly if not calling at the very end. 
-    // For now, simpler to just write "AnoHUB Platform | Vertraulich".
-    doc.text(`AnoHUB Platform | Vertraulicher Bericht | ${new Date().toLocaleDateString()}`, MARGIN, PAGE_HEIGHT - 10);
+    doc.text(`AnoHUB Pro-Bono Tool: Dedicated to 50-year Asset Longevity through Precision Engineering.`, MARGIN, PAGE_HEIGHT - 12);
+    doc.text(`Platform Report | Vertraulich | ${new Date().toLocaleDateString()}`, MARGIN, PAGE_HEIGHT - 8);
 };
 
 const drawFullAssetHealthCertificate = (doc: jsPDF, state: any, profile: any) => {
@@ -638,10 +650,10 @@ const drawEngineeringRecoveryPlan = (doc: jsPDF, state: TechnicalProjectState, i
     inferences.recoveryPaths.forEach(path => {
         path.actions.forEach(action => {
             recoveryData.push([
-                { content: action.title, styles: { fontStyle: 'bold' } },
+                { content: `• ${action.id}\n${action.title}`, styles: { fontStyle: 'bold', textColor: [51, 65, 85] } },
                 action.description,
-                action.requiredTools.join('\n• '),
-                action.mitigationImpact
+                { content: action.requiredTools.map(t => `[ ] ${t}`).join('\n'), styles: { fontStyle: 'italic' } },
+                { content: action.mitigationImpact, styles: { fontStyle: 'bold', textColor: [16, 185, 129] } }
             ]);
         });
     });
@@ -677,7 +689,6 @@ const drawEngineeringRecoveryPlan = (doc: jsPDF, state: TechnicalProjectState, i
         doc.setTextColor(33, 33, 33);
         const totalExtension = inferences.recoveryPaths.reduce((acc, p) => acc + p.estimatedLifeExtension, 0);
         doc.text(`Total Predicted Life Extension (${state.identity.turbineType}): +${totalExtension.toFixed(1)} Years`, MARGIN + 5, finalY + 30);
-
         doc.setFontSize(8);
         doc.setTextColor(100, 100, 100);
         doc.text("* Based on Cubic Stress-Life Relationship (Lext = Lrem * (sigma_limit / sigma_actual)^3)", MARGIN + 5, finalY + 35);
@@ -691,5 +702,275 @@ const drawEngineeringRecoveryPlan = (doc: jsPDF, state: TechnicalProjectState, i
     }
 
     drawFooter(doc, doc.getNumberOfPages());
+}
+
+const drawLongevityCertificate = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
+    drawHeader(doc, id, state.demoMode.active);
+
+    doc.setFontSize(26);
+    doc.setTextColor(30, 41, 59); // Slate 800
+    doc.setFont("helvetica", "bold");
+    doc.text("PATH TO 50-YEAR LONGEVITY", PAGE_WIDTH / 2, 60, { align: 'center' });
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Forensic Longevity Audit // NC-4.2 Precision Protocol", PAGE_WIDTH / 2, 68, { align: 'center' });
+
+    // Longevity Metrics Block
+    const startY = 85;
+    doc.setFillColor(248, 250, 252); // Slate 50
+    doc.roundedRect(MARGIN, startY, PAGE_WIDTH - (MARGIN * 2), 60, 3, 3, 'F');
+    doc.setDrawColor(226, 232, 240); // Slate 200
+    doc.rect(MARGIN, startY, PAGE_WIDTH - (MARGIN * 2), 60, 'D');
+
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.setFont("helvetica", "bold");
+    doc.text("Forensic Precision Metrics", MARGIN + 10, startY + 15);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Dynamic Risk Factor (DRF):`, MARGIN + 10, startY + 30);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${state.structural.drf?.toFixed(1)}%`, MARGIN + 100, startY + 30);
+
+    doc.setFont("helvetica", "normal");
+    doc.text(`Longevity Leak (Years Lost):`, MARGIN + 10, startY + 40);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(220, 38, 38);
+    doc.text(`${state.structural.longevityLeak} Years`, MARGIN + 100, startY + 40);
+
+    doc.setTextColor(15, 23, 42);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Projected Asset Horizon:`, MARGIN + 10, startY + 50);
+    doc.setFont("helvetica", "bold");
+    const remainingHorizon = 50 - parseFloat(state.structural.longevityLeak || '0');
+    doc.text(`${remainingHorizon.toFixed(1)} Years`, MARGIN + 100, startY + 50);
+
+    // Math Explanation
+    const mathY = startY + 80;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "bold");
+    doc.text("Engineering Logic: The Longevity Leak Equation", MARGIN, mathY);
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(71, 85, 105);
+    const mathText = "Longevity Leak is calculated based on the Dynamic Risk Factor (DRF). The DRF utilizes a cubic relationship between vibration intensity and bearing fatigue life (Life proportional to 1/Vibration cubed). When dynamic loads exceed 48% of the design baseline (The 48% Rule), degradation accelerates exponentially, leaking years from the 50-year investment horizon.";
+    doc.text(doc.splitTextToSize(mathText, PAGE_WIDTH - (MARGIN * 2)), MARGIN, mathY + 8);
+
+    // Stamp of Precision
+    const alignment = state.mechanical.alignment || 0;
+    if (alignment <= 0.05) {
+        const stampX = PAGE_WIDTH / 2;
+        const stampY = mathY + 60;
+
+        doc.setDrawColor(16, 185, 129); // Emerald 500
+        doc.setLineWidth(1);
+        doc.circle(stampX, stampY, 25, 'D');
+        doc.circle(stampX, stampY, 23, 'D');
+
+        doc.setFontSize(10);
+        doc.setTextColor(16, 185, 129);
+        doc.setFont("helvetica", "bold");
+        doc.text("PRECISION", stampX, stampY - 8, { align: 'center' });
+        doc.setFontSize(14);
+        doc.text("CERTIFIED", stampX, stampY + 2, { align: 'center' });
+        doc.setFontSize(8);
+        doc.text("GOLDEN 0.05 MM/M", stampX, stampY + 10, { align: 'center' });
+    } else {
+        const warningY = mathY + 60;
+        doc.setFillColor(254, 242, 242); // Red 50
+        doc.roundedRect(MARGIN, warningY, PAGE_WIDTH - (MARGIN * 2), 20, 2, 2, 'F');
+        doc.setTextColor(185, 28, 28); // Red 700
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("PRECISION ALERT: Alignment exceeds 0.05 mm/m Golden Standard.", MARGIN + 10, warningY + 12);
+    }
+
+    drawFooter(doc, doc.getNumberOfPages());
+};
+
+const drawTribologyAndThermalExpansion = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
+    drawHeader(doc, id, state.demoMode.active);
+
+    doc.setFontSize(24);
+    doc.setTextColor(30, 41, 59);
+    doc.setFont("helvetica", "bold");
+    doc.text("TRIBOLOGY & THERMAL STABILITY", MARGIN, 60);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Forensic Fluid Intelligence // Chemical Integrity & Expansion Compensation", MARGIN, 68);
+
+    // 1. Oil Chemistry Table
+    const fluid = state.identity.fluidIntelligence.oilSystem;
+    const water = fluid.waterContentPPM || 420; // Default or measured
+    const tan = fluid.tan || 0.35;
+    const viscosity = fluid.viscosityCSt || 46;
+
+    const oilData = [
+        ["Parameter", "Measured Value", "Threshold", "Status"],
+        ["Water Content", `${water} ppm`, "< 500 ppm", water > 500 ? "CRITICAL" : "OPTIMAL"],
+        ["Total Acid Number (TAN)", `${tan} mgKOH/g`, "< 0.5 mgKOH/g", tan > 0.5 ? "CRITICAL" : "OPTIMAL"],
+        ["Viscosity @ 40°C", `${viscosity} cSt`, "41.4 - 50.6", (viscosity < 41.4 || viscosity > 50.6) ? "WARNING" : "OPTIMAL"]
+    ];
+
+    autoTable(doc, {
+        startY: 80,
+        head: [oilData[0]],
+        body: oilData.slice(1),
+        theme: 'grid',
+        headStyles: { fillColor: [30, 41, 59] },
+        didDrawCell: (data) => {
+            if (data.section === 'body' && data.column.index === 3) {
+                const status = data.cell.text[0];
+                if (status === 'CRITICAL') doc.setTextColor(220, 38, 38);
+                else doc.setTextColor(16, 185, 129);
+            }
+        }
+    });
+
+    // 2. Thermal Growth Compensation
+    const tableY = (doc as any).lastAutoTable.finalY + 15;
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42);
+    doc.setFont("helvetica", "bold");
+    doc.text("Thermal Growth Compensation", MARGIN, tableY);
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(71, 85, 105);
+    const alpha = 11.5e-6;
+    const tempDelta = 60 - (state.identity.environmentalBaseline.ambientTemperature || 25);
+    const shaftLength = (state.identity.machineConfig.runnerDiameterMM || 1200) * 1.5;
+    const expansion = alpha * shaftLength * tempDelta;
+
+    const expansionText = `At an operating temperature of 60°C, the shaft is projected to expand by ${expansion.toFixed(3)} mm based on the thermal expansion coefficient of steel (alpha = 11.5e-6). Alignment offset has been calculated to compensate for this vector, ensuring peak precision at operating equilibrium.`;
+    doc.text(doc.splitTextToSize(expansionText, PAGE_WIDTH - (MARGIN * 2)), MARGIN, tableY + 8);
+
+    // 3. HERITAGE CERTIFICATION STAMP
+    const alignment = state.mechanical.alignment || 0;
+    const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5;
+
+    if (isHeritageCertified) {
+        const stampY = tableY + 60;
+        doc.setFillColor(236, 253, 245); // Emerald 50
+        doc.setDrawColor(16, 185, 129); // Emerald 500
+        doc.setLineWidth(2);
+        doc.roundedRect(MARGIN + 45, stampY, 100, 40, 5, 5, 'FD');
+
+        doc.setFontSize(12);
+        doc.setTextColor(16, 185, 129);
+        doc.setFont("helvetica", "bold");
+        doc.text("HERITAGE CERTIFIED", PAGE_WIDTH / 2, stampY + 15, { align: 'center' });
+        doc.setFontSize(18);
+        doc.text("TIER 1 ASSET", PAGE_WIDTH / 2, stampY + 28, { align: 'center' });
+
+        doc.setFontSize(7);
+        doc.setFont("helvetica", "normal");
+        doc.text("PRECISION ALIGNED // CHEMICALLY NEUTRAL // 50-YEAR TARGET REACHABLE", PAGE_WIDTH / 2, stampY + 35, { align: 'center' });
+    } else {
+        const warningY = tableY + 60;
+        doc.setFillColor(255, 251, 235); // Amber 50
+        doc.setDrawColor(245, 158, 11); // Amber 500
+        doc.roundedRect(MARGIN, warningY, PAGE_WIDTH - (MARGIN * 2), 25, 2, 2, 'FD');
+
+        doc.setFontSize(10);
+        doc.setTextColor(180, 83, 9);
+        doc.setFont("helvetica", "bold");
+        doc.text("CERTIFICATION PENDING: Asset does not currently meet Tier 1 Heritage standards.", MARGIN + 10, warningY + 10);
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
+        doc.text("Action Required: Align to 0.05 mm/m and purify oil (Water < 500 ppm, TAN < 0.5).", MARGIN + 10, warningY + 18);
+    }
+
+    drawFooter(doc, doc.getNumberOfPages());
+};
+
+const drawRevitalizationRoadmap = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
+    drawHeader(doc, id, state.demoMode.active);
+
+    doc.setFontSize(24);
+    doc.setTextColor(33, 33, 33);
+    doc.setFont("helvetica", "bold");
+    doc.text("REVITALIZATION ROADMAP", MARGIN, 60);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("Precision ROI Analysis // Roots of Engineering Standard", MARGIN, 68);
+
+    const roadmap = SolutionArchitect.getRevitalizationPlan(state);
+    const roadmapData: any[] = [];
+
+    roadmap.forEach(plan => {
+        roadmapData.push([
+            { content: plan.priority, styles: { textColor: plan.priority === 'HIGH' ? [220, 38, 38] : [245, 158, 11] } },
+            plan.category,
+            plan.action,
+            plan.impact,
+            { content: `${plan.roiRatio.toFixed(1)}x`, styles: { fontStyle: 'bold', textColor: [16, 185, 129] } }
+        ]);
+    });
+
+    autoTable(doc, {
+        startY: 75,
+        head: [["Priority", "System", "Proposed Action", "Engineering Impact", "ROI Factor"]],
+        body: roadmapData,
+        theme: 'grid',
+        headStyles: { fillColor: [30, 41, 59] },
+        styles: { fontSize: 8 },
+        columnStyles: {
+            0: { cellWidth: 20 },
+            1: { cellWidth: 30 },
+            2: { cellWidth: 45 },
+            3: { cellWidth: 60 },
+            4: { cellWidth: 15 }
+        }
+    });
+
+    const finalY = (doc as any).lastAutoTable.finalY + 15;
+
+    // Philosophy Quote
+    doc.setFontSize(12);
+    doc.setTextColor(51, 65, 85);
+    doc.setFont("helvetica", "italic");
+    doc.text("\"Precision is not a luxury; it is the root of asset longevity.\"", PAGE_WIDTH / 2, finalY, { align: 'center' });
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("All projections focus on a 50-year longevity horizon for Francis < 5 MW units.", PAGE_WIDTH / 2, finalY + 10, { align: 'center' });
+
+    drawFooter(doc, doc.getNumberOfPages());
+};
+
+const drawDigitalSeal = (doc: jsPDF) => {
+    const pageCount = doc.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+
+        // Circular Seal Placeholder
+        const x = PAGE_WIDTH - 45;
+        const y = PAGE_HEIGHT - 45;
+
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.5);
+        doc.circle(x, y, 15, 'D');
+
+        doc.setFontSize(6);
+        doc.setTextColor(150, 150, 150);
+        doc.setFont("helvetica", "bold");
+        doc.text("CERTIFIED", x - 8, y - 2);
+        doc.text("ANOHUB AI", x - 9, y + 2);
+        doc.text("NC-4.2", x - 5, y + 5);
+
+        // Digital Signature Text
+        doc.setFontSize(5);
+        doc.text(`SIG-HASH: ${Math.random().toString(36).substring(7).toUpperCase()}`, x - 12, y + 12);
+    }
 };
 

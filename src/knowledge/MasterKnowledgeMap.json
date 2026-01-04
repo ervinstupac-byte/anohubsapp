@@ -13,8 +13,8 @@
             "standard": "ISO 10816-3"
         },
         "bearingTemperature": {
-            "warning": 65,
-            "critical": 80,
+            "warning": 55,
+            "critical": 75,
             "unit": "C",
             "impact": "Bearing seize risk"
         },
@@ -28,6 +28,34 @@
             "warning": 2.0,
             "critical": 1.5,
             "method": "Barlow's Formula"
+        },
+        "goldenStandards": {
+            "alignment": {
+                "ideal": 0.05,
+                "warning": 0.08,
+                "failure": 0.12,
+                "unit": "mm/m"
+            },
+            "axialPlay": {
+                "max": 0.15,
+                "unit": "mm"
+            },
+            "insulation": {
+                "min": 100,
+                "unit": "MOhm"
+            },
+            "maintenanceCycleHours": 8000,
+            "philosophy": "Precision is the root of longevity. Aim for the Golden 0.05."
+        },
+        "oilChemistry": {
+            "waterContent": {
+                "warning": 500,
+                "unit": "ppm"
+            },
+            "tan": {
+                "warning": 0.5,
+                "unit": "mgKOH/g"
+            }
         }
     },
     "failureModes": {
@@ -49,6 +77,11 @@
             "symptom": "Frequency Error > 0.5 Hz",
             "logic": "Loop in full saturating recovery",
             "action": "Inhibit hydraulic bypass"
+        },
+        "PRECISION_FAILURE": {
+            "symptom": "Rapid Bearing Wear-Down",
+            "cause": "Alignment > 0.12 mm/m or Axial Play > 0.15 mm",
+            "impact": "Expontential fatigue accumulation"
         }
     },
     "economicImpacts": {

@@ -9,12 +9,15 @@ import {
     Droplets, GitPullRequest, Activity, Filter, Snowflake, Waves,
     Settings, Disc, Crosshair, LifeBuoy, Droplet, Octagon, BarChart2,
     ShieldAlert, Lock, ZapOff, BatteryCharging, Printer, Settings2, Merge, ArrowRight, RefreshCw, Link as LinkIcon, ArrowRightLeft, Wind, Wifi, Radio,
-    ChevronDown, ChevronRight, Zap, Building2, Wrench
+    ChevronDown, ChevronRight, Zap, Building2, Wrench, Book
 } from 'lucide-react';
 import { useCerebro } from '../../contexts/ProjectContext';
+import { FRANCIS_PATHS } from '../../routes/paths';
 import { FrancisSensorData } from '../../models/turbine/types';
 import { FrancisInteractiveCrossSection } from '../diagnostic-twin/FrancisInteractiveCrossSection';
 import { FrancisHillChart } from '../diagnostic-twin/FrancisHillChart';
+import { MaturityBadge } from '../dashboard/MaturityBadge';
+import { useContextEngine } from '../../hooks/useContextEngine';
 
 
 // Status Dot Component
@@ -129,6 +132,7 @@ export const FrancisHub: React.FC = () => {
 
     // Connect to Global Engineering State
     const { state: techState, dispatch } = useCerebro();
+    const { structuralSafetyMargin, extendedLifeYears, estimatedFailureDate } = useContextEngine();
 
     // Live Physics Data Hook (Mock for now or derive from techState)
     const simData: Partial<FrancisSensorData> = {
@@ -166,7 +170,8 @@ export const FrancisHub: React.FC = () => {
             mechanical: false,
             fluidChemical: false,
             electricalGrid: false,
-            civilInfrastructure: false
+            civilInfrastructure: false,
+            philosophy: false
         };
     });
 
@@ -188,7 +193,8 @@ export const FrancisHub: React.FC = () => {
             mechanical: true,
             fluidChemical: true,
             electricalGrid: true,
-            civilInfrastructure: true
+            civilInfrastructure: true,
+            philosophy: true
         });
     };
 
@@ -198,7 +204,8 @@ export const FrancisHub: React.FC = () => {
             mechanical: false,
             fluidChemical: false,
             electricalGrid: false,
-            civilInfrastructure: false
+            civilInfrastructure: false,
+            philosophy: false
         });
     };
 
@@ -310,18 +317,21 @@ export const FrancisHub: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* Health Score */}
-                    {/* Health Score */}
-                    <div className="flex items-center gap-6 bg-slate-900/70 p-4 rounded-lg border border-slate-700/50 shadow-xl">
-                        <div
-                            className="w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_20px_rgba(0,0,0,0.5)] animate-[pulse-glow_3s_ease-in-out_infinite]"
-                            style={{
-                                background: `conic-gradient(from 180deg, ${dialColor} 0%, ${dialColor} ${healthScore}%, #334155 ${healthScore}%, #334155 100%)`
-                            }}
-                        >
-                            <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center">
-                                <span className="text-2xl font-black text-white">{healthScore}%</span>
-                                <span className="text-sm text-slate-500 uppercase">{t('francis.health.label')}</span>
+                    {/* Maturity Badge & Health Score */}
+                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                        <MaturityBadge state={techState} />
+
+                        <div className="flex items-center gap-6 bg-slate-900/70 p-4 rounded-lg border border-slate-700/50 shadow-xl">
+                            <div
+                                className="w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_20px_rgba(0,0,0,0.5)] animate-[pulse-glow_3s_ease-in-out_infinite]"
+                                style={{
+                                    background: `conic-gradient(from 180deg, ${dialColor} 0%, ${dialColor} ${healthScore}%, #334155 ${healthScore}%, #334155 100%)`
+                                }}
+                            >
+                                <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center">
+                                    <span className="text-2xl font-black text-white">{healthScore}%</span>
+                                    <span className="text-sm text-slate-500 uppercase">{t('francis.health.label')}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -357,6 +367,41 @@ export const FrancisHub: React.FC = () => {
                                 <div className="text-right">
                                     <p className="text-[10px] text-slate-400 uppercase font-bold">{t('executive.sensors.activePower')}</p>
                                     <p className="text-xl font-mono text-[#2dd4bf] font-bold">142.5 <span className="text-xs text-slate-500">{t('francis.units.mw')}</span></p>
+                                </div>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+                    <div className="flex justify-between items-end">
+                        <GlassCard className="pointer-events-auto backdrop-blur-md bg-black/40 border-white/10 border-l-warn border-l-2">
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between gap-8">
+                                    <div className="flex items-center gap-2">
+                                        <ShieldAlert className="w-4 h-4 text-amber-500" />
+                                        <span className="text-[10px] text-slate-400 uppercase font-black uppercase tracking-widest">Structural Integrity</span>
+                                    </div>
+                                    <span className="text-xs font-mono text-white font-bold">{structuralSafetyMargin.toFixed(1)}% Margin</span>
+                                </div>
+                                <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                    <div
+                                        className={`h-full transition-all duration-1000 ${structuralSafetyMargin > 50 ? 'bg-cyan-500' : 'bg-amber-500'}`}
+                                        style={{ width: `${Math.min(100, structuralSafetyMargin)}%` }}
+                                    />
+                                </div>
+                            </div>
+                        </GlassCard>
+
+                        <GlassCard className="pointer-events-auto backdrop-blur-md bg-slate-900/60 border-cyan-500/20">
+                            <div className="flex items-center gap-4">
+                                <div className="p-2 bg-cyan-500/10 rounded border border-cyan-500/30">
+                                    <Wrench className="w-5 h-5 text-cyan-400" />
+                                </div>
+                                <div>
+                                    <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Longevity Projection</p>
+                                    <div className="flex items-baseline gap-2">
+                                        <p className="text-lg font-black text-white">{extendedLifeYears > 0 ? `+${extendedLifeYears.toFixed(1)}` : '0'} yrs</p>
+                                        <p className="text-[9px] text-slate-400 font-mono italic">EOL: {estimatedFailureDate}</p>
+                                    </div>
                                 </div>
                             </div>
                         </GlassCard>
@@ -682,13 +727,35 @@ export const FrancisHub: React.FC = () => {
                         href="#"
                     />
                 </AccordionSector>
+
+                {/* SECTOR 6: PHILOSOPHY & STANDARDS */}
+                <AccordionSector
+                    title={`📜 Philosophy & Standards`}
+                    icon={Book}
+                    iconColor="text-cyan-500"
+                    borderColor="border-cyan-500/30"
+                    isExpanded={expandedSectors.philosophy}
+                    onToggle={() => toggleSector('philosophy')}
+                >
+                    <ModuleLink
+                        icon={Book}
+                        label="The Roots of Engineering Manifesto"
+                        onClick={() => navigate(FRANCIS_PATHS.MANIFESTO)}
+                        href="#"
+                    />
+                </AccordionSector>
             </div>
 
             {/* Footer Actions */}
             <div className="mt-8 flex justify-between items-end border-t border-slate-800 pt-4">
-                <div className="text-slate-700 text-xs font-mono">
-                    <p>{t('francis.health.systemMap')}</p>
-                    <p>{t('francis.health.calcDescription')}</p>
+                <div className="text-slate-700 text-[10px] font-mono max-w-2xl">
+                    <p className="font-black text-slate-600 mb-1 tracking-widest uppercase">Roots of Engineering Disclaimer:</p>
+                    <p>
+                        This is a pro-bono engineering tool designed for field validation of Francis units &lt; 5 MW.
+                        All calculations are rooted in fundamental mechanical principles and industrial standards
+                        (Barlow&apos;s Law, ISO 10816-3 Vibration, IEEE 43 Insulation, and Cubic Fatigue Stress-Life).
+                    </p>
+                    <p className="mt-1 italic text-cyan-900/60">Non-commercial engine // Open Scientific Logic.</p>
                 </div>
 
                 <button className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded border border-slate-600 transition group">

@@ -9,6 +9,7 @@ const MissionControl = React.lazy(() => import('../components/francis/MissionCon
 const StartupFlowchart = React.lazy(() => import('../components/francis/StartupFlowchart').then(module => ({ default: module.StartupFlowchart })));
 const LoadRejectionLogic = React.lazy(() => import('../components/francis/LoadRejectionLogic').then(module => ({ default: module.LoadRejectionLogic })));
 const EmergencyProtocols = React.lazy(() => import('../components/francis/EmergencyProtocols').then(module => ({ default: module.EmergencyProtocols })));
+const Manifesto = React.lazy(() => import('../components/francis/Manifesto').then(module => ({ default: module.Manifesto })));
 const MIVDetail = React.lazy(() => import('../components/francis/MIVDetail').then(module => ({ default: module.MIVDetail })));
 const BearingsDetail = React.lazy(() => import('../components/francis/BearingsDetail').then(module => ({ default: module.BearingsDetail })));
 const ShaftAlignment = React.lazy(() => import('../components/francis/ShaftAlignment').then(module => ({ default: module.ShaftAlignment })));
@@ -70,6 +71,7 @@ const FrancisRouter: React.FC = () => {
                 <Route path={ROUTES.FRANCIS.FLOWCHART_STARTUP} element={<StartupFlowchart />} />
                 <Route path={ROUTES.FRANCIS.LOGIC_LOAD_REJECTION} element={<LoadRejectionLogic />} />
                 <Route path={ROUTES.FRANCIS.EMERGENCY} element={<EmergencyProtocols />} />
+                <Route path={ROUTES.FRANCIS.MANIFESTO} element={<Manifesto />} />
 
                 {/* Mechanical Systems */}
                 <Route path={ROUTES.FRANCIS.SOP.MIV_DISTRIBUTOR} element={<MIVDetail />} />

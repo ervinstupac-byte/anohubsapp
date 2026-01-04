@@ -19,7 +19,58 @@
     "tagline": "Arhitekti Imuniteta",
     "info": "INFO",
     "copyright": "© 2025 Anohubs Inc.",
-    "protocol": "ENGINEERING IMMUNITY PROTOCOL"
+    "protocol": "PROTOKOL INŽENJERSKOG IMUNITETA"
+  },
+  "manifesto": {
+    "title": "Korijeni mašinstva",
+    "subtitle": "Etički manifest za sredstva od 50 godina",
+    "quote": "\"Preciznost nije luksuz; to je temeljna etika mašinstva. Ciljamo na 50 godina, ne na 5.\"",
+    "classification": "Klasifikacija: Etički inženjering / NC-4.2",
+    "version": "Ver: 2026.01.04",
+    "section1": {
+      "title": "I. Zakon od 0.05 mm/m",
+      "content": "Preciznost nije izbor; to je fizički mandat. Vratilo koje je odstupilo više od 0.05 mm/m uvodi parazitske vektore koji proždiru babitni metal i zamaraju čelične komponente. Ignorisati ovaj limit znači namjerno ubrzavati propadanje ljudske infrastrukture.",
+      "quote": "\"Mašina odražava dušu onoga ko je održava.\""
+    },
+    "section2": {
+      "title": "II. Pravilo od 48% dinamičkog rizika",
+      "content": "Kada dinamička opterećenja—vibracije, vodeni udar ili termički pomak—premaše 48% dizajnirane osnove, stopa akumulacije zamora postaje nelinearna. Ovo je 'tačka bez povratka' za naslijeđena sredstva. Naša dužnost je da zadržimo 'otkucaje srca' mašine unutar sigurnog okvira od 48%."
+    },
+    "section3": {
+      "title": "III. Etička obaveza",
+      "content": "Gradimo i održavamo za one koji će ovdje stajati 2075. godine. Svaki izmjereni mikron, svaki zategnuti vijak i svaki analizirani uzorak ulja je ugovor potpisan sa budućnošću. Preciznost je naše izvinjenje za entropiju univerzuma."
+    },
+    "sidebar": {
+      "standard": "Standard",
+      "target": "Cilj",
+      "protocol": "Protokol",
+      "signature": "Potpis",
+      "heritage": "NC-4.2 HERITAGE",
+      "mtbf": "50 GODINA MTBF",
+      "precisionOnly": "SAMO PRECIZNOST",
+      "certified": "Certificirana Heritage Mašina"
+    },
+    "footer": {
+      "approved": "Odobreno od: Glavno inženjersko vijeće",
+      "signed": "Digitalno potpisano // Matrica stabilnosti vratila potvrđena"
+    },
+    "return": "Povratak u centar"
+  },
+  "passport": {
+    "sections": {
+      "mechanical": "Mehanička preciznost",
+      "stator": "Elektrika / Stator",
+      "hydraulic": "Hidraulički sistem"
+    },
+    "fields": {
+      "runout": "Osovinsko poravnanje (Runout)",
+      "axialPlay": "Aksijalni zazor (Potisak)",
+      "bearingScraping": "Tuširanje ležaja (Kontakt %)",
+      "statorInsulation": "Otpor izolacije",
+      "windingResistance": "Otpor namotaja",
+      "sealLeakageRate": "Stopa curenja zaptivke",
+      "draftTube": "Zapažanje na usisnoj cijevi"
+    }
   },
   "modules": {
     "riskAssessment": "Procjena Rizika",
@@ -1881,7 +1932,7 @@
       "title": "Kontrola Misije",
       "subtitle": "Sigurnosni Interlock Gates Aktivni",
       "systemStatus": "Status Sistema",
-      "simTitle": "Simulacija Logičkih Kvarova (Ubaci Grešku)",
+      "simTitle": "Forenzički Audit Logike (Verifikacija Integriteta)",
       "sequenceHold": "SEKVENCA NA ČEKANJU",
       "unitReady": "AGREGAT SPREMAN ZA START (SPEED-NO-LOAD)",
       "node1": {

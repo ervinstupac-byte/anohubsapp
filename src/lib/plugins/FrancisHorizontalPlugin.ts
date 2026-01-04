@@ -122,24 +122,27 @@ export const FrancisHorizontalPlugin: AssetProfile = {
         passport_sections: [
             {
                 id: 'mechanical',
-                title: 'francis:passport.sections.mechanical',
+                title: 'passport.sections.mechanical',
                 fields: [
-                    { id: 'runout', label: 'francis:passport.mechanical.runout', type: 'number', unit: 'mm', step: '0.001' },
-                    { id: 'bearingClearance', label: 'francis:passport.mechanical.bearingClearance', type: 'number', unit: 'mm', step: '0.01' },
-                    { id: 'axialPlay', label: 'francis:passport.mechanical.axialPlay', type: 'number', unit: 'mm', step: '0.01' },
-                    { id: 'governorDeadband', label: 'francis:passport.mechanical.governorDeadband', type: 'number', unit: '%', step: '0.1' },
-                    { id: 'runnerGap', label: 'francis:passport.mechanical.runnerGap', type: 'number', unit: 'mm', step: '0.01' },
-                    { id: 'labyrinthGap', label: 'francis:passport.mechanical.labyrinthGap', type: 'number', unit: 'mm', step: '0.01' }
+                    { id: 'runout', label: 'passport.fields.runout', type: 'number', unit: 'mm/m', step: '0.01' },
+                    { id: 'axialPlay', label: 'passport.fields.axialPlay', type: 'number', unit: 'mm', step: '0.05' },
+                    { id: 'bearingScraping', label: 'passport.fields.bearingScraping', type: 'number', unit: '%', step: '1' }
                 ]
             },
             {
-                id: 'electrical',
-                title: 'francis:passport.sections.electrical',
+                id: 'stator',
+                title: 'passport.sections.stator',
                 fields: [
-                    { id: 'statorInsulation', label: 'francis:passport.electrical.statorInsulation', type: 'number', unit: 'MΩ' },
-                    { id: 'rotorInsulation', label: 'francis:passport.electrical.rotorInsulation', type: 'number', unit: 'MΩ' },
-                    { id: 'polarizationIndex', label: 'francis:passport.electrical.polarizationIndex', type: 'number', step: '0.01' },
-                    { id: 'dcBatteryVoltage', label: 'francis:passport.electrical.dcBatteryVoltage', type: 'number', unit: 'V' }
+                    { id: 'statorInsulation', label: 'passport.fields.statorInsulation', type: 'number', unit: 'MOhm', step: '10' },
+                    { id: 'windingResistance', label: 'passport.fields.windingResistance', type: 'number', unit: 'Ohm', step: '0.001' }
+                ]
+            },
+            {
+                id: 'hydraulic',
+                title: 'passport.sections.hydraulic',
+                fields: [
+                    { id: 'sealLeakageRate', label: 'passport.fields.sealLeakageRate', type: 'number', unit: 'l/min', step: '0.1' },
+                    { id: 'draftTube', label: 'passport.fields.draftTube', type: 'string' }
                 ]
             },
             {

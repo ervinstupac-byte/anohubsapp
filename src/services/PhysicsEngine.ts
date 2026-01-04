@@ -1,5 +1,6 @@
 import { TechnicalProjectState, PhysicsResult, ENGINEERING_CONSTANTS } from '../models/TechnicalSchema';
 import Decimal from 'decimal.js';
+import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 import { MarketPriceEngine } from './MarketPriceEngine';
 import { ProfileLoader } from './ProfileLoader';
 import { FinancialImpactEngine } from './FinancialImpactEngine';
@@ -161,7 +162,10 @@ export const PhysicsEngine = {
         // Update State with new indices
         const finalState = {
             ...newState,
-            structural,
+            structural: {
+                ...newState.structural,
+                ...structural
+            },
             market,
             financials: FinancialImpactEngine.calculateImpact(newState, result)
         };
@@ -170,33 +174,56 @@ export const PhysicsEngine = {
     },
 
     calculateStructuralLife: (state: TechnicalProjectState, physics: PhysicsResult) => {
-        let { wearIndex, remainingLife, fatigueCycles } = state.structural;
+        let { wearIndex, fatigueCycles } = state.structural;
 
         // Grid Stress Factor (NC-4.2 Synthesis)
         const gridStressFactor = PhysicsEngine.calculateGridStress(state);
 
         // Fatigue Accumulator Logic
-        // Increment cycles if transient events are active
         if (state.demoMode.active) {
             let cycleIncrement = 0;
             if (state.demoMode.scenario === 'WATER_HAMMER') {
-                cycleIncrement = 25; // Massive shock
+                cycleIncrement = 25;
                 wearIndex += 0.05 * gridStressFactor;
             } else if (state.demoMode.scenario === 'GRID_LOSS') {
-                cycleIncrement = 10; // RPM overshoot stress
+                cycleIncrement = 10;
                 wearIndex += 0.02 * gridStressFactor;
             }
             fatigueCycles += cycleIncrement;
         }
 
-        // Mechanical wear from vibration (also affected by Grid Stability Stress)
-        const vibFactor = physics.eccentricity.toNumber() * 0.01 * gridStressFactor;
-        wearIndex += vibFactor;
+        // 1. DYNAMIC RISK FACTOR (The 48% Rule)
+        // High-precision forensic: Fatigue ~ (Intensity / 0.48)^3
+        const goldenVib = 1.1; // Golden "Good" limit
+        const intensity = state.mechanical.vibration / goldenVib;
+        const drf = intensity > 0.48 ? Math.pow(intensity / 0.48, 3) * 48 : intensity * 48;
+        const normalizedDRF = Math.min(100, drf);
 
-        // Calculate remaining life (%)
-        remainingLife = Math.max(0, 100 - (wearIndex));
+        // 2. LONGEVITY LEAK (Years lost of 50-year horizon)
+        // If DRF is 100%, we are losing life at a rate that prevents a 50-year target.
+        const idealYearlyWear = 100 / 50; // 2% per year for 50 years
+        const actualYearlyWear = idealYearlyWear * (1 + (normalizedDRF / 100) * 4); // Up to 5x faster wear
+        const longevityLeak = (actualYearlyWear - idealYearlyWear); // Extra wear % per year
 
-        return { wearIndex, remainingLife, fatigueCycles };
+        // 3. HERITAGE TRIBOLOGY PENALTY (NC-4.2)
+        // Exponential chemical erosion due to acid/water
+        const fluid = state.identity.fluidIntelligence.oilSystem;
+        const waterPenalty = (fluid.waterContentPPM || 0) > 500 ? 3.5 : 0; // 3.5 years lost
+        const tanPenalty = (fluid.tan || 0) > 0.5 ? 2.5 : 0;               // 2.5 years lost
+        const heritagePenaltyTotal = waterPenalty + tanPenalty;
+
+        // Update Cumulative Wear
+        wearIndex += (actualYearlyWear / (365 * 24)); // Fractional wear for this calculation tick
+
+        const remainingLife = Math.max(0, 100 - wearIndex);
+
+        return {
+            wearIndex,
+            remainingLife,
+            fatigueCycles,
+            drf: normalizedDRF,
+            longevityLeak: ((longevityLeak * 50 / 2) + heritagePenaltyTotal).toFixed(1) // Total Years lost
+        };
     },
 
     /**
@@ -248,8 +275,11 @@ export const PhysicsEngine = {
      * Insulation Resistance (Megger Standard: 1M Ohm per 1kV + 1)
      */
     getInsulationVerdict: (resistanceMOhm: number, ratedVoltageKV: number = 0.4): 'Healthy' | 'Degraded' | 'Critical' => {
+        const standards = (masterKnowledge as any).standardThresholds;
+        const goldenInsulation = standards.goldenStandards.insulation.min;
+
+        if (resistanceMOhm >= goldenInsulation) return 'Healthy';
         const minAcceptable = ratedVoltageKV + 1;
-        if (resistanceMOhm > 100) return 'Healthy';
         if (resistanceMOhm > minAcceptable) return 'Degraded';
         return 'Critical';
     },
@@ -258,8 +288,11 @@ export const PhysicsEngine = {
      * Axial Play (Standard for Francis < 5MW)
      */
     getAxialPlayVerdict: (playMM: number): 'Nominal' | 'Warning' | 'Critical' => {
-        if (playMM < 0.25) return 'Nominal';
-        if (playMM < 0.50) return 'Warning';
+        const standards = (masterKnowledge as any).standardThresholds;
+        const maxAxial = standards.goldenStandards.axialPlay.max;
+
+        if (playMM <= maxAxial) return 'Nominal';
+        if (playMM < maxAxial * 2) return 'Warning';
         return 'Critical';
     },
 

@@ -491,14 +491,21 @@ export const useContextEngine = () => {
         structuralSafetyMargin: expertMetrics.structuralSafetyMargin,
         extendedLifeYears: techState.structural.extendedLifeYears || 0,
         estimatedFailureDate: (() => {
-            const baseDate = new Date(techState.structural.estimatedFailureDate || '2035-01-01');
-            const extension = techState.structural.extendedLifeYears || 0;
-            if (extension === 0) return techState.structural.estimatedFailureDate;
+            const dateStr = techState.structural.estimatedFailureDate || '2035-01-01';
+            const baseDate = new Date(dateStr);
+            const extension = (techState.structural.extendedLifeYears || 0) - parseFloat(techState.structural.longevityLeak || '0');
 
-            const newDate = new Date(baseDate.getTime());
-            newDate.setFullYear(newDate.getFullYear() + Math.floor(extension));
-            newDate.setMonth(newDate.getMonth() + Math.floor((extension % 1) * 12));
-            return newDate.toISOString().split('T')[0];
+            if (isNaN(baseDate.getTime())) return dateStr;
+
+            try {
+                const newDate = new Date(baseDate.getTime());
+                newDate.setFullYear(newDate.getFullYear() + Math.floor(extension));
+                newDate.setMonth(newDate.getMonth() + Math.floor((extension % 1) * 12));
+                return newDate.toISOString().split('T')[0];
+            } catch (e) {
+                console.error('[ContextEngine] Date Calculation Error:', e);
+                return dateStr;
+            }
         })(),
         appliedMitigations: techState.appliedMitigations,
         totalInsights: activeNodes.reduce((acc, node) => acc + node.insights.length, 0),

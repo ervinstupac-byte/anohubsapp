@@ -167,6 +167,9 @@ export interface FluidIntelligence {
         changeIntervalHours: number;
         lastChangeDate: string;
         nextChangeDue: string;
+        waterContentPPM?: number; // ppm
+        tan?: number;           // mgKOH/g
+        viscosityCSt?: number;  // cSt @ 40C
     };
 
     filterSystem: {

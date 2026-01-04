@@ -34,13 +34,13 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         <ToastProvider>
             <AuditProvider>
                 <NotificationProvider>
-                    <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
-                        <HydrologyProvider>
-                            <AssetProvider>
-                                <MaintenanceProvider>
-                                    <RiskProvider>
-                                        <TelemetryProvider>
-                                            <AuthProvider>
+                    <AuthProvider>
+                        <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
+                            <HydrologyProvider>
+                                <AssetProvider>
+                                    <MaintenanceProvider>
+                                        <RiskProvider>
+                                            <TelemetryProvider>
                                                 <QuestionnaireProvider>
                                                     <HPPDesignProvider>
                                                         <InventoryProvider>
@@ -62,13 +62,13 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                                                         </InventoryProvider>
                                                     </HPPDesignProvider>
                                                 </QuestionnaireProvider>
-                                            </AuthProvider>
-                                        </TelemetryProvider>
-                                    </RiskProvider>
-                                </MaintenanceProvider>
-                            </AssetProvider>
-                        </HydrologyProvider>
-                    </ProjectProvider>
+                                            </TelemetryProvider>
+                                        </RiskProvider>
+                                    </MaintenanceProvider>
+                                </AssetProvider>
+                            </HydrologyProvider>
+                        </ProjectProvider>
+                    </AuthProvider>
                 </NotificationProvider>
             </AuditProvider>
         </ToastProvider>

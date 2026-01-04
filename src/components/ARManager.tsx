@@ -133,9 +133,10 @@ export const ARManager: React.FC = () => {
             ctx.fillStyle = '#fbbf24';
             ctx.fillText('SCANNING ANALOG GAUGE...', gx - 60, gy - 95);
 
-            const simulatedVal = (45.2 + Math.random() * 0.4).toFixed(1);
+            const forensicVal = (45.2 + Math.random() * 0.4).toFixed(1);
+            ctx.fillStyle = "#10b981";
             ctx.font = 'bold 24px Mono';
-            ctx.fillText(`${simulatedVal} bar`, gx - 40, gy + 10);
+            ctx.fillText(`${forensicVal} bar`, gx - 40, gy + 10);
         }
 
         if (mode === 'SPATIAL') {

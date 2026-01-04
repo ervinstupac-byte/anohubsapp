@@ -21,7 +21,7 @@ export const MissionControl: React.FC = () => {
 
     // PROCEDURE STATE
     const [step, setStep] = useState(1);
-    const [simulatedPressure, setSimulatedPressure] = useState(0.0);
+    const [forensicPressure, setForensicPressure] = useState(0.0);
     const [isFilling, setIsFilling] = useState(false);
 
     // FAULTS STATE
@@ -56,7 +56,7 @@ export const MissionControl: React.FC = () => {
         if (isFilling) {
             const limit = faults.dp ? 11.0 : 14.5;
             const interval = setInterval(() => {
-                setSimulatedPressure(prev => {
+                setForensicPressure(prev => {
                     const next = prev + 0.2;
                     if (next >= limit) {
                         clearInterval(interval);
@@ -125,7 +125,7 @@ export const MissionControl: React.FC = () => {
 
             <main className="max-w-6xl mx-auto px-4 md:px-8">
 
-                {/* 1. Simulation Override Panel */}
+                {/* 1. Precision Audit Panel */}
                 <div className="mb-12 p-8 bg-slate-900/60 rounded-[2.5rem] border border-white/5 backdrop-blur-md relative overflow-hidden group">
                     <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-6">
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 italic">
@@ -229,13 +229,13 @@ export const MissionControl: React.FC = () => {
                                                         </div>
                                                         <div className="flex flex-col text-right">
                                                             <span className="text-[9px] text-slate-500 uppercase font-black tracking-widest italic">Spiral Velocity Head</span>
-                                                            <span className={`text-lg font-black font-mono ${faults.dp && simulatedPressure >= 11 ? "text-red-500 animate-pulse" : simulatedPressure >= 14.5 ? "text-emerald-500" : "text-white"}`}>
-                                                                {simulatedPressure.toFixed(1)} Bar
+                                                            <span className={`text-lg font-black font-mono ${faults.dp && forensicPressure >= 11 ? "text-red-500 animate-pulse" : forensicPressure >= 14.5 ? "text-emerald-500" : "text-white"}`}>
+                                                                {forensicPressure.toFixed(1)} Bar
                                                             </span>
                                                         </div>
                                                     </div>
                                                     <div className="w-full h-2.5 bg-slate-900 rounded-full border border-white/5 overflow-hidden shadow-inner">
-                                                        <div className={`h-full transition-all duration-300 ${faults.dp && simulatedPressure >= 11 ? 'bg-red-500' : 'bg-cyan-500'} shadow-[0_0_15px_rgba(34,211,238,0.3)]`} style={{ width: `${(simulatedPressure / 14.5) * 100}%` }} />
+                                                        <div className={`h-full transition-all duration-300 ${faults.dp && forensicPressure >= 11 ? 'bg-red-500' : 'bg-cyan-500'} shadow-[0_0_15px_rgba(34,211,238,0.3)]`} style={{ width: `${(forensicPressure / 14.5) * 100}%` }} />
                                                     </div>
                                                 </div>
                                             )}
@@ -277,7 +277,7 @@ export const MissionControl: React.FC = () => {
                                                 <ShieldCheck className="w-4 h-4" /> Logic Confirmed
                                             </div>
                                         ) : step === nodeId ? (
-                                            nodeId === 3 && !isFilling && simulatedPressure < 14.5 ? (
+                                            nodeId === 3 && !isFilling && forensicPressure < 14.5 ? (
                                                 <button
                                                     onClick={() => setIsFilling(true)}
                                                     className="w-full py-5 bg-cyan-600 hover:bg-cyan-500 border-2 border-cyan-400 text-white font-black rounded-3xl text-sm uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(14,165,233,0.3)] transition-all hover:scale-105 italic flex items-center justify-center gap-4 group/btn"

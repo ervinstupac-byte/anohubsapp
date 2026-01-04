@@ -19,13 +19,13 @@ export const DataSyncBridge: React.FC = () => {
     useEffect(() => {
         if (!selectedAsset) return;
 
-        const specFingerprint = JSON.stringify({
-            id: selectedAsset.id,
-            specs: selectedAsset.specs
-        });
+        const specFingerprint = `${selectedAsset.id}-${JSON.stringify(selectedAsset.specs || {})}`;
+        if (lastSyncedSpecsRef.current === specFingerprint) {
+            console.log('[DataSyncBridge] Specs already synced, skipping.');
+            return;
+        }
 
-        // Anti-Freeze: Only sync if identity OR specs change
-        if (lastSyncedSpecsRef.current === specFingerprint) return;
+        console.log('[DataSyncBridge] Syncing asset specs for:', selectedAsset.name);
 
         console.log(`[CEREBRO Sync] Bridging Asset: ${selectedAsset.name} (${selectedAsset.turbine_type})`);
 

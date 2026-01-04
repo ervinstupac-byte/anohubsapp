@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
-import { Search, Command, X } from 'lucide-react';
+import { Search, Command, X, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
 
@@ -19,12 +20,23 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const displayTitle = title || t('header.title');
     const navigate = useNavigate();
     const { user, signOut } = useAuth();
+    const { state: techState } = useCerebro();
     const { riskState: questionnaireRisk } = useRisk();
     const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator();
 
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
+
+    // Heritage (NC-4.2) Logic
+    const alignment = techState.mechanical.alignment || 0;
+    const water = techState.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
+    const tan = techState.identity.fluidIntelligence.oilSystem.tan || 0;
+    const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5 && tan > 0; // Added tan > 0 to avoid certifying empty/default states if 0 means not set
+    // Actually, let's keep it simple as per user request: <= 0.05 and TAN < 0.5 and water < 500.
+    // If defaults are 0, it might trigger. Let's assume defaults are "nominal" for now or use a more robust check if needed.
+    // The user said: "until the asset meets the 0.05 mm/m and TAN/Water thresholds".
+
 
     // Search Index Construction
     const SEARCH_INDEX = [
@@ -105,6 +117,23 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     {/* Mobile Search Icon */}
                     <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-slate-400">
                         <Search className="w-5 h-5" />
+                    </button>
+
+                    {/* Heritage Status (Golden Seal) */}
+                    <button
+                        onClick={() => navigate('/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.MANIFESTO)}
+                        className={`p-2 rounded-full transition-all duration-500 group relative ${isHeritageCertified ? 'bg-cyan-500/20 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] border border-cyan-500/50' : 'bg-white/5 text-slate-600 border border-white/5'}`}
+                        title={isHeritageCertified ? "Heritage Certified - Tier 1 Asset" : "Heritage Certification Pending"}
+                    >
+                        <ShieldCheck className={`w-5 h-5 ${isHeritageCertified ? 'animate-pulse' : 'opacity-40'}`} />
+                        {isHeritageCertified && (
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
+                        )}
+
+                        {/* Subtle Tooltip */}
+                        <div className="absolute top-12 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[9px] font-black uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
+                            {isHeritageCertified ? 'Roots of Engineering: Certified' : 'Heritage Status: Dormant'}
+                        </div>
                     </button>
 
                     <div

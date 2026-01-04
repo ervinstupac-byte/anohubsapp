@@ -24,6 +24,7 @@ export const ROUTES = {
             FORENSICS: 'forensics',
         },
         MISSION_CONTROL: 'mission-control',
+        MANIFESTO: 'manifesto',
         EMERGENCY: 'emergency-protocols',
         LOGIC_LOAD_REJECTION: 'logic-load-rejection',
         FLOWCHART_STARTUP: 'flowchart-startup',
@@ -80,6 +81,7 @@ export const FRANCIS_PATHS = {
     HEATMAP: getFrancisPath(`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.HEATMAP}`),
     FORENSICS: getFrancisPath(`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS}`),
     MISSION_CONTROL: getFrancisPath(ROUTES.FRANCIS.MISSION_CONTROL),
+    MANIFESTO: getFrancisPath(ROUTES.FRANCIS.MANIFESTO),
 } as const;
 
 export const MAINTENANCE_PATHS = {

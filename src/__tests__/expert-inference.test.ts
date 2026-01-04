@@ -56,6 +56,13 @@ describe('ExpertInference Engine', () => {
             },
             environmentalBaseline: {
                 ambientTemperature: 25
+            },
+            fluidIntelligence: {
+                oilSystem: {
+                    waterContentPPM: 0,
+                    tan: 0,
+                    viscosityIndex: 100
+                }
             }
         } as any,
         structural: {

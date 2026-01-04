@@ -134,6 +134,14 @@ export const useEngineeringMath = () => {
         });
         const peakAngle = Decimal.atan2(new Decimal(peakPoint.y).neg(), new Decimal(peakPoint.x)).mul(180).div(PI).plus(360).mod(360);
 
+        // --- THERMAL GROWTH COMPENSATION (NC-4.2) ---
+        // Delta_L = alpha * L * Delta_T
+        const alpha_steel = new Decimal(11.5e-6);
+        const ambient = new Decimal(identity?.environmentalBaseline?.ambientTemperature || 22.5);
+        const operatingTemp = new Decimal(60); // Target for compensation
+        const shaftLengthProxy = new Decimal(identity?.machineConfig?.runnerDiameterMM || 1500).mul(1.5); // Estimate
+        const thermalGrowthMM = alpha_steel.mul(shaftLengthProxy).mul(operatingTemp.minus(ambient));
+
         return {
             thrust: {
                 totalKN: deltaP_Bar.mul(1.5).mul(new Decimal(0.4).plus(new Decimal(hydraulic.flow > 40 ? 0.1 : 0))).toNumber(),
@@ -167,6 +175,11 @@ export const useEngineeringMath = () => {
                 x: mechanical.vibrationX,
                 y: mechanical.vibrationY,
                 acousticNoise: metrics.cavitationIntensity
+            },
+            thermal: {
+                growthMM: thermalGrowthMM.toNumber(),
+                coefficient: alpha_steel.toNumber(),
+                targetTemp: 60
             }
         };
     }, [mechanical, hydraulic, physics, penstock, governor, identity]);

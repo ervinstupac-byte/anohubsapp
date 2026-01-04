@@ -9,9 +9,10 @@ import { generateDiagnosticDossier } from '../../utils/pdfGenerator';
 import { ShaftOrbitPlot, ShaftOrbitPlotHandle } from '../ui/ShaftOrbitPlot';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
-import { Activity, Zap, Sun, Footprints, AlertTriangle, CheckCircle, Database, FileSearch, Ruler, ArrowLeft, RotateCw, Info, ShieldCheck, Microscope } from 'lucide-react';
+import { Activity, Zap, Sun, Footprints, AlertTriangle, CheckCircle, Database, FileSearch, Ruler, ArrowLeft, RotateCw, Info, ShieldCheck, Microscope, Target } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
+import { AlignmentVisualizer } from '../ui/AlignmentVisualizer';
 
 export const ShaftAlignment: React.FC = () => {
     const { t } = useTranslation();
@@ -232,40 +233,44 @@ export const ShaftAlignment: React.FC = () => {
                         </GlassCard>
                     </div>
 
-                    {/* DISPLACEMENT FEED TILE */}
+                    {/* PRECISION ALIGNMENT VISUALIZER */}
                     <div className="lg:col-span-1">
-                        <section className="bg-slate-900/60 p-10 rounded-[3.5rem] border border-white/5 h-full flex flex-col justify-between group overflow-hidden relative shadow-2xl backdrop-blur-md">
-                            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <Activity className="w-32 h-32 text-cyan-500" />
-                            </div>
-                            <div className="relative z-10">
-                                <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] mb-12 flex items-center gap-3 italic">
-                                    <Activity className="w-5 h-5 text-cyan-400 animate-pulse" /> {t('francis.shaftAlignment.feedTitle')}
+                        <section className="bg-slate-900/60 p-10 rounded-[3.5rem] border border-white/5 h-full flex flex-col items-center justify-between group overflow-hidden relative shadow-2xl backdrop-blur-md">
+                            <div className="relative z-10 w-full">
+                                <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.3em] mb-8 flex items-center gap-3 italic">
+                                    <Target className="w-5 h-5 text-cyan-400 animate-pulse" /> Digital Dial Indicator
                                 </h3>
-                                <div className="space-y-12">
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between items-end">
-                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">{t('francis.shaftAlignment.radialX')}</span>
-                                            <span className="text-2xl font-black text-white font-mono tabular-nums italic tracking-tighter">{vibration.x.toFixed(3)} <span className="text-xs opacity-40 lowercase italic font-bold">mm</span></span>
+
+                                <div className="flex justify-center mb-8">
+                                    <AlignmentVisualizer
+                                        alignment={state.mechanical.alignment || 0.045}
+                                        angle={(orbitAnalysis.migrationAngle + 90) % 360}
+                                        size={220}
+                                    />
+                                </div>
+
+                                <div className="space-y-6">
+                                    <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest italic">Radial Vector</span>
+                                            <span className="text-xs font-black text-white font-mono">{orbitAnalysis.centerMigration.toFixed(4)} mm</span>
                                         </div>
-                                        <div className="h-2 bg-black rounded-full overflow-hidden border border-white/5 shadow-inner">
-                                            <div className="h-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)]" style={{ width: `${Math.min(Math.abs(vibration.x) * 200, 100)}%` }} />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between items-end">
-                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic">{t('francis.shaftAlignment.radialY')}</span>
-                                            <span className="text-2xl font-black text-white font-mono tabular-nums italic tracking-tighter">{vibration.y.toFixed(3)} <span className="text-xs opacity-40 lowercase italic font-bold">mm</span></span>
-                                        </div>
-                                        <div className="h-2 bg-black rounded-full overflow-hidden border border-white/5 shadow-inner">
-                                            <div className="h-full bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]" style={{ width: `${Math.min(Math.abs(vibration.y) * 200, 100)}%` }} />
+                                        <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                                            <div
+                                                className={`h-full ${orbitAnalysis.centerMigration > 0.05 ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-cyan-500'}`}
+                                                style={{ width: `${Math.min((orbitAnalysis.centerMigration / 0.1) * 100, 100)}%` }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <button className="mt-12 w-full py-4 bg-black/40 border border-white/5 rounded-2xl text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] hover:text-white transition-colors italic relative z-10 uppercase">
-                                {t('francis.shaftAlignment.zeroCal')}
-                            </button>
+                            <div className="mt-8 w-full p-4 bg-cyan-950/20 border border-cyan-500/20 rounded-2xl">
+                                <p className="text-[10px] text-cyan-300 font-bold italic uppercase tracking-tighter leading-tight">
+                                    {orbitAnalysis.centerMigration > 0.05
+                                        ? "CRITICAL: Displacement outside heritage circle. Longevity leak active."
+                                        : "OPTIMAL: Alignment within 0.05 mm/m Golden Standard."}
+                                </p>
+                            </div>
                         </section>
                     </div>
                 </div>

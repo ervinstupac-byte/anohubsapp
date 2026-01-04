@@ -21,6 +21,57 @@
     "copyright": "© 2025 Anohubs Inc.",
     "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
+  "manifesto": {
+    "title": "The Roots of Engineering",
+    "subtitle": "An Ethics Manifesto for the 50-Year Asset",
+    "quote": "\"Precision is not a luxury; it is the fundamental ethics of mechanical engineering. We aim for 50 years, not 5.\"",
+    "classification": "Classification: Engineering Ethics / NC-4.2",
+    "version": "Ver: 2026.01.04",
+    "section1": {
+      "title": "I. The 0.05 mm/m Law",
+      "content": "Precision is not a preference; it is a physical mandate. A shaft misaligned by more than 0.05 mm/m introduces parasitic vectors that devour Babbitt metal and fatigue steel components. To ignore this limit is to willfully accelerate the decay of human infrastructure.",
+      "quote": "\"The machine reflects the soul of its maintainer.\""
+    },
+    "section2": {
+      "title": "II. The 48% Dynamic Risk Rule",
+      "content": "When dynamic loads—vibration, water hammer, or thermal drift—exceed 48% of the design baseline, the rate of fatigue accumulation becomes non-linear. This is the 'Point of No Return' for Heritage Assets. Our duty is to keep the heartbeat of the machine within the safe 48% envelope."
+    },
+    "section3": {
+      "title": "III. The Ethical Obligation",
+      "content": "We build and maintain for those who will stand here in 2075. Every micron measured, every bolt torqued, and every oil sample analyzed is a contract signed with the future. Precision is our apology for the entropy of the universe."
+    },
+    "sidebar": {
+      "standard": "Standard",
+      "target": "Target",
+      "protocol": "Protocol",
+      "signature": "Signature",
+      "heritage": "NC-4.2 HERITAGE",
+      "mtbf": "50 YEAR MTBF",
+      "precisionOnly": "PRECISION-ONLY",
+      "certified": "Certified Heritage Engine"
+    },
+    "footer": {
+      "approved": "Approved By: Chief Engineering Council",
+      "signed": "Digitally Signed // Shaft Stability Matrix Confirmed"
+    },
+    "return": "Return to Hub"
+  },
+  "passport": {
+    "sections": {
+      "mechanical": "Mechanical Precision",
+      "stator": "Electrical / Stator",
+      "hydraulic": "Hydraulic System"
+    },
+    "fields": {
+      "runout": "Shaft Alignment (Runout)",
+      "axialPlay": "Axial Play (Thrust)",
+      "bearingScraping": "Bearing Scraping (Contact %)",
+      "statorInsulation": "Insulation Resistance",
+      "windingResistance": "Winding Resistance",
+      "sealLeakageRate": "Seal Leakage Rate",
+      "draftTube": "Draft Tube Observation"
+    }
+  },
   "modules": {
     "riskAssessment": "Risk Assessment",
     "riskAssessmentDesc": "Identify the 'Execution Gap' before failure.",
@@ -1881,7 +1932,7 @@
       "title": "Mission Control",
       "subtitle": "Safety Interlock Gates Active",
       "systemStatus": "System Status",
-      "simTitle": "Logic Fault Simulation (Inject Error)",
+      "simTitle": "Forensic Logic Audit (Verify Integrity)",
       "sequenceHold": "SEQUENCE ON HOLD",
       "unitReady": "UNIT READY FOR START (SPEED-NO-LOAD)",
       "node1": {
