@@ -13,7 +13,7 @@ export const DistributorSync: React.FC = () => {
     const { state } = useCerebro();
 
     // Telemetry from CEREBRO
-    const guideVaneOpening = state.francis?.sensors?.guide_vane_opening ?? 45.2; // %
+    const guideVaneOpening = state.specializedState?.sensors?.guide_vane_opening ?? 45.2; // %
     const syncDelta = 0.08; // mm (Mocked for current context)
     const isOutOfSync = syncDelta > 0.5;
 

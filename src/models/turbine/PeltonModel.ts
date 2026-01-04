@@ -4,7 +4,6 @@
 import React, { ReactNode } from 'react';
 import {
     ITurbineModel,
-    TurbineFamily,
     TurbineVariant,
     TurbineConfiguration,
     ToleranceMap,
@@ -14,9 +13,10 @@ import {
     ForensicsPattern,
     PeltonSensorData
 } from './types';
+import { TurbineFamily } from '../../types/assetIdentity';
 
 export class PeltonModel implements ITurbineModel {
-    family: TurbineFamily = 'pelton';
+    family: TurbineFamily = 'PELTON';
     variant: TurbineVariant;
     config: TurbineConfiguration;
 
@@ -100,7 +100,7 @@ export class PeltonModel implements ITurbineModel {
         if (historicalData.length === 0) return anomalies;
 
         const latest = historicalData[historicalData.length - 1];
-        const peltonData = latest.pelton as PeltonSensorData;
+        const peltonData = latest.specialized as PeltonSensorData;
 
         if (!peltonData) return anomalies;
 
@@ -264,8 +264,8 @@ export class PeltonModel implements ITurbineModel {
     private detectRapidDeflectorClosure(data: CompleteSensorData[]): boolean {
         if (data.length < 2) return false;
 
-        const latest = data[data.length - 1].pelton?.deflector_position;
-        const previous = data[data.length - 2].pelton?.deflector_position;
+        const latest = (data[data.length - 1].specialized as PeltonSensorData)?.deflector_position;
+        const previous = (data[data.length - 2].specialized as PeltonSensorData)?.deflector_position;
 
         // Rapid closure: OPEN -> CLOSED in less than 2 seconds
         if (previous === 'OPEN' && latest === 'CLOSED') {

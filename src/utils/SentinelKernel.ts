@@ -32,7 +32,8 @@ export interface HeuristicPattern {
     baseSeverity: Severity;
     slogan: string;
     conditions: MatrixCondition[];
-    actions?: TacticalAction[]; // Contextual Gravity
+    actions?: TacticalAction[];
+    physicsNarrative?: string | ((probability: number, vectors: string[]) => string); // NEW: Dynamic or Static narrative
 }
 
 export interface MatrixCondition {
@@ -80,19 +81,15 @@ export interface SentinelContext {
 export class SentinelKernel {
 
     /**
-     * GENERATES PHYSICS NARRATIVE (The Voice of the Machine)
+     * GENERATES PHYSICS NARRATIVE
      */
-    static generatePhysicsNarrative(patternId: string, vectors: string[], probability: number): string {
-        if (patternId === 'bearing-thermal-instability') {
-            return `Anomaly detected: Kinetic energy at the Runner is disippating as friction-induced Heat in Bearing #2. Efficiency loss projected at ${(probability * 3.5).toFixed(1)}%.`;
+    static generatePhysicsNarrativeFromPattern(pattern: HeuristicPattern, vectors: string[], probability: number): string {
+        if (!pattern.physicsNarrative) return `System deviation detected. Energy transformation efficiency is compromised with ${(probability * 100).toFixed(0)}% confidence.`;
+
+        if (typeof pattern.physicsNarrative === 'function') {
+            return pattern.physicsNarrative(probability, vectors);
         }
-        if (patternId === 'cavitation-complex') {
-            return `Flow turbulence detected: Differential pressure in Draft Tube suggests vortex rope formation, transferring destructive energy to the Runner linkage.`;
-        }
-        if (patternId === 'shaft-misalignment') {
-            return `Differential thermal expansion detected (ΔT > 5°C). Asymmetric friction suggests shaft centerline deviation, risking coupling fatigue and seal degradation.`;
-        }
-        return `System deviation detected. Energy transformation efficiency is compromised with ${(probability * 100).toFixed(0)}% confidence.`;
+        return pattern.physicsNarrative;
     }
 
     static computeTrend(data: number[]): VariableTrend {
@@ -272,7 +269,7 @@ export class SentinelKernel {
                         precedent, // Attach archived memory
                         actions: pattern.actions, // Attach Tactical Actions (Contextual Gravity)
                         mathProof: proofString, // XAI
-                        physicsNarrative: this.generatePhysicsNarrative(pattern.id, contributingVectors, probability) // The Narrative
+                        physicsNarrative: this.generatePhysicsNarrativeFromPattern(pattern, contributingVectors, probability) // The Narrative
                     });
                 }
             }
@@ -310,58 +307,27 @@ export class SentinelKernel {
 
         return merged;
     }
+
+    /**
+     * EVALUATES ACOUSTIC OBSERVATIONS (NC-4.2)
+     */
+    static evaluateAcoustics(observation: string): string {
+        switch (observation) {
+            case 'Metallic Knocking':
+                return "CRITICAL: The Sentinel identifies potential mechanical looseness or foreign object impact. Kinetic energy is being transferred into structural shocks.";
+            case 'High-pitch Squeal':
+                return "WARNING: High-frequency friction signature detected. Analysis suggests labyrinth seal interference or catastrophic bearing lubrication failure.";
+            case 'Low-frequency Thumping':
+                return "CAUTION: Low-frequency pressure pulsation. Likely hydrodynamic instability or 'Vortex Rope' formation in the draft tube.";
+            case 'Nominal':
+                return "System sound signature within design limits. Harmonic balance is stable.";
+            default:
+                return "Acoustic signature unclassified. Manual verification recommended.";
+        }
+    }
 }
+
 
 // --- SENTINEL PATTERN LIBRARY ---
 
-export const SENTINEL_PATTERNS: HeuristicPattern[] = [
-    {
-        id: 'cavitation-complex',
-        name: 'Cavitation Precursor (Level 4)',
-        description: 'Multi-variate correlation indicating implosion damage.',
-        baseSeverity: 'CRITICAL',
-        slogan: 'Cavitation: Rapid implosion of vapor bubbles causing erosive damage.',
-        conditions: [
-            { variableId: 'vibration', operator: 'TREND_MATCH', targetTrend: 'RISING', weight: 0.35 },
-            { variableId: 'draftTubePressure', operator: 'VARIANCE_MATCH', threshold: 1.0, weight: 0.35 },
-            { variableId: 'guideVane', operator: 'LESS', threshold: 40, weight: 0.3 }
-        ],
-        actions: [
-            { type: 'FOCUS_3D', label: 'Inspect Draft Tube', targetId: 'Mesh_DraftTube_Liner', icon: 'Box' },
-            { type: 'OPEN_SOP', label: 'Drainage Protocol', targetId: 'Francis_SOP_Drainage_Pumps', icon: 'FileText' }
-        ]
-    },
-    {
-        id: 'bearing-thermal-instability',
-        name: 'Bearing Thermal Instability',
-        description: 'Rapid thermal rise under high load.',
-        baseSeverity: 'HIGH',
-        slogan: 'Thermal Runaway: Friction coefficient escalation exceeding cooling capacity.',
-        conditions: [
-            // Dynamic Threshold: Check if Temp is 2 Sigma above Baseline for this Load
-            { variableId: 'bearingTemp', operator: 'DYNAMIC_THRESHOLD', baselineId: 'bearingTemp_Loaded', sigmaMultiplier: 2.5, weight: 0.4 },
 
-            { variableId: 'rpm', operator: 'GREATER', threshold: 300, weight: 0.2 },
-            { variableId: 'bearingTemp', operator: 'SLOPE_GREATER', threshold: 2.0, weight: 0.4 }
-        ],
-        actions: [
-            { type: 'FOCUS_3D', label: 'Focus Guide Bearing', targetId: 'Mesh_GuideBearing_Pad3', icon: 'Box' },
-            { type: 'OPEN_SOP', label: 'Active Cooling Reset', targetId: 'Francis_SOP_Cooling', icon: 'FileText' }
-        ]
-    },
-    {
-        id: 'shaft-misalignment',
-        name: 'Shaft Misalignment (Delta)',
-        description: 'Thermal asymmetry between T-Side and G-Side bearings.',
-        baseSeverity: 'HIGH',
-        slogan: 'Mechanical Drift: Shaft centerline deviation detected via thermal delta.',
-        conditions: [
-            { variableId: 'bearingTemp', operator: 'DELTA_GREATER', compareVariableId: 'generatorTemp', threshold: 5.0, weight: 0.6 },
-            { variableId: 'vibration', operator: 'TREND_MATCH', targetTrend: 'RISING', weight: 0.4 }
-        ],
-        actions: [
-            { type: 'FOCUS_3D', label: 'Inspect Coupling', targetId: 'Mesh_Shaft_Coupling', icon: 'Box' },
-            { type: 'OPEN_SOP', label: 'Alignment Protocol', targetId: 'Francis_SOP_Alignment', icon: 'FileText' }
-        ]
-    }
-];

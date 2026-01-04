@@ -158,10 +158,10 @@ export class ConsultingEngine {
                 repairCost = 80000; // Bearing replacement
             } else if (dominantFrequency > 1000) {
                 diagnosis = 'High frequency vibration - Possible cavitation or blade issues';
-                if (turbineFamily === 'kaplan') {
+                if (turbineFamily === 'KAPLAN') {
                     diagnosis += '. Check blade tip clearance and hub mechanism.';
                     repairCost = 120000; // Runner inspection/repair
-                } else if (turbineFamily === 'francis') {
+                } else if (turbineFamily === 'FRANCIS') {
                     diagnosis += '. Check runner for cavitation damage.';
                     repairCost = 150000; // Runner coating/repair
                 }

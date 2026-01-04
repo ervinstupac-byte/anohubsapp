@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../routes/paths.ts';
+import { ROUTES, getFrancisPath, getMaintenancePath } from '../../routes/paths.ts';
 import { useNavigation, AppView } from '../../contexts/NavigationContext.tsx';
 import { useAudit } from '../../contexts/AuditContext.tsx';
 import { useTranslation } from 'react-i18next';
@@ -108,17 +108,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const signalQuality = liveMetrics.length > 0 ? 0.98 : 0.0;
 
     const operationalModules = [
+        { id: 'toolbox', title: t('sidebar.toolbox', 'Toolbox Launchpad'), icon: '🧰', route: ROUTES.HOME },
+        { id: 'diagnosticTwin', title: t('sidebar.diagnosticTwin', 'Diagnostic Twin'), icon: '♊', route: `/${ROUTES.DIAGNOSTIC_TWIN}` },
+        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠', route: getFrancisPath(ROUTES.FRANCIS.HUB) },
+        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️', route: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD) },
+        { id: 'maintenanceLogbook', title: t('sidebar.logbook', 'Maintenance Logbook'), icon: '📓', route: getMaintenancePath(ROUTES.MAINTENANCE.LOGBOOK) },
+        { id: 'shaftAlignment', title: t('sidebar.shaftAlignment', 'Shaft Alignment'), icon: '🔄', route: getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT) },
+        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰', route: getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC) },
+        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩', route: getMaintenancePath(ROUTES.MAINTENANCE.BOLT_TORQUE) },
+        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
+        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂', route: getMaintenancePath(ROUTES.MAINTENANCE.INTUITION_LOG) },
         { id: 'riskAssessment', title: t('modules.riskAssessment', 'Risk Diagnostics'), icon: '🛡️', route: `/${ROUTES.RISK_ASSESSMENT}` },
-        { id: 'francisHub', title: t('sidebar.francisLogic', 'Francis Logic Map'), icon: '🧠', route: `/${ROUTES.FRANCIS.HUB}` },
-        { id: 'maintenanceDashboard', title: t('modules.maintenance', 'Maintenance Engine'), icon: '⚙️', route: `/${ROUTES.MAINTENANCE.DASHBOARD}` },
-        { id: 'shaftAlignment', title: t('sidebar.shaftAlignment', 'Shaft Alignment'), icon: '🔄', route: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
-        { id: 'hydraulicMaintenance', title: t('sidebar.hydraulicMaintenance', 'Hydraulic Maintenance'), icon: '🚰', route: `/${ROUTES.MAINTENANCE.HYDRAULIC}` },
-        { id: 'boltTorque', title: t('sidebar.boltTorque', 'Bolt Torque'), icon: '🔩', route: `/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
-        { id: 'shadowEngineer', title: t('sidebar.shadowEngineer', 'Shadow Engineer'), icon: '👻', route: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}` },
-        { id: 'intuitionLog', title: t('sidebar.intuitionLog', 'Intuition Log'), icon: '👂', route: `/${ROUTES.MAINTENANCE.INTUITION_LOG}` },
         { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: `/${ROUTES.STRUCTURAL_INTEGRITY}` },
         { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: `/${ROUTES.INSTALLATION_GUARANTEE}` },
         { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: `/${ROUTES.HPP_BUILDER}` },
+        { id: 'forensics', title: t('sidebar.forensics', 'Forensic Analysis'), icon: '🔍', route: '/forensics' },
+        { id: 'executive', title: t('sidebar.executive', 'Executive Dashboard'), icon: '📊', route: '/executive' },
     ];
 
     const secondaryModules = [
@@ -168,13 +173,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-transparent opacity-50 pointer-events-none" />
 
-                    <div className="flex items-center gap-4 relative z-10">
-                        <div className="w-12 h-12 bg-black/40 border border-cyan-500/30 rounded-xl flex items-center justify-center relative group overflow-hidden">
-                            <div className="absolute inset-0 bg-cyan-500/20 animate-pulse-glow" />
-                            <span className="text-2xl font-black text-cyan-400 tracking-tighter drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]">Ah</span>
+                    <div
+                        className="flex items-center gap-4 relative z-10 cursor-pointer group/logo transition-all hover:scale-[1.02]"
+                        onClick={() => navigate(ROUTES.HOME)}
+                    >
+                        <div className="w-12 h-12 bg-black/40 border border-cyan-500/30 rounded-xl flex items-center justify-center relative group-hover/logo:border-cyan-400 transition-colors overflow-hidden">
+                            <div className="absolute inset-0 bg-cyan-500/20 animate-pulse-glow group-hover/logo:bg-cyan-500/40" />
+                            <span className="text-2xl font-black text-cyan-400 tracking-tighter drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] group-hover/logo:text-white group-hover/logo:drop-shadow-[0_0_12px_rgba(6,182,212,0.8)] transition-all">Ah</span>
                         </div>
                         <div>
-                            <h1 className="text-base font-black text-white tracking-[0.2em] uppercase drop-shadow-sm">AnoHUB</h1>
+                            <h1 className="text-base font-black text-white tracking-[0.2em] uppercase drop-shadow-sm group-hover/logo:text-cyan-400 transition-colors">AnoHUB</h1>
                             <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-cyan-500/80 font-mono font-bold tracking-widest">{t('sidebar.version')}</span>
                                 <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_10px_rgba(6,182,212,1)]" />
@@ -332,7 +340,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             {t('sidebar.operationalCommand')}
                         </div>
                         {operationalModules.map((item) => {
-                            const isActive = location.pathname.includes(item.route);
+                            const isActive = location.pathname === item.route;
                             return (
                                 <button
                                     key={item.id}
@@ -342,8 +350,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         if (window.innerWidth < 1024) onClose();
                                     }}
                                     className={`w-full text-left px-4 py-3 rounded-xl flex items-center gap-4 transition-all duration-300 group relative overflow-hidden ${isActive
-                                        ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.1)]'
-                                        : 'text-slate-500 hover:bg-white/5 hover:text-cyan-200'
+                                        ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.15)] shimmer-overlay'
+                                        : 'text-slate-500 hover:bg-white/5 hover:text-cyan-200 border border-transparent'
                                         }`}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>

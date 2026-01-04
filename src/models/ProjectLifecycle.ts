@@ -8,8 +8,8 @@ import { WTFCase } from '../services/LegacyKnowledgeService';
 export type ProjectPhase = 'GENESIS' | 'PROCUREMENT' | 'CONSTRUCTION' | 'COMMISSIONING' | 'OPERATIONS' | 'FORENSICS';
 
 export interface ProjectIdentity {
-    id: string;
-    name: string;
+    assetId: string;
+    assetName: string;
     location: {
         lat: number;
         lng: number;

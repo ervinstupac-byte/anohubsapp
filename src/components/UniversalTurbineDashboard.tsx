@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Shield, Gauge, Activity, Radio, Droplet } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
-import { TurbineFactory, TurbineType, KaplanTurbine, FrancisTurbine, PeltonTurbine, TurbineFamily } from '../models/turbine/TurbineFactory';
+import { TurbineFactory, TurbineType, KaplanTurbine, FrancisTurbine, PeltonTurbine, ITurbineBehavior } from '../models/turbine/TurbineFactory';
 import { DecisionEngine } from '../services/DecisionEngine';
 import { SafetyInterlockEngine } from '../services/SafetyInterlockEngine';
 
@@ -16,9 +16,9 @@ const AcousticMonitor = () => <div className="p-4 rounded bg-black/20 text-cente
 
 export const UniversalTurbineDashboard: React.FC = () => {
     // State
-    const [turbineType, setTurbineType] = useState<TurbineType>('kaplan');
+    const [turbineType, setTurbineType] = useState<TurbineType>('KAPLAN');
     const [assetId, setAssetId] = useState('KAPLAN-UNIT-01');
-    const [model, setModel] = useState<TurbineFamily>(new KaplanTurbine());
+    const [model, setModel] = useState<ITurbineBehavior>(new KaplanTurbine());
     const [interlockStatus, setInterlockStatus] = useState(SafetyInterlockEngine.getStatus());
 
     // Switch turbine type handler (Simulating navigating to different asset)
@@ -48,8 +48,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                 {/* Interlock Status */}
                 <div className={`flex items-center gap-3 px-4 py-2 rounded-full border-2 ${interlockStatus.status === 'LOCKED' ? 'border-emerald-500 bg-emerald-950/40 text-emerald-400' :
-                        interlockStatus.status === 'UNLOCKED' ? 'border-amber-500 bg-amber-950/40 text-amber-400' :
-                            'border-red-500 bg-red-950/40 text-red-100 animate-pulse'
+                    interlockStatus.status === 'UNLOCKED' ? 'border-amber-500 bg-amber-950/40 text-amber-400' :
+                        'border-red-500 bg-red-950/40 text-red-100 animate-pulse'
                     }`}>
                     <Shield className="w-5 h-5" />
                     <span className="font-black text-sm uppercase">SCADA {interlockStatus.status}</span>
@@ -57,13 +57,13 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                 {/* Turbine Switcher (Dev Mode) */}
                 <div className="flex bg-black/40 rounded-lg p-1">
-                    {(['kaplan', 'francis', 'pelton'] as TurbineType[]).map(type => (
+                    {(['KAPLAN', 'FRANCIS', 'PELTON'] as TurbineType[]).map(type => (
                         <button
                             key={type}
                             onClick={() => handleSwitchType(type)}
                             className={`px-4 py-2 rounded text-xs font-bold uppercase transition-all ${turbineType === type
-                                    ? `bg-[${colors.primary}] text-white shadow-lg`
-                                    : 'text-slate-400 hover:text-white'
+                                ? `bg-[${colors.primary}] text-white shadow-lg`
+                                : 'text-slate-400 hover:text-white'
                                 }`}
                             style={{
                                 backgroundColor: turbineType === type ? colors.primary : 'transparent'
@@ -111,7 +111,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
                             </h2>
 
                             {/* KAPLAN SPECIFIC UI */}
-                            {turbineType === 'kaplan' && (
+                            {turbineType === 'KAPLAN' && (
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
                                         <h3 className="text-cyan-400 font-bold mb-2">Blade-Gate Correlation</h3>
@@ -138,7 +138,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
                             )}
 
                             {/* PELTON SPECIFIC UI */}
-                            {turbineType === 'pelton' && (
+                            {turbineType === 'PELTON' && (
                                 <div className="space-y-4">
                                     <div className="p-4 bg-fuchsia-950/30 border border-fuchsia-500/30 rounded-lg">
                                         <h3 className="text-fuchsia-400 font-bold mb-4">Multi-Nozzle Force Balance</h3>
@@ -161,7 +161,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
                             )}
 
                             {/* FRANCIS SPECIFIC UI */}
-                            {turbineType === 'francis' && (
+                            {turbineType === 'FRANCIS' && (
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg">
                                         <h3 className="text-emerald-400 font-bold mb-2">Labyrinth Seal Leakage</h3>

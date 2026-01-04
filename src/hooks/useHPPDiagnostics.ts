@@ -45,7 +45,7 @@ export const useHPPDiagnostics = () => {
             health,
             assetIdentity.operationalMapping.currentPoint?.flowM3S || assetIdentity.machineConfig.ratedFlowM3S,
             assetIdentity.operationalMapping.currentPoint?.headM || assetIdentity.machineConfig.ratedHeadM,
-            assetIdentity.francisAdvanced?.frontRunnerClearanceMM || 0.35
+            assetIdentity.specializedAdvanced?.frontRunnerClearanceMM || 0.35
         );
 
         // Apply Insights

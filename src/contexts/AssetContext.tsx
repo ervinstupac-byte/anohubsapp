@@ -4,7 +4,8 @@ import type { Asset, AssetContextType, AssetHistoryEntry } from '../types.ts';
 import { useAudit } from './AuditContext.tsx';
 import { useAuth } from './AuthContext.tsx';
 import { debounce } from '../utils/performance.ts';
-import { loadFromStorage, saveToStorage } from '../utils/storageUtils.ts'; // <--- NEW: Import Storage Utils
+import { loadFromStorage, saveToStorage } from '../utils/storageUtils.ts';
+import { ProfileLoader } from '../services/ProfileLoader';
 
 const AssetContext = createContext<AssetContextType | undefined>(undefined);
 
@@ -73,7 +74,6 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             }
         };
 
-        fetchAssets();
         fetchAssets();
     }, []);
 
@@ -204,20 +204,32 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         assets.find(a => a.id === selectedAssetId) || null
         , [assets, selectedAssetId]);
 
+    const activeProfile = useMemo(() => {
+        if (!selectedAsset) return null;
+        // Map asset.type or asset.turbine_type to profile
+        const profileType = selectedAsset.turbine_type || selectedAsset.type;
+        return ProfileLoader.getProfile(profileType) || null;
+    }, [selectedAsset]);
+
     const value = useMemo(() => ({
         assets,
         selectedAsset,
+        activeProfile,
         selectAsset,
         loading,
         addAsset,
         updateAsset,
         logActivity,
         assetLogs
-    }), [assets, selectedAsset, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs]);
+    }), [assets, selectedAsset, activeProfile, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs]);
 
     return (
         <AssetContext.Provider value={value}>
-            {children}
+            {loading ? (
+                <div className="fixed inset-0 bg-[#020617] flex items-center justify-center">
+                    <div className="w-12 h-12 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
+                </div>
+            ) : children}
         </AssetContext.Provider>
     );
 };

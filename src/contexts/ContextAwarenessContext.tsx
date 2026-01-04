@@ -13,6 +13,7 @@ interface ContextAwarenessState {
     activeWorkOrders: any[];
     liveMetrics: any[];
     diagnostics: any[]; // DiagnosticInsight[]
+    structuralSafetyMargin?: number;
 
     // Formatting
     hasContext: boolean;
@@ -60,6 +61,7 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         activeWorkOrders: engineData.activeWorkOrders,
         liveMetrics: engineData.liveMetrics,
         diagnostics: engineData.diagnostics,
+        structuralSafetyMargin: (engineData as any).structuralSafetyMargin,
         hasContext: !!activeDefinition || engineData.activeContext.length > 0,
         hasCriticalRisks: engineData.hasCriticalRisks || false,
         isLoading: engineData.isLoading,

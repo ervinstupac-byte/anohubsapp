@@ -22,7 +22,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     const [finalAlignment, setFinalAlignment] = useState<number | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
 
-    const isHorizontal = technicalState.identity.name.toLowerCase().includes('horizontal') || technicalState.identity.type === 'Pelton';
+    const isHorizontal = technicalState.identity.assetName.toLowerCase().includes('horizontal') || technicalState.identity.turbineType === 'PELTON';
     const bearingSpan = 5.0; // Default or from project site params
 
     const addRunoutPoint = async () => {

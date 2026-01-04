@@ -3,7 +3,8 @@
 
 import React from 'react';
 
-export type TurbineType = 'kaplan' | 'francis' | 'pelton' | 'bulb' | 'pit';
+import { TurbineType, TurbineFamily } from '../../types/assetIdentity';
+export type { TurbineType, TurbineFamily };
 
 export interface AlarmDefinition {
     id: string;
@@ -12,7 +13,7 @@ export interface AlarmDefinition {
     condition: (data: any) => boolean;
 }
 
-export interface TurbineFamily {
+export interface ITurbineBehavior {
     type: TurbineType;
 
     // Physics & Limits
@@ -29,8 +30,8 @@ export interface TurbineFamily {
 }
 
 // === KAPLAN IMPLEMENTATION ===
-export class KaplanTurbine implements TurbineFamily {
-    type: TurbineType = 'kaplan';
+export class KaplanTurbine implements ITurbineBehavior {
+    type: TurbineType = 'KAPLAN';
 
     getMaxAlignment() {
         return 0.08; // Kaplan allows more flexibility due to lower RPM usually
@@ -93,8 +94,8 @@ import { CompleteSensorData, FrancisSensorData } from './types';
 
 
 // === FRANCIS IMPLEMENTATION ===
-export class FrancisTurbine implements TurbineFamily {
-    type: TurbineType = 'francis';
+export class FrancisTurbine implements ITurbineBehavior {
+    type: TurbineType = 'FRANCIS';
 
     getMaxAlignment() {
         return 0.05; // Standard 0.05mm
@@ -132,7 +133,7 @@ export class FrancisTurbine implements TurbineFamily {
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
             assetId: 'mock',
-            turbineFamily: 'francis',
+            turbineFamily: 'FRANCIS',
             common: {
                 vibration: data.vibration || 0.5,
                 temperature: data.bearingTemp || 45,
@@ -140,13 +141,12 @@ export class FrancisTurbine implements TurbineFamily {
                 efficiency: 92,
                 status: 'OPTIMAL'
             },
-            francis: {
-                guide_vane_opening: data.guideVaneOpening || 50,
-                // Map legacy MIV status if needed, though model focuses on sensors
+            specialized: {
+                guide_vane_opening: data.gateOpening || 50,
                 runner_clearance: 1.0,
                 draft_tube_pressure: data.draftTubePressure || -0.2,
                 spiral_case_pressure: 5.0
-            } as FrancisSensorData
+            }
         };
 
         const anomalies = model.detectAnomalies([sensorData]);
@@ -158,8 +158,8 @@ export class FrancisTurbine implements TurbineFamily {
 }
 
 // === PELTON IMPLEMENTATION ===
-export class PeltonTurbine implements TurbineFamily {
-    type: TurbineType = 'pelton';
+export class PeltonTurbine implements ITurbineBehavior {
+    type: TurbineType = 'PELTON';
 
     getMaxAlignment() {
         return 0.03; // Very precise due to high speed/head
@@ -206,15 +206,14 @@ export class PeltonTurbine implements TurbineFamily {
 
 // === FACTORY ===
 export class TurbineFactory {
-    static create(type: TurbineType, variant?: string, config?: any): TurbineFamily {
-        switch (type) {
-            case 'kaplan':
-            case 'bulb': // Bulb is essentially a horizontal Kaplan
-            case 'pit':
+    static create(type: TurbineType | string, variant?: string, config?: any): ITurbineBehavior {
+        const normalizedType = type.toUpperCase();
+        switch (normalizedType) {
+            case 'KAPLAN':
                 return new KaplanTurbine();
-            case 'francis':
+            case 'FRANCIS':
                 return new FrancisTurbine();
-            case 'pelton':
+            case 'PELTON':
                 return new PeltonTurbine();
             default:
                 console.warn(`Unknown turbine type: ${type}. Defaulting to Francis.`);
@@ -222,8 +221,21 @@ export class TurbineFactory {
         }
     }
 
+    static getEngine(type: string): ITurbineBehavior {
+        return this.create(type as TurbineType);
+    }
+
     static getVariantDisplayName(variant: string): string {
         if (!variant) return 'Standard Configuration';
         return variant.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
+
+    static createModel(variant: string, config: any): any {
+        const normalizedVariant = variant.toLowerCase();
+        if (normalizedVariant.startsWith('francis')) {
+            return new FrancisModel(variant as any, config);
+        }
+        // Fallback for demo
+        return new FrancisModel('francis_horizontal', config);
     }
 }

@@ -1,0 +1,24 @@
+{
+    "sops": {
+        "VIBRATION_CRITICAL": {
+            "action": "Check Coupling Alignment and Foundation Bolts immediately. Assess runner integrity for cavitation pitting.",
+            "kbRef": "SOP-MECH-001"
+        },
+        "BEARING_TEMP_CRITICAL": {
+            "action": "Inspect oil levels and cooling water flow. Check for filter clogging or bearing clearance issues.",
+            "kbRef": "SOP-MECH-005"
+        },
+        "INSULATION_CRITICAL": {
+            "action": "Perform drying cycle or cleaning of stator windings. Inspect cable terminations for moisture.",
+            "kbRef": "SOP-ELEC-002"
+        },
+        "CAVITATION_INFERRED": {
+            "action": "Adjust wicket gate opening to move out of the high-vortex zone. Perform tailwater level audit.",
+            "kbRef": "SOP-HYD-004"
+        },
+        "STRUCTURAL_RISK": {
+            "action": "Reduce unit load/pressure. Perform ultrasonic wall thickness test on spiral casing.",
+            "kbRef": "SOP-STRUC-010"
+        }
+    }
+}

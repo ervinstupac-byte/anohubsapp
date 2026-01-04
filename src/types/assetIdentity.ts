@@ -3,7 +3,8 @@
  * Complete Digital Twin Foundation Schema
  */
 
-export type TurbineType = 'PELTON' | 'KAPLAN' | 'FRANCIS';
+export type TurbineType = 'PELTON' | 'KAPLAN' | 'FRANCIS' | 'CROSSFLOW';
+export type TurbineFamily = TurbineType;
 export type Orientation = 'VERTICAL' | 'HORIZONTAL';
 export type TransmissionType = 'DIRECT' | 'GEARBOX';
 export type PenstockMaterial = 'CONCRETE' | 'STEEL' | 'PLASTIC' | 'FRP';
@@ -64,9 +65,9 @@ export interface ShaftJackingModule {
     nextServiceDue?: string;
 }
 
-// ==================== FRANCIS ADVANCED MODULE ====================
+// ==================== SPECIALIZED ADVANCED MODULE ====================
 
-export interface FrancisAdvancedModule {
+export interface SpecializedAdvancedModule {
     // Runner Clearances
     frontRunnerClearanceMM: number;
     backRunnerClearanceMM: number;
@@ -199,6 +200,9 @@ export interface EnvironmentalBaseline {
         complianceStatus: ComplianceStatus;
     };
 
+    ambientTemperature: number; // Grad C
+    relativeHumidity: number;    // %
+
     penstockType: PenstockMaterial;
     penstockDiameterMM: number;
     penstockLengthM: number;
@@ -255,13 +259,17 @@ export interface AssetIdentity {
     turbineType: TurbineType;
     manufacturer: string;
     commissioningYear: number;
+    totalOperatingHours: number;
+    hoursSinceLastOverhaul: number;
+    startStopCount: number;
     lastMajorOverhaul?: string;
+    location: string;
 
     // Configuration
     machineConfig: MachineConfiguration;
 
     // Conditional Modules
-    francisAdvanced?: FrancisAdvancedModule;
+    specializedAdvanced?: SpecializedAdvancedModule;
     shaftJacking?: ShaftJackingModule;
 
     // Core Modules

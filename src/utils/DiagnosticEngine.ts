@@ -28,7 +28,7 @@ export const evaluateDiagnostics = (componentId: string, sensors: any, inputs?: 
             insights.push({
                 id: 'd-pen-hammer',
                 type: 'critical',
-                messageKey: 'francis.diagnostics.waterHammerCritical',
+                messageKey: 'common.sidebar.insights.waterHammerCritical',
                 value: `${pressureBar.toFixed(1)} bar`
             });
         }
@@ -38,7 +38,7 @@ export const evaluateDiagnostics = (componentId: string, sensors: any, inputs?: 
             insights.push({
                 id: 'd-pen-stress',
                 type: 'warning',
-                messageKey: 'francis.diagnostics.highPressure',
+                messageKey: 'common.sidebar.insights.highPressure',
                 value: sensors.hoopStressMPa
             });
         }
@@ -56,7 +56,7 @@ export const evaluateDiagnostics = (componentId: string, sensors: any, inputs?: 
             insights.push({
                 id: 'd-trans-thermal',
                 type: 'warning', // User said "NOTICE", which usually implies Warning/Info, but logic suggests urgency. Warning fits "Notice".
-                messageKey: 'francis.diagnostics.substationThermal',
+                messageKey: 'common.sidebar.insights.substationThermal',
                 value: `${oilTemp.toFixed(1)}°C`
             });
         }
@@ -71,7 +71,7 @@ export const evaluateDiagnostics = (componentId: string, sensors: any, inputs?: 
             insights.push({
                 id: 'd-gen-excitation',
                 type: 'safe',
-                messageKey: 'francis.diagnostics.fieldFlashing'
+                messageKey: 'common.sidebar.insights.fieldFlashing'
             });
         }
     }

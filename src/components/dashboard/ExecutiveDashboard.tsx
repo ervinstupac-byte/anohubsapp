@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next'; // <--- IMPORT ADDED
+import { useTranslation } from 'react-i18next';
 import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ExpertDiagnosisEngine } from '../../services/ExpertDiagnosisEngine';
 import { DrTurbineAI, ActionCard } from '../../services/DrTurbineAI';
 import { GlassCard } from '../ui/GlassCard';
 import { ModernButton } from '../ui/ModernButton';
 import { TypewriterText } from '../ui/TypewriterText';
-import { motion } from 'framer-motion';
-import { Activity, Zap, TrendingUp, ShieldCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Activity, Zap, TrendingUp, ShieldCheck, DollarSign, AlertTriangle, TrendingDown, Hammer, BarChart3, Clock } from 'lucide-react';
+import { EngineeringWisdomVault } from './EngineeringWisdomVault';
+import { VibrationAnalyzer } from '../diagnostic-twin/VibrationAnalyzer';
+import { SmartManual } from './SmartManual';
 
 // --- TECHNICAL TURBINE SILHOUETTE WITH GLASSMORPHISM ---
 const TurbineSilhouette: React.FC<{
@@ -20,7 +23,7 @@ const TurbineSilhouette: React.FC<{
     alarms?: string[]
 }> = ({ health, vibration, temp, flow, head, frequency, alarms = [] }) => {
     const { t } = useTranslation();
-    const isCritical = health < 50 || (frequency || 0) > 55 || (temp || 0) > 80;
+    const isCritical = health < 50 || (frequency || 0) > 55 || (temp || 0) > 45;
     const bearingColor = (temp || 0) > 60 ? '#EF4444' : health > 80 ? '#22D3EE' : '#F59E0B';
     const shaftColor = (vibration || 0) > 0.05 ? '#EF4444' : health > 80 ? '#06B6D4' : '#F59E0B';
     const runnerColor = isCritical ? '#EF4444' : health > 80 ? '#0891B2' : '#F59E0B';
@@ -130,30 +133,24 @@ const TurbineSilhouette: React.FC<{
 };
 
 export const ExecutiveDashboard: React.FC = () => {
-    const { t } = useTranslation(); // <--- HOOK ADDED
+    const { t } = useTranslation();
     const { technicalState, connectTwinToExpertEngine, getDrTurbineConsultation, createComplexIdentity } = useProjectEngine();
 
-    // Use Adapter to get full Asset Identity
     const assetIdentity = useMemo(() => {
         return createComplexIdentity && createComplexIdentity() ? createComplexIdentity() : null;
     }, [createComplexIdentity, technicalState]);
 
-    // Reactive Telemetry from Neural Core (CEREBRO)
     const scadaFlow = technicalState.francis?.sensors?.flow_rate || 42.5;
     const scadaHead = technicalState.francis?.sensors?.net_head || 152.0;
     const scadaFrequency = technicalState.francis?.sensors?.grid_frequency || 50.0;
-    const [viewMode, setViewMode] = useState<'DIGITAL_TWIN' | 'AI_CONSULTANT'>('DIGITAL_TWIN');
 
-    // AI Consultant State
     const [aiCards, setAiCards] = useState<ActionCard[]>([]);
     const [aiMessage, setAiMessage] = useState<string>('');
 
-    // Get diagnostics from Neural Core inputs
     const scadaDiagnostics = useMemo(() => {
         return connectTwinToExpertEngine(scadaFlow, scadaHead, scadaFrequency);
     }, [connectTwinToExpertEngine, scadaFlow, scadaHead, scadaFrequency]);
 
-    // --- EFFECT: Consult Dr. Turbine ---
     useEffect(() => {
         if (assetIdentity) {
             const consultation = getDrTurbineConsultation(scadaFlow, scadaHead, scadaFrequency);
@@ -243,10 +240,7 @@ export const ExecutiveDashboard: React.FC = () => {
 
                 {/* MIDDLE: KPIS & STRATEGY (5 Columns) */}
                 <div className="lg:col-span-5 flex flex-col gap-8">
-
-                    {/* GLASSMORPHISM KPI ROW */}
                     <div className="grid grid-cols-3 gap-6">
-                        {/* POWER KPI */}
                         <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
                             <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500 animate-pulse"></div>
                             <div className="p-6">
@@ -267,7 +261,6 @@ export const ExecutiveDashboard: React.FC = () => {
                             </div>
                         </GlassCard>
 
-                        {/* HEALTH KPI */}
                         <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
                             <div className={`absolute top-0 left-0 w-full h-1 transition-colors duration-500 ${(scadaDiagnostics?.healthScore || 85) < 50 ? 'bg-red-500' : 'bg-emerald-400'}`}></div>
                             <div className="p-6">
@@ -291,7 +284,6 @@ export const ExecutiveDashboard: React.FC = () => {
                             </div>
                         </GlassCard>
 
-                        {/* HEAD KPI */}
                         <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
                             <div className="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
                             <div className="p-6">
@@ -312,107 +304,180 @@ export const ExecutiveDashboard: React.FC = () => {
                         </GlassCard>
                     </div>
 
-                    {/* DR. TURBINE AI CHAT INTERFACE */}
+                    {/* PERFORMANCE GAP WIDGET (NC-4.2 Benchmarking) */}
+                    <GlassCard variant="commander" noPadding className="relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-red-500"></div>
+                        <div className="p-6 flex justify-between items-center">
+                            <div>
+                                <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Performance Gap</p>
+                                <div className="flex items-baseline gap-2">
+                                    <span className={`text-4xl font-black tracking-tighter ${(technicalState.physics.performanceGap || 0) > 98 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                                        {(technicalState.physics.performanceGap || 0).toFixed(1)}%
+                                    </span>
+                                    <span className="text-[10px] text-slate-500 font-bold uppercase">vs Design</span>
+                                </div>
+                            </div>
+                            <div className="w-1/2 h-2 bg-white/5 rounded-full overflow-hidden relative">
+                                <motion.div
+                                    className="h-full bg-emerald-500"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${technicalState.physics.performanceGap || 0}%` }}
+                                />
+                                <div className="absolute top-0 right-0 h-full w-[2px] bg-red-500/50" style={{ left: '95%' }}></div>
+                            </div>
+                        </div>
+                    </GlassCard>
+
+                    {/* PHASE 2: NEURAL EXPANSION ROW */}
+                    <div className="grid grid-cols-2 gap-6">
+                        <GlassCard variant="commander" className="border-l-4 border-l-purple-500 bg-purple-500/5">
+                            <div className="flex justify-between items-start mb-4">
+                                <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest flex items-center gap-2">
+                                    <Hammer className="w-3 h-3 text-purple-400" />
+                                    Structural Integrity
+                                </h4>
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <div className="flex justify-between items-end mb-1">
+                                        <span className="text-2xl font-black text-white tracking-tighter">
+                                            {technicalState.structural?.remainingLife.toFixed(1)}%
+                                        </span>
+                                        <span className="text-[9px] text-slate-500 font-mono">LIFE</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                        <motion.div
+                                            className="h-full bg-purple-500"
+                                            animate={{ width: `${technicalState.structural?.remainingLife}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </GlassCard>
+
+                        <GlassCard variant="commander" className="border-l-4 border-l-amber-500 bg-amber-500/5">
+                            <div className="flex justify-between items-start mb-4">
+                                <h4 className="text-[10px] text-slate-500 uppercase font-black tracking-widest flex items-center gap-2">
+                                    <BarChart3 className="w-3 h-3 text-amber-400" />
+                                    Profit Index
+                                </h4>
+                            </div>
+                            <div className="text-2xl font-black text-white tracking-tighter">
+                                {technicalState.market?.profitabilityIndex.toFixed(2)}
+                            </div>
+                        </GlassCard>
+                    </div>
+
                     <GlassCard variant="commander" className="flex-grow flex flex-col relative overflow-hidden">
                         <div className="flex items-center gap-4 mb-6">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.4)] relative overflow-hidden">
-                                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-                                <span className="text-2xl relative z-10">🧠</span>
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(6,182,212,0.4)] relative">
+                                <span className="text-2xl">🧠</span>
                             </div>
                             <div className="flex-1">
                                 <h3 className="text-xl font-black text-white uppercase tracking-tighter">{t('executive.ai.title')}</h3>
-                                <div className="text-sm text-cyan-400/90 font-mono tracking-tight min-h-[1.5rem] mt-1">
+                                <div className="text-sm text-cyan-400/90 font-mono tracking-tight mt-1">
                                     <TypewriterText text={aiMessage} speed={25} />
                                 </div>
                             </div>
                         </div>
 
-                        {/* PHYSICS-BASED DIAGNOSIS CHAT */}
                         <div className="flex-grow space-y-4 overflow-y-auto custom-scrollbar pr-2">
-                            {aiCards.length === 0 && (
-                                <div className="text-center py-12 glass-panel border-emerald-500/20 bg-emerald-500/5">
-                                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                                        <ShieldCheck className="w-8 h-8 text-emerald-400" />
-                                    </div>
-                                    <p className="text-emerald-400 text-lg font-black mb-1 italic tracking-tight">{t('executive.ai.nominal.title')}</p>
-                                    <p className="text-slate-400 text-sm font-medium">{t('executive.ai.nominal.desc')}</p>
-                                </div>
-                            )}
-
                             {aiCards.map((card, index) => (
                                 <GlassCard
                                     key={card.id}
                                     noPadding
                                     variant="deep"
-                                    className={`border-l-4 animate-fade-in ${card.severity === 'CRITICAL' ? 'border-l-red-500 bg-red-500/5' : 'border-l-amber-500 bg-amber-500/5'
-                                        }`}
+                                    className={`border-l-4 ${card.severity === 'CRITICAL' ? 'border-l-red-500 bg-red-500/5' : 'border-l-amber-500 bg-amber-500/5'}`}
                                 >
                                     <div className="p-5">
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className={`font-black uppercase text-sm tracking-tight ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'}`}>
-                                                {card.title}
-                                            </h4>
-                                            <span className={`text-[9px] font-black px-2 py-0.5 rounded border ${card.severity === 'CRITICAL'
-                                                ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                                                : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                                                } animate-pulse font-mono`}>
-                                                {card.severity}
-                                            </span>
+                                            <h4 className={`font-black uppercase text-sm ${card.severity === 'CRITICAL' ? 'text-red-300' : 'text-amber-300'}`}>{card.title}</h4>
                                         </div>
-                                        <p className="text-sm text-slate-300 mb-4 leading-relaxed font-medium">{card.message}</p>
-
-                                        {/* Physics-based explanation */}
-                                        <div className="bg-black/40 rounded-lg p-3 mb-4 border border-white/10 noise-commander">
-                                            <p className="text-[10px] text-cyan-400 font-black uppercase tracking-widest mb-1">{t('executive.ai.physicsAnalysis')}</p>
-                                            <p className="text-xs text-slate-400 font-mono leading-relaxed">
-                                                {card.severity === 'CRITICAL' && card.title.includes('GRID')
-                                                    ? t('executive.ai.gridRisk', { freq: scadaFrequency })
-                                                    : card.severity === 'CRITICAL' && card.title.includes('CAVITATION')
-                                                        ? t('executive.ai.cavitationRisk', { flow: scadaFlow, head: scadaHead })
-                                                        : t('executive.ai.acceptable')
-                                                }
-                                            </p>
-                                        </div>
-
-                                        <ModernButton
-                                            variant="secondary"
-                                            className={`w-full text-[11px] font-black uppercase tracking-widest h-10 ${card.severity === 'CRITICAL'
-                                                ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border-red-500/30'
-                                                : 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border-amber-500/30'
-                                                }`}
-                                        >
-                                            ⚡ {card.actionLabel}
-                                        </ModernButton>
+                                        <p className="text-sm text-slate-300 mb-4">{card.message}</p>
+                                        <ModernButton variant="secondary" className="w-full text-[11px] h-10">⚡ {card.actionLabel}</ModernButton>
                                     </div>
                                 </GlassCard>
                             ))}
                         </div>
                     </GlassCard>
-                    {aiCards.length > 0 && (
-                        <div className="flex items-center gap-3 text-cyan-400 text-sm animate-pulse">
-                            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                            <span className="font-mono">{t('executive.ai.analyzing')}</span>
-                        </div>
-                    )}
+
+                    {/* VIBRATION SPECTRUM (NC-4.2 FFT Layer) */}
+                    <VibrationAnalyzer />
                 </div>
-                {/* RIGHT: COMMAND & CONTROL REMOVED - NC-4.2 Directive */}
+
+                {/* RIGHT: FINANCE & WISDOM (3 Columns) */}
                 <div className="lg:col-span-3 flex flex-col gap-6">
-                    <GlassCard variant="commander" title={t('commander.forensicLog')} icon={<ShieldCheck className="w-5 h-5 text-cyan-400" />}>
-                        <div className="space-y-4">
-                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.lastSync')}</div>
-                                <div className="text-xs font-mono text-cyan-300">{new Date().toLocaleTimeString()}</div>
+                    <GlassCard
+                        variant="commander"
+                        title="Risk vs. Finance"
+                        icon={<DollarSign className="w-5 h-5 text-amber-400" />}
+                        className="border-amber-500/30 bg-amber-500/5"
+                    >
+                        <div className="space-y-6">
+                            <div>
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Maintenance Buffer</div>
+                                <div className="text-2xl font-mono text-amber-400 font-bold">
+                                    {(technicalState.financials?.maintenanceBufferEuro || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                                </div>
                             </div>
-                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.latency')}</div>
-                                <div className="text-xs font-mono text-emerald-400">0.8ms</div>
+                            <div>
+                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1">Annual Revenue Loss</div>
+                                <div className="text-xl font-mono text-white font-bold">
+                                    {(technicalState.financials?.lostRevenueEuro || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                                </div>
                             </div>
-                            <div className="p-4 bg-black/40 rounded-lg border border-white/5 noise-commander">
-                                <div className="text-[10px] text-slate-500 uppercase font-black mb-1 tracking-widest">{t('commander.dataIntegrity')}</div>
-                                <div className="text-xs font-mono text-emerald-400 uppercase">{t('commander.verifiedStatus')}</div>
+                            <div className="pt-4 border-t border-amber-500/20">
+                                <div className="text-[10px] text-emerald-400 uppercase font-black mb-1 flex items-center justify-between">
+                                    Annualized Maintenance Saver
+                                    <TrendingDown className="w-3 h-3" />
+                                </div>
+                                <div className="text-2xl font-mono text-emerald-400 font-bold">
+                                    {(technicalState.financials?.maintenanceSavingsEuro || 0).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                                </div>
+                                <p className="text-[9px] text-slate-500 mt-2 leading-tight">
+                                    Estimated savings through early anomaly detection and failure prevention.
+                                </p>
                             </div>
                         </div>
                     </GlassCard>
+
+                    <GlassCard
+                        variant="commander"
+                        title="Thrust Bearing Monitor"
+                        icon={<Activity className="w-4 h-4 text-cyan-400" />}
+                        className="bg-black/40 border-cyan-500/20"
+                    >
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <div className="text-[9px] text-slate-500 uppercase font-black mb-1">Axial Thrust</div>
+                                    <div className={`text-2xl font-mono font-black ${(technicalState.physics?.axialThrustKN || 0) > 180 ? 'text-red-400 animate-pulse' : 'text-cyan-400'}`}>
+                                        {(technicalState.physics?.axialThrustKN || 0).toFixed(1)} <span className="text-[10px]">kN</span>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-[9px] text-slate-500 uppercase font-black mb-1">Limit</div>
+                                    <div className="text-sm font-mono text-slate-300">250.0 kN</div>
+                                </div>
+                            </div>
+                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <motion.div
+                                    className={`h-full ${(technicalState.physics?.axialThrustKN || 0) > 180 ? 'bg-red-500' : 'bg-cyan-500'}`}
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${Math.min(100, (technicalState.physics?.axialThrustKN || 0) / 2.5)}%` }}
+                                />
+                            </div>
+                            {(technicalState.physics?.axialThrustKN || 0) > 180 && (
+                                <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center gap-2">
+                                    <AlertTriangle className="w-3 h-3 text-red-500" />
+                                    <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider">Thrust Overload Risk</span>
+                                </div>
+                            )}
+                        </div>
+                    </GlassCard>
+
+                    <EngineeringWisdomVault />
+                    <SmartManual />
                 </div>
             </div>
         </div>

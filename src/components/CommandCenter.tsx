@@ -10,11 +10,15 @@ import { TruthDeltaEngine } from '../utils/TruthDeltaEngine';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 import { useDigitalLedger } from '../stores/useDigitalLedger';
 import { useTheme } from '../stores/useTheme';
-import { Camera, Moon, Ghost, FileText } from 'lucide-react';
+import { Camera, Moon, Ghost, FileText, ChevronRight, Shield } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
 import { generateDiagnosticDossier } from '../utils/pdfGenerator';
 import { useDocumentViewer } from '../contexts/DocumentContext';
 import { useCerebro } from '../contexts/ProjectContext';
+import { StructuralSafetyMonitor } from './ui/StructuralSafetyMonitor';
+import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
+import { X, CheckCircle2, Wrench } from 'lucide-react';
+import { SolutionArchitect } from '../services/SolutionArchitect';
 
 const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
 
@@ -26,7 +30,8 @@ export const CommandCenter: React.FC = () => {
         liveMetrics,
         activeDefinition,
         hasCriticalRisks,
-        patternWeights
+        patternWeights,
+        structuralSafetyMargin
     } = useContextAwareness();
 
     const { addSnapshot } = useDigitalLedger();
@@ -35,6 +40,7 @@ export const CommandCenter: React.FC = () => {
     const { viewDocument } = useDocumentViewer();
     const { state: technicalState } = useCerebro();
     const [ghostMode, setGhostMode] = React.useState(false);
+    const [activeSop, setActiveSop] = React.useState<SOPMapping | null>(null);
     const turbineRef = useRef<HTMLDivElement>(null);
 
     // Calculate Performance Delta (Baseline vs Actual)
@@ -231,20 +237,37 @@ export const CommandCenter: React.FC = () => {
                             {diagnostics.slice(0, 5).map((diag, i) => (
                                 <div
                                     key={diag.id}
-                                    className="p-2 bg-slate-900/40 border border-white/5 rounded-sm"
+                                    className="p-2 bg-slate-900/40 border border-white/5 rounded-sm cursor-pointer hover:border-cyan-500/50 transition-all group"
+                                    onClick={() => {
+                                        if (diag.sopCode) {
+                                            const sop = MaintenanceEngine.getSOP(diag.sopCode);
+                                            if (sop) setActiveSop(sop);
+                                            else showToast(`SOP steps not yet defined for: ${diag.sopCode}`, 'info');
+                                        } else {
+                                            showToast("No mapped SOP for this alert level.", 'info');
+                                        }
+                                    }}
                                 >
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${diag.type === 'critical' ? 'bg-red-500' :
-                                            diag.type === 'warning' ? 'bg-amber-500' :
-                                                'bg-cyan-500'
-                                            }`} />
-                                        <span className="text-[9px] font-mono text-white">
-                                            {diag.messageKey}
-                                        </span>
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${diag.type === 'critical' ? 'bg-red-500' :
+                                                diag.type === 'warning' ? 'bg-amber-500' :
+                                                    'bg-cyan-500'
+                                                }`} />
+                                            <span className="text-[9px] font-mono text-white group-hover:text-cyan-400">
+                                                {diag.messageKey}
+                                            </span>
+                                        </div>
+                                        <ChevronRight className="w-3 h-3 text-slate-600 group-hover:text-cyan-500" />
                                     </div>
                                     {diag.value && (
                                         <div className="mt-1 text-[8px] font-mono text-slate-400">
                                             {diag.value}
+                                        </div>
+                                    )}
+                                    {diag.reasoning && (
+                                        <div className="mt-2 p-1.5 bg-black/40 rounded italic text-[8px] text-slate-300 leading-tight border-l border-cyan-500/30">
+                                            {diag.reasoning}
                                         </div>
                                     )}
                                 </div>
@@ -317,11 +340,93 @@ export const CommandCenter: React.FC = () => {
                             ))}
                         </div>
                     </TacticalCard>
+
+                    <StructuralSafetyMonitor
+                        margin={structuralSafetyMargin || 100}
+                        hoopStress={technicalState.physics.hoopStressMPa}
+                        yieldStrength={technicalState.penstock.materialYieldStrength}
+                    />
                 </div>
             </div>
 
             {/* Neural Pulse Bottom Bar */}
             <NeuralPulse />
+
+            {/* SOP Modal */}
+            {activeSop && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md">
+                    <div className="max-w-md w-full bg-slate-900 border border-cyan-500/30 shadow-2xl rounded-lg overflow-hidden animate-in fade-in zoom-in duration-200">
+                        <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-cyan-400" />
+                                <h3 className="text-xs font-black uppercase tracking-widest text-white">Maintenance Action Plan</h3>
+                            </div>
+                            <button onClick={() => setActiveSop(null)} className="text-slate-400 hover:text-white transition-colors">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="p-6">
+                            <div className="mb-4">
+                                <div className="text-[10px] text-slate-500 font-mono uppercase mb-1">Failure Mode</div>
+                                <div className="text-sm font-bold text-white">{activeSop.failureMode}</div>
+                            </div>
+                            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded">
+                                <div className="text-[10px] text-red-400 font-mono uppercase mb-1">Immediate Action</div>
+                                <div className="text-xs text-white leading-relaxed">{activeSop.action}</div>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="text-[10px] text-slate-500 font-mono uppercase">Step-by-Step Procedure</div>
+                                {activeSop.steps.map((step) => (
+                                    <div key={step.step} className="flex gap-3">
+                                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-[10px] font-bold text-cyan-400">
+                                            {step.step}
+                                        </div>
+                                        <div className="text-xs text-slate-300 leading-tight">
+                                            {step.description}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Required Tools (NC-4.2) */}
+                            {(() => {
+                                const path = SolutionArchitect.getRecoveryPath(activeSop.failureMode, technicalState);
+                                if (path.actions.length === 0) return null;
+
+                                const allTools = Array.from(new Set(path.actions.flatMap(a => a.requiredTools)));
+                                if (allTools.length === 0) return null;
+
+                                return (
+                                    <div className="mt-6 p-4 bg-slate-950/50 border border-cyan-500/20 rounded">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <Wrench className="w-3 h-3 text-cyan-400" />
+                                            <div className="text-[10px] text-cyan-400 font-mono uppercase font-black uppercase tracking-widest">Required Tooling Checklist</div>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-2">
+                                            {allTools.map(tool => (
+                                                <div key={tool} className="flex items-center gap-2">
+                                                    <div className="w-2 h-2 border border-cyan-500/50 rounded-sm" />
+                                                    <span className="text-[10px] text-slate-300 font-mono">{tool}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                        <div className="px-6 py-4 bg-slate-950/50 border-t border-white/5 flex items-center justify-between">
+                            <span className="text-[9px] font-mono text-slate-500">Ref: {activeSop.kbRef}</span>
+                            <button
+                                onClick={() => setActiveSop(null)}
+                                className="px-4 py-2 bg-cyan-500 text-slate-950 text-[10px] font-black uppercase tracking-widest rounded hover:bg-cyan-400 transition-all flex items-center gap-2"
+                            >
+                                <CheckCircle2 className="w-3 h-3" />
+                                Acknowledge SOP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

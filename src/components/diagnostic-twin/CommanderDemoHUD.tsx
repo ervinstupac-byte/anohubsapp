@@ -25,17 +25,17 @@ const SCENARIOS = [
         description: 'Stabilized nominal flow & 92% efficiency'
     },
     {
-        id: 'SURGE' as DemoScenario,
+        id: 'WATER_HAMMER' as DemoScenario,
         icon: Droplets,
         color: 'red',
-        label: 'Penstock Surge',
+        label: 'Water Hammer',
         description: 'Joukowsky Spike (150% Nominal Pressure)'
     },
     {
-        id: 'THERMAL' as DemoScenario,
+        id: 'BEARING_FAILURE' as DemoScenario,
         icon: Thermometer,
         color: 'orange',
-        label: 'Thermal Instability',
+        label: 'Bearing Failure',
         description: 'Vibration creep & Orbit deformation'
     },
     {
@@ -46,11 +46,11 @@ const SCENARIOS = [
         description: 'Acoustic Floor Shift & Erosion risk'
     },
     {
-        id: 'LEAK' as DemoScenario,
+        id: 'GRID_LOSS' as DemoScenario,
         icon: TrendingDown,
         color: 'yellow',
-        label: 'Efficiency Leak',
-        description: 'Wicket Gate wear & 4% drop'
+        label: 'Grid Loss',
+        description: 'Load rejection & speed spike'
     },
 ];
 
@@ -74,17 +74,17 @@ export const CommanderDemoHUD: React.FC = () => {
         switch (scenario) {
             case 'NORMAL':
                 targetValues = {
-                    hydraulic: { flow: 2.5, head: 450, efficiency: 0.92 },
+                    hydraulic: { flow: 42.5, head: 152.0, efficiency: 0.92 },
                     mechanical: { vibrationX: 0.012, vibrationY: 0.008, bearingTemp: 42 }
                 };
                 break;
-            case 'SURGE':
+            case 'WATER_HAMMER':
                 targetValues = {
                     hydraulic: { flow: 3.8, head: 675 }, // 150% Surge
                     mechanical: { vibrationX: 0.045, vibrationY: 0.042 }
                 };
                 break;
-            case 'THERMAL':
+            case 'BEARING_FAILURE':
                 targetValues = {
                     mechanical: {
                         vibrationX: 0.12, // Banana shape 
@@ -103,10 +103,9 @@ export const CommanderDemoHUD: React.FC = () => {
                     payload: { cavitationIntensity: 8.5, bearingGrindIndex: 4.2 }
                 });
                 break;
-            case 'LEAK':
+            case 'GRID_LOSS':
                 targetValues = {
-                    hydraulic: { efficiency: 0.88 },
-                    mechanical: { rpm: 495 }
+                    mechanical: { rpm: 625 }
                 };
                 break;
         }
@@ -185,8 +184,8 @@ export const CommanderDemoHUD: React.FC = () => {
                                             key={scenario.id}
                                             onClick={() => triggerScenario(scenario.id)}
                                             className={`relative group p-4 rounded-2xl border transition-all flex flex-col items-center text-center gap-3 active:scale-95 ${isActive
-                                                    ? `bg-${scenario.color}-500/20 border-${scenario.color}-500/50 shadow-[0_0_20px_rgba(var(--${scenario.color}-rgb),0.2)]`
-                                                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
+                                                ? `bg-${scenario.color}-500/20 border-${scenario.color}-500/50 shadow-[0_0_20px_rgba(var(--${scenario.color}-rgb),0.2)]`
+                                                : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20'
                                                 }`}
                                         >
                                             <div className={`p-3 rounded-xl transition-all ${isActive ? `bg-${scenario.color}-500 text-white` : 'bg-slate-800 text-slate-400 group-hover:text-white'

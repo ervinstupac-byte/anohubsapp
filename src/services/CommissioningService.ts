@@ -1,5 +1,4 @@
-// Commissioning Service - Initial Machine Pairing System
-// Records "healthy state" baseline for all operating conditions
+import { TurbineFamily } from '../types/assetIdentity';
 
 export interface BaselineFingerprint {
     loadLevel: number; // 0, 25, 50, 75, 100
@@ -47,7 +46,7 @@ export interface CommissioningSession {
     id: string;
     assetId: string;
     assetName: string;
-    turbineFamily: string;
+    turbineFamily: TurbineFamily;
     startedAt: number;
     completedAt?: number;
     status: 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
@@ -124,7 +123,7 @@ export class CommissioningService {
     static async startCommissioning(
         assetId: string,
         assetName: string,
-        turbineFamily: string
+        turbineFamily: TurbineFamily
     ): Promise<CommissioningSession> {
         const session: CommissioningSession = {
             id: `COMMISSION-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

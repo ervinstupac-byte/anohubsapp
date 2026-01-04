@@ -3,29 +3,30 @@ export const ROUTES = {
     LOGIN: '/login',
     MAINTENANCE: {
         ROOT: 'maintenance',
-        DASHBOARD: 'maintenance/dashboard',
-        LOGBOOK: 'maintenance/logbook',
-        HYDRAULIC: 'maintenance/hydraulic',
-        BOLT_TORQUE: 'maintenance/bolt-torque',
-        SHADOW_ENGINEER: 'maintenance/shadow-engineer', // SOPManager
-        INTUITION_LOG: 'maintenance/intuition-log', // ShiftLog
-        AR_GUIDE: 'maintenance/ar-guide', // ARManager
-        EXECUTIVE: 'maintenance/executive',
+        DASHBOARD: 'dashboard',
+        LOGBOOK: 'logbook',
+        HYDRAULIC: 'hydraulic',
+        BOLT_TORQUE: 'bolt-torque',
+        SHADOW_ENGINEER: 'shadow-engineer', // SOPManager
+        INTUITION_LOG: 'intuition-log', // ShiftLog
+        AR_GUIDE: 'ar-guide', // ARManager
+        EXECUTIVE: 'executive',
+        ASSET_PASSPORT: 'asset-passport',
     },
     FRANCIS: {
         ROOT: 'francis',
-        HUB: 'francis/hub',
-        COMMAND_CENTER: 'francis/command-center',
+        HUB: 'hub',
+        COMMAND_CENTER: 'command-center',
         DIAGNOSTICS: {
             ROOT: 'diagnostics',
-            MAIN: 'francis/diagnostics',
-            HEATMAP: 'francis/diagnostics/heatmap',
-            FORENSICS: 'francis/diagnostics/forensics',
+            MAIN: 'main',
+            HEATMAP: 'heatmap',
+            FORENSICS: 'forensics',
         },
-        MISSION_CONTROL: 'francis/mission-control',
-        EMERGENCY: 'francis/emergency-protocols',
-        LOGIC_LOAD_REJECTION: 'francis/logic-load-rejection',
-        FLOWCHART_STARTUP: 'francis/flowchart-startup',
+        MISSION_CONTROL: 'mission-control',
+        EMERGENCY: 'emergency-protocols',
+        LOGIC_LOAD_REJECTION: 'logic-load-rejection',
+        FLOWCHART_STARTUP: 'flowchart-startup',
         SOP: {
             WATER_HAMMER: 'sop-water-hammer',
             BEARINGS: 'sop-bearings',
@@ -60,13 +61,15 @@ export const ROUTES = {
     MAP: 'map',
     PROFILE: 'profile',
     RISK_ASSESSMENT: 'risk-assessment',
+    DIAGNOSTIC_TWIN: 'diagnostic-twin',
     HPP_BUILDER: 'hpp-builder',
     STRUCTURAL_INTEGRITY: 'structural-integrity',
     INSTALLATION_GUARANTEE: 'installation-guarantee',
     LEARNING_LAB: 'learning-lab',
 } as const;
 
-// Helper to build full Francis paths
+// Helper to build full paths
+export const getMaintenancePath = (subPath: string) => `/${ROUTES.MAINTENANCE.ROOT}/${subPath}`;
 export const getFrancisPath = (subPath: string) => `/${ROUTES.FRANCIS.ROOT}/${subPath}`;
 
 // Commonly used full paths
@@ -74,7 +77,15 @@ export const FRANCIS_PATHS = {
     HUB: getFrancisPath(ROUTES.FRANCIS.HUB),
     COMMAND_CENTER: getFrancisPath(ROUTES.FRANCIS.COMMAND_CENTER),
     DIAGNOSTICS: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.ROOT),
-    HEATMAP: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.HEATMAP),
-    FORENSICS: getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS),
+    HEATMAP: getFrancisPath(`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.HEATMAP}`),
+    FORENSICS: getFrancisPath(`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS}`),
     MISSION_CONTROL: getFrancisPath(ROUTES.FRANCIS.MISSION_CONTROL),
+} as const;
+
+export const MAINTENANCE_PATHS = {
+    DASHBOARD: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD),
+    BOLT_TORQUE: getMaintenancePath(ROUTES.MAINTENANCE.BOLT_TORQUE),
+    HYDRAULIC: getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC),
+    SHADOW_ENGINEER: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER),
+    ASSET_PASSPORT: getMaintenancePath(ROUTES.MAINTENANCE.ASSET_PASSPORT),
 } as const;

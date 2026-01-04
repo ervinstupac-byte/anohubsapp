@@ -1,0 +1,52 @@
+{
+    "standards": [
+        {
+            "code": "ISO-10816-3",
+            "title": "Mechanical vibration",
+            "description": "Evaluation of machine vibration by measurements on non-rotating parts.",
+            "limits": {
+                "vibration": [
+                    {
+                        "value": 1.1,
+                        "unit": "mm/s",
+                        "severity": "NORMAL"
+                    },
+                    {
+                        "value": 2.8,
+                        "unit": "mm/s",
+                        "severity": "WARNING"
+                    },
+                    {
+                        "value": 4.5,
+                        "unit": "mm/s",
+                        "severity": "CRITICAL"
+                    }
+                ]
+            }
+        },
+        {
+            "code": "IEC-60041",
+            "title": "Field acceptance tests",
+            "description": "Hydraulic turbines, storage pumps and pump-turbines - Determination of hydraulic performance.",
+            "limits": {
+                "efficiency": [
+                    {
+                        "value": 90,
+                        "unit": "%",
+                        "severity": "NORMAL"
+                    },
+                    {
+                        "value": 85,
+                        "unit": "%",
+                        "severity": "WARNING"
+                    },
+                    {
+                        "value": 80,
+                        "unit": "%",
+                        "severity": "CRITICAL"
+                    }
+                ]
+            }
+        }
+    ]
+}

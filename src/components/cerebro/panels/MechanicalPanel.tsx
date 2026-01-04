@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
 
 export const MechanicalPanel: React.FC = () => {
-    const { technicalState, updateMechanicalDetails } = useProjectEngine();
+    const { technicalState, updateMechanicalDetails, dispatch } = useProjectEngine();
     const { state: cerebroState } = useCerebro();
     const { t, i18n: { language } } = useTranslation();
     const { mechanical, physics, identity } = technicalState;
@@ -114,6 +114,25 @@ export const MechanicalPanel: React.FC = () => {
                     <span>0 mm</span>
                     <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit || 1.0, language, 3)} mm</span>
                 </div>
+
+                {mechanical.vibration > 4.5 && !cerebroState.appliedMitigations.includes('VIBRATION_CRITICAL') && (
+                    <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
+                        <div className="relative z-10">
+                            <h4 className="text-xs font-bold text-red-500 uppercase flex items-center gap-2">
+                                <Activity className="w-3 h-3 text-red-500" /> Vibration Mitigation Ready
+                            </h4>
+                            <p className="text-[10px] text-slate-400 mt-1 max-w-[200px]">
+                                Apply restrictive operating zone to bypass resonance and preserve bearing life.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'VIBRATION_CRITICAL' })}
+                            className="relative z-10 px-3 py-2 bg-red-500 text-white text-[10px] font-black rounded hover:bg-red-400 transition-all flex items-center gap-2"
+                        >
+                            ENGAGE RECOVERY <Zap className="w-3 h-3" />
+                        </button>
+                    </div>
+                )}
             </GlassCard>
 
             {/* Component Health Status */}
@@ -164,8 +183,8 @@ export const MechanicalPanel: React.FC = () => {
                                             animate={{ width: `${health.score}%` }}
                                             transition={{ duration: 0.8, delay: 0.2 }}
                                             className={`h-full rounded-full ${health.status === 'OPTIMAL' ? 'bg-emerald-500' :
-                                                    health.status === 'GOOD' ? 'bg-green-500' :
-                                                        health.status === 'WARNING' ? 'bg-amber-500' : 'bg-red-500'
+                                                health.status === 'GOOD' ? 'bg-green-500' :
+                                                    health.status === 'WARNING' ? 'bg-amber-500' : 'bg-red-500'
                                                 }`}
                                         />
                                     </div>

@@ -69,7 +69,7 @@ export const AnoHubOS: React.FC = () => {
                         <h1 className="text-xl font-black text-white tracking-tighter">AnoHUB OS</h1>
                     </div>
                     <div className="text-xs text-slate-500 font-mono">
-                        {project.identity.name}
+                        {project.identity.assetName}
                     </div>
                     <div className="mt-2 text-xs flex items-center gap-1 text-emerald-400">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>

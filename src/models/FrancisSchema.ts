@@ -52,7 +52,7 @@ export const FRANCIS_CONSTANTS = {
  * Type Guard to check if an asset is a Horizontal Francis
  */
 export const isFrancisHorizontal = (asset: Asset): boolean => {
-    return asset.turbine_type?.toLowerCase() === 'francis' &&
+    return asset.turbine_type?.toUpperCase() === 'FRANCIS' &&
         // We might need a more explicit 'orientation' field, 
         // but for now we infer or check specs existence.
         !!asset.specs && 'spiralCasePressure' in asset.specs;

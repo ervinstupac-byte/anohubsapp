@@ -159,7 +159,7 @@ export class AutoReportService {
         }
 
         // Francis-specific
-        if (turbineFamily === 'francis') {
+        if (turbineFamily === 'FRANCIS') {
             recs.push({
                 priority: 'MEDIUM',
                 action: 'Inspekcija draft tube vortex core na part-load režimu',
@@ -169,7 +169,7 @@ export class AutoReportService {
         }
 
         // Kaplan-specific
-        if (turbineFamily === 'kaplan') {
+        if (turbineFamily === 'KAPLAN') {
             recs.push({
                 priority: 'HIGH',
                 action: 'Zamijenim hidrauličkog ulja u servo sistemu',
@@ -179,7 +179,7 @@ export class AutoReportService {
         }
 
         // Pelton-specific
-        if (turbineFamily === 'pelton') {
+        if (turbineFamily === 'PELTON') {
             recs.push({
                 priority: 'MEDIUM',
                 action: 'Kontrola erozije mlaznica i igala',

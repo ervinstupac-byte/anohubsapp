@@ -20,6 +20,7 @@ import { AssetProvider } from './contexts/AssetContext.tsx'; // <--- NEW
 import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring it exists)
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
 import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
+import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -33,10 +34,12 @@ import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // D
 
 import { Hub } from './components/Hub.tsx';
 import { Sidebar } from './components/diagnostic-twin/Sidebar.tsx';
+import { NeuralFlowMap } from './components/diagnostic-twin/NeuralFlowMap.tsx';
 import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
 import { DigitalPanel } from './components/diagnostic-twin/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
+import { LoadingShimmer } from './components/ui/LoadingShimmer.tsx';
 import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
@@ -47,6 +50,9 @@ import { PrintPreviewModal } from './components/modals/PrintPreviewModal.tsx';
 import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostic-twin/Sidebar.tsx';
 import { useCerebro } from './contexts/ProjectContext';
 import { CommanderDemoHUD } from './components/diagnostic-twin/CommanderDemoHUD';
+import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
+import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
+import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -80,7 +86,7 @@ const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
-const FrancisDiagnostics = lazy(() => import('./components/FrancisDiagnostics.tsx').then(m => ({ default: m.FrancisDiagnostics })));
+const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
 const FrancisHub = React.lazy(() => import('./components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 // Francis Turbine Module - All routes extracted to dedicated sub-router
@@ -273,9 +279,9 @@ const AppLayout: React.FC = () => {
                 {isCriticalDemo && (
                     <motion.div
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: [0.1, 0.2, 0.1] }}
-                        transition={{ repeat: Infinity, duration: 3 }}
-                        className="fixed inset-0 pointer-events-none z-[99] border-[16px] border-red-500/10"
+                        animate={{ opacity: [0.1, 0.4, 0.1] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className="fixed inset-0 pointer-events-none z-[99] border-[24px] border-red-500/20 shadow-[inset_0_0_150px_rgba(239,68,68,0.3)]"
                     />
                 )}
                 {/* The "Elite" Background Glows */}
@@ -323,7 +329,7 @@ const AppLayout: React.FC = () => {
                     */}
 
                     <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
-                        <Suspense fallback={<div className="h-[80vh] flex flex-col items-center justify-center gap-4"><Spinner /> <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING...</span></div>}>
+                        <Suspense fallback={<LoadingShimmer />}>
                             <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
                                 {!isHub && <Breadcrumbs />}
                                 <ErrorBoundary fallback={
@@ -358,6 +364,7 @@ const AppLayout: React.FC = () => {
                                         >
                                             <Routes location={location}>
                                                 <Route index element={<ToolboxLaunchpad />} />
+                                                <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
                                                 {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />
@@ -409,36 +416,27 @@ const AppLayout: React.FC = () => {
                 />
                 <GlobalFooter />
             </main>
+            <SimulationController />
             <CommanderDemoHUD />
+            <CommanderTerminal />
         </NavigationProvider>
     );
 };
 
-import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx'; // <--- NEW
-
 const App: React.FC = () => {
+    const [booting, setBooting] = useState(true);
+
     return (
         <GlobalProvider>
-            <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}> {/* Technical Backbone */}
-                <NotificationProvider>
-                    <MaintenanceProvider>
-                        <AssetProvider> {/* Centralized Asset State */}
-                            <RiskProvider>
-                                <HashRouter>
-                                    <DocumentProvider>
-                                        <ContextAwarenessProvider>
-                                            <Routes>
-                                                <Route path="/login" element={<Login />} />
-                                                <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                            </Routes>
-                                        </ContextAwarenessProvider>
-                                    </DocumentProvider>
-                                </HashRouter>
-                            </RiskProvider>
-                        </AssetProvider>
-                    </MaintenanceProvider>
-                </NotificationProvider>
-            </ProjectProvider>
+            {booting && <SystemBootScreen onComplete={() => setBooting(false)} />}
+            <HashRouter>
+                <ContextAwarenessProvider>
+                    <Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                    </Routes>
+                </ContextAwarenessProvider>
+            </HashRouter>
         </GlobalProvider>
     );
 };

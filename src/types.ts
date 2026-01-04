@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 // --- GLOBAL VIEW TYPES ---
 export type AppView =
   | 'home' // Alias za hub
@@ -50,12 +52,17 @@ export interface Asset {
   status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
   imageUrl?: string;
   turbine_type?: string;
+  totalOperatingHours?: number;
+  hoursSinceLastOverhaul?: number;
+  startStopCount?: number;
   specs?: Record<string, any>; // Flexible storage for turbine-specific data (e.g. FrancisHorizontalSpecs)
+  assetPassport?: AssetPassport;
 }
 
 export interface AssetContextType {
   assets: Asset[];
   selectedAsset: Asset | null;
+  activeProfile: AssetProfile | null;
   selectAsset: (id: string) => void;
   loading: boolean;
   addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
@@ -200,3 +207,108 @@ export interface HubTool {
   view: AppView;
   isCritical?: boolean;
 }
+
+// --- ASSET PASSPORT (NC-4.2) ---
+export interface AssetPassport {
+  mechanical: {
+    runout: number;       // mm
+    bearingClearance: number; // mm
+    axialPlay: number;    // mm
+    governorDeadband: number; // %
+    runnerGap: number;
+    labyrinthGap: number;
+    lastAlignmentCheck: string;
+  };
+  electrical: {
+    statorInsulation: number; // MOhm
+    rotorInsulation: number;  // MOhm
+    polarizationIndex: number;
+    dcBatteryVoltage: number;
+    lastRelayTest: string;
+  };
+  auxiliary: {
+    sealLeakageRate: number; // ml/min
+    oilViscosity: number;    // cSt
+    oilAge: number;          // hours
+    lastOilChange: string;
+    vibrationSensors: boolean;
+    frequencySensors: boolean;
+    acousticObservation?: 'Metallic Knocking' | 'High-pitch Squeal' | 'Low-frequency Thumping' | 'Nominal';
+  };
+  pressureProfile: {
+    penstock: number;
+    labyrinthFront: number;
+    labyrinthRear: number;
+    spiralCasing: number;
+    draftTube: number;
+  };
+  kinematics: {
+    mivOpeningTime: number;
+    mivClosingTime: number;
+    distributorCylinderStrokeTime: number;
+    bypassType: 'Manual' | 'Electric';
+  };
+  calculations?: {
+    volumetricEfficiencyLoss: number;
+    shutdownRisk: 'Low' | 'Medium' | 'High';
+    soundVerdict?: string;
+    insulationAlert?: string;
+    bearingLifeImpact?: string;
+  };
+}
+
+// --- MODULAR FRAMEWORK (NC-4.2) ---
+export interface AssetProfile {
+  type: string;
+  subType?: string;
+  metadata: {
+    nominalPowerMW: number;
+    manufacturer?: string;
+    commissioningDate?: string;
+  };
+  math: {
+    formulas: Record<string, (state: any, constants: any) => any>;
+    constants?: Record<string, any>;
+    coefficients?: {
+      revenuePerMWh: number;
+      maintenanceBaseCost: number;
+      inefficiencyTaxThreshold: number;
+    };
+  };
+  diagnostics: {
+    patterns: any[]; // HeuristicPattern[]
+    evaluateSpecialized?: (data: any) => string;
+  };
+  ui_manifest: {
+    passport_sections: {
+      id: string;
+      title: string;
+      fields: {
+        id: string;
+        label: string;
+        type: 'number' | 'string' | 'date' | 'select';
+        unit?: string;
+        step?: string;
+        options?: { label: string; value: any }[];
+      }[];
+    }[];
+  };
+}
+
+export type BaseAssetProfile = AssetProfile;
+
+// --- BASE ASSET TEMPLATE (Engineering DNA) ---
+export const BaseAssetTemplateSchema = z.object({
+  id: z.string().uuid().optional(),
+  name: z.string().min(3),
+  type: z.enum(['HPP', 'Solar', 'Wind']),
+  turbine_type: z.enum(['FRANCIS', 'KAPLAN', 'PELTON']).optional(),
+  capacity: z.number().positive(),
+  location: z.string(),
+  coordinates: z.tuple([z.number(), z.number()]),
+  status: z.enum(['Operational', 'Maintenance', 'Planned', 'Critical', 'Warning']),
+  specs: z.record(z.any()).optional(),
+  assetPassport: z.any().optional() // Can be further specialized per plugin
+});
+
+export type BaseAssetTemplate = z.infer<typeof BaseAssetTemplateSchema>;

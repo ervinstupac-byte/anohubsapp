@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useMaintenance } from '../contexts/MaintenanceContext';
 import { KnowledgeNode, ContextTrigger } from '../models/knowledge/ContextTypes';
 import { KNOWLEDGE_BASE } from '../data/knowledge/KnowledgeBase';
 import { getComponentIdFromRoute } from '../data/knowledge/ComponentTaxonomy';
-import { SentinelKernel, SENTINEL_PATTERNS } from '../utils/SentinelKernel';
+import { SentinelKernel } from '../utils/SentinelKernel';
 import { HiveRegistry } from '../services/HiveRegistry';
 import { IndustrialDataBridge } from '../services/IndustrialDataBridge';
+import { ProfileLoader } from '../services/ProfileLoader';
+import { ExpertInference } from '../services/ExpertInference';
 
 export interface DiagnosticInsight {
     id: string;
@@ -25,6 +27,10 @@ export interface DiagnosticInsight {
         text: string;
         timestamp: string;
     };
+    reasoning?: string; // Expert reasoning from KB
+    kbReference?: string; // KB-REF code
+    recommendedAction?: string; // Actionable Intelligence
+    sopCode?: string; // Mapping to MaintenanceEngine
 }
 
 /**
@@ -104,8 +110,8 @@ export const useContextEngine = () => {
     }, []);
 
     // 6. THE SENTINEL (Heuristic Engine) - REPLACES LEGACY DIAGNOSTICS
-    const diagnostics = useMemo((): DiagnosticInsight[] => {
-        if (!activeComponentId) return [];
+    const diagnosticsAndMetrics = useMemo(() => {
+        if (!activeComponentId) return { diagnostics: [], metrics: { structuralSafetyMargin: 100 }, recoveryPaths: [] };
 
         // Mock Baseline Data (The Archivist)
         const mockBaselines = {
@@ -114,9 +120,10 @@ export const useContextEngine = () => {
         };
 
         // 1. Evaluate Sentinel Matrix with LEARNING WEIGHTS
+        const patterns = ProfileLoader.getPatterns(techState.identity.turbineType);
         const sentinelResults = SentinelKernel.evaluateMatrix(
             metricHistory,
-            SENTINEL_PATTERNS,
+            patterns,
             {
                 timeAtState: timeAtState,
                 baselines: mockBaselines,
@@ -125,7 +132,7 @@ export const useContextEngine = () => {
         );
 
         // 2. Map to UI format and CROSS-VERIFY
-        return sentinelResults.map(res => {
+        const sentinelDiagnostics = sentinelResults.map(res => {
             // HUMAN CROSS-VERIFICATION LOGIC
             // Check if any recent log matches the pattern keywords
             const verificationMatch = activeLogs.find(log => {
@@ -141,7 +148,7 @@ export const useContextEngine = () => {
 
             return {
                 id: res.patternId,
-                type: res.severity === 'CRITICAL' ? 'critical' : 'warning',
+                type: (res.severity === 'CRITICAL' ? 'critical' : 'warning') as any,
                 messageKey: res.name,
                 value: `${(res.probability * 100).toFixed(0)}% Probability`,
                 slogan: res.slogan,
@@ -154,16 +161,50 @@ export const useContextEngine = () => {
                     text: verificationMatch.summaryDE || verificationMatch.commentBS, // Show the verification text
                     timestamp: verificationMatch.timestamp
                 } : undefined
-            };
+            } as DiagnosticInsight;
         });
 
-    }, [activeComponentId, metricHistory, timeAtState, activeLogs, patternWeights]);
+        // 3. EXPERT LAYER INFERENCE
+        const expertResults = ExpertInference.analyze(techState);
+        const expertDiagnostics: DiagnosticInsight[] = [
+            ...expertResults.alerts.map(a => ({
+                id: `expert-alert-${a.parameter}`,
+                type: (a.severity.toLowerCase() === 'critical' ? 'critical' : 'warning') as any,
+                messageKey: `${a.parameter} Violation`,
+                value: a.standard,
+                reasoning: a.reasoning,
+                kbReference: a.standard,
+                recommendedAction: a.recommendedAction,
+                sopCode: (a as any).sopCode
+            })),
+            ...expertResults.conclusions.map(c => ({
+                id: c.id,
+                type: 'critical' as const,
+                messageKey: c.symptom,
+                value: 'Inferred Failure',
+                reasoning: c.reasoning,
+                kbReference: c.kbReference,
+                actions: c.remedies,
+                recommendedAction: c.recommendedAction,
+                sopCode: (c as any).sopCode
+            }))
+        ];
+
+        return {
+            diagnostics: [...sentinelDiagnostics, ...expertDiagnostics],
+            metrics: expertResults.metrics,
+            recoveryPaths: expertResults.recoveryPaths
+        };
+
+    }, [activeComponentId, metricHistory, timeAtState, activeLogs, patternWeights, techState]);
+
+    const { diagnostics, metrics: expertMetrics, recoveryPaths } = diagnosticsAndMetrics;
 
 
     // 1. KNOWLEDGE GRAPH RESOLUTION & COMPONENT ID
     useEffect(() => {
         const engineCurrentRoute = location.pathname;
-        const currentSensors = techState.francis?.sensors || {};
+        const currentSensors = techState.specializedState?.sensors || {};
 
         // Resolve Component ID from Route
         const resolvedId = getComponentIdFromRoute(engineCurrentRoute);
@@ -180,7 +221,7 @@ export const useContextEngine = () => {
         });
 
         setActiveNodes(relevantNodes);
-    }, [location.pathname, techState.francis?.sensors, manualFocus]);
+    }, [location.pathname, techState.specializedState?.sensors, manualFocus]);
 
     // Bi-Directional Focus Setter
     const setFocus = useCallback((componentId: string | null) => {
@@ -240,20 +281,25 @@ export const useContextEngine = () => {
     }, [activeComponentId, workOrders]);
 
     // 3.1 PREDICTIVE WORK ORDERS (The Sentinel's Hand)
+    const pendingDispatchesRef = useRef<Set<string>>(new Set());
+
     useEffect(() => {
         if (!diagnostics.length || !activeComponentId) return;
 
         diagnostics.forEach(diag => {
             if (diag.type === 'critical') {
                 // Check if we already have an open WO for this
-                const exists = activeWorkOrders.some(wo =>
+                const existsInState = activeWorkOrders.some(wo =>
                     wo.status !== 'COMPLETED' &&
                     wo.status !== 'CANCELLED' &&
                     wo.description.includes(diag.messageKey)
                 );
 
-                if (!exists) {
+                const isPending = pendingDispatchesRef.current.has(diag.messageKey);
+
+                if (!existsInState && !isPending) {
                     console.log(`[The Sentinel] Auto-Dispatching Work Order for: ${diag.messageKey}`);
+                    pendingDispatchesRef.current.add(diag.messageKey);
 
                     // Logic Trace formatting
                     const logicTrace = diag.vectors?.join('\n- ') || 'No trace available';
@@ -374,7 +420,7 @@ export const useContextEngine = () => {
 
 
     const liveMetrics = useMemo(() => {
-        if (!activeComponentId || !techState.francis?.sensors) return [];
+        if (!activeComponentId || !techState.specializedState?.sensors) return [];
         const metrics: any[] = [];
         const hist = metricHistory;
 
@@ -441,6 +487,20 @@ export const useContextEngine = () => {
         activeWorkOrders,
         liveMetrics,
         diagnostics,
+        recoveryPaths: diagnosticsAndMetrics.recoveryPaths,
+        structuralSafetyMargin: expertMetrics.structuralSafetyMargin,
+        extendedLifeYears: techState.structural.extendedLifeYears || 0,
+        estimatedFailureDate: (() => {
+            const baseDate = new Date(techState.structural.estimatedFailureDate || '2035-01-01');
+            const extension = techState.structural.extendedLifeYears || 0;
+            if (extension === 0) return techState.structural.estimatedFailureDate;
+
+            const newDate = new Date(baseDate.getTime());
+            newDate.setFullYear(newDate.getFullYear() + Math.floor(extension));
+            newDate.setMonth(newDate.getMonth() + Math.floor((extension % 1) * 12));
+            return newDate.toISOString().split('T')[0];
+        })(),
+        appliedMitigations: techState.appliedMitigations,
         totalInsights: activeNodes.reduce((acc, node) => acc + node.insights.length, 0),
         hasCriticalRisks: (diagnostics.some(d => d.type === 'critical')),
         isLoading: maintenanceLoading,

@@ -18,7 +18,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
 
     const handleGenerate = () => {
         const blob = reportGenerator.generateProjectPDF(state);
-        reportGenerator.downloadReport(blob, `AnoHUB_Audit_${state.identity.name}_${new Date().toISOString().split('T')[0]}.pdf`);
+        reportGenerator.downloadReport(blob, `AnoHUB_Audit_${state.identity.assetName}_${new Date().toISOString().split('T')[0]}.pdf`);
         onClose();
     };
 
@@ -84,7 +84,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             </div>
                                             <div className="space-y-1">
                                                 <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Engineering Asset:</p>
-                                                <p className="text-xl font-black text-white tracking-tight">{state.identity.name}</p>
+                                                <p className="text-xl font-black text-white tracking-tight">{state.identity.assetName}</p>
                                                 <p className="text-cyan-500/80 text-[10px] font-mono">{state.identity.location.toUpperCase()}</p>
                                             </div>
                                         </div>

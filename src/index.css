@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Sinhala:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Mono:wght@100..700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Sinhala:wght@100..900&display=swap');
 
 :root {
   --bg-slate-950: #020617;
@@ -9,8 +9,38 @@
   --glass-blur: 24px;
   --glass-opacity: 0.45;
   --glass-border: rgba(255, 255, 255, 0.08);
-  --commander-glow: 0 0 30px rgba(6, 182, 212, 0.2);
+  --glass-border-bright: rgba(255, 255, 255, 0.15);
+  --commander-glow: 0 0 30px rgba(6, 182, 212, 0.4), 0 0 60px rgba(6, 182, 212, 0.1);
   --deep-carbon: #010409;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%);
+  animation: shimmer 2s infinite;
 }
 
 :root[data-theme="commander"] {

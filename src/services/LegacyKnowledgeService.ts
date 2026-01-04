@@ -6,7 +6,7 @@ export interface WTFCase {
     timestamp: number;
 
     // Classification
-    turbineFamily: 'kaplan' | 'francis' | 'pelton' | 'bulb' | 'pit' | 'all';
+    turbineFamily: 'KAPLAN' | 'FRANCIS' | 'PELTON' | 'BULB' | 'PIT' | 'ALL';
     component: string; // e.g., "Hydraulic System", "Bearing", "Runner"
     severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 
@@ -67,7 +67,7 @@ export class LegacyKnowledgeService {
         this.addCase({
             id: 'KM-2024',
             timestamp: Date.now(),
-            turbineFamily: 'kaplan',
+            turbineFamily: 'KAPLAN',
             component: 'Hydraulic System - Servo Control',
             severity: 'CRITICAL',
             symptom: 'Cijevi na rotor-glavi se čudno trzaju. Blade position oscilira +/- 2° pri konstantnom opterećenju.',
@@ -90,7 +90,7 @@ export class LegacyKnowledgeService {
         this.addCase({
             id: 'HEJ-2015',
             timestamp: Date.now(),
-            turbineFamily: 'francis',
+            turbineFamily: 'FRANCIS',
             component: 'Upper Guide Bearing',
             severity: 'CRITICAL',
             symptom: 'Nema očiglednih alarma. Vibracije 40% limita, kavitacija 4/10, temperatura lagano raste (0.5°C/dan). Generator radi normalno.',
@@ -115,7 +115,7 @@ export class LegacyKnowledgeService {
         this.addCase({
             id: 'FR-VORTEX',
             timestamp: Date.now(),
-            turbineFamily: 'francis',
+            turbineFamily: 'FRANCIS',
             component: 'Draft Tube',
             severity: 'HIGH',
             symptom: 'Glasne vibracije (bukva) na 30% opterećenja. Frekvencija 8-12 Hz. Nestaje na full load i idle.',
@@ -138,7 +138,7 @@ export class LegacyKnowledgeService {
         this.addCase({
             id: 'SENSOR-FA',
             timestamp: Date.now(),
-            turbineFamily: 'all',
+            turbineFamily: 'ALL',
             component: 'Vibration Sensor',
             severity: 'LOW',
             symptom: 'Vibration sensor pokazuje spike do 15 mm/s koji traju < 5 sekundi. Ponavljaju se nasumično.',
@@ -160,7 +160,7 @@ export class LegacyKnowledgeService {
         // Add Old School Tips
         this.addTip({
             id: 'TIP-001',
-            turbineFamily: 'kaplan',
+            turbineFamily: 'KAPLAN',
             component: 'Hub Cover Bolts',
             procedure: 'Pritezanje vijaka na rotor-glavi',
             tip: 'Uvijek pretegnuti za 5Nm više od manuala (manual kaže 180Nm, ti stavi 185Nm)',
@@ -181,7 +181,7 @@ export class LegacyKnowledgeService {
 
         this.addTip({
             id: 'TIP-003',
-            turbineFamily: 'francis',
+            turbineFamily: 'FRANCIS',
             component: 'Runner Bolts',
             procedure: 'Demontaža runnera',
             tip: 'NIKAD ne skidaj sve vijke odjednom. Redom, dijagonalno, po 1/4 okreta.',
@@ -193,7 +193,7 @@ export class LegacyKnowledgeService {
         // Add Legacy Validations
         this.addValidation({
             caseId: 'VALIDATION-442',
-            turbineFamily: 'kaplan',
+            turbineFamily: 'KAPLAN',
             component: 'Hydraulic System',
             checklistBefore: [
                 'Provjeri osigurače na potisnoj liniji',
@@ -233,7 +233,7 @@ export class LegacyKnowledgeService {
 
         for (const wtfCase of this.cases.values()) {
             // Filter by turbine family if specified
-            if (turbineFamily && wtfCase.turbineFamily !== 'all' && wtfCase.turbineFamily !== turbineFamily) {
+            if (turbineFamily && wtfCase.turbineFamily !== 'ALL' && wtfCase.turbineFamily !== turbineFamily) {
                 continue;
             }
 

@@ -4,7 +4,7 @@ import { Spinner } from '../components/Spinner';
 
 // Lazy load all Francis components
 const FrancisHub = React.lazy(() => import('../components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
-const FrancisDiagnostics = React.lazy(() => import('../components/FrancisDiagnostics').then(module => ({ default: module.FrancisDiagnostics })));
+const FrancisDiagnostics = React.lazy(() => import('../components/SpecializedDiagnostics').then(module => ({ default: module.SpecializedDiagnostics })));
 const MissionControl = React.lazy(() => import('../components/francis/MissionControl').then(module => ({ default: module.MissionControl })));
 const StartupFlowchart = React.lazy(() => import('../components/francis/StartupFlowchart').then(module => ({ default: module.StartupFlowchart })));
 const LoadRejectionLogic = React.lazy(() => import('../components/francis/LoadRejectionLogic').then(module => ({ default: module.LoadRejectionLogic })));
@@ -42,79 +42,74 @@ const TruthHeatmapDemo = React.lazy(() => import('../components/TruthHeatmapDemo
 const CommandCenter = React.lazy(() => import('../components/CommandCenter').then(module => ({ default: module.CommandCenter })));
 const ForensicLab = React.lazy(() => import('../components/ForensicLab').then(module => ({ default: module.ForensicLab })));
 
+import { LoadingShimmer } from '../components/ui/LoadingShimmer.tsx';
+import { ROUTES } from './paths.ts';
+
 /**
  * FrancisRouter - Dedicated sub-router for all Francis turbine modules
  * 
- * This router handles all /francis-* routes using React Router v6 nested routing.
- * Parent route in App.tsx: <Route path="/francis-*" element={<FrancisRouter />} />
- * 
- * All paths here are RELATIVE (no leading slash) to maintain correct URL structure.
+ * This router handles all /francis/* routes using React Router v6 nested routing.
  */
 const FrancisRouter: React.FC = () => {
     return (
-        <Suspense fallback={
-            <div className="h-[80vh] flex flex-col items-center justify-center gap-4">
-                <Spinner />
-                <span className="text-xs text-slate-500 tracking-widest animate-pulse">LOADING FRANCIS MODULE...</span>
-            </div>
-        }>
+        <Suspense fallback={<LoadingShimmer />}>
             <Routes>
                 {/* Command Center (Main View) */}
-                <Route path="command-center" element={<CommandCenter />} />
+                <Route path={ROUTES.FRANCIS.COMMAND_CENTER} element={<CommandCenter />} />
 
                 {/* Main Hub */}
-                <Route path="hub" element={<FrancisHub />} />
+                <Route path={ROUTES.FRANCIS.HUB} element={<FrancisHub />} />
 
                 {/* Diagnostics */}
-                <Route path="diagnostics" element={<FrancisDiagnostics />} />
-                <Route path="diagnostics/heatmap" element={<TruthHeatmapDemo />} />
-                <Route path="diagnostics/forensics" element={<ForensicLab />} />
+                <Route path={ROUTES.FRANCIS.DIAGNOSTICS.ROOT} element={<FrancisDiagnostics />} />
+                <Route path={`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.HEATMAP}`} element={<TruthHeatmapDemo />} />
+                <Route path={`${ROUTES.FRANCIS.DIAGNOSTICS.ROOT}/${ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS}`} element={<ForensicLab />} />
 
                 {/* Mission Control & Logic */}
-                <Route path="mission-control" element={<MissionControl />} />
-                <Route path="flowchart-startup" element={<StartupFlowchart />} />
-                <Route path="logic-load-rejection" element={<LoadRejectionLogic />} />
-                <Route path="emergency-protocols" element={<EmergencyProtocols />} />
+                <Route path={ROUTES.FRANCIS.MISSION_CONTROL} element={<MissionControl />} />
+                <Route path={ROUTES.FRANCIS.FLOWCHART_STARTUP} element={<StartupFlowchart />} />
+                <Route path={ROUTES.FRANCIS.LOGIC_LOAD_REJECTION} element={<LoadRejectionLogic />} />
+                <Route path={ROUTES.FRANCIS.EMERGENCY} element={<EmergencyProtocols />} />
 
                 {/* Mechanical Systems */}
-                <Route path="sop-miv-distributor" element={<MIVDetail />} />
-                <Route path="sop-bearings" element={<BearingsDetail />} />
-                <Route path="sop-shaft-alignment" element={<ShaftAlignment />} />
-                <Route path="sop-thrust-balance" element={<ThrustBalance />} />
-                <Route path="sop-vortex-control" element={<VortexControl />} />
-                <Route path="sop-regulating-ring" element={<RegulatingRing />} />
-                <Route path="sop-linkage" element={<Linkage />} />
-                <Route path="sop-coupling" element={<Coupling />} />
+                <Route path={ROUTES.FRANCIS.SOP.MIV_DISTRIBUTOR} element={<MIVDetail />} />
+                <Route path={ROUTES.FRANCIS.SOP.BEARINGS} element={<BearingsDetail />} />
+                <Route path={ROUTES.FRANCIS.SOP.ALIGNMENT} element={<ShaftAlignment />} />
+                <Route path={ROUTES.FRANCIS.SOP.THRUST_BALANCE} element={<ThrustBalance />} />
+                <Route path={ROUTES.FRANCIS.SOP.VORTEX_CONTROL} element={<VortexControl />} />
+                <Route path={ROUTES.FRANCIS.SOP.REGULATING_RING} element={<RegulatingRing />} />
+                <Route path={ROUTES.FRANCIS.SOP.LINKAGE} element={<Linkage />} />
+                <Route path={ROUTES.FRANCIS.SOP.COUPLING} element={<Coupling />} />
 
                 {/* Fluid & Chemical Integrity */}
-                <Route path="sop-oil-health" element={<OilHealth />} />
-                <Route path="sop-cooling-water" element={<CoolingWater />} />
-                <Route path="sop-drainage-pumps" element={<DrainagePumps />} />
-                <Route path="sop-lubrication" element={<LubricationSystem />} />
-                <Route path="sop-hpu" element={<HPU />} />
+                <Route path={ROUTES.FRANCIS.SOP.OIL_HEALTH} element={<OilHealth />} />
+                <Route path={ROUTES.FRANCIS.SOP.COOLING_WATER} element={<CoolingWater />} />
+                <Route path={ROUTES.FRANCIS.SOP.DRAINAGE_PUMPS} element={<DrainagePumps />} />
+                <Route path={ROUTES.FRANCIS.SOP.LUBRICATION} element={<LubricationSystem />} />
+                <Route path={ROUTES.FRANCIS.SOP.HPU} element={<HPU />} />
 
                 {/* Governor & Control */}
-                <Route path="sop-governor-pid" element={<GovernorPID />} />
+                <Route path={ROUTES.FRANCIS.SOP.GOVERNOR_PID} element={<GovernorPID />} />
 
                 {/* Electrical & Grid Systems */}
-                <Route path="sop-generator-integrity" element={<GeneratorIntegrity />} />
-                <Route path="sop-electrical-health" element={<ElectricalHealth />} />
-                <Route path="sop-grid-sync" element={<GridSync />} />
-                <Route path="sop-distributor-sync" element={<DistributorSync />} />
-                <Route path="sop-dc-systems" element={<DCSystems />} />
-                <Route path="sop-excitation" element={<Excitation />} />
-                <Route path="sop-transformer" element={<Transformer />} />
+                <Route path={ROUTES.FRANCIS.SOP.GENERATOR} element={<GeneratorIntegrity />} />
+                <Route path={ROUTES.FRANCIS.SOP.ELECTRICAL_HEALTH} element={<ElectricalHealth />} />
+                <Route path={ROUTES.FRANCIS.SOP.GRID_SYNC} element={<GridSync />} />
+                <Route path={ROUTES.FRANCIS.SOP.DISTRIBUTOR_SYNC} element={<DistributorSync />} />
+                <Route path={ROUTES.FRANCIS.SOP.DC_SYSTEMS} element={<DCSystems />} />
+                <Route path={ROUTES.FRANCIS.SOP.EXCITATION} element={<Excitation />} />
+                <Route path={ROUTES.FRANCIS.SOP.TRANSFORMER} element={<Transformer />} />
 
                 {/* Civil & Infrastructure */}
-                <Route path="sop-penstock" element={<Penstock />} />
-                <Route path="sop-intake" element={<Intake />} />
-                <Route path="sop-cathodic" element={<CathodicProtection />} />
+                <Route path={ROUTES.FRANCIS.SOP.PENSTOCK} element={<Penstock />} />
+                <Route path={ROUTES.FRANCIS.SOP.INTAKE} element={<Intake />} />
+                <Route path={ROUTES.FRANCIS.SOP.CATHODIC} element={<CathodicProtection />} />
 
                 {/* Safety & Auxiliary */}
-                <Route path="sop-water-hammer" element={<WaterHammer />} />
-                <Route path="sop-braking-system" element={<BrakingSystem />} />
-                <Route path="sop-recovery" element={<SealRecovery />} />
-                <Route path="sop-auxiliary" element={<AuxiliarySystems />} />
+                <Route path={ROUTES.FRANCIS.SOP.WATER_HAMMER} element={<WaterHammer />} />
+                <Route path={ROUTES.FRANCIS.SOP.BRAKING_SYSTEM} element={<BrakingSystem />} />
+                <Route path={ROUTES.FRANCIS.SOP.SEAL_RECOVERY} element={<SealRecovery />} />
+                <Route path={ROUTES.FRANCIS.SOP.AUXILIARY} element={<AuxiliarySystems />} />
 
                 {/* Generic SOP Viewer (fallback for dynamic SOPs) */}
                 <Route path="sop/:id" element={<SOPViewer />} />

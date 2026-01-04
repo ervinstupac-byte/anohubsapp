@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import Decimal from 'decimal.js';
 
 /**
- * DataSyncBridge (CEREBRO v4.5)
+ * DataSyncBridge (CEREBRO v4.5 Hardened)
  * 
  * Synchronizes the selected asset from AssetContext with the ProjectContext (Cerebro).
  * ensures engineering utilities are always reactive to the real machine specs.
@@ -13,30 +13,38 @@ export const DataSyncBridge: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { dispatch, state: techState } = useCerebro();
 
+    // Persistence Ref to prevent redundant sync loops
+    const lastSyncedSpecsRef = useRef<string>("");
+
     useEffect(() => {
         if (!selectedAsset) return;
 
-        // Prevent redundant dispatches if identity already matches
-        if (techState?.identity?.id === selectedAsset.id) return;
+        const specFingerprint = JSON.stringify({
+            id: selectedAsset.id,
+            specs: selectedAsset.specs
+        });
+
+        // Anti-Freeze: Only sync if identity OR specs change
+        if (lastSyncedSpecsRef.current === specFingerprint) return;
 
         console.log(`[CEREBRO Sync] Bridging Asset: ${selectedAsset.name} (${selectedAsset.turbine_type})`);
 
         // Map Asset types to TurbineType
-        const turbineType = selectedAsset.turbine_type || 'Francis';
-        const mappedType = (turbineType.charAt(0).toUpperCase() + turbineType.slice(1)) as any;
+        const turbineType = selectedAsset.turbine_type || 'FRANCIS';
+        const mappedType = turbineType.toUpperCase() as any;
 
-        // Prepare the payload for ProjectContext
+        // 1. Sync Identity
         dispatch({
             type: 'SET_ASSET',
             payload: {
-                id: selectedAsset.id,
-                name: selectedAsset.name,
-                location: selectedAsset.location,
-                type: mappedType || 'Francis'
+                ...techState.identity,
+                assetId: selectedAsset.id,
+                assetName: selectedAsset.name,
+                turbineType: mappedType || 'FRANCIS'
             }
         });
 
-        // If specific engineering specs exist, sync them too
+        // 2. Sync Engineering Specifications
         if (selectedAsset.specs) {
             const specs = selectedAsset.specs;
 
@@ -45,57 +53,49 @@ export const DataSyncBridge: React.FC = () => {
                 const headValue = parseFloat(specs.head);
                 const flowValue = parseFloat(specs.flow);
 
-                if (headValue !== techState.hydraulic.head || flowValue !== techState.hydraulic.flow) {
-                    dispatch({
-                        type: 'UPDATE_HYDRAULIC',
-                        payload: {
-                            head: headValue || techState.hydraulic.head,
-                            flow: flowValue || techState.hydraulic.flow,
-                            waterHead: new Decimal(specs.head || techState.hydraulic.head),
-                            flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
-                        }
-                    });
-                }
+                dispatch({
+                    type: 'UPDATE_HYDRAULIC',
+                    payload: {
+                        head: headValue || techState.hydraulic.head,
+                        flow: flowValue || techState.hydraulic.flow,
+                        waterHead: new Decimal(specs.head || techState.hydraulic.head),
+                        flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
+                    }
+                });
             }
 
-            // Sync Mechanical (Bolt Specs, etc)
+            // Sync Mechanical
             if (specs.boltDiameter || specs.boltCount || specs.boltGrade) {
-                if (specs.boltDiameter !== techState.mechanical.boltSpecs.diameter ||
-                    specs.boltCount !== techState.mechanical.boltSpecs.count ||
-                    specs.boltGrade !== techState.mechanical.boltSpecs.grade) {
-                    dispatch({
-                        type: 'UPDATE_MECHANICAL',
-                        payload: {
-                            boltSpecs: {
-                                ...techState.mechanical.boltSpecs,
-                                diameter: specs.boltDiameter || techState.mechanical.boltSpecs.diameter,
-                                count: specs.boltCount || techState.mechanical.boltSpecs.count,
-                                grade: specs.boltGrade || techState.mechanical.boltSpecs.grade
-                            }
+                dispatch({
+                    type: 'UPDATE_MECHANICAL',
+                    payload: {
+                        boltSpecs: {
+                            ...techState.mechanical.boltSpecs,
+                            diameter: specs.boltDiameter || techState.mechanical.boltSpecs.diameter,
+                            count: specs.boltCount || techState.mechanical.boltSpecs.count,
+                            grade: specs.boltGrade || techState.mechanical.boltSpecs.grade
                         }
-                    });
-                }
+                    }
+                });
             }
 
             // Sync Penstock
             if (specs.penstockDiameter || specs.penstockLength || specs.penstockMaterial) {
-                if (specs.penstockDiameter !== techState.penstock.diameter ||
-                    specs.penstockLength !== techState.penstock.length ||
-                    specs.penstockMaterial !== techState.penstock.material) {
-                    dispatch({
-                        type: 'UPDATE_PENSTOCK',
-                        payload: {
-                            diameter: specs.penstockDiameter || techState.penstock.diameter,
-                            length: specs.penstockLength || techState.penstock.length,
-                            material: specs.penstockMaterial || techState.penstock.material,
-                            wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
-                        }
-                    });
-                }
+                dispatch({
+                    type: 'UPDATE_PENSTOCK',
+                    payload: {
+                        diameter: specs.penstockDiameter || techState.penstock.diameter,
+                        length: specs.penstockLength || techState.penstock.length,
+                        material: specs.penstockMaterial || techState.penstock.material,
+                        wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
+                    }
+                });
             }
         }
 
-    }, [selectedAsset, dispatch, techState.identity.id]);
+        lastSyncedSpecsRef.current = specFingerprint;
+
+    }, [selectedAsset, dispatch, techState.hydraulic.head, techState.hydraulic.flow, techState.mechanical.boltSpecs, techState.penstock.diameter]);
 
     return null; // Pure logic component
 };

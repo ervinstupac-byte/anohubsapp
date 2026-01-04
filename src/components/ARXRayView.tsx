@@ -190,8 +190,8 @@ function render3DTurbineModel(
             />
 
             {/* Runner blades */}
-            {[...Array(family === 'pelton' ? 18 : 8)].map((_, i) => {
-                const angle = (i * (360 / (family === 'pelton' ? 18 : 8))) * Math.PI / 180;
+            {[...Array(family === 'PELTON' ? 18 : 8)].map((_, i) => {
+                const angle = (i * (360 / (family === 'PELTON' ? 18 : 8))) * Math.PI / 180;
                 const x2 = 200 + Math.cos(angle) * 60;
                 const y2 = 200 + Math.sin(angle) * 60;
                 return (
@@ -218,7 +218,7 @@ function render3DTurbineModel(
             />
 
             {/* Guide Vanes (for Francis/Kaplan) */}
-            {family !== 'pelton' && (
+            {family !== 'PELTON' && (
                 <circle
                     cx="200" cy="200" r="100"
                     fill="none"
@@ -282,8 +282,8 @@ const ComponentLabel: React.FC<ComponentLabelProps> = ({ component, status, posi
             onClick={onClick}
         >
             <div className={`px-2 py-1 rounded-lg backdrop-blur-md border transition-all ${isSelected
-                    ? 'bg-cyan-500/30 border-cyan-500'
-                    : 'bg-slate-900/70 border-white/20 hover:bg-slate-800/70'
+                ? 'bg-cyan-500/30 border-cyan-500'
+                : 'bg-slate-900/70 border-white/20 hover:bg-slate-800/70'
                 }`}>
                 <div className="flex items-center gap-1">
                     <StatusIcon className={`w-3 h-3 ${statusColor}`} />

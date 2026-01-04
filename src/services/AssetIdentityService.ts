@@ -5,7 +5,8 @@
 
 import {
     AssetIdentity,
-    FrancisAdvancedModule,
+    TurbineType,
+    SpecializedAdvancedModule,
     FluidIntelligence,
     EnvironmentalBaseline,
     OperatingPoint,
@@ -17,15 +18,15 @@ import {
 export class AssetIdentityService {
 
     /**
-     * Calculate Axial Thrust Balance for Francis turbines
+     * Calculate Axial Thrust Balance for specialized turbines (e.g. Francis)
      */
-    static calculateAxialThrustBalance(francis: FrancisAdvancedModule): {
+    static calculateAxialThrustBalance(specialized: SpecializedAdvancedModule): {
         balanced: boolean;
         pressureDifference: number;
     } {
         const diff = Math.abs(
-            francis.draftTubePressure.nominalBar -
-            francis.backRunnerPressure.nominalBar
+            specialized.draftTubePressure.nominalBar -
+            specialized.backRunnerPressure.nominalBar
         );
 
         return {
@@ -265,7 +266,7 @@ export class AssetIdentityService {
     static createDefaultIdentity(
         assetId: string,
         assetName: string,
-        turbineType: 'PELTON' | 'KAPLAN' | 'FRANCIS',
+        turbineType: TurbineType,
         createdBy: string
     ): AssetIdentity {
         const now = new Date().toISOString();
@@ -276,6 +277,10 @@ export class AssetIdentityService {
             turbineType,
             manufacturer: '',
             commissioningYear: new Date().getFullYear(),
+            totalOperatingHours: 0,
+            hoursSinceLastOverhaul: 0,
+            startStopCount: 0,
+            location: 'Station A',
 
             machineConfig: {
                 orientation: 'HORIZONTAL',
@@ -337,6 +342,8 @@ export class AssetIdentityService {
                     regulatoryLimitDB: 85,
                     complianceStatus: 'COMPLIANT'
                 },
+                ambientTemperature: 20,
+                relativeHumidity: 50,
                 penstockType: 'STEEL',
                 penstockDiameterMM: 0,
                 penstockLengthM: 0,

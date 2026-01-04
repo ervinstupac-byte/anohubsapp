@@ -201,7 +201,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             {selectedAsset?.type === 'HPP' && (
                                 <>
                                     {/* FRANCIS */}
-                                    {(selectedAsset.turbine_type === 'francis' || selectedAsset.specs?.spiralCasePressure) && (
+                                    {(selectedAsset.turbine_type === 'FRANCIS' || selectedAsset.specs?.spiralCasePressure) && (
                                         <>
                                             <GlassCard
                                                 onClick={() => navigate(`/${ROUTES.FRANCIS.DIAGNOSTICS.MAIN}`)}
@@ -234,7 +234,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     )}
 
                                     {/* PELTON */}
-                                    {(selectedAsset.turbine_type === 'pelton' || selectedAsset.specs?.nozzleCount) && (
+                                    {(selectedAsset.turbine_type === 'PELTON' || selectedAsset.specs?.nozzleCount) && (
                                         <GlassCard
                                             onClick={() => navigate(`/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`)} // Link to SOP Manager
                                             className="p-4 cursor-pointer bg-blue-900/10 border-blue-500/30 hover:bg-blue-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"
@@ -251,7 +251,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     )}
 
                                     {/* KAPLAN */}
-                                    {(selectedAsset.turbine_type === 'kaplan' || selectedAsset.specs?.bladeAngleRangeDeg) && (
+                                    {(selectedAsset.turbine_type === 'KAPLAN' || selectedAsset.specs?.bladeAngleRangeDeg) && (
                                         <GlassCard
                                             onClick={() => navigate(`/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`)}
                                             className="p-4 cursor-pointer bg-purple-900/10 border-purple-500/30 hover:bg-purple-900/20 flex items-center gap-4 group col-span-1 md:col-span-2"

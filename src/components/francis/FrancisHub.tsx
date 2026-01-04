@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { FrancisSensorData } from '../../models/turbine/types';
+import { FrancisInteractiveCrossSection } from '../diagnostic-twin/FrancisInteractiveCrossSection';
+import { FrancisHillChart } from '../diagnostic-twin/FrancisHillChart';
 
 
 // Status Dot Component
@@ -130,13 +132,13 @@ export const FrancisHub: React.FC = () => {
 
     // Live Physics Data Hook (Mock for now or derive from techState)
     const simData: Partial<FrancisSensorData> = {
-        rpm: techState.francis?.sensors?.rpm || 428.5,
-        gridFrequency: techState.francis?.sensors?.gridFrequency || 50.02,
-        activePower: techState.francis?.sensors?.activePower || 142.5
+        rpm: techState.specializedState?.sensors?.rpm || 428.5,
+        gridFrequency: techState.specializedState?.sensors?.gridFrequency || 50.02,
+        activePower: techState.specializedState?.sensors?.activePower || 142.5
     };
 
-    // Fallback if state.francis is undefined
-    const moduleStates = techState.francis?.modules || {
+    // Fallback if state.specializedState is undefined
+    const moduleStates = techState.specializedState?.modules || {
         miv: 'green',
         penstock: 'green',
         cooling: 'green',
@@ -208,7 +210,7 @@ export const FrancisHub: React.FC = () => {
         else if (current === 'yellow') next = 'red';
 
         dispatch({
-            type: 'UPDATE_FRANCIS_MODULE',
+            type: 'UPDATE_SPECIALIZED_MODULE',
             payload: { moduleId: key, status: next }
         });
     };
@@ -360,6 +362,31 @@ export const FrancisHub: React.FC = () => {
                         </GlassCard>
                     </div>
                 </div>
+            </div>
+
+            {/* NC-4.2 ENGINEERING INTELLIGENCE SECTION */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <GlassCard className="border-t-2 border-t-cyan-500/50 overflow-hidden">
+                    <div className="mb-6 flex justify-between items-center">
+                        <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                            <Disc className="w-5 h-5 text-cyan-400" />
+                            Interactive Cross-Section
+                        </h3>
+                        <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded border border-cyan-500/20 font-bold uppercase">Live Physics HUD</span>
+                    </div>
+                    <FrancisInteractiveCrossSection />
+                </GlassCard>
+
+                <GlassCard className="border-t-2 border-t-blue-500/50 overflow-hidden">
+                    <div className="mb-6 flex justify-between items-center">
+                        <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                            <BarChart2 className="w-5 h-5 text-blue-400" />
+                            Hill Chart Topology
+                        </h3>
+                        <span className="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded border border-blue-500/20 font-bold uppercase">Efficiency Mapping</span>
+                    </div>
+                    <FrancisHillChart />
+                </GlassCard>
             </div>
 
             {/* Expand/Collapse All Toggle */}

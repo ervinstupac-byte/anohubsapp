@@ -121,8 +121,8 @@ export class CavitationErosionService {
 
         // Determine current material (typical for turbine family)
         let currentMaterial = 'Martenzitni Cr13 čelik'; // Default
-        if (turbineFamily === 'kaplan') currentMaterial = 'Austenitic Stainless 18Cr-8Ni';
-        if (turbineFamily === 'pelton') currentMaterial = 'Hardened 17Cr-4Ni';
+        if (turbineFamily === 'KAPLAN') currentMaterial = 'Austenitic Stainless 18Cr-8Ni';
+        if (turbineFamily === 'PELTON') currentMaterial = 'Hardened 17Cr-4Ni';
 
         // Recommend action based on erosion rate
         let recommendedMaterial: string | undefined;
@@ -138,14 +138,14 @@ export class CavitationErosionService {
             recommendedAction = erosionAcceleration > 30 ? 'STELLITE_WELD' : 'REGIME_CHANGE';
 
             // Suggest operational changes
-            if (turbineFamily === 'francis') {
+            if (turbineFamily === 'FRANCIS') {
                 recommendedRegimeChange = {
                     parameter: 'HEAD',
                     currentValue: 100, // meters (example)
                     recommendedValue: 95,
                     expectedReduction: 15 // % erosion reduction
                 };
-            } else if (turbineFamily === 'kaplan') {
+            } else if (turbineFamily === 'KAPLAN') {
                 recommendedRegimeChange = {
                     parameter: 'FLOW',
                     currentValue: 50, // m³/s (example)

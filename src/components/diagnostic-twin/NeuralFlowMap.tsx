@@ -223,77 +223,100 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         eccentricity={orbit.eccentricity}
                         vibration={vibration.x}
                     />
-                    <div className="w-full h-[2px] sm:w-[2px] sm:h-80 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent sm:mx-12"></div>
+
+                    <div className="relative flex flex-col items-center justify-center sm:mx-4">
+                        <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"></div>
+
+                        {/* HEALTH DELTA INDICATOR (NC-4.2 FLEET INTEL) */}
+                        {technicalState.demoMode.active && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="absolute bg-slate-900/80 backdrop-blur-xl border border-amber-500/50 rounded-xl p-4 shadow-[0_0_30px_rgba(245,158,11,0.2)] z-30 min-w-[200px]"
+                            >
+                                <div className="text-[10px] text-amber-400 font-black uppercase tracking-widest text-center mb-1">Fleet Health Delta</div>
+                                <div className="text-4xl font-black text-white text-center tracking-tighter">
+                                    Δ {Math.abs(85 - (technicalState.riskScore > 0 ? 100 - technicalState.riskScore : 85)).toFixed(0)}%
+                                </div>
+                                <div className="mt-2 text-[8px] text-slate-400 font-mono text-center uppercase">
+                                    Simulation vs. Nominal Baseline
+                                </div>
+                            </motion.div>
+                        )}
+
+                        <div className="w-[2px] h-40 bg-gradient-to-t from-transparent via-cyan-500/20 to-transparent"></div>
+                    </div>
+
                     <TurbineUnit
                         id="t2"
                         name="UNIT_02"
                         status="running"
                         mw={mwOutput * 0.98}
-                        eccentricity={orbit.eccentricity * 1.05}
-                        vibration={vibration.y}
+                        eccentricity={orbit.eccentricity * 0.15} // UNIT_02 staying nominal
+                        vibration={vibration.y * 0.2}
                     />
                 </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12">
-                    <DigitalDisplay value={technicalState.hydraulic.flow.toFixed(1)} label="NOMINAL_FLOW" unit="m³/s" color="cyan" />
-                    <DigitalDisplay value={technicalState.hydraulic.head.toFixed(0)} label="GROSS_HEAD" unit="m" color="cyan" />
-                    <DigitalDisplay value={orbit.eccentricity.toFixed(3)} label="ECCENTRICITY" color={orbit.eccentricity > 0.8 ? 'red' : 'cyan'} />
-                    <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
-                </div>
-
-                <AnimatePresence>
-                    {(orbit.eccentricity > 0.75 || vibration.x > 0.05) && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20, height: 0 }}
-                            animate={{ opacity: 1, y: 0, height: 'auto' }}
-                            exit={{ opacity: 0, y: 20, height: 0 }}
-                            className="mt-6 overflow-hidden"
-                        >
-                            <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-2xl shadow-[0_20px_40px_rgba(6,182,212,0.1)] relative group">
-                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
-                                            <Sparkles className="w-6 h-6 animate-pulse" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-white font-black uppercase text-sm tracking-widest">{t('neuralFlow.smartInsight')}</h4>
-                                            <p className="text-xs text-slate-400 font-medium max-w-md">
-                                                {orbit.eccentricity > 0.75
-                                                    ? t('neuralFlow.eccentricityInsight')
-                                                    : t('neuralFlow.vibrationInsight')}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => navigate('/maintenance/shaft-alignment')}
-                                        className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
-                                    >
-                                        {t('neuralFlow.launchAlignmentWizard')}
-                                        <ChevronRight className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {diagnosticAlerts.length > 0 && (
-                    <div className="mt-6 p-5 bg-red-950/30 border border-red-500/30 rounded-2xl animate-pulse">
-                        <div className="flex items-center gap-3 mb-3">
-                            <ZapOff className="w-5 h-5 text-red-500" />
-                            <h4 className="text-red-400 font-black uppercase text-sm tracking-widest text-white">{t('neuralFlow.detectionActive')}</h4>
-                        </div>
-                        <div className="space-y-1">
-                            {diagnosticAlerts.map((alarm, idx) => (
-                                <div key={idx} className="text-red-200 text-xs font-mono pl-8">
-                                    {`> ${alarm.message}`}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12">
+                <DigitalDisplay value={technicalState.hydraulic.flow.toFixed(1)} label="NOMINAL_FLOW" unit="m³/s" color="cyan" />
+                <DigitalDisplay value={technicalState.hydraulic.head.toFixed(0)} label="GROSS_HEAD" unit="m" color="cyan" />
+                <DigitalDisplay value={orbit.eccentricity.toFixed(3)} label="ECCENTRICITY" color={orbit.eccentricity > 0.8 ? 'red' : 'cyan'} />
+                <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
+            </div>
+
+            <AnimatePresence>
+                {(orbit.eccentricity > 0.75 || vibration.x > 0.05) && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: 20, height: 0 }}
+                        className="mt-6 overflow-hidden"
+                    >
+                        <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-2xl shadow-[0_20px_40px_rgba(6,182,212,0.1)] relative group">
+                            <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                                        <Sparkles className="w-6 h-6 animate-pulse" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-black uppercase text-sm tracking-widest">{t('neuralFlow.smartInsight')}</h4>
+                                        <p className="text-xs text-slate-400 font-medium max-w-md">
+                                            {orbit.eccentricity > 0.75
+                                                ? t('neuralFlow.eccentricityInsight')
+                                                : t('neuralFlow.vibrationInsight')}
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => navigate('/maintenance/shaft-alignment')}
+                                    className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
+                                >
+                                    {t('neuralFlow.launchAlignmentWizard')}
+                                    <ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {diagnosticAlerts.length > 0 && (
+                <div className="mt-6 p-5 bg-red-950/30 border border-red-500/30 rounded-2xl animate-pulse">
+                    <div className="flex items-center gap-3 mb-3">
+                        <ZapOff className="w-5 h-5 text-red-500" />
+                        <h4 className="text-red-400 font-black uppercase text-sm tracking-widest text-white">{t('neuralFlow.detectionActive')}</h4>
+                    </div>
+                    <div className="space-y-1">
+                        {diagnosticAlerts.map((alarm, idx) => (
+                            <div key={idx} className="text-red-200 text-xs font-mono pl-8">
+                                {`> ${alarm.message}`}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 });

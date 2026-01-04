@@ -1,0 +1,27 @@
+﻿src/components/modals/PrintPreviewModal.tsx(21,77): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.
+src/components/modals/PrintPreviewModal.tsx(87,125): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.
+src/components/modals/PrintPreviewModal.tsx(88,119): error TS2339: Property 'location' does not exist on type 'AssetIdentity'.
+src/components/TechnicalPassport.tsx(20,48): error TS2339: Property 'getPlugin' does not exist on type 'ProfileLoaderService'.
+src/components/TechnicalPassport.tsx(142,61): error TS7006: Parameter 'section' implicitly has an 'any' type.
+src/components/TechnicalPassport.tsx(146,54): error TS7006: Parameter 'field' implicitly has an 'any' type.
+src/components/TechnicalPassport.tsx(157,61): error TS7006: Parameter 'opt' implicitly has an 'any' type.
+src/components/UniversalTurbineDashboard.tsx(8,26): error TS2459: Module '"../models/turbine/TurbineFactory"' declares 'TurbineType' locally, but it is not exported.
+src/components/UniversalTurbineDashboard.tsx(8,85): error TS2305: Module '"../models/turbine/TurbineFactory"' has no exported member 'TurbineFamily'.
+src/contexts/ProjectContext.tsx(326,37): error TS2339: Property 'id' does not exist on type 'AssetIdentity'.
+src/contexts/ProjectContext.tsx(327,39): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.
+src/contexts/ProjectContext.tsx(328,41): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/hooks/useContextEngine.ts(118,71): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/hooks/useContextEngine.ts(168,42): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
+src/hooks/useContextEngine.ts(185,38): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
+src/hooks/useContextEngine.ts(384,46): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
+src/hooks/useEngineeringMath.ts(15,39): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/models/ProjectLifecycle.ts(5,10): error TS2459: Module '"./turbine/TurbineFactory"' declares 'TurbineType' locally, but it is not exported.
+src/models/ProjectLifecycle.ts(5,23): error TS2305: Module '"./turbine/TurbineFactory"' has no exported member 'TurbineFamily'.
+src/routes/FrancisRouter.tsx(7,52): error TS2307: Cannot find module '../components/FrancisDiagnostics' or its corresponding type declarations.
+src/services/FinancialImpactEngine.ts(10,65): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/services/PhysicsEngine.ts(21,38): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/services/PhysicsEngine.ts(127,65): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/services/ReportGenerator.ts(633,53): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.
+src/services/ReportGenerator.ts(649,46): error TS2339: Property 'id' does not exist on type 'AssetIdentity'.
+src/services/ReportGenerator.ts(649,79): error TS2339: Property 'location' does not exist on type 'AssetIdentity'.
+src/services/ReportGenerator.ts(787,43): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.

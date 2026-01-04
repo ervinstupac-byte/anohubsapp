@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        mono: ['Roboto Mono', 'JetBrains Mono', 'monospace'],
       },
       colors: {
         'h-cyan': '#06b6d4',

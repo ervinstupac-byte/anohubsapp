@@ -4,7 +4,6 @@
 import React, { ReactNode } from 'react';
 import {
     ITurbineModel,
-    TurbineFamily,
     TurbineVariant,
     TurbineConfiguration,
     ToleranceMap,
@@ -14,6 +13,7 @@ import {
     ForensicsPattern,
     FrancisSensorData
 } from './types';
+import { TurbineFamily } from '../../types/assetIdentity';
 
 // Constants mined from Francis_H Reference Docs & FrancisSchema.ts
 const FRANCIS_CONSTANTS = {
@@ -27,7 +27,7 @@ const FRANCIS_CONSTANTS = {
 };
 
 export class FrancisModel implements ITurbineModel {
-    family: TurbineFamily = 'francis';
+    family: TurbineFamily = 'FRANCIS';
     variant: TurbineVariant;
     config: TurbineConfiguration;
 
@@ -119,10 +119,10 @@ export class FrancisModel implements ITurbineModel {
         if (historicalData.length === 0) return anomalies;
 
         const latest = historicalData[historicalData.length - 1];
-        const francisData = latest.francis as FrancisSensorData;
+        const francisData = latest.specialized as FrancisSensorData;
 
         // We also check common data for Vibration/Temp if not in Francis specific
-        const vibration = latest.francis?.stay_ring_vibration || latest.common.vibration;
+        const vibration = (latest.specialized as FrancisSensorData)?.stay_ring_vibration || latest.common.vibration;
         const temp = latest.common.temperature; // Assuming this maps to bearing temp for now
 
         if (!francisData) return anomalies;

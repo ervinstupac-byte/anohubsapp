@@ -14,50 +14,62 @@ import { DiagnosticProvider } from './DiagnosticContext.tsx';
 import { FleetProvider } from './FleetContext.tsx';
 import { VoiceAssistantProvider } from './VoiceAssistantContext.tsx';
 import { ForensicsProvider } from './ForensicsContext.tsx';
-// import { AIPredictionProvider } from './AIPredictionContext.tsx'; // REMOVED: AI predictions disabled for authentic data only
 import { CommissioningProvider } from './CommissioningContext.tsx';
 import { DocumentProvider } from './DocumentContext.tsx';
+import { ProjectProvider } from './ProjectContext.tsx';
+import { NotificationProvider } from './NotificationContext.tsx';
+import { HydrologyProvider } from './HydrologyContext.tsx';
+import { DEFAULT_TECHNICAL_STATE } from '../models/TechnicalSchema.ts';
 
 interface GlobalProviderProps {
     children: React.ReactNode;
 }
 
+/**
+ * GLOBAL PROVIDER (REVISED NC-4.2)
+ * The Hierarchy of Truth: Consolidates all core engineering and system contexts.
+ */
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     return (
         <ToastProvider>
             <AuditProvider>
-                <DocumentProvider>
-                    <AuthProvider>
-                        <QuestionnaireProvider>
-                            <HPPDesignProvider>
-                                <RiskProvider>
-                                    <AssetProvider>
+                <NotificationProvider>
+                    <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
+                        <HydrologyProvider>
+                            <AssetProvider>
+                                <MaintenanceProvider>
+                                    <RiskProvider>
                                         <TelemetryProvider>
-                                            <MaintenanceProvider>
-                                                <InventoryProvider>
-                                                    <WorkOrderProvider>
-                                                        <DiagnosticProvider>
-                                                            {/* AIPredictionProvider removed - AI predictions disabled */}
-                                                            <FleetProvider>
-                                                                <VoiceAssistantProvider>
-                                                                    <ForensicsProvider>
-                                                                        <CommissioningProvider>
-                                                                            {children}
-                                                                        </CommissioningProvider>
-                                                                    </ForensicsProvider>
-                                                                </VoiceAssistantProvider>
-                                                            </FleetProvider>
-                                                        </DiagnosticProvider>
-                                                    </WorkOrderProvider>
-                                                </InventoryProvider>
-                                            </MaintenanceProvider>
+                                            <AuthProvider>
+                                                <QuestionnaireProvider>
+                                                    <HPPDesignProvider>
+                                                        <InventoryProvider>
+                                                            <WorkOrderProvider>
+                                                                <DiagnosticProvider>
+                                                                    <FleetProvider>
+                                                                        <VoiceAssistantProvider>
+                                                                            <ForensicsProvider>
+                                                                                <CommissioningProvider>
+                                                                                    <DocumentProvider>
+                                                                                        {children}
+                                                                                    </DocumentProvider>
+                                                                                </CommissioningProvider>
+                                                                            </ForensicsProvider>
+                                                                        </VoiceAssistantProvider>
+                                                                    </FleetProvider>
+                                                                </DiagnosticProvider>
+                                                            </WorkOrderProvider>
+                                                        </InventoryProvider>
+                                                    </HPPDesignProvider>
+                                                </QuestionnaireProvider>
+                                            </AuthProvider>
                                         </TelemetryProvider>
-                                    </AssetProvider>
-                                </RiskProvider>
-                            </HPPDesignProvider>
-                        </QuestionnaireProvider>
-                    </AuthProvider>
-                </DocumentProvider>
+                                    </RiskProvider>
+                                </MaintenanceProvider>
+                            </AssetProvider>
+                        </HydrologyProvider>
+                    </ProjectProvider>
+                </NotificationProvider>
             </AuditProvider>
         </ToastProvider>
     );

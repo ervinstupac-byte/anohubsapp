@@ -16,18 +16,15 @@ import { GlassCard } from './ui/GlassCard';
 import { ModernButton } from './ui/ModernButton';
 import { ModernInput } from './ui/ModernInput';
 import { FrancisModel } from '../models/turbine/FrancisModel';
-import { CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
-
 import { useNotifications } from '../contexts/NotificationContext';
+import { useAssetContext } from '../contexts/AssetContext';
+import { TurbineFactory } from '../models/turbine/TurbineFactory';
+import { TurbineFamily, TurbineVariant, Anomaly } from '../models/turbine/types';
+import type { CompleteSensorData } from '../models/turbine/types';
 
 // Local UI State Interface
-interface FrancisTelemetry {
-    bearingTemp: number;
-    vibration: number;
-    siltPpm: number;
-    gridFreq: number;
-    loadMw: number;
-    mivStatus: string;
+interface SpecializedTelemetry {
+    [key: string]: number | string;
 }
 
 // Adapted Result for UI
@@ -38,13 +35,14 @@ interface DiagnosticOutcome {
     referenceProtocol?: string;
 }
 
-export const FrancisDiagnostics: React.FC = () => {
+export const SpecializedDiagnostics: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { pushNotification } = useNotifications();
+    const { activeProfile } = useAssetContext();
 
     // -- STATE --
-    const [inputs, setInputs] = useState<FrancisTelemetry>({
+    const [inputs, setInputs] = useState<SpecializedTelemetry>({
         bearingTemp: 45.0,
         vibration: 0.5,
         siltPpm: 50,
@@ -57,28 +55,38 @@ export const FrancisDiagnostics: React.FC = () => {
 
     // -- HANDLERS --
     const handleRunDiagnostics = () => {
-        // Instantiate Engineering Model
-        const model = new FrancisModel('francis_horizontal', {} as any);
+        if (!activeProfile) return;
+
+        // Instantiate Engineering Model via Factory
+        const family = activeProfile.type.toUpperCase() as TurbineFamily;
+        const variant = (activeProfile.type.toLowerCase() + '_horizontal') as TurbineVariant; // Defaulting for manual diag
+        const model = TurbineFactory.createModel(variant, {
+            head: 100,
+            flow_max: 10,
+            runner_diameter: 1.5,
+            manufacturer: 'Generic',
+            serial_number: 'M-001',
+            commissioning_date: new Date().toISOString()
+        });
 
         // Construct Sensor Data from Form Inputs
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
             assetId: 'manual-diag',
-            turbineFamily: 'francis',
+            turbineFamily: family,
             common: {
-                vibration: inputs.vibration,
-                temperature: inputs.bearingTemp, // Mapping bearing temp to common temp for now
-                output_power: inputs.loadMw,
+                vibration: inputs.vibration as number,
+                temperature: inputs.bearingTemp as number,
+                output_power: inputs.loadMw as number,
                 efficiency: 90,
                 status: 'OPTIMAL'
             },
-            francis: {
-                // Inferring some values for the sake of the model check
-                guide_vane_opening: inputs.loadMw > 10 ? 60 : 30, // Rough inference
+            specialized: {
+                guide_vane_opening: (inputs.loadMw as number) > 10 ? 60 : 30,
                 runner_clearance: 1.0,
-                draft_tube_pressure: -0.2, // Default healthy
+                draft_tube_pressure: -0.2,
                 spiral_case_pressure: 5.0
-            } as FrancisSensorData
+            }
         };
 
         // Run Detection
@@ -86,22 +94,21 @@ export const FrancisDiagnostics: React.FC = () => {
 
         // Map Anomalies to UI Outcomes
         if (anomalies.length === 0) {
-            setResults([{ status: 'NORMAL', message: 'System Nominal', referenceProtocol: 'SOP-GEN-001' }]);
+            setResults([{ status: 'NORMAL', message: t('specialized.status.normal'), referenceProtocol: 'SOP-GEN-001' }]);
         } else {
-            const mappedResults: DiagnosticOutcome[] = anomalies.map(a => ({
-                // Map Severity to UI Status
+            const mappedResults: DiagnosticOutcome[] = anomalies.map((a: Anomaly) => ({
                 status: a.severity === 'CRITICAL' ? 'CRITICAL' : a.severity === 'HIGH' ? 'CRITICAL' : 'WARNING',
                 message: a.type.replace(/_/g, ' '),
                 action: a.recommendation,
-                referenceProtocol: 'REF-ENG-LOGIC' // Generic ref for dynamic logic
+                referenceProtocol: 'REF-ENG-LOGIC'
             }));
             setResults(mappedResults);
         }
 
-        pushNotification('INFO', 'Francis Logic Engine: Analysis Complete');
+        pushNotification('INFO', `${activeProfile.type} Logic Engine: Analysis Complete`);
     };
 
-    const handleInputChange = (field: keyof FrancisTelemetry, value: string) => {
+    const handleInputChange = (field: string, value: string) => {
         setInputs(prev => ({
             ...prev,
             [field]: parseFloat(value) || 0
@@ -136,10 +143,10 @@ export const FrancisDiagnostics: React.FC = () => {
                         <Activity className="w-8 h-8 text-cyan-400" />
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-2">
-                        {t('francis.title').split('•')[0]} <span className="text-cyan-400">{t('francis.title').split('•')[1] || 'Fault Isolation'}</span>
+                        {activeProfile?.type} <span className="text-cyan-400">{t('common.diagnostic_hub')}</span>
                     </h1>
                     <p className="text-slate-400 text-sm font-mono max-w-md mx-auto">
-                        {t('francis.subtitle')}
+                        Specialized Fault Isolation & Forensics
                     </p>
                 </div>
 

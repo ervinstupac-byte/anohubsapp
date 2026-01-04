@@ -53,7 +53,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                 id: 'JET_SYNC',
                 label: 'Pelton Jet Sync',
                 description: 'Multi-nozzle balance (Pelton only)',
-                required: asset.turbine_family === 'pelton'
+                required: asset.turbine_family === 'PELTON'
             },
             {
                 id: 'SPECIAL_MEASUREMENTS',
@@ -110,7 +110,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     <ul className="text-sm text-slate-400 space-y-1">
                         <li>✅ Baseline fingerprints at 0%, 25%, 50%, 75%, 100% load</li>
                         <li>✅ Shaft alignment verification (0.05 mm/m standard)</li>
-                        {asset.turbine_family === 'pelton' && <li>✅ Multi-nozzle jet balance</li>}
+                        {asset.turbine_family === 'PELTON' && <li>✅ Multi-nozzle jet balance</li>}
                         <li>📋 Optional: Hydro-static test, special measurements</li>
                     </ul>
                 </div>
@@ -192,7 +192,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                         />
                     )}
 
-                    {currentStep === 'JET_SYNC' && asset.turbine_family === 'pelton' && (
+                    {currentStep === 'JET_SYNC' && asset.turbine_family === 'PELTON' && (
                         <PeltonJetVisualizer
                             sessionId={session.id}
                             onComplete={() => completeStep('JET_SYNC')}

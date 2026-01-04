@@ -4,9 +4,12 @@ import { TechnicalProjectState, ProjectAction, ComponentHealthData } from '../mo
 import { PhysicsEngine } from '../services/PhysicsEngine';
 import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
 import { DrTurbineAI } from '../services/DrTurbineAI';
+import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
+import { ProfileLoader } from '../services/ProfileLoader';
 import { HPPSettingsSchema } from '../schemas/engineering';
 import i18n from '../i18n';
 import Decimal from 'decimal.js';
+import { SolutionArchitect } from '../services/SolutionArchitect';
 
 const PERSISTENCE_KEY = 'ANOHUB_CORE_V4.2';
 
@@ -52,23 +55,23 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 }
             };
         }
-        case 'UPDATE_FRANCIS_MODULE': {
+        case 'UPDATE_SPECIALIZED_MODULE': {
             const { moduleId, status } = action.payload;
-            const currentFrancis = state.francis || {
+            const currentSpecialized = state.specializedState || {
                 modules: {},
                 healthScore: 100,
                 activeRisks: []
             };
 
             const updatedModules = {
-                ...currentFrancis.modules,
+                ...currentSpecialized.modules,
                 [moduleId]: status
             };
 
             return {
                 ...state,
-                francis: {
-                    ...currentFrancis,
+                specializedState: {
+                    ...currentSpecialized,
                     modules: updatedModules
                 }
             };
@@ -138,6 +141,51 @@ const cerebroReducer = (state: TechnicalProjectState, action: ProjectAction): Te
                 ...state,
                 demoMode: action.payload
             };
+        case 'START_SCENARIO':
+            return {
+                ...state,
+                demoMode: {
+                    active: action.payload !== 'NORMAL',
+                    scenario: action.payload
+                }
+            };
+        case 'UPDATE_SIMULATION':
+            return {
+                ...state,
+                ...action.payload,
+                // Ensure physics are recalculated on top of manual simulation updates
+                ...PhysicsEngine.recalculateProjectPhysics({ ...state, ...action.payload })
+            };
+        case 'UPDATE_STRUCTURAL':
+            return {
+                ...state,
+                structural: { ...state.structural, ...action.payload }
+            };
+        case 'UPDATE_HYDROLOGY':
+            return {
+                ...state,
+                hydrology: { ...state.hydrology, ...action.payload }
+            };
+        case 'UPDATE_MARKET':
+            return {
+                ...state,
+                market: { ...state.market, ...action.payload }
+            };
+        case 'ADD_MANUAL_RULE':
+            return {
+                ...state,
+                manualRules: [...state.manualRules, action.payload]
+            };
+        case 'APPLY_MITIGATION':
+            const nextApplied = Array.from(new Set([...state.appliedMitigations, action.payload]));
+            const nextStateWithMitigation = { ...state, appliedMitigations: nextApplied };
+            return {
+                ...nextStateWithMitigation,
+                structural: {
+                    ...state.structural,
+                    extendedLifeYears: SolutionArchitect.calculateTotalExtendedLife(nextStateWithMitigation)
+                }
+            };
         case 'UPDATE_TELEMETRY_SUCCESS':
             return action.payload; // payload is the fully recalculated state
         case 'RESET_TO_DEMO':
@@ -205,7 +253,7 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                     details: JSON.stringify(validatedData.error.format())
                 });
                 console.error(`🚨 CRITICAL: ${errorMessage}`);
-                return; // Block update to preserve state integrity
+                return; // Block update to preserve
             }
 
             // 2. High-Precision Preparation
@@ -248,6 +296,10 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                     baselineOrbitCenter: state.mechanical.baselineOrbitCenter || { x: 0, y: 0 }
                 },
                 diagnosis,
+                structural: {
+                    ...state.structural,
+                    extendedLifeYears: (diagnosis as any).metrics.extendedLifeYears || 0
+                },
                 riskScore: diagnosis.severity === 'CRITICAL' ? 100 : (diagnosis.severity === 'WARNING' ? 50 : 0),
                 lastRecalculation: new Date().toISOString()
             };
@@ -286,9 +338,9 @@ export const useProjectEngine = (): any => {
         if (!state.identity) return null;
         // Construct a FULL AssetIdentity from the simple definition + state context
         return {
-            assetId: state.identity.id,
-            assetName: state.identity.name,
-            turbineType: state.identity.type.toUpperCase() as any, // 'PELTON' | 'KAPLAN' ...
+            assetId: state.identity.assetId,
+            assetName: state.identity.assetName,
+            turbineType: state.identity.turbineType, // 'PELTON' | 'KAPLAN' ...
             manufacturer: 'AnoHUB Legacy',
             commissioningYear: 2020,
             version: '1.0',
@@ -331,7 +383,7 @@ export const useProjectEngine = (): any => {
                 hillChart: { dataPoints: 0, coveragePercent: 0, lastUpdated: '' },
                 bestEfficiencyPoint: null
             },
-            francisAdvanced: { // Mock for Francis calculations
+            specializedAdvanced: { // Mock for specialized calculations
                 frontRunnerClearanceMM: 0.4,
                 backRunnerClearanceMM: 0.4,
                 spiralClearanceMM: 0.5,

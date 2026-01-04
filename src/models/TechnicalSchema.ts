@@ -1,20 +1,35 @@
 import Decimal from 'decimal.js';
 
-export type TurbineType = 'Pelton' | 'Kaplan' | 'Francis';
+import { AssetIdentity, TurbineType } from '../types/assetIdentity';
 
-export type DemoScenario = 'NORMAL' | 'SURGE' | 'THERMAL' | 'CAVITATION' | 'LEAK';
+export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS';
 
 export interface DemoState {
     active: boolean;
     scenario: DemoScenario | null;
 }
 
-export interface AssetIdentity {
-    id: string;
-    name: string;
-    location: string;
-    type: TurbineType;
+export interface StructuralMetrics {
+    wearIndex: number; // 0-100 (Cumulative fatigue)
+    remainingLife: number; // 0-100 (%)
+    fatigueCycles: number;
+    estimatedFailureDate?: string;
+    extendedLifeYears?: number;
 }
+
+export interface HydrologyContext {
+    upstreamLevel: number; // m
+    downstreamLevel: number; // m
+    forecastedInflow: number; // m3/s
+    spillageRisk: number; // 0-100 (%)
+}
+
+export interface MarketData {
+    energyPrice: number; // EUR/MWh
+    revenueToday: number; // EUR
+    profitabilityIndex: number; // 0-1 (Revenue vs Wear)
+}
+
 
 export interface HydraulicStream {
     head: number;
@@ -53,6 +68,8 @@ export interface MechanicalStream {
     baselineOrbitCenter?: { x: number; y: number }; // For localStorage persistence
     vibrationHistory?: { x: number; y: number }[]; // For centralized engineering math history
     centerPath?: { x: number; y: number }[]; // For thermal drift visualization
+    insulationResistance?: number; // MOhm - Added for ISO/Megger
+    axialPlay?: number; // mm - Added for expert diagnostic
     acousticNoiseFloor?: number; // dB - Added for Acoustic-Orbit Fusion
     acousticMetrics?: AcousticMetrics; // NEW: Real-time shadow acoustic data
     particleAnalysis?: any[]; // NEW: Ferography classification history
@@ -86,6 +103,7 @@ export interface TechnicalProjectState {
         designFlow: number;
         waterQuality: string;
         temperature: number;
+        designPerformanceMW: number; // Manufacturer design output for benchmarking
     };
     penstock: {
         diameter: number;
@@ -105,14 +123,30 @@ export interface TechnicalProjectState {
         surgePressureBar: number;
         waterHammerPressureBar: number;
         eccentricity: number; // NEW: Persisted eccentricity for reporting
+        axialThrustKN?: number; // NEW: NC-4.2 MHE Specialization
+        specificWaterConsumption?: number; // m3/kWh - Leakage monitor
+        leakageStatus?: 'NOMINAL' | 'DEGRADING' | 'CRITICAL';
+        volumetricLoss?: number; // NEW: NC-4.2 Volumetric Efficiency Monitor
     };
     governor: GovernorState; // NEW: High-precision PID state
-    francis?: FrancisState; // NEW: Francis Hub State
+    specializedState?: SpecializedState; // NEW: Specialized Hub State
     componentHealth?: ComponentHealthRegistry;
     diagnosis?: DiagnosisReport;
     riskScore: number;
     lastRecalculation: string;
     demoMode: DemoState;
+    structural: StructuralMetrics;
+    hydrology: HydrologyContext;
+    market: MarketData;
+    manualRules: string[];
+    appliedMitigations: string[]; // NEW: NC-4.2 Persistent Mitigations
+    financials?: {
+        lostRevenueEuro: number;
+        maintenanceBufferEuro: number;
+        potentialDamageEUR: number;
+        maintenanceSavingsEuro?: number; // NEW: NC-4.2 MHE Specialization
+        leakageCostYearly?: number; // NEW: NC-4.2 Leakage Monitor
+    };
 }
 
 export interface EngineeringConstants {
@@ -145,12 +179,12 @@ export interface PenstockSpecs {
     materialYieldStrength: number;
 }
 
-export type FrancisModuleStatus = 'green' | 'yellow' | 'red';
+export type SpecializedModuleStatus = 'green' | 'yellow' | 'red';
 
 import { FrancisSensorData } from './turbine/types';
 
-export interface FrancisState {
-    modules: Record<string, FrancisModuleStatus>;
+export interface SpecializedState {
+    modules: Record<string, SpecializedModuleStatus>;
     healthScore: number;
     activeRisks: string[];
     sensors?: Partial<FrancisSensorData>;
@@ -173,7 +207,7 @@ export type ProjectAction =
     | { type: 'UPDATE_PENSTOCK'; payload: Partial<PenstockSpecs> }
     | { type: 'SET_ASSET'; payload: AssetIdentity }
     | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: string; componentId: string; healthData: ComponentHealthData } }
-    | { type: 'UPDATE_FRANCIS_MODULE'; payload: { moduleId: string; status: FrancisModuleStatus } }
+    | { type: 'UPDATE_SPECIALIZED_MODULE'; payload: { moduleId: string; status: SpecializedModuleStatus } }
     | { type: 'UPDATE_TELEMETRY_SUCCESS'; payload: TechnicalProjectState }
     | { type: 'UPDATE_VIBRATION_HISTORY'; payload: { x: number; y: number } }
     | { type: 'UPDATE_CENTER_PATH'; payload: { x: number; y: number } }
@@ -181,6 +215,13 @@ export type ProjectAction =
     | { type: 'UPDATE_PARTICLE_DATA'; payload: any[] }
     | { type: 'UPDATE_GOVERNOR'; payload: Partial<GovernorState> }
     | { type: 'SET_DEMO_MODE'; payload: DemoState }
+    | { type: 'START_SCENARIO'; payload: DemoScenario }
+    | { type: 'UPDATE_SIMULATION'; payload: Partial<TechnicalProjectState> }
+    | { type: 'UPDATE_STRUCTURAL'; payload: Partial<StructuralMetrics> }
+    | { type: 'UPDATE_HYDROLOGY'; payload: Partial<HydrologyContext> }
+    | { type: 'UPDATE_MARKET'; payload: Partial<MarketData> }
+    | { type: 'ADD_MANUAL_RULE'; payload: string }
+    | { type: 'APPLY_MITIGATION'; payload: string }
     | { type: 'RESET_TO_DEMO' };
 
 /**
@@ -192,7 +233,11 @@ export interface PhysicsResult {
     surgePressure: Decimal;
     eccentricity: Decimal; // e = sqrt(1 - (b^2 / a^2))
     performanceDelta: Decimal; // Delta_Perf = ((Actual - Baseline) / Baseline) * 100
+    axialThrustKN?: Decimal; // NEW: NC-4.2 MHE Specialization
+    specificWaterConsumption: Decimal;
+    performanceGap: Decimal; // (Actual / Design) * 100
     status: 'NOMINAL' | 'WARNING' | 'CRITICAL';
+    volumetricLoss?: Decimal; // NEW: NC-4.2 Volumetric Efficiency Monitor
 }
 
 export interface DiagnosisMessage {
@@ -209,10 +254,58 @@ export interface DiagnosisReport {
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     identity: {
-        id: 'demo-1',
-        name: 'HPP Demo',
-        location: 'Virtual River',
-        type: 'Pelton'
+        assetId: 'demo-1',
+        assetName: 'HPP Demo',
+        turbineType: 'PELTON',
+        manufacturer: 'Generic',
+        commissioningYear: 2024,
+        totalOperatingHours: 12500,
+        hoursSinceLastOverhaul: 4200,
+        startStopCount: 156,
+        location: 'Demo Site',
+        machineConfig: {
+            orientation: 'HORIZONTAL',
+            transmissionType: 'DIRECT',
+            ratedPowerMW: 10,
+            ratedSpeedRPM: 500,
+            ratedHeadM: 100,
+            ratedFlowM3S: 12,
+            runnerDiameterMM: 1500,
+            numberOfBlades: 15
+        },
+        sensorMatrix: {
+            vibrationSensors: { generator: [], turbine: [] },
+            temperatureSensors: { bearings: [], oilSystem: [], powerhouse: [] },
+            pressureSensors: [],
+            upgradeRecommendations: []
+        },
+        fluidIntelligence: {
+            oilSystem: { oilType: 'ISO VG 46', oilCapacityLiters: 200, currentHours: 0, changeIntervalHours: 4000, lastChangeDate: '', nextChangeDue: '' },
+            filterSystem: { filterType: '10 Micron', installDate: '', deltaPBar: 0, deltaPAlarmBar: 1.5, filterClogged: false },
+            temperatureCorrelation: { powerhouseAmbientC: 25, bearingTempsC: [], excessiveHeatDetected: false },
+            healthScore: 100
+        },
+        environmentalBaseline: {
+            noiseLevel: { operatingDB: 75, locations: { powerhouse: 70, turbinePit: 85, controlRoom: 60 }, regulatoryLimitDB: 85, complianceStatus: 'COMPLIANT' },
+            ambientTemperature: 22.5,
+            relativeHumidity: 45,
+            penstockType: 'STEEL',
+            penstockDiameterMM: 1200,
+            penstockLengthM: 50,
+            penstockThicknessMM: 12,
+            sludgeRemoval: { hasSludgeCleaner: false, erosionRiskScore: 0 },
+            waterQuality: { sedimentContentMGL: 10, abrasivityIndex: 'LOW', phLevel: 7.2 }
+        },
+        operationalMapping: {
+            operatingPoints: [],
+            currentPoint: null,
+            hillChart: { dataPoints: 0, coveragePercent: 0, lastUpdated: '' },
+            bestEfficiencyPoint: null
+        },
+        createdAt: new Date().toISOString(),
+        createdBy: 'SYSTEM',
+        lastUpdatedAt: new Date().toISOString(),
+        version: '1.0'
     },
     hydraulic: {
         head: 450,
@@ -230,6 +323,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         rpm: 500,
         bearingTemp: 45,
         radialClearance: 0.5,
+        insulationResistance: 850,
+        axialPlay: 0.15,
         boltSpecs: {
             grade: '8.8',
             count: 12,
@@ -243,7 +338,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         grossHead: 455,
         designFlow: 3.0,
         waterQuality: 'Clear',
-        temperature: 15
+        temperature: 15,
+        designPerformanceMW: 5.0
     },
     penstock: {
         diameter: 1.5,
@@ -261,7 +357,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         staticPressureBar: 45,
         surgePressureBar: 55,
         waterHammerPressureBar: 12.5,
-        eccentricity: 0.25
+        eccentricity: 0.25,
+        axialThrustKN: 0
     },
     governor: {
         setpoint: new Decimal(50.0),
@@ -273,7 +370,7 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         previousError: new Decimal(0),
         outputSignal: new Decimal(0)
     },
-    francis: {
+    specializedState: {
         modules: {
             miv: 'green',
             penstock: 'green',
@@ -308,5 +405,29 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     demoMode: {
         active: false,
         scenario: null
+    },
+    structural: {
+        wearIndex: 5,
+        remainingLife: 95,
+        fatigueCycles: 1240
+    },
+    hydrology: {
+        upstreamLevel: 455.2,
+        downstreamLevel: 102.1,
+        forecastedInflow: 12.5,
+        spillageRisk: 0
+    },
+    market: {
+        energyPrice: 85.0,
+        revenueToday: 0,
+        profitabilityIndex: 0.95
+    },
+    manualRules: [],
+    appliedMitigations: [],
+    financials: {
+        lostRevenueEuro: 0,
+        maintenanceBufferEuro: 150000,
+        potentialDamageEUR: 0,
+        maintenanceSavingsEuro: 0
     }
 };

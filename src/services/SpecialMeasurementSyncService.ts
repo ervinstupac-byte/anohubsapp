@@ -150,8 +150,8 @@ export class SpecialMeasurementSyncService {
     ): EfficiencyGapAnalysis {
         // Determine k factor
         let k = 2.5; // Default for Francis
-        if (turbineFamily === 'kaplan') k = 3.0;
-        if (turbineFamily === 'pelton') k = 1.8;
+        if (turbineFamily === 'KAPLAN') k = 3.0;
+        if (turbineFamily === 'PELTON') k = 1.8;
 
         // Reference dimension (typical spiral case diameter ~3000mm)
         const referenceDimension = 3000; // mm
@@ -259,7 +259,7 @@ export class SpecialMeasurementSyncService {
 // ===== IDEAL BLUEPRINT EXAMPLES =====
 
 export const FRANCIS_IDEAL_BLUEPRINT: IdealBlueprint = {
-    turbineFamily: 'francis',
+    turbineFamily: 'FRANCIS',
     variant: 'francis_vertical',
     geometryPoints: [
         { name: 'Spiral Case Inlet', x: 1500.000, y: 2000.000, z: 500.000, tolerance: 2.0 },

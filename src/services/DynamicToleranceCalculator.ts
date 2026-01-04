@@ -26,7 +26,7 @@ export class DynamicToleranceCalculator {
      * 
      * Pelton @ 1000 RPM, 500m head → High centrifugal forces → Loosen tolerance
      * Kaplan @ 100 RPM, 50m head → Low forces → Tighten tolerance
-     * Francis @ 500 RPM, 200m head → Medium forces → Standard tolerance
+     * FRANCIS @ 500 RPM, 200m head → Medium forces → Standard tolerance
      */
     static calculateShaftAlignmentTolerance(
         turbineFamily: TurbineFamily,
@@ -49,7 +49,7 @@ export class DynamicToleranceCalculator {
         // ===== TURBINE-SPECIFIC ADJUSTMENTS =====
 
         switch (turbineFamily) {
-            case 'pelton':
+            case 'PELTON':
                 // High speed + high head = looser tolerance
                 centrifugalFactor = new Decimal(1).plus(centrifugalAccel.div(1000)); // Normalize to ~1-2
                 headFactor = new Decimal(1).plus(new Decimal(physics.head).div(500)); // Head effect
@@ -60,12 +60,12 @@ export class DynamicToleranceCalculator {
 
                 break;
 
-            case 'kaplan':
+            case 'KAPLAN':
                 // Low speed = tighter tolerance possible
                 speedFactor = new Decimal(0.8).plus(new Decimal(physics.runningSpeed).div(200)); // Slower = tighter
                 headFactor = new Decimal(1).plus(new Decimal(physics.head).div(100)); // Moderate head effect
 
-                reasons.push(`Kaplan low speed operation (${physics.runningSpeed} RPM)`);
+                reasons.push(`KAPLAN low speed operation (${physics.runningSpeed} RPM)`);
 
                 // Bulb variant: underwater = thermal stability
                 if (physics.rotorDiameter < 2) { // Bulb turbines smaller
@@ -75,12 +75,12 @@ export class DynamicToleranceCalculator {
 
                 break;
 
-            case 'francis':
+            case 'FRANCIS':
                 // Medium speed, medium head = close to standard
                 speedFactor = new Decimal(1).plus(new Decimal(physics.runningSpeed).minus(500).div(500).mul(0.2));
                 headFactor = new Decimal(1).plus(new Decimal(physics.head).div(200));
 
-                reasons.push(`Francis medium-speed operation (${physics.runningSpeed} RPM)`);
+                reasons.push(`FRANCIS medium-speed operation (${physics.runningSpeed} RPM)`);
 
                 break;
         }

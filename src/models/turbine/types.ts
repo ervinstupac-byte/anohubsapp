@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 // ENUMS & TYPES
 // =====================================================
 
-export type TurbineFamily = 'kaplan' | 'francis' | 'pelton' | 'crossflow';
+export type TurbineFamily = 'KAPLAN' | 'FRANCIS' | 'PELTON' | 'CROSSFLOW';
 
 export type TurbineVariant =
     // Kaplan Family (6 variants)
@@ -131,9 +131,7 @@ export interface CompleteSensorData {
     assetId: string;
     turbineFamily: TurbineFamily;
     common: CommonSensorData;
-    kaplan?: KaplanSensorData;
-    francis?: FrancisSensorData;
-    pelton?: PeltonSensorData;
+    specialized?: any; // NC-4.2 Universal modular data bucket
     generator?: GeneratorData;
 }
 

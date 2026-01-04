@@ -12,7 +12,7 @@ export const useEngineeringMath = () => {
 
     return useMemo(() => {
         const PI = Decimal.acos(-1);
-        const turbineType = identity?.type || 'Francis';
+        const turbineType = identity?.turbineType || 'FRANCIS';
 
         // --- ORBIT ANALYSIS ---
         const history = mechanical.vibrationHistory || [];
@@ -56,7 +56,7 @@ export const useEngineeringMath = () => {
         };
 
         // Contextual thresholding based on turbine type
-        const eccentricityLimit = turbineType === 'Pelton' ? 0.82 : 0.78;
+        const eccentricityLimit = turbineType === 'PELTON' ? 0.82 : 0.78;
         const isStructuralLoosenessConfirmed = eccentricity.greaterThan(eccentricityLimit) &&
             (metrics.cavitationIntensity > 6 || metrics.bearingGrindIndex > 6);
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SentinelKernel, SENTINEL_PATTERNS, SentinelInsight } from '../../utils/SentinelKernel';
+import { SentinelKernel, SentinelInsight } from '../../utils/SentinelKernel';
+import { COMMON_HYDRO_PATTERNS } from '../../lib/plugins/CommonHydroPatterns';
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
 import { Sparkline } from '../ui/Sparkline';
 import { BrainCircuit, ArrowRight, CheckCircle, XCircle, Play, RefreshCw, AlertTriangle, Activity, Info } from 'lucide-react';
@@ -39,7 +40,7 @@ export const LearningLab = () => {
         // 1. Run the REAL Kernel
         const results = SentinelKernel.evaluateMatrix(
             data,
-            SENTINEL_PATTERNS,
+            COMMON_HYDRO_PATTERNS as any,
             {
                 weights: patternWeights // Inject the CURRENT trained weights
             }

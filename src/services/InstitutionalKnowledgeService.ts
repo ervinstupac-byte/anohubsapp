@@ -4,7 +4,7 @@
 export interface ExpertKnowledgeEntry {
     id: string;
     incidentPattern: string; // "Kaplan horizontal hydraulic runaway"
-    turbineFamily: 'kaplan' | 'francis' | 'pelton';
+    turbineFamily: 'KAPLAN' | 'FRANCIS' | 'PELTON';
     turbineVariant: string;
 
     // The core knowledge
@@ -331,7 +331,7 @@ export class InstitutionalKnowledgeService {
 export const SEED_KNOWLEDGE: Array<Omit<ExpertKnowledgeEntry, 'id' | 'reportedBy' | 'verifiedBy' | 'confidenceScore' | 'upvotes' | 'downvotes' | 'viewCount' | 'createdAt' | 'updatedAt'>> = [
     {
         incidentPattern: 'Kaplan Horizontal Hydraulic Runaway After Pipe Replacement',
-        turbineFamily: 'kaplan',
+        turbineFamily: 'KAPLAN',
         turbineVariant: 'kaplan_horizontal',
         symptoms: {
             servo_pressure_spike: true,
@@ -356,7 +356,7 @@ export const SEED_KNOWLEDGE: Array<Omit<ExpertKnowledgeEntry, 'id' | 'reportedBy
     },
     {
         incidentPattern: 'Francis Draft Tube Vortex Core at Part Load',
-        turbineFamily: 'francis',
+        turbineFamily: 'FRANCIS',
         turbineVariant: 'francis_vertical',
         symptoms: {
             low_frequency_vibration: true,
@@ -381,7 +381,7 @@ export const SEED_KNOWLEDGE: Array<Omit<ExpertKnowledgeEntry, 'id' | 'reportedBy
     },
     {
         incidentPattern: 'Pelton Water Hammer from Emergency Stop',
-        turbineFamily: 'pelton',
+        turbineFamily: 'PELTON',
         turbineVariant: 'pelton_horizontal',
         symptoms: {
             pressure_spike_in_penstock: true,

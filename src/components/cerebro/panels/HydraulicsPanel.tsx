@@ -7,7 +7,7 @@ import { GlassCard } from '../../ui/GlassCard';
 import { PipeMaterial } from '../../../models/TechnicalSchema';
 
 export const HydraulicsPanel: React.FC = () => {
-    const { technicalState, updatePenstockSpecs } = useProjectEngine();
+    const { technicalState, updatePenstockSpecs, dispatch } = useProjectEngine();
     const { t, i18n: { language } } = useTranslation();
 
     const { material, wallThickness } = technicalState.penstock;
@@ -81,6 +81,25 @@ export const HydraulicsPanel: React.FC = () => {
                         <div className="text-[10px] text-slate-500 mt-1">Material Load</div>
                     </div>
                 </div>
+
+                {physics.hoopStressMPa > 200 && !technicalState.appliedMitigations.includes('STRUCTURAL_RISK') && (
+                    <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
+                        <div className="relative z-10">
+                            <h4 className="text-xs font-bold text-amber-500 uppercase flex items-center gap-2">
+                                <Shield className="w-3 h-3" /> Recovery Mitigation Available
+                            </h4>
+                            <p className="text-[10px] text-slate-400 mt-1 max-w-[200px]">
+                                Reduce load by 15% to stabilize casing hoop stress and extend fatigue life.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'STRUCTURAL_RISK' })}
+                            className="relative z-10 px-3 py-2 bg-amber-500 text-black text-[10px] font-black rounded hover:bg-amber-400 transition-all flex items-center gap-2"
+                        >
+                            APPLY RECOVERY <ArrowRight className="w-3 h-3" />
+                        </button>
+                    </div>
+                )}
             </GlassCard>
         </div>
     );

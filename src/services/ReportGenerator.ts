@@ -630,7 +630,7 @@ export class ReportGenerator {
         doc.setTextColor(30, 41, 59);
         doc.setFont('helvetica', 'bold');
         const dossierLabel = i18n.t('report.dossierLabel', 'PROJECT DOSSIER');
-        doc.text(`${dossierLabel}: ${state.identity.name}`, 14, 60);
+        doc.text(`${dossierLabel}: ${state.identity.assetName}`, 14, 60);
 
         // --- NC-4.2 FORENSIC DEMO OVERLAY ---
         if (state.demoMode?.active) {
@@ -646,7 +646,7 @@ export class ReportGenerator {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(`Asset ID: ${state.identity.id} | Location: ${state.identity.location}`, 14, 67);
+        doc.text(`Asset ID: ${state.identity.assetId} | Location: ${state.identity.location}`, 14, 67);
 
         // MULTI-COLUMN LAYOUT START
         // Left Column: Hydraulic & Mechanical
@@ -784,7 +784,7 @@ export class ReportGenerator {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(`Asset: ${state.identity.name} | Captured: ${new Date().toISOString()}`, 14, 67);
+        doc.text(`Asset: ${state.identity.assetName} | Captured: ${new Date().toISOString()}`, 14, 67);
 
         // Targeted body based on module
         if (moduleName.toLowerCase().includes('mechan')) {

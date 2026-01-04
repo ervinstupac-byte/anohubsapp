@@ -1,5 +1,5 @@
-// Strategic Planning & Feasibility Service
-// Pre-construction analysis, hydraulic optimization, and bid evaluation
+
+import { TurbineType } from '../models/turbine/TurbineFactory';
 
 export type PipeMaterial = 'GRP' | 'STEEL' | 'CONCRETE' | 'PEHD';
 
@@ -53,7 +53,7 @@ export interface FeasibilityResult {
 
 export interface Bid {
     manufacturer: string;
-    turbineType: 'kaplan' | 'francis' | 'pelton';
+    turbineType: TurbineType;
     ratedPowerMW: number;
     efficiencyAtBestPoint: number; // %
     runnerDiameter: number; // mm
@@ -261,11 +261,12 @@ export class StrategicPlanningService {
 
         // 1. Efficiency Reality Check
         // Modern Francis peak ~94-95%, Kaplan ~93-94%, Pelton ~91-92%
-        const maxTheoreticalEta = {
-            'francis': 95.5,
-            'kaplan': 94.5,
-            'pelton': 92.5
-        }[bid.turbineType];
+        const maxTheoreticalEta = ({
+            'FRANCIS': 95.5,
+            'KAPLAN': 94.5,
+            'PELTON': 92.5,
+            'CROSSFLOW': 90.0
+        } as Record<TurbineType, number>)[bid.turbineType];
 
         if (bid.efficiencyAtBestPoint > maxTheoreticalEta) {
             risks.push(`Sumnjivo visoka efikasnost (${bid.efficiencyAtBestPoint}%). Fizički limit je oko ${maxTheoreticalEta}%. Tražiti IEC 60041 test izvještaj.`);
@@ -276,12 +277,12 @@ export class StrategicPlanningService {
         // Kaplan on high head? Francis on low head?
         const H = site.grossHead;
 
-        if (bid.turbineType === 'kaplan' && H > 70) {
+        if (bid.turbineType === 'KAPLAN' && H > 70) {
             risks.push('LEGACY WARNING: Kaplan na padu > 70m nosi ogroman rizik od kavitacije. Potrebna duboka potopljenost (negativna kota).');
             score -= 30;
         }
 
-        if (bid.turbineType === 'francis' && H < 20) {
+        if (bid.turbineType === 'FRANCIS' && H < 20) {
             risks.push('Ekonomska neisplativost: Francis na padu < 20m zahtijeva ogroman spiralni cjevovod.');
             score -= 15;
         }

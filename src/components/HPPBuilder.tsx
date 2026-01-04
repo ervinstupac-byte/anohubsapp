@@ -341,9 +341,13 @@ export const HPPBuilder: React.FC = () => {
             // I will keep original logic but wrap it.
             assetId: crypto.randomUUID(),
             assetName: `${turbineType} Design ${new Date().toLocaleDateString()}`,
-            turbineType: turbineType as any,
+            turbineType: turbineType as TurbineType,
             manufacturer: 'AnoHUB GenK',
             commissioningYear: new Date().getFullYear(),
+            totalOperatingHours: 0,
+            hoursSinceLastOverhaul: 0,
+            startStopCount: 0,
+            location: 'Remote Studio',
             version: '1.0.0',
             createdAt: new Date().toISOString(),
             createdBy: user?.email || 'System',
@@ -372,6 +376,8 @@ export const HPPBuilder: React.FC = () => {
             },
             environmentalBaseline: {
                 noiseLevel: { operatingDB: 85, locations: { powerhouse: 85, turbinePit: 90, controlRoom: 60 }, regulatoryLimitDB: 85, complianceStatus: 'COMPLIANT' },
+                ambientTemperature: 25,
+                relativeHumidity: 45,
                 penstockType: 'STEEL', penstockDiameterMM: 2000, penstockLengthM: 100, penstockThicknessMM: 20,
                 sludgeRemoval: { hasSludgeCleaner: true, erosionRiskScore: 0 },
                 waterQuality: { sedimentContentMGL: 5, abrasivityIndex: 'LOW', phLevel: 7 }
@@ -384,7 +390,7 @@ export const HPPBuilder: React.FC = () => {
         };
 
         if (turbineType === 'FRANCIS') {
-            newIdentity.francisAdvanced = {
+            newIdentity.specializedAdvanced = {
                 frontRunnerClearanceMM: 0.35, backRunnerClearanceMM: 0.35, spiralClearanceMM: 1.2,
                 labyrinthGaps: { upperLabyrinthMM: 0.40, lowerLabyrinthMM: 0.40, sealType: 'METALLIC' },
                 draftTubePressure: { nominalBar: 1.2, minBar: 0.8, maxBar: 1.8, sensorInstalled: true },
@@ -392,7 +398,7 @@ export const HPPBuilder: React.FC = () => {
                 axialThrustBalanced: true, pressureDifferenceBar: 0.1
             };
         }
-        dispatch({ type: 'SET_ASSET', payload: { ...state.identity, type: turbineType === 'KAPLAN' ? 'Kaplan' : turbineType === 'PELTON' ? 'Pelton' : 'Francis' } }); // Enforce PascalCase
+        dispatch({ type: 'SET_ASSET', payload: { ...state.identity, turbineType: turbineType } });
         showToast(t('hppStudio.toasts.turbineInitialized', { type: turbineType }), 'success');
         navigateToTurbineDetail(type);
     };

@@ -1,0 +1,63 @@
+{
+    "metadata": {
+        "version": "1.0.0",
+        "lastExtraction": "2026-01-04",
+        "scope": "Francis < 5 MW units"
+    },
+    "standardThresholds": {
+        "vibration": {
+            "good": 1.1,
+            "satisfactory": 2.8,
+            "unsatisfactory": 4.5,
+            "unit": "mm/s",
+            "standard": "ISO 10816-3"
+        },
+        "bearingTemperature": {
+            "warning": 65,
+            "critical": 80,
+            "unit": "C",
+            "impact": "Bearing seize risk"
+        },
+        "insulationResistance": {
+            "healthy": 100,
+            "formula": "ratedVoltageKV + 1",
+            "unit": "MOhm",
+            "standard": "Megger"
+        },
+        "hoopStressSafetyFactor": {
+            "warning": 2.0,
+            "critical": 1.5,
+            "method": "Barlow's Formula"
+        }
+    },
+    "failureModes": {
+        "CAVITATION": {
+            "symptom": "Efficiency loss + High SWC",
+            "indices": [
+                "Specific Water Consumption > 1.1 * Design",
+                "Efficiency < 88%"
+            ],
+            "financialImpact": 45000,
+            "kbRef": "KB-REF-04"
+        },
+        "AERATION": {
+            "symptom": "Milky oil + Spongy Governor",
+            "cause": "Air entrainment / Low oil level",
+            "impact": "Reduced Bulk Modulus"
+        },
+        "PID_SATURATION": {
+            "symptom": "Frequency Error > 0.5 Hz",
+            "logic": "Loop in full saturating recovery",
+            "action": "Inhibit hydraulic bypass"
+        }
+    },
+    "economicImpacts": {
+        "GRID_STABILITY_WEAR": {
+            "trigger": "Frequency Deviation > 0.1 Hz",
+            "scaling": "1.0x to 1.5x wear rate"
+        },
+        "EMERGENCY_REPAIR": 120000,
+        "PREVENTATIVE_SAVINGS": 105000,
+        "SURGE_DAMAGE": 85000
+    }
+}

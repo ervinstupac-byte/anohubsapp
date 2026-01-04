@@ -17,8 +17,8 @@ export class LifecycleManager {
         // Default scaffolding
         this.currentProject = {
             identity: {
-                id,
-                name,
+                assetId: id,
+                assetName: name,
                 location,
                 createdDate: Date.now()
             },
@@ -48,7 +48,7 @@ export class LifecycleManager {
                 regulatoryStatus: new Map()
             },
             build: {
-                selectedTurbineType: 'francis', // default
+                selectedTurbineType: 'FRANCIS', // default
                 manufacturer: '',
                 constructionProgress: 0,
                 hardwareSpec: { // To be filled from Bid
@@ -74,7 +74,7 @@ export class LifecycleManager {
         };
 
         this.saveState();
-        return this.currentProject;
+        return this.currentProject!;
     }
 
     private static saveState() {
@@ -106,7 +106,7 @@ export class LifecycleManager {
             // Auto-create if missing (for demo purposes)
             return this.initializeProject('Demo Hydro Plant', { lat: 43.85, lng: 18.41, region: 'Balkan' });
         }
-        return this.currentProject;
+        return this.currentProject!;
     }
 
     /**

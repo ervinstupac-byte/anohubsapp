@@ -11,7 +11,7 @@ import { useProjectEngine } from '../../contexts/ProjectContext';
 import { AssetIdentity, TurbineType, Orientation, TransmissionType, PenstockMaterial } from '../../types/assetIdentity';
 import { AssetIdentityService } from '../../services/AssetIdentityService';
 
-type WizardStep = 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
+type WizardStep = 'physical' | 'sensors' | 'specialized' | 'hydraulics' | 'environmental' | 'review';
 
 export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     const { dispatch } = useProjectEngine();
@@ -47,13 +47,13 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
 
     // Conditional Module Checks
     const showJackingModule = orientation === 'VERTICAL';
-    const showFrancisModule = turbineType === 'FRANCIS';
+    const showSpecializedModule = turbineType === 'FRANCIS' || turbineType === 'KAPLAN';
     const showGearboxSensors = transmission === 'GEARBOX';
     const manualInspectionRequired = !hasGeneratorVibSensor && !hasTurbineVibSensor;
 
     const handleNext = () => {
         const steps: WizardStep[] = ['physical', 'sensors'];
-        if (showFrancisModule) steps.push('francis');
+        if (showSpecializedModule) steps.push('specialized');
         steps.push('hydraulics', 'environmental', 'review');
 
         const currentIndex = steps.indexOf(currentStep);
@@ -64,7 +64,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
 
     const handlePrevious = () => {
         const steps: WizardStep[] = ['physical', 'sensors'];
-        if (showFrancisModule) steps.push('francis');
+        if (showSpecializedModule) steps.push('specialized');
         steps.push('hydraulics', 'environmental', 'review');
 
         const currentIndex = steps.indexOf(currentStep);
@@ -106,9 +106,9 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
             };
         }
 
-        // Francis Advanced (if Francis)
-        if (showFrancisModule) {
-            identity.francisAdvanced = {
+        // Specialized Advanced (if applicable)
+        if (showSpecializedModule) {
+            (identity as any).specializedAdvanced = {
                 frontRunnerClearanceMM: frontClearance,
                 backRunnerClearanceMM: backClearance,
                 spiralClearanceMM: 0.5,
@@ -133,9 +133,11 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                 pressureDifferenceBar: 0
             };
 
-            const balance = AssetIdentityService.calculateAxialThrustBalance(identity.francisAdvanced);
-            identity.francisAdvanced.axialThrustBalanced = balance.balanced;
-            identity.francisAdvanced.pressureDifferenceBar = balance.pressureDifference;
+            if (identity.specializedAdvanced) {
+                const balance = AssetIdentityService.calculateAxialThrustBalance(identity.specializedAdvanced);
+                identity.specializedAdvanced.axialThrustBalanced = balance.balanced;
+                identity.specializedAdvanced.pressureDifferenceBar = balance.pressureDifference;
+            }
         }
 
         // Sensor Matrix
@@ -201,10 +203,10 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                     <StepIndicator active={currentStep === 'physical'} complete={currentStep !== 'physical'} icon={<Settings />} label="Physical" />
                     <div className="flex-1 h-1 bg-slate-800 mx-2" />
                     <StepIndicator active={currentStep === 'sensors'} complete={currentStep !== 'sensors' && currentStep !== 'physical'} icon={<Cpu />} label="Sensors" />
-                    {showFrancisModule && (
+                    {showSpecializedModule && (
                         <>
                             <div className="flex-1 h-1 bg-slate-800 mx-2" />
-                            <StepIndicator active={currentStep === 'francis'} icon={<Gauge />} label="Francis" />
+                            <StepIndicator active={currentStep === 'specialized'} icon={<Gauge />} label="Specialized" />
                         </>
                     )}
                     <div className="flex-1 h-1 bg-slate-800 mx-2" />
@@ -371,15 +373,15 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                     </motion.div>
                 )}
 
-                {currentStep === 'francis' && showFrancisModule && (
+                {currentStep === 'specialized' && showSpecializedModule && (
                     <motion.div
-                        key="francis"
+                        key="specialized"
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -100 }}
                         className="max-w-2xl mx-auto"
                     >
-                        <h2 className="text-3xl font-bold mb-2 text-[#2dd4bf]">Francis Specific Parameters</h2>
+                        <h2 className="text-3xl font-bold mb-2 text-[#2dd4bf]">Specialized Parameters</h2>
                         <p className="text-slate-400 mb-8">Baseline clearances and pressure zones</p>
 
                         <div className="space-y-6">
@@ -541,7 +543,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                                     <ReviewItem label="Jacking Flow" value={`${jackingFlow} l/min`} />
                                 </>
                             )}
-                            {showFrancisModule && (
+                            {showSpecializedModule && (
                                 <>
                                     <ReviewItem label="Front Clearance" value={`${frontClearance} mm`} />
                                     <ReviewItem label="Upper Labyrinth" value={`${upperLabyrinth} mm`} />

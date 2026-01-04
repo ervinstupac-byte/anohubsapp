@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from './paths.ts';
 
@@ -10,26 +10,31 @@ const BoltTorqueCalculator = lazy(() => import('../components/BoltTorqueCalculat
 const SOPManager = lazy(() => import('../components/SOPManager').then(m => ({ default: m.SOPManager }))); // Shadow Engineer
 const ShiftLog = lazy(() => import('../components/ShiftLog').then(m => ({ default: m.ShiftLog }))); // Intuition Log
 const ARManager = lazy(() => import('../components/ARManager').then(m => ({ default: m.ARManager })));
+const TechnicalPassport = lazy(() => import('../components/TechnicalPassport').then(m => ({ default: m.TechnicalPassport })));
 
+
+import { LoadingShimmer } from '../components/ui/LoadingShimmer.tsx';
 
 const MaintenanceRouter: React.FC = () => {
     return (
-        <Routes>
-            {/* Default to dashboard */}
-            <Route index element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
+        <Suspense fallback={<LoadingShimmer />}>
+            <Routes>
+                {/* Default to dashboard */}
+                <Route index element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
 
-            <Route path={ROUTES.MAINTENANCE.DASHBOARD} element={<MaintenanceDashboard />} />
-            <Route path={ROUTES.MAINTENANCE.LOGBOOK} element={<MaintenanceLogbook />} />
-            <Route path={ROUTES.MAINTENANCE.HYDRAULIC} element={<HydraulicMaintenance />} />
-            <Route path={ROUTES.MAINTENANCE.BOLT_TORQUE} element={<BoltTorqueCalculator />} />
-            <Route path={ROUTES.MAINTENANCE.SHADOW_ENGINEER} element={<SOPManager />} />
-            <Route path={ROUTES.MAINTENANCE.INTUITION_LOG} element={<ShiftLog />} />
-            <Route path={ROUTES.MAINTENANCE.AR_GUIDE} element={<ARManager />} />
+                <Route path={ROUTES.MAINTENANCE.DASHBOARD} element={<MaintenanceDashboard />} />
+                <Route path={ROUTES.MAINTENANCE.LOGBOOK} element={<MaintenanceLogbook />} />
+                <Route path={ROUTES.MAINTENANCE.HYDRAULIC} element={<HydraulicMaintenance />} />
+                <Route path={ROUTES.MAINTENANCE.BOLT_TORQUE} element={<BoltTorqueCalculator />} />
+                <Route path={ROUTES.MAINTENANCE.SHADOW_ENGINEER} element={<SOPManager />} />
+                <Route path={ROUTES.MAINTENANCE.INTUITION_LOG} element={<ShiftLog />} />
+                <Route path={ROUTES.MAINTENANCE.AR_GUIDE} element={<ARManager />} />
+                <Route path={ROUTES.MAINTENANCE.ASSET_PASSPORT} element={<TechnicalPassport />} />
 
-
-            {/* Catch-all */}
-            <Route path="*" element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
-        </Routes>
+                {/* Catch-all */}
+                <Route path="*" element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
+            </Routes>
+        </Suspense>
     );
 };
 

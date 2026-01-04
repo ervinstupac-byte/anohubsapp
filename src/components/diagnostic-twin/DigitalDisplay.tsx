@@ -48,10 +48,13 @@ export const DigitalDisplay: React.FC<DigitalDisplayProps> = React.memo(({
             <span className="text-xs font-black text-slate-400 uppercase tracking-[0.25em] mb-2">{label}</span>
             <div className="flex items-baseline gap-2 relative">
                 <div className={`
-                    font-mono text-4xl font-black tracking-tight transition-all duration-300
+                    font-mono text-5xl font-black tracking-tight transition-all duration-300
                     ${colorClasses[color]}
+                    drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]
                     ${isFlickering ? 'opacity-60 scale-95 skew-x-1' : 'opacity-100'}
-                `}>
+                `}
+                    style={{ fontFamily: "'Roboto Mono', monospace" }}
+                >
                     {value}
                 </div>
                 {unit && (

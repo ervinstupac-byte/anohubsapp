@@ -53,7 +53,7 @@ export const ProjectGenesisForm: React.FC = () => {
         const project = LifecycleManager.getActiveProject();
 
         // Mapping to ProjectDNA
-        project.identity.name = "Field Project " + new Date().toLocaleDateString();
+        project.identity.assetName = "Field Project " + new Date().toLocaleDateString();
         project.genesis.siteParams = {
             grossHead: parseFloat(formData.grossHead) || 0,
             pipeDiameter: parseFloat(formData.pipeDiameter) || 0,
@@ -175,7 +175,7 @@ export const ProjectGenesisForm: React.FC = () => {
                                         <option value="KAPLAN_PIT">Kaplan PIT</option>
                                         <option value="KAPLAN_BULB">Kaplan Bulb</option>
                                     </optgroup>
-                                    <optgroup label="High Head">
+                                    <optgroup label="Reaction & Impulse">
                                         <option value="FRANCIS">Francis</option>
                                         <option value="PELTON">Pelton</option>
                                     </optgroup>

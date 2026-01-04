@@ -14,15 +14,25 @@ const savedLanguage = localStorage.getItem('appLanguage') || 'en';
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: { translation: en },
-    bs: { translation: bs },
+    en: {
+      common: en, // Temporary: keep as en if not restructured yet, or move to nested
+      francis: (en as any).francis || {},
+      system: (en as any).system || {}
+    },
+    bs: {
+      common: bs,
+      francis: (bs as any).francis || {},
+      system: (bs as any).system || {}
+    },
     de: { translation: de },
     tr: { translation: tr },
     ms: { translation: ms },
     si: { translation: si }
   },
-  lng: savedLanguage, // Koristi sačuvani jezik ili default (en)
+  lng: savedLanguage,
   fallbackLng: 'en',
+  ns: ['common', 'francis', 'system'],
+  defaultNS: 'common',
   interpolation: { escapeValue: false }
 });
 
