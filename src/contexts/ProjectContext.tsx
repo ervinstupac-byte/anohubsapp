@@ -203,28 +203,38 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
             if (saved) {
                 console.log(`[CEREBRO] Neural Core waking up from ${PERSISTENCE_KEY}`);
                 const parsed = JSON.parse(saved);
-                // Re-hydrate Decimal instances
-                if (parsed.hydraulic) {
-                    parsed.hydraulic.waterHead = new Decimal(parsed.hydraulic.waterHead);
-                    parsed.hydraulic.flowRate = new Decimal(parsed.hydraulic.flowRate);
-                    parsed.hydraulic.cavitationThreshold = new Decimal(parsed.hydraulic.cavitationThreshold);
-                    if (parsed.hydraulic.currentHoopStress) parsed.hydraulic.currentHoopStress = new Decimal(parsed.hydraulic.currentHoopStress);
-                    if (parsed.hydraulic.baselineOutputMW) parsed.hydraulic.baselineOutputMW = new Decimal(parsed.hydraulic.baselineOutputMW);
+
+                // Deep merge with initial state to ensure missing properties are populated
+                const merged = { ...initial, ...parsed };
+
+                // Re-hydrate Decimal instances safely
+                if (merged.hydraulic) {
+                    if (merged.hydraulic.waterHead) merged.hydraulic.waterHead = new Decimal(merged.hydraulic.waterHead);
+                    if (merged.hydraulic.flowRate) merged.hydraulic.flowRate = new Decimal(merged.hydraulic.flowRate);
+                    if (merged.hydraulic.cavitationThreshold) merged.hydraulic.cavitationThreshold = new Decimal(merged.hydraulic.cavitationThreshold);
+                    if (merged.hydraulic.currentHoopStress) merged.hydraulic.currentHoopStress = new Decimal(merged.hydraulic.currentHoopStress);
+                    if (merged.hydraulic.baselineOutputMW) merged.hydraulic.baselineOutputMW = new Decimal(merged.hydraulic.baselineOutputMW);
                 }
-                if (parsed.governor) {
-                    parsed.governor.setpoint = new Decimal(parsed.governor.setpoint);
-                    parsed.governor.actualValue = new Decimal(parsed.governor.actualValue);
-                    parsed.governor.kp = new Decimal(parsed.governor.kp);
-                    parsed.governor.ki = new Decimal(parsed.governor.ki);
-                    parsed.governor.kd = new Decimal(parsed.governor.kd);
-                    parsed.governor.integralError = new Decimal(parsed.governor.integralError);
-                    parsed.governor.previousError = new Decimal(parsed.governor.previousError);
-                    parsed.governor.outputSignal = new Decimal(parsed.governor.outputSignal);
+
+                if (merged.governor) {
+                    if (merged.governor.setpoint) merged.governor.setpoint = new Decimal(merged.governor.setpoint);
+                    if (merged.governor.actualValue) merged.governor.actualValue = new Decimal(merged.governor.actualValue);
+                    if (merged.governor.kp) merged.governor.kp = new Decimal(merged.governor.kp);
+                    if (merged.governor.ki) merged.governor.ki = new Decimal(merged.governor.ki);
+                    if (merged.governor.kd) merged.governor.kd = new Decimal(merged.governor.kd);
+                    if (merged.governor.integralError) merged.governor.integralError = new Decimal(merged.governor.integralError);
+                    if (merged.governor.previousError) merged.governor.previousError = new Decimal(merged.governor.previousError);
+                    if (merged.governor.outputSignal) merged.governor.outputSignal = new Decimal(merged.governor.outputSignal);
                 }
-                return parsed as TechnicalProjectState;
+
+                // Ensure identity exists
+                if (!merged.identity) merged.identity = initial.identity;
+
+                return merged as TechnicalProjectState;
             }
         } catch (e) {
-            console.error("[CEREBRO] Failed to re-hydrate Neural Core:", e);
+            console.error("[CEREBRO] Critical failure during re-hydration. Reverting to factory defaults.", e);
+            localStorage.removeItem(PERSISTENCE_KEY); // Clear bad state
         }
         return initial;
     });

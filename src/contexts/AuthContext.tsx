@@ -25,11 +25,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         // Provjeri pravu sesiju SAMO ako nismo u guest modu
         if (!isGuest) {
-            supabase.auth.getSession().then(({ data: { session } }) => {
-                setSession(session);
-                setUser(session?.user ?? null);
-                setLoading(false);
-            });
+            // Safety Timeout: if Supabase doesn't respond in 5s, continue as anonymous
+            const timeout = setTimeout(() => {
+                if (loading) {
+                    console.warn('[AUTH] Session check timed out. Proceeding as anonymous.');
+                    setLoading(false);
+                }
+            }, 5000);
+
+            supabase.auth.getSession()
+                .then(({ data: { session } }) => {
+                    clearTimeout(timeout);
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    clearTimeout(timeout);
+                    console.error('[AUTH] Critical session check failure:', err);
+                    setLoading(false);
+                });
         }
 
         // Slušaj promjene
