@@ -204,33 +204,65 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                 console.log(`[CEREBRO] Neural Core waking up from ${PERSISTENCE_KEY}`);
                 const parsed = JSON.parse(saved);
 
-                // Deep merge with initial state to ensure missing properties are populated
-                const merged = { ...initial, ...parsed };
+                // --- ROBUST DEEP MERGE (NC-4.2 Directive) ---
+                // We ensure sub-objects exist even if the saved state is from an older version
+                const merged: TechnicalProjectState = {
+                    ...initial,
+                    ...parsed,
+                    identity: { ...initial.identity, ...(parsed.identity || {}) },
+                    hydraulic: { ...initial.hydraulic, ...(parsed.hydraulic || {}) },
+                    mechanical: { ...initial.mechanical, ...(parsed.mechanical || {}) },
+                    site: { ...initial.site, ...(parsed.site || {}) },
+                    penstock: { ...initial.penstock, ...(parsed.penstock || {}) },
+                    physics: { ...initial.physics, ...(parsed.physics || {}) },
+                    governor: { ...initial.governor, ...(parsed.governor || {}) },
+                    structural: { ...initial.structural, ...(parsed.structural || {}) },
+                    specializedState: { ...initial.specializedState, ...(parsed.specializedState || {}) },
+                    demoMode: { ...initial.demoMode, ...(parsed.demoMode || {}) }
+                };
 
                 // Re-hydrate Decimal instances safely
                 if (merged.hydraulic) {
                     if (merged.hydraulic.waterHead) merged.hydraulic.waterHead = new Decimal(merged.hydraulic.waterHead);
+                    else merged.hydraulic.waterHead = initial.hydraulic.waterHead;
+
                     if (merged.hydraulic.flowRate) merged.hydraulic.flowRate = new Decimal(merged.hydraulic.flowRate);
+                    else merged.hydraulic.flowRate = initial.hydraulic.flowRate;
+
                     if (merged.hydraulic.cavitationThreshold) merged.hydraulic.cavitationThreshold = new Decimal(merged.hydraulic.cavitationThreshold);
+                    else merged.hydraulic.cavitationThreshold = initial.hydraulic.cavitationThreshold;
+
                     if (merged.hydraulic.currentHoopStress) merged.hydraulic.currentHoopStress = new Decimal(merged.hydraulic.currentHoopStress);
                     if (merged.hydraulic.baselineOutputMW) merged.hydraulic.baselineOutputMW = new Decimal(merged.hydraulic.baselineOutputMW);
                 }
 
                 if (merged.governor) {
                     if (merged.governor.setpoint) merged.governor.setpoint = new Decimal(merged.governor.setpoint);
+                    else merged.governor.setpoint = initial.governor.setpoint;
+
                     if (merged.governor.actualValue) merged.governor.actualValue = new Decimal(merged.governor.actualValue);
+                    else merged.governor.actualValue = initial.governor.actualValue;
+
                     if (merged.governor.kp) merged.governor.kp = new Decimal(merged.governor.kp);
+                    else merged.governor.kp = initial.governor.kp;
+
                     if (merged.governor.ki) merged.governor.ki = new Decimal(merged.governor.ki);
+                    else merged.governor.ki = initial.governor.ki;
+
                     if (merged.governor.kd) merged.governor.kd = new Decimal(merged.governor.kd);
+                    else merged.governor.kd = initial.governor.kd;
+
                     if (merged.governor.integralError) merged.governor.integralError = new Decimal(merged.governor.integralError);
+                    else merged.governor.integralError = initial.governor.integralError;
+
                     if (merged.governor.previousError) merged.governor.previousError = new Decimal(merged.governor.previousError);
+                    else merged.governor.previousError = initial.governor.previousError;
+
                     if (merged.governor.outputSignal) merged.governor.outputSignal = new Decimal(merged.governor.outputSignal);
+                    else merged.governor.outputSignal = initial.governor.outputSignal;
                 }
 
-                // Ensure identity exists
-                if (!merged.identity) merged.identity = initial.identity;
-
-                return merged as TechnicalProjectState;
+                return merged;
             }
         } catch (e) {
             console.error("[CEREBRO] Critical failure during re-hydration. Reverting to factory defaults.", e);

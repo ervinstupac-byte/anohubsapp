@@ -479,7 +479,7 @@ textarea::placeholder {
 }
 
 #root:empty::after {
-  content: 'ESTABLISHING SECURE CONNECTION...';
+  content: 'NEURAL CORE HANDSHAKE: PENDING...';
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   font-weight: 700;

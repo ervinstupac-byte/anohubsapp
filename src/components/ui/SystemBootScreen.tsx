@@ -11,16 +11,16 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
     const [isVisible, setIsVisible] = useState(true);
 
     const technicalMessages = [
-        "INITIALIZING NEURAL CORE...",
-        "SYNCING CEREBRO v4.2...",
-        "VERIFYING DECIMAL.JS INTEGRITY...",
-        "LOAD SENSORS: PIT-202-A...",
-        "ESTABLISHING HIVE LINK...",
-        "READY FOR OPERATION."
+        "CALIBRATING FRANCIS UNIT #1...",
+        "STABILIZING HYDRAULIC PRESSURE...",
+        "VERIFYING ROTOR ALIGNMENT...",
+        "SYNCING CEREBRO NEURAL FLOW...",
+        "HIVE CONSENSUS ESTABLISHED.",
+        "READY FOR TURBINE OPERATION."
     ];
 
     useEffect(() => {
-        const duration = 2000; // 2 seconds boot sequence
+        const duration = 1200; // 1.2 seconds boot sequence (Faster)
         const interval = 20;
         const step = 100 / (duration / interval);
 

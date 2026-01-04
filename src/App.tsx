@@ -125,7 +125,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
         }
     }, [loading, user, navigate]);
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#0B0F19]"><Spinner /></div>;
+    if (loading) return null; // Boot screen already parallelizes this. Avoid double spinner.
     if (!user) return <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] text-slate-400">{t('auth.accessDenied', 'Access Denied')}</div>;
     return <>{children}</>;
 };
@@ -428,15 +428,27 @@ const App: React.FC = () => {
 
     return (
         <GlobalProvider>
-            {booting && <SystemBootScreen onComplete={() => setBooting(false)} />}
-            <HashRouter>
-                <ContextAwarenessProvider>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                    </Routes>
-                </ContextAwarenessProvider>
-            </HashRouter>
+            <AnimatePresence mode="wait">
+                {booting ? (
+                    <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
+                ) : (
+                    <motion.div
+                        key="main-app"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="w-full h-full"
+                    >
+                        <HashRouter>
+                            <ContextAwarenessProvider>
+                                <Routes>
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                </Routes>
+                            </ContextAwarenessProvider>
+                        </HashRouter>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </GlobalProvider>
     );
 };

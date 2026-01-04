@@ -225,11 +225,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     return (
         <AssetContext.Provider value={value}>
-            {loading ? (
-                <div className="fixed inset-0 bg-[#020617] flex items-center justify-center">
-                    <div className="w-12 h-12 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
-                </div>
-            ) : children}
+            {children}
         </AssetContext.Provider>
     );
 };
