@@ -17,7 +17,7 @@ import { FrancisSensorData } from '../../models/turbine/types';
 import { FrancisInteractiveCrossSection } from '../diagnostic-twin/FrancisInteractiveCrossSection';
 import { FrancisHillChart } from '../diagnostic-twin/FrancisHillChart';
 import { MaturityBadge } from '../dashboard/MaturityBadge';
-import { TurbineVisualNavigator } from '../dashboard/TurbineVisualNavigator';
+import TurbineVisualNavigator from '../dashboard/TurbineVisualNavigator';
 import { useContextEngine } from '../../hooks/useContextEngine';
 
 
