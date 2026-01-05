@@ -133,7 +133,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             {[
                                 { name: t('sidebar.boltTorque'), icon: '🔩', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
                                 { name: t('sidebar.shaftAlignment'), icon: '🔄', path: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
-                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}` },
+                                { name: t('sidebar.modules.hydraulic_maint'), icon: '🚰', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}` },
                             ].map(tool => (
                                 <GlassCard
                                     key={tool.name}
@@ -162,8 +162,8 @@ export const ToolboxLaunchpad: React.FC = () => {
                                         ⚡
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold text-white mb-1">{t('modules.hppBuilder')}</h3>
-                                        <p className="text-slate-400 text-sm">{t('modules.hppBuilderDesc')}</p>
+                                        <h3 className="text-xl font-bold text-white mb-1">{t('sidebar.modules.hppBuilder')}</h3>
+                                        <p className="text-slate-400 text-sm">{t('sidebar.modules.hppBuilderDesc')}</p>
                                     </div>
                                 </div>
                                 <div className="hidden md:block">

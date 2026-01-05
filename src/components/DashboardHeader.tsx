@@ -107,7 +107,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                         >
                             <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <Search className="w-3.5 h-3.5" />
-                            <span className="font-medium tracking-tight">{t('header.searchPlaceholder')}</span>
+                            <span className="font-medium tracking-tight">{t('sidebar.search_placeholder')}</span>
                             <span className="ml-2 px-1.5 py-0.5 bg-black/40 rounded text-[10px] text-slate-500 font-mono border border-white/5">Ctrl+K</span>
                         </button>
                     </div>

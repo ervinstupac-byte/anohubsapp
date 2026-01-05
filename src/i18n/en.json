@@ -133,6 +133,12 @@
         },
         "sentinel": {
             "title": "Sentinel Recommendations"
+        },
+        "riskStatus": {
+            "label": "RISK STATUS",
+            "normal": "NOMINAL",
+            "warning": "WARNING",
+            "critical": "CRITICAL"
         }
     },
     "sidebar": {

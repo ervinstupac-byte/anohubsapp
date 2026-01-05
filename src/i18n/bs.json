@@ -133,6 +133,12 @@
         },
         "sentinel": {
             "title": "Sentinel Preporuke"
+        },
+        "riskStatus": {
+            "label": "STATUS RIZIKA",
+            "normal": "NOMINALNO",
+            "warning": "UPOZORENJE",
+            "critical": "KRITIČNO"
         }
     },
     "sidebar": {
