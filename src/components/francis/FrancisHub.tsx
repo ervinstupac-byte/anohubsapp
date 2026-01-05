@@ -17,6 +17,7 @@ import { FrancisSensorData } from '../../models/turbine/types';
 import { FrancisInteractiveCrossSection } from '../diagnostic-twin/FrancisInteractiveCrossSection';
 import { FrancisHillChart } from '../diagnostic-twin/FrancisHillChart';
 import { MaturityBadge } from '../dashboard/MaturityBadge';
+import { TurbineVisualNavigator } from '../dashboard/TurbineVisualNavigator';
 import { useContextEngine } from '../../hooks/useContextEngine';
 
 
@@ -428,28 +429,46 @@ export const FrancisHub: React.FC = () => {
             </div>
 
             {/* NC-4.2 ENGINEERING INTELLIGENCE SECTION */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 relative z-10">
-                <GlassCard className="border-t-2 border-t-cyan-500/50 overflow-hidden">
-                    <div className="mb-6 flex justify-between items-center">
+            <div className="grid grid-cols-1 gap-8 mb-8 relative z-10">
+                <GlassCard className="border-t-2 border-t-cyan-500/50 overflow-visible shadow-3xl shadow-cyan-900/10">
+                    <div className="mb-6 flex justify-between items-center p-2">
                         <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
                             <Disc className="w-5 h-5 text-cyan-400" />
-                            Interactive Cross-Section
+                            {t('dashboard.topology.title')}
                         </h3>
-                        <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded border border-cyan-500/20 font-bold uppercase">Live Physics HUD</span>
+                        <div className="flex items-center gap-3">
+                            <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded border border-cyan-500/20 font-bold uppercase select-none animate-pulse">Live Visual Navigator</span>
+                            <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest hidden md:block">NC-4.2 COMPLIANT</span>
+                        </div>
                     </div>
-                    <FrancisInteractiveCrossSection />
+                    <div className="p-1">
+                        <TurbineVisualNavigator />
+                    </div>
                 </GlassCard>
 
-                <GlassCard className="border-t-2 border-t-blue-500/50 overflow-hidden">
-                    <div className="mb-6 flex justify-between items-center">
-                        <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                            <BarChart2 className="w-5 h-5 text-blue-400" />
-                            Hill Chart Topology
-                        </h3>
-                        <span className="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded border border-blue-500/20 font-bold uppercase">Efficiency Mapping</span>
-                    </div>
-                    <FrancisHillChart />
-                </GlassCard>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <GlassCard className="border-t-2 border-t-blue-500/50 overflow-hidden h-full">
+                        <div className="mb-6 flex justify-between items-center p-2">
+                            <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                                <BarChart2 className="w-5 h-5 text-blue-400" />
+                                Hill Chart Topology
+                            </h3>
+                            <span className="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded border border-blue-500/20 font-bold uppercase">Efficiency Mapping</span>
+                        </div>
+                        <FrancisHillChart />
+                    </GlassCard>
+
+                    <GlassCard className="border-t-2 border-t-slate-500/50 overflow-hidden h-full">
+                        <div className="mb-6 flex justify-between items-center p-2">
+                            <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                                <Settings2 className="w-5 h-5 text-slate-400" />
+                                Legacy Topology
+                            </h3>
+                            <span className="text-[10px] bg-slate-500/10 text-slate-400 px-2 py-1 rounded border border-slate-500/20 font-bold uppercase">Standard View</span>
+                        </div>
+                        <FrancisInteractiveCrossSection />
+                    </GlassCard>
+                </div>
             </div>
 
             {/* Expand/Collapse All Toggle */}
