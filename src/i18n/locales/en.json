@@ -383,5 +383,73 @@
                 "leak_risk": "Longevity Leak Detected"
             }
         }
+    },
+    "generator": {
+        "detail": {
+            "title": "Generator Unit",
+            "drillDown": "Drill-Down",
+            "functionalTarget": "Functional Target",
+            "precisionRequirement": "Precision Requirement",
+            "heritageTip": "Field Engineer Instruction",
+            "initiateScan": "Initiate Diagnostic Scan",
+            "selectHotspot": "Select Hotspot",
+            "identifyComponent": "Identify component on official blueprint",
+            "frontBearing": {
+                "name": "Front Bearing (DE)",
+                "param": "Alignment Precision",
+                "func": "Primary radial support for the generator rotor shaft. Critical for maintaining concentricity with stator air gap.",
+                "precision": "$0.05\\text{ mm/m}$ Heritage Standard",
+                "heritage": "The 0.05 mm/m specification originates from legacy Swiss turbine manufacturers—a gold standard that prevents uneven air-gap distribution."
+            },
+            "rearBearing": {
+                "name": "Rear Bearing (NDE)",
+                "param": "Electrical Isolation",
+                "func": "Secondary radial support, electrically insulated to prevent shaft current circulation through the bearing oil film.",
+                "precision": "Insulation Resistance > 1 MΩ",
+                "heritage": "Electrical insulation on the NDE bearing breaks the shaft current loop, protecting both bearings from electrical discharge machining (EDM)."
+            },
+            "groundingBrush": {
+                "name": "Shaft Grounding Brush",
+                "param": "Shaft Current Control",
+                "func": "Provides a low-impedance path for shaft currents induced by electromagnetic asymmetries in the generator.",
+                "precision": "Brush Contact Resistance < 10 mΩ",
+                "heritage": "A worn brush leads to micro-pitting in the bearings, significantly reducing asset life. Check brush wear every 2000 hours."
+            },
+            "lubrication": {
+                "name": "Lubrication Hub",
+                "param": "Oil Film Integrity",
+                "func": "Circulates pressurized oil to cool and lubricate main turbine-generator shaft bearings.",
+                "precision": "5 micron filtration standard",
+                "heritage": "A clean oil film is critical for the longevity of sliding bearings under high pressure. Always verify ISO cleanliness code 16/14/11."
+            },
+            "stator": {
+                "name": "Stator Core & Air Gap",
+                "param": "Magnetic Center",
+                "func": "Houses the core and windings, providing structural support and defining the electromagnetic center of the machine.",
+                "precision": "Axial play < 0.5 mm at Magnetic Center",
+                "heritage": "The Magnetic Center is the axial position where electromagnetic forces are balanced. Operating off-center creates thrust on the turbine runner."
+            },
+            "anchorBolts": {
+                "name": "Foundation Anchor Bolts",
+                "param": "Design Torque",
+                "func": "Secures the generator frame to the concrete foundation, transmitting all dynamic loads to the civil structure.",
+                "precision": "Torque per M36 Class 8.8: 1850 Nm",
+                "heritage": "Tighten in a star pattern to prevent frame distortion. Never tighten sequentially around the perimeter."
+            },
+            "jackingBolts": {
+                "name": "Adjustment (Jacking) Bolts",
+                "param": "MUST BE LOOSE",
+                "func": "Used during alignment to fine-tune generator position. Must be backed off after anchor bolts are torqued.",
+                "precision": "Final State: Finger-loose + 1/4 turn back",
+                "heritage": "These are for positioning only. Leaving them tight creates parasitic stress that mimics misalignment vibration signatures."
+            },
+            "shims": {
+                "name": "Precision Nivelation Shims",
+                "param": "Gold Standard",
+                "func": "Stainless steel shims that establish the vertical alignment datum. Total thickness determines final elevation.",
+                "precision": "$0.01\\text{ mm/m}$ Gold Standard",
+                "heritage": "Use a maximum of 3-4 shims per foot. Stacked shims act like a spring, compromising stability under dynamic loads."
+            }
+        }
     }
 }

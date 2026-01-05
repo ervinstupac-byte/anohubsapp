@@ -35,7 +35,7 @@ const SUB_COMPONENTS = [
         icon: Activity,
         pos: { x: 15, y: 48 },
         func: 'Primary radial support for the generator rotor shaft. Critical for maintaining concentricity with stator air gap.',
-        precision: '0.05 mm/m Heritage Standard',
+        precision: '$0.05\\text{ mm/m}$ Heritage Standard',
         category: 'core'
     },
     {
@@ -114,13 +114,13 @@ const SUB_COMPONENTS = [
     {
         id: 'gen-shims',
         i18nKey: 'shims',
-        name: 'Precision Shims',
+        name: 'Precision Nivelation Shims',
         param: 'Gold Standard',
         heritage: 'Use a maximum of 3-4 shims per foot. Stacked shims act like a spring, compromising stability under dynamic loads.',
         icon: Layers,
         pos: { x: 40, y: 72 },
         func: 'Stainless steel shims that establish the vertical alignment datum. Total thickness determines final elevation.',
-        precision: '0.01 mm/m Gold Standard',
+        precision: '$0.01\\text{ mm/m}$ Gold Standard',
         category: 'foundation'
     }
 ];
@@ -501,7 +501,7 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                                                 <Info className="w-8 h-8 text-amber-500" />
                                             </div>
                                             <div className="flex items-center gap-2 mb-2 text-amber-400 font-black text-[10px] uppercase tracking-widest">
-                                                {t('generator.detail.heritageTip', 'Heritage Tip')}
+                                                {t('generator.detail.heritageTip', 'Field Engineer Instruction')}
                                             </div>
                                             <p className="text-xs text-amber-100 italic relative z-10 leading-relaxed">
                                                 "{translatedData.heritage}"

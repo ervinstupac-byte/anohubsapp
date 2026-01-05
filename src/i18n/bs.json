@@ -310,5 +310,73 @@
                 "leak_risk": "Detektovan Rizik od Curenja"
             }
         }
+    },
+    "generator": {
+        "detail": {
+            "title": "Generator Jedinica",
+            "drillDown": "Detaljna Analiza",
+            "functionalTarget": "Funkcionalni Cilj",
+            "precisionRequirement": "Zahtjev Preciznosti",
+            "heritageTip": "Terenska Instrukcija",
+            "initiateScan": "Pokreni Dijagnostički Sken",
+            "selectHotspot": "Odaberi Tačku",
+            "identifyComponent": "Identifikuj komponentu na zvaničnom crtežu",
+            "frontBearing": {
+                "name": "Prednji Ležaj (DE)",
+                "param": "Preciznost Centriranja",
+                "func": "Primarni radijalni oslonac osovine generatora. Ključan za održavanje koncentričnosti sa vazdušnim zazorom statora.",
+                "precision": "$0.05\\text{ mm/m}$ Heritage Standard",
+                "heritage": "Specifikacija 0.05 mm/m potiče od legacy Švajcarskih proizvođača turbina—zlatni standard koji prevencira neravnomjernu distribuciju vazdušnog zazora."
+            },
+            "rearBearing": {
+                "name": "Zadnji Ležaj (NDE)",
+                "param": "Električna Izolacija",
+                "func": "Sekundarni radijalni oslonac, električno izolovan kako bi spriječio cirkulaciju struja kroz uljni film ležaja.",
+                "precision": "Otpor Izolacije > 1 MΩ",
+                "heritage": "Električna izolacija na NDE ležaju prekida krug struje osovine, štiteći oba ležaja od EDM erozije (elektroerozija)."
+            },
+            "groundingBrush": {
+                "name": "Četka za Uzemljenje",
+                "param": "Kontrola Struja Osovine",
+                "func": "Obezbeđuje put niskog otpora za struje osovine indukovane elektromagnetnim asimetrijama u generatoru.",
+                "precision": "Otpor Kontakta Četke < 10 mΩ",
+                "heritage": "Istrošena četka vodi do mikro-rupičenja u ležajevima, značajno smanjujući životni vijek sredstva. Provjeravati habanje četke svakih 2000 sati."
+            },
+            "lubrication": {
+                "name": "Sistem Podmazivanja",
+                "param": "Integritet Uljnog Filma",
+                "func": "Cirkuliše ulje pod pritiskom za hlađenje i podmazivanje glavnih ležajeva turbine-generatora.",
+                "precision": "5 mikrona - standard filtracije",
+                "heritage": "Čist uljni film je kritičan za dugovječnost kliznih ležaja pod visokim pritiskom. Uvijek verifikovati ISO kod čistoće 16/14/11."
+            },
+            "stator": {
+                "name": "Jezgro Statora i Vazdušni Zazor",
+                "param": "Magnetna Sredina",
+                "func": "Sadrži jezgro i namotaje, obezbeđujući strukturalni oslonac i definirajući elektromagnetnu sredinu mašine.",
+                "precision": "Aksijalna igra < 0.5 mm na Magnetnoj Sredini",
+                "heritage": "Magnetna Sredina je aksijalna pozicija gdje su elektromagnetne sile balansirane. Rad izvan centra stvara potisak na kolo turbine."
+            },
+            "anchorBolts": {
+                "name": "Sidreni Vijci Temelja",
+                "param": "Projektni Moment",
+                "func": "Osigurava okvir generatora na betonski temelj, prenoseći sva dinamička opterećenja na građevinsku strukturu.",
+                "precision": "Moment po M36 Klasa 8.8: 1850 Nm",
+                "heritage": "Pritegnuti u zvjezdastom uzorku kako bi se spriječila deformacija okvira. Nikada ne pritezati sekvencijalno oko perimetra."
+            },
+            "jackingBolts": {
+                "name": "Vijci za Podešavanje (Jacking)",
+                "param": "MORAJU BITI LABAVI",
+                "func": "Koriste se tokom centriranja za fino podešavanje pozicije generatora. Moraju biti olabavljeni nakon pritezanja sidrenih vijaka.",
+                "precision": "Finalno Stanje: Labavo prstima + 1/4 okreta nazad",
+                "heritage": "Ovi vijci služe isključivo za pozicioniranje. Ako se ostave zategnuti, stvaraju parazitski stres koji imitira vibracije neusklađenosti."
+            },
+            "shims": {
+                "name": "Precizne Podmetače za Nivelaciju",
+                "param": "Zlatni Standard",
+                "func": "Nehrđajuće čelične podmetače koje uspostavljaju vertikalni datum centriranja. Ukupna debljina određuje finalnu elevaciju.",
+                "precision": "$0.01\\text{ mm/m}$ Zlatni Standard",
+                "heritage": "Koristiti maksimum 3-4 podmetače po stoporu. Naslagane podmetače djeluju kao opruga, kompromitirajući stabilnost pod dinamičkim opterećenjima."
+            }
+        }
     }
 }
