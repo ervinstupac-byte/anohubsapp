@@ -14,8 +14,11 @@ import {
     Target
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Minimize2, Maximize2, Home } from 'lucide-react';
+import { FRANCIS_PATHS } from '../../routes/paths';
 
 import GeneratorDetailView from './visual/GeneratorDetailView';
+import RunnerDetailView from './visual/RunnerDetailView';
 
 /**
  * NC-4.2 COMPLIANT VISUAL NAVIGATOR
@@ -51,13 +54,24 @@ const COMPONENTS: ComponentDetail[] = [
     {
         id: 'temp-spiral-case',
         name: 'SPIRAL CASE',
-        func: 'Distributes high-pressure water uniformly around the turbine runner circumference.',
+        func: 'Stationary spiral housing ("snail shell") that distributes high-pressure water uniformly around the turbine runner circumference.',
         precision: '0.1 mm surface smoothness',
         heritage: 'The spiral geometry is optimized to maintain constant velocity, reducing cavitation risk.',
-        path: '/francis/modules/runner',
+        path: '/francis/modules/spiral-case',
         icon: Droplets,
-        anchor: { x: 850, y: 450 },
-        labelPos: { top: '50%', left: '85%' }
+        anchor: { x: 700, y: 500 },
+        labelPos: { top: '58%', left: '70%' }
+    },
+    {
+        id: 'temp-runner',
+        name: 'FRANCIS RUNNER',
+        func: 'Central rotating element that converts hydraulic energy into mechanical torque through precisely profiled blade channels.',
+        precision: 'Wearing ring gap: 0.3-0.5 mm',
+        heritage: 'The runner is the heart of the turbine. A 1mm increase in wearing ring gap can drop power by >3%.',
+        path: '/francis/modules/runner',
+        icon: Target,
+        anchor: { x: 600, y: 450 },
+        labelPos: { top: '50%', left: '55%' }
     },
     {
         id: 'temp-miv',
@@ -108,13 +122,32 @@ const COMPONENTS: ComponentDetail[] = [
 const TurbineVisualNavigator: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [viewMode, setViewMode] = useState<'overview' | 'generator-detail'>('overview');
+    const [viewMode, setViewMode] = useState<'overview' | 'generator-detail' | 'runner-detail'>('overview');
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [focusedId, setFocusedId] = useState<string | null>(null);
     const [svgContent, setSvgContent] = useState<string>('');
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const svgRef = useRef<SVGSVGElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Load the grouped SVG
+    // Fullscreen Toggle Handler
+    const toggleFullscreen = () => {
+        if (!containerRef.current) return;
+        if (!document.fullscreenElement) {
+            containerRef.current.requestFullscreen().then(() => setIsFullscreen(true)).catch(err => console.error(err));
+        } else {
+            document.exitFullscreen().then(() => setIsFullscreen(false));
+        }
+    };
+
+    // Listen to fullscreen changes
+    useEffect(() => {
+        const handleFSChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFSChange);
+        return () => document.removeEventListener('fullscreenchange', handleFSChange);
+    }, []);
+
+    // Load and Patch the SVG
     useEffect(() => {
         fetch('/Turbine_Grouped.svg')
             .then(res => res.text())
@@ -123,6 +156,26 @@ const TurbineVisualNavigator: React.FC = () => {
                 const doc = parser.parseFromString(data, 'image/svg+xml');
                 const svgElement = doc.querySelector('svg');
                 if (svgElement) {
+                    // NC-4.2 TOPOLOGY REPAIR: Inject Runner Hitbox
+                    // Create a transparent interaction zone in the center
+                    const runnerGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+                    runnerGroup.id = "temp-runner";
+                    runnerGroup.style.cursor = "pointer";
+
+                    const circle = doc.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", "600"); // Calculated Center of viewBox 0 0 1184 864
+                    circle.setAttribute("cy", "432");
+                    circle.setAttribute("r", "90");   // Optimal hit-area radius
+                    circle.setAttribute("fill", "transparent");
+                    // Ensure it has a title for checking
+                    const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
+                    title.textContent = "Francis Runner";
+                    runnerGroup.appendChild(title);
+                    runnerGroup.appendChild(circle);
+
+                    // Append as last child to ensure z-index priority over spiral case
+                    svgElement.appendChild(runnerGroup);
+
                     setSvgContent(svgElement.innerHTML);
                 }
             });
@@ -131,7 +184,7 @@ const TurbineVisualNavigator: React.FC = () => {
     const focusedComp = COMPONENTS.find(c => c.id === focusedId);
 
     return (
-        <div className="relative w-full aspect-[1184/864] bg-[#0A0F14] rounded-xl overflow-hidden border border-cyan-500/20 shadow-2xl transition-all duration-700">
+        <div ref={containerRef} className={`relative w-full ${isFullscreen ? 'h-screen rounded-none' : 'aspect-[1184/864] rounded-xl'} bg-[#0A0F14] overflow-hidden border border-cyan-500/20 shadow-2xl transition-all duration-700`}>
             <AnimatePresence mode="wait">
                 {viewMode === 'overview' ? (
                     <motion.div
@@ -170,6 +223,8 @@ const TurbineVisualNavigator: React.FC = () => {
                                         if (group && group.id && group.id.startsWith('temp-')) {
                                             if (group.id === 'temp-generator') {
                                                 setViewMode('generator-detail');
+                                            } else if (group.id === 'temp-runner') {
+                                                setViewMode('runner-detail');
                                             } else {
                                                 setFocusedId(group.id);
                                             }
@@ -238,6 +293,8 @@ const TurbineVisualNavigator: React.FC = () => {
                                         onClick={() => {
                                             if (comp.id === 'temp-generator') {
                                                 setViewMode('generator-detail');
+                                            } else if (comp.id === 'temp-runner') {
+                                                setViewMode('runner-detail');
                                             } else {
                                                 setFocusedId(comp.id);
                                             }
@@ -366,8 +423,8 @@ const TurbineVisualNavigator: React.FC = () => {
                             )}
                         </AnimatePresence>
 
-                        {/* Top Banner */}
-                        <div className="absolute top-4 left-4 z-20 pointer-events-none">
+                        {/* Top Banner & Controls */}
+                        <div className="absolute top-4 left-4 right-4 z-20 pointer-events-none flex justify-between items-start">
                             <div className="flex items-center gap-3">
                                 <div className="bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-md backdrop-blur-md">
                                     <span className="text-[10px] font-mono font-bold text-cyan-400 tracking-tighter">NC-4.2 COMPLIANT TOPOLOGY</span>
@@ -377,18 +434,45 @@ const TurbineVisualNavigator: React.FC = () => {
                                     <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">LIVE INTERFACE</span>
                                 </div>
                             </div>
+
+                            {/* Global Full Screen Toggle */}
+                            <div className="pointer-events-auto flex items-center gap-2">
+                                <button
+                                    onClick={toggleFullscreen}
+                                    className="p-2 bg-black/40 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-500/50 rounded-lg backdrop-blur-md text-slate-400 hover:text-cyan-400 transition-all group"
+                                    title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                                >
+                                    {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                                </button>
+                            </div>
                         </div>
                     </motion.div>
-                ) : (
+                ) : viewMode === 'generator-detail' ? (
                     <motion.div
-                        key="detail"
+                        key="generator-detail"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute inset-0"
+                        className="absolute inset-0 z-30"
                     >
-                        <GeneratorDetailView onBack={() => setViewMode('overview')} />
+                        <GeneratorDetailView
+                            onBack={() => setViewMode('overview')}
+                        />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="runner-detail"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                        className="absolute inset-0 z-30"
+                    >
+                        <RunnerDetailView
+                            onBack={() => setViewMode('overview')}
+                            onHome={() => navigate(FRANCIS_PATHS.HUB)}
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>

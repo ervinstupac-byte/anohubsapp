@@ -378,5 +378,52 @@
                 "heritage": "Koristiti maksimum 3-4 podmetače po stoporu. Naslagane podmetače djeluju kao opruga, kompromitirajući stabilnost pod dinamičkim opterećenjima."
             }
         }
+    },
+    "runner": {
+        "detail": {
+            "title": "Francis Kolo (Runner)",
+            "drillDown": "Hidraulička Analiza",
+            "functionalTarget": "Funkcionalni Cilj",
+            "precisionRequirement": "Zahtjev Preciznosti",
+            "heritageTip": "Terenska Instrukcija",
+            "initiateScan": "Pokreni Hidraulički Sken",
+            "selectHotspot": "Odaberi Tačku",
+            "identifyComponent": "Identifikuj komponentu na hidrauličkom crtežu",
+            "runnerBlades": {
+                "name": "Francis Kolo (Rotor)",
+                "param": "Otpornost na Kavitaciju",
+                "func": "Konvertuje hidrauličku energiju u mehanički obrtni moment kroz precizno profilisane kanale lopatica.",
+                "precision": "Tolerancija profila lopatice: ±0.5 mm",
+                "heritage": "Erozija čelne ivice je prvi indikator rada izvan projektnih uslova. Inspekcija lopatica svakih 5000 sati za šupljikave uzorke."
+            },
+            "spiralCase": {
+                "name": "Sekcija Spiralnog Kućišta",
+                "param": "Strukturni Pritisak",
+                "func": "Distribuira vodu visokog pritiska ravnomjerno oko obima turbinskog kola sa optimizovanim profilom brzine.",
+                "precision": "Glatkoća površine: Ra < 6.3 μm",
+                "heritage": "Spiralna geometrija održava konstantnu brzinu kako bi se spriječilo neravnomjerno opterećenje lopatica, smanjujući zamorni stres."
+            },
+            "wearingGap": {
+                "name": "Zazor Zaptivnog Prstena",
+                "param": "Kritično za Efikasnost",
+                "func": "Zaptivni interfejs između rotirajućeg kola i stacionarnih komponenti, prevencija bypass-a vode visokog pritiska.",
+                "precision": "$0.3 - 0.5\\text{ mm}$ Zlatni Standard",
+                "heritage": "Povećanje zazora za 1mm može smanjiti snagu turbine za >3%. Mjeriti zazor na 4 glavne tačke tokom svakog velikog remonta."
+            },
+            "axialPosition": {
+                "name": "Aksijalna Pozicija Centriranja",
+                "param": "Hidraulična Centralna Linija",
+                "func": "Definiše preciznu vertikalnu dubinu rotora u odnosu na hidrauličnu centralnu liniju turbine.",
+                "precision": "Tolerancija aksijalne igre: ±0.2 mm",
+                "heritage": "Neispravna aksijalna pozicija stvara parazitski potisak na ležajeve generatora, ubrzavajući habanje i smanjujući efikasnost."
+            },
+            "headCover": {
+                "name": "Prednji Poklopac & Zaptivač",
+                "param": "Cilj Nulta Curenja",
+                "func": "Obezbeđuje strukturalno zatvaranje i zaptivanje gornje komore turbine, zadržavajući vodu visokog pritiska.",
+                "precision": "Moment vijka: M24 Klasa 8.8 = 980 Nm",
+                "heritage": "Vijčani prednji sklop mora održavati apsolutni integritet zaptivanja. Sekvenca vijaka slijedi zvjezdasti uzorak za ravnomjernu distribuciju pritiska."
+            }
+        }
     }
 }

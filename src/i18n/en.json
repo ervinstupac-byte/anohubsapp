@@ -451,5 +451,52 @@
                 "heritage": "Use a maximum of 3-4 shims per foot. Stacked shims act like a spring, compromising stability under dynamic loads."
             }
         }
+    },
+    "runner": {
+        "detail": {
+            "title": "Francis Runner",
+            "drillDown": "Hydraulic Analysis",
+            "functionalTarget": "Functional Target",
+            "precisionRequirement": "Precision Requirement",
+            "heritageTip": "Field Engineer Instruction",
+            "initiateScan": "Initiate Hydraulic Scan",
+            "selectHotspot": "Select Hotspot",
+            "identifyComponent": "Identify component on hydraulic blueprint",
+            "runnerBlades": {
+                "name": "Francis Runner (Rotor)",
+                "param": "Cavitation Resistance",
+                "func": "Converts hydraulic energy into mechanical torque through precisely profiled blade channels.",
+                "precision": "Blade profile tolerance: ±0.5 mm",
+                "heritage": "Leading-edge erosion is the first indicator of off-design operation. Inspect blades every 5000 hours for pitting patterns."
+            },
+            "spiralCase": {
+                "name": "Spiral Case Section",
+                "param": "Structural Pressure",
+                "func": "Distributes high-pressure water uniformly around the turbine runner circumference with optimized velocity profile.",
+                "precision": "Surface smoothness: Ra < 6.3 μm",
+                "heritage": "The spiral geometry maintains constant velocity to prevent uneven loading on runner blades, reducing fatigue stress."
+            },
+            "wearingGap": {
+                "name": "Wearing Ring Gap",
+                "param": "Efficiency Critical",
+                "func": "Sealing interface between rotating runner and stationary components, preventing high-pressure water bypass.",
+                "precision": "$0.3 - 0.5\\text{ mm}$ Gold Standard",
+                "heritage": "A 1mm increase in gap can drop turbine power by >3%. Measure gap at 4 cardinal points during every major overhaul."
+            },
+            "axialPosition": {
+                "name": "Axial Alignment Position",
+                "param": "Hydraulic Centerline",
+                "func": "Defines the precise vertical depth of the rotor relative to the hydraulic centerline of the turbine.",
+                "precision": "Axial play tolerance: ±0.2 mm",
+                "heritage": "Incorrect axial position creates parasitic thrust on the generator bearings, accelerating wear and reducing efficiency."
+            },
+            "headCover": {
+                "name": "Front Head Cover & Seal",
+                "param": "Zero-Leakage Target",
+                "func": "Provides structural closure and sealing for the upper turbine chamber, containing high-pressure water.",
+                "precision": "Bolt torque: M24 Class 8.8 = 980 Nm",
+                "heritage": "The bolted front assembly must maintain absolute sealing integrity. Bolt sequence follows star pattern for even pressure distribution."
+            }
+        }
     }
 }
