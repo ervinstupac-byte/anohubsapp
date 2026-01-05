@@ -292,7 +292,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
                 { id: 'intuitionLog', title: t('sidebar.modules.intuition_log'), icon: '👂', route: getMaintenancePath(ROUTES.MAINTENANCE.INTUITION_LOG) },
                 { id: 'logbook', title: t('sidebar.modules.logbook'), icon: '📓', route: getMaintenancePath(ROUTES.MAINTENANCE.LOGBOOK) },
-                { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: `/${ROUTES.HPP_BUILDER}` },
+                { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
             ]
         }
     ], [t]);

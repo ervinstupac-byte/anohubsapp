@@ -67,6 +67,12 @@ export const ProfessionalReportEngine = {
 
         drawDigitalSeal(doc);
 
+        // --- PAGE 7: MECHANICAL INSTALLATION SCHEDULE (As-Built) ---
+        if ((state as any).specs?.assemblySequence && (state as any).specs.assemblySequence.length > 0) {
+            doc.addPage();
+            drawMechanicalInstallationSchedule(doc, state, projectID);
+        }
+
         // --- PAGE 2: DETAILS (Placeholder or more charts) ---
         // (Skipping for brevity or adding empty page for structure if needed, but user asked for Page 3 Gallery)
         // Let's assume Page 2 is more content using drawFooter(doc, 2) if we had it.
@@ -400,7 +406,6 @@ const drawVibrationMatrix = (doc: jsPDF, x: number, y: number, size: number) => 
 const drawFooter = (doc: jsPDF, pageNum: number) => {
     const pageCount = doc.getNumberOfPages();
     doc.setFontSize(8);
-    doc.text(`AnoHUB Pro-Bono Tool: Dedicated to 50-year Asset Longevity through Precision Engineering.`, MARGIN, PAGE_HEIGHT - 12);
     doc.text(`Platform Report | Vertraulich | ${new Date().toLocaleDateString()}`, MARGIN, PAGE_HEIGHT - 8);
 };
 
@@ -948,15 +953,6 @@ const drawRevitalizationRoadmap = (doc: jsPDF, state: TechnicalProjectState, id:
     drawFooter(doc, doc.getNumberOfPages());
 };
 
-/**
- * HERITAGE INTEGRITY SEAL & FORENSIC WATERMARK (NC-4.2 PRODUCTION)
- * 
- * Features:
- * - Unique Audit Hash per page (SHA-like)
- * - Forensic Timestamp (UTC)
- * - Heritage Integrity certification if alignment meets 0.05 mm/m
- * - Cubic Wear Formula citation
- */
 const drawDigitalSeal = (doc: jsPDF, state?: any) => {
     const pageCount = doc.getNumberOfPages();
     const timestamp = new Date().toISOString();
@@ -1033,10 +1029,6 @@ const drawDigitalSeal = (doc: jsPDF, state?: any) => {
     drawMathProofAppendix(doc, state);
 };
 
-/**
- * MATH PROOF APPENDIX (NC-4.2)
- * Renders the Cubic Wear Formula with LaTeX-style clarity
- */
 const drawMathProofAppendix = (doc: jsPDF, state?: any) => {
     const MARGIN = 20;
 
@@ -1142,9 +1134,6 @@ const drawMathProofAppendix = (doc: jsPDF, state?: any) => {
     doc.text("AnoHUB NC-4.2 // Pro-Bono Tool for 50-Year Asset Longevity // Mathematical Proof Document", PAGE_WIDTH / 2, PAGE_HEIGHT - 10, { align: 'center' });
 };
 
-/**
- * Generate forensic hash from input string
- */
 function generateForensicHash(input: string): string {
     let hash = 5381;
     for (let i = 0; i < input.length; i++) {
@@ -1154,3 +1143,81 @@ function generateForensicHash(input: string): string {
     return Math.abs(hash).toString(36).toUpperCase().slice(0, 8);
 }
 
+const drawMechanicalInstallationSchedule = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
+    drawHeader(doc, id, state.demoMode.active);
+
+    doc.setFontSize(24);
+    doc.setTextColor(30, 41, 59);
+    doc.setFont("helvetica", "bold");
+    doc.text("MECHANICAL INSTALLATION SCHEDULE", MARGIN, 60);
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    doc.text("As-Built Configuration & Tolerance Verification // NC-4.2", MARGIN, 68);
+
+    const assemblyData = ((state as any).specs?.assemblySequence || []).map((record: any, index: number) => {
+        const alignment = record.alignment !== undefined ? `${record.alignment.toFixed(3)} mm/m` : 'N/A';
+        const isCritical = ['STAY_RING', 'HEAD_COVER', 'ROTOR'].includes(record.partId);
+        let verdict = 'N/A';
+        if (record.alignment !== undefined) {
+            verdict = record.alignment <= 0.05 ? 'PASS (GOLDEN)' : 'DEVIATION';
+        }
+
+        return [
+            index + 1,
+            i18n.t(`hpp_builder.assembly.components.${record.partId.toLowerCase()}`),
+            new Date(record.timestamp).toLocaleTimeString(),
+            alignment,
+            verdict
+        ];
+    });
+
+    if (assemblyData.length > 0) {
+        autoTable(doc, {
+            startY: 80,
+            head: [["Seq", "Component", "Install Time", "Measured Alignment", "Verdict"]],
+            body: assemblyData,
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: { fontSize: 10 },
+            columnStyles: {
+                0: { cellWidth: 15 },
+                1: { cellWidth: 60 },
+                2: { cellWidth: 30 },
+                3: { cellWidth: 40 },
+                4: { cellWidth: 40 }
+            },
+            didDrawCell: (data) => {
+                if (data.section === 'body' && data.column.index === 4) {
+                    const val = data.cell.text[0];
+                    if (val.includes('DEVIATION')) doc.setTextColor(220, 38, 38);
+                    else if (val.includes('PASS')) doc.setTextColor(16, 185, 129);
+                }
+            }
+        });
+
+        // Certification Seal
+        const finalY = (doc as any).lastAutoTable.finalY + 20;
+        doc.setDrawColor(100, 100, 100);
+        doc.setLineWidth(1);
+        doc.rect(MARGIN, finalY, PAGE_WIDTH - (MARGIN * 2), 40);
+
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Installation Supervisor Signature:", MARGIN + 10, finalY + 15);
+        doc.line(MARGIN + 70, finalY + 15, MARGIN + 150, finalY + 15);
+
+        doc.text("Date:", MARGIN + 10, finalY + 30);
+        doc.line(MARGIN + 25, finalY + 30, MARGIN + 60, finalY + 30);
+
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text("By signing, I certify that the installed components meet the NC-4.2 specifications.", MARGIN + 10, finalY + 38);
+    } else {
+        doc.setTextColor(150, 150, 150);
+        doc.text("No assembly data recorded.", MARGIN, 90);
+    }
+
+    drawFooter(doc, doc.getNumberOfPages());
+};

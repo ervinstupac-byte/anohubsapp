@@ -5,11 +5,12 @@
   "type": "module",
   "homepage": "https://anohubs.com",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run i18n:sync && vite",
     "lint": "tsc --noEmit",
-    "build": "npm run test && tsc && vite build",
+    "build": "npm run i18n:sync && npm run test && tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "i18n:sync": "copy \"src\\i18n\\locales\\en.json\" \"src\\i18n\\en.json\" /Y && copy \"src\\i18n\\locales\\bs.json\" \"src\\i18n\\bs.json\" /Y",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

@@ -1,9 +1,23 @@
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { ExpertInference } from '../services/ExpertInference';
 import { TechnicalProjectState } from '../models/TechnicalSchema';
+import i18n from '../i18n';
+import en from '../i18n/locales/en.json';
 
 describe('ExpertInference Engine', () => {
+    beforeAll(async () => {
+        await i18n.init({
+            lng: 'en',
+            resources: {
+                en: {
+                    common: en
+                }
+            },
+            defaultNS: 'common'
+        });
+    });
+
     const mockState: any = {
         mechanical: {
             vibration: 5.0, // Should trigger ISO 10816-3 Critical
@@ -21,9 +35,9 @@ describe('ExpertInference Engine', () => {
         },
         hydraulic: {
             head: 100,
-            flow: 5.0,
+            flow: 3.0,
             efficiency: 0.85,
-            baselineOutputMW: 4.5 as any
+            baselineOutputMW: 4.5
         },
         physics: {
             specificWaterConsumption: 5000, // Very high
@@ -40,7 +54,7 @@ describe('ExpertInference Engine', () => {
         site: {
             designPerformanceMW: 5.0,
             designFlow: 3.0
-        } as any,
+        },
         penstock: {
             diameter: 1.5,
             length: 200,
@@ -64,7 +78,7 @@ describe('ExpertInference Engine', () => {
                 }
             },
             startStopCount: 120
-        } as any,
+        },
         demoMode: {
             active: false
         },
@@ -78,7 +92,7 @@ describe('ExpertInference Engine', () => {
 
     it('should detect ISO 10816-3 Vibration violation', () => {
         const result = ExpertInference.analyze(mockState as TechnicalProjectState);
-        const vibAlert = result.alerts.find(a => a.parameter === 'Vibration');
+        const vibAlert = result.alerts.find(a => a.parameter === i18n.t('validation.fields.vibration'));
         expect(vibAlert).toBeDefined();
         expect(vibAlert?.severity).toBe('CRITICAL');
         expect(vibAlert?.reasoning).toContain('ISO 10816-3');
@@ -86,7 +100,7 @@ describe('ExpertInference Engine', () => {
 
     it('should detect critical bearing temperature', () => {
         const result = ExpertInference.analyze(mockState as TechnicalProjectState);
-        const tempAlert = result.alerts.find(a => a.parameter === 'Bearing Temp');
+        const tempAlert = result.alerts.find(a => a.parameter === i18n.t('validation.fields.bearingTemp'));
         expect(tempAlert).toBeDefined();
         expect(tempAlert?.severity).toBe('CRITICAL');
     });
@@ -95,14 +109,15 @@ describe('ExpertInference Engine', () => {
         const result = ExpertInference.analyze(mockState as TechnicalProjectState);
         // MAWP = (2 * 250 * 0.02) / 1.5 = 6.66 MPa = 66.6 Bar
         // Current P = 10 + 12 = 22 Bar
-        // Margin = (66.6 - 22) / 66.6 = 0.67 (67%)
+        // Margin = (66.6 - 22) / 66.6 = 0.67 (67.0%)
         expect(result.metrics.structuralSafetyMargin).toBeCloseTo(67, 0);
     });
 
     it('should attach recommendedAction to critical alerts', () => {
         const result = ExpertInference.analyze(mockState as TechnicalProjectState);
-        const vibAlert = result.alerts.find(a => a.parameter === 'Vibration');
+        const vibAlert = result.alerts.find(a => a.parameter === i18n.t('validation.fields.vibration'));
         expect(vibAlert?.recommendedAction).toBeDefined();
+        // Since it pulls from MaintenanceSOP.json now
         expect(vibAlert?.recommendedAction).toContain('Check Coupling');
     });
 });

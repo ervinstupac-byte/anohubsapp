@@ -1,3 +1,5 @@
+import i18n from '../i18n';
+
 /**
  * ENGINEERING VALIDATION ENGINE (NC-4.2)
  * 
@@ -28,29 +30,29 @@ export interface CrossSectorEffect {
  */
 const PHYSICAL_LIMITS = {
     // Mechanical
-    alignment: { min: 0, max: 2.0, unit: 'mm/m', name: 'Shaft Alignment' },
-    vibration: { min: 0, max: 50, unit: 'mm/s', name: 'Vibration Velocity' },
-    axialPlay: { min: 0, max: 5.0, unit: 'mm', name: 'Axial Play' },
+    alignment: { min: 0, max: 2.0, unit: 'mm/m', name: 'validation.fields.alignment' },
+    vibration: { min: 0, max: 50, unit: 'mm/s', name: 'validation.fields.vibration' },
+    axialPlay: { min: 0, max: 5.0, unit: 'mm', name: 'validation.fields.axialPlay' },
 
     // Thermal
-    bearingTemp: { min: -40, max: 200, unit: '°C', name: 'Bearing Temperature' },
-    oilTemp: { min: -20, max: 120, unit: '°C', name: 'Oil Temperature' },
-    ambientTemp: { min: -50, max: 60, unit: '°C', name: 'Ambient Temperature' },
+    bearingTemp: { min: -40, max: 200, unit: '°C', name: 'validation.fields.bearingTemp' },
+    oilTemp: { min: -20, max: 120, unit: '°C', name: 'validation.fields.oilTemp' },
+    ambientTemp: { min: -50, max: 60, unit: '°C', name: 'validation.fields.ambientTemp' },
 
     // Electrical
-    insulationResistance: { min: 0, max: 10000, unit: 'MΩ', name: 'Insulation Resistance' },
-    gridFrequency: { min: 45, max: 55, unit: 'Hz', name: 'Grid Frequency' },
-    voltage: { min: 0, max: 50, unit: 'kV', name: 'Voltage' },
+    insulationResistance: { min: 0, max: 10000, unit: 'MΩ', name: 'validation.fields.insulationResistance' },
+    gridFrequency: { min: 45, max: 55, unit: 'Hz', name: 'validation.fields.gridFrequency' },
+    voltage: { min: 0, max: 50, unit: 'kV', name: 'validation.fields.voltage' },
 
     // Hydraulic
-    head: { min: 0, max: 2000, unit: 'm', name: 'Net Head' },
-    flow: { min: 0, max: 1000, unit: 'm³/s', name: 'Flow Rate' },
-    efficiency: { min: 0, max: 100, unit: '%', name: 'Efficiency' },
+    head: { min: 0, max: 2000, unit: 'm', name: 'validation.fields.netHead' },
+    flow: { min: 0, max: 1000, unit: 'm³/s', name: 'validation.fields.flowRate' },
+    efficiency: { min: 0, max: 100, unit: '%', name: 'validation.fields.efficiency' },
 
     // Structural
-    hoopStress: { min: 0, max: 500, unit: 'MPa', name: 'Hoop Stress' },
-    wallThickness: { min: 1, max: 100, unit: 'mm', name: 'Wall Thickness' },
-    pressure: { min: 0, max: 100, unit: 'bar', name: 'Pressure' }
+    hoopStress: { min: 0, max: 500, unit: 'MPa', name: 'validation.fields.hoopStress' },
+    wallThickness: { min: 1, max: 100, unit: 'mm', name: 'validation.fields.wallThickness' },
+    pressure: { min: 0, max: 100, unit: 'bar', name: 'validation.fields.pressure' }
 };
 
 export const EngineeringValidation = {
@@ -59,13 +61,14 @@ export const EngineeringValidation = {
      */
     validateField(field: keyof typeof PHYSICAL_LIMITS, value: number): ValidationResult {
         const limits = PHYSICAL_LIMITS[field];
+        const fieldName = i18n.t(limits.name);
 
         if (value < limits.min) {
             return {
                 isValid: false,
-                field: limits.name,
+                field: fieldName,
                 value,
-                message: `${limits.name} cannot be negative or below ${limits.min} ${limits.unit}`,
+                message: i18n.t('validation.limits.negative', { field: fieldName, min: limits.min, unit: limits.unit }),
                 severity: 'error',
                 suggestedRange: { min: limits.min, max: limits.max }
             };
@@ -74,9 +77,9 @@ export const EngineeringValidation = {
         if (value > limits.max) {
             return {
                 isValid: false,
-                field: limits.name,
+                field: fieldName,
                 value,
-                message: `${limits.name} of ${value} ${limits.unit} exceeds physical maximum (${limits.max} ${limits.unit})`,
+                message: i18n.t('validation.limits.exceeds', { field: fieldName, value, unit: limits.unit, max: limits.max }),
                 severity: 'error',
                 suggestedRange: { min: limits.min, max: limits.max }
             };
@@ -84,9 +87,9 @@ export const EngineeringValidation = {
 
         return {
             isValid: true,
-            field: limits.name,
+            field: fieldName,
             value,
-            message: 'Value within engineering limits',
+            message: i18n.t('validation.limits.nominal'),
             severity: 'info'
         };
     },
@@ -102,9 +105,9 @@ export const EngineeringValidation = {
         if (tempC > 85) {
             return {
                 isValid: true,
-                field: 'Bearing Temperature',
+                field: i18n.t('validation.fields.bearingTemp'),
                 value: tempC,
-                message: `Critical: ${tempC}°C exceeds safe operating limit (85°C). Immediate shutdown recommended.`,
+                message: i18n.t('validation.bearing.critical', { value: tempC }),
                 severity: 'error'
             };
         }
@@ -112,9 +115,9 @@ export const EngineeringValidation = {
         if (tempC > 70) {
             return {
                 isValid: true,
-                field: 'Bearing Temperature',
+                field: i18n.t('validation.fields.bearingTemp'),
                 value: tempC,
-                message: `Warning: ${tempC}°C approaching critical threshold. Monitor closely.`,
+                message: i18n.t('validation.bearing.warning', { value: tempC }),
                 severity: 'warning'
             };
         }
@@ -134,9 +137,9 @@ export const EngineeringValidation = {
         if (alignmentMmM > GOLDEN_STANDARD * 4) { // > 0.20 mm/m
             return {
                 isValid: true,
-                field: 'Shaft Alignment',
+                field: i18n.t('validation.fields.alignment'),
                 value: alignmentMmM,
-                message: `Critical deviation: ${alignmentMmM} mm/m is ${(alignmentMmM / GOLDEN_STANDARD).toFixed(1)}x the Golden Standard.`,
+                message: i18n.t('validation.alignment.critical', { value: alignmentMmM, ratio: (alignmentMmM / GOLDEN_STANDARD).toFixed(1) }),
                 severity: 'error'
             };
         }
@@ -144,9 +147,9 @@ export const EngineeringValidation = {
         if (alignmentMmM > GOLDEN_STANDARD) {
             return {
                 isValid: true,
-                field: 'Shaft Alignment',
+                field: i18n.t('validation.fields.alignment'),
                 value: alignmentMmM,
-                message: `Heritage deviation: ${alignmentMmM} mm/m exceeds 0.05 mm/m Golden Standard.`,
+                message: i18n.t('validation.alignment.heritage', { value: alignmentMmM }),
                 severity: 'warning'
             };
         }
@@ -240,8 +243,8 @@ export const CrossSectorEngine = {
             predictedTemp,
             warning,
             message: warning
-                ? `Thermal Stress: Alignment deviation may increase bearing temp by +${tempIncrease.toFixed(1)}°C`
-                : 'Thermal profile nominal'
+                ? i18n.t('validation.cross_sector.thermal_stress', { alignment: alignmentMmM.toFixed(3), stress: ((stressMultiplier - 1) * 100).toFixed(0) })
+                : i18n.t('validation.limits.nominal')
         };
     },
 
@@ -263,12 +266,12 @@ export const CrossSectorEngine = {
         if (alignment > this.GOLDEN_ALIGNMENT) {
             const stressMultiplier = this.calculateThermalStressFromAlignment(alignment);
             effects.push({
-                sourceSector: 'MECHANICAL',
-                sourceField: 'Shaft Alignment',
-                affectedSector: 'ELECTRICAL/SCADA',
-                affectedField: 'Bearing Temperature',
+                sourceSector: i18n.t('validation.fields.alignment'),
+                sourceField: i18n.t('validation.fields.alignment'),
+                affectedSector: i18n.t('validation.fields.bearingTemp'),
+                affectedField: i18n.t('validation.fields.bearingTemp'),
                 stressMultiplier,
-                message: `Misalignment (${alignment.toFixed(3)} mm/m) applying ${((stressMultiplier - 1) * 100).toFixed(0)}% thermal stress`
+                message: i18n.t('validation.cross_sector.thermal_stress', { alignment: alignment.toFixed(3), stress: ((stressMultiplier - 1) * 100).toFixed(0) })
             });
         }
 
@@ -276,12 +279,12 @@ export const CrossSectorEngine = {
         if (alignment > this.GOLDEN_ALIGNMENT) {
             const oilImpact = this.calculateOilLongevityImpact(alignment);
             effects.push({
-                sourceSector: 'MECHANICAL',
-                sourceField: 'Shaft Alignment',
-                affectedSector: 'MECHANICAL',
-                affectedField: 'Oil Longevity',
+                sourceSector: i18n.t('validation.fields.alignment'),
+                sourceField: i18n.t('validation.fields.alignment'),
+                affectedSector: i18n.t('validation.fields.oilLongevity'),
+                affectedField: i18n.t('validation.fields.oilLongevity'),
                 stressMultiplier: oilImpact.multiplier,
-                message: `Oil service interval reduced by ${oilImpact.yearsLost.toFixed(1)} years due to accelerated wear`
+                message: i18n.t('validation.cross_sector.oil_degradation', { years: oilImpact.yearsLost.toFixed(1) })
             });
         }
 
@@ -289,12 +292,12 @@ export const CrossSectorEngine = {
         if (vibration > 2.8) { // ISO 10816 "Satisfactory" threshold
             const sealStress = vibration / 2.8;
             effects.push({
-                sourceSector: 'MECHANICAL',
-                sourceField: 'Vibration',
-                affectedSector: 'MECHANICAL',
-                affectedField: 'Seal Integrity',
+                sourceSector: i18n.t('validation.fields.vibration'),
+                sourceField: i18n.t('validation.fields.vibration'),
+                affectedSector: i18n.t('validation.fields.sealIntegrity'),
+                affectedField: i18n.t('validation.fields.sealIntegrity'),
                 stressMultiplier: sealStress,
-                message: `High vibration (${vibration.toFixed(2)} mm/s) accelerating seal wear`
+                message: i18n.t('validation.cross_sector.seal_integrity', { value: vibration.toFixed(2) })
             });
         }
 
@@ -303,12 +306,12 @@ export const CrossSectorEngine = {
         if (freqDeviation > 0.5) {
             const gridStress = 1 + (freqDeviation * 0.2);
             effects.push({
-                sourceSector: 'ELECTRICAL/SCADA',
-                sourceField: 'Grid Frequency',
-                affectedSector: 'ELECTRICAL/SCADA',
-                affectedField: 'Generator Insulation',
+                sourceSector: i18n.t('validation.fields.gridFrequency'),
+                sourceField: i18n.t('validation.fields.gridFrequency'),
+                affectedSector: i18n.t('validation.fields.generatorInsulation'),
+                affectedField: i18n.t('validation.fields.generatorInsulation'),
                 stressMultiplier: gridStress,
-                message: `Grid deviation (${freqDeviation.toFixed(2)} Hz) inducing insulation stress`
+                message: i18n.t('validation.cross_sector.insulation_stress', { deviation: freqDeviation.toFixed(2) })
             });
         }
 
@@ -337,13 +340,13 @@ export const CrossSectorEngine = {
         const temp = state.bearingTemp || 0;
 
         if (alignment > this.GOLDEN_ALIGNMENT) {
-            reasons.push(`Alignment ${alignment.toFixed(3)} mm/m exceeds 0.05 mm/m standard`);
+            reasons.push(i18n.t('validation.certification.alignment_fail', { value: alignment.toFixed(3) }));
         }
         if (vibration > 1.1) { // ISO "Good" threshold
-            reasons.push(`Vibration ${vibration.toFixed(2)} mm/s exceeds ISO "Good" threshold`);
+            reasons.push(i18n.t('validation.certification.vibration_fail', { value: vibration.toFixed(2) }));
         }
         if (temp > 65) {
-            reasons.push(`Bearing temperature ${temp}°C exceeds optimal range`);
+            reasons.push(i18n.t('validation.certification.temp_fail', { value: temp }));
         }
 
         return {

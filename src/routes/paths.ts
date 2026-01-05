@@ -16,6 +16,7 @@ export const ROUTES = {
     FRANCIS: {
         ROOT: 'francis',
         HUB: 'hub',
+        DESIGNER: 'designer',
         COMMAND_CENTER: 'command-center',
         DIAGNOSTICS: {
             ROOT: 'diagnostics',

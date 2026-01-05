@@ -132,22 +132,39 @@ export const CommanderTerminal: React.FC = () => {
     }, [messages, isOpen]);
 
     return (
-        <div className="fixed bottom-4 right-4 z-40 pointer-events-auto flex flex-col items-end">
-            {/* TOGGLE BUTTON */}
-            <button
+        <div className="fixed bottom-4 right-4 z-40 pointer-events-none flex flex-col items-end">
+            {/* Toggle Button - Needs Auto Pointer Events */}
+            <motion.button
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="mb-2 bg-slate-900/90 border border-cyan-500/30 text-cyan-400 p-2 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:bg-cyan-950 transition-all group"
+                className={`
+                    pointer-events-auto
+                    w-12 h-12 rounded-full 
+                    bg-black/80 backdrop-blur-md 
+                    border border-cyan-500/50 
+                    shadow-[0_0_20px_rgba(6,182,212,0.3)]
+                    flex items-center justify-center
+                    text-cyan-400
+                    transition-all duration-300
+                    hover:bg-cyan-950/50 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]
+                    ${isOpen ? 'bg-cyan-950 border-cyan-400' : ''}
+                `}
             >
-                <Terminal className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            </button>
+                <Terminal className="w-5 h-5" />
+            </motion.button>
 
+            {/* Terminal Window - Needs Auto Pointer Events */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        animate={{ opacity: 1, y: -16, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="w-96 h-80 bg-black/90 backdrop-blur-3xl border border-cyan-500/30 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                        className="pointer-events-auto w-96 h-80 bg-black/90 backdrop-blur-3xl border border-cyan-500/30 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
                     >
                         {/* HEADER */}
                         <div className="px-4 py-2.5 bg-cyan-500/10 border-b border-cyan-500/20 flex justify-between items-center shrink-0">

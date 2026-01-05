@@ -131,9 +131,9 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.utilities')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {[
-                                { name: t('sidebar.boltTorque'), icon: '🔩', path: `/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
+                                { name: t('sidebar.boltTorque'), icon: '🔩', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.BOLT_TORQUE}` },
                                 { name: t('sidebar.shaftAlignment'), icon: '🔄', path: `/${ROUTES.FRANCIS.ROOT}/${ROUTES.FRANCIS.SOP.ALIGNMENT}` },
-                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: `/${ROUTES.MAINTENANCE.HYDRAULIC}` },
+                                { name: t('sidebar.hydraulicMaintenance'), icon: '🚰', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.HYDRAULIC}` },
                             ].map(tool => (
                                 <GlassCard
                                     key={tool.name}
@@ -178,9 +178,9 @@ export const ToolboxLaunchpad: React.FC = () => {
                         <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">{t('toolbox.sections.operationalModules')}</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {[
-                                { name: t('sidebar.maintenanceLogbook'), icon: '📝', path: `/${ROUTES.MAINTENANCE.LOGBOOK}`, desc: t('toolbox.activity.descLogbook') },
+                                { name: t('sidebar.maintenanceLogbook'), icon: '📝', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.LOGBOOK}`, desc: t('toolbox.activity.descLogbook') },
                                 { name: t('sidebar.structuralIntegrity'), icon: '🏗️', path: `/${ROUTES.STRUCTURAL_INTEGRITY}`, desc: t('toolbox.activity.descStructural') },
-                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: `/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`, desc: t('toolbox.activity.descShadow') },
+                                { name: t('sidebar.shadowEngineer'), icon: '🛠️', path: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.SHADOW_ENGINEER}`, desc: t('toolbox.activity.descShadow') },
                                 { name: t('sidebar.toolboxAnalytics'), icon: '📊', path: `/${ROUTES.MAINTENANCE.EXECUTIVE}`, desc: t('toolbox.activity.descAnalytics') },
                             ].map(item => (
                                 <GlassCard
@@ -195,6 +195,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     </div>
                                 </GlassCard>
                             ))}
+
 
                             {/* DYNAMIC: FRANCIS PROTOCOLS */}
                             {/* DYNAMIC PROTOCOLS CARDS based on Asset Type */}
@@ -350,7 +351,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                     </div>
                 </div>
 
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };

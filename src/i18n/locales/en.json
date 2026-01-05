@@ -98,6 +98,7 @@
         "export_brief": "Export Brief",
         "heritage_banner": {
             "title": "Heritage Precision Standard",
+            "alert_desc": "Current alignment deviation is accelerating wear beyond design parameters.",
             "subtitle": "Golden Alignment Protocol",
             "compliant": "Compliant",
             "deviation": "Deviation",
@@ -171,8 +172,17 @@
             "learning_lab": "Learning Lab",
             "intuition_log": "Intuition Log",
             "logbook": "Maintenance Logbook",
-            "hpp_studio": "HPP Studio"
-        }
+            "hpp_studio": "HPP Studio",
+            "hppBuilder": "HPP Designer",
+            "hppBuilderDesc": "Design and simulate new hydro plants."
+        },
+        "boltTorque": "Bolt Torque",
+        "shaftAlignment": "Shaft Alignment",
+        "hydraulicMaintenance": "Hydraulic Maintenance",
+        "maintenanceLogbook": "Maintenance Logbook",
+        "structuralIntegrity": "Structural Integrity",
+        "shadowEngineer": "Shadow Engineer",
+        "toolboxAnalytics": "Toolbox Analytics"
     },
     "terminal": {
         "title": "Commander_Terminal_v4.2",
@@ -181,7 +191,191 @@
     },
     "toolbox": {
         "greeting": {
-            "morning": "Good Morning, Engineer"
+            "morning": "Good Morning, Engineer",
+            "afternoon": "Good Afternoon, Engineer",
+            "evening": "Good Evening, Engineer"
+        },
+        "engineer": "Chief Engineer",
+        "systemOperational": "System Operational",
+        "assetsOnline": "Assets Online",
+        "activeAsset": "Active: {{name}}",
+        "passport": "Asset Passport",
+        "addAsset": "Add Asset",
+        "zeroState": {
+            "title": "System Cold Start",
+            "noAssets": "No assets detected in local reservoir.",
+            "initialize": "Initialize New Asset"
+        },
+        "sections": {
+            "utilities": "Field Utilities",
+            "designAnalysis": "Design & Analysis",
+            "operationalModules": "Operational Modules",
+            "recentActivity": "Recent Activity"
+        },
+        "activity": {
+            "descLogbook": "Review daily logs and anomalies.",
+            "descStructural": "Monitor dam and penstock health.",
+            "descShadow": "AI-guided maintenance procedures.",
+            "descAnalytics": "Executive financial overview.",
+            "none": "No recent activity recorded.",
+            "open": "Open Logbook",
+            "view": "View All Activity"
+        },
+        "toast": {
+            "generatingPassport": "Generating Digital Passport for {{asset}}..."
+        },
+        "diagnostics": {
+            "francisTitle": "Francis Diagnostics",
+            "francisDesc": "Real-time spectral analysis for {{name}}"
+        },
+        "logicHub": {
+            "title": "Logic Hub",
+            "desc": "Centralized neural control unit"
+        },
+        "pelton": {
+            "title": "Pelton Systems",
+            "desc": "Injector and bucket analysis"
+        },
+        "kaplan": {
+            "title": "Kaplan Control",
+            "desc": "Blade angle and flow optimization"
+        },
+        "bulb": {
+            "title": "Bulb Turbine",
+            "desc": "Submersible unit monitoring"
+        }
+    },
+    "validation": {
+        "fields": {
+            "alignment": "Shaft Alignment",
+            "vibration": "Vibration Velocity",
+            "axialPlay": "Axial Play",
+            "bearingTemp": "Bearing Temperature",
+            "oilTemp": "Oil Temperature",
+            "ambientTemp": "Ambient Temperature",
+            "insulationResistance": "Insulation Resistance",
+            "gridFrequency": "Grid Frequency",
+            "voltage": "Voltage",
+            "netHead": "Net Head",
+            "flowRate": "Flow Rate",
+            "efficiency": "Efficiency",
+            "hoopStress": "Hoop Stress",
+            "wallThickness": "Wall Thickness",
+            "pressure": "Pressure",
+            "bearingRise": "Bearing Rise",
+            "oilLongevity": "Oil Longevity",
+            "sealIntegrity": "Seal Integrity",
+            "generatorInsulation": "Generator Insulation",
+            "thermalStability": "Thermal Stability",
+            "greaseManagement": "Grease Management",
+            "dynamicRisk": "Dynamic Risk Profile",
+            "oilChemistry": "Oil Chemistry"
+        },
+        "limits": {
+            "negative": "{{field}} cannot be negative or below {{min}} {{unit}}",
+            "exceeds": "{{field}} of {{value}} {{unit}} exceeds physical maximum ({{max}} {{unit}})",
+            "nominal": "Value within engineering limits"
+        },
+        "bearing": {
+            "critical": "CRITICAL: {{value}}°C exceeds safe operating limit (85°C). Immediate shutdown recommended.",
+            "warning": "WARNING: {{value}}°C approaching critical threshold. Monitor closely."
+        },
+        "alignment": {
+            "critical": "CRITICAL DEVIATION: {{value}} mm/m is {{ratio}}x the Golden Standard.",
+            "heritage": "HERITAGE DEVIATION: {{value}} mm/m exceeds 0.05 mm/m Golden Standard."
+        },
+        "cross_sector": {
+            "thermal_stress": "THERMAL CAUSALITY: Misalignment ({{alignment}} mm/m) is actively inducing {{stress}}% excess thermal load on bearings.",
+            "oil_degradation": "ACCELERATED WEAR: Oil service life reduced by {{years}} years due to particle contamination.",
+            "seal_integrity": "MECHANICAL EROSION: High vibration ({{value}} mm/s) is compromising seal integrity.",
+            "insulation_stress": "ELECTRICAL STRESS: Grid instability ({{deviation}} Hz) is degrading generator insulation."
+        },
+        "certification": {
+            "alignment_fail": "Alignment {{value}} mm/m exceeds 0.05 mm/m standard",
+            "vibration_fail": "Vibration {{value}} mm/s exceeds ISO 'Good' threshold",
+            "temp_fail": "Bearing temperature {{value}}°C exceeds optimal range"
+        }
+    },
+    "expert_inference": {
+        "headers": {
+            "structural_risk": "STRUCTURAL RISK",
+            "precision_breach": "PRECISION BREACH",
+            "axial_breach": "AXIAL PLAY BREACH",
+            "insulation_risk": "INSULATION RISK",
+            "tribology_risk": "ACIDIC/HYDRATED OIL"
+        },
+        "remedies": {
+            "realignment": "Execute Precision Laser Re-alignment to 0.05 mm/m.",
+            "shimming": "Precision shimming and thrust bridge calibration.",
+            "dryout": "Stator dry-out and cryogenic cleaning sequence.",
+            "oil_scraping": "Execute SOP-TRIB-001: Scraping & Blueing and Oil Purification.",
+            "grease_purge": "Purge grease lines and inspect seal integrity.",
+            "cooling_verify": "Verify cooling water flow and jacking oil pressure."
+        },
+        "alerts": {
+            "structural_risk": "Safety margin is {{margin}}%. Hoop stress ({{pressure}} Bar) vs Limit ({{limit}} Bar).",
+            "vibration_critical": "Measured vibration of {{value}} mm/s exceeds the {{standard}} critical limit of {{limit}} mm/s for large machines.",
+            "bearing_critical": "Bearing temperature reached {{value}}°C, exceeding the safe critical shutdown threshold of {{limit}}°C. Relative rise above ambient is {{rise}}°C.",
+            "bearing_rise": "Abnormal thermal rise detected. Bearing is {{rise}}°C above ambient ({{ambient}}°C). Even if below absolute limits, this indicates a lubrication or friction issue.",
+            "alignment_breach": "PRECISION BREACH: Measured {{value}} mm/m exceeds strict {{limit}} mm/m Golden Standard. Based on the cubic relationship of bearing wear, this misalignment accelerates capital erosion by {{erosion}}%.",
+            "axial_breach": "Measured {{value}} mm exceeds max limit of {{limit}} mm. Driving high dynamic thrust loads on pads, risking catastrophic fatigue breakthrough.",
+            "insulation_risk": "Stator resistance of {{value}} MOhm is below the strict Healthy Baseline of {{limit}} MOhm. High probability of winding partial discharge.",
+            "oil_chemistry": "{{condition}}. Accelerated chemical erosion of Babbitt (white metal) bearings detected.",
+            "grease_risk": "Excessive lubrication during standby.",
+            "thermal_inertia": "Abnormal bearing heat rise.",
+            "mag_unb": "High stator temperature variance.",
+            "cavitation": "DIAGNOSIS: Potential Cavitation. REASONING: Specific Water Consumption ({{swc}}) is > 10% above design baseline.",
+            "fatigue_risk": "INVESTMENT DECAY ALERT: Dynamic fatigue risk is {{risk}}%. Failure to correct alignment/vibration will result in accelerated capital erosion."
+        },
+        "symptoms": {
+            "mag_unb": "Localized Stator Heating",
+            "cavitation": "Cavitation"
+        },
+        "verdicts": {
+            "critical_multi": "CRITICAL: Asset requires immediate intervention across {{count}} failure domains; prioritize shutdown and comprehensive audit before further operation.",
+            "structural_mech": "Asset shows compounded structural and mechanical degradation; immediate engineering review required to prevent cascading failure.",
+            "mech_trib": "Asset is structurally sound but tribologically compromised; prioritize oil filtration and precision realignment to arrest longevity leak.",
+            "thermal_mech": "Thermal stress detected with alignment deviation; bearing wear accelerating—recommend laser realignment and thermography baseline.",
+            "mech_only": "Alignment precision below Golden Standard (0.05 mm/m); execute laser realignment protocol to restore full longevity potential.",
+            "elec_only": "Electrical insulation degradation detected; schedule stator dry-out and partial discharge testing within 30 days.",
+            "trib_only": "Oil analysis indicates contamination; implement enhanced filtration and consider oil change to prevent accelerated bearing wear.",
+            "warning_only": "Asset operating within acceptable limits with {{count}} monitoring flag(s); maintain current inspection cadence.",
+            "golden": "Asset meets NC-4.2 Heritage Standards; projected 50-year longevity pathway confirmed—continue predictive monitoring.",
+            "nominal": "Asset health nominal with no immediate action required; next scheduled audit recommended in 6 months."
+        }
+    },
+    "hpp_builder": {
+        "assembly": {
+            "title": "Structural Assembly Audit",
+            "subtitle": "Step 4: Vertical Integration & Tolerance Check",
+            "components": {
+                "draft_tube": "Draft Tube",
+                "spiral_case": "Spiral Case",
+                "stay_ring": "Stay Ring",
+                "wicket_gates": "Wicket Gates",
+                "head_cover": "Head Cover",
+                "rotor": "Rotor",
+                "main_shaft": "Main Shaft",
+                "stator": "Stator"
+            },
+            "errors": {
+                "seq_001": "Foundational Error: Draft Tube must be installed first.",
+                "seq_002": "Support Error: Spiral Case requires Draft Tube foundation.",
+                "seq_003": "Load Path Error: Stay Ring must rest on Spiral Case.",
+                "seq_004": "ERR_SEQ_004: Guide vanes (Wicket Gates) must be installed before Top Cover.",
+                "seq_005": "Clearance Error: Head Cover required before Rotor insertion."
+            },
+            "prompts": {
+                "measure_alignment": "Enter Measured Alignment (mm/m)",
+                "bolt_tension": "Confirm Bolt Tensioning (Nm)",
+                "clearance_check": "Clearance Check",
+                "scraping_contact": "Scraping Contact Verified"
+            },
+            "status": {
+                "foundation_locked": "Foundation Locked",
+                "integrity_verified": "Structural Integrity 100%",
+                "leak_risk": "Longevity Leak Detected"
+            }
         }
     }
 }

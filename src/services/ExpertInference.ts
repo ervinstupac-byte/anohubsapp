@@ -1,3 +1,4 @@
+import i18n from '../i18n';
 import { TechnicalProjectState } from '../models/TechnicalSchema';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 import maintenanceSop from '../knowledge/MaintenanceSOP.json';
@@ -87,10 +88,10 @@ export const ExpertInference = {
 
         if (structuralAudit.status !== 'NORMAL') {
             result.alerts.push({
-                standard: 'NC-4.2 Structural',
-                parameter: 'Spiral Casing Stress',
+                standard: i18n.t('expert_inference.headers.structural_risk'),
+                parameter: i18n.t('validation.fields.hoopStress'),
                 severity: structuralAudit.status,
-                reasoning: `STRUCTURAL RISK: Safety margin is ${structuralAudit.margin.toFixed(1)}%. Hoop stress (${structuralAudit.currentPressure.toFixed(1)} Bar) vs Limit (${structuralAudit.mawp.toFixed(1)} Bar).`,
+                reasoning: i18n.t('expert_inference.alerts.structural_risk', { margin: structuralAudit.margin.toFixed(1), pressure: structuralAudit.currentPressure.toFixed(1), limit: structuralAudit.mawp.toFixed(1) }),
                 recommendedAction: (maintenanceSop.sops as any).STRUCTURAL_RISK.action,
                 sopCode: 'STRUCTURAL_RISK'
             });
@@ -104,9 +105,9 @@ export const ExpertInference = {
         if (vib > standards.vibration.unsatisfactory) {
             result.alerts.push({
                 standard: standards.vibration.standard,
-                parameter: 'Vibration',
+                parameter: i18n.t('validation.fields.vibration'),
                 severity: 'CRITICAL',
-                reasoning: `Measured vibration of ${vib} mm/s exceeds the ${standards.vibration.standard} critical limit of ${standards.vibration.unsatisfactory} mm/s for large machines.`,
+                reasoning: i18n.t('expert_inference.alerts.vibration_critical', { value: vib, standard: standards.vibration.standard, limit: standards.vibration.unsatisfactory }),
                 recommendedAction: (maintenanceSop.sops as any).VIBRATION_CRITICAL.action,
                 sopCode: 'VIBRATION_CRITICAL'
             });
@@ -120,18 +121,18 @@ export const ExpertInference = {
         if (bTemp > standards.bearingTemperature.critical) {
             result.alerts.push({
                 standard: 'Industrial Standard',
-                parameter: 'Bearing Temp',
+                parameter: i18n.t('validation.fields.bearingTemp'),
                 severity: 'CRITICAL',
-                reasoning: `Bearing temperature reached ${bTemp}°C, exceeding the safe critical shutdown threshold of ${standards.bearingTemperature.critical}°C. Relative rise above ambient is ${relativeRise.toFixed(1)}°C.`,
+                reasoning: i18n.t('expert_inference.alerts.bearing_critical', { value: bTemp, limit: standards.bearingTemperature.critical, rise: relativeRise.toFixed(1) }),
                 recommendedAction: (maintenanceSop.sops as any).BEARING_TEMP_CRITICAL.action,
                 sopCode: 'BEARING_TEMP_CRITICAL'
             });
         } else if (relativeRise > 40) {
             result.alerts.push({
                 standard: 'Relative Delta Standard',
-                parameter: 'Bearing Rise',
+                parameter: i18n.t('validation.fields.bearingRise'),
                 severity: 'WARNING',
-                reasoning: `Abnormal thermal rise detected. Bearing is ${relativeRise.toFixed(1)}°C above ambient (${ambient}°C). Even if below absolute limits, this indicates a lubrication or friction issue.`
+                reasoning: i18n.t('expert_inference.alerts.bearing_rise', { rise: relativeRise.toFixed(1), ambient })
             });
         }
 
@@ -145,10 +146,10 @@ export const ExpertInference = {
             const severity = alignment > golden.alignment.failure ? 'CRITICAL' : 'WARNING';
             result.alerts.push({
                 standard: 'ROOTS GOLDEN (NC-4.2)',
-                parameter: 'Alignment',
+                parameter: i18n.t('validation.fields.alignment'),
                 severity,
-                reasoning: `PRECISION BREACH: Measured ${alignment} mm/m exceeds strict ${golden.alignment.ideal} mm/m Golden Standard. Based on the cubic relationship of bearing wear, this misalignment accelerates capital erosion by ${(Math.pow(alignment / golden.alignment.ideal, 3) * 10).toFixed(1)}%.`,
-                recommendedAction: 'Execute Precision Laser Re-alignment to 0.05 mm/m.',
+                reasoning: i18n.t('expert_inference.alerts.alignment_breach', { value: alignment, limit: golden.alignment.ideal, erosion: (Math.pow(alignment / golden.alignment.ideal, 3) * 10).toFixed(1) }),
+                recommendedAction: i18n.t('expert_inference.remedies.realignment'),
                 sopCode: 'ALIGNMENT'
             });
             result.metrics.investmentDecayRate += severity === 'CRITICAL' ? 12.0 : 5.0;
@@ -158,10 +159,10 @@ export const ExpertInference = {
         if (axial > golden.axialPlay.max) {
             result.alerts.push({
                 standard: 'ROOTS GOLDEN (NC-4.2)',
-                parameter: 'Axial Play',
+                parameter: i18n.t('validation.fields.axialPlay'),
                 severity: 'CRITICAL',
-                reasoning: `AXIAL PLAY BREACH: Measured ${axial} mm exceeds max limit of ${golden.axialPlay.max} mm. Driving high dynamic thrust loads on pads, risking catastrophic fatigue breakthrough.`,
-                recommendedAction: 'Precision shimming and thrust bridge calibration.',
+                reasoning: i18n.t('expert_inference.alerts.axial_breach', { value: axial, limit: golden.axialPlay.max }),
+                recommendedAction: i18n.t('expert_inference.remedies.shimming'),
                 sopCode: 'THRUST_BALANCE'
             });
             result.metrics.investmentDecayRate += 15.5;
@@ -172,10 +173,10 @@ export const ExpertInference = {
         if (megger < golden.insulation.min) {
             result.alerts.push({
                 standard: 'ROOTS GOLDEN (NC-4.2)',
-                parameter: 'Insulation (Healthy Baseline)',
+                parameter: i18n.t('validation.fields.insulationResistance'),
                 severity: 'CRITICAL',
-                reasoning: `INSULATION RISK: Stator resistance of ${megger} MOhm is below the strict Healthy Baseline of ${golden.insulation.min} MOhm. High probability of winding partial discharge.`,
-                recommendedAction: 'Stator dry-out and cryogenic cleaning sequence.',
+                reasoning: i18n.t('expert_inference.alerts.insulation_risk', { value: megger, limit: golden.insulation.min }),
+                recommendedAction: i18n.t('expert_inference.remedies.dryout'),
                 sopCode: 'ELECTRICAL_HEALTH'
             });
         }
@@ -189,10 +190,10 @@ export const ExpertInference = {
         if (waterContent > oilThresholds.waterContent.warning || tanValue > oilThresholds.tan.warning) {
             result.alerts.push({
                 standard: 'HERITAGE TRIBOLOGY',
-                parameter: 'Oil Chemistry',
+                parameter: i18n.t('validation.fields.oilChemistry'),
                 severity: 'CRITICAL',
-                reasoning: `ACIDIC/HYDRATED OIL: ${waterContent > 500 ? `Water (${waterContent} ppm) > 500 ppm` : `TAN (${tanValue}) > 0.5`}. Accelerated chemical erosion of Babbitt (white metal) bearings detected.`,
-                recommendedAction: 'Execute SOP-TRIB-001: Scraping & Blueing and Oil Purification.',
+                reasoning: i18n.t('expert_inference.alerts.oil_chemistry', { condition: waterContent > 500 ? `Water (${waterContent} ppm) > 500 ppm` : `TAN (${tanValue}) > 0.5` }),
+                recommendedAction: i18n.t('expert_inference.remedies.oil_scraping'),
                 sopCode: 'BEARING_RECLAMATION'
             });
             result.metrics.longevityLeakPenalty = 1.25; // 25% increase in leak
@@ -207,10 +208,10 @@ export const ExpertInference = {
         if (grease.risk) {
             result.alerts.push({
                 standard: 'NC-4.7 Infrastructure',
-                parameter: 'Grease Management',
+                parameter: i18n.t('validation.fields.greaseManagement'),
                 severity: (grease.risk === 'HIGH' ? 'WARNING' : 'CRITICAL') as 'WARNING' | 'CRITICAL',
-                reasoning: grease.message || 'Excessive lubrication during standby.',
-                recommendedAction: 'Purge grease lines and inspect seal integrity.',
+                reasoning: grease.message || i18n.t('expert_inference.alerts.grease_risk'),
+                recommendedAction: i18n.t('expert_inference.remedies.grease_purge'),
                 sopCode: 'BEARING_RECLAMATION',
             });
             (result.alerts[result.alerts.length - 1] as any).slogan = 'PREVENTATIVE OVERFILLING';
@@ -226,10 +227,10 @@ export const ExpertInference = {
         if (thermal.risk) {
             result.alerts.push({
                 standard: 'NC-4.7 Infrastructure',
-                parameter: 'Thermal Stability',
+                parameter: i18n.t('validation.fields.thermalStability'),
                 severity: thermal.risk === 'EMERGENCY' ? 'CRITICAL' : 'WARNING',
-                reasoning: thermal.message || 'Abnormal bearing heat rise.',
-                recommendedAction: 'Verify cooling water flow and jacking oil pressure.'
+                reasoning: thermal.message || i18n.t('expert_inference.alerts.thermal_inertia'),
+                recommendedAction: i18n.t('expert_inference.remedies.cooling_verify')
             });
             (result.alerts[result.alerts.length - 1] as any).slogan = 'COMPOUNDING FRICTION';
             (result.alerts[result.alerts.length - 1] as any).vectors = ['Temp Rate', 'Post-Shutdown'];
@@ -241,10 +242,10 @@ export const ExpertInference = {
         if (magnetic.risk) {
             result.conclusions.push({
                 id: 'MAG-UNB-001',
-                symptom: 'Localized Stator Heating',
+                symptom: i18n.t('expert_inference.symptoms.mag_unb'),
                 probableCauses: ['Rotor Eccentricity', 'Shorted Laminations', 'Uneven Air Gap'],
                 remedies: ['Check air gap alignment', 'Inspect rotor windings'],
-                reasoning: magnetic.message || 'High stator temperature variance.',
+                reasoning: magnetic.message || i18n.t('expert_inference.alerts.mag_unb'),
                 kbReference: 'KB-INFRA-03',
                 recommendedAction: 'Execute magnetic center audit and stator scanning.'
             });
@@ -264,10 +265,10 @@ export const ExpertInference = {
         if (actualSWC > designSWC * 1.1) {
             result.conclusions.push({
                 id: 'CAV-001',
-                symptom: failureModes.CAVITATION?.symptom || 'Cavitation',
+                symptom: failureModes.CAVITATION?.symptom || i18n.t('expert_inference.symptoms.cavitation'),
                 probableCauses: failureModes.CAVITATION?.probableCauses || ["Runner wear", "Low head"],
                 remedies: ["Adjust setpoint", "Check draft tube"],
-                reasoning: `DIAGNOSIS: Potential Cavitation. REASONING: Specific Water Consumption (${actualSWC.toFixed(2)}) is > 10% above design baseline.`,
+                reasoning: i18n.t('expert_inference.alerts.cavitation', { swc: actualSWC.toFixed(2) }),
                 kbReference: failureModes.CAVITATION?.kbRef || 'KB-CAV',
                 recommendedAction: (maintenanceSop.sops as any).CAVITATION_INFERRED.action,
                 sopCode: 'CAVITATION_INFERRED'
@@ -298,9 +299,9 @@ export const ExpertInference = {
         if (result.metrics.fatigueRiskFactor > 48) {
             result.alerts.push({
                 standard: 'NC-4.2 Forensic',
-                parameter: 'Dynamic Risk Profile',
+                parameter: i18n.t('validation.fields.dynamicRisk'),
                 severity: 'CRITICAL',
-                reasoning: `INVESTMENT DECAY ALERT: Dynamic fatigue risk is ${result.metrics.fatigueRiskFactor}%. Failure to correct alignment/vibration will result in accelerated capital erosion.`,
+                reasoning: i18n.t('expert_inference.alerts.fatigue_risk', { risk: result.metrics.fatigueRiskFactor }),
                 recommendedAction: 'Engage Revitalization Roadmap immediately.'
             });
         }
@@ -349,41 +350,41 @@ function generateChiefEngineerVerdict(state: TechnicalProjectState, result: Infe
 
     // Build verdict based on priority
     if (criticalAlerts >= 3) {
-        return `CRITICAL: Asset requires immediate intervention across ${criticalAlerts} failure domains; prioritize shutdown and comprehensive audit before further operation.`;
+        return i18n.t('expert_inference.verdicts.critical_multi', { count: criticalAlerts });
     }
 
     if (hasStructuralIssue && hasMechanicalIssue) {
-        return `Asset shows compounded structural and mechanical degradation; immediate engineering review required to prevent cascading failure.`;
+        return i18n.t('expert_inference.verdicts.structural_mech');
     }
 
     if (hasMechanicalIssue && hasTribologyIssue) {
-        return `Asset is structurally sound but tribologically compromised; prioritize oil filtration and precision realignment to arrest longevity leak.`;
+        return i18n.t('expert_inference.verdicts.mech_trib');
     }
 
     if (hasThermalIssue && hasMechanicalIssue) {
-        return `Thermal stress detected with alignment deviation; bearing wear accelerating—recommend laser realignment and thermography baseline.`;
+        return i18n.t('expert_inference.verdicts.thermal_mech');
     }
 
     if (hasMechanicalIssue && !hasTribologyIssue && !hasElectricalIssue) {
-        return `Alignment precision below Golden Standard (0.05 mm/m); execute laser realignment protocol to restore full longevity potential.`;
+        return i18n.t('expert_inference.verdicts.mech_only');
     }
 
     if (hasElectricalIssue && !hasMechanicalIssue) {
-        return `Electrical insulation degradation detected; schedule stator dry-out and partial discharge testing within 30 days.`;
+        return i18n.t('expert_inference.verdicts.elec_only');
     }
 
     if (hasTribologyIssue) {
-        return `Oil analysis indicates contamination; implement enhanced filtration and consider oil change to prevent accelerated bearing wear.`;
+        return i18n.t('expert_inference.verdicts.trib_only');
     }
 
     if (warningAlerts > 0 && criticalAlerts === 0) {
-        return `Asset operating within acceptable limits with ${warningAlerts} monitoring flag(s); maintain current inspection cadence.`;
+        return i18n.t('expert_inference.verdicts.warning_only', { count: warningAlerts });
     }
 
     // All clear
     if (alignment <= 0.05 && vibration <= 1.1 && bearingTemp <= 65) {
-        return `Asset meets NC-4.2 Heritage Standards; projected 50-year longevity pathway confirmed—continue predictive monitoring.`;
+        return i18n.t('expert_inference.verdicts.golden');
     }
 
-    return `Asset health nominal with no immediate action required; next scheduled audit recommended in 6 months.`;
+    return i18n.t('expert_inference.verdicts.nominal');
 }

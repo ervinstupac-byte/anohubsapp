@@ -89,5 +89,220 @@
         "tempSpike": "KRITIČNO: Zastoj osovine detektovan, ali temperatura raste! Trenutno: {{temp}}°C (Limit: {{limit}}°C)",
         "vibrationWarning": "Upozorenje: Nivo vibracija se približava Zoni B.",
         "maintenanceDue": "Info: Planirano održavanje za 3 dana."
+    },
+    "dashboard": {
+        "title": "Izvršna Komanda",
+        "subtitle": "Francis < 5 MW // Heritage Precision Interface",
+        "status_active": "NC-4.2 Komanda Aktivna",
+        "neural_link": "Neuralna Veza",
+        "export_brief": "Izvezi Izvještaj",
+        "heritage_banner": {
+            "title": "Heritage Precision Standard",
+            "alert_desc": "Trenutno odstupanje centriranja ubrzava habanje izvan projektnih parametara.",
+            "subtitle": "Protokol Zlatnog Centriranja",
+            "compliant": "Usklađeno",
+            "deviation": "Odstupanje",
+            "years_lost": "Izgubljene Godine Rada"
+        },
+        "topology": {
+            "title": "Topologija Sistema",
+            "digital_twin": "Digitalni Blizanac",
+            "full_view": "Puni Pregled",
+            "rated_power": "Nominalna Snaga",
+            "grid_freq": "Mrežna Frekvencija"
+        },
+        "kpi": {
+            "active_power": "Aktivna Snaga",
+            "active_power_sub": "Verifikovan Izlaz",
+            "system_health": "Zdravlje Sistema",
+            "net_head": "Neto Pad",
+            "axial_thrust": "Aksijalni Potisak",
+            "axial_thrust_sub": "Max: 250 kN",
+            "structural_life": "Konstruktivni Vijek",
+            "structural_life_sub": "Rezerva Zamora",
+            "performance_gap": "Gap Performansi",
+            "vs_design": "vs Projektovano"
+        },
+        "finance": {
+            "title": "Rizik vs. Finansije",
+            "maint_buffer": "Budžet Održavanja",
+            "annual_loss": "Godišnji Gubitak",
+            "predictive_savings": "Prediktivne Uštede",
+            "profit_index": "Indeks Profita",
+            "profit_basis": "Bazirano na trenutnoj efikasnosti i tržišnim cijenama"
+        },
+        "sentinel": {
+            "title": "Sentinel Preporuke"
+        }
+    },
+    "sidebar": {
+        "fleet_overview": "Pregled Flote",
+        "mission_sectors": "Sektori Misije",
+        "generate_forensic": "Generiši Forenziku",
+        "hive_link": "Hive Veza",
+        "connected": "Povezano",
+        "offline": "Offline",
+        "search_placeholder": "Brza Pretraga... (Ctrl+K)",
+        "sectors": {
+            "critical_ops": "Kritične Operacije",
+            "mechanical": "Mehanika",
+            "electrical": "Elektro / SCADA",
+            "risk": "Rizik i Forenzika",
+            "knowledge": "Baza Znanja"
+        },
+        "modules": {
+            "mission_control": "Kontrola Misije",
+            "francis_hub": "Francis Čvorište",
+            "diagnostic_twin": "Dijagnostički Blizanac",
+            "shaft_alignment": "Centriranje Osovina",
+            "bolt_torque": "Pritezanje Vijaka",
+            "labyrinth_health": "Zdravlje Labirinata",
+            "hydraulic_maint": "Hidrauličko Održavanje",
+            "maintenance_engine": "Motor Održavanja",
+            "grid_sync": "Sinhronizacija Mreže",
+            "generator_integrity": "Integritet Generatora",
+            "excitation": "Sistem Uzbude",
+            "executive": "Izvršna Tabla",
+            "barlow_audit": "Barlow Strukturalni Audit",
+            "longevity_roadmap": "Mapa Dugovječnosti (50 god)",
+            "forensic_analysis": "Forenzička Analiza",
+            "precision_audit": "Precizni Audit",
+            "sop_manager": "SOP Menadžer",
+            "engineering_manifesto": "Inženjerski Manifest",
+            "learning_lab": "Laboratorija Učenja",
+            "intuition_log": "Dnevnik Intuicije",
+            "logbook": "Dnevnik Održavanja",
+            "hpp_studio": "HPP Studio",
+            "hppBuilder": "HPP Dizajner",
+            "hppBuilderDesc": "Dizajn i simulacija novih postrojenja."
+        },
+        "boltTorque": "Pritezanje Vijaka",
+        "shaftAlignment": "Centriranje Osovina",
+        "hydraulicMaintenance": "Hidrauličko Održavanje",
+        "maintenanceLogbook": "Dnevnik Održavanja",
+        "structuralIntegrity": "Strukturalni Integritet",
+        "shadowEngineer": "Shadow Engineer",
+        "toolboxAnalytics": "Analitika Alata"
+    },
+    "terminal": {
+        "title": "Komandni_Terminal_v4.2",
+        "init": "Inicijalizacija Neuralne Veze... kucaj /help",
+        "placeholder": "Unesi komandu (npr. /explain)..."
+    },
+    "toolbox": {
+        "greeting": {
+            "morning": "Dobro Jutro, Inženjeru",
+            "afternoon": "Dobar Dan, Inženjeru",
+            "evening": "Dobro Veče, Inženjeru"
+        },
+        "engineer": "Glavni Inženjer",
+        "systemOperational": "Sistem Operativan",
+        "assetsOnline": "Sredstava Online",
+        "activeAsset": "Aktivno: {{name}}",
+        "passport": "Pasoš Sredstva",
+        "addAsset": "Dodaj Sredstvo",
+        "zeroState": {
+            "title": "Sistem Hladni Start",
+            "noAssets": "Nema detektovanih sredstava u lokalnom rezervoaru.",
+            "initialize": "Inicijaliziraj Novo Sredstvo"
+        },
+        "sections": {
+            "utilities": "Terenski Alati",
+            "designAnalysis": "Dizajn i Analiza",
+            "operationalModules": "Operativni Moduli",
+            "recentActivity": "Nedavna Aktivnost"
+        },
+        "activity": {
+            "descLogbook": "Pregled dnevnih zapisa i anomalija.",
+            "descStructural": "Monitor zdravlja brane i cjevovoda.",
+            "descShadow": "AI-vođene procedure održavanja.",
+            "descAnalytics": "Izvršni finansijski pregled.",
+            "none": "Nema zabilježenih aktivnosti.",
+            "open": "Otvori Dnevnik",
+            "view": "Vidi Sve Aktivnosti"
+        },
+        "toast": {
+            "generatingPassport": "Generisanje Digitalnog Pasoša za {{asset}}..."
+        },
+        "diagnostics": {
+            "francisTitle": "Francis Dijagnostika",
+            "francisDesc": "Spektralna analiza u realnom vremenu za {{name}}"
+        },
+        "logicHub": {
+            "title": "Logičko Čvorište",
+            "desc": "Centralizovana neuralna kontrolna jedinica"
+        },
+        "pelton": {
+            "title": "Pelton Sistemi",
+            "desc": "Analiza injektora i lopatica"
+        },
+        "kaplan": {
+            "title": "Kaplan Kontrola",
+            "desc": "Ugao lopatica i optimizacija protoka"
+        },
+        "bulb": {
+            "title": "Cijevna Turbina",
+            "desc": "Monitoring potopljenih jedinica"
+        }
+    },
+    "validation": {
+        "limits": {
+            "negative": "{{field}} ne može biti negativan ili ispod {{min}} {{unit}}",
+            "exceeds": "{{field}} od {{value}} {{unit}} prelazi fizički maksimum ({{max}} {{unit}})",
+            "nominal": "Vrijednost unutar inženjerskih limita"
+        },
+        "bearing": {
+            "critical": "KRITIČNO: {{value}}°C prelazi sigurni limit (85°C). Preporučeno hitno zaustavljanje.",
+            "warning": "UPOZORENJE: {{value}}°C se približava kritičnom pragu. Potreban pojačan nadzor."
+        },
+        "alignment": {
+            "critical": "KRITIČNO ODSTUPANJE: {{value}} mm/m je {{ratio}}x veće od Zlatnog Standarada.",
+            "heritage": "HERITAGE ODSTUPANJE: {{value}} mm/m prelazi 0.05 mm/m Zlatni Standard."
+        },
+        "cross_sector": {
+            "thermal_stress": "TERMALNA UZROČNOST: Odstupanje u centriranju ({{alignment}} mm/m) aktivno indukuje {{stress}}% viška termalnog opterećenja na ležajeve.",
+            "oil_degradation": "UBRZANO HABANJE: Životni vijek ulja smanjen za {{years}} godina zbog kontaminacije česticama.",
+            "seal_integrity": "MEHANIČKA EROZIJA: Visoke vibracije ({{value}} mm/s) kompromituju integritet zaptivača.",
+            "insulation_stress": "ELEKTRIČNI STRES: Nestabilnost mreže ({{deviation}} Hz) degradira izolaciju generatora."
+        },
+        "certification": {
+            "alignment_fail": "Centriranje {{value}} mm/m prelazi 0.05 mm/m standard",
+            "vibration_fail": "Vibracije {{value}} mm/s prelaze ISO 'Dobro' prag",
+            "temp_fail": "Temperatura ležaja {{value}}°C izvan optimalnog opsega"
+        }
+    },
+    "hpp_builder": {
+        "assembly": {
+            "title": "Strukturalna Revizija Montaže",
+            "subtitle": "Korak 4: Vertikalna Integracija & Kontrola Tolerancija",
+            "components": {
+                "draft_tube": "Sifonski Dio (Draft Tube)",
+                "spiral_case": "Spiralno Kućište",
+                "stay_ring": "Statorski Prsten",
+                "wicket_gates": "Sprovodne Lopatice",
+                "head_cover": "Poklopac Turbine",
+                "rotor": "Rotor (Kolo)",
+                "main_shaft": "Glavna Osovina",
+                "stator": "Stator Generatora"
+            },
+            "errors": {
+                "seq_001": "Fundamentalna Greška: Sifonski dio se mora prvi instalirati.",
+                "seq_002": "Greška Oslonca: Spiralno kućište zahtijeva temelj sifona.",
+                "seq_003": "Greška Opterećenja: Statorski prsten mora ležati na spirali.",
+                "seq_004": "ERR_SEQ_004: Sprovodne lopatice moraju biti instalirane prije poklopca.",
+                "seq_005": "Greška Zazora: Poklopac turbine obavezan prije spuštanja rotora."
+            },
+            "prompts": {
+                "measure_alignment": "Unesi Izmjereno Centriranje (mm/m)",
+                "bolt_tension": "Potvrdi Moment Pritezanja (Nm)",
+                "clearance_check": "Provjera Zazora",
+                "scraping_contact": "Verifikovan Kontakt Tuširanja"
+            },
+            "status": {
+                "foundation_locked": "Temelj Zaključan",
+                "integrity_verified": "Strukturalni Integritet 100%",
+                "leak_risk": "Detektovan Rizik od Curenja"
+            }
+        }
     }
 }

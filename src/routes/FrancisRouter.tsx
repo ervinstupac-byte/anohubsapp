@@ -4,6 +4,7 @@ import { Spinner } from '../components/Spinner';
 
 // Lazy load all Francis components
 const FrancisHub = React.lazy(() => import('../components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
+const HPPBuilder = React.lazy(() => import('../components/HPPBuilder').then(module => ({ default: module.HPPBuilder })));
 const FrancisDiagnostics = React.lazy(() => import('../components/SpecializedDiagnostics').then(module => ({ default: module.SpecializedDiagnostics })));
 const MissionControl = React.lazy(() => import('../components/francis/MissionControl').then(module => ({ default: module.MissionControl })));
 const StartupFlowchart = React.lazy(() => import('../components/francis/StartupFlowchart').then(module => ({ default: module.StartupFlowchart })));
@@ -60,6 +61,7 @@ const FrancisRouter: React.FC = () => {
 
                 {/* Main Hub */}
                 <Route path={ROUTES.FRANCIS.HUB} element={<FrancisHub />} />
+                <Route path={ROUTES.FRANCIS.DESIGNER} element={<HPPBuilder />} />
 
                 {/* Diagnostics */}
                 <Route path={ROUTES.FRANCIS.DIAGNOSTICS.ROOT} element={<FrancisDiagnostics />} />

@@ -21,6 +21,7 @@ import { ModernButton } from './ui/ModernButton.tsx';
 import { ModernInput } from './ui/ModernInput.tsx';
 import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
+import { StructuralAssembly } from './hpp-designer/StructuralAssembly.tsx';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -58,7 +59,12 @@ export const HPPBuilder: React.FC = () => {
 
     // --- STEPPER STATE ---
     const [step, setStep] = useState(1);
-    const steps = [t('hppStudio.steps.hydrology'), t('hppStudio.steps.selection'), t('hppStudio.steps.export')];
+    const steps = [
+        t('hppStudio.steps.hydrology'),
+        t('hppStudio.steps.selection'),
+        t('hpp_builder.assembly.title'), // Step 3 -> Now Assembly
+        t('hppStudio.steps.export')      // Step 4 -> Export
+    ];
 
     // --- DATA STATE ---
     const [settings, setSettings] = useState<HPPSettings>(() => {
@@ -512,8 +518,33 @@ export const HPPBuilder: React.FC = () => {
                     </div>
                 )}
 
-                {/* STEP 3: FINANCIAL & EXPORT */}
+                {/* STEP 3: STRUCTURAL ASSEMBLY (NEW) */}
                 {step === 3 && (
+                    <div className="animate-fade-in">
+                        <div className="mb-6 flex justify-between items-center bg-slate-900/50 p-4 rounded-xl border border-white/5">
+                            <div>
+                                <h3 className="text-xl font-bold text-white">{t('hpp_builder.assembly.title')}</h3>
+                                <p className="text-slate-400 text-xs">{t('hpp_builder.assembly.subtitle')}</p>
+                            </div>
+                            <div className="flex gap-2">
+                                <span className="px-3 py-1 rounded bg-amber-500/10 text-amber-500 text-xs font-mono border border-amber-500/20">NC-4.2 COMPLIANT</span>
+                            </div>
+                        </div>
+
+                        <StructuralAssembly
+                            onComplete={() => showToast(t('hpp_builder.assembly.status.integrity_verified'), 'success')}
+                            onAssemblyChange={(parts) => updateSettings('assemblySequence', parts)}
+                        />
+
+                        <div className="flex justify-between pt-8">
+                            <ModernButton onClick={() => setStep(2)} variant="ghost">{t('hppStudio.buttons.back')}</ModernButton>
+                            <ModernButton onClick={() => setStep(4)} variant="primary">{t('hppStudio.buttons.continue')}</ModernButton>
+                        </div>
+                    </div>
+                )}
+
+                {/* STEP 4: FINANCIAL & EXPORT */}
+                {step === 4 && (
                     <div className="animate-fade-in max-w-2xl mx-auto space-y-8">
                         <GlassCard title={t('hppStudio.labels.projectExport')}>
                             <div className="space-y-6">
@@ -536,7 +567,7 @@ export const HPPBuilder: React.FC = () => {
                             </div>
                         </GlassCard>
                         <div className="flex justify-start">
-                            <ModernButton onClick={() => setStep(2)} variant="ghost">{t('hppStudio.buttons.backToSelection')}</ModernButton>
+                            <ModernButton onClick={() => setStep(3)} variant="ghost">{t('hppStudio.buttons.back')}</ModernButton>
                         </div>
                     </div>
                 )}

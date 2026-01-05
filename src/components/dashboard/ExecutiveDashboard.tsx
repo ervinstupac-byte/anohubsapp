@@ -343,7 +343,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     {t('dashboard.heritage_banner.deviation', 'LONGEVITY LEAK DETECTED')}
                                 </span>
                                 <p className="text-xs text-red-400/80 font-mono mt-0.5">
-                                    Current alignment deviation is accelerating wear beyond design parameters.
+                                    {t('dashboard.heritage_banner.alert_desc', 'Current alignment deviation is accelerating wear beyond design parameters.')}
                                 </p>
                             </div>
                         </div>
@@ -540,7 +540,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 trendData={trendData.thrust}
                                 isoRef="API 610"
                                 subtitle={t('dashboard.kpi.axial_thrust_sub')}
-                                onClick={() => navigate(`/${ROUTES.FRANCIS.ROOT}`)}
+                                onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.HUB))}
                             />
                             <RackInstrument
                                 title={t('dashboard.kpi.structural_life')}
@@ -550,7 +550,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 status={(technicalState.structural?.remainingLife || 0) < 50 ? 'critical' : (technicalState.structural?.remainingLife || 0) < 75 ? 'warning' : 'nominal'}
                                 isoRef="ASME B31.1"
                                 subtitle={t('dashboard.kpi.structural_life_sub')}
-                                onClick={() => navigate(`/${ROUTES.STRUCTURAL_INTEGRITY}`)}
+                                onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS))}
                             />
                         </div>
 

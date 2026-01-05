@@ -159,6 +159,7 @@ export interface HPPSettings {
   penstockLength?: number;
   penstockDiameter?: number;
   penstockRoughness?: number;
+  assemblySequence?: { partId: string; alignment?: number; timestamp: number; }[];
 }
 
 export interface TurbineRecommendation {
