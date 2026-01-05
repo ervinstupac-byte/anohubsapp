@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 
 import { AssetIdentity, TurbineType } from '../types/assetIdentity';
 
-export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS';
+export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS' | 'INFRASTRUCTURE_STRESS';
 
 export interface DemoState {
     active: boolean;

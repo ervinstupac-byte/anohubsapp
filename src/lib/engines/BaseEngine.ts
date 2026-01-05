@@ -7,12 +7,40 @@ export abstract class BaseEngine implements ITurbineEngine {
     protected G = new Decimal('9.80665');
     protected WATER_DENSITY = new Decimal('1000');
 
-    calculatePower(head: number, flow: number, efficiency: number): number {
-        const h = new Decimal(head);
+    calculatePower(head: number, flow: number, efficiency: number, penstock?: import('./types.ts').PenstockLossParams): number {
+        let netHead = head;
+        if (penstock) {
+            const loss = this.calculateFrictionLoss(head, flow, penstock);
+            netHead = Math.max(0, head - loss);
+        }
+
+        const h = new Decimal(netHead);
         const q = new Decimal(flow);
         const eta = new Decimal(efficiency).div(100);
         const powerW = this.WATER_DENSITY.mul(this.G).mul(h).mul(q).mul(eta);
         return powerW.div(1_000_000).toDecimalPlaces(3).toNumber();
+    }
+
+    calculateFrictionLoss(_head: number, flow: number, penstock: import('./types.ts').PenstockLossParams): number {
+        if (penstock.diameter <= 0) return 0;
+
+        // Manning's Equation for Friction Loss (SI)
+        // hf = (n^2 * L * v^2) / R^(4/3)
+        // v = Q / A
+        // R = D / 4 (for full pipe)
+
+        const n = new Decimal(penstock.roughness);
+        const L = new Decimal(penstock.length);
+        const Q = new Decimal(flow);
+        const D = new Decimal(penstock.diameter);
+
+        const area = Decimal.acos(-1).mul(D.pow(2)).div(4);
+        const velocity = Q.div(area);
+        const hydraulicRadius = D.div(4);
+
+        const loss = n.pow(2).mul(L).mul(velocity.pow(2)).div(hydraulicRadius.pow(1.333));
+
+        return loss.toDecimalPlaces(3).toNumber();
     }
 
     calculateEnergy(powerMW: number, flowVariation: string): number {

@@ -156,6 +156,9 @@ export interface HPPSettings {
   powerFactor: number;
   waterQuality: string;
   flowVariation: string;
+  penstockLength?: number;
+  penstockDiameter?: number;
+  penstockRoughness?: number;
 }
 
 export interface TurbineRecommendation {
@@ -170,10 +173,10 @@ export interface CalculationResult {
   energyGWh: number;
   annualGWh: string;
   n_sq: string;
+  netHead?: number;
+  frictionLoss?: number;
   revenue?: number;
   capex?: number;
-  lcoe?: number;
-  roi?: number;
 }
 
 export interface SavedConfiguration {

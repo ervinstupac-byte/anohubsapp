@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useAssetContext } from './AssetContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { loggingService } from '../services/LoggingService.ts';
+import { SentinelKernel } from '../services/SentinelKernel.ts';
+import { useNotifications } from './NotificationContext.tsx';
 
 // Tipovi za telemetriju
 export interface TelemetryData {

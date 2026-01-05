@@ -64,6 +64,12 @@ export const ROUTES = {
     RISK_ASSESSMENT: 'risk-assessment',
     DIAGNOSTIC_TWIN: 'diagnostic-twin',
     HPP_BUILDER: 'hpp-builder',
+    INFRASTRUCTURE: {
+        ROOT: 'infrastructure',
+        PLANT_MASTER: 'plant-master',
+        BID_EVALUATOR: 'bid-evaluator',
+        HYDROLOGY: 'hydrology-lab',
+    },
     STRUCTURAL_INTEGRITY: 'structural-integrity',
     INSTALLATION_GUARANTEE: 'installation-guarantee',
     LEARNING_LAB: 'learning-lab',

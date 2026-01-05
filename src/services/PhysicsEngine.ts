@@ -8,6 +8,9 @@ import { FinancialImpactEngine } from './FinancialImpactEngine';
 // Configuration for HPP environment precision
 Decimal.set({ precision: 20, rounding: Decimal.ROUND_HALF_UP });
 
+export type RiskStatus = 'NOMINAL' | 'WARNING' | 'CRITICAL';
+export type LeakageStatus = 'NOMINAL' | 'DEGRADING' | 'CRITICAL';
+
 /**
  * PHYSICS ENGINE: NC-4.2 NEURAL CORE
  * Centralized high-precision engineering logic using decimal.js.
@@ -77,7 +80,7 @@ export const PhysicsEngine = {
         const eccentricity = a.isZero() ? new Decimal(0) : Decimal.sqrt(new Decimal(1).sub(b.pow(2).div(a.pow(2))));
 
         // 7. Safety Status Assignment
-        let status: 'NOMINAL' | 'WARNING' | 'CRITICAL' = 'NOMINAL';
+        let status: RiskStatus = 'NOMINAL';
         const hoopSF = new Decimal(penstock.materialYieldStrength).div(hoopStress.gt(0) ? hoopStress : 1);
 
         const powerKW = powerMW.mul(1000);
@@ -89,7 +92,7 @@ export const PhysicsEngine = {
         // 9. Leakage Status Flag
         const designFlow = new Decimal(state.site.designFlow || 3.0);
         const designSWC = designFlow.mul(3600).div(designPower.mul(1000));
-        let leakageStatus: 'NOMINAL' | 'DEGRADING' | 'CRITICAL' = 'NOMINAL';
+        let leakageStatus: LeakageStatus = 'NOMINAL';
 
         const axialThrustKN = PhysicsEngine.calculateAxialThrust(state);
 
@@ -137,7 +140,15 @@ export const PhysicsEngine = {
      */
     recalculateProjectPhysics: (state: TechnicalProjectState): TechnicalProjectState => {
         const result = PhysicsEngine.recalculatePhysics(state);
-        const newState = {
+
+        const designPower = new Decimal(state.site.designPerformanceMW || 5.0);
+        const designFlow = new Decimal(state.site.designFlow || 3.0);
+        const designSWC = designFlow.mul(3600).div(designPower.mul(1000));
+        let leakageStatus: LeakageStatus = 'NOMINAL';
+        if (result.specificWaterConsumption.gt(designSWC.mul(1.10))) leakageStatus = 'CRITICAL';
+        else if (result.specificWaterConsumption.gt(designSWC.mul(1.03))) leakageStatus = 'DEGRADING';
+
+        const newState: TechnicalProjectState = {
             ...state,
             physics: {
                 ...state.physics,
@@ -148,7 +159,7 @@ export const PhysicsEngine = {
                 eccentricity: result.eccentricity.toNumber(),
                 axialThrustKN: result.axialThrustKN ? result.axialThrustKN.toNumber() : 0,
                 specificWaterConsumption: result.specificWaterConsumption.toNumber(),
-                leakageStatus: (result as any).leakageStatus || 'NOMINAL',
+                leakageStatus: leakageStatus,
                 volumetricLoss: result.volumetricLoss ? result.volumetricLoss.toNumber() : 0
             },
             riskScore: result.status === 'CRITICAL' ? 100 : (result.status === 'WARNING' ? 50 : 0),
@@ -329,7 +340,7 @@ export const PhysicsEngine = {
         if (starts > 500) score = Math.max(score, 3); // High cycling stress
 
         return score;
-    }
+    },
 };
 
 /**

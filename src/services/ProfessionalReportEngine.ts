@@ -948,29 +948,209 @@ const drawRevitalizationRoadmap = (doc: jsPDF, state: TechnicalProjectState, id:
     drawFooter(doc, doc.getNumberOfPages());
 };
 
-const drawDigitalSeal = (doc: jsPDF) => {
+/**
+ * HERITAGE INTEGRITY SEAL & FORENSIC WATERMARK (NC-4.2 PRODUCTION)
+ * 
+ * Features:
+ * - Unique Audit Hash per page (SHA-like)
+ * - Forensic Timestamp (UTC)
+ * - Heritage Integrity certification if alignment meets 0.05 mm/m
+ * - Cubic Wear Formula citation
+ */
+const drawDigitalSeal = (doc: jsPDF, state?: any) => {
     const pageCount = doc.getNumberOfPages();
+    const timestamp = new Date().toISOString();
+    const baseHash = generateForensicHash(timestamp + (state?.identity?.assetId || 'ANOHUB'));
+
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
+        const pageHash = `${baseHash}-${i.toString().padStart(2, '0')}`;
 
-        // Circular Seal Placeholder
-        const x = PAGE_WIDTH - 45;
-        const y = PAGE_HEIGHT - 45;
-
-        doc.setDrawColor(200, 200, 200);
-        doc.setLineWidth(0.5);
-        doc.circle(x, y, 15, 'D');
-
+        // --- FORENSIC TIMESTAMP FOOTER ---
         doc.setFontSize(6);
-        doc.setTextColor(150, 150, 150);
-        doc.setFont("helvetica", "bold");
-        doc.text("CERTIFIED", x - 8, y - 2);
-        doc.text("ANOHUB AI", x - 9, y + 2);
-        doc.text("NC-4.2", x - 5, y + 5);
+        doc.setTextColor(120, 120, 120);
+        doc.setFont("helvetica", "normal");
+        doc.text(
+            `FORENSIC TIMESTAMP: ${timestamp} | AUDIT HASH: ${pageHash} | PAGE ${i}/${pageCount}`,
+            PAGE_WIDTH / 2,
+            PAGE_HEIGHT - 5,
+            { align: 'center' }
+        );
 
-        // Digital Signature Text
+        // --- DIGITAL SEAL (Bottom Right) ---
+        const sealX = PAGE_WIDTH - 35;
+        const sealY = PAGE_HEIGHT - 35;
+
+        // Check if asset meets Heritage Standard
+        const alignment = state?.mechanical?.alignment || 0;
+        const isHeritageCertified = alignment <= 0.05;
+
+        if (isHeritageCertified) {
+            // HERITAGE INTEGRITY SEAL (Green)
+            doc.setDrawColor(16, 185, 129); // Emerald-500
+            doc.setLineWidth(1.5);
+            doc.circle(sealX, sealY, 18, 'D');
+            doc.circle(sealX, sealY, 16, 'D');
+
+            doc.setFillColor(16, 185, 129);
+            doc.circle(sealX, sealY, 14, 'F');
+
+            doc.setFontSize(7);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.text("HERITAGE", sealX, sealY - 4, { align: 'center' });
+            doc.text("CERTIFIED", sealX, sealY + 1, { align: 'center' });
+            doc.setFontSize(5);
+            doc.text("0.05 mm/m", sealX, sealY + 5, { align: 'center' });
+
+            // Checkmark icon
+            doc.setLineWidth(1);
+            doc.line(sealX - 4, sealY + 9, sealX - 1, sealY + 12);
+            doc.line(sealX - 1, sealY + 12, sealX + 5, sealY + 6);
+        } else {
+            // STANDARD AUDIT SEAL (Gray)
+            doc.setDrawColor(148, 163, 184); // Slate-400
+            doc.setLineWidth(0.8);
+            doc.circle(sealX, sealY, 15, 'D');
+            doc.circle(sealX, sealY, 13, 'D');
+
+            doc.setFontSize(6);
+            doc.setTextColor(100, 100, 100);
+            doc.setFont("helvetica", "bold");
+            doc.text("NC-4.2", sealX, sealY - 3, { align: 'center' });
+            doc.text("VERIFIED", sealX, sealY + 2, { align: 'center' });
+            doc.text("ANOHUB", sealX, sealY + 7, { align: 'center' });
+        }
+
+        // --- AUDIT HASH SIDEBAR (Rotated) ---
         doc.setFontSize(5);
-        doc.text(`SIG-HASH: ${Math.random().toString(36).substring(7).toUpperCase()}`, x - 12, y + 12);
+        doc.setTextColor(180, 180, 180);
+        doc.text(`AH:${pageHash}`, 5, PAGE_HEIGHT / 2, { angle: 90 });
     }
+
+    // --- FINAL PAGE: MATH PROOF APPENDIX ---
+    doc.addPage();
+    drawMathProofAppendix(doc, state);
 };
+
+/**
+ * MATH PROOF APPENDIX (NC-4.2)
+ * Renders the Cubic Wear Formula with LaTeX-style clarity
+ */
+const drawMathProofAppendix = (doc: jsPDF, state?: any) => {
+    const MARGIN = 20;
+
+    // Header
+    doc.setFillColor(15, 23, 42); // Slate-900
+    doc.rect(0, 0, PAGE_WIDTH, 35, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("ENGINEERING PROOF APPENDIX", MARGIN, 22);
+    doc.setFontSize(9);
+    doc.setTextColor(148, 163, 184);
+    doc.text("NC-4.2 PRECISION MATHEMATICS // LONGEVITY GUARANTEE FORMULAS", MARGIN, 30);
+
+    let y = 50;
+
+    // --- SECTION 1: CUBIC WEAR LAW ---
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("1. Cubic Wear Law (Longevity Leak Equation)", MARGIN, y);
+    y += 12;
+
+    // Formula Box
+    doc.setFillColor(248, 250, 252); // Slate-50
+    doc.setDrawColor(226, 232, 240); // Slate-200
+    doc.roundedRect(MARGIN, y, PAGE_WIDTH - (MARGIN * 2), 40, 3, 3, 'FD');
+
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.setFont("courier", "bold");
+    doc.text("L_leak = 1 - (1 / DRF³)", PAGE_WIDTH / 2, y + 15, { align: 'center' });
+
+    doc.setFontSize(9);
+    doc.setTextColor(71, 85, 105);
+    doc.setFont("helvetica", "normal");
+    doc.text("where DRF = Deviation Ratio Factor = (Actual Alignment) / (0.05 mm/m)", PAGE_WIDTH / 2, y + 28, { align: 'center' });
+    y += 50;
+
+    // Explanation
+    doc.setFontSize(10);
+    doc.setTextColor(51, 65, 85);
+    const explanation = "The cubic relationship between alignment deviation and bearing wear life is fundamental to the NC-4.2 Longevity Guarantee. When misalignment exceeds the 0.05 mm/m Golden Standard, frictional losses and uneven load distribution accelerate exponentially. A DRF of 2.0 (0.10 mm/m alignment) results in 87.5% accelerated wear.";
+    doc.text(doc.splitTextToSize(explanation, PAGE_WIDTH - (MARGIN * 2)), MARGIN, y);
+    y += 30;
+
+    // --- SECTION 2: THERMAL STRESS PROPAGATION ---
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("2. Thermal Stress Propagation (Cross-Sector Effect)", MARGIN, y);
+    y += 12;
+
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(MARGIN, y, PAGE_WIDTH - (MARGIN * 2), 30, 3, 3, 'FD');
+
+    doc.setFontSize(12);
+    doc.setFont("courier", "bold");
+    doc.text("T_stress = 1.0 + (DRF² - 1) × 0.1", PAGE_WIDTH / 2, y + 12, { align: 'center' });
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text("Temperature rise factor applied to bearing thermal calculations", PAGE_WIDTH / 2, y + 22, { align: 'center' });
+    y += 42;
+
+    // --- SECTION 3: CURRENT ASSET VALUES ---
+    if (state) {
+        const alignment = state.mechanical?.alignment || 0;
+        const drf = alignment / 0.05;
+        const longevityLeak = alignment <= 0.05 ? 0 : (1 - (1 / Math.pow(drf, 3))) * 100;
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("3. Current Asset Calculation", MARGIN, y);
+        y += 12;
+
+        doc.setFillColor(alignment <= 0.05 ? 236 : 254, alignment <= 0.05 ? 253 : 242, alignment <= 0.05 ? 245 : 242);
+        doc.roundedRect(MARGIN, y, PAGE_WIDTH - (MARGIN * 2), 45, 3, 3, 'F');
+
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(51, 65, 85);
+        doc.text(`Measured Alignment: ${alignment.toFixed(3)} mm/m`, MARGIN + 10, y + 12);
+        doc.text(`Deviation Ratio Factor (DRF): ${drf.toFixed(2)}`, MARGIN + 10, y + 22);
+        doc.text(`Longevity Leak: ${longevityLeak.toFixed(1)}%`, MARGIN + 10, y + 32);
+
+        if (alignment <= 0.05) {
+            doc.setTextColor(16, 185, 129);
+            doc.setFont("helvetica", "bold");
+            doc.text("✓ HERITAGE CERTIFIED - Within 0.05 mm/m Golden Standard", MARGIN + 10, y + 42);
+        } else {
+            const yearsLost = (longevityLeak / 100) * 50;
+            doc.setTextColor(220, 38, 38);
+            doc.setFont("helvetica", "bold");
+            doc.text(`⚠ LONGEVITY LEAK: -${yearsLost.toFixed(1)} Years Expected Life`, MARGIN + 10, y + 42);
+        }
+    }
+
+    // Footer
+    doc.setFontSize(7);
+    doc.setTextColor(148, 163, 184);
+    doc.text("AnoHUB NC-4.2 // Pro-Bono Tool for 50-Year Asset Longevity // Mathematical Proof Document", PAGE_WIDTH / 2, PAGE_HEIGHT - 10, { align: 'center' });
+};
+
+/**
+ * Generate forensic hash from input string
+ */
+function generateForensicHash(input: string): string {
+    let hash = 5381;
+    for (let i = 0; i < input.length; i++) {
+        hash = ((hash << 5) + hash) + input.charCodeAt(i);
+        hash = hash & hash;
+    }
+    return Math.abs(hash).toString(36).toUpperCase().slice(0, 8);
+}
 

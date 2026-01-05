@@ -289,6 +289,20 @@ export const CommandCenter: React.FC = () => {
                                             {diag.reasoning}
                                         </div>
                                     )}
+                                    {diag.slogan && (
+                                        <div className="mt-2 text-[7px] font-black text-cyan-500 uppercase tracking-widest">
+                                            {diag.slogan}
+                                        </div>
+                                    )}
+                                    {diag.vectors && diag.vectors.length > 0 && (
+                                        <div className="mt-1 flex flex-wrap gap-1">
+                                            {diag.vectors.map((v: string, idx: number) => (
+                                                <span key={idx} className="px-1 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-[6px] text-cyan-400 rounded-sm">
+                                                    {v}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>

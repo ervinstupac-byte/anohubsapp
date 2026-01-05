@@ -53,7 +53,8 @@
       "exitToSite": "Izlaz na Stranicu",
       "version": "CDR_X_V4.2",
       "connected": "POVEZAN",
-      "offline": "OFFLINE"
+      "offline": "OFFLINE",
+      "infrastructure": "Infrastrukturna Komanda"
     },
     "actions": {
       "back": "Nazad na Hub",
@@ -98,5 +99,10 @@
       "signInButton": "Prijavi se",
       "guestButton": "Nastavi kao Gost"
     }
+  },
+  "notifications": {
+    "greaseRisk": "Kritična Maziva: {{message}}",
+    "thermalInertia": "Termalna Inercija: Brzina porasta {{rate}}°C/min premašuje limit!",
+    "magneticUnbalance": "Magnetski Debalans: DeltaT {{delta}}°C detektovan!"
   }
 }

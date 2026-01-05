@@ -21,6 +21,7 @@ export const SimulationController: React.FC = () => {
         { id: 'BEARING_FAILURE', label: 'Bearing Failure', icon: Droplets, color: 'orange' },
         { id: 'CAVITATION', label: 'Cavitation', icon: Zap, color: 'yellow' },
         { id: 'GRID_LOSS', label: 'Grid Loss', icon: Activity, color: 'purple' },
+        { id: 'INFRASTRUCTURE_STRESS', label: 'Infra Stress', icon: ShieldAlert, color: 'orange' },
     ];
 
     const runScenario = (type: DemoScenario) => {
@@ -61,6 +62,11 @@ export const SimulationController: React.FC = () => {
             },
             'GRID_LOSS': {
                 'mechanical.rpm': 625 // +25% spike
+            },
+            'INFRASTRUCTURE_STRESS': {
+                'mechanical.bearingTemp': 82, // Exceeds thermal inertia & static limit
+                'physics.eccentricity': 0.75, // Magnetic unbalance trigger
+                'identity.startStopCount': 1056 // High cycle count for grease risk
             }
         };
 

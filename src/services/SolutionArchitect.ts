@@ -4,6 +4,25 @@ import { LifeExtensionEngine } from './LifeExtensionEngine';
 import { MITIGATION_LIBRARY } from '../data/mitigationLibrary';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 
+// Local interface until we centralize MasterKnowledge type
+interface MasterKnowledgeMap {
+    standardThresholds: {
+        goldenStandards: {
+            alignment: { ideal: number; failure: number };
+            axialPlay: { max: number };
+            insulation: { min: number };
+            maintenanceCycleHours: number;
+        };
+        oilChemistry: {
+            waterContent: { warning: number };
+            tan: { warning: number }
+        };
+    };
+}
+
+// Strictly typed knowledge
+const KNOWLEDGE = masterKnowledge as unknown as MasterKnowledgeMap;
+
 export class SolutionArchitect {
 
     static getRecoveryPath(conclusion: string, state: TechnicalProjectState): RecoveryPath {
@@ -34,7 +53,7 @@ export class SolutionArchitect {
 
     static getRevitalizationPlan(state: TechnicalProjectState): RevitalizationPlan[] {
         const roadmap: RevitalizationPlan[] = [];
-        const golden = (masterKnowledge as any).standardThresholds.goldenStandards;
+        const golden = KNOWLEDGE.standardThresholds.goldenStandards;
 
         // 1. Alignment (THE PRECISION CORE)
         if (state.mechanical.alignment > golden.alignment.ideal) {

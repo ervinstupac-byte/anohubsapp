@@ -2,8 +2,37 @@ import { TechnicalProjectState } from '../models/TechnicalSchema';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 import maintenanceSop from '../knowledge/MaintenanceSOP.json';
 import { StructuralIntegrityService } from './StructuralIntegrityService';
+import { SentinelKernel } from './SentinelKernel';
 import { LifeExtensionEngine } from './LifeExtensionEngine';
 import { RecoveryPath } from '../models/RepairContext';
+
+// Define the shape of MasterKnowledge based on usage
+interface MasterKnowledgeMap {
+    standardThresholds: {
+        goldenStandards: {
+            insulation: { min: number };
+            axialPlay: { max: number };
+            alignment: { ideal: number; failure: number };
+        };
+        vibration: {
+            satisfactory: number;
+            unsatisfactory: number;
+            standard: string
+        };
+        bearingTemperature: { critical: number };
+        oilChemistry: {
+            waterContent: { warning: number };
+            tan: { warning: number }
+        };
+    };
+    failureModes: Record<string, {
+        symptom: string;
+        probableCauses: string[];
+        kbRef: string
+    }>;
+}
+
+const KNOWLEDGE = masterKnowledge as unknown as MasterKnowledgeMap;
 
 export interface InferenceResult {
     conclusions: {
@@ -32,6 +61,7 @@ export interface InferenceResult {
         longevityLeakPenalty?: number; // Acceleration factor (e.g. 1.25)
     };
     recoveryPaths: RecoveryPath[]; // NEW: NC-4.2
+    chiefEngineerVerdict: string;  // One-sentence executive summary
 }
 
 export const ExpertInference = {
@@ -47,7 +77,8 @@ export const ExpertInference = {
                 fatigueRiskFactor: 0,
                 investmentDecayRate: 0
             },
-            recoveryPaths: []
+            recoveryPaths: [],
+            chiefEngineerVerdict: ''
         };
 
         // 1. Live Structural Integrity Check (Barlow's Link)
@@ -66,7 +97,7 @@ export const ExpertInference = {
         }
 
         // 2. Standards Evaluation (ISO, Megger, Barlow)
-        const standards = masterKnowledge.standardThresholds;
+        const standards = KNOWLEDGE.standardThresholds;
 
         // Vibration (ISO 10816-3)
         const vib = state.mechanical.vibration;
@@ -76,7 +107,7 @@ export const ExpertInference = {
                 parameter: 'Vibration',
                 severity: 'CRITICAL',
                 reasoning: `Measured vibration of ${vib} mm/s exceeds the ${standards.vibration.standard} critical limit of ${standards.vibration.unsatisfactory} mm/s for large machines.`,
-                recommendedAction: maintenanceSop.sops.VIBRATION_CRITICAL.action,
+                recommendedAction: (maintenanceSop.sops as any).VIBRATION_CRITICAL.action,
                 sopCode: 'VIBRATION_CRITICAL'
             });
         }
@@ -92,7 +123,7 @@ export const ExpertInference = {
                 parameter: 'Bearing Temp',
                 severity: 'CRITICAL',
                 reasoning: `Bearing temperature reached ${bTemp}°C, exceeding the safe critical shutdown threshold of ${standards.bearingTemperature.critical}°C. Relative rise above ambient is ${relativeRise.toFixed(1)}°C.`,
-                recommendedAction: maintenanceSop.sops.BEARING_TEMP_CRITICAL.action,
+                recommendedAction: (maintenanceSop.sops as any).BEARING_TEMP_CRITICAL.action,
                 sopCode: 'BEARING_TEMP_CRITICAL'
             });
         } else if (relativeRise > 40) {
@@ -153,7 +184,7 @@ export const ExpertInference = {
         const fluid = state.identity?.fluidIntelligence?.oilSystem;
         const waterContent = fluid?.waterContentPPM || 0;
         const tanValue = fluid?.tan || 0;
-        const oilThresholds = (masterKnowledge.standardThresholds as any).oilChemistry;
+        const oilThresholds = standards.oilChemistry;
 
         if (waterContent > oilThresholds.waterContent.warning || tanValue > oilThresholds.tan.warning) {
             result.alerts.push({
@@ -168,8 +199,61 @@ export const ExpertInference = {
             result.metrics.investmentDecayRate += 10.0;
         }
 
+        // --- SENTINEL KERNEL: INFRASTRUCTURE CORE (NC-4.7) ---
+
+        // 1. Grease Blowout Risk (Standby Watcher)
+        const isStandby = state.demoMode?.active ? true : false; // Simplified for demo
+        const grease = SentinelKernel.checkGreaseRisk(isStandby ? 'STBY' : 'RUNNING', state.identity.startStopCount % 30); // Use modulo as proxy
+        if (grease.risk) {
+            result.alerts.push({
+                standard: 'NC-4.7 Infrastructure',
+                parameter: 'Grease Management',
+                severity: (grease.risk === 'HIGH' ? 'WARNING' : 'CRITICAL') as 'WARNING' | 'CRITICAL',
+                reasoning: grease.message || 'Excessive lubrication during standby.',
+                recommendedAction: 'Purge grease lines and inspect seal integrity.',
+                sopCode: 'BEARING_RECLAMATION',
+            });
+            (result.alerts[result.alerts.length - 1] as any).slogan = 'PREVENTATIVE OVERFILLING';
+            (result.alerts[result.alerts.length - 1] as any).vectors = ['Standby Ops', 'Grease History'];
+        }
+
+        // 2. Thermal Inertia (Rate of Rise)
+        // Simulate a history if we are in a heat-related scenario
+        const isBearingFailure = state.demoMode.scenario === 'BEARING_FAILURE';
+        const mockTemps = isBearingFailure ? [55, 62, 71] : [55, 56];
+        const mockTimes = [Date.now() - 120000, Date.now() - 60000, Date.now()];
+        const thermal = SentinelKernel.checkThermalInertia(mockTemps, mockTimes);
+        if (thermal.risk) {
+            result.alerts.push({
+                standard: 'NC-4.7 Infrastructure',
+                parameter: 'Thermal Stability',
+                severity: thermal.risk === 'EMERGENCY' ? 'CRITICAL' : 'WARNING',
+                reasoning: thermal.message || 'Abnormal bearing heat rise.',
+                recommendedAction: 'Verify cooling water flow and jacking oil pressure.'
+            });
+            (result.alerts[result.alerts.length - 1] as any).slogan = 'COMPOUNDING FRICTION';
+            (result.alerts[result.alerts.length - 1] as any).vectors = ['Temp Rate', 'Post-Shutdown'];
+        }
+
+        // 3. Magnetic Unbalance (Stator Variance)
+        const statorTemps = [55, 56, isBearingFailure ? 85 : 55, 55, 55];
+        const magnetic = SentinelKernel.checkMagneticUnbalance(statorTemps, 450);
+        if (magnetic.risk) {
+            result.conclusions.push({
+                id: 'MAG-UNB-001',
+                symptom: 'Localized Stator Heating',
+                probableCauses: ['Rotor Eccentricity', 'Shorted Laminations', 'Uneven Air Gap'],
+                remedies: ['Check air gap alignment', 'Inspect rotor windings'],
+                reasoning: magnetic.message || 'High stator temperature variance.',
+                kbReference: 'KB-INFRA-03',
+                recommendedAction: 'Execute magnetic center audit and stator scanning.'
+            });
+            (result.conclusions[result.conclusions.length - 1] as any).slogan = 'MAGNETIC SIDE PULL';
+            (result.conclusions[result.conclusions.length - 1] as any).vectors = ['Stator Delta', 'Excitation High'];
+        }
+
         // 4. Failure Mode Detection (Cavitation, Aeration, PID)
-        const failureModes = (masterKnowledge as any).failureModes;
+        const failureModes = KNOWLEDGE.failureModes;
 
         // Cavitation Check
         const designPower = state.site.designPerformanceMW || 5.0;
@@ -180,12 +264,12 @@ export const ExpertInference = {
         if (actualSWC > designSWC * 1.1) {
             result.conclusions.push({
                 id: 'CAV-001',
-                symptom: failureModes.CAVITATION.symptom,
-                probableCauses: failureModes.CAVITATION.probableCauses || ["Runner wear", "Low head"],
+                symptom: failureModes.CAVITATION?.symptom || 'Cavitation',
+                probableCauses: failureModes.CAVITATION?.probableCauses || ["Runner wear", "Low head"],
                 remedies: ["Adjust setpoint", "Check draft tube"],
                 reasoning: `DIAGNOSIS: Potential Cavitation. REASONING: Specific Water Consumption (${actualSWC.toFixed(2)}) is > 10% above design baseline.`,
-                kbReference: failureModes.CAVITATION.kbRef,
-                recommendedAction: maintenanceSop.sops.CAVITATION_INFERRED.action,
+                kbReference: failureModes.CAVITATION?.kbRef || 'KB-CAV',
+                recommendedAction: (maintenanceSop.sops as any).CAVITATION_INFERRED.action,
                 sopCode: 'CAVITATION_INFERRED'
             });
         }
@@ -223,19 +307,83 @@ export const ExpertInference = {
 
         // 6. Total Extended Life (NC-4.2 Persistent)
         const totalExtendedLife = LifeExtensionEngine.calculateTotalExtendedLife(state);
-        (result.metrics as any).extendedLifeYears = totalExtendedLife;
+        result.metrics.extendedLifeYears = totalExtendedLife;
+
+        // 7. CHIEF ENGINEER'S VERDICT (NC-4.2 Production Sentinel)
+        result.chiefEngineerVerdict = generateChiefEngineerVerdict(state, result);
 
         return result;
+    },
+
+    /**
+     * Get only the Chief Engineer's Verdict without full analysis
+     */
+    getQuickVerdict: (state: TechnicalProjectState): string => {
+        const result = ExpertInference.analyze(state);
+        return result.chiefEngineerVerdict;
     }
 };
 
 /**
- * Utility to extract parameter value from nested TechnicalProjectState
+ * CHIEF ENGINEER'S VERDICT GENERATOR (NC-4.2 PRODUCTION)
+ * 
+ * Generates a one-sentence executive summary based on aggregate data.
+ * This is the "human" voice of the AI - authoritative and actionable.
  */
-function getParamValue(state: any, path: string): number | undefined {
-    if (path === 'vibration') return state.mechanical.vibration;
-    if (path === 'efficiency') return state.hydraulic.efficiency * 100;
-    if (path === 'bearingTemp') return state.mechanical.bearingTemp;
-    // ... expansion for other params
-    return undefined;
+function generateChiefEngineerVerdict(state: TechnicalProjectState, result: InferenceResult): string {
+    const alignment = state.mechanical?.alignment || 0;
+    const vibration = state.mechanical?.vibration || 0;
+    const bearingTemp = state.mechanical?.bearingTemp || 0;
+    const insulation = state.mechanical?.insulationResistance || 500;
+
+    // Count issues by category
+    const criticalAlerts = result.alerts.filter(a => a.severity === 'CRITICAL').length;
+    const warningAlerts = result.alerts.filter(a => a.severity === 'WARNING').length;
+
+    // Determine primary concern categories
+    const hasMechanicalIssue = alignment > 0.05 || vibration > 2.8;
+    const hasTribologyIssue = state.physics?.leakageStatus === 'CRITICAL' || state.physics?.leakageStatus === 'DEGRADING';
+    const hasElectricalIssue = insulation < 100;
+    const hasThermalIssue = bearingTemp > 70;
+    const hasStructuralIssue = result.metrics.structuralSafetyMargin < 30;
+
+    // Build verdict based on priority
+    if (criticalAlerts >= 3) {
+        return `CRITICAL: Asset requires immediate intervention across ${criticalAlerts} failure domains; prioritize shutdown and comprehensive audit before further operation.`;
+    }
+
+    if (hasStructuralIssue && hasMechanicalIssue) {
+        return `Asset shows compounded structural and mechanical degradation; immediate engineering review required to prevent cascading failure.`;
+    }
+
+    if (hasMechanicalIssue && hasTribologyIssue) {
+        return `Asset is structurally sound but tribologically compromised; prioritize oil filtration and precision realignment to arrest longevity leak.`;
+    }
+
+    if (hasThermalIssue && hasMechanicalIssue) {
+        return `Thermal stress detected with alignment deviation; bearing wear accelerating—recommend laser realignment and thermography baseline.`;
+    }
+
+    if (hasMechanicalIssue && !hasTribologyIssue && !hasElectricalIssue) {
+        return `Alignment precision below Golden Standard (0.05 mm/m); execute laser realignment protocol to restore full longevity potential.`;
+    }
+
+    if (hasElectricalIssue && !hasMechanicalIssue) {
+        return `Electrical insulation degradation detected; schedule stator dry-out and partial discharge testing within 30 days.`;
+    }
+
+    if (hasTribologyIssue) {
+        return `Oil analysis indicates contamination; implement enhanced filtration and consider oil change to prevent accelerated bearing wear.`;
+    }
+
+    if (warningAlerts > 0 && criticalAlerts === 0) {
+        return `Asset operating within acceptable limits with ${warningAlerts} monitoring flag(s); maintain current inspection cadence.`;
+    }
+
+    // All clear
+    if (alignment <= 0.05 && vibration <= 1.1 && bearingTemp <= 65) {
+        return `Asset meets NC-4.2 Heritage Standards; projected 50-year longevity pathway confirmed—continue predictive monitoring.`;
+    }
+
+    return `Asset health nominal with no immediate action required; next scheduled audit recommended in 6 months.`;
 }

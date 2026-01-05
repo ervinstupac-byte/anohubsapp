@@ -89,5 +89,99 @@
         "tempSpike": "CRITICAL: Shaft stoppage detected but Temperature rising! Current: {{temp}}°C (Limit: {{limit}}°C)",
         "vibrationWarning": "Warning: Vibration levels approaching Zone B.",
         "maintenanceDue": "Info: Scheduled maintenance in 3 days."
+    },
+    "dashboard": {
+        "title": "Executive Command",
+        "subtitle": "Francis < 5 MW // Heritage Precision Interface",
+        "status_active": "NC-4.2 Command Active",
+        "neural_link": "Neural Link",
+        "export_brief": "Export Brief",
+        "heritage_banner": {
+            "title": "Heritage Precision Standard",
+            "subtitle": "Golden Alignment Protocol",
+            "compliant": "Compliant",
+            "deviation": "Deviation",
+            "years_lost": "Years Lost"
+        },
+        "topology": {
+            "title": "System Topology",
+            "digital_twin": "Digital Twin",
+            "full_view": "Full View",
+            "rated_power": "Rated Power",
+            "grid_freq": "Grid Freq"
+        },
+        "kpi": {
+            "active_power": "Active Power",
+            "active_power_sub": "Verified Output",
+            "system_health": "System Health",
+            "net_head": "Net Head",
+            "axial_thrust": "Axial Thrust",
+            "axial_thrust_sub": "Max: 250 kN",
+            "structural_life": "Structural Life",
+            "structural_life_sub": "Fatigue Reserve",
+            "performance_gap": "Performance Gap",
+            "vs_design": "vs Design"
+        },
+        "finance": {
+            "title": "Risk vs. Finance",
+            "maint_buffer": "Maint. Buffer",
+            "annual_loss": "Annual Rev. Loss",
+            "predictive_savings": "Predictive Savings",
+            "profit_index": "Profit Index",
+            "profit_basis": "Based on current efficiency and market rates"
+        },
+        "sentinel": {
+            "title": "Sentinel Recommendations"
+        }
+    },
+    "sidebar": {
+        "fleet_overview": "Fleet Overview",
+        "mission_sectors": "Mission Sectors",
+        "generate_forensic": "Generate Forensic",
+        "hive_link": "Hive Link",
+        "connected": "Connected",
+        "offline": "Offline",
+        "search_placeholder": "Quick Search... (Ctrl+K)",
+        "sectors": {
+            "critical_ops": "Critical Ops",
+            "mechanical": "Mechanical",
+            "electrical": "Electrical / SCADA",
+            "risk": "Risk & Forensics",
+            "knowledge": "Knowledge"
+        },
+        "modules": {
+            "mission_control": "Mission Control",
+            "francis_hub": "Francis Hub",
+            "diagnostic_twin": "Diagnostic Twin",
+            "shaft_alignment": "Shaft Alignment",
+            "bolt_torque": "Bolt Torque",
+            "labyrinth_health": "Labyrinth Health",
+            "hydraulic_maint": "Hydraulic Maintenance",
+            "maintenance_engine": "Maintenance Engine",
+            "grid_sync": "Grid Sync Monitor",
+            "generator_integrity": "Generator Integrity",
+            "excitation": "Excitation System",
+            "executive": "Executive Dashboard",
+            "barlow_audit": "Barlow Structural Audit",
+            "longevity_roadmap": "50-Year Longevity Roadmap",
+            "forensic_analysis": "Forensic Analysis",
+            "precision_audit": "Precision Audit",
+            "sop_manager": "SOP Manager",
+            "engineering_manifesto": "Engineering Manifesto",
+            "learning_lab": "Learning Lab",
+            "intuition_log": "Intuition Log",
+            "logbook": "Maintenance Logbook",
+            "hpp_studio": "HPP Studio"
+        }
+    },
+    "terminal": {
+        "title": "Commander_Terminal_v4.2",
+        "init": "Initializing Neural Link... type /help",
+        "placeholder": "Enter command (e.g. /explain)..."
+    },
+    "toolbox": {
+        "greeting": {
+            "morning": "Good Morning, Engineer"
+        }
     }
 }

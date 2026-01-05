@@ -60,11 +60,14 @@ describe('ExpertInference Engine', () => {
             fluidIntelligence: {
                 oilSystem: {
                     waterContentPPM: 0,
-                    tan: 0,
                     viscosityIndex: 100
                 }
-            }
+            },
+            startStopCount: 120
         } as any,
+        demoMode: {
+            active: false
+        },
         structural: {
             remainingLife: 50,
             extendedLifeYears: 0,

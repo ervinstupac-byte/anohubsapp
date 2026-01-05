@@ -82,6 +82,30 @@
             "symptom": "Rapid Bearing Wear-Down",
             "cause": "Alignment > 0.12 mm/m or Axial Play > 0.15 mm",
             "impact": "Expontential fatigue accumulation"
+        },
+        "GREASE_BLOWOUT": {
+            "symptom": "High startup friction or Seal failure",
+            "indices": [
+                "Status = STOPPED/STBY",
+                "Cycles > 20"
+            ],
+            "impact": "Catastrophic startup event",
+            "kbRef": "KB-INFRA-01"
+        },
+        "THERMAL_INERTIA": {
+            "symptom": "Critical Temperature rate of rise",
+            "indices": [
+                "Rate > 2.0 C/min"
+            ],
+            "kbRef": "KB-INFRA-02"
+        },
+        "MAGNETIC_UNBALANCE": {
+            "symptom": "Localized Stator Heating",
+            "indices": [
+                "DeltaT > 15C",
+                "Excitation > UNSTABLE"
+            ],
+            "kbRef": "KB-INFRA-03"
         }
     },
     "economicImpacts": {

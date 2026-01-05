@@ -60,6 +60,101 @@
   --bg-carbon-dim: #010101;
 }
 
+/* --- FIELD CONTRAST MODE (NC-4.2 TURBINE HALL) --- */
+/* Strips all ambient glows and orbs for maximum readability in poorly lit conditions */
+:root[data-theme="field-contrast"] {
+  --accent-primary: 255, 255, 255;
+  --accent-glow: none;
+  --bg-carbon: #000000;
+  --glass-opacity: 0;
+  --glass-blur: 0px;
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --commander-glow: none;
+}
+
+:root.field-mode {
+  /* Override all blur and glow effects */
+  --glass-blur: 0px !important;
+}
+
+:root.field-mode body {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+
+/* High contrast text */
+:root.field-mode * {
+  text-shadow: none !important;
+}
+
+/* Strip ambient glow orbs */
+:root.field-mode [class*="blur-"],
+:root.field-mode [class*="backdrop-blur"] {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove blur from fixed elements */
+:root.field-mode .fixed[class*="blur"] {
+  opacity: 0 !important;
+}
+
+/* High contrast borders */
+:root.field-mode .glass-panel,
+:root.field-mode .glass-panel-deep {
+  background: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: none !important;
+}
+
+/* Crisp text for field conditions */
+:root.field-mode .text-cyan-400,
+:root.field-mode .text-cyan-500 {
+  color: #00FFFF !important;
+}
+
+:root.field-mode .text-emerald-400,
+:root.field-mode .text-emerald-500 {
+  color: #00FF00 !important;
+}
+
+:root.field-mode .text-amber-400,
+:root.field-mode .text-amber-500 {
+  color: #FFFF00 !important;
+}
+
+:root.field-mode .text-red-400,
+:root.field-mode .text-red-500 {
+  color: #FF0000 !important;
+}
+
+/* High contrast status indicators */
+:root.field-mode .bg-cyan-500,
+:root.field-mode .bg-cyan-400 {
+  background-color: #00FFFF !important;
+}
+
+:root.field-mode .border-cyan-500\/20,
+:root.field-mode .border-cyan-500\/30,
+:root.field-mode .border-cyan-500\/40 {
+  border-color: rgba(0, 255, 255, 0.6) !important;
+}
+
+/* Remove all pulse/glow animations in field mode */
+:root.field-mode [class*="animate-pulse"],
+:root.field-mode [class*="animate-glow"] {
+  animation: none !important;
+}
+
+/* Ensure monospace text remains crisp */
+:root.field-mode .font-mono {
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
 /* --- TYPOGRAPHY PRESETS --- */
 .font-mono {
   font-family: 'JetBrains Mono', monospace !important;

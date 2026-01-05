@@ -9,7 +9,7 @@ import {
     Droplets, GitPullRequest, Activity, Filter, Snowflake, Waves,
     Settings, Disc, Crosshair, LifeBuoy, Droplet, Octagon, BarChart2,
     ShieldAlert, Lock, ZapOff, BatteryCharging, Printer, Settings2, Merge, ArrowRight, RefreshCw, Link as LinkIcon, ArrowRightLeft, Wind, Wifi, Radio,
-    ChevronDown, ChevronRight, Zap, Building2, Wrench, Book
+    ChevronDown, ChevronRight, Zap, Building2, Wrench, Book, Award
 } from 'lucide-react';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { FRANCIS_PATHS } from '../../routes/paths';
@@ -256,18 +256,31 @@ export const FrancisHub: React.FC = () => {
     const dialColor = getDialColor(healthScore);
 
     return (
-        <div className="min-h-screen p-4 md:p-8 bg-[#020617] font-mono text-slate-300">
+        <div className="min-h-screen p-4 md:p-8 bg-[#020617] font-mono text-slate-300 relative overflow-hidden">
+            {/* Blueprint Grid Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-10" style={{
+                backgroundImage: 'linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px)',
+                backgroundSize: '40px 40px'
+            }}></div>
+
             {/* Header & Health Score */}
-            <header className="mb-10 border-b border-slate-800 pb-6">
-                <div className="mb-6">
+            <header className="mb-10 border-b border-slate-800 pb-6 relative z-10">
+                <div className="mb-6 flex justify-between items-center">
                     <button onClick={() => navigate('/')} className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition group">
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                         <span className="text-sm font-bold">{t('common.back', 'Back to Turbine Selection')}</span>
                     </button>
+                    {/* Golden Seal of Excellence */}
+                    {healthScore > 90 && (
+                        <div className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-amber-500/10 to-transparent border-l-2 border-amber-500 animate-fade-in-right">
+                            <Award className="w-5 h-5 text-amber-400" />
+                            <span className="text-xs font-black uppercase text-amber-500 tracking-widest">Golden Seal Certified</span>
+                        </div>
+                    )}
                 </div>
 
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-slate-900/50 p-6 rounded-xl border border-slate-700/50">
-                    <div>
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-slate-900/50 p-6 rounded-xl border border-slate-700/50 relative overflow-hidden">
+                    <div className="relative z-10">
                         <div className="flex items-center gap-3 mb-3">
                             <div className="p-3 bg-cyan-900/30 rounded-lg border border-cyan-500/30">
                                 <Cpu className="text-cyan-400 w-8 h-8" />
@@ -282,7 +295,7 @@ export const FrancisHub: React.FC = () => {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3 relative z-10">
                         <button
                             onClick={() => navigate(`/francis/${ROUTES.FRANCIS.MISSION_CONTROL}`)}
                             className="px-5 py-3 bg-gradient-to-br from-orange-900/40 to-orange-950/60 border border-orange-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-orange-800/50 hover:to-orange-900/70 hover:border-orange-400 transition-all group shadow-lg shadow-orange-900/20"
@@ -318,7 +331,7 @@ export const FrancisHub: React.FC = () => {
                     </div>
 
                     {/* Maturity Badge & Health Score */}
-                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
                         <MaturityBadge state={techState} />
 
                         <div className="flex items-center gap-6 bg-slate-900/70 p-4 rounded-lg border border-slate-700/50 shadow-xl">
@@ -328,9 +341,14 @@ export const FrancisHub: React.FC = () => {
                                     background: `conic-gradient(from 180deg, ${dialColor} 0%, ${dialColor} ${healthScore}%, #334155 ${healthScore}%, #334155 100%)`
                                 }}
                             >
-                                <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center">
+                                <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center relative">
                                     <span className="text-2xl font-black text-white">{healthScore}%</span>
                                     <span className="text-sm text-slate-500 uppercase">{t('francis.health.label')}</span>
+                                    {healthScore > 90 && (
+                                        <div className="absolute -top-1 right-0 text-amber-500 animate-pulse">
+                                            <Award size={16} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -339,7 +357,7 @@ export const FrancisHub: React.FC = () => {
             </header>
 
             {/* 3D VISUALIZATION HEADER */}
-            <div className="relative h-96 w-full bg-[#050505] overflow-hidden rounded-b-3xl border-b border-white/5 shadow-2xl mb-8">
+            <div className="relative h-96 w-full bg-[#050505] overflow-hidden rounded-b-3xl border-b border-white/5 shadow-2xl mb-8 z-10">
                 <div className="absolute inset-0 z-0 opacity-80">
                     <TurbineRunner3D rpm={(simData as any).rpm || 428} />
                 </div>
@@ -410,7 +428,7 @@ export const FrancisHub: React.FC = () => {
             </div>
 
             {/* NC-4.2 ENGINEERING INTELLIGENCE SECTION */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 relative z-10">
                 <GlassCard className="border-t-2 border-t-cyan-500/50 overflow-hidden">
                     <div className="mb-6 flex justify-between items-center">
                         <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
@@ -435,7 +453,7 @@ export const FrancisHub: React.FC = () => {
             </div>
 
             {/* Expand/Collapse All Toggle */}
-            <div className="mb-6 flex justify-end gap-3">
+            <div className="mb-6 flex justify-end gap-3 relative z-10">
                 <button
                     onClick={expandAll}
                     className="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-slate-800/50 hover:bg-cyan-900/30 text-slate-400 hover:text-cyan-400 border border-slate-700 hover:border-cyan-500/50 rounded transition-all"
@@ -450,7 +468,7 @@ export const FrancisHub: React.FC = () => {
                 </button>
             </div>
             {/* ACCORDION SECTORS */}
-            <div className="space-y-4">
+            <div className="space-y-4 relative z-10">
                 {/* SECTOR 1: CRITICAL SAFETY */}
                 <AccordionSector
                     title={`🔴 ${t('francis.sectors.critical')}`}
@@ -747,7 +765,7 @@ export const FrancisHub: React.FC = () => {
             </div>
 
             {/* Footer Actions */}
-            <div className="mt-8 flex justify-between items-end border-t border-slate-800 pt-4">
+            <div className="mt-8 flex justify-between items-end border-t border-slate-800 pt-4 relative z-10">
                 <div className="text-slate-700 text-[10px] font-mono max-w-2xl">
                     <p className="font-black text-slate-600 mb-1 tracking-widest uppercase">Roots of Engineering Disclaimer:</p>
                     <p>

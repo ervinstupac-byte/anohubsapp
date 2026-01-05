@@ -35,9 +35,16 @@ export interface TurbineSpecs {
     specificSpeed: number;
 }
 
+export interface PenstockLossParams {
+    length: number;
+    diameter: number;
+    roughness: number; // Manning's n
+}
+
 export interface ITurbineEngine {
     type: string;
-    calculatePower(head: number, flow: number, efficiency: number): number;
+    calculatePower(head: number, flow: number, efficiency: number, penstock?: PenstockLossParams): number;
+    calculateFrictionLoss(head: number, flow: number, penstock: PenstockLossParams): number;
     calculateEnergy(powerMW: number, flowVariation: string): number;
     calculateSpecificSpeed(head: number, flow: number): number;
     calculateEfficiency(head: number, flow: number): number;

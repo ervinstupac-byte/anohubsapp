@@ -9,11 +9,52 @@ import { SentinelKernel } from '../utils/SentinelKernel';
 import { useTranslation } from 'react-i18next';
 import {
     Thermometer, Activity, Gauge, Zap, Waves, Volume2, Save, Download,
-    AlertTriangle, Shield, Settings, History, Droplets, ZapOff, Info, Book
+    AlertTriangle, Shield, Settings, History, Droplets, ZapOff, Info, Book, PenTool
 } from 'lucide-react';
 import { ProfessionalReportEngine } from '../services/ProfessionalReportEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
+
+// --- HERITAGE INSIGHTS KNOWLEDGE BASE ---
+const HERITAGE_INSIGHTS: Record<string, { title: string; desc: string }> = {
+    // Mechanical
+    runout: { title: "The 0.05 mm/m Law", desc: "Alignment exceeding 0.05 mm/m is an ethical failure. Precision anchors structural longevity." },
+    bearingClearance: { title: "Cubic Wear Rule", desc: "Doubling clearance increases dynamic impact by factor of 8 (2^3). maintain tight tolerances." },
+    axialPlay: { title: "Thrust Management", desc: "Excessive play (>0.15mm) causes hammer-effect on thrust pads during load rejection." },
+    governorDeadband: { title: "Frequency Stability", desc: "Deadband > 0.05Hz causes grid oscillation. Keep tight for island-mode stability." },
+    runnerGap: { title: "Volumetric Sealing", desc: "Each 0.1mm gap increase loses ~0.5% efficiency. Water must work, not bypass." },
+    labyrinthGap: { title: "parasitic Flow", desc: "Worn labyrinths bypass the runner, wasting potential energy directly to the draft tube." },
+    lastAlignmentCheck: { title: "Seasonal Drift", desc: "Concrete foundations shift with temperature. Re-align every season transition." },
+
+    // Electrical
+    statorInsulation: { title: "Dielectric Health", desc: "Megger < 100MΩ indicates moisture ingress. Dry-out required to prevent flashover." },
+    rotorInsulation: { title: "Field Integrity", desc: "Low rotor insulation risks excitation failure. Clean carbon dust regularly." },
+    polarizationIndex: { title: "Age vs Moisture", desc: "PI < 2.0 suggests brittle insulation or water absorption. PI < 1.0 is immediate danger." },
+    dcBatteryVoltage: { title: "The Last Defense", desc: "During blackout, this voltage fires the emergency lube pump. Critical safety node." },
+    lastRelayTest: { title: "Silent Sentinel", desc: "Protection relays must be tested annually. A stuck relay guarantees catastrophic failure." },
+
+    // Auxiliary
+    sealLeakageRate: { title: "Run-Dry Risk", desc: "Leakage cools the seal. Zero leakage is dangerous (burning); too much floods the pit." },
+    oilViscosity: { title: "Fluid Film Wedge", desc: "Viscosity drops 50% for every 10°C rise. Maintain 46 cSt at 40°C for hydrodynamic lift." },
+    oilAge: { title: "Chemical Breakdown", desc: "Oxidized oil becomes acidic, eating white metal bearings from the inside out." },
+    lastOilChange: { title: "Fresh Blood", desc: "Change oil before TAN > 0.5. Clean oil extends bearing life by 300%." },
+    vibrationSensors: { title: "The Nervous System", desc: "Accelerometers detect faults months before audible failure. Trust the trend." },
+    frequencySensors: { title: "Grid Pulse", desc: "Captures islanding events and load rejection spikes." },
+    acousticObservation: { title: "The Song of Steel", desc: "Grinding sounds = metal contact. Thumping = draft tube surge. Listen to the machine." },
+
+    // Pressure
+    penstock: { title: "Artery Pressure", desc: "Head pressure drives the system. Sudden drops indicate rupture or massive leak." },
+    labyrinthFront: { title: "Upper Seal", desc: "High pressure here indicates worn lower labyrinth. Water is bypassing the runner." },
+    labyrinthRear: { title: "Thrust Relief", desc: "This pressure pushes up against the rotor weight. Balance is key." },
+    spiralCasing: { title: "Containment Vessel", desc: "Hoop stress is highest here. Watch for hairline cracks in the weld seams." },
+    draftTube: { title: "Vacuum Recovery", desc: "Negative pressure recovers energy. Loss of vacuum = 5-10% power loss." },
+
+    // Kinematics
+    mivOpeningTime: { title: "Hydraulic shock", desc: "Opening too fast causes water hammer in the penstock." },
+    mivClosingTime: { title: "Surge Protection", desc: "Closing too fast bursts pipes. Closing too slow overspeeds the generator." },
+    distributorCylinderStrokeTime: { title: "Governor Response", desc: "Sluggish cylinders cause grid instability and hunting." },
+    bypassType: { title: "Pressure Relief", desc: "Synchronous bypass prevents water hammer during load rejection." }
+};
 
 export const TechnicalPassport: React.FC = () => {
     const { t } = useTranslation();
@@ -141,14 +182,21 @@ export const TechnicalPassport: React.FC = () => {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6 bg-slate-950 min-h-screen">
-            <div className="flex justify-between items-end mb-8">
+        <div className="p-6 max-w-7xl mx-auto space-y-6 bg-slate-950 min-h-screen relative overflow-hidden">
+            {/* Blueprint Grid Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-20" style={{
+                backgroundImage: 'linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px)',
+                backgroundSize: '20px 20px'
+            }}></div>
+
+            <div className="flex justify-between items-end mb-8 relative z-10">
                 <div>
                     <h1 className="text-3xl font-black text-white tracking-tighter uppercase italic flex items-center gap-3">
                         <Shield className="text-cyan-400 w-8 h-8" />
                         Comprehensive Asset Passport
                     </h1>
-                    <p className="text-slate-400 text-sm font-mono mt-1">
+                    <p className="text-slate-400 text-sm font-mono mt-1 flex items-center gap-2">
+                        <PenTool size={12} className="text-cyan-500" />
                         360° {profile?.type} Technical Matrix // {profile?.subType || 'Asset Portal'}
                     </p>
                 </div>
@@ -162,7 +210,7 @@ export const TechnicalPassport: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
                 {profile?.ui_manifest.passport_sections.map((section) => (
                     <GlassCard key={section.id} title={section.title} icon={getIcon(section.id)}>
                         <div className="space-y-4">
@@ -183,31 +231,17 @@ export const TechnicalPassport: React.FC = () => {
                                             ))}
                                         </ModernInput>
 
-                                        {/* Heritage Insights Tooltip */}
-                                        {field.id === 'bearingScraping' && (
-                                            <div className="absolute top-0 right-0 p-1 cursor-help group-hover/field:text-cyan-400 text-slate-600 transition-colors" title="Heritage Insight: The 80% Rule">
+                                        {/* Dynamic Heritage Insights Tooltip */}
+                                        {HERITAGE_INSIGHTS[field.id] && (
+                                            <div className="absolute top-0 right-0 p-1 cursor-help group-hover/field:text-cyan-400 text-slate-600 transition-colors" title="Heritage Insight">
                                                 <Info size={14} />
                                                 <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-slate-900 border border-cyan-500/30 rounded-lg shadow-2xl opacity-0 scale-95 origin-bottom-right group-hover/field:opacity-100 group-hover/field:scale-100 transition-all z-50 pointer-events-none">
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <Book size={10} className="text-cyan-400" />
-                                                        <span className="text-[10px] font-black uppercase text-cyan-400 tracking-tighter">The 80% Contact Law</span>
+                                                        <span className="text-[10px] font-black uppercase text-cyan-400 tracking-tighter">{HERITAGE_INSIGHTS[field.id].title}</span>
                                                     </div>
                                                     <p className="text-[9px] leading-tight text-slate-300 font-medium">
-                                                        Precision bearing scraping requires 80% contact area spotted with Prussian Blue. This ensures the "Roots of Engineering" foundation for a 50-year MTBF.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {field.id === 'runout' && (
-                                            <div className="absolute top-0 right-0 p-1 cursor-help group-hover/field:text-cyan-400 text-slate-600 transition-colors" title="Heritage Insight: The 0.05 Law">
-                                                <Info size={14} />
-                                                <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-slate-900 border border-cyan-500/30 rounded-lg shadow-2xl opacity-0 scale-95 origin-bottom-right group-hover/field:opacity-100 group-hover/field:scale-100 transition-all z-50 pointer-events-none">
-                                                    <div className="flex items-center gap-2 mb-1">
-                                                        <Book size={10} className="text-cyan-400" />
-                                                        <span className="text-[10px] font-black uppercase text-cyan-400 tracking-tighter">The 0.05 mm/m Law</span>
-                                                    </div>
-                                                    <p className="text-[9px] leading-tight text-slate-300 font-medium">
-                                                        Alignment exceeding 0.05 mm/m is not just a tolerance violation—it is an ethical failure. Precision is the anchor of structural longevity.
+                                                        {HERITAGE_INSIGHTS[field.id].desc}
                                                     </p>
                                                 </div>
                                             </div>
@@ -303,7 +337,7 @@ export const TechnicalPassport: React.FC = () => {
             </div>
 
             {/* QUICK STATS FOOTER */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 relative z-10">
                 <div className="bg-slate-900 border border-white/5 p-4 rounded-2xl">
                     <p className="text-[10px] text-slate-500 uppercase font-black">Efficiency Loss</p>
                     <p className="text-xl font-bold text-white">{calculations.volumetricEfficiencyLoss}%</p>

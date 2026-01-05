@@ -57,6 +57,7 @@ import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx'
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
 import { ROUTES } from './routes/paths.ts';
+import { useSentinelWatchdog } from './hooks/useSentinelWatchdog.ts';
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -77,6 +78,7 @@ const RevitalizationStrategy = lazy(() => import('./components/RevitalizationStr
 const DigitalIntegrity = lazy(() => import('./components/DigitalIntegrity.tsx').then(m => ({ default: m.DigitalIntegrity })));
 const ContractManagement = lazy(() => import('./components/ContractManagement.tsx').then(m => ({ default: m.ContractManagement })));
 const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
+const InfrastructureHub = lazy(() => import('./components/infrastructure/InfrastructureHub.tsx').then(m => ({ default: m.InfrastructureHub })));
 const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
 
@@ -135,6 +137,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // New component for collapsible fleet section
 // FleetSection removed - Moved to Sidebar.tsx
 const AppLayout: React.FC = () => {
+    useSentinelWatchdog(); // Infrastructure Watchdog
     const location = useLocation();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -235,6 +238,10 @@ const AppLayout: React.FC = () => {
             'turbineDetail': '/turbine',
             'activeContext': '/vision',
             'vision': '/vision',
+            'plantMaster': '/infrastructure/plant-master',
+            'bidEvaluator': '/infrastructure/bid-evaluator',
+            'hydrologyLab': '/infrastructure/hydrology-lab',
+            'infrastructure': '/infrastructure',
 
             // Maintenance Routes - Hardcoded for Stability
             'maintenanceDashboard': '/maintenance/dashboard',
@@ -379,6 +386,7 @@ const AppLayout: React.FC = () => {
                                                 <Route path="installation-guarantee" element={<InstallationGuarantee />} />
                                                 <Route path="gender-equity" element={<GenderEquity />} />
                                                 <Route path="hpp-builder" element={<HPPBuilder />} />
+                                                <Route path="infrastructure/*" element={<InfrastructureHub />} />
                                                 <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
                                                 <Route path="phase-guide" element={<ProjectPhaseGuide />} />
                                                 <Route path="river-wildlife" element={<RiverWildlife />} />
