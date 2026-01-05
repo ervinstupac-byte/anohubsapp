@@ -11,7 +11,7 @@
     "build": "npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "i18n:sync": "copy \"src\\i18n\\locales\\en.json\" \"src\\i18n\\en.json\" /Y && copy \"src\\i18n\\locales\\bs.json\" \"src\\i18n\\bs.json\" /Y",
+    "i18n:sync": "node -e \"const fs=require('fs'); try { fs.copyFileSync('src/i18n/locales/en.json', 'src/i18n/en.json'); fs.copyFileSync('src/i18n/locales/bs.json', 'src/i18n/bs.json'); console.log('i18n synced'); } catch(e) { console.error(e); process.exit(1); }\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

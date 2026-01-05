@@ -20,31 +20,31 @@ function verify() {
     console.log("------------------------------------------");
 
     const envPath = join(process.cwd(), '.env');
-    const examplePath = join(process.cwd(), '.env.example');
+    let envContent = '';
 
-    if (!existsSync(envPath)) {
-        console.error("CRITICAL ERROR: .env file is missing from project root.");
-        if (existsSync(examplePath)) {
-            console.warn("TIP: Copy .env.example to .env and populate it with your Supabase credentials.");
-        }
-        process.exit(1);
+    if (existsSync(envPath)) {
+        envContent = readFileSync(envPath, 'utf-8');
+    } else {
+        console.warn("NOTICE: .env file not found. Assuming CI/CD environment with injected variables.");
     }
 
-    const envContent = readFileSync(envPath, 'utf-8');
     const missing = [];
 
     for (const v of REQUIRED_VARS) {
-        // Simple check: is the key present and followed by an equals sign and some value?
-        const regex = new RegExp(`^${v}\\s*=.*`, 'm');
-        const match = envContent.match(regex);
+        // PRIORITY 1: Check System Environment (Vercel/CI)
+        let value = process.env[v];
 
-        if (!match) {
-            missing.push(v);
-        } else {
-            const value = match[0].split('=')[1]?.trim();
-            if (!value || value.startsWith('your_')) {
-                missing.push(`${v} (Value is empty or placeholder)`);
+        // PRIORITY 2: Check .env file content (Local Dev)
+        if (!value && envContent) {
+            const regex = new RegExp(`^${v}\\s*=.*`, 'm');
+            const match = envContent.match(regex);
+            if (match) {
+                value = match[0].split('=')[1]?.trim();
             }
+        }
+
+        if (!value || value.startsWith('your_')) {
+            missing.push(v);
         }
     }
 

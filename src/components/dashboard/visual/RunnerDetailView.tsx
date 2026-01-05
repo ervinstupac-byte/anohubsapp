@@ -114,10 +114,15 @@ const childVariants = {
 const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome }) => {
     const { t } = useTranslation();
     const [activeSub, setActiveSub] = useState<string | null>(null);
-    const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
+    const [isFullscreen, setIsFullscreen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeData = RUNNER_COMPONENTS.find(c => c.id === activeSub);
+
+    // Initial check for fullscreen state to handle SSR safely
+    useEffect(() => {
+        setIsFullscreen(!!document.fullscreenElement);
+    }, []);
 
     // Fullscreen API handlers
     const toggleFullscreen = useCallback(() => {
