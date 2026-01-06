@@ -19,6 +19,9 @@ import { FrancisHillChart } from '../diagnostic-twin/FrancisHillChart';
 import { MaturityBadge } from '../dashboard/MaturityBadge';
 import TurbineVisualNavigator from '../dashboard/TurbineVisualNavigator';
 import { useContextEngine } from '../../hooks/useContextEngine';
+import { FrancisHeader } from './layout/FrancisHeader';
+import { FrancisQuickActions } from './layout/FrancisQuickActions';
+import { FrancisHealthWidget } from './layout/FrancisHealthWidget';
 
 
 // Status Dot Component
@@ -257,7 +260,7 @@ export const FrancisHub: React.FC = () => {
     const dialColor = getDialColor(healthScore);
 
     return (
-        <div className="min-h-screen p-4 md:p-8 bg-[#020617] font-mono text-slate-300 relative overflow-hidden">
+        <div className="min-h-screen p-4 md:p-8 bg-h-dark font-mono text-slate-300 relative overflow-hidden">
             {/* Blueprint Grid Background */}
             <div className="absolute inset-0 pointer-events-none opacity-10" style={{
                 backgroundImage: 'linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px)',
@@ -266,96 +269,20 @@ export const FrancisHub: React.FC = () => {
 
             {/* Header & Health Score */}
             <header className="mb-10 border-b border-slate-800 pb-6 relative z-10">
-                <div className="mb-6 flex justify-between items-center">
-                    <button onClick={() => navigate('/')} className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition group">
-                        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
-                        <span className="text-sm font-bold">{t('common.back', 'Back to Turbine Selection')}</span>
-                    </button>
-                    {/* Golden Seal of Excellence */}
-                    {healthScore > 90 && (
-                        <div className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-amber-500/10 to-transparent border-l-2 border-amber-500 animate-fade-in-right">
-                            <Award className="w-5 h-5 text-amber-400" />
-                            <span className="text-xs font-black uppercase text-amber-500 tracking-widest">Golden Seal Certified</span>
-                        </div>
-                    )}
-                </div>
+                <FrancisHeader t={t} navigate={navigate} healthScore={healthScore} />
 
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-slate-900/50 p-6 rounded-xl border border-slate-700/50 relative overflow-hidden">
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="p-3 bg-cyan-900/30 rounded-lg border border-cyan-500/30">
-                                <Cpu className="text-cyan-400 w-8 h-8" />
-                            </div>
-                            <div>
-                                <h1 className="text-4xl font-black text-white tracking-tighter uppercase">
-                                    {t('francis.title').split('•')[0]} <span className="text-cyan-400">{t('francis.title').split('•')[1] || 'UNIT 1'}</span>
-                                </h1>
-                                <p className="text-slate-500 text-xs tracking-widest mt-1">{t('francis.subtitle')}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Quick Actions */}
-                    <div className="flex flex-col sm:flex-row gap-3 relative z-10">
-                        <button
-                            onClick={() => navigate(`/francis/${ROUTES.FRANCIS.MISSION_CONTROL}`)}
-                            className="px-5 py-3 bg-gradient-to-br from-orange-900/40 to-orange-950/60 border border-orange-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-orange-800/50 hover:to-orange-900/70 hover:border-orange-400 transition-all group shadow-lg shadow-orange-900/20"
-                        >
-                            <Power className="text-red-400 w-5 h-5 group-hover:scale-110 transition" />
-                            <div className="text-left">
-                                <div className="text-[9px] text-red-400 font-bold uppercase tracking-wider">{t('francis.actions.missionControl')}</div>
-                                <div className="text-white text-xs font-black tracking-widest">{t('francis.actions.startSequence')}</div>
-                            </div>
-                        </button>
-
-                        <button
-                            onClick={() => navigate(`/francis/${ROUTES.FRANCIS.EMERGENCY}`)}
-                            className="px-5 py-3 bg-gradient-to-br from-indigo-900/40 to-indigo-950/60 border border-indigo-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-indigo-800/50 hover:to-indigo-900/70 hover:border-indigo-400 transition-all group shadow-lg shadow-indigo-900/20"
-                        >
-                            <AlertTriangle className="text-orange-400 w-5 h-5 group-hover:scale-110 transition" />
-                            <div className="text-left">
-                                <div className="text-[9px] text-orange-400 font-bold uppercase tracking-wider">{t('francis.actions.emergency')}</div>
-                                <div className="text-white text-xs font-black tracking-widest">{t('francis.actions.protocols')}</div>
-                            </div>
-                        </button>
-
-                        <button
-                            onClick={() => navigate(`/francis/${ROUTES.FRANCIS.FLOWCHART_STARTUP}`)}
-                            className="px-5 py-3 bg-gradient-to-br from-green-900/40 to-green-950/60 border border-green-500/50 rounded-lg flex items-center justify-center gap-3 hover:from-green-800/50 hover:to-green-900/70 hover:border-green-400 transition-all group shadow-lg shadow-green-900/20"
-                        >
-                            <GitBranch className="text-green-400 w-5 h-5 group-hover:scale-110 transition" />
-                            <div className="text-left">
-                                <div className="text-[9px] text-green-400 font-bold uppercase tracking-wider">{t('francis.actions.startup')}</div>
-                                <div className="text-white text-xs font-black tracking-widest">{t('francis.actions.flowchart')}</div>
-                            </div>
-                        </button>
-                    </div>
-
-                    {/* Maturity Badge & Health Score */}
-                    <div className="flex flex-col sm:flex-row items-center gap-6 relative z-10">
-                        <MaturityBadge state={techState} />
-
-                        <div className="flex items-center gap-6 bg-slate-900/70 p-4 rounded-lg border border-slate-700/50 shadow-xl">
-                            <div
-                                className="w-[120px] h-[120px] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.4),inset_0_0_20px_rgba(0,0,0,0.5)] animate-[pulse-glow_3s_ease-in-out_infinite]"
-                                style={{
-                                    background: `conic-gradient(from 180deg, ${dialColor} 0%, ${dialColor} ${healthScore}%, #334155 ${healthScore}%, #334155 100%)`
-                                }}
-                            >
-                                <div className="bg-[#020617] w-[80%] h-[80%] rounded-full flex flex-col items-center justify-center relative">
-                                    <span className="text-2xl font-black text-white">{healthScore}%</span>
-                                    <span className="text-sm text-slate-500 uppercase">{t('francis.health.label')}</span>
-                                    {healthScore > 90 && (
-                                        <div className="absolute -top-1 right-0 text-amber-500 animate-pulse">
-                                            <Award size={16} />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-8 bg-gradient-to-r from-slate-900/50 via-slate-800/30 to-slate-900/50 p-6 rounded-xl border border-slate-700/50 relative overflow-hidden mt-4">
+                    <FrancisQuickActions t={t} navigate={navigate} />
+                    <FrancisHealthWidget t={t} healthScore={healthScore} dialColor={dialColor} techState={techState} />
                 </div>
             </header>
+
+            {/* NC-4.2 PRIMARY VISUALIZATION - PRIORITY 1 */}
+            <div className="w-full mb-8 relative z-20">
+                <GlassCard className="border-cyan-500/30 overflow-hidden">
+                    <TurbineVisualNavigator />
+                </GlassCard>
+            </div>
 
             {/* 3D VISUALIZATION HEADER */}
             <div className="relative h-96 w-full bg-[#050505] overflow-hidden rounded-b-3xl border-b border-white/5 shadow-2xl mb-8 z-10">
@@ -368,7 +295,7 @@ export const FrancisHub: React.FC = () => {
                     <div className="flex justify-between items-start">
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="px-2 py-0.5 bg-[#2dd4bf]/10 border border-[#2dd4bf]/30 text-[#2dd4bf] text-[10px] font-bold uppercase tracking-widest rounded">
+                                <span className="px-2 py-0.5 bg-h-teal/10 border border-h-teal/30 text-h-teal text-[10px] font-bold uppercase tracking-widest rounded">
                                     {t('francis.machineHall')}
                                 </span>
                                 <span className="px-2 py-0.5 bg-slate-800 border border-white/10 text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-1">
@@ -385,7 +312,7 @@ export const FrancisHub: React.FC = () => {
                                 <div className="h-8 w-px bg-white/10" />
                                 <div className="text-right">
                                     <p className="text-[10px] text-slate-400 uppercase font-bold">{t('executive.sensors.activePower')}</p>
-                                    <p className="text-xl font-mono text-[#2dd4bf] font-bold">142.5 <span className="text-xs text-slate-500">{t('francis.units.mw')}</span></p>
+                                    <p className="text-xl font-mono text-h-teal font-bold">142.5 <span className="text-xs text-slate-500">{t('francis.units.mw')}</span></p>
                                 </div>
                             </div>
                         </GlassCard>
@@ -407,67 +334,21 @@ export const FrancisHub: React.FC = () => {
                                         style={{ width: `${Math.min(100, structuralSafetyMargin)}%` }}
                                     />
                                 </div>
+                                <FrancisHillChart />
                             </div>
                         </GlassCard>
 
-                        <GlassCard className="pointer-events-auto backdrop-blur-md bg-slate-900/60 border-cyan-500/20">
-                            <div className="flex items-center gap-4">
-                                <div className="p-2 bg-cyan-500/10 rounded border border-cyan-500/30">
-                                    <Wrench className="w-5 h-5 text-cyan-400" />
-                                </div>
-                                <div>
-                                    <p className="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Longevity Projection</p>
-                                    <div className="flex items-baseline gap-2">
-                                        <p className="text-lg font-black text-white">{extendedLifeYears > 0 ? `+${extendedLifeYears.toFixed(1)}` : '0'} yrs</p>
-                                        <p className="text-[9px] text-slate-400 font-mono italic">EOL: {estimatedFailureDate}</p>
-                                    </div>
-                                </div>
+                        <GlassCard className="border-t-2 border-t-slate-500/50 overflow-hidden h-full">
+                            <div className="mb-6 flex justify-between items-center p-2">
+                                <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                                    <Settings2 className="w-5 h-5 text-slate-400" />
+                                    Legacy Topology
+                                </h3>
+                                <span className="text-[10px] bg-slate-500/10 text-slate-400 px-2 py-1 rounded border border-slate-500/20 font-bold uppercase">Standard View</span>
                             </div>
+                            <FrancisInteractiveCrossSection />
                         </GlassCard>
                     </div>
-                </div>
-            </div>
-
-            {/* NC-4.2 ENGINEERING INTELLIGENCE SECTION */}
-            <div className="grid grid-cols-1 gap-8 mb-8 relative z-10">
-                <GlassCard className="border-t-2 border-t-cyan-500/50 overflow-visible shadow-3xl shadow-cyan-900/10">
-                    <div className="mb-6 flex justify-between items-center p-2">
-                        <h3 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                            <Disc className="w-5 h-5 text-cyan-400" />
-                            {t('dashboard.topology.title')}
-                        </h3>
-                        <div className="flex items-center gap-3">
-                            <span className="text-[10px] bg-cyan-500/10 text-cyan-400 px-2 py-1 rounded border border-cyan-500/20 font-bold uppercase select-none animate-pulse">Live Visual Navigator</span>
-                            <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest hidden md:block">NC-4.2 COMPLIANT</span>
-                        </div>
-                    </div>
-                    <div className="p-1">
-                        <TurbineVisualNavigator />
-                    </div>
-                </GlassCard>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <GlassCard className="border-t-2 border-t-blue-500/50 overflow-hidden h-full">
-                        <div className="mb-6 flex justify-between items-center p-2">
-                            <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                                <BarChart2 className="w-5 h-5 text-blue-400" />
-                                Hill Chart Topology
-                            </h3>
-                            <span className="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-1 rounded border border-blue-500/20 font-bold uppercase">Efficiency Mapping</span>
-                        </div>
-                        <FrancisHillChart />
-                    </GlassCard>
-
-                    <GlassCard className="border-t-2 border-t-slate-500/50 overflow-hidden h-full">
-                        <div className="mb-6 flex justify-between items-center p-2">
-                            <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                                <Settings2 className="w-5 h-5 text-slate-400" />
-                                Legacy Topology
-                            </h3>
-                            <span className="text-[10px] bg-slate-500/10 text-slate-400 px-2 py-1 rounded border border-slate-500/20 font-bold uppercase">Standard View</span>
-                        </div>
-                        <FrancisInteractiveCrossSection />
-                    </GlassCard>
                 </div>
             </div>
 

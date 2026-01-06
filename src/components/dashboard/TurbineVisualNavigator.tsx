@@ -11,11 +11,13 @@ import {
     ChevronRight,
     Info,
     History,
-    Target
+    Target,
+    Activity
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Minimize2, Maximize2, Home } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
+import { TURBINE_COMPONENTS as COMPONENTS } from './data/visual-map';
 
 import GeneratorDetailView from './visual/GeneratorDetailView';
 import RunnerDetailView from './visual/RunnerDetailView';
@@ -27,110 +29,7 @@ import FlywheelDetailView from './visual/FlywheelDetailView';
  * Interactive Blueprint with Signposts & Drill-Down
  */
 
-interface ComponentDetail {
-    id: string;
-    name: string;
-    func: string;
-    precision: string;
-    heritage: string;
-    path: string;
-    icon: any;
-    // Spatial anchor for leader line (SVG coordinates)
-    anchor: { x: number, y: number };
-    // Visual position for label (Percentage)
-    labelPos: { top: string, left: string };
-}
 
-const COMPONENTS: ComponentDetail[] = [
-    {
-        id: 'temp-generator',
-        name: 'GENERATOR UNIT',
-        func: 'Converts mechanical rotational energy into electrical power via electromagnetic induction.',
-        precision: '0.05 mm/m alignment factor',
-        heritage: 'Modern excitation systems allow for +/- 2% voltage stability during transient grid fluctuations.',
-        path: '/electrical/generator-integrity',
-        icon: Zap,
-        anchor: { x: 800, y: 150 },
-        labelPos: { top: '10%', left: '80%' }
-    },
-    {
-        id: 'temp-shaft-coupling',
-        name: 'SHAFT & FLYWHEEL',
-        func: 'Mechanical transmission backbone connecting the turbine runner to the generator rotor.',
-        precision: 'Flywheel Balance G2.5',
-        heritage: 'The flywheel uses rotational inertia to stabilize grid frequency during sudden load changes.',
-        path: '/mechanical/coupling',
-        icon: Settings,
-        anchor: { x: 650, y: 350 },
-        labelPos: { top: '35%', left: '75%' }
-    },
-    {
-        id: 'temp-spiral-case',
-        name: 'SPIRAL CASE',
-        func: 'Stationary spiral housing ("snail shell") that distributes high-pressure water uniformly around the turbine runner circumference.',
-        precision: '0.1 mm surface smoothness',
-        heritage: 'The spiral geometry is optimized to maintain constant velocity, reducing cavitation risk.',
-        path: '/francis/modules/spiral-case',
-        icon: Droplets,
-        anchor: { x: 700, y: 500 },
-        labelPos: { top: '58%', left: '70%' }
-    },
-    {
-        id: 'temp-runner',
-        name: 'FRANCIS RUNNER',
-        func: 'Central rotating element that converts hydraulic energy into mechanical torque through precisely profiled blade channels.',
-        precision: 'Wearing ring gap: 0.3-0.5 mm',
-        heritage: 'The runner is the heart of the turbine. A 1mm increase in wearing ring gap can drop power by >3%.',
-        path: '/francis/modules/runner',
-        icon: Target,
-        anchor: { x: 600, y: 450 },
-        labelPos: { top: '50%', left: '55%' }
-    },
-    {
-        id: 'temp-miv',
-        name: 'MAIN INLET VALVE (MIV)',
-        func: 'Provides emergency isolation and primary control of water entry to the turbine.',
-        precision: 'Zero-leakage seat tolerance',
-        heritage: 'Spherical MIVs provide the lowest head loss when fully open, maximizing efficiency.',
-        path: '/francis/modules/miv',
-        icon: Settings,
-        anchor: { x: 500, y: 400 },
-        labelPos: { top: '35%', left: '45%' }
-    },
-    {
-        id: 'temp-penstock',
-        name: 'PENSTOCK CONNECTION',
-        func: 'High-pressure conduit delivering water from the reservoir to the valve assembly.',
-        precision: '0.02 mm weld integrity check',
-        heritage: 'Acoustic monitoring of penstocks can detect micro-cracks before they reach critical failure.',
-        path: '/maintenance/bolt-torque',
-        icon: ShieldCheck,
-        anchor: { x: 250, y: 400 },
-        labelPos: { top: '45%', left: '15%' }
-    },
-    {
-        id: 'temp-lubrication',
-        name: 'LUBRICATION SYSTEM',
-        func: 'Manages heat and friction for the main turbine bearings and guide vanes.',
-        precision: '5 micron filtration target',
-        heritage: 'Clean oil is the lifeblood of a turbine; 80% of bearing failures are due to particle contamination.',
-        path: '/francis/modules/lubrication',
-        icon: ShieldCheck,
-        anchor: { x: 750, y: 270 },
-        labelPos: { top: '25%', left: '60%' }
-    },
-    {
-        id: 'temp-cabinet',
-        name: 'CONTROL CABINET',
-        func: 'Central processor for gubernor logic and safety monitoring systems.',
-        precision: '1ms response time',
-        heritage: 'Modern PLC logic handles over 200 field sensors in real-time for millisecond trip response.',
-        path: '/operations/control-center',
-        icon: Compass,
-        anchor: { x: 150, y: 350 },
-        labelPos: { top: '30%', left: '5%' }
-    }
-];
 
 const TurbineVisualNavigator: React.FC = () => {
     const { t } = useTranslation();
@@ -169,51 +68,142 @@ const TurbineVisualNavigator: React.FC = () => {
                 const doc = parser.parseFromString(data, 'image/svg+xml');
                 const svgElement = doc.querySelector('svg');
                 if (svgElement) {
-                    // NC-4.2 TOPOLOGY REPAIR: Inject Runner Hitbox
-                    // Create a transparent interaction zone in the center
-                    const runnerGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
-                    runnerGroup.id = "temp-runner";
-                    runnerGroup.style.cursor = "pointer";
 
-                    const circle = doc.createElementNS("http://www.w3.org/2000/svg", "circle");
-                    circle.setAttribute("cx", "600"); // Calculated Center of viewBox 0 0 1184 864
-                    circle.setAttribute("cy", "432");
-                    circle.setAttribute("r", "90");   // Optimal hit-area radius
-                    circle.setAttribute("fill", "transparent");
-                    // Ensure it has a title for checking
-                    const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
-                    title.textContent = "Francis Runner";
-                    runnerGroup.appendChild(title);
-                    runnerGroup.appendChild(circle);
+                    // Cleanup existing injections
+                    const idsToRemove = [
+                        'temp-generator', 'temp-shaft-coupling', 'temp-spiral-case', 'temp-runner',
+                        'temp-lubrication', 'temp-control', 'temp-miv', 'temp-penstock',
+                        'temp-hpu', 'temp-gen-cooling', 'temp-pressure-eq', 'nav-zone-left', 'nav-chevron'
+                    ];
+                    idsToRemove.forEach(id => {
+                        const existing = doc.getElementById(id);
+                        if (existing) existing.remove();
+                    });
 
-                    // Append as last child to ensure z-index priority over spiral case
-                    svgElement.appendChild(runnerGroup);
+                    // Utility: Create Hitbox with CSS Class
+                    const createHitbox = (id: string, type: 'rect' | 'circle', coords: any, titleText: string) => {
+                        const group = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+                        group.id = id;
+                        group.setAttribute("class", "interactive-zone"); // CSS Hook
+                        group.style.cursor = "pointer";
 
-                    // Inject Shaft/Coupling Hitbox
-                    const shaftGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
-                    shaftGroup.id = "temp-shaft-coupling";
-                    shaftGroup.style.cursor = "pointer";
-                    const shaftRect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
-                    shaftRect.setAttribute("x", "580");
-                    shaftRect.setAttribute("y", "280");
-                    shaftRect.setAttribute("width", "140");
-                    shaftRect.setAttribute("height", "140");
-                    shaftRect.setAttribute("fill", "transparent");
-                    const shaftTitle = doc.createElementNS("http://www.w3.org/2000/svg", "title");
-                    shaftTitle.textContent = "Shaft & Flywheel";
-                    shaftGroup.appendChild(shaftTitle);
-                    shaftGroup.appendChild(shaftRect);
-                    svgElement.appendChild(shaftGroup);
+                        const shape = doc.createElementNS("http://www.w3.org/2000/svg", type);
+                        if (type === 'circle') {
+                            shape.setAttribute("cx", coords.cx);
+                            shape.setAttribute("cy", coords.cy);
+                            shape.setAttribute("r", coords.r);
+                        } else {
+                            shape.setAttribute("x", coords.x);
+                            shape.setAttribute("y", coords.y);
+                            shape.setAttribute("width", coords.w);
+                            shape.setAttribute("height", coords.h);
+                        }
+
+                        const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
+                        title.textContent = titleText;
+                        group.appendChild(title);
+                        group.appendChild(shape);
+                        return group;
+                    };
+
+                    // Inject Aesthetic CSS
+                    const style = doc.createElementNS("http://www.w3.org/2000/svg", "style");
+                    style.textContent = `
+                        .interactive-zone rect, .interactive-zone circle {
+                            fill: #22D3EE;
+                            fill-opacity: 0;
+                            stroke: none;
+                            transition: all 0.3s ease;
+                        }
+                        .interactive-zone:hover rect, .interactive-zone:hover circle {
+                            fill-opacity: 0.15;
+                            stroke: #22D3EE;
+                            stroke-width: 2px;
+                            filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+                        }
+                        #nav-zone-left rect {
+                            transition: all 0.3s ease;
+                        }
+                        #nav-zone-left:hover rect {
+                            fill-opacity: 0.2 !important;
+                        }
+                        #nav-zone-left:hover #nav-chevron {
+                            stroke: #ffffff;
+                            filter: drop-shadow(0 0 5px #22D3EE);
+                        }
+                    `;
+                    svgElement.insertBefore(style, svgElement.firstChild);
+
+                    // --- HARD-CODED INJECTION (Emergency Recovery) ---
+
+                    // 1. Generator Unit
+                    svgElement.appendChild(createHitbox("temp-generator", "rect", { x: "120", y: "180", w: "260", h: "380" }, "Generator Unit"));
+
+                    // 2. Shaft & Flywheel
+                    svgElement.appendChild(createHitbox("temp-shaft-coupling", "rect", { x: "420", y: "380", w: "150", h: "100" }, "Shaft & Flywheel"));
+
+                    // 3. Spiral Case
+                    svgElement.appendChild(createHitbox("temp-spiral-case", "circle", { cx: "720", cy: "460", r: "200" }, "Spiral Case"));
+
+                    // 4. Francis Runner (Last in Z-Order / Top)
+                    svgElement.appendChild(createHitbox("temp-runner", "circle", { cx: "720", cy: "460", r: "80" }, "Francis Runner"));
+
+                    // 5. Main Inlet Valve
+                    svgElement.appendChild(createHitbox("temp-miv", "rect", { x: "900", y: "320", w: "140", h: "200" }, "Main Inlet Valve"));
+
+                    // 6. Penstock
+                    svgElement.appendChild(createHitbox("temp-penstock", "rect", { x: "1050", y: "380", w: "150", h: "120" }, "Penstock"));
+
+                    // 7. Auxiliaries (Left as is, or adjust if needed - keeping basics)
+                    svgElement.appendChild(createHitbox("temp-control", "rect", { x: "100", y: "80", w: "120", h: "120" }, "Control Cabinet"));
+                    svgElement.appendChild(createHitbox("temp-hpu", "rect", { x: "250", y: "80", w: "100", h: "80" }, "HPU"));
+                    svgElement.appendChild(createHitbox("temp-gen-cooling", "rect", { x: "120", y: "250", w: "150", h: "300" }, "Generator Cooling"));
+
+                    // 8. Lubrication (Top of Spiral) - Approximate, adjusted to not span weirdly
+                    svgElement.appendChild(createHitbox("temp-lubrication", "circle", { cx: "720", cy: "350", r: "50" }, "Bearings"));
+
+                    // 9. Pressure Eq - Bypass
+                    svgElement.appendChild(createHitbox("temp-pressure-eq", "rect", { x: "920", y: "280", w: "120", h: "40" }, "Bypass"));
+
+
+                    // --- LEFT NAVIGATION ZONE (Mechanism Detail) ---
+                    const navGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+                    navGroup.id = "nav-zone-left";
+                    navGroup.style.cursor = "w-resize";
+
+                    const navRect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    navRect.setAttribute("x", "0");
+                    navRect.setAttribute("y", "0");
+                    navRect.setAttribute("width", "150"); // x < 150
+                    navRect.setAttribute("height", "864");
+                    navRect.setAttribute("fill", "#22D3EE");
+                    navRect.setAttribute("fill-opacity", "0.1");
+                    navRect.setAttribute("stroke", "cyan"); // Differentiate nav zone
+                    navRect.setAttribute("stroke-width", "2");
+
+                    // Visual Cue: Chevron
+                    const chevron = doc.createElementNS("http://www.w3.org/2000/svg", "path");
+                    chevron.setAttribute("d", "M 60 380 L 40 432 L 60 484");
+                    chevron.setAttribute("stroke", "#22D3EE");
+                    chevron.setAttribute("stroke-width", "4");
+                    chevron.setAttribute("fill", "none");
+                    chevron.setAttribute("opacity", "0.8");
+                    chevron.setAttribute("id", "nav-chevron");
+
+                    navGroup.appendChild(navRect);
+                    navGroup.appendChild(chevron);
+                    svgElement.appendChild(navGroup);
 
                     setSvgContent(svgElement.innerHTML);
                 }
+
             });
     }, []);
 
     const focusedComp = COMPONENTS.find(c => c.id === focusedId);
 
     return (
-        <div ref={containerRef} className={`relative w-full ${isFullscreen ? 'h-screen rounded-none' : 'aspect-[1184/864] rounded-xl'} bg-[#0A0F14] overflow-hidden border border-cyan-500/20 shadow-2xl transition-all duration-700`}>
+        <div ref={containerRef} className={`relative w-full ${isFullscreen ? 'h-screen rounded-none' : 'aspect-[1184/864] rounded-xl'} bg-[#0A0F14] border border-cyan-500/20 shadow-2xl transition-all duration-700`}>
             <AnimatePresence mode="wait">
                 {viewMode === 'overview' ? (
                     <motion.div
@@ -232,30 +222,27 @@ const TurbineVisualNavigator: React.FC = () => {
                                 className="w-full h-full"
                                 onMouseLeave={() => setHoveredId(null)}
                             >
-                                <defs>
-                                    <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur stdDeviation="4" result="blur" />
-                                        <feFlood floodColor="#22D3EE" floodOpacity="0.8" result="color" />
-                                        <feComposite in="color" in2="blur" operator="in" result="glow" />
-                                        <feMerge>
-                                            <feMergeNode in="glow" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-
                                 <g
                                     dangerouslySetInnerHTML={{ __html: svgContent }}
                                     onClick={(e) => {
                                         const target = e.target as SVGElement;
                                         const group = target.closest('g');
-                                        if (group && group.id && group.id.startsWith('temp-')) {
+                                        const clickedId = group?.id || target.id;
+
+                                        if (clickedId === 'nav-zone-left' || clickedId === 'nav-chevron') {
+                                            navigate('/francis/mechanism-detail');
+                                            return;
+                                        }
+
+                                        if (group && group.id && (group.id.startsWith('temp-') || group.id.startsWith('nav-'))) {
                                             if (group.id === 'temp-generator') {
                                                 setViewMode('generator-detail');
                                             } else if (group.id === 'temp-runner') {
                                                 setViewMode('runner-detail');
                                             } else if (group.id === 'temp-shaft-coupling') {
                                                 setViewMode('flywheel-detail');
+                                            } else if (group.id === 'nav-seal' || group.id === 'nav-distributor') {
+                                                navigate('/francis/mechanism-detail');
                                             } else {
                                                 setFocusedId(group.id);
                                             }
@@ -271,14 +258,6 @@ const TurbineVisualNavigator: React.FC = () => {
                                         }
                                     }}
                                 />
-
-                                {hoveredId && (
-                                    <use
-                                        href={`#${hoveredId}`}
-                                        filter="url(#cyanGlow)"
-                                        style={{ pointerEvents: 'none', transition: 'all 0.3s' }}
-                                    />
-                                )}
 
                                 <g className="pointer-events-none">
                                     {COMPONENTS.map(comp => {

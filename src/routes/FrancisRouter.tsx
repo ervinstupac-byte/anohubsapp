@@ -43,6 +43,8 @@ const SOPViewer = React.lazy(() => import('../components/francis/SOPViewer').the
 const TruthHeatmapDemo = React.lazy(() => import('../components/TruthHeatmapDemo').then(module => ({ default: module.TruthHeatmapDemo })));
 const CommandCenter = React.lazy(() => import('../components/CommandCenter').then(module => ({ default: module.CommandCenter })));
 const ForensicLab = React.lazy(() => import('../components/ForensicLab').then(module => ({ default: module.ForensicLab })));
+const MechanismDetail = React.lazy(() => import('../components/dashboard/visual/MechanismDetailView')); // Default export
+
 
 import { LoadingShimmer } from '../components/ui/LoadingShimmer.tsx';
 import { ROUTES } from './paths.ts';
@@ -76,6 +78,7 @@ const FrancisRouter: React.FC = () => {
                 <Route path={ROUTES.FRANCIS.MANIFESTO} element={<Manifesto />} />
 
                 {/* Mechanical Systems */}
+                <Route path="mechanism-detail" element={<MechanismDetail />} />
                 <Route path={ROUTES.FRANCIS.SOP.MIV_DISTRIBUTOR} element={<MIVDetail />} />
                 <Route path={ROUTES.FRANCIS.SOP.BEARINGS} element={<BearingsDetail />} />
                 <Route path={ROUTES.FRANCIS.SOP.ALIGNMENT} element={<ShaftAlignment />} />

@@ -14,6 +14,7 @@ export default {
         'h-cyan': '#06b6d4',
         'h-gold': '#FFB800',
         'h-dark': '#020617',
+        'h-teal': '#2dd4bf',
         'neon-cyan': '#00f3ff',
         'warning-orange': '#ffaa00',
         'alarm-red': '#ff0033',
