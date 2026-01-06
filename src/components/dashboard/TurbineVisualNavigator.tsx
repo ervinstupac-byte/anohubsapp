@@ -60,6 +60,7 @@ const TurbineVisualNavigator: React.FC = () => {
     }, []);
 
     // Load and Patch the SVG
+    // NC-4.2 PRECISION TOPOLOGY - DEBUG MODE ENABLED
     useEffect(() => {
         fetch('/Turbine_Grouped.svg')
             .then(res => res.text())
@@ -68,6 +69,10 @@ const TurbineVisualNavigator: React.FC = () => {
                 const doc = parser.parseFromString(data, 'image/svg+xml');
                 const svgElement = doc.querySelector('svg');
                 if (svgElement) {
+                    // Remove any clip-path or mask that could cause "black hole" effect
+                    svgElement.removeAttribute('clip-path');
+                    svgElement.removeAttribute('mask');
+                    svgElement.style.overflow = 'visible';
 
                     // Cleanup existing injections
                     const idsToRemove = [
@@ -80,11 +85,14 @@ const TurbineVisualNavigator: React.FC = () => {
                         if (existing) existing.remove();
                     });
 
-                    // Utility: Create Hitbox with CSS Class
+                    // DEBUG MODE FLAG - Set to true for visual verification
+                    const DEBUG_MODE = true;
+
+                    // Utility: Create Hitbox with NC-4.2 Precision Coordinates
                     const createHitbox = (id: string, type: 'rect' | 'circle', coords: any, titleText: string) => {
                         const group = doc.createElementNS("http://www.w3.org/2000/svg", "g");
                         group.id = id;
-                        group.setAttribute("class", "interactive-zone"); // CSS Hook
+                        group.setAttribute("class", "interactive-zone");
                         group.style.cursor = "pointer";
 
                         const shape = doc.createElementNS("http://www.w3.org/2000/svg", type);
@@ -99,6 +107,14 @@ const TurbineVisualNavigator: React.FC = () => {
                             shape.setAttribute("height", coords.h);
                         }
 
+                        // DEBUG MODE: Red stroke for visual verification
+                        if (DEBUG_MODE) {
+                            shape.setAttribute("stroke", "red");
+                            shape.setAttribute("stroke-width", "2");
+                            shape.setAttribute("fill", "#22D3EE");
+                            shape.setAttribute("fill-opacity", "0.2");
+                        }
+
                         const title = doc.createElementNS("http://www.w3.org/2000/svg", "title");
                         title.textContent = titleText;
                         group.appendChild(title);
@@ -106,67 +122,61 @@ const TurbineVisualNavigator: React.FC = () => {
                         return group;
                     };
 
-                    // Inject Aesthetic CSS
+                    // Inject Electric Cyan (#22D3EE) CSS with semi-transparent black label backgrounds
                     const style = doc.createElementNS("http://www.w3.org/2000/svg", "style");
                     style.textContent = `
                         .interactive-zone rect, .interactive-zone circle {
                             fill: #22D3EE;
-                            fill-opacity: 0;
-                            stroke: none;
+                            fill-opacity: ${DEBUG_MODE ? '0.2' : '0'};
+                            stroke: ${DEBUG_MODE ? 'red' : 'none'};
+                            stroke-width: ${DEBUG_MODE ? '2px' : '0'};
                             transition: all 0.3s ease;
                         }
                         .interactive-zone:hover rect, .interactive-zone:hover circle {
-                            fill-opacity: 0.15;
+                            fill-opacity: 0.25;
                             stroke: #22D3EE;
-                            stroke-width: 2px;
-                            filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+                            stroke-width: 3px;
+                            filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.6));
                         }
                         #nav-zone-left rect {
                             transition: all 0.3s ease;
                         }
                         #nav-zone-left:hover rect {
-                            fill-opacity: 0.2 !important;
+                            fill-opacity: 0.3 !important;
+                            stroke: #22D3EE !important;
                         }
                         #nav-zone-left:hover #nav-chevron {
                             stroke: #ffffff;
-                            filter: drop-shadow(0 0 5px #22D3EE);
+                            filter: drop-shadow(0 0 8px #22D3EE);
                         }
                     `;
                     svgElement.insertBefore(style, svgElement.firstChild);
 
-                    // --- HARD-CODED INJECTION (Emergency Recovery) ---
+                    // =====================================================
+                    // NC-4.2 PRECISION TOPOLOGY CALIBRATION
+                    // Coordinates are EXACT PIXELS for 1184x864 canvas
+                    // =====================================================
 
-                    // 1. Generator Unit
-                    svgElement.appendChild(createHitbox("temp-generator", "rect", { x: "120", y: "180", w: "260", h: "380" }, "Generator Unit"));
+                    // 1. Generator Unit - Anchor: (220, 350)
+                    svgElement.appendChild(createHitbox("temp-generator", "rect", { x: "100", y: "200", w: "240", h: "360" }, "Generator Unit"));
 
-                    // 2. Shaft & Flywheel
+                    // 2. Shaft & Flywheel - Anchor: (480, 420)
                     svgElement.appendChild(createHitbox("temp-shaft-coupling", "rect", { x: "420", y: "380", w: "150", h: "100" }, "Shaft & Flywheel"));
 
-                    // 3. Spiral Case
+                    // 3. Spiral Case (The Shell) - Anchor: (720, 460), MUST be BEFORE Runner for z-order
                     svgElement.appendChild(createHitbox("temp-spiral-case", "circle", { cx: "720", cy: "460", r: "200" }, "Spiral Case"));
 
-                    // 4. Francis Runner (Last in Z-Order / Top)
+                    // 5. Main Inlet Valve (MIV) - Anchor: (960, 400)
+                    svgElement.appendChild(createHitbox("temp-miv", "rect", { x: "900", y: "320", w: "140", h: "220" }, "Main Inlet Valve"));
+
+                    // 6. Penstock Connection - Anchor: (1120, 430)
+                    svgElement.appendChild(createHitbox("temp-penstock", "rect", { x: "1050", y: "380", w: "134", h: "150" }, "Penstock"));
+
+                    // 4. Francis Runner (The Heart) - Anchor: (720, 460), LAST in DOM for z-order (clickable on top)
                     svgElement.appendChild(createHitbox("temp-runner", "circle", { cx: "720", cy: "460", r: "80" }, "Francis Runner"));
 
-                    // 5. Main Inlet Valve
-                    svgElement.appendChild(createHitbox("temp-miv", "rect", { x: "900", y: "320", w: "140", h: "200" }, "Main Inlet Valve"));
-
-                    // 6. Penstock
-                    svgElement.appendChild(createHitbox("temp-penstock", "rect", { x: "1050", y: "380", w: "150", h: "120" }, "Penstock"));
-
-                    // 7. Auxiliaries (Left as is, or adjust if needed - keeping basics)
-                    svgElement.appendChild(createHitbox("temp-control", "rect", { x: "100", y: "80", w: "120", h: "120" }, "Control Cabinet"));
-                    svgElement.appendChild(createHitbox("temp-hpu", "rect", { x: "250", y: "80", w: "100", h: "80" }, "HPU"));
-                    svgElement.appendChild(createHitbox("temp-gen-cooling", "rect", { x: "120", y: "250", w: "150", h: "300" }, "Generator Cooling"));
-
-                    // 8. Lubrication (Top of Spiral) - Approximate, adjusted to not span weirdly
-                    svgElement.appendChild(createHitbox("temp-lubrication", "circle", { cx: "720", cy: "350", r: "50" }, "Bearings"));
-
-                    // 9. Pressure Eq - Bypass
-                    svgElement.appendChild(createHitbox("temp-pressure-eq", "rect", { x: "920", y: "280", w: "120", h: "40" }, "Bypass"));
-
-
                     // --- LEFT NAVIGATION ZONE (Mechanism Detail) ---
+                    // Width extended to 180px as per spec
                     const navGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
                     navGroup.id = "nav-zone-left";
                     navGroup.style.cursor = "w-resize";
@@ -174,20 +184,20 @@ const TurbineVisualNavigator: React.FC = () => {
                     const navRect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
                     navRect.setAttribute("x", "0");
                     navRect.setAttribute("y", "0");
-                    navRect.setAttribute("width", "150"); // x < 150
+                    navRect.setAttribute("width", "180");
                     navRect.setAttribute("height", "864");
                     navRect.setAttribute("fill", "#22D3EE");
-                    navRect.setAttribute("fill-opacity", "0.1");
-                    navRect.setAttribute("stroke", "cyan"); // Differentiate nav zone
-                    navRect.setAttribute("stroke-width", "2");
+                    navRect.setAttribute("fill-opacity", DEBUG_MODE ? "0.15" : "0.05");
+                    navRect.setAttribute("stroke", DEBUG_MODE ? "red" : "#22D3EE");
+                    navRect.setAttribute("stroke-width", DEBUG_MODE ? "3" : "2");
 
-                    // Visual Cue: Chevron
+                    // Visual Cue: Chevron pointing left (Mechanism Detail)
                     const chevron = doc.createElementNS("http://www.w3.org/2000/svg", "path");
-                    chevron.setAttribute("d", "M 60 380 L 40 432 L 60 484");
+                    chevron.setAttribute("d", "M 70 380 L 40 432 L 70 484");
                     chevron.setAttribute("stroke", "#22D3EE");
                     chevron.setAttribute("stroke-width", "4");
                     chevron.setAttribute("fill", "none");
-                    chevron.setAttribute("opacity", "0.8");
+                    chevron.setAttribute("opacity", "0.9");
                     chevron.setAttribute("id", "nav-chevron");
 
                     navGroup.appendChild(navRect);
@@ -214,12 +224,14 @@ const TurbineVisualNavigator: React.FC = () => {
                         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                         className="absolute inset-0"
                     >
-                        {/* SVG Container */}
-                        <div className="absolute inset-0 z-0">
+                        {/* SVG Container - NC-4.2 ABSOLUTE PIXEL GRID */}
+                        <div className="absolute inset-0 z-0" style={{ overflow: 'visible' }}>
                             <svg
                                 ref={svgRef}
                                 viewBox="0 0 1184 864"
+                                preserveAspectRatio="xMidYMid meet"
                                 className="w-full h-full"
+                                style={{ overflow: 'visible' }}
                                 onMouseLeave={() => setHoveredId(null)}
                             >
                                 <g
@@ -229,12 +241,16 @@ const TurbineVisualNavigator: React.FC = () => {
                                         const group = target.closest('g');
                                         const clickedId = group?.id || target.id;
 
+                                        // NC-4.2 DEBUG: Log clicked element to console
+                                        console.log('[NC-4.2 DEBUG] Clicked Element ID:', clickedId, 'Target:', target.tagName);
+
                                         if (clickedId === 'nav-zone-left' || clickedId === 'nav-chevron') {
                                             navigate('/francis/mechanism-detail');
                                             return;
                                         }
 
                                         if (group && group.id && (group.id.startsWith('temp-') || group.id.startsWith('nav-'))) {
+                                            console.log('[NC-4.2 DEBUG] Matched interactive zone:', group.id);
                                             if (group.id === 'temp-generator') {
                                                 setViewMode('generator-detail');
                                             } else if (group.id === 'temp-runner') {
@@ -259,10 +275,12 @@ const TurbineVisualNavigator: React.FC = () => {
                                     }}
                                 />
 
+                                {/* Leader Lines - Using ABSOLUTE PIXEL coordinates */}
                                 <g className="pointer-events-none">
                                     {COMPONENTS.map(comp => {
-                                        const labelX = (parseFloat(comp.labelPos.left) / 100) * 1184;
-                                        const labelY = (parseFloat(comp.labelPos.top) / 100) * 864;
+                                        // NC-4.2: Direct pixel values, no percentage conversion
+                                        const labelX = comp.labelPos.x;
+                                        const labelY = comp.labelPos.y;
                                         const isHovered = hoveredId === comp.id;
 
                                         return (
@@ -272,9 +290,9 @@ const TurbineVisualNavigator: React.FC = () => {
                                                 y1={labelY}
                                                 x2={comp.anchor.x}
                                                 y2={comp.anchor.y}
-                                                stroke={isHovered ? "#22D3EE" : "rgba(34, 211, 238, 0.2)"}
-                                                strokeWidth={isHovered ? 2 : 1}
-                                                strokeDasharray={isHovered ? "none" : "4 2"}
+                                                stroke={isHovered ? "#22D3EE" : "rgba(34, 211, 238, 0.3)"}
+                                                strokeWidth={isHovered ? 2.5 : 1.5}
+                                                strokeDasharray={isHovered ? "none" : "6 3"}
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ duration: 0.5 }}
@@ -285,28 +303,39 @@ const TurbineVisualNavigator: React.FC = () => {
                             </svg>
                         </div>
 
-                        {/* Signpost Labels */}
-                        <div className="absolute inset-0 pointer-events-none z-10">
+                        {/* Signpost Labels - NC-4.2 ABSOLUTE PIXEL POSITIONING */}
+                        {/* Container matches SVG viewBox aspect ratio for pixel-perfect alignment */}
+                        <div
+                            className="absolute inset-0 pointer-events-none z-10"
+                            style={{ position: 'relative', width: '100%', height: '100%' }}
+                        >
                             {COMPONENTS.map(comp => {
                                 const isHovered = hoveredId === comp.id;
+                                // Convert absolute pixels to percentage for responsive scaling
+                                const leftPct = (comp.labelPos.x / 1184) * 100;
+                                const topPct = (comp.labelPos.y / 864) * 100;
+
                                 return (
                                     <motion.div
                                         key={`label-${comp.id}`}
                                         style={{
                                             position: 'absolute',
-                                            top: comp.labelPos.top,
-                                            left: comp.labelPos.left,
+                                            top: `${topPct}%`,
+                                            left: `${leftPct}%`,
                                             transform: 'translate(-50%, -50%)',
                                         }}
                                         className="pointer-events-auto cursor-pointer"
                                         onMouseEnter={() => setHoveredId(comp.id)}
                                         onClick={() => {
+                                            console.log('[NC-4.2 DEBUG] Label clicked:', comp.id);
                                             if (comp.id === 'temp-generator') {
                                                 setViewMode('generator-detail');
                                             } else if (comp.id === 'temp-runner') {
                                                 setViewMode('runner-detail');
                                             } else if (comp.id === 'temp-shaft-coupling') {
                                                 setViewMode('flywheel-detail');
+                                            } else if (comp.id.startsWith('nav-')) {
+                                                navigate('/francis/mechanism-detail');
                                             } else {
                                                 setFocusedId(comp.id);
                                             }
@@ -316,7 +345,7 @@ const TurbineVisualNavigator: React.FC = () => {
                     flex items-center gap-2 px-3 py-1.5 rounded-full border backdrop-blur-md transition-all duration-300
                     ${isHovered
                                                 ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.4)] scale-110'
-                                                : 'bg-black/40 border-cyan-500/20 shadow-lg scale-100'
+                                                : 'bg-black/70 border-cyan-500/30 shadow-lg scale-100'
                                             }
                   `}>
                                             <comp.icon className={`w-3.5 h-3.5 ${isHovered ? 'text-cyan-400' : 'text-slate-400'}`} />
