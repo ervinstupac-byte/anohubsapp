@@ -496,6 +496,86 @@
                 "func": "Provides structural closure and sealing for the upper turbine chamber, containing high-pressure water.",
                 "precision": "Bolt torque: M24 Class 8.8 = 980 Nm",
                 "heritage": "The bolted front assembly must maintain absolute sealing integrity. Bolt sequence follows star pattern for even pressure distribution."
+            },
+            "guideVaneAssembly": {
+                "name": "Guide Vane Assembly (Wicket Gates)",
+                "param": "Flow Regulation",
+                "func": "Controls the volume and direction of water entering the runner. Click to Deep-Dive.",
+                "precision": "Sync deviation < 0.1°",
+                "heritage": "The 24 wicket gates must move in perfect unison. A single lagging gate creates asymmetric thrust that wrecks the steady bearing."
+            }
+        },
+        "guidevane": {
+            "detail": {
+                "title": "Guide Vane System",
+                "wicketGates": {
+                    "name": "Wicket Gates (Lopatice)",
+                    "param": "Flow Synchronization",
+                    "func": "Regulates water flow into the runner, controlling turbine output and maintaining hydraulic stability.",
+                    "precision": "Angular Deviation < 0.1°",
+                    "heritage": "Precise angular synchronization determines the purity of flow entry. Any deviation > 0.1° creates turbulence that hammers the runner blades."
+                },
+                "shearPins": {
+                    "name": "Safety Shear Pins",
+                    "param": "Mechanical Fuse",
+                    "func": "Protect the regulation mechanism by breaking under excessive load (e.g., debris jam), decoupling the specific gate.",
+                    "precision": "Calibrated Breaking Point",
+                    "heritage": "Never replace with standard bolts. Use only calibrated shear pins to protect the gate linkage in case of foreign object jam."
+                },
+                "vaneClearance": {
+                    "name": "Vane End Clearance",
+                    "param": "Efficiency Loss",
+                    "func": "The gap between vane ends and the head cover/bottom ring. Must be minimal to prevent leakage but sufficient for operation.",
+                    "precision": "Clearance < 0.2 mm",
+                    "heritage": "Excessive top/bottom clearance acts as a high-velocity bypass leak, eroding surfaces and reducing efficiency measurable by 0.5-1%."
+                },
+                "operatingRing": {
+                    "name": "Regulation Ring & Linkage",
+                    "param": "Linkage Kinematics",
+                    "func": "Transmits servomotor force to all wicket gates simultaneously ensuring synchronized opening/closing.",
+                    "precision": "Zero Backlash Target",
+                    "heritage": "Smooth operation relies on regular greasing of the linkage bushings. A sticky linkage causes governor hunting and power fluctuations."
+                }
+            }
+        },
+        "mechanical": {
+            "detail": {
+                "title": "Mechanical Backbone",
+                "genBearing": {
+                    "name": "Generator Drive-End (DE) Bearing",
+                    "param": "Load Support",
+                    "func": "Supports the radial and axial loads of the generator rotor and flywheel mass.",
+                    "precision": "Temp < 65°C",
+                    "heritage": "Supporting the significant weight overhang of the flywheel. Oil film thickness must be monitored continuously."
+                },
+                "flywheel": {
+                    "name": "Flywheel (Zamajac)",
+                    "param": "Rotational Inertia",
+                    "func": "Stores kinetic energy to stabilize turbine speed during load rejections and grid fluctuations.",
+                    "precision": "Balance G2.5 ISO 1940",
+                    "heritage": "Never operate without the flywheel guard installed. The stored kinetic energy is immense and catastrophic if released."
+                },
+                "coupling": {
+                    "name": "Shaft Coupling Interface (Ø200)",
+                    "param": "Torque Transmission",
+                    "func": "Rigidly connects the turbine shaft to the generator shaft, transmitting torque.",
+                    "precision": "Run-out < 0.03 mm",
+                    "heritage": "Shaft run-out at this point should typically be < 0.03 mm TIR (Total Indicator Reading). Loose bolts here inevitably shear."
+                },
+                "turbBearing": {
+                    "name": "Turbine Guide Bearing",
+                    "param": "Hydraulic Stability",
+                    "func": "Resists radial hydraulic forces acting on the runner, maintaining shaft concentricity.",
+                    "precision": "Clearance 0.15 - 0.25 mm",
+                    "heritage": "The bearing closest to the hydraulic chaos. If this bearing vibrates, check the Runner Wearing Rings first."
+                },
+                "shaftSeal": {
+                    "name": "Turbine Shaft Seal",
+                    "param": "Water Ingress Prevention",
+                    "func": "Prevents water from traveling up the shaft from the turbine casing into the bearing assembly.",
+                    "precision": "Leakage < 5 L/min",
+                    "heritage": "Carbon rings must be 'run-in' properly. A leaking seal floods the turbine, causing corrosion of the bearing housing."
+                }
             }
         }
     }

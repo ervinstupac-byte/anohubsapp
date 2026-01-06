@@ -418,11 +418,91 @@
                 "heritage": "Neispravna aksijalna pozicija stvara parazitski potisak na ležajeve generatora, ubrzavajući habanje i smanjujući efikasnost."
             },
             "headCover": {
-                "name": "Prednji Poklopac & Zaptivač",
-                "param": "Cilj Nulta Curenja",
-                "func": "Obezbeđuje strukturalno zatvaranje i zaptivanje gornje komore turbine, zadržavajući vodu visokog pritiska.",
-                "precision": "Moment vijka: M24 Klasa 8.8 = 980 Nm",
-                "heritage": "Vijčani prednji sklop mora održavati apsolutni integritet zaptivanja. Sekvenca vijaka slijedi zvjezdasti uzorak za ravnomjernu distribuciju pritiska."
+                "name": "Prednji Poklopac i Zaptivanje",
+                "param": "Cilj Nultog Curenja",
+                "func": "Obezbjeđuje strukturno zatvaranje i zaptivanje gornje komore turbine, zadržavajući visoki pritisak.",
+                "precision": "Moment pritezanja: M24 Klasa 8.8 = 980 Nm",
+                "heritage": "Vijčani spoj mora održavati apsolutni integritet zaptivanja. Redoslijed pritezanja prati zvijezda šemu za ravnomjernu raspodjelu pritiska."
+            },
+            "guideVaneAssembly": {
+                "name": "Sklop Sprovodnih Lopatica (Wicket Gates)",
+                "param": "Regulacija Protoka",
+                "func": "Kontroliše zapreminu i smjer vode koja ulazi u radno kolo. Kliknite za Detalje.",
+                "precision": "Odstupanje sinhronizacije < 0.1°",
+                "heritage": "24 sprovodne lopatice se moraju kretati u savršenom skladu. Jedna lopatica koja kasni stvara asimetrični potisak koji uništava vodeći ležaj."
+            }
+        }
+    },
+    "guidevane": {
+        "detail": {
+            "title": "Sistem Sprovodnih Lopatica",
+            "wicketGates": {
+                "name": "Sprovodne Lopatic",
+                "param": "Sinhronizacija Protoka",
+                "func": "Reguliše protok vode u radno kolo, kontrolišući snagu turbine i održavajući hidrauličku stabilnost.",
+                "precision": "Ugaono Odstupanje < 0.1°",
+                "heritage": "Precizna ugaona sinhronizacija određuje čistoću ulaska toka. Svako odstupanje > 0.1° stvara turbulenciju koja udara u lopatice radnog kola."
+            },
+            "shearPins": {
+                "name": "Sigurnosni Klinovi",
+                "param": "Mehanički Osigurač",
+                "func": "Štite mehanizam regulacije pucanjem pod prekomjernim opterećenjem (npr. zaglavljivanje krhotinama), odvajajući specifičnu lopaticu.",
+                "precision": "Kalibrisana Tačka Pucanja",
+                "heritage": "Nikada ne mijenjajte standardnim vijcima. Koristite samo kalibrisane sigurnosne klinove za zaštitu polužja u slučaju zaglavljivanja stranog tijela."
+            },
+            "vaneClearance": {
+                "name": "Čeoni Zazor Lopatica",
+                "param": "Gubitak Efikasnosti",
+                "func": "Zazor između krajeva lopatica i poklopca/donjeg prstena. Mora biti minimalan da spriječi curenje, ali dovoljan za rad.",
+                "precision": "Zazor < 0.2 mm",
+                "heritage": "Prekomjeran gornji/donji zazor djeluje kao curenje velike brzine, erodirajući površine i smanjujući efikasnost mjerljivo za 0.5-1%."
+            },
+            "operatingRing": {
+                "name": "Regulacioni Prsten i Polužje",
+                "param": "Kinematika Polužja",
+                "func": "Prenosi silu servomotora na sve lopatice istovremeno osiguravajući sinhronizovano otvaranje/zatvaranje.",
+                "precision": "Cilj Nultog Zazora",
+                "heritage": "Glatk rad se oslanja na redovno podmazivanje čaura polužja. Zaglavljeno polužje uzrokuje njihanje regulatora i fluktuacije snage."
+            }
+        },
+        "mechanical": {
+            "detail": {
+                "title": "Mehanička Kičma",
+                "genBearing": {
+                    "name": "Generatorski Vodeći Ležaj (DE)",
+                    "param": "Nosivost Opterećenja",
+                    "func": "Podržava radijalna i aksijalna opterećenja rotora generatora i mase zamajca.",
+                    "precision": "Temp < 65°C",
+                    "heritage": "Podržava značajnu težinu zamajca. Debljina uljnog filma mora se kontinuirano pratiti."
+                },
+                "flywheel": {
+                    "name": "Zamajac",
+                    "param": "Rotaciona Inercija",
+                    "func": "Pohranjuje kinetičku energiju za stabilizaciju brzine turbine tokom odbacivanja tereta i fluktuacija mreže.",
+                    "precision": "Balans G2.5 ISO 1940",
+                    "heritage": "Nikada ne radite bez postavljenog štitnika zamajca. Pohranjena kinetička energija je ogromna i katastrofalna ako se oslobodi."
+                },
+                "coupling": {
+                    "name": "Spojnica Osovina (Ø200)",
+                    "param": "Prenos Momenta",
+                    "func": "Čvrsto povezuje osovinu turbine sa osovinom generatora, prenoseći obrtni moment.",
+                    "precision": "Bacanje < 0.03 mm",
+                    "heritage": "Bacanje osovine na ovoj tački bi trebalo biti < 0.03 mm TIR. Labavi vijci ovdje neminovno pucaju."
+                },
+                "turbBearing": {
+                    "name": "Turbinski Vodeći Ležaj",
+                    "param": "Hidraulička Stabilnost",
+                    "func": "Odupire se radijalnim hidrauličkim silama koje djeluju na radno kolo, održavajući koncentričnost osovine.",
+                    "precision": "Zazor 0.15 - 0.25 mm",
+                    "heritage": "Ležaj najbliži hidrauličkom haosu. Ako ovaj ležaj vibrira, prvo provjerite zaptivne prstenove radnog kola."
+                },
+                "shaftSeal": {
+                    "name": "Zaptivka Osovine Turbine",
+                    "param": "Prevencija Proboja Vode",
+                    "func": "Sprečava putovanje vode uz osovinu iz kućišta turbine u sklop ležaja.",
+                    "precision": "Curenje < 5 L/min",
+                    "heritage": "Karbonski prstenovi moraju biti pravilno 'uhodani'. Zaptivka koja curi poplavljuje turbinu, uzrokujući koroziju kućišta ležaja."
+                }
             }
         }
     }

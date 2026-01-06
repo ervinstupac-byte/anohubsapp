@@ -19,6 +19,8 @@ import { FRANCIS_PATHS } from '../../routes/paths';
 
 import GeneratorDetailView from './visual/GeneratorDetailView';
 import RunnerDetailView from './visual/RunnerDetailView';
+import GuideVaneDetailView from './visual/GuideVaneDetailView';
+import FlywheelDetailView from './visual/FlywheelDetailView';
 
 /**
  * NC-4.2 COMPLIANT VISUAL NAVIGATOR
@@ -50,6 +52,17 @@ const COMPONENTS: ComponentDetail[] = [
         icon: Zap,
         anchor: { x: 800, y: 150 },
         labelPos: { top: '10%', left: '80%' }
+    },
+    {
+        id: 'temp-shaft-coupling',
+        name: 'SHAFT & FLYWHEEL',
+        func: 'Mechanical transmission backbone connecting the turbine runner to the generator rotor.',
+        precision: 'Flywheel Balance G2.5',
+        heritage: 'The flywheel uses rotational inertia to stabilize grid frequency during sudden load changes.',
+        path: '/mechanical/coupling',
+        icon: Settings,
+        anchor: { x: 650, y: 350 },
+        labelPos: { top: '35%', left: '75%' }
     },
     {
         id: 'temp-spiral-case',
@@ -122,7 +135,7 @@ const COMPONENTS: ComponentDetail[] = [
 const TurbineVisualNavigator: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [viewMode, setViewMode] = useState<'overview' | 'generator-detail' | 'runner-detail'>('overview');
+    const [viewMode, setViewMode] = useState<'overview' | 'generator-detail' | 'runner-detail' | 'guide-vane-detail' | 'flywheel-detail'>('overview');
     const [hoveredId, setHoveredId] = useState<string | null>(null);
     const [focusedId, setFocusedId] = useState<string | null>(null);
     const [svgContent, setSvgContent] = useState<string>('');
@@ -176,6 +189,22 @@ const TurbineVisualNavigator: React.FC = () => {
                     // Append as last child to ensure z-index priority over spiral case
                     svgElement.appendChild(runnerGroup);
 
+                    // Inject Shaft/Coupling Hitbox
+                    const shaftGroup = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+                    shaftGroup.id = "temp-shaft-coupling";
+                    shaftGroup.style.cursor = "pointer";
+                    const shaftRect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    shaftRect.setAttribute("x", "580");
+                    shaftRect.setAttribute("y", "280");
+                    shaftRect.setAttribute("width", "140");
+                    shaftRect.setAttribute("height", "140");
+                    shaftRect.setAttribute("fill", "transparent");
+                    const shaftTitle = doc.createElementNS("http://www.w3.org/2000/svg", "title");
+                    shaftTitle.textContent = "Shaft & Flywheel";
+                    shaftGroup.appendChild(shaftTitle);
+                    shaftGroup.appendChild(shaftRect);
+                    svgElement.appendChild(shaftGroup);
+
                     setSvgContent(svgElement.innerHTML);
                 }
             });
@@ -225,6 +254,8 @@ const TurbineVisualNavigator: React.FC = () => {
                                                 setViewMode('generator-detail');
                                             } else if (group.id === 'temp-runner') {
                                                 setViewMode('runner-detail');
+                                            } else if (group.id === 'temp-shaft-coupling') {
+                                                setViewMode('flywheel-detail');
                                             } else {
                                                 setFocusedId(group.id);
                                             }
@@ -295,6 +326,8 @@ const TurbineVisualNavigator: React.FC = () => {
                                                 setViewMode('generator-detail');
                                             } else if (comp.id === 'temp-runner') {
                                                 setViewMode('runner-detail');
+                                            } else if (comp.id === 'temp-shaft-coupling') {
+                                                setViewMode('flywheel-detail');
                                             } else {
                                                 setFocusedId(comp.id);
                                             }
@@ -460,7 +493,7 @@ const TurbineVisualNavigator: React.FC = () => {
                             onBack={() => setViewMode('overview')}
                         />
                     </motion.div>
-                ) : (
+                ) : viewMode === 'runner-detail' ? (
                     <motion.div
                         key="runner-detail"
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -470,6 +503,35 @@ const TurbineVisualNavigator: React.FC = () => {
                         className="absolute inset-0 z-30"
                     >
                         <RunnerDetailView
+                            onBack={() => setViewMode('overview')}
+                            onHome={() => navigate(FRANCIS_PATHS.HUB)}
+                            onGuideVaneDrillDown={() => setViewMode('guide-vane-detail')}
+                        />
+                    </motion.div>
+                ) : viewMode === 'guide-vane-detail' ? (
+                    <motion.div
+                        key="guide-vane-detail"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                        className="absolute inset-0 z-30"
+                    >
+                        <GuideVaneDetailView
+                            onBack={() => setViewMode('runner-detail')}
+                            onHome={() => navigate(FRANCIS_PATHS.HUB)}
+                        />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="flywheel-detail"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                        className="absolute inset-0 z-30"
+                    >
+                        <FlywheelDetailView
                             onBack={() => setViewMode('overview')}
                             onHome={() => navigate(FRANCIS_PATHS.HUB)}
                         />

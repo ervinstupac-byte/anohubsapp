@@ -15,12 +15,14 @@ import {
     Waves,
     Target,
     Circle,
-    Home
+    Home,
+    Aperture
 } from 'lucide-react';
 
 interface RunnerDetailProps {
     onBack: () => void;
     onHome?: () => void;
+    onGuideVaneDrillDown?: () => void;
 }
 
 // NC-4.2 Compliant Hotspot Definitions with Ground-Truth Hydraulic Data
@@ -85,6 +87,18 @@ const RUNNER_COMPONENTS = [
         func: 'Provides structural closure and sealing for the upper turbine chamber, containing high-pressure water.',
         precision: 'Bolt torque: M24 Class 8.8 = 980 Nm',
         category: 'sealing'
+    },
+    {
+        id: 'guide-vane-assembly',
+        i18nKey: 'guideVaneAssembly',
+        name: 'Guide Vane Assembly (Wicket Gates)',
+        param: 'Flow Regulation',
+        heritage: 'The 24 wicket gates must move in perfect unison. A single lagging gate creates asymmetric thrust that wrecks the steady bearing.',
+        icon: Aperture,
+        pos: { x: 35, y: 65 },
+        func: 'Controls the volume and direction of water entering the runner. **Click to Deep-Dive**.',
+        precision: 'Sync deviation < 0.1°',
+        category: 'regulation'
     }
 ];
 
@@ -111,7 +125,7 @@ const childVariants = {
     animate: { opacity: 1, y: 0 }
 };
 
-const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome }) => {
+const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuideVaneDrillDown }) => {
     const { t } = useTranslation();
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -167,6 +181,7 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome }) => {
             case 'alignment': return '#8B5CF6'; // Purple for alignment
             case 'rotor': return '#22D3EE'; // Cyan for rotor
             case 'hydraulic': return '#10B981'; // Emerald for hydraulic
+            case 'regulation': return '#F472B6'; // Pink for regulation
             default: return '#22D3EE';
         }
     };
@@ -307,7 +322,13 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome }) => {
                                     key={comp.id}
                                     className="cursor-pointer group"
                                     onMouseEnter={() => setActiveSub(comp.id)}
-                                    onClick={() => setActiveSub(comp.id)}
+                                    onClick={() => {
+                                        if (comp.id === 'guide-vane-assembly' && onGuideVaneDrillDown) {
+                                            onGuideVaneDrillDown();
+                                        } else {
+                                            setActiveSub(comp.id);
+                                        }
+                                    }}
                                 >
                                     {/* Transparent Trigger Zone */}
                                     <circle
