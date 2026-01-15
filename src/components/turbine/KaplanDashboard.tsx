@@ -12,7 +12,7 @@ import {
     Wind,
     Waves
 } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ITurbineModel } from '../../models/turbine/types';
 import { useTelemetry } from '../../contexts/TelemetryContext';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -317,8 +317,8 @@ const HydraulicRunawayMonitor: React.FC<HydraulicRunawayMonitorProps> = ({
 
     return (
         <GlassCard className={`border-l-4 ${riskLevel === 'CRITICAL' ? 'border-l-red-500 animate-pulse' :
-                riskLevel === 'HIGH' ? 'border-l-amber-500' :
-                    'border-l-emerald-500'
+            riskLevel === 'HIGH' ? 'border-l-amber-500' :
+                'border-l-emerald-500'
             }`}>
             <h3 className="text-sm font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                 <Waves className="w-5 h-5" />

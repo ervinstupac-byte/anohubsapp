@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Shield, Gauge, Activity, Radio, Droplet } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { TurbineFactory, TurbineType, KaplanTurbine, FrancisTurbine, PeltonTurbine, ITurbineBehavior } from '../models/turbine/TurbineFactory';
 import { DecisionEngine } from '../services/DecisionEngine';
 import { SafetyInterlockEngine } from '../services/SafetyInterlockEngine';

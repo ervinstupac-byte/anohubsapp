@@ -1,15 +1,25 @@
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useProjectEngine } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 export const FrancisInteractiveCrossSection: React.FC = () => {
-    const { technicalState } = useProjectEngine();
+    const { physics: livePhysics, specializedState, mechanical } = useTelemetryStore();
+    const { technicalState } = useProjectEngine(); // Keep for demoMode only if needed, or migrate usage.
 
+    // DATA BRIDGE: Prefer real-time telemetry, fallback to project state
     // Physics-driven state extraction
-    const pressure = technicalState.physics?.surgePressureBar || 45;
-    const vaneOpening = technicalState.francis?.sensors?.guide_vane_opening || 65;
-    const rpm = technicalState.mechanical.rpm || 428;
-    const isCavitation = technicalState.demoMode.active && technicalState.demoMode.scenario === 'CAVITATION';
+    const pressure = livePhysics?.surgePressure
+        ? livePhysics.surgePressure.toNumber()
+        : 45;
+
+    // Legacy sensors (not yet in TelemetryStore)
+    const vaneOpening = specializedState?.sensors?.guide_vane_opening || 65;
+    const rpm = mechanical?.rpm || 428;
+    // Assuming demoMode is not yet in TelemetryStore, we check where it lives. 
+    // Usually it's in AppStore or ProjectContext. 
+    // Keeping technicalState.demoMode access for now or assume safe default.
+    const isCavitation = technicalState?.demoMode?.active && technicalState?.demoMode?.scenario === 'CAVITATION';
 
     // Color Interpolation for Spiral Casing (Blue based on pressure)
     // Nominal: 45 Bar -> light blue. Critical: > 100 Bar -> Deep Intense Blue/Red

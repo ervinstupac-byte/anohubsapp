@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Radio, Play, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { PeltonJetSyncService, JetAnalysis } from '../services/PeltonJetSyncService';
 
 interface PeltonJetVisualizerProps {
@@ -92,8 +92,8 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                                     key={count}
                                     onClick={() => setNozzleCount(count)}
                                     className={`flex-1 px-4 py-3 rounded-lg font-bold transition-all ${nozzleCount === count
-                                            ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
-                                            : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
+                                        ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
+                                        : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                         }`}
                                 >
                                     {count} Jets
@@ -141,7 +141,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                                 <div className="text-center">
                                     <p className="text-xs text-slate-400 uppercase font-bold mb-1">Imbalance Ratio</p>
                                     <p className={`text-2xl font-black ${forceBalance.imbalanceRatio > 0.15 ? 'text-red-400' :
-                                            forceBalance.imbalanceRatio > 0.08 ? 'text-amber-400' : 'text-emerald-400'
+                                        forceBalance.imbalanceRatio > 0.08 ? 'text-amber-400' : 'text-emerald-400'
                                         }`}>
                                         {(forceBalance.imbalanceRatio * 100).toFixed(1)}%
                                     </p>
@@ -149,7 +149,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                                 <div className="text-center">
                                     <p className="text-xs text-slate-400 uppercase font-bold mb-1">Bearing Load Increase</p>
                                     <p className={`text-2xl font-black ${forceBalance.bearingLoadIncrease > 15 ? 'text-red-400' :
-                                            forceBalance.bearingLoadIncrease > 8 ? 'text-amber-400' : 'text-emerald-400'
+                                        forceBalance.bearingLoadIncrease > 8 ? 'text-amber-400' : 'text-emerald-400'
                                         }`}>
                                         +{forceBalance.bearingLoadIncrease.toFixed(0)}%
                                     </p>

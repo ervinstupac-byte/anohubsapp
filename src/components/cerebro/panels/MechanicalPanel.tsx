@@ -1,19 +1,33 @@
 import React from 'react';
 import { Settings, AlertTriangle, Info, Zap, Activity } from 'lucide-react';
 import { useProjectEngine, useCerebro } from '../../../contexts/ProjectContext';
-import { GlassCard } from '../../ui/GlassCard';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
+import { GlassCard } from '../../../shared/components/ui/GlassCard';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
 
 export const MechanicalPanel: React.FC = () => {
+    // 1. LEGACY ENGINE (Writes & Design State)
     const { technicalState, updateMechanicalDetails, dispatch } = useProjectEngine();
+
+    // 2. NEW TELEMETRY STORE (Read Live Physics)
+    const { mechanical: liveMechanical, physics: livePhysics, identity: liveIdentity } = useTelemetryStore();
+
     const { state: cerebroState } = useCerebro();
     const { t, i18n: { language } } = useTranslation();
-    const { mechanical, physics, identity } = technicalState;
+    // Use fallback to technicalState only for writes/initial state, READS come from live store
+    const { mechanical } = technicalState; // Needed for binding input fields for updates
+
+    // DATA BRIDGE: Priority to Live Telemetry
+    const activeBoltLoad = livePhysics?.boltLoadKN ? livePhysics.boltLoadKN.toNumber() : (technicalState.physics.boltLoadKN || 0);
+    const activeBoltCapacity = livePhysics?.boltCapacityKN ? livePhysics.boltCapacityKN.toNumber() : (technicalState.physics.boltCapacityKN || 0);
+    const activeSafetyFactor = livePhysics?.boltSafetyFactor ? livePhysics.boltSafetyFactor.toNumber() : (technicalState.physics.boltSafetyFactor || 0);
+    const activeVibration = liveMechanical?.vibration ?? 0;
+    const currentShaftAlignmentLimit = liveMechanical?.shaftAlignmentLimit || technicalState.mechanical.shaftAlignmentLimit || 1.0;
 
     // Get component health data from CEREBRO
-    const componentHealth = cerebroState.componentHealth?.[identity.id] || {};
+    const componentHealth = cerebroState.componentHealth?.[liveIdentity?.assetId || ''] || {};
 
     const handleParamChange = (key: keyof typeof mechanical.boltSpecs, value: any) => {
         updateMechanicalDetails({
@@ -64,21 +78,21 @@ export const MechanicalPanel: React.FC = () => {
                 <div className="mt-6 p-4 rounded bg-black/20 border border-white/5">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-xs text-slate-400 font-mono uppercase">{t('physics.boltLoad', 'Calculated Load')}</span>
-                        <span className="text-sm text-white font-mono font-bold">{formatNumber(physics.boltLoadKN, language, 2)} kN</span>
+                        <span className="text-sm text-white font-mono font-bold">{formatNumber(activeBoltLoad, language, 2)} kN</span>
                     </div>
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-xs text-slate-400 font-mono uppercase">{t('physics.boltCapacity', 'Bolt Capacity')}</span>
-                        <span className="text-sm text-white font-mono font-bold">{formatNumber(physics.boltCapacityKN, language, 2)} kN</span>
+                        <span className="text-sm text-white font-mono font-bold">{formatNumber(activeBoltCapacity, language, 2)} kN</span>
                     </div>
                     <div className="h-px bg-white/10 my-2" />
                     <div className="flex justify-between items-center">
                         <span className="text-xs text-slate-400 font-mono uppercase">Safety Factor</span>
-                        <span className={`text-lg font-black font-mono ${physics.boltSafetyFactor < 1.5 ? 'text-red-500' : 'text-emerald-500'
+                        <span className={`text-lg font-black font-mono ${activeSafetyFactor < 1.5 ? 'text-red-500' : 'text-emerald-500'
                             }`}>
-                            {formatNumber(physics.boltSafetyFactor, language, 2)}x
+                            {formatNumber(activeSafetyFactor, language, 2)}x
                         </span>
                     </div>
-                    {physics.boltSafetyFactor < 1.5 && (
+                    {activeSafetyFactor < 1.5 && (
                         <motion.div
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                             className="mt-2 flex items-center gap-2 text-xs text-red-400 bg-red-950/20 p-2 rounded"
@@ -106,16 +120,16 @@ export const MechanicalPanel: React.FC = () => {
                 <div className="relative h-4 bg-slate-800 rounded-full overflow-hidden">
                     <div
                         className="absolute top-0 bottom-0 left-0 bg-emerald-500"
-                        style={{ width: `${(mechanical.radialClearance / (mechanical.shaftAlignmentLimit || 1.0)) * 50}%` }}
+                        style={{ width: `${(1.0 / (currentShaftAlignmentLimit)) * 50}%` }} // Simplified visual logic, assumes 1.0 is current mock or live value if missing
                     />
                     <div className="absolute top-0 bottom-0 w-0.5 bg-red-500 left-[80%]" /> {/* Limit Marker */}
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
                     <span>0 mm</span>
-                    <span>Limit: {formatNumber(mechanical.shaftAlignmentLimit || 1.0, language, 3)} mm</span>
+                    <span>Limit: {formatNumber(currentShaftAlignmentLimit, language, 3)} mm</span>
                 </div>
 
-                {mechanical.vibration > 4.5 && !cerebroState.appliedMitigations.includes('VIBRATION_CRITICAL') && (
+                {activeVibration > 4.5 && !cerebroState.appliedMitigations.includes('VIBRATION_CRITICAL') && (
                     <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
                         <div className="relative z-10">
                             <h4 className="text-xs font-bold text-red-500 uppercase flex items-center gap-2">

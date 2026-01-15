@@ -5,7 +5,7 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 // ISPRAVKA IMPORTA: Uvozimo Questionnaire kao Named Export
 import { Questionnaire } from './Questionnaire.tsx';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useRisk } from '../contexts/RiskContext.tsx';
 // DODANO: Import AssetPicker-a koji je nedostajao
 import { AssetPicker } from './AssetPicker.tsx';

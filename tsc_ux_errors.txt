@@ -1,0 +1,102 @@
+﻿src/App.tsx(31,25): error TS2307: Cannot find module './components/Spinner.tsx' or its corresponding type declarations.
+src/App.tsx(42,32): error TS2307: Cannot find module './components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/App.tsx(43,29): error TS2307: Cannot find module './components/ui/Breadcrumbs.tsx' or its corresponding type declarations.
+src/components/AlignmentWizard.tsx(31,33): error TS2339: Property 'name' does not exist on type 'AssetIdentity'.
+src/components/AlignmentWizard.tsx(32,86): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/components/AlignmentWizard.tsx(110,69): error TS2339: Property 'type' does not exist on type 'AssetIdentity'.
+src/components/AnoHubOS.tsx(33,25): error TS2307: Cannot find module './Spinner' or its corresponding type declarations.
+src/components/AnoHubOS.tsx(35,32): error TS2307: Cannot find module './ui/ModuleFallback' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(7,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(91,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(98,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(173,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(181,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(199,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(209,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(219,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/ClientDashboard.tsx(6,29): error TS2307: Cannot find module './ui/ToastSystem' or its corresponding type declarations.
+src/components/ClientDashboard.tsx(7,31): error TS2307: Cannot find module './ui/TurbineLoader' or its corresponding type declarations.
+src/components/CommandCenter.tsx(5,32): error TS2307: Cannot find module './ui/ModuleFallback' or its corresponding type declarations.
+src/components/dashboard/SmartManual.tsx(35,13): error TS2365: Operator '>' cannot be applied to types 'number | Decimal' and 'number'.
+src/components/dashboard/SmartManual.tsx(46,13): error TS2367: This comparison appears to be unintentional because the types '"OPTIMAL"' and '"DEGRADING"' have no overlap.
+src/components/dashboard/SmartManual.tsx(46,46): error TS2367: This comparison appears to be unintentional because the types '"OPTIMAL"' and '"CRITICAL"' have no overlap.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,33): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,62): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,96): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,117): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/DataSyncBridge.tsx(74,25): error TS2353: Object literal may only specify known properties, and 'netHead' does not exist in type 'Partial<HydraulicStream>'.
+src/components/DataSyncBridge.tsx(91,25): error TS2322: Type '{ diameter: number | undefined; count: number | undefined; grade: any; torque: number; }' is not assignable to type '{ grade: string; count: number; torque: number; diameter?: number | undefined; }'.
+  Types of property 'count' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/components/diagnostic-twin/NeuralFlowMap.tsx(8,25): error TS2307: Cannot find module '../ui/Tooltip.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(11,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(13,31): error TS2307: Cannot find module './ui/FetchSkeleton.tsx' or its corresponding type declarations.
+src/components/francis/FrancisHub.tsx(7,32): error TS2307: Cannot find module '../ui/ModuleFallback' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(9,54): error TS2307: Cannot find module '../ui/ShaftOrbitPlot' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(186,54): error TS7006: Parameter 'analysis' implicitly has an 'any' type.
+src/components/HPPBuilder.tsx(21,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/HPPImprovements.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/HPPImprovements.tsx(165,25): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/infrastructure/BidEvaluator.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/infrastructure/HydrologyLab.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(7,25): error TS2307: Cannot find module '../Spinner.tsx' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(9,32): error TS2307: Cannot find module '../ui/ModuleFallback.tsx' or its corresponding type declarations.
+src/components/infrastructure/PlantMaster.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(9,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(121,108): error TS2322: Type '{ children: Element[]; title: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/InvestorBriefing.tsx(123,146): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/InvestorBriefing.tsx(124,138): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/InvestorBriefing.tsx(125,137): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/Login.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/Login.tsx(80,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/Login.tsx(90,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/MaintenanceDashboard.tsx(24,30): error TS2307: Cannot find module './OrbitPlotter.tsx' or its corresponding type declarations.
+src/components/modals/PrintPreviewModal.tsx(45,56): error TS2322: Type '{ children: Element[]; variant: "commander"; noPadding: true; className: string; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'noPadding' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/QuestionnaireSummary.tsx(307,93): error TS2322: Type '{ children: Element[]; className: string; style: { animationDelay: string; }; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'style' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/QuestionnaireSummary.tsx(330,95): error TS2322: Type '{ children: Element[]; className: string; style: { animationDelay: string; }; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'style' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/RevitalizationStrategy.tsx(56,25): error TS2322: Type '{ children: Element[]; title: string; subtitle: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/RevitalizationStrategy.tsx(108,25): error TS2322: Type '{ children: Element[]; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/RiskReport.tsx(14,26): error TS2307: Cannot find module './ui/Skeleton.tsx' or its corresponding type declarations.
+src/components/RiskReport.tsx(280,25): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/RiskReport.tsx(334,25): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/SpecializedDiagnostics.tsx(17,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/SpecializedDiagnostics.tsx(158,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(170,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(183,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(195,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/StrategicPlanningDashboard.tsx(27,29): error TS2307: Cannot find module './ui/ToastSystem' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(5,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(226,56): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/TurbineDetail.tsx(115,25): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/TurbineDetail.tsx(131,25): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/TurbineDetail.tsx(149,21): error TS2322: Type '{ children: Element; title: string; subtitle: string; className: string; action: Element; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'action' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/UniversalTurbineDashboard.tsx(83,59): error TS2322: Type '{ children: Element[]; className: string; style: { borderColor: string; }; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'style' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/UserProfile.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/UserProfile.tsx(210,48): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/UserProfile.tsx(218,48): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/UserProfile.tsx(227,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/features/reporting/api/ReportDataBuilder.ts(125,29): error TS2367: This comparison appears to be unintentional because the types '1' and '5' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(126,13): error TS2367: This comparison appears to be unintentional because the types '1' and '4' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(127,17): error TS2367: This comparison appears to be unintentional because the types '1' and '3' have no overlap.
+src/hooks/useFinancialYield.ts(33,21): error TS2339: Property 'power' does not exist on type 'HydraulicStream'.
+src/routes/FrancisRouter.tsx(3,25): error TS2307: Cannot find module '../components/Spinner' or its corresponding type declarations.
+src/routes/FrancisRouter.tsx(49,32): error TS2307: Cannot find module '../components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/routes/MaintenanceRouter.tsx(16,32): error TS2307: Cannot find module '../components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(2,32): error TS2307: Cannot find module '../../contexts/MaintenanceContext' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(3,41): error TS2307: Cannot find module '../../data/knowledge/ComponentTaxonomy' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(22,41): error TS7006: Parameter 'wo' implicitly has an 'any' type.
+src/shared/components/ui/StatusBadge.tsx(31,36): error TS7006: Parameter 'log' implicitly has an 'any' type.

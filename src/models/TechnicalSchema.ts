@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js';
 
 import { AssetIdentity, TurbineType } from '../types/assetIdentity';
+import { AssetPassport, InspectionImage, Asset } from '../types';
 
 export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS' | 'INFRASTRUCTURE_STRESS';
 
@@ -149,6 +150,9 @@ export interface TechnicalProjectState {
         maintenanceSavingsEuro?: number; // NEW: NC-4.2 MHE Specialization
         leakageCostYearly?: number; // NEW: NC-4.2 Leakage Monitor
     };
+    assetPassport?: AssetPassport;
+    images?: InspectionImage[];
+    selectedAsset?: Asset | null;
 }
 
 export interface EngineeringConstants {
@@ -240,6 +244,9 @@ export interface PhysicsResult {
     performanceGap: Decimal; // (Actual / Design) * 100
     status: 'NOMINAL' | 'WARNING' | 'CRITICAL';
     volumetricLoss?: Decimal; // NEW: NC-4.2 Volumetric Efficiency Monitor
+    boltLoadKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
+    boltSafetyFactor?: Decimal; // NEW: Added to sync with TechnicalProjectState
+    boltCapacityKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
 }
 
 export interface DiagnosisMessage {
@@ -252,6 +259,10 @@ export interface DiagnosisReport {
     severity: 'NOMINAL' | 'WARNING' | 'CRITICAL';
     messages: DiagnosisMessage[];
     safetyFactor: Decimal;
+    metrics?: {
+        extendedLifeYears?: number;
+        [key: string]: any;
+    };
 }
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {

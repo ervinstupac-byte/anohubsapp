@@ -3,8 +3,8 @@ import { useClient, MaintenanceEvent } from '../contexts/ClientContext';
 import { useNotifications, Severity } from '../contexts/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Calendar, Activity, Zap, MessageSquare, LogOut, CheckCircle, Clock, Bell, Settings as SettingsIcon, X, AlertTriangle, AlertCircle, Info } from 'lucide-react';
-import { ToastSystem } from './ui/ToastSystem';
-import { TurbineLoader } from './ui/TurbineLoader';
+import { ToastSystem } from '../shared/components/ui/ToastSystem';
+import { TurbineLoader } from '../shared/components/ui/TurbineLoader';
 import { useTranslation } from 'react-i18next';
 
 export const ClientDashboard: React.FC = () => {

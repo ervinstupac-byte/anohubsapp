@@ -14,6 +14,7 @@ import {
     Target,
     Activity
 } from 'lucide-react';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useNavigate } from 'react-router-dom';
 import { Minimize2, Maximize2, Home } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
@@ -85,8 +86,8 @@ const TurbineVisualNavigator: React.FC = () => {
                         if (existing) existing.remove();
                     });
 
-                    // DEBUG MODE FLAG - Set to true for visual verification
-                    const DEBUG_MODE = true;
+                    // DEBUG MODE FLAG - Set to false for production
+                    const DEBUG_MODE = false;
 
                     // Utility: Create Hitbox with NC-4.2 Precision Coordinates
                     const createHitbox = (id: string, type: 'rect' | 'circle', coords: any, titleText: string) => {
@@ -222,140 +223,146 @@ const TurbineVisualNavigator: React.FC = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, scale: 1.1 }}
                         transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute inset-0"
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{ overflow: 'visible' }}
                     >
-                        {/* SVG Container - NC-4.2 ABSOLUTE PIXEL GRID */}
-                        <div className="absolute inset-0 z-0" style={{ overflow: 'visible' }}>
-                            <svg
-                                ref={svgRef}
-                                viewBox="0 0 1184 864"
-                                preserveAspectRatio="xMidYMid meet"
-                                className="w-full h-full"
-                                style={{ overflow: 'visible' }}
-                                onMouseLeave={() => setHoveredId(null)}
-                            >
-                                <g
-                                    dangerouslySetInnerHTML={{ __html: svgContent }}
-                                    onClick={(e) => {
-                                        const target = e.target as SVGElement;
-                                        const group = target.closest('g');
-                                        const clickedId = group?.id || target.id;
-
-                                        // NC-4.2 DEBUG: Log clicked element to console
-                                        console.log('[NC-4.2 DEBUG] Clicked Element ID:', clickedId, 'Target:', target.tagName);
-
-                                        if (clickedId === 'nav-zone-left' || clickedId === 'nav-chevron') {
-                                            navigate('/francis/mechanism-detail');
-                                            return;
-                                        }
-
-                                        if (group && group.id && (group.id.startsWith('temp-') || group.id.startsWith('nav-'))) {
-                                            console.log('[NC-4.2 DEBUG] Matched interactive zone:', group.id);
-                                            if (group.id === 'temp-generator') {
-                                                setViewMode('generator-detail');
-                                            } else if (group.id === 'temp-runner') {
-                                                setViewMode('runner-detail');
-                                            } else if (group.id === 'temp-shaft-coupling') {
-                                                setViewMode('flywheel-detail');
-                                            } else if (group.id === 'nav-seal' || group.id === 'nav-distributor') {
-                                                navigate('/francis/mechanism-detail');
-                                            } else {
-                                                setFocusedId(group.id);
-                                            }
-                                        }
-                                    }}
-                                    onMouseMove={(e) => {
-                                        const target = e.target as SVGElement;
-                                        const group = target.closest('g');
-                                        if (group && group.id && group.id.startsWith('temp-')) {
-                                            setHoveredId(group.id);
-                                        } else {
-                                            setHoveredId(null);
-                                        }
-                                    }}
-                                />
-
-                                {/* Leader Lines - Using ABSOLUTE PIXEL coordinates */}
-                                <g className="pointer-events-none">
-                                    {COMPONENTS.map(comp => {
-                                        // NC-4.2: Direct pixel values, no percentage conversion
-                                        const labelX = comp.labelPos.x;
-                                        const labelY = comp.labelPos.y;
-                                        const isHovered = hoveredId === comp.id;
-
-                                        return (
-                                            <motion.line
-                                                key={`line-${comp.id}`}
-                                                x1={labelX}
-                                                y1={labelY}
-                                                x2={comp.anchor.x}
-                                                y2={comp.anchor.y}
-                                                stroke={isHovered ? "#22D3EE" : "rgba(34, 211, 238, 0.3)"}
-                                                strokeWidth={isHovered ? 2.5 : 1.5}
-                                                strokeDasharray={isHovered ? "none" : "6 3"}
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                transition={{ duration: 0.5 }}
-                                            />
-                                        );
-                                    })}
-                                </g>
-                            </svg>
-                        </div>
-
-                        {/* Signpost Labels - NC-4.2 ABSOLUTE PIXEL POSITIONING */}
-                        {/* Container matches SVG viewBox aspect ratio for pixel-perfect alignment */}
+                        {/* NC-4.2 ZERO-DRIFT CONTAINER: Fixed 1184x864 for 1:1 pixel parity */}
                         <div
-                            className="absolute inset-0 pointer-events-none z-10"
-                            style={{ position: 'relative', width: '100%', height: '100%' }}
+                            className="relative"
+                            style={{
+                                width: '1184px',
+                                height: '864px',
+                                maxWidth: '100%',
+                                maxHeight: '100%'
+                            }}
                         >
-                            {COMPONENTS.map(comp => {
-                                const isHovered = hoveredId === comp.id;
-                                // Convert absolute pixels to percentage for responsive scaling
-                                const leftPct = (comp.labelPos.x / 1184) * 100;
-                                const topPct = (comp.labelPos.y / 864) * 100;
+                            {/* SVG Container - NC-4.2 ABSOLUTE PIXEL GRID */}
+                            <div className="absolute inset-0 z-0" style={{ overflow: 'visible' }}>
+                                <svg
+                                    ref={svgRef}
+                                    viewBox="0 0 1184 864"
+                                    preserveAspectRatio="xMidYMid meet"
+                                    className="w-full h-full"
+                                    style={{ overflow: 'visible' }}
+                                    onMouseLeave={() => setHoveredId(null)}
+                                >
+                                    <g
+                                        dangerouslySetInnerHTML={{ __html: svgContent }}
+                                        onClick={(e) => {
+                                            const target = e.target as SVGElement;
+                                            const group = target.closest('g');
+                                            const clickedId = group?.id || target.id;
 
-                                return (
-                                    <motion.div
-                                        key={`label-${comp.id}`}
-                                        style={{
-                                            position: 'absolute',
-                                            top: `${topPct}%`,
-                                            left: `${leftPct}%`,
-                                            transform: 'translate(-50%, -50%)',
-                                        }}
-                                        className="pointer-events-auto cursor-pointer"
-                                        onMouseEnter={() => setHoveredId(comp.id)}
-                                        onClick={() => {
-                                            console.log('[NC-4.2 DEBUG] Label clicked:', comp.id);
-                                            if (comp.id === 'temp-generator') {
-                                                setViewMode('generator-detail');
-                                            } else if (comp.id === 'temp-runner') {
-                                                setViewMode('runner-detail');
-                                            } else if (comp.id === 'temp-shaft-coupling') {
-                                                setViewMode('flywheel-detail');
-                                            } else if (comp.id.startsWith('nav-')) {
+                                            // NC-4.2 PRODUCTION: Clean click handler
+
+
+                                            if (clickedId === 'nav-zone-left' || clickedId === 'nav-chevron') {
                                                 navigate('/francis/mechanism-detail');
-                                            } else {
-                                                setFocusedId(comp.id);
+                                                return;
+                                            }
+
+                                            if (group && group.id && (group.id.startsWith('temp-') || group.id.startsWith('nav-'))) {
+                                                if (group.id === 'temp-generator') {
+                                                    setViewMode('generator-detail');
+                                                } else if (group.id === 'temp-runner') {
+                                                    setViewMode('runner-detail');
+                                                } else if (group.id === 'temp-shaft-coupling') {
+                                                    setViewMode('flywheel-detail');
+                                                } else if (group.id === 'nav-seal' || group.id === 'nav-distributor') {
+                                                    navigate('/francis/mechanism-detail');
+                                                } else {
+                                                    setFocusedId(group.id);
+                                                }
                                             }
                                         }}
-                                    >
-                                        <div className={`
+                                        onMouseMove={(e) => {
+                                            const target = e.target as SVGElement;
+                                            const group = target.closest('g');
+                                            if (group && group.id && group.id.startsWith('temp-')) {
+                                                setHoveredId(group.id);
+                                            } else {
+                                                setHoveredId(null);
+                                            }
+                                        }}
+                                    />
+
+                                    {/* Leader Lines - Using ABSOLUTE PIXEL coordinates */}
+                                    <g className="pointer-events-none">
+                                        {COMPONENTS.map(comp => {
+                                            // NC-4.2: Direct pixel values, no percentage conversion
+                                            const labelX = comp.labelPos.x;
+                                            const labelY = comp.labelPos.y;
+                                            const isHovered = hoveredId === comp.id;
+
+                                            return (
+                                                <motion.line
+                                                    key={`line-${comp.id}`}
+                                                    x1={labelX}
+                                                    y1={labelY}
+                                                    x2={comp.anchor.x}
+                                                    y2={comp.anchor.y}
+                                                    stroke={isHovered ? "#22D3EE" : "rgba(34, 211, 238, 0.3)"}
+                                                    strokeWidth={isHovered ? 2.5 : 1.5}
+                                                    strokeDasharray={isHovered ? "none" : "6 3"}
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    transition={{ duration: 0.5 }}
+                                                />
+                                            );
+                                        })}
+                                    </g>
+                                </svg>
+                            </div>
+
+                            {/* Label Layer - ABSOLUTE PIXEL positioning (NO percentages) */}
+                            <div
+                                className="absolute top-0 left-0 pointer-events-none z-10"
+                                style={{ width: '1184px', height: '864px' }}
+                            >
+                                {COMPONENTS.map(comp => {
+                                    const isHovered = hoveredId === comp.id;
+
+                                    return (
+                                        <motion.div
+                                            key={`label-${comp.id}`}
+                                            style={{
+                                                position: 'absolute',
+                                                left: `${comp.labelPos.x}px`,
+                                                top: `${comp.labelPos.y}px`,
+                                                transform: 'translate(-50%, -50%)',
+                                            }}
+                                            className="pointer-events-auto cursor-pointer"
+                                            onMouseEnter={() => setHoveredId(comp.id)}
+                                            onClick={() => {
+                                                if (comp.id === 'temp-generator') {
+                                                    setViewMode('generator-detail');
+                                                } else if (comp.id === 'temp-runner') {
+                                                    setViewMode('runner-detail');
+                                                } else if (comp.id === 'temp-shaft-coupling') {
+                                                    setViewMode('flywheel-detail');
+                                                } else if (comp.id.startsWith('nav-')) {
+                                                    navigate('/francis/mechanism-detail');
+                                                } else {
+                                                    setFocusedId(comp.id);
+                                                }
+                                            }}
+                                        >
+                                            <div className={`
                     flex items-center gap-2 px-3 py-1.5 rounded-full border backdrop-blur-md transition-all duration-300
                     ${isHovered
-                                                ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.4)] scale-110'
-                                                : 'bg-black/70 border-cyan-500/30 shadow-lg scale-100'
-                                            }
+                                                    ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.4)] scale-110'
+                                                    : 'bg-black/70 border-cyan-500/30 shadow-lg scale-100'
+                                                }
                   `}>
-                                            <comp.icon className={`w-3.5 h-3.5 ${isHovered ? 'text-cyan-400' : 'text-slate-400'}`} />
-                                            <span className={`text-[10px] font-black tracking-widest uppercase ${isHovered ? 'text-white' : 'text-slate-300'}`}>
-                                                {comp.name}
-                                            </span>
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
+                                                <comp.icon className={`w-3.5 h-3.5 ${isHovered ? 'text-cyan-400' : 'text-slate-400'}`} />
+                                                <span className={`text-[10px] font-black tracking-widest uppercase ${isHovered ? 'text-white' : 'text-slate-300'}`}>
+                                                    {comp.name}
+                                                </span>
+                                            </div>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         {/* Detail Card Overlay (Drill-Down) */}

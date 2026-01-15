@@ -1,8 +1,9 @@
 
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { TechnicalProjectState, ProjectAction, ComponentHealthData } from '../models/TechnicalSchema';
-import { PhysicsEngine } from '../services/PhysicsEngine';
-import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
+import { AssetIdentity } from '../types/assetIdentity';
+import { PhysicsEngine } from '../features/physics-core/PhysicsEngine';
+import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine';
 import { DrTurbineAI } from '../services/DrTurbineAI';
 import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
@@ -340,7 +341,7 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                 diagnosis,
                 structural: {
                     ...state.structural,
-                    extendedLifeYears: (diagnosis as any).metrics.extendedLifeYears || 0
+                    extendedLifeYears: diagnosis.metrics?.extendedLifeYears || 0
                 },
                 riskScore: diagnosis.severity === 'CRITICAL' ? 100 : (diagnosis.severity === 'WARNING' ? 50 : 0),
                 lastRecalculation: new Date().toISOString()
@@ -376,7 +377,7 @@ export const useProjectEngine = (): any => {
     const { state, dispatch } = useCerebro();
 
     // Helper to bridge Simple Identity -> Complex AssetIdentity
-    const createComplexIdentity = () => {
+    const createComplexIdentity = (): AssetIdentity | null => {
         if (!state.identity) return null;
         // Construct a FULL AssetIdentity from the simple definition + state context
         return {
@@ -385,6 +386,10 @@ export const useProjectEngine = (): any => {
             turbineType: state.identity.turbineType, // 'PELTON' | 'KAPLAN' ...
             manufacturer: 'AnoHUB Legacy',
             commissioningYear: 2020,
+            totalOperatingHours: 0,
+            hoursSinceLastOverhaul: 0,
+            startStopCount: 0,
+            location: 'Unknown',
             version: '1.0',
             createdAt: new Date().toISOString(),
             createdBy: 'System',
@@ -413,12 +418,14 @@ export const useProjectEngine = (): any => {
             },
             environmentalBaseline: {
                 noiseLevel: { operatingDB: 80, locations: { powerhouse: 80, turbinePit: 85, controlRoom: 60 }, regulatoryLimitDB: 85, complianceStatus: 'COMPLIANT' },
-                penstockType: state.penstock?.material as any || 'STEEL',
+                penstockType: (state.penstock?.material as any) || 'STEEL', // Cast needed if string mismatch
                 penstockDiameterMM: (state.penstock?.diameter || 1) * 1000,
                 penstockLengthM: state.penstock?.length || 100,
                 penstockThicknessMM: (state.penstock?.wallThickness || 0.01) * 1000,
                 sludgeRemoval: { hasSludgeCleaner: false, erosionRiskScore: 0 },
-                waterQuality: { sedimentContentMGL: 0, abrasivityIndex: 'LOW', phLevel: 7 }
+                waterQuality: { sedimentContentMGL: 0, abrasivityIndex: 'LOW', phLevel: 7 },
+                ambientTemperature: 20,
+                relativeHumidity: 50
             },
             operationalMapping: {
                 operatingPoints: [], currentPoint: null,
@@ -435,7 +442,7 @@ export const useProjectEngine = (): any => {
                 axialThrustBalanced: true,
                 pressureDifferenceBar: 0
             }
-        } as any; // Cast as any because AssetIdentity is very complex
+        };
     };
 
     const connectTwinToExpertEngine = (flow: number, head: number, frequency: number) => {

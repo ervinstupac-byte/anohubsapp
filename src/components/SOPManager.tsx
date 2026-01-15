@@ -3,12 +3,12 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext.tsx';
 
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';
 import { getProtocolsForType } from '../data/protocols/GeneratedProtocols';
 import { DigitalProtocol } from '../data/protocols/francis_horizontal_protocols';
-import { LiveMetricToken } from './ui/LiveMetricToken';
+import { LiveMetricToken } from '../features/telemetry/components/LiveMetricToken';
 import { ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react';
 
 // Component-specific interfaces (View Model)

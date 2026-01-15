@@ -1,5 +1,5 @@
 import { TechnicalProjectState } from '../models/TechnicalSchema';
-import { TechnicalAuditData, VisionAnalysisResult } from './ReportGenerator';
+import { TechnicalAuditData, VisionAnalysisResult } from '../features/reporting/ReportGenerator';
 import { InspectionImage } from './StrategicPlanningService';
 
 /**

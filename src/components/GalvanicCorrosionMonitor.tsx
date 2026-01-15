@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Zap, AlertTriangle, TrendingDown } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { GalvanicCorrosionService, CathodicProtectionSystem } from '../services/GalvanicCorrosionService';
 
 export const GalvanicCorrosionMonitor: React.FC = () => {

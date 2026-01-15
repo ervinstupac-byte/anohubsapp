@@ -1,7 +1,7 @@
 // Auto-Report Service - AI-Powered Service Report Generation
 // Generates As-Found / As-Left / Recommendations PDF reports
 
-import { ReportGenerator } from './ReportGenerator';
+import { ReportGenerator } from '../features/reporting/ReportGenerator';
 import { EnhancedAsset } from '../models/turbine/types';
 
 export interface ServiceMeasurement {

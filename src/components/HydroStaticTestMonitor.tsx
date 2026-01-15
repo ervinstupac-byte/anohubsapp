@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Square, AlertTriangle, CheckCircle, TrendingDown } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
 
 interface HydroStaticTestMonitorProps {
@@ -161,8 +161,8 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className={`p-4 rounded-lg border-2 ${testResult.isLinear
-                                    ? 'bg-emerald-950/20 border-emerald-500'
-                                    : 'bg-red-950/20 border-red-500'
+                                ? 'bg-emerald-950/20 border-emerald-500'
+                                : 'bg-red-950/20 border-red-500'
                                 }`}
                         >
                             <div className="flex items-center gap-2 mb-2">

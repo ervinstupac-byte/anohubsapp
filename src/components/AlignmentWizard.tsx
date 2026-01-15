@@ -1,12 +1,12 @@
 // Alignment Wizard - Real-time Runout Diagram
 // Interactive tool for 0.05 mm/m shaft centering
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle, Lock } from 'lucide-react';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
-import { useProjectEngine } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 interface AlignmentWizardProps {
     sessionId: string;
@@ -14,7 +14,13 @@ interface AlignmentWizardProps {
 }
 
 export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onComplete }) => {
-    const { technicalState } = useProjectEngine(); // Linked to CEREBRO
+    // HYBRID MIGRATION: Use Telemetry Store for Identity and Safety Checks
+    const { identity, mechanical } = useTelemetryStore();
+
+    // Safety Interlock: Alignment requires stopped machine
+    const currentRpm = mechanical?.rpm || 0;
+    const isRotating = currentRpm > 5; // >5 RPM considered unsafe for manual alignment
+
     const [runoutPoints, setRunoutPoints] = useState<Array<{ angle: number; runout: number }>>([]);
     const [currentAngle, setCurrentAngle] = useState(0);
     const [manualRunout, setManualRunout] = useState('');
@@ -22,7 +28,8 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     const [finalAlignment, setFinalAlignment] = useState<number | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
 
-    const isHorizontal = technicalState.identity.assetName.toLowerCase().includes('horizontal') || technicalState.identity.turbineType === 'PELTON';
+    const assetName = identity?.assetName || '—';
+    const isHorizontal = assetName.toLowerCase().includes('horizontal') || identity?.turbineType === 'PELTON';
     const bearingSpan = 5.0; // Default or from project site params
 
     const addRunoutPoint = async () => {
@@ -62,205 +69,242 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     return (
         <GlassCard>
             <div className="mb-6">
-                <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
-                    <span className="text-white">0.05 mm Alignment</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
-                        Wizard
-                    </span>
-                </h3>
-                <p className="text-sm text-slate-400">
-                    Rotate rotor manually and record runout at each position
-                </p>
+                <div className="flex justify-between items-start">
+                    <div>
+                        <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
+                            <span className="text-white">0.05 mm Alignment</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
+                                Wizard
+                            </span>
+                        </h3>
+                        <p className="text-sm text-slate-400">
+                            Rotate rotor manually and record runout at each position
+                        </p>
+                    </div>
+                    {/* Safety Status Banner */}
+                    <div className={`px-4 py-2 rounded-lg border flex items-center gap-3 ${isRotating ? 'bg-red-500/20 border-red-500/50' : 'bg-emerald-500/20 border-emerald-500/50'}`}>
+                        {isRotating ? (
+                            <>
+                                <AlertTriangle className="w-5 h-5 text-red-500 animate-pulse" />
+                                <div>
+                                    <div className="text-xs text-red-400 font-bold uppercase">Unsafe Condition</div>
+                                    <div className="text-sm font-black text-white">ROTATING ({currentRpm.toFixed(0)} RPM)</div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <Lock className="w-5 h-5 text-emerald-500" />
+                                <div>
+                                    <div className="text-xs text-emerald-400 font-bold uppercase">Safety Interlock</div>
+                                    <div className="text-sm font-black text-white">MACHINE STOPPED</div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
                 {isHorizontal && (
-                    <div className="mt-2 px-3 py-2 bg-amber-950/20 border border-amber-500/30 rounded-lg flex items-center gap-2">
+                    <div className="mt-4 px-3 py-2 bg-amber-950/20 border border-amber-500/30 rounded-lg flex items-center gap-2 max-w-fit">
                         <AlertTriangle className="w-4 h-4 text-amber-400" />
                         <p className="text-xs text-amber-300">
-                            Horizontal machine detected - Shaft sag will be auto-compensated
+                            Horizontal machine detected ({identity?.turbineType}) - Shaft sag auto-compensated
                         </p>
                     </div>
                 )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Left: Runout Diagram */}
-                <div>
-                    <div className="mb-4 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50">
-                        <div className="flex items-center justify-between mb-2">
-                            <p className="text-xs text-slate-400 uppercase font-bold">Runout Points Recorded</p>
-                            <p className="text-sm font-black text-cyan-400">{runoutPoints.length}/8</p>
-                        </div>
-                        <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${(runoutPoints.length / 8) * 100}%` }}
-                                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Polar Diagram */}
-                    <RunoutDiagram points={runoutPoints} shaftSag={shaftSag} isHorizontal={isHorizontal} />
-
-                    {/* Final Results */}
-                    {finalAlignment !== null && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className={`mt-4 p-4 rounded-lg border-2 ${finalAlignment <= 0.05
-                                ? 'bg-emerald-950/20 border-emerald-500'
-                                : 'bg-red-950/20 border-red-500'
-                                }`}
-                        >
-                            <div className="flex items-center justify-between mb-2">
-                                <p className="text-sm font-bold text-white">Final Alignment</p>
-                                {finalAlignment <= 0.05 ? (
-                                    <CheckCircle className="w-6 h-6 text-emerald-400" />
-                                ) : (
-                                    <XCircle className="w-6 h-6 text-red-400" />
-                                )}
-                            </div>
-                            <p className="text-3xl font-black text-white mb-1">
-                                {finalAlignment.toFixed(3)} mm/m
-                            </p>
-                            <p className={`text-xs font-bold ${finalAlignment <= 0.05 ? 'text-emerald-400' : 'text-red-400'
-                                }`}>
-                                Standard: 0.05 mm/m {finalAlignment <= 0.05 ? '✓ PASS' : '✗ FAIL'}
-                            </p>
-                            {isHorizontal && (
-                                <p className="text-xs text-slate-400 mt-2">
-                                    Shaft sag compensated: {shaftSag.toFixed(3)} mm
-                                </p>
-                            )}
-                        </motion.div>
-                    )}
+            {isRotating ? (
+                // LOCKOUT SCREEN
+                <div className="p-12 text-center bg-red-950/20 border border-red-500/30 rounded-xl">
+                    <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                    <h2 className="text-2xl font-black text-white uppercase mb-2">Alignment Procedure Locked</h2>
+                    <p className="text-slate-400 max-w-md mx-auto">
+                        The turbine must be completely stopped before commencing shaft alignment. Detection of <b>{currentRpm.toFixed(1)} RPM</b> prevents access to this tool.
+                    </p>
                 </div>
-
-                {/* Right: Input Controls */}
-                <div className="space-y-4">
-                    {/* Bluetooth Connection */}
-                    <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                                <Bluetooth className={`w-5 h-5 ${isBluetoothConnected ? 'text-cyan-400' : 'text-slate-500'}`} />
-                                <p className="text-sm font-bold text-white">Bluetooth Dial Indicator</p>
+            ) : (
+                // WIZARD CONTENT
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Left: Runout Diagram */}
+                    <div>
+                        <div className="mb-4 p-3 bg-slate-800/30 rounded-lg border border-slate-700/50">
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="text-xs text-slate-400 uppercase font-bold">Runout Points Recorded</p>
+                                <p className="text-sm font-black text-cyan-400">{runoutPoints.length}/8</p>
                             </div>
-                            <div className={`px-2 py-1 rounded text-xs font-bold ${isBluetoothConnected
-                                ? 'bg-cyan-500/20 text-cyan-400'
-                                : 'bg-slate-700/50 text-slate-400'
-                                }`}>
-                                {isBluetoothConnected ? 'CONNECTED' : 'DISCONNECTED'}
+                            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(runoutPoints.length / 8) * 100}%` }}
+                                    className="h-full bg-gradient-to-r from-cyan-500 to-purple-500"
+                                />
                             </div>
                         </div>
-                        {!isBluetoothConnected && (
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={connectBluetooth}
-                                className="w-full px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-lg text-cyan-400 font-bold text-sm hover:bg-cyan-500/30 transition-colors"
+
+                        {/* Polar Diagram */}
+                        <RunoutDiagram points={runoutPoints} shaftSag={shaftSag} isHorizontal={isHorizontal} />
+
+                        {/* Final Results */}
+                        {finalAlignment !== null && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className={`mt-4 p-4 rounded-lg border-2 ${finalAlignment <= 0.05
+                                    ? 'bg-emerald-950/20 border-emerald-500'
+                                    : 'bg-red-950/20 border-red-500'
+                                    }`}
                             >
-                                Connect Bluetooth Device
-                            </motion.button>
+                                <div className="flex items-center justify-between mb-2">
+                                    <p className="text-sm font-bold text-white">Final Alignment</p>
+                                    {finalAlignment <= 0.05 ? (
+                                        <CheckCircle className="w-6 h-6 text-emerald-400" />
+                                    ) : (
+                                        <XCircle className="w-6 h-6 text-red-400" />
+                                    )}
+                                </div>
+                                <p className="text-3xl font-black text-white mb-1">
+                                    {finalAlignment.toFixed(3)} mm/m
+                                </p>
+                                <p className={`text-xs font-bold ${finalAlignment <= 0.05 ? 'text-emerald-400' : 'text-red-400'
+                                    }`}>
+                                    Standard: 0.05 mm/m {finalAlignment <= 0.05 ? '✓ PASS' : '✗ FAIL'}
+                                </p>
+                                {isHorizontal && (
+                                    <p className="text-xs text-slate-400 mt-2">
+                                        Shaft sag compensated: {shaftSag.toFixed(3)} mm
+                                    </p>
+                                )}
+                            </motion.div>
                         )}
                     </div>
 
-                    {/* Manual Input */}
-                    <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
-                        <p className="text-sm font-bold text-white mb-3">Manual Measurement Entry</p>
-
-                        <div className="mb-3">
-                            <label className="block text-xs text-slate-400 uppercase font-bold mb-2">
-                                Rotation Angle
-                            </label>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="number"
-                                    value={currentAngle}
-                                    onChange={(e) => setCurrentAngle(parseInt(e.target.value) || 0)}
-                                    min="0"
-                                    max="360"
-                                    step="45"
-                                    className="flex-1 px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                                />
-                                <span className="text-sm text-slate-400 font-bold">°</span>
+                    {/* Right: Input Controls */}
+                    <div className="space-y-4">
+                        {/* Bluetooth Connection */}
+                        <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
+                            <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                    <Bluetooth className={`w-5 h-5 ${isBluetoothConnected ? 'text-cyan-400' : 'text-slate-500'}`} />
+                                    <p className="text-sm font-bold text-white">Bluetooth Dial Indicator</p>
+                                </div>
+                                <div className={`px-2 py-1 rounded text-xs font-bold ${isBluetoothConnected
+                                    ? 'bg-cyan-500/20 text-cyan-400'
+                                    : 'bg-slate-700/50 text-slate-400'
+                                    }`}>
+                                    {isBluetoothConnected ? 'CONNECTED' : 'DISCONNECTED'}
+                                </div>
                             </div>
-                            <div className="mt-2 grid grid-cols-4 gap-1">
-                                {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
-                                    <button
-                                        key={angle}
-                                        onClick={() => setCurrentAngle(angle)}
-                                        className={`px-2 py-1 rounded text-xs font-bold transition-colors ${currentAngle === angle
-                                            ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500'
-                                            : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
-                                            }`}
-                                    >
-                                        {angle}°
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="block text-xs text-slate-400 uppercase font-bold mb-2">
-                                Runout Reading (mm)
-                            </label>
-                            <input
-                                type="number"
-                                value={manualRunout}
-                                onChange={(e) => setManualRunout(e.target.value)}
-                                step="0.001"
-                                placeholder="0.045"
-                                className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
-                            />
-                        </div>
-
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={addRunoutPoint}
-                            disabled={!manualRunout}
-                            className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
-                        >
-                            <Target className="w-5 h-5" />
-                            Record Point
-                        </motion.button>
-                    </div>
-
-                    {/* Recorded Points List */}
-                    <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
-                        <p className="text-sm font-bold text-white mb-3">Recorded Points</p>
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
-                            {runoutPoints.length === 0 ? (
-                                <p className="text-xs text-slate-500 text-center py-4">No points recorded yet</p>
-                            ) : (
-                                runoutPoints.map((point, index) => (
-                                    <div key={index} className="flex items-center justify-between p-2 bg-slate-900/50 rounded">
-                                        <span className="text-xs text-slate-400">
-                                            <RotateCw className="w-3 h-3 inline mr-1" />
-                                            {point.angle}°
-                                        </span>
-                                        <span className="text-xs font-bold text-white">{point.runout.toFixed(3)} mm</span>
-                                    </div>
-                                ))
+                            {!isBluetoothConnected && (
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={connectBluetooth}
+                                    className="w-full px-4 py-2 bg-cyan-500/20 border border-cyan-500/50 rounded-lg text-cyan-400 font-bold text-sm hover:bg-cyan-500/30 transition-colors"
+                                >
+                                    Connect Bluetooth Device
+                                </motion.button>
                             )}
                         </div>
-                    </div>
 
-                    {/* Finalize Button */}
-                    {runoutPoints.length >= 4 && (
-                        <motion.button
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={finalizeAlignment}
-                            className="w-full px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-emerald-500/50 transition-all"
-                        >
-                            <CheckCircle className="w-5 h-5" />
-                            Calculate Alignment
-                        </motion.button>
-                    )}
+                        {/* Manual Input */}
+                        <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
+                            <p className="text-sm font-bold text-white mb-3">Manual Measurement Entry</p>
+
+                            <div className="mb-3">
+                                <label className="block text-xs text-slate-400 uppercase font-bold mb-2">
+                                    Rotation Angle
+                                </label>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="number"
+                                        value={currentAngle}
+                                        onChange={(e) => setCurrentAngle(parseInt(e.target.value) || 0)}
+                                        min="0"
+                                        max="360"
+                                        step="45"
+                                        className="flex-1 px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                    />
+                                    <span className="text-sm text-slate-400 font-bold">°</span>
+                                </div>
+                                <div className="mt-2 grid grid-cols-4 gap-1">
+                                    {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
+                                        <button
+                                            key={angle}
+                                            onClick={() => setCurrentAngle(angle)}
+                                            className={`px-2 py-1 rounded text-xs font-bold transition-colors ${currentAngle === angle
+                                                ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500'
+                                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
+                                                }`}
+                                        >
+                                            {angle}°
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="block text-xs text-slate-400 uppercase font-bold mb-2">
+                                    Runout Reading (mm)
+                                </label>
+                                <input
+                                    type="number"
+                                    value={manualRunout}
+                                    onChange={(e) => setManualRunout(e.target.value)}
+                                    step="0.001"
+                                    placeholder="0.045"
+                                    className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-cyan-500"
+                                />
+                            </div>
+
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={addRunoutPoint}
+                                disabled={!manualRunout}
+                                className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-bold text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
+                            >
+                                <Target className="w-5 h-5" />
+                                Record Point
+                            </motion.button>
+                        </div>
+
+                        {/* Recorded Points List */}
+                        <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
+                            <p className="text-sm font-bold text-white mb-3">Recorded Points</p>
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                                {runoutPoints.length === 0 ? (
+                                    <p className="text-xs text-slate-500 text-center py-4">No points recorded yet</p>
+                                ) : (
+                                    runoutPoints.map((point, index) => (
+                                        <div key={index} className="flex items-center justify-between p-2 bg-slate-900/50 rounded">
+                                            <span className="text-xs text-slate-400">
+                                                <RotateCw className="w-3 h-3 inline mr-1" />
+                                                {point.angle}°
+                                            </span>
+                                            <span className="text-xs font-bold text-white">{point.runout.toFixed(3)} mm</span>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Finalize Button */}
+                        {runoutPoints.length >= 4 && (
+                            <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={finalizeAlignment}
+                                className="w-full px-4 py-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-emerald-500/50 transition-all"
+                            >
+                                <CheckCircle className="w-5 h-5" />
+                                Calculate Alignment
+                            </motion.button>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </GlassCard>
     );
 };

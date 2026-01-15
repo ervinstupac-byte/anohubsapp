@@ -1,0 +1,5 @@
+﻿src/components/CommandCenter.tsx(5,32): error TS2307: Cannot find module './ui/ModuleFallback' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(9,54): error TS2307: Cannot find module '../ui/ShaftOrbitPlot' or its corresponding type declarations.
+src/components/MaintenanceDashboard.tsx(24,30): error TS2307: Cannot find module './OrbitPlotter.tsx' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(2,32): error TS2307: Cannot find module '../../contexts/MaintenanceContext' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(3,41): error TS2307: Cannot find module '../../data/knowledge/ComponentTaxonomy' or its corresponding type declarations.

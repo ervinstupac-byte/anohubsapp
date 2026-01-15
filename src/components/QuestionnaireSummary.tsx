@@ -11,8 +11,8 @@ import { createRiskReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { QUESTIONS } from '../constants.ts';
 import type { Question } from '../types.ts';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // --- RISK LOGIC MAP ---
 export const riskKeywords: Record<string, { high: string[], medium: string[] }> = {

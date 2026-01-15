@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import {
     ArrowLeft,
     Settings,
@@ -15,7 +16,8 @@ import {
     Minimize2,
     Anchor,
     Move,
-    Layers
+    Layers,
+    Gauge
 } from 'lucide-react';
 
 interface GeneratorDetailProps {
@@ -150,11 +152,14 @@ const childVariants = {
 
 const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
     const { t } = useTranslation();
+    const { mechanical } = useTelemetryStore(); // Live Data Injection
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeData = SUB_COMPONENTS.find(c => c.id === activeSub);
+    const liveRpm = mechanical?.rpm || 0;
+    const liveVibration = mechanical?.vibration || 0;
 
     // Fullscreen API handlers
     const toggleFullscreen = useCallback(() => {
@@ -222,9 +227,18 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                         <h2 className="text-xl font-black text-white tracking-widest uppercase">
                             {t('generator.detail.title', 'Generator Unit')} <span className="text-cyan-500">{t('generator.detail.drillDown', 'Drill-Down')}</span>
                         </h2>
-                        <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                            NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 8 PRECISION HOTSPOTS
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
+                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 8 PRECISION HOTSPOTS
+                            </p>
+                            {/* Live RPM Indicator */}
+                            {liveRpm > 0 && (
+                                <div className="flex items-center gap-1 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/30">
+                                    <Gauge className="w-3 h-3 text-cyan-300" />
+                                    <span className="text-[10px] font-mono font-black text-white">{liveRpm.toFixed(0)} RPM</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -421,6 +435,7 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                             const translatedData = getComponentData(activeData);
                             const isFoundation = activeData.category === 'foundation';
                             const accentColor = isFoundation ? 'amber' : 'cyan';
+                            const isBearing = activeData.id.includes('bearing');
 
                             return (
                                 <motion.div
@@ -470,6 +485,23 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                                     </div>
 
                                     <div className="space-y-6">
+                                        {/* OPTIONAL LIVE TELEMETRY BRIDGE */}
+                                        {isBearing && liveVibration > 0 && (
+                                            <div className="p-4 bg-cyan-950/40 border-l-2 border-cyan-400 rounded-r-lg">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                        <Activity className="w-3 h-3" /> Live Sensor
+                                                    </span>
+                                                    <span className={`text-sm font-mono font-black ${liveVibration > 3 ? 'text-amber-400' : 'text-white'}`}>
+                                                        {liveVibration.toFixed(2)} mm/s
+                                                    </span>
+                                                </div>
+                                                <div className="w-full h-1 bg-cyan-900/50 mt-2 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-cyan-400" style={{ width: `${(liveVibration / 5) * 100}%` }} />
+                                                </div>
+                                            </div>
+                                        )}
+
                                         <div>
                                             <div
                                                 className="flex items-center gap-2 mb-2 font-black text-[10px] uppercase tracking-widest"

@@ -6,7 +6,7 @@ export const GlobalFooter: React.FC = () => {
     const { state } = useCerebro();
 
     return (
-        <footer className="fixed bottom-0 left-0 right-0 z-[100] h-8 bg-[#020617]/90 backdrop-blur-md border-t border-white/5 px-6 flex items-center justify-between pointer-events-none">
+        <footer className="fixed bottom-0 left-0 right-0 z-20 h-8 bg-[#020617]/90 backdrop-blur-md border-t border-white/5 px-6 flex items-center justify-between pointer-events-none">
             <div className="flex items-center gap-6">
                 {/* Sync Status */}
                 <div className="flex items-center gap-2">

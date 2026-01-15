@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const DigitalIntroduction: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { GlassCard } from './GlassCard';
-import { ModernButton } from './ModernButton';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useNavigation } from '../../contexts/NavigationContext';
 
 export const UnderConstruction: React.FC = () => {

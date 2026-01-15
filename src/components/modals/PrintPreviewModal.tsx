@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { TechnicalProjectState } from '../../models/TechnicalSchema';
-import { reportGenerator } from '../../services/ReportGenerator';
+import { ActionEngine } from '../../features/business/logic/ActionEngine';
+import { reportGenerator } from '../../features/reporting/ReportGenerator';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 
@@ -99,11 +100,122 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                         </div>
                                     </div>
 
-                                    {/* Section 1: Hydraulic Audit */}
+                                    {/* Section 1: Financial Forensics (Executive Summary) */}
+                                    <div className="space-y-6 relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2 h-6 bg-emerald-500 rounded-full" />
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">I. Executive Summary & Financial Forensics</h3>
+                                        </div>
+                                        {(() => {
+                                            const targetEff = 0.92;
+                                            const currentEff = state.hydraulic.efficiency;
+                                            const effGap = Math.max(0, targetEff - currentEff);
+                                            const flow = state.hydraulic.flow;
+                                            const head = state.hydraulic.head;
+                                            const lostMW = (flow * head * 9.81 * effGap) / 1000;
+                                            const revenueLoss = lostMW * 65 * 8000;
+
+                                            return (
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Revenue Efficiency Gap</p>
+                                                        <p className={`text-2xl font-black ${effGap > 0 ? 'text-red-400' : 'text-emerald-400'} tracking-tighter`}>
+                                                            {effGap > 0 ? `-${(effGap * 100).toFixed(1)}%` : 'OPTIMAL'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Projected Annual Loss</p>
+                                                        <p className={`text-2xl font-black ${revenueLoss > 0 ? 'text-red-400' : 'text-slate-200'} tracking-tighter`}>
+                                                            €{revenueLoss > 0 ? revenueLoss.toLocaleString(undefined, { maximumFractionDigits: 0 }) : '0.00'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+
+                                    {/* Section 2: Predictive Health (New) */}
+                                    <div className="space-y-6 relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2 h-6 bg-indigo-500 rounded-full" />
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">II. Predictive Health & Maintenance</h3>
+                                        </div>
+                                        {(() => {
+                                            const vibStress = (Math.max(state.mechanical.vibrationX, state.mechanical.vibrationY) / 7.1) * 100;
+                                            const tempStress = (state.mechanical.bearingTemp / 85.0) * 100;
+                                            const stressIndex = Math.max(vibStress, tempStress);
+                                            const remainingCapacity = Math.max(0, 100 - stressIndex);
+                                            const estHours = (remainingCapacity / 100) * 50000;
+                                            const estDays = Math.round(estHours / 24);
+
+                                            return (
+                                                <div className="grid grid-cols-3 gap-4">
+                                                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Stress Index</p>
+                                                        <p className={`text-2xl font-black ${stressIndex > 50 ? 'text-amber-400' : 'text-slate-200'} tracking-tighter`}>{stressIndex.toFixed(0)}/100</p>
+                                                    </div>
+                                                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Est. Remaining Life</p>
+                                                        <p className={`text-2xl font-black ${estDays < 365 ? 'text-red-400' : 'text-emerald-400'} tracking-tighter`}>{estDays} Days</p>
+                                                    </div>
+                                                    <div className="bg-slate-900/50 p-6 rounded-2xl border border-white/5">
+                                                        <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Service Status</p>
+                                                        <p className="text-xl font-black text-white tracking-tighter">{estDays < 90 ? 'IMMEDIATE' : 'SCHEDULED'}</p>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+
+                                    {/* Section 3: Strategic Action Plan */}
+                                    <div className="space-y-6 relative z-10">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-2 h-6 bg-amber-500 rounded-full" />
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">III. Strategic Action Plan</h3>
+                                        </div>
+                                        {(() => {
+                                            let actions: any[] = [];
+                                            try { actions = ActionEngine.generateRecommendations(state as any); } catch (e) { }
+                                            const topActions = actions.slice(0, 3); // Check logic consistency
+
+                                            if (topActions.length === 0) {
+                                                return (
+                                                    <div className="p-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold uppercase tracking-widest flex items-center gap-3">
+                                                        <ShieldCheck className="w-5 h-5" />
+                                                        System Optimal. No actions required.
+                                                    </div>
+                                                );
+                                            }
+
+                                            return (
+                                                <div className="space-y-3">
+                                                    {topActions.map((act, i) => (
+                                                        <div key={i} className="flex items-start gap-4 p-4 rounded-xl border border-white/10 bg-white/5">
+                                                            <div className={`mt-1 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${act.priority === 'HIGH' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                                                act.priority === 'MEDIUM' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                                                                    'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                                                }`}>
+                                                                {act.priority}
+                                                            </div>
+                                                            <div>
+                                                                <h5 className="text-sm font-bold text-white mb-1">{act.title}</h5>
+                                                                <p className="text-xs text-slate-400 leading-relaxed mb-2">{act.description}</p>
+                                                                <div className="text-[10px] font-mono text-slate-600">
+                                                                    TRIGGER: <span className="text-slate-300">{act.relatedMetric} ({act.triggerValue})</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+
+                                    {/* Section 4: Hydraulic Audit (Renumbered) */}
                                     <div className="space-y-6 relative z-10">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-6 bg-cyan-500 rounded-full" />
-                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">I. Hydraulic Performance</h3>
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">IV. Hydraulic Performance</h3>
                                         </div>
                                         <div className="grid grid-cols-3 gap-6">
                                             {[
@@ -122,11 +234,11 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                         </div>
                                     </div>
 
-                                    {/* Section 2: Mechanical Integrity */}
+                                    {/* Section 5: Mechanical Integrity (Renumbered) */}
                                     <div className="space-y-6 relative z-10">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-6 bg-cyan-500 rounded-full" />
-                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">II. Mechanical Integrity</h3>
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">V. Mechanical Integrity</h3>
                                         </div>
                                         <div className="bg-slate-900/50 rounded-2xl border border-white/5 overflow-hidden">
                                             <table className="w-full text-left">
@@ -158,11 +270,11 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                         </div>
                                     </div>
 
-                                    {/* Section 3: Diagnostic Narrative */}
+                                    {/* Section 6: Diagnostic Narrative (Renumbered) */}
                                     <div className="space-y-6 relative z-10">
                                         <div className="flex items-center gap-3">
                                             <div className="w-2 h-6 bg-red-500 rounded-full" />
-                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">III. AI Diagnostic Outcome</h3>
+                                            <h3 className="text-lg font-black text-white uppercase tracking-tight">VI. AI Diagnostic Outcome</h3>
                                         </div>
                                         <div className={`p-8 rounded-2xl border ${state.riskScore > 50 ? 'bg-red-950/20 border-red-500/30' : 'bg-cyan-950/20 border-cyan-500/30'} flex gap-6 shadow-2xl`}>
                                             <div className={`p-4 rounded-xl h-fit ${state.riskScore > 50 ? 'bg-red-500/20 border-red-500/30' : 'bg-cyan-500/20 border-cyan-500/30'} border`}>
@@ -182,6 +294,8 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             </div>
                                         </div>
                                     </div>
+
+
 
                                     {/* Document Footer Simulation */}
                                     <div className="pt-12 border-t border-white/10 flex justify-between items-end relative z-10">

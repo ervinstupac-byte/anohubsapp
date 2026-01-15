@@ -1,4 +1,4 @@
-import { ExpertDiagnosisEngine } from './ExpertDiagnosisEngine';
+import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine';
 import { AssetIdentity } from '../types/assetIdentity';
 import { DiagnosticResults } from '../types/diagnostics';
 

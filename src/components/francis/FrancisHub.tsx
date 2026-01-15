@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../routes/paths';
-import { TurbineRunner3D } from '../three/TurbineRunner3D';
-import { GlassCard } from '../ui/GlassCard';
+const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(module => ({ default: module.TurbineRunner3D })));
+import { ErrorBoundary } from '../ErrorBoundary';
+import { ModuleFallback } from '../../shared/components/ui/ModuleFallback';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import {
     ArrowLeft, Cpu, Power, AlertTriangle, GitBranch,
     Droplets, GitPullRequest, Activity, Filter, Snowflake, Waves,
@@ -287,7 +289,11 @@ export const FrancisHub: React.FC = () => {
             {/* 3D VISUALIZATION HEADER */}
             <div className="relative h-96 w-full bg-[#050505] overflow-hidden rounded-b-3xl border-b border-white/5 shadow-2xl mb-8 z-10">
                 <div className="absolute inset-0 z-0 opacity-80">
-                    <TurbineRunner3D rpm={(simData as any).rpm || 428} />
+                    <ErrorBoundary fallback={<ModuleFallback title="3D Engine" icon="Box" />}>
+                        <React.Suspense fallback={<div className="w-full h-full flex items-center justify-center bg-slate-900"><div className="w-6 h-6 border-2 border-cyan-500 border-t-transparent animate-spin rounded-full" /></div>}>
+                            <TurbineRunner3D rpm={(simData as any).rpm || 428} />
+                        </React.Suspense>
+                    </ErrorBoundary>
                 </div>
 
                 {/* Overlay Content */}

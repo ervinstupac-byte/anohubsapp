@@ -1,11 +1,13 @@
 import React, { useMemo, useCallback, useRef, useEffect } from 'react';
 import html2canvas from 'html2canvas';
-import { TurbineRunner3D } from './three/TurbineRunner3D';
+const TurbineRunner3D = React.lazy(() => import('./three/TurbineRunner3D').then(module => ({ default: module.TurbineRunner3D })));
+import { ErrorBoundary } from './ErrorBoundary';
+import { ModuleFallback } from '../shared/components/ui/ModuleFallback';
 import { HeatmapLegend } from './ui/HeatmapLegend';
 import { NeuralPulse } from './ui/NeuralPulse';
 import { TacticalCard } from './ui/TacticalCard';
-import { LiveMetricToken } from './ui/LiveMetricToken';
-import { ShaftOrbitPlot } from './ui/ShaftOrbitPlot';
+import { LiveMetricToken } from '../features/telemetry/components/LiveMetricToken';
+import { ShaftOrbitPlot } from '../features/telemetry/components/ShaftOrbitPlot';
 import { TruthDeltaEngine } from '../utils/TruthDeltaEngine';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 import { useDigitalLedger } from '../stores/useDigitalLedger';
@@ -15,7 +17,7 @@ import { useToast } from '../contexts/ToastContext';
 import { generateDiagnosticDossier } from '../utils/pdfGenerator';
 import { useDocumentViewer } from '../contexts/DocumentContext';
 import { useCerebro } from '../contexts/ProjectContext';
-import { StructuralSafetyMonitor } from './ui/StructuralSafetyMonitor';
+import { StructuralSafetyMonitor } from '../features/telemetry/components/StructuralSafetyMonitor';
 import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
 import { X, CheckCircle2, Wrench } from 'lucide-react';
 import { SolutionArchitect } from '../services/SolutionArchitect';
@@ -343,16 +345,27 @@ export const CommandCenter: React.FC = () => {
                     <TacticalCard title="TRUTH HEATMAP (3D VISUALIZATION)" status="nominal" className="h-full">
                         <div className="relative h-full" style={{ transformStyle: 'preserve-3d' }}>
                             <div className="absolute inset-0" style={{ transform: 'rotateY(0deg)' }}>
-                                <TurbineRunner3D
-                                    ref={turbineRef}
-                                    rpm={300}
-                                    deltaMap={deltaMap}
-                                    heatmapMode={true}
-                                    ghostMode={ghostMode}
-                                    baselineDelta={deltaMap} // Using current delta as baseline for demo purpose (simulating deviation)
-                                    deltaIndex={deltaPerf}
-                                    className="h-full"
-                                />
+                                <ErrorBoundary fallback={<ModuleFallback title="3D Turbine Engine" icon="Box" />}>
+                                    <React.Suspense fallback={
+                                        <div className="flex items-center justify-center h-full">
+                                            <div className="flex flex-col items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
+                                                <span className="text-[10px] text-cyan-500 font-mono animate-pulse">Initializing WebGL Core...</span>
+                                            </div>
+                                        </div>
+                                    }>
+                                        <TurbineRunner3D
+                                            ref={turbineRef}
+                                            rpm={300}
+                                            deltaMap={deltaMap}
+                                            heatmapMode={true}
+                                            ghostMode={ghostMode}
+                                            baselineDelta={deltaMap} // Using current delta as baseline for demo purpose (simulating deviation)
+                                            deltaIndex={deltaPerf}
+                                            className="h-full"
+                                        />
+                                    </React.Suspense>
+                                </ErrorBoundary>
                             </div>
                             {/* Legend docked bottom-right, semi-transparent */}
                             <div className="absolute bottom-0 right-0 opacity-90">

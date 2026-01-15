@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { TechnicalProjectState } from '../../models/TechnicalSchema';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 

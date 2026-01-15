@@ -13,7 +13,7 @@ const ARManager = lazy(() => import('../components/ARManager').then(m => ({ defa
 const TechnicalPassport = lazy(() => import('../components/TechnicalPassport').then(m => ({ default: m.TechnicalPassport })));
 
 
-import { LoadingShimmer } from '../components/ui/LoadingShimmer.tsx';
+import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
 
 const MaintenanceRouter: React.FC = () => {
     return (

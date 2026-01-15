@@ -6,10 +6,12 @@ import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
-import { FetchSkeleton } from './ui/FetchSkeleton.tsx';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore.ts'; // Data Bridge
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { ModernButton } from '../shared/components/ui/ModernButton';
+import { FetchSkeleton } from '../shared/components/ui/FetchSkeleton';
+import { RefreshCw } from 'lucide-react'; // Icon for Fetch
 
 // --- TYPES ---
 interface Block {
@@ -38,6 +40,7 @@ export const DigitalIntegrity: React.FC = () => {
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
+    const { mechanical, physics } = useTelemetryStore(); // Live Telemetry Store
 
     // --- STATE ---
     const [ledger, setLedger] = useState<Block[]>([]);
@@ -45,7 +48,7 @@ export const DigitalIntegrity: React.FC = () => {
     // Form Inputs
     const [operation, setOperation] = useState('Shaft Alignment Check');
     const [value, setValue] = useState('0.04 mm/m');
-    const [engineer, setEngineer] = useState(user?.email || 'Eng. Unknown');
+    const [engineer, setEngineer] = useState(user?.email || 'Field Engineer');
 
     // UI States
     const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +59,23 @@ export const DigitalIntegrity: React.FC = () => {
         if (user?.email) setEngineer(user.email);
         else if (user?.user_metadata?.full_name) setEngineer(user.user_metadata.full_name);
     }, [user]);
+
+    // --- 0. SMART ASSIST: FETCH LIVE DATA ---
+    const fetchLiveTelemetry = () => {
+        if (operation === 'Vibration Analysis' && mechanical?.vibration !== undefined) {
+            setValue(`${mechanical.vibration.toFixed(3)} mm/s ISO`);
+            showToast('Fetched Live Vibration Data', 'success');
+        } else if (operation === 'Shaft Alignment Check' && mechanical?.rpm !== undefined) {
+            setValue(mechanical.rpm > 1 ? `Dynamic Run-out @ ${mechanical.rpm.toFixed(0)} RPM` : 'Static Alignment OK');
+            showToast('Fetched Alignment Context', 'success');
+        } else if (operation.includes('Seal') && physics?.surgePressure !== undefined) {
+            const pressure = typeof physics.surgePressure === 'number' ? physics.surgePressure : physics.surgePressure.toNumber();
+            setValue(`${pressure.toFixed(2)} Bar (Live)`);
+            showToast('Fetched Live Pressure Data', 'success');
+        } else {
+            showToast('No relevant telemetry stream found for this operation.', 'info');
+        }
+    };
 
     // --- 1. FETCH LEDGER (REAL-TIME) ---
     const fetchLedger = async () => {
@@ -241,12 +261,21 @@ export const DigitalIntegrity: React.FC = () => {
                                 </select>
                             </div>
 
-                            <ModernInput
-                                label={t('digitalIntegrity.resultLabel', 'Measured Value / Result')}
-                                value={value}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-                                className="font-mono"
-                            />
+                            <div className="relative">
+                                <ModernInput
+                                    label={t('digitalIntegrity.resultLabel', 'Measured Value / Result')}
+                                    value={value}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+                                    className="font-mono pr-12"
+                                />
+                                <button
+                                    onClick={fetchLiveTelemetry}
+                                    className="absolute right-2 bottom-2 p-2 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 rounded transition-colors"
+                                    title="Fetch Live System Data"
+                                >
+                                    <RefreshCw className="w-4 h-4" />
+                                </button>
+                            </div>
 
                             <div className="pt-4">
                                 <ModernButton
@@ -350,4 +379,4 @@ export const DigitalIntegrity: React.FC = () => {
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.
+// Uklonjen dupli eksport

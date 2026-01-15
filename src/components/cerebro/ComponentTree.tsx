@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, Hexagon, Circle, Zap, Anchor, Camera, Sparkles, Activity, FileCheck, Droplet, Settings, AlertTriangle } from 'lucide-react';
 import { useProjectEngine } from '../../contexts/ProjectContext';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { InspectionImage } from '../../services/StrategicPlanningService';
 import { useTranslation } from 'react-i18next';
 

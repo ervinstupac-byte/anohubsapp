@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { PlantMaster } from './PlantMaster.tsx';
-import { BidEvaluator } from './BidEvaluator.tsx';
-import { HydrologyLab } from './HydrologyLab.tsx';
-import { GlassCard } from '../ui/GlassCard.tsx';
+const PlantMaster = React.lazy(() => import('./PlantMaster.tsx').then(m => ({ default: m.PlantMaster })));
+const BidEvaluator = React.lazy(() => import('./BidEvaluator.tsx').then(m => ({ default: m.BidEvaluator })));
+const HydrologyLab = React.lazy(() => import('./HydrologyLab.tsx').then(m => ({ default: m.HydrologyLab })));
+import { Spinner } from '../../shared/components/ui/Spinner';
+import { ErrorBoundary } from '../ErrorBoundary.tsx';
+import { ModuleFallback } from '../../shared/components/ui/ModuleFallback';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { Database, Factory, Droplets, HardHat } from 'lucide-react';
 
 export const InfrastructureHub: React.FC = () => {
@@ -48,12 +51,16 @@ export const InfrastructureHub: React.FC = () => {
             </div>
 
             <div className="mt-8">
-                <Routes>
-                    <Route path="/" element={<PlantMaster />} />
-                    <Route path="plant-master" element={<PlantMaster />} />
-                    <Route path="bid-evaluator" element={<BidEvaluator />} />
-                    <Route path="hydrology-lab" element={<HydrologyLab />} />
-                </Routes>
+                <ErrorBoundary fallback={<ModuleFallback title="Infrastructure Module Error" icon="Ban" />}>
+                    <React.Suspense fallback={<div className="flex justify-center p-12"><Spinner /></div>}>
+                        <Routes>
+                            <Route path="/" element={<PlantMaster />} />
+                            <Route path="plant-master" element={<PlantMaster />} />
+                            <Route path="bid-evaluator" element={<BidEvaluator />} />
+                            <Route path="hydrology-lab" element={<HydrologyLab />} />
+                        </Routes>
+                    </React.Suspense>
+                </ErrorBoundary>
             </div>
         </div>
     );

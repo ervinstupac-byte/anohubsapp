@@ -8,6 +8,7 @@ import de from './de.json';
 import tr from './tr.json';
 import ms from './ms.json';
 import si from './si.json';
+import docs from './locales/docs.json'; // New Engineering Docs
 
 // Provjeri da li postoji sačuvani jezik u memoriji preglednika
 const savedLanguage = localStorage.getItem('appLanguage') || 'en';
@@ -17,7 +18,8 @@ i18n.use(initReactI18next).init({
     en: {
       common: en, // Temporary: keep as en if not restructured yet, or move to nested
       francis: (en as any).francis || {},
-      system: (en as any).system || {}
+      system: (en as any).system || {},
+      docs: docs // NEW
     },
     bs: {
       common: bs,
@@ -31,7 +33,7 @@ i18n.use(initReactI18next).init({
   },
   lng: savedLanguage,
   fallbackLng: 'en',
-  ns: ['common', 'francis', 'system'],
+  ns: ['common', 'francis', 'system', 'docs'],
   defaultNS: 'common',
   interpolation: { escapeValue: false }
 });

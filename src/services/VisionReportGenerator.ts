@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { TechnicalAuditData, VisionAnalysisResult } from './ReportGenerator';
+import { TechnicalAuditData, VisionAnalysisResult } from '../features/reporting/ReportGenerator';
 
 /**
  * Vision Enhanced Report Generator (Phase 3)

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 // --- 1. MOCK DATA (ESG METRICS) ---
 const METRICS = {

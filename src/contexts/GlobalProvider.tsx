@@ -19,7 +19,12 @@ import { DocumentProvider } from './DocumentContext.tsx';
 import { ProjectProvider } from './ProjectContext.tsx';
 import { NotificationProvider } from './NotificationContext.tsx';
 import { HydrologyProvider } from './HydrologyContext.tsx';
+import { AssetConfigProvider } from './AssetConfigContext.tsx'; // NEW: Static configuration
 import { DEFAULT_TECHNICAL_STATE } from '../models/TechnicalSchema.ts';
+// NEW: Sync Engine Bridge for incremental migration
+import { DataBridge } from '../hooks/useSyncLegacyToNew';
+import { DensityProvider } from './DensityContext.tsx';
+import { WorkflowProvider } from './WorkflowContext.tsx'; // NEW: Cross-module workflow state
 
 interface GlobalProviderProps {
     children: React.ReactNode;
@@ -31,46 +36,55 @@ interface GlobalProviderProps {
  */
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     return (
-        <ToastProvider>
-            <AuditProvider>
-                <NotificationProvider>
-                    <AuthProvider>
-                        <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
-                            <HydrologyProvider>
-                                <AssetProvider>
-                                    <MaintenanceProvider>
-                                        <RiskProvider>
-                                            <TelemetryProvider>
-                                                <QuestionnaireProvider>
-                                                    <HPPDesignProvider>
-                                                        <InventoryProvider>
-                                                            <WorkOrderProvider>
-                                                                <DiagnosticProvider>
-                                                                    <FleetProvider>
-                                                                        <VoiceAssistantProvider>
-                                                                            <ForensicsProvider>
-                                                                                <CommissioningProvider>
-                                                                                    <DocumentProvider>
-                                                                                        {children}
-                                                                                    </DocumentProvider>
-                                                                                </CommissioningProvider>
-                                                                            </ForensicsProvider>
-                                                                        </VoiceAssistantProvider>
-                                                                    </FleetProvider>
-                                                                </DiagnosticProvider>
-                                                            </WorkOrderProvider>
-                                                        </InventoryProvider>
-                                                    </HPPDesignProvider>
-                                                </QuestionnaireProvider>
-                                            </TelemetryProvider>
-                                        </RiskProvider>
-                                    </MaintenanceProvider>
-                                </AssetProvider>
-                            </HydrologyProvider>
-                        </ProjectProvider>
-                    </AuthProvider>
-                </NotificationProvider>
-            </AuditProvider>
-        </ToastProvider>
+        <DensityProvider>
+            <ToastProvider>
+                <AuditProvider>
+                    <NotificationProvider>
+                        <AuthProvider>
+                            {/* NEW STORES: Zustand stores don't need providers, but AssetConfig does */}
+                            <AssetConfigProvider>
+                                <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
+                                    {/* SYNC ENGINE: Bridges legacy ProjectContext → New Stores */}
+                                    <DataBridge />
+                                    <HydrologyProvider>
+                                        <AssetProvider>
+                                            <MaintenanceProvider>
+                                                <RiskProvider>
+                                                    <TelemetryProvider>
+                                                        <QuestionnaireProvider>
+                                                            <HPPDesignProvider>
+                                                                <InventoryProvider>
+                                                                    <WorkOrderProvider>
+                                                                        <DiagnosticProvider>
+                                                                            <FleetProvider>
+                                                                                <VoiceAssistantProvider>
+                                                                                    <ForensicsProvider>
+                                                                                        <CommissioningProvider>
+                                                                                            <DocumentProvider>
+                                                                                                <WorkflowProvider>
+                                                                                                    {children}
+                                                                                                </WorkflowProvider>
+                                                                                            </DocumentProvider>
+                                                                                        </CommissioningProvider>
+                                                                                    </ForensicsProvider>
+                                                                                </VoiceAssistantProvider>
+                                                                            </FleetProvider>
+                                                                        </DiagnosticProvider>
+                                                                    </WorkOrderProvider>
+                                                                </InventoryProvider>
+                                                            </HPPDesignProvider>
+                                                        </QuestionnaireProvider>
+                                                    </TelemetryProvider>
+                                                </RiskProvider>
+                                            </MaintenanceProvider>
+                                        </AssetProvider>
+                                    </HydrologyProvider>
+                                </ProjectProvider>
+                            </AssetConfigProvider>
+                        </AuthProvider>
+                    </NotificationProvider>
+                </AuditProvider>
+            </ToastProvider>
+        </DensityProvider>
     );
 };

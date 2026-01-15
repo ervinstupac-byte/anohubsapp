@@ -4,7 +4,7 @@ import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { AlarmBar } from './diagnostic-twin/AlarmBar.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 // import { ExpertDiagnosticPanel } from './ExpertDiagnosticPanel.tsx'; // REMOVED: simulation feature
-import { ModernButton } from './ui/ModernButton.tsx';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // --- PERFORMANCE: CODE SPLITTING ---
 // We load heavy modules lazily to ensure a lightning-fast "Command Center" initial load.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GlassCard } from './GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 
 interface StatCardProps {
     label: string;

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';
 import { useForensics } from '../contexts/ForensicsContext.tsx';
 

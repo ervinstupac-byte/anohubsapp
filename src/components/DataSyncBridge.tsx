@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useCerebro } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import Decimal from 'decimal.js';
 
 /**
@@ -12,6 +13,7 @@ import Decimal from 'decimal.js';
 export const DataSyncBridge: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { dispatch, state: techState } = useCerebro();
+    const { updateTelemetry } = useTelemetryStore();
 
     // Persistence Ref to prevent redundant sync loops
     const lastSyncedSpecsRef = useRef<string>("");
@@ -53,6 +55,7 @@ export const DataSyncBridge: React.FC = () => {
                 const headValue = parseFloat(specs.head);
                 const flowValue = parseFloat(specs.flow);
 
+                // Legacy Context Sync
                 dispatch({
                     type: 'UPDATE_HYDRAULIC',
                     payload: {
@@ -62,33 +65,64 @@ export const DataSyncBridge: React.FC = () => {
                         flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
                     }
                 });
+
+                // New Telemetry Store Sync
+                // New Telemetry Store Sync
+                updateTelemetry({
+                    hydraulic: {
+                        head: headValue,
+                        flow: flowValue,
+                        // netHead removed - not in schema
+                    }
+                });
             }
 
             // Sync Mechanical
             if (specs.boltDiameter || specs.boltCount || specs.boltGrade) {
+                // Ensure defaults to match strict requirements if values are missing
+                const safeCount = specs.boltCount ? parseInt(specs.boltCount.toString()) : techState.mechanical.boltSpecs.count;
+                const safeGrade = specs.boltGrade || techState.mechanical.boltSpecs.grade;
+                const safeDiameter = specs.boltDiameter ? parseInt(specs.boltDiameter.toString()) : techState.mechanical.boltSpecs.diameter;
+
+                const boltSpecsPayload = {
+                    diameter: safeDiameter,
+                    count: safeCount,
+                    grade: safeGrade,
+                    torque: techState.mechanical.boltSpecs.torque // Preserve existing
+                };
+
                 dispatch({
                     type: 'UPDATE_MECHANICAL',
                     payload: {
-                        boltSpecs: {
-                            ...techState.mechanical.boltSpecs,
-                            diameter: specs.boltDiameter || techState.mechanical.boltSpecs.diameter,
-                            count: specs.boltCount || techState.mechanical.boltSpecs.count,
-                            grade: specs.boltGrade || techState.mechanical.boltSpecs.grade
-                        }
+                        boltSpecs: boltSpecsPayload
+                    }
+                });
+
+                // New Telemetry Store Sync
+                updateTelemetry({
+                    mechanical: {
+                        boltSpecs: boltSpecsPayload
                     }
                 });
             }
 
             // Sync Penstock
             if (specs.penstockDiameter || specs.penstockLength || specs.penstockMaterial) {
+                const penstockUpdate = {
+                    diameter: specs.penstockDiameter || techState.penstock.diameter,
+                    length: specs.penstockLength || techState.penstock.length,
+                    material: specs.penstockMaterial || techState.penstock.material,
+                    wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
+                };
+
                 dispatch({
                     type: 'UPDATE_PENSTOCK',
-                    payload: {
-                        diameter: specs.penstockDiameter || techState.penstock.diameter,
-                        length: specs.penstockLength || techState.penstock.length,
-                        material: specs.penstockMaterial || techState.penstock.material,
-                        wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
-                    }
+                    payload: penstockUpdate
+                });
+
+                // New Telemetry Store Sync
+                updateTelemetry({
+                    penstock: penstockUpdate as any
                 });
             }
         }

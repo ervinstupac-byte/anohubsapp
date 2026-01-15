@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 interface OnboardingProps {
     onComplete: () => void;

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, AlertTriangle, CheckCircle, X } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { LegacyKnowledgeService } from '../services/LegacyKnowledgeService';
 
 export interface LegacyValidationModalProps {
@@ -123,17 +123,17 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                 <>
                                     {/* Validation Info */}
                                     <div className={`mb-6 p-4 rounded-lg border-2 ${validation.riskLevel === 'HIGH' ? 'border-red-500 bg-red-950/20' :
-                                            validation.riskLevel === 'MEDIUM' ? 'border-amber-500 bg-amber-950/20' :
-                                                'border-blue-500 bg-blue-950/20'
+                                        validation.riskLevel === 'MEDIUM' ? 'border-amber-500 bg-amber-950/20' :
+                                            'border-blue-500 bg-blue-950/20'
                                         }`}>
                                         <div className="flex items-center gap-2 mb-3">
                                             <AlertTriangle className={`w-5 h-5 ${validation.riskLevel === 'HIGH' ? 'text-red-400' :
-                                                    validation.riskLevel === 'MEDIUM' ? 'text-amber-400' :
-                                                        'text-blue-400'
+                                                validation.riskLevel === 'MEDIUM' ? 'text-amber-400' :
+                                                    'text-blue-400'
                                                 }`} />
                                             <span className={`text-sm font-black uppercase ${validation.riskLevel === 'HIGH' ? 'text-red-400' :
-                                                    validation.riskLevel === 'MEDIUM' ? 'text-amber-400' :
-                                                        'text-blue-400'
+                                                validation.riskLevel === 'MEDIUM' ? 'text-amber-400' :
+                                                    'text-blue-400'
                                                 }`}>
                                                 {validation.riskLevel} RISK - Legacy ID: {validation.caseId}
                                             </span>
@@ -151,8 +151,8 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                                 <label
                                                     key={index}
                                                     className={`flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${checklistStatus.get(index)
-                                                            ? 'border-emerald-500 bg-emerald-950/20'
-                                                            : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
+                                                        ? 'border-emerald-500 bg-emerald-950/20'
+                                                        : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
                                                         }`}
                                                 >
                                                     <input
@@ -201,8 +201,8 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                             <div
                                                 key={tip.id}
                                                 className={`p-3 rounded-lg border ${tip.criticality === 'MUST_FOLLOW'
-                                                        ? 'border-red-500 bg-red-950/20'
-                                                        : 'border-purple-500 bg-purple-950/20'
+                                                    ? 'border-red-500 bg-red-950/20'
+                                                    : 'border-purple-500 bg-purple-950/20'
                                                     }`}
                                             >
                                                 <p className={`text-xs font-bold uppercase mb-1 ${tip.criticality === 'MUST_FOLLOW' ? 'text-red-400' : 'text-purple-400'
@@ -256,8 +256,8 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                     onClick={handleProceed}
                                     disabled={!canProceed && !!validation}
                                     className={`flex-1 px-6 py-3 rounded-lg font-bold transition-all ${canProceed || !validation
-                                            ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-emerald-500/50'
-                                            : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                                        ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-emerald-500/50'
+                                        : 'bg-slate-800 text-slate-500 cursor-not-allowed'
                                         }`}
                                 >
                                     {canProceed || !validation ? 'Nastavi sa zadatkom ✓' : 'Potvrdi sve stavke'}

@@ -2,13 +2,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Upload, AlertTriangle, CheckCircle, Microscope } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ParticleAnalysisService, ParticleClassification } from '../services/ParticleAnalysisService';
-import { useCerebro } from '../contexts/ProjectContext';
+// MIGRATED: From ProjectContext to specialized Store
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export const ParticleFerographyViewer: React.FC = () => {
-    const { state } = useCerebro();
-    const particles: ParticleClassification[] = state.mechanical.particleAnalysis || [
+    // MIGRATION: Consume mechanical data from TelemetryStore
+    const { mechanical } = useTelemetryStore();
+
+    // Fallback to sample data if no live data (or during migration gap)
+    const particleData = mechanical?.particleAnalysis as ParticleClassification[] | undefined;
+
+    const particles: ParticleClassification[] = particleData || [
         {
             particleType: 'BABBITT_FLAKE',
             confidence: 92,
@@ -53,7 +59,7 @@ export const ParticleFerographyViewer: React.FC = () => {
     const fatigueParticles = particles.filter(p => p.particleType === 'FATIGUE_CHUNK');
     const totalParticles = particles.reduce((sum, p) => sum + p.characteristics.count, 0);
 
-    const bearingTemp = state.mechanical.bearingTemp;
+    const bearingTemp = mechanical?.bearingTemp || 0;
     const baselineTemp = 65; // °C
     const correlation = ParticleAnalysisService.correlateTempAndParticles(particles, bearingTemp, baselineTemp);
 

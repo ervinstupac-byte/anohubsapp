@@ -1,0 +1,227 @@
+﻿src/App.tsx(31,25): error TS2307: Cannot find module './components/Spinner.tsx' or its corresponding type declarations.
+src/App.tsx(42,32): error TS2307: Cannot find module './components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/App.tsx(43,29): error TS2307: Cannot find module './components/ui/Breadcrumbs.tsx' or its corresponding type declarations.
+src/components/AcousticDiagnosticModule.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/AdminApproval.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/AdminApproval.tsx(5,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/AlignmentWizard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/AnoHubOS.tsx(33,25): error TS2307: Cannot find module './Spinner' or its corresponding type declarations.
+src/components/AnoHubOS.tsx(35,32): error TS2307: Cannot find module './ui/ModuleFallback' or its corresponding type declarations.
+src/components/ARManager.tsx(5,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/ARXRayView.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(6,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(7,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(8,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/AssetRegistrationWizard.tsx(91,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(98,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(173,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(181,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(199,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(209,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AssetRegistrationWizard.tsx(219,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/AutoReportGenerator.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/BaselineFingerprintWizard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/BlackBoxForensics.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/BoltTorqueCalculator.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/BoltTorqueCalculator.tsx(5,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/cerebro/panels/HydraulicsPanel.tsx(6,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/cerebro/panels/MechanicalPanel.tsx(4,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/ClientDashboard.tsx(6,29): error TS2307: Cannot find module './ui/ToastSystem' or its corresponding type declarations.
+src/components/ClientDashboard.tsx(7,31): error TS2307: Cannot find module './ui/TurbineLoader' or its corresponding type declarations.
+src/components/CommandCenter.tsx(5,32): error TS2307: Cannot find module './ui/ModuleFallback' or its corresponding type declarations.
+src/components/CommissioningModeDashboard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/CommissioningWizard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/ComponentLibrary.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ContractManagement.tsx(9,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ContractManagement.tsx(10,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/dashboard/EngineeringWisdomVault.tsx(4,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/EngineeringWisdomVault.tsx(5,30): error TS2307: Cannot find module '../ui/ModernButton' or its corresponding type declarations.
+src/components/dashboard/ExecutiveDashboard.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/ExecutiveDashboard.tsx(8,30): error TS2307: Cannot find module '../ui/ModernButton' or its corresponding type declarations.
+src/components/dashboard/SmartManual.tsx(4,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/visual/MechanismDetailView.tsx(15,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/diagnostic-twin/NeuralFlowMap.tsx(6,25): error TS2307: Cannot find module '../ui/Tooltip.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(9,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(10,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(11,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/DigitalIntegrity.tsx(12,31): error TS2307: Cannot find module './ui/FetchSkeleton.tsx' or its corresponding type declarations.
+src/components/DigitalIntroduction.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/DigitalIntroduction.tsx(7,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/ErosionMappingViewer.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/ErrorBoundary.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/ErrorBoundary.tsx(3,30): error TS2307: Cannot find module './ui/ModernButton' or its corresponding type declarations.
+src/components/ExecutiveFinancialDashboard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/Feedback.tsx(3,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/Feedback.tsx(4,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/FluidForceDiagnostics.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/FluidMetalDiagnosticsHub.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/ForensicDepthAnalyzer.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/francis/AuxiliarySystems.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/BearingsDetail.tsx(20,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/BrakingSystem.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/CathodicProtection.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/CoolingWater.tsx(20,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/Coupling.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/DCSystems.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/DistributorSync.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/DrainagePumps.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/ElectricalHealth.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/EmergencyProtocols.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/Excitation.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/FrancisHub.tsx(7,32): error TS2307: Cannot find module '../ui/ModuleFallback' or its corresponding type declarations.
+src/components/francis/FrancisHub.tsx(8,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/GeneratorIntegrity.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/GovernorPID.tsx(21,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/GridSync.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/HPU.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/Intake.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/Linkage.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/LoadRejectionLogic.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/LubricationSystem.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/MissionControl.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/MIVDetail.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/OilHealth.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/RegulatingRing.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/SealRecovery.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(9,54): error TS2307: Cannot find module '../ui/ShaftOrbitPlot' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(13,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/ShaftAlignment.tsx(186,54): error TS7006: Parameter 'analysis' implicitly has an 'any' type.
+src/components/francis/StartupFlowchart.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/ThrustBalance.tsx(8,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/Transformer.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/VortexControl.tsx(7,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/francis/WaterHammer.tsx(20,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/GalvanicCorrosionMonitor.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/GenderEquity.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/GlobalMap.tsx(8,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/GuidedDiagnosisModal.tsx(3,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/hpp-designer/StructuralAssembly.tsx(7,30): error TS2307: Cannot find module '../ui/ModernButton' or its corresponding type declarations.
+src/components/HPPBuilder.tsx(17,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/HPPBuilder.tsx(20,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/HPPBuilder.tsx(21,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/HPPImprovements.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/HPPImprovements.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/HPPImprovements.tsx(9,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/Hub.tsx(7,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/HydraulicMaintenance.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/HydraulicMaintenance.tsx(10,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/HydroStaticTestMonitor.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/IncidentSimulator.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/IncidentSimulator.tsx(5,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/infrastructure/BidEvaluator.tsx(3,27): error TS2307: Cannot find module '../ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/infrastructure/BidEvaluator.tsx(4,30): error TS2307: Cannot find module '../ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/infrastructure/BidEvaluator.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/infrastructure/HydrologyLab.tsx(3,27): error TS2307: Cannot find module '../ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/infrastructure/HydrologyLab.tsx(4,30): error TS2307: Cannot find module '../ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/infrastructure/HydrologyLab.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(7,25): error TS2307: Cannot find module '../Spinner.tsx' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(9,32): error TS2307: Cannot find module '../ui/ModuleFallback.tsx' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(10,27): error TS2307: Cannot find module '../ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/infrastructure/PlantMaster.tsx(3,27): error TS2307: Cannot find module '../ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/infrastructure/PlantMaster.tsx(4,30): error TS2307: Cannot find module '../ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/infrastructure/PlantMaster.tsx(5,29): error TS2307: Cannot find module '../ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/InstallationGuarantee.tsx(10,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/InstallationGuarantee.tsx(11,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/InterventionCTA.tsx(6,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(8,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(9,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(10,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(123,146): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/InvestorBriefing.tsx(124,138): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/InvestorBriefing.tsx(125,137): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/KnowledgeBridgeVisualizer.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/KnowledgeCapturePanel.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/LegacyModeHub.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/LegacyValidationModal.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/Login.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/Login.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/Login.tsx(9,30): error TS2307: Cannot find module './ui/ModernButton' or its corresponding type declarations.
+src/components/Login.tsx(80,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/Login.tsx(90,40): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/MachineProtectionSystem.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/MagneticPullAnalytics.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/MaintenanceDashboard.tsx(11,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/MaintenanceDashboard.tsx(24,30): error TS2307: Cannot find module './OrbitPlotter.tsx' or its corresponding type declarations.
+src/components/modals/PrintPreviewModal.tsx(4,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/OilAnalysisDashboard.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/Onboarding.tsx(3,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/ParticleFerographyViewer.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/PeltonJetVisualizer.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/PerformanceGuardDashboard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/PostShutdownWatchdog.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/PrescriptiveRecommendations.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ProjectGenesisForm.tsx(17,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/ProjectPhaseGuide.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/Questionnaire.tsx(3,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/Questionnaire.tsx(4,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/QuestionnaireSummary.tsx(14,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/QuestionnaireSummary.tsx(15,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/RevitalizationStrategy.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/RevitalizationStrategy.tsx(7,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/RiskAssessment.tsx(8,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/RiskReport.tsx(13,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/RiskReport.tsx(14,26): error TS2307: Cannot find module './ui/Skeleton.tsx' or its corresponding type declarations.
+src/components/RiskReport.tsx(15,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/SatelliteInflowMap.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/SealingIntegrity.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ShiftLog.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ShiftLog.tsx(5,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/SmartStartChecklist.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/SOPManager.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/SOPManager.tsx(7,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/SpecializedDiagnostics.tsx(15,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/SpecializedDiagnostics.tsx(16,30): error TS2307: Cannot find module './ui/ModernButton' or its corresponding type declarations.
+src/components/SpecializedDiagnostics.tsx(17,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/SpecializedDiagnostics.tsx(158,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(170,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(183,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecializedDiagnostics.tsx(195,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/SpecialMeasurementPanel.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/StandardOfExcellence.tsx(6,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/StandardOfExcellence.tsx(7,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/StrategicPlanningDashboard.tsx(10,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/StrategicPlanningDashboard.tsx(27,29): error TS2307: Cannot find module './ui/ToastSystem' or its corresponding type declarations.
+src/components/StressCycleCounter.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/StructuralIntegrity.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/StructuralIntegrity.tsx(6,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/SystemResponseAnalytics.tsx(2,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/TechnicalAuditReportModule.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(5,29): error TS2307: Cannot find module './ui/ModernInput' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(6,30): error TS2307: Cannot find module './ui/ModernButton' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(226,56): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/ToolboxLaunchpad.tsx(5,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ToolboxLaunchpad.tsx(6,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/turbine/DigitalTwinOverlay.tsx(16,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/turbine/KaplanDashboard.tsx(15,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/turbine/OptimizationDashboard.tsx(15,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/TurbineDetail.tsx(4,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/ui/ControlPanel.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/StatCard.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/UnderConstruction.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/UnderConstruction.tsx(3,30): error TS2307: Cannot find module './ModernButton' or its corresponding type declarations.
+src/components/UniversalFleetDashboard.tsx(29,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/UniversalTurbineDashboard.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/UserProfile.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/UserProfile.tsx(8,29): error TS2307: Cannot find module './ui/ModernInput.tsx' or its corresponding type declarations.
+src/components/UserProfile.tsx(9,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/components/UserProfile.tsx(210,48): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/UserProfile.tsx(218,48): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/UserProfile.tsx(227,52): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/VisualInspectionHub.tsx(7,27): error TS2307: Cannot find module './ui/GlassCard' or its corresponding type declarations.
+src/components/WorkOrderOrchestrator.tsx(3,27): error TS2307: Cannot find module './ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/WorkOrderOrchestrator.tsx(4,30): error TS2307: Cannot find module './ui/ModernButton.tsx' or its corresponding type declarations.
+src/features/reporting/api/ReportDataBuilder.ts(125,29): error TS2367: This comparison appears to be unintentional because the types '1' and '5' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(126,13): error TS2367: This comparison appears to be unintentional because the types '1' and '4' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(127,17): error TS2367: This comparison appears to be unintentional because the types '1' and '3' have no overlap.
+src/hooks/useSyncLegacyToNew.ts(91,28): error TS2339: Property 'setState' does not exist on type 'TelemetryState'.
+src/hooks/useSyncLegacyToNew.ts(103,28): error TS2339: Property 'setState' does not exist on type 'TelemetryState'.
+src/hooks/useSyncLegacyToNew.ts(116,28): error TS2339: Property 'setState' does not exist on type 'TelemetryState'.
+src/hooks/useSyncLegacyToNew.ts(120,60): error TS2339: Property 'eccentricity' does not exist on type 'StructuralMetrics'.
+src/routes/FrancisRouter.tsx(3,25): error TS2307: Cannot find module '../components/Spinner' or its corresponding type declarations.
+src/routes/FrancisRouter.tsx(49,32): error TS2307: Cannot find module '../components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/routes/MaintenanceRouter.tsx(16,32): error TS2307: Cannot find module '../components/ui/LoadingShimmer.tsx' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(2,32): error TS2307: Cannot find module '../../contexts/MaintenanceContext' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(3,41): error TS2307: Cannot find module '../../data/knowledge/ComponentTaxonomy' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(22,41): error TS7006: Parameter 'wo' implicitly has an 'any' type.
+src/shared/components/ui/StatusBadge.tsx(31,36): error TS7006: Parameter 'log' implicitly has an 'any' type.

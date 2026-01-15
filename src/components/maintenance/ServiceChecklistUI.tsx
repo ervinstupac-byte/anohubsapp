@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, Camera, Mic, MicOff } from 'lucide-react';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
-import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ServiceChecklistEngine } from '../../services/ServiceChecklistEngine';
 import { ChecklistItem } from '../../types/checklist';
 import { PrecisionInput } from '../precision/PrecisionInput';
@@ -16,7 +15,8 @@ import { HistoricalMeasurement, PrecisionMeasurement } from '../../types/trends'
 export const ServiceChecklistUI: React.FC = () => {
     const { activeChecklist, updateChecklistItem, addFieldNote } = useMaintenance();
     // TODO: Re-enable when addMeasurement and addPrecisionMeasurement are implemented
-    // const { addMeasurement, addPrecisionMeasurement } = useProjectEngine();
+    // TODO: Re-enable when addMeasurement and addPrecisionMeasurement are implemented in new store
+    // const { addMeasurement, addPrecisionMeasurement } = useTelemetryStore...
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 

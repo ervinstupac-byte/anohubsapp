@@ -2,10 +2,14 @@ import React, { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useContextEngine } from '../hooks/useContextEngine';
 import { getContextFromRoute, ContextDefinition } from '../data/knowledge/ContextMap';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from './AuthContext';
+
+export type UserPersona = 'TECHNICIAN' | 'MANAGER' | 'ENGINEER';
 
 interface ContextAwarenessState {
-    // Identity
+    // Identity & RBAC
     activeDefinition: ContextDefinition | null;
+    activePersona: UserPersona;
 
     // Knowledge
     activeContextNodes: any[]; // KnowledgeNode[]
@@ -47,6 +51,7 @@ const ContextAwarenessContext = createContext<ContextAwarenessState | undefined>
 
 export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const location = useLocation();
+    const { user } = useAuth();
 
     // 1. Get Core Engine Data (Logs, Graphs)
     const engineData = useContextEngine(); // This hook handles the heavy lifting (Supabase, Logic)
@@ -54,8 +59,19 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
     // 2. Get Static Definition (Title, Slogan)
     const activeDefinition = getContextFromRoute(location.pathname);
 
+    // 3. Derive Persona (RBAC) - Default to TECHNICIAN for safety
+    const activePersona: UserPersona = useMemo(() => {
+        // In refined auth, this comes from user.user_metadata.role or a profile table
+        // For now, we simulate based on email or assume TECHNICIAN
+        const role = user?.user_metadata?.role as string;
+        if (role === 'MANAGER' || role === 'admin') return 'MANAGER';
+        if (role === 'ENGINEER') return 'ENGINEER';
+        return 'TECHNICIAN';
+    }, [user]);
+
     const value: ContextAwarenessState = useMemo(() => ({
         activeDefinition,
+        activePersona, // <--- Exposed to App
         activeContextNodes: engineData.activeContext,
         activeLogs: engineData.activeLogs,
         activeWorkOrders: engineData.activeWorkOrders,
@@ -77,7 +93,7 @@ export const ContextAwarenessProvider: React.FC<{ children: ReactNode }> = ({ ch
         reinforcePattern: engineData.reinforcePattern,
         setFocus: engineData.setFocus,
         activeComponentId: engineData.activeComponentId
-    }), [activeDefinition, engineData]);
+    }), [activeDefinition, activePersona, engineData]);
 
     return (
         <ContextAwarenessContext.Provider value={value}>

@@ -12,7 +12,7 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { GlassCard } from '../../ui/GlassCard';
+import { GlassCard } from '../../../shared/components/ui/GlassCard';
 
 /**
  * NC-4.2 MECHANISM DETAIL VIEW

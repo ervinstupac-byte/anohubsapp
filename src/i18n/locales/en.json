@@ -1,4 +1,13 @@
 {
+    "actions": {
+        "troubleshoot": "Troubleshoot",
+        "analyzeTrend": "Analyze Trend",
+        "updateSpecs": "Update Specs",
+        "viewHistory": "View History",
+        "viewTwin": "Digital Twin",
+        "goToOperations": "Go to Operations",
+        "viewDesign": "View Design"
+    },
     "common": {
         "switchLanguage": "Switch Language",
         "simulate": "Simulate",
@@ -40,6 +49,9 @@
     "forensics": {
         "title": "Diagnostic Forensics",
         "subtitle": "Field Analysis Unit • Machine Health • Root Cause",
+        "critical_alert": "CRITICAL SECURITY ALERT: DATA EXFILTRATION",
+        "network_traffic": "Network Traffic",
+        "security_feed": "Security & Threat Feed",
         "vision_title": "Texture Forensics",
         "audio_title": "Acoustic Signature",
         "post_mortem": "Post-Mortem Watchdog",
@@ -139,6 +151,32 @@
             "normal": "NOMINAL",
             "warning": "WARNING",
             "critical": "CRITICAL"
+        },
+        "workflowHeader": {
+            "title": "Active Machine",
+            "health": "Health",
+            "dashboard": "Dashboard"
+        },
+        "selectAssetFirst": "Select Unit",
+        "assetRequiredDesc": "Identify equipment to load safety protocols.",
+        "status_pending": "Sync Pending",
+        "protocolLaunchpad": {
+            "title": "Protocol Launchpad"
+        },
+        "assetPassport": {
+            "title": "Asset Passport",
+            "editSpecs": "Edit Specs",
+            "downloadFull": "Download Full",
+            "viewDesign": "View Design",
+            "lastOverhaul": "Last Overhaul",
+            "labyrinthClearance": "Labyrinth Clearance",
+            "babbittStatus": "Babbitt Temp Status",
+            "toleranceBreach": "Tolerance Breach",
+            "operatingHours": "Operating Hours"
+        },
+        "eventMarkers": {
+            "protocol": "Protocol Completed",
+            "workOrder": "Work Order Closed"
         }
     },
     "sidebar": {

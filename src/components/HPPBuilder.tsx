@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
+import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { reportGenerator } from '../services/ReportGenerator.ts';
+import { reportGenerator } from '../features/reporting/ReportGenerator.ts';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
@@ -14,11 +15,11 @@ import { ErrorBoundary } from './ErrorBoundary.tsx';
 import { AssetIdentity, TurbineType } from '../types/assetIdentity.ts';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
 import { DEFAULT_TECHNICAL_STATE } from '../models/TechnicalSchema';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StatCard } from './ui/StatCard.tsx';
 import { ControlPanel } from './ui/ControlPanel.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
+import { ModernButton } from '../shared/components/ui/ModernButton';
+import { ModernInput } from '../shared/components/ui/ModernInput';
 import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 import { StructuralAssembly } from './hpp-designer/StructuralAssembly.tsx';
@@ -47,6 +48,7 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
 };
 
 export const HPPBuilder: React.FC = () => {
+    const navigate = useNavigate();
     const { navigateToTurbineDetail } = useNavigation();
     const { showToast } = useToast();
     const { user } = useAuth();
@@ -265,7 +267,7 @@ export const HPPBuilder: React.FC = () => {
         showToast(t('hppStudio.toasts.savingDesign'), 'info');
 
         try {
-            const bestTurbine = recommendations.find(r => r.isBest)?.key || 'Unknown';
+            const bestTurbine = recommendations.find(r => r.isBest)?.key || 'N/A';
             const payload = {
                 engineer_id: user?.email || 'Anonymous',
                 user_id: user?.id,
@@ -280,6 +282,24 @@ export const HPPBuilder: React.FC = () => {
 
             // --- CENTRALIZED ASSET UPDATE & LOGGING ---
             const oldSpecs = selectedAsset.specs || {};
+
+            // DESIGN-TO-FIELD TRANSLATION LOGIC
+            // Derive engineering constraints from the physical design parameters
+            const isHighHead = settings.head > 200;
+            const isHighFlow = settings.flow > 100;
+            const derivedBoltSpecs = {
+                grade: isHighHead ? '12.9' : '10.9',
+                diameter: isHighFlow ? 64 : isHighHead ? 42 : 36, // Larger bolts for high flow (mass) or high head (pressure)
+                count: isHighFlow ? 24 : 16
+            };
+
+            const derivedLimits = {
+                vibrationLimit: isHighHead ? 2.8 : 3.5, // Stricter vib limit for high-speed/head
+                maxLabyrinthClearance: bestTurbine === 'FRANCIS' ? 0.45 : undefined,
+                minBladeGap: bestTurbine === 'KAPLAN' ? 2.0 : undefined,
+                nominalSpeedRPM: calculations.n_sq ? parseFloat(calculations.n_sq) : undefined // Approx speed index
+            };
+
             const newSpecs = {
                 ...oldSpecs,
                 designName: configName,
@@ -287,7 +307,11 @@ export const HPPBuilder: React.FC = () => {
                 flow: settings.flow,
                 powerMW: calculations.powerMW,
                 recommendedTurbine: bestTurbine,
-                lastDesignUpdate: new Date().toISOString()
+                lastDesignUpdate: new Date().toISOString(),
+
+                // INJECTED ENGINEERING CONSTRAINTS (Source of Truth for Field Tools)
+                boltSpecs: derivedBoltSpecs,
+                ...derivedLimits
             };
 
             // 1. Update Global Asset State
@@ -419,6 +443,13 @@ export const HPPBuilder: React.FC = () => {
                         <p className="text-slate-400 text-xs font-mono uppercase tracking-widest mt-1">{t('hppStudio.subtitle')}</p>
                     </div>
                     <div className="flex items-center gap-4">
+                        <ModernButton
+                            variant="ghost"
+                            className="text-xs uppercase font-bold tracking-wide"
+                            onClick={() => navigate('/')}
+                        >
+                            {t('hppBuilder.goToOperations', 'Go to Operations')}
+                        </ModernButton>
                         <AssetPicker />
                         <BackButton text={t('hppStudio.exitStudio')} />
                     </div>

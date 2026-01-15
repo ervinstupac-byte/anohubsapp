@@ -1,0 +1,228 @@
+﻿
+> anohub-hpp-risk-excellence-platform@1.0.0 build
+> npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build
+
+
+> anohub-hpp-risk-excellence-platform@1.0.0 build:verify
+> npx tsx scripts/verify_env.ts
+
+------------------------------------------
+BUILD CLEANLINESS CHECK: NC-4.2 PROTOCOL
+------------------------------------------
+SUCCESS: All critical environment variables verified.
+------------------------------------------
+
+
+> anohub-hpp-risk-excellence-platform@1.0.0 i18n:sync
+> node -e "const fs=require('fs'); try { fs.copyFileSync('src/i18n/locales/en.json', 'src/i18n/en.json'); fs.copyFileSync('src/i18n/locales/bs.json', 'src/i18n/bs.json'); console.log('i18n synced'); } catch(e) { console.error(e); process.exit(1); }"
+
+i18n synced
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test
+> vitest run
+
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32mÔ£ô[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [33mÔØ»[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m0 test[22m[2m)[22m
+ [32mÔ£ô[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [33mÔØ»[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m0 test[22m[2m)[22m
+ [32mÔ£ô[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+
+node.exe : [31mÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1m[7m 
+Failed Suites 2 [27m
+[22mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[39m
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([31mÔÄ»ÔÄ   
+ »ÔÄ»Ô...»ÔÄ»ÔÄ»ÔÄ    
+»[39m:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-thresho
+lds.test.ts [2m[ src/
+__tests__/expert-thres
+holds.test.ts ][22m
+[31m[1mError[22m: 
+Failed to resolve 
+import "../config/Syst
+emConstants" from "src
+/features/physics-core
+/PhysicsCalculations.l
+ogic.ts". Does the 
+file exist?[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext._f
+ormatError ../../../..
+/getting%20started/Doc
+uments/GitHub/anohubsa
+pp/node_modules/vite/d
+ist/node/chunks/dep-BK
+3b2jBa.js:[2m49258:41
+[22m[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext.er
+ror ../../../../gettin
+g%20started/Documents/
+GitHub/anohubsapp/node
+_modules/vite/dist/nod
+e/chunks/dep-BK3b2jBa.
+js:[2m49253:16[22m[
+39m
+[90m [2mÔØ»[22m 
+normalizeUrl ../../../
+../getting%20started/D
+ocuments/GitHub/anohub
+sapp/node_modules/vite
+/dist/node/chunks/dep-
+BK3b2jBa.js:[2m64307:
+23[22m[39m
+[90m [2mÔØ»[22m 
+async file:/C:/Users/H
+ome/OneDrive/getting%2
+0started/Documents/Git
+Hub/anohubsapp/node_mo
+dules/vite/dist/node/c
+hunks/dep-BK3b2jBa.js:
+[2m64439:39[22m[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext.tr
+ansform ../../../../ge
+tting%20started/Docume
+nts/GitHub/anohubsapp/
+node_modules/vite/dist
+/node/chunks/dep-BK3b2
+jBa.js:[2m64366:7[22
+m[39m
+[90m [2mÔØ»[22m Plu
+ginContainer.transform
+ ../../../../getting%2
+0started/Documents/Git
+Hub/anohubsapp/node_mo
+dules/vite/dist/node/c
+hunks/dep-BK3b2jBa.js:
+[2m49099:18[22m[39m
+[90m [2mÔØ»[22m 
+loadAndTransform ../..
+/../../getting%20start
+ed/Documents/GitHub/an
+ohubsapp/node_modules/
+vite/dist/node/chunks/
+dep-BK3b2jBa.js:[2m51
+978:27[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/physics-engine
+-audit.test.ts [2m[ s
+rc/__tests__/physics-e
+ngine-audit.test.ts 
+][22m
+[31m[1mError[22m: 
+Failed to resolve 
+import "../config/Syst
+emConstants" from "src
+/features/physics-core
+/PhysicsCalculations.l
+ogic.ts". Does the 
+file exist?[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext._f
+ormatError ../../../..
+/getting%20started/Doc
+uments/GitHub/anohubsa
+pp/node_modules/vite/d
+ist/node/chunks/dep-BK
+3b2jBa.js:[2m49258:41
+[22m[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext.er
+ror ../../../../gettin
+g%20started/Documents/
+GitHub/anohubsapp/node
+_modules/vite/dist/nod
+e/chunks/dep-BK3b2jBa.
+js:[2m49253:16[22m[
+39m
+[90m [2mÔØ»[22m 
+normalizeUrl ../../../
+../getting%20started/D
+ocuments/GitHub/anohub
+sapp/node_modules/vite
+/dist/node/chunks/dep-
+BK3b2jBa.js:[2m64307:
+23[22m[39m
+[90m [2mÔØ»[22m 
+async file:/C:/Users/H
+ome/OneDrive/getting%2
+0started/Documents/Git
+Hub/anohubsapp/node_mo
+dules/vite/dist/node/c
+hunks/dep-BK3b2jBa.js:
+[2m64439:39[22m[39m
+[90m [2mÔØ»[22m Tra
+nsformPluginContext.tr
+ansform ../../../../ge
+tting%20started/Docume
+nts/GitHub/anohubsapp/
+node_modules/vite/dist
+/node/chunks/dep-BK3b2
+jBa.js:[2m64366:7[22
+m[39m
+[90m [2mÔØ»[22m Plu
+ginContainer.transform
+ ../../../../getting%2
+0started/Documents/Git
+Hub/anohubsapp/node_mo
+dules/vite/dist/node/c
+hunks/dep-BK3b2jBa.js:
+[2m49099:18[22m[39m
+[90m [2mÔØ»[22m 
+loadAndTransform ../..
+/../../getting%20start
+ed/Documents/GitHub/an
+ohubsapp/node_modules/
+vite/dist/node/chunks/
+dep-BK3b2jBa.js:[2m51
+978:27[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ
+»[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m19 passed[39m[22m[90m (19)[39m
+[2m   Start at [22m 19:16:38
+[2m   Duration [22m 2.59s[2m (transform 189ms, setup 36ms, collect 322ms, tests 23ms, environment 14.36s, prepare 1.60s)[22m
+

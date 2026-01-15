@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 export const StructuralIntegrity: React.FC = () => {
     const { telemetry } = useTelemetry();

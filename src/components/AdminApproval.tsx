@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../services/supabaseClient.ts';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { BackButton } from './BackButton.tsx';
 

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, Search, Lightbulb, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { LegacyKnowledgeService, WTFCase, OldSchoolTip } from '../services/LegacyKnowledgeService';
 
 export const LegacyModeHub: React.FC = () => {
@@ -181,8 +181,8 @@ const TabButton: React.FC<{
     <button
         onClick={onClick}
         className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors ${active
-                ? 'border-purple-500 text-white'
-                : 'border-transparent text-slate-500 hover:text-slate-300'
+            ? 'border-purple-500 text-white'
+            : 'border-transparent text-slate-500 hover:text-slate-300'
             }`}
     >
         <Icon className="w-4 h-4" />
@@ -217,8 +217,8 @@ const CaseCard: React.FC<{
         >
             <div className="flex items-start justify-between mb-2">
                 <span className={`text-xs font-bold px-2 py-1 rounded ${wtfCase.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
-                        wtfCase.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
-                            'bg-blue-500/20 text-blue-400'
+                    wtfCase.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
+                        'bg-blue-500/20 text-blue-400'
                     }`}>
                     {wtfCase.id}
                 </span>
@@ -240,8 +240,8 @@ const CaseDetailView: React.FC<{ case: WTFCase }> = ({ case: wtfCase }) => (
                 <p className="text-sm text-purple-400">{wtfCase.component}</p>
             </div>
             <span className={`px-3 py-1 rounded font-bold ${wtfCase.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
-                    wtfCase.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
-                        'bg-blue-500/20 text-blue-400'
+                wtfCase.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
+                    'bg-blue-500/20 text-blue-400'
                 }`}>
                 {wtfCase.severity}
             </span>
@@ -335,17 +335,17 @@ const TipsPanel: React.FC = () => {
 
 const TipCard: React.FC<{ tip: OldSchoolTip }> = ({ tip }) => (
     <GlassCard className={`p-4 border-2 ${tip.criticality === 'MUST_FOLLOW' ? 'border-red-500 bg-red-950/20' :
-            tip.criticality === 'RECOMMENDED' ? 'border-amber-500 bg-amber-950/20' :
-                'border-blue-500 bg-blue-950/20'
+        tip.criticality === 'RECOMMENDED' ? 'border-amber-500 bg-amber-950/20' :
+            'border-blue-500 bg-blue-950/20'
         }`}>
         <div className="flex items-center gap-2 mb-2">
             <Lightbulb className={`w-4 h-4 ${tip.criticality === 'MUST_FOLLOW' ? 'text-red-400' :
-                    tip.criticality === 'RECOMMENDED' ? 'text-amber-400' :
-                        'text-blue-400'
+                tip.criticality === 'RECOMMENDED' ? 'text-amber-400' :
+                    'text-blue-400'
                 }`} />
             <span className={`text-xs font-bold uppercase ${tip.criticality === 'MUST_FOLLOW' ? 'text-red-400' :
-                    tip.criticality === 'RECOMMENDED' ? 'text-amber-400' :
-                        'text-blue-400'
+                tip.criticality === 'RECOMMENDED' ? 'text-amber-400' :
+                    'text-blue-400'
                 }`}>
                 {tip.criticality.replace('_', ' ')}
             </span>

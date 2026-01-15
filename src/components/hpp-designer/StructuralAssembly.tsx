@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Wrench } from 'lucide-react';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useToast } from '../../contexts/ToastContext';
-import { ModernButton } from '../ui/ModernButton';
+import { ModernButton } from '../../shared/components/ui/ModernButton';
 
 // --- TYPES & INVENTORY ---
 type ComponentType = 'DRAFT_TUBE' | 'SPIRAL_CASE' | 'STAY_RING' | 'WICKET_GATES' | 'HEAD_COVER' | 'ROTOR' | 'MAIN_SHAFT' | 'STATOR';
@@ -31,6 +33,7 @@ const INVENTORY: HPPComponent[] = [
 // --- COMPONENT ---
 export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyChange: (parts: { partId: string; alignment?: number; timestamp: number }[]) => void }> = ({ onComplete, onAssemblyChange }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate(); // NEW: For deep-link navigation
     const { showToast } = useToast();
     const { logActivity, selectedAsset, updateAsset } = useAssetContext();
 
@@ -204,12 +207,28 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
                                     initial={{ opacity: 0, y: -50, scale: 0.9 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    className="w-full h-16 bg-slate-800 rounded-lg border border-cyan-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center justify-center gap-4 relative group"
+                                    className="w-full h-16 bg-slate-800 rounded-lg border border-cyan-500/30 shadow-[0_4px_20px_rgba(0,0,0,0.5)] flex items-center justify-between px-4 relative group"
                                     style={{ zIndex: part?.zIndex || 0 }}
                                 >
-                                    <span className="text-2xl">{part?.icon}</span>
-                                    <span className="text-sm font-bold text-cyan-100">{t(`hpp_builder.assembly.components.${partId.toLowerCase()}`)}</span>
-                                    <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="flex items-center gap-4">
+                                        <span className="text-2xl">{part?.icon}</span>
+                                        <span className="text-sm font-bold text-cyan-100">{t(`hpp_builder.assembly.components.${partId.toLowerCase()}`)}</span>
+                                    </div>
+
+                                    {/* NEW: Go to Operations Deep-Link */}
+                                    <ModernButton
+                                        variant="ghost"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate('/', { state: { focusComponent: partId, fromBuilder: true } });
+                                        }}
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] px-2 py-1 flex items-center gap-1 hover:bg-cyan-500/10 hover:text-cyan-400"
+                                    >
+                                        <Wrench className="w-3 h-3" />
+                                        <span>{t('actions.goToOperations', 'Operations')}</span>
+                                    </ModernButton>
+
+                                    <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                 </motion.div>
                             );
                         })}

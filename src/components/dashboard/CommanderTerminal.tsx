@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { Terminal, Shield, Zap, AlertTriangle, ChevronRight, X } from 'lucide-react';
 import { ExpertInference } from '../../services/ExpertInference';
@@ -35,7 +38,7 @@ export const CommanderTerminal: React.FC = () => {
         const [cmdName, ...args] = input.trim().toLowerCase().split(' ');
         const param = args.join(' ');
 
-        addMessage(`$ ${input}`, 'INFO');
+        addMessage(`$ ${input} `, 'INFO');
 
         if (cmdName === '/explain') {
             if (param) {
@@ -57,8 +60,8 @@ export const CommanderTerminal: React.FC = () => {
                 const vibLimit = 4.5;
                 const kv = state.identity.machineConfig?.ratedPowerMW ? 11 : 6.6;
                 addMessage("DR. TURBINE ANALYSIS:", 'SUCCESS');
-                addMessage(`1. VIBRATION: Standard ISO 10816-3 specifies Critical as >${vibLimit}mm/s.`);
-                addMessage(`2. INSULATION: Megger Law R_{min} = kV + 1. Current required: >${kv + 1} MOhm.`);
+                addMessage(`1. VIBRATION: Standard ISO 10816 - 3 specifies Critical as > ${vibLimit} mm / s.`);
+                addMessage(`2. INSULATION: Megger Law R_{ min } = kV + 1. Current required: > ${kv + 1} MOhm.`);
                 const inferences = ExpertInference.analyze(state);
                 addMessage(`3. BARLOW'S LINK (Spiral): Stress = (P * D) / (2 * t). Current Margin: ${inferences.metrics.structuralSafetyMargin.toFixed(1)}%.`);
             }

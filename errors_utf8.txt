@@ -1,0 +1,37 @@
+﻿src/components/cerebro/panels/HydraulicsPanel.tsx(7,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/cerebro/panels/MechanicalPanel.tsx(5,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/EngineeringWisdomVault.tsx(4,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/EngineeringWisdomVault.tsx(5,30): error TS2307: Cannot find module '../ui/ModernButton' or its corresponding type declarations.
+src/components/dashboard/RevenueImpactCard.tsx(6,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/SmartManual.tsx(5,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/SmartManual.tsx(35,13): error TS2365: Operator '>' cannot be applied to types 'number | Decimal' and 'number'.
+src/components/dashboard/SmartManual.tsx(46,13): error TS2367: This comparison appears to be unintentional because the types '"OPTIMAL"' and '"DEGRADING"' have no overlap.
+src/components/dashboard/SmartManual.tsx(46,46): error TS2367: This comparison appears to be unintentional because the types '"OPTIMAL"' and '"CRITICAL"' have no overlap.
+src/components/dashboard/visual/MechanismDetailView.tsx(15,27): error TS2307: Cannot find module '../../ui/GlassCard' or its corresponding type declarations.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,33): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,62): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,96): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/dashboard/visual/RunnerDetailView.tsx(140,117): error TS2339: Property 'efficiency' does not exist on type 'Partial<PhysicsResult>'.
+src/components/DataSyncBridge.tsx(74,25): error TS2353: Object literal may only specify known properties, and 'netHead' does not exist in type 'Partial<HydraulicStream>'.
+src/components/DataSyncBridge.tsx(91,25): error TS2322: Type '{ diameter: number | undefined; count: number | undefined; grade: any; torque: number; }' is not assignable to type '{ grade: string; count: number; torque: number; diameter?: number | undefined; }'.
+  Types of property 'count' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/components/hpp-designer/StructuralAssembly.tsx(7,30): error TS2307: Cannot find module '../ui/ModernButton' or its corresponding type declarations.
+src/components/infrastructure/InfrastructureHub.tsx(10,27): error TS2307: Cannot find module '../ui/GlassCard.tsx' or its corresponding type declarations.
+src/components/modals/PrintPreviewModal.tsx(4,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/turbine/DigitalTwinOverlay.tsx(16,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/turbine/KaplanDashboard.tsx(15,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/turbine/OptimizationDashboard.tsx(15,27): error TS2307: Cannot find module '../ui/GlassCard' or its corresponding type declarations.
+src/components/ui/ControlPanel.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/StatCard.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/UnderConstruction.tsx(2,27): error TS2307: Cannot find module './GlassCard' or its corresponding type declarations.
+src/components/ui/UnderConstruction.tsx(3,30): error TS2307: Cannot find module './ModernButton' or its corresponding type declarations.
+src/features/reporting/api/ReportDataBuilder.ts(125,29): error TS2367: This comparison appears to be unintentional because the types '1' and '5' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(126,13): error TS2367: This comparison appears to be unintentional because the types '1' and '4' have no overlap.
+src/features/reporting/api/ReportDataBuilder.ts(127,17): error TS2367: This comparison appears to be unintentional because the types '1' and '3' have no overlap.
+src/hooks/useFinancialYield.ts(33,21): error TS2339: Property 'power' does not exist on type 'HydraulicStream'.
+src/shared/components/ui/StatusBadge.tsx(2,32): error TS2307: Cannot find module '../../contexts/MaintenanceContext' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(3,41): error TS2307: Cannot find module '../../data/knowledge/ComponentTaxonomy' or its corresponding type declarations.
+src/shared/components/ui/StatusBadge.tsx(22,41): error TS7006: Parameter 'wo' implicitly has an 'any' type.
+src/shared/components/ui/StatusBadge.tsx(31,36): error TS7006: Parameter 'log' implicitly has an 'any' type.

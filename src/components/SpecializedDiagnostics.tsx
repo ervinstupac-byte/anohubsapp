@@ -12,9 +12,9 @@ import {
     Zap,
     AlertOctagon
 } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
-import { ModernButton } from './ui/ModernButton';
-import { ModernInput } from './ui/ModernInput';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
+import { ModernInput } from '../shared/components/ui/ModernInput';
 import { FrancisModel } from '../models/turbine/FrancisModel';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useAssetContext } from '../contexts/AssetContext';

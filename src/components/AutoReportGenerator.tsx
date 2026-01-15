@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, Sparkles, CheckCircle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { autoReportService, ServiceMeasurement } from '../services/AutoReportService';
 import { useAssetContext } from '../contexts/AssetContext';
 

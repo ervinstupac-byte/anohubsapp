@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
+
 import {
     ArrowLeft,
     Settings,
@@ -90,11 +92,15 @@ const childVariants = {
 
 const GuideVaneDetailView: React.FC<GuideVaneDetailProps> = ({ onBack, onHome }) => {
     const { t } = useTranslation();
+    const { mechanical, specializedState } = useTelemetryStore(); // Live Telemetry + Specialized Mock
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeData = GV_COMPONENTS.find(c => c.id === activeSub);
+    const rpm = mechanical?.rpm || 0;
+    // New Data Bridge (Telemetry Store)
+    const guideVaneOpening = specializedState?.sensors?.guide_vane_opening || 0;
 
     // Initial check for fullscreen state to handle SSR safely
     useEffect(() => {
@@ -156,9 +162,16 @@ const GuideVaneDetailView: React.FC<GuideVaneDetailProps> = ({ onBack, onHome })
                         <h2 className="text-xl font-black text-white tracking-widest uppercase">
                             {t('guidevane.detail.title', 'Guide Vane System')} <span className="text-cyan-500">{t('common.drillDown', 'Drill-Down')}</span>
                         </h2>
-                        <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                            NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 4 REGULATION POINTS
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
+                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 4 REGULATION POINTS
+                            </p>
+                            {/* LIVE OPENING INDICATOR */}
+                            <div className="flex items-center gap-1 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/30">
+                                <Aperture className="w-3 h-3 text-cyan-300" />
+                                <span className="text-[10px] font-mono font-black text-white">{guideVaneOpening.toFixed(1)}% OPEN</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -273,6 +286,19 @@ const GuideVaneDetailView: React.FC<GuideVaneDetailProps> = ({ onBack, onHome })
                                     </div>
                                 </div>
                                 <div className="space-y-6">
+                                    {/* LIVE OPENING CARD */}
+                                    {activeData.id === 'gv-vanes' && (
+                                        <div className="p-4 bg-cyan-950/30 border-l-2 border-cyan-400 rounded-r-lg">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">Live Opening</span>
+                                                <span className="text-sm font-mono font-black text-white">{guideVaneOpening.toFixed(1)}%</span>
+                                            </div>
+                                            <div className="w-full h-1 bg-cyan-900/50 rounded-full overflow-hidden">
+                                                <div className="h-full bg-cyan-400 transition-all duration-300" style={{ width: `${guideVaneOpening}%` }} />
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div>
                                         <span className="text-[10px] font-black uppercase text-slate-400 block mb-1">Functional Target</span>
                                         <p className="text-sm text-slate-300">{getComponentData(activeData).func}</p>

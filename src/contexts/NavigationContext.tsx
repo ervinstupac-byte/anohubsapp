@@ -56,6 +56,11 @@ interface NavigationContextType {
     showOnboarding: boolean;
     completeOnboarding: () => void;
     showFeedbackModal: () => void;
+    // --- NEW: Golden Thread Navigation Helpers ---
+    navigateToExecutive: () => void;
+    navigateToBuilder: () => void;
+    navigateToToolbox: () => void;
+    navigateToMaintenance: () => void;
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined);

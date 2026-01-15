@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, DollarSign, ShieldCheck, Activity, AlertOctagon, Zap } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { PerformanceGuardService, OperatingPoint } from '../services/PerformanceGuardService';
 
 export const ClientConsultantDashboard: React.FC = () => {
@@ -63,8 +63,8 @@ export const ClientConsultantDashboard: React.FC = () => {
                                 Efficiency Hill Chart Audit
                             </h3>
                             <div className={`px-3 py-1 rounded text-xs font-black uppercase ${zoneInfo.zone === 'BEST_EFFICIENCY' ? 'bg-emerald-500 text-black' :
-                                    zoneInfo.zone === 'VORTEX_ROPE' ? 'bg-amber-500 text-black' :
-                                        zoneInfo.zone === 'CAVITATION_RISK' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
+                                zoneInfo.zone === 'VORTEX_ROPE' ? 'bg-amber-500 text-black' :
+                                    zoneInfo.zone === 'CAVITATION_RISK' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
                                 }`}>
                                 Phase: {zoneInfo.zone.replace('_', ' ')}
                             </div>

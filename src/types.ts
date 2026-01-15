@@ -57,6 +57,30 @@ export interface Asset {
   startStopCount?: number;
   specs?: Record<string, any>; // Flexible storage for turbine-specific data (e.g. FrancisHorizontalSpecs)
   assetPassport?: AssetPassport;
+  turbineProfile?: TurbineProfile; // NEW: Dynamic Asset Profiling
+}
+
+export interface TurbineProfile {
+  type: 'francis' | 'kaplan' | 'pelton';
+  configuration: 'horizontal' | 'vertical';
+  rpmNominal: number; // For ISO thresholds
+  specificParams: {
+    // Francis
+    labyrinthType?: 'stepped' | 'smooth' | 'grooved';
+    guideVaneCount?: number;
+    runnerDiameter?: number;
+
+    // Kaplan
+    bladeCount?: number;
+    pitchMechanism?: 'hydraulic' | 'mechanical';
+    hubDiameter?: number;
+
+    // Pelton
+    needleCount?: number;
+    nozzleType?: 'single' | 'multi';
+    bucketCount?: number;
+    needleGap?: number; // Nominal gap
+  };
 }
 
 export interface AssetContextType {
@@ -66,9 +90,12 @@ export interface AssetContextType {
   selectAsset: (id: string) => void;
   loading: boolean;
   addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
-  updateAsset: (id: string, updates: Partial<Asset>) => void; // <--- NEW: Update Asset
-  logActivity: (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void; // <--- NEW: Log Activity
-  assetLogs: AssetHistoryEntry[]; // <--- NEW: Expose Logs
+  updateAsset: (id: string, updates: Partial<Asset>) => void;
+  logActivity: (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
+  assetLogs: AssetHistoryEntry[];
+  // --- NEW: Golden Thread additions ---
+  isAssetSelected: boolean;
+  clearSelection: () => void;
 }
 
 export interface AssetHistoryEntry {
@@ -79,6 +106,8 @@ export interface AssetHistoryEntry {
   message: string;
   author: string;
   changes?: { oldVal: any, newVal: any };
+  previousHash?: string; // <--- NEW: Crypto Chain
+  hash?: string; // <--- NEW: SHA-256 Signature
 }
 
 // --- RISK & QUESTIONNAIRE ---
@@ -316,3 +345,16 @@ export const BaseAssetTemplateSchema = z.object({
 });
 
 export type BaseAssetTemplate = z.infer<typeof BaseAssetTemplateSchema>;
+
+// --- INSPECTION IMAGE ---
+export interface InspectionImage {
+  id: string;
+  componentId: string;
+  description: string; // German Technical Caption
+  src: string; // Base64 or Blob URL
+  metadata: {
+    timestamp: string;
+    gps: string;
+  };
+  aiTags: string[]; // e.g., 'Kavitation'
+}

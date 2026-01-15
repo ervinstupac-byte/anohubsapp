@@ -10,9 +10,9 @@ import { supabase } from '../services/supabaseClient.ts';
 import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { Skeleton } from './ui/Skeleton.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { Skeleton } from '../shared/components/ui/Skeleton';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 // Spinner removed as it's replaced by Skeleton
 import { QUESTIONS } from '../constants.ts';
 

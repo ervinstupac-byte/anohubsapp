@@ -29,11 +29,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return (
         <ToastContext.Provider value={{ showToast }}>
             {children}
-            
+
             {/* MODERN TOAST CONTAINER */}
-            <div className="fixed top-6 right-6 z-[9999] flex flex-col gap-4 pointer-events-none w-full max-w-sm">
+            <div className="fixed top-6 right-6 z-50 flex flex-col gap-4 pointer-events-none w-full max-w-sm">
                 {toasts.map(toast => (
-                    <div 
+                    <div
                         key={toast.id}
                         className={`
                             pointer-events-auto transform transition-all duration-500 ease-out animate-slide-in-right
@@ -72,7 +72,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         </div>
 
                         {/* Close Button */}
-                        <button 
+                        <button
                             onClick={() => removeToast(toast.id)}
                             className="text-white/50 hover:text-white transition-colors"
                         >

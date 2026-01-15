@@ -12,7 +12,7 @@ import {
     ArrowRight,
     Download
 } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ITurbineModel, OptimizationReport } from '../../models/turbine/types';
 import { EnhancedAsset } from '../../models/turbine/types';
 import { ConsultingEngine } from '../../services/ConsultingEngine';
@@ -95,8 +95,8 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setSelectedScenario(scenario)}
                             className={`flex-1 p-4 rounded-lg border-2 transition-all ${selectedScenario === scenario
-                                    ? 'bg-purple-500/20 border-purple-500 shadow-lg shadow-purple-500/20'
-                                    : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
+                                ? 'bg-purple-500/20 border-purple-500 shadow-lg shadow-purple-500/20'
+                                : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
                                 }`}
                         >
                             <p className={`text-xs uppercase font-black tracking-wider mb-2 ${selectedScenario === scenario ? 'text-purple-400' : 'text-slate-500'
@@ -252,8 +252,8 @@ const MetricRow: React.FC<MetricRowProps> = ({ label, value, status, improvement
         <span className="text-sm text-slate-400">{label}</span>
         <div className="flex items-center gap-2">
             <span className={`text-lg font-black ${status === 'success' ? 'text-emerald-400' :
-                    status === 'warning' ? 'text-amber-400' :
-                        'text-red-400'
+                status === 'warning' ? 'text-amber-400' :
+                    'text-red-400'
                 }`}>
                 {value}
             </span>

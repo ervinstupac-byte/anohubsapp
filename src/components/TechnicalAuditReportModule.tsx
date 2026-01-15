@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { FileText, Download, ShieldCheck, AlertTriangle } from 'lucide-react';
-import { reportGenerator } from '../services/ReportGenerator';
-import { GlassCard } from './ui/GlassCard';
+import { reportGenerator } from '../features/reporting/ReportGenerator';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 export const TechnicalAuditReportModule: React.FC = () => {
 

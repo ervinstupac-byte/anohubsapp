@@ -1,14 +1,30 @@
 import { useMemo } from 'react';
-import { useCerebro } from '../contexts/ProjectContext';
 import Decimal from 'decimal.js';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { useAssetConfig } from '../contexts/AssetConfigContext';
+import { DEFAULT_TECHNICAL_STATE } from '../models/TechnicalSchema';
 
 /**
  * useEngineeringMath - The Neural Core's Math Engine
  * Centralized high-precision calculations for all CEREBRO components.
+ * 
+ * MIGRATION NOTE (Batch 2 Pattern):
+ * Now uses specialized stores instead of monolithic ProjectContext:
+ * - useTelemetryStore: Live sensor data (mechanical, hydraulic) + physics results
+ * - useAssetConfig: Static asset configuration (identity, penstock specs)
  */
 export const useEngineeringMath = () => {
-    const { state } = useCerebro();
-    const { mechanical, hydraulic, physics, penstock, governor, identity } = state;
+    // NEW: Specialized stores for different concerns
+    const telemetry = useTelemetryStore();
+    const { config } = useAssetConfig();
+
+    // Extract with null safety, falling back to defaults
+    const mechanical = telemetry.mechanical ?? DEFAULT_TECHNICAL_STATE.mechanical;
+    const hydraulic = telemetry.hydraulic ?? DEFAULT_TECHNICAL_STATE.hydraulic;
+    const physics = telemetry.physics ?? {};
+    const penstock = telemetry.penstock ?? DEFAULT_TECHNICAL_STATE.penstock;
+    const governor = DEFAULT_TECHNICAL_STATE.governor; // Governor still from defaults for now
+    const identity = telemetry.identity ?? DEFAULT_TECHNICAL_STATE.identity;
 
     return useMemo(() => {
         const PI = Decimal.acos(-1);
@@ -96,8 +112,10 @@ export const useEngineeringMath = () => {
 
         // --- BURST SAFETY FACTOR ---
         const yieldStrength = new Decimal(penstock.materialYieldStrength || 250);
-        const hoopStress = new Decimal(physics.hoopStressMPa || 1);
-        const burstSafetyFactor = yieldStrength.div(hoopStress.greaterThan(0) ? hoopStress : new Decimal(1));
+        // physics.hoopStress is a Decimal from PhysicsResult; extract numeric value
+        const hoopStressValue = physics.hoopStress?.toNumber?.() ?? 1;
+        const hoopStressDecimal = new Decimal(hoopStressValue > 0 ? hoopStressValue : 1);
+        const burstSafetyFactor = yieldStrength.div(hoopStressDecimal);
 
         let iecRecommendation = "IEC 60041: Operational parameters within design envelope.";
         if (burstSafetyFactor.lessThan(1.5)) {
@@ -115,7 +133,8 @@ export const useEngineeringMath = () => {
 
         // --- PERFORMANCE DELTA ---
         let performanceDelta = new Decimal(0);
-        const actualPower = new Decimal(physics.surgePressureBar || 0);
+        // physics.surgePressure is a Decimal from PhysicsResult
+        const actualPower = new Decimal(physics.surgePressure?.toNumber?.() ?? 0);
         const baselinePower = new Decimal(hydraulic.baselineOutputMW || 100);
 
         if (baselinePower.greaterThan(0)) {
@@ -169,7 +188,7 @@ export const useEngineeringMath = () => {
             },
             performance: {
                 delta: performanceDelta.toNumber(),
-                hoopStress: physics.hoopStressMPa
+                hoopStress: hoopStressValue
             },
             vibration: {
                 x: mechanical.vibrationX,

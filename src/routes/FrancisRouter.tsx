@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Spinner } from '../components/Spinner';
+import { Spinner } from '../shared/components/ui/Spinner';
 
 // Lazy load all Francis components
 const FrancisHub = React.lazy(() => import('../components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
@@ -46,7 +46,7 @@ const ForensicLab = React.lazy(() => import('../components/ForensicLab').then(mo
 const MechanismDetail = React.lazy(() => import('../components/dashboard/visual/MechanismDetailView')); // Default export
 
 
-import { LoadingShimmer } from '../components/ui/LoadingShimmer.tsx';
+import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
 import { ROUTES } from './paths.ts';
 
 /**

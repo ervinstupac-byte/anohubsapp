@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDiagnostic, IntuitionQuery } from '../contexts/DiagnosticContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 interface GuidedDiagnosisModalProps {
     query: IntuitionQuery;

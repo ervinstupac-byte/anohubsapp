@@ -6,7 +6,7 @@
 
 import { useMemo } from 'react';
 import { useProjectEngine } from '../contexts/ProjectContext';
-import { ExpertDiagnosisEngine } from '../services/ExpertDiagnosisEngine';
+import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine';
 import { injectExpertInsights } from '../services/KnowledgeInjector';
 // import { calculateFinancialRisk } from '../components/dashboard/FinancialRiskTicker'; // Removed in favor of KnowledgeInjector
 import { AIFinding } from '../types/aiFinding';

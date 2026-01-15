@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';
 
 export const ShiftLog: React.FC = () => {

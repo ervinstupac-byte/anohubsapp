@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
-import { Search, Command, X, ShieldCheck } from 'lucide-react';
+import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
+import { useAssetContext } from '../contexts/AssetContext'; // <--- NEW
+import { useContextAwareness } from '../contexts/ContextAwarenessContext'; // <--- NEW
+import { useDensity } from '../contexts/DensityContext'; // <--- Density Control Phase 4
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
@@ -17,66 +20,32 @@ interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, title }) => {
     const { t } = useTranslation();
-    const displayTitle = title || t('header.title');
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, signOut } = useAuth();
     const { state: techState } = useCerebro();
     const { riskState: questionnaireRisk } = useRisk();
     const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator();
+    const { selectedAsset } = useAssetContext(); // <--- Get Active Asset
+    const { activePersona, hiveStatus } = useContextAwareness(); // <--- Get Persona & Sync
+    const { mode, toggleDensity } = useDensity();
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    // const [searchQuery, setSearchQuery] = useState(''); // Removed in favor of Global Command Palette
+    // const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
+    const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
     // Heritage (NC-4.2) Logic
     const alignment = techState.mechanical.alignment || 0;
     const water = techState.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
     const tan = techState.identity.fluidIntelligence.oilSystem.tan || 0;
-    const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5 && tan > 0; // Added tan > 0 to avoid certifying empty/default states if 0 means not set
-    // Actually, let's keep it simple as per user request: <= 0.05 and TAN < 0.5 and water < 500.
-    // If defaults are 0, it might trigger. Let's assume defaults are "nominal" for now or use a more robust check if needed.
-    // The user said: "until the asset meets the 0.05 mm/m and TAN/Water thresholds".
+    const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5 && tan > 0;
 
 
-    // Search Index Construction
-    const SEARCH_INDEX = [
-        { label: t('sidebar.shaftAlignment'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.ALIGNMENT },
-        { label: t('sidebar.bearings'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.BEARINGS },
-        { label: t('francis.waterHammer.title'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.WATER_HAMMER },
-        { label: t('sidebar.excitation'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.EXCITATION },
-        { label: t('sidebar.transformer'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.TRANSFORMER },
-        { label: t('sidebar.penstock'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.PENSTOCK },
-        { label: t('sidebar.intake'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.SOP.INTAKE },
-        { label: t('sidebar.hydraulicMaintenance'), path: '/' + ROUTES.MAINTENANCE.ROOT + '/' + ROUTES.MAINTENANCE.HYDRAULIC },
-        { label: t('sidebar.boltTorque'), path: '/' + ROUTES.MAINTENANCE.ROOT + '/' + ROUTES.MAINTENANCE.BOLT_TORQUE },
-        { label: t('sidebar.maintenanceLogbook'), path: '/' + ROUTES.MAINTENANCE.ROOT + '/' + ROUTES.MAINTENANCE.LOGBOOK },
-        { label: t('modules.riskAssessment'), path: ROUTES.RISK_ASSESSMENT },
-        { label: t('sidebar.francisLogic'), path: '/' + ROUTES.FRANCIS.ROOT + '/' + ROUTES.FRANCIS.HUB },
-    ];
+    // Search Index Removed - Replaced by Global CommandPalette.tsx (Ctrl+K)
 
-    const filteredResults = searchQuery
-        ? SEARCH_INDEX.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
-        : [];
-
-    // Ctrl+K Listener
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.key === 'k') {
-                e.preventDefault();
-                setIsSearchOpen(true);
-            }
-            if (e.key === 'Escape') {
-                setIsSearchOpen(false);
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
-
-    const handleResultClick = (path: string) => {
-        navigate(path);
-        setIsSearchOpen(false);
-        setSearchQuery('');
+    const triggerCommandPalette = () => {
+        window.dispatchEvent(new CustomEvent('openCommandPalette'));
     };
 
     // Badge Logic
@@ -90,32 +59,146 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
         navigate('riskAssessment');
     };
 
+    // --- MISSION STATUS BAR LOGIC ---
+    const getMissionMode = () => {
+        if (location.pathname.includes('executive')) return 'COMMAND';
+        if (location.pathname.includes('maintenance') || location.pathname === '/') return 'FIELD OPS';
+        if (location.pathname.includes('francis/designer')) return 'DESIGN STUDIO';
+        return activePersona === 'TECHNICIAN' ? 'FIELD OPS' : 'COMMAND';
+    };
+
     return (
         <>
-            <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/40 glass-panel-deep !rounded-none flex items-center justify-between px-6 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-                <div className="flex items-center gap-4">
-                    <button onClick={onToggleSidebar} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
-                    <div className="flex items-center gap-6">
-                        <h1 className="text-xl font-black text-white tracking-widest uppercase">
-                            {displayTitle}
-                        </h1>
+            <header className="sticky top-0 z-30 h-16 border-b border-white/5 bg-slate-950/90 backdrop-blur-md flex items-center justify-between px-6 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
 
-                        {/* Command Palette Trigger */}
-                        <button
-                            onClick={() => setIsSearchOpen(true)}
-                            className="hidden md:flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300 group relative overflow-hidden"
-                        >
-                            <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <Search className="w-3.5 h-3.5" />
-                            <span className="font-medium tracking-tight">{t('sidebar.search_placeholder')}</span>
-                            <span className="ml-2 px-1.5 py-0.5 bg-black/40 rounded text-[10px] text-slate-500 font-mono border border-white/5">Ctrl+K</span>
-                        </button>
+                {/* LEFT: Identity & Status */}
+                <div className="flex items-center gap-6">
+                    <button onClick={onToggleSidebar} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
+
+                    {/* MISSION STATUS BAR */}
+                    <div className="flex items-center gap-3 text-xs font-mono tracking-wider">
+
+                        {/* 1. ASSET SEGMENT (Enhanced with Quick Actions) */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsQuickActionsOpen(!isQuickActionsOpen)}
+                                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all ${selectedAsset ? 'bg-cyan-950/30 border-cyan-500/30 hover:border-cyan-500/50' : 'bg-slate-900/30 border-slate-700/30 hover:border-slate-600/50'}`}
+                            >
+                                <Database className={`w-3.5 h-3.5 ${selectedAsset ? 'text-cyan-400' : 'text-slate-600'}`} />
+                                <div className="flex flex-col items-start">
+                                    <span className={`font-bold ${selectedAsset ? 'text-white' : 'text-slate-500'}`}>
+                                        {selectedAsset ? selectedAsset.name.toUpperCase() : t('header.fleetView', 'FLEET VIEW')}
+                                    </span>
+                                    {selectedAsset && (
+                                        <span className="text-[9px] text-cyan-400/70">
+                                            {(selectedAsset.turbine_type || selectedAsset.type || 'HPP').toUpperCase()} | {selectedAsset.capacity?.toFixed(1) || '—'} MW
+                                        </span>
+                                    )}
+                                </div>
+                                <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${isQuickActionsOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {/* Quick Actions Dropdown */}
+                            {isQuickActionsOpen && (
+                                <div className="absolute top-full left-0 mt-2 w-56 bg-slate-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden animate-scale-in">
+                                    <div className="p-2 border-b border-white/5">
+                                        <span className="text-[9px] text-slate-500 font-black uppercase tracking-widest px-2">{t('header.quickActions', 'Quick Actions')}</span>
+                                    </div>
+                                    <div className="p-1">
+                                        <button
+                                            onClick={() => { navigate('/hpp-builder'); setIsQuickActionsOpen(false); }}
+                                            disabled={!selectedAsset}
+                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${selectedAsset ? 'hover:bg-cyan-500/10 text-slate-300 hover:text-white' : 'opacity-40 cursor-not-allowed text-slate-600'}`}
+                                        >
+                                            <Settings className="w-4 h-4 text-cyan-400" />
+                                            <div>
+                                                <span className="text-sm font-bold">{t('header.editSpecs', 'Edit Technical Specs')}</span>
+                                                <p className="text-[9px] text-slate-500">{t('header.editSpecsDesc', 'HPP Builder Studio')}</p>
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => { navigate('/executive'); setIsQuickActionsOpen(false); }}
+                                            disabled={!selectedAsset}
+                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${selectedAsset ? 'hover:bg-emerald-500/10 text-slate-300 hover:text-white' : 'opacity-40 cursor-not-allowed text-slate-600'}`}
+                                        >
+                                            <BarChart3 className="w-4 h-4 text-emerald-400" />
+                                            <div>
+                                                <span className="text-sm font-bold">{t('header.viewAnalytics', 'View Live Analytics')}</span>
+                                                <p className="text-[9px] text-slate-500">{t('header.viewAnalyticsDesc', 'Executive Dashboard')}</p>
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => { navigate('/maintenance/dashboard'); setIsQuickActionsOpen(false); }}
+                                            disabled={!selectedAsset}
+                                            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${selectedAsset ? 'hover:bg-amber-500/10 text-slate-300 hover:text-white' : 'opacity-40 cursor-not-allowed text-slate-600'}`}
+                                        >
+                                            <Wrench className="w-4 h-4 text-amber-400" />
+                                            <div>
+                                                <span className="text-sm font-bold">{t('header.performMaintenance', 'Perform Maintenance')}</span>
+                                                <p className="text-[9px] text-slate-500">{t('header.performMaintenanceDesc', 'Field Toolbox')}</p>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div className="p-2 border-t border-white/5">
+                                        <button
+                                            onClick={() => { navigate('/'); setIsQuickActionsOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left hover:bg-slate-800 text-slate-400 hover:text-white transition-all"
+                                        >
+                                            <Zap className="w-4 h-4" />
+                                            <span className="text-xs font-bold">{t('header.viewFleet', 'View Full Fleet')}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <span className="text-slate-700">|</span>
+
+                        {/* 2. MODE SEGMENT (Dynamic Breadcrumb) */}
+                        <div className="flex items-center gap-2">
+                            <Activity className="w-3.5 h-3.5 text-amber-500" />
+                            <span className="font-bold text-amber-500/90">
+                                {getMissionMode()}
+                            </span>
+                        </div>
+
+                        <span className="text-slate-700">|</span>
+
+                        {/* 3. SYNC SEGMENT */}
+                        <div className="flex items-center gap-2" title={hiveStatus?.connected ? "Online & Synced" : "Offline Mode"}>
+                            <div className={`w-2 h-2 rounded-full ${hiveStatus?.connected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-600'}`} />
+                            <span className={`${hiveStatus?.connected ? 'text-emerald-500' : 'text-slate-600'} font-bold`}>
+                                {hiveStatus?.connected ? 'LIVE' : 'OFFLINE'}
+                            </span>
+                        </div>
+
                     </div>
+
+                    {/* Command Search (Desktop) */}
+                    {/* Command Search (Desktop) */}
+                    <button
+                        onClick={triggerCommandPalette}
+                        className="hidden xl:flex items-center gap-2 px-3 py-1.5 ml-4 bg-white/5 border border-white/10 rounded text-[10px] text-slate-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all"
+                    >
+                        <Search className="w-3 h-3" />
+                        <span>SEARCH</span>
+                        <span className="ml-1 opacity-50">CTRL+K</span>
+                    </button>
                 </div>
 
+                {/* RIGHT: Global Actions */}
                 <div className="flex items-center gap-4">
+                    {/* Density Toggle */}
+                    <button
+                        onClick={toggleDensity}
+                        title={mode === 'compact' ? "Switch to Relaxed View" : "Switch to Compact View"}
+                        className="p-2 text-slate-400 hover:text-white transition-colors"
+                    >
+                        {mode === 'compact' ? <Square className="w-5 h-5" /> : <Grid className="w-5 h-5" />}
+                    </button>
+
                     {/* Mobile Search Icon */}
-                    <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-slate-400">
+                    <button onClick={triggerCommandPalette} className="md:hidden p-2 text-slate-400">
                         <Search className="w-5 h-5" />
                     </button>
 
@@ -129,8 +212,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                         {isHeritageCertified && (
                             <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
                         )}
-
-                        {/* Subtle Tooltip */}
                         <div className="absolute top-12 left-1/2 -translate-x-1/2 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[9px] font-black uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
                             {isHeritageCertified ? 'Roots of Engineering: Certified' : 'Heritage Status: Dormant'}
                         </div>
@@ -160,66 +241,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                 </div>
             </header>
 
-            {/* Command Palette Modal */}
-            {isSearchOpen && (
-                <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] bg-black/80 backdrop-blur-sm animate-fade-in px-4" onClick={() => setIsSearchOpen(false)}>
-                    <div
-                        className="w-full max-w-2xl bg-slate-900/90 glass-panel-deep border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden animate-scale-in"
-                        onClick={e => e.stopPropagation()}
-                    >
-                        <div className="flex items-center gap-4 px-6 py-5 border-b border-white/5 bg-white/5 noise-commander">
-                            <Search className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
-                            <input
-                                autoFocus
-                                type="text"
-                                placeholder={t('header.modalPlaceholder')}
-                                className="bg-transparent border-none outline-none text-white w-full font-mono text-base placeholder:text-slate-600 tracking-wider"
-                                value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
-                            />
-                            <button onClick={() => setIsSearchOpen(false)} className="text-slate-500 hover:text-white transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <div className="max-h-[300px] overflow-y-auto custom-scrollbar p-2">
-                            {filteredResults.length > 0 ? (
-                                filteredResults.map((result, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => handleResultClick(result.path)}
-                                        className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 text-left group transition-colors"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Command className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
-                                            <span className="text-slate-300 group-hover:text-white font-medium text-sm">{result.label}</span>
-                                        </div>
-                                        <span className="text-[10px] text-slate-600 font-mono">{t('header.jumpTo')}</span>
-                                    </button>
-                                ))
-                            ) : searchQuery ? (
-                                <div className="p-4 text-center text-slate-500 text-xs">{t('header.noResults')}</div>
-                            ) : (
-                                <div className="p-2">
-                                    <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest px-2">{t('header.recentSuggested')}</span>
-                                    {SEARCH_INDEX.slice(0, 3).map((result, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => handleResultClick(result.path)}
-                                            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 text-left group transition-colors mt-1"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <Command className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
-                                                <span className="text-slate-300 group-hover:text-white font-medium text-sm">{result.label}</span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Command Palette Modal Removed - Now Global via App.tsx */}
 
             {/* Sign Out Dialog */}
             {showSignOutDialog && (

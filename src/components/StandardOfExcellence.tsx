@@ -3,8 +3,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // Data moved inside component
 

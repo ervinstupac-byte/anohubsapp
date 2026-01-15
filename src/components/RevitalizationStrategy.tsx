@@ -3,8 +3,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx'; // <--- UI Kit
-import { ModernButton } from './ui/ModernButton.tsx'; // <--- UI Kit
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 // OVO JE JEDINA DEKLARACIJA I EKSPORT

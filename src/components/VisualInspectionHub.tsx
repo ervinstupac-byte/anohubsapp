@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Upload, ScanEye, AlertTriangle, FileCheck, Search } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { VisualInspectionService, InspectionResult, DamageType } from '../services/VisualInspectionService';
 
 export const VisualInspectionHub: React.FC = () => {

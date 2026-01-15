@@ -4,9 +4,9 @@ import { useToast } from '../contexts/ToastContext';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from './LanguageSelector';
-import { GlassCard } from './ui/GlassCard'; // Provjeri putanje importa
-import { ModernInput } from './ui/ModernInput';
-import { ModernButton } from './ui/ModernButton';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 export const Login: React.FC = () => {
     const { signIn, signInAsGuest } = useAuth();

@@ -1,6 +1,6 @@
 
 import { describe, it, expect } from 'vitest';
-import { PhysicsEngine } from '../services/PhysicsEngine';
+import { PhysicsEngine } from '../features/physics-core/PhysicsEngine';
 import { DEFAULT_TECHNICAL_STATE, TechnicalProjectState } from '../models/TechnicalSchema';
 
 describe('Expert Threshold Logic Verification', () => {

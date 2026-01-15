@@ -11,17 +11,16 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
     const [isVisible, setIsVisible] = useState(true);
 
     const technicalMessages = [
-        "CALIBRATING FRANCIS UNIT #1...",
-        "STABILIZING HYDRAULIC PRESSURE...",
-        "VERIFYING ROTOR ALIGNMENT...",
-        "SYNCING CEREBRO NEURAL FLOW...",
-        "HIVE CONSENSUS ESTABLISHED.",
-        "READY FOR TURBINE OPERATION."
+        "NEURAL CORE INITIALIZATION...",
+        "VERIFYING ASSET INTEGRITY...",
+        "ESTABLISHING HIVE CONSENSUS...",
+        "SECURITY PROTOCOLS ACTIVE.",
+        "SYSTEM OPTIMAL."
     ];
 
     useEffect(() => {
-        const duration = 1200; // 1.2 seconds boot sequence (Faster)
-        const interval = 20;
+        const duration = 2500; // 2.5 seconds boot sequence for readability
+        const interval = 25;
         const step = 100 / (duration / interval);
 
         const timer = setInterval(() => {
@@ -32,7 +31,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                     setTimeout(() => {
                         setIsVisible(false);
                         if (onComplete) onComplete();
-                    }, 200);
+                    }, 500);
                     return 100;
                 }
                 return next;
@@ -98,8 +97,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                             </div>
                         </div>
 
-                        {/* Subtext info */}
-                        <div className="flex justify-center">
+                        <div className="flex justify-center flex-col items-center gap-4">
                             <motion.div
                                 animate={{ opacity: [0.3, 0.6, 0.3] }}
                                 transition={{ repeat: Infinity, duration: 1.5 }}
@@ -107,6 +105,20 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                             >
                                 Secure Engineering Protocol Active
                             </motion.div>
+
+                            {/* EMERGENCY BYPASS BUTTON (Appears if stuck > 3s) */}
+                            <motion.button
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 3 }} // Show after 3 seconds
+                                onClick={() => {
+                                    console.warn('[SystemBoot] User initiated manual bypass.');
+                                    if (onComplete) onComplete();
+                                }}
+                                className="text-[9px] text-red-500/50 hover:text-red-400 border border-red-900/30 hover:border-red-500/50 px-3 py-1 bg-red-900/10 rounded cursor-pointer transition-colors uppercase tracking-widest mt-4"
+                            >
+                                Emergency Bypass
+                            </motion.button>
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { GlassCard } from './ui/GlassCard';
-import { ModernButton } from './ui/ModernButton';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 interface Props {
     children: ReactNode;

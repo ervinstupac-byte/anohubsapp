@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import {
     ArrowLeft,
     Settings,
@@ -127,11 +128,17 @@ const childVariants = {
 
 const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuideVaneDrillDown }) => {
     const { t } = useTranslation();
+    const { physics, mechanical, hydraulic } = useTelemetryStore(); // Live Telemetry Injection
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeData = RUNNER_COMPONENTS.find(c => c.id === activeSub);
+
+    // Live Data Extraction
+    const surgePressure = physics?.surgePressure ? (typeof physics.surgePressure === 'number' ? physics.surgePressure : physics.surgePressure.toNumber()) : 0;
+    const efficiency = hydraulic?.efficiency || 0;
+    const rpm = mechanical?.rpm || 0;
 
     // Initial check for fullscreen state to handle SSR safely
     useEffect(() => {
@@ -211,9 +218,18 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                         <h2 className="text-xl font-black text-white tracking-widest uppercase">
                             {t('runner.detail.title', 'Francis Runner')} <span className="text-cyan-500">{t('runner.detail.drillDown', 'Hydraulic Analysis')}</span>
                         </h2>
-                        <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                            NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 HYDRAULIC HOTSPOTS
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
+                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 HYDRAULIC HOTSPOTS
+                            </p>
+                            {/* Live RPM Indicator */}
+                            {rpm > 10 && (
+                                <div className="flex items-center gap-1 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/30">
+                                    <Activity className="w-3 h-3 text-cyan-300" />
+                                    <span className="text-[10px] font-mono font-black text-white">{rpm.toFixed(0)} RPM</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -443,6 +459,8 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                             const translatedData = getComponentData(activeData);
                             const color = getCategoryColor(activeData.category);
                             const categoryLabel = activeData.category.charAt(0).toUpperCase() + activeData.category.slice(1);
+                            const isSpiralCase = activeData.id === 'run-spiral-case';
+                            const isWearingGap = activeData.id === 'run-wearing-gap';
 
                             return (
                                 <motion.div
@@ -494,6 +512,33 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                                     </div>
 
                                     <div className="space-y-6">
+                                        {/* LIVE SENSOR BRIDGES */}
+                                        {isSpiralCase && surgePressure > 0 && (
+                                            <div className="p-4 bg-emerald-950/40 border-l-2 border-emerald-400 rounded-r-lg">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                        <Activity className="w-3 h-3" /> Live Pressure
+                                                    </span>
+                                                    <span className="text-sm font-mono font-black text-white">
+                                                        {surgePressure.toFixed(2)} Bar
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {isWearingGap && efficiency > 0 && (
+                                            <div className="p-4 bg-amber-950/40 border-l-2 border-amber-400 rounded-r-lg">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-[10px] text-amber-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                                                        <Activity className="w-3 h-3" /> System Efficiency
+                                                    </span>
+                                                    <span className="text-sm font-mono font-black text-white">
+                                                        {efficiency.toFixed(1)}%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+
                                         <div>
                                             <div
                                                 className="flex items-center gap-2 mb-2 font-black text-[10px] uppercase tracking-widest"

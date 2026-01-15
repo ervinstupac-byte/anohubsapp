@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { reportGenerator } from '../services/ReportGenerator.ts';
+import { reportGenerator } from '../features/reporting/ReportGenerator';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useInventory } from '../contexts/InventoryContext.tsx';
@@ -88,7 +88,7 @@ export const InvestorBriefing: React.FC = () => {
 
         const blob = reportGenerator.generateIncidentReport({
             assetName: selectedAsset.name,
-            incidentType: activeIncident?.type || 'Unknown Failure',
+            incidentType: activeIncident?.type || 'Unspecified Event',
             deviation: liveData?.incidentDetails || 'Out of tolerance',
             timestamp: new Date().toISOString(),
             status: 'CRITICAL'

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const ComponentLibrary: React.FC = () => {

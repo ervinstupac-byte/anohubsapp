@@ -14,7 +14,7 @@ import {
     ArrowRight,
     ChevronLeft
 } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { LifecycleManager } from '../services/LifecycleManager';
 
 export const ProjectGenesisForm: React.FC = () => {

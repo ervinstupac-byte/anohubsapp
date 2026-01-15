@@ -13,7 +13,7 @@ import {
     ZoomIn,
     RotateCw
 } from 'lucide-react';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ITurbineModel, Anomaly } from '../../models/turbine/types';
 import { EnhancedAsset } from '../../models/turbine/types';
 import { useTelemetry } from '../../contexts/TelemetryContext';
@@ -371,10 +371,10 @@ const AnomalyCard: React.FC<AnomalyCardProps> = ({ anomaly, selected, onClick })
         whileHover={{ scale: 1.02 }}
         onClick={onClick}
         className={`p-3 rounded-lg border cursor-pointer transition-all ${selected
-                ? 'bg-cyan-500/20 border-cyan-500'
-                : anomaly.severity === 'CRITICAL'
-                    ? 'bg-red-950/30 border-red-500/30'
-                    : 'bg-amber-950/30 border-amber-500/30'
+            ? 'bg-cyan-500/20 border-cyan-500'
+            : anomaly.severity === 'CRITICAL'
+                ? 'bg-red-950/30 border-red-500/30'
+                : 'bg-amber-950/30 border-amber-500/30'
             }`}
     >
         <div className="flex items-start gap-2">

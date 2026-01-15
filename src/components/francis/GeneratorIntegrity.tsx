@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Zap, ArrowLeft, Skull, Brush, ThermometerSun, ShieldCheck, Power, Activity, Info, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const GeneratorIntegrity: React.FC = () => {

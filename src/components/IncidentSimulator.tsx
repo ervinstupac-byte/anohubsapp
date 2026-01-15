@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 export const IncidentSimulator: React.FC = () => {
     const { triggerEmergency, clearEmergency, activeIncident } = useTelemetry();

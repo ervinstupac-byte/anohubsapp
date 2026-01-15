@@ -108,7 +108,7 @@ export const SimulationController: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-8 right-8 z-[100]">
+        <div className="fixed bottom-8 right-8 z-30">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div

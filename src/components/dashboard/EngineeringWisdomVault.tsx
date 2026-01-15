@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { GlassCard } from '../ui/GlassCard';
-import { ModernButton } from '../ui/ModernButton';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { Book, Save, Plus, Trash2, ShieldAlert } from 'lucide-react';
 
 export const EngineeringWisdomVault: React.FC = () => {

@@ -1,0 +1,9 @@
+﻿src/components/CommandCenter.tsx(7,33): error TS2307: Cannot find module './ui/LiveMetricToken' or its corresponding type declarations.
+src/components/InvestorBriefing.tsx(5,33): error TS2307: Cannot find module '../services/ReportGenerator.ts' or its corresponding type declarations.
+src/components/MaintenanceDashboard.tsx(10,33): error TS2307: Cannot find module '../services/ReportGenerator.ts' or its corresponding type declarations.
+src/components/modals/PrintPreviewModal.tsx(6,33): error TS2307: Cannot find module '../../services/ReportGenerator' or its corresponding type declarations.
+src/components/SOPManager.tsx(11,33): error TS2307: Cannot find module './ui/LiveMetricToken' or its corresponding type declarations.
+src/components/TechnicalAuditReportModule.tsx(6,33): error TS2307: Cannot find module '../services/ReportGenerator' or its corresponding type declarations.
+src/components/TechnicalPassport.tsx(3,31): error TS2307: Cannot find module '../services/PhysicsEngine' or its corresponding type declarations.
+src/hooks/useHPPDiagnostics.ts(9,39): error TS2307: Cannot find module '../services/ExpertDiagnosisEngine' or its corresponding type declarations.
+src/services/DrTurbineAI.ts(1,39): error TS2307: Cannot find module './ExpertDiagnosisEngine' or its corresponding type declarations.

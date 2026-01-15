@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useAssetContext } from '../contexts/AssetContext';
-import { PhysicsEngine } from '../services/PhysicsEngine';
-import { GlassCard } from './ui/GlassCard';
-import { ModernInput } from './ui/ModernInput';
-import { ModernButton } from './ui/ModernButton';
+import { PhysicsEngine } from '../features/physics-core/PhysicsEngine';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { AssetPassport } from '../types';
 import { SentinelKernel } from '../utils/SentinelKernel';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ import {
     Thermometer, Activity, Gauge, Zap, Waves, Volume2, Save, Download,
     AlertTriangle, Shield, Settings, History, Droplets, ZapOff, Info, Book, PenTool
 } from 'lucide-react';
-import { ProfessionalReportEngine } from '../services/ProfessionalReportEngine';
+import { ProfessionalReportEngine } from '../features/reporting/ProfessionalReportEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 

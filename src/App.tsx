@@ -21,6 +21,8 @@ import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
 import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
 import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
+import { DrillDownProvider } from './contexts/DrillDownContext.tsx'; // <--- NEW Phase 3
+import { CommandPalette } from './components/ui/CommandPalette.tsx'; // <--- NEW Phase 3
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -28,7 +30,7 @@ import { Feedback } from './components/Feedback.tsx';
 // ClientDashboard removed (Simulation)
 import { MaintenanceLogbook } from './components/MaintenanceLogbook.tsx'; // Logbook
 import { Onboarding } from './components/Onboarding.tsx';
-import { Spinner } from './components/Spinner.tsx';
+import { Spinner } from './shared/components/ui/Spinner';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
@@ -39,10 +41,11 @@ import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
 import { DigitalPanel } from './components/diagnostic-twin/DigitalPanel.tsx';
 import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
-import { LoadingShimmer } from './components/ui/LoadingShimmer.tsx';
-import { Breadcrumbs } from './components/ui/Breadcrumbs.tsx';
+import { LoadingShimmer } from './shared/components/ui/LoadingShimmer';
+import { Breadcrumbs } from './shared/components/ui/Breadcrumbs';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
+import { WorkflowHeader } from './components/ui/WorkflowHeader'; // NEW: Global health status bar
 import { GlobalFooter } from './components/GlobalFooter.tsx';
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
@@ -58,6 +61,9 @@ import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx'
 import type { AppView } from './contexts/NavigationContext.tsx';
 import { ROUTES } from './routes/paths.ts';
 import { useSentinelWatchdog } from './hooks/useSentinelWatchdog.ts';
+import { useSafeExit } from './hooks/useSafeExit'; // NEW
+import { RoleGuard } from './components/auth/RoleGuard.tsx'; // <--- NEW
+import { AccessDenied } from './components/auth/AccessDenied.tsx'; // <--- NEW
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -138,6 +144,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // FleetSection removed - Moved to Sidebar.tsx
 const AppLayout: React.FC = () => {
     useSentinelWatchdog(); // Infrastructure Watchdog
+    useSafeExit(); // INFRASTRUCTURE: Guard unsaved data - NEW
     const location = useLocation();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -152,7 +159,7 @@ const AppLayout: React.FC = () => {
     // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
     const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
@@ -276,157 +283,198 @@ const AppLayout: React.FC = () => {
         navigateToTurbineDetail: (id: string) => navigate(`/turbine/${id}`),
         showOnboarding,
         completeOnboarding: handleOnboardingComplete,
-        showFeedbackModal: () => setIsFeedbackVisible(true)
+        showFeedbackModal: () => setIsFeedbackVisible(true),
+        // --- NEW: Golden Thread Navigation Helpers ---
+        navigateToExecutive: () => navigate('/executive'),
+        navigateToBuilder: () => navigate('/hpp-builder'),
+        navigateToToolbox: () => navigate('/'),
+        navigateToMaintenance: () => navigate('/maintenance/dashboard')
     }), [isHub, navigateTo, navigate, showOnboarding, handleOnboardingComplete]);
 
     return (
         <NavigationProvider value={navValue}>
-            {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-            <main className={`min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
-                {isCriticalDemo && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0.1, 0.4, 0.1] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                        className="fixed inset-0 pointer-events-none z-[99] border-[24px] border-red-500/20 shadow-[inset_0_0_150px_rgba(239,68,68,0.3)]"
-                    />
-                )}
-                {/* The "Elite" Background Glows */}
-                <div className="fixed inset-0 pointer-events-none z-0">
-                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
-                    <div className="noise-overlay opacity-20" />
-                </div>
-
-                {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
-                {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
-
-                {/* GLOBAL MAP MODAL */}
-                <Suspense fallback={<Spinner />}>
-                    <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
-                </Suspense>
-
-                {/* NEURAL BRIDGE (DATA SYNC V4.5) */}
-                <DataSyncBridge />
-
-                {/* UNIFIED SIDEBAR */}
-                <Sidebar
-                    isOpen={isSidebarOpen}
-                    onClose={() => setIsSidebarOpen(false)}
-                    showMap={isMapOpen}
-                    onToggleMap={() => setIsMapOpen(!isMapOpen)}
-                    onRegisterAsset={() => {
-                        setIsWizardOpen(true);
-                        setIsSidebarOpen(false);
-                    }}
-                />
-
-                {/* MAIN AREA */}
-                <div className="flex-grow flex flex-col min-h-screen lg:ml-[280px] relative z-20">
-
-                    <DashboardHeader
-                        onToggleSidebar={() => setIsSidebarOpen(true)}
-                        title="ANOHUB // NC-4.2 NEURAL CORE"
-                    />
-
-                    {/* Sign Out Dialog handled within DashboardHeader now to avoid prop drilling or dupes, 
-                        BUT keeping App-level state if needed. 
-                        Actually DashboardHeader handles its own SignOut Dialog. 
-                        Removing inline Header and inline Dialog from App.tsx. 
-                    */}
-
-                    <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
-                        <Suspense fallback={<LoadingShimmer />}>
-                            <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
-                                {!isHub && <Breadcrumbs />}
-                                <ErrorBoundary fallback={
-                                    <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-                                        <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20 animate-pulse">
-                                            <span className="text-4xl">⚠️</span>
-                                        </div>
-                                        <h2 className="text-xl font-black text-white uppercase tracking-widest">Module System Failure</h2>
-                                        <p className="text-slate-400 max-w-md text-center">
-                                            The requested module encountered a critical runtime error.
-                                            Diagnostic data has been logged to the black box.
-                                        </p>
-                                        <button
-                                            onClick={() => window.location.reload()}
-                                            className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
-                                        >
-                                            System Reboot
-                                        </button>
-                                    </div>
-                                }>
-                                    <AnimatePresence mode="wait">
-                                        <motion.div
-                                            key={location.pathname}
-                                            initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(20px)' }}
-                                            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                                            exit={{ opacity: 0, y: -30, scale: 1.02, filter: 'blur(20px)' }}
-                                            transition={{
-                                                duration: 0.5,
-                                                ease: [0.22, 1, 0.36, 1] // Custom hydraulic flow curve
-                                            }}
-                                            className="w-full"
-                                        >
-                                            <Routes location={location}>
-                                                <Route index element={<ToolboxLaunchpad />} />
-                                                <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
-                                                {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
-                                                <Route path="/francis/*" element={<FrancisRouter />} />
-                                                <Route path="profile" element={<UserProfile />} />
-                                                <Route path="map" element={<GlobalMap />} />
-                                                <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                                                <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                                                <Route path="risk-report" element={<RiskReport />} />
-                                                <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                                <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
-                                                <Route path="digital-introduction" element={<DigitalIntroduction />} />
-                                                <Route path="hpp-improvements" element={<HPPImprovements />} />
-                                                <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                                                <Route path="gender-equity" element={<GenderEquity />} />
-                                                <Route path="hpp-builder" element={<HPPBuilder />} />
-                                                <Route path="infrastructure/*" element={<InfrastructureHub />} />
-                                                <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                                                <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                                                <Route path="river-wildlife" element={<RiverWildlife />} />
-                                                <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                                                <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                                                <Route path="contract-management" element={<ContractManagement />} />
-                                                <Route path="library" element={<ComponentLibrary />} />
-                                                <Route path="vision" element={<UnderConstruction />} />
-
-                                                {/* Maintenance Sub-Router */}
-                                                <Route path="/maintenance/*" element={<MaintenanceRouter />} />
-
-                                                <Route path="executive" element={<ExecutiveDashboard />} />
-                                                <Route path="structural-integrity" element={<StructuralIntegrity />} />
-
-                                                <Route path="admin-approval" element={<AdminApproval />} />
-                                                <Route path="/forensics" element={<ForensicDashboard />} />
-                                                <Route path="stress-test" element={<SystemStressTest />} />
-                                                <Route path="learning-lab" element={<UnderConstruction />} />
-                                                <Route path="*" element={<Navigate to="/" replace />} />
-                                            </Routes>
-                                        </motion.div>
-                                    </AnimatePresence>
-                                </ErrorBoundary>
-                            </div>
-                        </Suspense>
+            <DrillDownProvider>
+                {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
+                <main className={`min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                    {isCriticalDemo && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0.1, 0.4, 0.1] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                            className="fixed inset-0 pointer-events-none z-[99] border-[24px] border-red-500/20 shadow-[inset_0_0_150px_rgba(239,68,68,0.3)]"
+                        />
+                    )}
+                    {/* The "Elite" Background Glows */}
+                    <div className="fixed inset-0 pointer-events-none z-0">
+                        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
+                        <div className="noise-overlay opacity-20" />
                     </div>
-                </div>
-                <VoiceAssistant />
-                {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
-                <PrintPreviewModal
-                    isOpen={isPreviewOpen}
-                    onClose={() => setIsPreviewOpen(false)}
-                    state={technicalState}
-                />
-                <GlobalFooter />
-            </main>
-            <SimulationController />
-            <CommanderDemoHUD />
-            <CommanderTerminal />
+
+                    {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
+                    {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
+
+                    {/* GLOBAL MAP MODAL */}
+                    <Suspense fallback={<Spinner />}>
+                        <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+                    </Suspense>
+
+                    {/* NEURAL BRIDGE (DATA SYNC V4.5) */}
+                    <DataSyncBridge />
+
+                    {/* UNIFIED SIDEBAR */}
+                    <Sidebar
+                        isOpen={isSidebarOpen}
+                        onClose={() => setIsSidebarOpen(false)}
+                        showMap={isMapOpen}
+                        onToggleMap={() => setIsMapOpen(!isMapOpen)}
+                        onRegisterAsset={() => {
+                            setIsWizardOpen(true);
+                            setIsSidebarOpen(false);
+                        }}
+                    />
+
+                    {/* MAIN AREA */}
+                    <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-[280px] lg:max-w-[calc(100%-280px)]' : 'ml-0 max-w-full'} relative z-20`}>
+
+                        {/* NEW: Global Workflow Header - Machine Health & Navigation */}
+                        <WorkflowHeader />
+
+                        <DashboardHeader
+                            onToggleSidebar={() => setIsSidebarOpen(true)}
+                            title="ANOHUB // NC-4.2 NEURAL CORE"
+                        />
+
+                        <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
+                            <Suspense fallback={<LoadingShimmer />}>
+                                <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
+                                    {!isHub && location.pathname !== '/dashboard' && location.pathname !== '/executive' && <Breadcrumbs />}
+                                    <ErrorBoundary fallback={
+                                        <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+                                            <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20 animate-pulse">
+                                                <span className="text-4xl">⚠️</span>
+                                            </div>
+                                            <h2 className="text-xl font-black text-white uppercase tracking-widest">Module System Failure</h2>
+                                            <p className="text-slate-400 max-w-md text-center">
+                                                The requested module encountered a critical runtime error.
+                                                Diagnostic data has been logged to the black box.
+                                            </p>
+                                            <button
+                                                onClick={() => window.location.reload()}
+                                                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
+                                            >
+                                                System Reboot
+                                            </button>
+                                        </div>
+                                    }>
+                                        <AnimatePresence mode="wait">
+                                            <motion.div
+                                                key={location.pathname}
+                                                initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(20px)' }}
+                                                animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                                                exit={{ opacity: 0, y: -30, scale: 1.02, filter: 'blur(20px)' }}
+                                                transition={{
+                                                    duration: 0.5,
+                                                    ease: [0.22, 1, 0.36, 1] // Custom hydraulic flow curve
+                                                }}
+                                                className="w-full"
+                                            >
+                                                <Routes location={location}>
+                                                    <Route index element={<ToolboxLaunchpad />} />
+                                                    <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
+                                                    {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
+                                                    <Route path="/francis/*" element={<FrancisRouter />} />
+                                                    <Route path="profile" element={<UserProfile />} />
+                                                    <Route path="map" element={<GlobalMap />} />
+
+                                                    {/* RISK: Accessible to all but mostly Manager focused */}
+                                                    <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                                                    <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                                                    <Route path="risk-report" element={<RiskReport />} />
+
+                                                    {/* PUBLIC-FACING / STAKEHOLDER */}
+                                                    <Route path="investor-briefing" element={<InvestorBriefing />} />
+                                                    <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
+                                                    <Route path="digital-introduction" element={<DigitalIntroduction />} />
+
+                                                    {/* ENGINEERING TOOLS - RESTRICTED */}
+                                                    <Route path="hpp-builder" element={
+                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER']}>
+                                                            <HPPBuilder />
+                                                        </RoleGuard>
+                                                    } />
+
+                                                    {/* GENERAL INFO */}
+                                                    <Route path="hpp-improvements" element={<HPPImprovements />} />
+                                                    <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                                                    <Route path="gender-equity" element={<GenderEquity />} />
+
+                                                    {/* INFRASTRUCTURE - RESTRICTED */}
+                                                    <Route path="infrastructure/*" element={
+                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                            <InfrastructureHub />
+                                                        </RoleGuard>
+                                                    } />
+
+                                                    <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                                                    <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                                                    <Route path="river-wildlife" element={<RiverWildlife />} />
+                                                    <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                                                    <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                                                    <Route path="contract-management" element={<ContractManagement />} />
+                                                    <Route path="library" element={<ComponentLibrary />} />
+                                                    <Route path="vision" element={<UnderConstruction />} />
+
+                                                    {/* Maintenance Sub-Router */}
+                                                    <Route path="/maintenance/*" element={<MaintenanceRouter />} />
+
+                                                    {/* EXECUTIVE - RESTRICTED */}
+                                                    <Route path="executive" element={
+                                                        <RoleGuard allowedRoles={['MANAGER']}>
+                                                            <ExecutiveDashboard />
+                                                        </RoleGuard>
+                                                    } />
+
+                                                    <Route path="structural-integrity" element={<StructuralIntegrity />} />
+
+                                                    {/* ADMIN - RESTRICTED */}
+                                                    <Route path="admin-approval" element={
+                                                        <RoleGuard allowedRoles={['MANAGER']}>
+                                                            <AdminApproval />
+                                                        </RoleGuard>
+                                                    } />
+
+                                                    <Route path="/forensics" element={<ForensicDashboard />} />
+                                                    <Route path="stress-test" element={<SystemStressTest />} />
+                                                    <Route path="learning-lab" element={<UnderConstruction />} />
+
+                                                    {/* ACCESS DENIED PAGE */}
+                                                    <Route path="/access-denied" element={<AccessDenied />} />
+
+                                                    <Route path="*" element={<Navigate to="/" replace />} />
+                                                </Routes>
+                                            </motion.div>
+                                        </AnimatePresence>
+                                    </ErrorBoundary>
+                                </div>
+                            </Suspense>
+                        </div>
+                    </div>
+                    <VoiceAssistant />
+                    {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
+                    <PrintPreviewModal
+                        isOpen={isPreviewOpen}
+                        onClose={() => setIsPreviewOpen(false)}
+                        state={technicalState}
+                    />
+                    <GlobalFooter />
+
+                    <SimulationController />
+                    <CommanderDemoHUD />
+                    <CommanderTerminal />
+                    <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
+                </main>
+            </DrillDownProvider>
         </NavigationProvider>
     );
 };
@@ -434,30 +482,57 @@ const AppLayout: React.FC = () => {
 const App: React.FC = () => {
     const [booting, setBooting] = useState(true);
 
+    // NUCLEAR RESET / CLEAN SLATE OPTION
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const shouldReset = window.location.href.includes('reset=true') || urlParams.get('clean') === 'true';
+
+        if (shouldReset) {
+            console.warn('NUCLEAR RESET: Clearing LocalStorage & SessionStorage');
+            localStorage.clear();
+            sessionStorage.clear();
+            // Force reload to apply clean state without the param
+            const cleanUrl = window.location.href.split('?')[0];
+            window.location.href = cleanUrl;
+        }
+    }, []);
+
+    // EMERGENCY INITIALIZATION TIMEOUT (Force Handshake Resolution)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (booting) {
+                console.warn('[System] Force-resolving boot sequence after timeout.');
+                setBooting(false);
+            }
+        }, 5000); // 5 seconds max
+
+        return () => clearTimeout(timer);
+    }, [booting]);
+
     return (
-        <GlobalProvider>
-            <AnimatePresence mode="wait">
-                {booting ? (
-                    <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
-                ) : (
-                    <motion.div
-                        key="main-app"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="w-full h-full"
-                    >
-                        <HashRouter>
+        <HashRouter>
+            <GlobalProvider>
+                <AnimatePresence mode="wait">
+                    {booting ? (
+                        <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
+                    ) : (
+                        <motion.div
+                            key="main-app"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="w-full h-full"
+                        >
                             <ContextAwarenessProvider>
                                 <Routes>
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
                                 </Routes>
                             </ContextAwarenessProvider>
-                        </HashRouter>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </GlobalProvider>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </GlobalProvider>
+        </HashRouter>
     );
 };
 

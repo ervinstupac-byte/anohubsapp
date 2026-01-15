@@ -4,9 +4,9 @@ import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const UserProfile: React.FC = () => {

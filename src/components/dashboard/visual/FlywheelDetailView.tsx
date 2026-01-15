@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import {
     ArrowLeft,
     Settings,
@@ -103,11 +104,14 @@ const childVariants = {
 
 const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) => {
     const { t } = useTranslation();
+    const { mechanical } = useTelemetryStore(); // Live Telemetry
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false); // Default false to avoid hydration mismatch
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeData = MECH_COMPONENTS.find(c => c.id === activeSub);
+    const rpm = mechanical?.rpm || 0;
+    const vibration = mechanical?.vibration || 0;
 
     // Initial check for fullscreen state
     useEffect(() => {
@@ -173,9 +177,18 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                         <h2 className="text-xl font-black text-white tracking-widest uppercase">
                             {t('mechanical.detail.title', 'Mechanical Backbone')} <span className="text-cyan-500">{t('common.drillDown', 'Drill-Down')}</span>
                         </h2>
-                        <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                            NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 MECHANICAL NODES
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
+                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 MECHANICAL NODES
+                            </p>
+                            {/* Live Vibration Indicator if High */}
+                            {vibration > 1 && (
+                                <div className="flex items-center gap-1 bg-red-900/40 px-2 py-0.5 rounded border border-red-500/30 animate-pulse">
+                                    <Activity className="w-3 h-3 text-red-400" />
+                                    <span className="text-[10px] font-mono font-black text-white">{vibration.toFixed(2)} mm/s</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -220,7 +233,9 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                 {/* Visual Area */}
                 <motion.div variants={childVariants} className="flex-[2] relative bg-black/40 rounded-2xl border border-cyan-500/10 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center p-4">
-                        <img
+                        <motion.img
+                            animate={rpm > 10 ? { rotate: 360 } : { rotate: 0 }}
+                            transition={rpm > 10 ? { duration: 6000 / rpm, repeat: Infinity, ease: 'linear' } : {}}
                             src="/flywheel-assembly.svg"
                             alt="Flywheel Assembly Blueprint"
                             className="w-full h-full object-contain"
@@ -294,6 +309,21 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                                     </div>
                                 </div>
                                 <div className="space-y-6">
+                                    {activeData.category === 'support' && vibration > 0.5 && (
+                                        <div className={`p-4 rounded-r-lg border-l-2 ${vibration > 1.5 ? 'bg-red-950/40 border-red-500' : 'bg-amber-950/40 border-amber-500'}`}>
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className={`text-[10px] font-bold uppercase tracking-widest ${vibration > 1.5 ? 'text-red-400' : 'text-amber-400'}`}>Live Vibration</span>
+                                                <span className="text-sm font-mono font-black text-white">{vibration.toFixed(2)} mm/s</span>
+                                            </div>
+                                            <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                                                <div
+                                                    className={`h-full transition-all duration-300 ${vibration > 1.5 ? 'bg-red-500' : 'bg-amber-500'}`}
+                                                    style={{ width: `${(vibration / 3) * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div>
                                         <span className="text-[10px] font-black uppercase text-slate-400 block mb-1">Functional Target</span>
                                         <p className="text-sm text-slate-300">{getComponentData(activeData).func}</p>

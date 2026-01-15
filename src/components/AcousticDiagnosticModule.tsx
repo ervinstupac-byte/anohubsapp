@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useCerebro } from '../contexts/ProjectContext.tsx';
 
 export const AcousticDiagnosticModule: React.FC = () => {

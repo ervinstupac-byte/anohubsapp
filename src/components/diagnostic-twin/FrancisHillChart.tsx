@@ -1,14 +1,17 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { useProjectEngine } from '../../contexts/ProjectContext';
+// MIGRATED: From useProjectEngine to specialized stores
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 export const FrancisHillChart: React.FC = () => {
-    const { technicalState } = useProjectEngine();
+    // MIGRATION: Replaced useProjectEngine with useTelemetryStore
+    const { hydraulic, mechanical } = useTelemetryStore();
 
-    // Core Parameters
-    const flow = technicalState.hydraulic.flow || 42.5;
-    const head = technicalState.hydraulic.head || 152.0;
-    const efficiency = technicalState.hydraulic.efficiency || 0.92;
+    // Core Parameters (with null safety)
+    const flow = hydraulic?.flow || 42.5;
+    const head = hydraulic?.head || 152.0;
+    const efficiency = hydraulic?.efficiency || 0.92;
+    const rpm = mechanical?.rpm || 500;
 
     // MHE Calibration: Convert Physical units to SVG coordinates (0-400)
     // Assume MHE Flow Range: 0 - 15 m3/s (Typical for <5MW)
@@ -21,7 +24,6 @@ export const FrancisHillChart: React.FC = () => {
     const bepY = 400 - (65 / 100) * 400; // 65 m
 
     const isInefficient = efficiency < 0.88;
-    const rpm = technicalState.mechanical.rpm || 500;
     const isOverSpeed = rpm > 750; // Critical over-speed for small horizontal units (>150% of 500)
 
     return (

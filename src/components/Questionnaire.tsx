@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { QUESTIONS } from '../constants.ts';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';

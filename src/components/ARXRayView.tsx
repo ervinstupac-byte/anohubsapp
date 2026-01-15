@@ -4,7 +4,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Maximize2, RotateCw, ZoomIn, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
 import { useTelemetry } from '../contexts/TelemetryContext';
 

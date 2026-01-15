@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { turbineDetailData } from '../data/turbineDetailData.ts';
 import type { TurbineDetail as TurbineDetailType, TurbineComponent } from '../data/turbineDetailData.ts';
 

@@ -7,8 +7,10 @@ import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { reportGenerator } from '../services/ReportGenerator.ts';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { reportGenerator } from '../features/reporting/ReportGenerator';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { MaintenanceTimelineCard } from './maintenance/MaintenanceTimelineCard';
+import { SmartActionList } from './dashboard/SmartActionList';
 import { AssetPicker } from './AssetPicker.tsx';
 import { BackButton } from './BackButton.tsx';
 import { WorkOrderOrchestrator } from './WorkOrderOrchestrator.tsx';
@@ -21,7 +23,7 @@ import { StressCycleCounter } from './StressCycleCounter.tsx';
 import { MachineProtectionSystem } from './MachineProtectionSystem.tsx';
 import { FluidForceDiagnostics } from './FluidForceDiagnostics.tsx';
 import { ForensicDepthAnalyzer } from './ForensicDepthAnalyzer.tsx';
-import { OrbitPlotter } from './OrbitPlotter.tsx';
+import { OrbitPlotter } from '../features/telemetry/components/OrbitPlotter';
 import { MagneticPullAnalytics } from './MagneticPullAnalytics.tsx';
 import { AcousticDiagnosticModule } from './AcousticDiagnosticModule.tsx';
 // import { AIPredictiveModule } from './AIPredictiveModule.tsx'; // REMOVED: simulation feature
@@ -106,6 +108,8 @@ export const MaintenanceDashboard: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* LEFT: STATUS CARD */}
                         <div className="space-y-6">
+                            <MaintenanceTimelineCard />
+                            <SmartActionList />
                             <GlassCard className="bg-slate-900/60 border-l-4 border-l-emerald-500">
                                 <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">Total Operating Hours</p>
                                 <div className="text-5xl font-black text-white tracking-tighter mb-2">

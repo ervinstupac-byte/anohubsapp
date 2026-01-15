@@ -16,18 +16,23 @@ import {
 } from 'lucide-react';
 
 // Modules
-import { StrategicPlanningDashboard } from './StrategicPlanningDashboard';
-import { ProjectGenesisForm } from './ProjectGenesisForm';
-import { UniversalTurbineDashboard } from './UniversalTurbineDashboard';
-import { KnowledgeBridgeVisualizer } from './KnowledgeBridgeVisualizer';
-import { LegacyModeHub } from './LegacyModeHub';
-import { VisualInspectionHub } from './VisualInspectionHub';
-import { ClientConsultantDashboard } from './PerformanceGuardDashboard';
-import { SmartStartChecklist } from './SmartStartChecklist';
-import { PostShutdownWatchdog } from './PostShutdownWatchdog';
-import { TechnicalAuditReportModule } from './TechnicalAuditReportModule';
+// Modules (Lazy Loaded)
+const StrategicPlanningDashboard = React.lazy(() => import('./StrategicPlanningDashboard').then(m => ({ default: m.StrategicPlanningDashboard })));
+const ProjectGenesisForm = React.lazy(() => import('./ProjectGenesisForm').then(m => ({ default: m.ProjectGenesisForm })));
+const UniversalTurbineDashboard = React.lazy(() => import('./UniversalTurbineDashboard').then(m => ({ default: m.UniversalTurbineDashboard })));
+const KnowledgeBridgeVisualizer = React.lazy(() => import('./KnowledgeBridgeVisualizer').then(m => ({ default: m.KnowledgeBridgeVisualizer })));
+const LegacyModeHub = React.lazy(() => import('./LegacyModeHub').then(m => ({ default: m.LegacyModeHub })));
+const VisualInspectionHub = React.lazy(() => import('./VisualInspectionHub').then(m => ({ default: m.VisualInspectionHub })));
+const ClientConsultantDashboard = React.lazy(() => import('./PerformanceGuardDashboard').then(m => ({ default: m.ClientConsultantDashboard })));
+const SmartStartChecklist = React.lazy(() => import('./SmartStartChecklist').then(m => ({ default: m.SmartStartChecklist })));
+const PostShutdownWatchdog = React.lazy(() => import('./PostShutdownWatchdog').then(m => ({ default: m.PostShutdownWatchdog })));
+const TechnicalAuditReportModule = React.lazy(() => import('./TechnicalAuditReportModule').then(m => ({ default: m.TechnicalAuditReportModule })));
+
 import { LifecycleManager } from '../services/LifecycleManager';
 import { ProjectPhase } from '../models/ProjectLifecycle';
+import { Spinner } from '../shared/components/ui/Spinner'; // Use existing Spinner or fallback
+import { ErrorBoundary } from './ErrorBoundary';
+import { ModuleFallback } from '../shared/components/ui/ModuleFallback';
 
 export const AnoHubOS: React.FC = () => {
     // Global Project State
@@ -114,57 +119,61 @@ export const AnoHubOS: React.FC = () => {
             {/* MAIN CONTENT AREA */}
             <main className="flex-1 overflow-auto bg-slate-950 relative">
                 <AnimatePresence mode="wait">
-                    {activeModule === 'GENESIS' && (
-                        <WrappedComponent key="genesis">
-                            <ProjectGenesisForm />
-                        </WrappedComponent>
-                    )}
+                    <React.Suspense fallback={<div className="h-full flex items-center justify-center"><Spinner /></div>}>
+                        <ErrorBoundary fallback={<ModuleFallback title="Module Error" icon="Ban" />}>
+                            {activeModule === 'GENESIS' && (
+                                <WrappedComponent key="genesis">
+                                    <ProjectGenesisForm />
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'FORENSICS' && (
-                        <WrappedComponent key="forensics">
-                            <VisualInspectionHub />
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'FORENSICS' && (
+                                <WrappedComponent key="forensics">
+                                    <VisualInspectionHub />
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'PROCUREMENT' && (
-                        <WrappedComponent key="procurement">
-                            <StrategicPlanningDashboard /> {/* Reuse for now, ideally specific view */}
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'PROCUREMENT' && (
+                                <WrappedComponent key="procurement">
+                                    <StrategicPlanningDashboard /> {/* Reuse for now, ideally specific view */}
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'CONSTRUCTION' && (
-                        <WrappedComponent key="construction">
-                            <ConstructionView project={project} />
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'CONSTRUCTION' && (
+                                <WrappedComponent key="construction">
+                                    <ConstructionView project={project} />
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'OPERATIONS' && (
-                        <WrappedComponent key="operations">
-                            <div className="space-y-8">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                    <UniversalTurbineDashboard />
-                                    <SmartStartChecklist />
-                                </div>
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                    <PostShutdownWatchdog />
-                                    <TechnicalAuditReportModule />
-                                </div>
-                                <KnowledgeBridgeVisualizer />
-                            </div>
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'OPERATIONS' && (
+                                <WrappedComponent key="operations">
+                                    <div className="space-y-8">
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                            <UniversalTurbineDashboard />
+                                            <SmartStartChecklist />
+                                        </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                            <PostShutdownWatchdog />
+                                            <TechnicalAuditReportModule />
+                                        </div>
+                                        <KnowledgeBridgeVisualizer />
+                                    </div>
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'PERFORMANCE' && (
-                        <WrappedComponent key="performance">
-                            <ClientConsultantDashboard />
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'PERFORMANCE' && (
+                                <WrappedComponent key="performance">
+                                    <ClientConsultantDashboard />
+                                </WrappedComponent>
+                            )}
 
-                    {activeModule === 'LEGACY' && (
-                        <WrappedComponent key="legacy">
-                            <LegacyModeHub />
-                        </WrappedComponent>
-                    )}
+                            {activeModule === 'LEGACY' && (
+                                <WrappedComponent key="legacy">
+                                    <LegacyModeHub />
+                                </WrappedComponent>
+                            )}
+                        </ErrorBoundary>
+                    </React.Suspense>
                 </AnimatePresence>
             </main>
         </div>

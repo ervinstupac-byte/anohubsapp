@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';

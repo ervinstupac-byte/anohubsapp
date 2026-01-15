@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Orbit, Fan, Droplets, CircleDotDashed, Zap, RefreshCcw, Sun, Wind } from 'lucide-react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
-import { ModernInput } from './ui/ModernInput.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { ModernButton } from '../shared/components/ui/ModernButton';
+import { ModernInput } from '../shared/components/ui/ModernInput';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { Asset } from '../types.ts';
 
 interface AssetRegistrationWizardProps {

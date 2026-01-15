@@ -1,6 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Activity, Zap, TrendingUp, ShieldAlert, BadgeCheck } from 'lucide-react';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { SystemHealth } from '../../services/LiveMathSync';
 
 interface LiveHUDProps {
@@ -45,7 +47,7 @@ export const LiveHUD: React.FC<LiveHUDProps> = ({ health, baseline }) => {
                             <span className="text-xs text-slate-500">kW</span>
                         </div>
                         {powerDelta !== 0 && (
-                            <div className={`text-xs font-bold flex items-center ${isPowerRising ? 'text-emerald-500' : 'text-red-500'}`}>
+                            <div className={`text - xs font - bold flex items - center ${isPowerRising ? 'text-emerald-500' : 'text-red-500'} `}>
                                 {isPowerRising ? '+' : ''}{powerDelta.toFixed(1)} kW
                                 {isPowerRising ? <TrendingUp className="w-3 h-3 ml-1" /> : <TrendingUp className="w-3 h-3 ml-1 rotate-180" />}
                             </div>
@@ -62,7 +64,7 @@ export const LiveHUD: React.FC<LiveHUDProps> = ({ health, baseline }) => {
                             <span className="text-xs text-slate-500">yrs</span>
                         </div>
                         {roiDelta !== 0 && (
-                            <div className={`text-xs font-bold ${isRoiImproving ? 'text-emerald-500' : 'text-amber-500'}`}>
+                            <div className={`text - xs font - bold ${isRoiImproving ? 'text-emerald-500' : 'text-amber-500'} `}>
                                 {roiDelta > 0 ? '+' : ''}{roiDelta.toFixed(1)} yrs
                             </div>
                         )}

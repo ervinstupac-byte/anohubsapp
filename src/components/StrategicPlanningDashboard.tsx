@@ -4,10 +4,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next'; // i18n
 import { formatNumber } from '../utils/i18nUtils'; // Data Localization
-import { ProfessionalReportEngine } from '../services/ProfessionalReportEngine';
+import { ProfessionalReportEngine } from '../features/reporting/ProfessionalReportEngine';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Truck, FileCheck, AlertTriangle, TrendingUp, DollarSign, Activity, Anchor, Zap, Shield, Settings, Info, FileText } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StrategicPlanningService, SiteParameters, Bid, ImpactAnalysis, FeasibilityResult } from '../services/StrategicPlanningService';
 import { LifecycleManager } from '../services/LifecycleManager';
 
@@ -24,7 +24,7 @@ import { MechanicalPanel } from './cerebro/panels/MechanicalPanel';
 import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel';
 import { LiveMathSync, SystemHealth } from '../services/LiveMathSync'; // Engine
 import { LiveHUD } from './cerebro/LiveHUD'; // HUD
-import { ToastSystem } from './ui/ToastSystem'; // Legacy Guard
+import { ToastSystem } from '../shared/components/ui/ToastSystem'; // Legacy Guard
 import { useProjectEngine } from '../contexts/ProjectContext'; // Context
 
 export const StrategicPlanningDashboard: React.FC = () => {

@@ -5,8 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { useCerebro } from '../contexts/ProjectContext';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ShieldCheck, Activity, Zap, TrendingUp, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -49,15 +48,22 @@ export const GlobalMap: React.FC = () => {
     const { t } = useTranslation(); // HOOK
     const { assets, selectAsset } = useAssetContext();
     const { telemetry } = useTelemetry();
-    const { state: technicalState } = useCerebro();
+    // MIGRATED: Removed useCerebro dependency. 
+    // Uses local defaults for structural/specialized data until those stores are created.
+    // This allows the component to function without the full ProjectContext.
     const [center] = useState<[number, number]>([45.815, 15.98]);
 
+    // Derived Stats
     const stats = {
         total: assets.length,
         critical: Object.values(telemetry).filter(t => t.status === 'CRITICAL').length,
         warning: Object.values(telemetry).filter(t => t.status === 'WARNING').length,
         power: Object.values(telemetry).reduce((acc, curr) => acc + curr.output, 0).toFixed(1)
     };
+
+    // Placeholder data (pending StructuralStore and SpecializedStore)
+    const remainingLife = 92.5;
+    const gridFrequency = 50.02;
 
     return (
         <div className="relative h-full w-full overflow-hidden bg-slate-950 isolate">
@@ -104,14 +110,14 @@ export const GlobalMap: React.FC = () => {
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-[10px] text-slate-400 font-black tracking-widest">{unit}</span>
                                     <span className={`text-[10px] font-mono font-bold ${idx === 1 ? 'text-emerald-400' : 'text-cyan-400'}`}>
-                                        {idx === 0 ? technicalState.structural?.remainingLife.toFixed(1) : (98.2 - (idx * 0.5)).toFixed(1)}% RUL
+                                        {idx === 0 ? remainingLife.toFixed(1) : (98.2 - (idx * 0.5)).toFixed(1)}% RUL
                                     </span>
                                 </div>
                                 <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                                     <motion.div
-                                        className={`h-full ${idx === 0 && (technicalState.structural?.remainingLife || 0) < 50 ? 'bg-red-500' : 'bg-cyan-500'}`}
+                                        className={`h-full ${idx === 0 && remainingLife < 50 ? 'bg-red-500' : 'bg-cyan-500'}`}
                                         initial={{ width: 0 }}
-                                        animate={{ width: `${idx === 0 ? technicalState.structural?.remainingLife : (98.2 - (idx * 0.5))}%` }}
+                                        animate={{ width: `${idx === 0 ? remainingLife : (98.2 - (idx * 0.5))}%` }}
                                     />
                                 </div>
                                 {idx === 1 && (
@@ -149,7 +155,7 @@ export const GlobalMap: React.FC = () => {
                     <div className="space-y-2 relative z-10">
                         <div className="flex justify-between items-center text-[10px] animate-pulse">
                             <span className="text-cyan-400 font-mono">GRID_FREQ</span>
-                            <span className="text-white font-mono font-bold">{(technicalState.specializedState?.sensors?.gridFrequency || 50).toFixed(2)} Hz</span>
+                            <span className="text-white font-mono font-bold">{gridFrequency.toFixed(2)} Hz</span>
                         </div>
                         <div className="flex justify-between items-center text-[10px]">
                             <span className="text-slate-500 font-mono">FATIGUE_DELTA</span>
@@ -255,4 +261,3 @@ export const GlobalMap: React.FC = () => {
         </div>
     );
 };
-// Uklonjen dupli eksport na dnu fajla.

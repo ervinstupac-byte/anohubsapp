@@ -4,7 +4,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Zap, Play, BookOpen } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningWizard } from './CommissioningWizard';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useCommissioning } from '../contexts/CommissioningContext';

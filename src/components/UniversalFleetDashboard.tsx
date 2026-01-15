@@ -26,7 +26,7 @@ const OptimizationDashboard = ({ asset, turbineModel }: any) => <div className="
 // import { DigitalTwinOverlay } from './turbine/DigitalTwinOverlay';
 // import { OptimizationDashboard } from './turbine/OptimizationDashboard';
 // import { ForensicTimeline } from './turbine/ForensicTimeline';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 type ViewMode = 'OPERATION' | 'DIGITAL_TWIN' | 'CONSULTING' | 'FORENSICS';
 

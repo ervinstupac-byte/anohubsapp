@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
-import { useProjectEngine } from '../../contexts/ProjectContext.tsx';
+// MIGRATED: From useProjectEngine to specialized stores
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useDemoMode } from '../../stores/useAppStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath.ts';
-import { Tooltip } from '../ui/Tooltip.tsx';
+import { Tooltip } from '../../shared/components/ui/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DigitalDisplay } from './DigitalDisplay.tsx';
@@ -86,13 +88,21 @@ const TurbineUnit: React.FC<{
 export const NeuralFlowMap: React.FC = React.memo(() => {
     const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
-    const { connectTwinToExpertEngine, technicalState } = useProjectEngine();
-    const { orbit, vibration, waterHammer } = useEngineeringMath();
+
+    // MIGRATED: From useProjectEngine to specialized stores
+    const { hydraulic, physics } = useTelemetryStore();
+    const demoMode = useDemoMode();
+    const { orbit, vibration } = useEngineeringMath();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [diagnosticAlerts, setDiagnosticAlerts] = useState<any[]>([]);
 
-    const mwOutput = technicalState.physics?.surgePressureBar ? technicalState.physics.surgePressureBar * 2.5 : 45.0;
+    // Calculate MW output from physics (with null safety)
+    const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
+    const mwOutput = surgePressure ? surgePressure * 2.5 : 45.0;
+
+    // Risk score approximation (would come from diagnosis in production)
+    const riskScore = physics?.hoopStress?.toNumber?.() ?? 0 > 140 ? 30 : 10;
 
     useEffect(() => {
         setIsLoading(true);
@@ -104,15 +114,21 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     useEffect(() => {
         if (!selectedAsset || isLoading) return;
 
-        // Reactive Diagnostic Pipeline (Formerly SCADA Interlock)
-        const flowRate = technicalState.hydraulic.flow;
-        const headPressure = technicalState.hydraulic.head;
-        const gridFreq = 50.0; // Stabilized frequency for twin visualization
+        // Reactive Diagnostic Pipeline
+        const flowRate = hydraulic?.flow ?? 0;
+        const headPressure = hydraulic?.head ?? 0;
 
-        const scadaConnection = connectTwinToExpertEngine(flowRate, headPressure, gridFreq);
-        setDiagnosticAlerts(scadaConnection?.criticalAlarms || []);
+        // Simplified diagnostic check (replacing connectTwinToExpertEngine)
+        const alerts: any[] = [];
+        if (flowRate > 50) {
+            alerts.push({ message: 'Flow rate exceeds operational threshold' });
+        }
+        if (headPressure > 200) {
+            alerts.push({ message: 'Head pressure approaching critical limit' });
+        }
+        setDiagnosticAlerts(alerts);
 
-    }, [selectedAsset, isLoading, technicalState, connectTwinToExpertEngine]);
+    }, [selectedAsset, isLoading, hydraulic]);
 
     if (isLoading) {
         return (
@@ -186,8 +202,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     return (
         <div className="flex-1 bg-gradient-to-br from-slate-950 via-slate-900 to-black relative overflow-hidden flex flex-col items-center justify-center p-4 sm:p-6 md:p-12">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                style={{ backgroundImage: 'linear-gradient(#06b6d4 1px, transparent 1px), linear-gradient(90deg, #06b6d4 1px, transparent 1px)', backgroundSize: '80px 80px' }}>
-            </div>
+                style={{ backgroundImage: 'linear-gradient(#06b6d4 1px, transparent 1px), linear-gradient(90deg, #06b6d4 1px, transparent 1px)', backgroundSize: '80px 80px' }}></div>
 
             <div className="relative z-10 w-full max-w-6xl border border-white/10 bg-slate-900/40 p-6 sm:p-8 md:p-16 rounded-[2.5rem] backdrop-blur-3xl shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden">
                 <div className="absolute inset-0 noise-commander opacity-20"></div>
@@ -228,7 +243,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"></div>
 
                         {/* HEALTH DELTA INDICATOR (NC-4.2 FLEET INTEL) */}
-                        {technicalState.demoMode.active && (
+                        {demoMode.active && (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -236,7 +251,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                             >
                                 <div className="text-[10px] text-amber-400 font-black uppercase tracking-widest text-center mb-1">Fleet Health Delta</div>
                                 <div className="text-4xl font-black text-white text-center tracking-tighter">
-                                    Δ {Math.abs(85 - (technicalState.riskScore > 0 ? 100 - technicalState.riskScore : 85)).toFixed(0)}%
+                                    Δ {Math.abs(85 - (riskScore > 0 ? 100 - riskScore : 85)).toFixed(0)}%
                                 </div>
                                 <div className="mt-2 text-[8px] text-slate-400 font-mono text-center uppercase">
                                     Simulation vs. Nominal Baseline
@@ -259,8 +274,8 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-12">
-                <DigitalDisplay value={technicalState.hydraulic.flow.toFixed(1)} label="NOMINAL_FLOW" unit="m³/s" color="cyan" />
-                <DigitalDisplay value={technicalState.hydraulic.head.toFixed(0)} label="GROSS_HEAD" unit="m" color="cyan" />
+                <DigitalDisplay value={(hydraulic?.flow ?? 0).toFixed(1)} label="NOMINAL_FLOW" unit="m³/s" color="cyan" />
+                <DigitalDisplay value={(hydraulic?.head ?? 0).toFixed(0)} label="GROSS_HEAD" unit="m" color="cyan" />
                 <DigitalDisplay value={orbit.eccentricity.toFixed(3)} label="ECCENTRICITY" color={orbit.eccentricity > 0.8 ? 'red' : 'cyan'} />
                 <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
             </div>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Activity, Zap, Lock, Scale, DoorOpen, ShieldAlert, AlertTriangle, ArrowLeft, Cpu, Timer, ShieldCheck, Waves } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 interface FaultState {

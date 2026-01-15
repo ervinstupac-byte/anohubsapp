@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAIPrediction } from '../contexts/AIPredictionContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 
 export const PrescriptiveRecommendations: React.FC = () => {
     const { prescriptions, executeAction } = useAIPrediction();
@@ -49,10 +49,10 @@ export const PrescriptiveRecommendations: React.FC = () => {
                         <div
                             key={key}
                             className={`p-4 rounded-xl border ${isCritical
-                                    ? 'bg-red-950/30 border-red-500/30'
-                                    : isHigh
-                                        ? 'bg-amber-950/30 border-amber-500/30'
-                                        : 'bg-slate-950/30 border-slate-700/30'
+                                ? 'bg-red-950/30 border-red-500/30'
+                                : isHigh
+                                    ? 'bg-amber-950/30 border-amber-500/30'
+                                    : 'bg-slate-950/30 border-slate-700/30'
                                 }`}
                         >
                             {/* Header */}

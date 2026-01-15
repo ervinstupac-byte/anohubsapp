@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Wind, Activity, Timer, AlertTriangle, Check, Volume2, ShieldAlert, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const VortexControl: React.FC = () => {

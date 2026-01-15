@@ -1,11 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StatCard } from './ui/StatCard.tsx';
 import { BackButton } from './BackButton.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
-import { useProjectEngine } from '../contexts/ProjectContext.tsx'; // Connected
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
-
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 const BOLT_GRADES: Record<string, number> = {
     '8.8': 640,
@@ -20,7 +19,9 @@ const MACHINE_PARTS = [
 ];
 
 export const BoltTorqueCalculator: React.FC = () => {
-    const { technicalState } = useProjectEngine(); // Use Central State
+    // Removed legacy technicalState import
+    const { physics: livePhysics, mechanical: liveMechanical, identity } = useTelemetryStore();
+
     const [selectedPartId, setSelectedPartId] = useState(MACHINE_PARTS[0].id);
     const [measuredElongation, setMeasuredElongation] = useState<number>(0);
 
@@ -28,9 +29,13 @@ export const BoltTorqueCalculator: React.FC = () => {
         MACHINE_PARTS.find(p => p.id === selectedPartId) || MACHINE_PARTS[0]
         , [selectedPartId]);
 
+    // Live Data Bridge
+    // If we have live physics for bolt load, we display it for comparison
+    const liveBoltLoad = livePhysics?.boltLoadKN ? livePhysics.boltLoadKN.toNumber() : 0;
+
     const calculations = useMemo(() => {
-        // Source of Truth: technicalState from CEREBRO
-        const techBoltSpecs = technicalState.mechanical.boltSpecs;
+        // Source of Truth: technicalState from CEREBRO (Design Parameters)
+        const techBoltSpecs = liveMechanical.boltSpecs;
 
         // Logic: Use technicalState specs which are now synced via DataSyncBridge
         const d = techBoltSpecs.diameter || parseInt(activePart.size.replace('M', ''));
@@ -60,7 +65,7 @@ export const BoltTorqueCalculator: React.FC = () => {
             elongation: targetElongation.toFixed(3),
             isElongationOk: Math.abs(measuredElongation - targetElongation) < 0.05
         };
-    }, [activePart, measuredElongation, technicalState.mechanical.boltSpecs]);
+    }, [activePart, measuredElongation, liveMechanical.boltSpecs]);
 
     // Star Pattern helper
     const starSteps = useMemo(() => {
@@ -112,19 +117,19 @@ export const BoltTorqueCalculator: React.FC = () => {
                         <div className="space-y-3 p-4 bg-white/5 rounded-2xl border border-white/5">
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Project Identity</span>
-                                <span className="text-cyan-400 font-mono font-bold uppercase">{technicalState.identity.name}</span>
+                                <span className="text-cyan-400 font-mono font-bold uppercase">{identity.assetName}</span>
                             </div>
                             <div className="flex justify-between text-xs pt-2 border-t border-white/5">
                                 <span className="text-slate-500">Bolt Size</span>
-                                <span className="text-white font-mono font-bold">M{technicalState.mechanical.boltSpecs.diameter || activePart.size}</span>
+                                <span className="text-white font-mono font-bold">M{liveMechanical.boltSpecs.diameter || activePart.size}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Material Grade</span>
-                                <span className="text-cyan-400 font-bold">{technicalState.mechanical.boltSpecs.grade || activePart.grade}</span>
+                                <span className="text-cyan-400 font-bold">{liveMechanical.boltSpecs.grade || activePart.grade}</span>
                             </div>
                             <div className="flex justify-between text-xs">
                                 <span className="text-slate-500">Total Bolts</span>
-                                <span className="text-white">{technicalState.mechanical.boltSpecs.count || activePart.bolts}</span>
+                                <span className="text-white">{liveMechanical.boltSpecs.count || activePart.bolts}</span>
                             </div>
                         </div>
                     </GlassCard>
@@ -132,7 +137,18 @@ export const BoltTorqueCalculator: React.FC = () => {
                     <GlassCard title="Dynamic Results" className="border-l-4 border-l-cyan-500">
                         <div className="space-y-6">
                             <StatCard label="Target Torque" value={calculations.torque.toString()} unit="Nm" />
-                            <StatCard label="Preload Force" value={calculations.force} unit="kN" />
+                            <StatCard label="Target Force" value={calculations.force} unit="kN" />
+
+                            {/* Live Bridge Data */}
+                            {liveBoltLoad > 0 && (
+                                <div className="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-lg">
+                                    <div className="text-[10px] text-emerald-500 font-bold uppercase mb-1">Live Sensor Array</div>
+                                    <div className="flex justify-between items-end">
+                                        <span className="text-lg font-mono font-bold text-white">{liveBoltLoad.toFixed(1)} <span className="text-xs text-slate-500">kN</span></span>
+                                        <span className="text-[10px] text-slate-400">Actual Load</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </GlassCard>
                 </div>

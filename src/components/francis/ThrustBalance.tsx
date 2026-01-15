@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRightLeft, AlertTriangle, Check, Droplet, Layers, Shiel
 import { FRANCIS_PATHS } from '../../routes/paths';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const ThrustBalance: React.FC = () => {

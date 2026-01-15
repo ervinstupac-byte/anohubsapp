@@ -9,6 +9,9 @@ import { ProfileLoader } from '../services/ProfileLoader';
 
 const AssetContext = createContext<AssetContextType | undefined>(undefined);
 
+// BroadcastChannel for instant cross-tab sync
+const ASSET_CHANNEL_NAME = 'anohub_asset_channel';
+
 export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { logAction } = useAudit();
     const [assets, setAssets] = useState<Asset[]>([]);
@@ -16,18 +19,36 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
+    // BroadcastChannel ref for cross-tab communication
+    const assetChannelRef = useRef<BroadcastChannel | null>(null);
+
     // Load assets from Supabase or LocalStorage (Guest)
     useEffect(() => {
+        console.log('[AssetContext] Step 1: Starting Initialization...');
+
         const fetchAssets = async () => {
             try {
+                // NUCLEAR SAFETY: Wrap everything to ensure loading=false eventually
+
                 // Check for guest assets in local storage first
-                const localAssets = loadFromStorage<Asset[]>('guest_assets') || [];
+                let localAssets: Asset[] = [];
+                try {
+                    localAssets = loadFromStorage<Asset[]>('guest_assets') || [];
+                } catch (e) {
+                    console.warn('[AssetContext] Failed to load guest_assets, resetting.', e);
+                    localAssets = [];
+                }
 
                 if (localAssets.length > 0) {
+                    console.log('[AssetContext] Step 2: Found Guest Assets:', localAssets.length);
                     setAssets(localAssets);
 
                     // Persistence Logic
-                    const savedAssetId = localStorage.getItem('activeAssetId');
+                    let savedAssetId: string | null = null;
+                    try {
+                        savedAssetId = localStorage.getItem('activeAssetId');
+                    } catch (e) { console.warn('LocalStorage access failed'); }
+
                     const initialAsset = savedAssetId
                         ? localAssets.find(a => a.id === savedAssetId)
                         : localAssets[0];
@@ -36,6 +57,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         setSelectedAssetId(initialAsset.id);
                     }
 
+                    console.log('[AssetContext] Step 3: Guest Load Complete');
                     setLoading(false);
                     return;
                 }
@@ -44,6 +66,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (error) throw error;
 
                 if (data) {
+                    console.log('[AssetContext] Step 2: Supabase Assets Loaded:', data.length);
                     const mappedAssets: Asset[] = data.map((item: any) => ({
                         id: item.id.toString(),
                         name: item.name,
@@ -52,12 +75,18 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         coordinates: [item.lat || 0, item.lng || 0],
                         capacity: parseFloat(item.power_output) || 0,
                         status: item.status || 'Operational',
-                        turbine_type: item.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(item.type?.toLowerCase()) ? item.type.toLowerCase() : 'francis')
+                        turbine_type: item.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(item.type?.toLowerCase()) ? item.type.toLowerCase() : 'francis'),
+                        specs: item.specs || {},
+                        turbineProfile: item.specs?.turbineProfile // Hoist profile from specs
                     }));
                     setAssets(mappedAssets);
 
                     // --- PERSISTENCE LOGIC START ---
-                    const savedAssetId = localStorage.getItem('activeAssetId');
+                    let savedAssetId: string | null = null;
+                    try {
+                        savedAssetId = localStorage.getItem('activeAssetId');
+                    } catch (e) { }
+
                     const initialAsset = savedAssetId
                         ? mappedAssets.find(a => a.id === savedAssetId)
                         : mappedAssets[0];
@@ -69,12 +98,43 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 }
             } catch (error) {
                 console.error('Error fetching assets:', error);
+                // Fallback to empty state but STOP LOADING
             } finally {
+                console.log('[AssetContext] Step 4: Finalizing (Loading = False)');
                 setLoading(false);
             }
         };
 
         fetchAssets();
+
+        // Cross-Tab Sync via BroadcastChannel (instant) + StorageEvent (fallback)
+        // Guard checking for window/browser environment
+        if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+            try {
+                assetChannelRef.current = new BroadcastChannel(ASSET_CHANNEL_NAME);
+                assetChannelRef.current.onmessage = (event) => {
+                    if (event.data?.type === 'ASSET_CHANGED') {
+                        setSelectedAssetId(event.data.assetId);
+                    }
+                };
+            } catch (e) {
+                console.warn('[AssetContext] BroadcastChannel init failed', e);
+            }
+        }
+
+        // Fallback: StorageEvent for older browsers
+        const handleStorage = (e: StorageEvent) => {
+            if (e.key === 'activeAssetId') {
+                setSelectedAssetId(e.newValue);
+            }
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => {
+            try {
+                assetChannelRef.current?.close();
+            } catch (e) { }
+            window.removeEventListener('storage', handleStorage);
+        };
     }, []);
 
     // --- NEW: Optimistic Update function ---
@@ -100,19 +160,49 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // --- NEW: Log Activity Function ---
     const logActivity = (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
-        const newLog: AssetHistoryEntry = {
-            id: crypto.randomUUID(),
-            assetId,
-            date: new Date().toISOString(),
-            category,
-            message,
-            author: 'CurrentUser', // TODO: Get actual user
-            changes
-        };
+        setAssetLogs(prev => {
+            const previousLog = prev[0]; // Assuming desc order
+            const previousHash = previousLog?.hash || 'GENESIS_HASH';
 
-        setAssetLogs(prev => [newLog, ...prev]);
+            // Create payload for hashing
+            const payload = {
+                id: crypto.randomUUID(),
+                assetId,
+                date: new Date().toISOString(),
+                category,
+                message,
+                author: 'CurrentUser', // TODO: Get actual user
+                changes,
+                previousHash
+            };
 
-        // console.log('[AssetLog]', newLog); 
+            // Calculate SHA-256 Hash synchronously (simplification) or use a simple hash for demo if crypto.subtle is async
+            // For true Ledger integrity, we'd use crypto.subtle.digest(), but that is async.
+            // setAssetLogs is sync. We can use a simple hash function for now or make it async.
+            // Let's use a robust string hash for "Proof of Concept" Ledger in sync mode.
+            // Or better: Use JSON.stringify and a simple hash function.
+
+            const simpleHash = (str: string) => {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash; // Convert to 32bit integer
+                }
+                return hash.toString(16);
+            }
+
+            const signature = simpleHash(JSON.stringify(payload) + previousHash);
+
+            const newLog: AssetHistoryEntry = {
+                ...payload,
+                hash: signature
+            };
+
+            // console.log(`[LEDGER] Signed Block: ${signature} (Prev: ${previousHash})`);
+
+            return [newLog, ...prev];
+        });
     };
 
     // Create a ref to hold the debounced logging function
@@ -126,12 +216,24 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const selectAsset = useCallback((id: string) => {
         setSelectedAssetId(id);
         localStorage.setItem('activeAssetId', id); // Save to local storage
+
+        // Broadcast to other tabs instantly
+        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: id });
+
         const asset = assets.find(a => a.id === id);
         if (asset) {
             // Call the debounced function instead of direct logAction
             debouncedLogContextSwitch(asset.name);
         }
     }, [assets, debouncedLogContextSwitch]);
+
+    // --- NEW: Clear selection for "Fleet View" mode ---
+    const clearSelection = useCallback(() => {
+        setSelectedAssetId(null);
+        localStorage.removeItem('activeAssetId');
+        logAction('CONTEXT_SWITCH', 'Fleet View', 'SUCCESS');
+    }, [logAction]);
+
 
     const { isGuest } = useAuth(); // Hook to check guest status
 
@@ -162,7 +264,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     coordinates: [dbPayload.lat, dbPayload.lng],
                     capacity: dbPayload.power_output,
                     status: dbPayload.status as Asset['status'],
-                    specs: dbPayload.specs
+                    specs: dbPayload.specs,
+                    turbineProfile: dbPayload.specs?.turbineProfile
                 };
 
                 const existingGuestAssets = loadFromStorage<Asset[]>('guest_assets') || [];
@@ -186,7 +289,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     capacity: parseFloat(data.power_output),
                     status: data.status,
                     turbine_type: data.turbine_type || (['pelton', 'francis', 'kaplan', 'crossflow'].includes(data.type?.toLowerCase()) ? data.type.toLowerCase() : 'francis'),
-                    specs: data.specs || {}
+                    specs: data.specs || {},
+                    turbineProfile: data.specs?.turbineProfile
                 };
             }
 
@@ -204,6 +308,9 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         assets.find(a => a.id === selectedAssetId) || null
         , [assets, selectedAssetId]);
 
+    // --- NEW: Boolean for conditional rendering (must be after selectedAsset) ---
+    const isAssetSelected = selectedAssetId !== null && selectedAsset !== null;
+
     const activeProfile = useMemo(() => {
         if (!selectedAsset) return null;
         // Map asset.type or asset.turbine_type to profile
@@ -220,8 +327,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addAsset,
         updateAsset,
         logActivity,
-        assetLogs
-    }), [assets, selectedAsset, activeProfile, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs]);
+        assetLogs,
+        // --- NEW: Golden Thread additions ---
+        isAssetSelected,
+        clearSelection
+    }), [assets, selectedAsset, activeProfile, selectAsset, loading, addAsset, updateAsset, logActivity, assetLogs, isAssetSelected, clearSelection]);
 
     return (
         <AssetContext.Provider value={value}>

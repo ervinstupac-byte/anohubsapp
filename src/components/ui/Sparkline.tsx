@@ -1,11 +1,18 @@
 import React from 'react';
 
+// NEW: Event Markers support
+interface SparklineMarker {
+    index: number;
+    color?: string; // e.g. yellow for protocol, purple for work order
+}
+
 interface SparklineProps {
     data: number[];
     width?: number;
     height?: number;
     color?: string;
     className?: string;
+    markers?: SparklineMarker[];
 }
 
 export const Sparkline: React.FC<SparklineProps> = React.memo(({
@@ -13,7 +20,8 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
     width = 60,
     height = 20,
     color = '#22d3ee', // cyan-400 default
-    className = ''
+    className = '',
+    markers = []
 }) => {
     // Need at least 2 points to draw a line
     if (!data || data.length < 2) {
@@ -24,12 +32,13 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
     const max = Math.max(...data);
     const range = max - min || 1; // avoid division by zero
 
+    // Calculate Y for a value
+    const getY = (val: number) => height - (((val - min) / range) * height);
+
     // Calculate points
     const points = data.map((val, i) => {
         const x = (i / (data.length - 1)) * width;
-        const normalizedVal = (val - min) / range;
-        // SVG coordinates: y=0 is top, so we invert
-        const y = height - (normalizedVal * height);
+        const y = getY(val);
         return `${x},${y}`;
     }).join(' ');
 
@@ -43,10 +52,29 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
-            {/* Optional: Add a dot at the end */}
+            {/* Markers */}
+            {markers.map((marker, i) => {
+                if (marker.index < 0 || marker.index >= data.length) return null;
+                const val = data[marker.index];
+                const x = (marker.index / (data.length - 1)) * width;
+                const y = getY(val);
+                return (
+                    <circle
+                        key={i}
+                        cx={x}
+                        cy={y}
+                        r="2"
+                        fill={marker.color || '#FBBF24'} // Amber default
+                        stroke="#0F172A"
+                        strokeWidth="1"
+                    />
+                );
+            })}
+
+            {/* End Dot */}
             <circle
                 cx={width}
-                cy={height - ((data[data.length - 1] - min) / range * height)}
+                cy={getY(data[data.length - 1])}
                 r="1.5"
                 fill={color}
             />

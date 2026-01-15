@@ -127,7 +127,7 @@ export const CommanderDemoHUD: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-4xl px-4 pointer-events-none">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 w-full max-w-4xl px-4 pointer-events-none">
             <motion.div
                 layout
                 className="pointer-events-auto overflow-hidden bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_32px_64px_rgba(0,0,0,0.5)]"

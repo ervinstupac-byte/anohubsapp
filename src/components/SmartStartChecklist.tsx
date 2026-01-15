@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, AlertOctagon, Activity, FlaskConical, CheckCircle2, ChevronRight, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { SmartStartService, CheckItem } from '../services/SmartStartService';
 
 export const SmartStartChecklist: React.FC = () => {

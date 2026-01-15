@@ -6,8 +6,8 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import jsPDF from 'jspdf';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 interface ContractStatus {
     status: 'ACTIVE' | 'BREACHED' | 'WARNING' | 'EXPIRED';
@@ -124,12 +124,12 @@ export const ContractManagement: React.FC = () => {
 
                     {/* LEFT: STATUS CARD */}
                     <GlassCard className={`p-0 overflow-hidden border-2 transition-all duration-500 ${contract.status === 'BREACHED' ? 'border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)]' :
-                            contract.status === 'WARNING' ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]' :
-                                'border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
+                        contract.status === 'WARNING' ? 'border-amber-500 shadow-[0_0_30px_rgba(245,158,11,0.3)]' :
+                            'border-emerald-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]'
                         }`}>
                         <div className={`p-10 text-center relative h-full flex flex-col justify-center ${contract.status === 'BREACHED' ? 'bg-red-950/30' :
-                                contract.status === 'WARNING' ? 'bg-amber-950/30' :
-                                    'bg-emerald-950/30'
+                            contract.status === 'WARNING' ? 'bg-amber-950/30' :
+                                'bg-emerald-950/30'
                             }`}>
                             <div className="text-8xl mb-6 filter drop-shadow-lg animate-bounce-slow">
                                 {contract.status === 'BREACHED' ? '🚫' : contract.status === 'WARNING' ? '⚠️' : '✅'}

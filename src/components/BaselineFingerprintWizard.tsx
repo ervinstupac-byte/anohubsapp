@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, Zap, CheckCircle, Circle, Play } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
 import { EnhancedAsset } from '../models/turbine/types';
 import { useTelemetry } from '../contexts/TelemetryContext';

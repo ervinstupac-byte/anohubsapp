@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useProjectEngine } from '../../contexts/ProjectContext';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
+import { PhysicsEngine } from '../../features/physics-core/PhysicsEngine';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, AlertTriangle, PlayCircle, Loader2 } from 'lucide-react';
 

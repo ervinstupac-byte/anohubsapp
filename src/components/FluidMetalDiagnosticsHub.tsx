@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Droplet, Microscope, Map, Shield } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { OilAnalysisDashboard } from './OilAnalysisDashboard';
 import { ParticleFerographyViewer } from './ParticleFerographyViewer';
 import { ErosionMappingViewer } from './ErosionMappingViewer';

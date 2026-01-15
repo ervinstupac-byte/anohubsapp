@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, AlertTriangle, Lightbulb, Award, ThumbsUp, Eye } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { InstitutionalKnowledgeService, ExpertKnowledgeEntry, KnowledgeSearchResult } from '../services/InstitutionalKnowledgeService';
 import { useAssetContext } from '../contexts/AssetContext';
 

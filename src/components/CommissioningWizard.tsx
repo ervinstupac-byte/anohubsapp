@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, Circle, Play, Save, AlertCircle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { BaselineFingerprintWizard } from './BaselineFingerprintWizard';
 import { AlignmentWizard } from './AlignmentWizard';
 import { HydroStaticTestMonitor } from './HydroStaticTestMonitor';

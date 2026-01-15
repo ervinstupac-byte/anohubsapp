@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Network, ArrowRight, Droplets, Zap, Clock, Coins } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { KnowledgeBridgeService } from '../services/KnowledgeBridgeService';
 import { LifecycleManager } from '../services/LifecycleManager';
 

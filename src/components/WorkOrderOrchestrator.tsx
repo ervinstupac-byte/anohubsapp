@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 
 export const WorkOrderOrchestrator: React.FC = () => {
     const { activeWorkOrder, currentStepIndex, completeStep, confirmTools, loading } = useWorkOrder();

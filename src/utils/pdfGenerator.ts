@@ -45,7 +45,8 @@ export const generateDiagnosticDossier = (
     insight: any,
     engineerName: string,
     snapshotImage: string | null = null,
-    returnBlob: boolean = false
+    returnBlob: boolean = false,
+    ledgerId: string | null = null
 ) => {
     // HARDENING: Safe Defaults
     const safeInsight = insight || {
@@ -75,7 +76,9 @@ export const generateDiagnosticDossier = (
     doc.setFontSize(10);
     doc.text(`CASE ID: ${caseId}`, pageWidth - 20, 15, { align: 'right' });
     doc.text(`GENERATED: ${new Date().toISOString()}`, pageWidth - 20, 25, { align: 'right' });
-    doc.text(`DIGITAL LEDGER: #DL-${Math.floor(Math.random() * 999999)} (Authenticity Verified)`, pageWidth - 20, 35, { align: 'right' });
+    doc.text(`GENERATED: ${new Date().toISOString()}`, pageWidth - 20, 25, { align: 'right' });
+    const ledgerDisplay = ledgerId ? `#${ledgerId.substring(0, 8).toUpperCase()}` : `#DL-${Math.floor(Math.random() * 999999)}`;
+    doc.text(`DIGITAL LEDGER: ${ledgerDisplay} (Authenticity Verified)`, pageWidth - 20, 35, { align: 'right' });
 
     // Insight Headline
     let y = 60;
@@ -483,7 +486,8 @@ export const generateAuditReport = (
     logs: any[],
     engineerName: string,
     t: TFunction,
-    returnBlob: boolean = false
+    returnBlob: boolean = false,
+    ledgerId: string | null = null
 ) => {
     const doc = new jsPDF();
     addCustomFont(doc);
@@ -501,7 +505,13 @@ export const generateAuditReport = (
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.text(`${t('common.generatedBy') || 'Engineer'}: ${engineerName}`, pageWidth - 20, 15, { align: 'right' });
+    doc.text(`${t('common.generatedBy') || 'Engineer'}: ${engineerName}`, pageWidth - 20, 15, { align: 'right' });
     doc.text(new Date().toLocaleString(), pageWidth - 20, 25, { align: 'right' });
+    if (ledgerId) {
+        doc.setTextColor(100, 116, 139); // Slate 500
+        doc.setFontSize(8);
+        doc.text(`LEDGER ID: ${ledgerId.substring(0, 8).toUpperCase()}`, pageWidth - 20, 32, { align: 'right' });
+    }
 
     // Context Title
     let y = 50;

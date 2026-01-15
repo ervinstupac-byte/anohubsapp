@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useForensics } from '../contexts/ForensicsContext.tsx';
 
 export const ForensicDepthAnalyzer: React.FC = () => {

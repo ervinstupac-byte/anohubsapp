@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Droplet, AlertTriangle, CheckCircle, TrendingDown, TrendingUp } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { OilAnalysisService, OilSample } from '../services/OilAnalysisService';
 
 export const OilAnalysisDashboard: React.FC = () => {

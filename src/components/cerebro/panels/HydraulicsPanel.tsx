@@ -1,17 +1,33 @@
 import React from 'react';
 import { Activity, ArrowRight, TrendingDown, Shield } from 'lucide-react';
 import { useProjectEngine } from '../../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
-import { GlassCard } from '../../ui/GlassCard';
+import { GlassCard } from '../../../shared/components/ui/GlassCard';
 import { PipeMaterial } from '../../../models/TechnicalSchema';
 
 export const HydraulicsPanel: React.FC = () => {
+    // 1. LEGACY (Writes & Config)
     const { technicalState, updatePenstockSpecs, dispatch } = useProjectEngine();
+
+    // 2. NEW TELEMETRY (Read Live Physics)
+    const { physics: livePhysics, hydraulic: liveHydraulic } = useTelemetryStore();
+
     const { t, i18n: { language } } = useTranslation();
 
-    const { material, wallThickness } = technicalState.penstock;
-    const { physics } = technicalState;
+    const { material, wallThickness } = technicalState.penstock; // Keep reading config from TechnicalState for Inputs
+
+    // DATA BRIDGE: Live Physics or Fallback
+    // Note: ProjectEngine splits surge vs hammer. PhysicsEngine has 'surgePressure'.
+    // We map 'surgePressure' to the display value.
+    const activeSurge = livePhysics?.surgePressure
+        ? livePhysics.surgePressure.toNumber()
+        : (technicalState.physics?.waterHammerPressureBar || 0);
+
+    const activeHoopStress = livePhysics?.hoopStress
+        ? livePhysics.hoopStress.toNumber()
+        : (technicalState.physics?.hoopStressMPa || 0);
 
     return (
         <div className="space-y-6">
@@ -65,24 +81,24 @@ export const HydraulicsPanel: React.FC = () => {
                             <span className="text-[10px] text-blue-400 font-bold uppercase">{t('physics.waterHammer', 'Water Hammer')}</span>
                         </div>
                         <div className="text-2xl font-black text-white font-mono">
-                            {formatNumber(technicalState.physics.waterHammerPressureBar, language, 1)} <span className="text-sm text-slate-500">bar</span>
+                            {formatNumber(activeSurge, language, 1)} <span className="text-sm text-slate-500">bar</span>
                         </div>
                         <div className="text-[10px] text-slate-500 mt-1">Surge Pressure</div>
                     </div>
 
-                    <div className={`p-3 rounded border ${physics.hoopStressMPa > 200 ? 'bg-red-950/20 border-red-500/20' : 'bg-emerald-950/20 border-emerald-500/20'}`}>
+                    <div className={`p-3 rounded border ${activeHoopStress > 200 ? 'bg-red-950/20 border-red-500/20' : 'bg-emerald-950/20 border-emerald-500/20'}`}>
                         <div className="flex items-center gap-2 mb-1">
-                            <Shield className={`w-4 h-4 ${physics.hoopStressMPa > 200 ? 'text-red-500' : 'text-emerald-500'}`} />
-                            <span className={`text-[10px] font-bold uppercase ${physics.hoopStressMPa > 200 ? 'text-red-400' : 'text-emerald-400'}`}>
+                            <Shield className={`w-4 h-4 ${activeHoopStress > 200 ? 'text-red-500' : 'text-emerald-500'}`} />
+                            <span className={`text-[10px] font-bold uppercase ${activeHoopStress > 200 ? 'text-red-400' : 'text-emerald-400'}`}>
                                 {t('physics.hoopStress', 'Hoop Stress')}
                             </span>
                         </div>
-                        <span className="text-xl font-mono text-white">{physics.hoopStressMPa.toFixed(1)} <span className="text-xs">MPa</span></span>
+                        <span className="text-xl font-mono text-white">{activeHoopStress.toFixed(1)} <span className="text-xs">MPa</span></span>
                         <div className="text-[10px] text-slate-500 mt-1">Material Load</div>
                     </div>
                 </div>
 
-                {physics.hoopStressMPa > 200 && !technicalState.appliedMitigations.includes('STRUCTURAL_RISK') && (
+                {activeHoopStress > 200 && !technicalState.appliedMitigations.includes('STRUCTURAL_RISK') && (
                     <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
                         <div className="relative z-10">
                             <h4 className="text-xs font-bold text-amber-500 uppercase flex items-center gap-2">

@@ -3,11 +3,11 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { GlassCard } from './ui/GlassCard.tsx';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StatCard } from './ui/StatCard.tsx';
 import { BackButton } from './BackButton.tsx';
 import { AssetPicker } from './AssetPicker.tsx';
-import { ModernButton } from './ui/ModernButton.tsx';
+import { ModernButton } from '../shared/components/ui/ModernButton';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 
 export const HydraulicMaintenance: React.FC = () => {

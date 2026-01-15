@@ -3,21 +3,56 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Activity, Octagon, AlertTriangle, ArrowDown, ShieldAlert, Cpu, Scaling } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+// NEW: Specialized stores instead of monolithic ProjectContext
+import { useAssetConfig } from '../../contexts/AssetConfigContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useDemoMode } from '../../stores/useAppStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const Penstock: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+
+    // NEW PATTERN: Specialized stores for different concerns
+    // - useAssetConfig: STATIC configuration (penstock.diameter, penstock.material)
+    // - useTelemetryStore: LIVE sensor data (physics.hoopStress, physics.surgePressure)
+    // - useDemoMode: UI state (demo scenarios)
+    const { config, isLoading } = useAssetConfig(); // Static configuration
+    const { physics } = useTelemetryStore(); // Live telemetry data
+    const demoMode = useDemoMode(); // UI state (unused in current render but available)
     const { waterHammer } = useEngineeringMath();
 
-    // Data from CEREBRO Hub
-    const hoopStress = state.physics.hoopStressMPa;
-    const burstSF = waterHammer.burstSafetyFactor;
+    // === MAPPING FROM OLD STATE TO NEW STORES ===
+    // OLD: state.penstock.diameter      -> NEW: config?.penstock?.diameter
+    // OLD: state.penstock.material      -> NEW: config?.penstock?.material  
+    // OLD: state.physics.hoopStressMPa  -> NEW: physics?.hoopStress?.toNumber()
+    // OLD: state.demoMode               -> NEW: demoMode (from useAppStore)
+
+    // Penstock specs from AssetConfig (static, rarely changes)
+    const penstockDiameter = config?.penstock?.diameter ?? 2.5;
+    const penstockMaterial = config?.penstock?.material ?? 'STEEL';
+    const penstockThickness = config?.penstock?.wallThickness ?? 0.025;
+
+    // Live telemetry from TelemetryStore (with null safety)
+    // Note: PhysicsResult uses Decimal.js, we convert to number for display
+    const hoopStress = physics?.hoopStress?.toNumber?.() ?? 0;
+    const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
+    const burstSF = waterHammer?.burstSafetyFactor ?? 1.0;
     const isDanger = burstSF < 1.5;
+
+    // Loading guard: Prevent undefined errors on initial mount
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full mx-auto mb-4" />
+                    <p className="text-slate-400 text-sm font-medium">Loading Penstock Data...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
@@ -81,6 +116,39 @@ export const Penstock: React.FC = () => {
                     </div>
                 </GlassCard>
 
+                {/* 2. Configuration Specs (from AssetConfig - STATIC DATA) */}
+                <GlassCard title="Penstock Configuration" className="relative overflow-hidden">
+                    <div className="absolute top-4 right-4 px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-[9px] font-black uppercase tracking-widest">
+                        From AssetConfig
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                            <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                                <Octagon className="w-3 h-3 text-blue-400" /> Internal Diameter
+                            </p>
+                            <p className="text-3xl font-black text-white font-mono tracking-tighter">
+                                {(penstockDiameter * 1000).toFixed(0)} <span className="text-xs text-slate-500 uppercase ml-1">mm</span>
+                            </p>
+                        </div>
+                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                            <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                                <ShieldAlert className="w-3 h-3 text-purple-400" /> Material Grade
+                            </p>
+                            <p className="text-2xl font-black text-white font-mono tracking-tighter">
+                                {penstockMaterial}
+                            </p>
+                        </div>
+                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                            <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
+                                <Activity className="w-3 h-3 text-amber-400" /> Wall Thickness
+                            </p>
+                            <p className="text-3xl font-black text-white font-mono tracking-tighter">
+                                {(penstockThickness * 1000).toFixed(1)} <span className="text-xs text-slate-500 uppercase ml-1">mm</span>
+                            </p>
+                        </div>
+                    </div>
+                </GlassCard>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Joukowsky Analysis */}
                     <GlassCard title={t('francis.penstock.hammer')} icon={<ArrowDown className="text-red-400" />}>
@@ -93,20 +161,20 @@ export const Penstock: React.FC = () => {
                                 </p>
                                 <div className="p-4 bg-black/60 rounded-2xl border border-white/5 flex justify-between items-center group/opt">
                                     <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Surge Pressure</span>
-                                    <span className="text-xl font-black text-red-400 font-mono tracking-tighter">+{state.physics.waterHammerPressureBar.toFixed(1)} <span className="text-[10px] opacity-40">BAR</span></span>
+                                    <span className="text-xl font-black text-red-400 font-mono tracking-tighter">+{surgePressure.toFixed(1)} <span className="text-[10px] opacity-40">BAR</span></span>
                                 </div>
                             </div>
 
                             <div className="bg-slate-900/40 p-6 rounded-3xl border border-white/5 space-y-4">
                                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
                                     <span>Design Limit Progress</span>
-                                    <span className="text-white">{(state.physics.surgePressureBar / 25 * 100).toFixed(1)}%</span>
+                                    <span className="text-white">{(surgePressure / 25 * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className="relative h-6 bg-slate-800 rounded-full overflow-hidden border border-white/5 shadow-inner">
                                     <div className="absolute top-0 bottom-0 w-1 bg-red-500 z-10" style={{ left: '80%' }} />
                                     <div
                                         className={`h-full transition-all duration-1000 shadow-[0_0_20px_rgba(239,68,68,0.3)] ${isDanger ? 'bg-gradient-to-r from-red-600 to-amber-500' : 'bg-gradient-to-r from-cyan-600 to-blue-500'}`}
-                                        style={{ width: `${Math.min((state.physics.surgePressureBar / 25) * 100, 100)}%` }}
+                                        style={{ width: `${Math.min((surgePressure / 25) * 100, 100)}%` }}
                                     />
                                 </div>
                                 <div className="flex justify-between text-[8px] text-slate-600 font-black uppercase tracking-[0.3em]">

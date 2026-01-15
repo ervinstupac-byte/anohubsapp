@@ -4,7 +4,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
 
 interface ExecutiveDashboardProps {

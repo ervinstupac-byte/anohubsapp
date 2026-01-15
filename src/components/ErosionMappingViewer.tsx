@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Map, TrendingUp, AlertCircle, Wrench } from 'lucide-react';
-import { GlassCard } from './ui/GlassCard';
+import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CavitationErosionService, ErosionAnalysis } from '../services/CavitationErosionService';
 
 export const ErosionMappingViewer: React.FC = () => {
@@ -163,8 +163,8 @@ export const ErosionMappingViewer: React.FC = () => {
 
                     {/* Recommended Action */}
                     <GlassCard className={`p-4 border-2 ${analysis.recommendedAction === 'STELLITE_WELD' ? 'border-red-500 bg-red-950/20' :
-                            analysis.recommendedAction === 'REGIME_CHANGE' ? 'border-amber-500 bg-amber-950/20' :
-                                'border-emerald-500 bg-emerald-950/20'
+                        analysis.recommendedAction === 'REGIME_CHANGE' ? 'border-amber-500 bg-amber-950/20' :
+                            'border-emerald-500 bg-emerald-950/20'
                         }`}>
                         <div className="flex items-center gap-2 mb-3">
                             <Wrench className={`w-5 h-5 ${analysis.recommendedAction === 'STELLITE_WELD' ? 'text-red-400' : 'text-amber-400'

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowDown, CheckCircle, XCircle, Play, Pause, AlertTriangle, ArrowLeft, ShieldCheck, Timer, Cpu, Zap, Activity } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { GlassCard } from '../ui/GlassCard';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const StartupFlowchart: React.FC = () => {
