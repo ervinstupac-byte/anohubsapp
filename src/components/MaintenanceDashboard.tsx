@@ -10,6 +10,7 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { reportGenerator } from '../features/reporting/ReportGenerator';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { MaintenanceTimelineCard } from './maintenance/MaintenanceTimelineCard';
+import { ExpertMaintenanceAdvisorCard } from './maintenance/ExpertMaintenanceAdvisorCard';
 import { SmartActionList } from './dashboard/SmartActionList';
 import { AssetPicker } from './AssetPicker.tsx';
 import { BackButton } from './BackButton.tsx';
@@ -109,6 +110,7 @@ export const MaintenanceDashboard: React.FC = () => {
                         {/* LEFT: STATUS CARD */}
                         <div className="space-y-6">
                             <MaintenanceTimelineCard />
+                            <ExpertMaintenanceAdvisorCard />
                             <SmartActionList />
                             <GlassCard className="bg-slate-900/60 border-l-4 border-l-emerald-500">
                                 <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">Total Operating Hours</p>

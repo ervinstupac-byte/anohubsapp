@@ -225,8 +225,38 @@ export const StrategicPlanningDashboard: React.FC = () => {
                             <span className="text-xs uppercase tracking-widest">{t('common.generatePDF', 'PDF Generieren')}</span>
                         </motion.button>
 
-                        <div className="mt-4 bg-slate-900/50 p-4 rounded-xl border border-slate-800">
-                            <h3 className="text-xs font-bold text-slate-400 uppercase mb-2">Live Status</h3>
+                        <div className="mt-4 bg-slate-900 p-4 rounded-xl border border-white/5 space-y-3">
+                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-tighter mb-1">Head Analysis</h3>
+
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="text-slate-400">Gross Head (Hg)</span>
+                                <span className="text-white font-mono">{formatNumber(technicalState.site.grossHead, language, 1)} m</span>
+                            </div>
+
+                            <div className="flex justify-between items-center text-xs text-amber-500">
+                                <span className="font-bold">Total Loss (hf)</span>
+                                <span className="font-mono">-{formatNumber(feasibility?.frictionLoss || 0, language, 2)} m</span>
+                            </div>
+
+                            <div className="h-px bg-white/5 my-1" />
+
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-cyan-400 font-bold uppercase tracking-widest text-[10px]">Net Head (Hn)</span>
+                                <span className="text-white font-black font-mono">{formatNumber(feasibility?.netHead || 0, language, 2)} m</span>
+                            </div>
+
+                            <div className="pt-2">
+                                <div className="flex justify-between text-[9px] text-slate-500 uppercase mb-1">
+                                    <span>Relative Efficiency</span>
+                                    <span>{((feasibility?.netHead || 1) / (technicalState.site.grossHead || 1) * 100).toFixed(1)}%</span>
+                                </div>
+                                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-cyan-500"
+                                        style={{ width: `${(feasibility?.netHead || 0) / (technicalState.site.grossHead || 1) * 100}%` }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

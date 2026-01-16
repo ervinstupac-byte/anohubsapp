@@ -1,0 +1,5 @@
+﻿src/App.tsx(98,44): error TS2307: Cannot find module './components/francis/FrancisHub' or its corresponding type declarations.
+src/components/CommandCenter.tsx(264,75): error TS2339: Property 'getSOP' does not exist on type '{ generateActionPlan: (report: DiagnosisReport) => SOPMapping[]; }'.
+src/components/dashboard/CommanderTerminal.tsx(76,51): error TS2339: Property 'getSOP' does not exist on type '{ generateActionPlan: (report: DiagnosisReport) => SOPMapping[]; }'.
+src/components/dashboard/CommanderTerminal.tsx(80,43): error TS7006: Parameter 's' implicitly has an 'any' type.
+src/features/francis/components/FrancisHub.tsx(94,38): error TS2552: Cannot find name 'motion'. Did you mean 'Option'?

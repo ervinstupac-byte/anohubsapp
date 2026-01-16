@@ -42,11 +42,24 @@ export const PhysicsEngine = {
         const pressureWaveVelocity = PhysicsLogic.calculateWaveVelocity(d, t, E);
         const surgePressurePa = PhysicsLogic.calculateSurgePressure(pressureWaveVelocity, velocity);
 
-        // 3. Hoop Stress (Barlow's Formula)
+        // 3. Friction & Net Head (Swamee-Jain)
+        const ROUGHNESS_MAP: Record<string, number> = {
+            'STEEL': 0.045,
+            'GRP': 0.01,
+            'PEHD': 0.005,
+            'CONCRETE': 1.5
+        };
+        const roughnessMM = new Decimal(ROUGHNESS_MAP[penstock.material] || 0.045);
+        const Re = PhysicsLogic.calculateReynoldsNumber(velocity, d);
+        const f = PhysicsLogic.calculateFrictionFactor(Re, roughnessMM, d);
+        const headLoss = PhysicsLogic.calculateHeadLoss(f, new Decimal(penstock.length), d, velocity);
+        const netHead = Decimal.max(0, head.sub(headLoss));
+
+        // 4. Hoop Stress (Barlow's Formula) - Uses Total Pressure (Static + Surge)
         const hoopStress = PhysicsLogic.calculateHoopStress(head, surgePressurePa, d, t);
 
-        // 4. Power Output (P = rho * g * H * Q * eta)
-        const powerMW = PhysicsLogic.calculatePowerMW(head, flow, new Decimal(hydraulic.efficiency));
+        // 5. Power Output (P = rho * g * H_net * Q * eta)
+        const powerMW = PhysicsLogic.calculatePowerMW(netHead, flow, new Decimal(hydraulic.efficiency));
 
         // 5. Performance Delta (Delta_Perf = ((Actual - Baseline) / Baseline) * 100)
         const performanceDelta = powerMW.sub(baselinePower).div(baselinePower).mul(100);
@@ -57,7 +70,24 @@ export const PhysicsEngine = {
 
         const eccentricity = PhysicsLogic.calculateEccentricity(vibX, vibY, turbineType || 'FRANCIS');
 
-        // 7. Safety Status Assignment
+        // 7. Bolt Integrity (Axial Mechanical Safety)
+        const BOLT_YIELD_MAP: Record<string, number> = {
+            '4.6': 240, '5.6': 300, '8.8': 640, '10.9': 940, '12.9': 1080
+        };
+        const yieldMPa = new Decimal(BOLT_YIELD_MAP[mechanical.boltSpecs.grade] || 640);
+        const boltD = new Decimal(mechanical.boltSpecs.diameter || 36); // Base M36
+        const boltCount = mechanical.boltSpecs.count || 12;
+
+        const rho = new Decimal(SYSTEM_CONSTANTS.PHYSICS.WATER.DENSITY);
+        const gravity = new Decimal(SYSTEM_CONSTANTS.PHYSICS.GRAVITY);
+        const staticPressurePa = rho.mul(gravity).mul(head);
+        const totalPressurePa = staticPressurePa.plus(surgePressurePa);
+
+        const runnerD = new Decimal(identity.machineConfig?.runnerDiameterMM || 1500);
+
+        const boltLoadKN = PhysicsLogic.calculateBoltLoadKN(totalPressurePa, runnerD, boltCount);
+        const boltCapacityKN = PhysicsLogic.calculateBoltCapacityKN(boltD, yieldMPa);
+        const boltSafetyFactor = boltCapacityKN.div(boltLoadKN.gt(0) ? boltLoadKN : 1);
         let status: RiskStatus = 'NOMINAL';
         const hoopSF = new Decimal(penstock.materialYieldStrength).div(hoopStress.gt(0) ? hoopStress : 1);
 
@@ -97,7 +127,12 @@ export const PhysicsEngine = {
             specificWaterConsumption,
             performanceGap,
             status,
-            volumetricLoss
+            volumetricLoss,
+            netHead,
+            headLoss,
+            boltLoadKN,
+            boltCapacityKN,
+            boltSafetyFactor
         };
     },
 
@@ -138,7 +173,12 @@ export const PhysicsEngine = {
                 axialThrustKN: result.axialThrustKN ? result.axialThrustKN.toNumber() : 0,
                 specificWaterConsumption: result.specificWaterConsumption.toNumber(),
                 leakageStatus: leakageStatus,
-                volumetricLoss: result.volumetricLoss ? result.volumetricLoss.toNumber() : 0
+                volumetricLoss: result.volumetricLoss ? result.volumetricLoss.toNumber() : 0,
+                netHead: result.netHead ? result.netHead.toNumber() : 0,
+                headLoss: result.headLoss ? result.headLoss.toNumber() : 0,
+                boltLoadKN: result.boltLoadKN ? result.boltLoadKN.toNumber() : 0,
+                boltCapacityKN: result.boltCapacityKN ? result.boltCapacityKN.toNumber() : 0,
+                boltSafetyFactor: result.boltSafetyFactor ? result.boltSafetyFactor.toNumber() : 0
             },
             riskScore: result.status === 'CRITICAL' ? 100 : (result.status === 'WARNING' ? 50 : 0),
             lastRecalculation: new Date().toISOString(),

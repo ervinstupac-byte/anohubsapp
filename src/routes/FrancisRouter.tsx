@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Spinner } from '../shared/components/ui/Spinner';
 
 // Lazy load all Francis components
-const FrancisHub = React.lazy(() => import('../components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
+const FrancisHub = React.lazy(() => import('../features/francis/components/FrancisHub'));
 const HPPBuilder = React.lazy(() => import('../components/HPPBuilder').then(module => ({ default: module.HPPBuilder })));
 const FrancisDiagnostics = React.lazy(() => import('../components/SpecializedDiagnostics').then(module => ({ default: module.SpecializedDiagnostics })));
 const MissionControl = React.lazy(() => import('../components/francis/MissionControl').then(module => ({ default: module.MissionControl })));

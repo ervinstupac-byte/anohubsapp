@@ -7,9 +7,50 @@ import { SYSTEM_CONSTANTS } from '../../config/SystemConstants';
  */
 
 export const calculateFlowVelocity = (flow: Decimal, diameter: Decimal): Decimal => {
-    const radius = diameter.div(2);
+    const radius = diameter.div(2); // Assume diameter is in METERS
     const area = radius.pow(2).mul(Decimal.acos(-1)); // pi * r^2
-    return flow.div(area);
+    return flow.div(area.gt(0) ? area : 1);
+};
+
+/**
+ * REYNOLDS NUMBER (Re = v * D / nu)
+ * Kinematic viscosity for water @ 15°C ~ 1.14e-6 m²/s
+ */
+export const calculateReynoldsNumber = (velocity: Decimal, diameter: Decimal): Decimal => {
+    const nu = new Decimal('0.00000114'); // m2/s
+    return velocity.mul(diameter).div(nu); // D must be in METERS
+};
+
+/**
+ * SWAMEE-JAIN FRICTION FACTOR
+ * Explicit approximation of Colebrook-White.
+ */
+export const calculateFrictionFactor = (Re: Decimal, roughnessMM: Decimal, diameter: Decimal): Decimal => {
+    if (Re.lt(2300)) return new Decimal(64).div(Re.gt(0) ? Re : 1); // Laminar
+
+    const epsilon = roughnessMM.div(1000);
+
+    // f = 0.25 / [log10( epsilon/(3.7*D) + 5.74/(Re^0.9) )]^2
+    const term1 = epsilon.div(diameter.mul(3.7));
+    const term2 = new Decimal(5.74).div(Re.pow(0.9));
+    const logVal = Decimal.log10(term1.plus(term2));
+
+    return new Decimal(0.25).div(logVal.pow(2));
+};
+
+/**
+ * DARCY-WEISBACH HEAD LOSS
+ * hf = f * (L/D) * (v^2 / 2g)
+ */
+export const calculateHeadLoss = (
+    f: Decimal,
+    length: Decimal,
+    diameter: Decimal,
+    velocity: Decimal
+): Decimal => {
+    const g = new Decimal(SYSTEM_CONSTANTS.PHYSICS.GRAVITY);
+
+    return f.mul(length.div(diameter)).mul(velocity.pow(2).div(g.mul(2)));
 };
 
 export const calculateWaveVelocity = (diameter: Decimal, thickness: Decimal, modulusPa: Decimal): Decimal => {
@@ -90,4 +131,29 @@ export const calculateGridStressFactor = (frequency: number): number => {
     }
 
     return 1.0;
+};
+
+/**
+ * BOLT INTEGRITY MATH
+ */
+export const calculateBoltLoadKN = (
+    totalPressurePa: Decimal,
+    runnerDiameterMM: Decimal,
+    boltCount: number
+): Decimal => {
+    const radiusM = runnerDiameterMM.div(1000).div(2);
+    const areaM2 = radiusM.pow(2).mul(Decimal.acos(-1));
+    const totalForceN = totalPressurePa.mul(areaM2);
+    return totalForceN.div(boltCount).div(1000); // kN per bolt
+};
+
+export const calculateBoltCapacityKN = (
+    boltDiameterMM: Decimal,
+    boltGradeYieldMPa: Decimal
+): Decimal => {
+    const radiusM = boltDiameterMM.div(2).div(1000);
+    const areaM2 = radiusM.pow(2).mul(Decimal.acos(-1));
+    // F_cap = Stress * Area (convert Pa: MPa * 1e6)
+    const forceN = boltGradeYieldMPa.mul(1e6).mul(areaM2);
+    return forceN.div(1000); // kN
 };

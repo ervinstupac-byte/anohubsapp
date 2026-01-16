@@ -6,7 +6,7 @@ import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { Terminal, Shield, Zap, AlertTriangle, ChevronRight, X } from 'lucide-react';
 import { ExpertInference } from '../../services/ExpertInference';
-import { MaintenanceEngine } from '../../services/MaintenanceEngine';
+import { MaintenanceEngine, ActionStep } from '../../services/MaintenanceEngine';
 
 interface TerminalMessage {
     id: string;
@@ -77,7 +77,7 @@ export const CommanderTerminal: React.FC = () => {
                     if (sop) {
                         addMessage(`SOP FOR ${sopCode}:`, 'SUCCESS');
                         addMessage(`ACTION: ${sop.action}`);
-                        sop.steps.forEach(s => addMessage(`${s.step}. ${s.description}`));
+                        sop.steps.forEach((s: ActionStep) => addMessage(`${s.step}. ${s.description}`));
                     } else {
                         addMessage(`SOP for ${sopCode} not found.`, 'WARNING');
                     }

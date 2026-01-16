@@ -1,7 +1,7 @@
-// Fix type access by checking schema
-import { TechnicalProjectState } from '../models/TechnicalSchema';
+import { TechnicalProjectState, ENGINEERING_CONSTANTS } from '../models/TechnicalSchema';
 import { SiteParameters } from './StrategicPlanningService';
 import Decimal from 'decimal.js';
+import * as PhysicsLogic from '../features/physics-core/PhysicsCalculations.logic';
 
 export interface SystemHealth {
     efficiency: number;
@@ -31,17 +31,33 @@ export const LiveMathSync = {
         const designFlow = new Decimal(tech.site?.designFlow || site.ecologicalFlow || 5.0);
         const penstock = tech.penstock || { length: 1000, diameter: 1000, material: 'STEEL', roughness: 0.045 };
 
-        const netHead = Decimal.max(0, grossHead.mul(0.95)); // Example loss factor
+        // 1. DYNAMIC HEAD LOSS (Swamee-Jain Logic)
+        const diameterM = new Decimal(penstock.diameter); // Already in METERS from technical state
+        const velocity = PhysicsLogic.calculateFlowVelocity(designFlow, diameterM);
+
+        const ROUGHNESS_MAP: Record<string, number> = {
+            'STEEL': 0.045,
+            'GRP': 0.01,
+            'PEHD': 0.005,
+            'CONCRETE': 1.5
+        };
+        const roughnessMM = new Decimal(ROUGHNESS_MAP[penstock.material] || 0.045);
+
+        const Re = PhysicsLogic.calculateReynoldsNumber(velocity, diameterM);
+        const f = PhysicsLogic.calculateFrictionFactor(Re, roughnessMM, diameterM);
+        const headLoss = PhysicsLogic.calculateHeadLoss(f, new Decimal(penstock.length), diameterM, velocity);
+
+        const netHead = Decimal.max(0, grossHead.sub(headLoss));
 
         // 2. Efficiency Calculation (Turbine specific curves)
         let efficiency = new Decimal(0.85);
 
         if (netHead.gt(100)) {
-            efficiency = new Decimal(0.90);
+            efficiency = new Decimal(0.92); // Upgraded Francis baseline
         } else if (netHead.gt(30)) {
-            efficiency = new Decimal(0.92);
+            efficiency = new Decimal(0.90);
         } else {
-            efficiency = new Decimal(0.93);
+            efficiency = new Decimal(0.93); // Kaplan peak
         }
 
         // 3. Power Output
@@ -63,7 +79,7 @@ export const LiveMathSync = {
 
         const PI = Decimal.acos(-1);
         const area = PI.mul(new Decimal(penstock.diameter).div(1000).div(2).pow(2));
-        const velocity = designFlow.div(area.gt(0) ? area : 1);
+        // Removed redundant velocity declaration to use the one from line 36
 
         const surgePressurePa = WATER_DENSITY.mul(waveSpeed).mul(velocity);
         const waterHammerSurgeBar = surgePressurePa.div(100000);

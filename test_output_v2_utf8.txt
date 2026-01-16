@@ -1,0 +1,434 @@
+﻿
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32mÔ£ô[39m src/__tests__/turbine-math.test.ts[2m > [22mTurbine Engineering Math Precision Audit[2m > [22mshould validate Francis Turbine (150m, 30m┬│/s) with extreme precision
+ [32mÔ£ô[39m src/__tests__/turbine-math.test.ts[2m > [22mTurbine Engineering Math Precision Audit[2m > [22mshould validate Kaplan Turbine (25m, 100m┬│/s) with extreme precision
+ [32mÔ£ô[39m src/__tests__/turbine-math.test.ts[2m > [22mTurbine Engineering Math Precision Audit[2m > [22mshould validate Pelton Turbine (600m, 5m┬│/s) with extreme precision
+ [32mÔ£ô[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts[2m > [22mFinancialCalculator[2m > [22mcalculates correct revenue loss for normal operation
+ [32mÔ£ô[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts[2m > [22mFinancialCalculator[2m > [22mreturns 0 loss when turbine is stopped
+ [32mÔ£ô[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts[2m > [22mFinancialCalculator[2m > [22mhandles negative inputs gracefully by clamping to 0
+ [32mÔ£ô[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts[2m > [22mFinancialCalculator[2m > [22mreturns 0 loss if actual exceeds design (no negative loss)
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx[2m > [22mQuickCalcSidebar Component[2m > [22mrenders closed initially
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx[2m > [22mQuickCalcSidebar Component[2m > [22mcopies to clipboard
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx[2m > [22mQuickCalcSidebar Component[2m > [22mperforms precise pressure conversion (bar -> psi)
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx[2m > [22mQuickCalcSidebar Component[2m > [22mperforms torque conversion (Nm -> lbf.ft)
+ [32mÔ£ô[39m src/__tests__/simple.test.ts[2m > [22mSanity Check[2m > [22mshould be true
+ [32mÔ£ô[39m src/__tests__/expert-thresholds.test.ts[2m > [22mExpert Threshold Logic Verification[2m > [22mshould classify vibration correctly
+ [32mÔ£ô[39m src/__tests__/expert-thresholds.test.ts[2m > [22mExpert Threshold Logic Verification[2m > [22mshould classify bearing temperature correctly
+ [32mÔ£ô[39m src/__tests__/expert-thresholds.test.ts[2m > [22mExpert Threshold Logic Verification[2m > [22mshould classify insulation correctly
+ [32mÔ£ô[39m src/__tests__/expert-thresholds.test.ts[2m > [22mExpert Threshold Logic Verification[2m > [22mshould calculate maintenance urgency level correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mrenders OFFLINE state correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mrenders SYNCING state correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mrenders IDLE state (Synced) correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mrenders ERROR state correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mrenders pending count badge when IDLE but has data
+ [32mÔ£ô[39m src/components/dashboard/__tests__/SyncBadge.test.tsx[2m > [22mSyncBadge Component[2m > [22mtriggers sync on click when enabled
+ [32mÔ£ô[39m src/__tests__/i18n.test.ts[2m > [22mi18n en.json[2m > [22mhas no empty values
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould detect ISO 10816-3 Vibration violation
+[31m   ÔåÆ Cannot read properties of undefined (reading 'unsatisfactory')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould detect critical bearing temperature
+[31m   ÔåÆ Cannot read properties of undefined (reading 'unsatisfactory')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould calculate Structural Safety Margin (Barlow Link)
+[31m   ÔåÆ Cannot read properties of undefined (reading 'unsatisfactory')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould attach recommendedAction to critical alerts
+[31m   ÔåÆ Cannot read properties of undefined (reading 'unsatisfactory')[39m
+ [32mÔ£ô[39m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould calculate static pressure and hoop stress correctly
+ [32mÔ£ô[39m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould handle healthy state with 0 risk
+ [32mÔ£ô[39m src/__tests__/maturity-audit.test.ts[2m > [22mAsset Maturity Audit[2m > [22mshould calculate 0% for empty state
+ [32mÔ£ô[39m src/__tests__/maturity-audit.test.ts[2m > [22mAsset Maturity Audit[2m > [22mshould calculate 100% for default tech state
+ [32mÔ£ô[39m src/__tests__/maturity-audit.test.ts[2m > [22mAsset Maturity Audit[2m > [22mshould detect missing critical fields
+ [32mÔ£ô[39m src/__tests__/solution-architect.test.ts[2m > [22mSolutionArchitect & LifeExtensionEngine Math[2m > [22mcalculateLifeExtension implements cubic formula correctly
+ [32mÔ£ô[39m src/__tests__/solution-architect.test.ts[2m > [22mSolutionArchitect & LifeExtensionEngine Math[2m > [22mcalculateTotalExtendedLife considers all applied mitigations
+ [32mÔ£ô[39m src/__tests__/solution-architect.test.ts[2m > [22mSolutionArchitect & LifeExtensionEngine Math[2m > [22mgetRecoveryPath returns correct tools from mitigation library
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mHydraulics: Surge & Flow[2m > [22mcalculates flow velocity correctly
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mHydraulics: Surge & Flow[2m > [22mcalculates surge pressure correctly (Water Hammer)
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mStructural: Hoop Stress (Barlow)[2m > [22mcalculates hoop stress correctly under static + surge load
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mPerformance: Efficiency & Power[2m > [22mcalculates output power correctly
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mPerformance: Efficiency & Power[2m > [22mhandles efficiency as decimal (0.9) vs percent (90)
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mcalculates eccentricity for Francis (default)
+ [32mÔ£ô[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mhandles Pelton factors correctly
+ [32mÔ£ô[39m src/__tests__/infrastructure_genesis.test.ts[2m > [22mInfrastructure Logic (Infrastructure Genesis)[2m > [22mshould calculate Darcy-Weisbach net head accurately
+ [32mÔ£ô[39m src/__tests__/infrastructure_genesis.test.ts[2m > [22mInfrastructure Logic (Infrastructure Genesis)[2m > [22mshould detect marketing lies in turbine bids
+ [32mÔ£ô[39m src/__tests__/infrastructure_genesis.test.ts[2m > [22mInfrastructure Logic (Infrastructure Genesis)[2m > [22mshould detect thermal inertia in bearings
+ [32mÔ£ô[39m src/__tests__/infrastructure_genesis.test.ts[2m > [22mInfrastructure Logic (Infrastructure Genesis)[2m > [22mshould calculate magnetic unbalance deltaT
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mrenders closed state initially
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mexpands and shows search input on click
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mshows recommended critical cases when query is empty
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mdebounces search and filters results
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mshows no results state when search yields nothing
+ [32mÔ£ô[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx[2m > [22mHeritageSearchWidget Component[2m > [22mnavigates to legacy hub on result click
+ [32mÔ£ô[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx[2m > [22mWorkOrderSummary Component[2m > [22mrenders empty state correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx[2m > [22mWorkOrderSummary Component[2m > [22mrenders work orders sorted by priority
+ [32mÔ£ô[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx[2m > [22mWorkOrderSummary Component[2m > [22mnavigates to detail on click
+ [32mÔ£ô[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx[2m > [22mWorkOrderSummary Component[2m > [22mshows urgent badge if high priority exists
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22mQuickCalcCard Component[2m > [22mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22mQuickCalcCard Component[2m > [22mrenders Kaplan-specific targets correctly (Blade Bolts & Gap)
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22mQuickCalcCard Component[2m > [22mtriggers navigation on card click
+ [32mÔ£ô[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22mQuickCalcCard Component[2m > [22mshows critical alerts when limits exceeded
+node.exe : 
+[90mstderr[2m | src/
+components/dashboard/_
+_tests__/QuickCalcCard
+.test.tsx[2m > [22m
+[2mQuickCalcCard 
+Component[2m > 
+[22m[2mrenders 
+Francis-specific 
+targets correctly 
+(Runner Torque & 
+Labyrinth)[22m[39m
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([90mstder   
+ r[2m...inth)[22    
+m[39m:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+ÔÜá´©Å React Router 
+Future Flag Warning: 
+React Router will 
+begin wrapping state 
+updates in `React.star
+tTransition` in v7. 
+You can use the 
+`v7_startTransition` 
+future flag to opt-in 
+early. For more 
+information, see https
+://reactrouter.com/v6/
+upgrading/future#v7_st
+arttransition.
+ÔÜá´©Å React Router 
+Future Flag Warning: 
+Relative route 
+resolution within 
+Splat routes is 
+changing in v7. You 
+can use the `v7_relati
+veSplatPath` future 
+flag to opt-in early. 
+For more information, 
+see https://reactroute
+r.com/v6/upgrading/fut
+ure#v7_relativesplatpa
+th.
+
+[90mstderr[2m | src/
+components/dashboard/_
+_tests__/AssetPassport
+Card.test.tsx[2m > [
+22m[2mAssetPassportCa
+rd Component[2m > 
+[22m[2mrenders 
+nominal state 
+correctly[22m[39m
+ÔÜá´©Å React Router 
+Future Flag Warning: 
+React Router will 
+begin wrapping state 
+updates in `React.star
+tTransition` in v7. 
+You can use the 
+`v7_startTransition` 
+future flag to opt-in 
+early. For more 
+information, see https
+://reactrouter.com/v6/
+upgrading/future#v7_st
+arttransition.
+ÔÜá´©Å React Router 
+Future Flag Warning: 
+Relative route 
+resolution within 
+Splat routes is 
+changing in v7. You 
+can use the `v7_relati
+veSplatPath` future 
+flag to opt-in early. 
+For more information, 
+see https://reactroute
+r.com/v6/upgrading/fut
+ure#v7_relativesplatpa
+th.
+
+ [32mÔ£ô[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx[2m > [22mAssetPassportCard Component[2m > [22mrenders nominal state correctly
+ [32mÔ£ô[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx[2m > [22mAssetPassportCard Component[2m > [22mrenders warning state when tolerances breached (Amber/Red)
+ [32mÔ£ô[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx[2m > [22mAssetPassportCard Component[2m > [22mhandles incomplete specs with defaults
+ [32mÔ£ô[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx[2m > [22mAssetPassportCard Component[2m > [22mtriggers PDF generation on click
+ [32mÔ£ô[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mrenders in IDLE state
+ [32mÔ£ô[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mshows CRITICAL ALERT during ATTACK_IN_PROGRESS
+ [32mÔ£ô[39m src/features/maintenance/logic/__tests__/Predictor.test.ts[2m > [22mMaintenancePredictor[2m > [22mpredicts normal life when telemetry is optimal
+ [32mÔ£ô[39m src/features/maintenance/logic/__tests__/Predictor.test.ts[2m > [22mMaintenancePredictor[2m > [22maccelerates wear when vibration exceeds limit
+ [32mÔ£ô[39m src/features/maintenance/logic/__tests__/Predictor.test.ts[2m > [22mMaintenancePredictor[2m > [22mreturns 0 remaining life for expired components
+ [32mÔ£ô[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mrenders nothing if no asset selected
+ [32mÔ£ô[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mrenders all protocols when data is available
+ [32mÔ£ô[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mdisables "Generate" button if sync is pending (Offline Integrity Lock)
+[90mstdout[2m | src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22m[2mProtocolLaunchpad Component[2m > [22m[2mgenerates report and creates Ledger entry when clicked[22m[39m
+[ProtocolHistory] Logged: Shaft Alignment for Turbine A
+
+ [32mÔ£ô[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mgenerates report and creates Ledger entry when clicked
+ [32mÔ£ô[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mshows "Start Session" status for protocols with missing data
+
+[31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»[1m[7m Failed 
+Tests 4 [27m[22mÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould detect 
+ISO 10816-3 Vibration 
+violation
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'unsatisfactory')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m105:39[22m[39
+m
+    [90m103| [39m   
+     [90m// 
+Vibration (ISO 
+10816-3)[39m
+    [90m104| [39m   
+     [35mconst[39m 
+vib [33m=[39m state
+[33m.[39mmechanical[
+33m.[39mvibration[33
+m;[39m
+    [90m105| [39m   
+     [35mif[39m 
+(vib [33m>[39m stand
+ards[33m.[39mvibrati
+on[33m.[39munsatisfa
+ctory) {
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m106| [39m   
+         result[33m.
+[39malerts[33m.[39m
+[34mpush[39m({
+    [90m107| [39m   
+             
+standard[33m:[39m st
+andards[33m.[39mvibr
+ation[33m.[39mstanda
+rd[33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m94:4
+0[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould detect 
+critical bearing 
+temperature
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'unsatisfactory')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m105:39[22m[39
+m
+    [90m103| [39m   
+     [90m// 
+Vibration (ISO 
+10816-3)[39m
+    [90m104| [39m   
+     [35mconst[39m 
+vib [33m=[39m state
+[33m.[39mmechanical[
+33m.[39mvibration[33
+m;[39m
+    [90m105| [39m   
+     [35mif[39m 
+(vib [33m>[39m stand
+ards[33m.[39mvibrati
+on[33m.[39munsatisfa
+ctory) {
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m106| [39m   
+         result[33m.
+[39malerts[33m.[39m
+[34mpush[39m({
+    [90m107| [39m   
+             
+standard[33m:[39m st
+andards[33m.[39mvibr
+ation[33m.[39mstanda
+rd[33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m102:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould calculate 
+Structural Safety 
+Margin (Barlow Link)
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'unsatisfactory')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m105:39[22m[39
+m
+    [90m103| [39m   
+     [90m// 
+Vibration (ISO 
+10816-3)[39m
+    [90m104| [39m   
+     [35mconst[39m 
+vib [33m=[39m state
+[33m.[39mmechanical[
+33m.[39mvibration[33
+m;[39m
+    [90m105| [39m   
+     [35mif[39m 
+(vib [33m>[39m stand
+ards[33m.[39mvibrati
+on[33m.[39munsatisfa
+ctory) {
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m106| [39m   
+         result[33m.
+[39malerts[33m.[39m
+[34mpush[39m({
+    [90m107| [39m   
+             
+standard[33m:[39m st
+andards[33m.[39mvibr
+ation[33m.[39mstanda
+rd[33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m109:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[3/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould attach 
+recommendedAction to 
+critical alerts
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'unsatisfactory')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m105:39[22m[39
+m
+    [90m103| [39m   
+     [90m// 
+Vibration (ISO 
+10816-3)[39m
+    [90m104| [39m   
+     [35mconst[39m 
+vib [33m=[39m state
+[33m.[39mmechanical[
+33m.[39mvibration[33
+m;[39m
+    [90m105| [39m   
+     [35mif[39m 
+(vib [33m>[39m stand
+ards[33m.[39mvibrati
+on[33m.[39munsatisfa
+ctory) {
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m106| [39m   
+         result[33m.
+[39malerts[33m.[39m
+[34mpush[39m({
+    [90m107| [39m   
+             
+standard[33m:[39m st
+andards[33m.[39mvibr
+ation[33m.[39mstanda
+rd[33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m117:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[4/4]ÔÄ
+»[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m19 passed[39m[22m[90m (20)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m70 passed[39m[22m[90m (74)[39m
+[2m   Start at [22m 14:17:31
+[2m   Duration [22m 4.09s[2m (transform 1.04s, setup 3.98s, collect 4.37s, tests 612ms, environment 42.78s, prepare 5.34s)[22m
+

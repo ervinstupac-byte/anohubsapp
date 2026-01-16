@@ -1,0 +1,299 @@
+﻿
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould detect ISO 10816-3 Vibration violation
+[31m   ÔåÆ Cannot read properties of undefined (reading 'CAVITATION')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould detect critical bearing temperature
+[31m   ÔåÆ Cannot read properties of undefined (reading 'CAVITATION')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould calculate Structural Safety Margin (Barlow Link)
+[31m   ÔåÆ Cannot read properties of undefined (reading 'CAVITATION')[39m
+ [31m├ù[39m src/__tests__/expert-inference.test.ts[2m > [22mExpertInference Engine[2m > [22mshould attach recommendedAction to critical alerts
+[31m   ÔåÆ Cannot read properties of undefined (reading 'CAVITATION')[39m
+
+node.exe : [31mÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1m[7
+m Failed Tests 4 [27m
+[22mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»[39m
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: ([31mÔÄ»ÔÄ   
+ »ÔÄ»Ô...»ÔÄ»ÔÄ»ÔÄ    
+»[39m:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould detect 
+ISO 10816-3 Vibration 
+violation
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'CAVITATION')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m268:39[22m[39
+m
+    [90m266| [39m   
+         result[33m.
+[39mconclusions[33m.
+[39m[34mpush[39m({
+    [90m267| [39m   
+             
+id[33m:[39m [32m'CA
+V-001'[39m[33m,[39m
+    [90m268| [39m   
+             
+symptom[33m:[39m fai
+lureModes[33m.[39m[
+33mCAVITATION[39m[33
+m?.[39msymptom 
+[33m||[39m i18n[33m
+.[39m[34mt[39m([32
+m'e[39mÔÇª
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m269| [39m   
+             probableC
+auses[33m:[39m failu
+reModes[33m.[39m[33
+mCAVITATION[39m[33m?
+.[39mprobableCauseÔÇª
+    [90m270| [39m   
+             
+remedies[33m:[39m 
+[[32m"Adjust setpoint
+"[39m[33m,[39m 
+[32m"Check draft 
+tube"[39m][33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m94:4
+0[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould detect 
+critical bearing 
+temperature
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'CAVITATION')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m268:39[22m[39
+m
+    [90m266| [39m   
+         result[33m.
+[39mconclusions[33m.
+[39m[34mpush[39m({
+    [90m267| [39m   
+             
+id[33m:[39m [32m'CA
+V-001'[39m[33m,[39m
+    [90m268| [39m   
+             
+symptom[33m:[39m fai
+lureModes[33m.[39m[
+33mCAVITATION[39m[33
+m?.[39msymptom 
+[33m||[39m i18n[33m
+.[39m[34mt[39m([32
+m'e[39mÔÇª
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m269| [39m   
+             probableC
+auses[33m:[39m failu
+reModes[33m.[39m[33
+mCAVITATION[39m[33m?
+.[39mprobableCauseÔÇª
+    [90m270| [39m   
+             
+remedies[33m:[39m 
+[[32m"Adjust setpoint
+"[39m[33m,[39m 
+[32m"Check draft 
+tube"[39m][33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m102:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould calculate 
+Structural Safety 
+Margin (Barlow Link)
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'CAVITATION')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m268:39[22m[39
+m
+    [90m266| [39m   
+         result[33m.
+[39mconclusions[33m.
+[39m[34mpush[39m({
+    [90m267| [39m   
+             
+id[33m:[39m [32m'CA
+V-001'[39m[33m,[39m
+    [90m268| [39m   
+             
+symptom[33m:[39m fai
+lureModes[33m.[39m[
+33mCAVITATION[39m[33
+m?.[39msymptom 
+[33m||[39m i18n[33m
+.[39m[34mt[39m([32
+m'e[39mÔÇª
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m269| [39m   
+             probableC
+auses[33m:[39m failu
+reModes[33m.[39m[33
+mCAVITATION[39m[33m?
+.[39mprobableCauseÔÇª
+    [90m270| [39m   
+             
+remedies[33m:[39m 
+[[32m"Adjust setpoint
+"[39m[33m,[39m 
+[32m"Check draft 
+tube"[39m][33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m109:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[3/4]ÔÄ
+»[22m[39m
+
+[31m[1m[7m FAIL 
+[27m[22m[39m src/__
+tests__/expert-inferen
+ce.test.ts[2m > 
+[22mExpertInference 
+Engine[2m > 
+[22mshould attach 
+recommendedAction to 
+critical alerts
+[31m[1mTypeError[22
+m: Cannot read 
+properties of 
+undefined (reading 
+'CAVITATION')[39m
+[36m [2mÔØ»[22m 
+Object.analyze src/ser
+vices/ExpertInference.
+ts:[2m268:39[22m[39
+m
+    [90m266| [39m   
+         result[33m.
+[39mconclusions[33m.
+[39m[34mpush[39m({
+    [90m267| [39m   
+             
+id[33m:[39m [32m'CA
+V-001'[39m[33m,[39m
+    [90m268| [39m   
+             
+symptom[33m:[39m fai
+lureModes[33m.[39m[
+33mCAVITATION[39m[33
+m?.[39msymptom 
+[33m||[39m i18n[33m
+.[39m[34mt[39m([32
+m'e[39mÔÇª
+    [90m   | [39m   
+                      
+             
+[31m^[39m
+    [90m269| [39m   
+             probableC
+auses[33m:[39m failu
+reModes[33m.[39m[33
+mCAVITATION[39m[33m?
+.[39mprobableCauseÔÇª
+    [90m270| [39m   
+             
+remedies[33m:[39m 
+[[32m"Adjust setpoint
+"[39m[33m,[39m 
+[32m"Check draft 
+tube"[39m][33m,[39m
+[90m [2mÔØ»[22m src
+/__tests__/expert-infe
+rence.test.ts:[2m117:
+40[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[4/4]ÔÄ
+»[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[90m (4)[39m
+[2m   Start at [22m 14:18:47
+[2m   Duration [22m 1.42s[2m (transform 90ms, setup 91ms, collect 107ms, tests 8ms, environment 578ms, prepare 112ms)[22m
+

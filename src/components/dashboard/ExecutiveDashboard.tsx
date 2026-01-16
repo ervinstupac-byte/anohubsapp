@@ -148,7 +148,7 @@ export const ExecutiveDashboard: React.FC = () => {
     const longevityImpact = calculateLongevityLoss(currentAlignment);
 
     return (
-        <div className="h-screen bg-slate-950 relative overflow-y-auto custom-scrollbar">
+        <div className="min-h-full bg-slate-950 relative overflow-y-auto custom-scrollbar">
             <div className="fixed inset-0 pointer-events-none" style={{ backgroundImage: `linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
             <div className="fixed top-0 left-0 w-[600px] h-[600px] bg-cyan-500/3 rounded-full blur-[180px] pointer-events-none" />
             <div className="fixed bottom-0 right-0 w-[500px] h-[500px] bg-emerald-500/3 rounded-full blur-[180px] pointer-events-none" />

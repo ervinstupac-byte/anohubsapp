@@ -884,3 +884,4 @@ textarea::placeholder {
   font-weight: 700;
   margin-right: 0.1em;
 }
+.svg-container svg { width: 100%; height: 100%; object-fit: contain; max-height: 80vh; }

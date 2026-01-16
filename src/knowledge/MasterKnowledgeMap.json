@@ -1,120 +1,53 @@
 {
-    "metadata": {
-        "version": "1.0.0",
-        "lastExtraction": "2026-01-04",
-        "scope": "Francis < 5 MW units"
-    },
     "standardThresholds": {
-        "vibration": {
-            "good": 1.1,
-            "satisfactory": 2.8,
-            "unsatisfactory": 4.5,
-            "unit": "mm/s",
-            "standard": "ISO 10816-3"
-        },
-        "bearingTemperature": {
-            "warning": 55,
-            "critical": 75,
-            "unit": "C",
-            "impact": "Bearing seize risk"
-        },
-        "insulationResistance": {
-            "healthy": 100,
-            "formula": "ratedVoltageKV + 1",
-            "unit": "MOhm",
-            "standard": "Megger"
-        },
-        "hoopStressSafetyFactor": {
-            "warning": 2.0,
-            "critical": 1.5,
-            "method": "Barlow's Formula"
-        },
         "goldenStandards": {
             "alignment": {
                 "ideal": 0.05,
-                "warning": 0.08,
-                "failure": 0.12,
-                "unit": "mm/m"
+                "failure": 0.15
             },
             "axialPlay": {
-                "max": 0.15,
-                "unit": "mm"
+                "max": 0.35
             },
             "insulation": {
-                "min": 100,
-                "unit": "MOhm"
+                "min": 100
             },
-            "maintenanceCycleHours": 8000,
-            "philosophy": "Precision is the root of longevity. Aim for the Golden 0.05."
+            "maintenanceCycleHours": 8000
+        },
+        "vibration": {
+            "satisfactory": 1.1,
+            "unsatisfactory": 4.5,
+            "standard": "ISO 10816-3"
+        },
+        "bearingTemperature": {
+            "critical": 80
         },
         "oilChemistry": {
             "waterContent": {
-                "warning": 500,
-                "unit": "ppm"
+                "warning": 300
             },
             "tan": {
-                "warning": 0.5,
-                "unit": "mgKOH/g"
+                "warning": 0.4
             }
         }
     },
     "failureModes": {
         "CAVITATION": {
-            "symptom": "Efficiency loss + High SWC",
-            "indices": [
-                "Specific Water Consumption > 1.1 * Design",
-                "Efficiency < 88%"
+            "symptom": "High Specific Water Consumption & Acoustic Pulse",
+            "probableCauses": [
+                "Draft tube vacuum breach",
+                "Runner blade erosion",
+                "Off-design operation"
             ],
-            "financialImpact": 45000,
-            "kbRef": "KB-REF-04"
+            "kbRef": "KB-CAV-001"
         },
-        "AERATION": {
-            "symptom": "Milky oil + Spongy Governor",
-            "cause": "Air entrainment / Low oil level",
-            "impact": "Reduced Bulk Modulus"
-        },
-        "PID_SATURATION": {
-            "symptom": "Frequency Error > 0.5 Hz",
-            "logic": "Loop in full saturating recovery",
-            "action": "Inhibit hydraulic bypass"
-        },
-        "PRECISION_FAILURE": {
-            "symptom": "Rapid Bearing Wear-Down",
-            "cause": "Alignment > 0.12 mm/m or Axial Play > 0.15 mm",
-            "impact": "Expontential fatigue accumulation"
-        },
-        "GREASE_BLOWOUT": {
-            "symptom": "High startup friction or Seal failure",
-            "indices": [
-                "Status = STOPPED/STBY",
-                "Cycles > 20"
+        "VIBRATION": {
+            "symptom": "Mechanical oscillation beyond ISO limits",
+            "probableCauses": [
+                "Unbalance",
+                "Misalignment",
+                "Looseness"
             ],
-            "impact": "Catastrophic startup event",
-            "kbRef": "KB-INFRA-01"
-        },
-        "THERMAL_INERTIA": {
-            "symptom": "Critical Temperature rate of rise",
-            "indices": [
-                "Rate > 2.0 C/min"
-            ],
-            "kbRef": "KB-INFRA-02"
-        },
-        "MAGNETIC_UNBALANCE": {
-            "symptom": "Localized Stator Heating",
-            "indices": [
-                "DeltaT > 15C",
-                "Excitation > UNSTABLE"
-            ],
-            "kbRef": "KB-INFRA-03"
+            "kbRef": "KB-VIB-001"
         }
-    },
-    "economicImpacts": {
-        "GRID_STABILITY_WEAR": {
-            "trigger": "Frequency Deviation > 0.1 Hz",
-            "scaling": "1.0x to 1.5x wear rate"
-        },
-        "EMERGENCY_REPAIR": 120000,
-        "PREVENTATIVE_SAVINGS": 105000,
-        "SURGE_DAMAGE": 85000
     }
 }

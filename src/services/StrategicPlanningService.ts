@@ -1,5 +1,6 @@
-
 import { TurbineType } from '../models/turbine/TurbineFactory';
+import Decimal from 'decimal.js';
+import * as PhysicsLogic from '../features/physics-core/PhysicsCalculations.logic';
 
 export type PipeMaterial = 'GRP' | 'STEEL' | 'CONCRETE' | 'PEHD';
 
@@ -95,56 +96,61 @@ export class StrategicPlanningService {
                 };
             }
 
-            // 1. Calculate Friction Head Loss (Darcy-Weisbach approximation or Hazen-Williams)
-            // Simplified using specific roughness approximation
-
-            const roughness = {
-                'STEEL': 0.045, // mm
+            // 1. Calculate Friction Head Loss (Darcy-Weisbach with professional Swamee-Jain)
+            const ROUGHNESS_MAP: Record<string, number> = {
+                'STEEL': 0.045,
                 'GRP': 0.01,
                 'PEHD': 0.005,
                 'CONCRETE': 1.5
-            }[site.pipeMaterial] || 0.045; // Default to Steel if undefined
+            };
+            const roughnessMM = new Decimal(ROUGHNESS_MAP[site.pipeMaterial] || 0.045);
 
-            const D = site.pipeDiameter / 1000; // m
-            const L = site.pipeLength || 100; // Default length
-            const A = Math.PI * Math.pow(D / 2, 2);
+            const L = new Decimal(site.pipeLength || 100);
+            const D = new Decimal(site.pipeDiameter).div(1000); // Convert mm to meters
 
-            // Find optimal design flow (simplified: usually between Q30 and Q40 on curve)
-            // Let's assume Q_design is set based on Q30 for calculation
-            // In real app, we iterate to find NPV max. Here we pick Q30.
-            const qDesign = (site.flowDurationCurve || []).find(p => p.probability >= 30)?.flow || 10;
-            const usefulFlow = Math.max(0, qDesign - (site.ecologicalFlow || 0));
+            // Optimal design flow (usually Q30)
+            const qDesignRaw = (site.flowDurationCurve || []).find(p => p.probability >= 30)?.flow || 10;
+            const qDesign = new Decimal(qDesignRaw);
+            const qEco = new Decimal(site.ecologicalFlow || 0);
+            const usefulFlow = Decimal.max(0, qDesign.sub(qEco));
 
-            const velocity = usefulFlow / A;
+            const velocity = PhysicsLogic.calculateFlowVelocity(usefulFlow, D);
+            const Re = PhysicsLogic.calculateReynoldsNumber(velocity, D);
+            const f = PhysicsLogic.calculateFrictionFactor(Re, roughnessMM, D); // roughnessMM is passed, logic handles /1000
+            const hLoss = PhysicsLogic.calculateHeadLoss(f, L, D, velocity);
 
-            // Darcy-Weisbach: hf = f * (L/D) * (v^2/2g)
-            // f approximation (Swamee-Jain is better, but constant for demo)
-            const f = 0.02; // Placeholder, would depend on Reynolds number
+            const gHead = new Decimal(site.grossHead);
+            const hNet = Decimal.max(0, gHead.sub(hLoss));
 
-            const hLoss = f * (L / D) * (Math.pow(velocity, 2) / (2 * 9.81));
-            const hNet = Math.max(0, site.grossHead - hLoss); // Prevent negative head
+            // 2. Annual Production Calculation (Professional Integration)
+            let totalEnergyKWh = new Decimal(0);
+            const efficiency = new Decimal(0.91);
+            const gravity = new Decimal(9.81);
+            const density = new Decimal(1000);
 
-            // 2. Annual Production Calculation (Integration of FDC)
-            let totalEnergyKWh = 0;
-            const efficiency = 0.91; // Global system efficiency estimate
-
-            // Iterate through probability steps (e.g. 10% steps)
             const fdc = site.flowDurationCurve || [];
-            for (let i = 0; i < fdc.length - 1; i++) {
-                const p1 = fdc[i];
-                const p2 = fdc[i + 1];
+            if (fdc.length > 1) {
+                for (let i = 0; i < fdc.length - 1; i++) {
+                    const p1 = fdc[i];
+                    const p2 = fdc[i + 1];
 
-                const probDiff = (p2.probability - p1.probability) / 100; // fraction of year
-                const hours = probDiff * 8760;
+                    const probDiff = new Decimal(p2.probability).sub(p1.probability).div(100);
+                    const hours = probDiff.mul(8760);
 
-                const avgFlow = (p1.flow + p2.flow) / 2;
-                const turbineFlow = Math.min(avgFlow - (site.ecologicalFlow || 0), qDesign);
+                    const avgFlow = new Decimal(p1.flow).plus(p2.flow).div(2);
+                    const turbineFlow = Decimal.min(avgFlow.sub(qEco), qDesign);
 
-                if (turbineFlow > 0) {
-                    // Power P = rho * g * Q * H * eta
-                    const powerKW = 1000 * 9.81 * turbineFlow * hNet * efficiency / 1000;
-                    totalEnergyKWh += powerKW * hours;
+                    if (turbineFlow.gt(0)) {
+                        // Power P = rho * g * Q * H * eta / 1000 (for kW)
+                        const powerKW = density.mul(gravity).mul(turbineFlow).mul(hNet).mul(efficiency).div(1000);
+                        totalEnergyKWh = totalEnergyKWh.plus(powerKW.mul(hours));
+                    }
                 }
+            } else {
+                // Simplified FALLBACK if FDC is missing
+                const hours = new Decimal(8760).mul(0.65); // 65% Capacity Factor estimate
+                const powerKW = density.mul(gravity).mul(usefulFlow).mul(hNet).mul(efficiency).div(1000);
+                totalEnergyKWh = powerKW.mul(hours);
             }
 
             // 3. Aggregate Recommendation
@@ -153,7 +159,7 @@ export class StrategicPlanningService {
             const variability = fdcSafe[fdcSafe.length - 1].flow / fdcSafe[0].flow;
             let recommendation = { count: 1, type: 'Unknown', reasoning: '' };
 
-            if (hNet < 30) {
+            if (hNet.lt(30)) {
                 recommendation.type = 'Kaplan';
                 if (variability < 0.2) {
                     recommendation.count = 2;
@@ -161,9 +167,9 @@ export class StrategicPlanningService {
                 } else {
                     recommendation.reasoning = 'insights.kaplan_single';
                 }
-            } else if (hNet < 400) {
+            } else if (hNet.lt(400)) {
                 recommendation.type = 'Francis';
-                if (usefulFlow < 0.3 * qDesign) { // If often running part load
+                if (usefulFlow.lt(qDesign.mul(0.3))) { // If often running part load
                     recommendation.count = 2;
                     recommendation.reasoning = 'insights.francis_part_load';
                 }
@@ -172,10 +178,10 @@ export class StrategicPlanningService {
             }
 
             return {
-                netHead: isNaN(hNet) ? 0 : hNet,
-                frictionLoss: isNaN(hLoss) ? 0 : hLoss,
-                optimalFlow: isNaN(usefulFlow) ? 0 : usefulFlow,
-                annualProductionMWh: isNaN(totalEnergyKWh) ? 0 : (totalEnergyKWh / 1000),
+                netHead: isNaN(hNet.toNumber()) ? 0 : hNet.toNumber(),
+                frictionLoss: isNaN(hLoss.toNumber()) ? 0 : hLoss.toNumber(),
+                optimalFlow: isNaN(usefulFlow.toNumber()) ? 0 : usefulFlow.toNumber(),
+                annualProductionMWh: isNaN(totalEnergyKWh.toNumber()) ? 0 : (totalEnergyKWh.div(1000).toNumber()),
                 recommendedAggregates: recommendation
             };
         } catch (error) {

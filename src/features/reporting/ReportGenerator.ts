@@ -4,6 +4,8 @@ import { TechnicalProjectState } from '../../models/TechnicalSchema';
 import { Decimal } from 'decimal.js';
 import i18n from '../../i18n';
 import { ActionEngine } from '../business/logic/ActionEngine';
+import { calculateMaintenancePrediction } from '../maintenance/logic/PredictiveAnalytics';
+import { MaintenanceEngine } from '../../services/MaintenanceEngine';
 
 // Metadata configuration
 const PLATFORM_VERSION = 'v1.0.0';
@@ -686,17 +688,17 @@ export class ReportGenerator {
 
         currentY = (doc as any).lastAutoTable.finalY + 15;
 
-        // --- SECTION B: PREDICTIVE HEALTH (MAINTENANCE PREDICTOR) ---
-        // Logic replicated from MaintenancePredictor for PDF generation without class dependence issues
-        // Formula: Stress Index = Max((Vib/7.1), (Temp/85)) * 100
-        const vibStress = (Math.max(state.mechanical.vibrationX, state.mechanical.vibrationY) / 7.1) * 100;
-        const tempStress = (state.mechanical.bearingTemp / 85.0) * 100;
-        const stressIndex = Math.max(vibStress, tempStress);
-
-        const remainingCapacity = Math.max(0, 100 - stressIndex);
-        const designLife = 50000;
-        const estHours = (remainingCapacity / 100) * designLife;
-        const estDays = Math.round(estHours / 24);
+        // --- SECTION B: PREDICTIVE HEALTH (PAE NC-4.2) ---
+        const prediction = calculateMaintenancePrediction({
+            config: { id: state.identity.assetId, name: state.identity.assetName, designLifeHours: 50000, installationDate: '', wearFactorCurve: 'LINEAR' },
+            telemetry: {
+                accumulatedRunHours: state.identity.totalOperatingHours || 0,
+                currentVibrationMMs: Math.max(state.mechanical.vibrationX, state.mechanical.vibrationY),
+                currentEfficiencyPercent: state.hydraulic.efficiency * 100,
+                startsAndStops: state.identity.startStopCount || 0,
+                cavitationIndex: state.mechanical.acousticMetrics?.cavitationIntensity ? state.mechanical.acousticMetrics.cavitationIntensity / 100 : 0
+            }
+        });
 
         doc.text('II. PREDICTIVE HEALTH & MAINTENANCE TIMELINE', 14, currentY);
 
@@ -704,9 +706,9 @@ export class ReportGenerator {
             startY: currentY + 5,
             head: [['Predictive Indicator', 'Status/Value', 'Risk Assessment']],
             body: [
-                ['Composite Stress Index', `${stressIndex.toFixed(1)} / 100`, stressIndex > 50 ? 'ELEVATED WEAR DETECTED' : 'NOMINAL WEAR'],
-                ['Est. Remaining Life (ERL)', `~${estDays} Days (${(estHours / 1000).toFixed(1)}k Hours)`, estDays < 365 ? 'CRITICAL: PLAN OVERHAUL' : 'LONG-TERM STABLE'],
-                ['Next Recommended Service', estDays < 90 ? 'IMMEDIATE' : (estDays < 365 ? 'WITHIN 6 MONTHS' : 'SCHEDULED ANNUAL'), '-']
+                ['Degradation Factor', `${prediction.degradationFactor}x Acceleration`, prediction.degradationFactor > 1.2 ? 'ACCELERATED WEAR' : 'NOMINAL'],
+                ['Est. Remaining Life (ERL)', `~${prediction.remainingLifeHours.toLocaleString()} Hours`, `${prediction.urgency} STATUS`],
+                ['Forecasted Failure Event', new Date(prediction.predictedFailureDate).toLocaleDateString(), prediction.primaryStressor]
             ],
             theme: 'grid',
             headStyles: { fillColor: [88, 28, 135] }, // Purple
@@ -715,40 +717,36 @@ export class ReportGenerator {
 
         currentY = (doc as any).lastAutoTable.finalY + 15;
 
-        // --- SECTION C: STRATEGIC ACTION PLAN ---
-        let recommendations: any[] = [];
-        try {
-            recommendations = ActionEngine.generateRecommendations(state);
-        } catch (e) {
-            console.warn("ActionEngine unavailable", e);
+        // --- SECTION C: STRATEGIC ACTION PLAN (NC-4.2 Expert Advisor) ---
+        let expertSOPs: any[] = [];
+        if (state.diagnosis) {
+            expertSOPs = MaintenanceEngine.generateActionPlan(state.diagnosis);
         }
 
-        /* Top 3 Actions only */
-        const topActions = recommendations.slice(0, 3);
+        if (expertSOPs.length > 0) {
+            doc.text('III. STRATEGIC ACTION PLAN (PRIORITIZED SOPs)', 14, currentY);
 
-        if (topActions.length > 0) {
-            doc.text('III. STRATEGIC ACTION PLAN (TOP 3 PRIORITY)', 14, currentY);
-
-            const actionBody = topActions.map(rec => [
-                rec.priority,
-                rec.title,
-                rec.description,
-                `${rec.relatedMetric}: ${rec.triggerValue}`
+            const actionBody = expertSOPs.map(sop => [
+                sop.priority,
+                sop.failureMode,
+                sop.action,
+                sop.kbRef
             ]);
 
             autoTable(doc, {
                 startY: currentY + 5,
-                head: [['Priority', 'Action Protocol', 'Engineering Directive', 'Trigger']],
+                head: [['Priority', 'Failure Mode', 'Engineering Directive / SOP', 'Reference']],
                 body: actionBody,
                 theme: 'grid',
                 headStyles: { fillColor: [249, 115, 22] }, // Orange-500
                 styles: { fontSize: 8 },
                 columnStyles: {
-                    0: { fontStyle: 'bold', textColor: [239, 68, 68] }, // Red text for priority
-                    2: { cellWidth: 80 } // Wider description
+                    0: { fontStyle: 'bold', textColor: [239, 68, 68] },
+                    2: { cellWidth: 100 }
                 }
             });
-        } else {
+        }
+        else {
             doc.setFontSize(10);
             doc.setTextColor(34, 197, 94); // Green
             doc.text('III. STRATEGIC ACTION PLAN: SYSTEM OPTIMAL. NO ACTIONS REQUIRED.', 14, currentY);

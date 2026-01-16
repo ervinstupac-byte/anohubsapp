@@ -29,6 +29,14 @@ export const HydraulicsPanel: React.FC = () => {
         ? livePhysics.hoopStress.toNumber()
         : (technicalState.physics?.hoopStressMPa || 0);
 
+    const activeHeadLoss = livePhysics?.headLoss
+        ? livePhysics.headLoss.toNumber()
+        : (technicalState.physics?.headLoss || 0);
+
+    const activeNetHead = livePhysics?.netHead
+        ? livePhysics.netHead.toNumber()
+        : (technicalState.physics?.netHead || 0);
+
     return (
         <div className="space-y-6">
             <GlassCard className="p-6 border-l-4 border-blue-500">
@@ -95,6 +103,22 @@ export const HydraulicsPanel: React.FC = () => {
                         </div>
                         <span className="text-xl font-mono text-white">{activeHoopStress.toFixed(1)} <span className="text-xs">MPa</span></span>
                         <div className="text-[10px] text-slate-500 mt-1">Material Load</div>
+                    </div>
+
+                    <div className="p-3 bg-slate-900 border border-white/5 rounded">
+                        <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Head Loss (hf)</div>
+                        <div className="text-xl font-black text-amber-500 font-mono">
+                            {formatNumber(activeHeadLoss, language, 2)} <span className="text-xs text-slate-600">m</span>
+                        </div>
+                        <div className="text-[9px] text-slate-600 uppercase mt-1">Friction dissipation</div>
+                    </div>
+
+                    <div className="p-3 bg-slate-900 border border-white/5 rounded">
+                        <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">Net Head (Hn)</div>
+                        <div className="text-xl font-black text-cyan-500 font-mono">
+                            {formatNumber(activeNetHead, language, 2)} <span className="text-xs text-slate-600">m</span>
+                        </div>
+                        <div className="text-[9px] text-slate-600 uppercase mt-1">Effective energy</div>
                     </div>
                 </div>
 

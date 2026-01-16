@@ -95,7 +95,7 @@ const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDash
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
-const FrancisHub = React.lazy(() => import('./components/francis/FrancisHub').then(module => ({ default: module.FrancisHub })));
+const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 // Francis Turbine Module - All routes extracted to dedicated sub-router
@@ -295,7 +295,7 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <main className={`min-h-screen w-full bg-[#05070a] text-slate-100 overflow-x-hidden selection:bg-cyan-500/30 font-sans relative flex bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                <div className={`h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
                     {isCriticalDemo && (
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -335,7 +335,7 @@ const AppLayout: React.FC = () => {
                     />
 
                     {/* MAIN AREA */}
-                    <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${isSidebarOpen ? 'lg:ml-[280px] lg:max-w-[calc(100%-280px)]' : 'ml-0 max-w-full'} relative z-20`}>
+                    <div className="flex-1 flex flex-col min-h-0 relative z-20 overflow-y-auto custom-scrollbar">
 
                         {/* NEW: Global Workflow Header - Machine Health & Navigation */}
                         <WorkflowHeader />
@@ -473,7 +473,7 @@ const AppLayout: React.FC = () => {
                     <CommanderDemoHUD />
                     <CommanderTerminal />
                     <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
-                </main>
+                </div>
             </DrillDownProvider>
         </NavigationProvider>
     );

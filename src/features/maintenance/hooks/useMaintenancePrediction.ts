@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
-import { calculateMaintenancePrediction } from '../logic/Predictor';
+import { calculateMaintenancePrediction } from '../logic/PredictiveAnalytics';
 import { PredictionInput, MaintenancePrediction } from '../types';
 
 // UI Interface (Adapter Pattern)

@@ -350,7 +350,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -280, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed left-0 top-0 bottom-0 w-[280px] ${industrialGradient} border-r border-[#2f3542]/40 z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] ${industrialGradient} border-r border-[#2f3542]/40 z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
                     >
                         {/* BRUSHED METAL TEXTURE */}
                         <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
@@ -389,7 +389,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         </div>
 
                         {/* CONTENT */}
-                        <div className="flex-1 overflow-y-auto relative z-10 custom-scrollbar">
+                        <div className="flex-1 overflow-hidden relative z-10">
                             <FleetSection
                                 showMap={showMap}
                                 onToggleMap={onToggleMap}

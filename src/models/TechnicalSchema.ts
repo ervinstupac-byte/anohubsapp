@@ -130,6 +130,8 @@ export interface TechnicalProjectState {
         specificWaterConsumption?: number; // m3/kWh - Leakage monitor
         leakageStatus?: 'NOMINAL' | 'DEGRADING' | 'CRITICAL';
         volumetricLoss?: number; // NEW: NC-4.2 Volumetric Efficiency Monitor
+        netHead?: number; // NEW
+        headLoss?: number; // NEW
     };
     governor: GovernorState; // NEW: High-precision PID state
     specializedState?: SpecializedState; // NEW: Specialized Hub State
@@ -247,6 +249,8 @@ export interface PhysicsResult {
     boltLoadKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
     boltSafetyFactor?: Decimal; // NEW: Added to sync with TechnicalProjectState
     boltCapacityKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
+    netHead?: Decimal; // NEW
+    headLoss?: Decimal; // NEW
 }
 
 export interface DiagnosisMessage {
