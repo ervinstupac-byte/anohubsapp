@@ -14,6 +14,7 @@ import { Z_INDEX, SECTOR_GLOW, STATUS_COLORS } from '../../shared/design-tokens'
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { Decimal } from 'decimal.js';
 import docsData from '../../i18n/locales/docs.json';
+import { ForensicReportService } from '../../services/ForensicReportService';
 
 interface FieldAuditFormProps {
     isOpen: boolean;
@@ -286,6 +287,23 @@ const ALL_AUDIT_FIELDS: Record<string, AuditField> = {
         placeholder: '0.0',
         threshold: { warning: 2, critical: 5 },
         docKey: 'nozzle_leak'
+    },
+    // NC-4.9 Additions
+    insulationResistance: {
+        key: 'insulationResistance',
+        label: 'Insulation Resistance',
+        unit: 'MΩ',
+        placeholder: '1250',
+        threshold: { warning: 100, critical: 50 }, // Critical if low
+        docKey: 'winding'
+    },
+    geodeticSettlement: {
+        key: 'geodeticSettlement',
+        label: 'Geodetic Settlement',
+        unit: 'mm',
+        placeholder: '0.12',
+        threshold: { warning: 0.5, critical: 1.0 },
+        docKey: 'water_level'
     }
 };
 
@@ -319,7 +337,9 @@ export const FieldAuditForm: React.FC<FieldAuditFormProps> = ({
                     ALL_AUDIT_FIELDS.vibration,
                     ALL_AUDIT_FIELDS.axialPlay,
                     ALL_AUDIT_FIELDS.windingTemp,
-                    ALL_AUDIT_FIELDS.sumpLevel
+                    ALL_AUDIT_FIELDS.sumpLevel,
+                    ALL_AUDIT_FIELDS.insulationResistance, // NC-4.9
+                    ALL_AUDIT_FIELDS.geodeticSettlement    // NC-4.9
                 ];
             case 2: // HYDRAULIC & COOLING
                 return [
@@ -403,11 +423,16 @@ export const FieldAuditForm: React.FC<FieldAuditFormProps> = ({
                 effectiveThreshold.critical *= 0.8;
             }
 
+            // NC-4.9: Invert logic for Insulation Resistance (Critical if BELOW)
+            const isInverseField = field.key === 'insulationResistance';
             let status: 'nominal' | 'warning' | 'critical' = 'nominal';
-            if (value > effectiveThreshold.critical) {
-                status = 'critical';
-            } else if (effectiveThreshold.warning && value > effectiveThreshold.warning) {
-                status = 'warning';
+
+            if (isInverseField) {
+                if (value < effectiveThreshold.critical) status = 'critical';
+                else if (effectiveThreshold.warning && value < effectiveThreshold.warning) status = 'warning';
+            } else {
+                if (value > effectiveThreshold.critical) status = 'critical';
+                else if (effectiveThreshold.warning && value > effectiveThreshold.warning) status = 'warning';
             }
 
             // Get recommendation from docs.json
@@ -540,7 +565,32 @@ export const FieldAuditForm: React.FC<FieldAuditFormProps> = ({
 
             localStorage.setItem(`field_audit_${Date.now()} `, JSON.stringify(auditData));
 
-            pushNotification('INFO', 'Field audit submitted successfully');
+            // ⚠️ NC-4.9: WIRE TO TELEMETRY STORE
+            // This ensures manual audit metrics trigger immediate AI brain recalculation
+            const telemetryState = useTelemetryStore.getState();
+            telemetryState.updateTelemetry({
+                mechanical: {
+                    vibration: formData.vibration ? parseFloat(formData.vibration) : 0,
+                    bearingTemp: formData.bearingTemp ? parseFloat(formData.bearingTemp) : 0,
+                    axialPlay: formData.axialPlay ? parseFloat(formData.axialPlay) : 0,
+                },
+                insulationResistance: formData.insulationResistance ? parseFloat(formData.insulationResistance) : telemetryState.insulationResistance,
+                geodeticData: {
+                    settlement: formData.geodeticSettlement ? parseFloat(formData.geodeticSettlement) : telemetryState.geodeticData.settlement,
+                    tilt: telemetryState.geodeticData.tilt
+                },
+                hydraulic: {
+                    head: (formData.headWaterLevel && formData.tailWaterLevel) ?
+                        parseFloat(formData.headWaterLevel) - parseFloat(formData.tailWaterLevel) : telemetryState.hydraulic.head
+                },
+                // Trigger brain refresh
+                acousticMatch: 99.2 // Standard baseline
+            });
+
+            // NC-4.9 Trigger Analysis
+            await telemetryState.runDeepAnalysis();
+
+            pushNotification('INFO', 'Field audit submitted successfully - Brain recalculating...');
 
             // Reset form
             setFormData({});

@@ -7,7 +7,7 @@ import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { reportGenerator } from '../features/reporting/ReportGenerator';
+import { ForensicReportService } from '../services/ForensicReportService';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { MaintenanceTimelineCard } from './maintenance/MaintenanceTimelineCard';
 import { ExpertMaintenanceAdvisorCard } from './maintenance/ExpertMaintenanceAdvisorCard';
@@ -170,16 +170,17 @@ export const MaintenanceDashboard: React.FC = () => {
 
                                                             const handleGenerateOrder = (e: React.MouseEvent) => {
                                                                 e.stopPropagation();
-                                                                const blob = reportGenerator.generatePurchaseOrder({
+                                                                const blob = ForensicReportService.generatePurchaseOrder({
                                                                     vendorName: 'ANO_LOGISTICS_BHD',
                                                                     parts: missingParts.map((p: any) => ({
                                                                         name: p.name,
                                                                         partNumber: p.partNumber,
                                                                         quantity: p.minStockThreshold * 2,
                                                                         unitPrice: p.unitPrice
-                                                                    }))
+                                                                    })),
+                                                                    t
                                                                 });
-                                                                reportGenerator.downloadReport(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`);
+                                                                ForensicReportService.openAndDownloadBlob(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`, true);
                                                             };
 
                                                             return (

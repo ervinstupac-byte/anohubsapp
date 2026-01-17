@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../routes/paths';
 import { useAudit } from '../../contexts/AuditContext';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
-import { generateDiagnosticDossier } from '../../utils/pdfGenerator';
+import { ForensicReportService } from '../../services/ForensicReportService';
 import { ShaftOrbitPlot, ShaftOrbitPlotHandle } from '../../features/telemetry/components/ShaftOrbitPlot';
 import { useCerebro } from '../../contexts/ProjectContext';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
@@ -158,7 +158,13 @@ export const ShaftAlignment: React.FC = () => {
             }
         };
 
-        const blob = generateDiagnosticDossier(caseId, insight, 'Senior Engineer', snapshot, true);
+        const blob = ForensicReportService.generateDiagnosticDossier({
+            caseId,
+            insight,
+            engineerName: 'Senior Engineer',
+            snapshotImage: snapshot,
+            t
+        });
         if (blob instanceof Blob) {
             viewDocument(blob, `Dossier: ${caseId}`, `Stability_Dossier_${caseId}.pdf`);
         }

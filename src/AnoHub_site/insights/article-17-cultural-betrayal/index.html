@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Article 17: THE CULTURAL BETRAYAL | AnoHUB Intel | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/insights/article-17-cultural-betrayal/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/insights/article-17-cultural-betrayal/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        
+<style>
+    /* === MULTI-LAYER BACKGROUND SYSTEM === */
+    .bg-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 1.2s ease-in-out;
+        will-change: opacity;
+    }
+
+    .bg-layer.active {
+        opacity: 1;
+    }
+
+    /* Overlay */
+    #bg-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(to bottom, rgba(2, 6, 23, 0.85) 0%, rgba(2, 6, 23, 0.4) 50%, rgba(2, 6, 23, 0.9) 100%);
+        pointer-events: none;
+    }
+
+    #reading-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: #ef4444;
+        width: 0%;
+        z-index: 100;
+        box-shadow: 0 0 15px #ef4444;
+    }
+
+    /* Typography inside article content */
+    .article-body h2 {
+        color: white;
+        font-weight: 900;
+        font-size: 2.5rem;
+        margin: 5rem 0 2rem;
+        border-left: 8px solid #ef4444;
+        padding-left: 2rem;
+        text-shadow: 3px 3px 15px black;
+        letter-spacing: -0.03em;
+    }
+
+    .article-body h3 {
+        color: #facc15;
+        font-weight: 700;
+        font-size: 1.6rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 8px black;
+    }
+
+    .article-body p {
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 1);
+        font-weight: 500;
+        color: #f1f5f9;
+    }
+
+    /* Glass Blocks */
+    .article-body blockquote {
+        background: rgba(0, 0, 0, 0.4);
+        border-left: 4px solid #ef4444;
+        padding: 2.5rem;
+        font-style: italic;
+        color: #fca5a5;
+        margin: 3rem 0;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        font-size: 1.3rem;
+        font-weight: 600;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .article-img {
+        border-radius: 0.5rem;
+        border: 1px solid #334155;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+        transition: transform 0.5s ease;
+    }
+
+    .article-img:hover {
+        transform: scale(1.01);
+    }
+
+    .caption {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: #94a3b8;
+        text-align: center;
+        margin-top: 0.5rem;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #334155;
+    }
+
+    .improv-circle {
+        width: 350px;
+        height: 350px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 8px solid #facc15;
+        box-shadow: 0 0 60px rgba(250, 204, 21, 0.3);
+        margin: 0 auto;
+        display: block;
+    }
+
+    .glass-panel {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+    }
+</style>
+
+<div id="bg-1" class="bg-layer active" style="background-image: url('/assets/images/A_17/A17-pozadina1.jpg');"></div>
+<div id="bg-2" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina2.jpg');"></div>
+<div id="bg-3" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina3.jpg');"></div>
+<div id="bg-4" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina4.jpg');"></div>
+<div id="bg-5" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina5.jpg');"></div>
+<div id="bg-6" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina6.jpg');"></div>
+<div id="bg-7" class="bg-layer" style="background-image: url('/assets/images/A_17/A17-pozadina7.jpg');"></div>
+
+<div id="bg-overlay"></div>
+<div id="reading-progress"></div>
+
+<main class="pt-32 pb-20">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <article class="lg:col-span-8">
+            <section class="scroll-section mb-16 border-b border-white/10 pb-8" data-bg-id="bg-1">
+                <div class="flex items-center gap-4 mb-6 text-xs font-mono">
+                    <span
+                        class="px-3 py-1 rounded bg-h-red text-black font-black border border-h-red shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+                        data-i18n="article17.meta.tags">MANIFESTO</span>
+                    <span class="text-slate-300 font-bold bg-black/40 px-2 py-1 rounded"
+                        data-i18n="article17.meta.doc_id">ID: A17-CULT-BETRAYAL</span>
+                </div>
+
+                <img src="/assets/images/protocol_eng_immunity.jpg" alt="Protocol Immunity"
+                    class="w-full h-64 md:h-96 object-cover rounded-lg mb-8 border border-white/10 opacity-80">
+
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
+                    <span data-i18n="article17.hero.title">THE CULTURAL BETRAYAL</span>
+                </h1>
+                <p class="text-2xl text-slate-100 font-light border-l-4 border-h-red pl-6 bg-black/30 py-4 pr-4 rounded-r-lg backdrop-blur-sm"
+                    data-i18n="article17.hero.subtitle">
+                    Why the 'Low-Bid' Policy is an Act of <strong>Corporate Violence</strong> Against Your Assets.
+                </p>
+            </section>
+
+            <div class="article-body">
+                <div class="mb-16 relative group">
+                    <img src="/assets/images/A_17/A17_kako_to.jpg" alt="Groblje Vrijednosti"
+                        class="article-img w-full h-auto min-h-[500px] object-cover shadow-2xl opacity-95">
+                    <div
+                        class="absolute bottom-6 left-6 bg-black/80 px-6 py-3 rounded border-l-8 border-h-red shadow-xl">
+                        <p class="text-sm font-mono text-white m-0 font-bold tracking-wider"
+                            data-i18n="article17.graveyard.fig_title">FIG 1.0: THE GRAVEYARD OF "VALUE"</p>
+                    </div>
+                </div>
+
+                <section class="scroll-section" data-bg-id="bg-2">
+                    <p data-i18n="article17.graveyard.text">Let's be unequivocally clear: The pursuit of the
+                        <strong>lowest initial price (CapEx)</strong> in hydropower is not merely a poor economic
+                        choice; it is a systemic act of <strong>corporate violence</strong> against your long-term
+                        projected lifespan and a deep betrayal of investor trust.</p>
+                    <blockquote onclick="copyToClipboard(this)" data-i18n="article17.graveyard.quote">"This 'Lust for
+                        Cheap' is the single factor that guarantees engineered failure."</blockquote>
+                </section>
+
+                <section class="scroll-section" data-bg-id="bg-3">
+                    <h2 data-i18n="article17.execution_gap.title">1. The Execution Gap: Quantifying Financial Fraud</h2>
+                    <p data-i18n="article17.execution_gap.text">Investors are sold a financial illusion—the belief that
+                        CapEx is relevant compared to the true <strong>Life Cycle Cost (LCC)</strong>. This creates a
+                        vacuum for ethical contamination.</p>
+
+                    <div class="my-12">
+                        <img src="/assets/images/A_17/A17_are_you_sure.jpg" alt="Wall of Skulls"
+                            class="article-img w-full h-[600px] object-cover object-center filter contrast-125 hover:contrast-150 transition duration-500 opacity-90">
+                        <div class="caption text-h-red font-bold text-lg py-3"
+                            data-i18n="article17.execution_gap.cumulative_text">THE CUMULATIVE COST: Don't let your
+                            project become another anonymous victim.</div>
+                    </div>
+
+                    <div
+                        class="my-16 glass-panel p-8 flex flex-col items-center gap-8 shadow-[0_0_50px_rgba(239,68,68,0.2)]">
+                        <div class="w-full relative">
+                            <img src="/assets/images/A_17/A17-ne dopustite im da vascijede.jpg" alt="Resource Draining"
+                                class="rounded-xl shadow-2xl w-full h-auto max-h-[800px] object-contain bg-black/30">
+                            <div
+                                class="absolute top-4 left-4 bg-h-red text-white font-black px-4 py-2 rounded shadow-lg uppercase tracking-widest">
+                                The Metaphor</div>
+                        </div>
+                        <div class="text-center w-full max-w-2xl">
+                            <h3 class="text-4xl md:text-5xl font-black text-white uppercase leading-none mb-6 tracking-tight drop-shadow-lg"
+                                data-i18n="article17.metaphor.quote">
+                                "DON'T LET THEM <br> <span
+                                    class="text-transparent bg-clip-text bg-gradient-to-r from-h-red to-orange-500">SUCK
+                                    YOU DRY.</span>"
+                            </h3>
+                            <p
+                                class="text-2xl text-h-cyan font-bold uppercase tracking-wider mb-6 flex items-center justify-center gap-3">
+                                <i data-lucide="droplet" class="w-8 h-8 text-h-cyan animate-bounce"></i> Use your
+                                "water" smarter.
+                            </p>
+                            <p class="text-lg text-slate-200 italic border-t border-slate-600/50 pt-6"
+                                data-i18n="article17.metaphor.text">
+                                Every day your turbine runs sub-optimally due to cheap "low-bid" parts, you are bleeding
+                                critical resources—just like this tree. Stop the drain.
+                            </p>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-4 my-8 glass-panel p-6">
+                        <li class="p-4 rounded border-l-4 border-h-cyan bg-white/5">
+                            <span class="block text-h-cyan font-bold text-lg mb-1"
+                                data-i18n="article17.metaphor.erosion_title">AEP EROSION</span>
+                            <span class="text-white" data-i18n="article17.metaphor.erosion_text">Up to <strong>$100,000
+                                    per day</strong> in Unrealized Value due to early wear and unplanned outages.</span>
+                        </li>
+                        <li class="p-4 rounded border-l-4 border-h-yellow bg-white/5">
+                            <span class="block text-h-yellow font-bold text-lg mb-1"
+                                data-i18n="article17.metaphor.poison_title">PROCUREMENT POISON</span>
+                            <span class="text-white" data-i18n="article17.metaphor.poison_text">Galvanic Corrosion from
+                                incompatible metals cuts bearing life by <strong>50%</strong>.</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="scroll-section" data-bg-id="bg-4">
+                    <h2 data-i18n="article17.frequency_trap.title">2. The Frequency Trap: The Invisible Killer (AEP
+                        Killer #2)</h2>
+                    <p class="font-bold text-h-red text-lg drop-shadow-md" data-i18n="article17.frequency_trap.intro">If
+                        you aren't a Forensic Vibration Expert, you won't see this trap until it destroys you.</p>
+
+                    <div class="my-12 relative group">
+                        <img src="/assets/images/A_17/A17_techh2.jpg" alt="Rotor Mass Integrity"
+                            class="article-img w-full h-auto min-h-[600px] object-cover object-center opacity-95 border-4 border-h-yellow">
+                        <div class="absolute top-4 right-4 bg-h-yellow text-black font-black px-4 py-2 text-sm uppercase tracking-widest shadow-lg"
+                            data-i18n="article17.frequency_trap.rotor_title">ROTOR MASS INTEGRITY</div>
+                    </div>
+
+                    <p data-i18n="article17.frequency_trap.rotor_text">After a "successful" cheap installation, the
+                        turbine starts running. But inside, an invisible process is happening. I call it <strong>"The
+                            Frequency Trap"</strong>.</p>
+
+                    <div class="space-y-6 mt-8 glass-panel p-8">
+                        <div class="border-l-4 border-h-yellow pl-6">
+                            <h3 class="mt-0 text-white" data-i18n="article17.frequency_trap.how_title">How does it work?
+                            </h3>
+                            <p class="text-slate-200" data-i18n="article17.frequency_trap.step1"><strong>1. Cavitation
+                                    Creates Mass:</strong> Cavitation fundamentally changes the <strong>Rotor Mass
+                                    (Added Mass Effect)</strong>. This alters the natural frequency of your rotor.</p>
+
+                            <figure class="my-8">
+                                <img src="/assets/images/A_17/A17.tech.jpg" alt="Micro-fracture analysis"
+                                    class="w-full rounded border border-h-red/20">
+                                <figcaption
+                                    class="text-xs font-mono text-h-red mt-2 text-center uppercase tracking-widest"
+                                    data-i18n="article17.frequency_trap.fig2_caption">Fig 2.0: CFD Analysis of Frequency
+                                    Resonance</figcaption>
+                            </figure>
+                            <p class="text-slate-200" data-i18n="article17.frequency_trap.step2"><strong>2. Rotor Seeks
+                                    Resonance:</strong> The rotor enters a dangerous relationship with the excitation
+                                frequency generated by the grid.</p>
+                            <p class="text-slate-200" data-i18n="article17.frequency_trap.step3"><strong>3. Stability
+                                    Implosion:</strong> When these align, your turbine experiences
+                                <strong>Resonance</strong>. This destroys bearings and foundations already stressed by
+                                the hidden 48% dynamic risk.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="scroll-section" data-bg-id="bg-5">
+                    <h2 data-i18n="article17.compartmentalization.title">3. The Curse of Compartmentalization</h2>
+                    <p data-i18n="article17.compartmentalization.text">The industry is paralyzed. Legal audits clauses
+                        but ignores Material Certificates. Inspectors focus on visible parts but ignore the
+                        organizational chaos.</p>
+
+                    <div class="my-16 relative shadow-2xl">
+                        <div class="grid grid-cols-2 gap-1 bg-black/50 p-1 rounded-t-xl backdrop-blur-sm">
+                            <div class="relative group h-full">
+                                <img src="/assets/images/A_17/A17-Korporativno-Nasilje-Korozija.jpg" alt="The Problem"
+                                    class="w-full h-full min-h-[400px] object-cover grayscale group-hover:grayscale-0 transition duration-700 opacity-90">
+                                <div class="absolute top-0 left-0 w-full bg-black/60 p-2 text-center text-white text-xs font-bold font-mono border-b border-h-red"
+                                    data-i18n="article17.compartmentalization.problem">THE PROBLEM</div>
+                            </div>
+                            <div class="relative group h-full">
+                                <img src="/assets/images/A_17/A17_improvisation2.jpg" alt="The Bad Fix"
+                                    class="w-full h-full min-h-[400px] object-cover grayscale group-hover:grayscale-0 transition duration-700 opacity-90">
+                                <div class="absolute top-0 left-0 w-full bg-black/60 p-2 text-center text-h-red text-xs font-bold font-mono border-b border-h-red"
+                                    data-i18n="article17.compartmentalization.fix">THE "FIX"</div>
+                            </div>
+                        </div>
+                        <div
+                            class="p-4 bg-gradient-to-r from-h-panel/80 to-black/80 border-t-4 border-h-red text-center rounded-b-xl backdrop-blur-sm">
+                            <p class="text-white text-sm font-bold font-mono m-0 uppercase tracking-wider"
+                                data-i18n="article17.compartmentalization.synergy_caption">SITE SYNERGY: When there are
+                                no tools, demands create dangerous improvisation.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="my-16 flex flex-col gap-6 items-center glass-panel p-8 shadow-[0_0_30px_rgba(6,182,212,0.15)] max-w-lg ml-auto transform rotate-1 hover:rotate-0 transition duration-500">
+                        <div class="w-full">
+                            <img src="/assets/images/A_17/A17_call_for_dialog.jpg" alt="Reality on the Raft"
+                                class="w-full rounded-sm shadow-lg h-auto object-cover border-8 border-white sepia-[.20] opacity-95">
+                            <div class="caption text-white font-bold text-sm mt-2"
+                                data-i18n="article17.compartmentalization.fig3_caption">Fig 3.0: The Reality on the Raft
+                                - Where decisions actually land.</div>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-h-cyan mt-0 text-2xl font-black uppercase tracking-tighter"
+                                data-i18n="article17.compartmentalization.ivory_tower_title">The Ivory Tower</h3>
+                            <p class="text-base text-white italic font-serif leading-relaxed"
+                                data-i18n="article17.compartmentalization.ivory_tower_quote">"Decisions made in these
+                                comfortable chairs often have no connection to the reality on the raft."</p>
+                            <a href="/contact/"
+                                class="inline-block mt-6 bg-h-cyan/90 text-black font-bold px-8 py-3 rounded-full uppercase text-xs tracking-widest hover:bg-white hover:scale-105 transition shadow-lg shadow-cyan-500/50"
+                                data-i18n="article17.compartmentalization.dialogue">We need a Dialogue</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="scroll-section" data-bg-id="bg-6">
+                    <div class="glass-panel p-8 my-16 shadow-2xl">
+                        <h3 class="text-center text-white font-black mb-10 text-3xl tracking-tighter uppercase border-b border-white/10 pb-6"
+                            data-i18n="article17.compartmentalization.disconnect_title">The Disconnect</h3>
+
+                        <div class="mb-10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group">
+                                    <img src="/assets/images/A_17/hitit.jpg" alt="Input"
+                                        class="w-full h-[400px] object-cover rounded-lg border border-white/20">
+                                    <div class="absolute bottom-2 left-2 bg-black/60 px-2 py-1 text-xs font-mono text-white"
+                                        data-i18n="article17.compartmentalization.input_caption">INDUSTRY INPUT</div>
+                                </div>
+                                <div class="relative group">
+                                    <img src="/assets/images/A_17/A17_hitit2.jpg" alt="Output"
+                                        class="w-full h-[400px] object-cover rounded-lg border border-white/20">
+                                    <div class="absolute bottom-2 left-2 bg-black/60 px-2 py-1 text-xs font-mono text-h-red"
+                                        data-i18n="article17.compartmentalization.output_caption">REALITY OUTPUT</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-center text-slate-300 italic mb-12"
+                            data-i18n="article17.compartmentalization.reality_quote">"While management talks Digital
+                            Twins, the field crew uses 'percussive maintenance' (sledgehammers). That is the reality."
+                        </p>
+
+                        <div class="py-20 text-center">
+                            <div class="relative inline-block hover:scale-105 transition duration-500">
+                                <img src="/assets/images/A_17/A17-Improvise.jpg" alt="Improvised Tool"
+                                    class="improv-circle mb-8 opacity-95">
+                                <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-h-yellow text-black font-black px-8 py-3 rounded-full text-sm shadow-[0_0_30px_rgba(250,204,21,0.6)] whitespace-nowrap uppercase tracking-wider border-2 border-white"
+                                    data-i18n="article17.compartmentalization.adapt_die">ADAPT OR DIE?</div>
+                            </div>
+                            <h3 class="text-5xl font-black text-white mt-10 uppercase drop-shadow-xl"
+                                data-i18n="article17.compartmentalization.improv_text">How much improvisation<br>is too
+                                much?</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="scroll-section" data-bg-id="bg-7">
+                    <h2 data-i18n="article17.zero_tolerance.title">4. The Zero-Tolerance Mandate</h2>
+                    <p data-i18n="article17.zero_tolerance.text">We must reject the transactional view. Partner with
+                        forensic authority. Enforce <strong>Absolute Precision (QC < 0.05 mm)</strong>.</p>
+
+                    <div class="my-16 flex justify-center max-w-4xl mx-auto text-center">
+                        <div
+                            class="bg-black/40 p-4 rounded-2xl border-2 border-h-cyan/50 shadow-[0_0_50px_rgba(6,182,212,0.3)] backdrop-blur-md w-full max-w-2xl mx-auto">
+                            <img src="/assets/images/A_17/A17-pozadina1.jpg" alt="Synergy"
+                                class="rounded-lg w-full h-auto object-cover opacity-95">
+                            <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+                                <span class="text-h-cyan font-mono text-sm font-bold uppercase"
+                                    data-i18n="article17.zero_tolerance.precision_title">PRECISION ENGINEERING</span>
+                                <span class="text-white font-mono text-xs"
+                                    data-i18n="article17.zero_tolerance.tolerance">TOLERANCE: 0.00mm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-16 shadow-2xl rounded-2xl overflow-hidden border-4 border-white/10">
+                        <div class="grid grid-cols-2 gap-0">
+                            <div class="relative group h-[500px]">
+                                <img src="/assets/images/A_17/A17-Korporativno-Nasilje-Korozija2.jpg"
+                                    alt="Corrosion Source"
+                                    class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700 opacity-90">
+                                <div class="absolute bottom-0 w-full bg-black/70 text-h-red text-xs font-black font-mono py-3 text-center uppercase tracking-widest border-t border-h-red"
+                                    data-i18n="article17.zero_tolerance.cause">The Cause</div>
+                            </div>
+                            <div class="relative group h-[500px]">
+                                <img src="/assets/images/A_17/A17-WCB-after_n_symptoms - Copy.jpg" alt="Bearing Failure"
+                                    class="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700 opacity-90">
+                                <div class="absolute bottom-0 w-full bg-black/70 text-h-red text-xs font-black font-mono py-3 text-center uppercase tracking-widest border-t border-h-red"
+                                    data-i18n="article17.zero_tolerance.effect">The Effect</div>
+                            </div>
+                        </div>
+                        <div class="p-8 bg-gradient-to-r from-h-red/90 to-black/90 text-center backdrop-blur-sm">
+                            <p class="text-white text-xl font-black uppercase m-0 tracking-tight leading-tight">
+                                <span data-i18n="article17.zero_tolerance.obliteration">"FROM OXIDATION TO
+                                    OBLITERATION"</span> <br>
+                                <span class="text-sm font-normal opacity-80 normal-case font-mono mt-2 block"
+                                    data-i18n="article17.zero_tolerance.lifecycle">The inevitable lifecycle of low-bid
+                                    compliance.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="text-2xl font-black text-white text-center mt-12 mb-12 text-shadow-lg"
+                        data-i18n="article17.zero_tolerance.binary_choice">The choice is binary: Absolute Integrity or
+                        Guaranteed Erosion.</p>
+                </section>
+
+                <div
+                    class="mt-24 mb-16 relative transform -rotate-1 hover:rotate-0 transition duration-500 max-w-4xl mx-auto">
+                    <div
+                        class="bg-gradient-to-br from-black/80 via-h-dark/80 to-black/80 border-4 border-h-red p-10 md:p-16 text-center relative overflow-hidden shadow-[0_0_60px_rgba(239,68,68,0.4)] backdrop-blur-md">
+                        <div
+                            class="absolute inset-0 bg-[url('/assets/images/A_17/A17-take%20the%20journey-safe.jpg')] bg-cover bg-center">
+                        </div>
+                        <div class="absolute inset-0 bg-black/80 z-0"></div>
+                        <h3 class="relative z-10 text-4xl md:text-6xl font-black text-white mb-4 uppercase italic tracking-tighter drop-shadow-lg"
+                            data-i18n="article17.cta.title">"HYDRO SPECIALISTS..."</h3>
+                        <p class="relative z-10 text-h-red font-mono text-base md:text-lg tracking-[0.2em] mb-10 uppercase font-bold bg-black/40 inline-block px-4 py-1 rounded"
+                            data-i18n="article17.cta.challenge_title">// RAZUVJERITE ME. (PROVE ME WRONG.)</p>
+                        <p
+                            class="relative z-10 text-xl md:text-2xl text-slate-200 max-w-4xl mx-auto leading-relaxed mb-12 font-medium text-shadow">
+                            <span data-i18n="article17.cta.challenge_text">I see you clapping on LinkedIn for "Digital
+                                Twins" while your shafts are misaligned by 0.15mm. You say I'm too harsh?</span>
+                            <br><br>
+                            <span
+                                class="bg-h-red text-white px-3 py-1 font-black transform skew-x-[-10deg] inline-block shadow-lg"
+                                data-i18n="article17.cta.come_comment">COME TO THE COMMENTS.</span> <br>
+                            <span data-i18n="article17.cta.tell_me">Tell me I'm wrong. Tell me that physics doesn't
+                                apply to your budget.</span>
+                        </p>
+                        <div class="relative z-10 flex flex-col sm:flex-row justify-center items-center gap-8">
+                            <button onclick="shareArticle()"
+                                class="w-full sm:w-auto px-10 py-5 bg-h-red hover:bg-red-600 text-white font-black text-xl uppercase tracking-widest rounded-lg shadow-2xl hover:scale-105 transition flex items-center justify-center gap-3">
+                                <i data-lucide="megaphone" class="w-6 h-6"></i> <span
+                                    data-i18n="article17.cta.share_truth">Share The Truth</span>
+                            </button>
+                            <a href="https://www.linkedin.com/in/ervin-stupac-b34914183/" target="_blank"
+                                class="w-full sm:w-auto px-10 py-5 border-2 border-white hover:border-h-cyan text-white hover:text-h-cyan hover:bg-white/10 font-black text-xl uppercase tracking-widest rounded-lg transition hover:scale-105 flex items-center justify-center gap-3">
+                                <i data-lucide="message-square" class="w-6 h-6"></i> <span
+                                    data-i18n="article17.cta.debate_me">Debate Me</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="my-20 relative group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-h-cyan via-purple-500 to-h-yellow rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000">
+                    </div>
+                    <div
+                        class="relative bg-black/40 rounded-2xl overflow-hidden border border-white/10 backdrop-blur-sm">
+                        <img src="/assets/images/A_17/20221203_174933.jpg" alt="Culture of Difference"
+                            class="w-full h-[600px] object-cover opacity-70 group-hover:opacity-90 transition duration-700">
+                        <div
+                            class="absolute inset-0 flex flex-col justify-center items-center bg-black/30 hover:bg-black/10 transition duration-500 p-8 text-center">
+                            <h4 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4 drop-shadow-xl leading-tight text-shadow-lg"
+                                data-i18n="article17.cta.perfection_quote">"WE ACHIEVE PERFECTION <br> THROUGH <span
+                                    class="text-h-yellow">DIFFERENCE</span>."</h4>
+                            <p class="text-2xl text-slate-100 font-light mb-8 max-w-2xl drop-shadow-md text-shadow"
+                                data-i18n="article17.cta.guardians">We are not just another engineering firm. We are the
+                                guardians of integrity.</p>
+                            <div class="inline-block border-4 border-white px-8 py-3 text-3xl font-black text-white tracking-[0.3em] uppercase bg-black/20 backdrop-blur-md shadow-xl"
+                                data-i18n="article17.cta.we_are">WE ARE ANOHUBS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-12 border-t border-white/10">
+                    <p class="text-center text-xs font-mono text-slate-500 mb-8 tracking-widest uppercase"
+                        data-i18n="article17.cta.behind_protocol">BEHIND THE PROTOCOL</p>
+                    <div class="grid grid-cols-3 gap-4 opacity-80 hover:opacity-100 transition duration-500">
+                        <img src="/assets/images/A_17/A17-ja.jpg"
+                            class="h-72 w-full object-cover object-top rounded-lg bg-slate-800/50 border border-white/10">
+                        <img src="/assets/images/A_17/A17-ja_ja.jpg"
+                            class="h-72 w-full object-cover object-top rounded-lg bg-slate-800/50 border border-white/10">
+                        <img src="/assets/images/A_17/A17-ja_ja_samo_ja.jpg"
+                            class="h-72 w-full object-cover object-top rounded-lg bg-slate-800/50 border border-white/10">
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 bg-h-dark/60 p-6 rounded-xl backdrop-blur-md">
+                <div class="text-xs font-mono text-slate-400" data-i18n="article17.meta.tags">TAGS: #ExecutionGap
+                    #AssetIntegrity #LowBidCatastrophe</div>
+                <div class="flex gap-4">
+                    <button onclick="shareArticle()"
+                        class="flex items-center gap-2 text-sm font-bold text-h-cyan hover:text-white transition"><i
+                            data-lucide="share-2" class="w-4 h-4"></i> SHARE</button>
+                    <button onclick="copyLink()"
+                        class="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition"><i
+                            data-lucide="link" class="w-4 h-4"></i> COPY LINK</button>
+                </div>
+            </div>
+        </article>
+
+        <aside class="lg:col-span-4 space-y-8">
+            <div class="sticky top-24">
+                <div class="glass-panel p-8 shadow-2xl border-t-4 border-h-red">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="/assets/images/ervin_stupac_portrait.jpg" alt="Ervin Stupac"
+                            class="w-20 h-20 rounded-full border-4 border-slate-700 object-cover shadow-lg">
+                        <div>
+                            <h4 class="text-white font-bold text-lg" data-i18n="article17.author.name">Ervin Stupac</h4>
+                            <p class="text-xs text-h-red font-mono tracking-wider" data-i18n="article17.author.role">
+                                ASSET INTEGRITY CONSULTANT</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-300 mb-8 leading-relaxed" data-i18n="article17.author.bio">Specializing
+                        in neutralizing the 48% Dynamic Risk through forensic execution protocols. I don't just inspect;
+                        I enforce integrity.</p>
+                    <a href="/contact/"
+                        class="block w-full text-center py-4 bg-h-red hover:bg-red-600 text-white font-bold rounded-lg uppercase tracking-wider text-xs transition shadow-lg hover:shadow-red-500/50"
+                        data-i18n="article17.author.btn">Audit Your Project</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const bgLayers = document.querySelectorAll('.bg-layer');
+        const sections = document.querySelectorAll('.scroll-section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-10% 0px -10% 0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const targetId = entry.target.getAttribute('data-bg-id');
+                    bgLayers.forEach(bg => {
+                        if (bg.id === targetId) bg.classList.add('active');
+                        else bg.classList.remove('active');
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        window.addEventListener('scroll', () => {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            const progress = document.getElementById("reading-progress");
+            if (progress) progress.style.width = scrolled + "%";
+        });
+    });
+
+    function copyToClipboard(element) { navigator.clipboard.writeText(element.innerText).then(() => alert("Quote copied!")); }
+    function copyLink() { navigator.clipboard.writeText(window.location.href).then(() => alert("Link copied!")); }
+    function shareArticle() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'THE CULTURAL BETRAYAL',
+                text: 'Low-Bid is Violence.',
+                url: window.location.href,
+            });
+        } else {
+            copyLink();
+        }
+    }
+</script>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

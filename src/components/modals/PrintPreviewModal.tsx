@@ -4,7 +4,7 @@ import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler } fr
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { TechnicalProjectState } from '../../models/TechnicalSchema';
 import { ActionEngine } from '../../features/business/logic/ActionEngine';
-import { reportGenerator } from '../../features/reporting/ReportGenerator';
+import { ForensicReportService } from '../../services/ForensicReportService';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 
@@ -18,8 +18,8 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
     const { t } = useTranslation();
 
     const handleGenerate = () => {
-        const blob = reportGenerator.generateProjectPDF(state);
-        reportGenerator.downloadReport(blob, `AnoHUB_Audit_${state.identity.assetName}_${new Date().toISOString().split('T')[0]}.pdf`);
+        const blob = ForensicReportService.generateProjectDossier({ state, t });
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_${state.identity.assetName}_${new Date().toISOString().split('T')[0]}.pdf`, true);
         onClose();
     };
 

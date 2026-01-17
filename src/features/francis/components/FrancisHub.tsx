@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SurgicalDigitalTwin from './SurgicalDigitalTwin';
 
@@ -6,16 +6,21 @@ import SurgicalDigitalTwin from './SurgicalDigitalTwin';
  * Technical Asset Definition for the Surgical Index
  */
 const ASSETS = [
-    { id: 'generator', label: 'Generator', detail: 'Primary AC Unit' },
-    { id: 'miv', label: 'Main Inlet Valve', detail: 'Control & Isolation' },
-    { id: 'spiral-case', label: 'Spiral Case', detail: 'Vortex Dynamics' },
-    { id: 'runner', label: 'Francis Runner', detail: 'Core Energy Transfer' },
-    { id: 'shaft-seal', label: 'Shaft Seal', detail: 'Hydraulic Containment' },
+    { id: 'electrical-cubicles', label: 'Electrical Cubicles', detail: 'Power Distribution' },
     { id: 'hpu', label: 'HPU System', detail: 'Actuator Control' },
-    { id: 'draft-tube', label: 'Draft Tube', detail: 'Discharge Recuperation' },
-    { id: 'manhole', label: 'Manhole', detail: 'Service Access Pt.' },
     { id: 'lubrication', label: 'Lubrication', detail: 'Bearing Protection' },
+    { id: 'penstock', label: 'Penstock', detail: 'Water Conveyance' },
+    { id: 'manhole', label: 'Manhole', detail: 'Service Access Pt.' },
     { id: 'bypass', label: 'Bypass Valve', detail: 'Pressure Equilibrium' },
+    { id: 'miv', label: 'Main Inlet Valve', detail: 'Control & Isolation' },
+    { id: 'draft-tube', label: 'Draft Tube', detail: 'Discharge Recuperation' },
+    { id: 'dft-manhole', label: 'Draft Tube Manhole', detail: 'Access Point' },
+    { id: 'seal', label: 'Shaft Seal', detail: 'Hydraulic Containment', xrayOnly: true },
+    { id: 'spiral-case', label: 'Spiral Case', detail: 'Vortex Dynamics' },
+    { id: 'spiral-manhole', label: 'Spiral Manhole', detail: 'Inspection Hatch' },
+    { id: 'relief-pipes', label: 'Relief Pipes', detail: 'Pressure Relief' },
+    { id: 'runner', label: 'Francis Runner', detail: 'Core Energy Transfer', xrayOnly: true },
+    { id: 'generator', label: 'Generator', detail: 'Primary AC Unit' },
 ];
 
 /**
@@ -24,6 +29,40 @@ const ASSETS = [
 export const FrancisHub: React.FC = () => {
     const [viewMode, setViewMode] = useState<'hall' | 'generator'>('hall');
     const [activeAssetId, setActiveAssetId] = useState<string | null>(null);
+    const [bigViewOpen, setBigViewOpen] = useState(false);
+    const [bigViewAsset, setBigViewAsset] = useState<string | null>(null);
+    const [xrayEnabled, setXrayEnabled] = useState(false);
+
+    // Listen for clicks inside the injected SVG (dispatched by SurgicalDigitalTwin)
+    useEffect(() => {
+        const handler = (e: Event) => {
+            try {
+                // @ts-ignore - CustomEvent typing
+                const id = (e as CustomEvent).detail as string;
+                if (!id) return;
+                setActiveAssetId(id);
+                // Open the big view when a marker is clicked inside the SVG
+                setBigViewAsset(id);
+                setBigViewOpen(true);
+                if (id === 'generator') setViewMode('generator');
+            } catch (err) {
+                // ignore
+            }
+        };
+
+        window.addEventListener('twin:asset-click', handler as EventListener);
+        return () => window.removeEventListener('twin:asset-click', handler as EventListener);
+    }, []);
+
+    // when X‑Ray is turned off, ensure any xray-only active asset is cleared
+    useEffect(() => {
+        if (!xrayEnabled && activeAssetId) {
+            const asset = ASSETS.find(a => a.id === activeAssetId);
+            if (asset && (asset as any).xrayOnly) {
+                setActiveAssetId(null);
+            }
+        }
+    }, [xrayEnabled, activeAssetId]);
 
     return (
         <div className="flex flex-col h-screen w-full bg-[#0b1121] text-white overflow-hidden transition-colors duration-500">
@@ -42,6 +81,22 @@ export const FrancisHub: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-8 font-mono text-[10px] uppercase tracking-widest text-cyan-500/60">
+                    <button
+                        onClick={() => {
+                            setXrayEnabled(prev => {
+                                const next = !prev;
+                                if (!next && activeAssetId) {
+                                    const asset = ASSETS.find(a => a.id === activeAssetId);
+                                    if (asset && (asset as any).xrayOnly) setActiveAssetId(null);
+                                }
+                                return next;
+                            });
+                        }}
+                        className={`px-2 py-1 rounded transition-all ${xrayEnabled ? 'bg-cyan-500 text-black' : 'bg-black/20 text-cyan-300'}`}
+                    >
+                        X‑Ray
+                    </button>
+
                     <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
                         <span>Telemetry Link: Active</span>
@@ -51,8 +106,8 @@ export const FrancisHub: React.FC = () => {
                 </div>
             </header>
 
-            {/* Main Container - 30/40/30 Grid */}
-            <div className="flex-1 grid grid-cols-[30%_40%_30%] overflow-hidden relative">
+            {/* Main Container - 25/50/25 Grid */}
+            <div className="flex-1 grid grid-cols-[25%_50%_25%] overflow-hidden relative">
 
                 {/* Left Panel: Surgical Index */}
                 <aside className="border-r border-cyan-900/20 bg-black/10 flex flex-col overflow-hidden">
@@ -62,12 +117,12 @@ export const FrancisHub: React.FC = () => {
                     </div>
 
                     <nav className="flex-1 overflow-y-auto px-4 py-2 space-y-1 custom-scrollbar scroll-p-2">
-                        {ASSETS.map((asset) => (
+                        {ASSETS.filter(a => !(a as any).xrayOnly || xrayEnabled).map((asset) => (
                             <button
                                 key={asset.id}
                                 onMouseEnter={() => setActiveAssetId(asset.id)}
                                 onMouseLeave={() => setActiveAssetId(null)}
-                                onClick={() => asset.id === 'generator' && setViewMode('generator')}
+                                onClick={() => { setActiveAssetId(asset.id); if (asset.id === 'generator') setViewMode('generator'); }}
                                 className={`w-full text-left group transition-all duration-300 relative overflow-hidden rounded-lg border
                   ${activeAssetId === asset.id
                                         ? 'bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
@@ -103,7 +158,7 @@ export const FrancisHub: React.FC = () => {
                 </aside>
 
                 {/* Center Panel: Surgical Digital Twin */}
-                <main className="relative flex items-center justify-center bg-[#05080f] overflow-hidden group">
+                <main className="relative flex items-center justify-center h-full bg-[#05080f] overflow-hidden group">
                     {/* Visual ambience glow */}
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.1)_0%,transparent_70%)] pointer-events-none" />
 
@@ -111,6 +166,8 @@ export const FrancisHub: React.FC = () => {
                         viewMode={viewMode}
                         setViewMode={setViewMode}
                         activeAssetId={activeAssetId}
+                        xrayEnabled={xrayEnabled}
+                        setXrayEnabled={setXrayEnabled}
                     />
 
                     {/* Perspective View Label */}
@@ -164,15 +221,37 @@ export const FrancisHub: React.FC = () => {
                                 </div>
                             </div>
                             <div className="text-center space-y-2">
-                                <p className="text-cyan-400 font-mono text-[11px] uppercase font-bold tracking-widest">Analytical Ready</p>
-                                <p className="text-slate-500 font-mono text-[9px] leading-relaxed max-w-[200px]">
-                                    Awaiting component selection for depth-sensing forensic scan.
-                                </p>
+                                <p className="text-cyan-400 font-mono text-[9px] uppercase font-bold tracking-widest">Ready</p>
                             </div>
                         </div>
                     )}
                 </aside>
             </div>
+
+            {/* Big View Modal - displays an enlarged twin for selected asset */}
+            {bigViewOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+                    <div className="relative w-[90%] max-w-[1200px] h-[90%] bg-[#070814] border border-cyan-900/40 rounded-lg p-4 shadow-xl">
+                        <button
+                            onClick={() => { setBigViewOpen(false); setBigViewAsset(null); }}
+                            className="absolute top-3 right-3 text-slate-300 bg-black/40 hover:bg-black/60 p-2 rounded"
+                            aria-label="Close Big View"
+                        >
+                            ×
+                        </button>
+
+                        <div className="w-full h-full">
+                            <SurgicalDigitalTwin
+                                viewMode={viewMode}
+                                setViewMode={setViewMode}
+                                activeAssetId={bigViewAsset}
+                                xrayEnabled={xrayEnabled}
+                                setXrayEnabled={setXrayEnabled}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Logic Integrity Footer */}
             <footer className="px-6 py-2 border-t border-cyan-900/30 flex items-center justify-between bg-black/40 text-[9px] font-mono opacity-50 uppercase tracking-tighter">

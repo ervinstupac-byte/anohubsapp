@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hydro Turbine Friend | Knowledge Base | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        
+<!-- === HERO SECTION === -->
+<section class="relative w-full pt-32 pb-20 px-6 md:px-20 border-b border-white/5 bg-[#020617]">
+    <div class="max-w-7xl mx-auto text-center">
+        <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded border border-h-cyan/30 bg-h-cyan/10 text-h-cyan text-[10px] font-mono tracking-widest uppercase mb-4">
+            <i data-lucide="book-open" class="w-3 h-3"></i>
+            <span>Engineering Library</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6 font-header uppercase">
+            Hydro Turbine <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-h-cyan to-white">Friend</span>
+        </h1>
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+            Expert Knowledge Base. Operational protocols, diagnostic matrices, and safety mandates for specific machine
+            topologies.
+        </p>
+    </div>
+</section>
+
+<!-- === MISSION STATUS BAR === -->
+<section
+    class="relative z-10 w-full bg-gradient-to-r from-red-950/40 to-slate-900 border-b border-red-500/20 py-4 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <span class="text-[10px] font-mono font-bold text-red-400 uppercase tracking-widest">Active
+                        Mission</span>
+                </div>
+                <div class="h-4 w-px bg-white/10"></div>
+                <h2 class="text-sm md:text-base font-bold text-white uppercase tracking-wide">
+                    CURRENT FOCUS: <span class="text-red-400">UNIT 1 RECOVERY</span>
+                    <span class="text-slate-400 font-normal text-xs">(Shaft Seal & Alignment)</span>
+                </h2>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="./Francis_SOP_Recovery.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider rounded transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/40">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    <span>QUICK ACTION</span>
+                </a>
+                <a href="./Francis_Emergency_Protocols.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-red-700 hover:bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded transition-all shadow-lg shadow-red-700/20 hover:shadow-red-700/40 border border-red-500">
+                    <i data-lucide="alert-octagon" class="w-4 h-4"></i>
+                    <span>EMERGENCY</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- === PRIMARY DASHBOARD === -->
+<section class="relative z-10 w-full bg-black py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- CARD 1: FRANCIS HORIZONTAL (ACTIVE) - Refactored Three-Column Layout -->
+        <div
+            class="col-span-1 md:col-span-2 lg:col-span-3 relative bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
+            <!-- Header Section -->
+            <div class="p-8 border-b border-white/10 bg-gradient-to-r from-slate-900 to-slate-800">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="text-3xl font-black text-white mb-2">FRANCIS <span
+                                class="text-xl font-normal text-slate-300">HORIZONTAL</span></h3>
+                        <p class="text-slate-400 text-sm font-mono">
+                            Complete O&M Manual: Recovery, Alignment & Diagnostic Matrix
+                        </p>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <span class="text-[10px] font-mono font-bold text-h-cyan bg-h-cyan/10 px-3 py-1 rounded">
+                            &lt; 5MW
+                        </span>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-1 rounded bg-red-500/10 border border-red-500/50 text-red-500 text-[10px] font-bold uppercase tracking-wider">
+                            <i data-lucide="alert-triangle" class="w-3 h-3"></i>
+                            Critical SOP Available
+                        </span>
+                        <i data-lucide="check-circle" class="w-3 h-3"></i>
+                        42 Modules • 100% COVERAGE
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Critical Cross-Logic Warning -->
+            <div
+                class="mt-8 mb-0 p-4 bg-red-950/30 border border-red-500/30 rounded-lg flex items-start gap-4 animate-pulse">
+                <i data-lucide="alert-triangle" class="w-6 h-6 text-red-500 shrink-0 mt-1"></i>
+                <div>
+                    <h3 class="text-sm font-bold text-red-400 uppercase tracking-wide">SYSTEM LOGIC INTERLOCK</h3>
+                    <p class="text-xs text-red-300 mt-1">
+                        <strong>BYPASS FAILURE LOGIC:</strong> MIV cannot open if Distributor Seals are failing.
+                        If Spiral Case pressure fails to equalize, DO NOT override.
+                        See <a href="./Francis_SOP_Distributor_Sync.html" class="underline hover:text-white">Distributor
+                            Sync SOP</a>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Operational Priority Calculator -->
+            <div
+                class="mt-8 p-6 bg-gradient-to-br from-cyan-950/30 via-slate-900 to-slate-950 border-2 border-cyan-500/40 rounded-lg">
+                <div class="flex items-center gap-3 mb-4">
+                    <i data-lucide="radar" class="w-6 h-6 text-cyan-400"></i>
+                    <h3 class="text-xl font-black text-cyan-400 uppercase tracking-wider">OPERATIONAL PRIORITY
+                        CALCULATOR</h3>
+                </div>
+                <p class="text-slate-300 text-sm mb-4">Dynamic maintenance intensity based on environmental conditions •
+                    <a href="./Francis_SOP_MIM.html" class="text-cyan-400 hover:text-cyan-300 underline font-bold">View
+                        Full MIM Strategy →</a>
+                </p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-[11px] font-mono border-collapse">
+                        <thead>
+                            <tr class="bg-cyan-500/20 text-cyan-300">
+                                <th class="border border-cyan-700/50 px-3 py-2 text-left">System Component</th>
+                                <th class="border border-cyan-700/50 px-3 py-2">Low Silt (Dry)</th>
+                                <th class="border border-cyan-700/50 px-3 py-2">High Silt (Flood)</th>
+                                <th class="border border-cyan-700/50 px-3 py-2">Critical Indicator</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-300">
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">Runner & Seal</td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Monthly Check</td>
+                                <td class="border border-slate-700 px-3 py-2 text-red-400 font-bold">Daily Inspection
+                                </td>
+                                <td class="border border-slate-700 px-3 py-2">Leakage Rate / Vibration</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">Oil/HPU</td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Quarterly Analysis</td>
+                                <td class="border border-slate-700 px-3 py-2 text-orange-400 font-bold">Monthly Analysis
+                                </td>
+                                <td class="border border-slate-700 px-3 py-2">Aeration/Foaming</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">Cooling Water</td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Weekly Filter Check</td>
+                                <td class="border border-slate-700 px-3 py-2 text-red-400 font-bold">Shift-ly Filter
+                                    Check</td>
+                                <td class="border border-slate-700 px-3 py-2">Bearing Temperature</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">Stator/Core</td>
+                                <td class="border border-slate-700 px-3 py-2 text-orange-400 font-bold">Annual Tap Test
+                                </td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Post-Flood Check</td>
+                                <td class="border border-slate-700 px-3 py-2">Ozone Smell/Heat Map</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">Alignment/Precision
+                                </td>
+                                <td class="border border-slate-700 px-3 py-2 text-red-400 font-bold">Bi-Annual Work</td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Deferred</td>
+                                <td class="border border-slate-700 px-3 py-2">Thermal Stability</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/50">
+                                <td class="border border-slate-700 px-3 py-2 font-bold text-white">PID Tuning</td>
+                                <td class="border border-slate-700 px-3 py-2 text-orange-400 font-bold">Step Response
+                                    Test</td>
+                                <td class="border border-slate-700 px-3 py-2 text-green-400">Monitor Only</td>
+                                <td class="border border-slate-700 px-3 py-2">Dead-Time / Hunting</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4 flex gap-4 text-[10px]">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-red-500 rounded"></div>
+                        <span class="text-slate-400">High Priority</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-orange-500 rounded"></div>
+                        <span class="text-slate-400">Medium Priority</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-green-500 rounded"></div>
+                        <span class="text-slate-400">Low Priority / Deferred</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Three-Column System Map -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+
+                <!-- COLUMN 1: THE WATER PATH (Blue) -->
+                <div class="p-6 bg-gradient-to-b from-cyan-950/30 to-slate-900 border-r border-white/5">
+                    <div class="mb-4 pb-3 border-b border-cyan-500/20">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i data-lucide="droplets" class="w-4 h-4 text-cyan-400"></i>
+                            <h4 class="text-sm font-black text-cyan-400 uppercase tracking-wider">The Water Path
+                            </h4>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-mono">Intake → Tailrace</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="./Francis_Flowchart_Startup.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="play-circle" class="w-3 h-3"></i>
+                            <span>STARTUP LOGIC</span>
+                            <span class="text-[8px] bg-green-500/30 px-1 rounded ml-auto">SEQUENCE</span>
+                        </a>
+                        <a href="./Francis_SOP_Intake.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="waves" class="w-3 h-3"></i>
+                            <span>INTAKE & SILT</span>
+                        </a>
+                        <a href="./Francis_SOP_MIV_Bypass.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="git-pull-request" class="w-3 h-3"></i>
+                            <span>MIV & BYPASS LOGIC</span>
+                            <span class="text-[8px] bg-sky-700/50 px-1 rounded ml-auto">CRITICAL</span>
+                        </a>
+                        <a href="./Francis_SOP_DFT.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="wind" class="w-3 h-3"></i>
+                            <span>AIR ADMISSION</span>
+                        </a>
+                        <a href="./Francis_SOP_DFT_Tailrace.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="move-down" class="w-3 h-3"></i>
+                            <span>DFT & TAILRACE</span>
+                        </a>
+                        <a href="./Francis_SOP_Vortex_Control.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="rotate-cw" class="w-3 h-3"></i>
+                            <span>VORTEX CONTROL</span>
+                            <span class="text-[8px] bg-cyan-700/30 px-1 rounded ml-auto">VIBRATION</span>
+                        </a>
+                        <a href="./Francis_SOP_Thrust_Balance.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="arrow-up" class="w-3 h-3"></i>
+                            <span>THRUST BALANCE</span>
+                            <span class="text-[8px] bg-cyan-700/30 px-1 rounded ml-auto">HYDRAULIC</span>
+                        </a>
+                        <a href="./Francis_SOP_Hidden_Guardians.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="shield" class="w-3 h-3"></i>
+                            <span>HIDDEN GUARDIANS</span>
+                            <span class="text-[8px] bg-cyan-700/30 px-1 rounded ml-auto">CRITICAL</span>
+                        </a>
+                        <a href="./Francis_SOP_Cathodic.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="atom" class="w-3 h-3"></i>
+                            <span>CATHODIC PROTECT.</span>
+                            <span class="text-[8px] bg-teal-700/50 px-1 rounded ml-auto">MATERIAL</span>
+                        </a>
+                        <a href="./Francis_SOP_Welding.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/20 border border-cyan-800/30 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="flame" class="w-3 h-3"></i>
+                            <span>RUNNER WELDING</span>
+                            <span class="text-[8px] bg-orange-700/50 px-1 rounded ml-auto">REPAIR</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: THE MECHANICAL CORE (Steel/Grey) -->
+                <div class="p-6 bg-gradient-to-b from-slate-800/50 to-slate-900 border-r border-white/5">
+                    <div class="mb-4 pb-3 border-b border-slate-500/20">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i data-lucide="cog" class="w-4 h-4 text-slate-400"></i>
+                            <h4 class="text-sm font-black text-slate-400 uppercase tracking-wider">Mechanical Core
+                            </h4>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-mono">Power Transmission</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="./Francis_SOP_Precision.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="crosshair" class="w-3 h-3"></i>
+                            <span>SHAFT ALIGNMENT</span>
+                        </a>
+                        <a href="./Francis_SOP_Coupling.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="link" class="w-3 h-3"></i>
+                            <span>COUPLING</span>
+                        </a>
+                        <a href="./Francis_SOP_Linkage.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="anchor" class="w-3 h-3"></i>
+                            <span>GOV. LINKAGE</span>
+                        </a>
+                        <a href="./Francis_SOP_Distributor_Sync.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="layers" class="w-3 h-3"></i>
+                            <span>DISTRIBUTOR SYNC</span>
+                            <span class="text-[8px] bg-slate-600/50 px-1 rounded ml-auto">ALIGNMENT</span>
+                        </a>
+                        <a href="./Francis_SOP_Bearings.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="disc" class="w-3 h-3"></i>
+                            <span>BEARINGS & COOLING</span>
+                        </a>
+                        <a href="./Francis_SOP_Regulating_Ring.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="rotate-3d" class="w-3 h-3"></i>
+                            <span>REGULATING RING</span>
+                            <span class="text-[8px] bg-slate-600/30 px-1 rounded ml-auto">FRICTION</span>
+                        </a>
+                        <a href="./Francis_SOP_Foundation.html"
+                            class="flex items-center gap-2 p-2 rounded bg-slate-800/40 border border-slate-600/30 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-400 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="hammer" class="w-3 h-3"></i>
+                            <span>FOUNDATION</span>
+                            <span class="text-[8px] bg-amber-700/50 px-1 rounded ml-auto">STRUCTURAL</span>
+                        </a>
+                        <a href="./Francis_SOP_MIM.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/30 border border-cyan-700/40 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="radar" class="w-3 h-3"></i>
+                            <span>MIM STRATEGY</span>
+                            <span class="text-[8px] bg-cyan-700/50 px-1 rounded ml-auto">PRIORITY</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- COLUMN 3: AUXILIARY & ELECTRICAL (Amber) -->
+                <div class="p-6 bg-gradient-to-b from-amber-950/30 to-slate-900">
+                    <div class="mb-4 pb-3 border-b border-amber-500/20">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                            <h4 class="text-sm font-black text-amber-400 uppercase tracking-wider">Auxiliary &
+                                Electrical</h4>
+                        </div>
+                        <p class="text-[10px] text-slate-500 font-mono">Control & Output</p>
+                    </div>
+                    <div class="space-y-2">
+                        <a href="./Francis_SOP_HPU.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="gauge" class="w-3 h-3"></i>
+                            <span>HPU & NITROGEN</span>
+                        </a>
+                        <a href="./Francis_SOP_Oil.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="beaker" class="w-3 h-3"></i>
+                            <span>OIL HYGIENE</span>
+                        </a>
+                        <a href="./Francis_SOP_HPU_Energy.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="battery-charging" class="w-3 h-3"></i>
+                            <span>HPU ENERGY (N₂)</span>
+                            <span class="text-[8px] bg-amber-700/50 px-1 rounded ml-auto">STORED</span>
+                        </a>
+                        <a href="./Francis_SOP_Generator.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="zap-off" class="w-3 h-3"></i>
+                            <span>GENERATOR ELEC.</span>
+                        </a>
+                        <a href="./Francis_SOP_Instrumentation.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="activity" class="w-3 h-3"></i>
+                            <span>SENSORS & SCADA</span>
+                        </a>
+                        <a href="./Francis_SOP_Auxiliary.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="server" class="w-3 h-3"></i>
+                            <span>BRAKING & SUMP</span>
+                        </a>
+                        <a href="./Francis_SOP_Grounding.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="zap-off" class="w-3 h-3"></i>
+                            <span>SHAFT GROUNDING</span>
+                            <span class="text-[8px] bg-amber-700/30 px-1 rounded ml-auto">ELECTRICAL</span>
+                        </a>
+                        <a href="./Francis_SOP_Elec_Health.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="thermometer" class="w-3 h-3"></i>
+                            <span>GEN. INSULATION</span>
+                            <span class="text-[8px] bg-amber-700/30 px-1 rounded ml-auto">THERMAL</span>
+                        </a>
+                        <a href="./Francis_SOP_Governor_PID.html"
+                            class="flex items-center gap-2 p-2 rounded bg-amber-950/20 border border-amber-800/30 text-amber-300 hover:text-white hover:bg-amber-800/40 hover:border-amber-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="settings" class="w-3 h-3"></i>
+                            <span>GOVERNOR PID</span>
+                            <span class="text-[8px] bg-blue-700/50 px-1 rounded ml-auto">CONTROL</span>
+                        </a>
+                        <a href="./Francis_SOP_Acoustics.html"
+                            class="flex items-center gap-2 p-2 rounded bg-purple-950/30 border border-purple-700/40 text-purple-300 hover:text-white hover:bg-purple-800/40 hover:border-purple-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="ear" class="w-3 h-3"></i>
+                            <span>ACOUSTIC DIAG.</span>
+                            <span class="text-[8px] bg-purple-700/50 px-1 rounded ml-auto">SENSORY</span>
+                        </a>
+                        <a href="./Francis_SOP_Thermal.html"
+                            class="flex items-center gap-2 p-2 rounded bg-red-950/30 border border-red-700/40 text-red-300 hover:text-white hover:bg-red-800/40 hover:border-red-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="thermometer" class="w-3 h-3"></i>
+                            <span>THERMAL MAPPING</span>
+                            <span class="text-[8px] bg-orange-700/50 px-1 rounded ml-auto">PREDICTIVE</span>
+                        </a>
+                        <a href="./Francis_SOP_Oil_Health.html"
+                            class="flex items-center gap-2 p-2 rounded bg-yellow-950/30 border border-yellow-700/40 text-yellow-300 hover:text-white hover:bg-yellow-800/40 hover:border-yellow-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="droplet" class="w-3 h-3"></i>
+                            <span>OIL HEALTH</span>
+                            <span class="text-[8px] bg-amber-700/50 px-1 rounded ml-auto">FLUID</span>
+                        </a>
+                        <a href="./Francis_SOP_Gov_Logic.html"
+                            class="flex items-center gap-2 p-2 rounded bg-green-950/30 border border-green-700/40 text-green-300 hover:text-white hover:bg-green-800/40 hover:border-green-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="cpu" class="w-3 h-3"></i>
+                            <span>GOVERNOR LOGIC</span>
+                            <span class="text-[8px] bg-green-700/50 px-1 rounded ml-auto">FREQUENCY</span>
+                        </a>
+                        <a href="./Francis_SOP_Digital_Integrity.html"
+                            class="flex items-center gap-2 p-2 rounded bg-cyan-950/30 border border-cyan-700/40 text-cyan-300 hover:text-white hover:bg-cyan-800/40 hover:border-cyan-500 transition text-[11px] font-mono font-bold">
+                            <i data-lucide="binary" class="w-3 h-3"></i>
+                            <span>DIGITAL INTEGRITY</span>
+                            <span class="text-[8px] bg-cyan-500/20 px-1 rounded ml-auto">SCADA</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Site Intelligence Sidebar -->
+            <div class="p-6 bg-gradient-to-b from-purple-950/20 to-slate-900 border-t border-white/5">
+                <div class="mb-4 pb-3 border-b border-purple-500/20">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i data-lucide="brain" class="w-4 h-4 text-purple-400"></i>
+                        <h4 class="text-sm font-black text-purple-400 uppercase tracking-wider">Site Intelligence</h4>
+                        <a href="./Francis_SOP_Analytics.html"
+                            class="ml-auto text-[10px] bg-purple-500/20 text-purple-300 px-2 py-1 rounded border border-purple-500/30 hover:bg-purple-500/40 transition">
+                            VIEW FULL ANALYTICS →
+                        </a>
+                    </div>
+                    <p class="text-[10px] text-slate-500 font-mono">Operational Analytics & Tracking</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                    <!-- Erosion Tracking -->
+                    <div class="bg-slate-800/30 border border-purple-500/20 rounded p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="trending-down" class="w-3 h-3 text-purple-400"></i>
+                            <h5 class="text-xs font-bold text-purple-300 uppercase">Erosion Tracking</h5>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mb-3">Runner blade thickness log (6-month intervals)</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-[10px] font-mono">
+                                <span class="text-slate-500">Jan 2025:</span>
+                                <span class="text-cyan-400 font-bold">12.5mm</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[10px] font-mono">
+                                <span class="text-slate-500">Jul 2024:</span>
+                                <span class="text-cyan-400 font-bold">12.8mm</span>
+                            </div>
+                            <div class="flex justify-between items-center text-[10px] font-mono">
+                                <span class="text-slate-500">Jan 2024:</span>
+                                <span class="text-slate-400">13.0mm</span>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-purple-500/20">
+                                <div class="flex justify-between items-center text-[10px]">
+                                    <span class="text-slate-500">Total Loss:</span>
+                                    <span class="text-red-400 font-bold">0.5mm/year</span>
+                                </div>
+                                <div class="flex justify-between items-center text-[10px] mt-1">
+                                    <span class="text-slate-500">Limit:</span>
+                                    <span class="text-yellow-400 font-bold">11.0mm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Silt Basin Flushing -->
+                    <div class="bg-slate-800/30 border border-purple-500/20 rounded p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="calendar" class="w-3 h-3 text-purple-400"></i>
+                            <h5 class="text-xs font-bold text-purple-300 uppercase">Silt Basin Flushing</h5>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mb-3">Intake sandtrap maintenance schedule</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 p-2 rounded bg-green-950/20 border border-green-500/30">
+                                <i data-lucide="check-circle" class="w-3 h-3 text-green-400"></i>
+                                <div class="flex-1">
+                                    <div class="text-[10px] font-bold text-green-300">Week 3 Complete</div>
+                                    <div class="text-[9px] text-slate-500 font-mono">Dec 15, 2024</div>
+                                </div>
+                            </div>
+                            <div
+                                class="flex items-center gap-2 p-2 rounded bg-yellow-950/20 border border-yellow-500/30">
+                                <i data-lucide="clock" class="w-3 h-3 text-yellow-400"></i>
+                                <div class="flex-1">
+                                    <div class="text-[10px] font-bold text-yellow-300">Week 7 Due</div>
+                                    <div class="text-[9px] text-slate-500 font-mono">Jan 12, 2025</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-purple-500/20">
+                                <div class="text-[9px] text-slate-500 uppercase mb-1">Monsoon Protocol</div>
+                                <div class="text-[10px] text-purple-300 font-bold">Bi-weekly during Jun-Sep</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Head Loss Analytics -->
+                    <div class="bg-slate-800/30 border border-purple-500/20 rounded p-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="dollar-sign" class="w-3 h-3 text-purple-400"></i>
+                            <h5 class="text-xs font-bold text-purple-300 uppercase">Head Loss Analytics</h5>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mb-3">Revenue impact of trash rack clogging</p>
+                        <div class="space-y-2">
+                            <div class="grid grid-cols-2 gap-2 text-[10px] font-mono">
+                                <div class="bg-slate-900/50 p-2 rounded border border-slate-600/20">
+                                    <div class="text-slate-500 mb-1">10cm loss</div>
+                                    <div class="text-red-400 font-bold">-$50/day</div>
+                                </div>
+                                <div class="bg-slate-900/50 p-2 rounded border border-slate-600/20">
+                                    <div class="text-slate-500 mb-1">20cm loss</div>
+                                    <div class="text-red-500 font-bold">-$120/day</div>
+                                </div>
+                                <div class="bg-slate-900/50 p-2 rounded border border-slate-600/20">
+                                    <div class="text-slate-500 mb-1">30cm loss</div>
+                                    <div class="text-red-600 font-bold">-$210/day</div>
+                                </div>
+                                <div class="bg-red-950/30 p-2 rounded border border-red-500/30">
+                                    <div class="text-slate-400 mb-1">50cm loss</div>
+                                    <div class="text-red-400 font-bold">CRITICAL</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-purple-500/20">
+                                <div class="text-[9px] text-slate-500 uppercase mb-1">Current Status</div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-400">Head Loss:</span>
+                                    <span class="text-green-400 font-bold text-xs">8cm</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span class="text-[10px] text-slate-400">Impact:</span>
+                                    <span class="text-yellow-400 font-bold text-xs">-$35/day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div
+                class="p-6 bg-slate-800/30 border-t border-white/10 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <a href="./Francis_Horizontal.html"
+                        class="flex items-center gap-2 px-4 py-2 bg-h-cyan text-black font-bold text-xs uppercase tracking-wider rounded hover:bg-white transition">
+                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                        <span>MASTER MANUAL</span>
+                    </a>
+                    <a href="./Francis_PreStart_Checklist.html"
+                        class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white font-bold text-xs uppercase tracking-wider rounded hover:bg-green-500 transition">
+                        <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+                        <span>PRE-START CHECKLIST</span>
+                    </a>
+                </div>
+                <a href="./Francis_SOP_Recovery.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white font-bold text-xs uppercase tracking-wider rounded hover:bg-red-500 transition">
+                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    <span>CRITICAL RECOVERY SOP</span>
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+
+<!-- === FUTURE UPDATES FOOTER === -->
+<section class="relative z-10 w-full bg-slate-950 border-t border-white/5 py-12 px-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-6 text-center">
+            <h3 class="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest mb-1">Future Updates</h3>
+            <p class="text-[10px] text-slate-600">Additional turbine topologies under development</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <!-- Compact Kaplan Card -->
+            <div class="flex items-center gap-3 p-4 bg-slate-900/30 border border-white/5 rounded-lg opacity-50">
+                <div class="flex-shrink-0 w-12 h-12 bg-slate-800 rounded flex items-center justify-center">
+                    <i data-lucide="风扇" class="w-6 h-6 text-slate-600"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <h4 class="text-sm font-bold text-slate-500">KAPLAN VERTICAL</h4>
+                        <span class="text-[9px] font-mono text-slate-600 bg-slate-800 px-1.5 py-0.5 rounded">COMING
+                            SOON</span>
+                    </div>
+                    <p class="text-[10px] text-slate-600 font-mono">Hub oil leakage & blade servo protocols</p>
+                </div>
+            </div>
+
+            <!-- Compact Pelton Card -->
+            <div class="flex items-center gap-3 p-4 bg-slate-900/30 border border-white/5 rounded-lg opacity-50">
+                <div class="flex-shrink-0 w-12 h-12 bg-slate-800 rounded flex items-center justify-center">
+                    <i data-lucide="target" class="w-6 h-6 text-slate-600"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                        <h4 class="text-sm font-bold text-slate-500">PELTON IMPULSE</h4>
+                        <span class="text-[9px] font-mono text-slate-600 bg-slate-800 px-1.5 py-0.5 rounded">COMING
+                            SOON</span>
+                    </div>
+                    <p class="text-[10px] text-slate-600 font-mono">Injector alignment & erosion coating</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- === INFO SECTION === -->
+<section class="py-12 px-6 md:px-20 bg-[#020617] border-t border-white/5">
+    <div class="max-w-4xl mx-auto text-center">
+        <i data-lucide="info" class="w-6 h-6 text-slate-600 mx-auto mb-3"></i>
+        <p class="text-slate-500 text-xs max-w-lg mx-auto">
+            These manuals are designed for direct powerhouse application. They are distinct from the <strong>AnoHUB
+                Digital Twin App</strong>, which provides real-time telemetry and diagnostics.
+        </p>
+    </div>
+</section>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

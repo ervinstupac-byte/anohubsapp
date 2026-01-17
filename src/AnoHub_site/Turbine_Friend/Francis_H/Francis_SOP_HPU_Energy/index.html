@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_HPU_Energy/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_HPU_Energy/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: HPU Energy & Nitrogen Systems</title>
+    <style>
+        /* Auxiliary Theme - Amber/Orange */
+        :root {
+            --primary-color: #F59E0B;
+            --secondary-color: #D97706;
+            --accent-color: #FCD34D;
+            --warning-color: #DC2626;
+            --bg-color: #1a1506;
+            --text-color: #FFFBEB;
+            --border-color: #F59E0B;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #2a200a, #1a1506);
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(252, 211, 77, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--primary-color);
+            color: #000;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #000;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .section-title::before {
+            content: "⚡";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        .nitrogen-box {
+            border-left: 5px solid var(--accent-color);
+            background: rgba(252, 211, 77, 0.05);
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: bold;
+            border: 1px solid var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .pressure-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .pressure-table th,
+        .pressure-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .pressure-table th {
+            background: var(--primary-color);
+            color: #000;
+        }
+
+        .pressure-table tr:nth-child(even) {
+            background: rgba(245, 158, 11, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 data-i18n="title">⚡ HPU ENERGY & NITROGEN SYSTEMS</h1>
+            <h2 data-i18n="subtitle">"Hydraulic Lungs" of the Turbine</h2>
+            <p style="color: var(--accent-color); font-size: 0.9em; margin-top: 10px;" data-i18n="hdr_desc">Ensuring
+                stored energy for Emergency Shutdown (ESD) even during total blackout</p>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <div class="module critical">
+            <h3 data-i18n="warn_title">⚠️ HIGH PRESSURE WARNING (160 Bar)</h3>
+            <p><strong data-i18n="lethal_force">DANGER OF LETHAL FORCE:</strong></p>
+            <ul>
+                <li data-i18n="warn_1">Hydraulic oil at 125-160 Bar can penetrate skin (injection injury), leading to
+                    amputation or death.</li>
+                <li data-i18n="warn_2">Nitrogen accumulators are pressure vessels. <strong>NEVER</strong> attempt to
+                    disassemble bladder/piston without first bleeding gas pressure.</li>
+                <li data-i18n="warn_3">Always use "Bleed-Down Valve" before servicing any HPU component.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="logic_title">Nitrogen (N₂) Accumulator Logic - "Stored Breath"</div>
+
+        <div class="nitrogen-box">
+            <h3 data-i18n="precharge_title">Why N₂ Pre-Charge Matters</h3>
+            <p data-i18n="precharge_desc">Accumulator bottles are not just oil tanks; they contain a bladder with
+                Nitrogen gas. This compressed gas provides the "spring" force that pushes oil out when pumps stop.</p>
+
+            <p><strong data-i18n="safety_func">Safety Function:</strong> <span data-i18n="safety_func_desc">During total
+                    blackout (no pump power), Nitrogen expansion pushes stored oil into cylinder to close Wicket Gates
+                    and MIV.</span></p>
+
+            <h4 style="color: var(--primary-color);" data-i18n="quart_prot_title">Quarterly Pre-Charge Check Protocol:
+            </h4>
+            <ol>
+                <li><strong data-i18n="isolate">Isolate:</strong> <span data-i18n="isolate_desc">Close oil isolation
+                        valve to accumulator bank.</span></li>
+                <li><strong data-i18n="bleed">Bleed Oil:</strong> <span data-i18n="bleed_desc">Slowly bleed oil system
+                        side pressure to 0 Bar.</span></li>
+                <li><strong data-i18n="connect">Connect Kit:</strong> <span data-i18n="connect_desc">Attach N₂ charging
+                        kit to gas valve on top of bottle.</span></li>
+                <li><strong data-i18n="measure">Measure:</strong> <span data-i18n="read_press">Read gas pressure.</span>
+                    <ul>
+                        <li><strong data-i18n="target">Target:</strong> <span data-i18n="target_desc">~60-70% of System
+                                Operating Pressure (e.g. if System = 125 Bar, N₂ Pre-charge should be ~80-90 Bar).
+                                *Consult OEM manual.*</span></li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="action">Action:</strong> <span data-i18n="action_desc">If < 10% below target, top
+                            up from N₂ bottle. If < 50% target, suspect bladder rupture.</span>
+                </li>
+            </ol>
+
+            <p style="color: var(--warning-color);"><strong data-i18n="warn_sign">Warning Sign:</strong> <span
+                    data-i18n="warn_sign_desc">If HPU pumps cycle on/off rapidly (every few seconds), Accumulator has
+                    lost its "gas spring". Check pre-charge immediately!</span></p>
+        </div>
+
+        <div class="section-title" data-i18n="esd_title">Emergency Shutdown (ESD) by Weights</div>
+
+        <div class="module">
+            <h3 data-i18n="gravity_title">Gravity - The Last Line of Defense</h3>
+            <p data-i18n="gravity_desc">Even if HPU fails and Nitrogen leaks, gravity MUST close the unit. This is
+                achieved via "Weights" or mechanical counterweight on MIV.</p>
+
+            <h4 style="color: var(--primary-color);" data-i18n="insp_pts">Inspection Points:</h4>
+            <ol>
+                <li><strong data-i18n="release_mech">Release Mechanism:</strong> <span
+                        data-i18n="release_desc">Hydraulic lock holding weight up must move freely. Lubricate pivot
+                        points monthly.</span></li>
+                <li><strong data-i18n="drop_path">Drop Path:</strong> <span data-i18n="drop_desc">Ensure area under
+                        weight arm is clear of tools, debris, or personnel.</span></li>
+                <li><strong data-i18n="cushion">Cushioning:</strong> <span data-i18n="cushion_desc">Weight should drop
+                        fast initially (80% stroke), then slow down (cushioning) at end to prevent water hammer.</span>
+                </li>
+            </ol>
+
+            <h4 style="color: var(--warning-color);" data-i18n="blackout_title">"Blackout Test" (Annual):</h4>
+            <p data-i18n="blackout_desc">Simulate total power loss. Verify weights drop and fully close MIV without any
+                electrical or hydraulic assistance.</p>
+        </div>
+
+        <div class="section-title" data-i18n="hose_title">Flexible Hose Lifespan Management</div>
+
+        <div class="module">
+            <h3 data-i18n="six_year">The 6-Year Rule</h3>
+            <p data-i18n="hose_desc">Flexible hydraulic hoses are rubber components that degrade over time due to
+                pressure cycles and heat. Hose burst = instant loss of control.</p>
+
+            <table class="pressure-table">
+                <tr>
+                    <th data-i18n="comp">Component</th>
+                    <th data-i18n="max_life">Max Life</th>
+                    <th data-i18n="repl_trig">Replacement Trigger</th>
+                </tr>
+                <tr>
+                    <td data-i18n="main_lines">Main Pressure Lines (125 Bar)</td>
+                    <td data-i18n="5_yrs">5 Years</td>
+                    <td data-i18n="burst_rubber">Burst outer rubber; "Weeping" at crimp</td>
+                </tr>
+                <tr>
+                    <td data-i18n="pilot_lines">Pilot Control Lines</td>
+                    <td data-i18n="6_yrs">6 Years</td>
+                    <td data-i18n="stiff_rubber">Stiff/brittle rubber; Abrasion marks</td>
+                </tr>
+                <tr>
+                    <td data-i18n="drain_lines">Return/Drain Lines</td>
+                    <td data-i18n="8_yrs">8 Years</td>
+                    <td data-i18n="kinking">Any visible kinking or oil saturation</td>
+                </tr>
+            </table>
+
+            <p><strong data-i18n="m_insp">Inspection (Monthly):</strong> <span data-i18n="sweating_desc">Look for
+                    "sweating" (oil sheen on hose surface) or fraying of steel braid. <strong>Sweating = Imminent
+                        Burst.</strong> Replace immediately.</span></p>
+        </div>
+
+        <div class="section-title" data-i18n="hygiene_title">Oil Hygiene & Pilot Valve Health</div>
+
+        <div class="nitrogen-box">
+            <h3 data-i18n="pilot_sens">Pilot Valve Sensitivity</h3>
+            <p data-i18n="pilot_desc">ESD logic relies on tiny electro-mechanical "Pilot Valves" to direct main oil
+                flow. These valves have clearances < 5 microns.</p>
+
+                    <p><strong data-i18n="stiction_risk">Risk of "Stiction":</strong></p>
+                    <ul>
+                        <li><strong data-i18n="varnish">Varnish:</strong> <span data-i18n="varnish_desc">Oxidized oil
+                                leaves sticky brown residue on valve spools.</span></li>
+                        <li><strong data-i18n="result">Result:</strong> <span data-i18n="res_desc">Solenoid activates,
+                                but valve spool does not move. ESD fails.</span></li>
+                        <li><strong data-i18n="prevention">Prevention:</strong>
+                            <ul>
+                                <li data-i18n="prev_1">Maintain oil cleanliness ISO 16/14/11.</li>
+                                <li data-i18n="prev_2">Install "Electrostatic Oil Cleaners" if varnish is detected.</li>
+                                <li data-i18n="prev_3">Cycle (exercise) all ESD valves monthly to prevent seizing.</li>
+                            </ul>
+                        </li>
+                    </ul>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "⚡ HPU ENERGY & NITROGEN SYSTEMS",
+                subtitle: "\"Hydraulic Lungs\" of the Turbine",
+                hdr_desc: "Ensuring stored energy for Emergency Shutdown (ESD) even during total blackout",
+                warn_title: "⚠️ HIGH PRESSURE WARNING (160 Bar)",
+                lethal_force: "DANGER OF LETHAL FORCE:",
+                warn_1: "Hydraulic oil at 125-160 Bar can penetrate skin (injection injury), leading to amputation or death.",
+                warn_2: "Nitrogen accumulators are pressure vessels. <strong>NEVER</strong> attempt to disassemble bladder/piston without first bleeding gas pressure.",
+                warn_3: "Always use \"Bleed-Down Valve\" before servicing any HPU component.",
+                logic_title: "Nitrogen (N₂) Accumulator Logic - \"Stored Breath\"",
+                precharge_title: "Why N₂ Pre-Charge Matters",
+                precharge_desc: "Accumulator bottles are not just oil tanks; they contain a bladder with Nitrogen gas. This compressed gas provides the \"spring\" force that pushes oil out when pumps stop.",
+                safety_func: "Safety Function:",
+                safety_func_desc: "During total blackout (no pump power), Nitrogen expansion pushes stored oil into cylinder to close Wicket Gates and MIV.",
+                quart_prot_title: "Quarterly Pre-Charge Check Protocol:",
+                isolate: "Isolate:",
+                isolate_desc: "Close oil isolation valve to accumulator bank.",
+                bleed: "Bleed Oil:",
+                bleed_desc: "Slowly bleed oil system side pressure to 0 Bar.",
+                connect: "Connect Kit:",
+                connect_desc: "Attach N₂ charging kit to gas valve on top of bottle.",
+                measure: "Measure:",
+                read_press: "Read gas pressure.",
+                target: "Target:",
+                target_desc: "~60-70% of System Operating Pressure (e.g. if System = 125 Bar, N₂ Pre-charge should be ~80-90 Bar). *Consult OEM manual.*",
+                action: "Action:",
+                action_desc: "If < 10% below target, top up from N₂ bottle. If < 50% target, suspect bladder rupture.",
+                warn_sign: "Warning Sign:",
+                warn_sign_desc: "If HPU pumps cycle on/off rapidly (every few seconds), Accumulator has lost its \"gas spring\". Check pre-charge immediately!",
+                esd_title: "Emergency Shutdown (ESD) by Weights",
+                gravity_title: "Gravity - The Last Line of Defense",
+                gravity_desc: "Even if HPU fails and Nitrogen leaks, gravity MUST close the unit. This is achieved via \"Weights\" or mechanical counterweight on MIV.",
+                insp_pts: "Inspection Points:",
+                release_mech: "Release Mechanism:",
+                release_desc: "Hydraulic lock holding weight up must move freely. Lubricate pivot points monthly.",
+                drop_path: "Drop Path:",
+                drop_desc: "Ensure area under weight arm is clear of tools, debris, or personnel.",
+                cushion: "Cushioning:",
+                cushion_desc: "Weight should drop fast initially (80% stroke), then slow down (cushioning) at end to prevent water hammer.",
+                blackout_title: "\"Blackout Test\" (Annual):",
+                blackout_desc: "Simulate total power loss. Verify weights drop and fully close MIV without any electrical or hydraulic assistance.",
+                hose_title: "Flexible Hose Lifespan Management",
+                six_year: "The 6-Year Rule",
+                hose_desc: "Flexible hydraulic hoses are rubber components that degrade over time due to pressure cycles and heat. Hose burst = instant loss of control.",
+                comp: "Component",
+                max_life: "Max Life",
+                repl_trig: "Replacement Trigger",
+                main_lines: "Main Pressure Lines (125 Bar)",
+                "5_yrs": "5 Years",
+                burst_rubber: "Burst outer rubber; \"Weeping\" at crimp",
+                pilot_lines: "Pilot Control Lines",
+                "6_yrs": "6 Years",
+                stiff_rubber: "Stiff/brittle rubber; Abrasion marks",
+                drain_lines: "Return/Drain Lines",
+                "8_yrs": "8 Years",
+                kinking: "Any visible kinking or oil saturation",
+                m_insp: "Inspection (Monthly):",
+                sweating_desc: "Look for \"sweating\" (oil sheen on hose surface) or fraying of steel braid. <strong>Sweating = Imminent Burst.</strong> Replace immediately.",
+                hygiene_title: "Oil Hygiene & Pilot Valve Health",
+                pilot_sens: "Pilot Valve Sensitivity",
+                pilot_desc: "ESD logic relies on tiny electro-mechanical \"Pilot Valves\" to direct main oil flow. These valves have clearances < 5 microns.",
+                stiction_risk: "Risk of \"Stiction\":",
+                varnish: "Varnish:",
+                varnish_desc: "Oxidized oil leaves sticky brown residue on valve spools.",
+                result: "Result:",
+                res_desc: "Solenoid activates, but valve spool does not move. ESD fails.",
+                prevention: "Prevention:",
+                prev_1: "Maintain oil cleanliness ISO 16/14/11.",
+                prev_2: "Install \"Electrostatic Oil Cleaners\" if varnish is detected.",
+                prev_3: "Cycle (exercise) all ESD valves monthly to prevent seizing.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "⚡ HPU ENERGIJA & AZOTNI SISTEMI",
+                subtitle: "\"Hidraulična Pluća\" Turbine",
+                hdr_desc: "Osiguranje pohranjene energije za Hitno Zaustavljanje (ESD) čak i tokom potpunog nestanka struje",
+                warn_title: "⚠️ UPOZORENJE NA VISOK PRITISAK (160 Bar)",
+                lethal_force: "OPASNOST OD SMRTONOSNE SILE:",
+                warn_1: "Hidraulično ulje na 125-160 Bara može probiti kožu (injekcijska povreda), što vodi do amputacije ili smrti.",
+                warn_2: "Azotni akumulatori su posude pod pritiskom. <strong>NIKADA</strong> ne pokušavajte rastaviti mijeh/klip bez prethodnog ispuštanja pritiska gasa.",
+                warn_3: "Uvijek koristite \"Ventil za Ispuštanje\" (Bleed-Down) prije servisiranja bilo koje HPU komponente.",
+                logic_title: "Logika Azotnog (N₂) Akumulatora - \"Pohranjeni Dah\"",
+                precharge_title: "Zašto je Pretpunjenje N₂ Bitan",
+                precharge_desc: "Boce akumulatora nisu samo rezervoari za ulje; sadrže mijeh sa Azotnim gasom. Ovaj komprimirani gas pruža silu \"opruge\" koja gura ulje van kada pumpe stanu.",
+                safety_func: "Sigurnosna Funkcija:",
+                safety_func_desc: "tokom potpunog \"blackout-a\" (nema napajanja pumpi), širenje Azota gura pohranjeno ulje u cilindar da zatvori Sprovodne Lopaticu i GUV.",
+                quart_prot_title: "Protokol Kvartalne Provjere Pretpunjenja:",
+                isolate: "Izoluj:",
+                isolate_desc: "Zatvori izolacioni ventil ulja prema bateriji akumulatora.",
+                bleed: "Ispusti Ulje:",
+                bleed_desc: "Polako ispusti pritisak ulja na strani sistema na 0 Bar.",
+                connect: "Spoji Kit:",
+                connect_desc: "Priključi kit za punjenje N₂ na gasni ventil na vrhu boce.",
+                measure: "Izmjeri:",
+                read_press: "Očitaj pritisak gasa.",
+                target: "Cilj:",
+                target_desc: "~60-70% Radnog Pritiska Sistema (npr. ako je Sistem = 125 Bar, N₂ Pretpunjenje treba biti ~80-90 Bar). *Konsultuj priručnik proizvođača.*",
+                action: "Akcija:",
+                action_desc: "Ako je < 10% ispod cilja, dopuni iz N₂ boce. Ako je < 50% cilja, sumnjaj na pucanje mijeha.",
+                warn_sign: "Znak Upozorenja:",
+                warn_sign_desc: "Ako se HPU pumpe pale/gase brzo (svakih nekoliko sekundi), akumulator je izgubio svoju \"gasnu oprugu\". Provjeri pretpunjenje odmah!",
+                esd_title: "Hitno Zaustavljanje (ESD) putem Tegova",
+                gravity_title: "Gravitacija - Posljednja Linija Odbrane",
+                gravity_desc: "Čak i ako HPU otkaže i Azot iscuri, gravitacija MORA zatvoriti agregat. Ovo se postiže putem \"Tegova\" ili mehaničkog protivtega na GUV-u.",
+                insp_pts: "Tačke Inspekcije:",
+                release_mech: "Mehanizam Otpuštanja:",
+                release_desc: "Hidraulična brava koja drži teg gore mora se kretati slobodno. Podmaži tačke okretanja mjesečno.",
+                drop_path: "Putanja Pada:",
+                drop_desc: "Osiguraj da je prostor ispod ruke tega čist od alata, krša ili osoblja.",
+                cushion: "Prigušenje:",
+                cushion_desc: "Teg treba pasti brzo u početku (80% hoda), a zatim usporiti (prigušenje/cushioning) na kraju kako bi se spriječio hidraulični udar.",
+                blackout_title: "\"Blackout Test\" (Godišnji):",
+                blackout_desc: "Simuliraj potpuni nestanak struje. Verifikuj da tegovi padaju i potpuno zatvaraju GUV bez ikakve električne ili hidraulične pomoći.",
+                hose_title: "Upravljanje Životnim Vijekom Fleksibilnih Crijeva",
+                six_year: "Pravilo 6 Godina",
+                hose_desc: "Fleksibilna hidraulična crijeva su gumene komponente koje degradiraju vremenom zbog ciklusa pritiska i toplote. Pucanje crijeva = trenutni gubitak kontrole.",
+                comp: "Komponenta",
+                max_life: "Max Život",
+                repl_trig: "Okidač Zamjene",
+                main_lines: "Glavne Potisne Linije (125 Bar)",
+                "5_yrs": "5 Godina",
+                burst_rubber: "Pucanje vanjske gume; \"Vlaženje\" na spoju",
+                pilot_lines: "Pilot Kontrolne Linije",
+                "6_yrs": "6 Godina",
+                stiff_rubber: "Krut/krt guma; Tragovi abrazije",
+                drain_lines: "Povratne/Drenažne Linije",
+                "8_yrs": "8 Godina",
+                kinking: "Bilo kakvo vidljivo prelamanje ili zasićenje uljem",
+                m_insp: "Inspekcija (Mjesečno):",
+                sweating_desc: "Traži \"znojenje\" (uljni sjaj na površini crijeva) ili cufanje čeličnog pletiva. <strong>Znojenje = Neminovno Pucanje.</strong> Zamijeni odmah.",
+                hygiene_title: "Higijena Ulja & Zdravlje Pilot Ventila",
+                pilot_sens: "Osjetljivost Pilot Ventila",
+                pilot_desc: "ESD logika se oslanja na sitne elektromehaničke \"Pilot Ventile\" za usmjeravanje glavnog toka ulja. Ovi ventili imaju zazore < 5 mikrona.",
+                stiction_risk: "Rizik od \"Stiction-a\":",
+                varnish: "Lakiranje (Varnish):",
+                varnish_desc: "Oksidirano ulje ostavlja ljepljiv smeđi talog na klipovima ventila.",
+                result: "Rezultat:",
+                res_desc: "Solenoid se aktivira, ali se klip ventila ne pomjera. ESD neuspješan.",
+                prevention: "Prevencija:",
+                prev_1: "Održavaj čistoću ulja ISO 16/14/11.",
+                prev_2: "Instaliraj \"Elektrostatske Čistače Ulja\" ako se detektuje lakiranje.",
+                prev_3: "Cikliraj (vježbaj) sve ESD ventile mjesečno da spriječiš zapeknuće.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

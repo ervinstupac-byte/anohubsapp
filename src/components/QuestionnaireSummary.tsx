@@ -6,7 +6,7 @@ import { useRisk } from '../contexts/RiskContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { createRiskReportBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
+import { ForensicReportService } from '../services/ForensicReportService';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { QUESTIONS } from '../constants.ts';
@@ -195,15 +195,15 @@ export const QuestionnaireSummary: React.FC = () => {
             consultation: consultationText // <--- Added Consultation to PDF Data
         };
 
-        const blob = createRiskReportBlob(
-            riskDataForPDF,
-            user?.email || 'AnoHUB Engineer',
-            riskDataForPDF.assetName,
+        const blob = ForensicReportService.generateRiskReport({
+            riskData: riskDataForPDF,
+            engineerEmail: user?.email || 'AnoHUB Engineer',
+            assetName: riskDataForPDF.assetName,
             t,
             description
-        );
+        });
 
-        openAndDownloadBlob(blob, 'risk_report.pdf');
+        ForensicReportService.openAndDownloadBlob(blob, 'risk_report.pdf');
 
         showToast(t('questionnaire.pdfDownloaded'), 'success');
     };

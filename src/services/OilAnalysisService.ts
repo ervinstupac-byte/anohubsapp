@@ -63,16 +63,16 @@ export class OilAnalysisService {
             findings.push({
                 category: 'VISCOSITY',
                 severity: 'CRITICAL',
-                message: `Pad viskoziteta na ${sample.viscosityIndex} cSt signalizira prodor vode ili pregrijavanje ulja.`,
-                recommendation: 'HITNO: Zamjena ulja. Provjeriti brtvila i hladnjak ulja.'
+                message: `Viscosity drop to ${sample.viscosityIndex} cSt signals water ingress or oil overheating.`,
+                recommendation: 'URGENT: Oil change. Check seals and oil cooler.'
             });
             healthScore -= 30;
         } else if (viscosityDrop < -15) {
             findings.push({
                 category: 'VISCOSITY',
                 severity: 'WARNING',
-                message: `Viskozitet opao za ${Math.abs(viscosityDrop).toFixed(0)}% od baseline.`,
-                recommendation: 'Planirati zamjenu ulja u naredna 2-3 mjeseca.'
+                message: `Viscosity dropped by ${Math.abs(viscosityDrop).toFixed(0)}% from baseline.`,
+                recommendation: 'Plan oil replacement within 2-3 months.'
             });
             healthScore -= 15;
         }
@@ -82,24 +82,24 @@ export class OilAnalysisService {
             findings.push({
                 category: 'ACIDITY',
                 severity: 'CRITICAL',
-                message: `TAN od ${sample.tan.toFixed(2)} mg KOH/g ukazuje na kritičnu oksidaciju ulja.`,
-                recommendation: 'HITNO: Zamjena ulja. Ulje je potpuno degradirano.'
+                message: `TAN of ${sample.tan.toFixed(2)} mg KOH/g indicates critical oil oxidation.`,
+                recommendation: 'URGENT: Oil change. Oil is fully degraded.'
             });
             healthScore -= 35;
         } else if (sample.tan > 1.0) {
             findings.push({
                 category: 'ACIDITY',
                 severity: 'WARNING',
-                message: `Rast kiselosti (TAN ${sample.tan.toFixed(2)}) zbog oksidacije ulja.`,
-                recommendation: 'Zamjena ulja preporučena u roku od mjesec dana.'
+                message: `Acidity rise (TAN ${sample.tan.toFixed(2)}) due to oil oxidation.`,
+                recommendation: 'Oil replacement recommended within one month.'
             });
             healthScore -= 20;
         } else if (sample.tan > 0.5) {
             findings.push({
                 category: 'ACIDITY',
                 severity: 'INFO',
-                message: `TAN ${sample.tan.toFixed(2)} - ulje u dobroj kondic iji, ali prati trend.`,
-                recommendation: 'Ponovna analiza za 3 mjeseca.'
+                message: `TAN ${sample.tan.toFixed(2)} - oil in good condition, but monitor trend.`,
+                recommendation: 'Re-analyze in 3 months.'
             });
         }
 
@@ -109,16 +109,16 @@ export class OilAnalysisService {
             findings.push({
                 category: 'MOISTURE',
                 severity: 'CRITICAL',
-                message: `Detekcija vlage u realnom vremenu: Dielectric constant ${sample.dielectricConstant.toFixed(2)} (procjena ~${estimatedMoisture.toFixed(0)} ppm vode).`,
-                recommendation: 'HITNO: Provjeriti brtvila. Vlaga uzrokuje koroziju ležajeva!'
+                message: `Real-time moisture detection: Dielectric constant ${sample.dielectricConstant.toFixed(2)} (est. ~${estimatedMoisture.toFixed(0)} ppm water).`,
+                recommendation: 'URGENT: Check seals. Moisture causes bearing corrosion!'
             });
             healthScore -= 25;
         } else if (sample.waterContent > 200) {
             findings.push({
                 category: 'MOISTURE',
                 severity: 'WARNING',
-                message: `Sadržaj vode ${sample.waterContent} ppm prekoračuje limit (200 ppm).`,
-                recommendation: 'Aktivirati vakuum dehidraciju ili zamijeniti ulje.'
+                message: `Water content ${sample.waterContent} ppm exceeds limit (200 ppm).`,
+                recommendation: 'Activate vacuum dehydration or replace oil.'
             });
             healthScore -= 15;
         }
@@ -132,8 +132,8 @@ export class OilAnalysisService {
             findings.push({
                 category: 'WEAR',
                 severity: 'CRITICAL',
-                message: `Visok nivo Babbitt metala (Sn: ${tin} ppm, Pb: ${lead} ppm, Cu: ${copper} ppm) - Total: ${babbittTotal} ppm.`,
-                recommendation: 'HITNO: Provjeriti aksijalni zazor, ležaj gubi materijal! Inspekcija ležajeva obavezna.'
+                message: `High Babbitt metal levels (Sn: ${tin} ppm, Pb: ${lead} ppm, Cu: ${copper} ppm) - Total: ${babbittTotal} ppm.`,
+                recommendation: 'URGENT: Check axial clearance, bearing is losing material! Bearing inspection mandatory.'
             });
             healthScore -= 40;
         }
@@ -143,16 +143,16 @@ export class OilAnalysisService {
             findings.push({
                 category: 'WEAR',
                 severity: 'CRITICAL',
-                message: `Ekstreman nivo željeza (${iron} ppm) - zamor materijala zupčanika ili vratila.`,
-                recommendation: 'HITNO: Vibracijksa analiza i magnetna provjera pukotina.'
+                message: `Extreme iron level (${iron} ppm) - fatigue of gears or shaft.`,
+                recommendation: 'URGENT: Vibration analysis and magnetic crack detection.'
             });
             healthScore -= 35;
         } else if (iron > 50) {
             findings.push({
                 category: 'WEAR',
                 severity: 'WARNING',
-                message: `Povećan nivo željeza (${iron} ppm) - mogu ći početak habanja.`,
-                recommendation: 'Praćenje trenda. Ferografska analiza preporučena.'
+                message: `Increased iron level (${iron} ppm) - possible onset of wear.`,
+                recommendation: 'Trend monitoring. Ferrographic analysis recommended.'
             });
             healthScore -= 10;
         }
@@ -251,7 +251,7 @@ export class OilAnalysisService {
         const tempIncrease = bearingTemp - baselineTemp;
 
         if (babbittTotal > 30 && tempIncrease > 10) {
-            return `AI KORELACIJA: Rast temperature ležaja (${tempIncrease.toFixed(1)}°C) korelira sa prisustvom Babbitt metala (${babbittTotal} ppm). HITNO: Provjeriti aksijalni zazor, ležaj gubi materijal!`;
+            return `AI CORRELATION: Bearing temperature rise (${tempIncrease.toFixed(1)}°C) correlates with Babbitt metal presence (${babbittTotal} ppm). URGENT: Check axial clearance, bearing is losing material!`;
         }
 
         return null;

@@ -266,6 +266,7 @@ export interface AssetIdentity {
     hoursSinceLastOverhaul: number;
     startStopCount: number;
     lastMajorOverhaul?: string;
+    lastAlignmentDate?: string;
     location: string;
 
     // Configuration

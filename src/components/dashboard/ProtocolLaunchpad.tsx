@@ -12,7 +12,7 @@ import { LocalLedger } from '../../services/LocalLedger';
 import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
 import { FieldAuditForm } from './FieldAuditForm';
-import { generateFieldAuditReport } from '../../utils/pdfGeneratorFieldAudit';
+import { ForensicReportService } from '../../services/ForensicReportService';
 
 /**
  * ProtocolLaunchpad — The Report Engine
@@ -93,7 +93,8 @@ export const ProtocolLaunchpad: React.FC = () => {
         }
 
         // Generate PDF
-        generateFieldAuditReport(auditData, false);
+        const blob = ForensicReportService.generateFieldAuditReport({ auditData, t });
+        ForensicReportService.openAndDownloadBlob(blob, `Audit_Report_${selectedAsset.name}_${Date.now()}.pdf`, true);
         pushNotification('INFO', 'Executive audit report downloaded');
     };
 
@@ -146,36 +147,30 @@ export const ProtocolLaunchpad: React.FC = () => {
             }, 'PROTOCOL');
 
             if (protocol.generator === 'audit') {
-                const { generateAuditReport } = await import('../../utils/pdfGenerator');
-                const mechanicalData = mechanical as Record<string, any>;
-
-                const blob = generateAuditReport(
-                    `${selectedAsset.name} - ${protocol.name}`,
-                    `Protocol completed on ${new Date().toLocaleDateString()}`,
-                    [{ label: 'Protocol', value: protocol.name }],
-                    diagnosis ? [{ type: 'info', message: (diagnosis as any).summary || 'No diagnosis' }] : [],
-                    [],
-                    [],
-                    'Field Engineer',
+                const blob = ForensicReportService.generateAuditReport({
+                    contextTitle: `${selectedAsset.name} - ${protocol.name}`,
+                    slogan: `Protocol completed on ${new Date().toLocaleDateString()}`,
+                    metrics: [{ label: 'Protocol', value: protocol.name }],
+                    diagnostics: diagnosis ? [{ type: 'info', message: (diagnosis as any).summary || 'No diagnosis' }] : [],
+                    logs: [],
+                    physicsData: [],
+                    engineerName: 'Field Engineer',
                     t,
-                    true,
-                    entry.uuid // PASSING LEDGER ID
-                );
+                    ledgerId: entry.uuid
+                });
 
                 if (blob instanceof Blob) {
                     viewDocument(blob, `${protocol.name} Report`, `${protocol.id}_${selectedAsset.name}.pdf`);
                 }
             } else {
-                const { generateDiagnosticDossier } = await import('../../utils/pdfGenerator');
-
-                const blob = generateDiagnosticDossier(
-                    `DIAG-${Date.now().toString(36).toUpperCase()}`,
-                    diagnosis || { summary: 'Manual vibration check' },
-                    'Field Engineer',
-                    null,
-                    true,
-                    entry.uuid // PASSING LEDGER ID
-                );
+                const blob = ForensicReportService.generateDiagnosticDossier({
+                    caseId: `DIAG-${Date.now().toString(36).toUpperCase()}`,
+                    insight: diagnosis || { summary: 'Manual vibration check' },
+                    engineerName: 'Field Engineer',
+                    snapshotImage: null,
+                    t,
+                    ledgerId: entry.uuid
+                });
 
                 if (blob instanceof Blob) {
                     viewDocument(blob, `${protocol.name} Dossier`, `diagnostic_${selectedAsset.name}.pdf`);

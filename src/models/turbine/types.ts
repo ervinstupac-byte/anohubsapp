@@ -209,6 +209,7 @@ export interface TurbineConfiguration {
     flow_max: number; // m³/s
     runner_diameter: number; // meters
     commissioning_date: string;
+    lastAlignmentDate?: string;
     manufacturer: string;
     serial_number: string;
 

@@ -2,7 +2,6 @@ import { TechnicalProjectState, PhysicsResult, ENGINEERING_CONSTANTS } from '../
 import Decimal from 'decimal.js';
 import * as PhysicsLogic from './PhysicsCalculations.logic';
 import masterKnowledge from '../../knowledge/MasterKnowledgeMap.json';
-import { MarketPriceEngine } from '../../services/MarketPriceEngine';
 import { ProfileLoader } from '../../services/ProfileLoader';
 import { FinancialImpactEngine } from '../../services/FinancialImpactEngine';
 import { SYSTEM_CONSTANTS } from '../../config/SystemConstants';
@@ -153,6 +152,12 @@ export const PhysicsEngine = {
      */
     recalculateProjectPhysics: (state: TechnicalProjectState): TechnicalProjectState => {
         const result = PhysicsEngine.recalculatePhysics(state);
+        const turbineType = state.identity.turbineType || 'FRANCIS';
+
+        // 1. Get Turbine-Specific Knowledge (NC-4.4 Migration)
+        const typEfficiency = PhysicsLogic.calculateTypicalEfficiency(turbineType, state.hydraulic.head);
+        const typThresholds = PhysicsLogic.getTurbineThresholds(turbineType);
+        const typSpecs = PhysicsLogic.generateTurbineSpecs(turbineType, state.hydraulic.head, state.hydraulic.flow);
 
         const designPower = new Decimal(state.site.designPerformanceMW || 5.0);
         const designFlow = new Decimal(state.site.designFlow || 3.0);
@@ -184,19 +189,24 @@ export const PhysicsEngine = {
             lastRecalculation: new Date().toISOString(),
         };
 
-        // 7. Structural & Market Logic (NC-4.2 Expansion)
+        // 2. Structural & Market Logic (NC-4.2 Expansion)
         const structural = PhysicsEngine.calculateStructuralLife(newState, result);
-        const market = MarketPriceEngine.calculateMarketMetrics(newState);
 
-        // Update State with new indices
+        // Update State with new indices and expert typical constants if needed
         const finalState = {
             ...newState,
             structural: {
                 ...newState.structural,
                 ...structural
             },
-            market,
-            financials: FinancialImpactEngine.calculateImpact(newState, result)
+            financials: FinancialImpactEngine.calculateImpact(newState, result),
+            // Store expert typicals in state.site for Builder/Dashboard logic
+            site: {
+                ...newState.site,
+                typicalEfficiency: typEfficiency,
+                expertThresholds: typThresholds,
+                theoreticalSpecs: typSpecs
+            }
         };
 
         return finalState;

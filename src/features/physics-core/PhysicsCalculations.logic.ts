@@ -157,3 +157,88 @@ export const calculateBoltCapacityKN = (
     const forceN = boltGradeYieldMPa.mul(1e6).mul(areaM2);
     return forceN.div(1000); // kN
 };
+
+/**
+ * TURBINE EFFICIENCY CURVES
+ * Simplified curves from ISO 60041 / Legacy engines
+ */
+export const calculateTypicalEfficiency = (type: string, head: number): number => {
+    switch (type.toUpperCase()) {
+        case 'FRANCIS':
+            return (head >= 40 && head <= 400) ? 92 : 88;
+        case 'KAPLAN':
+            return head < 40 ? 94 : 90;
+        case 'PELTON':
+            return head > 200 ? 91 : 85;
+        case 'CROSSFLOW':
+            return 82;
+        default:
+            return 90;
+    }
+};
+
+/**
+ * TURBINE TOLERANCE THRESHOLDS
+ * Standard machine-specific limits (mm or mm/s)
+ */
+export const getTurbineThresholds = (type: string) => {
+    switch (type.toUpperCase()) {
+        case 'FRANCIS':
+            return { foundationMax: 0.04, shaftMax: 0.015, vibrationMax: 1.8 };
+        case 'KAPLAN':
+            return { foundationMax: 0.05, shaftMax: 0.02, vibrationMax: 2.5 };
+        case 'PELTON':
+            return { foundationMax: 0.08, shaftMax: 0.05, vibrationMax: 3.5 };
+        case 'CROSSFLOW':
+            return { foundationMax: 0.1, shaftMax: 0.08, vibrationMax: 4.0 };
+        default:
+            return { foundationMax: 0.05, shaftMax: 0.02, vibrationMax: 2.0 };
+    }
+};
+
+/**
+ * TECHNICAL SPEC GENERATOR
+ * Logic ported from legacy engines for HPP Builder
+ */
+export const generateTurbineSpecs = (type: string, head: number, flow: number) => {
+    const headD = new Decimal(head);
+    const flowD = new Decimal(flow);
+
+    // Calculate Nsq (Specific Speed)
+    // Nsq = N * sqrt(Q) / H^(3/4)
+    const n = new Decimal(1000);
+    const nsq = n.mul(flowD.sqrt()).div(headD.pow(0.75)).toNumber();
+
+    switch (type.toUpperCase()) {
+        case 'FRANCIS':
+            return {
+                runnerType: 'Mixed-flow',
+                wickerGates: 'Adjustable',
+                mounting: head > 100 ? 'Vertical' : 'Horizontal',
+                specificSpeed: nsq
+            };
+        case 'KAPLAN':
+            return {
+                runnerType: 'Adjustable Blade',
+                spiralCase: head > 30 ? 'Steel' : 'Concrete',
+                draftTube: 'Elbow type',
+                specificSpeed: nsq
+            };
+        case 'PELTON':
+            return {
+                runnerType: 'Impulse Wheel',
+                jets: nsq > 30 ? 4 : 2,
+                housing: 'Atmospheric pressure',
+                specificSpeed: nsq
+            };
+        case 'CROSSFLOW':
+            return {
+                runnerType: 'Drum',
+                material: 'Stainless Steel',
+                regulation: head < 50 ? 'Single' : 'Double',
+                specificSpeed: nsq
+            };
+        default:
+            return { specificSpeed: nsq };
+    }
+};

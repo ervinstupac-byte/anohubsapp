@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowUpFromLine, Thermometer, Layers } from 'lucide-react';
+import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowUpFromLine, Thermometer, Layers, Clock } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -10,6 +10,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { Decimal } from 'decimal.js';
 import { TelemetryDrilldownModal } from './TelemetryDrilldownModal';
+import { ForensicReportService } from '../../services/ForensicReportService';
 
 /**
  * AssetPassportCard — Quick View Asset Information
@@ -156,9 +157,12 @@ export const AssetPassportCard: React.FC = () => {
         pushNotification('INFO', t('toolbox.toast.generatingPassport', { asset: selectedAsset.name }));
 
         try {
-            const { generateAssetPassport } = await import('../../utils/pdfGenerator');
             const relevantLogs = assetLogs.filter(log => log.assetId === selectedAsset.id);
-            const blob = generateAssetPassport(selectedAsset, relevantLogs, t, true);
+            const blob = ForensicReportService.generateAssetPassport({
+                asset: selectedAsset,
+                logs: relevantLogs,
+                t
+            });
 
             if (blob instanceof Blob) {
                 viewDocument(blob, `${selectedAsset.name} Passport`, `Passport_${selectedAsset.name}.pdf`);
@@ -264,6 +268,24 @@ export const AssetPassportCard: React.FC = () => {
                         <span className="text-sm font-mono font-bold text-cyan-400 cursor-pointer">
                             {lastOverhaul}
                         </span>
+                    </div>
+                </div>
+
+                {/* NC-5.4: Temporal Logic - 180-Day Alignment Rule */}
+                <div className="px-4 pt-2">
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20">
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-3 h-3 text-amber-500" />
+                            <span className="text-[9px] uppercase font-bold text-amber-500 tracking-wider">
+                                Laser Alignment Countdown
+                            </span>
+                        </div>
+                        <div className="text-right">
+                            <span className="text-sm font-mono font-black text-amber-400">
+                                {Math.max(0, 180 - Math.floor((Date.now() - new Date(identity.lastAlignmentDate || '2025-10-01').getTime()) / (1000 * 60 * 60 * 24)))}
+                                <span className="text-[10px] ml-1 text-slate-500 font-bold uppercase">Days Left</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

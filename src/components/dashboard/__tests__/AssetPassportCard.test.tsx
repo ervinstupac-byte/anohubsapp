@@ -38,9 +38,12 @@ vi.mock('../TelemetryDrilldownModal', () => ({
     TelemetryDrilldownModal: () => <div data-testid="drilldown-modal" />
 }));
 
-// Mock dynamic import of pdfGenerator
-vi.mock('../../../utils/pdfGenerator', () => ({
-    generateAssetPassport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+// Mock ForensicReportService
+vi.mock('../../../services/ForensicReportService', () => ({
+    ForensicReportService: {
+        generateAssetPassport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+        openAndDownloadBlob: vi.fn()
+    }
 }));
 
 // Mock icons
@@ -53,7 +56,8 @@ vi.mock('lucide-react', () => ({
     Droplets: () => <div data-testid="icon-droplets" />,
     ArrowUpFromLine: () => <div data-testid="icon-arrow-up" />,
     Thermometer: () => <div data-testid="icon-thermometer" />,
-    Layers: () => <div data-testid="icon-layers" />
+    Layers: () => <div data-testid="icon-layers" />,
+    Clock: () => <div data-testid="icon-clock" />
 }));
 
 describe('AssetPassportCard Component', () => {

@@ -23,10 +23,14 @@ vi.mock('../../../contexts/DocumentContext');
 vi.mock('../../../contexts/NotificationContext');
 vi.mock('../../../services/LocalLedger');
 
-// Mock dynamic import of pdfGenerator
-vi.mock('../../../utils/pdfGenerator', () => ({
-    generateAuditReport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
-    generateDiagnosticDossier: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+// Mock ForensicReportService
+vi.mock('../../../services/ForensicReportService', () => ({
+    ForensicReportService: {
+        generateAuditReport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+        generateDiagnosticDossier: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+        generateFieldAuditReport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
+        openAndDownloadBlob: vi.fn()
+    }
 }));
 
 describe('ProtocolLaunchpad Component', () => {

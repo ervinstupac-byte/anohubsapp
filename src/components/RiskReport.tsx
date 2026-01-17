@@ -7,7 +7,7 @@ import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 // ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
-import { createMasterDossierBlob, openAndDownloadBlob } from '../utils/pdfGenerator.ts';
+import { ForensicReportService } from '../services/ForensicReportService';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from '../shared/components/ui/GlassCard';
@@ -128,18 +128,18 @@ export const RiskReport: React.FC = () => {
 
         try {
             // Generišemo Blob koristeći novu preimenovanu funkciju
-            const pdfBlob = createMasterDossierBlob(
-                selectedAsset.name,
+            const pdfBlob = ForensicReportService.generateMasterDossier({
+                assetName: selectedAsset.name,
                 riskData,
                 designData,
-                user?.email || 'AnoHUB Engineer',
+                engineerEmail: user?.email || 'AnoHUB Engineer',
                 t
-            );
+            });
 
             const filename = `${selectedAsset.name.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
 
             // Koristimo helper funkciju koja otvara Preview ili skida fajl
-            openAndDownloadBlob(pdfBlob, filename, openPreview);
+            ForensicReportService.openAndDownloadBlob(pdfBlob, filename, openPreview);
 
             if (openPreview) {
                 showToast(t('riskReport.previewOpened', 'Dossier opened in new window.'), 'success');
@@ -167,13 +167,13 @@ export const RiskReport: React.FC = () => {
 
         try {
             // Ista Blob funkcija se koristi i za upload
-            const pdfBlob = createMasterDossierBlob(
-                selectedAsset.name,
+            const pdfBlob = ForensicReportService.generateMasterDossier({
+                assetName: selectedAsset.name,
                 riskData,
                 designData,
-                user.email || 'Engineer',
+                engineerEmail: user.email || 'Engineer',
                 t
-            );
+            });
 
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const safeAssetName = selectedAsset.name.replace(/\s+/g, '_');

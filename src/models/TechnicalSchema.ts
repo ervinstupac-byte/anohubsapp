@@ -136,6 +136,7 @@ export interface TechnicalProjectState {
     governor: GovernorState; // NEW: High-precision PID state
     specializedState?: SpecializedState; // NEW: Specialized Hub State
     componentHealth?: ComponentHealthRegistry;
+    investigatedComponents: string[];
     diagnosis?: DiagnosisReport;
     riskScore: number;
     lastRecalculation: string;
@@ -279,6 +280,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         totalOperatingHours: 12500,
         hoursSinceLastOverhaul: 4200,
         startStopCount: 156,
+        lastMajorOverhaul: '2023-01-15',
+        lastAlignmentDate: '2025-10-01',
         location: 'Demo Site',
         machineConfig: {
             orientation: 'HORIZONTAL',
@@ -427,6 +430,7 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
             runner_clearance: 0.8
         }
     },
+    investigatedComponents: [],
     riskScore: 0,
     lastRecalculation: new Date().toISOString(),
     demoMode: {

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AnoHUB | SPILLWAY &amp; FLOOD GATE // MODULE 10 | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    <meta name="description" content="Establishing the global standard for hydro integrity.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@300;400;700&family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition">Insights</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition">GET A QUOTE</a>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Insights</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2">REQUEST AUDIT</a>
+        </div>
+    </header>
+
+    <div id="hangar-loader" class="fixed inset-0 z-[10000] flex flex-col pointer-events-none bg-[#020617]">
+        <div id="hangar-top" class="w-full h-1/2 bg-[#020617] border-b border-h-gold/30 transition-transform duration-1000"></div>
+        <div id="hangar-line" class="absolute top-1/2 left-0 w-full h-[1px] bg-h-gold shadow-[0_0_20px_#FFD700] z-50"></div>
+        <div id="hangar-bottom" class="w-full h-1/2 bg-[#020617] border-t border-h-gold/30 transition-transform duration-1000"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        
+
+            
+            <section id="overview" class="relative scada-panel p-8 overflow-hidden group">
+                <div class="relative z-10">
+                    <div class="flex gap-2 mb-4">
+                        <span class="bg-h-blue/10 text-h-blue px-2 py-0.5 text-[10px] font-mono font-bold border border-h-blue/30">DAM SAFETY</span>
+                        <span class="text-slate-500 font-mono text-[10px]">DOC-MECH-010 | REV 2.4</span>
+                    </div>
+                    <h1 class="text-5xl font-divine text-white mb-6 tracking-tight">
+                        The Last <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-h-blue to-cyan-200">Line of Defense</span>
+                    </h1>
+                    <p class="text-slate-300 leading-relaxed text-lg border-l border-slate-700 pl-6 max-w-3xl font-light">
+                        Spillway gates are the safety valves of a hydroelectric complex. A failure to open during a flood event guarantees overtopping and potential dam failure. We ensure <strong class="text-white">100% availability</strong> through redundant HPU logic and trunnion friction monitoring.
+                    </p>
+                </div>
+            </section>
+
+            <section id="simulator">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-2">
+                    <span class="text-h-blue font-mono">02 //</span>
+                    <h3 class="text-2xl font-divine text-white">Radial Gate Control Simulator</h3>
+                </div>
+
+                <div class="scada-panel p-0 border-t-4 border-t-h-blue overflow-hidden">
+                    <div class="bg-black p-4 flex justify-between items-center border-b border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-h-green rounded-full" id="gate-led"></div>
+                            <span class="font-mono text-xs text-white" id="gate-status">STATUS: CLOSED</span>
+                        </div>
+                        <div class="font-mono text-[10px] text-slate-500">GATE ID: SP-01</div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2">
+                        
+                        <div class="bg-black/80 relative h-[400px] overflow-hidden border-r border-slate-800">
+                            <div class="absolute right-0 bottom-0 w-1/2 h-full bg-slate-900 border-l border-slate-700" style="clip-path: polygon(100% 0, 100% 100%, 0% 100%, 30% 0%);"></div>
+                            
+                            <div class="absolute left-0 bottom-0 w-[65%] h-[85%] bg-h-blue/20 border-t border-h-blue/50 water-texture" style="z-index: 0;"></div>
+
+                            <div id="gate-arm" class="absolute right-[35%] top-[30%] w-[150px] h-[150px] border-r-4 border-b-4 border-slate-500 rounded-br-full origin-top-left transition-transform duration-500" style="transform: rotate(0deg); z-index: 10; background: rgba(100,116,139,0.2);">
+                                <div class="absolute top-0 left-0 w-4 h-4 bg-h-gold rounded-full -translate-x-2 -translate-y-2 shadow-[0_0_10px_#FFD700]"></div>
+                            </div>
+
+                            <div id="water-flow" class="absolute right-[35%] bottom-0 w-20 h-0 bg-gradient-to-b from-h-cyan to-transparent opacity-80 transition-all duration-300" style="z-index: 5;"></div>
+                            
+                            <div id="spray-particles" class="absolute right-[20%] bottom-0 w-20 h-20 hidden">
+                                <div class="w-2 h-2 bg-white rounded-full absolute animate-spray"></div>
+                                <div class="w-1 h-1 bg-h-cyan rounded-full absolute top-2 left-4 animate-spray" style="animation-delay: 0.1s"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-8 space-y-8 bg-black/90">
+                            <div class="border-b border-slate-800 pb-4">
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-xs font-bold text-white uppercase tracking-widest">Gate Opening</label>
+                                    <span class="text-xs font-mono text-h-blue" id="val-open">0 %</span>
+                                </div>
+                                <input type="range" id="in-open" min="0" max="100" step="1" value="0" class="w-full">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-900 p-4 rounded border border-slate-700 text-center">
+                                    <div class="text-[10px] text-slate-500 uppercase mb-1">Discharge (Q)</div>
+                                    <div class="text-2xl font-mono text-white font-bold" id="val-flow">0 m³/s</div>
+                                </div>
+                                <div class="bg-slate-900 p-4 rounded border border-slate-700 text-center">
+                                    <div class="text-[10px] text-slate-500 uppercase mb-1">Velocity (V)</div>
+                                    <div class="text-2xl font-mono text-white font-bold" id="val-velocity">0 m/s</div>
+                                </div>
+                            </div>
+
+                            <div id="flow-warning" class="p-4 bg-slate-900 border border-slate-700 rounded text-xs font-mono text-slate-500">
+                                GATE CLOSED. RESERVOIR LEVEL RISING.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="hpu">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-2">
+                    <span class="text-h-gold font-mono">03 //</span>
+                    <h3 class="text-xl font-bold text-white">Hydraulic Power Unit (HPU) Diagnostics</h3>
+                </div>
+
+                <div class="scada-panel p-8 flex flex-col md:flex-row gap-8 items-center">
+                    
+                    <div class="flex gap-8">
+                        <div class="relative w-32 h-32 flex items-center justify-center border-4 border-slate-700 rounded-full bg-black shadow-inner">
+                            <div class="text-center">
+                                <div class="text-[9px] text-slate-500">OIL PRESSURE</div>
+                                <div id="val-pressure" class="text-2xl font-bold text-white">140</div>
+                                <div class="text-xs text-h-blue">BAR</div>
+                            </div>
+                            <svg class="absolute inset-0 w-full h-full -rotate-90">
+                                <circle cx="64" cy="64" r="58" fill="none" stroke="#1e293b" stroke-width="4"></circle>
+                                <circle id="pressure-ring" cx="64" cy="64" r="58" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="365" stroke-dashoffset="100"></circle>
+                            </svg>
+                        </div>
+
+                        <div class="relative w-32 h-32 flex items-center justify-center border-4 border-slate-700 rounded-full bg-black shadow-inner">
+                            <div class="text-center">
+                                <div class="text-[9px] text-slate-500">OIL TEMP</div>
+                                <div id="val-temp" class="text-2xl font-bold text-white">45</div>
+                                <div class="text-xs text-h-orange">°C</div>
+                            </div>
+                            <svg class="absolute inset-0 w-full h-full -rotate-90">
+                                <circle cx="64" cy="64" r="58" fill="none" stroke="#1e293b" stroke-width="4"></circle>
+                                <circle id="temp-ring" cx="64" cy="64" r="58" fill="none" stroke="#f97316" stroke-width="4" stroke-dasharray="365" stroke-dashoffset="200"></circle>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 space-y-4">
+                        <h4 class="font-bold text-white mb-2">System Integrity Check</h4>
+                        <div class="flex justify-between items-center p-3 bg-slate-900 border border-slate-700 rounded">
+                            <span class="text-xs text-slate-400">Main Pump A</span>
+                            <span class="text-xs font-bold text-h-green">RUNNING</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-slate-900 border border-slate-700 rounded">
+                            <span class="text-xs text-slate-400">Backup Pump B</span>
+                            <span class="text-xs font-bold text-slate-500">STANDBY</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-h-red/10 border border-h-red rounded animate-pulse">
+                            <span class="text-xs text-h-red">Accumulator N2 Charge</span>
+                            <span class="text-xs font-bold text-h-red">LOW (90 Bar)</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="bg-black border-t border-slate-900 pt-16 pb-16 text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <img src="/assets/images/logo.svg" alt="Anohubs Logo" class="h-10 w-auto opacity-60 mx-auto mb-10 grayscale">
+            <nav class="flex flex-wrap justify-center gap-8 text-sm font-bold text-slate-400 mb-12 uppercase tracking-wider">
+                <a href="/about-us-vision/" class="hover:text-white">About</a>
+                <a href="/capabilities/" class="hover:text-white">Capabilities</a>
+                <a href="/insights/" class="hover:text-white">Insights</a>
+                <a href="/case-studies/" class="hover:text-white">Case Studies</a>
+                <a href="/protocol/" class="hover:text-white">Protocol</a>
+                <a href="/contact/" class="hover:text-white">Contact</a>
+            </nav>
+            <nav class="flex flex-wrap justify-center gap-6 text-[10px] font-mono text-slate-500 mb-8 uppercase tracking-widest">
+                <a href="/privacy-policy/" class="hover:text-h-cyan transition">Privacy Policy</a>
+                <span class="opacity-20">/</span>
+                <a href="/terms-of-use/" class="hover:text-h-cyan transition">Terms of Use</a>
+            </nav>
+            <p class="text-[10px] font-mono text-slate-600">&copy; <span id="year"></span> ANOHUBS INC. <span class="text-hydro-green">// ALL SYSTEMS SECURE</span></p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+            // Hangar Logic
+            const topPanel = document.getElementById('hangar-top');
+            const btmPanel = document.getElementById('hangar-bottom');
+            const line = document.getElementById('hangar-line');
+            const loader = document.getElementById('hangar-loader');
+
+            if (topPanel && btmPanel && line && loader) {
+                setTimeout(() => {
+                    line.style.boxShadow = "0 0 100px #FFB800";
+                    line.style.backgroundColor = "#FFB800";
+                    setTimeout(() => {
+                        topPanel.style.transform = "translateY(-100%)";
+                        btmPanel.style.transform = "translateY(100%)";
+                        line.style.opacity = "0";
+                        setTimeout(() => { loader.style.display = 'none'; }, 1000);
+                    }, 600);
+                }, 800);
+            }
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+        });
+    </script>
+</body>
+</html>

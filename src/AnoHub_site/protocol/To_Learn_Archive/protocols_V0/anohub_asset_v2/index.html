@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AnoHUB | ASSET LIFECYCLE // MODULE 16 | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    <meta name="description" content="Establishing the global standard for hydro integrity.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@300;400;700&family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition">Insights</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition">GET A QUOTE</a>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Insights</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2">REQUEST AUDIT</a>
+        </div>
+    </header>
+
+    <div id="hangar-loader" class="fixed inset-0 z-[10000] flex flex-col pointer-events-none bg-[#020617]">
+        <div id="hangar-top" class="w-full h-1/2 bg-[#020617] border-b border-h-gold/30 transition-transform duration-1000"></div>
+        <div id="hangar-line" class="absolute top-1/2 left-0 w-full h-[1px] bg-h-gold shadow-[0_0_20px_#FFD700] z-50"></div>
+        <div id="hangar-bottom" class="w-full h-1/2 bg-[#020617] border-t border-h-gold/30 transition-transform duration-1000"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        
+
+            
+            <section id="overview" class="relative scada-panel p-8 overflow-hidden group">
+                <div class="relative z-10">
+                    <div class="flex gap-2 mb-4">
+                        <span class="bg-h-emerald/10 text-h-emerald px-2 py-0.5 text-[10px] font-mono font-bold border border-h-emerald/30">ASSET MANAGEMENT</span>
+                        <span class="text-slate-500 font-mono text-[10px]">DOC-LIFE-016 | REV 6.0</span>
+                    </div>
+                    <h1 class="text-5xl font-divine text-white mb-6 tracking-tight">
+                        The Immortal <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-h-emerald to-cyan-300">Machine</span>
+                    </h1>
+                    <p class="text-slate-300 leading-relaxed text-lg border-l border-slate-700 pl-6 max-w-3xl font-light">
+                        A hydroelectric turbine is not a disposable asset. With correct metallurgy and monitoring, it can outlive the civilization that built it. This module tracks the <strong class="text-white">Health Index (HI)</strong> and calculates the exact moment for refurbishment to reset the clock.
+                    </p>
+                </div>
+            </section>
+
+            <section id="bathtub">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-2">
+                    <span class="text-h-emerald font-mono">02 //</span>
+                    <h3 class="text-2xl font-divine text-white">The Bathtub Curve (Probability of Failure)</h3>
+                </div>
+
+                <div class="scada-panel p-0 border-t-4 border-t-h-emerald overflow-hidden">
+                    <div class="bg-black p-4 flex justify-between items-center border-b border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 bg-h-green rounded-full" id="life-led"></div>
+                            <span class="font-mono text-xs text-white" id="life-stage">STAGE: USEFUL LIFE</span>
+                        </div>
+                        <div class="font-mono text-[10px] text-slate-500">MODEL: WEIBULL DIST.</div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2">
+                        
+                        <div class="p-8 bg-black relative flex items-center justify-center border-r border-slate-800 min-h-[350px]">
+                            <svg class="w-full h-full" viewBox="0 0 300 200" preserveAspectRatio="none">
+                                <line x1="0" y1="190" x2="300" y2="190" stroke="#333" stroke-width="2" />
+                                <line x1="10" y1="0" x2="10" y2="200" stroke="#333" stroke-width="2" />
+                                
+                                <path d="M10,20 Q 40,150 80,150 L 220,150 Q 260,150 290,10" 
+                                      fill="none" stroke="#10b981" stroke-width="3" class="curve-path" />
+                                
+                                <line id="year-line" x1="10" y1="0" x2="10" y2="200" stroke="white" stroke-width="1" stroke-dasharray="4 4" />
+                                <circle id="year-dot" cx="10" cy="20" r="5" fill="#FFD700" />
+                            </svg>
+                            
+                            <div class="absolute bottom-2 right-2 font-mono text-xs text-slate-500">TIME (YEARS)</div>
+                            <div class="absolute top-2 left-2 font-mono text-xs text-slate-500">FAILURE RATE</div>
+                        </div>
+
+                        <div class="p-8 space-y-8 bg-black/80">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-xs font-bold text-white uppercase tracking-widest">Asset Age</label>
+                                    <span class="text-xs font-mono text-h-emerald" id="val-year">Year 0</span>
+                                </div>
+                                <input type="range" id="in-year" min="0" max="60" step="1" value="0" class="w-full">
+                                <div class="flex justify-between text-[10px] text-slate-600 mt-1">
+                                    <span>COMMISSIONING</span>
+                                    <span>END OF LIFE</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-900 p-4 rounded border border-slate-700">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-[10px] text-slate-500 uppercase">Failure Probability</span>
+                                    <span class="text-lg font-mono text-white font-bold" id="prob-val">HIGH</span>
+                                </div>
+                                <div class="w-full h-1 bg-slate-800 rounded overflow-hidden">
+                                    <div id="prob-bar" class="h-full bg-h-red w-[80%] transition-all duration-300"></div>
+                                </div>
+                            </div>
+
+                            <div class="text-xs text-slate-400 leading-relaxed border-l-2 border-h-emerald pl-3" id="stage-desc">
+                                <strong class="text-white">Infant Mortality:</strong> High risk of manufacturing defects, installation errors, or material flaws. Burn-in period required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="matrix">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-2">
+                    <span class="text-h-emerald font-mono">03 //</span>
+                    <h3 class="text-xl font-bold text-white">Health Index Matrix (CNA/CBI)</h3>
+                </div>
+
+                <div class="scada-panel p-8 flex flex-col md:flex-row gap-12 items-center">
+                    
+                    <div class="relative">
+                        <div class="text-[10px] text-center text-slate-500 mb-2">PROBABILITY OF FAILURE (PoF)</div>
+                        <div class="flex">
+                            <div class="text-[10px] text-slate-500 [writing-mode:vertical-lr] rotate-180 mr-2 text-center">CONSEQUENCE (CoF)</div>
+                            <div class="grid grid-cols-5 gap-1" id="risk-grid">
+                                </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 space-y-6 w-full">
+                        <div class="flex justify-between p-4 bg-slate-900 border border-slate-700 rounded">
+                            <div>
+                                <div class="text-xs text-slate-400">Condition Score</div>
+                                <input type="number" id="in-cond" min="1" max="5" value="2" class="bg-black border border-slate-600 text-white w-16 text-center mt-1">
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400">Criticality</div>
+                                <input type="number" id="in-crit" min="1" max="5" value="3" class="bg-black border border-slate-600 text-white w-16 text-center mt-1">
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="text-[10px] text-slate-500 uppercase">Risk Priority Number (RPN)</div>
+                            <div class="text-5xl font-divine text-white mb-2" id="val-rpn">6</div>
+                            <div class="text-xs font-bold text-h-emerald px-4 py-1 bg-h-emerald/10 border border-h-emerald rounded inline-block" id="risk-label">ACCEPTABLE</div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="lazarus" class="pb-12">
+                <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-2">
+                    <span class="text-h-emerald font-mono">04 //</span>
+                    <h3 class="text-xl font-bold text-white">The "Lazarus" Protocol (Refurbishment)</h3>
+                </div>
+
+                <div class="scada-panel p-8 text-center">
+                    <p class="text-sm text-slate-400 mb-6">
+                        When Asset Health drops below critical levels, we inject CAPEX to reset the clock.
+                    </p>
+                    
+                    <div class="flex justify-center items-center gap-8 mb-8">
+                        <div class="text-right">
+                            <div class="text-[10px] text-slate-500">CURRENT AGE</div>
+                            <div class="text-2xl font-mono text-white" id="current-age">42 YRS</div>
+                        </div>
+                        <div class="text-3xl text-h-emerald">→</div>
+                        <div class="text-left">
+                            <div class="text-[10px] text-slate-500">POST-REFURB</div>
+                            <div class="text-2xl font-mono text-h-emerald font-bold">0 YRS</div>
+                        </div>
+                    </div>
+
+                    <button id="capex-btn" class="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group border border-slate-600 hover:border-h-emerald transition-all duration-300">
+                        <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-h-emerald rounded-full group-hover:w-56 group-hover:h-56 opacity-20"></span>
+                        <span class="relative flex items-center gap-3 text-lg font-bold">
+                            <svg data-lucide="refresh-cw" class="w-5 h-5"></svg> INJECT CAPEX ($5M)
+                        </span>
+                    </button>
+                </div>
+            </section>
+
+        
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="bg-black border-t border-slate-900 pt-16 pb-16 text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <img src="/assets/images/logo.svg" alt="Anohubs Logo" class="h-10 w-auto opacity-60 mx-auto mb-10 grayscale">
+            <nav class="flex flex-wrap justify-center gap-8 text-sm font-bold text-slate-400 mb-12 uppercase tracking-wider">
+                <a href="/about-us-vision/" class="hover:text-white">About</a>
+                <a href="/capabilities/" class="hover:text-white">Capabilities</a>
+                <a href="/insights/" class="hover:text-white">Insights</a>
+                <a href="/case-studies/" class="hover:text-white">Case Studies</a>
+                <a href="/protocol/" class="hover:text-white">Protocol</a>
+                <a href="/contact/" class="hover:text-white">Contact</a>
+            </nav>
+            <nav class="flex flex-wrap justify-center gap-6 text-[10px] font-mono text-slate-500 mb-8 uppercase tracking-widest">
+                <a href="/privacy-policy/" class="hover:text-h-cyan transition">Privacy Policy</a>
+                <span class="opacity-20">/</span>
+                <a href="/terms-of-use/" class="hover:text-h-cyan transition">Terms of Use</a>
+            </nav>
+            <p class="text-[10px] font-mono text-slate-600">&copy; <span id="year"></span> ANOHUBS INC. <span class="text-hydro-green">// ALL SYSTEMS SECURE</span></p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+            // Hangar Logic
+            const topPanel = document.getElementById('hangar-top');
+            const btmPanel = document.getElementById('hangar-bottom');
+            const line = document.getElementById('hangar-line');
+            const loader = document.getElementById('hangar-loader');
+
+            if (topPanel && btmPanel && line && loader) {
+                setTimeout(() => {
+                    line.style.boxShadow = "0 0 100px #FFB800";
+                    line.style.backgroundColor = "#FFB800";
+                    setTimeout(() => {
+                        topPanel.style.transform = "translateY(-100%)";
+                        btmPanel.style.transform = "translateY(100%)";
+                        line.style.opacity = "0";
+                        setTimeout(() => { loader.style.display = 'none'; }, 1000);
+                    }, 600);
+                }, 800);
+            }
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+        });
+    </script>
+</body>
+</html>

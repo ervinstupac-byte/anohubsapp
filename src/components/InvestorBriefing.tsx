@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
-import { reportGenerator } from '../features/reporting/ReportGenerator';
+import { ForensicReportService } from '../services/ForensicReportService';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from '../shared/components/ui/GlassCard';
@@ -73,12 +73,13 @@ export const InvestorBriefing: React.FC = () => {
 
     const handleDownloadReport = () => {
         const assetName = selectedAsset?.name || (currentDesign ? t('investorBriefing.hppConceptDesign', "HPP Concept Design") : t('investorBriefing.genericProject', "Generic Project"));
-        const blob = reportGenerator.generateFinancialProspectus({
+        const blob = ForensicReportService.generateFinancialProspectus({
             assetName,
             kpis,
-            assumptions: params
+            assumptions: params,
+            t
         });
-        reportGenerator.downloadReport(blob, `AnoHUB_Financial_Briefing_${assetName}.pdf`);
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Financial_Briefing_${assetName}.pdf`, true);
         showToast(t('investorBriefing.downloaded', 'Financial Briefing Downloaded'), 'success');
     };
 
@@ -86,14 +87,14 @@ export const InvestorBriefing: React.FC = () => {
         if (!selectedAsset) return;
         const liveData = telemetry[selectedAsset.id];
 
-        const blob = reportGenerator.generateIncidentReport({
+        const blob = ForensicReportService.generateIncidentReport({
             assetName: selectedAsset.name,
             incidentType: activeIncident?.type || 'Unspecified Event',
             deviation: liveData?.incidentDetails || 'Out of tolerance',
             timestamp: new Date().toISOString(),
-            status: 'CRITICAL'
+            t
         });
-        reportGenerator.downloadReport(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`);
+        ForensicReportService.openAndDownloadBlob(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`, true);
         showToast('CRITICAL: Incident Report Exported', 'error');
     };
 

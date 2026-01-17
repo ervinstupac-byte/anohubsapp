@@ -6,7 +6,6 @@ import { useNavigation } from '../contexts/NavigationContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
-import { reportGenerator } from '../features/reporting/ReportGenerator.ts';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
@@ -23,6 +22,7 @@ import { ModernInput } from '../shared/components/ui/ModernInput';
 import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 import { StructuralAssembly } from './hpp-designer/StructuralAssembly.tsx';
+import { ForensicReportService } from '../services/ForensicReportService';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
 
@@ -255,7 +255,26 @@ export const HPPBuilder: React.FC = () => {
     };
 
     const handleGeneratePDF = () => {
-        window.dispatchEvent(new CustomEvent('ANOHUB_TRIGGER_FORENSIC_EXPORT'));
+        if (!selectedAsset) return;
+
+        const blob = ForensicReportService.generateHPPSpecification({
+            asset: selectedAsset,
+            projectState: {
+                identity: state.identity,
+                hydraulic: {
+                    head: settings.head,
+                    flow: settings.flow,
+                    efficiency: settings.efficiency,
+                    baselineOutputMW: calculations.powerMW
+                },
+                mechanical: {},
+                structural: {},
+                market: {}
+            } as any,
+            t: t
+        });
+
+        ForensicReportService.openAndDownloadBlob(blob, `HPP_Spec_${selectedAsset.name}_${Date.now()}.pdf`, true);
         showToast(t('hppBuilder.toasts.pdfGenerated'), 'success');
     };
 

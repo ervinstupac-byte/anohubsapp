@@ -5,10 +5,21 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, Sparkles, CheckCircle } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
-import { autoReportService, ServiceMeasurement } from '../services/AutoReportService';
+import { ForensicReportService } from '../services/ForensicReportService';
+import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../contexts/AssetContext';
 
+export interface ServiceMeasurement {
+    parameter: string;
+    asFound: number;
+    asLeft: number;
+    unit: string;
+    standard: number;
+    improvement: number;
+}
+
 export const AutoReportGenerator: React.FC = () => {
+    const { t } = useTranslation();
     const { selectedAsset } = useAssetContext();
     const [isGenerating, setIsGenerating] = useState(false);
     const [measurements, setMeasurements] = useState<ServiceMeasurement[]>([
@@ -68,17 +79,19 @@ export const AutoReportGenerator: React.FC = () => {
         // Simulate generation delay
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        const blob = autoReportService.quickGenerateFromMeasurements(
-            selectedAsset as any, // Cast to any or EnhancedAsset if imported
-            measurements,
+        const blob = ForensicReportService.generateServiceAuditReport({
+            assetName: selectedAsset.name,
             serviceType,
-            engineerName
-        );
+            engineerName,
+            measurements,
+            t
+        });
 
         // Download
-        autoReportService.reportGen.downloadReport(
+        ForensicReportService.openAndDownloadBlob(
             blob,
-            `ServiceReport_${selectedAsset.name}_${new Date().toISOString().split('T')[0]}.pdf`
+            `ServiceReport_${selectedAsset.name}_${new Date().toISOString().split('T')[0]}.pdf`,
+            true
         );
 
         setIsGenerating(false);

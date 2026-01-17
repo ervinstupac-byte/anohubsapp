@@ -12,20 +12,23 @@ import { TruthDeltaEngine } from '../utils/TruthDeltaEngine';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 import { useDigitalLedger } from '../stores/useDigitalLedger';
 import { useTheme } from '../stores/useTheme';
-import { Camera, Moon, Ghost, FileText, ChevronRight, Shield } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { ForensicReportService } from '../services/ForensicReportService';
+import { Camera, Moon, Ghost, FileText, ChevronRight, Shield, X, CheckCircle2, Wrench } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
-import { generateDiagnosticDossier } from '../utils/pdfGenerator';
 import { useDocumentViewer } from '../contexts/DocumentContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { StructuralSafetyMonitor } from '../features/telemetry/components/StructuralSafetyMonitor';
 import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
-import { X, CheckCircle2, Wrench } from 'lucide-react';
 import { SolutionArchitect } from '../services/SolutionArchitect';
 
 const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
 
 
 export const CommandCenter: React.FC = () => {
+    const { t } = useTranslation();
+    const { selectedAsset } = useAssetContext();
     const {
         diagnostics,
         activeLogs,
@@ -90,13 +93,13 @@ export const CommandCenter: React.FC = () => {
 
         // Generate Real PDF
         try {
-            const blob = generateDiagnosticDossier(
-                'CASE-' + Math.floor(Math.random() * 10000),
-                primaryInsight,
-                'Senior Engineer', // In real app, get from UserContext
-                snapshotData,
-                true // Return Blob
-            );
+            const blob = ForensicReportService.generateDiagnosticDossier({
+                caseId: 'CASE-' + Math.floor(Math.random() * 10000),
+                insight: primaryInsight,
+                engineerName: 'Senior Engineer',
+                snapshotImage: snapshotData,
+                t
+            });
 
             if (blob instanceof Blob) {
                 viewDocument(blob, `Dossier: ${primaryInsight.name}`, `Dossier_${primaryInsight.name}.pdf`);

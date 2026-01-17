@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Bearings/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Bearings/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Critical SOP Main Bearings & Cooling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0c0a09;
+            /* Industrial Dark Mode */
+            color: #d6d3d1;
+        }
+
+        .procedure-card {
+            background: #1c1917;
+            border: 1px solid #292524;
+            padding: 24px;
+            margin-bottom: 16px;
+            border-left: 4px solid #44403c;
+        }
+
+        .procedure-card.critical {
+            border-left-color: #dc2626;
+            background: #2a1210;
+        }
+
+        .step-num {
+            color: #3b82f6;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .btn-return {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1c1917;
+            border: 1px solid #44403c;
+            color: #78716c;
+            padding: 8px 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn-return:hover {
+            border-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="p-6 md:p-12 max-w-4xl mx-auto">
+
+    <!-- Header -->
+    <header class="mb-10 pb-6 border-b border-stone-800 flex justify-between items-start">
+        <div>
+            <div class="flex items-center gap-2 mb-2">
+                <span
+                    class="px-2 py-1 rounded bg-blue-900/30 text-blue-400 text-[10px] font-bold border border-blue-900 uppercase">SOP-GEN-00X</span>
+                <span class="text-[10px] text-stone-500 uppercase font-bold">REV 3.0</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white mb-2" data-i18n="title">CRITICAL SOP: MAIN BEARINGS & COOLING</h1>
+            <p class="text-stone-500 text-sm" data-i18n="subtitle">Thermal Protection & Heat Exchange Logic</p>
+
+            <!-- Language Toggle -->
+            <div class="flex gap-2 mt-4">
+                <button onclick="setLang('en')" id="btnEn"
+                    class="px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded">EN</button>
+                <button onclick="setLang('bs')" id="btnBs"
+                    class="px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white">BS</button>
+            </div>
+        </div>
+
+        <!-- Standard Return Button -->
+        <a href="Francis_Horizontal_Dashboard.html" class="btn-return">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-i18n="return">Back to Dashboard</span>
+        </a>
+    </header>
+
+    <!-- Content -->
+    <div class="space-y-6">
+        <div class="procedure-card critical">
+
+            <h3 class="text-white font-bold mb-2"><span class="step-num">01</span> <span data-i18n="s1_title">⚠️ OIL
+                    FILM IS THE BEARING</span></h3>
+            <p class="text-sm text-stone-400 mb-2"><strong data-i18n="context">Context:</strong> <span
+                    data-i18n="s1_desc">The heavy rotating mass of the turbine/generator floats on a microscopic film of
+                    oil.</span></p>
+            <ul class="list-disc pl-5 text-sm text-stone-400 space-y-2">
+                <li><strong data-i18n="danger">Danger:</strong> <span data-i18n="s1_li1">If oil overheats (> 60°C),
+                        viscosity drops. Thin oil cannot carry the shaft.</span></li>
+                <li><strong data-i18n="result">Result:</strong> <span data-i18n="s1_li2">Metal-to-metal contact,
+                        catastrophic babbit wiping (melting), and prolonged outage.</span></li>
+            </ul>
+
+        </div>
+        <div class="procedure-card">
+
+            <p class="text-sm text-stone-400 mb-2" data-i18n="s2_intro">Heat is removed from the oil by the cooling
+                water system. In rivers with heavy silt, this is the primary failure point.</p>
+
+            <h3 class="text-white font-bold mb-2"><span class="step-num">02</span> <span data-i18n="s2_title">1.1 Intake
+                    Filtration</span></h3>
+            <ol class="list-decimal pl-5 text-sm text-stone-400 space-y-2">
+                <li><strong data-i18n="check">Check:</strong> <span data-i18n="s2_li1">Inspect mesh filters on cooling
+                        water lines daily.</span></li>
+                <li><strong data-i18n="clean">Clean:</strong> <span data-i18n="s2_li2">If differential pressure is high,
+                        remove and scrub the mesh. Silt blocks flow.</span></li>
+            </ol>
+
+            <h3 class="text-white font-bold mb-2"><span class="step-num">02</span> <span data-i18n="s3_title">1.2
+                    "Backflush" of Exchangers</span></h3>
+            <p class="text-sm text-stone-400 mb-2" data-i18n="s3_desc">Silt accumulates inside heat exchanger tubes,
+                acting as an insulator.</p>
+            <ul class="list-disc pl-5 text-sm text-stone-400 space-y-2">
+                <li><strong data-i18n="protocol">Protocol:</strong> <span data-i18n="s3_li1">Close inlet/outlet valves.
+                        Open bypass valves for "Backflush" to reverse flow direction for 5 minutes. This ejects
+                        deposited sediment.</span></li>
+                <li><strong data-i18n="verify">Verification:</strong> <span data-i18n="s3_li2">Check water at discharge.
+                        Should transition from muddy to clear.</span></li>
+            </ul>
+
+        </div>
+        <div class="procedure-card">
+
+            <p class="text-sm text-stone-400 mb-2" data-i18n="s4_intro">Oil tells you visually.</p>
+
+            <h3 class="text-white font-bold mb-2"><span class="step-num">03</span> <span data-i18n="s4_title">2.1 Water
+                    Contamination</span></h3>
+            <ul class="list-disc pl-5 text-sm text-stone-400 space-y-2">
+                <li><strong data-i18n="symptom">Symptom:</strong> <span data-i18n="s4_li1">Oil in sight glass looks
+                        "Milky" or cloudy.</span></li>
+                <li><strong data-i18n="cause">Cause:</strong> <span data-i18n="s4_li2">Cooling water entering oil
+                        chamber (Seal failure or exchanger leak).</span></li>
+                <li><strong data-i18n="action">Action:</strong> <span data-i18n="s4_li3">EMERGENCY STOP. Centrifuge oil
+                        or replace. 0.1% water reduces bearing life by 50%.</span></li>
+            </ul>
+
+            <h3 class="text-white font-bold mb-2"><span class="step-num">03</span> <span data-i18n="s5_title">2.2
+                    Vibration Correlation</span></h3>
+            <p class="text-sm text-stone-400 mb-2"><strong data-i18n="note">Note:</strong> <span
+                    data-i18n="s5_desc">High temperature is a symptom, not the disease.</span></p>
+            <ul class="list-disc pl-5 text-sm text-stone-400 space-y-2">
+                <li data-i18n="s5_li1">If cooling is perfect but temperature rises: <strong>Check Alignment
+                        (Run-Out)</strong>.</li>
+                <li data-i18n="s5_li2">Shaft friction creates excess heat that the cooler cannot remove.</li>
+            </ul>
+
+        </div>
+        <div class="procedure-card critical">
+
+            <table>
+                <tr>
+                    <th data-i18n="tbl_condition">Condition</th>
+                    <th data-i18n="tbl_temp">Temp Range</th>
+                    <th data-i18n="tbl_action">Action</th>
+                </tr>
+                <tr>
+                    <td><strong data-i18n="tbl_normal">Normal</strong></td>
+                    <td>18°C - 55°C</td>
+                    <td data-i18n="tbl_monitor">Monitor.</td>
+                </tr>
+                <tr>
+                    <td><strong data-i18n="tbl_alarm">Alarm</strong></td>
+                    <td>60°C</td>
+                    <td data-i18n="tbl_check">Check Cooling & Oil Level. Clean filters.</td>
+                </tr>
+                <tr>
+                    <td><strong data-i18n="tbl_trip">Trip (Shutdown)</strong></td>
+                    <td>70°C</td>
+                    <td><strong data-i18n="tbl_esd">EMERGENCY STOP.</strong> <span data-i18n="tbl_norestart">Do not
+                            restart without inspection.</span></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="procedure-card">
+
+            <ul class="list-disc pl-5 text-sm text-stone-400 space-y-2">
+                <li><strong data-i18n="daily">Daily:</strong> <span data-i18n="daily_desc">Clean cooling water
+                        filters.</span></li>
+                <li><strong data-i18n="weekly">Weekly:</strong> <span data-i18n="weekly_desc">"Backflush" heat
+                        exchangers.</span></li>
+                <li><strong data-i18n="on_alarm">On Alarm:</strong> <span data-i18n="alarm_desc">Immediately check for
+                        "Milky" oil.</span></li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- Hidden Translation Data -->
+    <script>
+        lucide.createIcons();
+
+        // Check global lang preference
+        const ml = localStorage.getItem('anohub_lang_pref') || 'en';
+
+        const i18n = {
+            en: {
+                title: "CRITICAL SOP: MAIN BEARINGS & COOLING",
+                subtitle: "Thermal Protection & Heat Exchange Logic",
+                return: "Back to Dashboard",
+
+                s1_title: "⚠️ OIL FILM IS THE BEARING",
+                context: "Context:",
+                s1_desc: "The heavy rotating mass of the turbine/generator floats on a microscopic film of oil.",
+                danger: "Danger:",
+                s1_li1: "If oil overheats (> 60°C), viscosity drops. Thin oil cannot carry the shaft.",
+                result: "Result:",
+                s1_li2: "Metal-to-metal contact, catastrophic babbit wiping (melting), and prolonged outage.",
+
+                s2_intro: "Heat is removed from the oil by the cooling water system. In rivers with heavy silt, this is the primary failure point.",
+                s2_title: "1.1 Intake Filtration",
+                check: "Check:",
+                s2_li1: "Inspect mesh filters on cooling water lines daily.",
+                clean: "Clean:",
+                s2_li2: "If differential pressure is high, remove and scrub the mesh. Silt blocks flow.",
+
+                s3_title: "1.2 \"Backflush\" of Exchangers",
+                s3_desc: "Silt accumulates inside heat exchanger tubes, acting as an insulator.",
+                protocol: "Protocol:",
+                s3_li1: "Close inlet/outlet valves. Open bypass valves for \"Backflush\" to reverse flow direction for 5 minutes. This ejects deposited sediment.",
+                verify: "Verification:",
+                s3_li2: "Check water at discharge. Should transition from muddy to clear.",
+
+                s4_intro: "Oil tells you visually.",
+                s4_title: "2.1 Water Contamination",
+                symptom: "Symptom:",
+                s4_li1: "Oil in sight glass looks \"Milky\" or cloudy.",
+                cause: "Cause:",
+                s4_li2: "Cooling water entering oil chamber (Seal failure or exchanger leak).",
+                action: "Action:",
+                s4_li3: "EMERGENCY STOP. Centrifuge oil or replace. 0.1% water reduces bearing life by 50%.",
+
+                s5_title: "2.2 Vibration Correlation",
+                note: "Note:",
+                s5_desc: "High temperature is a symptom, not the disease.",
+                s5_li1: "If cooling is perfect but temperature rises: Check Alignment (Run-Out).",
+                s5_li2: "Shaft friction creates excess heat that the cooler cannot remove.",
+
+                tbl_condition: "Condition",
+                tbl_temp: "Temp Range",
+                tbl_action: "Action",
+                tbl_normal: "Normal",
+                tbl_monitor: "Monitor.",
+                tbl_alarm: "Alarm",
+                tbl_check: "Check Cooling & Oil Level. Clean filters.",
+                tbl_trip: "Trip (Shutdown)",
+                tbl_esd: "EMERGENCY STOP.",
+                tbl_norestart: "Do not restart without inspection.",
+
+                daily: "Daily:",
+                daily_desc: "Clean cooling water filters.",
+                weekly: "Weekly:",
+                weekly_desc: "\"Backflush\" heat exchangers.",
+                on_alarm: "On Alarm:",
+                alarm_desc: "Immediately check for \"Milky\" oil."
+            },
+            bs: {
+                title: "KRITIČNI SOP: GLAVNI LEŽAJEVI & HLAĐENJE",
+                subtitle: "Termalna Zaštita & Logika Razmjene Topline",
+                return: "Povratak na Kontrolnu Tablu",
+
+                s1_title: "⚠️ ULJNI FILM JE LEŽAJ",
+                context: "Kontekst:",
+                s1_desc: "Teška rotirajuća masa turbine/generatora pluta na mikroskopskom filmu ulja.",
+                danger: "Opasnost:",
+                s1_li1: "Ako se ulje pregrije (> 60°C), viskozitet pada. Rijetko ulje ne može nositi vratilo.",
+                result: "Rezultat:",
+                s1_li2: "Dodir metala o metal, katastrofalno brisanje (topljenje) babita, i dugotrajni zastoj.",
+
+                s2_intro: "Toplota se uklanja iz ulja sistemom rashladne vode. U rijekama sa puno mulja, ovo je primarna tačka kvara.",
+                s2_title: "1.1 Filtracija Zahvata",
+                check: "Provjera:",
+                s2_li1: "Pregledajte mrežaste filtere na linijama rashladne vode dnevno.",
+                clean: "Čišćenje:",
+                s2_li2: "Ako je diferencijalni pritisak visok, uklonite i oribajte mrežicu. Mulj blokira protok.",
+
+                s3_title: "1.2 \"Povratno Ispiranje\" Izmjenjivača",
+                s3_desc: "Mulj se nakuplja unutar cijevi izmjenjivača toplote, djelujući kao izolator.",
+                protocol: "Protokol:",
+                s3_li1: "Zatvorite ulazne/izlazne ventile. Otvorite bajpas ventile za \"Povratno Ispiranje\" kako bi obrnuli smjer toka na 5 minuta. Ovo izbacuje nataloženi sediment.",
+                verify: "Verifikacija:",
+                s3_li2: "Provjerite vodu na ispustu. Treba preći iz blatnjave u bistru.",
+
+                s4_intro: "Ulje vam govori vizuelno.",
+                s4_title: "2.1 Kontaminacija Vodom",
+                symptom: "Simptom:",
+                s4_li1: "Ulje u kontrolnom staklu izgleda \"Mliječno\" ili mutno.",
+                cause: "Uzrok:",
+                s4_li2: "Rashladna voda ulazi u uljnu komoru (Kvar zaptivača ili curenje izmjenjivača).",
+                action: "Akcija:",
+                s4_li3: "HITNO ZAUSTAVLJANJE. Centrifugirajte ulje ili zamijenite. 0.1% vode smanjuje život ležaja za 50%.",
+
+                s5_title: "2.2 Korelacija Vibracija",
+                note: "Napomena:",
+                s5_desc: "Visoka temperatura je simptom, a ne bolest.",
+                s5_li1: "Ako je hlađenje savršeno a temperatura raste: Provjerite Saosnost (Run-Out).",
+                s5_li2: "Trenje vratila stvara višak toplote koju hladnjak ne može ukloniti.",
+
+                tbl_condition: "Stanje",
+                tbl_temp: "Temp Opseg",
+                tbl_action: "Akcija",
+                tbl_normal: "Normalno",
+                tbl_monitor: "Nadzor.",
+                tbl_alarm: "Alarm",
+                tbl_check: "Provjerite Hlađenje & Nivo Ulja. Čišćenje filtera.",
+                tbl_trip: "Trip (Isključenje)",
+                tbl_esd: "HITNO ZAUSTAVLJANJE.",
+                tbl_norestart: "Ne restartujte bez inspekcije.",
+
+                daily: "Dnevno:",
+                daily_desc: "Očistite filtere rashladne vode.",
+                weekly: "Sedmično:",
+                weekly_desc: "\"Povratno isperite\" izmjenjivače toplote.",
+                on_alarm: "Na Alarm:",
+                alarm_desc: "Odmah provjerite \"Mliječno\" ulje."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            // Update button styles
+            if (lang === 'en') {
+                document.getElementById('btnEn').className = "px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded";
+                document.getElementById('btnBs').className = "px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white";
+            } else {
+                document.getElementById('btnBs').className = "px-2 py-0.5 text-[10px] font-bold bg-cyan-600 text-white rounded";
+                document.getElementById('btnEn').className = "px-2 py-0.5 text-[10px] font-bold bg-slate-800 text-slate-500 rounded hover:text-white";
+            }
+
+            // Apply translations
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        // Initialize on page load
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

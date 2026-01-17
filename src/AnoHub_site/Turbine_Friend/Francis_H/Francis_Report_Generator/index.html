@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_Report_Generator/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_Report_Generator/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIT STATE REPORT GENERATOR | FRANCIS 1.3MW</title>
+    <!-- Using Tailwind via CDN for layout, but custom CSS for print styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+        body {
+            background-color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            color: #111;
+        }
+
+        /* The A4 Paper Simulation */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            border: 1px solid #d3d3d3;
+            border-radius: 2px;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Engineering Frame */
+        .engineering-frame {
+            border: 2px solid #1e3a8a;
+            /* Blue-900 */
+            height: 100%;
+            padding: 2px;
+            position: relative;
+        }
+
+        .inner-frame {
+            border: 1px solid #1e3a8a;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #1e3a8a;
+        }
+
+        /* Print Specifics */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                border: initial;
+                border-radius: initial;
+                width: initial;
+                min-height: initial;
+                box-shadow: initial;
+                background: initial;
+                page-break-after: always;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .input-field {
+            border: none;
+            border-bottom: 1px dashed #94a3b8;
+            width: 100%;
+            font-family: 'Roboto Mono', monospace;
+            color: #0f172a;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-bottom: 1px solid #1e3a8a;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        /* Red */
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Green */
+        .status-nominal {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        /* Blue */
+    </style>
+</head>
+
+<body>
+
+    <!-- Control Bar (No Print) -->
+    <div
+        class="no-print fixed top-0 left-0 w-full bg-slate-900 text-white p-3 flex justify-between items-center z-50 shadow-lg">
+        <div class="flex items-center gap-4">
+            <a href="Francis_Horizontal_Dashboard.html"
+                class="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-bold uppercase transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Dashboard
+            </a>
+            <div class="h-4 w-px bg-slate-700"></div>
+            <span class="text-xs text-slate-400 font-mono">REPORT GENERATOR V1.0</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Language Toggle -->
+            <div class="flex bg-slate-800 rounded p-1">
+                <button onclick="setLang('en')" id="btnEn"
+                    class="px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition">EN</button>
+                <button onclick="setLang('bs')" id="btnBs"
+                    class="px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition">BS</button>
+            </div>
+
+            <button onclick="window.print()"
+                class="flex items-center gap-2 bg-white text-slate-900 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-slate-200 transition">
+                <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="h-16 no-print"></div> <!-- Spacer for fixed header -->
+
+    <!-- A4 Page Container -->
+    <div class="page">
+        <div class="engineering-frame">
+            <div class="inner-frame flex flex-col justify-between">
+
+                <!-- 1. Header -->
+                <div>
+                    <div class="flex justify-between items-start border-b-2 border-blue-900 pb-4 mb-6">
+                        <div>
+                            <h1 class="text-2xl text-blue-900 mb-1" data-i18n="report_title">UNIT STATE REPORT</h1>
+                            <div class="text-sm font-bold text-slate-500 flex items-center gap-2">
+                                <span class="uppercase">Francis Horizontal 1.3 MW</span> | <span
+                                    class="mono text-xs">S/N: 88-FR-01</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-slate-400 uppercase font-bold" data-i18n="date_label">Date & Time
+                            </div>
+                            <div class="text-sm font-mono font-bold text-slate-900" id="reportDate"></div>
+                        </div>
+                    </div>
+
+                    <!-- Operator Block -->
+                    <div class="grid grid-cols-2 gap-8 mb-8 text-sm">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1"
+                                data-i18n="operator_label">Authorized Operator</label>
+                            <input type="text" class="input-field font-bold bg-yellow-50/50 p-1"
+                                placeholder="[ ENTER NAME ]" value="Eric (Shift Lead)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1"
+                                data-i18n="shift_label">Shift ID</label>
+                            <input type="text" class="input-field font-bold bg-yellow-50/50 p-1" value="A-01-MORNING">
+                        </div>
+                    </div>
+
+                    <!-- 2. Health Score Summary -->
+                    <div class="mb-8">
+                        <div
+                            class="bg-slate-100 border border-slate-300 p-4 rounded-sm flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800 uppercase mb-1"
+                                    data-i18n="system_integrity">System Integrity Score</h2>
+                                <p class="text-xs text-slate-500 max-w-md" data-i18n="score_desc">Calculated based on
+                                    active logic codes and manual safety inputs.</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-4xl font-black text-blue-900 mono" id="healthScoreDisplay">100%</div>
+                                <div class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded inline-block mt-1 uppercase"
+                                    id="healthStatusLabel">Nominal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Anomaly Matrix -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                            <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="anomaly_matrix">Anomaly
+                                Matrix (Logic Log)</h3>
+                            <span class="text-[10px] font-mono text-slate-400">SOURCE: HEURISTIC_ENGINE_V2.0</span>
+                        </div>
+
+                        <div id="anomalyTableContainer">
+                            <!-- Table populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- 4. Strategic Analysis & Radar Chart -->
+                    <div class="mb-4 grid grid-cols-2 gap-8">
+                        <div>
+                            <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                                <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="safety_guard">Heuristic
+                                    Trend Analysis</h3>
+                            </div>
+
+                            <!-- Radar Chart Visualization -->
+                            <div
+                                class="relative w-full h-48 bg-slate-50 border border-slate-200 flex items-center justify-center">
+                                <div id="radarChart" class="w-full h-full"></div>
+                                <!-- Simple HTML/CSS Radar Overlay Mockup for PDF compatibility without heavy libraries -->
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                                    <div class="w-32 h-32 border border-slate-900 rounded-full"></div>
+                                    <div class="w-16 h-16 border border-slate-900 rounded-full absolute"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-0"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-60"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-120"></div>
+                                </div>
+                                <div class="absolute top-2 text-[9px] font-bold text-slate-500">MECH</div>
+                                <div class="absolute bottom-2 left-2 text-[9px] font-bold text-slate-500">HYDR</div>
+                                <div class="absolute bottom-2 right-2 text-[9px] font-bold text-slate-500">ELEC</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                                <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="risk_title">Rate of
+                                    Change (RoC) Alert</h3>
+                            </div>
+
+                            <!-- Predictive Input Block -->
+                            <div class="border border-slate-300 p-3 bg-red-50/50 mb-2">
+                                <label class="block text-[10px] font-bold text-red-900 uppercase mb-1">Shaft Seal
+                                    Leakage (L/min)</label>
+                                <div class="flex justify-between items-center">
+                                    <div class="w-1/2">
+                                        <input type="number" id="inputLeak"
+                                            class="w-full font-mono text-lg font-bold text-red-900 bg-transparent border-b border-red-300 focus:outline-none"
+                                            placeholder="0.0" onchange="calcRoC()">
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="rocResult" class="text-[10px] font-bold text-slate-400">WAITING DATA...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 5. Strategic Output (Inference Engine) -->
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                            <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="recommendation_title">
+                                Synthetic Diagnosis (Inference Engine)</h3>
+                        </div>
+
+                        <div class="border-l-4 border-blue-900 bg-slate-50 p-4 min-h-[100px]">
+                            <div class="font-mono text-sm text-slate-800 whitespace-pre-line" id="recommendationText">
+                                INITIATING HEURISTIC SCAN...
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div
+                    class="mt-4 pt-2 border-t border-slate-300 flex justify-between items-end text-[10px] text-slate-400">
+                    <div>
+                        <p class="font-bold uppercase text-slate-600">AnoHUB Engineering Intelligence</p>
+                        <p>Generated via Heuristic Core V2.0</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-mono">DOC-ID: <span id="docId">GEN-001</span></p>
+                        <p>PAGE 1 OF 1</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // --- I18N DICTIONARY ---
+        const i18n = {
+            en: {
+                report_title: "UNIT STATE REPORT",
+                date_label: "DATE & TIME",
+                operator_label: "AUTHORIZED OPERATOR",
+                shift_label: "SHIFT ID",
+                system_integrity: "SYSTEM INTEGRITY SCORE",
+                score_desc: "Calculated based on active logic codes and manual safety inputs.",
+                anomaly_matrix: "ANOMALY MATRIX (LOGIC LOG)",
+                safety_guard: "HEURISTIC TREND ANALYSIS",
+                risk_title: "RATE OF CHANGE (RoC) ALERT",
+                recommendation_title: "SYNTHETIC DIAGNOSIS (INFERENCE ENGINE)",
+                col_code: "SYMPTOM ID",
+                col_zone: "ZONE",
+                col_ctx: "CONTEXT",
+                col_crit: "CRIT",
+                default_rec: "SYSTEM STATUS STABLE. NO CRITICAL ACTIONS REQUIRED.\nCONTINUE STANDARD OBSERVATION PROTOCOL.",
+                status_nominal: "NOMINAL",
+                status_critical: "CRITICAL"
+            },
+            bs: {
+                report_title: "IZVJEŠTAJ O STANJU JEDINICE",
+                date_label: "DATUM I VRIJEME",
+                operator_label: "OVLAŠTENI OPERATER",
+                shift_label: "ID SMJENE",
+                system_integrity: "OCJENA INTEGRITETA SISTEMA",
+                score_desc: "Izračunato na osnovu aktivnih logičkih kodova i ručnih sigurnosnih unosa.",
+                anomaly_matrix: "TABELA ANOMALIJA (LOGIČKI ZAPIS)",
+                safety_guard: "HEURISTIČKA ANALIZA TRENDA",
+                risk_title: "UPOZORENJE NA STOPU PROMJENE (RoC)",
+                recommendation_title: "SINTETIČKA DIJAGNOZA (MOTOR ZAKLJUČIVANJA)",
+                col_code: "ID SIMPTOMA",
+                col_zone: "ZONA",
+                col_ctx: "KONTEKST",
+                col_crit: "KRIT",
+                default_rec: "SISTEM STABILAN. NISU POTREBNE KRITIČNE MJERE.\nNASTAVITI SA STANDARDNIM PROTOKOLOM POSMATRANJA.",
+                status_nominal: "NOMINALNO",
+                status_critical: "KRITIČNO"
+            }
+        };
+
+        let currentLang = 'en';
+
+        // --- SYNTHETIC LOGIC DATABASE (INFERENCE RULES) ---
+        const inferenceRules = [
+            {
+                // Rule: Bypass + Sync Error = Critical Cavitation Risk
+                condition: (codes) => codes.includes('ERR_LEAK_01') && codes.includes('ERR_SYNC_VAR'),
+                diagnosis: {
+                    en: "CRITICAL RISK: Distributor Sync Error combined with Seal Leakage indicates major mechanical misalignment.\n\nACTION: IMMEDIATE STOP RECOMMENDED. Verify guide vane linkage shear pins and check head cover alignment.",
+                    bs: "KRITIČAN RIZIK: Greška sinhronizacije distributera u kombinaciji sa curenjem zaptivača ukazuje na veliko mehaničko de-centriranje.\n\nAKCIJA: PREPORUČENO TRENUTNO ZAUSTAVLJANJE. Provjerite sigurnosne čivije poluga i centriranje poklopca turbine."
+                }
+            },
+            {
+                // Rule: Low Vib + High Temp = Cooling Flow + Draft Tube issue
+                condition: (codes) => codes.includes('ERR_VIB_LOW') && codes.includes('ERR_TEMP_HI'),
+                diagnosis: {
+                    en: "COMPLEX FAULT: Thermal overload concurrent with Rheingans vibration.\n\nACTION: Draft tube vortex may be restricting cooling water flow if shared intake. Inspect strainers and increase air injection.",
+                    bs: "SLOŽEN KVAR: Termičko preopterećenje istovremeno sa Rheingans vibracijama.\n\nAKCIJA: Vrtlog u usisnoj cijevi možda ograničava protok rashladne vode ako je zahvat zajednički. Pregledajte filtere i povećajte upuhivanje zraka."
+                }
+            }
+        ];
+
+        const singleFaults = {
+            'ERR_N2_PRESS': {
+                en: "CRITICAL: HPU Accumulator Nitrogen pressure is low. Initiate pre-charge sequence immediately.",
+                bs: "KRITIČNO: Nizak pritisak azota u HPU akumulatoru. Odmah pokrenite proceduru dopune."
+            },
+            'ERR_SYNC_VAR': {
+                en: "WARNING: Distributor Sync Variance detected. Inspect shear pins.",
+                bs: "UPOZORENJE: Detektovano odstupanje sinhronizacije sprovodnog aparata. Pregledajte čivije."
+            },
+            'ERR_LEAK_01': {
+                en: "ALERT: Shaft seal leakage above nominal limits. Monitor drainage.",
+                bs: "ALARM: Curenje zaptivača vratila iznad limita. Pratite drenažu."
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+
+            // Toggle Buttons
+            if (lang === 'en') {
+                document.getElementById('btnEn').className = "px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition";
+                document.getElementById('btnBs').className = "px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition";
+            } else {
+                document.getElementById('btnBs').className = "px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition";
+                document.getElementById('btnEn').className = "px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition";
+            }
+
+            // Update Text Elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+
+            // Re-render logic
+            renderData();
+        }
+
+        // --- RATE OF CHANGE (RoC) CALCULATOR ---
+        function calcRoC() {
+            const currentVal = parseFloat(document.getElementById('inputLeak').value);
+            const rocDisplay = document.getElementById('rocResult');
+
+            // Simulate Last Value (in real app, read from history)
+            const lastVal = 4.2; // Baseline
+
+            if (!isNaN(currentVal)) {
+                const change = ((currentVal - lastVal) / lastVal) * 100;
+
+                if (change > 15) {
+                    rocDisplay.innerHTML = `<span class="text-red-600 animate-pulse">▲ ${change.toFixed(1)}% (PREDICTIVE WARNING)</span>`;
+                    // Store high leak in local storage for next time? (Out of scope for simple demo)
+                } else if (change < 0) {
+                    rocDisplay.innerHTML = `<span class="text-green-600">▼ ${Math.abs(change).toFixed(1)}% (IMPROVING)</span>`;
+                } else {
+                    rocDisplay.innerHTML = `<span class="text-slate-500">STABLE (Ref: ${lastVal})</span>`;
+                }
+            }
+        }
+
+        // --- HEURISTIC ENGINE RENDERER ---
+        function renderData() {
+            document.getElementById('reportDate').innerText = new Date().toLocaleString();
+            document.getElementById('docId').innerText = `RPT-${Math.floor(Math.random() * 10000)}`;
+
+            // Fetch Turbine_Health_DB
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('Turbine_Health_DB') || '[]');
+            } catch (e) { console.error("DB Error", e); }
+
+            const container = document.getElementById('anomalyTableContainer');
+
+            if (history.length === 0) {
+                container.innerHTML = `<div class="text-center py-4 text-sm text-slate-400 italic">${currentLang === 'en' ? 'No anomalies recorded.' : 'Nema zabilježenih anomalija.'}</div>`;
+                document.getElementById('recommendationText').innerText = i18n[currentLang].default_rec;
+                updateScore(100);
+                drawRadarChart(100, 100, 100); // Perfect score
+                return;
+            }
+
+            // Render Table
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>${i18n[currentLang].col_zone}</th>
+                        <th>${i18n[currentLang].col_code}</th>
+                        <th>${i18n[currentLang].col_ctx}</th>
+                        <th>${i18n[currentLang].col_crit}</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            const activeCodes = [];
+            let maxCrit = 0;
+
+            // Simplified Radar Scores
+            let mechScore = 100;
+            let hydrScore = 100;
+            let elecScore = 100;
+
+            history.forEach(item => {
+                activeCodes.push(item.symptom_id);
+                if (item.criticality > maxCrit) maxCrit = item.criticality;
+
+                // Radar Logic
+                if (item.zone === 'BEAR' || item.zone === 'MIV') mechScore -= (item.criticality * 10);
+                if (item.zone === 'DIST') hydrScore -= (item.criticality * 10);
+                if (item.zone === 'GEN') elecScore -= (item.criticality * 10);
+
+                html += `<tr>
+                    <td class="font-bold text-slate-700">${item.zone}</td>
+                    <td class="font-mono text-blue-900">${item.symptom_id}</td>
+                    <td class="text-slate-500 text-[10px]">${item.operational_context}</td>
+                    <td><span class="status-badge ${item.criticality >= 4 ? 'status-active' : 'status-nominal'}">Lvl ${item.criticality}</span></td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+
+            // Update Radar Chart
+            drawRadarChart(mechScore, hydrScore, elecScore);
+
+            // Update Health Score
+            let systemHealth = 100 - (maxCrit * 15);
+            if (systemHealth < 0) systemHealth = 0;
+            updateScore(systemHealth);
+
+            // Inference Engine Execution
+            const outputEl = document.getElementById('recommendationText');
+            let diagnosis = null;
+
+            // 1. Check Complex Rules
+            for (const rule of inferenceRules) {
+                if (rule.condition(activeCodes)) {
+                    diagnosis = rule.diagnosis[currentLang];
+                    break; // Priority to complex faults
+                }
+            }
+
+            // 2. Fallback to Primary Fault
+            if (!diagnosis && activeCodes.length > 0) {
+                const primary = activeCodes[0];
+                if (singleFaults[primary]) diagnosis = singleFaults[primary][currentLang];
+                else diagnosis = `${currentLang === 'en' ? 'Standard Fault Protocol:' : 'Standardni Protokol Kvara:'} ${primary}`;
+            }
+
+            // 3. Default
+            if (!diagnosis) diagnosis = i18n[currentLang].default_rec;
+
+            outputEl.innerText = diagnosis;
+        }
+
+        // --- POLYGON RADAR CHART (Canvas-Free) ---
+        function drawRadarChart(m, h, e) {
+            // Visualize via CSS Triangle/Polygon clip-path or simpler div bars for robustness
+            // For this output we will use a SVG overlay which is cleaner
+            const container = document.getElementById('radarChart');
+
+            // Normalize inputs (radius usually 0-50 for percentages in SVG viewbox 0 0 100 100)
+            const rM = (m / 100) * 40; // Top
+            const rH = (h / 100) * 40; // Bottom Left
+            const rE = (e / 100) * 40; // Bottom Right
+
+            // Calc Points (Center is 50,50)
+            const p1 = `50,${50 - rM}`; // Mech (Top)
+            const p2 = `${50 - (rH * 0.866)},${50 + (rH * 0.5)}`; // Hydr (Bot Left)
+            const p3 = `${50 + (rE * 0.866)},${50 + (rE * 0.5)}`; // Elec (Bot Right)
+
+            // Dynamic SVG
+            container.innerHTML = `
+            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg">
+                <polygon points="50,10 15,70 85,70" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                <circle cx="50" cy="50" r="1" fill="#1e3a8a"/>
+                <polygon points="${p1} ${p2} ${p3}" fill="rgba(30, 58, 138, 0.5)" stroke="#1e3a8a" stroke-width="2"/>
+            </svg>
+            `;
+        }
+
+        // Initialize
+        renderData();
+
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

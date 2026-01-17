@@ -215,6 +215,21 @@
 
 @tailwind base;
 @tailwind components;
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-h-cyan hover:bg-hydro-primary text-h-dark font-bold rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-h-cyan/20;
+  }
+
+  .btn-outline {
+    @apply px-6 py-2 border border-h-border hover:border-h-cyan text-white rounded-lg transition-all bg-transparent hover:bg-h-cyan/10;
+  }
+
+  .btn-hero-xl {
+    @apply px-10 py-4 text-xl uppercase tracking-widest;
+  }
+}
+
 @tailwind utilities;
 
 /* --- TACTICAL COMMAND CENTER THEME --- */
@@ -884,4 +899,19 @@ textarea::placeholder {
   font-weight: 700;
   margin-right: 0.1em;
 }
-.svg-container svg { width: 100%; height: 100%; object-fit: contain; max-height: 80vh; }
+
+/* Digital Twin SVG Container Logic */
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+}
+
+.svg-container.loading {
+  filter: blur(10px);
+  opacity: 0.5;
+}

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_MIV_Bypass/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_MIV_Bypass/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: MIV & Bypass Logic</title>
+    <style>
+        /* Water Path Theme - Deep Blue */
+        :root {
+            --primary-color: #0EA5E9;
+            --secondary-color: #0284C7;
+            --accent-color: #38BDF8;
+            --warning-color: #EF4444;
+            --bg-color: #0F172A;
+            --text-color: #E2E8F0;
+            --border-color: #0EA5E9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #0f1c30, #0a1120);
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(14, 165, 233, 0.2);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.05));
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--accent-color);
+            background: transparent;
+            color: var(--accent-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+        }
+
+        .section-title::before {
+            content: "🌊";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .logic-box {
+            border-left: 5px solid var(--accent-color);
+            background: rgba(56, 189, 248, 0.05);
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            border: 1px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: rgba(14, 165, 233, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 data-i18n="title">🌊 MIV & BYPASS LOGIC PROTOCOL</h1>
+            <h2 data-i18n="subtitle">Pressure Equalization & Physical Sealing</h2>
+            <p style="color: var(--accent-color); font-size: 0.9em; margin-top: 10px;" data-i18n="hdr_desc">Preventing
+                "wire-drawing" erosion and ensuring reliable sequencing</p>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <div class="module critical">
+            <h3 data-i18n="crit_rule">⚠️ CRITICAL OPERATING RULE</h3>
+            <p><strong data-i18n="no_force">NEVER FORCE MIV OPEN.</strong></p>
+            <ul>
+                <li><strong data-i18n="diff_limit">Differential Pressure Limit:</strong> <span
+                        data-i18n="diff_limit_desc">MIV cylinder is NOT designed to open against full penstock pressure.
+                        ΔP must be < 2 Bar.</span>
+                </li>
+                <li><strong data-i18n="seal_damage">Seal Damage:</strong> <span data-i18n="seal_damage_desc">Opening
+                        under differential pressure rips the main seal out of its seat.</span></li>
+                <li><strong data-i18n="safety">Safety:</strong> <span data-i18n="safety_desc">Hydraulic overload can
+                        burst cylinder seals or hoses.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="rule_0_title">0% Closing Rule - Zero Tolerance</div>
+
+        <div class="logic-box">
+            <h3 data-i18n="scada_real">SCADA vs. Physical Reality</h3>
+            <p><strong data-i18n="trap">Trap:</strong> <span data-i18n="trap_desc">SCADA showing "0% Open" does not
+                    guarantee sealing. Limit switch might be moved or misaligned.</span></p>
+
+            <p><strong data-i18n="wire_law">Law of Erosion (Wire-Drawing):</strong></p>
+            <ul>
+                <li data-i18n="gap_desc">If MIV is physically open even by <strong>2°</strong> (e.g. at 88° instead of
+                    90° in seat), high velocity water jet shoots through the gap.</li>
+                <li data-i18n="vel_desc"><strong>Velocity:</strong> > 40 m/s under 150m head.</li>
+                <li data-i18n="eff_desc"><strong>Effect:</strong> Cuts through stainless steel seat ring like a laser
+                    within weeks.</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="ver_proc">Verification Procedure:</h4>
+            <ol>
+                <li><strong data-i18n="vis_check">Visual Check:</strong> <span data-i18n="vis_check_desc">Look at
+                        mechanical weight arm position. Mark the actual "Closed" position on wall/floor.</span></li>
+                <li><strong data-i18n="leak_check">Leak Check:</strong> <span data-i18n="leak_check_desc">With MIV and
+                        Bypass closed, open Spiral Drain.</span>
+                    <ul>
+                        <li data-i18n="flow_stop">Flow should stop completely within 5 minutes.</li>
+                        <li data-i18n="leak_rate">If water continues > 5 L/min, MIV seal is passing.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="bypass_title">Bypass Interlock Logic - Pressure Handling</div>
+
+        <div class="module">
+            <h3 data-i18n="auth_seq">Authorization Opening Sequence</h3>
+            <p data-i18n="plc_rule">PLC <strong>MUST</strong> enforce the following logic chain before energizing MIV
+                Open Solenoid:</p>
+
+            <table class="data-table">
+                <tr>
+                    <th data-i18n="step">Step</th>
+                    <th data-i18n="action">Action</th>
+                    <th data-i18n="cond">Condition to Proceed</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td data-i18n="start_cmd">"Start Unit" Command</td>
+                    <td data-i18n="no_faults">No Faults</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td data-i18n="open_bp">Open Bypass Valve</td>
+                    <td data-i18n="bp_open">Bypass Limit Switch = OPEN</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td data-i18n="wait_fill">Wait Spiral Fill</td>
+                    <td data-i18n="press_rise">Pressure Rise > 2 Bar/sec</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong data-i18n="check_eq">Pressure Equalization Check</strong></td>
+                    <td><strong data-i18n="delta_p">(P_penstock - P_spiral) < 0.5 Bar</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td data-i18n="open_miv">Open MIV Command</td>
+                    <td data-i18n="eq_conf">Equalization CONFIRMED</td>
+                </tr>
+            </table>
+
+            <h4 style="color: var(--warning-color);" data-i18n="leak_symp">"Distributor Leakage" Symptom</h4>
+            <p><strong data-i18n="scenario">Scenario:</strong> <span data-i18n="scen_byp_desc">Bypass valve opens, but
+                    Spiral pressure never equalizes with Penstock pressure.</span></p>
+            <p><strong data-i18n="diagnosis">Diagnosis:</strong> <span data-i18n="diag_byp_desc">Wicket Gates
+                    (Distributor) are leaking water into runner faster than Bypass can fill the spiral.</span></p>
+            <p><strong data-i18n="action_title">Action:</strong>
+            <ol>
+                <li data-i18n="act_1">DO NOT bridge the interlock.</li>
+                <li data-i18n="act_2">Perform Wicket Gate seal inspection.</li>
+                <li><span data-i18n="see_sop">See</span> <a href="Francis_SOP_Distributor_Sync.html"
+                        style="color: var(--accent-color);" data-i18n="dist_sop">Distributor Synchronization SOP</a>.
+                </li>
+            </ol>
+            </p>
+        </div>
+
+        <div class="section-title" data-i18n="cyl_title">Cylinder & Weld Checklist</div>
+
+        <div class="logic-box">
+            <h3 data-i18n="mech_int">Mechanical Integrity Inspection</h3>
+            <p data-i18n="stress_note">MIV body takes highest static stress of any component (16 Bar continuous).</p>
+
+            <h4 style="color: var(--primary-color);" data-i18n="ann_insp">Annual Inspection Points:</h4>
+            <ol>
+                <li><strong data-i18n="cyl_mount">Hydraulic Cylinder Mounting:</strong>
+                    <ul>
+                        <li data-i18n="chk_torq">Check torque on trunnion bolts.</li>
+                        <li data-i18n="chk_bush">Inspect pin bushings for ovality/play (> 0.5mm play = replace).</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="weld_seam">Welded Seams (NDT Mandatory):</strong>
+                    <ul>
+                        <li data-i18n="ndt_test">Perform Dye Penetrant test on flange-to-body welds.</li>
+                        <li data-i18n="crit_zone"><strong>Critical Zone:</strong> Valve body to cylinder trunnion
+                            transition (highest stress).</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="weight_arm">Weight Arm:</strong>
+                    <ul>
+                        <li data-i18n="chk_weld">Inspect safety cage welds.</li>
+                        <li data-i18n="chk_stack">Ensure weight stack is secured and cannot shift.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="ts_title">Troubleshooting Table</div>
+        <table class="data-table">
+            <tr>
+                <th data-i18n="symptom">Symptom</th>
+                <th data-i18n="prob_cause">Probable Cause</th>
+                <th data-i18n="corr_act">Corrective Action</th>
+            </tr>
+            <tr>
+                <td data-i18n="ts_1_sym">MIV won't open (Logic Block)</td>
+                <td data-i18n="ts_1_cause">Pressure not equalized</td>
+                <td data-i18n="ts_1_act">Check Wicket Gate leakage; Check Bypass filter</td>
+            </tr>
+            <tr>
+                <td data-i18n="ts_2_sym">MIV creeps closed during operation</td>
+                <td data-i18n="ts_2_cause">Cylinder internal bypass</td>
+                <td data-i18n="ts_2_act">Rebuild hydraulic cylinder seals</td>
+            </tr>
+            <tr>
+                <td data-i18n="ts_3_sym">Loud "Bang" when closing</td>
+                <td data-i18n="ts_3_cause">Closing too fast</td>
+                <td data-i18n="ts_3_act">Adjust throttle valve on HPU return line (Target: 60-90 sec)</td>
+            </tr>
+            <tr>
+                <td data-i18n="ts_4_sym">Hissing water sound when closed</td>
+                <td data-i18n="ts_4_cause">Seat erosion (Wire-drawing)</td>
+                <td data-i18n="ts_4_act"><strong>CRITICAL:</strong> Schedule outage for seat ring grinding/replacement
+                </td>
+            </tr>
+        </table>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "🌊 MIV & BYPASS LOGIC PROTOCOL",
+                subtitle: "Pressure Equalization & Physical Sealing",
+                hdr_desc: "Preventing \"wire-drawing\" erosion and ensuring reliable sequencing",
+                crit_rule: "⚠️ CRITICAL OPERATING RULE",
+                no_force: "NEVER FORCE MIV OPEN.",
+                diff_limit: "Differential Pressure Limit:",
+                diff_limit_desc: "MIV cylinder is NOT designed to open against full penstock pressure. ΔP must be < 2 Bar.",
+                seal_damage: "Seal Damage:",
+                seal_damage_desc: "Opening under differential pressure rips the main seal out of its seat.",
+                safety: "Safety:",
+                safety_desc: "Hydraulic overload can burst cylinder seals or hoses.",
+                rule_0_title: "0% Closing Rule - Zero Tolerance",
+                scada_real: "SCADA vs. Physical Reality",
+                trap: "Trap:",
+                trap_desc: "SCADA showing \"0% Open\" does not guarantee sealing. Limit switch might be moved or misaligned.",
+                wire_law: "Law of Erosion (Wire-Drawing):",
+                gap_desc: "If MIV is physically open even by <strong>2°</strong> (e.g. at 88° instead of 90° in seat), high velocity water jet shoots through the gap.",
+                vel_desc: "<strong>Velocity:</strong> > 40 m/s under 150m head.",
+                eff_desc: "<strong>Effect:</strong> Cuts through stainless steel seat ring like a laser within weeks.",
+                ver_proc: "Verification Procedure:",
+                vis_check: "Visual Check:",
+                vis_check_desc: "Look at mechanical weight arm position. Mark the actual \"Closed\" position on wall/floor.",
+                leak_check: "Leak Check:",
+                leak_check_desc: "With MIV and Bypass closed, open Spiral Drain.",
+                flow_stop: "Flow should stop completely within 5 minutes.",
+                leak_rate: "If water continues > 5 L/min, MIV seal is passing.",
+                bypass_title: "Bypass Interlock Logic - Pressure Handling",
+                auth_seq: "Authorization Opening Sequence",
+                plc_rule: "PLC <strong>MUST</strong> enforce the following logic chain before energizing MIV Open Solenoid:",
+                step: "Step",
+                action: "Action",
+                cond: "Condition to Proceed",
+                start_cmd: "\"Start Unit\" Command",
+                no_faults: "No Faults",
+                open_bp: "Open Bypass Valve",
+                bp_open: "Bypass Limit Switch = OPEN",
+                wait_fill: "Wait Spiral Fill",
+                press_rise: "Pressure Rise > 2 Bar/sec",
+                check_eq: "Pressure Equalization Check",
+                delta_p: "(P_penstock - P_spiral) < 0.5 Bar",
+                open_miv: "Open MIV Command",
+                eq_conf: "Equalization CONFIRMED",
+                leak_symp: "\"Distributor Leakage\" Symptom",
+                scenario: "Scenario:",
+                scen_byp_desc: "Bypass valve opens, but Spiral pressure never equalizes with Penstock pressure.",
+                diagnosis: "Diagnosis:",
+                diag_byp_desc: "Wicket Gates (Distributor) are leaking water into runner faster than Bypass can fill the spiral.",
+                action_title: "Action:",
+                act_1: "DO NOT bridge the interlock.",
+                act_2: "Perform Wicket Gate seal inspection.",
+                see_sop: "See",
+                dist_sop: "Distributor Synchronization SOP",
+                cyl_title: "Cylinder & Weld Checklist",
+                mech_int: "Mechanical Integrity Inspection",
+                stress_note: "MIV body takes highest static stress of any component (16 Bar continuous).",
+                ann_insp: "Annual Inspection Points:",
+                cyl_mount: "Hydraulic Cylinder Mounting:",
+                chk_torq: "Check torque on trunnion bolts.",
+                chk_bush: "Inspect pin bushings for ovality/play (> 0.5mm play = replace).",
+                weld_seam: "Welded Seams (NDT Mandatory):",
+                ndt_test: "Perform Dye Penetrant test on flange-to-body welds.",
+                crit_zone: "<strong>Critical Zone:</strong> Valve body to cylinder trunnion transition (highest stress).",
+                weight_arm: "Weight Arm:",
+                chk_weld: "Inspect safety cage welds.",
+                chk_stack: "Ensure weight stack is secured and cannot shift.",
+                ts_title: "Troubleshooting Table",
+                symptom: "Symptom",
+                prob_cause: "Probable Cause",
+                corr_act: "Corrective Action",
+                ts_1_sym: "MIV won't open (Logic Block)",
+                ts_1_cause: "Pressure not equalized",
+                ts_1_act: "Check Wicket Gate leakage; Check Bypass filter",
+                ts_2_sym: "MIV creeps closed during operation",
+                ts_2_cause: "Cylinder internal bypass",
+                ts_2_act: "Rebuild hydraulic cylinder seals",
+                ts_3_sym: "Loud \"Bang\" when closing",
+                ts_3_cause: "Closing too fast",
+                ts_3_act: "Adjust throttle valve on HPU return line (Target: 60-90 sec)",
+                ts_4_sym: "Hissing water sound when closed",
+                ts_4_cause: "Seat erosion (Wire-drawing)",
+                ts_4_act: "<strong>CRITICAL:</strong> Schedule outage for seat ring grinding/replacement",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "🌊 PROTOKOL GUV-a & BAJPAS LOGIKE",
+                subtitle: "Izjednačavanje Pritiska & Fizičko Zaptivanje",
+                hdr_desc: "Sprečavanje erozije \"izvlačenjem žice\" i osiguravanje pouzdanog sekvenciranja",
+                crit_rule: "⚠️ KRITIČNO PRAVILO RADA",
+                no_force: "NIKADA NE SILITE OTVARANJE GUV-a.",
+                diff_limit: "Limit Diferencijalnog Pritiska:",
+                diff_limit_desc: "Cilindar GUV-a NIJE dizajniran da otvara protiv punog pritiska cjevovoda. ΔP mora biti < 2 Bara.",
+                seal_damage: "Oštećenje Zaptivača:",
+                seal_damage_desc: "Otvaranje pod diferencijalnim pritiskom čupa glavni zaptivač iz njegovog sjedišta.",
+                safety: "Sigurnost:",
+                safety_desc: "Hidrauličko preopterećenje može rasprsnuti zaptivače cilindra ili crijeva.",
+                rule_0_title: "Pravilo 0% Zatvaranja - Nulta Tolerancija",
+                scada_real: "SCADA protiv Fizičke Stvarnosti",
+                trap: "Zamka:",
+                trap_desc: "SCADA prikaz \"0% Otvoreno\" ne garantuje zaptivanje. Krajnji prekidač može biti pomjeren ili pogrešno poravnat.",
+                wire_law: "Zakon Erozije (Wire-Drawing):",
+                gap_desc: "Ako je GUV fizički otvoren čak i za <strong>2°</strong> (npr. na 88° umjesto 90° u sjedištu), mlaz vode velike brzine prolazi kroz zazor.",
+                vel_desc: "<strong>Brzina:</strong> > 40 m/s pod padom od 150m.",
+                eff_desc: "<strong>Efekat:</strong> Reže kroz prsten sjedišta od nehrđajućeg čelika kao laser unutar nekoliko sedmica.",
+                ver_proc: "Procedura Verifikacije:",
+                vis_check: "Vizuelna Provjera:",
+                vis_check_desc: "Pogledajte poziciju ruke mehaničkog tega. Označite stvarnu \"Zatvorenu\" poziciju na zidu/podu.",
+                leak_check: "Provjera Curenja:",
+                leak_check_desc: "Sa zatvorenim GUV-om i Bajpasom, otvorite drenažu Spirale.",
+                flow_stop: "Protok bi trebao potpuno stati unutar 5 minuta.",
+                leak_rate: "Ako voda nastavi teći > 5 L/min, zaptivač GUV-a propušta.",
+                bypass_title: "Logika Bajpas Interlock-a - Rukovanje Pritiskom",
+                auth_seq: "Autorizacija Sekvence Otvaranja",
+                plc_rule: "PLC <strong>MORA</strong> provesti sljedeći lanac logike prije energizacije solenoida za otvaranje GUV-a:",
+                step: "Korak",
+                action: "Akcija",
+                cond: "Uslov za Nastavak",
+                start_cmd: "Komanda \"Start Agregat\"",
+                no_faults: "Nema Grešaka Zaustavljanja (Faults)",
+                open_bp: "Otvori Bajpas Ventil",
+                bp_open: "Bajpas Krajnji Prekidač = OTVOREN",
+                wait_fill: "Čekaj Punjenje Spirale",
+                press_rise: "Porast Pritiska > 2 Bar/sek",
+                check_eq: "Provjera Izjednačenja Pritiska",
+                delta_p: "(P_cjevovod - P_spirala) < 0.5 Bar",
+                open_miv: "Komanda Otvori GUV",
+                eq_conf: "Izjednačenje POTVRĐENO",
+                leak_symp: "Simptom \"Curenje Sprovodnog Aparata\"",
+                scenario: "Scenario:",
+                scen_byp_desc: "Bajpas ventil se otvara, ali pritisak u Spirali se nikada ne izjednači sa pritiskom Cjevovoda.",
+                diagnosis: "Dijagnoza:",
+                diag_byp_desc: "Sprovodne Lopatice (Distributor) propuštaju vodu u radno kolo brže nego što Bajpas može napuniti spiralu.",
+                action_title: "Akcija:",
+                act_1: "NEMOJTE premoštavati interlock.",
+                act_2: "Izvršite inspekciju zaptivača Sprovodnih Lopatica.",
+                see_sop: "Vidi",
+                dist_sop: "SOP Sinhronizacije Sprovodnog Aparata",
+                cyl_title: "Lista Provjere Cilindra & Zavara",
+                mech_int: "Inspekcija Mehaničkog Integriteta",
+                stress_note: "Tijelo GUV-a trpi najveći statički stres od svih komponenti (16 Bara kontinuirano).",
+                ann_insp: "Tačke Godišnje Inspekcije:",
+                cyl_mount: "Montaža Hidrauličnog Cilindra:",
+                chk_torq: "Provjeri moment na vijcima nosača (trunnion).",
+                chk_bush: "Pregledaj čahure bolcni na ovalnost/luft (> 0.5mm luft = zamjena).",
+                weld_seam: "Zavareni Šavovi (NDT Obavezan):",
+                ndt_test: "Izvrši test penetrantima na zavarima prirubnice prema tijelu.",
+                crit_zone: "<strong>Kritična Zona:</strong> Prijelaz sa tijela ventila na nosač cilindra (najveći stres).",
+                weight_arm: "Ruka Tega:",
+                chk_weld: "Pregledaj zavare sigurnosne ograde.",
+                chk_stack: "Osiguraj da je snop tegova učvršćen i da se ne može pomjeriti.",
+                ts_title: "Tabela Rješavanja Problema",
+                symptom: "Simptom",
+                prob_cause: "Vjerovatan Uzrok",
+                corr_act: "Korektivna Akcija",
+                ts_1_sym: "GUV neće da otvori (Logička Blokada)",
+                ts_1_cause: "Pritisak nije izjednačen",
+                ts_1_act: "Provjeri curenje Sprovodnih Lopatica; Provjeri filter Bajpasa",
+                ts_2_sym: "GUV puzi ka zatvaranju tokom rada",
+                ts_2_cause: "Unutrašnje curenje cilindra",
+                ts_2_act: "Reparacija zaptivača hidrauličnog cilindra",
+                ts_3_sym: "Glasan \"Udarac\" pri zatvaranju",
+                ts_3_cause: "Zatvaranje prebrzo",
+                ts_3_act: "Podesi prigušni ventil na povratnoj liniji HPU-a (Cilj: 60-90 sek)",
+                ts_4_sym: "Zvuk šištanja vode kada je zatvoren",
+                ts_4_cause: "Erozija sjedišta (Wire-drawing)",
+                ts_4_act: "<strong>KRITIČNO:</strong> Planiraj remont za brušenje/zamjenu prstena sjedišta",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

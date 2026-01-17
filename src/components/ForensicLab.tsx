@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useDigitalLedger, AuditSnapshot } from '../stores/useDigitalLedger';
 import { RootCauseEngine, RootCauseAnalysis } from '../utils/RootCauseEngine';
-import { generateForensicDossier } from '../utils/forensicDossier';
+import { ForensicReportService } from '../services/ForensicReportService';
+import { useTranslation } from 'react-i18next';
 import { CausalChain } from './ui/CausalChain';
 import { TacticalCard } from './ui/TacticalCard';
 import { TurbineRunner3D } from './three/TurbineRunner3D';
@@ -9,6 +10,7 @@ import { Clock, FileText, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 
 export const ForensicLab: React.FC = () => {
+    const { t } = useTranslation();
     const { snapshots } = useDigitalLedger();
     const { setFocus, activeComponentId } = useContextAwareness(); // Bi-Directional Sync
     const [selectedSnapshot, setSelectedSnapshot] = useState<AuditSnapshot | null>(null);
@@ -25,7 +27,12 @@ export const ForensicLab: React.FC = () => {
     // Export forensic dossier
     const exportDossier = () => {
         if (selectedSnapshot && rchAnalysis) {
-            generateForensicDossier(selectedSnapshot, rchAnalysis);
+            const blob = ForensicReportService.generateRootCauseDossier({
+                snapshot: selectedSnapshot,
+                rchAnalysis,
+                t
+            });
+            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedSnapshot.id}.pdf`, true);
         }
     };
 

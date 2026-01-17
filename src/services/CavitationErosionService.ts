@@ -120,7 +120,7 @@ export class CavitationErosionService {
         }
 
         // Determine current material (typical for turbine family)
-        let currentMaterial = 'Martenzitni Cr13 čelik'; // Default
+        let currentMaterial = 'Martensitic Cr13 Steel'; // Default
         if (turbineFamily === 'KAPLAN') currentMaterial = 'Austenitic Stainless 18Cr-8Ni';
         if (turbineFamily === 'PELTON') currentMaterial = 'Hardened 17Cr-4Ni';
 
@@ -132,7 +132,7 @@ export class CavitationErosionService {
         if (massLossRate > 50) {
             // CRITICAL: > 50 g/month
             recommendedAction = 'STELLITE_WELD';
-            recommendedMaterial = 'Stellite 6 (Co-Cr-W navarivanje)';
+            recommendedMaterial = 'Stellite 6 (Co-Cr-W welding)';
         } else if (massLossRate > 20) {
             // HIGH: 20-50 g/month
             recommendedAction = erosionAcceleration > 30 ? 'STELLITE_WELD' : 'REGIME_CHANGE';
@@ -183,40 +183,40 @@ export class CavitationErosionService {
     static generateRecommendation(analysis: ErosionAnalysis): string {
         const { massLossRate, erosionAcceleration, recommendedAction, recommendedMaterial, recommendedRegimeChange } = analysis;
 
-        let message = `🤖 ANO-AGENT CAVITATION ANALIZA:\n\n`;
-        message += `Stopa gubitka mase: ${massLossRate.toFixed(1)} g/mjesec\n`;
+        let message = `🤖 ANO-AGENT CAVITATION ANALYSIS:\n\n`;
+        message += `Mass loss rate: ${massLossRate.toFixed(1)} g/month\n`;
 
         if (erosionAcceleration > 0) {
-            message += `⚠️ Erozija se ubrzava: +${erosionAcceleration.toFixed(0)}% vs prethodno mjerenje\n\n`;
+            message += `⚠️ Erosion is accelerating: +${erosionAcceleration.toFixed(0)}% vs previous measurement\n\n`;
         } else {
-            message += `✓ Erozija se stabilizovala ili usporava: ${erosionAcceleration.toFixed(0)}%\n\n`;
+            message += `✓ Erosion has stabilized or is slowing down: ${erosionAcceleration.toFixed(0)}%\n\n`;
         }
 
-        message += `PREPORUKA:\n`;
+        message += `RECOMMENDATION:\n`;
 
         switch (recommendedAction) {
             case 'STELLITE_WELD':
-                message += `🔴 HITNO: Stellite navarivanje preporučeno.\n`;
-                message += `Materijal: ${recommendedMaterial}\n`;
-                message += `Očekivano smanjenje erozije: 70-80%\n`;
-                message += `Vijek trajanja: 5x duže od baznog materijala\n`;
+                message += `🔴 URGENT: Stellite welding recommended.\n`;
+                message += `Material: ${recommendedMaterial}\n`;
+                message += `Expected erosion reduction: 70-80%\n`;
+                message += `Service life: 5x longer than base material\n`;
                 break;
 
             case 'BLADE_REPLACEMENT':
-                message += `🟡 Zamjena lopatica preporučena u narednih 6-12 mjeseci.\n`;
+                message += `🟡 Blade replacement recommended within the next 6-12 months.\n`;
                 break;
 
             case 'REGIME_CHANGE':
-                message += `🟡 Promjena režima rada preporučena:\n`;
+                message += `🟡 Operational regime change recommended:\n`;
                 if (recommendedRegimeChange) {
                     message += `${recommendedRegimeChange.parameter}: ${recommendedRegimeChange.currentValue} → ${recommendedRegimeChange.recommendedValue}\n`;
-                    message += `Očekivano smanjenje erozije: ~${recommendedRegimeChange.expectedReduction}%\n`;
+                    message += `Expected erosion reduction: ~${recommendedRegimeChange.expectedReduction}%\n`;
                 }
                 break;
 
             case 'CONTINUE_MONITORING':
-                message += `✅ Erozija pod kontrolom. Nastaviti sa monitoringom.\n`;
-                message += `Sledeće skeniranje: 6 mjeseci\n`;
+                message += `✅ Erosion under control. Continue monitoring.\n`;
+                message += `Next scan: 6 months\n`;
                 break;
         }
 

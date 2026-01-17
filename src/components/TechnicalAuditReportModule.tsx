@@ -1,12 +1,14 @@
 // Technical Audit Report UI Module
-// This module invokes the ReportGenerator to create the "15-Year Experience" PDF.
+// This module invokes the ForensicReportService to create the "15-Year Experience" PDF.
 
 import React from 'react';
 import { FileText, Download, ShieldCheck, AlertTriangle } from 'lucide-react';
-import { reportGenerator } from '../features/reporting/ReportGenerator';
+import { ForensicReportService } from '../services/ForensicReportService';
 import { GlassCard } from '../shared/components/ui/GlassCard';
+import { useTranslation } from 'react-i18next';
 
 export const TechnicalAuditReportModule: React.FC = () => {
+    const { t } = useTranslation();
 
     const handleGenerateReport = () => {
         // MOCK DATA - In production this comes from SmartStartService, VisualInspectionService, etc.
@@ -54,8 +56,21 @@ export const TechnicalAuditReportModule: React.FC = () => {
             }
         };
 
-        const blob = reportGenerator.generateTechnicalAuditReport(mockData);
-        reportGenerator.downloadReport(blob, `AnoHUB_Audit_Report_${new Date().toISOString().slice(0, 10)}.pdf`);
+        const blob = ForensicReportService.generateAuditReport({
+            contextTitle: mockData.assetDetails.name,
+            slogan: "High-Fidelity Technical Audit Report",
+            metrics: [
+                { label: 'Bolt Grade', value: mockData.mechanical.boltGrade },
+                { label: 'Torque', value: mockData.mechanical.torqueApplied, unit: 'Nm' },
+                { label: 'Head', value: mockData.hydraulics.netHead, unit: 'm' }
+            ],
+            diagnostics: mockData.executiveSummary.recommendedActions.map(a => ({ message: a })),
+            logs: [],
+            physicsData: [],
+            engineerName: "CEREBRO AI",
+            t
+        });
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_Report_${new Date().toISOString().slice(0, 10)}.pdf`, true);
     };
 
     return (
