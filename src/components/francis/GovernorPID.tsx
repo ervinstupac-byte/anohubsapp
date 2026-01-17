@@ -41,7 +41,7 @@ export const GovernorPID: React.FC = () => {
                             {t('francis.governorPID.title')}
                         </h1>
                         <p className="text-blue-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <NeuralPulse /> {t('francis.governorPID.subtitle')} // NC-4.2 AI-TUNED
+                            <NeuralPulse /> {t('francis.governorPID.subtitle')} // NC-5.7 AI-TUNED
                         </p>
                     </div>
 

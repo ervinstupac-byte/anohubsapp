@@ -577,7 +577,7 @@ export const HPPBuilder: React.FC = () => {
                                 <p className="text-slate-400 text-xs">{t('hpp_builder.assembly.subtitle')}</p>
                             </div>
                             <div className="flex gap-2">
-                                <span className="px-3 py-1 rounded bg-amber-500/10 text-amber-500 text-xs font-mono border border-amber-500/20">NC-4.2 COMPLIANT</span>
+                                <span className="px-3 py-1 rounded bg-amber-500/10 text-amber-500 text-xs font-mono border border-amber-500/20">NC-5.7 COMPLIANT</span>
                             </div>
                         </div>
 

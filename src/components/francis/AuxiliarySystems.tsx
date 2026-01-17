@@ -23,7 +23,7 @@ export const AuxiliarySystems: React.FC = () => {
                             {t('francis.auxiliary.title')}
                         </h1>
                         <p className="text-blue-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <NeuralPulse /> {t('francis.auxiliary.subtitle')} // NC-4.2 AI-TUNED
+                            <NeuralPulse /> {t('francis.auxiliary.subtitle')} // NC-5.7 AI-TUNED
                         </p>
                     </div>
 

@@ -60,6 +60,7 @@ interface TelemetryState {
     insulationResistance: number; // MΩ
 
     lastUpdate: string;
+    isCommanderMode: boolean; // Protocol NC-8.0 Implementation
 
     // Actions
     updateTelemetry: (payload: TelemetryUpdatePayload) => void;
@@ -70,6 +71,7 @@ interface TelemetryState {
     runDeepAnalysis: () => Promise<void>;
     toggleInvestigation: (componentId: string) => void;
     loadScenario: (scenario: DemoScenario) => void;
+    toggleCommanderMode: () => void; // Protocol NC-8.0
 }
 
 export const useTelemetryStore = create<TelemetryState>((set, get) => ({
@@ -95,6 +97,7 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
     insulationResistance: 1250,
 
     lastUpdate: new Date().toISOString(),
+    isCommanderMode: true,
 
     updateTelemetry: (payload: TelemetryUpdatePayload) => {
         set((state) => {
@@ -287,5 +290,9 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
                 });
                 break;
         }
+    },
+
+    toggleCommanderMode: () => {
+        set((state) => ({ isCommanderMode: !state.isCommanderMode }));
     }
 }));

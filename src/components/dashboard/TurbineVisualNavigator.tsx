@@ -26,7 +26,7 @@ import GuideVaneDetailView from './visual/GuideVaneDetailView';
 import FlywheelDetailView from './visual/FlywheelDetailView';
 
 /**
- * NC-4.2 COMPLIANT VISUAL NAVIGATOR
+ * NC-5.7 COMPLIANT VISUAL NAVIGATOR
  * Interactive Blueprint with Signposts & Drill-Down
  */
 
@@ -61,7 +61,7 @@ const TurbineVisualNavigator: React.FC = () => {
     }, []);
 
     // Load and Patch the SVG
-    // NC-4.2 PRECISION TOPOLOGY - DEBUG MODE ENABLED
+    // NC-5.7 PRECISION TOPOLOGY - DEBUG MODE ENABLED
     useEffect(() => {
         fetch('/Turbine_Grouped.svg')
             .then(res => res.text())
@@ -89,7 +89,7 @@ const TurbineVisualNavigator: React.FC = () => {
                     // DEBUG MODE FLAG - Set to false for production
                     const DEBUG_MODE = false;
 
-                    // Utility: Create Hitbox with NC-4.2 Precision Coordinates
+                    // Utility: Create Hitbox with NC-5.7 Precision Coordinates
                     const createHitbox = (id: string, type: 'rect' | 'circle', coords: any, titleText: string) => {
                         const group = doc.createElementNS("http://www.w3.org/2000/svg", "g");
                         group.id = id;
@@ -154,7 +154,7 @@ const TurbineVisualNavigator: React.FC = () => {
                     svgElement.insertBefore(style, svgElement.firstChild);
 
                     // =====================================================
-                    // NC-4.2 PRECISION TOPOLOGY CALIBRATION
+                    // NC-5.7 PRECISION TOPOLOGY CALIBRATION
                     // Coordinates are EXACT PIXELS for 1184x864 canvas
                     // =====================================================
 
@@ -226,7 +226,7 @@ const TurbineVisualNavigator: React.FC = () => {
                         className="absolute inset-0 flex items-center justify-center"
                         style={{ overflow: 'visible' }}
                     >
-                        {/* NC-4.2 ZERO-DRIFT CONTAINER: Fixed 1184x864 for 1:1 pixel parity */}
+                        {/* NC-5.7 ZERO-DRIFT CONTAINER: Fixed 1184x864 for 1:1 pixel parity */}
                         <div
                             className="relative"
                             style={{
@@ -236,7 +236,7 @@ const TurbineVisualNavigator: React.FC = () => {
                                 maxHeight: '100%'
                             }}
                         >
-                            {/* SVG Container - NC-4.2 ABSOLUTE PIXEL GRID */}
+                            {/* SVG Container - NC-5.7 ABSOLUTE PIXEL GRID */}
                             <div className="absolute inset-0 z-0" style={{ overflow: 'visible' }}>
                                 <svg
                                     ref={svgRef}
@@ -253,7 +253,7 @@ const TurbineVisualNavigator: React.FC = () => {
                                             const group = target.closest('g');
                                             const clickedId = group?.id || target.id;
 
-                                            // NC-4.2 PRODUCTION: Clean click handler
+                                            // NC-5.7 PRODUCTION: Clean click handler
 
 
                                             if (clickedId === 'nav-zone-left' || clickedId === 'nav-chevron') {
@@ -289,7 +289,7 @@ const TurbineVisualNavigator: React.FC = () => {
                                     {/* Leader Lines - Using ABSOLUTE PIXEL coordinates */}
                                     <g className="pointer-events-none">
                                         {COMPONENTS.map(comp => {
-                                            // NC-4.2: Direct pixel values, no percentage conversion
+                                            // NC-5.7: Direct pixel values, no percentage conversion
                                             const labelX = comp.labelPos.x;
                                             const labelY = comp.labelPos.y;
                                             const isHovered = hoveredId === comp.id;
@@ -390,7 +390,7 @@ const TurbineVisualNavigator: React.FC = () => {
                                                 </div>
                                                 <div>
                                                     <h2 className="text-2xl font-black text-white tracking-tighter uppercase">{focusedComp.name}</h2>
-                                                    <p className="text-xs text-cyan-400 font-mono tracking-widest">NC-4.2 COMPONENT ANALYSIS</p>
+                                                    <p className="text-xs text-cyan-400 font-mono tracking-widest">NC-5.7 COMPONENT ANALYSIS</p>
                                                 </div>
                                             </div>
                                             <button
@@ -475,7 +475,7 @@ const TurbineVisualNavigator: React.FC = () => {
                         <div className="absolute top-4 left-4 right-4 z-20 pointer-events-none flex justify-between items-start">
                             <div className="flex items-center gap-3">
                                 <div className="bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-md backdrop-blur-md">
-                                    <span className="text-[10px] font-mono font-bold text-cyan-400 tracking-tighter">NC-4.2 COMPLIANT TOPOLOGY</span>
+                                    <span className="text-[10px] font-mono font-bold text-cyan-400 tracking-tighter">NC-5.7 COMPLIANT TOPOLOGY</span>
                                 </div>
                                 <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 border border-white/5 rounded-md backdrop-blur-sm">
                                     <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.5)]" />

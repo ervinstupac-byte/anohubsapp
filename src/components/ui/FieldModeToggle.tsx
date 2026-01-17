@@ -3,7 +3,7 @@ import { Sun, Moon, Eye } from 'lucide-react';
 import { useTheme } from '../../stores/useTheme';
 
 /**
- * FIELD MODE TOGGLE (NC-4.2)
+ * FIELD MODE TOGGLE (NC-5.7)
  * 
  * High-Contrast/Low-Light toggle for turbine halls.
  * Strips all ambient glows and orbs for maximum readability.

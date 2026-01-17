@@ -9,7 +9,10 @@ import { Tooltip } from '../../shared/components/ui/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DigitalDisplay } from './DigitalDisplay.tsx';
-import { Activity, ShieldCheck, ZapOff, Sparkles, ChevronRight } from 'lucide-react';
+import { Activity, ShieldCheck, ZapOff, Sparkles, ChevronRight, Info } from 'lucide-react';
+import { DossierViewerModal } from '../knowledge/DossierViewerModal';
+import { DOSSIER_LIBRARY, DossierFile } from '../../data/knowledge/DossierLibrary';
+import { MasterIntelligenceEngine } from '../../services/MasterIntelligenceEngine';
 
 const TurbineUnit: React.FC<{
     id: string;
@@ -18,9 +21,10 @@ const TurbineUnit: React.FC<{
     mw: number;
     eccentricity: number;
     vibration: number;
-}> = React.memo(({ name, status, mw, eccentricity, vibration }) => {
+    onAlertClick?: () => void;
+}> = React.memo(({ id, name, status, mw, eccentricity, vibration, onAlertClick }) => {
     const { t } = useTranslation();
-    // NC-4.2 Reactive Color Logic: Base color on physics metrics
+    // NC-5.7 Reactive Color Logic: Base color on physics metrics
     // Vibration > 0.05 or Eccentricity > 0.8 triggers Warning/Critical aesthetics
     const isVibrationCritical = vibration > 0.06;
     const isEccentricityWarning = eccentricity > 0.75;
@@ -75,8 +79,15 @@ const TurbineUnit: React.FC<{
                 {status === 'running' && !isVibrationCritical && (
                     <div className="w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(6,182,212,0.1)_50%,transparent_75%)] bg-[length:32px_32px] animate-[slide_1.5s_linear_infinite]"></div>
                 )}
-                {isVibrationCritical && (
-                    <div className="text-[10px] font-black text-red-400 animate-pulse tracking-tight px-3 py-1.5 bg-red-950/60 rounded-lg border border-red-500/30 uppercase z-10 mx-4 text-center">
+                {/* Physics Breach Alert: Triggered by critical vibration or manual override for UNIT_02 */}
+                {(isVibrationCritical || (id === 'UNIT_02' && vibration > 0.05)) && (
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAlertClick?.();
+                        }}
+                        className="text-[10px] font-black text-red-400 animate-pulse tracking-tight px-3 py-1.5 bg-red-950/60 rounded-lg border border-red-500/30 uppercase z-10 mx-4 text-center cursor-pointer hover:bg-red-900/80 transition-colors shadow-[0_0_15px_rgba(239,68,68,0.4)]"
+                    >
                         {t('neuralFlow.physicsBreach')}
                     </div>
                 )}
@@ -96,6 +107,29 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [diagnosticAlerts, setDiagnosticAlerts] = useState<any[]>([]);
+    const [isViewerOpen, setIsViewerOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<{ path: string; title: string; sourceData?: DossierFile } | null>(null);
+
+    // ISO Vibration Binding
+    const vibPeak = vibration.x * 1000; // converted to μm
+    const isoZone = MasterIntelligenceEngine.calculateVibrationZone(vibration.x * 10);
+    const isoJustification = MasterIntelligenceEngine.getISOJustification(isoZone);
+
+    const handleOpenDossier = (path: string) => {
+        const source = DOSSIER_LIBRARY.find(d => d.path === path);
+        if (source) {
+            let activePath = source.path;
+            if (!activePath.startsWith('/') && !activePath.startsWith('http')) {
+                activePath = `/archive/${activePath}`;
+            }
+            setSelectedFile({
+                path: activePath,
+                title: activePath.split('/').pop()?.replace('.html', '') || 'Dossier',
+                sourceData: source
+            });
+            setIsViewerOpen(true);
+        }
+    };
 
     // Calculate MW output from physics (with null safety)
     const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
@@ -214,35 +248,40 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     </div>
                 </div>
 
-                <div className={`absolute top-4 right-4 sm:top-8 sm:right-8 text-[10px] font-mono px-5 py-2.5 rounded-full backdrop-blur-xl flex items-center gap-3 border transition-all z-20 ${diagnosticAlerts.length > 0
-                    ? 'text-red-400 bg-red-500/10 border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.1)]'
-                    : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
-                    }`}>
-                    <motion.div
-                        animate={diagnosticAlerts.length > 0 ? { scale: [1, 1.2, 1], opacity: [1, 0.5, 1] } : {}}
-                        transition={{ repeat: Infinity, duration: 1 }}
-                    >
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                    </motion.div>
-                    <span className="font-black uppercase tracking-widest">
-                        {diagnosticAlerts.length > 0 ? t('neuralFlow.diagnosticBreach') : t('neuralFlow.integrityVerified')}
-                    </span>
-                </div>
+                <Tooltip content={isoJustification}>
+                    <div className={`absolute top-4 right-4 sm:top-8 sm:right-8 text-[10px] font-mono px-5 py-2.5 rounded-full backdrop-blur-xl flex items-center gap-3 border transition-all z-20 cursor-help ${isoZone === 'ZONE_D' ? 'text-red-400 bg-red-500/10 border-red-500/30' :
+                        isoZone === 'ZONE_C' ? 'text-orange-400 bg-orange-500/10 border-orange-500/30' :
+                            isoZone === 'ZONE_B' ? 'text-amber-400 bg-amber-500/10 border-amber-500/30' :
+                                'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                        } shadow-[0_0_20px_rgba(0,0,0,0.2)]`}>
+                        <motion.div
+                            animate={isoZone === 'ZONE_D' || isoZone === 'ZONE_C' ? { scale: [1, 1.2, 1], opacity: [1, 0.5, 1] } : {}}
+                            transition={{ repeat: Infinity, duration: 1 }}
+                        >
+                            <ShieldCheck className="w-3.5 h-3.5" />
+                        </motion.div>
+                        <span className="font-black uppercase tracking-widest">
+                            {isoZone === 'ZONE_A' ? 'COMMANDER.VERIFIED' : `ISO.${isoZone}`}
+                        </span>
+                        <Info className="w-3 h-3 opacity-50" />
+                    </div>
+                </Tooltip>
 
                 <div className="flex flex-col sm:flex-row justify-around items-center sm:items-end pt-16 sm:pt-20 pb-10 sm:pb-16 relative gap-16 sm:gap-8">
                     <TurbineUnit
                         id="t1"
                         name="UNIT_01"
                         status="running"
-                        mw={mwOutput}
+                        mw={selectedAsset?.specs?.power_output ?? mwOutput}
                         eccentricity={orbit.eccentricity}
                         vibration={vibration.x}
+                        onAlertClick={() => handleOpenDossier('Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
                     />
 
                     <div className="relative flex flex-col items-center justify-center sm:mx-4">
                         <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"></div>
 
-                        {/* HEALTH DELTA INDICATOR (NC-4.2 FLEET INTEL) */}
+                        {/* HEALTH DELTA INDICATOR (NC-5.7 FLEET INTEL) */}
                         {demoMode.active && (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
@@ -266,9 +305,10 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         id="t2"
                         name="UNIT_02"
                         status="running"
-                        mw={mwOutput * 0.98}
+                        mw={(selectedAsset?.specs?.power_output ?? mwOutput) * 0.98}
                         eccentricity={orbit.eccentricity * 0.15} // UNIT_02 staying nominal
                         vibration={vibration.y * 0.2}
+                        onAlertClick={() => handleOpenDossier('Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
                     />
                 </div>
             </div>
@@ -277,7 +317,11 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                 <DigitalDisplay value={(hydraulic?.flow ?? 0).toFixed(1)} label="NOMINAL_FLOW" unit="m³/s" color="cyan" />
                 <DigitalDisplay value={(hydraulic?.head ?? 0).toFixed(0)} label="GROSS_HEAD" unit="m" color="cyan" />
                 <DigitalDisplay value={orbit.eccentricity.toFixed(3)} label="ECCENTRICITY" color={orbit.eccentricity > 0.8 ? 'red' : 'cyan'} />
-                <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
+                <Tooltip content={`ISO 10816-5 Protocol Compliance: ${isoJustification}`}>
+                    <div className="cursor-help">
+                        <DigitalDisplay value={(vibration.x * 1000).toFixed(1)} label="VIB_X_PEAK" unit="μm" color={vibration.x > 0.05 ? 'red' : 'cyan'} />
+                    </div>
+                </Tooltip>
             </div>
 
             <AnimatePresence>
@@ -332,6 +376,14 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     </div>
                 </div>
             )}
+
+            <DossierViewerModal
+                isOpen={isViewerOpen}
+                onClose={() => setIsViewerOpen(false)}
+                filePath={selectedFile?.path || ''}
+                title={selectedFile?.title || ''}
+                sourceData={selectedFile?.sourceData}
+            />
         </div>
     );
 });

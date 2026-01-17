@@ -337,7 +337,7 @@ export const ShaftAlignment: React.FC = () => {
                     </div>
                 </section>
 
-                {/* 2. ORBIT ANALYSIS (NC-4.2) - Preserved but styled to fit density */}
+                {/* 2. ORBIT ANALYSIS (NC-5.7) - Preserved but styled to fit density */}
                 <div className={`grid grid-cols-1 lg:grid-cols-3 ${spacing.gap}`}>
                     <div className="lg:col-span-2">
                         <GlassCard title="Shaft Orbit Dynamic Stability" icon={<Microscope className="text-cyan-400" />}>

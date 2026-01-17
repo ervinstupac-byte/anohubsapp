@@ -248,7 +248,7 @@ export const AIInsightsPanel: React.FC = () => {
                                                         View Source Evidence
                                                     </button>
 
-                                                    {/* NC-5.5: Trust Architecture Tooltip (Justified Proof) */}
+                                                    {/* NC-5.7: Trust Architecture Tooltip (Justified Proof) */}
                                                     <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 border border-cyan-500/30 rounded-xl p-3 opacity-0 group-hover/evidence:opacity-100 pointer-events-none transition-opacity z-50 shadow-2xl backdrop-blur-md">
                                                         <p className="text-[8px] text-cyan-500 font-black uppercase mb-2 border-b border-cyan-500/20 pb-1 flex items-center gap-2">
                                                             <Library className="w-2.5 h-2.5" />

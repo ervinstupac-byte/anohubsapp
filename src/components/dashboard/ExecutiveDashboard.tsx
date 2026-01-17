@@ -31,7 +31,7 @@ import { LiveMetricToken } from '../../features/telemetry/components/LiveMetricT
 import { ForensicReportService } from '../../services/ForensicReportService';
 import { useProtocolHistoryStore, historyToSparklineMarkers } from '../../stores/ProtocolHistoryStore';
 import { BootSequence } from '../BootSequence';
-import { EngineeringDossierCard } from './EngineeringDossierCard';
+import { EngineeringDossierCard } from '../EngineeringDossierCard';
 
 // --- LONGEVITY IMPACT CALCULATOR ---
 const calculateLongevityLoss = (alignment: number): { years: number; percentage: number } => {
@@ -154,7 +154,8 @@ export const ExecutiveDashboard: React.FC = () => {
                             <ModernButton
                                 variant="primary"
                                 onClick={handleGenerateForensicPDF}
-                                className="btn-primary flex items-center gap-2 !px-4 !py-2"
+                                id="generate-forensic-pdf-exclusive"
+                                className="btn-primary flex items-center gap-2 !px-4 !py-2 shadow-[0_0_15px_rgba(34,197,94,0.3)]"
                             >
                                 <FileText className="w-3 h-3" />
                                 {t('dashboard.export_forensic', 'Generate Forensic PDF')}
@@ -364,7 +365,7 @@ export const ExecutiveDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* NC-5.5: Trust & Authority Footer */}
+                    {/* NC-5.7: Trust & Authority Footer */}
                     <div className="pt-10">
                         <EngineeringDossierCard />
                     </div>

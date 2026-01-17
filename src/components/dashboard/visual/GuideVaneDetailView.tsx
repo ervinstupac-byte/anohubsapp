@@ -23,7 +23,7 @@ interface GuideVaneDetailProps {
     onHome?: () => void;
 }
 
-// NC-4.2 Guide Vane Hotspots
+// NC-5.7 Guide Vane Hotspots
 const GV_COMPONENTS = [
     {
         id: 'gv-vanes',
@@ -164,7 +164,7 @@ const GuideVaneDetailView: React.FC<GuideVaneDetailProps> = ({ onBack, onHome })
                         </h2>
                         <div className="flex items-center gap-3">
                             <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 4 REGULATION POINTS
+                                NC-5.7 {t('common.technicalAnalysis', 'Technical Analysis')} // 4 REGULATION POINTS
                             </p>
                             {/* LIVE OPENING INDICATOR */}
                             <div className="flex items-center gap-1 bg-cyan-900/40 px-2 py-0.5 rounded border border-cyan-500/30">

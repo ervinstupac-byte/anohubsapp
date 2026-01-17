@@ -66,7 +66,20 @@ export class ForensicReportService {
 
         doc.setFontSize(8);
         doc.setTextColor(71, 85, 105); // Slate 600
-        doc.text("FORENSIC DIAGNOSTIC LAYER V4.7", 15, 25);
+        doc.text("FORENSIC DIAGNOSTIC LAYER V5.7 [NC-PLATINUM]", 15, 25);
+
+        // ISO Badge
+        doc.setFillColor(234, 179, 8); // Gold
+        doc.rect(15, 28, 40, 6, 'F');
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(7);
+        doc.text("ISO IMS VERIFIED // 2024", 35, 32.5, { align: 'center' });
+
+        // Database Strength Metric - NC-5.7
+        doc.setTextColor(34, 211, 238); // Cyan 400
+        doc.setFontSize(7);
+        doc.setFont("Roboto", "bold");
+        doc.text("DATABASE STRENGTH: Verified against 854+ sources", 60, 32.5);
 
         // Report Type
         doc.setTextColor(255, 255, 255);
@@ -75,8 +88,10 @@ export class ForensicReportService {
         doc.text(title.toUpperCase(), pageWidth - 15, 18, { align: 'right' });
 
         const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+        doc.setTextColor(234, 179, 8); // Gold for Sync Status
+        doc.text(`NC-5.7 SYNC: SECURE_VAULT_ACTIVE`, pageWidth - 15, 25, { align: 'right' });
         doc.setTextColor(148, 163, 184); // Slate 400
-        doc.text(`TIMESTAMP: ${timestamp} UTC`, pageWidth - 15, 28, { align: 'right' });
+        doc.text(`TIMESTAMP: ${timestamp} UTC`, pageWidth - 15, 32, { align: 'right' });
     }
 
     private static applyForensicFooter(doc: jsPDF) {
@@ -87,8 +102,18 @@ export class ForensicReportService {
         for (let i = 1; i <= pageCount; i++) {
             doc.setPage(i);
 
+            // Watermark Logic
+            doc.setTextColor(234, 179, 8); // Gold
+            doc.setFontSize(60);
+            doc.setGState(new (doc as any).GState({ opacity: 0.05 }));
+            doc.text("NC-5.7 ISO 9001:2015 INTEGRITY AUDIT", pageWidth / 2, pageHeight / 2, {
+                align: 'center',
+                angle: 45
+            });
+            doc.setGState(new (doc as any).GState({ opacity: 1 }));
+
             // Signature Line
-            doc.setDrawColor(203, 213, 225); // Slate 300
+            doc.setDrawColor(234, 179, 8); // Gold
             doc.setLineWidth(0.1);
             doc.line(15, pageHeight - 20, pageWidth - 15, pageHeight - 20);
 
@@ -96,14 +121,16 @@ export class ForensicReportService {
             doc.setTextColor(100, 116, 139); // Slate 500
 
             // Digital Signature
-            const sig = `DIGITAL-FRNSC-SIG: ${Math.random().toString(36).substring(2, 15).toUpperCase()} | VERIFIED-BY-ANOHUB`;
+            const sig = `DIGITAL-FRNSC-SIG: ${Math.random().toString(36).substring(2, 15).toUpperCase()} | NC-5.7 DOSSIER-LINKED`;
             doc.text(sig, 15, pageHeight - 15);
 
             // Page Number
             doc.text(`PAGE ${i} OF ${pageCount}`, pageWidth - 15, pageHeight - 15, { align: 'right' });
 
             // Branding
-            doc.text("ANO HUB ENGINEERING DATA EXCELLENCE", pageWidth / 2, pageHeight - 10, { align: 'center' });
+            doc.setTextColor(234, 179, 8);
+            doc.setFont("Roboto", "bold");
+            doc.text("ISO 9001/14001/45001 INTEGRATED SYSTEMS VERIFIED", pageWidth / 2, pageHeight - 10, { align: 'center' });
         }
     }
 

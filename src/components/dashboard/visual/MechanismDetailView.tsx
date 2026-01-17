@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '../../../shared/components/ui/GlassCard';
 
 /**
- * NC-4.2 MECHANISM DETAIL VIEW
+ * NC-5.7 MECHANISM DETAIL VIEW
  * Focus: Labyrinth Seals, Distributor Linkage, Shaft Sealing
  */
 

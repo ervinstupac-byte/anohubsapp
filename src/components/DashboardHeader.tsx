@@ -15,7 +15,7 @@ import { useDensity } from '../contexts/DensityContext'; // <--- Density Control
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
-    title?: string;
+    title?: React.ReactNode;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSidebar, title }) => {
@@ -35,7 +35,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
-    // Heritage (NC-4.2) Logic
+    // Heritage (NC-5.7) Logic
     const alignment = techState.mechanical.alignment || 0;
     const water = techState.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
     const tan = techState.identity.fluidIntelligence.oilSystem.tan || 0;
@@ -77,6 +77,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
                     {/* MISSION STATUS BAR */}
                     <div className="flex items-center gap-3 text-xs font-mono tracking-wider">
+                        {title && <div className="hidden md:block mr-4">{title}</div>}
 
                         {/* 1. ASSET SEGMENT (Enhanced with Quick Actions) */}
                         <div className="relative">

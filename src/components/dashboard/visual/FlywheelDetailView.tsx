@@ -23,7 +23,7 @@ interface FlywheelDetailProps {
     onHome?: () => void;
 }
 
-// NC-4.2 Mechanical Backbone Hotspots
+// NC-5.7 Mechanical Backbone Hotspots
 const MECH_COMPONENTS = [
     {
         id: 'mech-gen-bearing',
@@ -179,7 +179,7 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
                         </h2>
                         <div className="flex items-center gap-3">
                             <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 MECHANICAL NODES
+                                NC-5.7 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 MECHANICAL NODES
                             </p>
                             {/* Live Vibration Indicator if High */}
                             {vibration > 1 && (

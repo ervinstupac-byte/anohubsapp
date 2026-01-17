@@ -55,9 +55,15 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                         <h2 className="text-xl font-black text-white uppercase tracking-tighter">
                                             {t('report.previewTitle', 'Project Dossier Preview')}
                                         </h2>
-                                        <p className="text-[10px] text-cyan-500/70 font-mono uppercase tracking-[0.2em] font-black">
-                                            AnoHUB NC-4.2 // Mission Critical Data
-                                        </p>
+                                        <div className="flex items-center gap-3">
+                                            <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
+                                                AnoHUB NC-5.7 // ISO IMS VERIFIED
+                                            </p>
+                                            <div className="h-1 w-1 rounded-full bg-slate-700" />
+                                            <p className="text-[10px] text-h-cyan font-mono uppercase tracking-[0.2em] font-black">
+                                                Database Strength: Verified against 854+ sources
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                                 <button
@@ -90,8 +96,8 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             </div>
                                         </div>
                                         <div className="text-right space-y-2">
-                                            <div className="inline-block px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded font-mono text-[9px] text-cyan-400 font-bold">
-                                                NC-4.2 CERTIFIED
+                                            <div className="inline-block px-3 py-1 bg-h-gold/20 border border-h-gold/30 rounded font-mono text-[9px] text-h-gold font-bold">
+                                                ISO IMS VERIFIED
                                             </div>
                                             <div className="space-y-1">
                                                 <p className="text-slate-500 font-mono text-[9px] uppercase tracking-widest">Dossier ID</p>

@@ -276,6 +276,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 borderColor: 'border-cyan-500/20',
                 glowColor: '#3b82f6',
                 modules: [
+                    { id: 'healthMonitor', title: 'System Health', icon: '🩺', route: '/knowledge/health-monitor', isoRef: 'SOURCES: 202' },
                     { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
                     { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
                     { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
@@ -283,14 +284,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             }
         ];
 
-        return allSectors.filter(sector => {
-            if (sector.id === 'criticalOps') return true;
-            switch (activePersona) {
-                case 'TECHNICIAN': return ['mechanical', 'knowledge'].includes(sector.id);
-                case 'MANAGER': return ['electrical', 'risk'].includes(sector.id);
-                default: return true;
-            }
-        });
+        return allSectors; // Force show all sectors for all personas (NC-5.7 Requirement)
     }, [t, activePersona]);
 
     const toggleSector = (id: string) => {
@@ -427,7 +421,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />
-                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'}</span>
+                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'} // NC-5.7</span>
                                 </div>
                                 <span className={hiveStatus?.connected ? 'text-emerald-600 font-black' : 'text-slate-500'}>
                                     {hiveStatus?.connected ? 'ENCRYPTED' : 'OFFLINE'}

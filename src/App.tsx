@@ -56,6 +56,7 @@ import { CommanderDemoHUD } from './components/diagnostic-twin/CommanderDemoHUD'
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
 import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
+import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -95,6 +96,8 @@ const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDash
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
+const LearningLab = lazy(() => import('./components/diagnostic-twin/LearningLab.tsx').then(m => ({ default: m.LearningLab })));
+const PrecisionAudit = lazy(() => import('./components/PrecisionAudit.tsx').then(m => ({ default: m.PrecisionAudit })));
 const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 // Francis Turbine Module - All routes extracted to dedicated sub-router
@@ -342,7 +345,7 @@ const AppLayout: React.FC = () => {
 
                         <DashboardHeader
                             onToggleSidebar={() => setIsSidebarOpen(true)}
-                            title="ANOHUB // NC-4.2 NEURAL CORE"
+                            title={<span className="text-h-gold">ANOHUB // NC-5.7 NEURAL CORE</span>}
                         />
 
                         <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
@@ -399,7 +402,7 @@ const AppLayout: React.FC = () => {
 
                                                     {/* ENGINEERING TOOLS - RESTRICTED */}
                                                     <Route path="hpp-builder" element={
-                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER']}>
+                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
                                                             <HPPBuilder />
                                                         </RoleGuard>
                                                     } />
@@ -423,6 +426,7 @@ const AppLayout: React.FC = () => {
                                                     <Route path="digital-integrity" element={<DigitalIntegrity />} />
                                                     <Route path="contract-management" element={<ContractManagement />} />
                                                     <Route path="library" element={<ComponentLibrary />} />
+                                                    <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
                                                     <Route path="vision" element={<UnderConstruction />} />
 
                                                     {/* Maintenance Sub-Router */}
@@ -430,7 +434,7 @@ const AppLayout: React.FC = () => {
 
                                                     {/* EXECUTIVE - RESTRICTED */}
                                                     <Route path="executive" element={
-                                                        <RoleGuard allowedRoles={['MANAGER']}>
+                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
                                                             <ExecutiveDashboard />
                                                         </RoleGuard>
                                                     } />
@@ -439,14 +443,15 @@ const AppLayout: React.FC = () => {
 
                                                     {/* ADMIN - RESTRICTED */}
                                                     <Route path="admin-approval" element={
-                                                        <RoleGuard allowedRoles={['MANAGER']}>
+                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
                                                             <AdminApproval />
                                                         </RoleGuard>
                                                     } />
 
                                                     <Route path="/forensics" element={<ForensicDashboard />} />
                                                     <Route path="stress-test" element={<SystemStressTest />} />
-                                                    <Route path="learning-lab" element={<UnderConstruction />} />
+                                                    <Route path="precision-audit" element={<PrecisionAudit />} />
+                                                    <Route path="learning-lab" element={<LearningLab />} />
 
                                                     {/* ACCESS DENIED PAGE */}
                                                     <Route path="/access-denied" element={<AccessDenied />} />

@@ -7,6 +7,7 @@ import { ThermalCard, ShaftLiftCard, LabyrinthCard } from './dashboard/anohub/Vi
 import { ActionCard, LiveAnalytics, SystemAlerts } from './dashboard/anohub/AnalyticsPanel';
 import { Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { EngineeringDossierCard } from './EngineeringDossierCard';
 
 /**
  * ANOHUB Command Center - Fixed HUD Architecture
@@ -96,7 +97,7 @@ export const ToolboxLaunchpad: React.FC = () => {
 
                 {/* ROW 3: ANALYTICS & ALERTS (1fr) */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 min-h-0 overflow-hidden">
-                    <div className="lg:col-span-3 h-full cursor-pointer hover:scale-[1.02] transition-all duration-200 active:scale-95 z-10 min-h-0" onClick={() => navigate('/hpp-builder')}>
+                    <div className="lg:col-span-3 h-full cursor-pointer hover:scale-[1.02] transition-all duration-200 active:scale-95 z-10 min-h-0" onClick={() => navigate('/precision-audit')}>
                         <ActionCard />
                     </div>
                     <div className="lg:col-span-6 h-full cursor-pointer hover:scale-[1.01] transition-all duration-200 active:scale-95 z-10 min-h-0 overflow-hidden" onClick={() => navigate('/executive')}>
@@ -117,7 +118,8 @@ export const ToolboxLaunchpad: React.FC = () => {
             </div>
 
             {/* FOOTER ROW (Fixed Height) */}
-            <div className="shrink-0 pt-4 lg:pt-6">
+            <div className="shrink-0 pt-4 lg:pt-6 flex flex-col gap-4">
+                <EngineeringDossierCard />
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -129,7 +131,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             <span className="text-[clamp(7px,0.9vh,9px)] font-mono font-black text-slate-400 uppercase tracking-wider">TELEMETRY_LINK: ESTABLISHED</span>
                         </div>
                         <div className="w-px h-4 bg-white/10 shrink-0" />
-                        <div className="text-[clamp(7px,0.9vh,9px)] font-mono font-bold text-cyan-400 tracking-wider uppercase">SECURE_SYNC: NC-4.2 CRYPTO</div>
+                        <div className="text-[clamp(7px,0.9vh,9px)] font-mono font-bold text-h-gold tracking-wider uppercase">SECURE_SYNC: NC-5.7 CRYPTO</div>
                     </div>
                     <div className="text-[clamp(7px,0.8vh,8px)] font-mono text-slate-600 font-black tracking-[0.2em] uppercase truncate ml-4">HPP_NODE_BIH_44.92N_15.87E</div>
                 </motion.div>

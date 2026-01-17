@@ -24,7 +24,7 @@ interface GeneratorDetailProps {
     onBack: () => void;
 }
 
-// NC-4.2 Compliant Hotspot Definitions with Ground-Truth Engineering Data
+// NC-5.7 Compliant Hotspot Definitions with Ground-Truth Engineering Data
 // 8 Total Hotspots: 5 Core Components + 3 Foundation Alignment Trio
 const SUB_COMPONENTS = [
     // === CORE GENERATOR COMPONENTS (Original 5) ===
@@ -229,7 +229,7 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                         </h2>
                         <div className="flex items-center gap-3">
                             <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                                NC-4.2 {t('common.technicalAnalysis', 'Technical Analysis')} // 8 PRECISION HOTSPOTS
+                                NC-5.7 {t('common.technicalAnalysis', 'Technical Analysis')} // 8 PRECISION HOTSPOTS
                             </p>
                             {/* Live RPM Indicator */}
                             {liveRpm > 0 && (
@@ -416,7 +416,7 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                             <div className="w-2 h-0.5 bg-cyan-500" /> SOURCE: geno_fr_h_manje_od_5.svg
                         </div>
                         <div className="text-[10px] text-cyan-500/40 font-bold uppercase tracking-tighter">
-                            NC-4.2 COMPLIANT // 8 HOTSPOTS: 5 CORE + 3 FOUNDATION
+                            NC-5.7 COMPLIANT // 8 HOTSPOTS: 5 CORE + 3 FOUNDATION
                         </div>
                     </div>
 
@@ -578,7 +578,7 @@ const GeneratorDetailView: React.FC<GeneratorDetailProps> = ({ onBack }) => {
                 <div className="flex items-center gap-8 animate-marquee whitespace-nowrap">
                     {[1, 2, 3].map(i => (
                         <span key={i} className="text-[8px] font-bold text-cyan-500/40 uppercase tracking-[0.2em]">
-                            ASSET: GENO_FR_H_MANJE_OD_5 // NC-4.2 COMPLIANT // 8 HOTSPOTS: DE BEARING | NDE BEARING | GROUNDING BRUSH | LUBRICATION | STATOR | ANCHOR BOLTS | JACKING BOLTS | SHIMS // ALIGNMENT TRIO ACTIVE
+                            ASSET: GENO_FR_H_MANJE_OD_5 // NC-5.7 COMPLIANT // 8 HOTSPOTS: DE BEARING | NDE BEARING | GROUNDING BRUSH | LUBRICATION | STATOR | ANCHOR BOLTS | JACKING BOLTS | SHIMS // ALIGNMENT TRIO ACTIVE
                         </span>
                     ))}
                 </div>

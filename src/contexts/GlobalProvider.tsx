@@ -31,7 +31,7 @@ interface GlobalProviderProps {
 }
 
 /**
- * GLOBAL PROVIDER (REVISED NC-4.2)
+ * GLOBAL PROVIDER (REVISED NC-5.7)
  * The Hierarchy of Truth: Consolidates all core engineering and system contexts.
  */
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {

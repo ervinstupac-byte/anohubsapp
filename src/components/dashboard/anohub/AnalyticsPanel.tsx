@@ -1,15 +1,31 @@
 import React from 'react';
-import { Upload, AlertTriangle, CheckCircle, Smartphone } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Upload, AlertTriangle, CheckCircle, Smartphone, Lock } from 'lucide-react';
 
 export const ActionCard: React.FC = () => {
+    const navigate = useNavigate();
+    // Protocol NC-5.8: Force Unlock sequence initialized
+    const isLocked = false;
+    const protocolVerified = true;
+
     return (
-        <button className="w-full h-full min-h-[100px] bg-slate-900/40 backdrop-blur-sm rounded p-4 relative overflow-hidden group hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] transition-all flex flex-col justify-between border border-white/5 active:translate-y-0.5 active:bg-slate-900/60">
+        <button
+            onClick={() => !isLocked && navigate('/precision-audit')}
+            className={`w-full h-full min-h-[100px] bg-slate-900/40 backdrop-blur-sm rounded p-4 relative overflow-hidden group hover:shadow-[0_0_30px_rgba(34,211,238,0.1)] transition-all flex flex-col justify-between border ${isLocked ? 'border-red-500/20 grayscale pointer-events-none' : 'border-white/5'} active:translate-y-0.5 active:bg-slate-900/60`}
+        >
             {/* Brushed Metal Texture */}
             <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none" />
-            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+            {!isLocked && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />}
 
             <div className="relative z-10 text-left">
-                <span className="text-[9px] text-slate-400 font-black font-mono uppercase tracking-[0.2em] opacity-80">Protocol Genesis</span>
+                <div className="flex justify-between items-start mb-1">
+                    <span className="text-[9px] text-slate-400 font-black font-mono uppercase tracking-[0.2em] opacity-80">Protocol Genesis</span>
+                    {protocolVerified && (
+                        <span className="text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 font-black animate-pulse">
+                            COMMANDER.VERIFIED
+                        </span>
+                    )}
+                </div>
                 <h2 className="text-2xl font-black text-slate-200 leading-tight uppercase drop-shadow-sm flex items-center gap-2">
                     <Smartphone className="w-6 h-6 text-cyan-400/80" />
                     New Audit
@@ -17,13 +33,22 @@ export const ActionCard: React.FC = () => {
             </div>
 
             <div className="relative z-10 flex justify-end">
-                <div className="bg-slate-800 p-2 rounded border border-slate-900 shadow-inner group-hover:bg-cyan-600 transition-colors">
+                <div className={`bg-slate-800 p-2 rounded border border-slate-900 shadow-inner ${!isLocked ? 'group-hover:bg-cyan-600' : ''} transition-colors`}>
                     <Upload className="w-4 h-4 text-cyan-400 group-hover:text-white" />
                 </div>
             </div>
 
             {/* Etched border effect */}
             <div className="absolute inset-0 border border-white/20 pointer-events-none" />
+
+            {isLocked && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-2">
+                        <Lock className="w-6 h-6 text-red-500" />
+                        <span className="text-[10px] font-black text-red-500 uppercase tracking-widest">Protocol Locked</span>
+                    </div>
+                </div>
+            )}
         </button>
     );
 };
