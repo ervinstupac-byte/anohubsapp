@@ -29,6 +29,7 @@ function normalizeManifestPath(raw: string): string {
 const manifest = (manifestRaw as Array<{ file: string; hash: string }>) || [];
 
 export const DOSSIER_LIBRARY_RAW: DossierFile[] = manifest.map(entry => {
+  const original = String(entry.file).replace(/\\\\+/g, '/');
   const rel = normalizeManifestPath(entry.file);
   const category = inferCategory(rel);
   return {
@@ -36,7 +37,9 @@ export const DOSSIER_LIBRARY_RAW: DossierFile[] = manifest.map(entry => {
     justification: 'Canonical entry imported from scripts/hashes_applied.json (NC-10).',
     category,
     hash: entry.hash,
-  } as DossierFile;
+    // preserve original manifest path for exact-case resolution
+    originalPath: original
+  } as any;
 });
 
 const normalizePath = (p: string) => p.replace(/\\/g, '/').replace(/protocol\/to_learn_archive\/protocols_v0\//g, 'protocol/');
@@ -46,6 +49,31 @@ const toArchiveAbsolute = (p: string) => {
   return `/archive/${cleaned}`;
 };
 
-export const DOSSIER_LIBRARY: DossierFile[] = DOSSIER_LIBRARY_RAW.map(d => ({ ...d, path: toArchiveAbsolute(d.path) }));
+export const DOSSIER_LIBRARY: Array<DossierFile & { originalPath?: string }> = DOSSIER_LIBRARY_RAW.map(d => ({ ...d, path: toArchiveAbsolute(d.path) }));
 
 export const DOSSIER_LIBRARY_COUNT = DOSSIER_LIBRARY.length;
+
+// Build deterministic PATH_INDEX: exact-case canonical path -> entry; also add normalized alias map
+export const PATH_INDEX: { [key: string]: DossierFile & { originalPath?: string } } = {};
+export const PATH_ALIAS: { [alias: string]: string } = {};
+
+for (const e of DOSSIER_LIBRARY) {
+  const key = e.path.replace(/^\/+/, '');
+  PATH_INDEX[key] = e as any;
+  // add lowercase alias
+  const alias = key.toLowerCase();
+  if (!PATH_ALIAS[alias]) PATH_ALIAS[alias] = key;
+  // also alias without index suffixes (index.html vs index)
+  const noIndex = alias.replace(/index(?:_\d+)?\.html$/, 'index.html');
+  if (!PATH_ALIAS[noIndex]) PATH_ALIAS[noIndex] = key;
+}
+
+export function resolveDossier(pathOrAlias: string) {
+  if (!pathOrAlias) return null;
+  const p = pathOrAlias.replace(/^\/+/, '');
+  if (PATH_INDEX[p]) return PATH_INDEX[p];
+  const alias = p.toLowerCase();
+  const resolvedKey = PATH_ALIAS[alias];
+  if (resolvedKey) return PATH_INDEX[resolvedKey];
+  return null;
+}

@@ -24,12 +24,13 @@ export default {
         'h-cta': '#f59e0b',
         'h-teal': '#2dd4bf',
         'neon-cyan': '#00f3ff',
+        'neon-green': '#00ff7f',
         'warning-orange': '#ffaa00',
         'alarm-red': '#ff0033',
         'hydro-charcoal': '#111827',
         'hydro-primary': '#22d3ee',
         // Semantic colors (Elite Industrial Palette)
-        'success': '#10b981',
+        'success': '#00ff7f',
         'warning': '#f59e0b',
         'danger': '#f43f5e',
         slate: {

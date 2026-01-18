@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const manifest = require('./hashes_applied.json');
+const keywords = (() => {
+  try { return require('./keywords_nc102.json'); } catch (e) { return null; }
+})();
 
 function normalizeManifestPath(raw) {
   const forward = raw.replace(/\\+/g, '/');
@@ -40,6 +43,30 @@ function scoreText(s) {
     }
   }
   return score;
+}
+
+function synthesizeRecommendation({ title, currentAnalysis, rel }) {
+  const kw = keywords && keywords.keywords ? keywords.keywords : {};
+  const weights = keywords && keywords.weights ? keywords.weights : {};
+  const templates = (keywords && keywords.synthesizedTemplates) || [];
+  const text = ((currentAnalysis || '') + ' ' + (title || '')).toLowerCase();
+  let best = { key: null, weight: 0, category: null };
+  for (const k of Object.keys(kw)) {
+    if (text.includes(k)) {
+      const w = kw[k].weight || 1;
+      const cat = kw[k].category || 'default';
+      if (w > best.weight) best = { key: k, weight: w, category: cat };
+    }
+  }
+  const days = (keywords && keywords.defaultMaintenanceDays) || 30;
+  let rec = templates.length ? templates[0] : `Recommend inspection; schedule within ${days} days.`;
+  if (best.key) {
+    const tmpl = templates.length ? templates[Math.min(2, Math.floor(best.weight))] : null;
+    rec = (tmpl || templates[0] || 'Recommend inspection and corrective action; schedule within {days} days.').replace('{days}', String(days)).replace('{category}', best.category || 'operational');
+  } else {
+    rec = rec.replace('{days}', String(days)).replace('{category}', 'operational');
+  }
+  return { operationalRecommendation: rec, provenance: 'synthesized', maintenanceDueDays: days };
 }
 
 function inferTopic(rel) {
@@ -111,16 +138,26 @@ for (const entry of manifest) {
     try { date = fs.statSync(filePath).mtime.toISOString(); } catch (e) { date = new Date().toISOString(); }
   }
 
+  // predeclare due so synthesized branch can set it
+  let due = null;
+
   if (!operationalRecommendation) {
     // Log missing recommendation but continue; provide placeholder
     errors.push({ file: rel, reason: 'Missing operational recommendation' });
-    operationalRecommendation = '[MISSING: OPERATIONAL_RECOMMENDATION]';
+    const synth = synthesizeRecommendation({ title, currentAnalysis, rel });
+    operationalRecommendation = synth.operationalRecommendation;
+    provenance = synth.provenance;
+    // ensure due is set
+    if (due === null || typeof due === 'undefined') due = synth.maintenanceDueDays;
   }
 
   const score = scoreText((currentAnalysis || '') + ' ' + (operationalRecommendation || ''));
-  const due = parseDueDays((currentAnalysis || '') + ' ' + (operationalRecommendation || ''));
+  if (due === null) due = parseDueDays((currentAnalysis || '') + ' ' + (operationalRecommendation || ''));
+  // Ensure every entry has a maintenance urgency; default to 30 days when unspecified
+  if (due === null || typeof due === 'undefined') due = 30;
   const topic = inferTopic(rel);
 
+  const priorityScore = Math.round((score + (keywords && keywords.weights && keywords.weights.default ? keywords.weights.default : 1)) * 10) / 10;
   results.push({
     path: `/archive/${rel.replace(/^\/+/, '')}`,
     rel,
@@ -130,7 +167,9 @@ for (const entry of manifest) {
     topic,
     currentAnalysis,
     operationalRecommendation,
+    provenance: provenance || 'author',
     score,
+    priorityScore,
     maintenanceDueDays: due
   });
 }

@@ -1,0 +1,30 @@
+{
+  "weights": {
+    "physical": 3.0,
+    "hydraulic": 2.5,
+    "electrical": 2.0,
+    "safety": 4.0,
+    "operational": 1.5,
+    "default": 1.0
+  },
+  "keywords": {
+    "cavitation": { "category": "physical", "weight": 3 },
+    "vibration": { "category": "physical", "weight": 3 },
+    "seizure": { "category": "safety", "weight": 4 },
+    "shutdown": { "category": "safety", "weight": 4 },
+    "bearing": { "category": "physical", "weight": 2.5 },
+    "leak": { "category": "hydraulic", "weight": 2.5 },
+    "pressure": { "category": "hydraulic", "weight": 2 },
+    "generator": { "category": "electrical", "weight": 2 },
+    "stator": { "category": "electrical", "weight": 2 },
+    "replace": { "category": "operational", "weight": 1.5 },
+    "inspect": { "category": "operational", "weight": 1.5 },
+    "monitor": { "category": "operational", "weight": 1.2 }
+  },
+  "synthesizedTemplates": [
+    "Recommend inspection and corrective action following standard procedures; schedule within {days} days.",
+    "No explicit operational recommendation found — perform focused inspection and risk mitigation; target within {days} days.",
+    "Synthesis: conduct detailed diagnostics and apply corrective maintenance; classify as {category} risk and schedule within {days} days."
+  ],
+  "defaultMaintenanceDays": 30
+}
