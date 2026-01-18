@@ -25,7 +25,17 @@ describe('Dossier archive integrity (spot checks)', () => {
       const content = fs.readFileSync(filePath, 'utf8');
 
       // Verify file content matches the recorded SHA-256 (compute and compare)
-      const computed = crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+      // Compute hash with the same normalization used by the integrity verifier:
+      const textExts = new Set(['.html', '.htm', '.css', '.js', '.json', '.txt', '.md', '.svg', '.ts', '.tsx', '.cjs', '.mjs']);
+      const ext = path.extname(filePath).toLowerCase();
+      let computed: string;
+      if (textExts.has(ext)) {
+        let txt = fs.readFileSync(filePath, 'utf8');
+        txt = txt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        computed = crypto.createHash('sha256').update(Buffer.from(txt, 'utf8')).digest('hex');
+      } else {
+        computed = crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+      }
       expect(
         computed === e.hash,
         `Computed SHA-256 (${computed}) does not match manifest (${e.hash}) for ${rel}`

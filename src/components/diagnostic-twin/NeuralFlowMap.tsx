@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { DigitalDisplay } from './DigitalDisplay.tsx';
 import { Activity, ShieldCheck, ZapOff, Sparkles, ChevronRight, Info } from 'lucide-react';
 import { DossierViewerModal } from '../knowledge/DossierViewerModal';
-import { DOSSIER_LIBRARY, DossierFile } from '../../data/knowledge/DossierLibrary';
+import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../../data/knowledge/DossierLibrary';
 import { MasterIntelligenceEngine } from '../../services/MasterIntelligenceEngine';
 import { computeIntegritySummary } from '../../services/DossierIntegrity';
 import { useIntelligenceReport } from '../../services/useIntelligenceReport';
@@ -123,13 +123,19 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     const isoJustification = MasterIntelligenceEngine.getISOJustification(isoZone);
 
     const handleOpenDossier = (path: string) => {
-        // Be resilient to case differences: match via lowercase
-        const normalized = (path || '').toString().toLowerCase();
-        let source = DOSSIER_LIBRARY.find(d => d.path.toLowerCase() === normalized || (`/archive/${d.path.replace(/^\/+/, '')}`).toLowerCase() === normalized);
+        // Prefer canonical resolution using PATH_INDEX / aliases
+        const resolved = resolveDossier(path) || null;
+        let source = resolved as (DossierFile & { originalPath?: string }) | null;
+
+        // Fallback: existing suffix-based search when resolve fails
         if (!source) {
-            // try matching by suffix
-            source = DOSSIER_LIBRARY.find(d => normalized.endsWith((d.path || '').toLowerCase()) || normalized.endsWith((('/archive/' + d.path).toLowerCase())) );
+            const normalized = (path || '').toString().toLowerCase();
+            source = DOSSIER_LIBRARY.find(d => d.path.toLowerCase() === normalized || (`/archive/${d.path.replace(/^\/+/, '')}`).toLowerCase() === normalized) as any;
+            if (!source) {
+                source = DOSSIER_LIBRARY.find(d => normalized.endsWith((d.path || '').toLowerCase()) || normalized.endsWith((('/archive/' + d.path).toLowerCase()))) as any;
+            }
         }
+
         if (source) {
             let activePath = source.path;
             if (!activePath.startsWith('/') && !activePath.startsWith('http')) {

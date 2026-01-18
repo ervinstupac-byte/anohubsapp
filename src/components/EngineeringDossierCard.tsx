@@ -17,7 +17,7 @@ import {
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { DossierViewerModal } from './knowledge/DossierViewerModal';
 import { ROUTES, getMaintenancePath } from '../routes/paths';
-import { DOSSIER_LIBRARY, DossierFile } from '../data/knowledge/DossierLibrary';
+import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../data/knowledge/DossierLibrary';
 import { useIntelligenceReport } from '../services/useIntelligenceReport';
 
 interface DossierCategory {
@@ -90,16 +90,17 @@ export const EngineeringDossierCard: React.FC = () => {
     };
 
     const handleOpenFile = (source: DossierFile) => {
-        const path = source.path || '';
-        // Expect absolute /archive/ path from DOSSIER_LIBRARY; fallback safely
-        let activePath = path;
+        const original = source?.path || '';
+        // Prefer canonical resolved entry from PATH_INDEX
+        const resolved = resolveDossier(original) || source;
+        let activePath = (resolved?.path || original) as string;
         if (!activePath.startsWith('/') && !activePath.startsWith('http')) {
             activePath = `/archive/${activePath}`;
         }
         setSelectedFile({
             path: activePath,
-            title: path.split('/').pop() || 'Dossier',
-            sourceData: source
+            title: (activePath.split('/').pop() || 'Dossier').replace('.html', ''),
+            sourceData: resolved as any
         });
         setViewerOpen(true);
     };
@@ -111,7 +112,10 @@ export const EngineeringDossierCard: React.FC = () => {
                 const kw = e?.detail?.keyword?.toString().toLowerCase();
                 if (!kw) return;
                 const match = DOSSIER_LIBRARY.find(ds => (ds.path + ' ' + (ds.justification || '')).toLowerCase().includes(kw));
-                if (match) handleOpenFile(match);
+                if (match) {
+                    const resolved = resolveDossier(match.path) || match;
+                    handleOpenFile(resolved as DossierFile);
+                }
             } catch (err) {
                 console.error('openDossier handler failed', err);
             }

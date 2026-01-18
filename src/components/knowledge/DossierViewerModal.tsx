@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ExternalLink, ShieldCheck, Download, Minimize2, AlertCircle, Activity } from 'lucide-react';
+import { resolveDossier } from '../../data/knowledge/DossierLibrary';
 
 interface DossierViewerModalProps {
     isOpen: boolean;
@@ -16,9 +17,11 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
     const [loadError, setLoadError] = useState(false);
     const [isChecking, setIsChecking] = useState(true);
 
-    // Ensure the path is relative to the public root
-    const normalizedPath = filePath.startsWith('/') ? filePath : `/${filePath}`;
-
+    // Resolve canonical dossier when possible
+    const resolvedSource = sourceData || resolveDossier(filePath) || undefined;
+    // Ensure the path is relative to the public root; prefer resolved canonical path
+    const resolvedPathCandidate = resolvedSource?.path || filePath || '';
+    const normalizedPath = resolvedPathCandidate.startsWith('/') ? resolvedPathCandidate : `/${resolvedPathCandidate}`;
     // Fallback: if it's pointing to src or AnoHub_site, we redirect to /archive
     const activePath = normalizedPath.includes('AnoHub_site')
         ? normalizedPath.replace('/src/AnoHub_site/', '/archive/').replace('/AnoHub_site/', '/archive/')
