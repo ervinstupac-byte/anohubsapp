@@ -1,0 +1,3418 @@
+[
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index.html",
+    "hash": "2E1136EE1CB416998812ECB92AA5D06742AB9D19F69E30CAC6777A8D42359CF8"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_2.html",
+    "hash": "EE12E79B77F4A1BC64EBC8EA961586A24C73046858D5C32A6D83D617960D0EDC"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_3.html",
+    "hash": "B8531A1C8B90C3537F4B02E38DFFDDB5F10D5772101E5F7A116639E838EE3327"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_4.html",
+    "hash": "991A74EC2BC9B8F2D0538202238783CE65FB5B0ECC5C3529C113CB472A141A0D"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_5.html",
+    "hash": "157FE9A7779C1A033F4D840BEFA3C01BCF869D299BCC07EF9A6C1024FB0D9C65"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_6.html",
+    "hash": "009EF93E5E4C5C33CA746FA5A7BA0991EC22FCA2A0756366757869693CF92745"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_7.html",
+    "hash": "FF0025031A4DA00A3B301F66AABD5E29EDD50DBEF6ADF1B946BF267DE1FEAE68"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-compliance-shield\\index_8.html",
+    "hash": "D1CE7F5E3CAAF193B7AB109FF42A26715CBE0F4363F08D2FCD1D50707CE1E9FE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index.html",
+    "hash": "3C84D8FCFB9A8F29AAD4C10FE1BB77CAA09DEEE1E6444CF1EB8FB621B3DE5676"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_2.html",
+    "hash": "A9035886B155939BA83726E6A5CF66D376BC7CE680721719F180F51D526AB9BA"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_3.html",
+    "hash": "E66486BF3168ACDB5AC4F54ADE082651E56CEF54CD13CA17053F2CB6E07B964D"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_4.html",
+    "hash": "885DA23606A053DA4D621FF97A54670D88BEEABC813522EF1A5A813E5B880B2B"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_5.html",
+    "hash": "AE8CEFE7FC92FCC5812D0BB6753239C8C500F06BE467D348D9DE589FE73A2A07"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_6.html",
+    "hash": "B5C29D0D9B680479EF15FABF81F5B70B862BA1E9B66E5BCDBEC2881D7DAB5C8E"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_7.html",
+    "hash": "C999C2EE9392541E8063E732ED53DAEACFCEDE6F14F89F4C5EE3E7BBBE9262CA"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-digital-protocol-roi\\index_8.html",
+    "hash": "3D7253EEB7A318EB7C06797BC10AB693932A7722120BE4B050E9595E2B4F7AC8"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index.html",
+    "hash": "970690EA261AB3259926F12541474C5B4B0161BC596031896BDC0827EE48CEE7"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_2.html",
+    "hash": "01237A405951252068E214EC964F97F13A24DF0E3522D43E7C892D93DE17EE88"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_3.html",
+    "hash": "769E9E7D77D50A1E049971AD41A351D2F7A85A84E265726906175201FB4A43DE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_4.html",
+    "hash": "82FE4A66625F162375243A3F618CE8DB2CBFA6CD567FC33E4DDED78D24CDA730"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_5.html",
+    "hash": "294ABC3A4AAEE13857B36B99EEC6D55CDDCE9BB270E6EABD7B8C13D52A0E474C"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_6.html",
+    "hash": "381A4412597B13632A2DB07415720128DC708D97112E9D974522539AFA30E59B"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_7.html",
+    "hash": "AAD17935E26CF0FB774673131EF309BF266B28F2DA0728153DFF4C49F228659D"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-fish-passage-optimization\\index_8.html",
+    "hash": "8FC3F60E9AD18405ECAB89B4FA64C15E2EA49F124C522A926FB2E70DB4204158"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index.html",
+    "hash": "471F81B20BECBE70DF6F8E77E51BE7C714AD0F3AA5B6A51CCCE36B5DA51A1D4F"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_2.html",
+    "hash": "DC25426EF30BCF122E40CCA25844BFC555D106FDB2CF276EDA9FB5B1D2659A54"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_3.html",
+    "hash": "02CF9C7FD48070A90CC0B12DAC3E75DD3E9236A484497879042783953BB09A7F"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_4.html",
+    "hash": "BA2E42EE5238DC6056BBB5ACB2BC91ECFED9DE26341C7F64F0921DD5AC1051CD"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_5.html",
+    "hash": "6A5093F5BFF2017C484AA67C3EDFE15E5BE41F91634A22EF15D7D178E1A12067"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_6.html",
+    "hash": "B4EC34A115F33B02C541A32E150A84F6EF82F391018025E9A4C4C2BCA130B50B"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_7.html",
+    "hash": "C29F3C99AB73E18F10776620185E6CD5E1F310D36B4608B71F6C8C71FF948B6F"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-forensic-ndt-fatigue\\index_8.html",
+    "hash": "8E4DEC47BFE84F414B3E71ABE82DE85C05963DB2D5A137BE397CEDE3EB7AA136"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index.html",
+    "hash": "1237B0619060CBB3F48BD29DFC7FC61601163DD41E8B4B662B0D972B4CB67115"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_2.html",
+    "hash": "6A8A9F8A9D4DC11727BA0EF3AEDF3CB2416164149CDD376BE24A0D67F4F16535"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_3.html",
+    "hash": "15BAC5F9E4B7AB16E8588FB41AFAE0FC47EA5B65BFF979FD7DB3516C0D5CCBEB"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_4.html",
+    "hash": "F8666EDFD61E2C0F221197E67B50E00212A04F9005B9910AB726BF95A5756CAB"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_5.html",
+    "hash": "C8587C1C06541FE6FA7E97080B2BDD6EFF23FAFCCB62E7CA3A8B7591660B6F0A"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_6.html",
+    "hash": "F00CC82C9BE37B15264BD88018E342E82B396DAFD65EEF8B0B1F5FF5D71AD2CB"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_7.html",
+    "hash": "FD930A085012B1A391D818F83211A22D1FBF86B0A8D65FC7F100E02F6EB670AB"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-francis-misalignment\\index_8.html",
+    "hash": "9D744C8AA2DA259E6586DA15E8396B1EBE9A6CA0321D533AA4DBF82366A2CA91"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index.html",
+    "hash": "4CA9EC59A895F1B7FFB883C4AC35E537C55D6BB7E240CDBDE979DBE6A12D164A"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_2.html",
+    "hash": "CC5FE89E118D920B45C4570A0615F6E1624DB6FBB405D3B24E38711E9A07A392"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_3.html",
+    "hash": "54E819B9F94CA5FEC98D4A3512753C75A3416734EC996DF42B8E56889793AABE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_4.html",
+    "hash": "90D050B41C5E0DDEFB233A2A32CA6163D31FD716C9D29C2C867BAD6D73FC876C"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_5.html",
+    "hash": "0676A8C77594F42F8E22605100E4D62E4037B3AC36C6D124005C36D124ED01FE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_6.html",
+    "hash": "E4B42D8FC62DA63179C04396126902CED0A6FB2A3AB82E2C2AFAFD786DB1B19D"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_7.html",
+    "hash": "71D4416F98B1D98AC1DE0B0818E107E6F9C768CDD1A4B8D74FF5B0EC409ED141"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-hydraulic-hammer-mitigation\\index_8.html",
+    "hash": "DAF5B1D14443F2D6CE4DB87FA16F09F8E20A2D9BDCADE92E1BCD77E2590737BE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index.html",
+    "hash": "938F270653835921D2B9B2B9104D12A68C31F16AF4FA17D6EA7C7BCD867AB3F9"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_2.html",
+    "hash": "BCB5955C0CDC46F59865EB628DB986E4CD0E8600CA95E0173A4620B552F7B412"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_3.html",
+    "hash": "88A1C33D75860E0F269193A3E52510643C23C557ADBD9B187309DF3D1864D650"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_4.html",
+    "hash": "78C1E20F6A1CD7F84CA107C4CFEFE9E57324D0E384B15D29FE6EADB2FD1BA866"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_5.html",
+    "hash": "B5D58A5204CF7142C2DBAB35DFFB39CB54F7853FDD1E09A70B3E6E6049540C39"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_6.html",
+    "hash": "9583A817BFC456ABAC4FBD36699D0F42AAF8CB9DA1CBE07E4053BABD0C21D9E5"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_7.html",
+    "hash": "F359A22FA1E6751A98B14E74A09D41233152CD38F7CFB512BAE0F6DE7F1F5730"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-kaplan-optimization\\index_8.html",
+    "hash": "4438CB7C155C85E9B45BA48FDA9E524C56F4EC7E9A9BADE49DB27FF22A387F59"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index.html",
+    "hash": "685F7A87479D911F02A7E43B4D97166C381DC8096619B7C72CEFBA8A71467AAC"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_2.html",
+    "hash": "0FAEA388C2D878FF64CBCD4D725D5A9DC0002EC082DC4B4F0009AEB7D2696A09"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_3.html",
+    "hash": "D3AA1CD3F36CD40218E4408A8C29E6726D764F3F477F20CC7FF83BCCDE68BF2B"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_4.html",
+    "hash": "367ED579469B22CF7978E8A291599FE5FB6F7BA7C146CC3491109DE2B27ECF3D"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_5.html",
+    "hash": "424DA6B0568C42AF9AF6BCBA72C0C4DBEE1F37105BF5FBB516F8EB01BC2656F0"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_6.html",
+    "hash": "2E1EB5E8FCE4CB4D9D5B4A031FFFF56E4AFB8379D271AB56F947392D649E1183"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_7.html",
+    "hash": "F25ED9EA09DC60B6982AD0E0A65CF2516B07FF50B654117A20C39574BB8B4856"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-lcc-procurement-audit\\index_8.html",
+    "hash": "F7FB2E525887832DFCAC20FADD0C0239509FA46172D6E684F33DD8B64CC57E73"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index.html",
+    "hash": "93115158D6B0E41432D3253D9BCB3BAA41C9BE72C1A4F9F96CED626ECFE23400"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_2.html",
+    "hash": "AEC234FB262C77777C20BA5B69973F07633BC36ABAB578AD71C1B87767DEDD26"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_3.html",
+    "hash": "6F436E73E90058CBEAEF6F81CE05AC2758F679FDF5BD59F41081181401AA39F8"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_4.html",
+    "hash": "FDDA090E275542DC2C1E30A76D57E41D0E98CEEDDB107DA5D6B59F6517A558BC"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_5.html",
+    "hash": "44E6740D0BE35D46B470846A722D01544FBC86377284B368533AE082EC540027"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_6.html",
+    "hash": "DA637D9E255DC3A355107BDB5180A9374C5DD3CB3F3237116785B76AF8CC2E91"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_7.html",
+    "hash": "5E9A3551A90214C4E7FA6998A553329B6F20CD8D7110D686B1397DAEBE42B55E"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-me-synergy-erosion\\index_8.html",
+    "hash": "449AB0C214408DCA30C1AB7CC9C837FF494F0BCFC5745772DDD25E7F0A09469A"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index.html",
+    "hash": "7C8FFB13DCC156A07C41E202AC61786A32078716E9FE5A582A710B5291B764F2"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_2.html",
+    "hash": "7FD8B8FEBC21C169A34AE97D3884B5F8DB80EEB51FB696B5D027EA0AB0F333E2"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_3.html",
+    "hash": "4C77742C9F5DFDC9483A7A279F334534FB2A1C2073AA1818B81A7D959F6EE681"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_4.html",
+    "hash": "597AC4A9635074E60EE70E537916C8E3DBA5F578267505A049B3084865A19375"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_5.html",
+    "hash": "B21AD86C15C6181D76615E5655C2A15EA2E1075EA0CFCCB3A579E71E3F447EA5"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_6.html",
+    "hash": "B7FD6A1795DB72EA5BB5CB1A0BB6754EDF3AC59F6B69D41EEC1B4D1E504F80F6"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_7.html",
+    "hash": "9897FD8CF3DDFB59243C652B09EDA67C1BF819917EEDAEB1CED08FBBDFE91817"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-pelton-abrasion\\index_8.html",
+    "hash": "E226137B1E0F211AA37DF9F49C77BA4FB970A001AD25089C3F93431EB7E400AA"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index.html",
+    "hash": "6129EF15EE1433F788FCE823B13D2464CF2896EEDF0AFB35580DC9524F4CC1D5"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_2.html",
+    "hash": "B3028CF051F6BBCCA2D776E03E714848D67380114472FFEE1910A8C201C2C5F6"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_3.html",
+    "hash": "88EFA2D1814BB6EEA424295A73861F19F2A569181EA0E7FBA0CB9EB3B78A4CD4"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_4.html",
+    "hash": "BCDCA633F5A83C9F0852E43939D3B7F71DA84FBD7775EB97503E1357CA638275"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_5.html",
+    "hash": "E5867663209F7269D9C50FA073C6AFD9EF9135F48A1E4191778E5B91F818334A"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_6.html",
+    "hash": "12240D2C35BDBF85C03980197D51BC05C6707808AB1F9F6759BA165663F8BC0E"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_7.html",
+    "hash": "AB719E8F12095A73B0914E67BF2DED38AC6422379B4E2D7B6ED59D815CA04D4E"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-predictive-maintenance-roi\\index_8.html",
+    "hash": "6A2B9E2AADF39F3900CEF71AA3E89D02F01972808392C5E9981DB5057A9873CE"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index.html",
+    "hash": "1A9878F7A8DF28447C0EB4792587A9CA0AE11D8586920BCED5F688A87FE4EF55"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_2.html",
+    "hash": "75CDDAA1FD46D26498816BE2E2524DAC19348C5BC4A7ECC6D2E4400CE12678E9"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_3.html",
+    "hash": "9322F40C1AD3051248A2DFEC772AFB975FFC960E6523F378F6DD52407F8A00BD"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_4.html",
+    "hash": "58916FEAB798A282F287261768C5F898474B96348422D1CDA3310D6F3E018EBC"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_5.html",
+    "hash": "562584B92A094D91C9127DCB5012E513E0430E812622076C312DF8363329F1E2"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_6.html",
+    "hash": "E88BE9D6B38D9573DE70894572C3EDF31FE9D4259A5BEA2C7FF8D211C4323E8B"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_7.html",
+    "hash": "45315E0B2D37557D6813E7D4740004DD24B00F061DAB3DFD497010003DA9A900"
+  },
+  {
+    "file": "public\\archive\\case-studies\\cs-shaft-system-stability\\index_8.html",
+    "hash": "DC4575A92F5BEC41F06C36A52A4DE0F244D1870F5CBD27120E82F69A58F009EF"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index.html",
+    "hash": "E0ACFC9CBEDF5778C29708D66C38ADB3171F1F3EBAC5FCD768B3D5857AC57B3E"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_2.html",
+    "hash": "8731389FE3CFE61C7314049000AE3FFCEC6B1961A6F6C7FF4D891B08AA519294"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_3.html",
+    "hash": "0D61992900434A2423487CCB82D23995CC98488F0281DE48E2780B1FDAE37682"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_4.html",
+    "hash": "388BE7365636D2A809866417202D5B4A4979DA97AFBF3F33E75E444F424579F1"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_5.html",
+    "hash": "FD120BF3597F92DFD59DBE7E691A8BFE6EA40B91BA5BD5B943D8642E662DB2BA"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_6.html",
+    "hash": "E730D9F6DF6625EC14ACA64EAFC40554BBFAEAD5A7F45D88238E69F2EECFB3C2"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_7.html",
+    "hash": "4334E7A8DDF597D84AB9B5CE40E48CEC7CBE8163B5CCD2F1474CEA55210EE6A3"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_8.html",
+    "hash": "5030DBDE05D2526943A6F8AE372AC36EC9DC33D8AA0DF88B3F1BA542A8A3808F"
+  },
+  {
+    "file": "public\\archive\\case-studies\\index_9.html",
+    "hash": "FC4CF7B755DEA32DF7AF0C411B5A785053DB216DB7056E5EC15C35FC2417668A"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index.html",
+    "hash": "A51BF828F376361CA1E522063D7E60E8E2A14C1A27335AF02A1C6823726198DB"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_2.html",
+    "hash": "D0FA94EAF15B25AE9F5ABE6AB96030458FD235796C5F31599077C8E5B466B3BA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_3.html",
+    "hash": "6927BF70C43A585D8262B80E8FF5F9A96F3C144366A67857F0AD6F4F3C8B2889"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_4.html",
+    "hash": "731ADE3095BBAC56F4A0A700D0020A3427BC8455FDFF0967A5B58E0BFEBFA6C2"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_5.html",
+    "hash": "7CC05E43A97E41E0D72EC66CCC73A067DB9C1B1BD9EAC83D014E61DA225CC220"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_6.html",
+    "hash": "99E81B6C876A5D0143DEEEF8FF8FB538B7810AAFA2594EC63124834DDAC0D9DC"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_7.html",
+    "hash": "551450CE05BDAEB00DB0B5EC25EEC0290020C2E018BE9F13CEDB0C973995148E"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_8.html",
+    "hash": "CFB5CBF1D5B32C59F4F8F8F2090FB49F4EDCE5DDDEF72803C5E1091756DB98DE"
+  },
+  {
+    "file": "public\\archive\\insights\\article-1-engineering-immunity\\index_9.html",
+    "hash": "2E28C61E75F9027D833A8B859033A26180F5B467DB44BAB85A4BCF1E4C1D4B42"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index.html",
+    "hash": "4402D2AE855C786744D86E78FE1BA4B5BE50194377E449E4DD2635058332AE0B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_2.html",
+    "hash": "4AA965E02C178EF1D7F70EEE64385AAA012773B8AEEFF10FF3B6A015D1FB8CB2"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_3.html",
+    "hash": "72282B2C925936A5B0DA776A692AE150EEE827BBAD39D37AAC2ABFA4F311C316"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_4.html",
+    "hash": "B0A3F510A2715E2FD94873743FCE5FCB5090F33904EE66DFD2B633CB5F23A965"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_5.html",
+    "hash": "B0CDF165934AB250880C8495B2BC4E25F70B7A7E89500496E54BD3A931496E5D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_6.html",
+    "hash": "0094355D7A4CFC76FF3FF0269A9A426A2E8F92E30619DF9460D122CF35F04585"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_7.html",
+    "hash": "D459F249E667D4D50133F5A5076BE925134EFF3E37880D6B92C2A224B902AB35"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_8.html",
+    "hash": "7634F8636C03F3022389DFF785BA9D03D0DC2BC2E5C0990493DDA424815170FC"
+  },
+  {
+    "file": "public\\archive\\insights\\article-10-check-engine-light\\index_9.html",
+    "hash": "17D88F08DCB41911C3A255093F3B8ECBB1D492BAE9430965DCE9451FE6D1E52F"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index.html",
+    "hash": "EE8F7C6DC195ED60F9CFE1F9FF49B64D5CB386D1FAC7F26118BC00D195D074AE"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_2.html",
+    "hash": "070F5353417F1083D73FBED601511F8486242FC3A7D2B5D5672D4644A219701C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_3.html",
+    "hash": "0F22B60F26B49315356F55B77B60A1F6CE1F3F6FD6B836D9FA373A70957A0BE9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_4.html",
+    "hash": "AA18D8FC4F807171F197D3C9AA353FF0F7C43EAD55C97138F6A8D782450B2691"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_5.html",
+    "hash": "C6D03B9B8F732B6A07D417E5D8C998A243677D22EC3B42118449A42FD9CF963B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_6.html",
+    "hash": "970025AF80019816DE456CD1333813A25F18F095F7AB58369B0BCD94E6956891"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_7.html",
+    "hash": "646F8CBCE28613BD4105A39309E278C8DA6B3DCDB1346562696C9CCD0DBA0ED9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_8.html",
+    "hash": "89132B800A1FD5FB0D78027E9303906D590E6C0CB627E43D66057AC23D6A68D9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-11-digital-twin\\index_9.html",
+    "hash": "A8B34BEBE04526924E18BEAF0009E6E1E2F692E4C0203379067B3C2952F16A5E"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index.html",
+    "hash": "8887D5AA84E06D44B3453B1F1940C5958FE5F2F0168A55780548D1670F47BDC2"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_2.html",
+    "hash": "A36CE45A7F38A827387B669C9CD6C439EA32EA7C408DEE835D603D9B437A0832"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_3.html",
+    "hash": "D8B8A7A50EBD849EC2AD956EC8E4D6CADFC4E7696D5E06C5DCE42FC2026FE134"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_4.html",
+    "hash": "12A6A0BA7EA0541DE4E37FBB9C3FE54D84EEE25A255334163C6C2A8E6019197B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_5.html",
+    "hash": "793ECE8B443A7A6E49FF57050E9F46A80D3B2AA5AA43B793E7983E97B70525DC"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_6.html",
+    "hash": "E007B4DB4E5BC3270E00B0B066B5C3FB1D295CD2F1D6DA08B77551335F325B9F"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_7.html",
+    "hash": "AB83EB738409CF58E5C03828AE279C256EA8BDAD354DCE7DFACC8B698FFA1A13"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_8.html",
+    "hash": "9478B40388E7E3F6727C2A2A953346B23F4393CA4DC74E1C21FF6DB535796807"
+  },
+  {
+    "file": "public\\archive\\insights\\article-12-me-synergy-audit\\index_9.html",
+    "hash": "58E0D4047F6842AA950B4D553507DDD4E65FCD88C339E43728A2F97467542A86"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index.html",
+    "hash": "5787255D7C0D78213B6976BA2A4C4A5A8EF74CBE92BE5172C9DDA41E77D75F9D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_2.html",
+    "hash": "289184693CB5FF1BF1C025EA8EFA2935DF4AC503CCD72508611DA00366662B6C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_3.html",
+    "hash": "DD5304A1094AB5E70423A7D4579E9007FEE8DC96ED19AE3D98E578034E90E9E9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_4.html",
+    "hash": "C43C83D760C632AC7162BF73DC8B59134906E744CC7FA3000E29C472713DBCAE"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_5.html",
+    "hash": "03D10921221B990C822F4BB854ACC92290261B51C6D70F40A47923460A256160"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_6.html",
+    "hash": "48A51913572E1414DF1553F9EC5A172A488541AFDC381AB2252DC1B3B95710F0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_7.html",
+    "hash": "86F0D44060A2F07885800648C54073F0437C3DBB630671C7F3A898EC6A92EC4D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_8.html",
+    "hash": "33E5C6CD520A4D31B8C72F3898A78F09E73D464CFB48C405575509F00FF62F0B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-13-sediment-silt\\index_9.html",
+    "hash": "B7663364677AE35E826B11174920F4CBBC346DF3FD09BB28C7C82F8CF380C709"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index.html",
+    "hash": "95C3E67F9EC31391E979172638770320087BA930B676FCF4B0F90714ABFB461A"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_2.html",
+    "hash": "433DD7C2BA58F20287D7C6F2A1B1B1A46D532D66582FD2B8C0568CE64C48CA21"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_3.html",
+    "hash": "EDC1995A3A3CA7F37B03B17E6F837F6D61B0FF33A6179CA5544827E47E44B409"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_4.html",
+    "hash": "0E6FEF0AF8EF9F62E2718EA3E7C4F6822657CA80E44AA33CDC34F55CA0A135DB"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_5.html",
+    "hash": "07D14A2A43D08BA7B004F9708A13AC211701BED0A51BA8FF6051DD9023A0BF1D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_6.html",
+    "hash": "DE38C0B5CDDD2240BE684A4A834582E79768F9BD06C5B81D5446AB87C343097E"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_7.html",
+    "hash": "B09BBFEEF68F4211C05DA48365D72AA7C4BB0B31567329D018CD4E72826D4D7E"
+  },
+  {
+    "file": "public\\archive\\insights\\article-14-3d-flow-analysis\\index_8.html",
+    "hash": "AF1A395213C3B36F7C33ECF3FC85A40D3646255BFC7832312AEE1A5562BB4811"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index.html",
+    "hash": "FA8CEAF181EA395ECA50E1DE938531FB62E9520076A0389892BE48423B755F53"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_2.html",
+    "hash": "6B39EB22189E8A0FA0CB86B850F9019D2DEFEE1EA427F9339DF972CD02BA9758"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_3.html",
+    "hash": "A23D56F0CDDD80E3ACD23EB90614CC5B8AF8E3F6014F9FC4F58BE36FBC09FC43"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_4.html",
+    "hash": "FE2A1671EBDA741DB9E619D461DA54DC0342A41A8D17750831EB545867A639EA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_5.html",
+    "hash": "D4D617773B4D9AFEC40F8BD78F708296C051F3E0ED102FB55DC91B2F10D905E6"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_6.html",
+    "hash": "9DF4413765562286F965342C273797145857D0775C920AB1F62C3C71612E516E"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_7.html",
+    "hash": "6CA4234659AC2A49024DA5EE6E26968B7612AAFBB4CF8CE9686F500240859D2D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-15-scada-ceo-gap\\index_8.html",
+    "hash": "C61F872BF9ABD30A907AAE3FE17E838220CD51AA3DDA6ABCFA49333560E64EF6"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index.html",
+    "hash": "E3502D05C255BCE2D537F26D59391EB3BBAE5FDEA6EE9E39AB878EB2A2F310C0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_2.html",
+    "hash": "8DAAE93539263033EAD3A6A555BB214082930D3814AE2CFBF6BC5FD6767221A5"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_3.html",
+    "hash": "C33226D83E2C104884F7B5D89CBDF74AAB2C317E9EBF80E3A92F4CCE11A771D7"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_4.html",
+    "hash": "759C6CD0D7251C6ED31C3DA0143E64B1A007D2256364A441B1896914B465CA67"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_5.html",
+    "hash": "D3A6B6BB5ABA62549388CDCA26B81B9151380114569F1A15899459BCC8E4659B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_6.html",
+    "hash": "CF38D858631AC16F53E04B3CD9FC8DF3B37CC60A33F2A8E7F2451D727C641778"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_7.html",
+    "hash": "3016A9494EA2E5C808A3E8E3A54D6FD1A994B65B0F1FF5DF40222E64D580D01A"
+  },
+  {
+    "file": "public\\archive\\insights\\article-16-ai-paradox\\index_8.html",
+    "hash": "B6261943A1E4588887E8975E79F004840D63944B0DC137247973035151C0EBF6"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index.html",
+    "hash": "2073A257C88B0383719F56F02AACC88A8D0186DE0834E63ED05C1827D08A8823"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_2.html",
+    "hash": "46DC68006C6A3FA25DCB6A47AD0AC299B2E6280F156687B7359E6B1029147295"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_3.html",
+    "hash": "1656DA873F8B6A2DFF648931B029C34F79F8A3EA4377EA2313D05A400EAF8C7F"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_4.html",
+    "hash": "5D46966486E7978DA0F486236E0CB1CA50DE24909EFD7F82EF6293E1F21E5BBC"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_5.html",
+    "hash": "6D9364B9AE0C0ABB68C3F849B16BC686FEC01C8ED8702807F6CACB61B05ECDA0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_6.html",
+    "hash": "3D8900621347E73C97329516456940110240E26ABCE53987608DE63F01FECA80"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_7.html",
+    "hash": "274CA4C64E46B2F6D1C2EA455AED9C38E254EA09FAEA901900B967A878F181F4"
+  },
+  {
+    "file": "public\\archive\\insights\\article-17-cultural-betrayal\\index_8.html",
+    "hash": "D4B62CEFA0C7EA23CD16081F7F45BD46F3FD5CC9017341E96D9950C3A1278ACE"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index.html",
+    "hash": "15F84E6CFBEC36F5026DBF49A26542F9623BE3A9D61659E4C01F5F4F10FDC4D7"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_2.html",
+    "hash": "E066F4EF9C6A883FF3A9C3CD20C2CECDEAF802D88C5595429905659807309863"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_3.html",
+    "hash": "37AF49563C8BC4F952DE93BC315E656BE45CBDBA7F8F4B72A242CEE9B7798102"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_4.html",
+    "hash": "04B1F061F8A2804A05D4519F97D4A2881FD709BF89745EE677D60A08F28719AF"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_5.html",
+    "hash": "C928AEDA2B23A7E6B1891F4BC077881E326B2F9B60C90D2175555235EB6EE9F4"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_6.html",
+    "hash": "5F95AF56CB6A0BC16ED09AEB114DDA1998D1FDE9B85C36C89A256BCE6DDC4D27"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_7.html",
+    "hash": "FDBE5D923A964ADEB535909582F565AD74C877C07A105DA3B82CDAEF7CFDB598"
+  },
+  {
+    "file": "public\\archive\\insights\\article-2-low-bid\\index_8.html",
+    "hash": "1957B324FBAB31D0A9D8387DDA94A5DEECF96B26C938650FF07078569F9899CD"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index.html",
+    "hash": "0D0ED92DE5610FAF458DED2A4E8021C0692706AF1DADB464A47DF26DB73EC02D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_2.html",
+    "hash": "2687DA71D835479F63D02F0435F8E3CDBD419FB5516D3E41819AAD1094D242D1"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_3.html",
+    "hash": "34A801486ABE1DAB680D07A2954B2D82BA35E92FDA95720E77956DF670BF64AE"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_4.html",
+    "hash": "A80044783CFC546A85F7CF23BCC43A730DCEDC0955A0E67B4745E9B14A182548"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_5.html",
+    "hash": "2B6C75992B13B4940D4F7E605530F4EBC476361BF8BA3E88A6E5634E68E75D27"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_6.html",
+    "hash": "30B516DE2BDE0F7082AA1D60631DE59FE1934842219F1E6009972305D49A67F0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_7.html",
+    "hash": "49DA71D66EF97737C82D47772CE70FAFCC87B2315E51F9C46703359ACA763EA1"
+  },
+  {
+    "file": "public\\archive\\insights\\article-3-winter-challenges\\index_8.html",
+    "hash": "E5438AE0327A2F62C27283116C63D9C50F4D5B2569632D5E976AD7FB9EE0DC4F"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index.html",
+    "hash": "44C9EC5F2D5F26A14EF23E0F08B7E34955223EA59250EB2D9E17A771AE6BDEE0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_2.html",
+    "hash": "733B3F910B0AE9B78C611CA5D72F1D5C2C86CEA218106EA78705B9B02D3E2ACA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_3.html",
+    "hash": "491F55D7F2D32E9CD29042CF32ACFCCE1E8ECC3B183DA41523F24F8CD6BE8815"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_4.html",
+    "hash": "C4686F0F4D2ABD9E68DAD93769B4F8CB9CA61CC5DB89F71FFCB65C984F0A58C4"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_5.html",
+    "hash": "0BE917861BC2C0FF4ADBCD3C6C87E192562E4D0DD1A4D84908145A8DD1689ADA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_6.html",
+    "hash": "A9963B80F587B9E99D531466894AA1A745F0AC43A32F02E6B3B53AAB31D22FEB"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_7.html",
+    "hash": "BD0EFB033ECC617D79721428A9BDBDC71701E5CD387F304CB6DD1577563AB6D9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-4-dach-leadership\\index_8.html",
+    "hash": "B53797EBD2D7578D86B74372048BEA6848BBA0CF9950EEF90A6177271910A1F9"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index.html",
+    "hash": "2AD1693502A05F9793E7139246DB69B00253C8EBE9D66253BA6DACF2800DEB6C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_2.html",
+    "hash": "645A34CB59F24AFD7A6BB4CC67BA7EB236E924DE07F647CBEEE0606EB6794DBB"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_3.html",
+    "hash": "124662B922F4BC0725532FFAD9D25197D6B5087196C84D19CC2A8AA990AFE7BD"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_4.html",
+    "hash": "255C48579A9B6DA8B722735B508D8262631CB7B68559C84E89336A723172E83D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_5.html",
+    "hash": "F538B368D2F9102EE0D35DFA38DE89DCC25A26A94AFA19FFDBEC2395A4F159E1"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_6.html",
+    "hash": "301266E46A1ED5BCD12DC104BA3A51EE27744A33F06A43F3E0559630FB089A7F"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_7.html",
+    "hash": "97DD78E7E2411F1B05A9E670593528021A3D169342988C4CA04FEA898838AA5B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-5-human-sensor\\index_8.html",
+    "hash": "BD1F52D1224600557F5DB25ACEA577D2B768FE221E37F9FD7EC4B2A6032E85CD"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index.html",
+    "hash": "416F5A023298733C7AB2060D4F388DBBFA79637051B75599643F27EBB0EB781D"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_2.html",
+    "hash": "4553D4E009C460334B1BA28C0770F6566EC41067C04631AF396FCACC253E725A"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_3.html",
+    "hash": "5A02F340CA74DBE7F1BB2D3CF913D7579F5BC03DE55E1AE69B53DBB4EF87B311"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_4.html",
+    "hash": "677D7B974A8FAFF03FB7849D833502B1CFE308C66CFB1876E224AAEE1495DD67"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_5.html",
+    "hash": "F7A7D960D9FA23D6093C9B3D2645B919451E14E8C4AD504007868350E21ACE5C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_6.html",
+    "hash": "CE5B70F3F75733DD42862697931AF5A1342DAF0AF006BF84D50CB4B82A0F9427"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_7.html",
+    "hash": "9F70E6437F33EC7CB4F8DCF94F200DC9FD12BFF17EEDBE7AF59CF31061F7EA02"
+  },
+  {
+    "file": "public\\archive\\insights\\article-6-ticking-bomb\\index_8.html",
+    "hash": "1E979EDA946C005F49C4EDAB2DA36DD29810A3E5944D1E73D4DB13F335A836E3"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index.html",
+    "hash": "B8B04B011CD1CA927899976048603C61033204C5ED02F46F5C1946DB82295CE6"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_2.html",
+    "hash": "D16400084ECEF4F30B65E0331122483C89B00781C1648AADEB6D749E8683B04B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_3.html",
+    "hash": "4BB136A84A28E1764E188F493EE4BC44A1BFDFF165AFBCD1A89FB20BC4AC2D43"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_4.html",
+    "hash": "37BCF8375FC2433E7234B82FB3193A887425C6076F874DE789178A66B8896EAA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_5.html",
+    "hash": "EA3C6BA75932230CED1F0B795D9E476C006D699DB3A619F2233B5B1C66CE707C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_6.html",
+    "hash": "1A134E13E99C3DA7D466B252715C9D0083833E88942AE6FEC26E432226A3AD94"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_7.html",
+    "hash": "6797ACE564DDCA5E1C90355C8BEE3D4D4FCB6E7E46AB13B61A0D0BCFFF8C2A91"
+  },
+  {
+    "file": "public\\archive\\insights\\article-7-fortress-maintenance\\index_8.html",
+    "hash": "3561AC335BF5A440ADF98C78A2896FFD8814E1DC2510D462FC8EFD2054057470"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index.html",
+    "hash": "C00D1A322529C53E7C7CFA65783CC95A1486DACA565A2FCCA3BF3A109CAAD5BF"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_2.html",
+    "hash": "C6F8B6AE97C215E470F3213B27FA18F7646D338C80359A870F0A2F19BB1B7FA0"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_3.html",
+    "hash": "7118995107DAD5AB518402FD28CF19A05D80264E066D53112E07B3375328D1AA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_4.html",
+    "hash": "0C38B04EA1AB5898DA859216DF013B245BBFA2CE29810C726075284EDC730367"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_5.html",
+    "hash": "ABE982C76C5FC66B0BF31FE20942AA4F3A4657C07492ACF95DA051F76EF63C4C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_6.html",
+    "hash": "821B8A7CD6D5674B6F032DC708FF2A84577CE672F535DF7598456509F63E38EC"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_7.html",
+    "hash": "34B79F0A1BFCD768BFCEFCB453340A4CC9ABD73A12EF32A4EFB006DF93D7977B"
+  },
+  {
+    "file": "public\\archive\\insights\\article-8-symbiosis-standard\\index_8.html",
+    "hash": "D625556DDD0130F891785C92010D4B2838758C0694B1D2C6D0727488C6EC4CAA"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index.html",
+    "hash": "0B7BD968304670748D286F76B6867A4D46FF181C5CEECC8CDD16B5FFF4030859"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_2.html",
+    "hash": "05C36AC45596B4EA6C09D11C2530E818513643329446378B71C1E2D781AD1AC3"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_3.html",
+    "hash": "CF933C38C2B377615C2762200CCD657C6E55990A9B92ABC7B7948890CC76696C"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_4.html",
+    "hash": "4A12EDE81A736A72C83728A9659930801BACD600DB5BA9082E15F72DFBD17BE2"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_5.html",
+    "hash": "DB0F30E3D8BDB9F667686851F639E6DCFDD1D100148703C70979410C68E7DAB6"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_6.html",
+    "hash": "2E7EFC57F9A46D4E32D911804445BBA9EAD668E01EECF9DBCEA879B9B7407092"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_7.html",
+    "hash": "B0E88F971EB853803B1199CC72FB9CFC2A5E866717DFFAE82224B2E7E1DFAE66"
+  },
+  {
+    "file": "public\\archive\\insights\\article-9-holistic-view\\index_8.html",
+    "hash": "D130946132B7280947C411DDF3FCEA7BFDBAE7DBC083C0A0C913099010DF194C"
+  },
+  {
+    "file": "public\\archive\\insights\\index.html",
+    "hash": "27369BCE52EBD575351D307514A42485BF914C6314B3DBB7D15DF0AE9B7FF21A"
+  },
+  {
+    "file": "public\\archive\\insights\\index_2.html",
+    "hash": "2F9B4E0F9FA1C95E0025DEF2827B7E55350EC409D79FA04AF8B004D281F553F2"
+  },
+  {
+    "file": "public\\archive\\insights\\index_3.html",
+    "hash": "3E751CA6BD0AFB32215BBE2B4614293D5A2880BFFAC7128C1CE788B2C2F447D8"
+  },
+  {
+    "file": "public\\archive\\insights\\index_4.html",
+    "hash": "B685FB52C425B4F9F1B3B2C0E657906ECD5675944E31C4CA5738046981534B96"
+  },
+  {
+    "file": "public\\archive\\insights\\index_5.html",
+    "hash": "34490349D9876C67D49C2A7251C3D170849972E549838F6369BB8DDBFDFC0C35"
+  },
+  {
+    "file": "public\\archive\\insights\\index_6.html",
+    "hash": "8AEF6F457CAC72A062557A15B8EE3AFACB5AAE0145D525F9A4C6715AD419C07E"
+  },
+  {
+    "file": "public\\archive\\insights\\index_7.html",
+    "hash": "B07DAFDE2D09494BDF82B2D296AE7D4477D53645B37EDAA77AABA45795A837C9"
+  },
+  {
+    "file": "public\\archive\\insights\\index_8.html",
+    "hash": "46E98D590F2C57FDCA627CC7FEE28FF6BD6A93EF0A93791E992E57B0FEB74A54"
+  },
+  {
+    "file": "public\\archive\\insights\\index_9.html",
+    "hash": "5010C989A9F1BB4CC335D407E80DC7253A1DF5C5EEA5F8807713267A54FC69E9"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_alignment_v2\\index.html",
+    "hash": "1888C0625EBC21120674108E50F8936CEA3436B15C2D3EC27E7C5F5FF08DC8D1"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_alignment_v2\\index_2.html",
+    "hash": "89872F8ABE93CEB338A17C539188666960E0D2BFF84315D1F35AFECE9393DA7F"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_alignment_v2\\index_3.html",
+    "hash": "A2373B8612EF6AFCF6983082A838109510F7412A9343B178E3EFB5273F761093"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_alignment_v2\\index_4.html",
+    "hash": "342E0EF30101422E5D29137315F5002A379D80CEA9A22B02357240F1AC9929A8"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_alignment_v2\\index_5.html",
+    "hash": "F1A367A9C4E76D26C106EB47FD0C81B045D92CFF26708155E93C5CD128B275EB"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_asset_v2\\index.html",
+    "hash": "88BB1D63DA2F01267B1DAC850F4E90A0A9794C1852DE67E0AD6C963C051E81B4"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_asset_v2\\index_2.html",
+    "hash": "14EE9312746F54A56428B5F3B85728A017CB2F63252D6972E90E0B2BE3FACC16"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_asset_v2\\index_3.html",
+    "hash": "988CD523647BE53D4D12A879E80F1F6475105814E59E0027E2086A083B0D2C48"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_asset_v2\\index_4.html",
+    "hash": "6F194833F8E1000C3DAEB64FF2012F23D43AED62DF9CDEC319088874CC7B9DA7"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_asset_v2\\index_5.html",
+    "hash": "62B07A64F5618356CFF9E8CCD4E8C0A7B07E3572991A709336240F3822A5762A"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cavitation_v2\\index.html",
+    "hash": "8F5B2EF06BF4CBA09FEFF8D46C0C89A5FE6C6C5EE8FCFE006980DE8F1D3EE13A"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cavitation_v2\\index_2.html",
+    "hash": "159E32D38CF2FA9B6DC8179D4518DA1623ED8AAD74A5252C972251081159AAF7"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cavitation_v2\\index_3.html",
+    "hash": "12B15372B582EE2E3967E5F84DC1886CF72545C644A03B52BA338902A4A05411"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cavitation_v2\\index_4.html",
+    "hash": "ED31BCFD5CA77C76D42010D36ADBC53B9F84ECF7C42F94D5AED87888DCEB9E77"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cavitation_v2\\index_5.html",
+    "hash": "28471469B1162052AB8FF0564949744E1BB3DCB30B63D251655AB8CF42F1C652"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_core_v2\\index.html",
+    "hash": "D75EBDC7FF9EFC0CC8EA0291F9593BAF9F09AD3BFFF0FE4A475244A1F0852AC2"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_core_v2\\index_2.html",
+    "hash": "7122684BCA5773F9C5AE6F5E18E79AE2AC715837F09E466B77A2A367F56E676C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_core_v2\\index_3.html",
+    "hash": "DC10B3B8AC1126C11B8802A32D42EDA79100FE1C38F0F38AE8277156A1CF4A41"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_core_v2\\index_4.html",
+    "hash": "AE3EF26F085FD094D71C8A533063DFA27E8A518E6E58B58EFE562D9BAB48CCFE"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_core_v2\\index_5.html",
+    "hash": "AA70637D78943A9A1125A947D0EEE4B0E654A472B164AFAD99982D1B82B778FE"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cost_v2\\index.html",
+    "hash": "D639FA79BA9D1044183D08122500F30D7B422D4816368B68DC28A8FB75E04883"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cost_v2\\index_2.html",
+    "hash": "A8CBDE7C4D91A5C3A9924B34B197F7DC8CFFDF5C6B403D2E752FCAE0A90B7EC9"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cost_v2\\index_3.html",
+    "hash": "1FB9240C26CB9A1101412F7F88C84EA5939A7467DFDE9F45DA7ABA09CB9798CD"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cost_v2\\index_4.html",
+    "hash": "C2BAE479182992DDB9BE15165E1AD099703ECBFA23524025BA729D3102C1FF9D"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_cost_v2\\index_5.html",
+    "hash": "BE6177197656CDF878B05FCE989A7EE1EDFC1D4CF53B121B84EFB7D7751F141C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_dam_v2\\index.html",
+    "hash": "6DD72EAB8712E0874E527C98D72EF5F89F6921DBD442BED97C7CF29CDD3B6D13"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_dam_v2\\index_2.html",
+    "hash": "8C422C12EF86DA4134C16F0E9770CB4A3FBA5E6864AA74B711E63C8C89F31836"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_dam_v2\\index_3.html",
+    "hash": "86151BC322A4C755BDD71DFBB5B59D8B279B4C075874359F07A4DAF516A86D0B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_dam_v2\\index_4.html",
+    "hash": "1EDF1866815ACD0E96E124E3093DDB751AEA5D9172A23E88516775DBFE4E8A8F"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_dam_v2\\index_5.html",
+    "hash": "534252DA38DEAD06EB5B4E1FAFF9594CE01338A406A54DFC1DC334972A7BCB9C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flood_v2\\index.html",
+    "hash": "B120155E4FE4B761E50C63B2DED0591388C9E087D571B33CB7B2B8567FDF001B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flood_v2\\index_2.html",
+    "hash": "997A484AA51B6FD613547E9F5235BDE8638FFC870B318166CFCC7DC8DBA3AA78"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flood_v2\\index_3.html",
+    "hash": "FD59102C7C2568068B9B9B8AE7BD51AB827AB96B56D61AF146FB92F25E983D91"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flood_v2\\index_4.html",
+    "hash": "5161C9C8D61857EF4CC374E894A9F1E18F5DC2116E7D87877A94B0BAD28FA995"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flood_v2\\index_5.html",
+    "hash": "9A3D3394EEC2DD1C99ECBBF82EB8FBCFE62BD05759C5DE696777FC09D8787AB7"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_fluid_v2\\index.html",
+    "hash": "5AE29687AA78F94F7282C86B30DDCCBFD14769E114A3B802E6CAF2D3A63528F9"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_fluid_v2\\index_2.html",
+    "hash": "3BE81B6631DFD70AD0B104603077371FB3378A06896588DE0BF9A317C4D56587"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_fluid_v2\\index_3.html",
+    "hash": "755D7F86B3D1E0F0E3FBEF7DE99715D441231754DB67AA1C04B4B3B408347BA1"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_fluid_v2\\index_4.html",
+    "hash": "6801EB9903098DE68FFC822B721C70503622303F23B99113A1E5EE3222FF50FD"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_fluid_v2\\index_5.html",
+    "hash": "7A0FADD66074144E7B5469F9F23AC07C1911EAD070DAE5B8C758F2DF53B28647"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flux_v2\\index.html",
+    "hash": "E4256AAE2015CBFB52B79F01E088E58FC1A50E9EB14AA0D62FF53A1A86C60D62"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flux_v2\\index_2.html",
+    "hash": "E5956C4975E69790009DF6D71DDAE2F9F0A042223726A8B20490C91B935892C8"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flux_v2\\index_3.html",
+    "hash": "35B62216DE7ECDE92DC38017B0672C4BF9E050CE635BD28B65FB906ACAE01E8A"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flux_v2\\index_4.html",
+    "hash": "1BE8963E8500010A854958CC79B3B86EE88B15E0E3B6C3EDAEC61AFCC4D01798"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_flux_v2\\index_5.html",
+    "hash": "DAFE9B5E26EB3EEA6A9DE2C19A0EA1FA03A7B234019C233815606456D4F1F32D"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_global_v2\\index.html",
+    "hash": "0D677C04B3B7E2E1FB179BE3FE9E456A3C30F417794ECDEDEA40F0F55E670491"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_global_v2\\index_2.html",
+    "hash": "5FC852D66274C5E90ADB83211153244CF2E2A0EE294410558F1C5821397F64BE"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_global_v2\\index_3.html",
+    "hash": "191004ACA4488B29365D62A42B43510BC0BD43D7614DA5F3127D1893B67A474C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_global_v2\\index_4.html",
+    "hash": "AB88C0541A729A61C1055E6CF62025EA032D2C92D52E91D94819867EA341B7FB"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_global_v2\\index_5.html",
+    "hash": "AA707E8C1F0F667488B43A16A92397A5BFDC1B370CF677F7CDB5E1BE77C745F1"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_iso_v2\\index.html",
+    "hash": "8ABFC6FE4F5E523611BDF01C5B0F2AA1B4CAA217255ECDD8965DD3B064C195C4"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_iso_v2\\index_2.html",
+    "hash": "AAB002E9EC77DEE3AD10CC97838272D56EB7041EE2B7AC47608D11C752409ECB"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_iso_v2\\index_3.html",
+    "hash": "322E54E0A2E90B2B9805B6A2F482CC4D5D710ABB38A325244E4D9E8F58812E95"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_iso_v2\\index_4.html",
+    "hash": "8832666D5FFAAA87A7E072483B9E821E2B5817DCC9ED4E4A62D6D0F734B3D50F"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_iso_v2\\index_5.html",
+    "hash": "D9D4663524BD7AC6B082536F6182A76F02CB49DA3A12582A4C56AEC9FFEC11B8"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_methodology_v2\\index.html",
+    "hash": "A4E416B98BCC5A83B9C56EE44FB3A25B3BC139FCDADB41A7B9B6CA3A19813C7B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_methodology_v2\\index_2.html",
+    "hash": "8564BEB7A57934427B94E9AC2B16F4A90384AA1189932D2ECBAB1FBEF2F4828C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_methodology_v2\\index_3.html",
+    "hash": "130611AF2311AF5FFC614A64BCEAEF3D8D1E8E555D16435FEB24304D6550E7C8"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_methodology_v2\\index_4.html",
+    "hash": "B6F7BA5AD2A95AC7E98E2F4A632F2D5786990DC7DA42DAD64C5564587B430FA4"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_methodology_v2\\index_5.html",
+    "hash": "4286BC58F92F28A45600EB1BFDC05585C6F4439B783CD44DEBA18A0BE4D1C4AD"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_organization_v2\\index.html",
+    "hash": "8D84D2CE07741BFE6E5D6207BB3D09D16E8D75A54968011CB24A6A7FCA2B670F"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_organization_v2\\index_2.html",
+    "hash": "0E75FFB09D8232120414458E97D44C0E51D1D7101207C91A4869B0A9A29B0211"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_organization_v2\\index_3.html",
+    "hash": "6E2E77607F9FE42ED07EC6D2462D12FC797574B0B3ADA502870B5A23B0B517AF"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_organization_v2\\index_4.html",
+    "hash": "BB34A16D147B9344FF6293078246703DE3730FFED52583F016EE4706BC555B79"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_organization_v2\\index_5.html",
+    "hash": "D5F08D62263834389CB1F9D73DD7890DDF6EE521535B405BFBA8F395443246EA"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_predictive_v2\\index.html",
+    "hash": "024982FD1FD8BD6AA37815F647CADD6864C6A041443156A13F8D63814ABAC1B0"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_predictive_v2\\index_2.html",
+    "hash": "498A4BEA936489436765C1F3B8D4E33F655C476A4C79AC35B3E235B79EBF8D60"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_predictive_v2\\index_3.html",
+    "hash": "2691834F5A2D03841466ABF1DB372CA8CBC2DF0F354F7BA36F0CA789186AC9C9"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_predictive_v2\\index_4.html",
+    "hash": "29C9786DB5ECFF24DC30538C8AB912789AFE042B2D675BE933E9F3E7C7832410"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_predictive_v2\\index_5.html",
+    "hash": "71BDDE9D634EFDD40CFAC4F1EB05648BEF6FC777B7D8AB935636E4DC0FE5AE9C"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_protocol_v2\\index.html",
+    "hash": "67357B91006E49274E892A6D04242E206B1C386268813ECFD0D9601EF93ED43F"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_protocol_v2\\index_2.html",
+    "hash": "3258098831FA60143C5ED9AFF1EBF8E1631DB160949EF00829BC773C86DD9262"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_protocol_v2\\index_3.html",
+    "hash": "2BEFCAD5EBBA667543DDD53F2EDEDB994FDF9AA8979AA5949ED725ED81D7EDB2"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_protocol_v2\\index_4.html",
+    "hash": "8586A7C33D42220108D151CD9D8B8E311261F90C0A5B0E8EFE28F5BA0FB0BB9D"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_protocol_v2\\index_5.html",
+    "hash": "475392EB2BE379775194E9BB7279FAB84AF2620AB11462CB292B7B02A5DEA359"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_quantum_v2\\index.html",
+    "hash": "6C7C65CB174515AD44672EF53FDB88DE303395F7C7201A0C4E0690CB7BFE78AB"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_quantum_v2\\index_2.html",
+    "hash": "764C6BD487BA4EB0B72687AF9FA8DA35FC0A6D7EF654141C41515577C09260CB"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_quantum_v2\\index_3.html",
+    "hash": "AA4FA4D09AACD0A256FA3302024CEBF682E485FF86C1AFE26673D20F67123E31"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_quantum_v2\\index_4.html",
+    "hash": "F6FB4100E1845268EF7EB0CB7D4BC4798ADDBC2BC1B696E60D02AE6E0534EACF"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_quantum_v2\\index_5.html",
+    "hash": "5F98D72F1CA48C13E6551A6E001DC12D3018976943A56863518DFD6DBB327247"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sat_v2\\index.html",
+    "hash": "DD5898470F381840D8A537D08A8AAC00127896F370B4AF21FF8DE209F1D22A0B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sat_v2\\index_2.html",
+    "hash": "AFC605A2C222D18F37980B9D00F5358535F123CE949B073AA8C221E99092A126"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sat_v2\\index_3.html",
+    "hash": "509032F4D8DF4DFD3F9FCDE5335658A0733FB6F85D0D84A36D755976BC32C128"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sat_v2\\index_4.html",
+    "hash": "F4973BCB4226FE34CF2A61502EF5957DA1795364997DB23ED3D149CE29393141"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sat_v2\\index_5.html",
+    "hash": "46C417E7490079E5044ED4E086085903018F2412ED20832D5B50EE59BFF4CF97"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_override_v2\\index.html",
+    "hash": "BC561CB10F124C06F27AFAB6017F6F00A9B3998E2B462192D4186C6100C4BEA2"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_override_v2\\index_2.html",
+    "hash": "67CF6B17047BE3B6D5992AE53C24D42652B8150E4B34AE3C62A2C520C8C558E0"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_override_v2\\index_3.html",
+    "hash": "62015AEE9F767E45DB17986D685B8CDF19B322D7BEB5D19390359604B3DCFD69"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_override_v2\\index_4.html",
+    "hash": "373EC64EC8BE01274046C32C835A3CDE5CC2B21C868FAF35589D814D2CBCED26"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_override_v2\\index_5.html",
+    "hash": "30874403AC0721BCC88C5A60F748FCB35C558AE17FA16C7914CEF20ACD0CF3E8"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_v2\\index.html",
+    "hash": "C4AB79AF85F1395BB00A6B38FB63ADCFE0E3CAA1C2305A403C0657AE1D4C4E36"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_v2\\index_2.html",
+    "hash": "77F649DA4CFE457FDFAE8F9B7442918CD7604FB3E7B8D1E93622F5416DB9A963"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_v2\\index_3.html",
+    "hash": "EAAD5C13CF3BFF337D0DB8264F16D9A73C9C19298B054C1BD3F4F5B44DDF6619"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_v2\\index_4.html",
+    "hash": "E4AA5BA64643E66124EB9CE467F4C324F8316AC41CCAED17C4E74AD6CB2C8AA5"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_scada_v2\\index_5.html",
+    "hash": "9C671DBE97C16DFB3292A90F3AA1E2365A1B784F2296D31D832133FABFB93E03"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sync_v2\\index.html",
+    "hash": "452E2BEA45574969F42405AC0518AC399D392105258F4E84BF22B5F5886A27C7"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sync_v2\\index_2.html",
+    "hash": "7B199D80A6B77460DBA03805A469BEB13709F0D175ACE90CD3480398CEAEC311"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sync_v2\\index_3.html",
+    "hash": "D19F1505B0A1B6CB008F933F1DE3839E9409E1CAFE7558BD8B7CCB2EB781DA9E"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sync_v2\\index_4.html",
+    "hash": "30A978E6DEA2ABDEEB07B642276BBA74F55743E33C4E16BB41E614EAAEE3A4EA"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_sync_v2\\index_5.html",
+    "hash": "8D774057E74F4D0CFEAABA8142B39B9EBD027A5F18D96F7233C7CB123F95FEEA"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_synergy_v2\\index.html",
+    "hash": "5FA2C82967D2FDB14C37A863BE2238E3672E5C072EA04E02E3F54869A51F1DF9"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_synergy_v2\\index_2.html",
+    "hash": "0CB3CBD1E896F5F6585695B1DDFD3DEB465A75685A2E840747F2F2E7708E84DE"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_synergy_v2\\index_3.html",
+    "hash": "ECCD46233364FA0335E97E6F9D7B8CFEDCD4F05CACE497C558914675E3B9960E"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_synergy_v2\\index_4.html",
+    "hash": "F42A944785594AC0F06DBE49550D7E257C8793683C509A1160E9F461C1C436B3"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_synergy_v2\\index_5.html",
+    "hash": "1311B5BB0F49B5759BBDB3DDD76DCDD6524C7EAA1C7CC8530A15040239B22F1B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_thermal_v2\\index.html",
+    "hash": "DE13BD2A04593728AC0317B321519085A4253BF40B3653326901B3FD8CA367AD"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_thermal_v2\\index_2.html",
+    "hash": "DACE1099080E7523540CF48462D946081EF541C487EEA83FDC97D344CDA90649"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_thermal_v2\\index_3.html",
+    "hash": "37CAD32F2BE000EFDA081CAE93123D361BE5B670101864612A66D39870D07143"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_thermal_v2\\index_4.html",
+    "hash": "FFD207A85A5F83ABA73EA3A5BD6A9ECDA3AE04792636E1326E4DD26A8A2E8A1A"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_thermal_v2\\index_5.html",
+    "hash": "326460C2152B5616D450BA1ADED0C287792CF8B4671621BB1DB69552E758F4E1"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vibration_v3\\index.html",
+    "hash": "6D290023C073612D9BE80337D545052DDEC58F450EF56D4A149B93ABEBD04C6B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vibration_v3\\index_2.html",
+    "hash": "547B71AE1AB403C7A38380AB19980006B46AB38373C31DB154C142F1147BDD8D"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vibration_v3\\index_3.html",
+    "hash": "30710C8DF16D420D5DC95B3323FE7536EA450DB964B8F020447B0618C89AADE6"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vibration_v3\\index_4.html",
+    "hash": "08B9F3D8E2FDE42D45799D3B2D371229D5447D408185D0FBAA0F7FE2CF41292E"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vibration_v3\\index_5.html",
+    "hash": "A78B421E294E53110D8B3F508D8B5D3D9A0CCB690EAF58790BB99D474DB90839"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vib_v2\\index.html",
+    "hash": "64555845758BFCCB79FC24851FC611E5D1D4CB4540E3F7727C66961359656F70"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vib_v2\\index_2.html",
+    "hash": "55586D5FE62FD11646558E4AE6AD1C84CD95318AEE382FB6ACE6A2D46358A9FE"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vib_v2\\index_3.html",
+    "hash": "02A979FD02B58C0589DD4F0EBADC32F55B447887F64A382009F3DBE1A0B7E54B"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vib_v2\\index_4.html",
+    "hash": "068A341B6F42043A29B3730D9CD634BDFD0DFDBC1EED54EAABFF05335A4392B7"
+  },
+  {
+    "file": "public\\archive\\protocol\\anohub_vib_v2\\index_5.html",
+    "hash": "4E6BFDDB293EBFFEEA572BB1A904614B59B6DC3F209D88B819D984548E89F2AA"
+  },
+  {
+    "file": "public\\archive\\protocol\\index.html",
+    "hash": "7D31B7D4836FAD58B6042707A1462362EE341215E84D6971D3700728B4064920"
+  },
+  {
+    "file": "public\\archive\\protocol\\index_2.html",
+    "hash": "6FE5CED84D3BAB189CF14A37A8DB121582F46948E3B913AFAA11E94B84854150"
+  },
+  {
+    "file": "public\\archive\\protocol\\index_3.html",
+    "hash": "96480355A447461E22DD95CDC4186C15A403A0ACEBA726840E5EB520EDDFB826"
+  },
+  {
+    "file": "public\\archive\\protocol\\index_4.html",
+    "hash": "3F997DC3796F2966C177484FDDD3DF9A4F72C5304293AD10BCF5191CD7692303"
+  },
+  {
+    "file": "public\\archive\\protocol\\index_5.html",
+    "hash": "92F96A01DF3D65BA1F16A6E1DDBAD2F3399D25397C655F7553CE9739B4622C94"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index.html",
+    "hash": "C9D277A0E99B93407E5E23CD835184DCD5CF538820D9AD8CDF9D04DB990CC2C5"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_2.html",
+    "hash": "0352B1F29E36C0BC15282B082DB87D30B60F7D893AEDD8BF426677624D8E0C11"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_3.html",
+    "hash": "ABCA01C041246F42C7097EB7E6712CEF8FCA28B50608C79AB17CC123A6B0B4AA"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_4.html",
+    "hash": "3D2599E8FE41550B859970471EF9E119BCE5E40DF17578F19B3CB2AE092DB9F4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_5.html",
+    "hash": "EFBCF637CE5234A0BCA5EF4BA9DE528E58960820806C5A4DAECD31D3A444A9DD"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index.html",
+    "hash": "3E674A054B36AAAF7482C8BA9E9267A43E190172D5C3F8DE2BA45DF16C322778"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_2.html",
+    "hash": "6F28929602F6A9C9172E124A6F49FC0B7B22660754031F61774DD01C0564EFBB"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_3.html",
+    "hash": "C1368A1C3512AC121ACF8F9E13BC4089E29E1BA61A8E44F0A085D9A1273C6CCA"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_4.html",
+    "hash": "290AD536DE1A31618EE364B3639B033D724EA0039A8BDA6356F7A785E4FB3A07"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_5.html",
+    "hash": "8E90BD8CB82B9FA1E809A6FD7121DE652FC4838A0970F81F0FD50B28D92B40DA"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index.html",
+    "hash": "309C600662596E019CD7BC595DA58B843A323E0088B7EF9B69DECFB7765F1EE0"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_2.html",
+    "hash": "2D000F04748ABBDFCEF813FD204E2BF78833ABEB1AC06628A29E2C4D973D752F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_3.html",
+    "hash": "924456C220FA9B6D8C5BC8E2007D5F54A88AFA443E2476D16B49A58B76743090"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_4.html",
+    "hash": "6DA7342AC47E8493AEA39B2C32450158A42A2D192CBFFC84E02BC4E1AE3E27E2"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_5.html",
+    "hash": "36C25AB9C58CDC5196491164E0DC8B27CC00D67D88F392A77645FBF3CB337C1F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index.html",
+    "hash": "9E11635267D90925524112DFD5477057C86041516D4658A4B1EF43D4607A2959"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_2.html",
+    "hash": "EB9D45CA3BED9502D29D73FCBB2621576A187DD71FA7949B0B1C6BC9577B2ABC"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_3.html",
+    "hash": "937926491B83B47997862A1B3986931E1AC4855E38C7DE19C744A5AA05BCB6B4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_4.html",
+    "hash": "62241862B3A529E8DDCE6B98D77799913D488321C68318C5BCDE7C8AEF23D229"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index.html",
+    "hash": "A5FF3D118EFD2E982873884F2B43DE8827EE5406E42B201403BE72F7A4BB9E5E"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_2.html",
+    "hash": "B5F2AA5001B2B2866F3C48E705F1A5CD90AE2684C49519DF14B0359F35AA2BB5"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_3.html",
+    "hash": "5084D8A5E6AEE499254D268CFA9EEDA7A675EBECB7FC35E4892A6E62BDDCA6A4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_4.html",
+    "hash": "689B558DAD215FD0AC9EAB555170770AF59FCDEDC16294B2DD69DE77542E7542"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index.html",
+    "hash": "013B2981896F4BB24F4701F7BDBE0CB2485C8355A0FAAD86E4F65E3D73042681"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_2.html",
+    "hash": "49B1CBF238D3C5058C6D5ACE781C40B18F2DDDB901D6B18BC914970962DB311F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_3.html",
+    "hash": "BECBBBEBB3BDA7720971613C2B8CC0E7E4887EC64D361CC4DCFEB519155ED958"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_4.html",
+    "hash": "7953CBBE0AD0BB6DF11E72EB7E5A23F6014716736FD34EFABA1B98D280814942"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index.html",
+    "hash": "7A8A4BAE681BF5AE1088DB2A9D6E4D8CF7918B17583E78E8C0C21F0EC8963F0D"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_2.html",
+    "hash": "7C72A9266C40F8CF8B2D9B8C8DD9DA36E1D72400C16A10D63BEF61B46CFA693A"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_3.html",
+    "hash": "4FB60BFE4E2E38CE97D836C679B8C8B3CCEA7D4DEF9E29BCB5471E93EF895F7D"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_4.html",
+    "hash": "4A9F7DD7F8777B41D73E3D1B326BFE2FE478E23935BB64844F79E5E1506A5AD1"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index.html",
+    "hash": "8E26E26F489C8E585A02ABD7BE2D3A6664A9FB90B3A3DEF3E11BEE9774477706"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_2.html",
+    "hash": "9BAC19448894A5D35DB752998832197E34B5D951A55D3528ABF64936E8A0E226"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_3.html",
+    "hash": "ACF23068A3A468FEACEDA2C452CFAB022648406B1852D06F31A7BD348B1BD835"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_4.html",
+    "hash": "83506A5F7F6B1F1F698149B41D61F5C1DD9CC14086468DC7C7A1B4063D4AFC55"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index.html",
+    "hash": "04414C0A9AE7EB7319647A3365624D80EFB41D02621EE83971082891ADFF4A27"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_2.html",
+    "hash": "1887E7E6276002BB6B8337202F0FF10AC4B6393E0CAD4702EF3823CCF9B3DDD5"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_3.html",
+    "hash": "4526F3E26A15DF1F6583569D0BE7A3343454A4373DAFBF355F55D712E9C018C1"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_4.html",
+    "hash": "62B19C722B1E56CAED5F65D5DD2718395B9A52D6F6F33046AFC468C7EE3E8ED0"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index.html",
+    "hash": "3AE0D261F798074CE245A95918BCE65804AB09D37381EA079E7037E594C1006A"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_2.html",
+    "hash": "A51DAEFB8C78782C7CFA5AE84E66F8A4BE61BC2548FC524E28439DFF66749F88"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_3.html",
+    "hash": "1EFB1B137ABA6DEAE463FA57B4E832FDAF2DF072867AEE0AF80E5ADB370A9460"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_4.html",
+    "hash": "7E0F3C43880F0267995CC8959351F5AAB7F322E6BD1406F786AFC42457B1994E"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index.html",
+    "hash": "48EE93755C0AC18C13A39A3C6D4409F0FC8187AB2045BFC411ECF02CBFF1DF69"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_2.html",
+    "hash": "4DFAC5493918D417DF9704C6D00A4B359B712A3F503FE72E76B0B2D2CCB6F63B"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_3.html",
+    "hash": "68440CB6D70B990930F5C0468C9B6EA06FF524B0C54405DB2CF76CE4E170D900"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_4.html",
+    "hash": "C2B56F26EE0B406DC27E07AB3554B42E9CA255FD52F3DC4ABA2E32CF011877B2"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index.html",
+    "hash": "6D6ED78D5833EFB0A1DFC9F2D4BB7D80712FB11781A833F4F255757277C1DCAF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_2.html",
+    "hash": "83C9D6FD0C5B2F62CA495EAD654F0B734D12F7502F4BA4AAC52BFAEB9479D43F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_3.html",
+    "hash": "74BA9D9746C7B462ADF2C2129430D7F1BB0B2F7C35AC246F497C04639B254D82"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_4.html",
+    "hash": "A8F98355465BDE6E4369452268DA9F59F9651A689BD705B5BE367E94D44829E2"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index.html",
+    "hash": "C85FF5FD508927174D4AF06CBFABB8480B50DBA719A008CD5020E2C4688CC0E4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_2.html",
+    "hash": "24584C1F084C175905B437F2D485B7C338CED42631D911CD2DCAFA40A23C2C8D"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_3.html",
+    "hash": "1862754D14AC1FEF926F5C667BDB5FB2CCA74AEFFE814C260EF3A28AC117084F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_4.html",
+    "hash": "899C69D548E9748F67887F74D9C55CA40B6D0628DB1F833E269C0C5507C53440"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index.html",
+    "hash": "92A0DB290C1FE1F3C74D28F9C9649F1BAC46C59F5CC0B4A3FC23D0306FDF64AF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_2.html",
+    "hash": "8274A1A5D4D4E2084017ABE3C2250C4626A58E95FA5F3BF736E20AD9D10E0DA5"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_3.html",
+    "hash": "0D9530470418A9880C5062452B93DCA15069EFBAB5FDB34740FF224EF109D4EF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_4.html",
+    "hash": "2930E7A97B45CE339F56F2F10BA9844CA9C118D7B9BDAEA3013D30BF17BE3711"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index.html",
+    "hash": "092A22FB80890FAAE33B16B1EAFC626938B3663302B32E65F8E5C96EFC9C03CD"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_2.html",
+    "hash": "033F5385C07506903D1C85FB3BA346FBC9F0DE85C9FB41909890E21DBF043A49"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_3.html",
+    "hash": "72F12D7D881034A366D1F4A025400917B25EFA9CFA04B4D525D7B463246686BF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_4.html",
+    "hash": "B718FF14B9923DC17BE4D67926B9DACA8D96427BDF8D33D803D83C00099B2FA7"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index.html",
+    "hash": "82A8590D7B35298F13833262FEC93F3BF715E66526DA7CFFDFF9F09013EC5D42"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_2.html",
+    "hash": "7CECD603E8ACF99980D0AFBF0968D454B91F2D8F05B69AC2BC5CB31E7289C4EA"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_3.html",
+    "hash": "7F88EA8D2E3B52ABAEA6E1FA641E675A7A09ADAC24A08D2DD97150C7EC7C9ACF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_4.html",
+    "hash": "07EE41F8B6F746D90F6F5FD0EE944800A15199829FAE65E34C06DDF24E7D1213"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index.html",
+    "hash": "A97DDDFF695064B2925AEF24ABADA82A045B211E212FBF487137AA02D0F1C2BD"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_2.html",
+    "hash": "618A4826C196C3D3A82B7646D8C4B3018737DCF4D68AB8255B787B35AA187D7B"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_3.html",
+    "hash": "A24F008AB2CF7C44738B90A2131CF211B0E151FBCC386DCB704E679DF7658B0D"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_4.html",
+    "hash": "41C871DFE7B4495E70666468D0C6819EDA69F04BA963FABF0F7E195211314284"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index.html",
+    "hash": "44DBCCFA0EB2652D796662FE104553DA7186EFBDB869DCFF71F2A36D48E7DA49"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_2.html",
+    "hash": "FB70B9ABCA05BF6BD29E1C34251D1CFA73DFBB8125CAC49ED7A7CC910A4C1716"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_3.html",
+    "hash": "7B1266092307308E793E532B1CAB74224BD114DA9FBA8C20B2C0D5B8D3C4CFBF"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_4.html",
+    "hash": "FF75D565B2E16F09A4980FCF9B245D5A5AAED0FB679C898884207492FA417F95"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index.html",
+    "hash": "22C222420ECADDD1EA8DC06BB6124B7A0A94751B855176F986A57FD14411CCB4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_2.html",
+    "hash": "10DF8F4CF42936213990F7F3FFE1E5F3B50832F1A791C52F42DEFD0A0CA32210"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_3.html",
+    "hash": "6172FB928AE968BC49A8631D31F768B27DE5223D1194ADCBD6F44E408F74EFD8"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_4.html",
+    "hash": "126AE4F2BAE3A4F3ABA1B28F6FEDD0CFFC6EE74E831A37EFA4AF5F3CF8020F01"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index.html",
+    "hash": "1FC5068EECEC5ECC2175F88779BB26ABB65C52BF42F34AA4EA5DD3042A40FD4E"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_2.html",
+    "hash": "327F78F8C6EDC3D983B6DCB4129B7D7B57868F4239144D8DE371175C82EC0B1F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_3.html",
+    "hash": "7D2EC64FECCE53820CAED98E70DB56A35D5B837415BB795D6A6CD64DEED98947"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_4.html",
+    "hash": "7EAF910736BAACF36E6694588923F9C8E160C960AECCE27BAF02178C15844D28"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index.html",
+    "hash": "0CF9BF4A2907B2D7E2D807332CED021ACF75A390426B11898707319E022EE14D"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_2.html",
+    "hash": "85094ECB6AE5ACFF65A794654B61521B576130AA583741A245AF340C7602D74B"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_3.html",
+    "hash": "9A2B379D3731913D369C43496CB85A78E38345C939EEE028088979E3EFE402EC"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_4.html",
+    "hash": "0741FE59A255D2DD17BB6DDD611506BE493E1A5C4B5F77A80FC794D05B546A87"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index.html",
+    "hash": "17BA2B849A56AE021D751B98343776D11B3D872F9CA08FE1E456A537AEFD125B"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_2.html",
+    "hash": "B7387935360E75E2280AF1B678D1E723B0CB1CC1B42E2820957851922893D59A"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_3.html",
+    "hash": "47CBE1853946F9F61F1F9AC7115C13630C427BA77A56440D56E9652C50EF3EAE"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_4.html",
+    "hash": "7CDF58B52EA35B421C42BDC3B559D42267E2990E813ECBAE9B15AA6B742F17D4"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index.html",
+    "hash": "F3EB99E44E6A2B1B5C472155654410C2112612435D53588F5468EFAB2C904B8F"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_2.html",
+    "hash": "BD53120ED5E4B4D06F2A378449391C6CB6F5F6BA7B058B13EBC3775073CBB9D3"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_3.html",
+    "hash": "B48E42BA897C16B455671E3B7B613E3C4E7523A91CD2F39E680FC8E081BA5BE8"
+  },
+  {
+    "file": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_4.html",
+    "hash": "172B36F453922135C5ED8FF0FCEF56788BEB7007A32B06F86E85A18903885499"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index.html",
+    "hash": "2EBACDAA4575D9B397D55298FF6262A32EDECAB4EBB21AB29705F63E1F31BD7D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_2.html",
+    "hash": "E59BDD8AB5DA2EB57E7E5A934EDFE5CDAEB46436DB98045A7CD7FBB690D73E4B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_3.html",
+    "hash": "2F11BE521A5434F2D5238D88E8B2B92501504C02210BC0AD78EAC62736C617A9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_4.html",
+    "hash": "907A3FEEC15CC2F82CC3A89D84D186047B80CC0A36EF0CB92286F46ED634CFF0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index.html",
+    "hash": "DD5B31BFE71D29CAD7CB66FA7055EF45195A1DCA113B3FD72789010A8E0271AA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_2.html",
+    "hash": "65ACE2F51E3C4180B38286002DD4475D280429266531A437C698F5814907EE8B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_3.html",
+    "hash": "0E3BFF85D0670F8D9937C094B644C6F52A003E890D3E1F157B57B08AB92C45EA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_4.html",
+    "hash": "8278D19A1E342E74B015A0DDD3957A04D4B3F80CCB27951DF7C9F764ACF4CB54"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index.html",
+    "hash": "8CA15C78D9E411697D9A3FCE35A869934CFD9DA0AD3CD823E5CCBA67C5E2A8E5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_2.html",
+    "hash": "4D90627304A4974CDD60EB4A5D7E9F4C8872285A98903F55EB55F7AE2A5AD600"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_3.html",
+    "hash": "C48BEB80E6660740C5E8D97D3AE25FFC6CBEC939E18215B18F75C7D99D89747D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_4.html",
+    "hash": "3BE4116CF8A967B0CA2C15299E7EE96FAD919CC228C4072718DA0EAB9CA8B953"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index.html",
+    "hash": "29BECF2746E802E5E0B423A2AEF109D0E216BC8DE4264CD7AC3E1DF4E6DFDF66"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_2.html",
+    "hash": "2383576E66A1A580DFA19E0424B9423C962B9D75D28B86018AAC763DE57D40B1"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_3.html",
+    "hash": "F54B27E879C3C1F8CBD3E0B552E835387B007E4D4D2318DEA058D87D2DE16830"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_4.html",
+    "hash": "B2054D70464C2E68E201ED2FA9A9F9D6D967DF7DA621760AFB2C6BED14BC6EDE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index.html",
+    "hash": "1C1F66B907B52C2429B4F736E725762A3DC30C8F2EC56617DDCF601942A43452"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_2.html",
+    "hash": "6BCD8E104585F9F375403F4D644AF4216CE3ADE212CA53DE5479F5381D2B4B17"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_3.html",
+    "hash": "453C3D0D0ACD09846F85F022023353922C9CF3771DA9D75397D6E7C6B220E3EA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_4.html",
+    "hash": "2D3B3EE9E0913A7D149243273045F525D54781C403BB292E02E4E7DF6D0C670A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index.html",
+    "hash": "FF467EF2B1037324DC93F2B204759A2C9D903834F61C4FC8F3BD96F2CB6AB0B5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_2.html",
+    "hash": "63B26052A8271C89AF343687536909EA0796B9D584BBA763CA20563E6CEFC6E9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_3.html",
+    "hash": "55CB0CE945112FBD05ACD52092E525E009D93F270EB7723241F641A6D0209189"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_4.html",
+    "hash": "6E3680EE9CE21BAAFBBC863948FDE9426B1A3CB36799EC957EB983A057710B15"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index.html",
+    "hash": "063A6AD1D92D16FA0ED69164783F91C62D463CD0155A9F9C9DF5577739DB9BBA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_2.html",
+    "hash": "D1E07190E20628FA8783F744BCE2DD36CA705D75FC80EB5332959434C58D98C1"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_3.html",
+    "hash": "885A273F1D9DFF61648D7F50B25E1B312349418FDE78D2905F6A8960F4B0C6C7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_4.html",
+    "hash": "4CA6697F90F9C18D30FDAAC4BD16926DFFD5B7E820A3C8D311C9C78021BC5813"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index.html",
+    "hash": "FD0A2AA59D7BF6DEDA0CF346D376CC614BA5079ADBBFE02C8107474499909DF4"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_2.html",
+    "hash": "0FF334FB72A1DD7554ABAB366ADC9B3E3CFB1618C02D38F3ACF7535D8454468F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_3.html",
+    "hash": "B36F09321B3B7BA225D2FB654D47E7650AE9B946CC92776F23790AF057686BEC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_4.html",
+    "hash": "8A916C0D02662B74114F9321A25F247EB17CCA067C60B98FB388BAEEA2AD80BB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index.html",
+    "hash": "566812E737A8887F098DA9837866D9969223697639324525F7859A8150CA1864"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index_2.html",
+    "hash": "274167FD919F9A47D38BF144271A27146664EC0BFD0C2922E84003D7B5FC1E9B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index_3.html",
+    "hash": "AB3C24F3A4976E8A9AC04D202E09F2F4ECC0AC5866203873B6049C2B3864260A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index.html",
+    "hash": "C0E00F83CDBFCA7D3F917AE0B885DB659C7D81467AD0D6D342CB2A2318AB7380"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index_2.html",
+    "hash": "6FDBACEF8C933A684E895DF6B42125D428EECB4A9B865019A0EE14DA310BAA5D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index_3.html",
+    "hash": "CAB4950E8DADDAA80635F9007920D604DFD63F5A29CFD3C82217885933E73C66"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index.html",
+    "hash": "52AE7E468A3B0BFFDABAFBB941F90E616BFF863B04E80C84236E958F9E9D72A2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index_2.html",
+    "hash": "FFD833BBD01AB41BBAF505D8E817C9341CC0A431A4CA1858F9BFF062C2AF6DA4"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index_3.html",
+    "hash": "67D2C0B51E400B5F1FF9F930131E814E5D7F7E6F261368F8981D3C9762552DA2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index.html",
+    "hash": "4306F52508355A9606EB24BEFFDD717840C5775211F09FA5EB74AD12FA9BEB41"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_2.html",
+    "hash": "951BB00704BCB5A05DCEE1A889E468AC47D565386C4F41109CA2A6BB3ABE20DC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_3.html",
+    "hash": "FABF17C07EAC6C08BED688A4E86EC90E667CECF1D78FDD56E5E53B1DFA31CE60"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index.html",
+    "hash": "F0FB6E922C72E29593C0D1C59C298747031863C9492C82296A371F54577C267F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index_2.html",
+    "hash": "0F17DB6F1634D265A943FAE29DCE54BA58FB2235980B263275B24342CD451F3E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index_3.html",
+    "hash": "50B98D30E7AB83878BCB7D2519660F0F658C23CABC287C9AB63CEE215C0FD7B8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index.html",
+    "hash": "2141596343106473C746E30880FA2A59D354135920BFE3FFE2F2919438C622BD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index_2.html",
+    "hash": "CE94D127127F54FD4681EDD984D9268F41EE951BD1EB6326C1968A7C0EEFA8FE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index_3.html",
+    "hash": "A0AFEB37E321A9E55680DC9BDE8C9F5FEF93E351E73B2218D9E91CBBC02F2D31"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index.html",
+    "hash": "355539D7FD2427C0184C93FBB3543E820CEB66E5D4B51D0FBFE62DAB0CEDA483"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index_2.html",
+    "hash": "4CDBE984E1FF7461509F3B848A5BC3975160A474078818770E586CC2906C2E31"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index_3.html",
+    "hash": "38D74EEB77CE8AF6BF0CFF5F4AAC02E4B78B22A54CFAD80BC88CC4F97F3A5764"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index.html",
+    "hash": "84AC8E5E08CAE53867F80241188893C83FF403828F3DCE1BBF6AF175D09731FA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index_2.html",
+    "hash": "78BEADCC3EE7C779698E8B92DF4E5F791C24BA5CCE5BB1737195A18F6E4C5FE7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index_3.html",
+    "hash": "F3981FC5DFD6FD55D686E6855795F3C830F07818869F0779F61D9EC55A0EC2AA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index.html",
+    "hash": "1799B49099AC3BFF59FED6674A55972B884435286208EBC7841A9B576DE993A6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index_2.html",
+    "hash": "899B8D5E61FE4D317DEA62A98F789D7166B98D90B455A37A5D9E3350A49E3E09"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index_3.html",
+    "hash": "31B69A522A7BC17DA0808C03FCA8BE6872892470858ECA5D358F58985F8759D3"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index.html",
+    "hash": "F7E2185E968D93EB473BDFCD0BD5B6D43D3DF9E423679B590E9A1601A62063C0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index_2.html",
+    "hash": "8107AE8B552D9EF37DD7E1DABE64705D03778A6F5015C9909F7EA2E32B649BD1"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index_3.html",
+    "hash": "D39FB684CE78630F8759C49CFD5401C2C1E09905D1CF0536B7C2E5498B2BC8E0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index.html",
+    "hash": "5F398536D7432D93F5DF7548D04DCF1207F2AB0223F3AE6C044A04FADA2805B2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index_2.html",
+    "hash": "627D25000013878848D5E1A269CA3073FADE091BC089D51E5D7BE52E10F9A5ED"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index_3.html",
+    "hash": "8BA301D47FB6D478085D42A3058E09575D2754FCBF511CE1930C77864B46EAED"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index.html",
+    "hash": "EA6FCBE410F5761EEA7F8E497581FEC1CDB60EA0011CA81D252C04A73CADC4F9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index_2.html",
+    "hash": "A878468EBA6729BDB464391B5995EB1002CD16A0BA9076265E77D304B6BAAD68"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index_3.html",
+    "hash": "BCF4C15C8F1C27508C5DE20125DEB33B9E83537F86F4B8D281F5DB7B53204117"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index.html",
+    "hash": "AB86CAD47B8B23FF8CE08EDEA93DC0BC5F96E41A00E155F9ED9CCEC47678865D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index_2.html",
+    "hash": "392CA087C721B2E82D013F1FD4F9A11558515C73B7B5517B4EAFF93826254B47"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index_3.html",
+    "hash": "3B7818D806E59BE15166D45D850DB6D26DBDD37B8A59217D3377B6A645AD0B84"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index.html",
+    "hash": "B3F87FDFA23EC8692EEF54A8B6FA394A7E5FA5AC769A0A9822A873957C8AC9B2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index_2.html",
+    "hash": "11E742A1C0EE88D3569878D6B938E2A59F8C6451348CE989841CA2393F123D4B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index_3.html",
+    "hash": "7EB8E7FF77370D782585D1B7D55DB8B9FFF65536A12E10FED5B04B336A71133D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index.html",
+    "hash": "2809C67B7D556987F42EFE28B5799B7A14D9CAA14DBEB3F6503B0AAFCB0D8633"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index_2.html",
+    "hash": "3378DFDE6B61A340861657841CC5810BF20231A59B808FAD8BDA944046385327"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index_3.html",
+    "hash": "EE6E62876E0DCDA671FCBDC4ADA5486FFAFDF15583BD460A7627F21781BB1AF2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index.html",
+    "hash": "2A51A3E9110473B52526936EE9ABFF357F178175661746AF15571A3BDB01E5C8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index_2.html",
+    "hash": "47DD15A0A8A39C8225A56594E2E0B4A746CA9D4511135612BFF53CE168FCEA90"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index_3.html",
+    "hash": "F0852B1E2756778475B05F4441552093DB49F0F6F62179D2B0BC52653485578C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index.html",
+    "hash": "1D959F8666A0C2162FCFD311B68BD31F1B6C3FE3AF2395CC34354ACFBD86263F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index_2.html",
+    "hash": "D195987A443AB5446D8A7B779DAE3CB23A2AC94243A2D42CDD3EBBC35D731F9A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index_3.html",
+    "hash": "29F4FA93D6E63F605E267D4E8523A530533E4CA0F263CBD63AB060F5F27E4CF6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index.html",
+    "hash": "BD58D630AD2CE3D0AAE38444A438F945C8BA1BDAE98C2FFBA7D172815B4CA31B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index_2.html",
+    "hash": "15ECE520BC995F30A0705D0FEBFE386BF1113D277A680984FB5FED0F6D19C205"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index_3.html",
+    "hash": "1751C6AFB34C038A3995623ECF89B2058316B45ECC0D852E0AAF1700C7BB2461"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index.html",
+    "hash": "2CC49711E67F617B05F5AE6A2D06C668FC42A098B513BD9CE32E9253F455050E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index_2.html",
+    "hash": "914141AC5A6829137901BD8E3D306E706D4B17B03C0B9C0050F34705B319ED46"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index_3.html",
+    "hash": "1355F7CFCC6F203B3BA823038C23C5EA4552B79635A79F439E69ABA079D12750"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index.html",
+    "hash": "A9491174192975407D86015322AEDC9A7F31B30594BF92E13B3D2D934729E547"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index_2.html",
+    "hash": "414DB5808927904500F09811B85EA0FA548540D8B7DF208058836D7C15060D47"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index_3.html",
+    "hash": "9F08E0ECF85B39EDBA5E56D1489E91CC326F773C38CA320E62065446803B1320"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index.html",
+    "hash": "E99E4771669EA59EDB06B42E7249DB79F9315541AD8BCED1F3B65538B2EB807D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index_2.html",
+    "hash": "5843D5911DE2900CB576F5E3523B6F4539960F064126C1FE5DB494C313767F3B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index_3.html",
+    "hash": "3216484191B234C30F6099BD0563E4AC041BF0FAFE379A31557A417C6E550E35"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index.html",
+    "hash": "F16239F6B7F389E51D9BA1BB1802123438884F8A5A5381B4C2063A3AF3C2A76C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index_2.html",
+    "hash": "EDDDBFC7AEEBFC9DE600A4E178F418571F6CA98DFE455F1979CB83CF781278A7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index_3.html",
+    "hash": "9753B6F60D712233B49E0915D257449DB4D9743D25DB201B5621F130666CCBF8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index.html",
+    "hash": "08D0F9E131B51DDDD1CD3583630FA4817DB1FB0580E3A7489959E915308DA207"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index_2.html",
+    "hash": "333716E4443A4A60311A0A50B7506D2FC3E2A8D6B8527D6C65C3A67E629E36E7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index_3.html",
+    "hash": "0E9378F6E4EE56F8C27AB3454D37C8D79849325BAC68E00C5D1D82119A91B528"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index.html",
+    "hash": "355AE45EB90B3D2ACDB9572B7CA5021FBEDF60F54E86336F007644B6BB344C86"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index_2.html",
+    "hash": "C90F330EF9F9F93756E230FD596F20990597330901646421255F9167AA440838"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index_3.html",
+    "hash": "E58208B7670BDF85374C16E1EF60CBA18F42EF9DA50D3E6DAF3490F24C005A2B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index.html",
+    "hash": "7C63E42B35BE176392AFBB0D7AC7D13EF87DC81A691379B1ED109AD74ABBEF7E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index_2.html",
+    "hash": "42FDFBD2EAF6F68CFFD762E6463213202A8CB52A709B96D28490F6D3D3131C74"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index_3.html",
+    "hash": "D61655979C3DA546F09EC6E7CA9A7BB9D078E6BDBA4EE408D79C6C02B695CBB2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index.html",
+    "hash": "97CC0688E6872D51BA4A4F1DC942A2B47A50B5E6396B62CD0B720657C6FE08E3"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index_2.html",
+    "hash": "E0C456CA5DF4391E7545659973B8F0CAD6E0AB24485B45FB57DD3EADA3362065"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index_3.html",
+    "hash": "6045A2CCD8A52B8D5B221996F6978940C170B6625C937FCA9729EC7576DA0A96"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index.html",
+    "hash": "98816FDD67AC6D9E4050B55CCBAD0A4F64C923276B4C0BC1B9C50C17F7553CE7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index_2.html",
+    "hash": "1123FCC4A9F6097862887EA06B36CABB181024144FDC1BCB0E3384DD3E7213E7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index_3.html",
+    "hash": "DE16CDD2BF5C5BA5BA5213A959E944DC4BF6284073D34386C62EF04B651A3077"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index.html",
+    "hash": "62D95EE589591134B174D0627E819E6D22DF54C258C0837F3566F826C36B5CBD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index_2.html",
+    "hash": "C905AAA541FB70189F8EB7145471D482AEA04F5A832515BD3CB38F005A53B689"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index_3.html",
+    "hash": "3636CAAE9EC14DD178E2D16EA6FEE0988AC037CB22B3326511B9207D86750943"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index.html",
+    "hash": "073862146C185EB9BA0D03ECA99C3F93F0D4F1D3D804B2FD096F50385B431076"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index_2.html",
+    "hash": "C9CDEFB89F87246E358C43041597528935014E3FE2BA9FC0C3D9EF5DB69CD8BD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index_3.html",
+    "hash": "701F4EF84A465C6DEED602F85C1EEB3CDFA6652227D94282D32427B60F59645D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index.html",
+    "hash": "8FCB0BEB4EE386697CC46A3F4195B396EA3B24CA0A9B970B495A9A8B1003812F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index_2.html",
+    "hash": "9E339AF52627BEC7663BAE4536ABB0A4091B0E827BDA2DF0E6EA398C60D4AC6C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index_3.html",
+    "hash": "45CFAC58DD27A274012C0889EF9B17816B840EFD6052CDD2C19335D5E923F65F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index.html",
+    "hash": "318E68C5E7FEEF0727AD6BEC6B05B0CF578032067F891F6149FA87143AE8E3CD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index_2.html",
+    "hash": "555F4E260DEA12D2BA3D38B8116E8D5A0CFE96D484C0075DD086F770415F97E7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index_3.html",
+    "hash": "A33F0EA2B170F319465A8184394BE8983ACC8DA9669441F2DFEAE00001C3ECD9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index.html",
+    "hash": "5C8E4EA1C9D39D12B6531CFA2A9434CB6F7E8B4A6495C31674CA773EC9D35038"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index_2.html",
+    "hash": "67A372F025D2700438770854D0593317623B9B6849866F26C55A9F07CCA13801"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index_3.html",
+    "hash": "7162E2A18B81D94318C7A2440A82AEFEF4847C1751BD867A669D3CFF4AE4F678"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index.html",
+    "hash": "153BFD48E82383632B757CF45975FE7653F194427E970263CDDE25639BD06450"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index_2.html",
+    "hash": "C93D3FCBA055B87A1780A9528A6805A33A986B0263590B92CEE393214852F67A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index_3.html",
+    "hash": "D5B3F78328247268F7C3D95706008397E55E4F66715A162E7B616F9A4E0A25F1"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index.html",
+    "hash": "EB898CE8693721716BC69D3493ED7925AA16AFCD7E8ACFF1E0CE8753B2CB07CF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index_2.html",
+    "hash": "158EB27811A63355F34B8E5297B8D6AAC680236EBEB1341870A68BD03DE8DA33"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index_3.html",
+    "hash": "2B4B1A3E99BD8376D1191F0ED762DAE19BE752C6071898E3BE6CF9B1C70CA37A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index.html",
+    "hash": "57BFBE614BD2303AE50A7A4081879767530C9E4C2823A4FE31D285490C70916C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index_2.html",
+    "hash": "489B0E91FE8F14A95D828149FEF5CE9598B3C96CF8D7E7C1299BA0F283EBC782"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index_3.html",
+    "hash": "C9E61AA557A815E615A96D082E878FA0DACE7A85E270363C2545E4D0A2212A93"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index.html",
+    "hash": "F177BA1BEB623DCD711907DC0AD55A49CFA4BF9531325CB3540D7943BCDA1FBF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index_2.html",
+    "hash": "E27E34DDBB45738AE8FEC87D9465057BEA4832B6ACD4017C2D4391A475F84482"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index_3.html",
+    "hash": "53074EDC249618942237E574C1A6685DD0B86980AE02C1703C3DE2DBD0E8998E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index.html",
+    "hash": "F432E9B07DE9451B3DD0E49F7B25B5A35797096BFB11FBECF34ACAA0C695F4DF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index_2.html",
+    "hash": "854D97A97D064D2ED5A8DB221251ACB1AA9F19C29DB363CB2FA3D0B45B2CD3EF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index_3.html",
+    "hash": "0F927AE019B8DA264C3AEA163CC5CEBC36B9FD1209AA82C2E1EFDE6D0E5188A8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index.html",
+    "hash": "E48E90C7201CF343C37B533BBB3CD481202B24850C7B0C045290EBBF5F60BBBE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index_2.html",
+    "hash": "AB4AF2AE0A80D96BC34095C79C0E8479036A7F8B689D74DF66753E75D7EBAAD9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index_3.html",
+    "hash": "08C80306B39E14735FF4EFE6FAADB53DC633360BE1E3A5533EA528AA7CB3191E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index.html",
+    "hash": "AEA0F7E055A412BA471AA510FFD68D77FE1F730DF5D340860FA136CEC7DCF34D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index_2.html",
+    "hash": "1A28F82327E9D1E04180C2E260B1E936F21318DF942DA91E9A6AF6C09FB5D482"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index_3.html",
+    "hash": "E2661143EE72202481B3584DCFFFDC941338D436EDDF894F522786E16D9B3404"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index.html",
+    "hash": "ED90D7366A3442864171B7B1C0E872E1B8488CFF0F1A8A8B6D62A783756A3DCB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index_2.html",
+    "hash": "D7090A7162AB1D14FDF8EB7D8A6CDD4BB5BFB51341FB4719CC9BE30E3E258E5F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index_3.html",
+    "hash": "C6DA418F0E444F9F7301130AB569091EDE08604D8339DCCCC7C5AEAFC3297482"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index.html",
+    "hash": "7F1998300C0C9187607BABE52ACFC8EF5BCCEB6353D15DB6386543D8D82F7B58"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index_2.html",
+    "hash": "0244EEF947254AFABEA5CED7484B3D9E0CA029774E185677E178533500F4838C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index_3.html",
+    "hash": "443D7C9D3919E1CE059737C8264AF703E9BE7D06485876F3C680E3274B7D2AAC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index.html",
+    "hash": "9FCD3EBACC49900DB856C3B57CEF3AF054F7470C11C859A6F3386667236557C8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index_2.html",
+    "hash": "6C150A0CCE100276ADCE6E85D9B5BD4797E5DE54BEEC520E1BDAC246FB711F31"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index_3.html",
+    "hash": "5FE4038BF1D4725C344349E6E20F9AB9E875B8A032ADF16998786CEB787392EC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index.html",
+    "hash": "0AEBFD5DA933567FC30EADF48CDA3AA50F52724DBC3C349FA22C23FC99975697"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index_2.html",
+    "hash": "EE197F929B9E7FA7B2874444E9DA55BF544DB7B84C98AE0536F9AC0B9FC63247"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index_3.html",
+    "hash": "F43B672487D67FD83F5D8BC97E7D578EF459993D4878F4E0F32F0955148C4FB6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index.html",
+    "hash": "BB2B892491AA17F58F6454952577B29C8415D6467BB9FDB0CAEC4C10F9EA70B6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index_2.html",
+    "hash": "E2B79B85DE12361051D1F7EE758B351305BDF7A93EBFFFDF7D8D20C8E3237666"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index_3.html",
+    "hash": "AF894795DAC83668663FF6B31DCB7EB74E5A8AD6E7B639E64CC05D140DF7987F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index.html",
+    "hash": "6BD2FF9325C86845EA3F9A000C4F065A88ECBCCAC9C038B689253C02BB9E0C4A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index_2.html",
+    "hash": "811EBC1CAE02430EBED0784AF9405B264C79A11753FF7E7C6EAF19CA27000039"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index_3.html",
+    "hash": "44D676ABBA448A79D9BD76DB0927BBEE19D2D3C82D9BF23038DC6668D15CA4D0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index.html",
+    "hash": "72F100BD41297279ECBFECD9626C1BBAD2AACB17E29C4E2374A92CA5DD8C0C78"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index_2.html",
+    "hash": "9E0B32C52372C9B107644628FAB84ECB9E45083B196D0FBC894C99FA468C6041"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index_3.html",
+    "hash": "7B869E0426C6F5CB6A5BCD1CDA036B3247C7C874DF5AEA7A4DF9D04C43F0746F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index.html",
+    "hash": "C54DE27D8CDCABB5D3CC071992138C800B101F00AB5F469CBF69744C449E66DB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index_2.html",
+    "hash": "C1E00248E54E2ABAAB60538D26B8C128AF8F02CA81EB4025463C5057DDD2971C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index_3.html",
+    "hash": "A3BE6AC77A44FB91F611DFDB3F116473ECB7996325C93BEDCEA8B2ED18166F10"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index.html",
+    "hash": "FBA0A6E331D1BDDB77D7D1D89448EFC40DEACFD8435A5114D8F95536E15A2488"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index_2.html",
+    "hash": "ECD5A1F3A40E06730B912C870148611787F5EAB2EC17E40C8DE8A2A600D547BF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index_3.html",
+    "hash": "9A10A1D3C8A24019A8EB55ABFBE32FD0289D7CEADC53D3AE2AF0CB5AC118CB0C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index.html",
+    "hash": "BC03787F6FC0CB4BD28274189361BC91304446D9429D9819D06EDB0F04779C6F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index_2.html",
+    "hash": "E2603306823C68FBAA51BD159BFB358D3C289682DF96B9588CE62AC4A7F9E8A9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index_3.html",
+    "hash": "09D8ED2E320D3C52FB8BB49D517CD987655146F60553059130D948D976F4A9B2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index.html",
+    "hash": "B5757D68ED2D8DE36DDBC16FBFD5980AD1F235DBDBCC186B95A60B6A3A883424"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index_2.html",
+    "hash": "054FA0A19BD0C6EEEFC631A1B26BAC432A73EB16AD679899788E7CD239E3889B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index_3.html",
+    "hash": "6866797F72C759367BD13BCD818815301E2A0C9ACE06095F3BAECDC478CF13E6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index.html",
+    "hash": "3FB2AF387FD3759FC035901BE18BFA62F13C8053330320F33CB07D7E325151D0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index_2.html",
+    "hash": "E62CEA7DC968D065B2F7AB1DE13FF94094E2B13330692ABE7740AE5F9BDF0BF7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index_3.html",
+    "hash": "952C5064B08049268CD716C751531143F2E0D79816F3A0B8F18BEC242071EA52"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index.html",
+    "hash": "FF2158DCF3F9D28BB0C1C2D5D6518BD726805546296D69AD6D73B18C27AD2A4A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index_2.html",
+    "hash": "A001659BBF3D039CC348BB6D993B38E405B7F900BD3253B952D2F939FB8395F9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index_3.html",
+    "hash": "1B3D1DB1F649D5116A89CDEC30B88888889DFE58EB14C7554D0A8E16D2C408DA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index.html",
+    "hash": "0DEB1E4BDE94C00D75C79F9DBE7B5656EFFC9228F378193A2B95A489B42CA008"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index_2.html",
+    "hash": "28CE107C9DCBEAA366E7D32BC516DD389C3FEFA06C4C1896B91FA0BB8967542D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index_3.html",
+    "hash": "627C236F62DE2FB83AD80B02A131BAD1A0DF8A8A50B0CECEE910DA58B9D6C2E4"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index.html",
+    "hash": "ECA388F06C7B7181C7D773E83841EC422D6E0CB6EA15156D79F8C6BF336E3882"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index_2.html",
+    "hash": "0F950E9208EFC6D9D7F4214B4BA24185CEA88E842FC992D62A160313476F657D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index_3.html",
+    "hash": "C19867A0D09A8ED5EECAE77491A75431B2E576B6646F94A962285027ED790767"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index.html",
+    "hash": "87B878D7190CCD0846AD9558C1B848C34A28C43CC064B3B81A9286A97EF502F0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index_2.html",
+    "hash": "C7940615BC0279BEFBCD8EFEFA9428D2EFBB281B6C7192EC0911A653971917DA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index_3.html",
+    "hash": "C6497954C50ED95F3AB37C0EDAACCF6858387A8346D786AFD7BD2A2BB5BB165F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index.html",
+    "hash": "0B76B78A8782ECFB6CEEC53DDDE664E44FDB059F92947C6BD77A56AB47453F1F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index_2.html",
+    "hash": "766D057CC0D29626C4F0C1A5149438EBBC5F5DB6F0CB5E2DAE6060C482C90689"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index_3.html",
+    "hash": "6943B4A483F09011411621F520509BE0B22AF5B2BBCEFC6775348569C502EEED"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\index.html",
+    "hash": "8E8F331726F1A43C5758B67A007171004F81EAA69CF456B51B20DD8427206A89"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\index_2.html",
+    "hash": "C98D1886931052913FBC08E2FAE882C37DDE75AD0ECC46B55C1813299819B9BE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\index_3.html",
+    "hash": "11D300592966735ABA4A53D202CD2E3B71E7E95F32C489120268873FA45901FE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_H\\index_4.html",
+    "hash": "AD3F31E1128A9A32CF5201D4EA4458257A63A9B3915A0B15BE287B85448AB7F4"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index.html",
+    "hash": "8D6B7B4B20CFC437060C09268CFBE32EEF17DFB20B43F34EA047093B38F226B0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index_2.html",
+    "hash": "B6784131FADEE3647107EE66523FF292C0CBB7A923F1FF1C42E9C61B0D8545B2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index_3.html",
+    "hash": "4EC36558A6AAD82AA83D5A194012DA78826695952B02EC8AF2A99062E2D5DB22"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index.html",
+    "hash": "C5DBB3CD01695A4D27514017DF50452D6D0200534FD93314DAC68601F9F06F61"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index_2.html",
+    "hash": "2B32C11E4C57A3234D5EBC231F1B08FB07AEC8CB4DFBEB9720C1C140F3C4E156"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index_3.html",
+    "hash": "6CE7D4D013F71C14EA589CEF26FB86AA25B9DF8301D000F79C2C029BB06F3080"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index.html",
+    "hash": "3AF6F79E7259A3CCF7FC786554A573E51A9023509EA02774C8C9CB1CCED46628"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index_2.html",
+    "hash": "6E11DFEFDEE0CEED0B671308D4B5C68DC4AD3D43C279D3993410349B47B3AD10"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index_3.html",
+    "hash": "39A2788104EB02E846B4AA2ED86C60EC24A02FCCAB0DD9EC654B0E5AF74A9893"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index.html",
+    "hash": "4B79BDC7A5C0BA34C41CD9757C0F711D8FA12C76AD1E869832E9D52D869B4A92"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index_2.html",
+    "hash": "E4EE70399443D43D2E60610162E84C228E24318025303E4E9D69D4BE8B2189CF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index_3.html",
+    "hash": "7EA1AD6C764C5C2B80E6CDC37A55D3DDAD0F60C6D62E54A55F0FA770BC831701"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index.html",
+    "hash": "B0A6C518B22DC87A12F4B46208A67B9D735066874D84DBB6D7DA28B7CE6A12AA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index_2.html",
+    "hash": "31BF2C1E8FAFAB2B66060862B570C9E8687DBCFAC28EE6ADB779E0655CD0CBF3"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index_3.html",
+    "hash": "8471BC84E46D5EC59DD384540396EEB8635B7DE73E6BA5743720AF7843F4F2E5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index.html",
+    "hash": "08DAF97DB3A4579B7464F1078644CFB6799490F1E68599D8AA5701DB8159C78C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index_2.html",
+    "hash": "001999A6EB390140ED13CD6650E786EC5CAD340E519D63F73EDBCA151F925068"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index_3.html",
+    "hash": "2B510593E5D1BEAAEC346AFE98A9591AE183F1A21CA384F954BD461F3FAEEB19"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index.html",
+    "hash": "9471907AF4CE49F61D174EA1848751FF5EEF51837ACDEF5F196EA0CBD21BDC92"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index_2.html",
+    "hash": "7E37F9B3F62C3D64DF9A368C6F7C8C456455B4069B35B479046D154963B0A7FE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index_3.html",
+    "hash": "9C38AA6B72ECED6B4D06AAD938E89A487978FA9ECD89371FC550C6C483903837"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index.html",
+    "hash": "5C6AE53F03C402BDE6A9016B0DC1E718306A0F7F39096313C39358281FCE5858"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index_2.html",
+    "hash": "6FA5148FC0C559E67791FA12237A8FC373C70811E22C9392C7518A613DA68A14"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index_3.html",
+    "hash": "BEE9FA52C4A2D45D2C1AB3852322FD3C679A3B77AECDE3D07F22857FEBBB7991"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index.html",
+    "hash": "4B0F246A412AFFC36A884C7E670D6F0CA56CF7271B9E62C0EB6B5B2CD54E431B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index_2.html",
+    "hash": "FBFF7F15B6B3A06405E5FE8E55157CE9EA10DB5A16826DC097324C6AE3263524"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index_3.html",
+    "hash": "72FBB06BA30939FF829148F1FAEFA59AB2B98A4A149FCF133B8C1CCA61261EF4"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index.html",
+    "hash": "04A084A2310635462A2178075E1CB3AB479794E64C5C796C8B5942FB55849C37"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index_2.html",
+    "hash": "C4B182BBF35D7144176ABC4A8753E79F93C3F3704FD1255F2BB25A354A8ABDFA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index_3.html",
+    "hash": "461924268DA64F2A88AE168775397AFD6AF850F1C702D4F956A936080B8D0276"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index.html",
+    "hash": "B08B7CE245A88CD6F3C0DBCC664F06180E60D412DECC4E57C3BA0677B38C8160"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index_2.html",
+    "hash": "D325E0D10683D15D1B1538B11E54CF6ECBACC607011CB4F440432A2E7C9DE987"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index_3.html",
+    "hash": "C87FE4FB5D3C72C678D0DEBC1F25B9734EEEEC1E69BED23ECD7713E13C2D4928"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index.html",
+    "hash": "CC88B185FAD686B6D7962BF6A882F48BFAA9D568A80A66B896E2AA7340274B67"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index_2.html",
+    "hash": "B6D9761592E0598BEB7D6710F68E9C5DBFCA96E7708D708F6873BAFA91EB236D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index_3.html",
+    "hash": "E075830958ECA23D0980D9B845BF264AB22D6C4C18DD2BB598BBB32374A79762"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index.html",
+    "hash": "8545E3D6C3960432243FED2126583E197B3AD3C04E4848ADDF0ECF8950FB5D93"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index_2.html",
+    "hash": "6DA6FDF15F1C582E8AFC89CA5423E4AA61A664EB060535F958A46A88FE8B9B0B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index_3.html",
+    "hash": "161BD477371504B11EFFDC985068A71C115C931697052E57EFFE545017D1D945"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index.html",
+    "hash": "708FAE1425B17EF46212FD235480F665A85ECBAC82374D007B5CFB51391555D8"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index_2.html",
+    "hash": "918B146B5EB6B5587F3858B4B5137CFFE1B2B01344CF4248D5E56447414B41CA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index_3.html",
+    "hash": "3894E1BE7DA0C01442BD71B8327AE7E0D1394E5F8D8BA5C829E65160B6CE6608"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index.html",
+    "hash": "A6FE06256D64A94809D4B3BAEF22B8E41FFC572BB844780F554792C805EE739E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index_2.html",
+    "hash": "B8C42385039F357F09363A929C1EF7B1C4B2E708FFE9871288738A93AC0243CE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index_3.html",
+    "hash": "1BA028AEFFC4A0A237232E58C06D61FF689530CFE1A34FDDFFBF8A78B78FD0BA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index.html",
+    "hash": "A21AD1D7A8FF08B4F5AD5713FE30C73E83EE420AC774ED73A4B18D0FC0B93180"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index_2.html",
+    "hash": "2B386925292C6CC0A974714907DEC2918032B15DD13D84AEAF896D8F52E6DBE7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index_3.html",
+    "hash": "B58A2854284EB3DD6F80432F2F53C769C4D557CD94C3A343D7ACF9617314AB12"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index.html",
+    "hash": "830ECE6AE4797D3BF85ABC8886A2FD4F70FBCF92DCCE7B5F8717244C3D35BA04"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index_2.html",
+    "hash": "14D68FE121733E17873247F9427611B2B3D64CC7763CB87F79432F926B01E069"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index_3.html",
+    "hash": "C9DE0B9C12820FED4C58A842E50D6C144479F3C4FA9EC312B188C33289B5B674"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index.html",
+    "hash": "D8940E8282D106EAE45B1BF860655BAC4B72ED2AEB9EAE910595D04C409F9E81"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index_2.html",
+    "hash": "6D64ACF1A2337BC946C206632F8ECEF990522A6F3C4E8C647E2D750DFFA27A5F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index_3.html",
+    "hash": "E6A358485E837D3112E49F53808743416F799C495474CA4AF03F870059D29438"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index.html",
+    "hash": "17AB41DD1AF68C44B9128E79BEF517FB6669E117528B2AEF9E8760ADC9CF9678"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index_2.html",
+    "hash": "AAF1EEC248C962947BA09B13A3D6809BFEBB8DC273CAAFC7840CEA39B7264C73"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index_3.html",
+    "hash": "9901BA230E987EB80DE2EAAC335705AEDE55C95FDC83AEDA00A106913BBB78E0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index.html",
+    "hash": "4CDB6BEF7B93E32E962D8BB24FA8C199395921F854C83FBC19F1A65A875C6F09"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index_2.html",
+    "hash": "79E5D7F2FF35514D2C90A1D7A636CFE0248623D5B6463D378483EB8858EB5716"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index_3.html",
+    "hash": "E8CB0F6D620C6B5D60B089FCDEA692C8C3037921671C7BEFA6DB0CE74E834703"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index.html",
+    "hash": "66D7EC9C446E5677FE0E4045499D35C22B5A4EE1BED9CD1A4BF7C557DA8A32CB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index_2.html",
+    "hash": "361494AF7771C6C5E746313BDAE0C6E77A433D1D4C24E49B13A49B33A53B2E54"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index_3.html",
+    "hash": "9B67A01128AB7F2FA809CC7FBA1E1C0DF71183FC7213F95E48F3A4CD6EE45263"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index.html",
+    "hash": "C6FF730E7E4DA33263C27FDE736149BFDFB8F971519A64F4DC869B2288477850"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index_2.html",
+    "hash": "B9476888DB8DBFE5C627329683C96BE500670AD67DE08E9667CAD8E777FD5431"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index_3.html",
+    "hash": "6C86AC2222B67812EE49C234303E0997E0FE0C4C258241D744449ECD5F2A2752"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index.html",
+    "hash": "AECE680F75C1555D415D8D154B0A347172AC0C970036E95FE2821E2F1EED2719"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index_2.html",
+    "hash": "A63763E736713FDCAA31B83D781609A4EC90A9C034C4485CB1B76DBD96E8F93E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index_3.html",
+    "hash": "60F85838B43015319690EBF677B5445EF24F351CA55A986AC3A860CCD4C61588"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index.html",
+    "hash": "3F0968851E82E1EF3563AE3D86F66F897851DA0E2117292DFBDAEE20A7BA218E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index_2.html",
+    "hash": "0BA7CD97A54EFCC897EAD45976F10B3C0387DCC488FA4F58578A9A57A0B499A2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index_3.html",
+    "hash": "A68DABA6A90D0A9EB8229DE068051E10A4DF03FD659A7364D6D166B8D2C1A9A6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index.html",
+    "hash": "FA59DC75C4FAF28732471F859DD04ECFA272A9CE31B269911CDB373F523D0896"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index_2.html",
+    "hash": "24276898184874E29D9405E43984FEC3A5A943EC353A414B48D58D9D0D0ADA72"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index_3.html",
+    "hash": "F1CC80EDB28F47DBC7CDCC25DB7229BC227154D3CF53E9B765F73176929F6121"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index.html",
+    "hash": "9DE0322470964F8EBC6C3BFB0002C6688010A61DE6BBFBE9A98F3E629F0EE333"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index_2.html",
+    "hash": "B9D2299FAF2123CF9352A11C7708B46EE8C97A07744A709E80CB3046E16D3D1A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index_3.html",
+    "hash": "23860F413A2184B440D6DFF65850BD3E48C9CAB44D4874964377367282906C6F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index.html",
+    "hash": "583C26B90B8E84E7B008501B5624B9E7F1282C5289B7E45854634DD82B7CDB19"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index_2.html",
+    "hash": "859269E753BAF0969E6D7BF4D97257975DE536778DB8A4845311CBECD3330FCE"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index_3.html",
+    "hash": "4B919E2E2C7D52DB8B78997FFE9C549F6E91611AF3BF34230873490654C51D39"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index.html",
+    "hash": "1A87D9CC71B9CC7C3D9AC2D888D1A69328132673F3E58D84B55C016BE857B395"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index_2.html",
+    "hash": "8E40D5E01B069AF9691ED22A9455B44E7C11E4F4DCB9E132279D10CB4AA0A6A2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index_3.html",
+    "hash": "95D27E22172588E20ADD89159FA00A94F302DFA761D0F4CB689EC75178AF0182"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index.html",
+    "hash": "C2D171C2106354F17CC0290734F56D7BA89923E4FF010F4BDE70F3F5BBD82B4B"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index_2.html",
+    "hash": "F3400728054B4FCA399B7C5BBAE528F2342C2FB9673857BF5B908BF075C70A7D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index_3.html",
+    "hash": "6391D5B63C44C69C3BEA59392233171EDF14B915BEEDCB73A92EAAEAFA66113D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index.html",
+    "hash": "19C9D6BC4CEA4AF4979350C0FD6B035DB408DDFDA5875B811554AF95A39E0556"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index_2.html",
+    "hash": "3779F8730F09834CB86CE6DD588A3BE1204AD8F676D6C6D5D045BA0DDFB9116A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index_3.html",
+    "hash": "8A58C9A2B6DBB834BE66A90270838F1A3B5CA8E2C3C5B4695A5F739FFB4EBFDD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index.html",
+    "hash": "9137F21B21E2BD255556B61BD503E667C9F56A4750058C9CE6530961C5DD55FF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index_2.html",
+    "hash": "E5CB2298F40B2B5588AAC715A503B3E1644EA87B80EBE1B38E2D7A9FD825CB73"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index_3.html",
+    "hash": "0346A1B79C7B4063E8F0DA688F08ACEBEBCA03CE0254DF844D8973EFF0B707C6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index.html",
+    "hash": "176A9B1A57CB0AFCAB6FF5DB75A3F80583B1F199FEDBE8665D3E7EC508A383B7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index_2.html",
+    "hash": "492ED56A216CB3197C3BF2497392DA77624A278B0D37D42227411C7232581427"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index_3.html",
+    "hash": "4EB5E3ADA07A23A634C38DB309F766CF1E56ECB50729AA2CFBC0EE56529A1891"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index.html",
+    "hash": "C515DA665C8A2265DD52F36491F7748D0DA7CE8E3787C0FCE431F6AA52E749E5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index_2.html",
+    "hash": "DBC5899AF78BADC66882C2E14BB07ABC7527247998B08B0564039573E4040CAC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index_3.html",
+    "hash": "E60E30C098C0690E41E8CA9C9A610FC64250D4CF1C5318027485D4CC96ECA1A5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index.html",
+    "hash": "4BB1A4F65C170A677B2E71D916A4C54231598A29F54DF30FA22C588283D09EBC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index_2.html",
+    "hash": "CE3304F46A0FB20B20590FCF6D175569A6D5860DD23052896B65CC8E8B955C5F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index_3.html",
+    "hash": "1B6D32B4F5C8BAF80AA9E545876A30DF2F415830B132FCE9D44AD4F150616280"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index.html",
+    "hash": "497D327BA4A73E80AFEECCBF95104F888D180720BA739E5B9136574A455DB8FF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index_2.html",
+    "hash": "48423A50A8D59FF61DAE5293EB8E59DF976FDE5D3851DE1364B3E816F5485AB9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index_3.html",
+    "hash": "9E98295D300AE312C4D4EE5ADE9820DEAF1AE94FA76BD140320A2983441430CD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index.html",
+    "hash": "8D2EAF0F8E12751DF48D3EA625F8078FCE80F169F2C374BEFB4B64888129901A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index_2.html",
+    "hash": "0F84EBBC350A01FD00F3682239271A0481E84CC7803CE78184896885B59E2BBF"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index_3.html",
+    "hash": "A48A7499263960687F9557E034E170B017E577255FB612C8DDEDACDF2362160E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index.html",
+    "hash": "53C89E0E6686E715D2B4AA6D35728D3B74861B82DC3F221C3E90AE891635E15A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index_2.html",
+    "hash": "72C7CA08854FB098B0D1211F9A893EAC41B779392FEDC53B2DC2ACEED621E655"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index_3.html",
+    "hash": "B9EC4E439B5A2AA258D52E87846E6ACA45A16225D6FDDFA80D0597BFE5340DD6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index.html",
+    "hash": "A3CDB51ED3B0B403A784DCBA8AD72C92C783920B19CEADEC82C430C3D03037B9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index_2.html",
+    "hash": "7C93311F8ECB93855121A470539B991FF9525270B2D957818EC062ACE1B74667"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index_3.html",
+    "hash": "61295612075A0EF93E5FA0B01A9F06C55513B1C17BF11042615FA8E88FA14781"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index.html",
+    "hash": "45B46A50333DF55A6F16FB95E7E22725CF8721F29A4972D3B0742FFF4F87AB0D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index_2.html",
+    "hash": "D485963D811E02742E73742CE50AFC3B10DA3724799FC2B53AC5B74EB8BF2882"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index_3.html",
+    "hash": "9E936E2F56838891C9FA5BC108EB49F90524EB29F77057FE1FD089E41F871D0C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index.html",
+    "hash": "768A758C5E79FD3BF0EC6DEFE5A2B48D50A94F66B252263CE7EF9F56834B9474"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index_2.html",
+    "hash": "1B26239232376DA8D2B2D4639505D69390F41CDEA7301767CC048649A697A4DB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index_3.html",
+    "hash": "D61CCEEC818AD84DC275F00AF0458BFC3B36870E9BF02E70ACA9ED95FA784000"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index.html",
+    "hash": "E03A989EFB30BA7E9BC8A9891CC8B27AD548F806640A726F8F23BE7AE0313838"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index_2.html",
+    "hash": "7385236D26DE36975D7DCAD89873DE83DE1093F305F44BD047796D9F137BD63E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index_3.html",
+    "hash": "EA2C72AFB54962026E3212F7CE70E3DE2C23EEBA0B68FD0F4804E0EA9EB5DE85"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index.html",
+    "hash": "06C9A71CA7B0AD89EC15E098493F02D3D5483A512287BA5ABECDAF5B7E55C2D3"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index_2.html",
+    "hash": "3AF74F345192F0CAE5BBFC4955554476E74D6D301606BB1DD216CD32D47E11F0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index_3.html",
+    "hash": "9EE798C85E01415A12095EF1166ED7B7CEA3FA5DC48081A7C1610E2D85D88C80"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index.html",
+    "hash": "D5B039EE93A6262AF2F6C96679DA5886C8A0240BF824A85694AF0ABE987D4219"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index_2.html",
+    "hash": "27C5AE7203FD58CB106A3C99B70E9287C72F9D6D93FA1493D15676EDDD58A3FB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index_3.html",
+    "hash": "0F546F0722501AF2DB8B172FB437E8972C645F003C1DC4EC72BE66863A089009"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index.html",
+    "hash": "EACE54FEC25F22DC459B76EB1B587DC8D3C81903C49E156654977D1776BF8752"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index_2.html",
+    "hash": "96D04603A7310140C59F0A966107CD93FFAB4A08ECFC14AA1173AA6E7FBC35A5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index_3.html",
+    "hash": "0DEB03E43FCB6B54D419A5B792FF7CC5E97FE9314897772710336F0D6CE24340"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index.html",
+    "hash": "DCD1EFEB37748F5E41ABB58A8103A48727599E450DC794D202095ED6A7016096"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index_2.html",
+    "hash": "B8794BD1B1B097A6E6668A2520E55E99831BC60B05A46B96A23CC726C71528EC"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index_3.html",
+    "hash": "615674F6DA40444B887EAF77B59B0CB5328CED036F3762941EE19FC9C7424BFD"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index.html",
+    "hash": "4670CF92559B63D3221071026E55FCC0CDF6694EE5649FD3BB6543043E186390"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index_2.html",
+    "hash": "EAB5DD8EEDF2C6DAC51F78D5819F79CC16062689D8A500D5D5571708C9EBFE3D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index_3.html",
+    "hash": "CA9B831146D38EB17F7456B63A0DC40982F9CFD7BC0BE99644E80354EF26712F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index.html",
+    "hash": "1F24789E41B7D03FA628B8DD44B06BCA669B62DDC8C04C701ED55FF11BAF81A7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index_2.html",
+    "hash": "CFF7368AEA44CC7D54AB5AE4E3ED07815B8E923DA7949E2CDC97F23D1EBB0E96"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index_3.html",
+    "hash": "60174BC6A25F6336C8C1293DE8E17A62BA28E9F667A2A87B5C88F7D0D846FA5E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index.html",
+    "hash": "89027710372198F217EE5A76510F5B5B0FFE1E2455DF18C9A0194DE054FCD691"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index_2.html",
+    "hash": "36D85FE747BE850DEE9F043CB382C70DC66E149CF87AA32B236F81009275820E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index_3.html",
+    "hash": "0A2C11FDE49A56C8C31A13C04116E2C12FC411508AD1E0595AAA7D219E35626E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index.html",
+    "hash": "41DEACB5CA9EFA0025752AAFC224C857252C689AA3E558964473DB019E3FE242"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index_2.html",
+    "hash": "53EDAB1E73EC74DC407FFE2FC568A6AB5F218291E272AE332917F2A6BD50A1CB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index_3.html",
+    "hash": "C771E500140AEC833076089D6274CA95B8E1B651A37FADF74ECDE9817B509EF2"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index.html",
+    "hash": "B528742D802F9849014F361993B6F0B676E234534860F3679DBCC008C7E9A52E"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index_2.html",
+    "hash": "B8337547F89DC98E4CF9388022AAA2E5BD97C71939AEDDD670A80B430F9A4BB9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index_3.html",
+    "hash": "31C37A9D5C3C984526F84EBF8945BAE49A01672686D22900F580545D14C8526C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index.html",
+    "hash": "BBE099C50D29D22FFA5A9197317A506748944ADCD2D5C9B651463B1BA307BCA5"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index_2.html",
+    "hash": "BA7A10C5FA7611C87CFA9F9018D7F059F0A681D89EBF630AEF6DB1A286AABF22"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index_3.html",
+    "hash": "944C00EECE90876FC30EF058D013E0737989B132299DE7303F1701EFC81F1C27"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index.html",
+    "hash": "F750885A05EF9C9B06058B795C584EDCF38CD319BDC2C1756A8046519C4FBCE7"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index_2.html",
+    "hash": "1CA3E761C7795773DE6D84BC759C8569C23B6C40AADE7E3960BE9990EB14AF82"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index_3.html",
+    "hash": "3C0E0405EB1DDFF169F3B6F1289190A25594975AD0F5B8DBF35C64DA6EC4921D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index.html",
+    "hash": "5617CB210F1150F320A7249C508FC2075DFDB91FE3A1658CA2DC32DD5B001C5C"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index_2.html",
+    "hash": "04D0F771F5E80ECFCEBC27030E06B845CA3E1F7DAF3CC0115DCD56044EA00CAA"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index_3.html",
+    "hash": "77F8B549DBBD8C334643CB3009A0F5242C2681D444E224AED98762A577CEDBE0"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index.html",
+    "hash": "EA035E3F1B6B25AAAAA65C137402CCFC3D205DC9F23BF8B78D06C162ED92A15F"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index_2.html",
+    "hash": "6F08D402C4BA1C0BA98A260EFEA3C0BE23DD3377E1D81FE65FD0B16237C65175"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index_3.html",
+    "hash": "4081F80952EFA1A4FF59A2B2439990A932507A81DD3BDD3B8CB8531F721462E6"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index.html",
+    "hash": "5638172CB3BA56BC6C4895391E4A507BD445BF23A033942F083B1C2AA0283048"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index_2.html",
+    "hash": "DE856C39AEFDC5C7BD52C88D23A2FF16E40918C066F3B195A77BDAEC7FD9D3BB"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index_3.html",
+    "hash": "6E270660403193E0D617BC5C6629ADDDF89B8DEDC56A732177B20C1F3DA74C91"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\index.html",
+    "hash": "3F9B17A4BD6EF0C7A1EA863087330F9F30E6BB4DD326BB4EB2311FD074B91634"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\index_2.html",
+    "hash": "E8239A524F19D2027BDF2C5A9015BC4A7D881C32541C210DF903571127AD758D"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\index_3.html",
+    "hash": "0E9B589E19947F6B1504CA31AD94074B40E3C467A82818AF8B8AB70297653AD9"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\index_4.html",
+    "hash": "C97CB7EA08C7671402C420CCE07EDBF3AE7DBD25F8BECBB84AE096F9FBDE2710"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Kaplan_T\\index.html",
+    "hash": "BB9FDF410A0C33A89A29A6526B1ED8D2EC39C2D4FA551688FD74C5CA0A3DF475"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Kaplan_T\\index_2.html",
+    "hash": "45917E38894B78168408DA3A963B6DEAEECD3980B2DAFFDEA85D4E742A731236"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Kaplan_T\\index_3.html",
+    "hash": "3EB7367CA04A031774897CE63434D71DD061A901B40EFFB39E094D1804BFB192"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Pelton_T\\index.html",
+    "hash": "BDF28687AB867FCC727D2334C5ACDA12D635966C9CD46298A94F04F9C0F9C26A"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Pelton_T\\index_2.html",
+    "hash": "4BA1DF3F04CBC7DA994AD2400CC0AA96E7296EE133A93429A5A6B46277E3CB14"
+  },
+  {
+    "file": "public\\archive\\Turbine_Friend\\Pelton_T\\index_3.html",
+    "hash": "D8B6F6A6087C9877548D6B790B5763BA9E46DE88DD9516D08B5DA08B75423B8A"
+  }
+]

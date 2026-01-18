@@ -1,60 +1,54 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { GlassCard } from '../shared/components/ui/GlassCard';
-import { ModernButton } from '../shared/components/ui/ModernButton';
+﻿import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
-    children: ReactNode;
-    fallback?: ReactNode;
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
 interface State {
-    hasError: boolean;
-    error: Error | null;
+  hasError: boolean;
+  error: Error | null;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-    public state: State = {
-        hasError: false,
-        error: null
-    };
+  public state: State = { hasError: false, error: null };
 
-    public static getDerivedStateFromError(error: Error): State {
-        return { hasError: true, error };
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Centralized logging for uncaught React errors
+    // Keep this minimal and synchronous to avoid additional failures
+    // Monitoring integrations can be added here.
+    // eslint-disable-next-line no-console
+    console.error('Uncaught error captured by ErrorBoundary:', error, errorInfo);
+  }
+
+  private handleReload = () => {
+    window.location.reload();
+  };
+
+  public render() {
+    if (this.state.hasError) {
+      if (this.props.fallback) return this.props.fallback;
+
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-[#071018] text-white p-6">
+          <div className="max-w-2xl text-center bg-[#071823] border border-red-700/30 rounded p-6">
+            <h1 className="text-2xl font-black mb-3">Application Error</h1>
+            <p className="mb-4">An unrecoverable error occurred. The UI has been isolated to prevent further failures.</p>
+            <div className="text-xs text-left bg-black/40 p-3 rounded text-red-300 overflow-auto mb-4">{String(this.state.error?.message || this.state.error)}</div>
+            <div className="mt-4">
+              <button onClick={this.handleReload} className="px-4 py-2 bg-red-600 rounded font-bold">Reload</button>
+            </div>
+          </div>
+        </div>
+      );
     }
 
-    public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.error('Uncaught error:', error, errorInfo);
-    }
-
-    private handleReset = () => {
-        this.setState({ hasError: false, error: null });
-        window.location.reload();
-    };
-
-    public render() {
-        if (this.state.hasError) {
-            return this.props.fallback || (
-                <div className="min-h-[400px] flex items-center justify-center p-6 text-center">
-                    <GlassCard className="max-w-md border-red-500/30">
-                        <div className="text-5xl mb-6">🛰️</div>
-                        <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Connection Lost</h2>
-                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            Something went wrong in this sector. Our engineers have been notified.
-                            Please try refreshing the interface.
-                        </p>
-                        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-6 text-left">
-                            <p className="text-[10px] font-mono text-red-400 break-all">
-                                {this.state.error?.message || 'Unknown Protocol Error'}
-                            </p>
-                        </div>
-                        <ModernButton onClick={this.handleReset} variant="secondary" fullWidth icon={<span>🔄</span>}>
-                            Re-establish Link
-                        </ModernButton>
-                    </GlassCard>
-                </div>
-            );
-        }
-
-        return this.props.children;
-    }
+    return this.props.children;
+  }
 }
+
+export default ErrorBoundary;

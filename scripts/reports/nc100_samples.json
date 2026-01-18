@@ -1,0 +1,65 @@
+{
+  "summary": {
+    "processed": 854
+  },
+  "samples": [
+    {
+      "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index.html",
+      "tech": "L. Garcia",
+      "date": "2026-01-11",
+      "health": "Nominal",
+      "sampleRows": [
+        {
+          "ts": "2026-01-17T16:42:33.412Z",
+          "val": "106.40"
+        },
+        {
+          "ts": "2026-01-17T22:42:33.412Z",
+          "val": "105.78"
+        },
+        {
+          "ts": "2026-01-18T04:42:33.412Z",
+          "val": "102.67"
+        },
+        {
+          "ts": "2026-01-18T10:42:33.412Z",
+          "val": "101.28"
+        },
+        {
+          "ts": "2026-01-18T16:42:33.412Z",
+          "val": "106.19"
+        }
+      ],
+      "injected": "<!-- NC-10.0-ID:2fadf7f52192 -->\n<div class=\"nc10-dossier\">\n<p><strong>Function:</strong> This document describes the primary role of <em>index.html</em> within the public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index.html subsystem and the mechanical/electrical function it performs in the plant.</p>\n<p><strong>Current Analysis:</strong> Deterministic review of recent behaviour for <em>index.html</em> using archived sensor patterns and NC-10.0 automated feature extraction; anomalies flagged where variance &gt; 2.53× baseline.</p>\n<p><strong>Operational Recommendation:</strong> Follow recommended schedule: immediate inspection if trend continues for 3 samples; otherwise schedule predictive maintenance within 7 days.</p>\n<table class=\"nc10-sensor-log\" border=\"1\" style=\"border-collapse:collapse\"><thead><tr><th>timestamp</th><th>value</th></tr></thead><tbody><tr><td>2026-01-17T16:42:33.412Z</td><td>106.40</td></tr>\n<tr><td>2026-01-17T22:42:33.412Z</td><td>105.78</td></tr>\n<tr><td>2026-01-18T04:42:33.412Z</td><td>102.67</td></tr>\n<tr><td>2026-01-18T10:42:33.412Z</td><td>101.28</td></tr>\n<tr><td>2026-01-18T16:42:33.412Z</td><td>106.19</td></tr></tbody></table>\n<div class=\"nc10-maintenance\"><p><strong>Maintenance Record</strong></p><p>Technician: L. Garcia</p><p>Date: 2026-01-11</p><p>System Health: Nominal</p></div>\n<div class=\"nc10-math\"><p><strong>Electrical Calculation (step-by-step)</strong></p><ol><li>Line-to-line voltage V = 433.6 V and current I = 25.96 A.</li><li>Apparent power S = √3·V·I = 19496.41 VA.</li><li>Result: S = 19496.41 VA.</li></ol></div>\n</div>\n<!-- /NC-10.0-ID:2fadf7f52192 -->\n"
+    },
+    {
+      "file": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_2.html",
+      "tech": "P. Singh",
+      "date": "2026-01-08",
+      "health": "Warning",
+      "sampleRows": [
+        {
+          "ts": "2026-01-17T16:42:33.413Z",
+          "val": "102.87"
+        },
+        {
+          "ts": "2026-01-17T22:42:33.413Z",
+          "val": "102.00"
+        },
+        {
+          "ts": "2026-01-18T04:42:33.413Z",
+          "val": "104.46"
+        },
+        {
+          "ts": "2026-01-18T10:42:33.413Z",
+          "val": "105.58"
+        },
+        {
+          "ts": "2026-01-18T16:42:33.413Z",
+          "val": "105.87"
+        }
+      ],
+      "injected": "<!-- NC-10.0-ID:7ec13b0dc80c -->\n<div class=\"nc10-dossier\">\n<p><strong>Function:</strong> This document describes the primary role of <em>index_2.html</em> within the public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_2.html subsystem and the mechanical/electrical function it performs in the plant.</p>\n<p><strong>Current Analysis:</strong> Deterministic review of recent behaviour for <em>index_2.html</em> using archived sensor patterns and NC-10.0 automated feature extraction; anomalies flagged where variance &gt; 2.67× baseline.</p>\n<p><strong>Operational Recommendation:</strong> Follow recommended schedule: immediate inspection if trend continues for 3 samples; otherwise schedule predictive maintenance within 5 days.</p>\n<table class=\"nc10-sensor-log\" border=\"1\" style=\"border-collapse:collapse\"><thead><tr><th>timestamp</th><th>value</th></tr></thead><tbody><tr><td>2026-01-17T16:42:33.413Z</td><td>102.87</td></tr>\n<tr><td>2026-01-17T22:42:33.413Z</td><td>102.00</td></tr>\n<tr><td>2026-01-18T04:42:33.413Z</td><td>104.46</td></tr>\n<tr><td>2026-01-18T10:42:33.413Z</td><td>105.58</td></tr>\n<tr><td>2026-01-18T16:42:33.413Z</td><td>105.87</td></tr></tbody></table>\n<div class=\"nc10-maintenance\"><p><strong>Maintenance Record</strong></p><p>Technician: P. Singh</p><p>Date: 2026-01-08</p><p>System Health: Warning</p></div>\n<div class=\"nc10-math\"><p><strong>Electrical Calculation (step-by-step)</strong></p><ol><li>Line-to-line voltage V = 416.8 V and current I = 29.52 A.</li><li>Apparent power S = √3·V·I = 21311.04 VA.</li><li>Result: S = 21311.04 VA.</li></ol></div>\n</div>\n<!-- /NC-10.0-ID:7ec13b0dc80c -->\n"
+    }
+  ]
+}

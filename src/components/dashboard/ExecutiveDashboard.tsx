@@ -304,7 +304,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     status={(livePhysics?.axialThrustKN?.toNumber() || 0) > 200 ? 'critical' : (livePhysics?.axialThrustKN?.toNumber() || 0) > 180 ? 'warning' : 'nominal'}
                                     trendData={trendData.thrust}
                                     subtitle={t('dashboard.kpi.axial_thrust_sub')}
-                                    onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.HUB))}
+                                    onClick={() => window.dispatchEvent(new CustomEvent('openDossier', { detail: { keyword: 'penstock' } }))}
                                 />
                                 <EngineeringCard
                                     variant="instrument"
@@ -314,7 +314,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     icon={<Hammer className="w-4 h-4 text-h-gold" />}
                                     status={(structural?.remainingLife || 0) < 50 ? 'critical' : (structural?.remainingLife || 0) < 75 ? 'warning' : 'nominal'}
                                     subtitle={t('dashboard.kpi.structural_life_sub')}
-                                    onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.DIAGNOSTICS.FORENSICS))}
+                                    onClick={() => window.dispatchEvent(new CustomEvent('openDossier', { detail: { keyword: 'generator' } }))}
                                 />
                             </div>
 

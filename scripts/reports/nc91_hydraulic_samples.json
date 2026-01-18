@@ -1,0 +1,10 @@
+{
+  "totalFiles": 854,
+  "uniqueEngineeringSections": 854,
+  "duplicates": 0,
+  "samples": {
+    "case-studies/cs-compliance-shield/index.html": "<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\"><h3 class=\"text-sm font-bold text-white mb-2\">NC-9.3 — Draft Tube / Outlet</h3><div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Cp=0.607 · angle=17° · PR=0.73</div>",
+    "case-studies/cs-compliance-shield/index_2.html": "<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\"><h3 class=\"text-sm font-bold text-white mb-2\">NC-9.3 — Draft Tube / Outlet</h3><div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Cp=0.439 · angle=12.3° · PR=0.358</div>",
+    "case-studies/cs-compliance-shield/index_3.html": "<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\"><h3 class=\"text-sm font-bold text-white mb-2\">NC-9.3 — Draft Tube / Outlet</h3><div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Cp=0.589 · angle=5.4° · PR=1.116</div>"
+  }
+}

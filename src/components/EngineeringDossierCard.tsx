@@ -39,6 +39,8 @@ export const EngineeringDossierCard: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [viewerOpen, setViewerOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState<{ path: string; title: string; sourceData?: DossierFile } | null>(null);
+    const [page, setPage] = useState(1);
+    const PAGE_SIZE = 50;
 
     const categories: DossierCategory[] = [
         { label: 'Case Studies', count: 105, icon: <ScrollText className="w-4 h-4" />, color: 'text-cyan-400' },
@@ -58,6 +60,8 @@ export const EngineeringDossierCard: React.FC = () => {
         });
     }, [searchTerm, selectedCategory]);
 
+    const displayedSources = useMemo(() => filteredSources.slice(0, page * PAGE_SIZE), [filteredSources, page]);
+
     const handleCategoryClick = (cat: string) => {
         setSelectedCategory(cat);
         setIsModalOpen(true);
@@ -68,11 +72,11 @@ export const EngineeringDossierCard: React.FC = () => {
     };
 
     const handleOpenFile = (source: DossierFile) => {
-        const path = source.path;
-        // Adjust path to point to /archive if it doesn't already
+        const path = source.path || '';
+        // Expect absolute /archive/ path from DOSSIER_LIBRARY; fallback safely
         let activePath = path;
-        if (!path.startsWith('/') && !path.startsWith('http')) {
-            activePath = `/archive/${path}`;
+        if (!activePath.startsWith('/') && !activePath.startsWith('http')) {
+            activePath = `/archive/${activePath}`;
         }
         setSelectedFile({
             path: activePath,
@@ -81,6 +85,22 @@ export const EngineeringDossierCard: React.FC = () => {
         });
         setViewerOpen(true);
     };
+
+    // Listen for global openDossier events so other dashboard buttons can trigger viewer
+    React.useEffect(() => {
+        const handler = (e: any) => {
+            try {
+                const kw = e?.detail?.keyword?.toString().toLowerCase();
+                if (!kw) return;
+                const match = DOSSIER_LIBRARY.find(ds => (ds.path + ' ' + (ds.justification || '')).toLowerCase().includes(kw));
+                if (match) handleOpenFile(match);
+            } catch (err) {
+                console.error('openDossier handler failed', err);
+            }
+        };
+        window.addEventListener('openDossier', handler as EventListener);
+        return () => window.removeEventListener('openDossier', handler as EventListener);
+    }, []);
 
     return (
         <>
@@ -153,7 +173,7 @@ export const EngineeringDossierCard: React.FC = () => {
                                 <span className="text-[8px] text-h-cyan font-mono">Turbine_Friend Module</span>
                             </div>
                             <div className="divide-y divide-white/5">
-                                {filteredSources.slice(0, 10).map((source, sIdx) => (
+                                {displayedSources.map((source, sIdx) => (
                                     <div
                                         key={sIdx}
                                         onClick={() => handleOpenFile(source)}
@@ -175,6 +195,16 @@ export const EngineeringDossierCard: React.FC = () => {
                                         </p>
                                     </div>
                                 ))}
+                                {filteredSources.length > displayedSources.length && (
+                                    <div className="p-3 flex items-center justify-center">
+                                        <button
+                                            onClick={() => setPage(prev => prev + 1)}
+                                            className="px-4 py-2 bg-h-cyan/10 border border-h-cyan/30 rounded text-sm font-mono text-h-cyan"
+                                        >
+                                            Load more ({filteredSources.length - displayedSources.length} more)
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

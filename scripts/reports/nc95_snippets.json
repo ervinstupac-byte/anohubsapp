@@ -1,0 +1,48 @@
+{
+  "summary": {
+    "totalFiles": 854,
+    "topics": [
+      "auxiliary",
+      "wear",
+      "vibration",
+      "regulating_ring",
+      "instrumentation",
+      "sync",
+      "cooling",
+      "generator",
+      "bearing",
+      "foundation",
+      "governor",
+      "inlet",
+      "penstock",
+      "transformer"
+    ]
+  },
+  "samples": [
+    {
+      "topic": "inlet",
+      "rel": "turbine_friend/francis_h/francis_sop_intake/index.html",
+      "snippet": "<!-- NC-9.5-ID:AFF683F5 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.5 — INLET</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">η = 0.85</div>"
+    },
+    {
+      "topic": "foundation",
+      "rel": "turbine_friend/francis_h/francis_sop_foundation/index.html",
+      "snippet": "<!-- NC-9.5-ID:2DE52602 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.5 — FOUNDATION</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">σ_y = 141761973.172 (F_s=2.47, M=483998.89, y=0.485, I=0.00409)</div>"
+    },
+    {
+      "topic": "wear",
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index.html",
+      "snippet": "<!-- NC-9.5-ID:D459F138 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.5 — WEAR</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">wear_rate = 0.01541 mm/hr</div>"
+    },
+    {
+      "topic": "regulating_ring",
+      "rel": "insights/article-1-engineering-immunity/index.html",
+      "snippet": "<!-- NC-9.5-ID:19DFCD34 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.5 — REGULATING_RING</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Φ = 0.071082 Wb (B=0.937 T, A=0.0978 m², θ=0.683 rad)</div>"
+    },
+    {
+      "topic": "transformer",
+      "rel": "turbine_friend/francis_h/francis_sop_transformer/index.html",
+      "snippet": "<!-- NC-9.5-ID:40F72A1C -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.5 — TRANSFORMER</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Φ = -0.263396 Wb (B=0.926 T, A=0.4115 m², θ=2.334 rad)</div>"
+    }
+  ]
+}

@@ -24,13 +24,21 @@ console.log('Found', paths.length, 'entries — checking HTTP status...');
     const rel = String(p).toLowerCase();
     const url = BASE + encodeURI(rel);
     try {
-      const res = await fetch(url, { method: 'HEAD' });
-      if (res.ok) {
-        ok++;
-      } else {
+      // GET instead of HEAD so we can inspect returned HTML body and detect SPA index.html
+      const res = await fetch(url, { method: 'GET' });
+      if (!res.ok) {
         fail++;
         console.error('FAIL', res.status, url);
+        continue;
       }
+      const text = await res.text();
+      // If the response contains the SPA root marker, it's serving the app shell, not the archive file
+      if (text.includes('<div id="root">')) {
+        fail++;
+        console.error('FAIL - SPA SHELL SERVED (contains <div id="root">):', url);
+        continue;
+      }
+      ok++;
     } catch (e) {
       fail++;
       console.error('ERROR', e.message, url);

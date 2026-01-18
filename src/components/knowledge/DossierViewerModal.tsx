@@ -26,16 +26,29 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
 
     useEffect(() => {
         if (isOpen) {
+            let mounted = true;
+            const controller = new AbortController();
             setIsChecking(true);
             setLoadError(false);
 
-            // Physical check for file existence
-            fetch(activePath, { method: 'HEAD' })
+            // Physical check for file existence with abort-safe fetch
+            fetch(activePath, { method: 'HEAD', signal: controller.signal })
                 .then(res => {
-                    if (!res.ok) setLoadError(true);
+                    if (mounted) {
+                        if (!res.ok) setLoadError(true);
+                    }
                 })
-                .catch(() => setLoadError(true))
-                .finally(() => setIsChecking(false));
+                .catch((err) => {
+                    if (mounted && err.name !== 'AbortError') setLoadError(true);
+                })
+                .finally(() => {
+                    if (mounted) setIsChecking(false);
+                });
+
+            return () => {
+                mounted = false;
+                controller.abort();
+            };
         }
     }, [isOpen, activePath]);
 

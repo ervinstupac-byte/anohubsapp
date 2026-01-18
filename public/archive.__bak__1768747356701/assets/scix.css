@@ -1,0 +1,19 @@
+/* scix.css - Scoped styling for NC-9.1 Scientific Context Injection */
+.scix-inject{
+  --scix-bg: rgba(255,255,255,0.03);
+  --scix-border: rgba(255,255,255,0.06);
+  background: var(--scix-bg);
+  border: 1px solid var(--scix-border);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+.scix-inject h3{margin:0 0 0.5rem 0;font-weight:700}
+.scix-equation{font-family:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace; white-space:normal}
+.scix-inject p{margin:0;font-size:0.9rem;color:rgba(248,250,252,0.78)}
+
+/* Isolation: do not affect global selectors */
+:root{}, html {} /* no-op rules to avoid accidental inheritance changes */
+
+/* Keep specificity limited to scix classes only */
