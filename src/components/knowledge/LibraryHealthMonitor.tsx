@@ -53,10 +53,18 @@ export const LibraryHealthMonitor: React.FC = () => {
                     if (response.ok) {
                         const html = await response.text();
                         // NC-8.0: Extract SHA-256 hash using regex
-                        const hashMatch = html.match(/SHA-256: ([A-F0-9]{40})/);
-                        const hash = hashMatch ? hashMatch[1] : 'NOT_FOUND';
+                        const hashMatch = html.match(/SHA-256:\s*([A-Fa-f0-9]{40,64})/);
+                        const embedded = hashMatch ? hashMatch[1].toUpperCase() : null;
 
-                        return { ok: true, name: file.path, hash };
+                        // Compute SHA-256 in-browser ignoring the embedded token
+                        const contentForHash = html.replace(/SHA-256:\s*[A-Fa-f0-9]{40,64}/g, 'SHA-256: ');
+                        const encoder = new TextEncoder();
+                        const digest = await crypto.subtle.digest('SHA-256', encoder.encode(contentForHash));
+                        const computed = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+
+                        const verified = embedded && embedded === computed;
+
+                        return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified };
                     }
                     return { ok: false, name: file.path };
                 } catch {
@@ -71,7 +79,9 @@ export const LibraryHealthMonitor: React.FC = () => {
             setAuditLog(prev => [...results.map(r => ({
                 name: r.name,
                 status: r.ok ? 'SUCCESS' as const : 'ERROR' as const,
-                hash: (r as any).hash
+                hash: (r as any).embedded || (r as any).hash || 'NOT_FOUND',
+                computed: (r as any).computed,
+                verified: (r as any).verified
             })), ...prev].slice(0, 50)); // Keep last 50 for performance
 
             setAuditProgress(Math.round(((i + batch.length) / total) * 100));
@@ -294,12 +304,17 @@ export const LibraryHealthMonitor: React.FC = () => {
                                                     {log.status}
                                                 </span>
                                             </div>
-                                            {log.hash && (
-                                                <div className="mt-1 flex items-center gap-2 pl-4">
-                                                    <span className="text-[8px] font-mono text-slate-600 uppercase">Hash:</span>
-                                                    <span className="text-[8px] font-mono text-h-cyan truncate">{log.hash}</span>
-                                                </div>
-                                            )}
+                                            <div className="mt-1 flex items-center gap-2 pl-4">
+                                                <span className="text-[8px] font-mono text-slate-600 uppercase">Embedded:</span>
+                                                <span className="text-[8px] font-mono text-h-cyan truncate">{(log as any).hash}</span>
+                                                { (log as any).computed && (
+                                                    <>
+                                                        <span className="text-[8px] font-mono text-slate-600 uppercase">Computed:</span>
+                                                        <span className="text-[8px] font-mono text-slate-400 truncate">{(log as any).computed}</span>
+                                                    </>
+                                                )}
+                                                <span className={`ml-auto text-[9px] font-black px-1.5 py-0.5 rounded ${ (log as any).verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }`}>{ (log as any).verified ? 'VERIFIED' : 'MISMATCH' }</span>
+                                            </div>
                                         </div>
                                     ))
                                 ) : (
