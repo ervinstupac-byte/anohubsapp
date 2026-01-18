@@ -862,7 +862,12 @@ export const DOSSIER_LIBRARY_RAW: DossierFile[] = [
 ];
 
 // Export a normalized, lowercased version for consumers to avoid case-sensitivity issues.
+const normalizePath = (p: string) => {
+    // lower-case and collapse historical nested protocol archive paths
+    return p.toLowerCase().replace(/protocol\/to_learn_archive\/protocols_v0\//g, 'protocol/');
+};
+
 export const DOSSIER_LIBRARY: DossierFile[] = DOSSIER_LIBRARY_RAW.map(d => ({
     ...d,
-    path: d.path.toLowerCase(),
+    path: normalizePath(d.path),
 }));
