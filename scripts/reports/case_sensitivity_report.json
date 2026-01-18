@@ -1,0 +1,1903 @@
+{
+  "generatedAt": "2026-01-18T22:21:28.665Z",
+  "total": 854,
+  "missing": [],
+  "mismatches": [
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_alignment_v2\\index_5.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_5.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_asset_v2\\index_5.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_5.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cavitation_v2\\index_5.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_5.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_core_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_core_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_cost_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_dam_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flood_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_fluid_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_flux_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_global_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_global_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_iso_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_methodology_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_organization_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_predictive_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_protocol_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_quantum_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sat_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_override_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_scada_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_sync_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_synergy_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_thermal_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_2.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_3.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\protocol\\To_Learn_Archive\\protocols_V0\\anohub_vib_v2\\index_4.html",
+      "actual": "public/archive/protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index.html",
+      "actual": "public/archive/turbine_friend/francis_emergency_protocols/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_emergency_protocols/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_emergency_protocols/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Emergency_Protocols\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_emergency_protocols/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index.html",
+      "actual": "public/archive/turbine_friend/francis_flowchart_startup/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_flowchart_startup/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_flowchart_startup/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Flowchart_Startup\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_flowchart_startup/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_emergency_protocols/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_emergency_protocols/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_emergency_protocols/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Emergency_Protocols\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_emergency_protocols/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_flowchart_startup/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_flowchart_startup/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_flowchart_startup/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Flowchart_Startup\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_flowchart_startup/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal_dashboard/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal_dashboard/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal_dashboard/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Horizontal_Dashboard\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_horizontal_dashboard/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_load_rejection/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_load_rejection/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_load_rejection/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Load_Rejection\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_load_rejection/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_logger/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_logger/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_logger/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Logic_Logger\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_logic_logger/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_mission_control/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_mission_control/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Mission_Control\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_mission_control/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_observation_log/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_observation_log/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Observation_Log\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_observation_log/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_prestart_checklist/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_prestart_checklist/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_PreStart_Checklist\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_prestart_checklist/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_report_generator/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_report_generator/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Report_Generator\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_report_generator/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_safety_system_integrity/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_safety_system_integrity/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Safety_System_Integrity\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_safety_system_integrity/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sensory_checklist/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sensory_checklist/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Sensory_Checklist\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sensory_checklist/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_acoustics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_acoustics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Acoustics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_acoustics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_analytics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_analytics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Analytics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_analytics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_auxiliary/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_auxiliary/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Auxiliary\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_auxiliary/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_bearings/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_bearings/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Bearings\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_bearings/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_braking_system/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_braking_system/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Braking_System\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_braking_system/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cathodic/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cathodic/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cathodic\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cathodic/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cooling_water/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cooling_water/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Cooling_Water\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_cooling_water/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_coupling/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_coupling/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Coupling\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_coupling/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dc_systems/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dc_systems/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DC_Systems\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dc_systems/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft_tailrace/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft_tailrace/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_DFT_Tailrace\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_dft_tailrace/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_digital_integrity/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_digital_integrity/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Digital_Integrity\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_digital_integrity/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_distributor_sync/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_distributor_sync/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Distributor_Sync\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_distributor_sync/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_drainage_pumps/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_drainage_pumps/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Drainage_Pumps\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_drainage_pumps/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_elec_health/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_elec_health/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Elec_Health\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_elec_health/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_excitation/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_excitation/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Excitation\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_excitation/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_foundation/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_foundation/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Foundation\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_foundation/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_generator/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_generator/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Generator\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_generator/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_governor_pid/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_governor_pid/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Governor_PID\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_governor_pid/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_gov_logic/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_gov_logic/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Gov_Logic\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_gov_logic/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grid_sync/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grid_sync/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grid_Sync\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grid_sync/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grounding/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grounding/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Grounding\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_grounding/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hidden_guardians/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hidden_guardians/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Hidden_Guardians\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hidden_guardians/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu_energy/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu_energy/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_HPU_Energy\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_hpu_energy/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_instrumentation/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_instrumentation/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Instrumentation\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_instrumentation/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_intake/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_intake/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Intake\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_intake/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_linkage/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_linkage/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Linkage\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_linkage/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_lubrication/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_lubrication/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Lubrication\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_lubrication/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_master_valve_distributor/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_master_valve_distributor/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Master_Valve_Distributor\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_master_valve_distributor/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_mim/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_mim/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIM\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_mim/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_bypass/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_bypass/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Bypass\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_bypass/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_distributor_detail/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_MIV_Distributor_Detail\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil_health/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil_health/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Oil_Health\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_oil_health/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_penstock/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_penstock/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Penstock\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_penstock/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_post_mortem/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_post_mortem/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Post_Mortem\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_post_mortem/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_precision/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_precision/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Precision\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_precision/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_recovery/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_recovery/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Recovery\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_recovery/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_regulating_ring/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_regulating_ring/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Regulating_Ring\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_regulating_ring/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_reporting/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_reporting/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Reporting\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_reporting/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_shaft_alignment/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_shaft_alignment/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Shaft_Alignment\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_shaft_alignment/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thermal/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thermal/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thermal\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thermal/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thrust_balance/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thrust_balance/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Thrust_Balance\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_thrust_balance/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_transformer/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_transformer/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Transformer\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_transformer/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_vortex_control/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_vortex_control/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Vortex_Control\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_vortex_control/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_water_hammer/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_water_hammer/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Water_Hammer\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_water_hammer/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_welding/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_welding/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_SOP_Welding\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_sop_welding/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_symptom_dictionary/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_symptom_dictionary/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Symptom_Dictionary\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_symptom_dictionary/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_wear_analytics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_wear_analytics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\Francis_Wear_Analytics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/francis_wear_analytics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\index.html",
+      "actual": "public/archive/turbine_friend/francis_h/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_h/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_h/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_H\\index_4.html",
+      "actual": "public/archive/turbine_friend/francis_h/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal_dashboard/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal_dashboard/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Horizontal_Dashboard\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_horizontal_dashboard/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index.html",
+      "actual": "public/archive/turbine_friend/francis_logic_load_rejection/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_logic_load_rejection/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Load_Rejection\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_logic_load_rejection/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index.html",
+      "actual": "public/archive/turbine_friend/francis_logic_logger/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_logic_logger/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Logic_Logger\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_logic_logger/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index.html",
+      "actual": "public/archive/turbine_friend/francis_mission_control/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_mission_control/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Mission_Control\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_mission_control/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index.html",
+      "actual": "public/archive/turbine_friend/francis_observation_log/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_observation_log/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Observation_Log\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_observation_log/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index.html",
+      "actual": "public/archive/turbine_friend/francis_prestart_checklist/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_prestart_checklist/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_PreStart_Checklist\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_prestart_checklist/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index.html",
+      "actual": "public/archive/turbine_friend/francis_report_generator/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_report_generator/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Report_Generator\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_report_generator/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index.html",
+      "actual": "public/archive/turbine_friend/francis_safety_system_integrity/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_safety_system_integrity/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Safety_System_Integrity\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_safety_system_integrity/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sensory_checklist/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sensory_checklist/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Sensory_Checklist\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sensory_checklist/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_acoustics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_acoustics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Acoustics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_acoustics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_analytics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_analytics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Analytics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_analytics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_auxiliary/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_auxiliary/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Auxiliary\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_auxiliary/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_bearings/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_bearings/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Bearings\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_bearings/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_braking_system/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_braking_system/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Braking_System\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_braking_system/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cathodic/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cathodic/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cathodic\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cathodic/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cooling_water/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cooling_water/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Cooling_Water\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_cooling_water/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_coupling/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_coupling/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Coupling\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_coupling/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dc_systems/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dc_systems/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DC_Systems\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dc_systems/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft_tailrace/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft_tailrace/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_DFT_Tailrace\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_dft_tailrace/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_digital_integrity/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_digital_integrity/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Digital_Integrity\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_digital_integrity/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_distributor_sync/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_distributor_sync/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Distributor_Sync\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_distributor_sync/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_drainage_pumps/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_drainage_pumps/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Drainage_Pumps\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_drainage_pumps/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_elec_health/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_elec_health/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Elec_Health\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_elec_health/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_foundation/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_foundation/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Foundation\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_foundation/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_generator/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_generator/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Generator\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_generator/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_governor_pid/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_governor_pid/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Governor_PID\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_governor_pid/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_gov_logic/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_gov_logic/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Gov_Logic\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_gov_logic/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_grounding/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_grounding/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Grounding\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_grounding/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hidden_guardians/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hidden_guardians/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Hidden_Guardians\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hidden_guardians/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu_energy/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu_energy/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_HPU_Energy\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_hpu_energy/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_instrumentation/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_instrumentation/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Instrumentation\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_instrumentation/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_intake/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_intake/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Intake\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_intake/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_linkage/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_linkage/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Linkage\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_linkage/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_lubrication/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_lubrication/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Lubrication\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_lubrication/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_master_valve_distributor/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_master_valve_distributor/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Master_Valve_Distributor\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_master_valve_distributor/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_mim/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_mim/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIM\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_mim/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_bypass/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_bypass/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Bypass\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_bypass/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_distributor_detail/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_distributor_detail/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_MIV_Distributor_Detail\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_miv_distributor_detail/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil_health/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil_health/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Oil_Health\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_oil_health/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_penstock/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_penstock/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Penstock\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_penstock/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_precision/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_precision/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Precision\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_precision/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_recovery/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_recovery/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Recovery\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_recovery/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_regulating_ring/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_regulating_ring/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Regulating_Ring\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_regulating_ring/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_shaft_alignment/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_shaft_alignment/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Shaft_Alignment\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_shaft_alignment/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thermal/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thermal/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thermal\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thermal/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thrust_balance/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thrust_balance/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Thrust_Balance\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_thrust_balance/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_vortex_control/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_vortex_control/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Vortex_Control\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_vortex_control/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_water_hammer/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_water_hammer/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Water_Hammer\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_water_hammer/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index.html",
+      "actual": "public/archive/turbine_friend/francis_sop_welding/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_sop_welding/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_SOP_Welding\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_sop_welding/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index.html",
+      "actual": "public/archive/turbine_friend/francis_symptom_dictionary/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_symptom_dictionary/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Symptom_Dictionary\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_symptom_dictionary/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index.html",
+      "actual": "public/archive/turbine_friend/francis_wear_analytics/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index_2.html",
+      "actual": "public/archive/turbine_friend/francis_wear_analytics/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Francis_Wear_Analytics\\index_3.html",
+      "actual": "public/archive/turbine_friend/francis_wear_analytics/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\index.html",
+      "actual": "public/archive/turbine_friend/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\index_2.html",
+      "actual": "public/archive/turbine_friend/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\index_3.html",
+      "actual": "public/archive/turbine_friend/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\index_4.html",
+      "actual": "public/archive/turbine_friend/index_4.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Kaplan_T\\index.html",
+      "actual": "public/archive/turbine_friend/kaplan_t/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Kaplan_T\\index_2.html",
+      "actual": "public/archive/turbine_friend/kaplan_t/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Kaplan_T\\index_3.html",
+      "actual": "public/archive/turbine_friend/kaplan_t/index_3.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Pelton_T\\index.html",
+      "actual": "public/archive/turbine_friend/pelton_t/index.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Pelton_T\\index_2.html",
+      "actual": "public/archive/turbine_friend/pelton_t/index_2.html"
+    },
+    {
+      "manifest": "public\\archive\\Turbine_Friend\\Pelton_T\\index_3.html",
+      "actual": "public/archive/turbine_friend/pelton_t/index_3.html"
+    }
+  ]
+}
