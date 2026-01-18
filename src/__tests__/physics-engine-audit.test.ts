@@ -46,6 +46,13 @@ describe('Physics Engine Precision Verification', () => {
             penstock: {
                 ...DEFAULT_TECHNICAL_STATE.penstock,
                 materialYieldStrength: 1000 // Very strong
+            },
+            // Ensure truly healthy mechanical readings to avoid eccentricity edge-cases
+            mechanical: {
+                ...DEFAULT_TECHNICAL_STATE.mechanical,
+                vibration: 0,
+                vibrationX: 0,
+                vibrationY: 0
             }
         };
 
