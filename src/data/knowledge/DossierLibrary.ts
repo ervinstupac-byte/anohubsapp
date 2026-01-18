@@ -4,7 +4,7 @@ export interface DossierFile {
     category: 'Case Studies' | 'Technical Insights' | 'Maintenance Protocols' | 'Turbine Friend Dossiers';
 }
 
-export const DOSSIER_LIBRARY: DossierFile[] = [
+export const DOSSIER_LIBRARY_RAW: DossierFile[] = [
     { path: 'case-studies/index.html', justification: 'Validated engineering data for Case Studies.', category: 'Case Studies' },
     { path: 'case-studies/cs-compliance-shield/index.html', justification: 'Validated engineering data for Cs Compliance Shield.', category: 'Case Studies' },
     { path: 'case-studies/cs-digital-protocol-roi/index.html', justification: 'Validated engineering data for Cs Digital Protocol Roi.', category: 'Case Studies' },
@@ -860,3 +860,9 @@ export const DOSSIER_LIBRARY: DossierFile[] = [
     { path: 'Turbine_Friend/Francis_H/Francis_Logic_Load_Rejection/index_4.html', justification: 'Validated engineering data for Francis Logic Load Rejection. (Instance 4)', category: 'Turbine Friend Dossiers' },
     { path: 'Turbine_Friend/Francis_H/Francis_Logic_Logger/index_4.html', justification: 'Validated engineering data for Francis Logic Logger. (Instance 4)', category: 'Turbine Friend Dossiers' }
 ];
+
+// Export a normalized, lowercased version for consumers to avoid case-sensitivity issues.
+export const DOSSIER_LIBRARY: DossierFile[] = DOSSIER_LIBRARY_RAW.map(d => ({
+    ...d,
+    path: d.path.toLowerCase(),
+}));

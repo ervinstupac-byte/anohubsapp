@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
-        // Relativna putanja za siguran build (radi i u podfolderima)
+        // Base URL for serving from root (Vercel production domain)
         base: '/',
 
         server: {

@@ -71,13 +71,13 @@ export const LibraryHealthMonitor: React.FC = () => {
                         const lowerUrl = `${prefix}${lowerRel}`.replace(/([^:]\/)\/+/, '$1');
                         response = await tryFetch(lowerUrl);
                         // annotate which URL succeeded for logging
-                        (response as any)?._fetchedUrl = response && response.ok ? lowerUrl : (response && (response as any).url) || url;
+                        if (response) {
+                            (response as any)._fetchedUrl = response.ok ? lowerUrl : (((response as any).url) || url);
+                        }
                     } else {
                         (response as any)._fetchedUrl = url;
                     }
                     if (response && response.ok) {
-                        const html = await response.text();
-                    if (response.ok) {
                         const html = await response.text();
                         // NC-8.0: Extract SHA-256 hash using regex
                         const hashMatch = html.match(/SHA-256:\s*([A-Fa-f0-9]{40,64})/);
@@ -94,7 +94,7 @@ export const LibraryHealthMonitor: React.FC = () => {
                         return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified, fetchedUrl: (response as any)._fetchedUrl };
                     }
                     return { ok: false, name: file.path };
-                } catch {
+                } catch (e) {
                     return { ok: false, name: file.path };
                 }
             }));
