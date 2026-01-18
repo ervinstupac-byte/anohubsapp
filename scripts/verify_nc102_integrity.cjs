@@ -6,6 +6,15 @@ const manifest = require('./hashes_applied.json');
 const EXPECTED_COUNT = 854;
 
 function sha256File(filePath) {
+  const textExts = new Set(['.html', '.htm', '.css', '.js', '.json', '.txt', '.md', '.svg', '.ts', '.tsx', '.cjs', '.mjs']);
+  const ext = path.extname(filePath).toLowerCase();
+  if (textExts.has(ext)) {
+    // normalize line endings to LF to avoid Windows CRLF vs Unix LF mismatches
+    let txt = fs.readFileSync(filePath, 'utf8');
+    txt = txt.replace(/\r\n/g, '\n');
+    txt = txt.replace(/\r/g, '\n');
+    return crypto.createHash('sha256').update(Buffer.from(txt, 'utf8')).digest('hex');
+  }
   const data = fs.readFileSync(filePath);
   return crypto.createHash('sha256').update(data).digest('hex');
 }
