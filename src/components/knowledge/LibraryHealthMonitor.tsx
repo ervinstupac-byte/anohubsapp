@@ -47,9 +47,36 @@ export const LibraryHealthMonitor: React.FC = () => {
         for (let i = 0; i < total; i += batchSize) {
             const batch = DOSSIER_LIBRARY.slice(i, i + batchSize);
             const results = await Promise.all(batch.map(async (file) => {
-                const path = file.path.startsWith('/') ? file.path : `/archive/${file.path}`;
+                // Build a base-aware URL so fetch works whether site is served from root or a repo subpath.
+                const base = ((typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env.BASE_URL) || (process.env.PUBLIC_URL) || '/');
+                const prefix = base.endsWith('/') ? base : `${base}/`;
+                const relativePath = file.path.startsWith('/') ? file.path.replace(/^\/+/, '') : `archive/${file.path}`;
+                const url = `${prefix}${relativePath}`.replace(/([^:]\/)\/+/, '$1');
+
+                // Try original path first; if 404, try lowercase path as fallback (Vercel/Linux case-sensitive)
+                async function tryFetch(u: string) {
+                    try {
+                        const r = await fetch(`${u}?t=${Date.now()}`);
+                        return r;
+                    } catch (e) {
+                        return null;
+                    }
+                }
+
                 try {
-                    const response = await fetch(`${path}?t=${Date.now()}`);
+                    let response = await tryFetch(url);
+                    if (!response || !response.ok) {
+                        // build lowercase fallback URL
+                        const lowerRel = relativePath.toLowerCase();
+                        const lowerUrl = `${prefix}${lowerRel}`.replace(/([^:]\/)\/+/, '$1');
+                        response = await tryFetch(lowerUrl);
+                        // annotate which URL succeeded for logging
+                        (response as any)?._fetchedUrl = response && response.ok ? lowerUrl : (response && (response as any).url) || url;
+                    } else {
+                        (response as any)._fetchedUrl = url;
+                    }
+                    if (response && response.ok) {
+                        const html = await response.text();
                     if (response.ok) {
                         const html = await response.text();
                         // NC-8.0: Extract SHA-256 hash using regex
@@ -64,7 +91,7 @@ export const LibraryHealthMonitor: React.FC = () => {
 
                         const verified = embedded && embedded === computed;
 
-                        return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified };
+                        return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified, fetchedUrl: (response as any)._fetchedUrl };
                     }
                     return { ok: false, name: file.path };
                 } catch {

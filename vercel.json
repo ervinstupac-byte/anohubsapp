@@ -1,5 +1,10 @@
 {
+    "cleanUrls": true,
     "rewrites": [
+        {
+            "source": "/archive/(.*)",
+            "destination": "/archive/$1"
+        },
         {
             "source": "/((?!api/|static/|_next/|[\\w-]+\\.\\w+).*)",
             "destination": "/index.html"
