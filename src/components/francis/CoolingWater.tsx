@@ -42,7 +42,7 @@ export const CoolingWater: React.FC = () => {
                             {t('francis.coolingWater.title')}
                         </h1>
                         <p className="text-cyan-400 font-bold mt-1 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <NeuralPulse /> {t('francis.coolingWater.subtitle') || "THERMAL REJECTION LOGIC"} // NC-5.7 CRYOSYNC
+                            <NeuralPulse /> {t('francis.coolingWater.subtitle') || "THERMAL REJECTION LOGIC"} // NC-9.0 CRYOSYNC
                         </p>
                     </div>
 

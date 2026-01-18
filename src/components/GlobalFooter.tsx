@@ -46,7 +46,7 @@ export const GlobalFooter: React.FC = () => {
 
                 <div className="flex items-center gap-2">
                     <Zap className="w-3 h-3 text-h-gold" />
-                    <span className="text-[9px] font-black text-h-gold uppercase tracking-widest">NC-5.7 Digital Dossier Edition</span>
+                    <span className="text-[9px] font-black text-h-gold uppercase tracking-widest">NC-9.0 Digital Dossier Edition</span>
                 </div>
             </div>
         </footer>

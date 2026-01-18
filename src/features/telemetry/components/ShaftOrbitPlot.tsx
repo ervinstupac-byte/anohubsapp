@@ -290,7 +290,7 @@ export const ShaftOrbitPlot = React.memo(forwardRef<ShaftOrbitPlotHandle, ShaftO
             </div>
 
             <div className="absolute bottom-2 right-2 hidden group-hover:block">
-                <span className="text-[8px] text-slate-500 font-mono uppercase">NC-5.7 Multi-Load View</span>
+                <span className="text-[8px] text-slate-500 font-mono uppercase">NC-9.0 Multi-Load View</span>
             </div>
 
             {baselinePoints && (

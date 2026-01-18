@@ -26,7 +26,7 @@ interface RunnerDetailProps {
     onGuideVaneDrillDown?: () => void;
 }
 
-// NC-5.7 Compliant Hotspot Definitions with Ground-Truth Hydraulic Data
+// NC-9.0 Compliant Hotspot Definitions with Ground-Truth Hydraulic Data
 // 5 Critical Hydraulic Points for Francis Runner
 const RUNNER_COMPONENTS = [
     {
@@ -220,7 +220,7 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                         </h2>
                         <div className="flex items-center gap-3">
                             <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-tighter opacity-70">
-                                NC-5.7 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 HYDRAULIC HOTSPOTS
+                                NC-9.0 {t('common.technicalAnalysis', 'Technical Analysis')} // 5 HYDRAULIC HOTSPOTS
                             </p>
                             {/* Live RPM Indicator */}
                             {rpm > 10 && (
@@ -440,7 +440,7 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                             <div className="w-2 h-0.5 bg-cyan-500" /> SOURCE: francis_runner_info.svg
                         </div>
                         <div className="text-[10px] text-cyan-500/40 font-bold uppercase tracking-tighter">
-                            NC-5.7 COMPLIANT // 5 HYDRAULIC HOTSPOTS
+                            NC-9.0 COMPLIANT // 5 HYDRAULIC HOTSPOTS
                         </div>
                     </div>
 
@@ -615,7 +615,7 @@ const RunnerDetailView: React.FC<RunnerDetailProps> = ({ onBack, onHome, onGuide
                 <div className="flex items-center gap-8 animate-marquee whitespace-nowrap">
                     {[1, 2, 3].map(i => (
                         <span key={i} className="text-[8px] font-bold text-cyan-500/40 uppercase tracking-[0.2em]">
-                            ASSET: FRANCIS_RUNNER_INFO // NC-5.7 COMPLIANT // 5 HOTSPOTS: RUNNER BLADES | SPIRAL CASE | WEARING GAP | AXIAL POSITION | HEAD COVER // HYDRAULIC INTEGRITY ACTIVE
+                            ASSET: FRANCIS_RUNNER_INFO // NC-9.0 COMPLIANT // 5 HOTSPOTS: RUNNER BLADES | SPIRAL CASE | WEARING GAP | AXIAL POSITION | HEAD COVER // HYDRAULIC INTEGRITY ACTIVE
                         </span>
                     ))}
                 </div>

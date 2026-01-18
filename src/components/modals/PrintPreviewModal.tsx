@@ -56,8 +56,8 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             {t('report.previewTitle', 'Project Dossier Preview')}
                                         </h2>
                                         <div className="flex items-center gap-3">
-                                            <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
-                                                AnoHUB NC-5.7 // ISO IMS VERIFIED
+                                                <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
+                                                AnoHUB NC-9.0 // ISO IMS VERIFIED
                                             </p>
                                             <div className="h-1 w-1 rounded-full bg-slate-700" />
                                             <p className="text-[10px] text-h-cyan font-mono uppercase tracking-[0.2em] font-black">

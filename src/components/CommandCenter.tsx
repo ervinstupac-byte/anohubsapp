@@ -146,9 +146,9 @@ export const CommandCenter: React.FC = () => {
         });
     }, [diagnostics, deltaMap, patternWeights, addSnapshot, systemHealth]);
 
-    // NC-5.7 Knowledge Wisdom Export
+    // NC-9.0 Knowledge Wisdom Export
     useEffect(() => {
-        console.group('%c ANOHUB NC-5.7 KNOWLEDGE AUDIT ', 'background: #0f172a; color: #38bdf8; font-weight: bold; padding: 4px;');
+        console.group('%c ANOHUB NC-9.0 KNOWLEDGE AUDIT ', 'background: #0f172a; color: #38bdf8; font-weight: bold; padding: 4px;');
         console.log('Maturity Rules:', {
             Mechanical: ['Bearing Temp', 'Vibration', 'Megger', 'Axial Play'],
             Hydraulic: ['Head', 'Flow', 'Efficiency'],
@@ -175,7 +175,7 @@ export const CommandCenter: React.FC = () => {
                 <div className="px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <h1 className="text-sm font-black uppercase tracking-[0.3em] text-white font-mono">
-                            ANOHUB <span className="text-cyan-400">//</span> NC-5.7
+                            ANOHUB <span className="text-cyan-400">//</span> NC-9.0
                         </h1>
                         <div className="flex flex-col">
                             {activeDefinition && (
@@ -437,7 +437,7 @@ export const CommandCenter: React.FC = () => {
                                 ))}
                             </div>
 
-                            {/* Required Tools (NC-5.7) */}
+                            {/* Required Tools (NC-9.0) */}
                             {(() => {
                                 const path = SolutionArchitect.getRecoveryPath(activeSop.failureMode, technicalState);
                                 if (path.actions.length === 0) return null;

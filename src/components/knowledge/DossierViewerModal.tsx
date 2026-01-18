@@ -157,7 +157,7 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                         <div className="p-3 bg-slate-950 border-t border-white/5 flex items-center justify-between">
                             <div className="flex items-center gap-4">
                                 <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">
-                                    NC-5.7 INTEGRITY LOCK ACTIVE
+                                    NC-9.0 INTEGRITY LOCK ACTIVE
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">

@@ -95,7 +95,7 @@ export const EngineeringDossierCard: React.FC = () => {
                             <h3 className="text-sm font-black text-h-gold uppercase tracking-[0.2em]">
                                 AnoHUB Trust Architecture
                             </h3>
-                            <p className="text-[10px] text-slate-500 font-mono">NC-5.7 Integrity Check: 854 Files Digested</p>
+                            <p className="text-[10px] text-slate-500 font-mono">NC-9.0 Integrity Check: 854 Files Digested</p>
                         </div>
                     </div>
 
@@ -304,7 +304,7 @@ export const EngineeringDossierCard: React.FC = () => {
                             {/* Modal Footer */}
                             <div className="p-4 bg-h-gold/5 border-t border-white/5 text-center">
                                 <p className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.3em]">
-                                    NC-5.7 Integrity Layer // SHA-256 Validated
+                                    NC-9.0 Integrity Layer // SHA-256 Validated
                                 </p>
                             </div>
                         </motion.div>

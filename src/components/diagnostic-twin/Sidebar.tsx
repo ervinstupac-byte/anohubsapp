@@ -284,7 +284,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             }
         ];
 
-        return allSectors; // Force show all sectors for all personas (NC-5.7 Requirement)
+        return allSectors; // Force show all sectors for all personas (NC-9.0 Requirement)
     }, [t, activePersona]);
 
     const toggleSector = (id: string) => {
@@ -421,7 +421,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />
-                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'} // NC-5.7</span>
+                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'} // NC-9.0</span>
                                 </div>
                                 <span className={hiveStatus?.connected ? 'text-emerald-600 font-black' : 'text-slate-500'}>
                                     {hiveStatus?.connected ? 'ENCRYPTED' : 'OFFLINE'}

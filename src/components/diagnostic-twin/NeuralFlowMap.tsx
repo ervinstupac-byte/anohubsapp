@@ -24,7 +24,7 @@ const TurbineUnit: React.FC<{
     onAlertClick?: () => void;
 }> = React.memo(({ id, name, status, mw, eccentricity, vibration, onAlertClick }) => {
     const { t } = useTranslation();
-    // NC-5.7 Reactive Color Logic: Base color on physics metrics
+    // NC-9.0 Reactive Color Logic: Base color on physics metrics
     // Vibration > 0.05 or Eccentricity > 0.8 triggers Warning/Critical aesthetics
     const isVibrationCritical = vibration > 0.06;
     const isEccentricityWarning = eccentricity > 0.75;
@@ -80,7 +80,7 @@ const TurbineUnit: React.FC<{
                     <div className="w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(6,182,212,0.1)_50%,transparent_75%)] bg-[length:32px_32px] animate-[slide_1.5s_linear_infinite]"></div>
                 )}
                 {/* Physics Breach Alert: Triggered by critical vibration or manual override for UNIT_02 */}
-                {(isVibrationCritical || (id === 'UNIT_02' && vibration > 0.05)) && (
+                {(isVibrationCritical || (name === 'UNIT_02' && vibration > 0.05)) && (
                     <div
                         onClick={(e) => {
                             e.stopPropagation();
@@ -281,7 +281,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     <div className="relative flex flex-col items-center justify-center sm:mx-4">
                         <div className="w-[2px] h-40 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent"></div>
 
-                        {/* HEALTH DELTA INDICATOR (NC-5.7 FLEET INTEL) */}
+                        {/* HEALTH DELTA INDICATOR (NC-9.0 FLEET INTEL) */}
                         {demoMode.active && (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}

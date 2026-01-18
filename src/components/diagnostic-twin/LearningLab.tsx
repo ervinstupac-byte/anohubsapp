@@ -30,7 +30,7 @@ export const LearningLab = () => {
     // We access the REAL global state for weights/reinforcement
     // But we run the Kernel LOCALLY on test data to prove the math
     const { patternWeights, reinforcePattern } = useContextAwareness() as any;
-    const [accessStatus] = useState<'GRANTED' | 'RESTRICTED'>('GRANTED'); // Forced GRANTED for NC-5.7
+    const [accessStatus] = useState<'GRANTED' | 'RESTRICTED'>('GRANTED'); // Forced GRANTED for NC-9.0
     const [viewMode, setViewMode] = useState<'DIAGNOSTICS' | 'ROADMAP'>('DIAGNOSTICS');
 
     const [selectedScenario, setSelectedScenario] = useState<keyof typeof TEST_DATABASE>('bolt_looseness');

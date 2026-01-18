@@ -365,7 +365,7 @@ export const ExecutiveDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* NC-5.7: Trust & Authority Footer */}
+                    {/* NC-9.0: Trust & Authority Footer */}
                     <div className="pt-10">
                         <EngineeringDossierCard />
                     </div>

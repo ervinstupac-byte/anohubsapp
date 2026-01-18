@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { useAssetContext } from '../contexts/AssetContext'; // <--- NEW
 import { useContextAwareness } from '../contexts/ContextAwarenessContext'; // <--- NEW
 import { useDensity } from '../contexts/DensityContext'; // <--- Density Control Phase 4
@@ -29,13 +30,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const { selectedAsset } = useAssetContext(); // <--- Get Active Asset
     const { activePersona, hiveStatus } = useContextAwareness(); // <--- Get Persona & Sync
     const { mode, toggleDensity } = useDensity();
+    const { isCommanderMode, toggleCommanderMode } = useTelemetryStore();
 
     // const [searchQuery, setSearchQuery] = useState(''); // Removed in favor of Global Command Palette
     // const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
-    // Heritage (NC-5.7) Logic
+    // Heritage (NC-9.0) Logic
     const alignment = techState.mechanical.alignment || 0;
     const water = techState.identity.fluidIntelligence.oilSystem.waterContentPPM || 0;
     const tan = techState.identity.fluidIntelligence.oilSystem.tan || 0;
@@ -201,6 +203,15 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     {/* Mobile Search Icon */}
                     <button onClick={triggerCommandPalette} className="md:hidden p-2 text-slate-400">
                         <Search className="w-5 h-5" />
+                    </button>
+
+                    {/* Commander Mode Toggle (NC-8.0 Global) */}
+                    <button
+                        onClick={toggleCommanderMode}
+                        title={isCommanderMode ? "Switch to Developer View" : "Switch to Commander Mode (NC-9.0)"}
+                        className={`p-2 rounded-full transition-all duration-500 ${isCommanderMode ? 'bg-h-gold/20 text-h-gold shadow-[0_0_15px_rgba(255,184,0,0.3)] border border-h-gold/50' : 'bg-white/5 text-slate-500 border border-white/5 hover:border-white/20'}`}
+                    >
+                        <ShieldCheck className={`w-5 h-5 ${isCommanderMode ? 'fill-current' : ''}`} />
                     </button>
 
                     {/* Heritage Status (Golden Seal) */}

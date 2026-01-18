@@ -75,7 +75,7 @@ export class ForensicReportService {
         doc.setFontSize(7);
         doc.text("ISO IMS VERIFIED // 2024", 35, 32.5, { align: 'center' });
 
-        // Database Strength Metric - NC-5.7
+        // Database Strength Metric - NC-9.0
         doc.setTextColor(34, 211, 238); // Cyan 400
         doc.setFontSize(7);
         doc.setFont("Roboto", "bold");
@@ -89,7 +89,7 @@ export class ForensicReportService {
 
         const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
         doc.setTextColor(234, 179, 8); // Gold for Sync Status
-        doc.text(`NC-5.7 SYNC: SECURE_VAULT_ACTIVE`, pageWidth - 15, 25, { align: 'right' });
+        doc.text(`NC-9.0 SYNC: SECURE_VAULT_ACTIVE`, pageWidth - 15, 25, { align: 'right' });
         doc.setTextColor(148, 163, 184); // Slate 400
         doc.text(`TIMESTAMP: ${timestamp} UTC`, pageWidth - 15, 32, { align: 'right' });
     }
@@ -106,7 +106,7 @@ export class ForensicReportService {
             doc.setTextColor(234, 179, 8); // Gold
             doc.setFontSize(60);
             doc.setGState(new (doc as any).GState({ opacity: 0.05 }));
-            doc.text("NC-5.7 ISO 9001:2015 INTEGRITY AUDIT", pageWidth / 2, pageHeight / 2, {
+            doc.text("NC-9.0 ISO 9001:2015 INTEGRITY AUDIT", pageWidth / 2, pageHeight / 2, {
                 align: 'center',
                 angle: 45
             });
@@ -121,7 +121,7 @@ export class ForensicReportService {
             doc.setTextColor(100, 116, 139); // Slate 500
 
             // Digital Signature
-            const sig = `DIGITAL-FRNSC-SIG: ${Math.random().toString(36).substring(2, 15).toUpperCase()} | NC-5.7 DOSSIER-LINKED`;
+            const sig = `DIGITAL-FRNSC-SIG: ${Math.random().toString(36).substring(2, 15).toUpperCase()} | NC-9.0 DOSSIER-LINKED`;
             doc.text(sig, 15, pageHeight - 15);
 
             // Page Number

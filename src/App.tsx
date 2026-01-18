@@ -345,7 +345,7 @@ const AppLayout: React.FC = () => {
 
                         <DashboardHeader
                             onToggleSidebar={() => setIsSidebarOpen(true)}
-                            title={<span className="text-h-gold">ANOHUB // NC-5.7 NEURAL CORE</span>}
+                            title={<span className="text-h-gold">ANOHUB // NC-9.0 NEURAL CORE</span>}
                         />
 
                         <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}

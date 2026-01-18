@@ -131,7 +131,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             <span className="text-[clamp(7px,0.9vh,9px)] font-mono font-black text-slate-400 uppercase tracking-wider">TELEMETRY_LINK: ESTABLISHED</span>
                         </div>
                         <div className="w-px h-4 bg-white/10 shrink-0" />
-                        <div className="text-[clamp(7px,0.9vh,9px)] font-mono font-bold text-h-gold tracking-wider uppercase">SECURE_SYNC: NC-5.7 CRYPTO</div>
+                        <div className="text-[clamp(7px,0.9vh,9px)] font-mono font-bold text-h-gold tracking-wider uppercase">SECURE_SYNC: NC-9.0 CRYPTO</div>
                     </div>
                     <div className="text-[clamp(7px,0.8vh,8px)] font-mono text-slate-600 font-black tracking-[0.2em] uppercase truncate ml-4">HPP_NODE_BIH_44.92N_15.87E</div>
                 </motion.div>

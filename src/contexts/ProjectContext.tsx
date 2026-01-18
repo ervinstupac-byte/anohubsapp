@@ -205,7 +205,7 @@ export const ProjectProvider = ({ children, initialState }: { children: ReactNod
                 console.log(`[CEREBRO] Neural Core waking up from ${PERSISTENCE_KEY}`);
                 const parsed = JSON.parse(saved);
 
-                // --- ROBUST DEEP MERGE (NC-5.7 Directive) ---
+                // --- ROBUST DEEP MERGE (NC-9.0 Directive) ---
                 // We ensure sub-objects exist even if the saved state is from an older version
                 const merged: TechnicalProjectState = {
                     ...initial,

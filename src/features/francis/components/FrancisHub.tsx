@@ -115,7 +115,7 @@ export const FrancisHub: React.FC = () => {
                         className={`flex items-center gap-2 px-3 py-1.5 rounded border transition-all ${isCommanderMode ? 'border-h-gold bg-h-gold/20 text-h-gold shadow-[0_0_15px_rgba(255,184,0,0.2)]' : 'border-white/10 text-slate-500 hover:border-white/20'}`}
                     >
                         <Shield className={`w-3 h-3 ${isCommanderMode ? 'fill-current' : ''}`} />
-                        <span className="font-bold tracking-widest">{isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}</span>
+                        <span className="font-bold tracking-widest">{isCommanderMode ? 'COMMANDER ACTIVE // NC-9.0' : 'COMMANDER MODE // NC-9.0'}</span>
                     </button>
 
                     <div className="opacity-30">|</div>

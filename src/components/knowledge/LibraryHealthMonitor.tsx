@@ -92,7 +92,7 @@ export const LibraryHealthMonitor: React.FC = () => {
                         System Health Monitor
                     </h1>
                     <p className="text-xs font-mono text-h-gold mt-2 uppercase tracking-[0.3em] font-black">
-                        Protocol NC-5.7 // Library Ingestion Pipeline
+                        Protocol NC-9.0 // Library Ingestion Pipeline
                     </p>
                 </div>
                 <div className="text-right">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
- * SystemBootScreen (COMMANDER NC-5.7)
+ * SystemBootScreen (COMMANDER NC-9.0)
  * High-end initialization experience with technical flickering text and premium aesthetics.
  */
 export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComplete }) => {

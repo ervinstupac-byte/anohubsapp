@@ -22,33 +22,28 @@
     "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
   "manifesto": {
-    "title": "The Roots of Engineering",
-    "subtitle": "An Ethics Manifesto for the 50-Year Asset",
-    "quote": "\"Precision is not a luxury; it is the fundamental ethics of mechanical engineering. We aim for 50 years, not 5.\"",
-    "classification": "Classification: Engineering Ethics / NC-4.2",
-    "version": "Ver: 2026.01.04",
+    "classification": "TOP_SECRET // NEURAL_CORE // NC-9.0",
+    "version": "v9.0.854 (Dossier Edition)",
+    "title": "THE FRANCIS INTELLIGENCE MANIFESTO",
+    "subtitle": "Autonomous Predictive Maintenance & Forensic Diagnostics",
+    "quote": "\"Between failure and stability stands only the precision of our data.\"",
     "section1": {
-      "title": "I. The 0.05 mm/m Law",
-      "content": "Precision is not a preference; it is a physical mandate. A shaft misaligned by more than 0.05 mm/m introduces parasitic vectors that devour Babbitt metal and fatigue steel components. To ignore this limit is to willfully accelerate the decay of human infrastructure.",
-      "quote": "\"The machine reflects the soul of its maintainer.\""
+      "title": "ARCHIVE INTEGRITY (NC-7.0)",
+      "content": "Based on the absolute integrity of 854 physical engineering sources. Every data point is verified via SHA-256 hash algorithm, ensuring diagnoses are immutable and grounded in verified machine history.",
+      "quote": "\"Verified against 854+ sources — knowledge is our first line of defense.\""
     },
     "section2": {
-      "title": "II. The 48% Dynamic Risk Rule",
-      "content": "When dynamic loads—vibration, water hammer, or thermal drift—exceed 48% of the design baseline, the rate of fatigue accumulation becomes non-linear. This is the 'Point of No Return' for Heritage Assets. Our duty is to keep the heartbeat of the machine within the safe 48% envelope."
+      "title": "PREDICTIVE LOGIC (NC-8.0)",
+      "content": "We do not wait for thresholds; we predict them. Using linear regression of vibration trends ($VIB\\_X\\_PEAK$), AnoHUB identifies deviations 72 hours before critical failure, pushing the boundaries of PdM."
     },
     "section3": {
-      "title": "III. The Ethical Obligation",
-      "content": "We build and maintain for those who will stand here in 2075. Every micron measured, every bolt torqued, and every oil sample analyzed is a contract signed with the future. Precision is our apology for the entropy of the universe."
+      "title": "ISO STANDARDIZATION",
+      "content": "Every 'Physics Breach' and neural impulse is interpreted strictly according to ISO 10816-5 protocols. Our telemetry is digital evidence aligned with global engineering norms."
     },
     "sidebar": {
-      "standard": "Standard",
-      "target": "Target",
-      "protocol": "Protocol",
-      "signature": "Signature",
-      "heritage": "NC-4.2 HERITAGE",
-      "mtbf": "50 YEAR MTBF",
-      "precisionOnly": "PRECISION-ONLY",
-      "certified": "Certified Heritage Engine"
+      "standard": "ISO 10816-5 // ISO 9001:2015",
+      "mtbf": "Target: > 45,000 Hours",
+      "precisionOnly": "Active Predictive Engine: 72h Lead Time"
     },
     "footer": {
       "approved": "Approved By: Chief Engineering Council",

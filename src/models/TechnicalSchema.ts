@@ -348,7 +348,7 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     mechanical: {
         alignment: 0.02,
         vibration: 2.5,
-        vibrationX: 0,
+        vibrationX: 0.055,
         vibrationY: 0,
         rpm: 500,
         bearingTemp: 45,

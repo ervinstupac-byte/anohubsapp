@@ -70,7 +70,7 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
         }
 
         // 4. SPECIAL CONSTRAINT: WICKET GATES before HEAD COVER
-        // Covered by dependency check generally, but let's ensure specific NC-5.7 rule is explicit
+        // Covered by dependency check generally, but let's ensure specific NC-9.0 rule is explicit
         if (partId === 'HEAD_COVER' && !assembledParts.includes('WICKET_GATES')) {
             return { valid: false, errorKey: 'seq_004' };
         }

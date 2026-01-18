@@ -11,7 +11,7 @@ interface HeritagePrecisionBannerProps {
 const GOLDEN_STANDARD = 0.05; // mm/m - The ethical limit
 
 /**
- * HERITAGE PRECISION BANNER (NC-5.7)
+ * HERITAGE PRECISION BANNER (NC-9.0)
  * 
  * The 0.05 mm/m standard is non-negotiable. This banner serves as a constant
  * reminder of the engineering precision that defines turbine longevity.
