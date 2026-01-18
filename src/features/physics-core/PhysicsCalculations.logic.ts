@@ -118,7 +118,27 @@ export const calculateEccentricity = (
     const a = Decimal.max(adjustedX, adjustedY);
     const b = Decimal.min(adjustedX, adjustedY);
 
-    return a.isZero() ? new Decimal(0) : Decimal.sqrt(new Decimal(1).sub(b.pow(2).div(a.pow(2))));
+    // Robustness guard:
+    // - If no measurable orbit (a == 0) -> eccentricity 0
+    // - If the smaller axis is zero (single-axis reading), avoid defaulting to 1.0
+    //   which would flag critical. Treat very small amplitudes as nominal,
+    //   and cap single-axis-derived eccentricity to avoid false positives.
+    if (a.isZero()) return new Decimal(0);
+
+    if (b.isZero()) {
+        // If the dominant axis amplitude is negligible, treat as nominal
+        if (a.lt(new Decimal('0.01'))) return new Decimal(0);
+
+        // Derive a proportional eccentricity from the dominant amplitude but cap it
+        // to avoid producing a full-1.0 eccentricity when one axis is missing.
+        const proportional = a.div(a.plus(new Decimal(1))).toDecimalPlaces(3);
+        return Decimal.min(proportional, new Decimal('0.75'));
+    }
+
+    // Standard two-axis eccentricity calculation
+    const ratio = b.pow(2).div(a.pow(2));
+    const val = Decimal.max(new Decimal(0), new Decimal(1).sub(ratio));
+    return Decimal.sqrt(val);
 };
 
 export const calculateGridStressFactor = (frequency: number): number => {
