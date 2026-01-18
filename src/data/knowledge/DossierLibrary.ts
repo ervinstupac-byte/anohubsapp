@@ -22,8 +22,8 @@ function normalizeManifestPath(raw: string): string {
   // Preserve original casing; normalize separators and strip leading `public/` or `public/archive/`.
   const forward = raw.replace(/\\+/g, '/');
   const withoutPublic = forward.replace(/^public\//i, '');
-  // If manifest included an initial 'archive/' segment, strip it so downstream code can prefix '/archive/'.
-  return withoutPublic.replace(/^archive\//i, '');
+  // If manifest included an initial 'archive/' segment, strip it. Use lowercase to match disk.
+  return withoutPublic.replace(/^archive\//i, '').toLowerCase();
 }
 
 const manifest = (manifestRaw as Array<{ file: string; hash: string }>) || [];

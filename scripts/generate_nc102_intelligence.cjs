@@ -6,7 +6,8 @@ const manifest = require('./hashes_applied.json');
 function normalizeManifestPath(raw) {
   const forward = raw.replace(/\\+/g, '/');
   const withoutPublic = forward.replace(/^public\//i, '');
-  return withoutPublic.replace(/^archive\//i, '');
+  // normalize to lowercase to match public/archive folder layout on disk
+  return withoutPublic.replace(/^archive\//i, '').toLowerCase();
 }
 
 function extractSection(html, labels) {
@@ -64,6 +65,7 @@ function parseDueDays(text) {
 }
 
 const results = [];
+const errors = [];
 
 for (const entry of manifest) {
   const rel = normalizeManifestPath(entry.file);
@@ -72,11 +74,48 @@ for (const entry of manifest) {
   try {
     html = fs.readFileSync(filePath, 'utf8');
   } catch (e) {
+    // Log and continue with a placeholder entry so every manifest row is represented
+    errors.push({ file: entry.file, reason: String(e) });
+    const title = path.basename(rel) || entry.file;
+    const stat = (() => { try { return fs.statSync(filePath); } catch (e2) { return null; } })();
+    const date = stat ? stat.mtime.toISOString() : new Date().toISOString();
+    results.push({
+      path: `/archive/${rel.replace(/^\/+/, '')}`,
+      rel,
+      title,
+      date,
+      hash: entry.hash,
+      topic: inferTopic(rel),
+      currentAnalysis: null,
+      operationalRecommendation: '[MISSING: FILE_READ_ERROR]',
+      score: 0,
+      maintenanceDueDays: null,
+      classification: 'NOMINAL'
+    });
     continue;
   }
 
   const currentAnalysis = extractSection(html, ['Current Analysis', 'Analysis']);
-  const operationalRecommendation = extractSection(html, ['Operational Recommendation', 'Recommendation', 'Operational Recommendations']);
+  let operationalRecommendation = extractSection(html, ['Operational Recommendation', 'Recommendation', 'Operational Recommendations']);
+
+  // Ensure every entry has a title and a date. Try <title> or <time>, fallback to fs.mtime
+  let title = null;
+  const mtitle = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+  if (mtitle && mtitle[1]) title = mtitle[1].trim();
+  if (!title) title = path.basename(rel) || rel;
+
+  let date = null;
+  const mtimeTag = html.match(/<time[^>]*>([^<]+)<\/time>/i) || html.match(/<meta[^>]*name=["']?date["']?[^>]*content=["']([^"']+)["'][^>]*>/i);
+  if (mtimeTag && mtimeTag[1]) date = new Date(mtimeTag[1]).toISOString();
+  if (!date) {
+    try { date = fs.statSync(filePath).mtime.toISOString(); } catch (e) { date = new Date().toISOString(); }
+  }
+
+  if (!operationalRecommendation) {
+    // Log missing recommendation but continue; provide placeholder
+    errors.push({ file: rel, reason: 'Missing operational recommendation' });
+    operationalRecommendation = '[MISSING: OPERATIONAL_RECOMMENDATION]';
+  }
 
   const score = scoreText((currentAnalysis || '') + ' ' + (operationalRecommendation || ''));
   const due = parseDueDays((currentAnalysis || '') + ' ' + (operationalRecommendation || ''));
@@ -85,7 +124,8 @@ for (const entry of manifest) {
   results.push({
     path: `/archive/${rel.replace(/^\/+/, '')}`,
     rel,
-    title: rel.split('/').pop() || rel,
+    title,
+    date,
     hash: entry.hash,
     topic,
     currentAnalysis,
@@ -137,5 +177,9 @@ const report = {
 const outDir = path.join(__dirname, 'reports');
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, 'nc102_intelligence.json'), JSON.stringify(report, null, 2), 'utf8');
+if (errors.length) {
+  fs.writeFileSync(path.join(outDir, 'nc102_intelligence_errors.json'), JSON.stringify({ generatedAt: new Date().toISOString(), errors }, null, 2), 'utf8');
+  console.warn('NC-10.2 Intelligence generator logged', errors.length, 'issues ->', path.join(outDir, 'nc102_intelligence_errors.json'));
+}
 
 console.log('NC-10.2 Intelligence report generated:', path.join(outDir, 'nc102_intelligence.json'));

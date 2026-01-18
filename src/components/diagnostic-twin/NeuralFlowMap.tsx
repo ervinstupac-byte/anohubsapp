@@ -123,7 +123,13 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     const isoJustification = MasterIntelligenceEngine.getISOJustification(isoZone);
 
     const handleOpenDossier = (path: string) => {
-        const source = DOSSIER_LIBRARY.find(d => d.path === path);
+        // Be resilient to case differences: match via lowercase
+        const normalized = (path || '').toString().toLowerCase();
+        let source = DOSSIER_LIBRARY.find(d => d.path.toLowerCase() === normalized || (`/archive/${d.path.replace(/^\/+/, '')}`).toLowerCase() === normalized);
+        if (!source) {
+            // try matching by suffix
+            source = DOSSIER_LIBRARY.find(d => normalized.endsWith((d.path || '').toLowerCase()) || normalized.endsWith((('/archive/' + d.path).toLowerCase())) );
+        }
         if (source) {
             let activePath = source.path;
             if (!activePath.startsWith('/') && !activePath.startsWith('http')) {
@@ -375,8 +381,8 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         mw={selectedAsset?.specs?.power_output ?? mwOutput}
                         eccentricity={orbit.eccentricity}
                         vibration={vibration.x}
-                        onAlertClick={() => handleOpenDossier('/archive/Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
-                        onComponentClick={() => handleOpenDossier('/archive/Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
+                        onAlertClick={() => handleOpenDossier('/archive/turbine_friend/francis_h/francis_symptom_dictionary/index.html')}
+                        onComponentClick={() => handleOpenDossier('/archive/turbine_friend/francis_h/francis_symptom_dictionary/index.html')}
                     />
 
                     <div className="relative flex flex-col items-center justify-center sm:mx-4">
@@ -409,8 +415,8 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                         mw={(selectedAsset?.specs?.power_output ?? mwOutput) * 0.98}
                         eccentricity={orbit.eccentricity * 0.15} // UNIT_02 staying nominal
                         vibration={vibration.y * 0.2}
-                        onAlertClick={() => handleOpenDossier('/archive/Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
-                        onComponentClick={() => handleOpenDossier('/archive/Turbine_Friend/Francis_H/Francis_Symptom_Dictionary/index.html')}
+                        onAlertClick={() => handleOpenDossier('/archive/turbine_friend/francis_h/francis_symptom_dictionary/index.html')}
+                        onComponentClick={() => handleOpenDossier('/archive/turbine_friend/francis_h/francis_symptom_dictionary/index.html')}
                     />
                 </div>
 

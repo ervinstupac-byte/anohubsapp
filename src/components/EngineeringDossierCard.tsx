@@ -18,6 +18,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { DossierViewerModal } from './knowledge/DossierViewerModal';
 import { ROUTES, getMaintenancePath } from '../routes/paths';
 import { DOSSIER_LIBRARY, DossierFile } from '../data/knowledge/DossierLibrary';
+import { useIntelligenceReport } from '../services/useIntelligenceReport';
 
 interface DossierCategory {
     label: string;
@@ -51,10 +52,27 @@ export const EngineeringDossierCard: React.FC = () => {
 
     const provenSources: DossierFile[] = DOSSIER_LIBRARY;
 
+    // Merge intelligence report entries for search and badges
+    const { report: intelReport } = useIntelligenceReport(0);
+    const intelMap = React.useMemo(() => {
+        const map: Record<string, any> = {};
+        if (!intelReport || !intelReport.all) return map;
+        for (const e of intelReport.all) {
+            // keys: absolute path and rel
+            if (e.path) map[e.path.toLowerCase()] = e;
+            if (e.rel) map[('/archive/' + e.rel).toLowerCase()] = e;
+            if (e.rel) map[e.rel.toLowerCase()] = e;
+        }
+        return map;
+    }, [intelReport]);
+
     const filteredSources = useMemo(() => {
         return provenSources.filter(s => {
-            const matchesSearch = s.path.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                s.justification.toLowerCase().includes(searchTerm.toLowerCase());
+            const term = searchTerm.toLowerCase();
+            const intel = intelMap[(s.path || '').toLowerCase()];
+            const matchesSearch = s.path.toLowerCase().includes(term) ||
+                s.justification.toLowerCase().includes(term) ||
+                (intel && ((intel.title || '').toLowerCase().includes(term) || (intel.currentAnalysis || '').toLowerCase().includes(term) || (intel.operationalRecommendation || '').toLowerCase().includes(term)));
             const matchesCategory = selectedCategory ? s.category === selectedCategory : true;
             return matchesSearch && matchesCategory;
         });
@@ -186,9 +204,16 @@ export const EngineeringDossierCard: React.FC = () => {
                                                     {source.path.split('/').pop()}
                                                 </span>
                                             </div>
-                                            <span className="text-[8px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-500 font-mono uppercase">
-                                                {source.category.slice(0, 3)}
-                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[8px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-500 font-mono uppercase">
+                                                    {source.category.slice(0, 3)}
+                                                </span>
+                                                {intelMap[(source.path || '').toLowerCase()] && (
+                                                    <span className="text-[8px] px-1.5 py-0.5 rounded bg-rose-900 text-rose-300 font-mono uppercase">
+                                                        {intelMap[(source.path || '').toLowerCase()].classification || 'NOMINAL'}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                         <p className="text-[9px] text-slate-500 leading-tight italic">
                                             "{source.justification}"
