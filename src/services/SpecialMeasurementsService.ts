@@ -4,7 +4,7 @@
 
 export interface GeodeticMeasurement {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     shaftDeviation: number; // mm/m
     foundationSettlement: number; // mm
     bearingElevations: number[]; // mm (for each bearing)
@@ -18,7 +18,7 @@ export interface GeodeticMeasurement {
 
 export interface VibrationMeasurement {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     horizontalVibration: number; // mm/s
     verticalVibration: number; // mm/s
     axialVibration: number; // mm/s
@@ -27,7 +27,7 @@ export interface VibrationMeasurement {
 
 export interface GeneratorMagneticField {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     airGapVariation: number[]; // mm (measured at 8 points around rotor)
     eccentricity: number; // mm
     eccentricityAngle: number; // degrees
@@ -298,7 +298,7 @@ export class SpecialMeasurementsService {
 /*
 const geodetic: GeodeticMeasurement = {
     timestamp: Date.now(),
-    assetId: 'FRANCIS-001',
+    assetId: 1001,
     shaftDeviation: 0.08, // mm/m (exceeds 0.05 tolerance!)
     foundationSettlement: 1.5, // mm
     bearingElevations: [100.000, 99.998, 99.997, 100.001],
@@ -307,7 +307,7 @@ const geodetic: GeodeticMeasurement = {
 
 const magnetic: GeneratorMagneticField = {
     timestamp: Date.now(),
-    assetId: 'FRANCIS-001',
+    assetId: 1001,
     airGapVariation: [10.2, 10.5, 10.8, 10.4, 10.1, 10.3, 10.6, 10.2], // mm
     eccentricity: 0.25, // mm
     eccentricityAngle: 45 // degrees

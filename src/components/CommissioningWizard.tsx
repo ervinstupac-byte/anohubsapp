@@ -65,7 +65,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
 
     const startCommissioning = async () => {
         const newSession = await CommissioningService.startCommissioning(
-            asset.id,
+            Number(asset.id),
             asset.name,
             asset.turbine_family
         );

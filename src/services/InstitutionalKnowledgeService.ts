@@ -38,7 +38,7 @@ export interface ExpertKnowledgeEntry {
 
 export interface EngineerNote {
     id: string;
-    assetId: string;
+    assetId: number;
     engineerId: string;
     engineerName: string;
 

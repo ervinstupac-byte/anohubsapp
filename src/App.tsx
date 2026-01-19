@@ -90,6 +90,7 @@ const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDa
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
+const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
 
 // Maintenance components moved to MaintenanceRouter
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
@@ -106,6 +107,11 @@ const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
 
 // Maintenance Module - Extracted to dedicated sub-router
 const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.tsx'));
+
+// Multi-tier entry points (Engineer / Owner / Hydroschool)
+const EngineerLanding = React.lazy(() => import('./pages/EngineerLanding').then(m => ({ default: m.EngineerLanding })));
+const OwnerLanding = React.lazy(() => import('./pages/OwnerLanding').then(m => ({ default: m.OwnerLanding })));
+const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding').then(m => ({ default: m.HydroschoolLanding })));
 
 
 
@@ -298,7 +304,7 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
                     {isCriticalDemo && (
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -354,7 +360,7 @@ const AppLayout: React.FC = () => {
                                     {!isHub && location.pathname !== '/dashboard' && location.pathname !== '/executive' && <Breadcrumbs />}
                                     <ErrorBoundary fallback={
                                         <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-                                            <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20 animate-pulse">
+                                            <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20">
                                                 <span className="text-4xl">⚠️</span>
                                             </div>
                                             <h2 className="text-xl font-black text-white uppercase tracking-widest">Module System Failure</h2>
@@ -397,6 +403,18 @@ const AppLayout: React.FC = () => {
 
                                                     {/* PUBLIC-FACING / STAKEHOLDER */}
                                                     <Route path="investor-briefing" element={<InvestorBriefing />} />
+                                                    {/* Multi-tier entry points */}
+                                                    <Route path="engineer" element={
+                                                        <RoleGuard allowedRoles={['ENGINEER', 'TECHNICIAN', 'MANAGER']}>
+                                                            <EngineerLanding />
+                                                        </RoleGuard>
+                                                    } />
+                                                    <Route path="owner" element={
+                                                        <RoleGuard allowedRoles={['OWNER', 'MANAGER']}>
+                                                            <OwnerLanding />
+                                                        </RoleGuard>
+                                                    } />
+                                                    <Route path="hydroschool" element={<HydroschoolLanding />} />
                                                     <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
                                                     <Route path="digital-introduction" element={<DigitalIntroduction />} />
 
@@ -445,6 +463,12 @@ const AppLayout: React.FC = () => {
                                                     <Route path="admin-approval" element={
                                                         <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
                                                             <AdminApproval />
+                                                        </RoleGuard>
+                                                    } />
+
+                                                    <Route path="admin/health" element={
+                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                            <AdminHealth />
                                                         </RoleGuard>
                                                     } />
 

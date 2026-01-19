@@ -9,7 +9,7 @@ export const OilAnalysisDashboard: React.FC = () => {
     const [currentSample, setCurrentSample] = useState<OilSample>({
         sampleId: 'OIL-2025-001',
         timestamp: Date.now(),
-        assetId: 'KAPLAN-001',
+        assetId: 5001,
         location: 'BEARING_UPPER',
         viscosityIndex: 52,
         tan: 0.8,

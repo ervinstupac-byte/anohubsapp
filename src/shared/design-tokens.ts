@@ -14,7 +14,7 @@ export const STATUS_COLORS = {
         bg: 'bg-cyan-500/5',
         bgHover: 'bg-cyan-500/10',
         text: 'text-cyan-400',
-        glow: 'shadow-[0_0_30px_rgba(34,211,238,0.1)]',
+        glow: '',
         dot: 'bg-cyan-500',
         hex: '#22d3ee'
     },
@@ -24,7 +24,7 @@ export const STATUS_COLORS = {
         bg: 'bg-amber-500/5',
         bgHover: 'bg-amber-500/10',
         text: 'text-amber-400',
-        glow: 'shadow-[0_0_30px_rgba(245,158,11,0.1)]',
+        glow: '',
         dot: 'bg-amber-500',
         hex: '#f59e0b'
     },
@@ -34,7 +34,7 @@ export const STATUS_COLORS = {
         bg: 'bg-red-500/5',
         bgHover: 'bg-red-500/10',
         text: 'text-red-400',
-        glow: 'shadow-[0_0_30px_rgba(239,68,68,0.15)]',
+        glow: '',
         dot: 'bg-red-500',
         hex: '#ef4444'
     },
@@ -54,7 +54,7 @@ export const STATUS_COLORS = {
         bg: 'bg-purple-500/5',
         bgHover: 'bg-purple-500/10',
         text: 'text-purple-400',
-        glow: 'shadow-[0_0_30px_rgba(168,85,247,0.1)]',
+        glow: '',
         dot: 'bg-purple-500',
         hex: '#a855f7'
     }
@@ -137,11 +137,11 @@ export const Z_INDEX = {
 // === SECTOR GLOW EFFECTS (Semantic) ===
 // Used for module categorization hover effects
 export const SECTOR_GLOW = {
-    critical: 'shadow-[0_0_30px_rgba(239,68,68,0.3)]',     // Red
-    mechanical: 'shadow-[0_0_30px_rgba(6,182,212,0.3)]',  // Cyan
-    knowledge: 'shadow-[0_0_30px_rgba(59,130,246,0.3)]',  // Blue
-    electrical: 'shadow-[0_0_30px_rgba(168,85,247,0.3)]', // Purple
-    financial: 'shadow-[0_0_30px_rgba(34,197,94,0.3)]',   // Green
+    critical: '',
+    mechanical: '',
+    knowledge: '',
+    electrical: '',
+    financial: '',
 } as const;
 
 export type SectorType = keyof typeof SECTOR_GLOW;

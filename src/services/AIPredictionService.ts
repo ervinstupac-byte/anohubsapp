@@ -55,7 +55,8 @@ export interface PrescriptiveRecommendation {
 }
 
 // --- HISTORICAL DATA STORAGE ---
-const telemetryHistory = new Map<string, TelemetryData[]>();
+// Keyed by numeric asset id to match app-wide asset id type
+const telemetryHistory = new Map<number, TelemetryData[]>();
 const HISTORY_WINDOW_SIZE = 10; // Last 10 measurements
 
 // Simulated incident database (in production, this would come from Supabase)
@@ -85,7 +86,7 @@ class AIPredictionService {
      * MULTI-SENSOR CORRELATION (Spider Logic)
      * Detects synergetic risk when all 3 parameters oscillate simultaneously
      */
-    detectSynergeticRisk(assetId: string, telemetry: TelemetryData): SynergeticRisk {
+    detectSynergeticRisk(assetId: number, telemetry: TelemetryData): SynergeticRisk {
         // Store historical data
         if (!telemetryHistory.has(assetId)) {
             telemetryHistory.set(assetId, []);
@@ -212,7 +213,7 @@ class AIPredictionService {
      * INCIDENT GHOST SIMULATOR
      * Pattern matching with historical incidents using Dynamic Time Warping
      */
-    matchHistoricalPattern(assetId: string, telemetry: TelemetryData): IncidentPattern | null {
+    matchHistoricalPattern(assetId: number, telemetry: TelemetryData): IncidentPattern | null {
         const history = telemetryHistory.get(assetId) || [];
 
         if (history.length < 5) return null;
@@ -421,14 +422,14 @@ class AIPredictionService {
     /**
      * Clear history for asset (useful for testing or after maintenance)
      */
-    clearHistory(assetId: string): void {
+    clearHistory(assetId: number): void {
         telemetryHistory.delete(assetId);
     }
 
     /**
      * Get history size for debugging
      */
-    getHistorySize(assetId: string): number {
+    getHistorySize(assetId: number): number {
         return telemetryHistory.get(assetId)?.length || 0;
     }
 }

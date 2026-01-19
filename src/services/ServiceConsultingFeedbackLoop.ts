@@ -4,7 +4,7 @@
 export interface OptimizationTrackingEntry {
     id: string;
     reportId: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
 
     // Predictions (from ConsultingEngine)
@@ -59,7 +59,7 @@ export class ServiceConsultingFeedbackLoop {
      */
     static async createTrackingEntry(
         reportId: string,
-        assetId: string,
+        assetId: number,
         assetName: string,
         predictions: {
             efficiencyGain: number;

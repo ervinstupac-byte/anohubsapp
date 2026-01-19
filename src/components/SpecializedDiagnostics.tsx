@@ -72,7 +72,7 @@ export const SpecializedDiagnostics: React.FC = () => {
         // Construct Sensor Data from Form Inputs
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
-            assetId: 'manual-diag',
+            assetId: 6001,
             turbineFamily: family,
             common: {
                 vibration: inputs.vibration as number,

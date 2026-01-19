@@ -166,7 +166,7 @@ export class ServiceChecklistEngine {
      */
     static generateServiceAlert(
         checklistId: string,
-        assetId: string,
+        assetId: number,
         assetName: string,
         item: ChecklistItem,
         response: ChecklistItemResponse,
@@ -345,7 +345,7 @@ export class ServiceChecklistEngine {
      * Returns validation result and formatted data for state updates
      */
     static addMeasurement(
-        assetId: string,
+        assetId: number,
         component: string,
         measuredValue: number,
         unit: MeasurementUnit,
@@ -357,7 +357,7 @@ export class ServiceChecklistEngine {
         isValid: boolean;
         validationResult: ValidationResult;
         measurementData: {
-            assetId: string;
+            assetId: number;
             component: string;
             value: number;
             unit: string;
@@ -415,7 +415,7 @@ export class ServiceChecklistEngine {
      * Enhanced validation for high-precision measurements
      */
     static addPrecisionMeasurement(
-        assetId: string,
+        assetId: number,
         component: string,
         measuredValue: number,
         nominalValue: number,
@@ -424,7 +424,7 @@ export class ServiceChecklistEngine {
         isValid: boolean;
         validationResult: ValidationResult;
         measurementData: {
-            assetId: string;
+            assetId: number;
             component: string;
             value: number;
             unit: string;
@@ -509,13 +509,13 @@ export class ServiceChecklistEngine {
      */
     static syncMeasurementToAssetHealth(
         measurementData: {
-            assetId: string;
+            assetId: number;
             component: string;
             healthScore: number;
             timestamp: string;
         }
     ): {
-        assetId: string;
+        assetId: number;
         componentHealth: {
             [component: string]: {
                 score: number;

@@ -39,64 +39,64 @@ export interface InspectionImage {
     timestamp: string;
     notes?: string;
     componentId: string;
-    assetId: string;
+    assetId: number;
 }
 
 interface ComponentStore {
     // Component Health Registry
     componentHealth: {
-        [assetId: string]: {
+        [assetId: number]: {
             [componentId: string]: ComponentHealthData;
         };
     };
 
     // Measurement History
     measurements: {
-        [assetId: string]: {
+        [assetId: number]: {
             [componentId: string]: MeasurementData[];
         };
     };
 
     // Inspection Images
     inspectionImages: {
-        [assetId: string]: {
+        [assetId: number]: {
             [componentId: string]: InspectionImage[];
         };
     };
 
     // Actions - Component Health
     updateComponentHealth: (
-        assetId: string,
+        assetId: number,
         componentId: string,
         healthData: ComponentHealthData
     ) => void;
 
-    getComponentHealth: (assetId: string, componentId: string) => ComponentHealthData | null;
+    getComponentHealth: (assetId: number, componentId: string) => ComponentHealthData | null;
 
     // Actions - Measurements
     addMeasurement: (
-        assetId: string,
+        assetId: number,
         componentId: string,
         measurement: MeasurementData
     ) => void;
 
-    getMeasurements: (assetId: string, componentId: string) => MeasurementData[];
+    getMeasurements: (assetId: number, componentId: string) => MeasurementData[];
 
-    getLatestMeasurement: (assetId: string, componentId: string) => MeasurementData | null;
+    getLatestMeasurement: (assetId: number, componentId: string) => MeasurementData | null;
 
     // Actions - Inspections
     addInspectionImage: (
-        assetId: string,
+        assetId: number,
         componentId: string,
         imageData: Omit<InspectionImage, 'imageId'>
     ) => string; // Returns imageId
 
-    getInspectionImages: (assetId: string, componentId: string) => InspectionImage[];
+    getInspectionImages: (assetId: number, componentId: string) => InspectionImage[];
 
     removeInspectionImage: (imageId: string) => void;
 
     // Utility
-    getAssetHealthScore: (assetId: string) => number;
+    getAssetHealthScore: (assetId: number) => number;
 
     reset: () => void;
 }
@@ -192,18 +192,18 @@ export const useComponentStore = create<ComponentStore>()(
 
             removeInspectionImage: (imageId) => {
                 set((state) => {
-                    const newImages = { ...state.inspectionImages };
+                    const newImages: Record<string, any> = { ...state.inspectionImages } as any;
 
-                    // Find and remove image
-                    Object.keys(newImages).forEach(assetId => {
-                        Object.keys(newImages[assetId]).forEach(componentId => {
-                            newImages[assetId][componentId] = newImages[assetId][componentId].filter(
-                                img => img.imageId !== imageId
-                            );
+                    // Find and remove image (work with string keys returned by Object.keys)
+                    Object.keys(newImages).forEach(aid => {
+                        const comps = newImages[aid] || {};
+                        Object.keys(comps).forEach(componentId => {
+                            comps[componentId] = (comps[componentId] || []).filter((img: InspectionImage) => img.imageId !== imageId);
                         });
+                        newImages[aid] = comps;
                     });
 
-                    return { inspectionImages: newImages };
+                    return { inspectionImages: newImages } as any;
                 });
 
                 console.log(`[ComponentStore] Inspection image removed: ${imageId}`);
@@ -235,8 +235,8 @@ export const useComponentStore = create<ComponentStore>()(
 );
 
 // Selectors
-export const useAssetHealth = (assetId: string) =>
+export const useAssetHealth = (assetId: number) =>
     useComponentStore((state) => state.componentHealth[assetId] || {});
 
-export const useComponentHealthScore = (assetId: string, componentId: string) =>
+export const useComponentHealthScore = (assetId: number, componentId: string) =>
     useComponentStore((state) => state.componentHealth[assetId]?.[componentId]?.score || 100);

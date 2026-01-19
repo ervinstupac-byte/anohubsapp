@@ -279,7 +279,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     { id: 'healthMonitor', title: 'System Health', icon: '🩺', route: '/knowledge/health-monitor', isoRef: 'SOURCES: 202' },
                     { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
                     { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
-                    { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
+                            { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
+                            { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '/engineer' },
+                            { id: 'ownerPortal', title: t('sidebar.modules.owner_portal', 'Owner Portal'), icon: '🏛️', route: '/owner' },
+                            { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '/hydroschool' },
                 ]
             }
         ];

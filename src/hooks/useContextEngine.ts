@@ -311,7 +311,7 @@ export const useContextEngine = () => {
                     const narrative = `Energy signature suggests ${diag.messageKey.toLowerCase()} is deviating from nominal baseline by significant margin. Probability of mechanical stress accumulation > 85%.`;
 
                     createWorkOrder({
-                        assetId: 'IRON-GORGE-01',
+                        assetId: 3001,
                         assetName: 'Iron Gorge HPP',
                         priority: 'HIGH',
                         trigger: 'AI_PREDICTION',

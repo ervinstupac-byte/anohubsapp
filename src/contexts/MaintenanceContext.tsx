@@ -40,7 +40,7 @@ export type WorkOrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELL
 
 export interface WorkOrder {
     id: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
     trigger: 'MANUAL' | 'AI_PREDICTION' | 'SERVICE_ALERT';
     component: string;
@@ -64,16 +64,16 @@ interface MaintenanceContextType {
     createLogEntry: (taskId: string, entry: Omit<LogEntry, 'id' | 'timestamp' | 'summaryDE' | 'pass'>) => Promise<void>;
     validateEntry: (taskId: string, value: number) => { valid: boolean; message: string };
     getTasksByComponent: (componentId: string) => MaintenanceTask[];
-    predictServiceDate: (assetId: string, threshold: number) => Date | null;
+    predictServiceDate: (assetId: number, threshold: number) => Date | null;
     // Work Order Management
     createWorkOrder: (order: Omit<WorkOrder, 'id' | 'status' | 'createdAt' | 'updatedAt'>) => Promise<WorkOrder>;
     updateWorkOrder: (orderId: string, updates: Partial<Pick<WorkOrder, 'status' | 'assignedTechnician' | 'estimatedHoursToComplete'>>) => Promise<void>;
     completeWorkOrder: (orderId: string, completionNotes: string) => Promise<void>;
-    updateOperatingHours: (assetId: string, hours: number) => void;
+    updateOperatingHours: (assetId: number, hours: number) => void;
     // Service Checklist Functions
     activeChecklist: ActiveChecklist | null;
     serviceAlerts: ServiceAlert[];
-    startChecklist: (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => void;
+    startChecklist: (turbineType: TurbineType, assetId: number, assetName: string, technicianName: string) => void;
     updateChecklistItem: (itemId: string, value: any) => void;
     addFieldNote: (itemId: string, transcript: string, audioSrc?: string) => void;
     completeChecklist: () => void;
@@ -222,7 +222,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     };
 
-    const predictServiceDate = useCallback((assetId: string, threshold: number) => {
+    const predictServiceDate = useCallback((assetId: number, threshold: number) => {
         const hours = operatingHours[assetId] || 0;
         const remaining = threshold - (hours % threshold);
         const dailyHours = 20; // Assumption
@@ -295,7 +295,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
     const getTasksByComponent = useCallback((id: string) => tasks.filter(t => t.componentId === id), [tasks]);
 
     // NEW: Service Checklist Functions
-    const startChecklist = (turbineType: TurbineType, assetId: string, assetName: string, technicianName: string) => {
+    const startChecklist = (turbineType: TurbineType, assetId: number, assetName: string, technicianName: string) => {
         const template = ServiceChecklistEngine.getTemplateForTurbine(turbineType);
 
         const newChecklist: ActiveChecklist = {
@@ -546,7 +546,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
      * Update operating hours for asset tracking
      * Used by AI Prediction Context for RUL calculations
      */
-    const updateOperatingHours = useCallback((assetId: string, hours: number): void => {
+    const updateOperatingHours = useCallback((assetId: number, hours: number): void => {
         setOperatingHours(prev => ({ ...prev, [assetId]: hours }));
         console.log(`[MaintenanceContext] Operating hours updated: ${assetId} = ${hours}h`);
     }, []);

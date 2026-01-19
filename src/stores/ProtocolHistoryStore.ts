@@ -6,7 +6,7 @@ export interface ProtocolHistoryEntry {
     id: string;
     protocolId: string;
     protocolName: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
     timestamp: number;
     type: 'protocol' | 'work_order';
@@ -21,7 +21,7 @@ interface ProtocolHistoryState {
 
     // Actions
     addEntry: (entry: Omit<ProtocolHistoryEntry, 'id' | 'timestamp' | 'synced'>) => void;
-    getEntriesForAsset: (assetId: string, hours?: number) => ProtocolHistoryEntry[];
+    getEntriesForAsset: (assetId: number, hours?: number) => ProtocolHistoryEntry[];
     getRecentEntries: (count?: number) => ProtocolHistoryEntry[];
     clearHistory: () => void;
     markAsSynced: (id: string) => void; // NEW

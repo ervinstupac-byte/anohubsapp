@@ -75,7 +75,7 @@ export const Breadcrumbs: React.FC = () => {
         if (ROUTE_LABELS[segment]) return ROUTE_LABELS[segment];
 
         // 2. Check Asset ID Lookup
-        const assetMatch = assets.find(a => a.id === segment);
+        const assetMatch = assets.find(a => String(a.id) === segment);
         if (assetMatch) return `Asset: ${assetMatch.name}`;
 
         // 3. Fallback: Formatted Text

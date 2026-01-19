@@ -54,7 +54,7 @@ export const SealRecovery: React.FC = () => {
                     </div>
 
                     <div className="relative z-10 mb-12">
-                        <div className="w-32 h-32 bg-amber-600 rounded-[3rem] shadow-[0_0_60px_rgba(217,119,6,0.3)] flex items-center justify-center mb-8 mx-auto relative group-hover:scale-110 transition-transform duration-700">
+                        <div data-hotspot-id="seal_package" className="w-32 h-32 bg-amber-600 rounded-[3rem] shadow-[0_0_60px_rgba(217,119,6,0.3)] flex items-center justify-center mb-8 mx-auto relative group-hover:scale-110 transition-transform duration-700">
                             <Construction className="text-white w-16 h-16 animate-pulse" />
                             <Lock className="absolute -bottom-4 -right-4 w-12 h-12 text-slate-950 bg-amber-400 p-2 rounded-2xl border-4 border-slate-950 shadow-xl" />
                         </div>
@@ -62,7 +62,7 @@ export const SealRecovery: React.FC = () => {
                         <h2 className="text-5xl md:text-6xl font-black text-white tracking-tighter uppercase mb-4 italic transition-all group-hover:tracking-normal duration-700">
                             {t('francis.recovery.csTitle')}
                         </h2>
-                        <div className="inline-block px-8 py-2 bg-amber-950/40 text-amber-500 text-sm font-black uppercase tracking-[0.4em] rounded-full border border-amber-500/30 animate-pulse italic">
+                        <div className="inline-block px-8 py-2 bg-amber-950/40 text-amber-500 text-sm font-black uppercase tracking-[0.4em] rounded-full border border-amber-500/30 italic">
                             {t('francis.recovery.csSubtitle')}
                         </div>
                     </div>

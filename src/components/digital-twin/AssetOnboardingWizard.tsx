@@ -76,7 +76,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
     const handleComplete = () => {
         // Build complete AssetIdentity
         const identity = AssetIdentityService.createDefaultIdentity(
-            `asset_${Date.now()}`,
+            Date.now(),
             'New HPP Asset',
             turbineType,
             'System Admin'

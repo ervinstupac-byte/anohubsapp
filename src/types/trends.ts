@@ -54,7 +54,7 @@ export interface PrecisionMeasurement {
 }
 
 export interface FineEngineeringLog {
-    assetId: string;
+    assetId: number;
     measurements: PrecisionMeasurement[];
     lastUpdated: string;
 }

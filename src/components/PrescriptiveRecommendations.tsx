@@ -11,7 +11,7 @@ export const PrescriptiveRecommendations: React.FC = () => {
 
     // Get prescriptions for selected asset
     const assetPrescriptions = Array.from(prescriptions.entries()).filter(([key]) =>
-        key.startsWith(selectedAsset.id)
+        key.startsWith(String(selectedAsset.id))
     );
 
     if (assetPrescriptions.length === 0) {

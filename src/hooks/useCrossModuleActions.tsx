@@ -16,7 +16,7 @@ import type { CardAction } from '../shared/components/ui/EngineeringCard';
  * @param sensorPath - Optional sensor path for contextual filtering (e.g., 'mechanical.vibration')
  */
 export const useCrossModuleActions = (
-    assetId?: string,
+    assetId?: number,
     sensorPath?: string
 ): CardAction[] => {
     const { t } = useTranslation();

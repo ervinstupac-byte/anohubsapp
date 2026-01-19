@@ -21,7 +21,7 @@ export interface AIInsight {
 
 export interface ServiceReportData {
     assetName: string;
-    assetId: string;
+    assetId: number;
     turbineFamily: string;
     serviceDate: string;
     serviceType: string;

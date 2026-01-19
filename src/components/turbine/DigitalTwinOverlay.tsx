@@ -164,8 +164,8 @@ export const DigitalTwinOverlay: React.FC<DigitalTwinOverlayProps> = ({
                             <div className="w-3 h-3 rounded-full bg-amber-500" />
                             <span className="text-xs text-slate-400">Warning Zone</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+                            <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-red-500" />
                             <span className="text-xs text-slate-400">Critical Deviation</span>
                         </div>
                     </div>
@@ -258,7 +258,7 @@ function renderTurbineWireframe(family: string, anomalies: Anomaly[]): React.Rea
                     })}
 
                     {/* Wicket gate ring */}
-                    <circle cx="150" cy="150" r="100" fill="none" stroke={color} strokeWidth="1" strokeDasharray="5,5" opacity="0.5" />
+                    <circle data-hotspot-id="wicket_gates" cx="150" cy="150" r="100" fill="none" stroke={color} strokeWidth="1" strokeDasharray="5,5" opacity="0.5" />
                 </svg>
             );
 
@@ -266,10 +266,10 @@ function renderTurbineWireframe(family: string, anomalies: Anomaly[]): React.Rea
             return (
                 <svg width="300" height="300" viewBox="0 0 300 300">
                     {/* Spiral case */}
-                    <circle cx="150" cy="150" r="120" fill="none" stroke={color} strokeWidth="2" opacity="0.3" />
+                    <circle data-hotspot-id="spiral_case" cx="150" cy="150" r="120" fill="none" stroke={color} strokeWidth="2" opacity="0.3" />
 
                     {/* Runner */}
-                    <circle cx="150" cy="150" r="60" fill="none" stroke={color} strokeWidth="3" />
+                    <circle data-hotspot-id="runner" cx="150" cy="150" r="60" fill="none" stroke={color} strokeWidth="3" />
 
                     {/* Blades (radial) */}
                     {[...Array(12)].map((_, i) => {
@@ -277,6 +277,7 @@ function renderTurbineWireframe(family: string, anomalies: Anomaly[]): React.Rea
                         return (
                             <line
                                 key={i}
+                                data-hotspot-id={`runner_blade_${i+1}`}
                                 x1={150 + Math.cos(angle) * 30}
                                 y1={150 + Math.sin(angle) * 30}
                                 x2={150 + Math.cos(angle) * 60}
@@ -287,9 +288,20 @@ function renderTurbineWireframe(family: string, anomalies: Anomaly[]): React.Rea
                         );
                     })}
 
+                    {/* Guide vanes ring */}
+                    <circle data-hotspot-id="guide_vanes" cx="150" cy="150" r="90" fill="none" stroke={color} strokeWidth="1" strokeDasharray="2,4" opacity="0.6" />
+
+                    {/* Guide bearing pads (visual markers) */}
+                    <circle data-hotspot-id="guide_bearing_pad1" cx="120" cy="60" r="4" fill={color} />
+                    <circle data-hotspot-id="guide_bearing_pad2" cx="180" cy="60" r="4" fill={color} />
+                    <circle data-hotspot-id="guide_bearing_pad3" cx="150" cy="220" r="4" fill={color} />
+
+                    {/* Wicket gate ring */}
+                    <circle data-hotspot-id="wicket_gates" cx="150" cy="150" r="100" fill="none" stroke={color} strokeWidth="1" strokeDasharray="5,5" opacity="0.5" />
+
                     {/* Draft tube */}
-                    <line x1="140" y1="210" x2="140" y2="270" stroke={color} strokeWidth="2" />
-                    <line x1="160" y1="210" x2="160" y2="270" stroke={color} strokeWidth="2" />
+                    <line data-hotspot-id="draft_tube" x1="140" y1="210" x2="140" y2="270" stroke={color} strokeWidth="2" />
+                    <line data-hotspot-id="draft_tube" x1="160" y1="210" x2="160" y2="270" stroke={color} strokeWidth="2" />
                 </svg>
             );
 

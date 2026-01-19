@@ -14,7 +14,7 @@ interface QrCodeProps {
 export const QrCode: React.FC<QrCodeProps> = ({ value, size = 128, className = '' }) => {
 
     // Simple pseudo-random generator seeded by value string to make the "QR" look deterministic
-    const seed = value.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const seed = String(value).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
     // Generate a grid of 8x8 blocks (64 bits)
     const blocks = Array.from({ length: 64 }).map((_, i) => {

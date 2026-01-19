@@ -39,7 +39,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ route }) => {
     if (issueCount === 0) return null;
 
     return (
-        <div className="flex items-center gap-1 px-1.5 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-[9px] font-black text-red-400 uppercase tracking-wider animate-pulse">
+        <div className="flex items-center gap-1 px-1.5 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-[9px] font-black text-red-400 uppercase tracking-wider">
             <AlertCircle className="w-3 h-3" />
             <span>{issueCount} ISSUES</span>
         </div>

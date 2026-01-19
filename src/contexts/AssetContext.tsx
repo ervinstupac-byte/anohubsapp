@@ -16,7 +16,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const { logAction } = useAudit();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [assetLogs, setAssetLogs] = useState<AssetHistoryEntry[]>([]); // <--- NEW: Separate Logs State
-    const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
+    const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
 
     // BroadcastChannel ref for cross-tab communication
@@ -50,11 +50,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     } catch (e) { console.warn('LocalStorage access failed'); }
 
                     const initialAsset = savedAssetId
-                        ? localAssets.find(a => a.id === savedAssetId)
+                        ? localAssets.find(a => a.id === Number(savedAssetId))
                         : localAssets[0];
 
                     if (initialAsset && !selectedAssetId) {
-                        setSelectedAssetId(initialAsset.id);
+                        setSelectedAssetId(initialAsset.id as any as number);
                     }
 
                     console.log('[AssetContext] Step 3: Guest Load Complete');
@@ -68,7 +68,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (data) {
                     console.log('[AssetContext] Step 2: Supabase Assets Loaded:', data.length);
                     const mappedAssets: Asset[] = data.map((item: any) => ({
-                        id: item.id.toString(),
+                        id: item.id,
                         name: item.name,
                         type: item.type,
                         location: item.location,
@@ -88,11 +88,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     } catch (e) { }
 
                     const initialAsset = savedAssetId
-                        ? mappedAssets.find(a => a.id === savedAssetId)
+                        ? mappedAssets.find(a => a.id === Number(savedAssetId))
                         : mappedAssets[0];
 
                     if (initialAsset && !selectedAssetId) {
-                        setSelectedAssetId(initialAsset.id);
+                        setSelectedAssetId(initialAsset.id as any as number);
                     }
                     // --- PERSISTENCE LOGIC END ---
                 }
@@ -125,7 +125,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Fallback: StorageEvent for older browsers
         const handleStorage = (e: StorageEvent) => {
             if (e.key === 'activeAssetId') {
-                setSelectedAssetId(e.newValue);
+                setSelectedAssetId(e.newValue ? Number(e.newValue) : null);
             }
         };
         window.addEventListener('storage', handleStorage);
@@ -138,7 +138,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, []);
 
     // --- NEW: Optimistic Update function ---
-    const updateAsset = (id: string, updates: Partial<Asset>) => {
+    const updateAsset = (id: number, updates: Partial<Asset>) => {
         setAssets(prevAssets => {
             const newAssets = prevAssets.map(asset => {
                 if (asset.id === id) {
@@ -159,7 +159,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     // --- NEW: Log Activity Function ---
-    const logActivity = (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
+    const logActivity = (assetId: number, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
         setAssetLogs(prev => {
             const previousLog = prev[0]; // Assuming desc order
             const previousHash = previousLog?.hash || 'GENESIS_HASH';
@@ -213,16 +213,15 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }, 1000) // 1 second delay
     ).current;
 
-    const selectAsset = useCallback((id: string) => {
+    const selectAsset = useCallback((id: number) => {
         setSelectedAssetId(id);
-        localStorage.setItem('activeAssetId', id); // Save to local storage
+        try { localStorage.setItem('activeAssetId', String(id)); } catch (e) {}
 
         // Broadcast to other tabs instantly
-        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: id });
+        try { assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: id }); } catch (e) {}
 
         const asset = assets.find(a => a.id === id);
         if (asset) {
-            // Call the debounced function instead of direct logAction
             debouncedLogContextSwitch(asset.name);
         }
     }, [assets, debouncedLogContextSwitch]);
@@ -255,9 +254,8 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
             if (isGuest) {
                 await new Promise(resolve => setTimeout(resolve, 800));
-
                 newAsset = {
-                    id: `guest-asset-${Date.now()}`,
+                    id: Date.now(),
                     name: dbPayload.name,
                     type: dbPayload.type,
                     location: dbPayload.location,
@@ -281,7 +279,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (error) throw error;
 
                 newAsset = {
-                    id: data.id.toString(),
+                    id: data.id,
                     name: data.name,
                     type: data.type,
                     location: data.location,

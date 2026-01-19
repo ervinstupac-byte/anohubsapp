@@ -22,7 +22,7 @@ interface Block {
     hash: string;
     prev_hash: string;
     status: string;
-    asset_id?: string;
+    asset_id?: number;
     engineer_id?: string;
 }
 
@@ -338,7 +338,7 @@ export const DigitalIntegrity: React.FC = () => {
                                                     <p className="text-base font-bold text-white tracking-tight">
                                                         {block.data.includes('|') ? block.data.split('|')[2] : 'System Event'}
                                                     </p>
-                                                    {block.asset_id && block.asset_id !== 'ROOT' && (
+                                                    {block.asset_id && String(block.asset_id) !== 'ROOT' && (
                                                         <span className="text-[9px] bg-slate-800 px-2 py-0.5 rounded text-cyan-200 border border-slate-700 font-mono w-fit">
                                                             ASSET ID: {block.asset_id}
                                                         </span>

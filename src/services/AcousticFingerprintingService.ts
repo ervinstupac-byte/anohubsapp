@@ -3,7 +3,7 @@
 
 export interface AcousticSignature {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     spectrum: number[]; // Frequency spectrum (FFT output)
     rmsLevel: number; // Overall RMS amplitude
     peakFrequencies: number[]; // Dominant frequencies
@@ -306,7 +306,7 @@ export class AcousticFingerprintingService {
 // Example: Analyze acoustic signature from Francis turbine
 const acousticData: AcousticSignature = {
     timestamp: Date.now(),
-    assetId: 'FRANCIS-001',
+    assetId: 1001,
     spectrum: [...], // FFT output from microphone/accelerometer
     rmsLevel: 4.2, // mm/s
     peakFrequencies: [1200, 2400, 3600], // Detected peaks
