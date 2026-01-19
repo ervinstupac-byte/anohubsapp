@@ -16,6 +16,7 @@ import { SpecialMeasurementSyncService, FRANCIS_IDEAL_BLUEPRINT } from './Specia
 import { DrTurbineAI } from './DrTurbineAI';
 import { TechnicalProjectState } from '../models/TechnicalSchema';
 import { HydraulicIntegrity } from './HydraulicIntegrity';
+import { persistAuditRecord } from '../lib/supabaseAuditAdapter';
 import { ITurbineModel, Anomaly, CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
 import { EnhancedAsset, CommonSensorData } from '../models/turbine/types';
 import { OilSample } from './OilAnalysisService';
@@ -548,15 +549,47 @@ export class MasterIntelligenceEngine {
             }
 
             diagnosis.automatedActions.push(action);
+
+            // Persist audit record for this action (integration mode guarded inside adapter)
+            try {
+                const audit = {
+                    asset_id: asset.id || 'unknown',
+                    action_type: action.action || 'CHECK_INVENTORY',
+                    payload: action,
+                    status: action.status || 'PENDING',
+                    source: 'MasterIntelligenceEngine'
+                };
+                const res = await persistAuditRecord(audit as any);
+                if ((res as any).inserted) {
+                    console.log('✅ Persisted audit record for action', action.action);
+                } else {
+                    console.log('ℹ️ Audit persistence result:', (res as any).message || (res as any).error || (res as any));
+                }
+            } catch (err) {
+                console.error('Failed to persist audit record:', err);
+            }
         }
 
         // ACTION 2: Notify consultant for critical issues
         if (diagnosis.criticality === 'CRITICAL') {
-            diagnosis.automatedActions.push({
+            const notifyAction = {
                 action: 'NOTIFY_CONSULTANT',
                 status: 'COMPLETED',
                 details: 'Critical health score - consultant notified via SMS/Email'
-            });
+            };
+            diagnosis.automatedActions.push(notifyAction);
+            try {
+                const res = await persistAuditRecord({
+                    asset_id: asset.id || 'unknown',
+                    action_type: notifyAction.action,
+                    payload: notifyAction,
+                    status: notifyAction.status,
+                    source: 'MasterIntelligenceEngine'
+                } as any);
+                console.log('Audit persistence (notify):', res);
+            } catch (err) {
+                console.error('Failed to persist notify action audit', err);
+            }
 
             await this.notifyConsultant(asset, diagnosis);
         }
@@ -567,11 +600,24 @@ export class MasterIntelligenceEngine {
         );
 
         if (hydraulicRunaway && hydraulicRunaway.similarity > 0.8) {
-            diagnosis.automatedActions.push({
+            const lockAction = {
                 action: 'LOCK_SYSTEM',
                 status: 'COMPLETED',
                 details: 'Hydraulic runaway risk detected - system locked pending inspection'
-            });
+            };
+            diagnosis.automatedActions.push(lockAction);
+            try {
+                const res = await persistAuditRecord({
+                    asset_id: asset.id || 'unknown',
+                    action_type: lockAction.action,
+                    payload: lockAction,
+                    status: lockAction.status,
+                    source: 'MasterIntelligenceEngine'
+                } as any);
+                console.log('Audit persistence (lock):', res);
+            } catch (err) {
+                console.error('Failed to persist lock action audit', err);
+            }
 
             // Trigger safety interlock
             // await SafetyInterlockEngine.lock('HYDRAULIC_SYSTEM');

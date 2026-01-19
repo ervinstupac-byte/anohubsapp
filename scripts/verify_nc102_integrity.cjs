@@ -1,5 +1,29 @@
 const fs = require('fs');
 const path = require('path');
+
+const manifestPath = path.join(__dirname, '..', 'scripts', 'hashes_applied.json');
+
+function main() {
+  try {
+    const raw = fs.readFileSync(manifestPath, 'utf8');
+    const manifest = JSON.parse(raw);
+    const count = manifest.length;
+    console.log('Manifest count:', count);
+    if (count !== 854) {
+      console.error(`Integrity check failed: expected 854 dossiers, found ${count}`);
+      process.exit(2);
+    }
+    console.log('Integrity check passed: 854 dossiers present');
+    process.exit(0);
+  } catch (err) {
+    console.error('Integrity check error', err);
+    process.exit(3);
+  }
+}
+
+main();
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 
 const manifest = require('./hashes_applied.json');
