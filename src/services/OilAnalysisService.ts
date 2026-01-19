@@ -4,7 +4,7 @@
 export interface OilSample {
     sampleId: string;
     timestamp: number;
-    assetId: string;
+    assetId: number;
     location: 'BEARING_UPPER' | 'BEARING_LOWER' | 'GEARBOX' | 'SERVO_SYSTEM';
 
     // Chemical parameters

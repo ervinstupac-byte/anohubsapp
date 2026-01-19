@@ -71,9 +71,9 @@ export const ElectricalHealth: React.FC = () => {
                         <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Thermometer className="w-3 h-3 text-amber-400" /> Stator Core Temp
-                            </p>
-                            <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase">
-                                72.4 <span className="text-xs text-slate-500">°C</span>
+                                </p>
+                                <p data-hotspot-id="stator_core" className="text-3xl font-black text-white font-mono tracking-tighter">
+                                    72.4 <span className="text-xs text-slate-500">°C</span>
                             </p>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ export const ElectricalHealth: React.FC = () => {
                                         { class: 'Class B', max: '130°C', hotspot: '145°C', active: false },
                                         { class: 'Class F', max: '155°C', hotspot: '170°C', active: true }
                                     ].map((row, idx) => (
-                                        <tr key={idx} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${row.active ? 'bg-indigo-900/10' : ''}`}>
+                                            <tr key={idx} data-hotspot-id={row.active ? 'stator_core' : undefined} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${row.active ? 'bg-indigo-900/10' : ''}`}>
                                             <td className={`p-4 font-black uppercase tracking-tighter ${row.active ? 'text-indigo-400' : ''}`}>{row.class}</td>
                                             <td className="p-4 font-mono font-black">{row.max}</td>
                                             <td className="p-4 text-right font-mono font-black text-indigo-300">{row.hotspot}</td>

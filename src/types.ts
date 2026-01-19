@@ -43,7 +43,8 @@ export type Answers = Record<string, string>;
 
 // --- ASSET MANAGEMENT ---
 export interface Asset {
-  id: string;
+  id: number;
+  plant_id?: number;
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;
@@ -87,11 +88,11 @@ export interface AssetContextType {
   assets: Asset[];
   selectedAsset: Asset | null;
   activeProfile: AssetProfile | null;
-  selectAsset: (id: string) => void;
+  selectAsset: (id: number) => void;
   loading: boolean;
   addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
-  updateAsset: (id: string, updates: Partial<Asset>) => void;
-  logActivity: (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
+  updateAsset: (id: number, updates: Partial<Asset>) => void;
+  logActivity: (assetId: number, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
   assetLogs: AssetHistoryEntry[];
   // --- NEW: Golden Thread additions ---
   isAssetSelected: boolean;
@@ -100,7 +101,7 @@ export interface AssetContextType {
 
 export interface AssetHistoryEntry {
   id: string;
-  assetId: string;
+  assetId: number;
   date: string;
   category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM';
   message: string;
@@ -212,7 +213,7 @@ export interface CalculationResult {
 export interface SavedConfiguration {
   id: string;
   name: string;
-  asset_id?: string;
+  asset_id?: number;
   timestamp: number;
   parameters: HPPSettings;
   results: CalculationResult;
@@ -332,7 +333,7 @@ export type BaseAssetProfile = AssetProfile;
 
 // --- BASE ASSET TEMPLATE (Engineering DNA) ---
 export const BaseAssetTemplateSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.number().optional(),
   name: z.string().min(3),
   type: z.enum(['HPP', 'Solar', 'Wind']),
   turbine_type: z.enum(['FRANCIS', 'KAPLAN', 'PELTON']).optional(),

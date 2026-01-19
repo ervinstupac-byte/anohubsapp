@@ -33,31 +33,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
             }, 5000);
 
-            supabase.auth.getSession()
-                .then(({ data: { session } }) => {
-                    clearTimeout(timeout);
-                    setSession(session);
-                    setUser(session?.user ?? null);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    clearTimeout(timeout);
-                    console.error('[AUTH] Critical session check failure:', err);
-                    setLoading(false);
-                });
+            if (supabase && supabase.auth && typeof supabase.auth.getSession === 'function') {
+                supabase.auth.getSession()
+                    .then(({ data: { session } }: any) => {
+                        clearTimeout(timeout);
+                        setSession(session);
+                        setUser(session?.user ?? null);
+                        setLoading(false);
+                    })
+                    .catch((err: any) => {
+                        clearTimeout(timeout);
+                        console.error('[AUTH] Critical session check failure:', err);
+                        setLoading(false);
+                    });
+            } else {
+                console.warn('[AUTH] Supabase auth client unavailable; continuing as anonymous.');
+                clearTimeout(timeout);
+                setLoading(false);
+            }
         }
 
         // Slušaj promjene
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            // Ako smo u guest modu, ignoriraj supabase promjene dok se ne odjavimo
-            if (!isGuest) {
-                setSession(session);
-                setUser(session?.user ?? null);
-                setLoading(false);
-            }
-        });
+        if (supabase && supabase.auth && typeof supabase.auth.onAuthStateChange === 'function') {
+            const { data: { subscription } }: any = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+                // Ako smo u guest modu, ignoriraj supabase promjene dok se ne odjavimo
+                if (!isGuest) {
+                    setSession(session);
+                    setUser(session?.user ?? null);
+                    setLoading(false);
+                }
+            });
 
-        return () => subscription.unsubscribe();
+            return () => { try { subscription.unsubscribe(); } catch (e) { } };
+        }
+
+        return () => { };
     }, [isGuest]);
 
     // 1. STANDARDNI LOGIN

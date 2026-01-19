@@ -30,7 +30,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
             <div className="relative flex items-center justify-center">
                 
                 {/* Glow Effect */}
-                <div className={`absolute bg-cyan-500/30 rounded-full blur-xl animate-pulse ${size === 'xl' ? 'w-48 h-48' : 'w-full h-full scale-150'}`}></div>
+                <div className={`absolute bg-cyan-500/30 rounded-full blur-xl ${size === 'xl' ? 'w-48 h-48' : 'w-full h-full scale-150'}`}></div>
 
                 {/* Outer Static Ring */}
                 <div className={`${currentSize.w} ${currentSize.h} ${currentSize.border} border-slate-800 rounded-full absolute opacity-50`}></div>
@@ -53,12 +53,12 @@ export const Spinner: React.FC<SpinnerProps> = ({
                 )}
                 
                 {/* Center Dot */}
-                <div className={`absolute bg-white rounded-full ${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'} animate-pulse`}></div>
+                <div className={`absolute bg-white rounded-full ${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'}`}></div>
             </div>
 
             {text && (
                 <div className="flex flex-col items-center gap-1">
-                    <div className="text-cyan-400 font-mono text-xs font-bold uppercase tracking-[0.3em] animate-pulse">
+                    <div className="text-cyan-400 font-mono text-xs font-bold uppercase tracking-[0.3em]">
                     {text}
                     </div>
                     {/* Loading dots */}

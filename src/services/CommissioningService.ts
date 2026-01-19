@@ -44,7 +44,7 @@ export interface BaselineFingerprint {
 
 export interface CommissioningSession {
     id: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
     turbineFamily: TurbineFamily;
     startedAt: number;
@@ -121,7 +121,7 @@ export class CommissioningService {
      * Start new commissioning session
      */
     static async startCommissioning(
-        assetId: string,
+        assetId: number,
         assetName: string,
         turbineFamily: TurbineFamily
     ): Promise<CommissioningSession> {

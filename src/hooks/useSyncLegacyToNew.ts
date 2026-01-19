@@ -37,9 +37,10 @@ export const useSyncLegacyToNew = () => {
         const identity = cerebroState.identity;
         if (!identity?.assetId) return;
 
-        // Skip if already synced this identity
-        if (lastSyncRef.current.identityId === identity.assetId) return;
-        lastSyncRef.current.identityId = identity.assetId;
+        // Skip if already synced this identity (store and compare as string)
+        const identityKey = String(identity.assetId);
+        if (lastSyncRef.current.identityId === identityKey) return;
+        lastSyncRef.current.identityId = identityKey;
 
         console.log('[SyncEngine] Syncing AssetConfig from ProjectContext');
 

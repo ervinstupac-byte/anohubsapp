@@ -294,7 +294,8 @@ export const HPPBuilder: React.FC = () => {
                 parameters: settings,
                 calculations: calculations,
                 recommended_turbine: bestTurbine,
-                asset_id: selectedAsset.id
+                asset_id: selectedAsset.id,
+                hotspot_map: selectedAsset?.specs?.hotspot_map || {}
             };
             const { error } = await supabase.from('turbine_designs').insert([payload]);
             if (error) throw error;
@@ -359,20 +360,28 @@ export const HPPBuilder: React.FC = () => {
     const fetchCloudConfigs = async () => {
         if (!user) return;
         setIsLoading(true);
-        let query = supabase.from('turbine_designs').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+        let query = supabase.from('turbine_designs').select("id, design_name, asset_id, created_at, parameters->>family as family, parameters->>variant as variant, parameters->'design_points' as design_points").eq('user_id', user.id).order('created_at', { ascending: false });
         if (selectedAsset) query = query.eq('asset_id', selectedAsset.id);
         const { data } = await query;
         if (data) setSavedConfigs(data.map((d: any) => ({
-            id: d.id.toString(), name: d.design_name, asset_id: d.asset_id, timestamp: new Date(d.created_at).getTime(),
-            parameters: d.parameters, results: d.calculations
+            id: String(d.id),
+            name: d.design_name,
+            asset_id: d.asset_id,
+            timestamp: new Date(d.created_at).getTime(),
+            parameters: (() => { try { const p = d.design_points; return typeof p === 'string' ? JSON.parse(p) : p; } catch (_) { return {}; } })(),
+            results: d.calculations
         })));
         setIsLoading(false);
     };
 
     const autoLoadLatestConfig = async () => {
         if (!user || !selectedAsset) return;
-        const { data } = await supabase.from('turbine_designs').select('*').eq('user_id', user.id).eq('asset_id', selectedAsset.id).order('created_at', { ascending: false }).limit(1).single();
-        if (data) setSettings(data.parameters);
+        const { data } = await supabase.from('turbine_designs').select("parameters->'design_points' as design_points, parameters->>family as family").eq('user_id', user.id).eq('asset_id', selectedAsset.id).order('created_at', { ascending: false }).limit(1).single();
+        if (data) {
+            let p = (data as any).design_points;
+            try { if (typeof p === 'string') p = JSON.parse(p); } catch (e) { p = p; }
+            setSettings(p || {});
+        }
     };
 
     const handleTurbineSelect = (type: string) => {
@@ -388,7 +397,7 @@ export const HPPBuilder: React.FC = () => {
             ...state.identity, // Ensure we are extending or using existing identity safely if applicable, or just creating new. 
             // Actually user code snippet was just a guard. The original code creates a NEW identity.
             // I will keep original logic but wrap it.
-            assetId: crypto.randomUUID(),
+            assetId: Date.now(),
             assetName: `${turbineType} Design ${new Date().toLocaleDateString()}`,
             turbineType: turbineType as TurbineType,
             manufacturer: 'AnoHUB GenK',

@@ -21,7 +21,7 @@ export const FetchSkeleton: React.FC<FetchSkeletonProps> = ({
     return (
         <div className={`space-y-4 ${className}`}>
             {Array.from({ length: count }).map((_, i) => (
-                <div key={i} className="animate-pulse space-y-3 p-4 bg-slate-900/40 rounded-xl border border-white/5">
+                <div key={i} className="space-y-3 p-4 bg-slate-900/40 rounded-xl border border-white/5">
                     {Array.from({ length: rows }).map((_, j) => (
                         <Skeleton
                             key={j}

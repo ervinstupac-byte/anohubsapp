@@ -35,7 +35,7 @@ vi.mock('../../../services/ForensicReportService', () => ({
 
 describe('ProtocolLaunchpad Component', () => {
     const mockSelectedAsset = {
-        id: 'asset-123',
+        id: 123,
         name: 'Turbine A',
         specs: { rpm: 100 },
     };
@@ -118,7 +118,7 @@ describe('ProtocolLaunchpad Component', () => {
             expect(LocalLedger.createEntry).toHaveBeenCalledWith(expect.objectContaining({
                 type: 'REPORT_GENERATED',
                 protocol: 'shaft-alignment',
-                assetId: 'asset-123'
+                assetId: 123
             }), 'PROTOCOL');
         });
 

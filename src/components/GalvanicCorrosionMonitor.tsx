@@ -7,7 +7,7 @@ import { GalvanicCorrosionService, CathodicProtectionSystem } from '../services/
 
 export const GalvanicCorrosionMonitor: React.FC = () => {
     const [system] = useState<CathodicProtectionSystem>({
-        assetId: 'BULB-001',
+        assetId: 4001,
         turbineType: 'BULB',
         anodes: [
             {

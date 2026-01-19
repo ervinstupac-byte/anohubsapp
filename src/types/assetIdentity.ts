@@ -257,7 +257,7 @@ export interface OperationalMapping {
 
 export interface AssetIdentity {
     // Basic Info
-    assetId: string;
+    assetId: number;
     assetName: string;
     turbineType: TurbineType;
     manufacturer: string;

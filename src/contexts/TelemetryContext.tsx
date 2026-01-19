@@ -7,7 +7,7 @@ import { useNotifications } from './NotificationContext.tsx';
 
 // Tipovi za telemetriju
 export interface TelemetryData {
-    assetId: string;
+    assetId: number;
     timestamp: number;
     status: 'OPTIMAL' | 'WARNING' | 'CRITICAL';
     vibration: number; // mm/s
@@ -67,14 +67,14 @@ export interface TelemetryData {
 
 interface TelemetryContextType {
     telemetry: Record<string, TelemetryData>;
-    activeIncident: { type: string, assetId: string, timestamp: number } | null;
-    triggerEmergency: (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => void;
+    activeIncident: { type: string, assetId: number, timestamp: number } | null;
+    triggerEmergency: (assetId: number, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => void;
     clearEmergency: () => void;
     forceUpdate: () => void;
-    updatePipeDiameter: (assetId: string, diameter: number) => void;
-    shutdownExcitation: (assetId: string) => void;
-    updateWicketGateSetpoint: (assetId: string, setpoint: number) => void;
-    resetFatigue: (assetId: string) => void;
+    updatePipeDiameter: (assetId: number, diameter: number) => void;
+    shutdownExcitation: (assetId: number) => void;
+    updateWicketGateSetpoint: (assetId: number, setpoint: number) => void;
+    resetFatigue: (assetId: number) => void;
 }
 
 const TelemetryContext = createContext<TelemetryContextType | undefined>(undefined);
@@ -82,9 +82,9 @@ const TelemetryContext = createContext<TelemetryContextType | undefined>(undefin
 export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { assets } = useAssetContext();
     const [telemetry, setTelemetry] = useState<Record<string, TelemetryData>>({});
-    const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: string, timestamp: number } | null>(null);
+    const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: number, timestamp: number } | null>(null);
 
-    const triggerEmergency = (assetId: string, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
+    const triggerEmergency = (assetId: number, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
         const timestamp = Date.now();
         setActiveIncident({ type, assetId, timestamp });
 
@@ -156,12 +156,19 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
 
     useEffect(() => {
-        const channel = supabase
+        if (!supabase || typeof (supabase as any).channel !== 'function') {
+            // No realtime in build/CI environment — simulate signals instead
+            generateSignal();
+            const id = setInterval(generateSignal, 10000);
+            return () => clearInterval(id);
+        }
+
+        const channel = (supabase as any)
             .channel('realtime_hpp_status')
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'hpp_status' },
-                (payload) => {
+                (payload: any) => {
                     const updatedData = payload.new as any;
                     if (updatedData && updatedData.asset_id) {
                         setTelemetry(prev => ({
@@ -221,7 +228,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             .subscribe();
 
         return () => {
-            supabase.removeChannel(channel);
+            try { (supabase as any).removeChannel(channel); } catch (e) { }
         };
     }, []);
 
@@ -343,7 +350,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         }
     }, [assets]);
 
-    const updatePipeDiameter = (assetId: string, diameter: number) => {
+    const updatePipeDiameter = (assetId: number, diameter: number) => {
         setTelemetry(prev => ({
             ...prev,
             [assetId]: {
@@ -354,7 +361,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         loggingService.logAction(assetId, 'PIPE_DIAMETER_CHANGE', { newDiameter: diameter });
     };
 
-    const shutdownExcitation = (assetId: string) => {
+    const shutdownExcitation = (assetId: number) => {
         setTelemetry(prev => ({
             ...prev,
             [assetId]: {
@@ -365,7 +372,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         loggingService.logAction(assetId, 'EXCITATION_SHUTDOWN', { cause: 'METAL_SCRAPING_DETECTED' });
     };
 
-    const updateWicketGateSetpoint = (assetId: string, setpoint: number) => {
+    const updateWicketGateSetpoint = (assetId: number, setpoint: number) => {
         setTelemetry(prev => ({
             ...prev,
             [assetId]: {
@@ -377,7 +384,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         loggingService.logAction(assetId, 'WICKET_GATE_COMMAND', { setpoint });
     };
 
-    const resetFatigue = (assetId: string) => {
+    const resetFatigue = (assetId: number) => {
         setTelemetry(prev => ({
             ...prev,
             [assetId]: {

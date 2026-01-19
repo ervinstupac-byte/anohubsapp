@@ -8,7 +8,7 @@ import { CavitationErosionService, ErosionAnalysis } from '../services/Cavitatio
 export const ErosionMappingViewer: React.FC = () => {
     const [analysis] = useState<ErosionAnalysis>({
         timestamp: Date.now(),
-        assetId: 'FRANCIS-001',
+        assetId: 1001,
         turbineFamily: 'francis',
         operatingHours: 2190, // 3 months
         blades: [

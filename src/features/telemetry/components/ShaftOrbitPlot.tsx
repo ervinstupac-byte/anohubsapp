@@ -300,7 +300,7 @@ export const ShaftOrbitPlot = React.memo(forwardRef<ShaftOrbitPlotHandle, ShaftO
             )}
 
             {analysis.isStructuralLoosenessConfirmed && (
-                <div className="absolute inset-0 flex items-center justify-center bg-red-950/40 backdrop-blur-[1px] rounded-lg border-2 border-red-500 animate-pulse pointer-events-none p-4 text-center">
+                <div className="absolute inset-0 flex items-center justify-center bg-red-950/40 backdrop-blur-[1px] rounded-lg border-2 border-red-500 pointer-events-none p-4 text-center">
                     <div className="bg-red-600 text-white text-[8px] font-black px-2 py-1 uppercase tracking-tighter shadow-lg">
                         CRITICAL: Structural Looseness Confirmed via Acoustic Signature
                     </div>

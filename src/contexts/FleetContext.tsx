@@ -13,7 +13,7 @@ export interface InflowPrediction {
 }
 
 export interface FleetHealthReport {
-    assetId: string;
+    assetId: number;
     assetName: string;
     healthScore: number; // 0-100
     efficiencyIndex: number; // %
@@ -70,7 +70,7 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const riskDuration = 120; // 5 days in hours
             let riskProbability = 0.05; // Base 5% probability
 
-            const diagnostic = activeDiagnoses.find(d => d.message.includes(asset.id) || d.source === 'CORRELATED');
+            const diagnostic = activeDiagnoses.find(d => String(d.message).includes(String(asset.id)) || d.source === 'CORRELATED');
             if (diagnostic?.diagnosis?.severity === 'CRITICAL') riskProbability = 0.8;
             else if (diagnostic?.diagnosis?.severity === 'HIGH') riskProbability = 0.4;
             else if (tel.status === 'CRITICAL') riskProbability = 0.3;

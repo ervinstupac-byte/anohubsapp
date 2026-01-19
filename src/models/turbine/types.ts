@@ -128,7 +128,7 @@ export interface GeneratorData {
 
 export interface CompleteSensorData {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     turbineFamily: TurbineFamily;
     common: CommonSensorData;
     specialized?: any; // NC-4.2 Universal modular data bucket
@@ -241,7 +241,7 @@ export interface TurbineConfiguration {
 export interface SpecialMeasurement {
     type: 'geodetic' | 'vibration' | 'thermography' | 'ultrasonic' | 'oil_analysis';
     timestamp: number;
-    assetId: string;
+    assetId: number;
     data: any;
     interpretedResults: InterpretedResult[];
 }
@@ -272,7 +272,7 @@ export interface Recommendation {
 }
 
 export interface OptimizationReport {
-    assetId: string;
+    assetId: number;
     assetName: string;
     turbineFamily: TurbineFamily;
     generatedAt: number;
@@ -300,7 +300,7 @@ export interface ForensicsMatch {
 // =====================================================
 
 export interface EnhancedAsset {
-    id: string;
+    id: number;
     name: string;
     type: 'HPP' | 'Solar' | 'Wind';
     location: string;

@@ -36,6 +36,12 @@ i18n.use(initReactI18next).init({
   ns: ['common', 'francis', 'system', 'docs'],
   defaultNS: 'common',
   interpolation: { escapeValue: false }
+  ,
+  // Provide a friendly fallback when a key is missing so raw keys are not shown in UI
+  parseMissingKeyHandler: (key: string) => {
+    const last = key.split('.').pop() || key;
+    return last.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
 });
 
 export default i18n;

@@ -4,7 +4,7 @@ export type LogSeverity = 'INFO' | 'WARNING' | 'CRITICAL';
 export type LogEventType = 'STRESS_TEST' | 'CRITICAL_FAILURE' | 'SYSTEM_RESET' | 'PERIODIC_HEALTH' | 'USER_ACTION' | 'MODULE_OPEN';
 
 export interface TelemetryLog {
-    assetId: string | null;
+    assetId: number | null;
     eventType: LogEventType;
     severity: LogSeverity;
     details: any;
@@ -35,7 +35,7 @@ class LoggingService {
     /**
      * Generic action logger
      */
-    async logAction(assetId: string | null, actionType: string, details: any) {
+    async logAction(assetId: number | null, actionType: string, details: any) {
         return this.logEvent({
             assetId,
             eventType: 'USER_ACTION',
@@ -47,7 +47,7 @@ class LoggingService {
     /**
      * Specialized logger for Incident Simulator events
      */
-    async logIncident(assetId: string, type: string, details: any) {
+    async logIncident(assetId: number, type: string, details: any) {
         return this.logEvent({
             assetId,
             eventType: 'CRITICAL_FAILURE',
@@ -59,7 +59,7 @@ class LoggingService {
     /**
      * Logs the clearance of an emergency state
      */
-    async logReset(assetId: string) {
+    async logReset(assetId: number) {
         return this.logEvent({
             assetId,
             eventType: 'SYSTEM_RESET',

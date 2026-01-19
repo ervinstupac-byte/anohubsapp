@@ -17,7 +17,7 @@ export interface ZincAnodeReading {
 }
 
 export interface CathodicProtectionSystem {
-    assetId: string;
+    assetId: number;
     turbineType: 'PIT' | 'BULB' | 'TUBULAR';
     anodes: ZincAnodeReading[];
 

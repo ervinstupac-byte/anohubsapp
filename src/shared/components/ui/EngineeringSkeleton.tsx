@@ -17,8 +17,8 @@ export const EngineeringSkeleton: React.FC<EngineeringSkeletonProps> = ({
     const isCompact = mode === 'compact';
     const spacing = isCompact ? SPACING_COMPACT : SPACING;
 
-    // Base shimmer effect
-    const shimmer = "animate-pulse bg-slate-800/50";
+    // Base shimmer effect (non-emissive for field-mode)
+    const shimmer = "bg-slate-800/50";
 
     if (variant === 'stat') {
         return (

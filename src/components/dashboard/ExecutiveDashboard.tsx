@@ -129,7 +129,7 @@ export const ExecutiveDashboard: React.FC = () => {
                             <img src="/assets/images/logo.svg" alt="AnoHUB Logo" className="w-12 h-12 mt-1 object-contain" />
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <div className="w-2 h-2 bg-h-cyan rounded-full animate-pulse" />
+                                    <div className="w-2 h-2 bg-h-cyan rounded-full" />
                                     <span className="text-[9px] text-h-cyan font-mono font-bold uppercase tracking-[0.2em]">{t('dashboard.status_active')}</span>
                                 </div>
                                 <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase font-mono">{t('dashboard.title')}</h1>

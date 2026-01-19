@@ -8,6 +8,7 @@ import { ProfileLoader } from '../../services/ProfileLoader';
 import { SolutionArchitect } from '../../services/SolutionArchitect';
 import { RevitalizationPlan } from '../../models/RepairContext';
 import i18n from '../../i18n';
+import { supabase } from '../../services/supabaseClient';
 
 // Standard A4
 const PAGE_WIDTH = 210;
@@ -142,6 +143,188 @@ export const ProfessionalReportEngine = {
         // Save
         doc.save(`Audit_Report_${projectID}.pdf`);
     }
+    ,
+    generateManagementDashboard: async (opts?: { projectID?: string, assetId?: string | number }) => {
+        const end = new Date();
+        const start = new Date();
+        start.setDate(end.getDate() - 30);
+        const startStr = start.toISOString().slice(0,10);
+        const endStr = end.toISOString().slice(0,10);
+
+        // Fetch eta_aggregates for period
+        const { data: rows, error } = await supabase
+            .from('eta_aggregates')
+            .select('id, asset_id, period_start, period_end, avg_eta, optimal_eta, computed_loss_cost, metadata')
+            .gte('period_start', startStr)
+            .lte('period_end', endStr)
+            .order('period_start', { ascending: true });
+
+        if (error) throw new Error('Failed to fetch eta_aggregates: ' + JSON.stringify(error));
+        const list = Array.isArray(rows) ? rows : [];
+
+        // Build date-ordered trend
+        const byDate = new Map<string, { sum:number; count:number }>();
+        for (const r of list) {
+            const d = String(r.period_start);
+            const cur = byDate.get(d) || { sum: 0, count: 0 };
+            cur.sum += Number(r.avg_eta || 0);
+            cur.count += 1;
+            byDate.set(d, cur);
+        }
+        const trend = Array.from(byDate.entries()).map(([date, v]) => ({ date, avg_eta: v.count ? v.sum / v.count : 0, samples: v.count }));
+
+        // Fetch threshold configs for assets present
+        const assetIds = Array.from(new Set(list.map(r => String(r.asset_id)).filter(Boolean)));
+        let thresholdsMap: Record<string, number> = {};
+        if (assetIds.length > 0) {
+            const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', assetIds);
+            (tcfgs || []).forEach((t: any) => { thresholdsMap[String(t.asset_id)] = Number(t.vibration_mm_s || 4.5); });
+        }
+
+        // Alerts: days where any row's metadata.max_vibration exceeds threshold
+        const VIBRATION_THRESHOLD_DEFAULT = 4.5;
+        const alerts: Array<any> = [];
+        for (const r of list) {
+            const meta = r.metadata || {};
+            const vibCandidates: number[] = [];
+            if (meta.max_vibration !== undefined) vibCandidates.push(Number(meta.max_vibration));
+            if (meta.vibration_max !== undefined) vibCandidates.push(Number(meta.vibration_max));
+            if (meta.vibration !== undefined) vibCandidates.push(Number(meta.vibration));
+            if (meta.sensor_vibration !== undefined) vibCandidates.push(Number(meta.sensor_vibration));
+            if (meta.francis && meta.francis.max_vibration !== undefined) vibCandidates.push(Number(meta.francis.max_vibration));
+
+            const maxVib = vibCandidates.filter(n => !Number.isNaN(n)).reduce((a,b) => Math.max(a,b), 0);
+            const thresh = thresholdsMap[String(r.asset_id)] || VIBRATION_THRESHOLD_DEFAULT;
+            if (maxVib > thresh) {
+                alerts.push({ id: r.id, asset_id: r.asset_id, period_start: r.period_start, max_vibration: maxVib, threshold: thresh });
+            }
+        }
+
+        // Total computed loss over period (prefer server-side view `asset_financials_with_eta` if available)
+        let totalLoss = list.reduce((acc, r) => acc + Number(r.computed_loss_cost || 0), 0);
+        try {
+            const { data: finRows, error: finErr } = await supabase.from('asset_financials_with_eta')
+                .select('computed_loss_cost, period_start, period_end')
+                .gte('period_start', startStr)
+                .lte('period_end', endStr);
+            if (!finErr && Array.isArray(finRows) && finRows.length > 0) {
+                const sumFin = finRows.reduce((acc: number, fr: any) => acc + Number(fr.computed_loss_cost || 0), 0);
+                // prefer the financial view's computed loss if it's non-zero
+                if (sumFin > 0) totalLoss = sumFin;
+            }
+        } catch (e) {
+            // ignore and keep totalLoss from aggregates
+        }
+
+        // Create PDF summary (in-client download or Node buffer write)
+        const doc = new jsPDF();
+        drawHeader(doc, opts?.projectID || 'MANAGEMENT_SUMMARY', false);
+        doc.setFontSize(16);
+        doc.text('Management Dashboard Summary — Last 30 Days', 20, 40);
+        doc.setFontSize(10);
+        doc.text(`Period: ${startStr} → ${endStr}`, 20, 48);
+
+        // Draw a simple line chart for trend vs Expert Curve (0.92)
+        const chartX = 20, chartY = 60, chartW = 170, chartH = 60;
+        doc.setDrawColor(200);
+        doc.rect(chartX, chartY, chartW, chartH);
+        // Y axis from 0.6 to 1.0 to give room
+        const yMin = 0.6, yMax = 1.0;
+        // Points
+        const points = trend.map(t => t.avg_eta);
+        for (let i=0;i<points.length;i++) {
+            const x = chartX + (i / Math.max(1, points.length-1)) * chartW;
+            const y = chartY + chartH - ((points[i] - yMin) / (yMax - yMin)) * chartH;
+            doc.setFillColor(33,33,33);
+            doc.circle(x, y, 0.8, 'F');
+            if (i>0) {
+                const prev = trend[i-1].avg_eta;
+                const px = chartX + ((i-1) / Math.max(1, points.length-1)) * chartW;
+                const py = chartY + chartH - ((prev - yMin) / (yMax - yMin)) * chartH;
+                doc.setDrawColor(45, 212, 191);
+                doc.line(px, py, x, y);
+            }
+        }
+        // Expert curve (92%) horizontal line
+        const expertEta = 0.92;
+        const ey = chartY + chartH - ((expertEta - yMin)/(yMax - yMin))*chartH;
+        doc.setDrawColor(220,38,38);
+        doc.setLineWidth(0.7);
+        doc.line(chartX, ey, chartX+chartW, ey);
+        doc.setFontSize(9);
+        doc.text('Expert Curve (92%)', chartX + chartW - 40, ey - 2);
+
+        // Table of daily values under chart
+        let ty = chartY + chartH + 10;
+        doc.setFontSize(11);
+        doc.text('Date', 20, ty);
+        doc.text('Avg η', 70, ty);
+        doc.text('Expert (0.92)', 110, ty);
+        doc.text('Samples', 150, ty);
+        ty += 6;
+        doc.setFontSize(10);
+        for (const t of trend) {
+            if (ty > 280) { doc.addPage(); ty = 20; }
+            doc.text(t.date, 20, ty);
+            doc.text((t.avg_eta*100).toFixed(2) + '%', 70, ty);
+            doc.text('92.00%', 110, ty);
+            doc.text(String(t.samples), 150, ty);
+            ty += 6;
+        }
+
+        // Vibration Audit
+        if (ty + 30 > 280) { doc.addPage(); ty = 20; }
+        doc.setFontSize(12);
+        doc.text('Vibration Audit (threshold-based)', 20, ty);
+        ty += 6;
+        doc.setFontSize(10);
+        if (alerts.length === 0) {
+            doc.text('No vibration alerts exceeding configured thresholds were detected in the 30-day window.', 20, ty);
+            ty += 8;
+        } else {
+            doc.text('Date', 20, ty);
+            doc.text('Asset', 70, ty);
+            doc.text('Max Vib (mm/s)', 120, ty);
+            doc.text('Thresh', 160, ty);
+            ty += 4;
+            for (const a of alerts) {
+                if (ty > 280) { doc.addPage(); ty = 20; }
+                doc.text(String(a.period_start), 20, ty);
+                doc.text(String(a.asset_id), 70, ty);
+                doc.text(Number(a.max_vibration).toFixed(2), 120, ty);
+                doc.text(Number(a.threshold).toFixed(2), 160, ty);
+                ty += 6;
+            }
+        }
+
+        // Financial Impact
+        if (ty + 30 > 280) { doc.addPage(); ty = 20; }
+        doc.setFontSize(12);
+        doc.text('Financial Impact (computed loss)', 20, ty);
+        ty += 8;
+        doc.setFontSize(14);
+        doc.setTextColor(220, 38, 38);
+        doc.text(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(totalLoss), 20, ty);
+
+        // Save or trigger download
+        try {
+            // Node environment: write to artifacts if fs available
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const fs = require('fs');
+            const path = require('path');
+            const outDir = path.join(process.cwd(), 'artifacts');
+            if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+            const fileName = `management_summary_30d_${startStr}_to_${endStr}.pdf`;
+            const outPath = path.join(outDir, fileName);
+            const ab = doc.output('arraybuffer');
+            fs.writeFileSync(outPath, Buffer.from(ab));
+            return { pdfPath: outPath, trend, alerts, totalLoss };
+        } catch (e) {
+            // Browser: trigger save dialog
+            doc.save(`management_summary_30d_${startStr}_to_${endStr}.pdf`);
+            return { trend, alerts, totalLoss };
+        }
+    }
 };
 
 const drawExecutiveRiskBrief = (doc: jsPDF, state: TechnicalProjectState, id: string) => {
@@ -225,7 +408,7 @@ const drawExecutiveRiskBrief = (doc: jsPDF, state: TechnicalProjectState, id: st
     drawFooter(doc, 1);
 };
 
-const drawHeader = (doc: jsPDF, id: string, isDemo: boolean = false) => {
+const drawHeader = (doc: jsPDF, id: string | number, isDemo: boolean = false) => {
     // Simple modern header bar
     doc.setFillColor(45, 212, 191); // Teal #2dd4bf
     doc.rect(0, 0, PAGE_WIDTH, 30, 'F');
@@ -238,7 +421,7 @@ const drawHeader = (doc: jsPDF, id: string, isDemo: boolean = false) => {
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`PROJEKT-ID: ${id}`, PAGE_WIDTH - MARGIN - 40, 20);
+    doc.text(`PROJEKT-ID: ${String(id)}`, PAGE_WIDTH - MARGIN - 40, 20);
 
     if (isDemo) {
         doc.saveGraphicsState();

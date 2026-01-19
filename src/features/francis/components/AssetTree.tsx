@@ -47,7 +47,7 @@ export const AssetTree: React.FC = () => {
                                 }`}
                         >
                             <div className="flex items-center gap-3">
-                                <div className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-cyan-400 animate-pulse' : 'bg-slate-600 group-hover:bg-slate-400'}`} />
+                                <div className={`w-1.5 h-1.5 rounded-full ${isActive ? 'bg-cyan-400' : 'bg-slate-600 group-hover:bg-slate-400'}`} />
                                 <span className="text-xs font-bold tracking-tight uppercase">{asset.label}</span>
                             </div>
                             <span className="text-[10px] font-mono opacity-30 group-hover:opacity-60 transition-opacity">{asset.surgicalId}</span>

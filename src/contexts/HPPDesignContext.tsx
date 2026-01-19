@@ -17,7 +17,7 @@ export interface HPPDesignData {
         annualGWh: string;
         n_sq: string;
     };
-    asset_id?: string;
+    asset_id?: number;
     created_at?: string;
 }
 

@@ -81,14 +81,14 @@ export const CommandPalette = React.memo(() => {
         const assetResults: CommandResult[] = safeAssets
             .filter(a => (a?.name || '').toLowerCase().includes(lowerQuery) || (a?.type || '').toLowerCase().includes(lowerQuery))
             .map(a => ({
-                id: a.id,
+                id: String(a.id),
                 label: a.name,
                 type: 'asset',
                 icon: <Box className="text-cyan-400" />,
                 subtitle: `${(a.type || '—').toUpperCase()} • ${a.capacity || '-'} MW`,
                 status: 'nominal', // In real app, derived from telemetry
                 action: () => {
-                    if (selectAsset) selectAsset(a.id);
+                    if (selectAsset) selectAsset(Number(a.id));
                     navigate('/'); // Go to toolbox with asset selected
                 }
             }));

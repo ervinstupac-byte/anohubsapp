@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { Asset } from '../types.ts';
 
-export const useRiskCalculator = (assetId?: string) => {
+export const useRiskCalculator = (assetId?: number) => {
     const { assets, selectedAsset, assetLogs } = useAssetContext();
 
     // Use provided assetId or fall back to selectedAsset

@@ -29,6 +29,7 @@ export const ROUTES = {
         EMERGENCY: 'emergency-protocols',
         LOGIC_LOAD_REJECTION: 'logic-load-rejection',
         FLOWCHART_STARTUP: 'flowchart-startup',
+        HORIZONTAL_5MW: 'horizontal-5mw',
         SOP: {
             WATER_HAMMER: 'sop-water-hammer',
             BEARINGS: 'sop-bearings',
