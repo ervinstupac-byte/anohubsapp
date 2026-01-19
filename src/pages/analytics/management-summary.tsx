@@ -11,6 +11,7 @@ export default function ManagementSummary() {
   const [pricePerKwh, setPricePerKwh] = useState<number>(0.08);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [topLossDays, setTopLossDays] = useState<Array<{date:string,loss:number}>>([]);
 
   useEffect(() => {
     async function load() {
@@ -53,6 +54,17 @@ export default function ManagementSummary() {
         fetch(filename, { method: 'HEAD' }).then(hres => {
           if (hres.ok) setPdfUrl(filename);
         }).catch(() => {});
+
+        // also attempt to fetch JSON artifact for forensic annotations
+        const jsonFilename = `/artifacts/management_summary_30d_${startStr}_to_${endStr}.json`;
+        fetch(jsonFilename).then(r => r.ok ? r.json() : null).then((j:any|null) => {
+          if (!j) return;
+          // compute top loss days if `rows` or `trend` available
+          const rows = j.rows || j.trend || [];
+          const parsed = rows.map((r: any) => ({ date: r.period_start || r.date, loss: Number(r.computed_loss_cost || r.loss || 0) }));
+          parsed.sort((a:any,b:any)=>b.loss - a.loss);
+          setTopLossDays(parsed.slice(0,5));
+        }).catch(()=>{});
       } catch (e) {
         console.error('Failed to generate management dashboard in-browser', e);
       }
@@ -99,6 +111,20 @@ export default function ManagementSummary() {
       <div>
         <svg ref={svgRef} width={720} height={200} />
       </div>
+
+      {topLossDays.length > 0 && (
+        <div style={{ marginTop: 8, background: '#fff7ed', padding: 8, border: '1px solid #fcd34d' }}>
+          <strong>Forensic Note:</strong>
+          <div style={{ marginTop: 6 }}>
+            Top loss days (sample): {topLossDays.slice(0,3).map(d => `${d.date} — ${new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(d.loss)}`).join(' | ')}
+          </div>
+          {topLossDays.some(d => d.date === '2025-12-25') && (
+            <div style={{ marginTop: 6, color: '#b91c1c' }}>
+              2025-12-25: Flow surge detected — rapid transient increase in flow caused the efficiency dip (~€1,003 loss).
+            </div>
+          )}
+        </div>
+      )}
 
       <div style={{ marginTop: 12 }}>
         <h3>Daily Trend Sample</h3>

@@ -138,22 +138,26 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
     React.useEffect(() => {
         fetchData();
 
-        // Realtime Subscription
-        const channel = supabase
-            .channel('maintenance_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'maintenance_logs' }, (payload) => {
-                console.log('⚡ Realtime Log Update:', payload);
-                fetchLogs(); // Refresh on simple change
-            })
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, (payload) => {
-                console.log('⚡ Realtime WO Update:', payload);
-                fetchWorkOrders();
-            })
-            .subscribe();
+        // Realtime Subscription (guarded for build/CI noop client)
+        if (supabase && typeof (supabase as any).channel === 'function') {
+            const channel = (supabase as any)
+                .channel('maintenance_changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'maintenance_logs' }, (payload: any) => {
+                    console.log('⚡ Realtime Log Update:', payload);
+                    fetchLogs(); // Refresh on simple change
+                })
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, (payload: any) => {
+                    console.log('⚡ Realtime WO Update:', payload);
+                    fetchWorkOrders();
+                })
+                .subscribe();
 
-        return () => {
-            supabase.removeChannel(channel);
-        };
+            return () => {
+                try { (supabase as any).removeChannel(channel); } catch (e) { }
+            };
+        }
+
+        return () => { };
     }, []);
 
     const fetchData = async () => {

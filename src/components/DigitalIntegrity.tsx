@@ -109,18 +109,22 @@ export const DigitalIntegrity: React.FC = () => {
     useEffect(() => {
         fetchLedger();
 
-        const sub = supabase.channel('public:digital_integrity_ledger')
-            .on('postgres_changes', {
-                event: 'INSERT',
-                schema: 'public',
-                table: 'digital_integrity_ledger',
-                filter: selectedAsset ? `asset_id=eq.${selectedAsset.id}` : undefined
-            }, (payload) => {
-                const newBlock = payload.new as Block;
-                setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
-            }).subscribe();
+        // Guard channel subscription when supabase client is a noop during build/CI
+        if (supabase && typeof (supabase as any).channel === 'function') {
+            const sub = (supabase as any).channel('public:digital_integrity_ledger')
+                .on('postgres_changes', {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'digital_integrity_ledger',
+                    filter: selectedAsset ? `asset_id=eq.${selectedAsset.id}` : undefined
+                }, (payload: any) => {
+                    const newBlock = payload.new as Block;
+                    setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
+                }).subscribe();
 
-        return () => { supabase.removeChannel(sub); };
+            return () => { try { (supabase as any).removeChannel(sub); } catch (e) { } };
+        }
+        return () => { };
     }, [selectedAsset]);
 
     // --- 2. GENESIS BLOCK (First Block) ---

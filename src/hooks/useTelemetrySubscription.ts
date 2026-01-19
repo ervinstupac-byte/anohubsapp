@@ -2,9 +2,16 @@ import { supabase } from '../services/supabaseClient';
 
 export function subscribeLatestSensor(assetId: number, onMessage: (payload: any) => void) {
     if (!assetId) return () => { };
-    const channel = supabase.channel(`telemetry_asset_${assetId}`);
+    // Guard against noop supabase client used during SSG/build.
+    if (!supabase || typeof (supabase as any).channel !== 'function') {
+        console.warn('Supabase real client unavailable; telemetry subscription disabled (build/CI environment).');
+        // Return a noop unsubscribe. UI should display a connecting/disabled state.
+        return () => { };
+    }
 
-    channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'dynamic_sensor_data', filter: `asset_id=eq.${assetId}` }, (payload) => {
+    const channel = (supabase as any).channel(`telemetry_asset_${assetId}`);
+
+    channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'dynamic_sensor_data', filter: `asset_id=eq.${assetId}` }, (payload: any) => {
         try {
             onMessage(payload.new);
         } catch (e) {
@@ -19,6 +26,6 @@ export function subscribeLatestSensor(assetId: number, onMessage: (payload: any)
 
     // return unsubscribe
     return () => {
-        channel.unsubscribe();
+        try { channel.unsubscribe(); } catch (e) { /* ignore */ }
     };
 }
