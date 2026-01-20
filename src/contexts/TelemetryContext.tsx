@@ -150,7 +150,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             };
         });
 
-        loggingService.logIncident(idAdapter.toStorage(assetId), type, {
+        loggingService.logIncident(assetId, type, {
             vibration: type === 'vibration_excess' ? 0.085 : 0.035,
             temperature: type === 'bearing_overheat' ? 85 : 55
         });
@@ -158,7 +158,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     const clearEmergency = () => {
         if (activeIncident) {
-            loggingService.logReset(idAdapter.toStorage(activeIncident.assetId));
+            loggingService.logReset(activeIncident.assetId);
         }
         setActiveIncident(null);
         generateSignal();
@@ -467,7 +467,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 pipeDiameter: diameter
             }
         }));
-        loggingService.logAction(idAdapter.toStorage(assetId), 'PIPE_DIAMETER_CHANGE', { newDiameter: diameter });
+        loggingService.logAction(assetId, 'PIPE_DIAMETER_CHANGE', { newDiameter: diameter });                                                                  
     };
 
     const shutdownExcitation = (assetId: number) => {
@@ -479,7 +479,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 excitationActive: false
             }
         }));
-        loggingService.logAction(idAdapter.toStorage(assetId), 'EXCITATION_SHUTDOWN', { cause: 'METAL_SCRAPING_DETECTED' });
+            loggingService.logAction(assetId, 'EXCITATION_SHUTDOWN', { cause: 'METAL_SCRAPING_DETECTED' });                                                        
     };
 
     const updateWicketGateSetpoint = (assetId: number, setpoint: number) => {
@@ -492,7 +492,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 lastCommandTimestamp: Date.now()
             }
         }));
-        loggingService.logAction(idAdapter.toStorage(assetId), 'WICKET_GATE_COMMAND', { setpoint });
+        loggingService.logAction(assetId, 'WICKET_GATE_COMMAND', { setpoint });                                                                                
     };
 
     const resetFatigue = (assetId: number) => {
@@ -504,7 +504,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 fatiguePoints: 0
             }
         }));
-        loggingService.logAction(idAdapter.toStorage(assetId), 'FATIGUE_RESET', { cause: 'NDT_COMPLETED' });
+        loggingService.logAction(assetId, 'FATIGUE_RESET', { cause: 'NDT_COMPLETED' });                                                                        
     };
 
     return (

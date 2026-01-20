@@ -121,9 +121,7 @@ export const DigitalIntegrity: React.FC = () => {
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
             }).subscribe();
 
-            return () => { try { (supabase as any).removeChannel(sub); } catch (e) { } };
-        }
-        return () => { };
+        return () => { try { (supabase as any).removeChannel(sub); } catch (e) { } };
     }, [selectedAsset]);
 
     // --- 2. GENESIS BLOCK (First Block) ---

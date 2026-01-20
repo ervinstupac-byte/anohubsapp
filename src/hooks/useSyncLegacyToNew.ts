@@ -39,14 +39,14 @@ export const useSyncLegacyToNew = () => {
         if (!identity?.assetId) return;
 
         // Skip if already synced this identity
-        const identityKey = idAdapter.toStorage(identity.assetId);
+        const identityKey = idAdapter.toNumber(identity.assetId) !== null ? String(idAdapter.toNumber(identity.assetId)) : idAdapter.toStorage(identity.assetId);
         if (lastSyncRef.current.identityId === identityKey) return;
         lastSyncRef.current.identityId = identityKey;
 
         console.log('[SyncEngine] Syncing AssetConfig from ProjectContext');
 
         updateConfig({
-            assetId: idAdapter.toStorage(identity.assetId),
+            assetId: idAdapter.toNumber(identity.assetId) || 0,
             assetName: identity.assetName,
             turbineType: identity.turbineType as 'PELTON' | 'FRANCIS' | 'KAPLAN',
             manufacturer: 'Legacy System',

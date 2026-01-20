@@ -101,7 +101,7 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             };
 
             return {
-                assetId: idAdapter.toStorage(asset.id),
+                assetId: idAdapter.toNumber(asset.id) || 0,
                 assetName: asset.name,
                 healthScore: score,
                 efficiencyIndex,

@@ -163,7 +163,7 @@ export const FrancisHorizontal5MW: React.FC = () => {
 
                 // fetch hydrology_context for asset's plant (if available)
                 try {
-                    const plantId = selectedAsset?.plant_id;
+                    const plantId = (selectedAsset as any)?.specs?.plant_id || (selectedAsset as any)?.plantId || (selectedAsset as any)?.plant_id;
                     if (plantId) {
                         const { data: hc } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
                         if (mounted) setHydrologyContext(hc || null);

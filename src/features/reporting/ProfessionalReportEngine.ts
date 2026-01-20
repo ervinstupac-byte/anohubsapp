@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { supabase } from '../../services/supabaseClient';
 import { TechnicalProjectState, ENGINEERING_CONSTANTS } from '../../models/TechnicalSchema';
 import { PhysicsEngine } from '../physics-core/PhysicsEngine';
 import { ExpertInference } from '../../services/ExpertInference';
@@ -391,10 +392,12 @@ export const ProfessionalReportEngine = {
         // Save or trigger download
         try {
             // Node environment: write to artifacts if fs available
+            // Use ephemeral /tmp when running on Vercel (serverless). TODO: migrate persistence to Supabase Storage for Level-5 auditability.
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const fs = require('fs');
             const path = require('path');
-            const outDir = path.join(process.cwd(), 'artifacts');
+            const isVercel = !!process.env.VERCEL;
+            const outDir = isVercel ? (process.env.REPORT_TMP_DIR || '/tmp/anohub') : path.join(process.cwd(), 'artifacts');
             if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
             const fileName = `management_summary_30d_${startStr}_to_${endStr}.pdf`;
             const outPath = path.join(outDir, fileName);

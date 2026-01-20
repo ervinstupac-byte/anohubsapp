@@ -152,12 +152,9 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
             })
             .subscribe();
 
-            return () => {
-                try { (supabase as any).removeChannel(channel); } catch (e) { }
-            };
-        }
-
-        return () => { };
+        return () => {
+            try { (supabase as any).removeChannel(channel); } catch (e) { }
+        };
     }, []);
 
     const fetchData = async () => {

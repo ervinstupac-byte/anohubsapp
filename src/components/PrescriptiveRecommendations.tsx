@@ -114,7 +114,7 @@ export const PrescriptiveRecommendations: React.FC = () => {
                                                                 </p>
                                                                     {action.executable && (
                                                                     <button
-                                                                        onClick={() => executeAction(idAdapter.toStorage(selectedAsset.id), action.action, action.value)}
+                                                                        onClick={() => executeAction(idAdapter.toNumber(selectedAsset.id) || 0, action.action, action.value)}
                                                                         className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded text-[9px] font-black text-red-400 hover:bg-red-500 hover:text-white transition-all uppercase tracking-widest"
                                                                     >
                                                                         EXECUTE NOW

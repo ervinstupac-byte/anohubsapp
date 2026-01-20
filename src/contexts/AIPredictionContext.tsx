@@ -129,7 +129,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                         ? 100 - (rul.remainingHours / rul.criticalThreshold) * 100
                         : 0;
 
-                    if (failureProbability > 50) {
+                        if (failureProbability > 50) {
                         const prescription = aiPredictionService.generatePrescription(
                             rul.componentType,
                             failureProbability
@@ -139,7 +139,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                         // 5. AUTONOMOUS WORK ORDER TRIGGER (>=95%)
                         if (failureProbability >= 95) {
                                 const existingOrder = autonomousOrders.find(
-                                order => order.assetId === aid && order.component === rul.componentType
+                                order => order.assetId === numericAssetId && order.component === rul.componentType
                             );
 
                             if (!existingOrder) {
@@ -151,8 +151,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
                                 const newOrder: AutonomousWorkOrder = {
                                     id: orderId,
-                                    assetId: aid,
-                                    assetName: asset?.name || String(aid),
+                                    assetId: numericAssetId,
+                                    assetName: asset?.name || String(numericAssetId),
                                     trigger: 'AI_PREDICTION',
                                     failureProbability,
                                     component: rul.componentType,
@@ -169,7 +169,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                 );
 
                                 // Send mobile notification (placeholder for future integration)
-                                sendMobileNotification(orderId, aid, rul.componentType, failureProbability);
+                                sendMobileNotification(orderId, numericAssetId, rul.componentType, failureProbability);
                             }
                         }
                     }

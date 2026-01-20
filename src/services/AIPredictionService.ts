@@ -250,17 +250,28 @@ class AIPredictionService {
         // residual standard deviation (process sigma)
         const residualStd = Math.sqrt(sigma2);
 
+        // Map residualStd to failure probability Pf (%) using an S-shaped mapping
+        const acceptableSigma = 0.5; // baseline acceptable process sigma
+        const z = residualStd / acceptableSigma;
+        // Approximate normal CDF tail mapping (Abramowitz approximation)
+        const t = 1 / (1 + 0.2316419 * Math.abs(z));
+        const d = 0.3989423 * Math.exp(-z * z / 2);
+        let prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+        prob = 1 - prob;
+        const pfVal = z < 0 ? 1 - prob : prob;
+        const pfPercent = Math.min(99.99, Math.max(0.01, pfVal * 100));
+
         // if slope is ~0 (stable), nothing to predict
-        if (!isFinite(a) || Math.abs(a) < 1e-16) return { weeksUntil: null, predictedTimestamp: null, confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+        if (!isFinite(a) || Math.abs(a) < 1e-16) return { weeksUntil: null, predictedTimestamp: null, confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd, pf: pfPercent };
 
         // Solve for t where y = threshold
         const tCross = (threshold - b) / a;
         const now = Date.now();
         if (!isFinite(tCross)) return { weeksUntil: null, predictedTimestamp: null, confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
-        if (tCross <= now) return { weeksUntil: 0, predictedTimestamp: Math.floor(tCross), confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+        if (tCross <= now) return { weeksUntil: 0, predictedTimestamp: Math.floor(tCross), confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd, pf: pfPercent };
 
         const weeks = (tCross - now) / (7 * 24 * 3600 * 1000);
-        return { weeksUntil: Math.max(0, weeks), predictedTimestamp: Math.floor(tCross), confidence: confidence, slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+        return { weeksUntil: Math.max(0, weeks), predictedTimestamp: Math.floor(tCross), confidence: confidence, slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd, pf: pfPercent };
     }
 
     /** Compute forecast excluding given ISO dates (YYYY-MM-DD) present in cached history or telemetry_logs */

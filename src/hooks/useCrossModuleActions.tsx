@@ -31,8 +31,8 @@ export const useCrossModuleActions = (
             if (assetId) {
                 selectAsset(assetId);
             }
-            const assetKey = assetId !== undefined && assetId !== null ? (typeof assetId === 'number' ? idAdapter.toStorage(assetId) : String(assetId)) : undefined;
-            logNavigation({ module, assetId: assetKey, sensorPath });
+            const assetKey = assetId !== undefined && assetId !== null ? (typeof assetId === 'number' ? assetId : Number(assetId)) : undefined;
+            logNavigation({ module, assetId: assetKey as any, sensorPath });
             navigate(path, { state });
         };
 

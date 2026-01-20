@@ -153,7 +153,7 @@ export const MaintenanceDashboard: React.FC = () => {
                             <GlassCard title="Service Protocols & Schedule" className="bg-slate-900/80">
                                 <div className="space-y-4">
                                     {protocols.map(proto => {
-                                        const nextDate = predictServiceDate(idAdapter.toStorage(selectedAsset.id), proto.threshold);
+                                        const nextDate = predictServiceDate(idAdapter.toNumber(selectedAsset.id) || 0, proto.threshold);
                                         const progress = (hours % proto.threshold) / proto.threshold * 100;
 
                                         return (

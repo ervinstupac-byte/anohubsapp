@@ -48,9 +48,12 @@ export const WorkOrderSummary: React.FC = () => {
     const assetOrders = useMemo(() => {
         if (!selectedAsset) return [];
 
+        const storageId = idAdapter.toStorage(selectedAsset.id);
+        const numericId = idAdapter.toNumber(selectedAsset.id);
+
         return workOrders
             .filter(wo =>
-                wo.assetId === idAdapter.toStorage(selectedAsset.id) &&
+                (String(wo.assetId) === storageId || wo.assetId === numericId) &&
                 wo.status !== 'COMPLETED' &&
                 wo.status !== 'CANCELLED'
             )

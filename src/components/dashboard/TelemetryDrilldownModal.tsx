@@ -69,18 +69,19 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
     // SURGICAL FIX 3: Regenerate trend data when asset changes
     const trendData = useMemo(() => {
         if (!selectedAsset) return [];
-        return generateTrendData(currentValue, threshold, idAdapter.toStorage(selectedAsset.id));
+        const numericId = idAdapter.toNumber(selectedAsset.id) || 0;
+        return generateTrendData(currentValue, threshold, numericId);
     }, [currentValue, threshold, selectedAsset?.id]); // Asset ID in deps ensures regeneration
 
     // Track previous asset to detect switches
     const prevAssetRef = React.useRef<number | null>(null);
     useEffect(() => {
-        const currentIdStr = selectedAsset ? idAdapter.toStorage(selectedAsset.id) : null;
-        if (selectedAsset && prevAssetRef.current && prevAssetRef.current !== currentIdStr) {
-            console.log(`[TelemetryDrilldown] Asset switched: ${prevAssetRef.current} → ${currentIdStr}`);
+        const currentIdNum = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
+        if (selectedAsset && prevAssetRef.current && currentIdNum !== null && prevAssetRef.current !== currentIdNum) {
+            console.log(`[TelemetryDrilldown] Asset switched: ${prevAssetRef.current} → ${currentIdNum}`);
             // Data automatically regenerates via useMemo deps
         }
-        prevAssetRef.current = currentIdStr;
+        prevAssetRef.current = currentIdNum;
     }, [selectedAsset]);
 
     const maintenanceAdvice = useMemo(() => {

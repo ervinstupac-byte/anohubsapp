@@ -33,7 +33,7 @@ const HydroschoolSimulator: React.FC = () => {
         let mounted = true;
         (async () => {
             try {
-                const plantId = selectedAsset?.plant_id;
+                const plantId = (selectedAsset as any)?.specs?.plant_id || (selectedAsset as any)?.plantId || (selectedAsset as any)?.plant_id;
                 if (plantId) {
                     const { data: hc } = await supabase.from('hydrology_context').select('*').eq('plant_id', plantId).single();
                     if (mounted) setHydroContext(hc || null);

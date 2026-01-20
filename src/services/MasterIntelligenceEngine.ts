@@ -197,6 +197,9 @@ export class MasterIntelligenceEngine {
                 const significant = forecast && ((forecast.tStatistic && Math.abs(forecast.tStatistic) > 2) || (forecast.confidence && forecast.confidence >= 0.95));
                 // If confidence is low, recommend Data Collection Phase instead of maintenance
                 const lowConfidence = forecast && ((forecast.confidence || 0) < 0.5 || ((forecast.sampleCount || 0) < 720));
+                // Critical maintenance if failure probability > 50% and breach is immediate (weeksUntil <= 1)
+                const criticalPf = forecast && (forecast.pf || 0) > 50 && (forecast.weeksUntil !== null && forecast.weeksUntil <= 1);
+
                 if (forecast && lowConfidence) {
                     diagnosis.serviceNotes?.push({
                         service: 'Data Collection Phase',
@@ -205,6 +208,17 @@ export class MasterIntelligenceEngine {
                         recommendation: 'Initiate scheduled high-resolution telemetry ingestion and pause automated maintenance advisories until sufficient samples are collected.',
                         sourceFiles: [
                             { filename: 'services/AIPredictionService.ts', justification: 'Forecast confidence below operational threshold; escalate to data collection.' }
+                        ]
+                    });
+                } else if (criticalPf) {
+                    diagnosis.serviceNotes?.push({
+                        service: 'Critical Maintenance Alert',
+                        severity: 'CRITICAL',
+                        message: `CRITICAL_MAINTENANCE: Estimated failure probability ${((forecast.pf||0)).toFixed(2)}% and breach predicted now (weeksUntil=${forecast.weeksUntil}). Immediate intervention required.`,
+                        recommendation: 'Isolate affected unit, reduce load to minimum, and execute emergency inspection protocol. [AUTOMATED_CRITICAL] ',
+                        sourceFiles: [
+                            { filename: 'services/AIPredictionService.ts', justification: 'High Pf derived from residual process sigma; triggers critical alert.' },
+                            { filename: 'services/MasterIntelligenceEngine.ts', justification: 'Final decision engine: Pf > 50% and imminent breach.' }
                         ]
                     });
                 } else if (forecast && forecast.weeksUntil !== null && forecast.weeksUntil < 8 && significant) {

@@ -142,11 +142,12 @@ export const ProtocolLaunchpad: React.FC = () => {
             // 1. Create Ledger Entry FIRST to get authenticity UUID
             const numericAssetId = idAdapter.toNumber(selectedAsset.id) ?? 0;
             const storageAssetId = idAdapter.toStorage(selectedAsset.id);
+            // Use numeric asset id for ledger payload to match historical ledger shape
             const entry = LocalLedger.createEntry({
                 type: 'REPORT_GENERATED',
                 protocol: protocol.id,
                 protocolName: protocol.name,
-                assetId: storageAssetId,
+                assetId: numericAssetId,
                 timestamp: Date.now()
             }, 'PROTOCOL');
 

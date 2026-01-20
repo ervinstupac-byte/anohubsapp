@@ -33,7 +33,7 @@ export const StructuralIntegrity: React.FC = () => {
                 <select
                     className="bg-slate-900 border border-white/10 rounded-xl px-4 py-2 text-xs text-white outline-none font-bold uppercase cursor-pointer"
                     value={String(selectedAssetId)}
-                    onChange={(e) => setSelectedAssetId(Number(e.target.value))}
+                    onChange={(e) => setSelectedAssetId(e.target.value)}
                 >
                     {assets.map(a => (
                         <option key={a.id} value={idAdapter.toStorage(a.id)}>{a.name}</option>
