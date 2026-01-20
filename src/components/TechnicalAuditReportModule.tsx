@@ -70,7 +70,7 @@ export const TechnicalAuditReportModule: React.FC = () => {
             engineerName: "CEREBRO AI",
             t
         });
-        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_Report_${new Date().toISOString().slice(0, 10)}.pdf`, true);
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_Report_${new Date().toISOString().slice(0, 10)}.pdf`, true, { reportType: 'TECHNICAL_AUDIT' });
     };
 
     return (

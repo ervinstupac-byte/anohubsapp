@@ -2,12 +2,13 @@ import React, { useMemo } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 
 export const MachineProtectionSystem: React.FC = () => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
 
-    const assetTele = selectedAsset ? telemetry[selectedAsset.id] : null;
+    const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
     const insights = useMemo(() => {
         if (!assetTele) return [];

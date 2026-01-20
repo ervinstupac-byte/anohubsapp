@@ -4,6 +4,7 @@ import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowU
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { idAdapter } from '../../utils/idAdapter';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -157,7 +158,10 @@ export const AssetPassportCard: React.FC = () => {
         pushNotification('INFO', t('toolbox.toast.generatingPassport', { asset: selectedAsset.name }));
 
         try {
-            const relevantLogs = assetLogs.filter(log => log.assetId === selectedAsset.id);
+            const numericAssetId = idAdapter.toNumber(selectedAsset.id);
+            const relevantLogs = numericAssetId !== null
+                ? assetLogs.filter(log => log.assetId === numericAssetId)
+                : assetLogs.filter(log => String(log.assetId) === String(selectedAsset.id));
             const blob = ForensicReportService.generateAssetPassport({
                 asset: selectedAsset,
                 logs: relevantLogs,
@@ -317,7 +321,7 @@ export const AssetPassportCard: React.FC = () => {
                     <ModernButton
                         variant="ghost"
                         className="flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide hover:bg-purple-500/10 hover:text-purple-400"
-                        onClick={() => navigate('/hpp-builder', { state: { highlightAsset: selectedAsset?.id, fromPassport: true } })}
+                        onClick={() => navigate('/hpp-builder', { state: { highlightAsset: idAdapter.toStorage(selectedAsset?.id), fromPassport: true } })}
                     >
                         <Layers className="w-4 h-4" />
                         {t('dashboard.assetPassport.viewDesign', 'View Design')}

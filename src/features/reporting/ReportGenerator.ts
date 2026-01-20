@@ -6,6 +6,7 @@ import i18n from '../../i18n';
 import { ActionEngine } from '../business/logic/ActionEngine';
 import { calculateMaintenancePrediction } from '../maintenance/logic/PredictiveAnalytics';
 import { MaintenanceEngine } from '../../services/MaintenanceEngine';
+import idAdapter from '../../utils/idAdapter';
 
 // Metadata configuration
 const PLATFORM_VERSION = 'v1.0.0';
@@ -689,8 +690,8 @@ export class ReportGenerator {
         currentY = (doc as any).lastAutoTable.finalY + 15;
 
         // --- SECTION B: PREDICTIVE HEALTH (PAE NC-4.2) ---
-        const prediction = calculateMaintenancePrediction({
-            config: { id: state.identity.assetId, name: state.identity.assetName, designLifeHours: 50000, installationDate: '', wearFactorCurve: 'LINEAR' },
+            const prediction = calculateMaintenancePrediction({
+            config: { id: idAdapter.toStorage(state.identity.assetId), name: state.identity.assetName, designLifeHours: 50000, installationDate: '', wearFactorCurve: 'LINEAR' },
             telemetry: {
                 accumulatedRunHours: state.identity.totalOperatingHours || 0,
                 currentVibrationMMs: Math.max(state.mechanical.vibrationX, state.mechanical.vibrationY),

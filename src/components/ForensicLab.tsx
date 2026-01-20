@@ -32,7 +32,10 @@ export const ForensicLab: React.FC = () => {
                 rchAnalysis,
                 t
             });
-            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedSnapshot.id}.pdf`, true);
+            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedSnapshot.id}.pdf`, true, {
+                reportType: 'ROOT_CAUSE_DOSSIER',
+                metadata: { snapshotId: selectedSnapshot.id }
+            });
         }
     };
 

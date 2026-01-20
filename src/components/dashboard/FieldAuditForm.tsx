@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { idAdapter } from '../../utils/idAdapter';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -541,11 +542,12 @@ export const FieldAuditForm: React.FC<FieldAuditFormProps> = ({
         setIsSubmitting(true);
 
         try {
+            const numericAssetId = idAdapter.toNumber(selectedAsset.id) ?? 0;
             const auditData = {
                 timestamp: Date.now(),
                 operator: operatorName,
                 asset: {
-                    id: selectedAsset.id,
+                    id: numericAssetId,
                     name: selectedAsset.name
                 },
                 measurements: formData,
@@ -557,7 +559,7 @@ export const FieldAuditForm: React.FC<FieldAuditFormProps> = ({
             addEntry({
                 protocolId: 'field-audit',
                 protocolName: 'Field Audit Report',
-                assetId: selectedAsset.id,
+                assetId: numericAssetId,
                 assetName: selectedAsset.name,
                 type: 'protocol',
                 details: auditData

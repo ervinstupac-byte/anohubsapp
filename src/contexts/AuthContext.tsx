@@ -34,13 +34,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }, 5000);
 
             supabase.auth.getSession()
-                .then(({ data: { session } }) => {
+                .then(({ data: { session } }: any) => {
                     clearTimeout(timeout);
                     setSession(session);
                     setUser(session?.user ?? null);
                     setLoading(false);
                 })
-                .catch(err => {
+                .catch((err: any) => {
                     clearTimeout(timeout);
                     console.error('[AUTH] Critical session check failure:', err);
                     setLoading(false);
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         // Slušaj promjene
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
             // Ako smo u guest modu, ignoriraj supabase promjene dok se ne odjavimo
             if (!isGuest) {
                 setSession(session);

@@ -264,7 +264,7 @@ export class AssetIdentityService {
      * Create default AssetIdentity template
      */
     static createDefaultIdentity(
-        assetId: string,
+        assetId: number,
         assetName: string,
         turbineType: TurbineType,
         createdBy: string

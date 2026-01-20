@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';
@@ -14,8 +15,9 @@ export const ShiftLog: React.FC = () => {
         e.preventDefault();
         if (!observation.trim() || !selectedAsset) return;
 
+        const numeric = idAdapter.toNumber(selectedAsset.id);
         addShiftLog({
-            assetId: selectedAsset.id,
+            assetId: numeric !== null ? numeric : selectedAsset.id as any,
             workerName: 'Duty Engineer',
             observation: observation.trim()
         });

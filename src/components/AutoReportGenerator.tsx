@@ -87,11 +87,12 @@ export const AutoReportGenerator: React.FC = () => {
             t
         });
 
-        // Download
+        // Download + persist metadata
         ForensicReportService.openAndDownloadBlob(
             blob,
             `ServiceReport_${selectedAsset.name}_${new Date().toISOString().split('T')[0]}.pdf`,
-            true
+            true,
+            { assetId: selectedAsset ? selectedAsset.id : undefined, reportType: 'SERVICE_AUDIT', metadata: { serviceType, engineerName } }
         );
 
         setIsGenerating(false);

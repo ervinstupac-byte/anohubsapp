@@ -23,6 +23,7 @@ import { RevenueImpactCard } from './RevenueImpactCard';
 import { MaintenanceTimeline } from '../maintenance/MaintenanceTimeline';
 import { SecondaryMetricsGrid } from './SecondaryMetricsGrid';
 import { useAssetContext } from '../../contexts/AssetContext';
+import idAdapter from '../../utils/idAdapter';
 import { useCrossModuleActions } from '../../hooks/useCrossModuleActions';
 import { AIInsightsPanel } from './AIInsightsPanel';
 import { TurbineRunner3D } from '../three/TurbineRunner3D';
@@ -30,6 +31,8 @@ import { ScenarioController } from './ScenarioController';
 import { LiveMetricToken } from '../../features/telemetry/components/LiveMetricToken';
 import { ForensicReportService } from '../../services/ForensicReportService';
 import { useProtocolHistoryStore, historyToSparklineMarkers } from '../../stores/ProtocolHistoryStore';
+import { aiPredictionService } from '../../services/AIPredictionService';
+import { supabase } from '../../services/supabaseClient';
 import { BootSequence } from '../BootSequence';
 import { EngineeringDossierCard } from '../EngineeringDossierCard';
 
@@ -81,10 +84,90 @@ export const ExecutiveDashboard: React.FC = () => {
 
     const [isBooting, setIsBooting] = useState(true);
     const { getEntriesForAsset } = useProtocolHistoryStore();
+    const [forecast, setForecast] = useState<{ weeksUntil: number | null; predictedTimestamp: number | null; confidence: number } | null>(null);
+    const [sampleCount, setSampleCount] = useState<number | null>(null);
+    const [dec25Present, setDec25Present] = useState(false);
+    const [residualStd, setResidualStd] = useState<number | null>(null);
+    const [pf, setPf] = useState<number | null>(null);
+
+    // Fetch forecast for selected asset
+    React.useEffect(() => {
+        let mounted = true;
+        const fetchForecast = async () => {
+            if (!selectedAsset) { setForecast(null); return; }
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            if (numeric === null) return;
+            try {
+                const f = await aiPredictionService.forecastEtaBreakEven(numeric);
+                if (mounted) {
+                    setForecast(f);
+                    setResidualStd((f && typeof f.residualStd === 'number') ? f.residualStd : null);
+                    setSampleCount((f && typeof f.sampleCount === 'number') ? f.sampleCount : sampleCount);
+                }
+                // fetch cache to determine sample count and Dec25 presence
+                try {
+                    const dbId = idAdapter.toDb(numeric);
+                    const { data: cacheRes, error: cacheErr } = await supabase.from('telemetry_history_cache').select('history').eq('asset_id', dbId).single();
+                    const hist = cacheRes?.history || [];
+                        if (mounted) {
+                        const histCount = Array.isArray(hist) ? hist.length : 0;
+                        setSampleCount(histCount);
+                        const hasDec25 = (hist || []).some((p: any) => {
+                            try { const d = new Date(p.t); return d.getUTCFullYear() === 2025 && d.getUTCMonth() === 11 && d.getUTCDate() === 25; } catch(e){return false}
+                        });
+                        setDec25Present(!!hasDec25);
+                        // compute Pf from residualStd if not already set by forecast
+                        try {
+                            const rStd = (f && typeof f.residualStd === 'number') ? f.residualStd : null;
+                            const residual = rStd !== null ? rStd : (() => {
+                                // attempt to compute from cache quickly
+                                const pts = (hist || []).map((p: any) => ({ t: p.t, y: p.y }));
+                                if (pts.length < 5) return null;
+                                const n = pts.length;
+                                const meanT = pts.reduce((s:any,p:any)=>s+p.t,0)/n;
+                                const meanY = pts.reduce((s:any,p:any)=>s+p.y,0)/n;
+                                const Sxx = pts.reduce((s:any,p:any)=>s+Math.pow(p.t-meanT,2),0);
+                                const Sxy = pts.reduce((s:any,p:any)=>s+(p.t-meanT)*(p.y-meanY),0);
+                                const a = Sxy/(Sxx||1);
+                                const b = meanY - a*meanT;
+                                const residuals = pts.map((p:any)=>p.y - (a*p.t + b));
+                                const SSE = residuals.reduce((s:any,r:any)=>s+r*r,0);
+                                const sigma2 = SSE/Math.max(1,(n-2));
+                                return Math.sqrt(sigma2);
+                            })();
+                            setResidualStd(residual);
+                            if (residual !== null) {
+                                // compute Pf using same baseline as RiskReport
+                                const acceptableSigma = 0.5;
+                                const z = residual / acceptableSigma;
+                                // normalCDF
+                                const t = 1 / (1 + 0.2316419 * Math.abs(z));
+                                const d = 0.3989423 * Math.exp(-z * z / 2);
+                                let prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+                                prob = 1 - prob;
+                                const pfVal = z < 0 ? 1 - prob : prob;
+                                setPf(Math.min(99.99, Math.max(0.01, pfVal * 100)));
+                            }
+                        } catch (e) {
+                            // ignore
+                        }
+                    }
+                } catch (e) {
+                    // ignore cache fetch errors
+                }
+            } catch (e) {
+                console.warn('Failed to fetch forecast', e);
+                if (mounted) setForecast(null);
+            }
+        };
+        fetchForecast();
+        return () => { mounted = false; };
+    }, [selectedAsset]);
 
     const eventMarkers = useMemo(() => {
-        if (!selectedAsset?.id) return [];
-        const entries = getEntriesForAsset(selectedAsset.id, 24);
+        const numeric = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
+        if (numeric === null) return [];
+        const entries = getEntriesForAsset(numeric, 24);
         return historyToSparklineMarkers(entries, 24);
     }, [selectedAsset?.id, getEntriesForAsset]);
 
@@ -108,7 +191,18 @@ export const ExecutiveDashboard: React.FC = () => {
                 threeRef: threeContainerRef.current || undefined,
                 t
             });
-            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedAsset.name}_${Date.now()}.pdf`, true);
+            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedAsset.name}_${Date.now()}.pdf`, true, {
+                assetId: idAdapter.toDb(selectedAsset.id),
+                projectState: {
+                    identity,
+                    hydraulic: livePhysics,
+                    mechanical,
+                    structural,
+                    market: financials,
+                    investigatedComponents
+                },
+                reportType: 'FORENSIC_DOSSIER'
+            });
         } catch (error) {
             console.error("Forensic PDF Generation failed:", error);
         }
@@ -164,6 +258,27 @@ export const ExecutiveDashboard: React.FC = () => {
                     </header>
 
                     <HeritagePrecisionBanner currentAlignment={currentAlignment} onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT))} />
+                    {/* Truth Badge: show Probability of Failure and confidence when high */}
+                    {pf !== null ? (
+                        <div className="mt-3 flex items-center gap-3">
+                            <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-2">
+                                <ShieldAlert className="w-4 h-4 text-red-400" />
+                                <div>
+                                    <div className="text-[10px] uppercase font-bold">Probability of Failure</div>
+                                    <div className="font-black text-lg">{pf.toFixed(2)}%</div>
+                                </div>
+                            </div>
+                            {forecast && (forecast.confidence || 0) >= 0.95 && sampleCount && sampleCount >= 720 ? (
+                                <div className="px-3 py-2 bg-emerald-900/10 border border-emerald-500/20 rounded text-emerald-300 text-sm font-mono inline-flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-emerald-400" />
+                                    <div>
+                                        <div className="text-[10px] uppercase font-bold">High Confidence</div>
+                                        <div className="font-mono">Verified — {sampleCount} hourly samples</div>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
+                    ) : null}
 
                     {(() => {
                         const crossSectorEffects = CrossSectorEngine.analyzeCrossSectorEffects({
@@ -364,6 +479,41 @@ export const ExecutiveDashboard: React.FC = () => {
                             <SmartManual />
                         </div>
                     </div>
+
+                    {/* Small Forecast Badge */}
+                    {selectedAsset && forecast ? (
+                        <div className="mt-3 space-y-2">
+                            {/* Confidence Warning when insufficient samples or low confidence */}
+                            {(forecast.confidence < 0.5 || (sampleCount !== null && sampleCount < 720)) ? (
+                                <div className="px-3 py-2 bg-rose-900/10 border border-rose-600/20 rounded text-rose-300 text-sm font-mono inline-flex items-center gap-3">
+                                    <ShieldAlert className="w-4 h-4 text-rose-400" />
+                                    <div>
+                                        <div className="text-[10px] uppercase font-bold">Confidence Warning</div>
+                                        <div className="font-mono">Low Confidence ({(forecast.confidence||0).toFixed(3)}) - Required 720 samples, found {sampleCount ?? 'N/A'}</div>
+                                    </div>
+                                </div>
+                            ) : forecast.predictedTimestamp ? (
+                                <div className="px-3 py-2 bg-amber-900/10 border border-amber-500/20 rounded text-amber-300 text-sm font-mono inline-flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-amber-400" />
+                                    <div>
+                                        <div className="text-[10px] uppercase">Predicted Efficiency Breach (90%)</div>
+                                        <div className="font-bold">{new Date(forecast.predictedTimestamp).toLocaleDateString()}</div>
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {/* Dec25 Critical Event Alert */}
+                            {dec25Present ? (
+                                <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-3">
+                                    <ShieldAlert className="w-4 h-4 text-red-400" />
+                                    <div>
+                                        <div className="text-[10px] uppercase font-bold">Model-Distorting Anomaly</div>
+                                        <div className="font-mono">Dec 25 hourly spike detected — Investigate Flow Surge Impact</div>
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
+                    ) : null}
 
                     {/* NC-9.0: Trust & Authority Footer */}
                     <div className="pt-10">

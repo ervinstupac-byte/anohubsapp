@@ -1,12 +1,19 @@
 import { useMemo } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { Asset } from '../types.ts';
+import idAdapter from '../utils/idAdapter';
 
-export const useRiskCalculator = (assetId?: string) => {
+export const useRiskCalculator = (assetId?: string | number) => {
     const { assets, selectedAsset, assetLogs } = useAssetContext();
 
     // Use provided assetId or fall back to selectedAsset
-    const targetAsset = assetId ? assets.find(a => a.id === assetId) : selectedAsset;
+    let targetAsset: Asset | undefined;
+    if (assetId !== undefined && assetId !== null) {
+        const numeric = typeof assetId === 'number' ? assetId : idAdapter.toNumber(assetId);
+        targetAsset = numeric === null ? undefined : assets.find(a => a.id === numeric);
+    } else {
+        targetAsset = selectedAsset ?? undefined;
+    }
 
     return useMemo(() => {
         if (!targetAsset) {

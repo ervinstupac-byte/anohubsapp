@@ -11,6 +11,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { EngineeringSchema } from '../schemas/engineering.ts';
 import { useRisk } from '../contexts/RiskContext.tsx';
+import idAdapter from '../utils/idAdapter';
 
 // --- TYPE DEFINITIONS ---
 interface StageStatus {
@@ -74,10 +75,12 @@ export const InstallationGuarantee: React.FC = () => {
         if (!selectedAsset || !currentValue || isNaN(parseFloat(currentValue))) return;
 
         try {
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : selectedAsset.id;
             const { data, error } = await supabase
                 .from('installation_audits')
                 .select('audit_data')
-                .eq('asset_id', selectedAsset.id)
+                .eq('asset_id', assetDbId)
                 .order('created_at', { ascending: false })
                 .limit(2);
 
@@ -159,9 +162,12 @@ export const InstallationGuarantee: React.FC = () => {
         const entries = Object.values(audit.stageStatus) as StageStatus[];
         const overallStatus = entries.some((s) => s.status === 'FAIL') ? 'FAILED' : 'PASSED';
 
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : selectedAsset.id;
+
         const payload = {
             engineer_id: user?.email || 'Guest',
-            asset_id: selectedAsset.id,
+            asset_id: assetDbId,
             asset_name_audit: selectedAsset.name,
             audit_data: audit.stageStatus,
             final_notes: audit.finalNotes,

@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.ts';
+import idAdapter from '../utils/idAdapter';
 
 export type LogSeverity = 'INFO' | 'WARNING' | 'CRITICAL';
 export type LogEventType = 'STRESS_TEST' | 'CRITICAL_FAILURE' | 'SYSTEM_RESET' | 'PERIODIC_HEALTH' | 'USER_ACTION' | 'MODULE_OPEN';
@@ -16,10 +17,12 @@ class LoggingService {
      */
     async logEvent(log: TelemetryLog) {
         try {
+            const numeric = idAdapter.toNumber(log.assetId);
+            const dbAssetId = numeric !== null ? idAdapter.toDb(numeric) : log.assetId;
             const { error } = await supabase
                 .from('telemetry_logs')
                 .insert({
-                    asset_id: log.assetId,
+                    asset_id: dbAssetId,
                     event_type: log.eventType,
                     severity: log.severity,
                     details: log.details

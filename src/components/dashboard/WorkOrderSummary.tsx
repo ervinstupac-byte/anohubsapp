@@ -4,6 +4,7 @@ import { Wrench, Clock, ChevronRight, AlertTriangle, AlertCircle, ArrowUpRight }
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useMaintenance, WorkOrder } from '../../contexts/MaintenanceContext';
 import { useAssetContext } from '../../contexts/AssetContext';
+import idAdapter from '../../utils/idAdapter';
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -49,7 +50,7 @@ export const WorkOrderSummary: React.FC = () => {
 
         return workOrders
             .filter(wo =>
-                wo.assetId === selectedAsset.id &&
+                wo.assetId === idAdapter.toStorage(selectedAsset.id) &&
                 wo.status !== 'COMPLETED' &&
                 wo.status !== 'CANCELLED'
             )

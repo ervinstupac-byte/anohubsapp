@@ -6,6 +6,7 @@ import { QUESTIONS } from '../constants.ts';
 import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
+import idAdapter from '../utils/idAdapter';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
@@ -28,11 +29,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
         const loadDraft = async () => {
             if (!user || !selectedAsset) return;
 
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+
             const { data, error } = await supabase
                 .from('diagnostic_drafts')
                 .select('answers')
                 .eq('user_id', user.id)
-                .eq('asset_id', selectedAsset.id)
+                .eq('asset_id', assetDbId)
                 .maybeSingle();
 
             if (!error && data && data.answers) {
@@ -55,11 +59,13 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
 
         const timer = setTimeout(async () => {
             console.log('💾 Saving draft to Supabase...');
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
             const { error } = await supabase
                 .from('diagnostic_drafts')
                 .upsert({
                     user_id: user.id,
-                    asset_id: selectedAsset.id,
+                    asset_id: assetDbId,
                     answers: answers,
                     updated_at: new Date().toISOString()
                 }, { onConflict: 'user_id,asset_id' });

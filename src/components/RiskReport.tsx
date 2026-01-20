@@ -8,6 +8,8 @@ import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 // ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
 import { ForensicReportService } from '../services/ForensicReportService';
+import idAdapter from '../utils/idAdapter';
+import { aiPredictionService } from '../services/AIPredictionService';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { GlassCard } from '../shared/components/ui/GlassCard';
@@ -29,6 +31,11 @@ export const RiskReport: React.FC = () => {
     const [cloudDesignData, setCloudDesignData] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [forecast, setForecast] = useState<any | null>(null);
+    const [sampleCount, setSampleCount] = useState<number | null>(null);
+    const [residualStd, setResidualStd] = useState<number | null>(null);
+    const [dec25Present, setDec25Present] = useState<boolean>(false);
+    const [dec25DeltaWeeks, setDec25DeltaWeeks] = useState<number | null>(null);
 
     // --- CALCULATE LOCAL RISK DATA FROM CONTEXT ---
     const localRiskData = useMemo(() => {
@@ -61,7 +68,7 @@ export const RiskReport: React.FC = () => {
             risk_level: risk_level,
             answers: answers,
             description: description || 'No notes provided.',
-            asset_id: selectedAsset?.id,
+            asset_id: selectedAsset ? idAdapter.toStorage(selectedAsset.id) : undefined,
             created_at: new Date().toISOString(),
             isDraft: true // Flag to identify local data
         };
@@ -69,6 +76,61 @@ export const RiskReport: React.FC = () => {
 
     // --- 1. FETCH DATA FROM CLOUD (LOGIKA OSTAJE ISTA) ---
     useEffect(() => {
+        let mounted = true;
+        const fetchForecast = async () => {
+            if (!selectedAsset) {
+                setForecast(null);
+                return;
+            }
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            if (numeric === null) return;
+            try {
+                const f: any = await aiPredictionService.forecastEtaBreakEven(numeric);
+                if (mounted) {
+                    setForecast(f);
+                    setSampleCount(f.sampleCount ?? null);
+                    setResidualStd(f.residualStd ?? null);
+                }
+
+                // Inspect cached history to detect Dec 25 and compute sensitivity
+                try {
+                    const dbId = idAdapter.toDb(numeric);
+                    const { data: cacheRes, error: cacheErr } = await supabase
+                        .from('telemetry_history_cache')
+                        .select('history')
+                        .eq('asset_id', dbId)
+                        .single();
+
+                    if (!cacheErr && cacheRes && Array.isArray(cacheRes.history)) {
+                        const hist = cacheRes.history as any[];
+                        const dec25Hits = hist.filter(h => new Date(h.t).toISOString().slice(5,10) === '12-25');
+                        if (dec25Hits.length > 0) {
+                            setDec25Present(true);
+                            // compute forecast excluding Dec25
+                            const excludeDates = Array.from(new Set(dec25Hits.map(d => new Date(d.t).toISOString().slice(0,10))));
+                            const fEx = await aiPredictionService.forecastExcludingDates(numeric, excludeDates);
+                            if (fEx && fEx.weeksUntil !== null && f && f.weeksUntil !== null) {
+                                setDec25DeltaWeeks((f.weeksUntil - fEx.weeksUntil));
+                            }
+                        } else {
+                            setDec25Present(false);
+                            setDec25DeltaWeeks(null);
+                        }
+                    }
+                } catch (e) {
+                    // ignore cache errors
+                }
+            } catch (e) {
+                console.warn('Forecast fetch failed', e);
+                if (mounted) setForecast(null);
+            }
+        };
+
+        fetchForecast();
+        return () => { mounted = false; };
+    }, [selectedAsset]);
+
+        useEffect(() => {
         const fetchData = async () => {
             if (!selectedAsset) {
                 setCloudRiskData(null);
@@ -79,10 +141,13 @@ export const RiskReport: React.FC = () => {
             setLoading(true);
             try {
                 // Fetch latest Risk Assessment
+                const numeric = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
+                const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+
                 const { data: risk } = await supabase
                     .from('risk_assessments')
                     .select('*')
-                    .eq('asset_id', selectedAsset.id)
+                    .eq('asset_id', assetDbId)
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .single();
@@ -91,7 +156,7 @@ export const RiskReport: React.FC = () => {
                 const { data: design } = await supabase
                     .from('turbine_designs')
                     .select('*')
-                    .eq('asset_id', selectedAsset.id)
+                    .eq('asset_id', assetDbId)
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .single();
@@ -139,7 +204,11 @@ export const RiskReport: React.FC = () => {
             const filename = `${selectedAsset.name.replace(/\s+/g, '_')}_Master_Dossier.pdf`;
 
             // Koristimo helper funkciju koja otvara Preview ili skida fajl
-            ForensicReportService.openAndDownloadBlob(pdfBlob, filename, openPreview);
+            ForensicReportService.openAndDownloadBlob(pdfBlob, filename, openPreview, {
+                assetId: selectedAsset ? idAdapter.toDb(selectedAsset.id) : undefined,
+                reportType: 'MASTER_DOSSIER',
+                metadata: { preview: !!openPreview }
+            });
 
             if (openPreview) {
                 showToast(t('riskReport.previewOpened', 'Dossier opened in new window.'), 'success');
@@ -213,6 +282,25 @@ export const RiskReport: React.FC = () => {
     };
 
     const hasData = riskData || designData;
+
+    // Normal CDF helper
+    const normalCDF = (x: number) => {
+        // Abramowitz & Stegun approximation
+        const t = 1 / (1 + 0.2316419 * Math.abs(x));
+        const d = 0.3989423 * Math.exp(-x * x / 2);
+        let prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+        prob = 1 - prob;
+        return x < 0 ? 1 - prob : prob;
+    };
+
+    // Compute Probability of Failure from residual std (process sigma)
+    const computePfFromSigma = (sigma: number | null) => {
+        if (sigma === null) return null;
+        const acceptableSigma = 0.5; // 0.5% efficiency std as operational baseline
+        const z = sigma / acceptableSigma; // higher z -> higher Pf
+        const pf = Math.min(99.99, Math.max(0.01, normalCDF(z) * 100));
+        return pf;
+    };
 
     return (
         <div className="animate-fade-in pb-12 space-y-8 max-w-7xl mx-auto">
@@ -289,9 +377,53 @@ export const RiskReport: React.FC = () => {
                                 {/* ... (prikaz Risk Level, Gap Score, Engineer Notes) ... */}
                                 <div className="flex justify-between items-center p-4 rounded-xl border bg-slate-900/50 border-slate-700">
                                     <span className="text-slate-400 text-sm font-bold uppercase tracking-wider">{t('riskReport.riskLevel', 'Risk Level')}</span>
-                                    <span className={`text-xl font-black uppercase px-3 py-1 rounded border ${getRiskColor(riskData.risk_level)}`}>
-                                        {riskData.risk_level}
-                                    </span>
+                                    {(() => {
+                                        const pf = computePfFromSigma(residualStd);
+                                        if (pf !== null) {
+                                            return (
+                                                <span className={`text-xl font-black uppercase px-3 py-1 rounded border text-red-400 border-red-500/50 bg-red-500/10`}>
+                                                    {`P_f: ${pf.toFixed(1)}%`}
+                                                </span>
+                                            );
+                                        }
+                                        return (
+                                            <span className={`text-xl font-black uppercase px-3 py-1 rounded border ${getRiskColor(riskData.risk_level)}`}>
+                                                {riskData.risk_level}
+                                            </span>
+                                        );
+                                    })()}
+                                </div>
+
+                                {/* Predicted efficiency breach (90%) */}
+                                <div className="mt-3 text-sm text-slate-400 space-y-2">
+                                    {forecast && forecast.predictedTimestamp ? (
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs uppercase tracking-wider font-bold">Predicted Efficiency Breach (90%):</span>
+                                            <span className="font-mono text-sm text-amber-300">{new Date(forecast.predictedTimestamp).toLocaleString()}</span>
+                                        </div>
+                                    ) : (
+                                        <div className="text-xs text-slate-500 italic">No predicted breach within forecast window.</div>
+                                    )}
+
+                                    {/* Confidence injection next to risk score */}
+                                    {forecast ? (
+                                        (forecast.confidence < 0.85) ? (
+                                            <div className="text-sm text-rose-300 font-bold uppercase">Risk Evaluation: Data Insufficient (confidence {(forecast.confidence||0).toFixed(3)})</div>
+                                        ) : (
+                                            <div className="text-sm text-slate-400">Forecast confidence: {(forecast.confidence||0).toFixed(3)} — samples: {sampleCount ?? 'N/A'}</div>
+                                        )
+                                    ) : null}
+
+                                    {/* Anomaly Impact Note */}
+                                    {dec25Present ? (
+                                        <div className="mt-2 p-3 rounded bg-red-900/10 border border-red-600/20 text-red-300 text-sm font-mono">
+                                            <div className="font-bold uppercase">Model-Distorting Anomaly — Dec 25 Flow Surge</div>
+                                            <div>Current risk / forecast is heavily influenced by a Dec 25 hourly outlier.</div>
+                                            {dec25DeltaWeeks !== null ? (
+                                                <div>Estimated forecast change due to Dec 25: {dec25DeltaWeeks.toFixed(0)} weeks (approx).</div>
+                                            ) : null}
+                                        </div>
+                                    ) : null}
                                 </div>
 
                                 <div>

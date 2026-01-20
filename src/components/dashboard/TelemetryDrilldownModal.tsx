@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Z_INDEX, SECTOR_GLOW } from '../../shared/design-tokens';
 import { useAssetContext } from '../../contexts/AssetContext';
 import docsData from '../../i18n/locales/docs.json';
+import idAdapter from '../../utils/idAdapter';
 
 interface TelemetryDrilldownModalProps {
     isOpen: boolean;
@@ -68,17 +69,18 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
     // SURGICAL FIX 3: Regenerate trend data when asset changes
     const trendData = useMemo(() => {
         if (!selectedAsset) return [];
-        return generateTrendData(currentValue, threshold, selectedAsset.id);
+        return generateTrendData(currentValue, threshold, idAdapter.toStorage(selectedAsset.id));
     }, [currentValue, threshold, selectedAsset?.id]); // Asset ID in deps ensures regeneration
 
     // Track previous asset to detect switches
     const prevAssetRef = React.useRef<string | null>(null);
     useEffect(() => {
-        if (selectedAsset && prevAssetRef.current && prevAssetRef.current !== selectedAsset.id) {
-            console.log(`[TelemetryDrilldown] Asset switched: ${prevAssetRef.current} → ${selectedAsset.id}`);
+        const currentIdStr = selectedAsset ? idAdapter.toStorage(selectedAsset.id) : null;
+        if (selectedAsset && prevAssetRef.current && prevAssetRef.current !== currentIdStr) {
+            console.log(`[TelemetryDrilldown] Asset switched: ${prevAssetRef.current} → ${currentIdStr}`);
             // Data automatically regenerates via useMemo deps
         }
-        prevAssetRef.current = selectedAsset?.id || null;
+        prevAssetRef.current = currentIdStr;
     }, [selectedAsset]);
 
     const maintenanceAdvice = useMemo(() => {

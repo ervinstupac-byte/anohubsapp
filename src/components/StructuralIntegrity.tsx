@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 
@@ -9,7 +10,7 @@ export const StructuralIntegrity: React.FC = () => {
     const { telemetry } = useTelemetry();
     const { assets } = useAssetContext();
     const { activeDiagnoses } = useDiagnostic();
-    const [selectedAssetId, setSelectedAssetId] = useState<string>(assets[0]?.id || '');
+    const [selectedAssetId, setSelectedAssetId] = useState<string>(assets[0] ? idAdapter.toStorage(assets[0].id) : '');
 
     const assetTele = telemetry[selectedAssetId];
 
@@ -35,7 +36,7 @@ export const StructuralIntegrity: React.FC = () => {
                     onChange={(e) => setSelectedAssetId(e.target.value)}
                 >
                     {assets.map(a => (
-                        <option key={a.id} value={a.id}>{a.name}</option>
+                        <option key={a.id} value={idAdapter.toStorage(a.id)}>{a.name}</option>
                     ))}
                 </select>
             </div>

@@ -12,6 +12,7 @@ import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { FetchSkeleton } from '../shared/components/ui/FetchSkeleton';
 import { RefreshCw } from 'lucide-react'; // Icon for Fetch
+import idAdapter from '../utils/idAdapter';
 
 // --- TYPES ---
 interface Block {
@@ -87,7 +88,7 @@ export const DigitalIntegrity: React.FC = () => {
                 .limit(50);
 
             if (selectedAsset) {
-                query = query.eq('asset_id', selectedAsset.id);
+                query = query.eq('asset_id', idAdapter.toStorage(selectedAsset.id));
             }
 
             const { data, error } = await query;
@@ -109,13 +110,13 @@ export const DigitalIntegrity: React.FC = () => {
     useEffect(() => {
         fetchLedger();
 
-        const sub = supabase.channel('public:digital_integrity_ledger')
+            const sub = supabase.channel('public:digital_integrity_ledger')
             .on('postgres_changes', {
                 event: 'INSERT',
                 schema: 'public',
                 table: 'digital_integrity_ledger',
-                filter: selectedAsset ? `asset_id=eq.${selectedAsset.id}` : undefined
-            }, (payload) => {
+                    filter: selectedAsset ? `asset_id=eq.${idAdapter.toStorage(selectedAsset.id)}` : undefined
+            }, (payload: any) => {
                 const newBlock = payload.new as Block;
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
             }).subscribe();
@@ -149,7 +150,7 @@ export const DigitalIntegrity: React.FC = () => {
 
         setIsMining(true);
 
-        const dataString = `${selectedAsset.id}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
+        const dataString = `${idAdapter.toStorage(selectedAsset.id)}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
         const prevBlock = ledger[0];
 
         try {
@@ -166,7 +167,7 @@ export const DigitalIntegrity: React.FC = () => {
                 prev_hash: prevBlock.hash,
                 status: 'Verified',
                 engineer_id: engineer,
-                asset_id: selectedAsset.id.toString(),
+                asset_id: idAdapter.toStorage(selectedAsset.id),
             };
 
             const { error } = await supabase.from('digital_integrity_ledger').insert([newBlock]);

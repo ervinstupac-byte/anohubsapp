@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { useToast } from '../contexts/ToastContext.tsx';
 
 export const StressCycleCounter: React.FC = () => {
@@ -9,7 +10,7 @@ export const StressCycleCounter: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const { showToast } = useToast();
 
-    const assetTele = selectedAsset ? telemetry[selectedAsset.id] : null;
+    const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
     const fatigueData = useMemo(() => {
         if (!assetTele) return null;
@@ -79,7 +80,8 @@ export const StressCycleCounter: React.FC = () => {
                         <button
                             onClick={() => {
                                 showToast("NDT Protocol Initialized. Scheduling specialist...", "info");
-                                resetFatigue(selectedAsset.id);
+                                const numeric = idAdapter.toNumber(selectedAsset.id);
+                                if (numeric !== null) resetFatigue(numeric);
                             }}
                             className="w-full py-2 bg-red-600 hover:bg-red-500 text-white text-[10px] font-black rounded-lg uppercase tracking-widest transition-all shadow-lg"
                         >

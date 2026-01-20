@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../services/supabaseClient.ts';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { supabase, getSafeClient } from '../services/supabaseClient.ts';
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useRisk } from './RiskContext.tsx';
 import { useToast } from './ToastContext.tsx';
+import idAdapter from '../utils/idAdapter';
+import { sanitizeEtaInputs } from '../utils/etaSanitizer';
 
 export interface Diagnosis {
     id: string;
@@ -20,7 +22,7 @@ export interface CorrelationResult {
 }
 
 export interface IntuitionQuery {
-    assetId: string;
+    assetId: number;
     primarySymptom: string;
     query: string;
     options: { label: string; value: string; resultSymptom: string }[];
@@ -28,7 +30,7 @@ export interface IntuitionQuery {
 
 export interface ShiftLogEntry {
     id: string;
-    assetId: string;
+    assetId: number;
     workerName: string;
     observation: string;
     timestamp: number;
@@ -38,6 +40,7 @@ interface DiagnosticContextType {
     activeDiagnoses: CorrelationResult[];
     activeQuery: IntuitionQuery | null;
     shiftLogs: ShiftLogEntry[];
+    processInstabilitySummary: (assetId: number) => { sigma: number; samples: number[] } | null;
     getTroubleshootingAdvice: (symptomKey: string) => Promise<Diagnosis | null>;
     recordLessonLearned: (lesson: { symptom: string; cause: string; resolution: string }) => Promise<void>;
     submitQueryResponse: (response: string) => void;
@@ -54,6 +57,26 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const { telemetry } = useTelemetry();
     const { engineeringHealthState, riskState } = useRisk();
     const { showToast } = useToast();
+
+    // SPC buffers: map numeric assetId -> array of last N eta samples
+    const etaBuffersRef = useRef<Record<number, number[]>>({});
+    const SPC_WINDOW = 10;
+
+    const pushEtaSample = (assetId: number, sample: number) => {
+        const a = Number(assetId);
+        if (!etaBuffersRef.current[a]) etaBuffersRef.current[a] = [];
+        etaBuffersRef.current[a].push(sample);
+        if (etaBuffersRef.current[a].length > SPC_WINDOW) etaBuffersRef.current[a].shift();
+    };
+
+    const computeSigma = (arr: number[]) => {
+        const n = arr.length;
+        if (n < 2) return 0;
+        const mean = arr.reduce((s, v) => s + v, 0) / n;
+        // unbiased sample standard deviation (N-1)
+        const variance = arr.reduce((s, v) => s + Math.pow(v - mean, 2), 0) / (n - 1);
+        return Math.sqrt(variance);
+    };
 
     // Field Log Correlation Logic
     const correlateLog = (text: string): CorrelationResult | null => {
@@ -156,6 +179,63 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         analyzeCorrelations();
     }, [telemetry, engineeringHealthState, riskState]);
 
+    // SPC: monitor telemetry efficiency / computed eta and flag instability
+    useEffect(() => {
+        // iterate telemetry entries
+        Object.entries(telemetry).forEach(async ([aid, t]) => {
+            const numeric = idAdapter.toNumber(aid);
+            if (numeric === null) return;
+
+            // prefer P/Q/H if present
+            const sanitizedFromPQH = sanitizeEtaInputs({ P: (t as any).P, Q: (t as any).Q, H: (t as any).H });
+
+            let etaVal: number | null = null;
+            if (sanitizedFromPQH) {
+                etaVal = sanitizedFromPQH.eta;
+            } else if ((t as any).efficiency !== undefined && (t as any).efficiency !== null) {
+                // telemetry efficiency may be percentage (0-100) or fraction (0-1)
+                const raw = Number((t as any).efficiency);
+                if (Number.isFinite(raw)) etaVal = raw > 1 ? raw / 100 : raw;
+            }
+
+            if (etaVal === null || !Number.isFinite(etaVal)) return;
+
+            // push sample and compute sigma
+            pushEtaSample(numeric, etaVal);
+            const buf = etaBuffersRef.current[numeric] || [];
+            const sigma = computeSigma(buf);
+
+            if (sigma > 0.05) {
+                // Flag instability
+                setActiveDiagnoses(prev => [
+                    ...prev,
+                    {
+                        symptom: 'PROCESS_INSTABILITY',
+                        source: 'TELEMETRY',
+                        message: `Process Instability detected (σ=${sigma.toFixed(4)}) for asset ${numeric}`
+                    }
+                ]);
+
+                showToast(`Process Instability detected for asset ${numeric} (σ=${sigma.toFixed(3)})`, 'warning');
+
+                // Persist event (best-effort) for audit
+                try {
+                    const client = getSafeClient();
+                    const assetDbId = idAdapter.toDb(numeric);
+                    await client.from('process_instability_events').insert([{ asset_id: assetDbId, sigma, samples: buf, timestamp: new Date().toISOString() }]);
+                } catch (e) {
+                    console.warn('SPC event log failed', e);
+                }
+            }
+        });
+    }, [telemetry]);
+
+    const processInstabilitySummary = (assetId: number) => {
+        const buf = etaBuffersRef.current[assetId] || [];
+        const sigma = computeSigma(buf);
+        return buf.length ? { sigma, samples: buf.slice() } : null;
+    };
+
     const submitQueryResponse = (value: string) => {
         if (!activeQuery) return;
         const option = activeQuery.options.find(o => o.value === value);
@@ -198,6 +278,7 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             activeDiagnoses,
             activeQuery,
             shiftLogs,
+            processInstabilitySummary,
             getTroubleshootingAdvice,
             recordLessonLearned,
             submitQueryResponse,

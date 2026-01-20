@@ -3,6 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Home } from 'lucide-react';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
+import idAdapter from '../../../utils/idAdapter';
 
 // Route Mapping Dictionary
 const ROUTE_LABELS: Record<string, string> = {
@@ -75,7 +76,7 @@ export const Breadcrumbs: React.FC = () => {
         if (ROUTE_LABELS[segment]) return ROUTE_LABELS[segment];
 
         // 2. Check Asset ID Lookup
-        const assetMatch = assets.find(a => a.id === segment);
+        const assetMatch = assets.find(a => idAdapter.toStorage(a.id) === segment);
         if (assetMatch) return `Asset: ${assetMatch.name}`;
 
         // 3. Fallback: Formatted Text

@@ -5,6 +5,7 @@ import { Wrench, BarChart3, Settings, History, Monitor } from 'lucide-react';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useWorkflow } from '../contexts/WorkflowContext';
 import type { CardAction } from '../shared/components/ui/EngineeringCard';
+import idAdapter from '../utils/idAdapter';
 
 /**
  * useCrossModuleActions
@@ -16,7 +17,7 @@ import type { CardAction } from '../shared/components/ui/EngineeringCard';
  * @param sensorPath - Optional sensor path for contextual filtering (e.g., 'mechanical.vibration')
  */
 export const useCrossModuleActions = (
-    assetId?: string,
+    assetId?: number | string,
     sensorPath?: string
 ): CardAction[] => {
     const { t } = useTranslation();
@@ -26,11 +27,12 @@ export const useCrossModuleActions = (
 
     const actions = useMemo(() => {
         // Common navigation handler with workflow logging
-        const nav = (path: string, module: 'toolbox' | 'executive' | 'builder' | 'maintenance', state?: any) => {
+            const nav = (path: string, module: 'toolbox' | 'executive' | 'builder' | 'maintenance', state?: any) => {
             if (assetId) {
                 selectAsset(assetId);
             }
-            logNavigation({ module, assetId, sensorPath });
+            const assetKey = assetId !== undefined && assetId !== null ? (typeof assetId === 'number' ? idAdapter.toStorage(assetId) : String(assetId)) : undefined;
+            logNavigation({ module, assetId: assetKey, sensorPath });
             navigate(path, { state });
         };
 

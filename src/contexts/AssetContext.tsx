@@ -16,7 +16,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const { logAction } = useAudit();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [assetLogs, setAssetLogs] = useState<AssetHistoryEntry[]>([]); // <--- NEW: Separate Logs State
-    const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
+    const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
 
     // BroadcastChannel ref for cross-tab communication
@@ -50,11 +50,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     } catch (e) { console.warn('LocalStorage access failed'); }
 
                     const initialAsset = savedAssetId
-                        ? localAssets.find(a => a.id === savedAssetId)
+                        ? localAssets.find(a => a.id === Number(savedAssetId))
                         : localAssets[0];
 
                     if (initialAsset && !selectedAssetId) {
-                        setSelectedAssetId(initialAsset.id);
+                        setSelectedAssetId(Number(initialAsset.id));
                     }
 
                     console.log('[AssetContext] Step 3: Guest Load Complete');
@@ -68,7 +68,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (data) {
                     console.log('[AssetContext] Step 2: Supabase Assets Loaded:', data.length);
                     const mappedAssets: Asset[] = data.map((item: any) => ({
-                        id: item.id.toString(),
+                        id: Number(item.id),
                         name: item.name,
                         type: item.type,
                         location: item.location,
@@ -88,11 +88,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     } catch (e) { }
 
                     const initialAsset = savedAssetId
-                        ? mappedAssets.find(a => a.id === savedAssetId)
+                        ? mappedAssets.find(a => a.id === Number(savedAssetId))
                         : mappedAssets[0];
 
                     if (initialAsset && !selectedAssetId) {
-                        setSelectedAssetId(initialAsset.id);
+                        setSelectedAssetId(Number(initialAsset.id));
                     }
                     // --- PERSISTENCE LOGIC END ---
                 }
@@ -114,8 +114,11 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 assetChannelRef.current = new BroadcastChannel(ASSET_CHANNEL_NAME);
                 assetChannelRef.current.onmessage = (event) => {
                     if (event.data?.type === 'ASSET_CHANGED') {
-                        setSelectedAssetId(event.data.assetId);
-                    }
+                            const maybeId = event.data.assetId;
+                            const numeric = typeof maybeId === 'number' ? maybeId : (maybeId ? Number(maybeId) : null);
+                            if (numeric === null || Number.isNaN(numeric)) return;
+                            setSelectedAssetId(numeric as number);
+                        }
                 };
             } catch (e) {
                 console.warn('[AssetContext] BroadcastChannel init failed', e);
@@ -125,7 +128,10 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Fallback: StorageEvent for older browsers
         const handleStorage = (e: StorageEvent) => {
             if (e.key === 'activeAssetId') {
-                setSelectedAssetId(e.newValue);
+                const v = e.newValue;
+                const numeric = v ? Number(v) : null;
+                if (numeric === null || Number.isNaN(numeric)) return;
+                setSelectedAssetId(numeric as number);
             }
         };
         window.addEventListener('storage', handleStorage);
@@ -138,7 +144,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, []);
 
     // --- NEW: Optimistic Update function ---
-    const updateAsset = (id: string, updates: Partial<Asset>) => {
+    const updateAsset = (id: number, updates: Partial<Asset>) => {
         setAssets(prevAssets => {
             const newAssets = prevAssets.map(asset => {
                 if (asset.id === id) {
@@ -159,13 +165,13 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     // --- NEW: Log Activity Function ---
-    const logActivity = (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
+    const logActivity = (assetId: number, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => {
         setAssetLogs(prev => {
             const previousLog = prev[0]; // Assuming desc order
             const previousHash = previousLog?.hash || 'GENESIS_HASH';
 
             // Create payload for hashing
-            const payload = {
+                const payload = {
                 id: crypto.randomUUID(),
                 assetId,
                 date: new Date().toISOString(),
@@ -212,15 +218,19 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             logAction('CONTEXT_SWITCH', assetName, 'SUCCESS');
         }, 1000) // 1 second delay
     ).current;
-
-    const selectAsset = useCallback((id: string) => {
-        setSelectedAssetId(id);
-        localStorage.setItem('activeAssetId', id); // Save to local storage
+    const selectAsset = useCallback((id: number | string) => {
+        const numeric = typeof id === 'number' ? id : (id ? Number(id) : null);
+        if (numeric === null || Number.isNaN(numeric)) {
+            console.warn('[AssetContext] selectAsset called with invalid id', id);
+            return;
+        }
+        setSelectedAssetId(numeric);
+        localStorage.setItem('activeAssetId', String(numeric)); // Save to local storage
 
         // Broadcast to other tabs instantly
-        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: id });
+        assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: numeric });
 
-        const asset = assets.find(a => a.id === id);
+        const asset = assets.find(a => a.id === numeric);
         if (asset) {
             // Call the debounced function instead of direct logAction
             debouncedLogContextSwitch(asset.name);
@@ -257,7 +267,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 await new Promise(resolve => setTimeout(resolve, 800));
 
                 newAsset = {
-                    id: `guest-asset-${Date.now()}`,
+                    id: -Date.now(),
                     name: dbPayload.name,
                     type: dbPayload.type,
                     location: dbPayload.location,
@@ -281,7 +291,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (error) throw error;
 
                 newAsset = {
-                    id: data.id.toString(),
+                    id: Number(data.id),
                     name: data.name,
                     type: data.type,
                     location: data.location,

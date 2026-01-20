@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTelemetry } from '../contexts/TelemetryContext';
+import idAdapter from '../utils/idAdapter';
 import { useAssetContext } from '../contexts/AssetContext';
 
 interface ForensicTrigger {
@@ -52,12 +53,13 @@ export function useBlackBoxRecorder() {
             switch (type) {
                 case 'REQUEST_DATA':
                     // Worker requests current telemetry data
-                    if (selectedAsset && telemetry[selectedAsset.id]) {
-                        const tData = telemetry[selectedAsset.id];
+                    if (selectedAsset && telemetry[idAdapter.toStorage(selectedAsset.id)]) {
+                        const key = idAdapter.toStorage(selectedAsset.id);
+                        const tData = telemetry[key];
                         worker.postMessage({
                             type: 'RECORD',
                             data: {
-                                assetId: selectedAsset.id,
+                                assetId: key,
                                 vibration: tData.vibration,
                                 temperature: tData.temperature,
                                 pressure: (tData as any).cylinderPressure || 0,

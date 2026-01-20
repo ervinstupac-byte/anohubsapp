@@ -3,6 +3,7 @@ import { useCerebro } from '../contexts/ProjectContext';
 import { useAssetConfig } from '../contexts/AssetConfigContext';
 import { useAppStore } from '../stores/useAppStore';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import idAdapter from '../utils/idAdapter';
 
 /**
  * Data Bridge Hook (TEMPORARY SYNC ENGINE)
@@ -38,13 +39,14 @@ export const useSyncLegacyToNew = () => {
         if (!identity?.assetId) return;
 
         // Skip if already synced this identity
-        if (lastSyncRef.current.identityId === identity.assetId) return;
-        lastSyncRef.current.identityId = identity.assetId;
+        const identityKey = idAdapter.toStorage(identity.assetId);
+        if (lastSyncRef.current.identityId === identityKey) return;
+        lastSyncRef.current.identityId = identityKey;
 
         console.log('[SyncEngine] Syncing AssetConfig from ProjectContext');
 
         updateConfig({
-            assetId: identity.assetId,
+            assetId: idAdapter.toStorage(identity.assetId),
             assetName: identity.assetName,
             turbineType: identity.turbineType as 'PELTON' | 'FRANCIS' | 'KAPLAN',
             manufacturer: 'Legacy System',

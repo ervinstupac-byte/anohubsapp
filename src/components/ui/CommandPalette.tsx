@@ -4,6 +4,7 @@ import { Search, Command, Smartphone, Box, Zap, FileText, Settings, X, ChevronRi
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../../contexts/AssetContext';
+import idAdapter from '../../utils/idAdapter';
 import { useDensity } from '../../contexts/DensityContext';
 import { useDrillDown } from '../../contexts/DrillDownContext';
 import { GLASS, RADIUS, TYPOGRAPHY_COMPACT, TYPOGRAPHY, SPACING, SPACING_COMPACT, STATUS_COLORS } from '../../shared/design-tokens';
@@ -81,7 +82,7 @@ export const CommandPalette = React.memo(() => {
         const assetResults: CommandResult[] = safeAssets
             .filter(a => (a?.name || '').toLowerCase().includes(lowerQuery) || (a?.type || '').toLowerCase().includes(lowerQuery))
             .map(a => ({
-                id: a.id,
+                id: idAdapter.toStorage(a.id),
                 label: a.name,
                 type: 'asset',
                 icon: <Box className="text-cyan-400" />,

@@ -1,4 +1,6 @@
 import { TelemetryData } from '../contexts/TelemetryContext.tsx';
+import { supabase } from './supabaseClient.ts';
+import idAdapter from '../utils/idAdapter';
 
 // --- TYPE DEFINITIONS ---
 
@@ -56,7 +58,7 @@ export interface PrescriptiveRecommendation {
 
 // --- HISTORICAL DATA STORAGE ---
 const telemetryHistory = new Map<string, TelemetryData[]>();
-const HISTORY_WINDOW_SIZE = 10; // Last 10 measurements
+const HISTORY_WINDOW_SIZE = 30; // Last 30 measurements
 
 // Simulated incident database (in production, this would come from Supabase)
 const HISTORICAL_INCIDENTS = [
@@ -85,13 +87,14 @@ class AIPredictionService {
      * MULTI-SENSOR CORRELATION (Spider Logic)
      * Detects synergetic risk when all 3 parameters oscillate simultaneously
      */
-    detectSynergeticRisk(assetId: string, telemetry: TelemetryData): SynergeticRisk {
+    detectSynergeticRisk(assetId: number, telemetry: TelemetryData): SynergeticRisk {
         // Store historical data
-        if (!telemetryHistory.has(assetId)) {
-            telemetryHistory.set(assetId, []);
+        const key = String(assetId);
+        if (!telemetryHistory.has(key)) {
+            telemetryHistory.set(key, []);
         }
 
-        const history = telemetryHistory.get(assetId)!;
+        const history = telemetryHistory.get(key)!;
         history.push(telemetry);
 
         // Keep only last N measurements
@@ -148,6 +151,137 @@ class AIPredictionService {
     }
 
     /**
+     * Forecast eta break-even week using linear regression on historical efficiency (%)
+     * Returns number of weeks until eta crosses `threshold` (default 90%) and confidence
+     */
+    async forecastEtaBreakEven(assetId: number, threshold: number = 90): Promise<{ weeksUntil: number | null; predictedTimestamp: number | null; confidence: number; slope?: number; intercept?: number; tStatistic?: number; sampleCount?: number; residualStd?: number }> {
+        // First try persisted telemetry from Supabase (telemetry_logs.details.efficiency)
+        try {
+            const numeric = idAdapter.toNumber(assetId);
+            const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
+
+            // Prefer precomputed cache if available (server-side backfill upserts into telemetry_history_cache)
+            try {
+                const { data: cacheRes, error: cacheErr } = await supabase
+                    .from('telemetry_history_cache')
+                    .select('history')
+                    .eq('asset_id', dbId)
+                    .single();
+
+                if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
+                    const points = cacheRes.history.map((p: any) => ({ t: p.t, y: p.y })).filter(Boolean);
+                    if (points.length >= 5) return this._computeLinearForecast(points, threshold);
+                }
+            } catch (e) {
+                // ignore cache errors and fall back to raw logs
+            }
+
+            const { data, error } = await supabase
+                .from('telemetry_logs')
+                .select('details, created_at')
+                .eq('asset_id', dbId)
+                .order('created_at', { ascending: true })
+                .limit(HISTORY_WINDOW_SIZE * 5);
+
+            if (!error && Array.isArray(data) && data.length > 0) {
+                const points = data
+                    .map((r: any) => {
+                        const details = r.details || {};
+                        const eff = details.efficiency ?? details.eta ?? details.efficiencyPercent ?? null;
+                        const y = typeof eff === 'number' ? eff : (typeof eff === 'string' ? Number(eff) : null);
+                        const t = r.created_at ? new Date(r.created_at).getTime() : Date.now();
+                        return y !== null && !Number.isNaN(y) ? { t, y } : null;
+                    })
+                    .filter(Boolean) as { t: number; y: number }[];
+
+                if (points.length >= 5) {
+                    // Keep most recent HISTORY_WINDOW_SIZE samples
+                    const recent = points.slice(-HISTORY_WINDOW_SIZE);
+                    return this._computeLinearForecast(recent, threshold);
+                }
+            }
+        } catch (err) {
+            console.warn('[AIPrediction] Supabase query failed, falling back to in-memory history', err);
+        }
+
+        // Fallback to in-memory history
+        const history = telemetryHistory.get(String(assetId)) || [];
+        if (history.length < 5) return { weeksUntil: null, predictedTimestamp: null, confidence: 0 };
+
+        const points = history.map(h => ({ t: h.timestamp, y: h.efficiency }));
+        return this._computeLinearForecast(points, threshold);
+    }
+
+    /** Internal: compute linear regression forecast from points */
+    private _computeLinearForecast(points: { t: number; y: number }[], threshold: number) {
+        const n = points.length;
+        const meanT = points.reduce((s, p) => s + p.t, 0) / n;
+        const meanY = points.reduce((s, p) => s + p.y, 0) / n;
+
+        // Calculate slope and intercept (ordinary least squares)
+        const Sxx = points.reduce((s, p) => s + Math.pow(p.t - meanT, 2), 0);
+        const Sxy = points.reduce((s, p) => s + (p.t - meanT) * (p.y - meanY), 0);
+        const a = Sxy / (Sxx || 1); // slope (efficiency per ms)
+        const b = meanY - a * meanT;
+
+        // Residuals and standard error
+        const residuals = points.map(p => p.y - (a * p.t + b));
+        const SSE = residuals.reduce((s, r) => s + r * r, 0);
+        const sigma2 = SSE / Math.max(1, (n - 2));
+
+        // Standard error of slope
+        const SEa = Math.sqrt(sigma2 / (Sxx || 1));
+
+        // t-statistic for slope
+        const tStat = SEa > 0 ? a / SEa : 0;
+        const tAbs = Math.abs(tStat);
+
+        // Heuristic confidence: map t-stat to [0,1] with threshold at 2 -> ~95% for moderate n
+        const confidence = Math.min(1, tAbs / 3);
+
+        // residual standard deviation (process sigma)
+        const residualStd = Math.sqrt(sigma2);
+
+        // if slope is ~0 (stable), nothing to predict
+        if (!isFinite(a) || Math.abs(a) < 1e-16) return { weeksUntil: null, predictedTimestamp: null, confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+
+        // Solve for t where y = threshold
+        const tCross = (threshold - b) / a;
+        const now = Date.now();
+        if (!isFinite(tCross)) return { weeksUntil: null, predictedTimestamp: null, confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+        if (tCross <= now) return { weeksUntil: 0, predictedTimestamp: Math.floor(tCross), confidence: Math.min(1, n / HISTORY_WINDOW_SIZE), slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+
+        const weeks = (tCross - now) / (7 * 24 * 3600 * 1000);
+        return { weeksUntil: Math.max(0, weeks), predictedTimestamp: Math.floor(tCross), confidence: confidence, slope: a, intercept: b, tStatistic: tStat, sampleCount: n, residualStd };
+    }
+
+    /** Compute forecast excluding given ISO dates (YYYY-MM-DD) present in cached history or telemetry_logs */
+    async forecastExcludingDates(assetId: number, excludeDates: string[], threshold: number = 90) {
+        try {
+            const numeric = idAdapter.toNumber(assetId);
+            const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
+            const { data: cacheRes, error: cacheErr } = await supabase
+                .from('telemetry_history_cache')
+                .select('history')
+                .eq('asset_id', dbId)
+                .single();
+
+            if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
+                const filtered = cacheRes.history
+                    .map((p: any) => ({ t: p.t, y: p.y, d: new Date(p.t).toISOString().slice(0, 10) }))
+                    .filter((p: any) => !excludeDates.includes(p.d))
+                    .map((p: any) => ({ t: p.t, y: p.y }));
+
+                if (filtered.length >= 5) return this._computeLinearForecast(filtered, threshold);
+            }
+        } catch (e) {
+            // swallow and return null-ish
+        }
+
+        return { weeksUntil: null, predictedTimestamp: null, confidence: 0, sampleCount: 0 };
+    }
+
+    /**
      * RUL ESTIMATOR (Remaining Useful Life)
      * Calculates remaining operational hours for critical components
      */
@@ -165,7 +299,7 @@ class AIPredictionService {
         };
 
         // Calculate stress factors
-        const history = telemetryHistory.get(telemetry.assetId) || [];
+        const history = telemetryHistory.get(String(telemetry.assetId)) || [];
 
         // Sudden starts: count rapid power changes
         const suddenStarts = history.filter((h, i) => {
@@ -212,8 +346,8 @@ class AIPredictionService {
      * INCIDENT GHOST SIMULATOR
      * Pattern matching with historical incidents using Dynamic Time Warping
      */
-    matchHistoricalPattern(assetId: string, telemetry: TelemetryData): IncidentPattern | null {
-        const history = telemetryHistory.get(assetId) || [];
+    matchHistoricalPattern(assetId: number, telemetry: TelemetryData): IncidentPattern | null {
+        const history = telemetryHistory.get(String(assetId)) || [];
 
         if (history.length < 5) return null;
 
@@ -421,15 +555,15 @@ class AIPredictionService {
     /**
      * Clear history for asset (useful for testing or after maintenance)
      */
-    clearHistory(assetId: string): void {
-        telemetryHistory.delete(assetId);
+    clearHistory(assetId: number): void {
+        telemetryHistory.delete(String(assetId));
     }
 
     /**
      * Get history size for debugging
      */
-    getHistorySize(assetId: string): number {
-        return telemetryHistory.get(assetId)?.length || 0;
+    getHistorySize(assetId: number): number {
+        return telemetryHistory.get(String(assetId))?.length || 0;
     }
 }
 

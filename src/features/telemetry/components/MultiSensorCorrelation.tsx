@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAIPrediction } from '../../../contexts/AIPredictionContext.tsx';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
+import idAdapter from '../../../utils/idAdapter';
 import { GlassCard } from '../../../shared/components/ui/GlassCard.tsx';
 
 export const MultiSensorCorrelation: React.FC = () => {
@@ -9,7 +10,7 @@ export const MultiSensorCorrelation: React.FC = () => {
 
     if (!selectedAsset) return null;
 
-    const risk = synergeticRisks[selectedAsset.id];
+    const risk = synergeticRisks[idAdapter.toStorage(selectedAsset.id)];
     if (!risk) return null;
 
     const { detected, probability, triggers, message } = risk;

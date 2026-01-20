@@ -2,13 +2,14 @@ import React, { useMemo, useState } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 
 export const SystemResponseAnalytics: React.FC = () => {
     const { telemetry, updateWicketGateSetpoint } = useTelemetry();
     const { selectedAsset } = useAssetContext();
     const [testValue, setTestValue] = useState(45);
 
-    const assetTele = selectedAsset ? telemetry[selectedAsset.id] : null;
+    const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
     const analysis = useMemo(() => {
         if (!assetTele) return null;
@@ -108,7 +109,10 @@ export const SystemResponseAnalytics: React.FC = () => {
                             className="flex-grow accent-cyan-500"
                         />
                         <button
-                            onClick={() => updateWicketGateSetpoint(selectedAsset.id, testValue)}
+                            onClick={() => {
+                                const numeric = idAdapter.toNumber(selectedAsset.id);
+                                if (numeric !== null) updateWicketGateSetpoint(numeric, testValue);
+                            }}
                             className="px-4 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-black rounded uppercase tracking-widest transition-all"
                         >
                             Execute Move

@@ -4,6 +4,7 @@ import { FileText, CheckCircle, Lock, Download, ClipboardCheck } from 'lucide-re
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { idAdapter } from '../../utils/idAdapter';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useSyncWatcher } from '../../hooks/useSyncWatcher';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
@@ -13,6 +14,7 @@ import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
 import { FieldAuditForm } from './FieldAuditForm';
 import { ForensicReportService } from '../../services/ForensicReportService';
+import reportService from '../../services/reportService';
 
 /**
  * ProtocolLaunchpad — The Report Engine
@@ -138,11 +140,13 @@ export const ProtocolLaunchpad: React.FC = () => {
 
         try {
             // 1. Create Ledger Entry FIRST to get authenticity UUID
+            const numericAssetId = idAdapter.toNumber(selectedAsset.id) ?? 0;
+            const storageAssetId = idAdapter.toStorage(selectedAsset.id);
             const entry = LocalLedger.createEntry({
                 type: 'REPORT_GENERATED',
                 protocol: protocol.id,
                 protocolName: protocol.name,
-                assetId: selectedAsset.id,
+                assetId: storageAssetId,
                 timestamp: Date.now()
             }, 'PROTOCOL');
 
@@ -160,7 +164,15 @@ export const ProtocolLaunchpad: React.FC = () => {
                 });
 
                 if (blob instanceof Blob) {
-                    viewDocument(blob, `${protocol.name} Report`, `${protocol.id}_${selectedAsset.name}.pdf`);
+                    const filename = `${protocol.id}_${selectedAsset.name}.pdf`;
+                    viewDocument(blob, `${protocol.name} Report`, filename);
+                    // Persist a minimal report record (fire-and-forget)
+                    reportService.saveReport({
+                        assetId: idAdapter.toDb(selectedAsset.id),
+                        reportType: 'PROTOCOL_REPORT',
+                        pdfPath: filename,
+                        metadata: { protocolId: protocol.id, ledgerId: entry.uuid }
+                    }).catch((e:any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
                 }
             } else {
                 const blob = ForensicReportService.generateDiagnosticDossier({
@@ -173,7 +185,14 @@ export const ProtocolLaunchpad: React.FC = () => {
                 });
 
                 if (blob instanceof Blob) {
-                    viewDocument(blob, `${protocol.name} Dossier`, `diagnostic_${selectedAsset.name}.pdf`);
+                    const filename = `diagnostic_${selectedAsset.name}.pdf`;
+                    viewDocument(blob, `${protocol.name} Dossier`, filename);
+                    reportService.saveReport({
+                        assetId: idAdapter.toDb(selectedAsset.id),
+                        reportType: 'PROTOCOL_DIAGNOSTIC',
+                        pdfPath: filename,
+                        metadata: { protocolId: protocol.id, ledgerId: entry.uuid }
+                    }).catch((e:any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
                 }
             }
 
@@ -183,7 +202,7 @@ export const ProtocolLaunchpad: React.FC = () => {
             logProtocol({
                 protocolId: protocol.id,
                 protocolName: protocol.name,
-                assetId: selectedAsset.id,
+                assetId: numericAssetId,
                 assetName: selectedAsset.name,
                 type: 'protocol',
                 ledgerUUID: entry.uuid

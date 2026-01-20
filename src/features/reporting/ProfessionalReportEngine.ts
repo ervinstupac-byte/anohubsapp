@@ -8,6 +8,11 @@ import { ProfileLoader } from '../../services/ProfileLoader';
 import { SolutionArchitect } from '../../services/SolutionArchitect';
 import { RevitalizationPlan } from '../../models/RepairContext';
 import i18n from '../../i18n';
+import idAdapter from '../../utils/idAdapter';
+import reportService from '../../services/reportService';
+import { FinancialImpactEngine } from '../../services/FinancialImpactEngine';
+import computeEta from '../../utils/eta';
+import designEfficiencyFor from '../../utils/designEfficiency';
 
 // Standard A4
 const PAGE_WIDTH = 210;
@@ -15,7 +20,7 @@ const PAGE_HEIGHT = 297;
 const MARGIN = 20;
 
 export const ProfessionalReportEngine = {
-    generateTechnicalAudit: (state: TechnicalProjectState, projectID: string = 'ANOHUB-2025-X') => {
+    generateTechnicalAudit: async (state: TechnicalProjectState, projectID: string = 'ANOHUB-2025-X') => {
         const doc = new jsPDF();
         const profile = ProfileLoader.getProfile(state.selectedAsset?.turbine_type || state.identity?.turbineType || 'FRANCIS');
 
@@ -139,8 +144,86 @@ export const ProfessionalReportEngine = {
             });
         }
 
-        // Save
-        doc.save(`Audit_Report_${projectID}.pdf`);
+        // Save: generate filename and persist metadata via reportService
+        const filename = `Audit_Report_${projectID}.pdf`;
+
+        try {
+            // Determine financial impact for computed_loss_cost
+            const impact = FinancialImpactEngine.calculateImpact(state, state.physics as any);
+            const computedLoss = (impact.lostRevenueEuro || 0) + (impact.potentialDamageEUR || 0) + (impact.leakageCostYearly || 0);
+
+            // Estimate investment (I_total): prefer explicit buffer or fall back to maintenanceBuffer
+            const I_total = (state.financials && (state.financials.maintenanceBufferEuro || 0)) || impact.maintenanceBufferEuro || 150000;
+
+            // P_avg (MW)
+            const P_avg_MW = (state.hydraulic?.baselineOutputMW && (state.hydraulic.baselineOutputMW as any).toNumber ? (state.hydraulic.baselineOutputMW as any).toNumber() : (state.hydraulic?.baselineOutputMW as any)) || 5;
+
+            // C_kWh (€/kWh) — convert market.energyPrice (EUR/MWh) if present
+            const marketPricePerMWh = state.market?.energyPrice || 100; // EUR/MWh
+            const C_kWh = marketPricePerMWh / 1000;
+
+            // Delta efficiency: compute current η using physical invariant if possible,
+            // otherwise fall back to reported hydraulic efficiency.
+            let currentEff = typeof state.hydraulic?.efficiency === 'number' ? state.hydraulic.efficiency : null;
+            try {
+                let baselineOutput: any = (state.hydraulic?.baselineOutputMW && (state.hydraulic.baselineOutputMW as any).toNumber)
+                    ? (state.hydraulic.baselineOutputMW as any).toNumber()
+                    : (state.hydraulic?.baselineOutputMW as any);
+                if (baselineOutput == null) baselineOutput = 5;
+                if (baselineOutput && typeof (baselineOutput as any).toNumber === 'function') baselineOutput = (baselineOutput as any).toNumber();
+
+                const flowVal = (state.hydraulic as any)?.flowRate ?? (state.hydraulic as any)?.flow ?? (state.hydraulic as any)?.designFlow;
+                const headVal = (state.hydraulic as any)?.netHead ?? (state.hydraulic as any)?.head ?? (state.hydraulic as any)?.waterHead ?? (state.hydraulic as any)?.grossHead;
+
+                const etaRes = computeEta({ powerMW: Number(baselineOutput), flow: Number(flowVal), head: Number(headVal) });
+                if (etaRes && etaRes.valid && typeof etaRes.eta === 'number') currentEff = etaRes.eta;
+            } catch (err) {
+                // swallow and use fallback below
+            }
+
+            if (currentEff === null || currentEff === undefined) {
+                // derive design efficiency dynamically from hydraulic settings if available
+                const designEff = designEfficiencyFor((state.hydraulic as any)?.flow || (state.hydraulic as any)?.flowRate || 9.0, (state.hydraulic as any)?.head || (state.hydraulic as any)?.netHead || 64.5);
+                currentEff = designEff;
+            }
+            const expectedEff = Math.min(0.99, currentEff + 0.08);
+            const deltaEta = Math.max(0, expectedEff - currentEff);
+
+            let T_ROI_years = null as number | null;
+            if (P_avg_MW > 0 && C_kWh > 0 && deltaEta > 0) {
+                // Convert P (MW) to kW, then to annual kWh
+                const annualKWh = P_avg_MW * 1000 * 24 * 365;
+                T_ROI_years = I_total / (annualKWh * C_kWh * deltaEta);
+            }
+
+            // Persist metadata via reportService (best-effort)
+            const saveRes = await reportService.saveReport({
+                assetId: idAdapter.toDb(state.selectedAsset?.id),
+                reportType: 'MANAGEMENT_SUMMARY',
+                reportPeriodStart: undefined,
+                reportPeriodEnd: undefined,
+                computedLossCost: Number(computedLoss || 0),
+                computedLossCostCurrency: 'EUR',
+                pdfPath: filename,
+                metadata: {
+                    break_even_years: T_ROI_years,
+                    break_even_date: T_ROI_years ? new Date(Date.now() + Math.round(T_ROI_years * 365 * 24 * 3600 * 1000)).toISOString() : undefined,
+                    estimated_investment: I_total,
+                    price_per_kwh: C_kWh,
+                    delta_eta: deltaEta
+                },
+                generatedBy: undefined
+            });
+
+            if (saveRes?.error) {
+                console.warn('[ProfessionalReportEngine] reportService.saveReport returned error:', saveRes.error);
+            }
+        } catch (e) {
+            console.error('[ProfessionalReportEngine] failed to persist report metadata:', (e as any)?.message || e);
+        }
+
+        // Trigger download/save for browser clients
+        doc.save(filename);
     }
 };
 
@@ -552,7 +635,7 @@ const drawFullAssetHealthCertificate = (doc: jsPDF, state: TechnicalProjectState
 
     // --- PAGE 4: PROACTIVE MAINTENANCE ROADMAP (NC-4.2) ---
     doc.addPage();
-    drawHeader(doc, state.identity.assetId, state.demoMode.active);
+    drawHeader(doc, idAdapter.toStorage(state.identity.assetId), state.demoMode.active);
 
     y = 50;
     doc.setFontSize(18);

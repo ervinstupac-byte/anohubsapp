@@ -272,7 +272,7 @@ export interface DiagnosisReport {
 
 export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
     identity: {
-        assetId: 'demo-1',
+        assetId: 1,
         assetName: 'HPP Demo',
         turbineType: 'PELTON',
         manufacturer: 'Generic',

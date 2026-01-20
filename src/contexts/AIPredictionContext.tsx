@@ -10,6 +10,7 @@ import {
     IncidentPattern,
     PrescriptiveRecommendation
 } from '../services/AIPredictionService.ts';
+import idAdapter from '../utils/idAdapter';
 
 // NEW: Sensor aggregation types
 export interface AggregatedSensorData {
@@ -85,8 +86,11 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
             // Process each asset with telemetry data
             Object.entries(telemetry).forEach(([assetId, tData]) => {
+                const numericAssetId = idAdapter.toNumber(assetId);
+                if (numericAssetId === null) return;
+
                 // 1. SYNERGETIC RISK DETECTION (Spider Logic)
-                const synergeticRisk = aiPredictionService.detectSynergeticRisk(assetId, tData);
+                const synergeticRisk = aiPredictionService.detectSynergeticRisk(numericAssetId, tData);
                 newSynergeticRisks[assetId] = synergeticRisk;
 
                 if (synergeticRisk.detected && !synergeticRisks[assetId]?.detected) {
@@ -95,8 +99,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                 }
 
                 // 2. RUL ESTIMATION
-                const asset = assets.find(a => a.id === assetId);
-                const operatingHours = maintenanceContext.operatingHours[assetId] || 5000;
+                const asset = assets.find(a => a.id === numericAssetId);
+                const operatingHours = maintenanceContext.operatingHours[idAdapter.toStorage(numericAssetId)] || 5000;
 
                 const rulEstimatesForAsset: RULEstimate[] = [
                     aiPredictionService.calculateRUL('bearing', operatingHours, tData),
@@ -107,7 +111,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                 newRulEstimates[assetId] = rulEstimatesForAsset;
 
                 // 3. INCIDENT PATTERN MATCHING (Incident Ghost)
-                const patternMatch = aiPredictionService.matchHistoricalPattern(assetId, tData);
+                const patternMatch = aiPredictionService.matchHistoricalPattern(numericAssetId, tData);
                 if (patternMatch) {
                     newIncidentPatterns.push(patternMatch);
 
@@ -130,7 +134,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                             rul.componentType,
                             failureProbability
                         );
-                        newPrescriptions.set(`${assetId}-${rul.componentType}`, prescription);
+                        newPrescriptions.set(`${idAdapter.toStorage(numericAssetId)}-${rul.componentType}`, prescription);
 
                         // 5. AUTONOMOUS WORK ORDER TRIGGER (>=95%)
                         if (failureProbability >= 95) {

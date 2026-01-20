@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 // ISPRAVKA IMPORTA: Uvozimo Questionnaire kao Named Export
 import { Questionnaire } from './Questionnaire.tsx';
 import { BackButton } from './BackButton.tsx';
@@ -48,6 +49,7 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
     const { selectedAsset } = useAssetContext();
     const { updateRiskState } = useRisk();
     const { activeIncident } = useTelemetry();
+    const numericSelected = selectedAsset ? idAdapter.toNumber(selectedAsset.id) : null;
 
     // Ova funkcija se aktivira kada korisnik klikne "Finalize Analysis" u upitniku
     const handleRiskSync = (score: number, criticalCount: number) => {
@@ -101,7 +103,7 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                 ) : (
                     // ACTIVE MODULE
                     <div className="space-y-8">
-                        {activeIncident && activeIncident.assetId === selectedAsset.id && (
+                        {activeIncident && numericSelected !== null && activeIncident.assetId === numericSelected && (
                             <EmergencyProtocol type={activeIncident.type} />
                         )}
 

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import idAdapter from '../utils/idAdapter';
 
 export const MagneticPullAnalytics: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -9,7 +10,7 @@ export const MagneticPullAnalytics: React.FC = () => {
 
     const assetTele = useMemo(() => {
         if (!selectedAsset) return null;
-        return telemetry[selectedAsset.id];
+        return telemetry[idAdapter.toStorage(selectedAsset.id)];
     }, [selectedAsset, telemetry]);
 
     const mspData = useMemo(() => {

@@ -16,6 +16,7 @@ import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ITurbineModel } from '../../models/turbine/types';
 import { useTelemetry } from '../../contexts/TelemetryContext';
 import { useAssetContext } from '../../contexts/AssetContext';
+import idAdapter from '../../utils/idAdapter';
 
 interface KaplanDashboardProps {
     turbineModel: ITurbineModel;
@@ -27,7 +28,7 @@ export const KaplanDashboard: React.FC<KaplanDashboardProps> = ({ turbineModel }
 
     if (!selectedAsset) return null;
 
-    const tData = telemetry[selectedAsset.id];
+    const tData = telemetry[idAdapter.toStorage(selectedAsset.id)];
     const kaplanData = (tData as any)?.kaplan_data || {};
 
     return (

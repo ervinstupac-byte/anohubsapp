@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wrench } from 'lucide-react';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { idAdapter } from '../../utils/idAdapter';
 import { useToast } from '../../contexts/ToastContext';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 
@@ -109,13 +110,14 @@ export const StructuralAssembly: React.FC<{ onComplete: () => void; onAssemblyCh
         let logMsg = `[INSTALLED] ${t(`hpp_builder.assembly.components.${partId.toLowerCase()}`)}`;
         if (alignmentVal !== undefined) {
             logMsg += ` | Alignment: ${alignmentVal.toFixed(3)} mm/m`;
-            if (alignmentVal > 0.05) {
-                logMsg += ` [HERITAGE DEVIATION]`;
-                if (selectedAsset) {
-                    // Log "Longevity Leak" event effectively
-                    logActivity(selectedAsset.id, 'MAINTENANCE', `Installation Deviation: ${partId} at ${alignmentVal} mm/m`, { oldVal: 0, newVal: alignmentVal });
+                if (alignmentVal > 0.05) {
+                    logMsg += ` [HERITAGE DEVIATION]`;
+                    if (selectedAsset) {
+                        const numericId = idAdapter.toNumber(selectedAsset.id);
+                        const activityAssetId = numericId !== null ? numericId : selectedAsset.id;
+                        logActivity(activityAssetId, 'MAINTENANCE', `Installation Deviation: ${partId} at ${alignmentVal} mm/m`, { oldVal: 0, newVal: alignmentVal });
+                    }
                 }
-            }
         }
 
         setAuditLog(prev => [logMsg, ...prev]);

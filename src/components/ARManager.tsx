@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';
@@ -56,7 +57,7 @@ export const ARManager: React.FC = () => {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        const assetTele = telemetry[selectedAsset.id];
+        const assetTele = telemetry[idAdapter.toStorage(selectedAsset.id)];
 
         // Simulated AI recognition area
         if (mode === 'RECOGNITION') {

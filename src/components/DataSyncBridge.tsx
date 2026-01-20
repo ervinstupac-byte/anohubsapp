@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useAssetContext } from '../contexts/AssetContext';
+import { idAdapter } from '../utils/idAdapter';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import Decimal from 'decimal.js';
@@ -21,7 +22,7 @@ export const DataSyncBridge: React.FC = () => {
     useEffect(() => {
         if (!selectedAsset) return;
 
-        const specFingerprint = `${selectedAsset.id}-${JSON.stringify(selectedAsset.specs || {})}`;
+        const specFingerprint = `${idAdapter.toStorage(selectedAsset.id)}-${JSON.stringify(selectedAsset.specs || {})}`;
         if (lastSyncedSpecsRef.current === specFingerprint) {
             console.log('[DataSyncBridge] Specs already synced, skipping.');
             return;
@@ -36,11 +37,12 @@ export const DataSyncBridge: React.FC = () => {
         const mappedType = turbineType.toUpperCase() as any;
 
         // 1. Sync Identity
+        const numericAssetId = idAdapter.toNumber(selectedAsset.id);
         dispatch({
             type: 'SET_ASSET',
             payload: {
                 ...techState.identity,
-                assetId: selectedAsset.id,
+                assetId: numericAssetId !== null ? numericAssetId : selectedAsset.id,
                 assetName: selectedAsset.name,
                 turbineType: mappedType || 'FRANCIS'
             }

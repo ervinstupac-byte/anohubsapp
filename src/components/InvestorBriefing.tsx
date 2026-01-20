@@ -10,6 +10,7 @@ import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { useInventory } from '../contexts/InventoryContext.tsx';
 
 export const InvestorBriefing: React.FC = () => {
@@ -79,13 +80,17 @@ export const InvestorBriefing: React.FC = () => {
             assumptions: params,
             t
         });
-        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Financial_Briefing_${assetName}.pdf`, true);
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Financial_Briefing_${assetName}.pdf`, true, {
+            assetId: selectedAsset ? idAdapter.toDb(selectedAsset.id) : undefined,
+            projectState: { market: { energyPrice: params.electricityPrice * 1000 }, hydraulic: { baselineOutputMW: kpis.powerMW } },
+            reportType: 'FINANCIAL_PROSPECTUS'
+        });
         showToast(t('investorBriefing.downloaded', 'Financial Briefing Downloaded'), 'success');
     };
 
     const handleDownloadIncidentReport = () => {
         if (!selectedAsset) return;
-        const liveData = telemetry[selectedAsset.id];
+        const liveData = telemetry[idAdapter.toStorage(selectedAsset.id)];
 
         const blob = ForensicReportService.generateIncidentReport({
             assetName: selectedAsset.name,
@@ -94,7 +99,10 @@ export const InvestorBriefing: React.FC = () => {
             timestamp: new Date().toISOString(),
             t
         });
-        ForensicReportService.openAndDownloadBlob(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`, true);
+        ForensicReportService.openAndDownloadBlob(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`, true, {
+            assetId: idAdapter.toDb(selectedAsset.id),
+            reportType: 'INCIDENT_REPORT'
+        });
         showToast('CRITICAL: Incident Report Exported', 'error');
     };
 

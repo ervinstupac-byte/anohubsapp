@@ -3,6 +3,7 @@ import { AcousticFingerprintingService } from './AcousticFingerprintingService';
 import { SpecialMeasurementsService, CorrelationResult } from './SpecialMeasurementsService';
 import { DynamicToleranceCalculator, TurbinePhysics } from './DynamicToleranceCalculator';
 import { OilAnalysisService } from './OilAnalysisService';
+import idAdapter from '../utils/idAdapter';
 import { CavitationErosionService } from './CavitationErosionService';
 import { StructuralIntegrityService } from './StructuralIntegrityService';
 import { HistoricalTrendAnalyzer } from './HistoricalTrendAnalyzer';
@@ -186,6 +187,47 @@ export class MasterIntelligenceEngine {
                         { filename: 'case-studies/cs-predictive-maintenance-roi/index.html', justification: 'Linear extrapolation of vibration trends indicates categorical structural risk within the 72h window.' }
                     ]
                 });
+            }
+
+            // NC-9.0: ETA Break-Even Forecast Advisory
+            // If AI forecast predicts efficiency breach within 8 weeks, add Maintenance Advisory
+            try {
+                const forecast = (aiResults && (aiResults as any).forecast) || null;
+                // Require strong statistical confidence (approx t-stat > 2 or confidence >= 0.95)
+                const significant = forecast && ((forecast.tStatistic && Math.abs(forecast.tStatistic) > 2) || (forecast.confidence && forecast.confidence >= 0.95));
+                // If confidence is low, recommend Data Collection Phase instead of maintenance
+                const lowConfidence = forecast && ((forecast.confidence || 0) < 0.5 || ((forecast.sampleCount || 0) < 720));
+                if (forecast && lowConfidence) {
+                    diagnosis.serviceNotes?.push({
+                        service: 'Data Collection Phase',
+                        severity: 'WARNING',
+                        message: `INSUFFICIENT_DATA: Forecast confidence/samples low (conf ${(forecast.confidence||0).toFixed(3)}, samples ${forecast.sampleCount||0}). Require 720 hourly samples for robust decisioning.`,
+                        recommendation: 'Initiate scheduled high-resolution telemetry ingestion and pause automated maintenance advisories until sufficient samples are collected.',
+                        sourceFiles: [
+                            { filename: 'services/AIPredictionService.ts', justification: 'Forecast confidence below operational threshold; escalate to data collection.' }
+                        ]
+                    });
+                } else if (forecast && forecast.weeksUntil !== null && forecast.weeksUntil < 8 && significant) {
+                    diagnosis.serviceNotes?.push({
+                        service: 'Predictive Advisory',
+                        severity: 'WARNING',
+                        message: `MAINTENANCE_ADVISORY: Predicted efficiency breach (90%) in ${forecast.weeksUntil.toFixed(1)} weeks.`,
+                        recommendation: 'Schedule preventive maintenance and detailed inspection within the advisory window. [AUTOMATED_ADVISORY]',
+                        sourceFiles: [
+                            { filename: 'services/AIPredictionService.ts', justification: 'Linear regression forecast on persisted telemetry (30-sample window).' }
+                        ]
+                    });
+
+                    // Also append an automated action for operations teams (non-executable placeholder)
+                    diagnosis.automatedActions.push({
+                        type: 'SCHEDULED',
+                        action: 'SCHEDULE_PREVENTIVE_MAINTENANCE',
+                        timeframe: `${Math.max(1, Math.ceil(forecast.weeksUntil))} weeks`,
+                        priority: 'HIGH'
+                    } as any);
+                }
+            } catch (e) {
+                // swallow forecast errors to avoid breaking main analysis
             }
 
             // 5e. Rule 1: Geometric Misalignment Audit (2x RPM Harmonic) - NC-5.4 Verified
@@ -406,14 +448,28 @@ export class MasterIntelligenceEngine {
             foundationDisplacement: latest.specialized?.geodeticData?.settlement || 0
         };
 
-        const synergeticRisks = aiPredictionService.detectSynergeticRisk(asset.id, mockTelemetry);
-        const incidentPatterns = aiPredictionService.matchHistoricalPattern(asset.id, mockTelemetry);
+        const numericId = idAdapter.toNumber(asset.id);
+        if (numericId === null) {
+            return {
+                synergeticRisks: [],
+                rulEstimates: [],
+                incidentPatterns: [],
+                prescriptiveActions: []
+            };
+        }
+
+        const synergeticRisks = aiPredictionService.detectSynergeticRisk(numericId, mockTelemetry);
+        const incidentPatterns = aiPredictionService.matchHistoricalPattern(numericId, mockTelemetry);
+
+        // Forecast using persisted telemetry (async)
+        const forecast = await aiPredictionService.forecastEtaBreakEven(numericId);
 
         return {
             synergeticRisks: synergeticRisks ? [synergeticRisks] : [],
             rulEstimates: [],
             incidentPatterns: incidentPatterns ? [incidentPatterns] : [],
-            prescriptiveActions: []
+            prescriptiveActions: [],
+            forecast
         };
     }
 
@@ -552,8 +608,10 @@ export class MasterIntelligenceEngine {
 
             // Persist audit record for this action (integration mode guarded inside adapter)
             try {
+                const numeric = idAdapter.toNumber(asset.id);
+                const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
                 const audit = {
-                    asset_id: asset.id || 'unknown',
+                    asset_id: assetDbId,
                     action_type: action.action || 'CHECK_INVENTORY',
                     payload: action,
                     status: action.status || 'PENDING',
@@ -579,8 +637,10 @@ export class MasterIntelligenceEngine {
             };
             diagnosis.automatedActions.push(notifyAction);
             try {
+                const numeric = idAdapter.toNumber(asset.id);
+                const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
                 const res = await persistAuditRecord({
-                    asset_id: asset.id || 'unknown',
+                    asset_id: assetDbId,
                     action_type: notifyAction.action,
                     payload: notifyAction,
                     status: notifyAction.status,
@@ -607,8 +667,10 @@ export class MasterIntelligenceEngine {
             };
             diagnosis.automatedActions.push(lockAction);
             try {
+                const numeric = idAdapter.toNumber(asset.id);
+                const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : (asset.id || 'unknown');
                 const res = await persistAuditRecord({
-                    asset_id: asset.id || 'unknown',
+                    asset_id: assetDbId,
                     action_type: lockAction.action,
                     payload: lockAction,
                     status: lockAction.status,

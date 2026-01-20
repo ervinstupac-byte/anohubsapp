@@ -14,6 +14,7 @@ import {
 import { ProfessionalReportEngine } from '../features/reporting/ProfessionalReportEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
 import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
+import idAdapter from '../utils/idAdapter';
 
 // --- HERITAGE INSIGHTS KNOWLEDGE BASE ---
 const HERITAGE_INSIGHTS: Record<string, { title: string; desc: string }> = {
@@ -146,7 +147,9 @@ export const TechnicalPassport: React.FC = () => {
 
     const handleSave = () => {
         if (!selectedAsset) return;
-        updateAsset(selectedAsset.id, { assetPassport: { ...passportData, calculations } });
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        const internalId = numeric !== null ? numeric : selectedAsset.id;
+        updateAsset(internalId, { assetPassport: { ...passportData, calculations } });
     };
 
     const handleGeneratePDF = () => {
@@ -154,7 +157,7 @@ export const TechnicalPassport: React.FC = () => {
         ProfessionalReportEngine.generateTechnicalAudit({
             ...selectedAsset,
             assetPassport: { ...passportData, calculations }
-        } as any, `PASSPORT-${selectedAsset.id}`);
+        } as any, `PASSPORT-${idAdapter.toStorage(selectedAsset.id)}`);
     };
 
     const handleChange = (section: string, field: string, value: any) => {

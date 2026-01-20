@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import { useAssetContext } from './AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useMaintenance } from './MaintenanceContext.tsx';
 import { useInventory } from './InventoryContext.tsx';
@@ -47,8 +48,9 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const fleetReports = useMemo(() => {
         return assets.map(asset => {
-            const tel = telemetry[asset.id] || { vibration: 0, temperature: 0, efficiency: 0, output: 0 };
-            const hours = operatingHours[asset.id] || 0;
+            const assetKey = idAdapter.toStorage(asset.id);
+            const tel = telemetry[assetKey] || { vibration: 0, temperature: 0, efficiency: 0, output: 0 };
+            const hours = operatingHours[assetKey] || 0;
             const missingParts = getMissingParts(asset.turbine_type || 'francis');
 
             // 1. HEALTH SCORE ALGORITHM
@@ -70,7 +72,7 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const riskDuration = 120; // 5 days in hours
             let riskProbability = 0.05; // Base 5% probability
 
-            const diagnostic = activeDiagnoses.find(d => d.message.includes(asset.id) || d.source === 'CORRELATED');
+            const diagnostic = activeDiagnoses.find(d => d.message.includes(idAdapter.toStorage(asset.id)) || d.source === 'CORRELATED');
             if (diagnostic?.diagnosis?.severity === 'CRITICAL') riskProbability = 0.8;
             else if (diagnostic?.diagnosis?.severity === 'HIGH') riskProbability = 0.4;
             else if (tel.status === 'CRITICAL') riskProbability = 0.3;
@@ -99,7 +101,7 @@ export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             };
 
             return {
-                assetId: asset.id,
+                assetId: idAdapter.toStorage(asset.id),
                 assetName: asset.name,
                 healthScore: score,
                 efficiencyIndex,

@@ -19,7 +19,11 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
 
     const handleGenerate = () => {
         const blob = ForensicReportService.generateProjectDossier({ state, t });
-        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_${state.identity.assetName}_${new Date().toISOString().split('T')[0]}.pdf`, true);
+        ForensicReportService.openAndDownloadBlob(blob, `AnoHUB_Audit_${state.identity.assetName}_${new Date().toISOString().split('T')[0]}.pdf`, true, {
+            assetId: state?.identity?.assetId || state?.selectedAsset?.id || null,
+            projectState: state,
+            reportType: 'PROJECT_DOSSIER'
+        });
         onClose();
     };
 

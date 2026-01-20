@@ -43,7 +43,7 @@ export type Answers = Record<string, string>;
 
 // --- ASSET MANAGEMENT ---
 export interface Asset {
-  id: string;
+  id: number;
   name: string;
   type: 'HPP' | 'Solar' | 'Wind';
   location: string;
@@ -87,11 +87,11 @@ export interface AssetContextType {
   assets: Asset[];
   selectedAsset: Asset | null;
   activeProfile: AssetProfile | null;
-  selectAsset: (id: string) => void;
+  selectAsset: (id: number | string) => void;
   loading: boolean;
   addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
-  updateAsset: (id: string, updates: Partial<Asset>) => void;
-  logActivity: (assetId: string, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
+  updateAsset: (id: number, updates: Partial<Asset>) => void;
+  logActivity: (assetId: number, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
   assetLogs: AssetHistoryEntry[];
   // --- NEW: Golden Thread additions ---
   isAssetSelected: boolean;
@@ -100,7 +100,7 @@ export interface AssetContextType {
 
 export interface AssetHistoryEntry {
   id: string;
-  assetId: string;
+  assetId: number;
   date: string;
   category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM';
   message: string;

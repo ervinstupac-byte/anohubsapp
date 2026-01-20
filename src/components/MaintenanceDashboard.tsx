@@ -6,6 +6,7 @@ import { useMaintenance, protocols } from '../contexts/MaintenanceContext.tsx';
 import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { useToast } from '../contexts/ToastContext.tsx';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { GlassCard } from '../shared/components/ui/GlassCard';
@@ -63,7 +64,7 @@ export const MaintenanceDashboard: React.FC = () => {
     const { activeQuery } = useDiagnostic();
     const { state } = useCerebro();
 
-    const hours = selectedAsset ? operatingHours[selectedAsset.id] || 0 : 0;
+    const hours = selectedAsset ? operatingHours[idAdapter.toStorage(selectedAsset.id)] || 0 : 0;
 
     // Heatmap removed - showing real data only
     const heatmapData: number[] = [];
@@ -152,7 +153,7 @@ export const MaintenanceDashboard: React.FC = () => {
                             <GlassCard title="Service Protocols & Schedule" className="bg-slate-900/80">
                                 <div className="space-y-4">
                                     {protocols.map(proto => {
-                                        const nextDate = predictServiceDate(selectedAsset.id, proto.threshold);
+                                        const nextDate = predictServiceDate(idAdapter.toStorage(selectedAsset.id), proto.threshold);
                                         const progress = (hours % proto.threshold) / proto.threshold * 100;
 
                                         return (
@@ -180,7 +181,11 @@ export const MaintenanceDashboard: React.FC = () => {
                                                                     })),
                                                                     t
                                                                 });
-                                                                ForensicReportService.openAndDownloadBlob(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`, true);
+                                                                ForensicReportService.openAndDownloadBlob(blob, `PO_${proto.id}_${selectedAsset.name}.pdf`, true, {
+                                                                    assetId: idAdapter.toDb(selectedAsset.id),
+                                                                    reportType: 'PURCHASE_ORDER',
+                                                                    metadata: { protoId: proto.id }
+                                                                });
                                                             };
 
                                                             return (

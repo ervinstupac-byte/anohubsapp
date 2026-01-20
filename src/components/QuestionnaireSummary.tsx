@@ -7,6 +7,7 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { ForensicReportService } from '../services/ForensicReportService';
+import idAdapter from '../utils/idAdapter';
 // ISPRAVKA IMPORTA: Uvozimo hook izravno iz konteksta
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { QUESTIONS } from '../constants.ts';
@@ -203,7 +204,11 @@ export const QuestionnaireSummary: React.FC = () => {
             description
         });
 
-        ForensicReportService.openAndDownloadBlob(blob, 'risk_report.pdf');
+        ForensicReportService.openAndDownloadBlob(blob, 'risk_report.pdf', false, {
+            assetId: selectedAsset ? idAdapter.toDb(selectedAsset.id) : undefined,
+            reportType: 'RISK_REPORT',
+            metadata: { draftId: riskDataForPDF.id }
+        });
 
         showToast(t('questionnaire.pdfDownloaded'), 'success');
     };

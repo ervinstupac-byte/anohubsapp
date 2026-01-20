@@ -3,6 +3,7 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
 import { useToast } from '../contexts/ToastContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StatCard } from './ui/StatCard.tsx';
 import { BackButton } from './BackButton.tsx';
@@ -17,7 +18,7 @@ export const HydraulicMaintenance: React.FC = () => {
     const { showToast } = useToast();
     const { triggerVoiceAlert } = useVoiceAssistant();
 
-    const assetTele = selectedAsset ? telemetry[selectedAsset.id] : null;
+    const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
     const lastRiverAlert = useRef<number>(0);
     const lastBlockageAlert = useRef<number>(0);
     const [diameterInput, setDiameterInput] = useState<number>(12);
@@ -53,10 +54,11 @@ export const HydraulicMaintenance: React.FC = () => {
         if (!assetTele || !selectedAsset) return;
 
         // TENSION MONITOR: Pressure spike without position change
-        if (assetTele.oilPressureRate > 15 && assetTele.actuatorPosition < 1) {
+            if (assetTele.oilPressureRate > 15 && assetTele.actuatorPosition < 1) {
             const now = Date.now();
             if (now - lastBlockageAlert.current > 10000) {
-                triggerEmergency(selectedAsset.id, 'mechanical_blockage');
+                const numeric = idAdapter.toNumber(selectedAsset.id);
+                if (numeric !== null) triggerEmergency(numeric, 'mechanical_blockage');
                 showToast("Cilindar blokiran - Sumnja na mehaničko zapetljavanje!", "error");
                 lastBlockageAlert.current = now;
             }
@@ -64,14 +66,17 @@ export const HydraulicMaintenance: React.FC = () => {
 
         // ACOUSTIC MONITOR (Old Man's Ear)
         const maxAcousticMag = Math.max(...assetTele.vibrationSpectrum);
-        if (maxAcousticMag > 0.8) {
+            if (maxAcousticMag > 0.8) {
             triggerVoiceAlert("Detektovano struganje metala na stražnjem ležaju. Automatsko gašenje uzbude.");
-            shutdownExcitation(selectedAsset.id);
-            triggerEmergency(selectedAsset.id, 'metal_scraping');
+                const numeric = idAdapter.toNumber(selectedAsset.id);
+                if (numeric !== null) {
+                    shutdownExcitation(numeric);
+                    triggerEmergency(numeric, 'metal_scraping');
+                }
         }
 
         // OIL-IN-WATER Sensor
-        if (assetTele.oilReservoirLevel < 80 && assetTele.output > 1) {
+                if (assetTele.oilReservoirLevel < 80 && assetTele.output > 1) {
             const now = Date.now();
             if (now - lastRiverAlert.current > 60000) {
                 triggerVoiceAlert("Sumnja na curenje ulja u rijeku. Provjeri zaptivke glave rotora.");
@@ -108,7 +113,8 @@ export const HydraulicMaintenance: React.FC = () => {
             return;
         }
 
-        updatePipeDiameter(selectedAsset.id, diameterInput);
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        if (numeric !== null) updatePipeDiameter(numeric, diameterInput);
         showToast("Retrofit Validated & Applied", "success");
     };
 

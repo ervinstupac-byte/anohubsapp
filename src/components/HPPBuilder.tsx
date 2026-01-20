@@ -10,6 +10,7 @@ import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useCerebro } from '../contexts/ProjectContext.tsx';
+import idAdapter from '../utils/idAdapter';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
 import { AssetIdentity, TurbineType } from '../types/assetIdentity.ts';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
@@ -274,7 +275,22 @@ export const HPPBuilder: React.FC = () => {
             t: t
         });
 
-        ForensicReportService.openAndDownloadBlob(blob, `HPP_Spec_${selectedAsset.name}_${Date.now()}.pdf`, true);
+        ForensicReportService.openAndDownloadBlob(blob, `HPP_Spec_${selectedAsset.name}_${Date.now()}.pdf`, true, {
+            assetId: idAdapter.toDb(selectedAsset.id),
+            projectState: {
+                identity: state.identity,
+                hydraulic: {
+                    head: settings.head,
+                    flow: settings.flow,
+                    efficiency: settings.efficiency,
+                    baselineOutputMW: calculations.powerMW
+                },
+                mechanical: {},
+                structural: {},
+                market: {}
+            },
+            reportType: 'HPP_SPEC'
+        });
         showToast(t('hppBuilder.toasts.pdfGenerated'), 'success');
     };
 
@@ -287,6 +303,9 @@ export const HPPBuilder: React.FC = () => {
 
         try {
             const bestTurbine = recommendations.find(r => r.isBest)?.key || 'N/A';
+            const numericForUpdate = idAdapter.toNumber(selectedAsset.id);
+            const assetDbId = numericForUpdate !== null ? idAdapter.toDb(numericForUpdate) : selectedAsset.id;
+
             const payload = {
                 engineer_id: user?.email || 'Anonymous',
                 user_id: user?.id,
@@ -294,7 +313,7 @@ export const HPPBuilder: React.FC = () => {
                 parameters: settings,
                 calculations: calculations,
                 recommended_turbine: bestTurbine,
-                asset_id: selectedAsset.id
+                asset_id: assetDbId
             };
             const { error } = await supabase.from('turbine_designs').insert([payload]);
             if (error) throw error;
@@ -334,11 +353,13 @@ export const HPPBuilder: React.FC = () => {
             };
 
             // 1. Update Global Asset State
-            updateAsset(selectedAsset.id, { specs: newSpecs });
+            // updateAsset expects the internal canonical id (number) when possible
+            const internalId = numericForUpdate !== null ? numericForUpdate : selectedAsset.id;
+            updateAsset(internalId, { specs: newSpecs });
 
             // 2. Log Activity
             logActivity(
-                selectedAsset.id,
+                internalId,
                 'DESIGN',
                 `Updated Turbine Design: ${configName} (${bestTurbine})`,
                 { oldVal: oldSpecs, newVal: newSpecs }
@@ -359,8 +380,13 @@ export const HPPBuilder: React.FC = () => {
     const fetchCloudConfigs = async () => {
         if (!user) return;
         setIsLoading(true);
+        // use idAdapter to coerce numeric asset id at DB boundary
+        const { idAdapter } = await import('../utils/idAdapter');
         let query = supabase.from('turbine_designs').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-        if (selectedAsset) query = query.eq('asset_id', selectedAsset.id);
+        if (selectedAsset) {
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            if (numeric !== null) query = query.eq('asset_id', idAdapter.toDb(numeric));
+        }
         const { data } = await query;
         if (data) setSavedConfigs(data.map((d: any) => ({
             id: d.id.toString(), name: d.design_name, asset_id: d.asset_id, timestamp: new Date(d.created_at).getTime(),
@@ -371,7 +397,10 @@ export const HPPBuilder: React.FC = () => {
 
     const autoLoadLatestConfig = async () => {
         if (!user || !selectedAsset) return;
-        const { data } = await supabase.from('turbine_designs').select('*').eq('user_id', user.id).eq('asset_id', selectedAsset.id).order('created_at', { ascending: false }).limit(1).single();
+        const { idAdapter } = await import('../utils/idAdapter');
+        const numeric = idAdapter.toNumber(selectedAsset.id);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
+        const { data } = await supabase.from('turbine_designs').select('*').eq('user_id', user.id).eq('asset_id', assetDbId).order('created_at', { ascending: false }).limit(1).single();
         if (data) setSettings(data.parameters);
     };
 
@@ -388,7 +417,7 @@ export const HPPBuilder: React.FC = () => {
             ...state.identity, // Ensure we are extending or using existing identity safely if applicable, or just creating new. 
             // Actually user code snippet was just a guard. The original code creates a NEW identity.
             // I will keep original logic but wrap it.
-            assetId: crypto.randomUUID(),
+            assetId: -Date.now(),
             assetName: `${turbineType} Design ${new Date().toLocaleDateString()}`,
             turbineType: turbineType as TurbineType,
             manufacturer: 'AnoHUB GenK',

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { LocalLedger } from '../services/LocalLedger';
 import { supabase } from '../services/supabaseClient';
+import idAdapter from '../utils/idAdapter';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 
@@ -104,8 +105,12 @@ export const useSyncWatcher = (): SyncStats => {
                 const payload = entry.payload || {};
 
                 // Construct the insert object matching existing LoggingService pattern
+                const resolvedAsset = payload.assetId || payload.asset_id || null;
+                const numeric = idAdapter.toNumber(resolvedAsset);
+                const dbAssetId = numeric !== null ? idAdapter.toDb(numeric) : (resolvedAsset || null);
+
                 const dbRow = {
-                    asset_id: payload.assetId || payload.asset_id || null, // fallbacks
+                    asset_id: dbAssetId,
                     event_type: entry.source === 'PROTOCOL' ? 'USER_ACTION' : 'PERIODIC_HEALTH',
                     severity: 'INFO',
                     details: {

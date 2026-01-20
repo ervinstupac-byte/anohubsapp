@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { supabase } from '../services/supabaseClient';
+import idAdapter from '../utils/idAdapter';
 import { InspectionImage } from '../services/StrategicPlanningService';
 import {
     ActiveChecklist,
@@ -141,11 +142,11 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         // Realtime Subscription
         const channel = supabase
             .channel('maintenance_changes')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'maintenance_logs' }, (payload) => {
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'maintenance_logs' }, (payload: any) => {
                 console.log('⚡ Realtime Log Update:', payload);
                 fetchLogs(); // Refresh on simple change
             })
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, (payload) => {
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, (payload: any) => {
                 console.log('⚡ Realtime WO Update:', payload);
                 fetchWorkOrders();
             })
@@ -459,8 +460,11 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         setWorkOrders(prev => [...prev, newOrder]);
 
         // Supabase Insert
+        const numeric = idAdapter.toNumber(order.assetId);
+        const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : order.assetId;
+
         const { data, error } = await supabase.from('work_orders').insert({
-            asset_id: order.assetId,
+            asset_id: assetDbId,
             asset_name: order.assetName,
             component: order.component,
             description: order.description,
