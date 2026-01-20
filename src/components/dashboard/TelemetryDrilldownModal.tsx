@@ -22,7 +22,7 @@ interface TelemetryDrilldownModalProps {
 const generateTrendData = (
     baseValue: number,
     threshold: { warning?: number; critical: number },
-    assetId: string, // Added for uniqueness per asset
+    assetId: number, // Added for uniqueness per asset
     days: number = 30
 ): { day: number; value: number }[] => {
     const data: { day: number; value: number }[] = [];
@@ -30,7 +30,7 @@ const generateTrendData = (
     const warningPoint = threshold.warning || criticalPoint * 0.85;
 
     // Use assetId to seed variation (simple hash)
-    const seed = assetId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const seed = String(assetId).split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const variance = (seed % 10) / 100; // 0-10% variance based on asset
 
     for (let i = 0; i < days; i++) {
@@ -73,7 +73,7 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
     }, [currentValue, threshold, selectedAsset?.id]); // Asset ID in deps ensures regeneration
 
     // Track previous asset to detect switches
-    const prevAssetRef = React.useRef<string | null>(null);
+    const prevAssetRef = React.useRef<number | null>(null);
     useEffect(() => {
         const currentIdStr = selectedAsset ? idAdapter.toStorage(selectedAsset.id) : null;
         if (selectedAsset && prevAssetRef.current && prevAssetRef.current !== currentIdStr) {

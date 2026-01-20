@@ -272,7 +272,7 @@ export const ShaftAlignment: React.FC = () => {
                         </div>
 
                         {/* Visualizer Target */}
-                        <div className="col-span-12 lg:col-span-5 flex flex-col items-center justify-center p-6 relative">
+                        <div data-hotspot-id="shaft" className="col-span-12 lg:col-span-5 flex flex-col items-center justify-center p-6 relative">
                             <h3 className="absolute top-4 left-6 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] flex gap-2 items-center">
                                 <Target className="w-3 h-3" /> Live Metrology
                             </h3>
@@ -284,11 +284,11 @@ export const ShaftAlignment: React.FC = () => {
                             <div className="mt-6 flex gap-4 text-center">
                                 <div>
                                     <div className="text-[9px] text-slate-500 font-black uppercase">Offset Status</div>
-                                    <div className={`text-sm font-black uppercase ${offsetStatus === 'pass' ? 'text-emerald-400' : 'text-red-500 animate-pulse'}`}>{offsetStatus}</div>
+                                    <div className={`text-sm font-black uppercase ${offsetStatus === 'pass' ? 'text-emerald-400' : 'text-red-500'}`}>{offsetStatus}</div>
                                 </div>
                                 <div>
                                     <div className="text-[9px] text-slate-500 font-black uppercase">Angular Status</div>
-                                    <div className={`text-sm font-black uppercase ${angularStatus === 'pass' ? 'text-emerald-400' : 'text-red-500 animate-pulse'}`}>{angularStatus}</div>
+                                    <div className={`text-sm font-black uppercase ${angularStatus === 'pass' ? 'text-emerald-400' : 'text-red-500'}`}>{angularStatus}</div>
                                 </div>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ import idAdapter from '../utils/idAdapter';
 
 // NEW: Sensor aggregation types
 export interface AggregatedSensorData {
-    assetId: string;
+    assetId: number;
     timeWindow: { start: number; end: number };
     vibration: { mean: number; max: number; trend: number };
     temperature: { mean: number; max: number; trend: number };
@@ -25,7 +25,7 @@ export interface AggregatedSensorData {
 }
 
 export interface FailurePrediction {
-    assetId: string;
+    assetId: number;
     component: string;
     probability: number;
     confidence: number;
@@ -36,7 +36,7 @@ export interface FailurePrediction {
 
 export interface AutonomousWorkOrder {
     id: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
     trigger: 'AI_PREDICTION';
     failureProbability: number;
@@ -55,7 +55,7 @@ interface AIPredictionContextType {
     autonomousOrders: AutonomousWorkOrder[];
     isEvaluating: boolean;
     acknowledgeWorkOrder: (orderId: string) => void;
-    executeAction: (assetId: string, action: string, value?: number) => void;
+    executeAction: (assetId: number, action: string, value?: number) => void;
 }
 
 const AIPredictionContext = createContext<AIPredictionContextType | undefined>(undefined);
@@ -138,8 +138,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
                         // 5. AUTONOMOUS WORK ORDER TRIGGER (>=95%)
                         if (failureProbability >= 95) {
-                            const existingOrder = autonomousOrders.find(
-                                order => order.assetId === assetId && order.component === rul.componentType
+                                const existingOrder = autonomousOrders.find(
+                                order => order.assetId === aid && order.component === rul.componentType
                             );
 
                             if (!existingOrder) {
@@ -151,8 +151,8 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
                                 const newOrder: AutonomousWorkOrder = {
                                     id: orderId,
-                                    assetId,
-                                    assetName: asset?.name || assetId,
+                                    assetId: aid,
+                                    assetName: asset?.name || String(aid),
                                     trigger: 'AI_PREDICTION',
                                     failureProbability,
                                     component: rul.componentType,
@@ -169,7 +169,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                 );
 
                                 // Send mobile notification (placeholder for future integration)
-                                sendMobileNotification(orderId, assetId, rul.componentType, failureProbability);
+                                sendMobileNotification(orderId, aid, rul.componentType, failureProbability);
                             }
                         }
                     }
@@ -205,7 +205,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
         showToast(`Work Order ${orderId} acknowledged`, 'success');
     };
 
-    const executeAction = (assetId: string, action: string, value?: number) => {
+    const executeAction = (assetId: number, action: string, value?: number) => {
         // Execute immediate actions
         switch (action) {
             case 'REDUCE_PRESSURE':
@@ -279,7 +279,7 @@ function getRequiredParts(componentType: string): string[] {
  */
 function sendMobileNotification(
     orderId: string,
-    assetId: string,
+    assetId: number,
     component: string,
     failureProbability: number
 ): void {

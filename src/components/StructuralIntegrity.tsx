@@ -12,10 +12,10 @@ export const StructuralIntegrity: React.FC = () => {
     const { activeDiagnoses } = useDiagnostic();
     const [selectedAssetId, setSelectedAssetId] = useState<string>(assets[0] ? idAdapter.toStorage(assets[0].id) : '');
 
-    const assetTele = telemetry[selectedAssetId];
+    const assetTele = telemetry[String(selectedAssetId)];
 
     const relevantDiagnoses = activeDiagnoses.filter(d =>
-        d.message.includes(selectedAssetId) ||
+        d.message.includes(String(selectedAssetId)) ||
         d.symptom === 'DAM_SUFFUSION' ||
         d.symptom === 'FOUNDATION_MOVEMENT'
     );
@@ -32,8 +32,8 @@ export const StructuralIntegrity: React.FC = () => {
                 </div>
                 <select
                     className="bg-slate-900 border border-white/10 rounded-xl px-4 py-2 text-xs text-white outline-none font-bold uppercase cursor-pointer"
-                    value={selectedAssetId}
-                    onChange={(e) => setSelectedAssetId(e.target.value)}
+                    value={String(selectedAssetId)}
+                    onChange={(e) => setSelectedAssetId(Number(e.target.value))}
                 >
                     {assets.map(a => (
                         <option key={a.id} value={idAdapter.toStorage(a.id)}>{a.name}</option>

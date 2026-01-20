@@ -165,7 +165,14 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
 
     useEffect(() => {
-        const channel = supabase
+        if (!supabase || typeof (supabase as any).channel !== 'function') {
+            // No realtime in build/CI environment — simulate signals instead
+            generateSignal();
+            const id = setInterval(generateSignal, 10000);
+            return () => clearInterval(id);
+        }
+
+        const channel = (supabase as any)
             .channel('realtime_hpp_status')
             .on(
                 'postgres_changes',
@@ -233,7 +240,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             .subscribe();
 
         return () => {
-            supabase.removeChannel(channel);
+            try { (supabase as any).removeChannel(channel); } catch (e) { }
         };
     }, [supabase]);
 

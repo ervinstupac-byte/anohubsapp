@@ -4,7 +4,7 @@ import { getContextFromRoute, ContextDefinition } from '../data/knowledge/Contex
 import { useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 
-export type UserPersona = 'TECHNICIAN' | 'MANAGER' | 'ENGINEER';
+export type UserPersona = 'TECHNICIAN' | 'MANAGER' | 'ENGINEER' | 'OWNER';
 
 interface ContextAwarenessState {
     // Identity & RBAC

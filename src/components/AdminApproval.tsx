@@ -83,7 +83,7 @@ export const AdminApproval: React.FC = () => {
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3].map(i => <div key={i} className="h-64 bg-white/5 animate-pulse rounded-2xl border border-white/5" />)}
+                    {[1, 2, 3].map(i => <div key={i} className="h-64 bg-white/5 rounded-2xl border border-white/5" />)}
                 </div>
             ) : pending.length === 0 ? (
                 <GlassCard className="text-center py-20 border-emerald-500/20">

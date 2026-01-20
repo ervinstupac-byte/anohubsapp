@@ -32,7 +32,7 @@ export const Skeleton: React.FC<SkeletonProps> = React.memo(({
     shimmer = true
 }) => {
     const baseClasses = `
-        animate-pulse bg-slate-800/50 
+        bg-slate-800/50 
         ${circle ? 'rounded-full' : variantStyles[variant]} 
         ${shimmer ? 'shimmer-overlay' : ''}
         ${className}

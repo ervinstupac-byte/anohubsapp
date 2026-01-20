@@ -42,7 +42,7 @@ export interface MachineConfiguration {
 
 export interface AssetConfig {
     // Identity
-    assetId: string;
+    assetId: number;
     assetName: string;
     turbineType: 'PELTON' | 'FRANCIS' | 'KAPLAN';
     manufacturer: string;
@@ -68,14 +68,14 @@ interface AssetConfigContextValue {
     config: AssetConfig | null;
     isLoading: boolean;
     error: string | null;
-    loadConfig: (assetId: string) => Promise<void>;
+    loadConfig: (assetId: number) => Promise<void>;
     updateConfig: (updates: Partial<AssetConfig>) => void;
 }
 
 const AssetConfigContext = createContext<AssetConfigContextValue | undefined>(undefined);
 
 const DEFAULT_CONFIG: AssetConfig = {
-    assetId: 'DEMO-UNIT-001',
+    assetId: 1,
     assetName: 'Francis Turbine Demo',
     turbineType: 'FRANCIS',
     manufacturer: 'AnoHUB Systems',
@@ -158,7 +158,7 @@ export const AssetConfigProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }, [config, isLoading]);
 
-    const loadConfig = async (assetId: string): Promise<void> => {
+    const loadConfig = async (assetId: number): Promise<void> => {
         setIsLoading(true);
         setError(null);
 

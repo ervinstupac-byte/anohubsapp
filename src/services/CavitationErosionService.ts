@@ -19,7 +19,7 @@ export interface BladeErosionMap {
 
 export interface ErosionAnalysis {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     turbineFamily: string;
     operatingHours: number; // Hours since last measurement
 
@@ -98,7 +98,7 @@ export class CavitationErosionService {
      * Analyze erosion trends and recommend actions
      */
     static analyzeErosionTrend(
-        assetId: string,
+        assetId: number,
         turbineFamily: string,
         currentScan: BladeErosionMap[],
         previousScan: BladeErosionMap[] | null,

@@ -55,7 +55,7 @@ export const VortexControl: React.FC = () => {
 
                 {/* 1. Vortex Intelligence Hub */}
                 <GlassCard title="Draft Tube Cavitation & Vortex Intelligence" className="relative overflow-hidden group">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <div data-hotspot-id="draft_tube" className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                         <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Cpu className="w-3 h-3 text-cyan-400" /> Current Flow Flux
@@ -92,7 +92,7 @@ export const VortexControl: React.FC = () => {
                         <div className="flex-grow">
                             <h2 className="text-emerald-500 font-extrabold text-2xl uppercase tracking-tighter mb-4 flex items-center gap-3">
                                 {t('francis.vortex.s1Title')}
-                                <span className={`px-3 py-1 bg-emerald-900 border border-emerald-800 text-white text-[10px] font-black rounded uppercase tracking-widest ${isVortexLikely ? 'animate-pulse' : ''}`}>
+                                <span className={`px-3 py-1 bg-emerald-900 border border-emerald-800 text-white text-[10px] font-black rounded uppercase tracking-widest`}>
                                     {isVortexLikely ? 'Rope Detected' : 'Stabile Flux'}
                                 </span>
                             </h2>
@@ -102,8 +102,8 @@ export const VortexControl: React.FC = () => {
 
                             <div className="h-32 bg-black/40 rounded-3xl relative overflow-hidden flex justify-center border border-white/5">
                                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent shadow-[0_0_20px_#10b981]" />
-                                <div className="w-16 h-[200%] bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent absolute animate-[spin_4s_linear_infinite] origin-top transform rotate-12 blur-md" />
-                                <div className="w-8 h-[200%] bg-gradient-to-b from-transparent via-emerald-400/20 to-transparent absolute animate-[spin_2s_linear_infinite] origin-top transform -rotate-12 blur-sm" />
+                                <div className="w-16 h-[200%] bg-gradient-to-b from-transparent via-emerald-500/10 to-transparent absolute origin-top transform rotate-12 blur-md" />
+                                <div className="w-8 h-[200%] bg-gradient-to-b from-transparent via-emerald-400/20 to-transparent absolute origin-top transform -rotate-12 blur-sm" />
                             </div>
                         </div>
 

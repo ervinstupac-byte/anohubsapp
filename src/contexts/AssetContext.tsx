@@ -232,7 +232,6 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         const asset = assets.find(a => a.id === numeric);
         if (asset) {
-            // Call the debounced function instead of direct logAction
             debouncedLogContextSwitch(asset.name);
         }
     }, [assets, debouncedLogContextSwitch]);
@@ -265,7 +264,6 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
             if (isGuest) {
                 await new Promise(resolve => setTimeout(resolve, 800));
-
                 newAsset = {
                     id: -Date.now(),
                     name: dbPayload.name,

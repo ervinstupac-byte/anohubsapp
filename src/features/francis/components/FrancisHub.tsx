@@ -103,7 +103,7 @@ export const FrancisHub: React.FC = () => {
                     </button>
 
                     <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                         <span>Telemetry Link: Active</span>
                     </div>
 
@@ -154,7 +154,7 @@ export const FrancisHub: React.FC = () => {
                                                 {asset.label}
                                             </span>
                                             {asset.id === 'generator' && (
-                                                <span className="text-[8px] px-1.5 py-0.5 rounded border border-cyan-500/50 text-cyan-500 font-bold bg-cyan-950/20 animate-pulse">
+                                                <span className="text-[8px] px-1.5 py-0.5 rounded border border-cyan-500/50 text-cyan-500 font-bold bg-cyan-950/20">
                                                     SOP PORTAL
                                                 </span>
                                             )}
@@ -249,7 +249,7 @@ export const FrancisHub: React.FC = () => {
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         {[1, 2, 3, 4].map(i => (
-                                            <div key={i} className="h-16 border border-slate-800 rounded bg-black/40 animate-pulse flex items-center justify-center text-[9px] text-slate-700 font-mono uppercase">
+                                            <div key={i} className="h-16 border border-slate-800 rounded bg-black/40 flex items-center justify-center text-[9px] text-slate-700 font-mono uppercase">
                                                 Snsr_{i}
                                             </div>
                                         ))}

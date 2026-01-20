@@ -16,7 +16,7 @@ export interface MaintenanceLogDB {
 
 export interface WorkOrderDB {
     id: string;
-    asset_id: string;
+    asset_id: number;
     asset_name: string;
     component: string;
     description: string;

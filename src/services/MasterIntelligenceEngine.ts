@@ -28,7 +28,7 @@ export interface JustifiedSource {
 }
 
 export interface UnifiedDiagnosis {
-    assetId: string;
+    assetId: number;
     timestamp: number;
     overallHealthScore: number;
     criticality: 'HEALTHY' | 'INVESTIGATE' | 'CRITICAL';
@@ -717,7 +717,7 @@ export class MasterIntelligenceEngine {
         return Math.random() > 0.5; // Mock
     }
 
-    private static async autoOrderPart(component: string, assetId: string): Promise<void> {
+    private static async autoOrderPart(component: string, assetId: number): Promise<void> {
         // In production: Create purchase order
         /*
         await supabase.from('purchase_orders').insert({

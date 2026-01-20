@@ -1,5 +1,6 @@
 import { DiagnosisReport } from '../models/TechnicalSchema';
 import MaintenanceSOP from '../knowledge/MaintenanceSOP.json';
+import { supabase } from './supabaseClient';
 
 export interface ActionStep {
     step: number;
@@ -114,5 +115,21 @@ export const MaintenanceEngine = {
             };
         }
         return null;
+    }
+    ,
+
+    /**
+     * Fetch spare parts inventory for an asset from `spare_parts_inventory` table.
+     */
+    async fetchSparePartsForAsset(assetId: number) {
+        try {
+            const aid = Number(assetId);
+            const { data, error } = await supabase.from('spare_parts_inventory').select('*').eq('asset_id', aid);
+            if (error) throw error;
+            return data || [];
+        } catch (e) {
+            console.warn('Failed to fetch spare parts for asset', assetId, e);
+            return [];
+        }
     }
 };

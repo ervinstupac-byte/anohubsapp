@@ -12,7 +12,8 @@ export class LifecycleManager {
      * Start a new project (Genesis Phase)
      */
     static initializeProject(name: string, location: { lat: number; lng: number; region: string }): ProjectDNA {
-        const id = `PROJ-${Date.now().toString(36).toUpperCase()}`;
+        const projectRef = `PROJ-${Date.now().toString(36).toUpperCase()}`;
+        const id = Date.now(); // numeric asset id for ProjectIdentity
 
         // Default scaffolding
         this.currentProject = {

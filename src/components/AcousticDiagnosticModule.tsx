@@ -161,7 +161,7 @@ export const AcousticDiagnosticModule: React.FC = () => {
                 </div>
 
                 {(metrics.cavitationIntensity > 7 || metrics.ultrasonicLeakIndex > 7) && (
-                    <div className={`flex items-center p-3 rounded-xl gap-3 animate-pulse border ${metrics.ultrasonicLeakIndex > 7 ? 'bg-cyan-500/20 border-cyan-500/40' : 'bg-red-500/20 border-red-500/40'}`}>
+                    <div className={`flex items-center p-3 rounded-xl gap-3 border ${metrics.ultrasonicLeakIndex > 7 ? 'bg-cyan-500/20 border-cyan-500/40' : 'bg-red-500/20 border-red-500/40'}`}>
                         <span className="text-xl">{metrics.ultrasonicLeakIndex > 7 ? '🚨' : '🎙️'}</span>
                         <p className={`text-[9px] font-bold leading-tight uppercase ${metrics.ultrasonicLeakIndex > 7 ? 'text-cyan-200' : 'text-red-200'}`}>
                             Ano-Agent: {metrics.ultrasonicLeakIndex > 7 ? 'Detektovano ultrazvučno šištanje. Moguće mikro-curenje. Provjerite spojeve.' : 'Detektovana intenzivna kavitacija. Provjerite pritiske.'}

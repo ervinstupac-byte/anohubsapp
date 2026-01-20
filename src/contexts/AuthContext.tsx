@@ -57,7 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         });
 
-        return () => subscription.unsubscribe();
+            return () => { try { subscription.unsubscribe(); } catch (e) { } };
+        }
+
+        return () => { };
     }, [isGuest]);
 
     // 1. STANDARDNI LOGIN

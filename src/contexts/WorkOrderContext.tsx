@@ -18,7 +18,7 @@ export interface WorkOrderStep {
 
 export interface WorkOrder {
     id: string;
-    asset_id: string;
+    asset_id: number;
     title: string;
     issue_type: string;
     status: 'PENDING' | 'IN_PROGRESS' | 'SEALED';

@@ -389,8 +389,12 @@ export const HPPBuilder: React.FC = () => {
         }
         const { data } = await query;
         if (data) setSavedConfigs(data.map((d: any) => ({
-            id: d.id.toString(), name: d.design_name, asset_id: d.asset_id, timestamp: new Date(d.created_at).getTime(),
-            parameters: d.parameters, results: d.calculations
+            id: String(d.id),
+            name: d.design_name,
+            asset_id: d.asset_id,
+            timestamp: new Date(d.created_at).getTime(),
+            parameters: (() => { try { const p = d.design_points; return typeof p === 'string' ? JSON.parse(p) : p; } catch (_) { return {}; } })(),
+            results: d.calculations
         })));
         setIsLoading(false);
     };

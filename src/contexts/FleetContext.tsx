@@ -14,7 +14,7 @@ export interface InflowPrediction {
 }
 
 export interface FleetHealthReport {
-    assetId: string;
+    assetId: number;
     assetName: string;
     healthScore: number; // 0-100
     efficiencyIndex: number; // %

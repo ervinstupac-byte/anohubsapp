@@ -188,9 +188,9 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
                             <span className="text-[10px] font-mono text-slate-600 uppercase hidden sm:inline">
                                 {t('dashboard.workflowHeader.title', 'Active')}:
                             </span>
-                            <select
+                                <select
                                 value={selectedAsset.id || ''} // Fallback for safety
-                                onChange={(e) => selectAsset(e.target.value)}
+                                onChange={(e) => selectAsset(Number(e.target.value))}
                                 className={`
                                     bg-slate-800/50 border border-white/10 rounded
                                     ${isCompact ? 'text-[10px] px-2 py-0.5' : 'text-xs px-3 py-1'}
