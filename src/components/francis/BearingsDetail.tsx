@@ -67,8 +67,8 @@ export const BearingsDetail: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
                         {/* Temp Viz */}
                         <div className="lg:col-span-1 flex flex-col justify-center items-center p-6 bg-black/60 rounded-3xl border border-white/5 shadow-2xl">
-                            <div className="relative w-40 h-40 flex items-center justify-center">
-                                <svg className="w-full h-full transform -rotate-90">
+                                <div className="relative w-40 h-40 flex items-center justify-center">
+                                <svg className="w-full h-full transform -rotate-90" data-hotspot-id="upper_guide_bearing">
                                     <circle
                                         cx="80" cy="80" r="70"
                                         stroke="rgba(255,255,255,0.05)" strokeWidth="12"
@@ -100,7 +100,7 @@ export const BearingsDetail: React.FC = () => {
                         <div className="lg:col-span-3 space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                                    <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
+                                    <p data-hotspot-id="upper_guide_bearing" className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                         <Thermometer className="w-3 h-3 text-cyan-400" /> Upper Guide Bearing
                                     </p>
                                     <p className="text-3xl font-black text-white font-mono tracking-tighter">
@@ -127,7 +127,7 @@ export const BearingsDetail: React.FC = () => {
 
                             <div className={`p-6 rounded-2xl border-2 transition-all ${isHighTemp ? 'bg-red-500/10 border-red-500/30 shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]' : 'bg-blue-500/10 border-blue-500/30 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]'}`}>
                                 <div className="flex items-center gap-3 mb-3">
-                                    <div className={`w-2 h-2 rounded-full ${isHighTemp ? 'bg-red-500 animate-ping' : 'bg-blue-400 animate-pulse'}`} />
+                                    <div data-hotspot-id="guide_bearing_indicator" className={`w-2 h-2 rounded-full ${isHighTemp ? 'bg-red-500' : 'bg-blue-400'}`} />
                                     <span className={`text-[10px] ${isHighTemp ? 'text-red-500' : 'text-blue-400'} font-black uppercase tracking-[0.2em]`}>Neural Diagnostic Engine</span>
                                 </div>
                                 <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-bold italic">

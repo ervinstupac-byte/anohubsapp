@@ -123,7 +123,16 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const analyzeCorrelations = async () => {
             const results: CorrelationResult[] = [];
 
-            // 1. Check for Telemetry Alarms
+            // 1. Check for Telemetry Alarms and Vibration Thresholds
+            const assetIds = Object.keys(telemetry).map(id => Number(id)).filter(n => !Number.isNaN(n));
+            const thresholdsMap: Record<string, number> = {};
+            try {
+                const { data: tcfgs } = await supabase.from('threshold_configs').select('asset_id, vibration_mm_s').in('asset_id', assetIds);
+                (tcfgs || []).forEach((t: any) => { thresholdsMap[String(t.asset_id)] = Number(t.vibration_mm_s || 4.5); });
+            } catch (e) {
+                // ignore, fall back to defaults
+            }
+
             Object.entries(telemetry).forEach(([assetId, t]) => {
                 if (t.status === 'CRITICAL') {
                     results.push({
@@ -134,12 +143,23 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                 }
 
                 // Field-Incident Safeguard: Metal Scraping check
-                const maxMag = Math.max(...t.vibrationSpectrum);
+                const maxMag = Math.max(...(t.vibrationSpectrum || [0]));
                 if (maxMag > 0.7) {
                     results.push({
                         symptom: 'METAL_SCRAPING',
                         source: 'CORRELATED',
                         message: `ACOUSTIC ALERT: High magnitude frequencies detected on ${assetId}. Probable metal contact.`
+                    });
+                }
+
+                // Vibration threshold check (mm/s) - default 4.5
+                const latestVib = Number((t as any).francis_data?.stay_ring_vibration ?? t.vibration ?? t.rotorHeadVibration ?? 0);
+                const thresh = thresholdsMap[String(assetId)] ?? 4.5;
+                if (!Number.isNaN(latestVib) && latestVib > thresh) {
+                    results.push({
+                        symptom: 'ELEVATED_VIBRATION',
+                        source: 'TELEMETRY',
+                        message: `Vibration ${latestVib.toFixed(2)} mm/s exceeds threshold ${thresh} mm/s for asset ${assetId}`
                     });
                 }
             });

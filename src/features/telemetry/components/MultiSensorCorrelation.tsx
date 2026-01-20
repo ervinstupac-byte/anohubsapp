@@ -49,7 +49,7 @@ export const MultiSensorCorrelation: React.FC = () => {
                     </p>
                 </div>
                 {detected && (
-                    <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-lg animate-pulse">
+                    <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-lg">
                         <span className="text-xs font-black text-red-400 uppercase tracking-wider">
                             {probability}% RISK
                         </span>
@@ -84,21 +84,18 @@ export const MultiSensorCorrelation: React.FC = () => {
                         cy={acousticPos.y}
                         r={triggers.acoustic ? "8" : "5"}
                         fill={triggers.acoustic ? '#f59e0b' : '#64748b'}
-                        className={triggers.acoustic ? 'animate-pulse' : ''}
                     />
                     <circle
                         cx={thermalPos.x}
                         cy={thermalPos.y}
                         r={triggers.thermal ? "8" : "5"}
                         fill={triggers.thermal ? '#ef4444' : '#64748b'}
-                        className={triggers.thermal ? 'animate-pulse' : ''}
                     />
                     <circle
                         cx={hydraulicPos.x}
                         cy={hydraulicPos.y}
                         r={triggers.hydraulic ? "8" : "5"}
                         fill={triggers.hydraulic ? '#3b82f6' : '#64748b'}
-                        className={triggers.hydraulic ? 'animate-pulse' : ''}
                     />
 
                     {/* Center indicator */}
@@ -107,7 +104,6 @@ export const MultiSensorCorrelation: React.FC = () => {
                         cy={centerY}
                         r="6"
                         fill={detected ? '#ef4444' : '#0891b2'}
-                        className={detected ? 'animate-pulse' : ''}
                     />
 
                     {/* Labels */}
@@ -119,19 +115,19 @@ export const MultiSensorCorrelation: React.FC = () => {
                 {/* Status indicators */}
                 <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.acoustic ? 'bg-amber-500 animate-pulse' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-full ${triggers.acoustic ? 'bg-amber-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.acoustic ? 'text-amber-400' : 'text-slate-500'}`}>
                             Akustični potpis (kavitacija)
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.thermal ? 'bg-red-500 animate-pulse' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-full ${triggers.thermal ? 'bg-red-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.thermal ? 'text-red-400' : 'text-slate-500'}`}>
                             Termalni trend (ležaj)
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.hydraulic ? 'bg-blue-500 animate-pulse' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-full ${triggers.hydraulic ? 'bg-blue-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.hydraulic ? 'text-blue-400' : 'text-slate-500'}`}>
                             Hidraulička stabilnost
                         </span>

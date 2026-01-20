@@ -67,10 +67,10 @@ export const AlignmentVisualizer: React.FC<AlignmentVisualizerProps> = ({
                     )}
                 </div>
 
-                {/* Longevity Loss Zone Highlight */}
+                {/* Longevity Loss Zone Highlight (non-animating for field-mode) */}
                 {isOutsideGolden && (
                     <div
-                        className="absolute rounded-full bg-gradient-to-r from-red-500/10 to-transparent animate-pulse z-10"
+                        className="absolute rounded-full bg-gradient-to-r from-red-500/10 to-transparent z-10"
                         style={{
                             width: alignment * scaleFactor * 2,
                             height: alignment * scaleFactor * 2,

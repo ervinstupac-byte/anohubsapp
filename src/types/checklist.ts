@@ -87,7 +87,7 @@ export interface ServiceAlert {
     id: string;
     checklistId: string;
     itemId: string;
-    assetId: string;
+    assetId: number;
     assetName: string;
     severity: AlertSeverity;
     title: string;
@@ -113,7 +113,7 @@ export interface ActiveChecklist {
     id: string;
     templateId: string;
     turbineType: TurbineType;
-    assetId: string;
+    assetId: number;
     assetName: string;
     startedAt: string;
     completedAt?: string;

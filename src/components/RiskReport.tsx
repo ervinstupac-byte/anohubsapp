@@ -317,7 +317,7 @@ export const RiskReport: React.FC = () => {
                     <div className="h-4 w-px bg-slate-700"></div>
                     {selectedAsset ? (
                         <div className="flex items-center gap-2 text-sm font-mono text-cyan-400">
-                            <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                            <span className={`w-2 h-2 rounded-full ${selectedAsset.status === 'Operational' ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
                             {selectedAsset.name}
                         </div>
                     ) : (

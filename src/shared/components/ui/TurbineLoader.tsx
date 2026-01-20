@@ -32,7 +32,7 @@ export const TurbineLoader: React.FC<TurbineLoaderProps> = ({ message = "Generir
 
             {/* Technical Message */}
             <div className="flex flex-col items-center gap-1">
-                <span className="text-[#2dd4bf] font-mono text-sm tracking-widest uppercase animate-pulse">
+                <span className="text-[#2dd4bf] font-mono text-sm tracking-widest uppercase">
                     {message}
                 </span>
                 <span className="text-slate-500 text-[10px] font-mono">

@@ -132,7 +132,7 @@ export class FrancisTurbine implements ITurbineBehavior {
         // Mock historical data snapshot
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
-            assetId: 'mock',
+            assetId: 2,
             turbineFamily: 'FRANCIS',
             common: {
                 vibration: data.vibration || 0.5,
@@ -149,7 +149,7 @@ export class FrancisTurbine implements ITurbineBehavior {
             }
         };
 
-        const anomalies = model.detectAnomalies([sensorData]);
+            const anomalies = model.detectAnomalies([sensorData]);
 
         return anomalies.map(a =>
             `${a.severity}: ${a.type} - ${a.recommendation}`

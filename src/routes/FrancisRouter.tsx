@@ -41,6 +41,7 @@ const VortexControl = React.lazy(() => import('../components/francis/VortexContr
 const WaterHammer = React.lazy(() => import('../components/francis/WaterHammer').then(module => ({ default: module.WaterHammer })));
 const SOPViewer = React.lazy(() => import('../components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 const TruthHeatmapDemo = React.lazy(() => import('../components/TruthHeatmapDemo').then(module => ({ default: module.TruthHeatmapDemo })));
+const FrancisHorizontal5MW = React.lazy(() => import('../features/francis/components/FrancisHorizontal5MW').then(module => ({ default: module.FrancisHorizontal5MW })));
 const CommandCenter = React.lazy(() => import('../components/CommandCenter').then(module => ({ default: module.CommandCenter })));
 const ForensicLab = React.lazy(() => import('../components/ForensicLab').then(module => ({ default: module.ForensicLab })));
 const MechanismDetail = React.lazy(() => import('../components/dashboard/visual/MechanismDetailView')); // Default export
@@ -78,6 +79,7 @@ const FrancisRouter: React.FC = () => {
                 <Route path={ROUTES.FRANCIS.MANIFESTO} element={<Manifesto />} />
 
                 {/* Mechanical Systems */}
+                <Route path={ROUTES.FRANCIS.HORIZONTAL_5MW} element={<FrancisHorizontal5MW />} />
                 <Route path="mechanism-detail" element={<MechanismDetail />} />
                 <Route path={ROUTES.FRANCIS.SOP.MIV_DISTRIBUTOR} element={<MIVDetail />} />
                 <Route path={ROUTES.FRANCIS.SOP.BEARINGS} element={<BearingsDetail />} />

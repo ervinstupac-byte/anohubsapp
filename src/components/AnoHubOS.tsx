@@ -77,7 +77,7 @@ export const AnoHubOS: React.FC = () => {
                         {project.identity.assetName}
                     </div>
                     <div className="mt-2 text-xs flex items-center gap-1 text-emerald-400">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                         PHASE: {project.currentPhase}
                     </div>
                 </div>

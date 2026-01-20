@@ -228,7 +228,7 @@ export const ARManager: React.FC = () => {
                 <header className="p-6 flex justify-between items-start pointer-events-auto">
                     <div className="space-y-1">
                         <div className="flex items-center gap-3">
-                            <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
+                            <div className="w-3 h-3 bg-red-600 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">AR FIELD GUIDE <span className="text-cyan-400">v2.0</span></h2>
                         </div>
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest pl-6">Spatial AI Inspection Module</p>
@@ -253,9 +253,9 @@ export const ARManager: React.FC = () => {
                     {isRemoteCalling && (
                         <div className="absolute top-24 right-6 w-48 aspect-video bg-slate-900/80 border border-cyan-500/30 rounded-xl overflow-hidden pointer-events-auto">
                             <div className="absolute top-2 left-2 px-2 py-0.5 bg-cyan-500 rounded text-[8px] font-black text-black">REMOTE: ING. STEVAN</div>
-                            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                                <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                                 <span className="text-2xl">👨‍🔧</span>
-                                <div className="text-[8px] text-cyan-400 animate-pulse font-mono font-bold uppercase">Streaming live feed...</div>
+                                <div className="text-[8px] text-cyan-400 font-mono font-bold uppercase">Streaming live feed...</div>
                             </div>
                         </div>
                     )}

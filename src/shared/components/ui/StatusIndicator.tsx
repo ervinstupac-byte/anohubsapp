@@ -53,12 +53,11 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
     // Dot variant — simple colored dot
     if (variant === 'dot') {
         return (
-            <div
+                <div
                 className={`
                     ${SIZE_CLASSES[size]} 
                     ${colors.dot} 
                     rounded-full 
-                    ${shouldPulse ? 'animate-pulse' : ''} 
                     ${className}
                 `}
                 title={label || status.toUpperCase()}
@@ -75,7 +74,6 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                         ${SIZE_CLASSES[size]} 
                         ${colors.dot} 
                         rounded-full 
-                        ${shouldPulse ? 'animate-pulse' : ''}
                     `}
                 />
                 {label && (
@@ -98,7 +96,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                 ${className}
             `}
         >
-            <div className={`${SIZE_CLASSES[size]} ${colors.dot} rounded-full ${shouldPulse ? 'animate-pulse' : ''}`} />
+            <div className={`${SIZE_CLASSES[size]} ${colors.dot} rounded-full`} />
             {label && (
                 <span className={`${LABEL_SIZE_CLASSES[size]} ${colors.text} font-black uppercase tracking-wider`}>
                     {label}

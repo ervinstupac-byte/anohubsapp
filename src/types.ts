@@ -212,7 +212,7 @@ export interface CalculationResult {
 export interface SavedConfiguration {
   id: string;
   name: string;
-  asset_id?: string;
+  asset_id?: number;
   timestamp: number;
   parameters: HPPSettings;
   results: CalculationResult;
@@ -332,7 +332,7 @@ export type BaseAssetProfile = AssetProfile;
 
 // --- BASE ASSET TEMPLATE (Engineering DNA) ---
 export const BaseAssetTemplateSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.number().optional(),
   name: z.string().min(3),
   type: z.enum(['HPP', 'Solar', 'Wind']),
   turbine_type: z.enum(['FRANCIS', 'KAPLAN', 'PELTON']).optional(),

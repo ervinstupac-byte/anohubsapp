@@ -6,7 +6,7 @@ export type ModuleType = 'toolbox' | 'executive' | 'builder' | 'design-studio' |
 export interface NavigationEntry {
     module: ModuleType;
     timestamp: number;
-    assetId?: string;
+    assetId?: number;
     componentId?: string;
     sensorPath?: string;
 }
@@ -19,7 +19,7 @@ interface WorkflowState {
 interface WorkflowContextType {
     state: WorkflowState;
     logNavigation: (entry: Omit<NavigationEntry, 'timestamp'>) => void;
-    getLastVisitedModule: (assetId?: string) => ModuleType | null;
+    getLastVisitedModule: (assetId?: number) => ModuleType | null;
     clearHistory: () => void;
 }
 
@@ -111,7 +111,7 @@ export const WorkflowProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }));
     }, []);
 
-    const getLastVisitedModule = useCallback((assetId?: string): ModuleType | null => {
+    const getLastVisitedModule = useCallback((assetId?: number): ModuleType | null => {
         if (!assetId) return state.lastModule;
 
         const lastForAsset = state.navigationHistory.find(
@@ -147,7 +147,7 @@ export const useWorkflow = () => {
 };
 
 // Optional hook for logging navigation on route change
-export const useWorkflowNavigation = (module: ModuleType, assetId?: string) => {
+export const useWorkflowNavigation = (module: ModuleType, assetId?: number) => {
     // Safety Wrapper: Don't crash if context is missing during early render
     let logNavigation: ((entry: Omit<NavigationEntry, 'timestamp'>) => void) | undefined;
     try {

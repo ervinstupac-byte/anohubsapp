@@ -22,7 +22,7 @@ export interface ParticleClassification {
 
 export interface FerographyReport {
     timestamp: number;
-    assetId: string;
+    assetId: number;
     particles: ParticleClassification[];
     overallWearRate: 'NORMAL' | 'ELEVATED' | 'SEVERE' | 'CATASTROPHIC';
     recommendations: string[];
@@ -107,7 +107,7 @@ export class ParticleAnalysisService {
      * Generate comprehensive ferography report
      */
     static generateFerographyReport(
-        assetId: string,
+        assetId: number,
         images: ParticleImage[],
         metalContent: any
     ): FerographyReport {

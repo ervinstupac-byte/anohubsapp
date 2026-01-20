@@ -89,7 +89,7 @@ export const CommandPalette = React.memo(() => {
                 subtitle: `${(a.type || '—').toUpperCase()} • ${a.capacity || '-'} MW`,
                 status: 'nominal', // In real app, derived from telemetry
                 action: () => {
-                    if (selectAsset) selectAsset(a.id);
+                    if (selectAsset) selectAsset(Number(a.id));
                     navigate('/'); // Go to toolbox with asset selected
                 }
             }));

@@ -6,7 +6,7 @@
 export type UrgencyLevel = 'OPTIMAL' | 'PLANNING' | 'PRIORITY' | 'CRITICAL';
 
 export interface ComponentConfig {
-    id: string;
+    id: string | number;
     name: string;
     designLifeHours: number; // e.g. 50,000
     installationDate: string; // ISO Date
@@ -27,7 +27,7 @@ export interface PredictionInput {
 }
 
 export interface MaintenancePrediction {
-    componentId: string;
+    componentId: string | number;
     predictedFailureDate: string; // ISO
     remainingLifeHours: number;
     remainingLifePercent: number; // 0-100

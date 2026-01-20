@@ -21,7 +21,7 @@ export const ActionCard: React.FC = () => {
                 <div className="flex justify-between items-start mb-1">
                     <span className="text-[9px] text-slate-400 font-black font-mono uppercase tracking-[0.2em] opacity-80">Protocol Genesis</span>
                     {protocolVerified && (
-                        <span className="text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 font-black animate-pulse">
+                            <span className="text-[8px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20 font-black">
                             COMMANDER.VERIFIED
                         </span>
                     )}
@@ -96,9 +96,9 @@ const AnalyticsGraph: React.FC<{ title: string, color: string, glowClass?: strin
 export const SystemAlerts: React.FC = () => {
     return (
         <div className="bg-slate-900/90 border border-slate-700/50 rounded-lg p-4 h-full flex flex-col metallic-border overflow-hidden">
-            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-between border-b border-white/5 pb-2">
+                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center justify-between border-b border-white/5 pb-2">
                 <span>SYSTEM ALERTS</span>
-                <span className="text-red-500 animate-pulse text-[8px]">CRITICAL SCAN ACTIVE</span>
+                <span className="text-red-500 text-[8px]">CRITICAL SCAN ACTIVE</span>
             </h3>
 
             <div className="space-y-2 flex-1 overflow-y-auto pr-1 custom-scrollbar">

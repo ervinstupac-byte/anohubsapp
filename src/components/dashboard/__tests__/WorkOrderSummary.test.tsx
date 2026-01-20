@@ -49,7 +49,7 @@ describe('WorkOrderSummary Component', () => {
 
         // Default Asset
         (useAssetContext as any).mockReturnValue({
-            selectedAsset: { id: 'asset-1', name: 'Turbine A' }
+            selectedAsset: { id: 1, name: 'Turbine A' }
         });
 
         // Default: No Orders
@@ -66,9 +66,9 @@ describe('WorkOrderSummary Component', () => {
 
     it('renders work orders sorted by priority', () => {
         const mockOrders = [
-            { id: '1', assetId: 'asset-1', priority: 'HIGH', status: 'PENDING', description: 'Low Task', createdAt: new Date() },
-            { id: '2', assetId: 'asset-1', priority: 'MEDIUM', status: 'PENDING', description: 'High Task', createdAt: new Date() },
-            { id: '3', assetId: 'asset-1', priority: 'LOW', status: 'PENDING', description: 'Medium Task', createdAt: new Date() },
+            { id: '1', assetId: 1, priority: 'HIGH', status: 'PENDING', description: 'Low Task', createdAt: new Date() },
+            { id: '2', assetId: 1, priority: 'MEDIUM', status: 'PENDING', description: 'High Task', createdAt: new Date() },
+            { id: '3', assetId: 1, priority: 'LOW', status: 'PENDING', description: 'Medium Task', createdAt: new Date() },
         ];
         (useMaintenance as any).mockReturnValue({ workOrders: mockOrders });
 
@@ -103,7 +103,7 @@ describe('WorkOrderSummary Component', () => {
 
     it('navigates to detail on click', () => {
         const mockOrders = [
-            { id: 'wo-123', assetId: 'asset-1', priority: 'HIGH', status: 'PENDING', description: 'Fix it', createdAt: new Date() }
+            { id: 'wo-123', assetId: 1, priority: 'HIGH', status: 'PENDING', description: 'Fix it', createdAt: new Date() }
         ];
         (useMaintenance as any).mockReturnValue({ workOrders: mockOrders });
 
@@ -115,7 +115,7 @@ describe('WorkOrderSummary Component', () => {
 
     it('shows urgent badge if high priority exists', () => {
         const mockOrders = [
-            { id: '1', assetId: 'asset-1', priority: 'HIGH', status: 'PENDING', description: 'Urgent Task', createdAt: new Date() }
+            { id: '1', assetId: 1, priority: 'HIGH', status: 'PENDING', description: 'Urgent Task', createdAt: new Date() }
         ];
         (useMaintenance as any).mockReturnValue({ workOrders: mockOrders });
 

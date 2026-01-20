@@ -82,7 +82,7 @@ export const RiskAssessment: React.FC<{ onShowSummary: () => void }> = ({ onShow
                     // STANDBY SCREEN (Ako nije odabran Asset)
                     <GlassCard className="text-center py-24 border-dashed border-slate-700/50 bg-slate-900/40">
                         <div className="relative inline-block mb-6">
-                            <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full animate-pulse"></div>
+                            <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full"></div>
                             <span className="relative text-6xl opacity-90 grayscale">🏗️</span>
                         </div>
 

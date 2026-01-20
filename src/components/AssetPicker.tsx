@@ -19,7 +19,7 @@ export const AssetPicker: React.FC = () => {
                 <select
                     value={selectedAsset?.id || ''}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                        selectAsset(e.target.value);
+                        selectAsset(Number(e.target.value));
                     }}
                     className="appearance-none w-full bg-slate-900/80 border border-slate-700 text-white text-sm rounded-lg px-4 py-2.5 pr-8 focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer hover:bg-slate-800"
                 >

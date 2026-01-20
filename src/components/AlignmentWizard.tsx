@@ -85,7 +85,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
                     <div className={`px-4 py-2 rounded-lg border flex items-center gap-3 ${isRotating ? 'bg-red-500/20 border-red-500/50' : 'bg-emerald-500/20 border-emerald-500/50'}`}>
                         {isRotating ? (
                             <>
-                                <AlertTriangle className="w-5 h-5 text-red-500 animate-pulse" />
+                                <AlertTriangle className="w-5 h-5 text-red-500" />
                                 <div>
                                     <div className="text-xs text-red-400 font-bold uppercase">Unsafe Condition</div>
                                     <div className="text-sm font-black text-white">ROTATING ({currentRpm.toFixed(0)} RPM)</div>

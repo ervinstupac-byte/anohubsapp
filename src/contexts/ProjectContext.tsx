@@ -481,7 +481,7 @@ export const useProjectEngine = (): any => {
      * Called from ComponentTree and other inspection UIs
      */
     const addInspectionImage = (
-        assetId: string,
+        assetId: number,
         component: string,
         imageData: {
             src: string; // base64 or blob URL
@@ -513,7 +513,7 @@ export const useProjectEngine = (): any => {
      * Facade that integrates with ServiceChecklistEngine and updates asset health
      */
     const addMeasurement = (
-        assetId: string,
+        assetId: number,
         component: string,
         measuredValue: number,
         unit: 'mm' | 'bar' | 'rpm' | 'celsius',
@@ -563,7 +563,7 @@ export const useProjectEngine = (): any => {
      * Integrates measurement results into CEREBRO state
      */
     const updateAssetHealth = (
-        assetId: string,
+        assetId: number,
         component: string,
         healthScore: number
     ): void => {

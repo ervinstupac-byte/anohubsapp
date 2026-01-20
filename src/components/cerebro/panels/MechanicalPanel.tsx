@@ -27,13 +27,15 @@ export const MechanicalPanel: React.FC = () => {
     const currentShaftAlignmentLimit = liveMechanical?.shaftAlignmentLimit || technicalState.mechanical.shaftAlignmentLimit || 1.0;
 
     // Get component health data from CEREBRO
-    const componentHealth = cerebroState.componentHealth?.[liveIdentity?.assetId || ''] || {};
+    const componentHealth = (cerebroState.componentHealth as Record<string, any>)?.[String(liveIdentity?.assetId ?? '')] || {};
 
     const handleParamChange = (key: keyof typeof mechanical.boltSpecs, value: any) => {
         updateMechanicalDetails({
             boltSpecs: { ...mechanical.boltSpecs, [key]: value }
         });
     };
+
+    const entries = Object.entries(componentHealth) as [string, any][];
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -156,15 +158,15 @@ export const MechanicalPanel: React.FC = () => {
                         <Activity className="w-4 h-4 text-cyan-400" /> Component Health Monitor
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {Object.entries(componentHealth).map(([compId, health]) => {
-                            const statusColors = {
+                        {entries.map(([compId, health]) => {
+                            const statusColors: Record<string, string> = {
                                 OPTIMAL: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50',
                                 GOOD: 'bg-green-500/20 text-green-400 border-green-500/50',
                                 WARNING: 'bg-amber-500/20 text-amber-400 border-amber-500/50',
                                 CRITICAL: 'bg-red-500/20 text-red-400 border-red-500/50'
                             };
 
-                            const statusIcons = {
+                            const statusIcons: Record<string, string> = {
                                 OPTIMAL: '✓',
                                 GOOD: '●',
                                 WARNING: '⚠',

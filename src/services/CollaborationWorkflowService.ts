@@ -12,7 +12,7 @@ export interface User {
 export interface MeasurementSubmission {
     id: string;
     submittedBy: User;
-    assetId: string;
+    assetId: number;
     measurementType: 'GEODETIC' | 'VIBRATION' | 'THERMAL' | 'OIL_ANALYSIS' | 'HYDRAULIC_CHANGE';
     data: any;
     timestamp: number;
@@ -54,7 +54,7 @@ export class CollaborationWorkflowService {
      */
     static async submitMeasurement(
         fieldWorker: User,
-        assetId: string,
+        assetId: number,
         measurementType: MeasurementSubmission['measurementType'],
         data: any
     ): Promise<MeasurementSubmission> {
@@ -304,7 +304,7 @@ export class CollaborationWorkflowService {
     /**
      * Get submission history for an asset
      */
-    static async getSubmissionHistory(assetId: string): Promise<MeasurementSubmission[]> {
+    static async getSubmissionHistory(assetId: number): Promise<MeasurementSubmission[]> {
         // return await supabase
         //     .from('measurement_submissions')
         //     .select('*')

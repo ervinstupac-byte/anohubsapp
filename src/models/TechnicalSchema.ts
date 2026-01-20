@@ -43,6 +43,7 @@ export interface HydraulicStream {
     cavitationThreshold: Decimal;
     currentHoopStress?: Decimal; // High-precision for reporting
     baselineOutputMW?: Decimal; // Performance benchmark
+    powerKW?: number; // convenience field for quick power lookups (derived)
 }
 
 export interface AcousticMetrics {
@@ -76,6 +77,7 @@ export interface MechanicalStream {
     acousticNoiseFloor?: number; // dB - Added for Acoustic-Orbit Fusion
     acousticMetrics?: AcousticMetrics; // NEW: Real-time shadow acoustic data
     particleAnalysis?: any[]; // NEW: Ferography classification history
+    powerKW?: number; // convenience field
 }
 
 /**
@@ -91,7 +93,7 @@ export interface ComponentHealthData {
 }
 
 export interface ComponentHealthRegistry {
-    [assetId: string]: {
+    [assetId: number]: {
         [componentId: string]: ComponentHealthData;
     };
 }
@@ -215,7 +217,7 @@ export type ProjectAction =
     | { type: 'UPDATE_MECHANICAL'; payload: Partial<MechanicalStream> }
     | { type: 'UPDATE_PENSTOCK'; payload: Partial<PenstockSpecs> }
     | { type: 'SET_ASSET'; payload: AssetIdentity }
-    | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: string; componentId: string; healthData: ComponentHealthData } }
+    | { type: 'UPDATE_COMPONENT_HEALTH'; payload: { assetId: number; componentId: string; healthData: ComponentHealthData } }
     | { type: 'UPDATE_SPECIALIZED_MODULE'; payload: { moduleId: string; status: SpecializedModuleStatus } }
     | { type: 'UPDATE_TELEMETRY_SUCCESS'; payload: TechnicalProjectState }
     | { type: 'UPDATE_VIBRATION_HISTORY'; payload: { x: number; y: number } }
