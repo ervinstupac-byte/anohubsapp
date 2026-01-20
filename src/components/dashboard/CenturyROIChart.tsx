@@ -29,7 +29,10 @@ export const CenturyROIChart: React.FC = () => {
         (async () => {
             try {
                 if (!numericAssetId) return;
-                const { data, error } = await fetch('/api/proxy/telemetry_history_cache?asset_id=' + numericAssetId);
+                const resp = await fetch('/api/proxy/telemetry_history_cache?asset_id=' + numericAssetId);
+                const json = await resp.json().catch(() => null);
+                const data = json?.data;
+                const error = json?.error;
                 // If proxy not available, fall back to direct supabase fetch using client in scripts; here we attempt a direct fetch via global endpoint.
                 if (!data) {
                     // try supabase client (dynamic import)

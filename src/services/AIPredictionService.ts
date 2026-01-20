@@ -155,6 +155,14 @@ class AIPredictionService {
      * Returns number of weeks until eta crosses `threshold` (default 90%) and confidence
      */
     async forecastEtaBreakEven(assetId: number, threshold: number = 90): Promise<{ weeksUntil: number | null; predictedTimestamp: number | null; confidence: number; slope?: number; intercept?: number; tStatistic?: number; sampleCount?: number; residualStd?: number }> {
+        // Prioritize any in-memory telemetry (useful for tests and live short-term buffers)
+        const memHistory = telemetryHistory.get(String(assetId));
+        if (memHistory && memHistory.length > 0) {
+            if (memHistory.length < 5) return { weeksUntil: null, predictedTimestamp: null, confidence: 0 };
+            const pts = memHistory.map(h => ({ t: h.timestamp, y: h.efficiency })).slice(-HISTORY_WINDOW_SIZE);
+            return this._computeLinearForecast(pts, threshold);
+        }
+
         // First try persisted telemetry from Supabase (telemetry_logs.details.efficiency)
         try {
             const numeric = idAdapter.toNumber(assetId);
