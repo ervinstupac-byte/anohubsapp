@@ -1,0 +1,153 @@
+{
+    "turbineType": "KAPLAN",
+    "version": "1.0",
+    "estimatedDurationMinutes": 180,
+    "requiredPhotos": 8,
+    "categories": [
+        {
+            "id": "oil_head",
+            "name": "Oil Head System",
+            "nameDE": "Ölkopf-System",
+            "items": [
+                {
+                    "id": "oil_pressure",
+                    "label": "Operating Oil Pressure",
+                    "labelDE": "Betriebsöldruck",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "bar",
+                        "nominalValue": 40.0,
+                        "tolerance": 2.0,
+                        "minValue": 35.0,
+                        "maxValue": 45.0
+                    },
+                    "expertNotes": "Low pressure causes slow blade response. High pressure indicates pump wear or filter blockage."
+                },
+                {
+                    "id": "oil_level",
+                    "label": "Oil Head Level Check",
+                    "labelDE": "Ölstandprüfung",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Low oil level can cause air entrainment and erratic blade movement."
+                },
+                {
+                    "id": "oil_quality",
+                    "label": "Oil Contamination Check",
+                    "labelDE": "Ölverunreinigung-Prüfung",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Replace oil if water or metal particles detected."
+                }
+            ]
+        },
+        {
+            "id": "blade_kinematics",
+            "name": "Blade Kinematics",
+            "nameDE": "Schaufelkinematik",
+            "items": [
+                {
+                    "id": "blade_angle_zero",
+                    "label": "Blade Angle at 0° Position",
+                    "labelDE": "Schaufelwinkel bei 0° Stellung",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.0,
+                        "tolerance": 0.05,
+                        "minValue": -0.1,
+                        "maxValue": 0.1
+                    },
+                    "expertNotes": "Deviation > 0.05mm indicates servo rod wear or hinge play. CRITICAL for efficiency."
+                },
+                {
+                    "id": "servo_rod_clearance",
+                    "label": "Servo Rod Radial Clearance",
+                    "labelDE": "Servostangen-Radialspiel",
+                    "type": "MEASUREMENT",
+                    "required": true,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.02,
+                        "tolerance": 0.05,
+                        "minValue": 0.0,
+                        "maxValue": 0.15
+                    },
+                    "expertNotes": "Excessive play causes blade flutter and fatigue cracks."
+                },
+                {
+                    "id": "blade_response",
+                    "label": "Blade Response Time Test",
+                    "labelDE": "Schaufel-Ansprechzeit-Test",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Slow response (> 3s for full stroke) indicates worn servo or oil system issue."
+                },
+                {
+                    "id": "kinematics_photo",
+                    "label": "Servo Mechanism Photos",
+                    "labelDE": "Servomechanismus Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 2,
+                        "maxPhotos": 4,
+                        "tags": [
+                            "servo_rod",
+                            "hinge",
+                            "linkage"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id": "shaft_seals",
+            "name": "Shaft Seals",
+            "nameDE": "Wellendichtungen",
+            "items": [
+                {
+                    "id": "seal_leakage",
+                    "label": "Water Leakage Detected",
+                    "labelDE": "Wasserleckage festgestellt",
+                    "type": "BOOLEAN",
+                    "required": true,
+                    "expertNotes": "Minor leakage is acceptable (< 5 liters/hour). Excessive leakage requires seal replacement."
+                },
+                {
+                    "id": "seal_wear",
+                    "label": "Seal Wear Depth",
+                    "labelDE": "Dichtungsverschleiß Tiefe",
+                    "type": "MEASUREMENT",
+                    "required": false,
+                    "measurementConfig": {
+                        "unit": "mm",
+                        "nominalValue": 0.0,
+                        "tolerance": 0.5,
+                        "minValue": 0.0,
+                        "maxValue": 2.0
+                    },
+                    "expertNotes": "Groove depth > 1.5mm requires seal ring replacement."
+                },
+                {
+                    "id": "seal_photo",
+                    "label": "Seal Condition Photos",
+                    "labelDE": "Dichtungszustand Fotos",
+                    "type": "PHOTO",
+                    "required": true,
+                    "photoConfig": {
+                        "minPhotos": 2,
+                        "maxPhotos": 4,
+                        "tags": [
+                            "upper_seal",
+                            "lower_seal",
+                            "leakage"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "inlet|turbine_friend__francis_h__francis_sop_penstock__indexhtml": {
+    "rel": "turbine_friend/francis_h/francis_sop_penstock/index.html",
+    "injection": "<!-- NC-9.4-ID:EC2A811A -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — INLET</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">H = 99.6 m</div>\n  <p class=\"text-sm text-slate-300\">Selected head H=99.6 m to parameterize flow energy available at the inlet/penstock. This formula is applied to turbine_friend/francis_h/francis_sop_penstock/index.html because the filename indicates the sub-topic 'inlet', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  },
+  "runner|turbine_friend__francis_emergency_protocols__indexhtml": {
+    "rel": "turbine_friend/francis_emergency_protocols/index.html",
+    "injection": "<!-- NC-9.4-ID:EC3D31A5 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — RUNNER</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">M = 383.37 N·m · η = 0.753</div>\n  <p class=\"text-sm text-slate-300\">Torque M=383.37 N·m and efficiency η=0.753 capture mechanical loading and conversion efficiency on the runner. This formula is applied to turbine_friend/francis_emergency_protocols/index.html because the filename indicates the sub-topic 'runner', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  },
+  "magnetic|protocol__anohub_sync_v2__indexhtml": {
+    "rel": "protocol/anohub_sync_v2/index.html",
+    "injection": "<!-- NC-9.4-ID:8611BCC6 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — MAGNETIC</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Φ = 0.442379 Wb (B=0.673 T, A=0.765 m², θ=0.537 rad)</div>\n  <p class=\"text-sm text-slate-300\">Magnetic flux Φ=0.442379 Wb estimated from B, A and orientation θ to characterize induction performance. This formula is applied to protocol/anohub_sync_v2/index.html because the filename indicates the sub-topic 'magnetic', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  },
+  "magnetic|turbine_friend__francis_sop_generator__indexhtml": {
+    "rel": "turbine_friend/francis_sop_generator/index.html",
+    "injection": "<!-- NC-9.4-ID:E0AF1620 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — MAGNETIC</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">Φ = 0.125044 Wb (B=1.712 T, A=0.1043 m², θ=0.795 rad)</div>\n  <p class=\"text-sm text-slate-300\">Magnetic flux Φ=0.125044 Wb estimated from B, A and orientation θ to characterize induction performance. This formula is applied to turbine_friend/francis_sop_generator/index.html because the filename indicates the sub-topic 'magnetic', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  },
+  "vibration|turbine_friend__francis_sop_shaft_alignment__indexhtml": {
+    "rel": "turbine_friend/francis_sop_shaft_alignment/index.html",
+    "injection": "<!-- NC-9.4-ID:76722498 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — VIBRATION</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">f_n = 5.275 Hz (k=602947.08 N/m, m=548.94 kg)</div>\n  <p class=\"text-sm text-slate-300\">Natural frequency f_n=5.275 Hz computed from stiffness k and mass m to evaluate resonance risk. This formula is applied to turbine_friend/francis_sop_shaft_alignment/index.html because the filename indicates the sub-topic 'vibration', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  },
+  "structural|turbine_friend__francis_sop_foundation__indexhtml": {
+    "rel": "turbine_friend/francis_sop_foundation/index.html",
+    "injection": "<!-- NC-9.4-ID:DC235255 -->\n<div class=\"scix-inject mt-6 p-4 bg-white/5 border border-white/5 rounded-lg\">\n  <h3 class=\"text-sm font-bold text-white mb-2\">NC-9.4 — STRUCTURAL</h3>\n  <div class=\"scix-equation text-sm font-mono text-slate-100 mb-2\">σ_y = 490770245.091 (F_s=2.684, M=961833.92, y=1.418, I=0.007459)</div>\n  <p class=\"text-sm text-slate-300\">Yield stress estimate σ_y=490770245.091 using safety factor and section properties for structural assessment. This formula is applied to turbine_friend/francis_sop_foundation/index.html because the filename indicates the sub-topic 'structural', making the parameters relevant for local diagnostics.</p>\n</div>\n"
+  }
+}

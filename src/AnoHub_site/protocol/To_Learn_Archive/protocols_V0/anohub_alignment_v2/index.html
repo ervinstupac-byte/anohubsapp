@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AnoHUB | ALIGNMENT AUTHORITY | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    <meta name="description" content="Establishing the global standard for hydro integrity.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto+Mono:wght@300;400;700&family=Inter:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition">Insights</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition">GET A QUOTE</a>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]">Insights</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2">REQUEST AUDIT</a>
+        </div>
+    </header>
+
+    <div id="hangar-loader" class="fixed inset-0 z-[10000] flex flex-col pointer-events-none bg-[#020617]">
+        <div id="hangar-top" class="w-full h-1/2 bg-[#020617] border-b border-h-gold/30 transition-transform duration-1000"></div>
+        <div id="hangar-line" class="absolute top-1/2 left-0 w-full h-[1px] bg-h-gold shadow-[0_0_20px_#FFD700] z-50"></div>
+        <div id="hangar-bottom" class="w-full h-1/2 bg-[#020617] border-t border-h-gold/30 transition-transform duration-1000"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        
+
+                
+                <section class="mb-8">
+                    <h3 class="text-xs font-bold uppercase border-b border-black mb-2 flex justify-between">
+                        <span>01. PROJECT IDENTIFICATION</span>
+                        <span class="font-mono text-gray-500">ISO 10816-5</span>
+                    </h3>
+                    <div class="grid grid-cols-4 gap-4 border-b border-gray-200 pb-4">
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-400">Plant / Facility</label>
+                            <input type="text" class="field font-bold" value="HE ORLJANI">
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-400">Unit ID</label>
+                            <input type="text" class="field font-bold" value="G1 - KAPLAN">
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-400">Job Order</label>
+                            <input type="text" class="field" value="WO-25-884">
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-400">Date</label>
+                            <input type="date" id="date-now" class="field">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-8">
+                    <div class="flex justify-between items-end mb-2">
+                        <h3 class="text-xs font-bold uppercase border-b border-black w-full pb-1">02. SHAFT ALIGNMENT ANALYSIS (RIM/FACE)</h3>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-6 h-[320px]">
+                        
+                        <div class="col-span-4 flex flex-col justify-between bg-gray-50 p-4 border border-gray-200">
+                            
+                            <div>
+                                <div class="text-[10px] font-bold bg-black text-white px-2 py-1 mb-3 inline-block">TARGETS (Thermal)</div>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="text-[9px] text-gray-500 block">V-Offset (mm)</label>
+                                        <input type="number" id="t-off" class="field field-num text-blue-800" value="0.15">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] text-gray-500 block">Slope (mm/m)</label>
+                                        <input type="number" id="t-slope" class="field field-num text-blue-800" value="0.02">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="text-[10px] font-bold bg-gray-300 text-black px-2 py-1 mb-3 inline-block">CORRECTIONS (Shims)</div>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-[10px] font-mono font-bold">FRONT FOOT</label>
+                                        <input type="number" id="s-front" class="field field-num w-20" value="0.15" step="0.01">
+                                    </div>
+                                    <input type="range" id="r-front" class="w-full h-1 bg-gray-300 appearance-none no-print" min="-1" max="1" step="0.01" value="0.15">
+                                    
+                                    <div class="flex justify-between items-center">
+                                        <label class="text-[10px] font-mono font-bold">BACK FOOT</label>
+                                        <input type="number" id="s-back" class="field field-num w-20" value="0.25" step="0.01">
+                                    </div>
+                                    <input type="range" id="r-back" class="w-full h-1 bg-gray-300 appearance-none no-print" min="-1" max="1" step="0.01" value="0.25">
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-gray-300">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span>FINAL OFFSET:</span>
+                                    <span id="res-off" class="font-mono">0.00</span>
+                                </div>
+                                <div class="flex justify-between text-xs font-bold">
+                                    <span>FINAL ANGLE:</span>
+                                    <span id="res-ang" class="font-mono">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-8 border border-black graph-bg relative overflow-hidden">
+                            <div class="absolute top-2 left-2 text-[9px] font-mono text-gray-400">VERTICAL PLANE PLOT [1:100 Scale]</div>
+                            <div class="absolute bottom-2 right-2 text-[9px] font-mono text-gray-400">X-AXIS: SHAFT LENGTH (mm)</div>
+                            
+                            <div class="absolute top-1/2 left-0 w-full h-[40px] -mt-[20px] bg-green-100/30 border-y border-green-500/20 pointer-events-none print:border-green-500"></div>
+                            
+                            <svg viewBox="0 0 400 200" class="w-full h-full absolute inset-0" preserveAspectRatio="none">
+                                <line x1="0" y1="100" x2="400" y2="100" stroke="#999" stroke-dasharray="2 2" stroke-width="1" />
+                                
+                                <path d="M50 80 L100 80 L100 120 L50 120 Z" fill="none" stroke="#333" stroke-width="1" opacity="0.5"/>
+                                <path d="M250 70 L350 70 L350 130 L250 130 Z" fill="none" stroke="#333" stroke-width="1" opacity="0.5"/>
+                                
+                                <line id="plot-line" x1="0" y1="100" x2="400" y2="100" stroke="black" stroke-width="2" />
+                                
+                                <circle id="plot-point" cx="200" cy="100" r="3" fill="black" />
+                                
+                                <line x1="200" y1="90" x2="200" y2="110" stroke="red" stroke-width="1" opacity="0.3"/>
+                            </svg>
+
+                            <div id="plot-stamp" class="absolute top-4 right-4 border-2 border-black px-3 py-1 font-header text-lg font-bold transform rotate-[-10deg] opacity-0 transition-opacity">
+                                PASSED
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-8">
+                    <h3 class="text-xs font-bold uppercase border-b border-black mb-4">03. THRUST BEARING EQUALIZATION</h3>
+                    
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-8">
+                            <table class="w-full text-[10px] font-mono border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 p-2 text-left">PAD ID</th>
+                                        <th class="border border-gray-300 p-2 text-center">PRESSURE (MPa)</th>
+                                        <th class="border border-gray-300 p-2 text-center">DEVIATION (%)</th>
+                                        <th class="border border-gray-300 p-2 text-center">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="thrust-rows">
+                                    </tbody>
+                            </table>
+                        </div>
+                        <div class="col-span-4 bg-gray-50 border border-gray-200 p-4 flex flex-col justify-center items-center">
+                            <div class="text-[9px] uppercase font-bold text-gray-500 mb-2">MAX DEVIATION</div>
+                            <div id="thrust-max-dev" class="text-3xl font-mono font-bold">0.0%</div>
+                            <div id="thrust-status-text" class="text-xs font-bold mt-2 px-2 py-1 text-white bg-gray-400">CALCULATING</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-8">
+                    <h3 class="text-xs font-bold uppercase mb-2">04. ENGINEER'S REMARKS</h3>
+                    <textarea class="w-full h-20 border border-gray-300 p-2 text-xs font-mono resize-none bg-transparent" placeholder="Enter comments here..."></textarea>
+                </section>
+
+            
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="bg-black border-t border-slate-900 pt-16 pb-16 text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <img src="/assets/images/logo.svg" alt="Anohubs Logo" class="h-10 w-auto opacity-60 mx-auto mb-10 grayscale">
+            <nav class="flex flex-wrap justify-center gap-8 text-sm font-bold text-slate-400 mb-12 uppercase tracking-wider">
+                <a href="/about-us-vision/" class="hover:text-white">About</a>
+                <a href="/capabilities/" class="hover:text-white">Capabilities</a>
+                <a href="/insights/" class="hover:text-white">Insights</a>
+                <a href="/case-studies/" class="hover:text-white">Case Studies</a>
+                <a href="/protocol/" class="hover:text-white">Protocol</a>
+                <a href="/contact/" class="hover:text-white">Contact</a>
+            </nav>
+            <nav class="flex flex-wrap justify-center gap-6 text-[10px] font-mono text-slate-500 mb-8 uppercase tracking-widest">
+                <a href="/privacy-policy/" class="hover:text-h-cyan transition">Privacy Policy</a>
+                <span class="opacity-20">/</span>
+                <a href="/terms-of-use/" class="hover:text-h-cyan transition">Terms of Use</a>
+            </nav>
+            <p class="text-[10px] font-mono text-slate-600">&copy; <span id="year"></span> ANOHUBS INC. <span class="text-hydro-green">// ALL SYSTEMS SECURE</span></p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+            // Hangar Logic
+            const topPanel = document.getElementById('hangar-top');
+            const btmPanel = document.getElementById('hangar-bottom');
+            const line = document.getElementById('hangar-line');
+            const loader = document.getElementById('hangar-loader');
+
+            if (topPanel && btmPanel && line && loader) {
+                setTimeout(() => {
+                    line.style.boxShadow = "0 0 100px #FFB800";
+                    line.style.backgroundColor = "#FFB800";
+                    setTimeout(() => {
+                        topPanel.style.transform = "translateY(-100%)";
+                        btmPanel.style.transform = "translateY(100%)";
+                        line.style.opacity = "0";
+                        setTimeout(() => { loader.style.display = 'none'; }, 1000);
+                    }, 600);
+                }, 800);
+            }
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+        });
+    </script>
+</body>
+</html>

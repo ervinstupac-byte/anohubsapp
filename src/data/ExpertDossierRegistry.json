@@ -1,0 +1,1489 @@
+{
+    "meta": {
+        "version": "1.0.0",
+        "protocol": "NC-76.1",
+        "lastUpdated": "2026-01-26",
+        "compliance": [
+            "IEC_60041",
+            "ISO_10816-5"
+        ],
+        "totalEntries": 50
+    },
+    "physicsModels": {
+        "JOUKOWSKY": {
+            "equation": "ΔH = (a × Δv) / g",
+            "description": "Water hammer pressure rise calculation",
+            "variables": {
+                "a": "Wave propagation speed (m/s)",
+                "Δv": "Velocity change (m/s)",
+                "g": "Gravitational acceleration (9.81 m/s²)"
+            }
+        },
+        "THOMA": {
+            "equation": "σ = NPSH / H",
+            "description": "Cavitation coefficient for operational safety",
+            "variables": {
+                "NPSH": "Net Positive Suction Head (m)",
+                "H": "Total hydraulic head (m)"
+            }
+        },
+        "ISO_10816_5": {
+            "zones": {
+                "A": {
+                    "max_mm_s": 2.8,
+                    "status": "NEWLY_COMMISSIONED"
+                },
+                "B": {
+                    "max_mm_s": 7.1,
+                    "status": "ACCEPTABLE"
+                },
+                "C": {
+                    "max_mm_s": 11.2,
+                    "status": "ALARM"
+                },
+                "D": {
+                    "max_mm_s": null,
+                    "status": "TRIP"
+                }
+            }
+        }
+    },
+    "dossiers": [
+        {
+            "DossierID": "DOS-KAP-001",
+            "Subsystem": "RUNNER",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "waterHammer_m": 15,
+                    "bladeAngle_deg": 18
+                },
+                "warning": {
+                    "waterHammer_m": 25,
+                    "bladeAngle_deg": 22
+                },
+                "critical": {
+                    "waterHammer_m": 35,
+                    "bladeAngle_deg": 28
+                }
+            },
+            "Symptoms": [
+                "Pressure spikes during load rejection",
+                "Blade servo hunting"
+            ],
+            "Diagnosis": "Joukowsky transient exceeds runner fatigue limit",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Reduce valve closure rate to >8s"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-002",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "sigmaThoma": 0.12,
+                    "openingPct": 85
+                },
+                "warning": {
+                    "sigmaThoma": 0.08,
+                    "openingPct": 95
+                },
+                "critical": {
+                    "sigmaThoma": 0.05,
+                    "openingPct": 100
+                }
+            },
+            "Symptoms": [
+                "Cavitation noise 8-16kHz",
+                "Efficiency drop >2%"
+            ],
+            "Diagnosis": "Thoma coefficient below minimum σ_crit",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Reduce load to 75% until σ > 0.10"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-003",
+            "Subsystem": "BEARING",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.8
+                },
+                "warning": {
+                    "vibration_mm_s": 7.1
+                },
+                "critical": {
+                    "vibration_mm_s": 11.2
+                }
+            },
+            "Symptoms": [
+                "Elevated bearing temperature",
+                "Increased vibration amplitude"
+            ],
+            "Diagnosis": "Guide bearing wear exceeding Zone B limits",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Schedule bearing inspection within 72h"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-001",
+            "Subsystem": "RUNNER",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "waterHammer_m": 8,
+                    "hubSealPressure_bar": 2.5
+                },
+                "warning": {
+                    "waterHammer_m": 12,
+                    "hubSealPressure_bar": 3.5
+                },
+                "critical": {
+                    "waterHammer_m": 18,
+                    "hubSealPressure_bar": 5.0
+                }
+            },
+            "Symptoms": [
+                "Hub seal leakage",
+                "Transient pressure oscillations"
+            ],
+            "Diagnosis": "Low-head Joukowsky amplification in horizontal shaft",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Install surge tank or increase penstock diameter"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-002",
+            "Subsystem": "SEAL",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "leakageRate_lpm": 5,
+                    "sealTemp_C": 45
+                },
+                "warning": {
+                    "leakageRate_lpm": 15,
+                    "sealTemp_C": 60
+                },
+                "critical": {
+                    "leakageRate_lpm": 30,
+                    "sealTemp_C": 80
+                }
+            },
+            "Symptoms": [
+                "Visible water ingress",
+                "Seal face scoring"
+            ],
+            "Diagnosis": "Mechanical seal failure from cavitation erosion",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Emergency seal replacement"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-003",
+            "Subsystem": "BEARING",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.5,
+                    "oilTemp_C": 50
+                },
+                "warning": {
+                    "vibration_mm_s": 6.5,
+                    "oilTemp_C": 65
+                },
+                "critical": {
+                    "vibration_mm_s": 10.0,
+                    "oilTemp_C": 85
+                }
+            },
+            "Symptoms": [
+                "Oil discoloration",
+                "Metallic particles in sample"
+            ],
+            "Diagnosis": "Thrust bearing pad wear",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Oil analysis + ultrasonic inspection"
+            }
+        },
+        {
+            "DossierID": "DOS-PIT-001",
+            "Subsystem": "RUNNER",
+            "TurbineType": "PIT",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "waterHammer_m": 10,
+                    "runnerClearance_mm": 1.5
+                },
+                "warning": {
+                    "waterHammer_m": 18,
+                    "runnerClearance_mm": 2.5
+                },
+                "critical": {
+                    "waterHammer_m": 28,
+                    "runnerClearance_mm": 4.0
+                }
+            },
+            "Symptoms": [
+                "Clearance rubbing sounds",
+                "Reduced efficiency"
+            ],
+            "Diagnosis": "Runner tip erosion from transient loading",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Measure clearances at next outage"
+            }
+        },
+        {
+            "DossierID": "DOS-PIT-002",
+            "Subsystem": "DRAFT_TUBE",
+            "TurbineType": "PIT",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "sigmaThoma": 0.15,
+                    "pressurePulsation_pct": 3
+                },
+                "warning": {
+                    "sigmaThoma": 0.10,
+                    "pressurePulsation_pct": 6
+                },
+                "critical": {
+                    "sigmaThoma": 0.06,
+                    "pressurePulsation_pct": 10
+                }
+            },
+            "Symptoms": [
+                "Draft tube surging",
+                "Power swings >5%"
+            ],
+            "Diagnosis": "Vortex rope formation at part load",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Air injection or load increase"
+            }
+        },
+        {
+            "DossierID": "DOS-PIT-003",
+            "Subsystem": "BEARING",
+            "TurbineType": "PIT",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.8,
+                    "shaftRunout_mm": 0.05
+                },
+                "warning": {
+                    "vibration_mm_s": 7.1,
+                    "shaftRunout_mm": 0.10
+                },
+                "critical": {
+                    "vibration_mm_s": 11.2,
+                    "shaftRunout_mm": 0.20
+                }
+            },
+            "Symptoms": [
+                "Synchronous vibration",
+                "Shaft orbit ellipticity"
+            ],
+            "Diagnosis": "Shaft misalignment or unbalance",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Laser alignment verification"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-001",
+            "Subsystem": "RUNNER",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "sigmaThoma": 0.08,
+                    "inletAngle_deg": 32
+                },
+                "warning": {
+                    "sigmaThoma": 0.05,
+                    "inletAngle_deg": 38
+                },
+                "critical": {
+                    "sigmaThoma": 0.03,
+                    "inletAngle_deg": 45
+                }
+            },
+            "Symptoms": [
+                "Leading edge pitting",
+                "Efficiency loss >3%"
+            ],
+            "Diagnosis": "Inlet edge cavitation from off-design head",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Coat with HVOF Stellite 6"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-002",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "waterHammer_m": 50,
+                    "servoPressure_bar": 80
+                },
+                "warning": {
+                    "waterHammer_m": 75,
+                    "servoPressure_bar": 100
+                },
+                "critical": {
+                    "waterHammer_m": 120,
+                    "servoPressure_bar": 140
+                }
+            },
+            "Symptoms": [
+                "Guide vane shaking",
+                "HPU pressure drops"
+            ],
+            "Diagnosis": "Emergency closure generating excessive ΔH",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Extend closure time to 12s minimum"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-003",
+            "Subsystem": "BEARING",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.8,
+                    "oilFlow_lpm": 120
+                },
+                "warning": {
+                    "vibration_mm_s": 7.1,
+                    "oilFlow_lpm": 90
+                },
+                "critical": {
+                    "vibration_mm_s": 11.2,
+                    "oilFlow_lpm": 60
+                }
+            },
+            "Symptoms": [
+                "Sub-synchronous vibration",
+                "Oil starvation alarm"
+            ],
+            "Diagnosis": "Thrust bearing oil film breakdown",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Immediate shutdown + bearing inspection"
+            }
+        },
+        {
+            "DossierID": "DOS-ALI-005",
+            "Subsystem": "SHAFT",
+            "TurbineType": "PIT",
+            "PhysicsModel": {
+                "primary": "CATENARY_CURVE",
+                "iecCompliance": "ISO_20816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "angularMisalignment_urad": 50,
+                    "parallelOffset_mm": 0.05
+                },
+                "warning": {
+                    "angularMisalignment_urad": 100,
+                    "parallelOffset_mm": 0.15
+                },
+                "critical": {
+                    "angularMisalignment_urad": 250,
+                    "parallelOffset_mm": 0.30
+                }
+            },
+            "Symptoms": [
+                "2X RPM vibration peak",
+                "Coupling temperature rise"
+            ],
+            "Diagnosis": "Horizontal shaft catenary deflection exceeded",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Adjust bearing pedestal shims to match catenary target"
+            }
+        },
+        {
+            "DossierID": "DOS-BEA-006",
+            "Subsystem": "BEARING",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "OIL_WHIP",
+                "iecCompliance": "ISO_7919"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "subSyncVibration_pct": 5,
+                    "eccentricityRatio": 0.6
+                },
+                "warning": {
+                    "subSyncVibration_pct": 20,
+                    "eccentricityRatio": 0.4
+                },
+                "critical": {
+                    "subSyncVibration_pct": 45,
+                    "eccentricityRatio": 0.2
+                }
+            },
+            "Symptoms": [
+                "Sub-synchronous vibration at 0.42-0.48X RPM",
+                "Orbit instability"
+            ],
+            "Diagnosis": "Oil whip instability (fluid induced instability)",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Increase bearing load or change oil viscosity"
+            }
+        },
+        {
+            "DossierID": "DOS-BEA-007",
+            "Subsystem": "BEARING",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "OIL_WHIRL",
+                "iecCompliance": "ISO_7919"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "whirlFrequency_Hz": 0,
+                    "clearanceRatio_mil": 1.5
+                },
+                "warning": {
+                    "whirlFrequency_Hz": 2.5,
+                    "clearanceRatio_mil": 2.0
+                },
+                "critical": {
+                    "whirlFrequency_Hz": 4.8,
+                    "clearanceRatio_mil": 3.0
+                }
+            },
+            "Symptoms": [
+                "Vibration tracking at ~0.48X RPM",
+                "High shaft locus orbit"
+            ],
+            "Diagnosis": "Oil whirl due to light loading or excessive clearance",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Verify bearing clearances and oil wedge geometry"
+            }
+        },
+        {
+            "DossierID": "DOS-THE-008",
+            "Subsystem": "GENERATOR",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "THERMAL_EXPANSION",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "airGapUniformity_pct": 95,
+                    "capsuleTemp_C": 45
+                },
+                "warning": {
+                    "airGapUniformity_pct": 85,
+                    "capsuleTemp_C": 60
+                },
+                "critical": {
+                    "airGapUniformity_pct": 75,
+                    "capsuleTemp_C": 80
+                }
+            },
+            "Symptoms": [
+                "Air gap asymmetry alarm",
+                "Stator core vibration"
+            ],
+            "Diagnosis": "Bulb capsule thermal expansion reducing top air gap",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Adjust cooling flow to stabilize capsule temperature"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-009",
+            "Subsystem": "COOLING",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "THERMAL_EXPANSION",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "deltaT_C": 10
+                },
+                "warning": {
+                    "deltaT_C": 15
+                },
+                "critical": {
+                    "deltaT_C": 25
+                }
+            },
+            "Symptoms": [
+                "Reduced cooling efficiency",
+                "High stator temp"
+            ],
+            "Diagnosis": "Heat exchanger fouling",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Backflush heat exchangers"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-010",
+            "Subsystem": "EXCITATION",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "fieldCurrent_A": 400
+                },
+                "warning": {
+                    "fieldCurrent_A": 450
+                },
+                "critical": {
+                    "fieldCurrent_A": 500
+                }
+            },
+            "Symptoms": [
+                "Brush sparking",
+                "Field ripple"
+            ],
+            "Diagnosis": "Slip ring surface degradation",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Grind slip rings in-situ"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-011",
+            "Subsystem": "EXCITATION",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.0
+                },
+                "warning": {
+                    "vibration_mm_s": 5.0
+                },
+                "critical": {
+                    "vibration_mm_s": 8.0
+                }
+            },
+            "Symptoms": [
+                "Exciter frame vibration"
+            ],
+            "Diagnosis": "Exciter armature unbalance",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Field balance exciter"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-012",
+            "Subsystem": "GOVERNOR",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60308"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "deadband_pct": 0.02
+                },
+                "warning": {
+                    "deadband_pct": 0.05
+                },
+                "critical": {
+                    "deadband_pct": 0.10
+                }
+            },
+            "Symptoms": [
+                "Frequency hunting"
+            ],
+            "Diagnosis": "Distributor linkage backlash",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Replace linkage bushings"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-013",
+            "Subsystem": "GOVERNOR",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60308"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "oilPressure_bar": 40
+                },
+                "warning": {
+                    "oilPressure_bar": 35
+                },
+                "critical": {
+                    "oilPressure_bar": 28
+                }
+            },
+            "Symptoms": [
+                "Sluggish blade response"
+            ],
+            "Diagnosis": "Accumulator nitrogen leakage",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Recharge accumulator N2"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-014",
+            "Subsystem": "STRUCTURAL",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "foundationVib_mm_s": 1.0
+                },
+                "warning": {
+                    "foundationVib_mm_s": 2.5
+                },
+                "critical": {
+                    "foundationVib_mm_s": 4.5
+                }
+            },
+            "Symptoms": [
+                "Concrete cracks",
+                "Anchor bolt loose"
+            ],
+            "Diagnosis": "Foundation resonance",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Grout injection and bolt retorque"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-015",
+            "Subsystem": "STRUCTURAL",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "stayVaneStress_MPa": 80
+                },
+                "warning": {
+                    "stayVaneStress_MPa": 120
+                },
+                "critical": {
+                    "stayVaneStress_MPa": 160
+                }
+            },
+            "Symptoms": [
+                "Stay vane cracks"
+            ],
+            "Diagnosis": "Flow induced vibration (Von Karman)",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Modify trailing edge profile"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-016",
+            "Subsystem": "TRANSFORMER",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "THERMAL_EXPANSION",
+                "iecCompliance": "IEC_60076"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "oilTemp_C": 60
+                },
+                "warning": {
+                    "oilTemp_C": 75
+                },
+                "critical": {
+                    "oilTemp_C": 90
+                }
+            },
+            "Symptoms": [
+                "Buchholz alarm"
+            ],
+            "Diagnosis": "Local overheating in windings",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "DGA analysis and load reduction"
+            }
+        },
+        {
+            "DossierID": "DOS-BUL-017",
+            "Subsystem": "TRANSFORMER",
+            "TurbineType": "BULB",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60076"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "noise_dBA": 75
+                },
+                "warning": {
+                    "noise_dBA": 85
+                },
+                "critical": {
+                    "noise_dBA": 95
+                }
+            },
+            "Symptoms": [
+                "Loud humming"
+            ],
+            "Diagnosis": "Core lamination looseness",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Retighten core bolts"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-018",
+            "Subsystem": "RUNNER",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "bladeLeak_lpm": 0.5
+                },
+                "warning": {
+                    "bladeLeak_lpm": 2.0
+                },
+                "critical": {
+                    "bladeLeak_lpm": 5.0
+                }
+            },
+            "Symptoms": [
+                "Oil slick in tailrace"
+            ],
+            "Diagnosis": "Blade trunnion seal failure",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Emergency dewatering and seal replacement"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-019",
+            "Subsystem": "RUNNER",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "servoPressure_bar": 120
+                },
+                "warning": {
+                    "servoPressure_bar": 140
+                },
+                "critical": {
+                    "servoPressure_bar": 160
+                }
+            },
+            "Symptoms": [
+                "Blade stall"
+            ],
+            "Diagnosis": "Runner servo piston seizure",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "HPU flushing and servo overhaul"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-020",
+            "Subsystem": "HUB",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "oilLevel_mm": 500
+                },
+                "warning": {
+                    "oilLevel_mm": 400
+                },
+                "critical": {
+                    "oilLevel_mm": 200
+                }
+            },
+            "Symptoms": [
+                "Low hub oil level"
+            ],
+            "Diagnosis": "Hub cover seal leakage",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Pressurize hub with air to exclude water"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-021",
+            "Subsystem": "HUB",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 2.0
+                },
+                "warning": {
+                    "vibration_mm_s": 5.0
+                },
+                "critical": {
+                    "vibration_mm_s": 9.0
+                }
+            },
+            "Symptoms": [
+                "Random vibration spikes"
+            ],
+            "Diagnosis": "Loose linkage in hub",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Internal hub inspection required"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-022",
+            "Subsystem": "DISCHARGE_RING",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "metalLoss_mm": 0.5
+                },
+                "warning": {
+                    "metalLoss_mm": 2.0
+                },
+                "critical": {
+                    "metalLoss_mm": 5.0
+                }
+            },
+            "Symptoms": [
+                "Cavitation pits > 5mm"
+            ],
+            "Diagnosis": "Discharge ring cavitation erosion",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Stainless steel cladding repair"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-023",
+            "Subsystem": "DISCHARGE_RING",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "clearance_mm": 2.0
+                },
+                "warning": {
+                    "clearance_mm": 1.0
+                },
+                "critical": {
+                    "clearance_mm": 0.5
+                }
+            },
+            "Symptoms": [
+                "Scraping noise"
+            ],
+            "Diagnosis": "Discharge ring deformation",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Grind high spots in discharge ring"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-024",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "shearPinFailure_cnt": 0
+                },
+                "warning": {
+                    "shearPinFailure_cnt": 1
+                },
+                "critical": {
+                    "shearPinFailure_cnt": 3
+                }
+            },
+            "Symptoms": [
+                "Shear pin failure alarm"
+            ],
+            "Diagnosis": "Debris jamming guide vane",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Clear debris and replace shear pin"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-025",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "leakage_lpm": 1
+                },
+                "warning": {
+                    "leakage_lpm": 5
+                },
+                "critical": {
+                    "leakage_lpm": 15
+                }
+            },
+            "Symptoms": [
+                "High leakage in closed position"
+            ],
+            "Diagnosis": "Guide vane seal wear",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Adjust closed position end stops"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-026",
+            "Subsystem": "GENERATOR",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "pd_pC": 500
+                },
+                "warning": {
+                    "pd_pC": 2000
+                },
+                "critical": {
+                    "pd_pC": 5000
+                }
+            },
+            "Symptoms": [
+                "High Partial Discharge"
+            ],
+            "Diagnosis": "Stator insulation void discharge",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Schedule off-line PD diagnosis"
+            }
+        },
+        {
+            "DossierID": "DOS-KAP-027",
+            "Subsystem": "GENERATOR",
+            "TurbineType": "S_TYPE_KAPLAN",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60034"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "ozone_ppm": 0.05
+                },
+                "warning": {
+                    "ozone_ppm": 0.2
+                },
+                "critical": {
+                    "ozone_ppm": 0.5
+                }
+            },
+            "Symptoms": [
+                "Ozone smell"
+            ],
+            "Diagnosis": "Corona discharge in end windings",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Apply semi-conductive paint"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-028",
+            "Subsystem": "SEAL",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "clearance_mm": 0.4
+                },
+                "warning": {
+                    "clearance_mm": 0.8
+                },
+                "critical": {
+                    "clearance_mm": 1.2
+                }
+            },
+            "Symptoms": [
+                "High top cover pressure"
+            ],
+            "Diagnosis": "Upper labyrinth seal wear",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Check turbine uplift and replace seals"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-029",
+            "Subsystem": "SEAL",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "leakage_lpm": 10
+                },
+                "warning": {
+                    "leakage_lpm": 25
+                },
+                "critical": {
+                    "leakage_lpm": 50
+                }
+            },
+            "Symptoms": [
+                "Sump pump frequent starts"
+            ],
+            "Diagnosis": "Main shaft seal failure",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Replace carbon ring segments"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-030",
+            "Subsystem": "DRAFT_TUBE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "oxygen_mg_l": 8
+                },
+                "warning": {
+                    "oxygen_mg_l": 4
+                },
+                "critical": {
+                    "oxygen_mg_l": 2
+                }
+            },
+            "Symptoms": [
+                "Fish kill downstream"
+            ],
+            "Diagnosis": "Low DO from draft tube flow",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Enable draft tube aeration valve"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-031",
+            "Subsystem": "DRAFT_TUBE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "pressurePeak_bar": 2
+                },
+                "warning": {
+                    "pressurePeak_bar": 4
+                },
+                "critical": {
+                    "pressurePeak_bar": 6
+                }
+            },
+            "Symptoms": [
+                "Water hammer in draft tube"
+            ],
+            "Diagnosis": "Rapid gate closure",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Tune governor closing time"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-032",
+            "Subsystem": "SPIRAL_CASE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 1.5
+                },
+                "warning": {
+                    "vibration_mm_s": 3.5
+                },
+                "critical": {
+                    "vibration_mm_s": 6.0
+                }
+            },
+            "Symptoms": [
+                "Casing vibration"
+            ],
+            "Diagnosis": "Rotor-Stator interaction",
+            "Remediation": {
+                "priority": "LOW",
+                "action": "Avoid specific load bands"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-033",
+            "Subsystem": "VALVE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "leakage_lpm": 2
+                },
+                "warning": {
+                    "leakage_lpm": 10
+                },
+                "critical": {
+                    "leakage_lpm": 25
+                }
+            },
+            "Symptoms": [
+                "MIV Bypass leakage"
+            ],
+            "Diagnosis": "MIV seal seat erosion",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Lap MIV seat rings"
+            }
+        },
+        {
+            "DossierID": "DOS-FRA-034",
+            "Subsystem": "VALVE",
+            "TurbineType": "FRANCIS",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "closingTime_s": 60
+                },
+                "warning": {
+                    "closingTime_s": 80
+                },
+                "critical": {
+                    "closingTime_s": 100
+                }
+            },
+            "Symptoms": [
+                "MIV slow closing"
+            ],
+            "Diagnosis": "Counterweight arm friction",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Lubricate MIV trunnions"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-035",
+            "Subsystem": "RUNNER",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "THOMA",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "pitDepth_mm": 0.2
+                },
+                "warning": {
+                    "pitDepth_mm": 1.0
+                },
+                "critical": {
+                    "pitDepth_mm": 3.0
+                }
+            },
+            "Symptoms": [
+                "Bucket splitter erosion"
+            ],
+            "Diagnosis": "Silt erosion on splitters",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "HVOF coating + profile grind"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-036",
+            "Subsystem": "RUNNER",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "crackLen_mm": 0
+                },
+                "warning": {
+                    "crackLen_mm": 10
+                },
+                "critical": {
+                    "crackLen_mm": 30
+                }
+            },
+            "Symptoms": [
+                "Bucket root crack"
+            ],
+            "Diagnosis": "Low cycle fatigue",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Gouge and weld repair"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-037",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "JOUKOWSKY",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "needleAlign_mm": 0.5
+                },
+                "warning": {
+                    "needleAlign_mm": 1.5
+                },
+                "critical": {
+                    "needleAlign_mm": 3.0
+                }
+            },
+            "Symptoms": [
+                "Jet misalignment"
+            ],
+            "Diagnosis": "Nozzle needle bent",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Replace needle and seat"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-038",
+            "Subsystem": "GUIDE_VANE",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "erosion_mm": 0.5
+                },
+                "warning": {
+                    "erosion_mm": 2.0
+                },
+                "critical": {
+                    "erosion_mm": 4.0
+                }
+            },
+            "Symptoms": [
+                "Spray from nozzle"
+            ],
+            "Diagnosis": "Nozzle tip erosion",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Replace nozzle tip"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-039",
+            "Subsystem": "DRAFT_TUBE",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "IEC_60041"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "response_ms": 200
+                },
+                "warning": {
+                    "response_ms": 500
+                },
+                "critical": {
+                    "response_ms": 1000
+                }
+            },
+            "Symptoms": [
+                "Deflector slow response"
+            ],
+            "Diagnosis": "Servomotor seal friction",
+            "Remediation": {
+                "priority": "CRITICAL",
+                "action": "Overhaul deflector servo"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-040",
+            "Subsystem": "BEARING",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "vibration_mm_s": 1.5
+                },
+                "warning": {
+                    "vibration_mm_s": 3.5
+                },
+                "critical": {
+                    "vibration_mm_s": 7.0
+                }
+            },
+            "Symptoms": [
+                "Housing vibration"
+            ],
+            "Diagnosis": "Bearing housing looseness",
+            "Remediation": {
+                "priority": "MEDIUM",
+                "action": "Retorque foundation bolts"
+            }
+        },
+        {
+            "DossierID": "DOS-PEL-041",
+            "Subsystem": "BEARING",
+            "TurbineType": "PELTON",
+            "PhysicsModel": {
+                "primary": "ISO_10816_5",
+                "iecCompliance": "ISO_10816"
+            },
+            "Thresholds": {
+                "nominal": {
+                    "temp_C": 55
+                },
+                "warning": {
+                    "temp_C": 70
+                },
+                "critical": {
+                    "temp_C": 85
+                }
+            },
+            "Symptoms": [
+                "Bearing overheating"
+            ],
+            "Diagnosis": "Insufficient cooling water",
+            "Remediation": {
+                "priority": "HIGH",
+                "action": "Clean cooling water filters"
+            }
+        }
+    ]
+}

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_Regulating_Ring/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_Regulating_Ring/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Regulating Ring & Eccentric Pins</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Language Toggle Switch */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .visual-aid {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .measurement-box {
+            background: #e8f4f8;
+            border-left: 4px solid #0066cc;
+            padding: 12px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('bs')">BS</button>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Advanced SOP: Regulating Ring & Eccentric Pins</h1>
+            <h2 data-i18n="subtitle">The "Forgotten" Friction - Stiction Analysis & Vane Synchronization</h2>
+        </header>
+
+        <!-- INTRO MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="intro_title">⚠️ THE HUNTING PROBLEM</h3>
+            <p><strong data-i18n="context_label">Context:</strong> <span data-i18n="context_text">The regulating ring is
+                    the mechanical translator between the hydraulic servomotor and all 20 guide vanes. It moves on
+                    rollers or slides, converting linear hydraulic force into rotational motion.</span></p>
+            <ul>
+                <li data-i18n="intro1"><strong>The Risk:</strong> If the ring's sliding surfaces are not perfectly
+                    lubricated, the governor will "hunt" (oscillate power output).</li>
+                <li data-i18n="intro2"><strong>Root Cause:</strong> Stiction (static friction) creates resistance that
+                    the HPU overcomes with pressure spikes, causing jerky movement instead of smooth modulation.</li>
+                <li data-i18n="intro3"><strong>Impact:</strong> Every oscillation causes wear on all 20 vanes
+                    simultaneously, accelerating bushing failure and creating unstable power delivery to the grid.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section1_title">SOP 1: Friction Analysis - Measuring Stiction</div>
+        <div class="module technical">
+            <p data-i18n="section1_intro">Stiction is invisible but measurable through HPU pressure behavior during slow
+                movement.</p>
+
+            <h3 data-i18n="subsection1_1_title">1.1 The "Dry-Start" Risk</h3>
+            <p><strong data-i18n="crit_context_label">Critical Context for Unit 1:</strong> <span
+                    data-i18n="crit_context_text">After the extended shutdown (seal replacement), the regulating ring's
+                    sliding surfaces have been bone-dry for weeks. The lubricant film has evaporated or drained
+                    away.</span></p>
+            <ul>
+                <li data-i18n="risk1"><strong>Consequence:</strong> The first HPU stroke after restart will encounter
+                    maximum stiction, potentially causing a violent "jump" that damages the linkage pins.</li>
+                <li data-i18n="risk2"><strong>Mandatory Pre-Start Action:</strong> Manual grease application to all
+                    sliding surfaces BEFORE energizing the HPU.</li>
+            </ul>
+
+            <h3 data-i18n="subsection1_2_title">1.2 Stiction Measurement Procedure</h3>
+            <ol>
+                <li data-i18n="meas1"><strong>Instrumentation:</strong> Monitor HPU pressure gauge in real-time (analog
+                    or SCADA).</li>
+                <li data-i18n="meas2"><strong>Test Sequence:</strong> Command governor to move from 0% to 10% open at
+                    slowest possible speed (manual mode).</li>
+                <li><strong data-i18n="meas3_label">Observe Pressure Profile:</strong>
+                    <ul>
+                        <li data-i18n="meas3_1"><strong>PASS (Smooth):</strong> Pressure rises gradually to ~140-150 bar
+                            and holds steady during movement.</li>
+                        <li data-i18n="meas3_2"><strong>FAIL (Stiction):</strong> Pressure spikes to 160-180 bar, then
+                            drops suddenly as ring "breaks free", creating a sawtooth pattern.</li>
+                    </ul>
+                </li>
+                <li data-i18n="meas4"><strong>Diagnostic:</strong> If sawtooth pattern observed, the ring is
+                    experiencing stick-slip friction. Lubrication is inadequate.</li>
+            </ol>
+
+            <div class="measurement-box" data-i18n="pressure_limits">
+                <strong>ACCEPTABLE PRESSURE BEHAVIOR:</strong><br>
+                Nominal: 140-150 bar (steady)<br>
+                Warning: 155-165 bar (marginal lubrication)<br>
+                Critical: >165 bar or sawtooth pattern (insufficient lubrication - STOP and re-grease)
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section2_title">SOP 2: Eccentric Pin Adjustment</div>
+        <div class="module technical">
+            <p data-i18n="section2_intro">The eccentric pins on each guide vane arm allow fine-tuning of the vane's
+                angular position. The goal: All 20 vanes must touch their mechanical stops
+                <strong>simultaneously</strong>.</p>
+
+            <h3 data-i18n="subsection2_1_title">2.1 The Synchronization Requirement</h3>
+            <p data-i18n="subsection2_1_text1"><strong>Physics:</strong> If vane #1 closes at 0° but vane #12 closes at
+                0.5°, the water flow distribution becomes asymmetric, creating turbulence and reducing efficiency by
+                ~2-3%.</p>
+            <p data-i18n="subsection2_1_text2"><strong>Mechanical Logic:</strong> Each vane arm has an eccentric bushing
+                that can be rotated to adjust the effective length of the linkage.</p>
+
+            <h3 data-i18n="subsection2_2_title">2.2 Adjustment Procedure</h3>
+            <ol>
+                <li data-i18n="adj1"><strong>Safety Lockout:</strong> Unit stopped, MIV closed, hydraulic pressure
+                    released, mechanical safety pin installed.</li>
+                <li data-i18n="adj2"><strong>Command Position:</strong> Set governor to "Fully Closed" (0%) position
+                    using manual override.</li>
+                <li><strong data-i18n="adj3_label">Visual Inspection:</strong> <span data-i18n="adj3_text">With
+                        flashlight, inspect each guide vane gap at the closed position.</span>
+                    <ul>
+                        <li data-i18n="adj3_1"><strong>Target:</strong> All vanes should have identical clearance to the
+                            "stop" surface (typically cast into the turbine casing).</li>
+                        <li data-i18n="adj3_2"><strong>Feeler Gauge:</strong> Measure the gap. Target: ≤ 0.2mm variation
+                            between any two vanes.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="adj4_label">Eccentric Adjustment:</strong> <span data-i18n="adj4_text">For vanes
+                        not touching the stop:</span>
+                    <ol type="a">
+                        <li data-i18n="adj4_a">Loosen the lock nut on the eccentric pin.</li>
+                        <li data-i18n="adj4_b">Rotate the eccentric bushing using a specialized wrench (typically 2-3°
+                            rotation = 0.5mm vane travel).</li>
+                        <li data-i18n="adj4_c">Re-tighten lock nut to manufacturer torque specification (record in
+                            logbook).</li>
+                    </ol>
+                </li>
+                <li data-i18n="adj5"><strong>Verification:</strong> Repeat the "Fully Closed" command and re-measure all
+                    gaps. Iterate until all vanes synchronized within 0.2mm.</li>
+            </ol>
+
+            <div class="visual-aid" data-i18n="diagram_placeholder">
+                [DIAGRAM PLACEHOLDER: Servomotor → Regulating Ring → 20x Linkage Arms with Eccentric Pins → Guide Vane
+                Stems]
+                <br><br>
+                <strong>Recommended Visual:</strong> Cross-section showing eccentric bushing rotation effect on vane
+                angle.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section3_title">SOP 3: Pre-Start Lubrication Protocol</div>
+        <div class="module critical">
+            <p data-i18n="section3_mandatory"><strong>MANDATORY for Unit 1 Recovery:</strong> This protocol MUST be
+                executed before the first HPU stroke after extended shutdown.</p>
+
+            <h3 data-i18n="subsection3_1_title">3.1 Manual Lubrication Procedure</h3>
+            <ol>
+                <li data-i18n="lube1"><strong>Access:</strong> Remove inspection cover for regulating ring chamber.</li>
+                <li data-i18n="lube2"><strong>Clean:</strong> Wipe all sliding surfaces with clean lint-free cloth to
+                    remove any debris or oxidation.</li>
+                <li><strong data-i18n="lube3_label">Grease Application:</strong> <span data-i18n="lube3_text">Apply
+                        high-temperature water-resistant grease (same as used in central greasing system) to:</span>
+                    <ul>
+                        <li data-i18n="lube3_1">All roller contact surfaces</li>
+                        <li data-i18n="lube3_2">Sliding guide tracks</li>
+                        <li data-i18n="lube3_3">Eccentric pin bushings (all 20 vanes)</li>
+                    </ul>
+                </li>
+                <li data-i18n="lube4"><strong>Manual Movement:</strong> Manually rotate the regulating ring through its
+                    full range (0-100%) to distribute grease evenly. Movement should be smooth with no "dry" spots.</li>
+                <li data-i18n="lube5"><strong>Re-install Cover:</strong> Ensure no tools or rags left in mechanism
+                    chamber.</li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="section4_title">Diagnostic Troubleshooting</div>
+        <div class="module diagnostic">
+            <h3 data-i18n="trouble1_title">Symptom: Power Output "Hunting" (±5% oscillation)</h3>
+            <ul>
+                <li data-i18n="cause1"><strong>Root Cause 1:</strong> Stiction in regulating ring → Check HPU pressure
+                    for sawtooth pattern.</li>
+                <li data-i18n="cause2"><strong>Root Cause 2:</strong> Poor vane synchronization → Verify eccentric pin
+                    adjustment using feeler gauge.</li>
+                <li data-i18n="cause3"><strong>Root Cause 3:</strong> Worn linkage bushings → Perform manual "wiggle
+                    test" on each vane arm (ref: Linkage SOP).</li>
+            </ul>
+
+            <h3 data-i18n="trouble2_title">Symptom: High HPU Pressure (>165 bar during normal operation)</h3>
+            <ul>
+                <li data-i18n="action1"><strong>Immediate Action:</strong> Stop unit, release pressure, manually
+                    lubricate ring.</li>
+                <li data-i18n="action2"><strong>Investigation:</strong> Check central greasing system - verify pump is
+                    building pressure and all dosage valves are flowing.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section5_title">Summary Checklist</div>
+        <div class="module">
+            <ul>
+                <li data-i18n="check1"><strong>Before First Start After Shutdown:</strong> Manual greasing of regulating
+                    ring surfaces (SOP 3).</li>
+                <li data-i18n="check2"><strong>Monthly:</strong> Monitor HPU pressure during slow movement for stiction
+                    indicators.</li>
+                <li data-i18n="check3"><strong>Annually:</strong> Eccentric pin adjustment verification (all 20 vanes
+                    synchronized within 0.2mm).</li>
+                <li data-i18n="check4"><strong>On Overhaul:</strong> Full disassembly and inspection of regulating ring
+                    roller bearings and sliding surfaces.</li>
+            </ul>
+        </div>
+
+        <a href="./Francis_Horizontal.html" class="back-btn" data-i18n="back_btn">← Return to Master Manual</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Advanced SOP: Regulating Ring & Eccentric Pins",
+                subtitle: "The \"Forgotten\" Friction - Stiction Analysis & Vane Synchronization",
+                intro_title: "⚠️ THE HUNTING PROBLEM",
+                context_label: "Context:",
+                context_text: "The regulating ring is the mechanical translator between the hydraulic servomotor and all 20 guide vanes. It moves on rollers or slides, converting linear hydraulic force into rotational motion.",
+                intro1: "<strong>The Risk:</strong> If the ring's sliding surfaces are not perfectly lubricated, the governor will \"hunt\" (oscillate power output).",
+                intro2: "<strong>Root Cause:</strong> Stiction (static friction) creates resistance that the HPU overcomes with pressure spikes, causing jerky movement instead of smooth modulation.",
+                intro3: "<strong>Impact:</strong> Every oscillation causes wear on all 20 vanes simultaneously, accelerating bushing failure and creating unstable power delivery to the grid.",
+                section1_title: "SOP 1: Friction Analysis - Measuring Stiction",
+                section1_intro: "Stiction is invisible but measurable through HPU pressure behavior during slow movement.",
+                subsection1_1_title: "1.1 The \"Dry-Start\" Risk",
+                crit_context_label: "Critical Context for Unit 1:",
+                crit_context_text: "After the extended shutdown (seal replacement), the regulating ring's sliding surfaces have been bone-dry for weeks. The lubricant film has evaporated or drained away.",
+                risk1: "<strong>Consequence:</strong> The first HPU stroke after restart will encounter maximum stiction, potentially causing a violent \"jump\" that damages the linkage pins.",
+                risk2: "<strong>Mandatory Pre-Start Action:</strong> Manual grease application to all sliding surfaces BEFORE energizing the HPU.",
+                subsection1_2_title: "1.2 Stiction Measurement Procedure",
+                meas1: "<strong>Instrumentation:</strong> Monitor HPU pressure gauge in real-time (analog or SCADA).",
+                meas2: "<strong>Test Sequence:</strong> Command governor to move from 0% to 10% open at slowest possible speed (manual mode).",
+                meas3_label: "Observe Pressure Profile:",
+                meas3_1: "<strong>PASS (Smooth):</strong> Pressure rises gradually to ~140-150 bar and holds steady during movement.",
+                meas3_2: "<strong>FAIL (Stiction):</strong> Pressure spikes to 160-180 bar, then drops suddenly as ring \"breaks free\", creating a sawtooth pattern.",
+                meas4: "<strong>Diagnostic:</strong> If sawtooth pattern observed, the ring is experiencing stick-slip friction. Lubrication is inadequate.",
+                pressure_limits: "<strong>ACCEPTABLE PRESSURE BEHAVIOR:</strong><br>Nominal: 140-150 bar (steady)<br>Warning: 155-165 bar (marginal lubrication)<br>Critical: >165 bar or sawtooth pattern (insufficient lubrication - STOP and re-grease)",
+                section2_title: "SOP 2: Eccentric Pin Adjustment",
+                section2_intro: "The eccentric pins on each guide vane arm allow fine-tuning of the vane's angular position. The goal: All 20 vanes must touch their mechanical stops <strong>simultaneously</strong>.",
+                subsection2_1_title: "2.1 The Synchronization Requirement",
+                subsection2_1_text1: "<strong>Physics:</strong> If vane #1 closes at 0° but vane #12 closes at 0.5°, the water flow distribution becomes asymmetric, creating turbulence and reducing efficiency by ~2-3%.",
+                subsection2_1_text2: "<strong>Mechanical Logic:</strong> Each vane arm has an eccentric bushing that can be rotated to adjust the effective length of the linkage.",
+                subsection2_2_title: "2.2 Adjustment Procedure",
+                adj1: "<strong>Safety Lockout:</strong> Unit stopped, MIV closed, hydraulic pressure released, mechanical safety pin installed.",
+                adj2: "<strong>Command Position:</strong> Set governor to \"Fully Closed\" (0%) position using manual override.",
+                adj3_label: "Visual Inspection:",
+                adj3_text: "With flashlight, inspect each guide vane gap at the closed position.",
+                adj3_1: "<strong>Target:</strong> All vanes should have identical clearance to the \"stop\" surface (typically cast into the turbine casing).",
+                adj3_2: "<strong>Feeler Gauge:</strong> Measure the gap. Target: ≤ 0.2mm variation between any two vanes.",
+                adj4_label: "Eccentric Adjustment:",
+                adj4_text: "For vanes not touching the stop:",
+                adj4_a: "Loosen the lock nut on the eccentric pin.",
+                adj4_b: "Rotate the eccentric bushing using a specialized wrench (typically 2-3° rotation = 0.5mm vane travel).",
+                adj4_c: "Re-tighten lock nut to manufacturer torque specification (record in logbook).",
+                adj5: "<strong>Verification:</strong> Repeat the \"Fully Closed\" command and re-measure all gaps. Iterate until all vanes synchronized within 0.2mm.",
+                diagram_placeholder: "[DIAGRAM PLACEHOLDER: Servomotor → Regulating Ring → 20x Linkage Arms with Eccentric Pins → Guide Vane Stems]<br><br><strong>Recommended Visual:</strong> Cross-section showing eccentric bushing rotation effect on vane angle.",
+                section3_title: "SOP 3: Pre-Start Lubrication Protocol",
+                section3_mandatory: "<strong>MANDATORY for Unit 1 Recovery:</strong> This protocol MUST be executed before the first HPU stroke after extended shutdown.",
+                subsection3_1_title: "3.1 Manual Lubrication Procedure",
+                lube1: "<strong>Access:</strong> Remove inspection cover for regulating ring chamber.",
+                lube2: "<strong>Clean:</strong> Wipe all sliding surfaces with clean lint-free cloth to remove any debris or oxidation.",
+                lube3_label: "Grease Application:",
+                lube3_text: "Apply high-temperature water-resistant grease (same as used in central greasing system) to:",
+                lube3_1: "All roller contact surfaces",
+                lube3_2: "Sliding guide tracks",
+                lube3_3: "Eccentric pin bushings (all 20 vanes)",
+                lube4: "<strong>Manual Movement:</strong> Manually rotate the regulating ring through its full range (0-100%) to distribute grease evenly. Movement should be smooth with no \"dry\" spots.",
+                lube5: "<strong>Re-install Cover:</strong> Ensure no tools or rags left in mechanism chamber.",
+                section4_title: "Diagnostic Troubleshooting",
+                trouble1_title: "Symptom: Power Output \"Hunting\" (±5% oscillation)",
+                cause1: "<strong>Root Cause 1:</strong> Stiction in regulating ring → Check HPU pressure for sawtooth pattern.",
+                cause2: "<strong>Root Cause 2:</strong> Poor vane synchronization → Verify eccentric pin adjustment using feeler gauge.",
+                cause3: "<strong>Root Cause 3:</strong> Worn linkage bushings → Perform manual \"wiggle test\" on each vane arm (ref: Linkage SOP).",
+                trouble2_title: "Symptom: High HPU Pressure (>165 bar during normal operation)",
+                action1: "<strong>Immediate Action:</strong> Stop unit, release pressure, manually lubricate ring.",
+                action2: "<strong>Investigation:</strong> Check central greasing system - verify pump is building pressure and all dosage valves are flowing.",
+                section5_title: "Summary Checklist",
+                check1: "<strong>Before First Start After Shutdown:</strong> Manual greasing of regulating ring surfaces (SOP 3).",
+                check2: "<strong>Monthly:</strong> Monitor HPU pressure during slow movement for stiction indicators.",
+                check3: "<strong>Annually:</strong> Eccentric pin adjustment verification (all 20 vanes synchronized within 0.2mm).",
+                check4: "<strong>On Overhaul:</strong> Full disassembly and inspection of regulating ring roller bearings and sliding surfaces.",
+                back_btn: "← Return to Master Manual"
+            },
+            bs: {
+                title: "Napredni SOP: Regulacioni prsten i ekscentrični klinovi",
+                subtitle: "\"Zaboravljeno\" trenje - Analiza zapinjanja i sinhronizacija lopatica",
+                intro_title: "⚠️ PROBLEM \"LOVA\" (OSCILACIJA)",
+                context_label: "Kontekst:",
+                context_text: "Regulacioni prsten je mehanički prevodilac između hidrauličkog servomotora i svih 20 sprovodnih lopatica. Kreće se na valjcima ili klizačima, pretvarajući linearnu hidrauličku silu u rotaciono kretanje.",
+                intro1: "<strong>Rizik:</strong> Ako klizne površine prstena nisu savršeno podmazane, regulator će \"loviti\" (oscilirati izlaznu snagu).",
+                intro2: "<strong>Osnovni uzrok:</strong> Zapinjanje (statičko trenje) stvara otpor koji HPU savladava skokovima pritiska, uzrokujući trzavo kretanje umjesto glatke modulacije.",
+                intro3: "<strong>Uticaj:</strong> Svaka oscilacija uzrokuje habanje svih 20 lopatica istovremeno, ubrzavajući otkazivanje čahura i stvarajući nestabilnu isporuku snage u mrežu.",
+                section1_title: "SOP 1: Analiza trenja - Mjerenje zapinjanja",
+                section1_intro: "Zapinjanje je nevidljivo, ali mjerljivo kroz ponašanje pritiska HPU tokom sporog kretanja.",
+                subsection1_1_title: "1.1 Rizik \"Starta na suho\"",
+                crit_context_label: "Kritični kontekst za Jedinicu 1:",
+                crit_context_text: "Nakon produženog gašenja (zamjena zaptivki), klizne površine regulacionog prstena su sedmicama bile potpuno suhe. Film maziva je ispario ili iscurio.",
+                risk1: "<strong>Posljedica:</strong> Prvi potez HPU nakon ponovnog pokretanja naići će na maksimalno zapinjanje, potencijalno uzrokujući nasilan \"skok\" koji oštećuje klinove polužja.",
+                risk2: "<strong>Obavezna radnja prije starta:</strong> Ručno nanošenje masti na sve klizne površine PRIJE stavljanja HPU pod napon.",
+                subsection1_2_title: "1.2 Procedura mjerenja zapinjanja",
+                meas1: "<strong>Instrumentacija:</strong> Pratite manometar HPU u realnom vremenu (analogni ili SCADA).",
+                meas2: "<strong>Sekvenca testa:</strong> Naredite regulatoru da se pomakne sa 0% na 10% otvorenosti najsporijom mogućom brzinom (ručni režim).",
+                meas3_label: "Posmatrajte profil pritiska:",
+                meas3_1: "<strong>PROLAZ (Glatko):</strong> Pritisak raste postepeno do ~140-150 bara i ostaje stabilan tokom kretanja.",
+                meas3_2: "<strong>PAD (Zapinjanje):</strong> Pritisak skače na 160-180 bara, zatim naglo pada kako se prsten \"oslobađa\", stvarajući pilasti uzorak.",
+                meas4: "<strong>Dijagnostika:</strong> Ako se uoči pilasti uzorak, prsten doživljava trenje klizanja-lijepljenja. Podmazivanje je neadekvatno.",
+                pressure_limits: "<strong>PRIHVATLJIVO PONAŠANJE PRITISKA:</strong><br>Nominalno: 140-150 bara (stabilno)<br>Upozorenje: 155-165 bara (granično podmazivanje)<br>Kritično: >165 bara ili pilasti uzorak (nedovoljno podmazivanje - STOP i ponovo podmažite)",
+                section2_title: "SOP 2: Podešavanje ekscentričnih klinova",
+                section2_intro: "Ekscentrični klinovi na svakoj ruci sprovodne lopatice omogućavaju fino podešavanje ugaone pozicije lopatice. Cilj: Svih 20 lopatica mora dodirnuti svoje mehaničke graničnike <strong>istovremeno</strong>.",
+                subsection2_1_title: "2.1 Zahtjev za sinhronizaciju",
+                subsection2_1_text1: "<strong>Fizika:</strong> Ako se lopatica #1 zatvori na 0°, a lopatica #12 na 0.5°, distribucija toka vode postaje asimetrična, stvarajući turbulenciju i smanjujući efikasnost za ~2-3%.",
+                subsection2_1_text2: "<strong>Mehanička logika:</strong> Svaka ruka lopatice ima ekscentričnu čahuru koja se može rotirati da bi se podesila efektivna dužina polužja.",
+                subsection2_2_title: "2.2 Procedura podešavanja",
+                adj1: "<strong>Sigurnosno zaključavanje:</strong> Jedinica zaustavljena, MIV zatvoren, hidraulički pritisak otpušten, mehanički sigurnosni klin instaliran.",
+                adj2: "<strong>Naredba pozicije:</strong> Postavite regulator na \"Potpuno zatvoreno\" (0%) poziciju koristeći ručno upravljanje.",
+                adj3_label: "Vizuelna inspekcija:",
+                adj3_text: "Sa lampom, pregledajte zazor svake sprovodne lopatice na zatvorenoj poziciji.",
+                adj3_1: "<strong>Cilj:</strong> Sve lopatice trebaju imati identičan zazor do površine \"graničnika\" (obično izlivene u kućište turbine).",
+                adj3_2: "<strong>Mjerni listići:</strong> Izmjerite zazor. Cilj: ≤ 0.2mm varijacije između bilo koje dvije lopatice.",
+                adj4_label: "Podešavanje ekscentra:",
+                adj4_text: "Za lopatice koje ne dodiruju graničnik:",
+                adj4_a: "Otpustite sigurnosnu maticu na ekscentričnom klinu.",
+                adj4_b: "Rotirajte ekscentričnu čahuru koristeći specijalizovani ključ (obično 2-3° rotacije = 0.5mm pomaka lopatice).",
+                adj4_c: "Ponovo zategnite sigurnosnu maticu na specifikaciju momenta proizvođača (zabilježite u dnevnik).",
+                adj5: "<strong>Verifikacija:</strong> Ponovite naredbu \"Potpuno zatvoreno\" i ponovo izmjerite sve zazore. Ponavljajte dok se sve lopatice ne sinhronizuju unutar 0.2mm.",
+                diagram_placeholder: "[MJESTO ZA DIJAGRAM: Servomotor → Regulacioni prsten → 20x Ruke polužja sa ekscentričnim klinovima → Stabljike sprovodnih lopatica]<br><br><strong>Preporučeni vizual:</strong> Presjek koji pokazuje efekat rotacije ekscentrične čahure na ugao lopatice.",
+                section3_title: "SOP 3: Protokol podmazivanja prije starta",
+                section3_mandatory: "<strong>OBAVEZNO za oporavak Jedinice 1:</strong> Ovaj protokol SE MORA izvršiti prije prvog poteza HPU nakon produženog gašenja.",
+                subsection3_1_title: "3.1 Procedura ručnog podmazivanja",
+                lube1: "<strong>Pristup:</strong> Uklonite inspekcijski poklopac za komoru regulacionog prstena.",
+                lube2: "<strong>Čišćenje:</strong> Obrišite sve klizne površine čistom krpom bez dlačica da uklonite ostatke ili oksidaciju.",
+                lube3_label: "Nanošenje masti:",
+                lube3_text: "Nanesite visokotemperaturnu vodootpornu mast (istu kao u centralnom sistemu podmazivanja) na:",
+                lube3_1: "Sve kontaktne površine valjaka",
+                lube3_2: "Klizne staze vodiča",
+                lube3_3: "Čahure ekscentričnih klinova (svih 20 lopatica)",
+                lube4: "<strong>Ručno kretanje:</strong> Ručno rotirajte regulacioni prsten kroz puni opseg (0-100%) da ravnomjerno rasporedite mast. Kretanje treba biti glatko bez \"suhih\" mjesta.",
+                lube5: "<strong>Ponovna instalacija poklopca:</strong> Osigurajte da nema alata ili krpa ostavljenih u komori mehanizma.",
+                section4_title: "Dijagnostičko rješavanje problema",
+                trouble1_title: "Simptom: \"Lov\" izlazne snage (±5% oscilacija)",
+                cause1: "<strong>Osnovni uzrok 1:</strong> Zapinjanje u regulacionom prstenu → Provjerite HPU pritisak za pilasti uzorak.",
+                cause2: "<strong>Osnovni uzrok 2:</strong> Loša sinhronizacija lopatica → Verifikujte podešavanje ekscentričnih klinova koristeći mjerne listiće.",
+                cause3: "<strong>Osnovni uzrok 3:</strong> Istrošene čahure polužja → Izvršite ručni \"test mrdanja\" na svakoj ruci lopatice (ref: SOP za Polužje).",
+                trouble2_title: "Simptom: Visok HPU pritisak (>165 bara tokom normalnog rada)",
+                action1: "<strong>Hitna akcija:</strong> Zaustavite jedinicu, otpustite pritisak, ručno podmažite prsten.",
+                action2: "<strong>Istraga:</strong> Provjerite centralni sistem podmazivanja - verifikujte da pumpa stvara pritisak i da svi dozirni ventili teku.",
+                section5_title: "Kontrolna lista sažetka",
+                check1: "<strong>Prije prvog starta nakon gašenja:</strong> Ručno podmazivanje površina regulacionog prstena (SOP 3).",
+                check2: "<strong>Mjesečno:</strong> Pratite HPU pritisak tokom sporog kretanja za indikatore zapinjanja.",
+                check3: "<strong>Godišnje:</strong> Verifikacija podešavanja ekscentričnih klinova (svih 20 lopatica sinhronizovano unutar 0.2mm).",
+                check4: "<strong>Na remontu:</strong> Potpuno rastavljanje i inspekcija valjkastih ležajeva i kliznih površina regulacionog prstena.",
+                back_btn: "← Povratak na Glavni priručnik"
+            }
+        };
+
+        function setLang(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerHTML = i18n[lang][key];
+                }
+            });
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('anohub_lang_pref', lang);
+        }
+
+        // Initialize from storage or default to English
+        const savedLang = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(savedLang);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{
+    "common": {
+        "switchLanguage": "Sprache wechseln",
+        "simulate": "Simulieren",
+        "reset": "Zurücksetzen",
+        "confidence": "Konfidenz",
+        "advice": "Handlungsempfehlung"
+    },
+    "hpp": {
+        "title": "Projekt Cerebro",
+        "physics_ready": "SYSTEM BEREIT",
+        "recalculating": "PHYSIK-ENGINE BERECHNET NEU...",
+        "hydraulics": "Hydraulik",
+        "mechanical": "Mechanik",
+        "electro": "Elektro",
+        "penstock": "Druckrohrleitung",
+        "bolts": "Schrauben",
+        "shaft": "Welle",
+        "turbine": "Turbine",
+        "generator": "Generator"
+    },
+    "physics": {
+        "grossHead": "Bruttofallhöhe",
+        "flow": "Ausbauwassermenge",
+        "netHead": "Nettofallhöhe",
+        "efficiency": "Wirkungsgrad",
+        "powerOutput": "Leistung",
+        "annualProd": "Jahresproduktion",
+        "roi": "Amortisationszeit",
+        "waterHammer": "Wasserschlag",
+        "hoopStress": "Ringspannung",
+        "boltSafety": "Schraubensicherheitsfaktor",
+        "boltLoad": "Schraubenlast",
+        "boltCapacity": "Schraubentragfähigkeit",
+        "torque": "Drehmoment",
+        "grade": "Güteklasse",
+        "material": "Material",
+        "wallThickness": "Wandstärke"
+    },
+    "forensics": {
+        "title": "Diagnostische Forensik",
+        "subtitle": "Feldanalyse • Maschinengesundheit • Ursachenforschung",
+        "vision_title": "Textur-Forensik",
+        "audio_title": "Akustische Signatur",
+        "post_mortem": "Post-Mortem Überwachung",
+        "drag_drop": "Schadensfotos hier ablegen zur Analyse.",
+        "scanning": "TEXTUR WIRD GESCANNT...",
+        "diagnosis_cavitation": "KAVITATION",
+        "diagnosis_erosion": "ABRASIVE EROSION",
+        "advice_cavitation": "Kritisch: Mikro-Jets haben Material abgetragen. Empfohlen: Sofortiges Auftragschweißen mit Stellit.",
+        "advice_erosion": "Warnung: Sandpartikel polieren die Oberfläche. Empfohlen: Keramikbeschichtung (Wolframcarbid) auftragen.",
+        "sand_hiss": "Hochfrequentes Zischen (15kHz+)",
+        "sand_diagnosis": "Diagnose: Quarzsand in Pelton-Düse erkannt. Entsander-Filter sofort prüfen.",
+        "emergency_cooling": "NOTFALLPROTOKOLL",
+        "seizure_risk": "RISIKO EINES WELLENFRESSERS ERKANNT. HILFSKÜHLPUMPEN AUTOMATISCH GESTARTET."
+    },
+    "glossary": {
+        "water_hammer": "Wasserschlag",
+        "bearing_clearance": "Lagerspiel",
+        "cavitation": "Kavitation",
+        "erosion": "Erosion",
+        "bolt_grade": "Schraubengüte"
+    },
+    "insights": {
+        "kaplan_risk": "LEGACY WARNUNG: Kaplan bei Fallhöhe > 70m birgt riesiges Kavitationsrisiko. Tiefe Eintauchung (negative Höhe) erforderlich.",
+        "francis_inefficient": "Wirtschaftlichkeit: Francis bei Fallhöhe < 20m erfordert massives Spiralgehäuse.",
+        "price_suspicious": "Preis deutlich unter Marktpreis. Stahlherkunft und Referenzliste prüfen.",
+        "efficiency_high": "Verdächtig hoher Wirkungsgrad ({{value}}%). Physikalisches Limit liegt bei ca. {{limit}}%. IEC 60041 Testbericht anfordern.",
+        "rotor_height": "Rotor ({{diameter}}m) ist höher als Tunnel ({{height}}m).",
+        "rotor_width": "Rotor ist breiter als Zufahrtsstraße.",
+        "bridge_capacity": "Gewicht ({{weight}}t) überschreitet Brückenkapazität ({{limit}}t).",
+        "split_rotor_required": "Zwingend \"Split Rotor\" Design (zwei Teile) oder Baustellenschweißung erforderlich.",
+        "transport_standard": "Standardtransport möglich.",
+        "kaplan_double_reg": "Große Durchflussschwankungen. Kaplan doppelt reguliert ist gut, aber 2 Einheiten (1/3 + 2/3) decken Minimum besser ab.",
+        "kaplan_single": "Stabiler Durchfluss, 1 große Kaplan-Turbine ist die günstigste Option.",
+        "francis_part_load": "Francis hat schlechten Wirkungsgrad unter 40%. Besser 2 kleinere Einheiten für Niedrigwasser."
+    },
+    "warnings": {
+        "wall_thin_burst": "KRITISCH: Wandstärke {{thickness}}mm unzureichend für {{head}}m Druckstoß. Sicherheitsfaktor: {{sf}} (Min 1.5). BERSTGEFAHR.",
+        "bolt_failure_46": "SCHRAUBENVERSAGEN: Klasse 4.6 Schrauben halten Drücken > 25 bar nicht stand. Upgrade auf 8.8.",
+        "corrosion_steel": "SCHNELLE KORROSION: Ungeschützter Stahl in abrasivem/schmutzigem Wasser versagt in < 10 Jahren.",
+        "corrosion_paint": "Wartungsintensiv: Farbe löst sich in schlammigem Wasser schnell ab. Verzinkung erwägen."
+    },
+    "notifications": {
+        "title": "Benachrichtigungszentrum",
+        "settings": "Einstellungen",
+        "markAllRead": "Alle als gelesen markieren",
+        "empty": "Keine neuen Benachrichtigungen.",
+        "tempSpike": "KRITISCH: Wellenstillstand erkannt, aber Temperatur steigt! Aktuell: {{temp}}°C (Limit: {{limit}}°C)",
+        "vibrationWarning": "Warnung: Vibrationspegel nähert sich Zone B.",
+        "maintenanceDue": "Info: Geplante Wartung in 3 Tagen."
+    }
+}

@@ -1,0 +1,656 @@
+{
+    "actions": {
+        "troubleshoot": "Troubleshoot",
+        "analyzeTrend": "Analyze Trend",
+        "updateSpecs": "Update Specs",
+        "viewHistory": "View History",
+        "viewTwin": "Digital Twin",
+        "goToOperations": "Go to Operations",
+        "viewDesign": "View Design"
+    },
+    "common": {
+        "switchLanguage": "Switch Language",
+        "simulate": "Simulate",
+        "reset": "Reset",
+        "confidence": "Confidence",
+        "advice": "Actionable Advice"
+    },
+    "hpp": {
+        "title": "Project Cerebro",
+        "physics_ready": "SYSTEM READY",
+        "recalculating": "PHYSICS ENGINE RECALCULATING...",
+        "hydraulics": "Hydraulics",
+        "mechanical": "Mechanical",
+        "electro": "Electro",
+        "penstock": "Penstock",
+        "bolts": "Bolts",
+        "shaft": "Shaft",
+        "turbine": "Turbine",
+        "generator": "Generator"
+    },
+    "physics": {
+        "grossHead": "Gross Head",
+        "flow": "Design Flow",
+        "netHead": "Net Head",
+        "efficiency": "Efficiency",
+        "powerOutput": "Power Output",
+        "annualProd": "Annual Production",
+        "roi": "ROI Period",
+        "waterHammer": "Water Hammer Surge",
+        "hoopStress": "Hoop Stress",
+        "boltSafety": "Bolt Safety Factor",
+        "boltLoad": "Bolt Load",
+        "boltCapacity": "Bolt Capacity",
+        "torque": "Torque",
+        "grade": "Grade",
+        "material": "Material",
+        "wallThickness": "Wall Thickness"
+    },
+    "forensics": {
+        "title": "Diagnostic Forensics",
+        "subtitle": "Field Analysis Unit • Machine Health • Root Cause",
+        "critical_alert": "CRITICAL SECURITY ALERT: DATA EXFILTRATION",
+        "network_traffic": "Network Traffic",
+        "security_feed": "Security & Threat Feed",
+        "vision_title": "Texture Forensics",
+        "audio_title": "Acoustic Signature",
+        "post_mortem": "Post-Mortem Watchdog",
+        "drag_drop": "Drag drop damage photos to analyze texture.",
+        "scanning": "SCANNING TEXTURE...",
+        "diagnosis_cavitation": "CAVITATION",
+        "diagnosis_erosion": "ABRASIVE EROSION",
+        "advice_cavitation": "Critical: Surface micro-jets have removed material. Recommended: Stellite Welding overlay immediately.",
+        "advice_erosion": "Warning: Sand particles polishing the surface. Recommended: Apply Ceramic Coating (Tungsten Carbide).",
+        "sand_hiss": "High Frequency Hiss (15kHz+)",
+        "sand_diagnosis": "Diagnosis: Silica Sand detected in Pelton Nozzle. Check desanding basin filters immediately.",
+        "emergency_cooling": "EMERGENCY PROTOCOL",
+        "seizure_risk": "RISK OF SHAFT SEIZURE DETECTED. AUTO-DEPLOYING AUX COOLING PUMPS."
+    },
+    "glossary": {
+        "water_hammer": "Water Hammer",
+        "bearing_clearance": "Bearing Clearance",
+        "cavitation": "Cavitation",
+        "erosion": "Erosion",
+        "bolt_grade": "Bolt Grade"
+    },
+    "insights": {
+        "kaplan_risk": "LEGACY WARNING: Kaplan on head > 70m carries huge cavitation risk. Deep submergence (negative elevation) required.",
+        "francis_inefficient": "Economic Viability: Francis on head < 20m requires massive spiral case.",
+        "price_suspicious": "Price significantly below market. Check steel origin and reference list.",
+        "efficiency_high": "Suspiciously high efficiency ({{value}}%). Physical limit is around {{limit}}%. Request IEC 60041 test report.",
+        "rotor_height": "Rotor ({{diameter}}m) is higher than tunnel ({{height}}m).",
+        "rotor_width": "Rotor is wider than access road.",
+        "bridge_capacity": "Weight ({{weight}}t) exceeds bridge capacity ({{limit}}t).",
+        "split_rotor_required": "Mandatory \"Split Rotor\" design (two parts) or on-site welding.",
+        "transport_standard": "Standard transport feasible.",
+        "kaplan_double_reg": "Large flow variations. Kaplan double-regulated is good, but 2 units (1/3 + 2/3) cover minimum better.",
+        "kaplan_single": "Stable flow, 1 large Kaplan turbine is the cheapest option.",
+        "francis_part_load": "Francis has poor efficiency below 40%. Better 2 smaller units to cover low waters."
+    },
+    "warnings": {
+        "wall_thin_burst": "CRITICAL: Wall thickness {{thickness}}mm insufficient for {{head}}m surge head. Safety Factor: {{sf}} (Min 1.5). Risk of BURST.",
+        "bolt_failure_46": "BOLT FAILURE RISK: Class 4.6 bolts cannot withstand pressures > 25 bar. Upgrade to 8.8.",
+        "corrosion_steel": "RAPID CORROSION: Unprotected steel in abrasive/dirty water will fail in < 10 years.",
+        "corrosion_paint": "Maintenance Heavy: Paint will strip quickly in silty water. Consider Galvanization."
+    },
+    "notifications": {
+        "title": "Notification Center",
+        "settings": "Notification Settings",
+        "markAllRead": "Mark all as read",
+        "empty": "No new notifications.",
+        "tempSpike": "CRITICAL: Shaft stoppage detected but Temperature rising! Current: {{temp}}°C (Limit: {{limit}}°C)",
+        "vibrationWarning": "Warning: Vibration levels approaching Zone B.",
+        "maintenanceDue": "Info: Scheduled maintenance in 3 days."
+    },
+    "dashboard": {
+        "title": "Executive Command",
+        "subtitle": "Francis < 5 MW // Heritage Precision Interface",
+        "status_active": "NC-4.2 Command Active",
+        "neural_link": "Neural Link",
+        "export_brief": "Export Brief",
+        "heritage_banner": {
+            "title": "Heritage Precision Standard",
+            "alert_desc": "Current alignment deviation is accelerating wear beyond design parameters.",
+            "subtitle": "Golden Alignment Protocol",
+            "compliant": "Compliant",
+            "deviation": "Deviation",
+            "years_lost": "Years Lost"
+        },
+        "topology": {
+            "title": "System Topology",
+            "digital_twin": "Digital Twin",
+            "full_view": "Full View",
+            "rated_power": "Rated Power",
+            "grid_freq": "Grid Freq"
+        },
+        "kpi": {
+            "active_power": "Active Power",
+            "active_power_sub": "Verified Output",
+            "system_health": "System Health",
+            "net_head": "Net Head",
+            "axial_thrust": "Axial Thrust",
+            "axial_thrust_sub": "Max: 250 kN",
+            "structural_life": "Structural Life",
+            "structural_life_sub": "Fatigue Reserve",
+            "performance_gap": "Performance Gap",
+            "vs_design": "vs Design"
+        },
+        "finance": {
+            "title": "Risk vs. Finance",
+            "maint_buffer": "Maint. Buffer",
+            "annual_loss": "Annual Rev. Loss",
+            "predictive_savings": "Predictive Savings",
+            "profit_index": "Profit Index",
+            "profit_basis": "Based on current efficiency and market rates"
+        },
+        "sentinel": {
+            "title": "Sentinel Recommendations"
+        },
+        "riskStatus": {
+            "label": "RISK STATUS",
+            "normal": "NOMINAL",
+            "warning": "WARNING",
+            "critical": "CRITICAL"
+        },
+        "workflowHeader": {
+            "title": "Active Machine",
+            "health": "Health",
+            "dashboard": "Dashboard"
+        },
+        "selectAssetFirst": "Select Unit",
+        "assetRequiredDesc": "Identify equipment to load safety protocols.",
+        "status_pending": "Sync Pending",
+        "protocolLaunchpad": {
+            "title": "Protocol Launchpad"
+        },
+        "assetPassport": {
+            "title": "Asset Passport",
+            "editSpecs": "Edit Specs",
+            "downloadFull": "Download Full",
+            "viewDesign": "View Design",
+            "lastOverhaul": "Last Overhaul",
+            "labyrinthClearance": "Labyrinth Clearance",
+            "babbittStatus": "Babbitt Temp Status",
+            "toleranceBreach": "Tolerance Breach",
+            "operatingHours": "Operating Hours"
+        },
+        "eventMarkers": {
+            "protocol": "Protocol Completed",
+            "workOrder": "Work Order Closed"
+        }
+    },
+    "sidebar": {
+        "fleet_overview": "Fleet Overview",
+        "mission_sectors": "Mission Sectors",
+        "generate_forensic": "Generate Forensic",
+        "hive_link": "Hive Link",
+        "connected": "Connected",
+        "offline": "Offline",
+        "search_placeholder": "Quick Search... (Ctrl+K)",
+        "sectors": {
+            "critical_ops": "Critical Ops",
+            "mechanical": "Mechanical",
+            "electrical": "Electrical / SCADA",
+            "risk": "Risk & Forensics",
+            "knowledge": "Knowledge"
+        },
+        "modules": {
+            "mission_control": "Mission Control",
+            "francis_hub": "Francis Hub",
+            "diagnostic_twin": "Diagnostic Twin",
+            "shaft_alignment": "Shaft Alignment",
+            "bolt_torque": "Bolt Torque",
+            "labyrinth_health": "Labyrinth Health",
+            "hydraulic_maint": "Hydraulic Maintenance",
+            "maintenance_engine": "Maintenance Engine",
+            "grid_sync": "Grid Sync Monitor",
+            "generator_integrity": "Generator Integrity",
+            "excitation": "Excitation System",
+            "executive": "Executive Dashboard",
+            "barlow_audit": "Barlow Structural Audit",
+            "longevity_roadmap": "50-Year Longevity Roadmap",
+            "forensic_analysis": "Forensic Analysis",
+            "precision_audit": "Precision Audit",
+            "sop_manager": "SOP Manager",
+            "engineering_manifesto": "Engineering Manifesto",
+            "learning_lab": "Learning Lab",
+            "intuition_log": "Intuition Log",
+            "logbook": "Maintenance Logbook",
+            "hpp_studio": "HPP Studio",
+            "hppBuilder": "HPP Designer",
+            "hppBuilderDesc": "Design and simulate new hydro plants."
+        },
+        "boltTorque": "Bolt Torque",
+        "shaftAlignment": "Shaft Alignment",
+        "hydraulicMaintenance": "Hydraulic Maintenance",
+        "maintenanceLogbook": "Maintenance Logbook",
+        "structuralIntegrity": "Structural Integrity",
+        "shadowEngineer": "Shadow Engineer",
+        "toolboxAnalytics": "Toolbox Analytics"
+    },
+    "terminal": {
+        "title": "Commander_Terminal_v4.2",
+        "init": "Initializing Neural Link... type /help",
+        "placeholder": "Enter command (e.g. /explain)..."
+    },
+    "toolbox": {
+        "greeting": {
+            "morning": "Good Morning, Engineer",
+            "afternoon": "Good Afternoon, Engineer",
+            "evening": "Good Evening, Engineer"
+        },
+        "engineer": "Chief Engineer",
+        "systemOperational": "System Operational",
+        "assetsOnline": "Assets Online",
+        "activeAsset": "Active: {{name}}",
+        "passport": "Asset Passport",
+        "addAsset": "Add Asset",
+        "zeroState": {
+            "title": "System Cold Start",
+            "noAssets": "No assets detected in local reservoir.",
+            "initialize": "Initialize New Asset"
+        },
+        "sections": {
+            "utilities": "Field Utilities",
+            "designAnalysis": "Design & Analysis",
+            "operationalModules": "Operational Modules",
+            "recentActivity": "Recent Activity"
+        },
+        "activity": {
+            "descLogbook": "Review daily logs and anomalies.",
+            "descStructural": "Monitor dam and penstock health.",
+            "descShadow": "AI-guided maintenance procedures.",
+            "descAnalytics": "Executive financial overview.",
+            "none": "No recent activity recorded.",
+            "open": "Open Logbook",
+            "view": "View All Activity"
+        },
+        "toast": {
+            "generatingPassport": "Generating Digital Passport for {{asset}}..."
+        },
+        "diagnostics": {
+            "francisTitle": "Francis Diagnostics",
+            "francisDesc": "Real-time spectral analysis for {{name}}"
+        },
+        "logicHub": {
+            "title": "Logic Hub",
+            "desc": "Centralized neural control unit"
+        },
+        "pelton": {
+            "title": "Pelton Systems",
+            "desc": "Injector and bucket analysis"
+        },
+        "kaplan": {
+            "title": "Kaplan Control",
+            "desc": "Blade angle and flow optimization"
+        },
+        "bulb": {
+            "title": "Bulb Turbine",
+            "desc": "Submersible unit monitoring"
+        }
+    },
+    "validation": {
+        "fields": {
+            "alignment": "Shaft Alignment",
+            "vibration": "Vibration Velocity",
+            "axialPlay": "Axial Play",
+            "bearingTemp": "Bearing Temperature",
+            "oilTemp": "Oil Temperature",
+            "ambientTemp": "Ambient Temperature",
+            "insulationResistance": "Insulation Resistance",
+            "gridFrequency": "Grid Frequency",
+            "voltage": "Voltage",
+            "netHead": "Net Head",
+            "flowRate": "Flow Rate",
+            "efficiency": "Efficiency",
+            "hoopStress": "Hoop Stress",
+            "wallThickness": "Wall Thickness",
+            "pressure": "Pressure",
+            "bearingRise": "Bearing Rise",
+            "oilLongevity": "Oil Longevity",
+            "sealIntegrity": "Seal Integrity",
+            "generatorInsulation": "Generator Insulation",
+            "thermalStability": "Thermal Stability",
+            "greaseManagement": "Grease Management",
+            "dynamicRisk": "Dynamic Risk Profile",
+            "oilChemistry": "Oil Chemistry"
+        },
+        "limits": {
+            "negative": "{{field}} cannot be negative or below {{min}} {{unit}}",
+            "exceeds": "{{field}} of {{value}} {{unit}} exceeds physical maximum ({{max}} {{unit}})",
+            "nominal": "Value within engineering limits"
+        },
+        "bearing": {
+            "critical": "CRITICAL: {{value}}°C exceeds safe operating limit (85°C). Immediate shutdown recommended.",
+            "warning": "WARNING: {{value}}°C approaching critical threshold. Monitor closely."
+        },
+        "alignment": {
+            "critical": "CRITICAL DEVIATION: {{value}} mm/m is {{ratio}}x the Golden Standard.",
+            "heritage": "HERITAGE DEVIATION: {{value}} mm/m exceeds 0.05 mm/m Golden Standard."
+        },
+        "cross_sector": {
+            "thermal_stress": "THERMAL CAUSALITY: Misalignment ({{alignment}} mm/m) is actively inducing {{stress}}% excess thermal load on bearings.",
+            "oil_degradation": "ACCELERATED WEAR: Oil service life reduced by {{years}} years due to particle contamination.",
+            "seal_integrity": "MECHANICAL EROSION: High vibration ({{value}} mm/s) is compromising seal integrity.",
+            "insulation_stress": "ELECTRICAL STRESS: Grid instability ({{deviation}} Hz) is degrading generator insulation."
+        },
+        "certification": {
+            "alignment_fail": "Alignment {{value}} mm/m exceeds 0.05 mm/m standard",
+            "vibration_fail": "Vibration {{value}} mm/s exceeds ISO 'Good' threshold",
+            "temp_fail": "Bearing temperature {{value}}°C exceeds optimal range"
+        }
+    },
+    "expert_inference": {
+        "headers": {
+            "structural_risk": "STRUCTURAL RISK",
+            "precision_breach": "PRECISION BREACH",
+            "axial_breach": "AXIAL PLAY BREACH",
+            "insulation_risk": "INSULATION RISK",
+            "tribology_risk": "ACIDIC/HYDRATED OIL"
+        },
+        "remedies": {
+            "realignment": "Execute Precision Laser Re-alignment to 0.05 mm/m.",
+            "shimming": "Precision shimming and thrust bridge calibration.",
+            "dryout": "Stator dry-out and cryogenic cleaning sequence.",
+            "oil_scraping": "Execute SOP-TRIB-001: Scraping & Blueing and Oil Purification.",
+            "grease_purge": "Purge grease lines and inspect seal integrity.",
+            "cooling_verify": "Verify cooling water flow and jacking oil pressure."
+        },
+        "alerts": {
+            "structural_risk": "Safety margin is {{margin}}%. Hoop stress ({{pressure}} Bar) vs Limit ({{limit}} Bar).",
+            "vibration_critical": "Measured vibration of {{value}} mm/s exceeds the {{standard}} critical limit of {{limit}} mm/s for large machines.",
+            "bearing_critical": "Bearing temperature reached {{value}}°C, exceeding the safe critical shutdown threshold of {{limit}}°C. Relative rise above ambient is {{rise}}°C.",
+            "bearing_rise": "Abnormal thermal rise detected. Bearing is {{rise}}°C above ambient ({{ambient}}°C). Even if below absolute limits, this indicates a lubrication or friction issue.",
+            "alignment_breach": "PRECISION BREACH: Measured {{value}} mm/m exceeds strict {{limit}} mm/m Golden Standard. Based on the cubic relationship of bearing wear, this misalignment accelerates capital erosion by {{erosion}}%.",
+            "axial_breach": "Measured {{value}} mm exceeds max limit of {{limit}} mm. Driving high dynamic thrust loads on pads, risking catastrophic fatigue breakthrough.",
+            "insulation_risk": "Stator resistance of {{value}} MOhm is below the strict Healthy Baseline of {{limit}} MOhm. High probability of winding partial discharge.",
+            "oil_chemistry": "{{condition}}. Accelerated chemical erosion of Babbitt (white metal) bearings detected.",
+            "grease_risk": "Excessive lubrication during standby.",
+            "thermal_inertia": "Abnormal bearing heat rise.",
+            "mag_unb": "High stator temperature variance.",
+            "cavitation": "DIAGNOSIS: Potential Cavitation. REASONING: Specific Water Consumption ({{swc}}) is > 10% above design baseline.",
+            "fatigue_risk": "INVESTMENT DECAY ALERT: Dynamic fatigue risk is {{risk}}%. Failure to correct alignment/vibration will result in accelerated capital erosion."
+        },
+        "symptoms": {
+            "mag_unb": "Localized Stator Heating",
+            "cavitation": "Cavitation"
+        },
+        "verdicts": {
+            "critical_multi": "CRITICAL: Asset requires immediate intervention across {{count}} failure domains; prioritize shutdown and comprehensive audit before further operation.",
+            "structural_mech": "Asset shows compounded structural and mechanical degradation; immediate engineering review required to prevent cascading failure.",
+            "mech_trib": "Asset is structurally sound but tribologically compromised; prioritize oil filtration and precision realignment to arrest longevity leak.",
+            "thermal_mech": "Thermal stress detected with alignment deviation; bearing wear accelerating—recommend laser realignment and thermography baseline.",
+            "mech_only": "Alignment precision below Golden Standard (0.05 mm/m); execute laser realignment protocol to restore full longevity potential.",
+            "elec_only": "Electrical insulation degradation detected; schedule stator dry-out and partial discharge testing within 30 days.",
+            "trib_only": "Oil analysis indicates contamination; implement enhanced filtration and consider oil change to prevent accelerated bearing wear.",
+            "warning_only": "Asset operating within acceptable limits with {{count}} monitoring flag(s); maintain current inspection cadence.",
+            "golden": "Asset meets NC-4.2 Heritage Standards; projected 50-year longevity pathway confirmed—continue predictive monitoring.",
+            "nominal": "Asset health nominal with no immediate action required; next scheduled audit recommended in 6 months."
+        }
+    },
+    "hpp_builder": {
+        "assembly": {
+            "title": "Structural Assembly Audit",
+            "subtitle": "Step 4: Vertical Integration & Tolerance Check",
+            "components": {
+                "draft_tube": "Draft Tube",
+                "spiral_case": "Spiral Case",
+                "stay_ring": "Stay Ring",
+                "wicket_gates": "Wicket Gates",
+                "head_cover": "Head Cover",
+                "rotor": "Rotor",
+                "main_shaft": "Main Shaft",
+                "stator": "Stator"
+            },
+            "errors": {
+                "seq_001": "Foundational Error: Draft Tube must be installed first.",
+                "seq_002": "Support Error: Spiral Case requires Draft Tube foundation.",
+                "seq_003": "Load Path Error: Stay Ring must rest on Spiral Case.",
+                "seq_004": "ERR_SEQ_004: Guide vanes (Wicket Gates) must be installed before Top Cover.",
+                "seq_005": "Clearance Error: Head Cover required before Rotor insertion."
+            },
+            "prompts": {
+                "measure_alignment": "Enter Measured Alignment (mm/m)",
+                "bolt_tension": "Confirm Bolt Tensioning (Nm)",
+                "clearance_check": "Clearance Check",
+                "scraping_contact": "Scraping Contact Verified"
+            },
+            "status": {
+                "foundation_locked": "Foundation Locked",
+                "integrity_verified": "Structural Integrity 100%",
+                "leak_risk": "Longevity Leak Detected"
+            }
+        }
+    },
+    "generator": {
+        "detail": {
+            "title": "Generator Unit",
+            "drillDown": "Drill-Down",
+            "functionalTarget": "Functional Target",
+            "precisionRequirement": "Precision Requirement",
+            "heritageTip": "Field Engineer Instruction",
+            "initiateScan": "Initiate Diagnostic Scan",
+            "selectHotspot": "Select Hotspot",
+            "identifyComponent": "Identify component on official blueprint",
+            "frontBearing": {
+                "name": "Front Bearing (DE)",
+                "param": "Alignment Precision",
+                "func": "Primary radial support for the generator rotor shaft. Critical for maintaining concentricity with stator air gap.",
+                "precision": "$0.05\\text{ mm/m}$ Heritage Standard",
+                "heritage": "The 0.05 mm/m specification originates from legacy Swiss turbine manufacturers—a gold standard that prevents uneven air-gap distribution."
+            },
+            "rearBearing": {
+                "name": "Rear Bearing (NDE)",
+                "param": "Electrical Isolation",
+                "func": "Secondary radial support, electrically insulated to prevent shaft current circulation through the bearing oil film.",
+                "precision": "Insulation Resistance > 1 MΩ",
+                "heritage": "Electrical insulation on the NDE bearing breaks the shaft current loop, protecting both bearings from electrical discharge machining (EDM)."
+            },
+            "groundingBrush": {
+                "name": "Shaft Grounding Brush",
+                "param": "Shaft Current Control",
+                "func": "Provides a low-impedance path for shaft currents induced by electromagnetic asymmetries in the generator.",
+                "precision": "Brush Contact Resistance < 10 mΩ",
+                "heritage": "A worn brush leads to micro-pitting in the bearings, significantly reducing asset life. Check brush wear every 2000 hours."
+            },
+            "lubrication": {
+                "name": "Lubrication Hub",
+                "param": "Oil Film Integrity",
+                "func": "Circulates pressurized oil to cool and lubricate main turbine-generator shaft bearings.",
+                "precision": "5 micron filtration standard",
+                "heritage": "A clean oil film is critical for the longevity of sliding bearings under high pressure. Always verify ISO cleanliness code 16/14/11."
+            },
+            "stator": {
+                "name": "Stator Core & Air Gap",
+                "param": "Magnetic Center",
+                "func": "Houses the core and windings, providing structural support and defining the electromagnetic center of the machine.",
+                "precision": "Axial play < 0.5 mm at Magnetic Center",
+                "heritage": "The Magnetic Center is the axial position where electromagnetic forces are balanced. Operating off-center creates thrust on the turbine runner."
+            },
+            "anchorBolts": {
+                "name": "Foundation Anchor Bolts",
+                "param": "Design Torque",
+                "func": "Secures the generator frame to the concrete foundation, transmitting all dynamic loads to the civil structure.",
+                "precision": "Torque per M36 Class 8.8: 1850 Nm",
+                "heritage": "Tighten in a star pattern to prevent frame distortion. Never tighten sequentially around the perimeter."
+            },
+            "jackingBolts": {
+                "name": "Adjustment (Jacking) Bolts",
+                "param": "MUST BE LOOSE",
+                "func": "Used during alignment to fine-tune generator position. Must be backed off after anchor bolts are torqued.",
+                "precision": "Final State: Finger-loose + 1/4 turn back",
+                "heritage": "These are for positioning only. Leaving them tight creates parasitic stress that mimics misalignment vibration signatures."
+            },
+            "shims": {
+                "name": "Precision Nivelation Shims",
+                "param": "Gold Standard",
+                "func": "Stainless steel shims that establish the vertical alignment datum. Total thickness determines final elevation.",
+                "precision": "$0.01\\text{ mm/m}$ Gold Standard",
+                "heritage": "Use a maximum of 3-4 shims per foot. Stacked shims act like a spring, compromising stability under dynamic loads."
+            }
+        }
+    },
+    "runner": {
+        "detail": {
+            "title": "Francis Runner",
+            "drillDown": "Hydraulic Analysis",
+            "functionalTarget": "Functional Target",
+            "precisionRequirement": "Precision Requirement",
+            "heritageTip": "Field Engineer Instruction",
+            "initiateScan": "Initiate Hydraulic Scan",
+            "selectHotspot": "Select Hotspot",
+            "identifyComponent": "Identify component on hydraulic blueprint",
+            "runnerBlades": {
+                "name": "Francis Runner (Rotor)",
+                "param": "Cavitation Resistance",
+                "func": "Converts hydraulic energy into mechanical torque through precisely profiled blade channels.",
+                "precision": "Blade profile tolerance: ±0.5 mm",
+                "heritage": "Leading-edge erosion is the first indicator of off-design operation. Inspect blades every 5000 hours for pitting patterns."
+            },
+            "spiralCase": {
+                "name": "Spiral Case Section",
+                "param": "Structural Pressure",
+                "func": "Distributes high-pressure water uniformly around the turbine runner circumference with optimized velocity profile.",
+                "precision": "Surface smoothness: Ra < 6.3 μm",
+                "heritage": "The spiral geometry maintains constant velocity to prevent uneven loading on runner blades, reducing fatigue stress."
+            },
+            "wearingGap": {
+                "name": "Wearing Ring Gap",
+                "param": "Efficiency Critical",
+                "func": "Sealing interface between rotating runner and stationary components, preventing high-pressure water bypass.",
+                "precision": "$0.3 - 0.5\\text{ mm}$ Gold Standard",
+                "heritage": "A 1mm increase in gap can drop turbine power by >3%. Measure gap at 4 cardinal points during every major overhaul."
+            },
+            "axialPosition": {
+                "name": "Axial Alignment Position",
+                "param": "Hydraulic Centerline",
+                "func": "Defines the precise vertical depth of the rotor relative to the hydraulic centerline of the turbine.",
+                "precision": "Axial play tolerance: ±0.2 mm",
+                "heritage": "Incorrect axial position creates parasitic thrust on the generator bearings, accelerating wear and reducing efficiency."
+            },
+            "headCover": {
+                "name": "Front Head Cover & Seal",
+                "param": "Zero-Leakage Target",
+                "func": "Provides structural closure and sealing for the upper turbine chamber, containing high-pressure water.",
+                "precision": "Bolt torque: M24 Class 8.8 = 980 Nm",
+                "heritage": "The bolted front assembly must maintain absolute sealing integrity. Bolt sequence follows star pattern for even pressure distribution."
+            },
+            "guideVaneAssembly": {
+                "name": "Guide Vane Assembly (Wicket Gates)",
+                "param": "Flow Regulation",
+                "func": "Controls the volume and direction of water entering the runner. Click to Deep-Dive.",
+                "precision": "Sync deviation < 0.1°",
+                "heritage": "The 24 wicket gates must move in perfect unison. A single lagging gate creates asymmetric thrust that wrecks the steady bearing."
+            }
+        },
+        "guidevane": {
+            "detail": {
+                "title": "Guide Vane System",
+                "wicketGates": {
+                    "name": "Wicket Gates (Lopatice)",
+                    "param": "Flow Synchronization",
+                    "func": "Regulates water flow into the runner, controlling turbine output and maintaining hydraulic stability.",
+                    "precision": "Angular Deviation < 0.1°",
+                    "heritage": "Precise angular synchronization determines the purity of flow entry. Any deviation > 0.1° creates turbulence that hammers the runner blades."
+                },
+                "shearPins": {
+                    "name": "Safety Shear Pins",
+                    "param": "Mechanical Fuse",
+                    "func": "Protect the regulation mechanism by breaking under excessive load (e.g., debris jam), decoupling the specific gate.",
+                    "precision": "Calibrated Breaking Point",
+                    "heritage": "Never replace with standard bolts. Use only calibrated shear pins to protect the gate linkage in case of foreign object jam."
+                },
+                "vaneClearance": {
+                    "name": "Vane End Clearance",
+                    "param": "Efficiency Loss",
+                    "func": "The gap between vane ends and the head cover/bottom ring. Must be minimal to prevent leakage but sufficient for operation.",
+                    "precision": "Clearance < 0.2 mm",
+                    "heritage": "Excessive top/bottom clearance acts as a high-velocity bypass leak, eroding surfaces and reducing efficiency measurable by 0.5-1%."
+                },
+                "operatingRing": {
+                    "name": "Regulation Ring & Linkage",
+                    "param": "Linkage Kinematics",
+                    "func": "Transmits servomotor force to all wicket gates simultaneously ensuring synchronized opening/closing.",
+                    "precision": "Zero Backlash Target",
+                    "heritage": "Smooth operation relies on regular greasing of the linkage bushings. A sticky linkage causes governor hunting and power fluctuations."
+                }
+            }
+        },
+        "mechanical": {
+            "detail": {
+                "title": "Mechanical Backbone",
+                "genBearing": {
+                    "name": "Generator Drive-End (DE) Bearing",
+                    "param": "Load Support",
+                    "func": "Supports the radial and axial loads of the generator rotor and flywheel mass.",
+                    "precision": "Temp < 65°C",
+                    "heritage": "Supporting the significant weight overhang of the flywheel. Oil film thickness must be monitored continuously."
+                },
+                "flywheel": {
+                    "name": "Flywheel (Zamajac)",
+                    "param": "Rotational Inertia",
+                    "func": "Stores kinetic energy to stabilize turbine speed during load rejections and grid fluctuations.",
+                    "precision": "Balance G2.5 ISO 1940",
+                    "heritage": "Never operate without the flywheel guard installed. The stored kinetic energy is immense and catastrophic if released."
+                },
+                "coupling": {
+                    "name": "Shaft Coupling Interface (Ø200)",
+                    "param": "Torque Transmission",
+                    "func": "Rigidly connects the turbine shaft to the generator shaft, transmitting torque.",
+                    "precision": "Run-out < 0.03 mm",
+                    "heritage": "Shaft run-out at this point should typically be < 0.03 mm TIR (Total Indicator Reading). Loose bolts here inevitably shear."
+                },
+                "turbBearing": {
+                    "name": "Turbine Guide Bearing",
+                    "param": "Hydraulic Stability",
+                    "func": "Resists radial hydraulic forces acting on the runner, maintaining shaft concentricity.",
+                    "precision": "Clearance 0.15 - 0.25 mm",
+                    "heritage": "The bearing closest to the hydraulic chaos. If this bearing vibrates, check the Runner Wearing Rings first."
+                },
+                "shaftSeal": {
+                    "name": "Turbine Shaft Seal",
+                    "param": "Water Ingress Prevention",
+                    "func": "Prevents water from traveling up the shaft from the turbine casing into the bearing assembly.",
+                    "precision": "Leakage < 5 L/min",
+                    "heritage": "Carbon rings must be 'run-in' properly. A leaking seal floods the turbine, causing corrosion of the bearing housing."
+                }
+            }
+        }
+    }
+    ,
+"manifesto": {
+    "classification": "CLASS-1 INDUSTRIAL / FORENSIC INTEGRITY",
+    "version": "NC-10.2 (AnoHUBs Intelligence)",
+    "title": "THE MANIFESTO OF PHYSICAL INTEGRITY",
+    "subtitle": "Bridging the 48% Execution Gap in Global Hydropower",
+    "quote": "'Software cannot fix a misaligned shaft. Precision is a physical discipline.'",
+
+    "section1": {
+        "title": "15 Years of Field Reality",
+        "content": "Built on 15+ years of global site management and commissioning. We don't solve problems with code alone; we solve them with the knowledge of how metal, water, and pressure interact in the real world.",
+        "quote": "'Discipline in the field. Integrity in the data.'"
+    },
+
+    "section2": {
+        "title": "SHA-256 Immutable Audit",
+        "content": "Every one of the 854 dossiers is digitally sealed. We eliminate the 'Human Factor' in documentation, ensuring that maintenance logs and sensor data remain tamper-proof for insurers and investors."
+    },
+
+    "section3": {
+        "title": "Beyond Hydropower",
+        "content": "This framework is asset-agnostic. From Wind Turbines to Solar Grids, the NC-10.2 protocol ensures physical precision across all critical infrastructure."
+    },
+
+    "sidebar": {
+        "heritage": "15 Years On-Site",
+        "mtbf": "Reliability Guaranteed",
+        "certified": "Forensic Grade"
+    },
+
+    "footer": {
+        "approved": "SYSTEM_NOMINAL_NC102",
+        "signed": "[Your Name / Forensic Consultant]"
+    }
+}
+
+}

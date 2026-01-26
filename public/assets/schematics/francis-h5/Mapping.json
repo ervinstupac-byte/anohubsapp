@@ -1,0 +1,127 @@
+{
+    "schemaVersion": "1.0",
+    "description": "Francis Turbine H5 SVG Component Mapping - Manual path identification for surgical interactivity",
+    "baseFile": "main-hall.svg",
+    "components": {
+        "group-generator": {
+            "label": "Generator Assembly",
+            "region": "top",
+            "approximateCoordinates": {
+                "x": "50%",
+                "y": "15-30%"
+            },
+            "pathIdentifiers": [
+                "Paths representing stator, rotor, and housing - typically at top of turbine section"
+            ],
+            "detailView": "generator-detail.svg",
+            "telemetryKeys": [
+                "rpm",
+                "statorTemp",
+                "bearingVibration"
+            ]
+        },
+        "group-miv": {
+            "label": "Main Inlet Valve",
+            "region": "left-center",
+            "approximateCoordinates": {
+                "x": "10-25%",
+                "y": "45-60%"
+            },
+            "pathIdentifiers": [
+                "Spherical valve assembly paths on penstock inlet"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "sealPressure",
+                "valvePosition"
+            ]
+        },
+        "group-spiral-case": {
+            "label": "Spiral Case",
+            "region": "center",
+            "approximateCoordinates": {
+                "x": "40-60%",
+                "y": "45-65%"
+            },
+            "pathIdentifiers": [
+                "Volute/spiral casing paths surrounding guide vanes"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "casingPressure",
+                "distribution"
+            ]
+        },
+        "group-runner": {
+            "label": "Francis Runner",
+            "region": "center",
+            "approximateCoordinates": {
+                "x": "45-55%",
+                "y": "50-60%"
+            },
+            "pathIdentifiers": [
+                "X-shape turbine blade paths at mechanical center"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "rpm",
+                "thrust",
+                "efficiency"
+            ]
+        },
+        "group-shaft-seal": {
+            "label": "Shaft Seal Assembly",
+            "region": "center-top",
+            "approximateCoordinates": {
+                "x": "45-55%",
+                "y": "35-45%"
+            },
+            "pathIdentifiers": [
+                "Radial packing system between generator and turbine"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "leakageRate",
+                "sealPressure"
+            ]
+        },
+        "group-hpu": {
+            "label": "Hydraulic Power Unit",
+            "region": "right",
+            "approximateCoordinates": {
+                "x": "70-85%",
+                "y": "25-45%"
+            },
+            "pathIdentifiers": [
+                "HPU accumulator and valve control system"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "systemPressure",
+                "oilLevel"
+            ]
+        },
+        "group-draft-tube": {
+            "label": "Draft Tube",
+            "region": "bottom",
+            "approximateCoordinates": {
+                "x": "40-60%",
+                "y": "70-90%"
+            },
+            "pathIdentifiers": [
+                "Conical diffuser paths below runner exit"
+            ],
+            "detailView": null,
+            "telemetryKeys": [
+                "exitVelocity",
+                "backPressure"
+            ]
+        }
+    },
+    "notes": [
+        "This mapping requires manual SVG inspection to assign actual path elements",
+        "Coordinate ranges are approximate based on standard Francis turbine layouts",
+        "group-generator is the only component with a detail view (generator-detail.svg)",
+        "X-Ray mode targets group-spiral-case with stroke-opacity: 0.3"
+    ]
+}

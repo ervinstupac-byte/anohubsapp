@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_Oil_Health/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_H/Francis_SOP_Oil_Health/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Oil Health & Aeration</title>
+    <style>
+        /* Fluid/Scientific Theme - Amber and White */
+        :root {
+            --primary-color: #FF8C00;
+            --secondary-color: #FFA500;
+            --accent-color: #FFD700;
+            --warning-color: #DC143C;
+            --bg-color: #1a1a1a;
+            --text-color: #FFF8DC;
+            --border-color: #FF8C00;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #2a1a00, #1a1a1a);
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(255, 140, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 165, 0, 0.1));
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--primary-color);
+            color: #000;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #000;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .section-title::before {
+            content: "🧪";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background: rgba(255, 140, 0, 0.05);
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background: rgba(220, 20, 60, 0.1);
+        }
+
+        .diagnostic-box {
+            border-left: 5px solid var(--accent-color);
+            background: rgba(255, 215, 0, 0.05);
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            border: 1px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 140, 0, 0.05);
+        }
+
+        .fluid-visual {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 215, 0, 0.1));
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 data-i18n="title">🧪 OIL HEALTH & AERATION DIAGNOSTICS</h1>
+            <h2 data-i18n="subtitle">Hydraulic System Fluid Chemistry</h2>
+            <p style="color: var(--accent-color); font-size: 0.9em; margin-top: 10px;" data-i18n="hdr_desc">
+                Understanding foam, aeration, and contamination in HPU systems</p>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ SAFETY PROTOCOL</h3>
+            <p><strong data-i18n="stop_msg">STOP. READ THIS FIRST.</strong></p>
+            <ul>
+                <li data-i18n="safety_1"><strong>Pressure Release:</strong> Depressurize HPU system before opening any
+                    oil circuit (nitrogen accumulator risk).</li>
+                <li data-i18n="safety_2"><strong>Hot Oil:</strong> Operating temperature can reach 55-65°C. Wear
+                    protective gloves when handling components.</li>
+                <li data-i18n="safety_3"><strong>Fire Risk:</strong> Hydraulic oil is flammable. Keep ignition sources
+                    away during inspection or sampling.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="foaming_title">The Foaming Phenomenon</div>
+
+        <h3 data-i18n="foam_vs_air">Surface Foam vs. Entrained Air (Aeration)</h3>
+        <p data-i18n="diff_states">Two distinct states affecting hydraulic oil, each with different causes and
+            consequences:</p>
+
+        <table class="comparison-table">
+            <tr>
+                <th data-i18n="char">Characteristic</th>
+                <th data-i18n="surf_foam">Surface Foam</th>
+                <th data-i18n="ent_air">Entrained Air (Aeration)</th>
+            </tr>
+            <tr>
+                <td data-i18n="appear"><strong>Appearance</strong></td>
+                <td data-i18n="large_bubbles">Large bubbles on oil surface<br>Visible in sight glass</td>
+                <td data-i18n="milky_oil">Milky, cloudy oil everywhere<br>Microscopic bubbles</td>
+            </tr>
+            <tr>
+                <td data-i18n="location"><strong>Location</strong></td>
+                <td data-i18n="surf_only">Reservoir surface only</td>
+                <td data-i18n="distrib">Distributed throughout oil volume</td>
+            </tr>
+            <tr>
+                <td data-i18n="prim_cause"><strong>Primary Cause</strong></td>
+                <td data-i18n="contam">Contamination (water, detergent)<br>Excessive pump suction velocity</td>
+                <td data-i18n="low_lvl">Low oil level<br>Suction line leak<br>Vortex formation</td>
+            </tr>
+            <tr>
+                <td data-i18n="sys_eff"><strong>System Effect</strong></td>
+                <td data-i18n="lvl_fluct">Level fluctuation<br>Mostly cosmetic issue</td>
+                <td data-i18n="bulk_mod_eff"><strong>Reduces Bulk Modulus</strong><br>Governor becomes
+                    "spongy"<br>Erratic response</td>
+            </tr>
+            <tr>
+                <td data-i18n="sever"><strong>Severity</strong></td>
+                <td data-i18n="mod">Moderate</td>
+                <td data-i18n="crit"><strong>CRITICAL</strong></td>
+            </tr>
+        </table>
+
+        <div class="module">
+            <h3 data-i18n="bulk_mod_title">The Bulk Modulus Problem</h3>
+            <p><strong data-i18n="what_is_bulk">What is Bulk Modulus?</strong> <span data-i18n="bulk_desc">The
+                    "stiffness" of hydraulic oil under pressure. Clean oil has high modulus (fast, precise response).
+                    Aerated oil has low modulus (slow, "spongy" feel).</span></p>
+
+            <p><strong data-i18n="gov_impact">Impact on Governor:</strong></p>
+            <ul>
+                <li data-i18n="norm_oil"><strong>Normal Oil:</strong> Governor Command → Instant wicket gate movement (<
+                        0.5 sec)</li>
+                <li data-i18n="aer_oil"><strong>Aerated Oil:</strong> Governor Command → Delayed, uncertain movement
+                    (1-2 sec lag) → Frequency hunting</li>
+            </ul>
+
+            <p style="color: var(--warning-color); margin-top: 15px;"><strong data-i18n="crit_eff">⚠️ Critical
+                    Effect:</strong> <span data-i18n="crit_eff_desc">Aeration is a major cause of "soft" governor
+                    response and frequency instability on your 1.3 MW units.</span></p>
+        </div>
+
+        <div class="section-title" data-i18n="map_title">Symptom Mapping & Root Causes</div>
+
+        <div class="diagnostic-box">
+            <h3 data-i18n="foam_diag">Foaming - Visual & Causes</h3>
+            <p data-i18n="foam_symp"><strong>Symptom:</strong> Large bubbles (> 1 mm) on oil surface, forming and
+                bursting rapidly.</p>
+
+            <h4 style="color: var(--primary-color);" data-i18n="main_causes">Main Causes:</h4>
+            <ol>
+                <li><strong data-i18n="water_contam">Water Contamination:</strong> <span data-i18n="water_desc">Even
+                        0.1% water can cause severe foaming.</span>
+                    <br><em data-i18n="water_test">Test: Karl Fischer moisture test. Target: < 200 ppm water.</em>
+                </li>
+                <li><strong data-i18n="det_contam">Detergent/Soap Contamination:</strong> <span
+                        data-i18n="det_desc">From improper tank cleaning.</span>
+                    <br><em data-i18n="det_act">Action: Drain, flush with clean oil, refill fresh.</em>
+                </li>
+                <li><strong data-i18n="pump_vel">Excessive Pump Suction Velocity:</strong> <span
+                        data-i18n="vel_desc">Creates surface turbulence.</span>
+                    <br><em data-i18n="vel_chk">Check: Pump inlet velocity should be < 1.2 m/s.</em>
+                </li>
+                <li><strong data-i18n="add_deg">Degraded Anti-Foam Additives:</strong> <span
+                        data-i18n="deg_desc">Expired oil (> 5 years).</span>
+                    <br><em data-i18n="deg_act">Action: Complete oil change.</em>
+                </li>
+            </ol>
+
+            <h4 style="color: var(--warning-color);" data-i18n="diag_proc">Diagnostic Procedure:</h4>
+            <ol>
+                <li data-i18n="proc_1">Observe sight glass while unit running. Note bubble size and persistence.</li>
+                <li data-i18n="proc_2">If large, persistent foam present → Sample oil for water content.</li>
+                <li data-i18n="proc_3">If water > 500 ppm → Drain and refill tank.</li>
+                <li data-i18n="proc_4">If water < 500 ppm but foaming persists → Check pump suction design for
+                        vortices.</li>
+            </ol>
+        </div>
+
+        <div class="diagnostic-box">
+            <h3 data-i18n="aer_diag">Aeration - Visual & Causes</h3>
+            <p data-i18n="aer_symp"><strong>Symptom:</strong> Milky, cloudy appearance throughout volume. Oil looks
+                "whipped" or "emulsified".</p>
+
+            <h4 style="color: var(--primary-color);" data-i18n="aer_causes">Main Causes:</h4>
+            <ol>
+                <li><strong data-i18n="low_oil">Low Oil Level:</strong> <span data-i18n="low_oil_desc">Pump suction
+                        pulls surface vortex, ingesting air.</span>
+                    <br><em data-i18n="low_oil_check">Check: Maintain oil level at 75-85% of sight glass height.</em>
+                </li>
+                <li><strong data-i18n="suct_leak">Suction Line Leak:</strong> <span data-i18n="suct_leak_desc">Air
+                        ingress through loose fittings or cracked hose.</span>
+                    <br><em data-i18n="suct_leak_test">Test: Pressurize suction line with air, spray soapy water to find
+                        leaks.</em>
+                </li>
+                <li><strong data-i18n="seal_dmg">Damaged Shaft Seal:</strong> <span data-i18n="seal_dmg_desc">Pump shaft
+                        seal admits air on suction stroke.</span>
+                    <br><em data-i18n="seal_symp">Symptom: Oil foams rhythmically with pump stroke.</em>
+                </li>
+                <li><strong data-i18n="vortex">Vortex Formation at Suction:</strong> <span
+                        data-i18n="vortex_desc">Improper tank baffling.</span>
+                    <br><em data-i18n="vortex_sol">Solution: Install anti-vortex plate at suction inlet.</em>
+                </li>
+            </ol>
+
+            <h4 style="color: var(--warning-color);" data-i18n="aer_proc">Diagnostic Procedure:</h4>
+            <ol>
+                <li data-i18n="aer_proc_1">Check oil level immediately. If low, top up and observe if cloudiness clears
+                    in 10-15 min.</li>
+                <li data-i18n="aer_proc_2">If level OK, inspect all suction line connections for tightness.</li>
+                <li data-i18n="aer_proc_3">Perform "Leak Test": Isolate suction line, pressurize to 0.5 bar, soap spray
+                    joints.</li>
+                <li data-i18n="aer_proc_4">If no external leaks found → Suspect pump shaft seal. Listen for rhythmic
+                    "whining" sound.</li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="vis_diag_title">Visual Diagnostics - HPU Sight Glass Interpretation</div>
+
+        <div class="fluid-visual">
+            <h3 data-i18n="what_to_look">What to Look For at Sight Glass</h3>
+
+            <h4 style="color: var(--accent-color);" data-i18n="norm_oil_st">Normal Oil</h4>
+            <ul>
+                <li data-i18n="norm_1"><strong>Color:</strong> Clear amber/gold (ISO VG 46 hydraulic oil)</li>
+                <li data-i18n="norm_2"><strong>Transparency:</strong> Can see through glass to opposite side</li>
+                <li data-i18n="norm_3"><strong>Bubbles:</strong> Few or none; present ones should rise and vanish
+                    quickly</li>
+                <li data-i18n="norm_4"><strong>Sediment:</strong> No visible sediment at glass bottom</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="abn_cond">Abnormal Conditions</h4>
+            <table class="comparison-table">
+                <tr>
+                    <th data-i18n="vis_app">Visual Appearance</th>
+                    <th data-i18n="diag">Diagnosis</th>
+                    <th data-i18n="act">Action</th>
+                </tr>
+                <tr>
+                    <td data-i18n="milky"><strong>Milky white throughout</strong></td>
+                    <td data-i18n="aer_diag_tab">Aeration (entrained air)</td>
+                    <td data-i18n="aer_act">Check level, look for leaks</td>
+                </tr>
+                <tr>
+                    <td data-i18n="large_bub"><strong>Large bubbles only on surface</strong></td>
+                    <td data-i18n="foam_diag_tab">Surface foaming</td>
+                    <td data-i18n="foam_act">Test for water contamination</td>
+                </tr>
+                <tr>
+                    <td data-i18n="dark"><strong>Dark brown/black color</strong></td>
+                    <td data-i18n="oxid_diag">Oxidation/oil degradation</td>
+                    <td data-i18n="oxid_act">Perform oil analysis, schedule change</td>
+                </tr>
+                <tr>
+                    <td data-i18n="metal"><strong>Visible metal particles</strong></td>
+                    <td data-i18n="wear_diag">Pump or valve wear</td>
+                    <td data-i18n="wear_act">Drain oil, inspect pump internals</td>
+                </tr>
+                <tr>
+                    <td data-i18n="water_drop"><strong>Water droplets (separate layer)</strong></td>
+                    <td data-i18n="free_water">Free water contamination</td>
+                    <td data-i18n="water_act">Drain water, find ingress source</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section-title" data-i18n="leak_det_title">Governor Leak Detection - "Drying" Procedure</div>
+
+        <div class="module">
+            <h3 data-i18n="int_leak">Identifying Internal Leaks in Governor Valves</h3>
+            <p data-i18n="leak_purpose"><strong>Purpose:</strong> Determine if oil is leaking internally between pilot
+                valve and main distributing valve, causing slow response.</p>
+
+            <h4 style="color: var(--accent-color);" data-i18n="proc_steps">Procedure Steps:</h4>
+            <ol>
+                <li><strong data-i18n="isol_sys">Isolate System:</strong> <span data-i18n="isol_desc">Close main
+                        isolation valve to governor. Release pressure.</span></li>
+                <li><strong data-i18n="pre_chk">Visual Pre-Check:</strong> <span data-i18n="pre_chk_desc">Inspect all
+                        external joints for oil weeping. Wipe clean and mark with chalk.</span></li>
+                <li><strong data-i18n="dry_test">Drying Test:</strong>
+                    <ul>
+                        <li data-i18n="dry_1">Remove oil from valve housing with compressed air (low pressure, 2-3 bar).
+                        </li>
+                        <li data-i18n="dry_2">Let system sit for 30 minutes.</li>
+                        <li data-i18n="dry_3">Re-inspect marked areas for fresh oil presence.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="leak_class">Leak Classification:</strong>
+                    <ul>
+                        <li data-i18n="pilot_leak"><strong>Pilot Valve Leak:</strong> Oil appears around pilot piston
+                            housing → Replace seals.</li>
+                        <li data-i18n="main_leak"><strong>Main Valve Leak:</strong> Oil appears on main valve body →
+                            Repair main valve.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="maint_sched">Maintenance Schedule & Oil Analysis</div>
+        <div class="module">
+            <ul>
+                <li data-i18n="daily_chk"><strong>Daily:</strong> Visual check of HPU sight glass for cloudiness or
+                    bubbles.</li>
+                <li data-i18n="weekly_chk"><strong>Weekly:</strong> Check oil level, top up if below 75% of glass.</li>
+                <li data-i18n="mth_chk"><strong>Monthly:</strong> Acoustic scan of HPU pump for cavitation sounds.</li>
+                <li data-i18n="quart_chk"><strong>Quarterly:</strong> Oil analysis (viscosity, water content, particle
+                    count).</li>
+                <li data-i18n="yr_chk"><strong>Annually:</strong> Complete oil change if any of following:
+                    <ul>
+                        <li data-i18n="cond_1">Water content > 500 ppm</li>
+                        <li data-i18n="cond_2">Viscosity change > 10% from ISO VG 46</li>
+                        <li data-i18n="cond_3">Particle contamination > ISO 18/16/13</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3 data-i18n="samp_proc">Oil Sampling Procedure</h3>
+            <ol>
+                <li data-i18n="samp_1">Run unit for 30 minutes to reach operating temp (50-60°C).</li>
+                <li data-i18n="samp_2">Take sample from middle depth of tank (not surface, not bottom) with clean
+                    syringe.</li>
+                <li data-i18n="samp_3">Fill bottle, label with date, unit ID, running hours.</li>
+                <li data-i18n="samp_4">Send to lab for analysis.</li>
+            </ol>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "🧪 OIL HEALTH & AERATION DIAGNOSTICS",
+                subtitle: "Hydraulic System Fluid Chemistry",
+                hdr_desc: "Understanding foam, aeration, and contamination in HPU systems",
+                safety_title: "⚠️ SAFETY PROTOCOL",
+                stop_msg: "STOP. READ THIS FIRST.",
+                safety_1: "<strong>Pressure Release:</strong> Depressurize HPU system before opening any oil circuit (nitrogen accumulator risk).",
+                safety_2: "<strong>Hot Oil:</strong> Operating temperature can reach 55-65°C. Wear protective gloves when handling components.",
+                safety_3: "<strong>Fire Risk:</strong> Hydraulic oil is flammable. Keep ignition sources away during inspection or sampling.",
+                foaming_title: "The Foaming Phenomenon",
+                foam_vs_air: "Surface Foam vs. Entrained Air (Aeration)",
+                diff_states: "Two distinct states affecting hydraulic oil, each with different causes and consequences:",
+                char: "Characteristic",
+                surf_foam: "Surface Foam",
+                ent_air: "Entrained Air (Aeration)",
+                appear: "<strong>Appearance</strong>",
+                large_bubbles: "Large bubbles on oil surface<br>Visible in sight glass",
+                milky_oil: "Milky, cloudy oil everywhere<br>Microscopic bubbles",
+                location: "<strong>Location</strong>",
+                surf_only: "Reservoir surface only",
+                distrib: "Distributed throughout oil volume",
+                prim_cause: "<strong>Primary Cause</strong>",
+                contam: "Contamination (water, detergent)<br>Excessive pump suction velocity",
+                low_lvl: "Low oil level<br>Suction line leak<br>Vortex formation",
+                sys_eff: "<strong>System Effect</strong>",
+                lvl_fluct: "Level fluctuation<br>Mostly cosmetic issue",
+                bulk_mod_eff: "<strong>Reduces Bulk Modulus</strong><br>Governor becomes \"spongy\"<br>Erratic response",
+                sever: "<strong>Severity</strong>",
+                mod: "Moderate",
+                crit: "<strong>CRITICAL</strong>",
+                bulk_mod_title: "The Bulk Modulus Problem",
+                what_is_bulk: "What is Bulk Modulus?",
+                bulk_desc: "The \"stiffness\" of hydraulic oil under pressure. Clean oil has high modulus (fast, precise response). Aerated oil has low modulus (slow, \"spongy\" feel).",
+                gov_impact: "Impact on Governor:",
+                norm_oil: "<strong>Normal Oil:</strong> Governor Command → Instant wicket gate movement (< 0.5 sec)",
+                aer_oil: "<strong>Aerated Oil:</strong> Governor Command → Delayed, uncertain movement (1-2 sec lag) → Frequency hunting",
+                crit_eff: "⚠️ Critical Effect:",
+                crit_eff_desc: "Aeration is a major cause of \"soft\" governor response and frequency instability on your 1.3 MW units.",
+                map_title: "Symptom Mapping & Root Causes",
+                foam_diag: "Foaming - Visual & Causes",
+                foam_symp: "<strong>Symptom:</strong> Large bubbles (> 1 mm) on oil surface, forming and bursting rapidly.",
+                main_causes: "Main Causes:",
+                water_contam: "Water Contamination:",
+                water_desc: "Even 0.1% water can cause severe foaming.",
+                water_test: "Test: Karl Fischer moisture test. Target: < 200 ppm water.",
+                det_contam: "Detergent/Soap Contamination:",
+                det_desc: "From improper tank cleaning.",
+                det_act: "Action: Drain, flush with clean oil, refill fresh.",
+                pump_vel: "Excessive Pump Suction Velocity:",
+                vel_desc: "Creates surface turbulence.",
+                vel_chk: "Check: Pump inlet velocity should be < 1.2 m/s.",
+                add_deg: "Degraded Anti-Foam Additives:",
+                deg_desc: "Expired oil (> 5 years).",
+                deg_act: "Action: Complete oil change.",
+                diag_proc: "Diagnostic Procedure:",
+                proc_1: "Observe sight glass while unit running. Note bubble size and persistence.",
+                proc_2: "If large, persistent foam present → Sample oil for water content.",
+                proc_3: "If water > 500 ppm → Drain and refill tank.",
+                proc_4: "If water < 500 ppm but foaming persists → Check pump suction design for vortices.",
+                aer_diag: "Aeration - Visual & Causes",
+                aer_symp: "<strong>Symptom:</strong> Milky, cloudy appearance throughout volume. Oil looks \"whipped\" or \"emulsified\".",
+                aer_causes: "Main Causes:",
+                low_oil: "Low Oil Level:",
+                low_oil_desc: "Pump suction pulls surface vortex, ingesting air.",
+                low_oil_check: "Check: Maintain oil level at 75-85% of sight glass height.",
+                suct_leak: "Suction Line Leak:",
+                suct_leak_desc: "Air ingress through loose fittings or cracked hose.",
+                suct_leak_test: "Test: Pressurize suction line with air, spray soapy water to find leaks.",
+                seal_dmg: "Damaged Shaft Seal:",
+                seal_dmg_desc: "Pump shaft seal admits air on suction stroke.",
+                seal_symp: "Symptom: Oil foams rhythmically with pump stroke.",
+                vortex: "Vortex Formation at Suction:",
+                vortex_desc: "Improper tank baffling.",
+                vortex_sol: "Solution: Install anti-vortex plate at suction inlet.",
+                aer_proc: "Diagnostic Procedure:",
+                aer_proc_1: "Check oil level immediately. If low, top up and observe if cloudiness clears in 10-15 min.",
+                aer_proc_2: "If level OK, inspect all suction line connections for tightness.",
+                aer_proc_3: "Perform \"Leak Test\": Isolate suction line, pressurize to 0.5 bar, soap spray joints.",
+                aer_proc_4: "If no external leaks found → Suspect pump shaft seal. Listen for rhythmic \"whining\" sound.",
+                vis_diag_title: "Visual Diagnostics - HPU Sight Glass Interpretation",
+                what_to_look: "What to Look For at Sight Glass",
+                norm_oil_st: "Normal Oil",
+                norm_1: "<strong>Color:</strong> Clear amber/gold (ISO VG 46 hydraulic oil)",
+                norm_2: "<strong>Transparency:</strong> Can see through glass to opposite side",
+                norm_3: "<strong>Bubbles:</strong> Few or none; present ones should rise and vanish quickly",
+                norm_4: "<strong>Sediment:</strong> No visible sediment at glass bottom",
+                abn_cond: "Abnormal Conditions",
+                vis_app: "Visual Appearance",
+                diag: "Diagnosis",
+                act: "Action",
+                milky: "<strong>Milky white throughout</strong>",
+                aer_diag_tab: "Aeration (entrained air)",
+                aer_act: "Check level, look for leaks",
+                large_bub: "<strong>Large bubbles only on surface</strong>",
+                foam_diag_tab: "Surface foaming",
+                foam_act: "Test for water contamination",
+                dark: "<strong>Dark brown/black color</strong>",
+                oxid_diag: "Oxidation/oil degradation",
+                oxid_act: "Perform oil analysis, schedule change",
+                metal: "<strong>Visible metal particles</strong>",
+                wear_diag: "Pump or valve wear",
+                wear_act: "Drain oil, inspect pump internals",
+                water_drop: "<strong>Water droplets (separate layer)</strong>",
+                free_water: "Free water contamination",
+                water_act: "Drain water, find ingress source",
+                leak_det_title: "Governor Leak Detection - \"Drying\" Procedure",
+                int_leak: "Identifying Internal Leaks in Governor Valves",
+                leak_purpose: "<strong>Purpose:</strong> Determine if oil is leaking internally between pilot valve and main distributing valve, causing slow response.",
+                proc_steps: "Procedure Steps:",
+                isol_sys: "Isolate System:",
+                isol_desc: "Close main isolation valve to governor. Release pressure.",
+                pre_chk: "Visual Pre-Check:",
+                pre_chk_desc: "Inspect all external joints for oil weeping. Wipe clean and mark with chalk.",
+                dry_test: "Drying Test:",
+                dry_1: "Remove oil from valve housing with compressed air (low pressure, 2-3 bar).",
+                dry_2: "Let system sit for 30 minutes.",
+                dry_3: "Re-inspect marked areas for fresh oil presence.",
+                leak_class: "Leak Classification:",
+                pilot_leak: "<strong>Pilot Valve Leak:</strong> Oil appears around pilot piston housing → Replace seals.",
+                main_leak: "<strong>Main Valve Leak:</strong> Oil appears on main valve body → Repair main valve.",
+                maint_sched: "Maintenance Schedule & Oil Analysis",
+                daily_chk: "<strong>Daily:</strong> Visual check of HPU sight glass for cloudiness or bubbles.",
+                weekly_chk: "<strong>Weekly:</strong> Check oil level, top up if below 75% of glass.",
+                mth_chk: "<strong>Monthly:</strong> Acoustic scan of HPU pump for cavitation sounds.",
+                quart_chk: "<strong>Quarterly:</strong> Oil analysis (viscosity, water content, particle count).",
+                yr_chk: "<strong>Annually:</strong> Complete oil change if any of following:",
+                cond_1: "Water content > 500 ppm",
+                cond_2: "Viscosity change > 10% from ISO VG 46",
+                cond_3: "Particle contamination > ISO 18/16/13",
+                samp_proc: "Oil Sampling Procedure",
+                samp_1: "Run unit for 30 minutes to reach operating temp (50-60°C).",
+                samp_2: "Take sample from middle depth of tank (not surface, not bottom) with clean syringe.",
+                samp_3: "Fill bottle, label with date, unit ID, running hours.",
+                samp_4: "Send to lab for analysis.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "🧪 ZDRAVLJE ULJA & DIJAGNOSTIKA AERACIJE",
+                subtitle: "Hemija Fluida Hidrauličnih Sistema",
+                hdr_desc: "Razumijevanje pjene, aeracije i kontaminacije u HPU sistemima",
+                safety_title: "⚠️ SIGURNOSNI PROTOKOL",
+                stop_msg: "STOP. PROČITAJ OVO PRVO.",
+                safety_1: "<strong>Otpuštanje Pritiska:</strong> Depresurizuj HPU sistem prije otvaranja bilo kojeg uljnog kruga (rizik dušičnog akumulatora).",
+                safety_2: "<strong>Vruće Ulje:</strong> Radna temperatura može dostići 55-65°C. Nosi zaštitne rukavice pri rukovanju komponentama.",
+                safety_3: "<strong>Rizik od Požara:</strong> Hidraulično ulje je zapaljivo. Drži izvore paljenja podalje tokom inspekcije ili uzorkovanja.",
+                foaming_title: "Fenomen Pjenjenja",
+                foam_vs_air: "Površinska Pjena vs. Zarobljeni Zrak (Aeracija)",
+                diff_states: "Dva različita stanja utiču na hidraulično ulje, svako sa drugačijim uzrocima i posljedicama:",
+                char: "Karakteristika",
+                surf_foam: "Površinska Pjena",
+                ent_air: "Zarobljeni Zrak (Aeracija)",
+                appear: "<strong>Izgled</strong>",
+                large_bubbles: "Veliki mjehuri na površini ulja<br>Vidljivi na staklu",
+                milky_oil: "Mliječno, mutno ulje svuda<br>Mikroskopski mjehurići",
+                location: "<strong>Lokacija</strong>",
+                surf_only: "Samo površina rezervoara",
+                distrib: "Distribuirano kroz zapreminu ulja",
+                prim_cause: "<strong>Primarni Uzrok</strong>",
+                contam: "Kontaminacija (voda, deterdžent)<br>Prevelika brzina usisa pumpe",
+                low_lvl: "Nizak nivo ulja<br>Curenje usisne linije<br>Formiranje vrtloga",
+                sys_eff: "<strong>Efekt na Sistem</strong>",
+                lvl_fluct: "Fluktuacija nivoa<br>Uglavnom kozmetički problem",
+                bulk_mod_eff: "<strong>Smanjuje modul stišljivosti</strong><br>Regulator postaje \"spužvast\"<br>Neredovan odziv",
+                sever: "<strong>Ozbiljnost</strong>",
+                mod: "Umjerena",
+                crit: "<strong>KRITIČNA</strong>",
+                bulk_mod_title: "Problem Modula Stišljivosti (Bulk Modulus)",
+                what_is_bulk: "Šta je Bulk Modulus?",
+                bulk_desc: "\"Krutost\" hidrauličnog ulja pod pritiskom. Čisto ulje ima visok modul (brz, precizan odziv). Ulje sa zrakom ima nizak modul (spor, \"spužvast\" osjećaj).",
+                gov_impact: "Uticaj na Regulator:",
+                norm_oil: "<strong>Normalno Ulje:</strong> Komanda Regulatora → Trenutno kretanje sprovodnih lopatica (< 0.5 sec)",
+                aer_oil: "<strong>Aerirano Ulje:</strong> Komanda Regulatora → Odgođeno, nesigurno kretanje (1-2 sec kašnjenja) → Ljuljanje frekvencije",
+                crit_eff: "⚠️ Kritični Efekt:",
+                crit_eff_desc: "Aeracija je glavni uzrok \"mekog\" odziva regulatora i nestabilnosti frekvencije na vašim 1.3 MW agregatima.",
+                map_title: "Mapiranje Simptoma & Glavni Uzroci",
+                foam_diag: "Pjenjenje - Vizuelno & Uzroci",
+                foam_symp: "<strong>Simptom:</strong> Veliki mjehuri (> 1 mm) na površini ulja, brzo formiranje i pucanje.",
+                main_causes: "Glavni Uzroci:",
+                water_contam: "Kontaminacija Vodom:",
+                water_desc: "Čak i 0.1% vode može uzrokovati ozbiljno pjenjenje.",
+                water_test: "Test: Karl Fischer test vlage. Cilj: < 200 ppm vode.",
+                det_contam: "Kontaminacija Deterdžentom/Sapunom:",
+                det_desc: "Od nepravilnog čišćenja rezervoara.",
+                det_act: "Akcija: Ispusti, isperi čistim uljem, napuni svježim uljem.",
+                pump_vel: "Prevelika Brzina Usisa Pumpe:",
+                vel_desc: "Stvara turbulenciju na površini ulja.",
+                vel_chk: "Provjera: Ulazna brzina pumpe treba biti < 1.2 m/s.",
+                add_deg: "Degradirani Antipjenušavi Aditivi:",
+                deg_desc: "Ulje isteklog roka (> 5 godina).",
+                deg_act: "Akcija: Kompletna zamjena ulja.",
+                diag_proc: "Dijagnostička Procedura:",
+                proc_1: "Posmatraj staklo dok agregat radi. Bilježi veličinu i trajnost mjehura.",
+                proc_2: "Ako je prisutna velika, trajna pjena → Uzorkuj ulje za sadržaj vode.",
+                proc_3: "Ako je voda > 500 ppm → Ispusti i ponovo napuni rezervoar.",
+                proc_4: "Ako je voda < 500 ppm ali pjenjenje i dalje traje → Provjeri dizajn usisa pumpe na vrtloge.",
+                aer_diag: "Aeracija - Vizuelno & Uzroci",
+                aer_symp: "<strong>Simptom:</strong> Mliječan, mutan izgled kroz cijelu zapreminu. Ulje izgleda \"umućeno\" ili \"emulgirano\".",
+                aer_causes: "Glavni Uzroci:",
+                low_oil: "Nizak Nivo Ulja:",
+                low_oil_desc: "Usis pumpe povlači površinski vrtlog, uvlačeći zrak.",
+                low_oil_check: "Provjera: Održavaj nivo ulja na 75-85% visine stakla.",
+                suct_leak: "Curenje Usisne Linije:",
+                suct_leak_desc: "Ulaz zraka kroz labave spojeve ili napuknuto crijevo.",
+                suct_leak_test: "Test: Presurizuj usisnu liniju zrakom, prskaj sapunicom da nađeš curenja.",
+                seal_dmg: "Oštećen Zaptivač Vratila:",
+                seal_dmg_desc: "Zaptivač pumpe pušta zrak na usisnom taktu.",
+                seal_symp: "Simptom: Ulje pjeni ritmično sa taktom pumpe.",
+                vortex: "Formiranje Vrtloga na Usisu:",
+                vortex_desc: "Nepravilno postavljanje pregrada u rezervoaru.",
+                vortex_sol: "Rješenje: Instaliraj anti-vrtložnu ploču na ulazu usisa.",
+                aer_proc: "Dijagnostička Procedura:",
+                aer_proc_1: "Odmah provjeri nivo ulja. Ako je nizak, dopuni i posmatraj da li se mutnoća bistri za 10-15 min.",
+                aer_proc_2: "Ako je nivo OK, pregledaj sve spojeve usisne linije na zategnutost.",
+                aer_proc_3: "Izvrši \"Leak Test\": Izoluj usisnu liniju, naduvaj na 0.5 bar, prskaj spojeve sapunicom.",
+                aer_proc_4: "Ako se ne nađu vanjska curenja → Sumnjaj na zaptivač vratila pumpe. Slušaj ritmični zvuk \"cviljenja\".",
+                vis_diag_title: "Vizuelna Dijagnostika - Interpretacija Stakla HPU",
+                what_to_look: "Šta Tražiti na Kontrolnom Staklu",
+                norm_oil_st: "Normalno Ulje",
+                norm_1: "<strong>Boja:</strong> Bistra amber/zlatna (ISO VG 46 hidraulično ulje)",
+                norm_2: "<strong>Prozirnost:</strong> Može se vidjeti kroz staklo na suprotnu stranu",
+                norm_3: "<strong>Mjehuri:</strong> Malo ili nimalo; prisutni trebaju brzo izbiti i nestati",
+                norm_4: "<strong>Talog:</strong> Nema vidljivog taloga na dnu stakla",
+                abn_cond: "Abnormalna Stanja",
+                vis_app: "Vizuelni Izgled",
+                diag: "Dijagnoza",
+                act: "Akcija",
+                milky: "<strong>Mliječno bijelo svuda</strong>",
+                aer_diag_tab: "Aeracija (zarobljeni zrak)",
+                aer_act: "Provjeri nivo, traži curenja",
+                large_bub: "<strong>Veliki mjehuri samo na površini</strong>",
+                foam_diag_tab: "Površinsko pjenjenje",
+                foam_act: "Testiraj na kontaminaciju vodom",
+                dark: "<strong>Tamno smeđa/crna boja</strong>",
+                oxid_diag: "Oksidacija/degradacija ulja",
+                oxid_act: "Izvrši analizu ulja, planiraj zamjenu",
+                metal: "<strong>Vidljive metalne čestice</strong>",
+                wear_diag: "Habanje pumpe ili ventila",
+                wear_act: "Ispusti ulje, pregledaj unutrašnjost pumpe",
+                water_drop: "<strong>Kapljice vode (odvojen sloj)</strong>",
+                free_water: "Kontaminacija slobodnom vodom",
+                water_act: "Ispusti vodu, nađi izvor ulaza",
+                leak_det_title: "Detekcija Curenja Regulatora - Procedura \"Sušenja\"",
+                int_leak: "Identifikacija Unutrašnjih Curenja u Ventilima Regulatora",
+                leak_purpose: "<strong>Svrha:</strong> Utvrditi da li ulje curi interno između pilot ventila i glavnog razvodnog ventila, uzrokujući spor odziv.",
+                proc_steps: "Koraci Procedure:",
+                isol_sys: "Izoluj Sistem:",
+                isol_desc: "Zatvori glavni izolacioni ventil prema regulatoru. Oslobodi pritisak.",
+                pre_chk: "Vizuelna Pred-Provjera:",
+                pre_chk_desc: "Pregledaj sve vanjske spojeve na curenje ulja. Obriši i označi kredom.",
+                dry_test: "Test Sušenja:",
+                dry_1: "Ukloni ulje iz kućišta ventila komprimiranim zrakom (nizak pritisak, 2-3 bar).",
+                dry_2: "Ostavi sistem da stoji 30 minuta.",
+                dry_3: "Ponovo pregledaj označena područja na prisustvo novog ulja.",
+                leak_class: "Klasifikacija Curenja:",
+                pilot_leak: "<strong>Curenje Pilot Ventila:</strong> Ulje se pojavljuje oko kućišta klipa pilota → Zamijeni zaptivače.",
+                main_leak: "<strong>Curenje Glavnog ventila:</strong> Ulje se pojavljuje na tijelu glavnog ventila → Repariraj glavni ventil.",
+                maint_sched: "Raspored Održavanja & Analiza Ulja",
+                daily_chk: "<strong>Dnevno:</strong> Vizuelna provjera HPU stakla na mutnoću ili mjehure.",
+                weekly_chk: "<strong>Sedmično:</strong> Provjeri nivo ulja, dopuni ako je ispod 75% stakla.",
+                mth_chk: "<strong>Mjesečno:</strong> Akustički sken HPU pumpe na zvukove kavitacije.",
+                quart_chk: "<strong>Kvartalno:</strong> Analiza ulja (viskozitet, sadržaj vode, broj čestica).",
+                yr_chk: "<strong>Godišnje:</strong> Kompletna zamjena ulja ako je bilo šta od navedenog:",
+                cond_1: "Sadržaj vode > 500 ppm",
+                cond_2: "Promjena viskoziteta > 10% od ISO VG 46",
+                cond_3: "Kontaminacija čestica > ISO 18/16/13",
+                samp_proc: "Procedura Uzorkovanja Ulja",
+                samp_1: "Pokreni agregat 30 minuta da postigne radnu temperaturu (50-60°C).",
+                samp_2: "Uzmi uzorak sa srednje dubine rezervoara (ne površina, ne dno) čistom špricom.",
+                samp_3: "Napuni bocu, označi datumom, ID jedinice, radnim satima.",
+                samp_4: "Pošalji u laboratoriju na analizu.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

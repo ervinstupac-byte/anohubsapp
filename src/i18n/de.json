@@ -1,0 +1,116 @@
+{
+  "common": {
+    "hub": {
+      "welcome": "Willkommen, {{name}}",
+      "subtitle": "Globale Plattform zur Durchsetzung von Exzellenzstandards.",
+      "operationalModules": "Betriebsmodule",
+      "strategicIntelligence": "Strategische Intelligenz",
+      "knowledgeCulture": "Wissen & Kultur",
+      "systemStatusConnecting": "VERBINDUNG...",
+      "systemStatusOperational": "BETRIEBSBEREIT",
+      "risks": "Risiken Erkannt",
+      "designs": "Designs Gespeichert",
+      "fleetOutput": "Flottenleistung",
+      "riskFactors": "Risikofaktoren",
+      "activeContext": "Aktiver Kontext",
+      "vision": "Vision",
+      "manifesto": "MANIFEST",
+      "footerText": "Engineered for Perfection",
+      "operatorId": "Betreiber-ID",
+      "tagline": "Architekten der Immunität",
+      "info": "INFO",
+      "copyright": "© 2025 Anohubs Inc.",
+      "protocol": "PROTOKOLL FÜR TECHNISCHE IMMUNITÄT",
+      "diagnostic_hub": "Diagnose-Hub"
+    },
+    "modules": {
+      "riskAssessment": "Risikobewertung",
+      "riskAssessmentDesc": "Identifizieren Sie die 'Ausführungslücke' vor dem Ausfall.",
+      "riskReport": "Master-Projektdossier",
+      "riskReportDesc": "Konsolidierte Unternehmensberichte.",
+      "hppBuilder": "HPP Design Studio",
+      "hppBuilderDesc": "Physikbasierte Turbinenauslegung & Simulation.",
+      "installationGuarantee": "Installationsstandard",
+      "installationGuaranteeDesc": "Durchsetzung des 0,05 mm/m Protokolls.",
+      "globalMap": "Globale Bestands Karte",
+      "globalMapDesc": "Geospatiale Asset-Intelligenz.",
+      "investorBriefing": "Investorenbriefing",
+      "investorBriefingDesc": "Finanz-KPIs und Risikoauswirkungen.",
+      "contractManagement": "Vertrag & Recht",
+      "contractManagementDesc": "Gewährleistungsschutz durch Daten.",
+      "digitalIntegrity": "Digitale Integrität",
+      "digitalIntegrityDesc": "Unveränderlicher Blockchain-Nachweis.",
+      "revitalizationStrategy": "Revitalisierungsstrategie",
+      "revitalizationStrategyDesc": "Strategien zur Lebensdauerverlängerung.",
+      "library": "Komponentenbibliothek",
+      "libraryDesc": "Fehlermodi & KPIs.",
+      "standardOfExcellence": "Standard der Exzellenz",
+      "standardOfExcellenceDesc": "Das 0,05 mm/m Manifest.",
+      "phaseGuide": "Projektphasen-Leitfaden",
+      "phaseGuideDesc": "Durchsetzung des Projektlebenszyklus.",
+      "hppImprovements": "HPP Ino-Hub",
+      "hppImprovementsDesc": "Innovationsverfolgung.",
+      "riverWildlife": "Fluss & Wildnis",
+      "riverWildlifeDesc": "Umweltmandat.",
+      "genderEquity": "Geschlechtergerechtigkeit",
+      "genderEquityDesc": "HR-Strategie & Kultur.",
+      "digitalIntroduction": "Digitale Einführung",
+      "maintenance": "Wartungs-Engine"
+    },
+    "sidebar": {
+      "fleetOverview": "FLOTTENÜBERSICHT",
+      "shaftAlignment": "Wellenausrichtung",
+      "hydraulicMaintenance": "Hydraulische Wartung",
+      "boltTorque": "Bolzendrehmoment",
+      "shadowEngineer": "Schatteningenieur",
+      "intuitionLog": "Intuitions-Logbuch",
+      "structuralIntegrity": "Strukturelle Integrität",
+      "operations": "OPERATIONEN",
+      "maintenanceLogbook": "Wartungsbuch",
+      "strategy": "STRATEGIE",
+      "toolboxAnalytics": "Werkzeugkasten-Analytik",
+      "knowledge": "WISSEN",
+      "exitToSite": "Zurück zur Website",
+      "version": "CDR_X_V4.2",
+      "connected": "VERBUNDEN",
+      "offline": "OFFLINE"
+    },
+    "actions": {
+      "back": "Zurück zum Hub",
+      "previewPrint": "Vorschau & Drucken",
+      "cancel": "Abbrechen",
+      "close": "Schließen"
+    },
+    "assetPicker": {
+      "selectContext": "Asset-Kontext wählen",
+      "registerNew": "+ Neues Asset registrieren",
+      "modalTitle": "Neues Asset registrieren",
+      "labelName": "Asset Name",
+      "labelType": "Turbinentyp",
+      "labelLocation": "Standort",
+      "labelCapacity": "Kapazität (MW)",
+      "registerButton": "Asset registrieren"
+    }
+  },
+  "specialized": {
+    "status": {
+      "normal": "System Nominal",
+      "normalDesc": "Alle spezialisierten Parameter liegen innerhalb der akzeptablen technischen Toleranzen."
+    }
+  },
+  "system": {
+    "auth": {
+      "signOut": "Abmelden",
+      "accessDenied": "Zugriff verweigert - Bitte anmelden",
+      "loading": "Authentifizierung..."
+    },
+    "login": {
+      "title": "Anmelden bei AnoHUB",
+      "subtitle": "Unternehmenszugang",
+      "emailLabel": "E-Mail-Adresse",
+      "passwordLabel": "Passwort",
+      "signInButton": "Anmelden",
+      "guestButton": "Als Gast fortfahren"
+    }
+  }
+}

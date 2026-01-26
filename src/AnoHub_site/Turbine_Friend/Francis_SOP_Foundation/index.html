@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Foundation/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Foundation/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Foundation Integrity</title>
+    <style>
+        :root {
+            --primary-color: #78350F;
+            --secondary-color: #92400E;
+            --accent-color: #A8A29E;
+            --warning-color: #DC2626;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #D6D3D1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(120, 53, 15, 0.15);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "🔨";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background-color: #FEF2F2;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #FEF3C7;
+        }
+
+        .structural {
+            border-left: 5px solid var(--accent-color);
+            background-color: #F5F5F4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .visual-aid {
+            border: 2px dashed var(--accent-color);
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .formula {
+            background: linear-gradient(135deg, #FEF3C7, #F5F5F4);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 data-i18n="title">🔨 Foundation Integrity</h1>
+            <h2 data-i18n="subtitle">Structural Stability & Grouting Verification</h2>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ MANDATORY SAFETY PROTOCOL</h3>
+            <p><strong data-i18n="stop">STOP. READ THIS FIRST.</strong></p>
+            <ul>
+                <li><strong data-i18n="shutdown">Unit Shutdown:</strong> <span data-i18n="shutdown_desc">Foundation
+                        inspection requires unit shutdown and mechanical isolation.</span></li>
+                <li><strong data-i18n="lifting">Heavy Lifting:</strong> <span data-i18n="lifting_desc">If anchor bolt
+                        replacement is required, lifting equipment is needed. Ensure load binding certificates.</span>
+                </li>
+                <li><strong data-i18n="chemical">Chemical Hazards:</strong> <span data-i18n="chemical_desc">Epoxy resins
+                        contain volatile compounds (VOC). Use in well-ventilated area with masks.</span></li>
+                <li><strong data-i18n="confined">Confined Space:</strong> <span data-i18n="confined_desc">Turbine pit
+                        may be classified as confined space. Follow entry protocols.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="hollow_test_title">'Hollow' Test: Acoustic Concrete Verification</div>
+        <div class="module technical">
+            <h3 data-i18n="why_important">Why Foundation Integrity Matters</h3>
+            <p data-i18n="why_desc">The turbine and generator are mounted on a <strong>concrete foundation</strong> with
+                grout filling the gap between equipment feet and floor. If grout detaches or creates air pockets:</p>
+            <ul>
+                <li><strong data-i18n="vibration_amp">Vibration Amplification:</strong> <span
+                        data-i18n="vibration_desc">Loss of stiffness allows vibration increase.</span></li>
+                <li><strong data-i18n="misalignment">Loss of Alignment:</strong> <span
+                        data-i18n="misalignment_desc">Equipment can shift, causing shaft imbalance.</span></li>
+                <li><strong data-i18n="stress">Stress Concentration:</strong> <span data-i18n="stress_desc">Uneven
+                        support creates high stress points on the frame.</span></li>
+                <li><strong data-i18n="bearing_fail">Bearing Failure:</strong> <span
+                        data-i18n="bearing_desc">Misalignment accelerates bearing wear.</span></li>
+            </ul>
+
+            <h3 data-i18n="hammer_proc">Hammer Test Procedure</h3>
+            <ol>
+                <li><strong data-i18n="select_hammer">Select Hammer:</strong> <span data-i18n="select_hammer_desc">Use a
+                        small locksmith hammer (200-300g) or geological hammer.</span></li>
+                <li><strong data-i18n="identify_zones">Identify Zones:</strong> <span
+                        data-i18n="identify_zones_desc">Focus on grout around turbine feet, generator, and anchor bolt
+                        plates.</span></li>
+                <li><strong data-i18n="tap_system">Tap Systematically:</strong> <span data-i18n="tap_desc">Tap the grout
+                        surface in a grid pattern (every 10-15 cm).</span></li>
+                <li><strong data-i18n="listen_sound">Listen to Sound:</strong>
+                    <ul>
+                        <li><strong data-i18n="solid_grout">Solid Grout:</strong> <span
+                                data-i18n="solid_desc">High-frequency, sharp "ting" sound.</span></li>
+                        <li><strong data-i18n="hollow_grout">Delaminated/Hollow:</strong> <span
+                                data-i18n="hollow_desc">Low-frequency, dull "thud" or "hollow" sound.</span></li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="mark_defects">Mark Defects:</strong> <span data-i18n="mark_desc">Use chalk to
+                        mark all hollow areas.</span></li>
+            </ol>
+
+            <div class="visual-aid" data-i18n="visual_aid">
+                [Visualization: Hammer Test]<br>
+                Solid Concrete: "TING!" (High pitch)<br>
+                Hollow/Detached: "THUD" (Low pitch, echo)
+            </div>
+
+            <div class="module structural">
+                <strong data-i18n="tech_note">💡 Technical Note:</strong> <span data-i18n="tech_note_desc">Hollow sound
+                    indicates air pockets or detachment between grout and concrete floor. This is often caused by
+                    shrinkage during curing, vibrations, or poor installation.</span>
+            </div>
+
+            <h3 data-i18n="documentation">Documentation</h3>
+            <ul>
+                <li data-i18n="doc_1">Sketch map of turbine/generator foundation.</li>
+                <li data-i18n="doc_2">Mark all hollow areas with dimensions.</li>
+                <li data-i18n="doc_3">Photograph marked areas.</li>
+                <li data-i18n="doc_4">Estimate total affected area (m²).</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="anchor_title">Anchor Bolt Tightening: Torque Protocol</div>
+        <div class="module technical">
+            <h3 data-i18n="why_loose">Why Anchor Bolts Loosen</h3>
+            <p data-i18n="why_loose_desc">Anchor bolts hold the turbine and generator to the foundation. Over time they
+                can loosen due to:</p>
+            <ul>
+                <li><strong data-i18n="vib_cause">Vibration:</strong> <span data-i18n="vib_cause_desc">Constant
+                        vibrations cause micro-movements loosening nuts.</span></li>
+                <li><strong data-i18n="thermal_cause">Thermal Cycles:</strong> <span
+                        data-i18n="thermal_cause_desc">Temperature changes cause expansion/contraction.</span></li>
+                <li><strong data-i18n="settling_cause">Grout Settling:</strong> <span data-i18n="settling_cause_desc">If
+                        grout cracks or settles, bolt tension is lost.</span></li>
+            </ul>
+
+            <h3 data-i18n="insp_proc">Inspection Procedure</h3>
+            <ol>
+                <li><strong data-i18n="locate_bolts">Locate All Bolts:</strong> <span data-i18n="locate_desc">Typically
+                        8-16 bolts per unit.</span></li>
+                <li><strong data-i18n="visual_insp">Visual Inspection:</strong> <span data-i18n="visual_desc">Check for
+                        rust, bent threads, or missing nuts.</span></li>
+                <li><strong data-i18n="torque_check">Torque Check:</strong> <span data-i18n="torque_check_desc">Use
+                        calibrated torque wrench to check current state.</span></li>
+                <li><strong data-i18n="record_vals">Record Values:</strong> <span data-i18n="record_desc">Document
+                        current torque for each bolt.</span></li>
+            </ol>
+
+            <h3 data-i18n="tight_proc">Tightening Procedure</h3>
+            <div class="formula">
+                Moment = K × D × P<br>
+                K = Friction Factor (0.15-0.20)<br>
+                D = Bolt Diameter (mm)<br>
+                P = Target Preload Force (kN)
+            </div>
+
+            <ol>
+                <li><strong data-i18n="determine_torque">Determine Target Torque:</strong> <span
+                        data-i18n="consult_manual">Consult manufacturer manual. Typical values:</span>
+                    <ul>
+                        <li>M24 bolts: 400-600 Nm</li>
+                        <li>M30 bolts: 800-1200 Nm</li>
+                        <li>M36 bolts: 1400-2000 Nm</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="clean_threads">Clean Threads:</strong> <span data-i18n="clean_desc">Clean with
+                        wire brush and apply anti-seize paste.</span></li>
+                <li><strong data-i18n="star_pattern">Tighten in Star Pattern:</strong> <span
+                        data-i18n="star_desc">Tighten crosswise for even force distribution.</span></li>
+                <li><strong data-i18n="multi_pass">Multi-Pass Tightening:</strong>
+                    <ul>
+                        <li data-i18n="pass_1">Pass 1: 50% target torque.</li>
+                        <li data-i18n="pass_2">Pass 2: 75% target torque.</li>
+                        <li data-i18n="pass_3">Pass 3: 100% target torque.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="final_ver">Final Verification:</strong> <span data-i18n="final_ver_desc">Check
+                        all bolts again.</span></li>
+            </ol>
+
+            <div class="module critical">
+                <strong data-i18n="critical_note">⚠️ CRITICAL:</strong> <span data-i18n="critical_desc">Overtightening
+                    can damage threads or crack foundation. Undertightening allows movement. Use calibrated wrench and
+                    follow specs.</span>
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="epoxy_title">Epoxy Injection: Crack Repair</div>
+        <div class="module technical">
+            <h3 data-i18n="when_epoxy">When to Use Epoxy</h3>
+            <p data-i18n="epoxy_usage">Injection is used to fill cracks and restore integrity when:</p>
+            <ul>
+                <li data-i18n="usage_1">Hollow areas detected by hammer test.</li>
+                <li data-i18n="usage_2">Visible cracks in concrete (width > 0.5 mm).</li>
+                <li data-i18n="usage_3">Grout has detached from foundation.</li>
+            </ul>
+
+            <h3 data-i18n="epoxy_select">Epoxy Selection</h3>
+            <div class="module structural">
+                <p><strong data-i18n="epoxy_type">Type:</strong> <span data-i18n="epoxy_type_desc">Use structural
+                        concrete resin (e.g. Sikadur, Hilti HIT-RE 500).</span></p>
+                <p><strong data-i18n="epoxy_props">Properties:</strong></p>
+                <ul>
+                    <li data-i18n="prop_1">Low viscosity (for deep penetration)</li>
+                    <li data-i18n="prop_2">High compressive strength (> 70 MPa)</li>
+                    <li data-i18n="prop_3">Good adhesion to concrete and steel</li>
+                    <li data-i18n="prop_4">Low shrinkage during curing</li>
+                </ul>
+            </div>
+
+            <h3 data-i18n="inject_proc">Injection Procedure</h3>
+            <ol>
+                <li><strong data-i18n="surf_prep">Surface Preparation:</strong>
+                    <ul>
+                        <li data-i18n="prep_1">Clean all loose material, dust, and oil.</li>
+                        <li data-i18n="prep_2">Blow out with compressed air.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="drill_ports">Drilling Ports:</strong>
+                    <ul>
+                        <li data-i18n="drill_1">Drill holes (10-12 mm) spaced 15-30 cm along crack.</li>
+                        <li data-i18n="drill_2">Drill at 45° angle into crack.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="install_packers">Packer Installation:</strong>
+                    <ul>
+                        <li data-i18n="pack_1">Insert plastic or metal packers.</li>
+                        <li data-i18n="pack_2">Seal around packers with fast-setting putty.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="injecting">Injecting:</strong>
+                    <ul>
+                        <li data-i18n="inj_1">Use injection pump.</li>
+                        <li data-i18n="inj_2">Start from lowest point.</li>
+                        <li data-i18n="inj_3">Inject until resin exits next packer.</li>
+                        <li data-i18n="inj_4">Move to next packer.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="module structural">
+                <strong data-i18n="tech_note_2">💡 Technical Note:</strong> <span data-i18n="tech_note_2_desc">For large
+                    hollow areas (> 0.5 m²), consider removing and repouring grout instead of injecting.</span>
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="schedule_title">Inspection Schedule</div>
+        <div class="module technical">
+            <ul>
+                <li><strong data-i18n="annual_insp">Annual Inspection:</strong> <span data-i18n="annual_desc">Hammer
+                        test all grouts during overhaul.</span></li>
+                <li><strong data-i18n="bi_annual_check">Bi-Annual Bolt Check:</strong> <span
+                        data-i18n="bi_annual_desc">Check anchor bolt torque every 2 years.</span></li>
+                <li><strong data-i18n="post_vib">After Vibration:</strong> <span data-i18n="vib_insp_desc">If abnormal
+                        vibrations detected, inspect foundation immediately.</span></li>
+                <li><strong data-i18n="post_quake">After Earthquake:</strong> <span data-i18n="quake_desc">Inspect
+                        foundation after any seismic activity (> 4.0).</span></li>
+            </ul>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "🔨 Foundation Integrity",
+                subtitle: "Structural Stability & Grouting Verification",
+                safety_title: "⚠️ MANDATORY SAFETY PROTOCOL",
+                stop: "STOP. READ THIS FIRST.",
+                shutdown: "Unit Shutdown:",
+                shutdown_desc: "Foundation inspection requires unit shutdown and mechanical isolation.",
+                lifting: "Heavy Lifting:",
+                lifting_desc: "If anchor bolt replacement is required, lifting equipment is needed. Ensure load binding certificates.",
+                chemical: "Chemical Hazards:",
+                chemical_desc: "Epoxy resins contain volatile compounds (VOC). Use in well-ventilated area with masks.",
+                confined: "Confined Space:",
+                confined_desc: "Turbine pit may be classified as confined space. Follow entry protocols.",
+                hollow_test_title: "'Hollow' Test: Acoustic Concrete Verification",
+                why_important: "Why Foundation Integrity Matters",
+                why_desc: "The turbine and generator are mounted on a <strong>concrete foundation</strong> with grout filling the gap between equipment feet and floor. If grout detaches or creates air pockets:",
+                vibration_amp: "Vibration Amplification:",
+                vibration_desc: "Loss of stiffness allows vibration increase.",
+                misalignment: "Loss of Alignment:",
+                misalignment_desc: "Equipment can shift, causing shaft imbalance.",
+                stress: "Stress Concentration:",
+                stress_desc: "Uneven support creates high stress points on the frame.",
+                bearing_fail: "Bearing Failure:",
+                bearing_desc: "Misalignment accelerates bearing wear.",
+                hammer_proc: "Hammer Test Procedure",
+                select_hammer: "Select Hammer:",
+                select_hammer_desc: "Use a small locksmith hammer (200-300g) or geological hammer.",
+                identify_zones: "Identify Zones:",
+                identify_zones_desc: "Focus on grout around turbine feet, generator, and anchor bolt plates.",
+                tap_system: "Tap Systematically:",
+                tap_desc: "Tap the grout surface in a grid pattern (every 10-15 cm).",
+                listen_sound: "Listen to Sound:",
+                solid_grout: "Solid Grout:",
+                solid_desc: "High-frequency, sharp \"ting\" sound.",
+                hollow_grout: "Delaminated/Hollow:",
+                hollow_desc: "Low-frequency, dull \"thud\" or \"hollow\" sound.",
+                mark_defects: "Mark Defects:",
+                mark_desc: "Use chalk to mark all hollow areas.",
+                visual_aid: "[Visualization: Hammer Test]<br>Solid Concrete: \"TING!\" (High pitch)<br>Hollow/Detached: \"THUD\" (Low pitch, echo)",
+                tech_note: "💡 Technical Note:",
+                tech_note_desc: "Hollow sound indicates air pockets or detachment between grout and concrete floor. This is often caused by shrinkage during curing, vibrations, or poor installation.",
+                documentation: "Documentation",
+                doc_1: "Sketch map of turbine/generator foundation.",
+                doc_2: "Mark all hollow areas with dimensions.",
+                doc_3: "Photograph marked areas.",
+                doc_4: "Estimate total affected area (m²).",
+                anchor_title: "Anchor Bolt Tightening: Torque Protocol",
+                why_loose: "Why Anchor Bolts Loosen",
+                why_loose_desc: "Anchor bolts hold the turbine and generator to the foundation. Over time they can loosen due to:",
+                vib_cause: "Vibration:",
+                vib_cause_desc: "Constant vibrations cause micro-movements loosening nuts.",
+                thermal_cause: "Thermal Cycles:",
+                thermal_cause_desc: "Temperature changes cause expansion/contraction.",
+                settling_cause: "Grout Settling:",
+                settling_cause_desc: "If grout cracks or settles, bolt tension is lost.",
+                insp_proc: "Inspection Procedure",
+                locate_bolts: "Locate All Bolts:",
+                locate_desc: "Typically 8-16 bolts per unit.",
+                visual_insp: "Visual Inspection:",
+                visual_desc: "Check for rust, bent threads, or missing nuts.",
+                torque_check: "Torque Check:",
+                torque_check_desc: "Use calibrated torque wrench to check current state.",
+                record_vals: "Record Values:",
+                record_desc: "Document current torque for each bolt.",
+                tight_proc: "Tightening Procedure",
+                determine_torque: "Determine Target Torque:",
+                consult_manual: "Consult manufacturer manual. Typical values:",
+                clean_threads: "Clean Threads:",
+                clean_desc: "Clean with wire brush and apply anti-seize paste.",
+                star_pattern: "Tighten in Star Pattern:",
+                star_desc: "Tighten crosswise for even force distribution.",
+                multi_pass: "Multi-Pass Tightening:",
+                pass_1: "Pass 1: 50% target torque.",
+                pass_2: "Pass 2: 75% target torque.",
+                pass_3: "Pass 3: 100% target torque.",
+                final_ver: "Final Verification:",
+                final_ver_desc: "Check all bolts again.",
+                critical_note: "⚠️ CRITICAL:",
+                critical_desc: "Overtightening can damage threads or crack foundation. Undertightening allows movement. Use calibrated wrench and follow specs.",
+                epoxy_title: "Epoxy Injection: Crack Repair",
+                when_epoxy: "When to Use Epoxy",
+                epoxy_usage: "Injection is used to fill cracks and restore integrity when:",
+                usage_1: "Hollow areas detected by hammer test.",
+                usage_2: "Visible cracks in concrete (width > 0.5 mm).",
+                usage_3: "Grout has detached from foundation.",
+                epoxy_select: "Epoxy Selection",
+                epoxy_type: "Type:",
+                epoxy_type_desc: "Use structural concrete resin (e.g. Sikadur, Hilti HIT-RE 500).",
+                epoxy_props: "Properties:",
+                prop_1: "Low viscosity (for deep penetration)",
+                prop_2: "High compressive strength (> 70 MPa)",
+                prop_3: "Good adhesion to concrete and steel",
+                prop_4: "Low shrinkage during curing",
+                inject_proc: "Injection Procedure",
+                surf_prep: "Surface Preparation:",
+                prep_1: "Clean all loose material, dust, and oil.",
+                prep_2: "Blow out with compressed air.",
+                drill_ports: "Drilling Ports:",
+                drill_1: "Drill holes (10-12 mm) spaced 15-30 cm along crack.",
+                drill_2: "Drill at 45° angle into crack.",
+                install_packers: "Packer Installation:",
+                pack_1: "Insert plastic or metal packers.",
+                pack_2: "Seal around packers with fast-setting putty.",
+                injecting: "Injecting:",
+                inj_1: "Use injection pump.",
+                inj_2: "Start from lowest point.",
+                inj_3: "Inject until resin exits next packer.",
+                inj_4: "Move to next packer.",
+                tech_note_2: "💡 Technical Note:",
+                tech_note_2_desc: "For large hollow areas (> 0.5 m²), consider removing and repouring grout instead of injecting.",
+                schedule_title: "Inspection Schedule",
+                annual_insp: "Annual Inspection:",
+                annual_desc: "Hammer test all grouts during overhaul.",
+                bi_annual_check: "Bi-Annual Bolt Check:",
+                bi_annual_desc: "Check anchor bolt torque every 2 years.",
+                post_vib: "After Vibration:",
+                vib_insp_desc: "If abnormal vibrations detected, inspect foundation immediately.",
+                post_quake: "After Earthquake:",
+                quake_desc: "Inspect foundation after any seismic activity (> 4.0).",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "🔨 Integritet Temelja",
+                subtitle: "Strukturalna Stabilnost & Provjera Injektiranja",
+                safety_title: "⚠️ OBAVEZNI SIGURNOSNI PROTOKOL",
+                stop: "STOP. PROČITAJ OVO PRVO.",
+                shutdown: "Zaustavljanje Agregata:",
+                shutdown_desc: "Provjera temelja zahtijeva zaustavljanje i mehaničku izolaciju agregata.",
+                lifting: "Teško Dizanje:",
+                lifting_desc: "Ako je potrebna zamjena anker vijaka, potrebna je oprema za dizanje. Osiguraj certifikate za vezivanje tereta.",
+                chemical: "Hemijske Opasnosti:",
+                chemical_desc: "Epoksidne smole sadrže isparljiva jedinjenja (VOC). Koristi u dobro ventiliranom prostoru sa maskama.",
+                confined: "Zatvoreni Prostor:",
+                confined_desc: "Turbinska jama može biti klasifikovana kao zatvoreni prostor. Prati protokole ulaska.",
+                hollow_test_title: "'Šuplji' Test: Akustična Provjera Betona",
+                why_important: "Zašto je Integritet Temelja Bitan",
+                why_desc: "Turbina i generator su montirani na <strong>betonski temelj</strong> sa podlivom (grout) koji popunjava prazninu između stopa opreme i poda. Ako se podliv odvoji ili stvori zračne džepove:",
+                vibration_amp: "Pojačanje Vibracija:",
+                vibration_desc: "Gubitak krutosti omogućava povećanje vibracija.",
+                misalignment: "Gubitak Saosnosti:",
+                misalignment_desc: "Oprema se može pomjeriti, uzrokujući debalans vratila.",
+                stress: "Koncentracija Stresa:",
+                stress_desc: "Neravnomjeran oslonac stvara visoke tačke stresa na ramu.",
+                bearing_fail: "Kvar Ležajeva:",
+                bearing_desc: "Odstupanje ubrzava habanje ležajeva.",
+                hammer_proc: "Procedura Testa Čekićem",
+                select_hammer: "Odaberi Čekić:",
+                select_hammer_desc: "Koristi mali bravarski čekić (200-300g) ili geološki čekić.",
+                identify_zones: "Identificiraj Zone:",
+                identify_zones_desc: "Fokusiraj se na podliv oko stopa turbine, generatora i ploča anker vijaka.",
+                tap_system: "Kuckaj Sistematski:",
+                tap_desc: "Kuckaj površinu podliva u mrežnom uzorku (svakih 10-15 cm).",
+                listen_sound: "Slušaj Zvuk:",
+                solid_grout: "Solidan Podliv:",
+                solid_desc: "Visokofrekventan, oštar \"ting\" zvuk.",
+                hollow_grout: "Delaminiran/Šupalj:",
+                hollow_desc: "Niskofrekventan, tup \"tup\" ili \"šuplji\" zvuk.",
+                mark_defects: "Označi Defekte:",
+                mark_desc: "Koristi kredu da označiš sva šuplja područja.",
+                visual_aid: "[Vizualizacija: Test Čekićem]<br>Solidan Beton: \"TING!\" (Visok ton)<br>Šupalj/Odvojen: \"TUP\" (Nizak ton, eho)",
+                tech_note: "💡 Tehnička Bilješka:",
+                tech_note_desc: "Šuplji zvuk ukazuje na zračne džepove ili odvajanje između podliva i betonskog poda. Ovo je često uzrokovano skupljanjem tokom sušenja, vibracijama ili lošom ugradnjom.",
+                documentation: "Dokumentacija",
+                doc_1: "Skiciraj mapu temelja turbine/generatora.",
+                doc_2: "Označi sva šuplja područja sa dimenzijama.",
+                doc_3: "Fotografiši označena područja.",
+                doc_4: "Procijeni ukupnu pogođenu površinu (m²).",
+                anchor_title: "Zatezanje Anker Vijaka: Protokol Momenta",
+                why_loose: "Zašto Anker Vijci Popuštaju",
+                why_loose_desc: "Anker vijci drže turbinu i generator za temelj. Vremenom mogu popustiti zbog:",
+                vib_cause: "Vibracija:",
+                vib_cause_desc: "Konstantne vibracije uzrokuju mikro-pomjeranja koja otpuštaju matice.",
+                thermal_cause: "Termički Ciklusi:",
+                thermal_cause_desc: "Promjene temperature uzrokuju širenje/skupljanje.",
+                settling_cause: "Slijeganje Podliva:",
+                settling_cause_desc: "Ako podliv pukne ili legne, napetost vijka se gubi.",
+                insp_proc: "Procedura Inspekcije",
+                locate_bolts: "Lociraj Sve Vijke:",
+                locate_desc: "Tipično 8-16 vijaka po agregatu.",
+                visual_insp: "Vizuelna Inspekcija:",
+                visual_desc: "Provjeri hrđu, savijene navoje ili nedostajuće matice.",
+                torque_check: "Provjera Momenta:",
+                torque_check_desc: "Koristi kalibrirani moment ključ za provjeru trenutnog stanja.",
+                record_vals: "Zapiši Vrijednosti:",
+                record_desc: "Dokumentuj trenutni moment za svaki vijak.",
+                tight_proc: "Procedura Dotezanja",
+                determine_torque: "Odredi Ciljani Moment:",
+                consult_manual: "Konsultuj priručnik proizvođača. Tipične vrijednosti:",
+                clean_threads: "Očisti Navoje:",
+                clean_desc: "Očisti žičanom četkom i nanesi anti-seize pastu.",
+                star_pattern: "Zateži u Zvijezda Uzorku:",
+                star_desc: "Zateži unakrsno radi ravnomjerne raspodjele sile.",
+                multi_pass: "Višeprolazno Zatezanje:",
+                pass_1: "Prolaz 1: 50% ciljanog momenta.",
+                pass_2: "Prolaz 2: 75% ciljanog momenta.",
+                pass_3: "Prolaz 3: 100% ciljanog momenta.",
+                final_ver: "Završna Verifikacija:",
+                final_ver_desc: "Provjeri sve vijke ponovo.",
+                critical_note: "⚠️ KRITIČNO:",
+                critical_desc: "Pretezanje može oštetiti navoje ili puknuti temelj. Nedovoljno zatezanje dozvoljava pomjeranje. Koristi kalibrirani ključ i prati specifikacije.",
+                epoxy_title: "Epoksidna Injekcija: Popravak Pukotina",
+                when_epoxy: "Kada Koristiti Epoksid",
+                epoxy_usage: "Injektiranje se koristi za popunjavanje pukotina i obnovu integriteta kada:",
+                usage_1: "Su detektovana šuplja područja testom čekićem.",
+                usage_2: "Su vidljive pukotine u betonu (širina > 0.5 mm).",
+                usage_3: "Se podliv odvojio od temelja.",
+                epoxy_select: "Izbor Epoksida",
+                epoxy_type: "Tip:",
+                epoxy_type_desc: "Koristi strukturnu smolu za beton (npr. Sikadur, Hilti HIT-RE 500).",
+                epoxy_props: "Svojstva:",
+                prop_1: "Niska viskoznost (za duboku penetraciju)",
+                prop_2: "Visoka pritisna čvrstoća (> 70 MPa)",
+                prop_3: "Dobro prianjanje za beton i čelik",
+                prop_4: "Malo skupljanje pri sušenju",
+                inject_proc: "Procedura Injektiranja",
+                surf_prep: "Priprema Površine:",
+                prep_1: "Očisti sav labav materijal, prašinu i ulje.",
+                prep_2: "Ispuši komprimiranim zrakom.",
+                drill_ports: "Bušenje Portova:",
+                drill_1: "Buši rupe (10-12 mm) na razmaku 15-30 cm duž pukotine.",
+                drill_2: "Buši pod uglom od 45° u pukotinu.",
+                install_packers: "Instalacija Pakera:",
+                pack_1: "Ubaci plastične ili metalne pakere.",
+                pack_2: "Zaptij oko pakera brzovezujućim kitom.",
+                injecting: "Injektiranje:",
+                inj_1: "Koristi pumpu za injektiranje.",
+                inj_2: "Počni od najniže tačke.",
+                inj_3: "Injektiraj dok smola ne izađe na sljedeći paker.",
+                inj_4: "Pređi na sljedeći paker.",
+                tech_note_2: "💡 Tehnička Bilješka:",
+                tech_note_2_desc: "Za velika šuplja područja (> 0.5 m²), razmotri uklanjanje i ponovno Izlijevanje podliva umjesto injektiranja.",
+                schedule_title: "Raspored Inspekcije",
+                annual_insp: "Godišnja Inspekcija:",
+                annual_desc: "Test čekićem svih podliva tokom remonta.",
+                bi_annual_check: "Dvogodišnja Provjera Vijke:",
+                bi_annual_desc: "Provjeri moment anker vijaka svake 2 godine.",
+                post_vib: "Nakon Vibracija:",
+                vib_insp_desc: "Ako se detektuju abnormalne vibracije, odmah pregledaj temelj.",
+                post_quake: "Nakon Zemljotresa:",
+                quake_desc: "Pregledaj temelj nakon bilo kakve seizmičke aktivnosti (> 4.0).",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

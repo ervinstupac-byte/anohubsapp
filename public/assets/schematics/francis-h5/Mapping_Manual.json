@@ -1,0 +1,53 @@
+{
+    "components": {
+        "FR-SPIRAL-01": {
+            "description": "Spiral Case",
+            "approximateCoordinates": {
+                "x": "0-100%",
+                "y": "0-100%"
+            }
+        },
+        "FR-RUNNER-01": {
+            "description": "Francis Runner",
+            "approximateCoordinates": {
+                "x": "40-60%",
+                "y": "40-60%"
+            }
+        },
+        "FR-GEN-01": {
+            "description": "Generator",
+            "approximateCoordinates": {
+                "x": "40-60%",
+                "y": "10-25%"
+            }
+        },
+        "FR-MIV-01": {
+            "description": "Main Inlet Valve",
+            "approximateCoordinates": {
+                "x": "75-90%",
+                "y": "40-60%"
+            }
+        },
+        "FR-SEAL-01": {
+            "description": "Shaft Seal",
+            "approximateCoordinates": {
+                "x": "45-55%",
+                "y": "30-35%"
+            }
+        },
+        "FR-HPU-01": {
+            "description": "HPU System",
+            "approximateCoordinates": {
+                "x": "10-20%",
+                "y": "80-90%"
+            }
+        },
+        "FR-DRAFT-01": {
+            "description": "Draft Tube",
+            "approximateCoordinates": {
+                "x": "40-60%",
+                "y": "70-95%"
+            }
+        }
+    }
+}

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Thrust_Balance/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Thrust_Balance/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Thrust Bearing & Hydraulic Balance</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Language Toggle Switch */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .visual-aid {
+            border: 2px dashed #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .force-calc {
+            background: #f0f7ff;
+            border-left: 4px solid #0066cc;
+            padding: 12px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .silt-warning {
+            background: #fdf8e4;
+            border-left: 4px solid #f0ad4e;
+            padding: 12px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('bs')">BS</button>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Advanced SOP: Thrust Bearing & Hydraulic Balance</h1>
+            <h2 data-i18n="subtitle">The "Forgotten" Balance - Axial Thrust Management & Balance Holes</h2>
+        </header>
+
+        <!-- INTRO MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="intro_title">⚠️ THE SILENT KILLER</h3>
+            <p><strong data-i18n="context_label">Context:</strong> <span data-i18n="context_text">While the main
+                    bearings carry the turbine's weight (radial load), the thrust bearing handles the massive
+                    <strong>axial</strong> (horizontal) force created by water pressure pushing on the back of the
+                    runner.</span></p>
+            <ul>
+                <li data-i18n="risk1"><strong>The Risk:</strong> If the "balance holes" in the runner hub become clogged
+                    with silt, water pressure behind the runner increases dramatically, potentially
+                    <strong>tripling</strong> the thrust bearing load.</li>
+                <li data-i18n="risk2"><strong>Why It's Forgotten:</strong> Thrust bearing temperature rise is gradual,
+                    so operators don't notice until Babbitt metal has already started to fail.</li>
+                <li data-i18n="risk3"><strong>Silt-Heavy River Context:</strong> Unit 1's river carries significant
+                    silt, especially during monsoon season. Balance holes are highly susceptible to blockage.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section1_title">SOP 1: Hydraulic Thrust Logic</div>
+        <div class="module technical">
+            <p data-i18n="section1_intro">Understanding the forces allows predictive detection, not just reactive
+                repairs.</p>
+
+            <h3 data-i18n="subsection1_1_title">1.1 The Physics of Axial Thrust</h3>
+            <p data-i18n="subsection1_1_text">Water enters the turbine at high pressure and exits at low pressure (draft
+                tube). This pressure differential acts on the runner surfaces, creating a net force pushing the runner
+                <strong>downstream</strong> (toward the generator).</p>
+
+            <div class="force-calc" data-i18n="force_calc">
+                <strong>SIMPLIFIED FORCE CALCULATION:</strong><br>
+                Effective Runner Area: ~1.5 m² (back side)<br>
+                Upstream Pressure: 15 bar (150 m head)<br>
+                Downstream Pressure: 0.2 bar (draft tube)<br>
+                <br>
+                Net Thrust = (15 - 0.2) bar × 1.5 m² = <strong>~220 kN</strong> (22 metric tons of force!)<br>
+                <br>
+                <em>Note: This is a massive force that continuously pushes on the thrust bearing pads.</em>
+            </div>
+
+            <h3 data-i18n="subsection1_2_title">1.2 The Balance Hole System</h3>
+            <p data-i18n="subsection1_2_text1"><strong>Design Intent:</strong> Balance holes (typically 4-8 holes
+                drilled through the runner hub) allow high-pressure water to equalize on both sides of the runner,
+                reducing net axial thrust.</p>
+            <p data-i18n="subsection1_2_text2"><strong>When Functioning Properly:</strong> Balance holes reduce thrust
+                by 50-70%, bringing the load from 220 kN down to ~80-100 kN.</p>
+            <p data-i18n="subsection1_2_text3"><strong>When Clogged:</strong> No pressure equalization occurs. Full 220
+                kN load applied to thrust bearing → rapid temperature rise → Babbitt metal failure within hours.</p>
+        </div>
+
+        <div class="section-title" data-i18n="section2_title">SOP 2: Balance Hole Inspection Procedure</div>
+        <div class="module technical">
+            <p data-i18n="section2_intro"><strong>Criticality:</strong> Due to silt-heavy river conditions, balance hole
+                inspection must be performed during <strong>every major overhaul</strong> and suspected whenever thrust
+                bearing temperature increases without explanation.</p>
+
+            <h3 data-i18n="subsection2_1_title">2.1 Access Requirements</h3>
+            <ul>
+                <li data-i18n="access1"><strong>Unit Status:</strong> Complete shutdown, MIV closed, draft tube
+                    dewatered.</li>
+                <li data-i18n="access2"><strong>Safety:</strong> Confined space entry protocol for draft tube access
+                    (gas monitor, ventilation, safety harness).</li>
+                <li data-i18n="access3"><strong>Tools:</strong> High-pressure water lance, borescope camera, wire
+                    brushes, flashlight.</li>
+            </ul>
+
+            <h3 data-i18n="subsection2_2_title">2.2 Visual Inspection</h3>
+            <ol>
+                <li data-i18n="inspect1"><strong>Access via Draft Tube:</strong> Enter draft tube from tailrace side.
+                    Navigate to runner hub area.</li>
+                <li data-i18n="inspect2"><strong>Locate Balance Holes:</strong> Typically 6-12mm diameter holes drilled
+                    radially through runner hub (usually 4-8 holes spaced evenly around circumference).</li>
+                <li><strong data-i18n="inspect3_label">Visual Check:</strong> <span data-i18n="inspect3_text">With
+                        flashlight, inspect each hole opening:</span>
+                    <ul>
+                        <li data-i18n="inspect3_pass"><strong>PASS:</strong> Hole is clear, you can see through to the
+                            other side or confirm depth with wire probe.</li>
+                        <li data-i18n="inspect3_fail"><strong>FAIL:</strong> Hole is partially or fully blocked with
+                            silt, debris, or mineral deposits.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3 data-i18n="subsection2_3_title">2.3 Cleaning Procedure</h3>
+            <ol>
+                <li data-i18n="clean1"><strong>Mechanical Cleaning:</strong> Use wire brush or flexible shaft drill to
+                    dislodge silt deposits.</li>
+                <li data-i18n="clean2"><strong>High-Pressure Water:</strong> Flush each hole with water lance (100-150
+                    bar) to clear remaining debris.</li>
+                <li data-i18n="clean3"><strong>Verification:</strong> Insert wire gauge (6mm diameter) through full
+                    length of hole to confirm complete clearance.</li>
+                <li data-i18n="clean4"><strong>Documentation:</strong> Record condition of each hole in maintenance log
+                    (% blockage estimate before cleaning).</li>
+            </ol>
+
+            <div class="silt-warning" data-i18n="silt_warning">
+                <strong>SILT-HEAVY RIVER PROTOCOL:</strong> During monsoon season (June-September), silt concentration
+                triples. If unit operates continuously during this period, plan for balance hole inspection at end of
+                season (October) as preventive maintenance, not just reactive.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section3_title">SOP 3: Thrust Pad Inspection</div>
+        <div class="module diagnostic">
+            <p data-i18n="section3_intro">The thrust bearing uses Babbitt metal pads that ride on an oil film. If the
+                thrust load exceeds design limits (due to clogged balance holes), the oil film breaks down and
+                metal-to-metal contact occurs.</p>
+
+            <h3 data-i18n="subsection3_1_title">3.1 Oil Analysis - The "Flakes" Test</h3>
+            <p data-i18n="subsection3_1_text"><strong>Diagnostic Principle:</strong> Failing Babbitt metal sheds
+                microscopic metallic flakes into the bearing oil. These flakes are visible proof of bearing distress.
+            </p>
+
+            <ol>
+                <li data-i18n="flakes1"><strong>Sample Collection:</strong> Draw oil sample from thrust bearing sump
+                    (50ml minimum in clean glass bottle).</li>
+                <li><strong data-i18n="flakes2_label">Visual Inspection:</strong> <span data-i18n="flakes2_text">Hold
+                        bottle to light source. Swirl gently.</span>
+                    <ul>
+                        <li data-i18n="flakes2_pass"><strong>PASS (Healthy):</strong> Oil is translucent amber, no
+                            particulates visible.</li>
+                        <li data-i18n="flakes2_warn"><strong>WARNING:</strong> Fine metallic "shimmer" visible when
+                            swirled - early stage wear.</li>
+                        <li data-i18n="flakes2_crit"><strong>CRITICAL:</strong> Visible metallic flakes settling to
+                            bottom - active Babbitt degradation.</li>
+                    </ul>
+                </li>
+                <li data-i18n="flakes3"><strong>Laboratory Analysis:</strong> If flakes detected, send sample for
+                    spectrographic analysis to quantify metal concentration (ppm).</li>
+            </ol>
+
+            <h3 data-i18n="subsection3_2_title">3.2 Thrust Pad Visual Inspection (During Overhaul)</h3>
+            <p data-i18n="subsection3_2_text"><strong>Access:</strong> Requires disassembly of thrust bearing housing
+                (major work, typically during scheduled outage).</p>
+            <ul>
+                <li data-i18n="pad_healthy"><strong>Healthy Babbitt:</strong> Smooth silver surface, uniform thickness,
+                    no scoring or pitting.</li>
+                <li data-i18n="pad_early"><strong>Early Wear:</strong> Surface discoloration (darkening), minor scoring
+                    lines parallel to rotation.</li>
+                <li data-i18n="pad_advanced"><strong>Advanced Failure:</strong> Deep gouges, missing Babbitt chunks,
+                    exposed steel backing.</li>
+            </ul>
+
+            <div class="visual-aid" data-i18n="visual_aid">
+                [PHOTO REFERENCE: Healthy vs. Failed Babbitt Metal Surface]<br>
+                Recommended: Create visual reference chart posted in workshop for technician training.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section4_title">SOP 4: Thrust Bearing Temperature Monitoring</div>
+        <div class="module diagnostic">
+            <p data-i18n="section4_intro">Continuous monitoring provides early warning before catastrophic failure.</p>
+
+            <h3 data-i18n="subsection4_1_title">4.1 Normal Operating Range</h3>
+            <div class="force-calc" data-i18n="temp_limits">
+                <strong>THRUST BEARING TEMPERATURE LIMITS:</strong><br>
+                Normal: 40-50°C (healthy bearing, clean balance holes)<br>
+                Warning: 50-60°C (increased load or marginal lubrication)<br>
+                Critical: >60°C (STOP UNIT - inspect balance holes and oil quality)<br>
+                Emergency: >70°C (Immediate shutdown - bearing failure imminent)
+            </div>
+
+            <h3 data-i18n="subsection4_2_title">4.2 Diagnostic Correlation</h3>
+            <p data-i18n="subsection4_2_text">Temperature rise patterns can indicate root cause:</p>
+            <ul>
+                <li data-i18n="diag1"><strong>Gradual rise over days/weeks:</strong> Balance holes slowly clogging with
+                    silt → Plan cleaning during next scheduled outage.</li>
+                <li data-i18n="diag2"><strong>Sudden spike (hours):</strong> Balance hole(s) suddenly blocked by debris
+                    strike → Emergency inspection required.</li>
+                <li data-i18n="diag3"><strong>Temperature rise with vibration increase:</strong> Possible misalignment
+                    creating unbalanced thrust → Check shaft alignment (ref: Precision SOP).</li>
+            </ul>
+
+            <h3 data-i18n="subsection4_3_title">4.3 SCADA Integration</h3>
+            <ul>
+                <li data-i18n="scada1"><strong>Alarm Setpoints:</strong> Configure SCADA to alarm at 55°C (warning) and
+                    65°C (critical).</li>
+                <li data-i18n="scada2"><strong>Trend Monitoring:</strong> Review thrust bearing temperature trend
+                    weekly. Gradual upward trend over months indicates balance hole degradation even if absolute
+                    temperature still acceptable.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section5_title">Summary Checklist</div>
+        <div class="module">
+            <h3 data-i18n="summary_title">Preventive Maintenance Schedule</h3>
+            <ul>
+                <li data-i18n="sched1"><strong>Monthly:</strong> Collect oil sample from thrust bearing, visual flake
+                    inspection.</li>
+                <li data-i18n="sched2"><strong>Quarterly:</strong> Review thrust bearing temperature trends (SCADA
+                    data).</li>
+                <li data-i18n="sched3"><strong>Annually:</strong> Balance hole inspection and cleaning (mandatory for
+                    silt-heavy river conditions).</li>
+                <li data-i18n="sched4"><strong>Every Major Overhaul (3-5 years):</strong> Disassemble thrust bearing,
+                    inspect Babbitt pads for wear, replace if >30% degraded.</li>
+            </ul>
+
+            <h3 data-i18n="emergency_title">Emergency Response Protocol</h3>
+            <ul>
+                <li data-i18n="emerg1"><strong>If thrust temperature >65°C:</strong> Reduce load immediately, prepare
+                    for shutdown.</li>
+                <li data-i18n="emerg2"><strong>If metallic flakes detected in oil:</strong> Plan emergency outage within
+                    2 weeks maximum.</li>
+                <li data-i18n="emerg3"><strong>If temperature >70°C:</strong> STOP UNIT - Do not restart until root
+                    cause identified and corrected.</li>
+            </ul>
+        </div>
+
+        <a href="./Francis_Horizontal.html" class="back-btn" data-i18n="back_btn">← Return to Master Manual</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Advanced SOP: Thrust Bearing & Hydraulic Balance",
+                subtitle: "The \"Forgotten\" Balance - Axial Thrust Management & Balance Holes",
+                intro_title: "⚠️ THE SILENT KILLER",
+                context_label: "Context:",
+                context_text: "While the main bearings carry the turbine's weight (radial load), the thrust bearing handles the massive <strong>axial</strong> (horizontal) force created by water pressure pushing on the back of the runner.",
+                risk1: "<strong>The Risk:</strong> If the \"balance holes\" in the runner hub become clogged with silt, water pressure behind the runner increases dramatically, potentially <strong>tripling</strong> the thrust bearing load.",
+                risk2: "<strong>Why It's Forgotten:</strong> Thrust bearing temperature rise is gradual, so operators don't notice until Babbitt metal has already started to fail.",
+                risk3: "<strong>Silt-Heavy River Context:</strong> Unit 1's river carries significant silt, especially during monsoon season. Balance holes are highly susceptible to blockage.",
+                section1_title: "SOP 1: Hydraulic Thrust Logic",
+                section1_intro: "Understanding the forces allows predictive detection, not just reactive repairs.",
+                subsection1_1_title: "1.1 The Physics of Axial Thrust",
+                subsection1_1_text: "Water enters the turbine at high pressure and exits at low pressure (draft tube). This pressure differential acts on the runner surfaces, creating a net force pushing the runner <strong>downstream</strong> (toward the generator).",
+                force_calc: "<strong>SIMPLIFIED FORCE CALCULATION:</strong><br>Effective Runner Area: ~1.5 m² (back side)<br>Upstream Pressure: 15 bar (150 m head)<br>Downstream Pressure: 0.2 bar (draft tube)<br><br>Net Thrust = (15 - 0.2) bar × 1.5 m² = <strong>~220 kN</strong> (22 metric tons of force!)<br><br><em>Note: This is a massive force that continuously pushes on the thrust bearing pads.</em>",
+                subsection1_2_title: "1.2 The Balance Hole System",
+                subsection1_2_text1: "<strong>Design Intent:</strong> Balance holes (typically 4-8 holes drilled through the runner hub) allow high-pressure water to equalize on both sides of the runner, reducing net axial thrust.",
+                subsection1_2_text2: "<strong>When Functioning Properly:</strong> Balance holes reduce thrust by 50-70%, bringing the load from 220 kN down to ~80-100 kN.",
+                subsection1_2_text3: "<strong>When Clogged:</strong> No pressure equalization occurs. Full 220 kN load applied to thrust bearing → rapid temperature rise → Babbitt metal failure within hours.",
+                section2_title: "SOP 2: Balance Hole Inspection Procedure",
+                section2_intro: "<strong>Criticality:</strong> Due to silt-heavy river conditions, balance hole inspection must be performed during <strong>every major overhaul</strong> and suspected whenever thrust bearing temperature increases without explanation.",
+                subsection2_1_title: "2.1 Access Requirements",
+                access1: "<strong>Unit Status:</strong> Complete shutdown, MIV closed, draft tube dewatered.",
+                access2: "<strong>Safety:</strong> Confined space entry protocol for draft tube access (gas monitor, ventilation, safety harness).",
+                access3: "<strong>Tools:</strong> High-pressure water lance, borescope camera, wire brushes, flashlight.",
+                subsection2_2_title: "2.2 Visual Inspection",
+                inspect1: "<strong>Access via Draft Tube:</strong> Enter draft tube from tailrace side. Navigate to runner hub area.",
+                inspect2: "<strong>Locate Balance Holes:</strong> Typically 6-12mm diameter holes drilled radially through runner hub (usually 4-8 holes spaced evenly around circumference).",
+                inspect3_label: "Visual Check:",
+                inspect3_text: "With flashlight, inspect each hole opening:",
+                inspect3_pass: "<strong>PASS:</strong> Hole is clear, you can see through to the other side or confirm depth with wire probe.",
+                inspect3_fail: "<strong>FAIL:</strong> Hole is partially or fully blocked with silt, debris, or mineral deposits.",
+                subsection2_3_title: "2.3 Cleaning Procedure",
+                clean1: "<strong>Mechanical Cleaning:</strong> Use wire brush or flexible shaft drill to dislodge silt deposits.",
+                clean2: "<strong>High-Pressure Water:</strong> Flush each hole with water lance (100-150 bar) to clear remaining debris.",
+                clean3: "<strong>Verification:</strong> Insert wire gauge (6mm diameter) through full length of hole to confirm complete clearance.",
+                clean4: "<strong>Documentation:</strong> Record condition of each hole in maintenance log (% blockage estimate before cleaning).",
+                silt_warning: "<strong>SILT-HEAVY RIVER PROTOCOL:</strong> During monsoon season (June-September), silt concentration triples. If unit operates continuously during this period, plan for balance hole inspection at end of season (October) as preventive maintenance, not just reactive.",
+                section3_title: "SOP 3: Thrust Pad Inspection",
+                section3_intro: "The thrust bearing uses Babbitt metal pads that ride on an oil film. If the thrust load exceeds design limits (due to clogged balance holes), the oil film breaks down and metal-to-metal contact occurs.",
+                subsection3_1_title: "3.1 Oil Analysis - The \"Flakes\" Test",
+                subsection3_1_text: "<strong>Diagnostic Principle:</strong> Failing Babbitt metal sheds microscopic metallic flakes into the bearing oil. These flakes are visible proof of bearing distress.",
+                flakes1: "<strong>Sample Collection:</strong> Draw oil sample from thrust bearing sump (50ml minimum in clean glass bottle).",
+                flakes2_label: "Visual Inspection:",
+                flakes2_text: "Hold bottle to light source. Swirl gently.",
+                flakes2_pass: "<strong>PASS (Healthy):</strong> Oil is translucent amber, no particulates visible.",
+                flakes2_warn: "<strong>WARNING:</strong> Fine metallic \"shimmer\" visible when swirled - early stage wear.",
+                flakes2_crit: "<strong>CRITICAL:</strong> Visible metallic flakes settling to bottom - active Babbitt degradation.",
+                flakes3: "<strong>Laboratory Analysis:</strong> If flakes detected, send sample for spectrographic analysis to quantify metal concentration (ppm).",
+                subsection3_2_title: "3.2 Thrust Pad Visual Inspection (During Overhaul)",
+                subsection3_2_text: "<strong>Access:</strong> Requires disassembly of thrust bearing housing (major work, typically during scheduled outage).",
+                pad_healthy: "<strong>Healthy Babbitt:</strong> Smooth silver surface, uniform thickness, no scoring or pitting.",
+                pad_early: "<strong>Early Wear:</strong> Surface discoloration (darkening), minor scoring lines parallel to rotation.",
+                pad_advanced: "<strong>Advanced Failure:</strong> Deep gouges, missing Babbitt chunks, exposed steel backing.",
+                visual_aid: "[PHOTO REFERENCE: Healthy vs. Failed Babbitt Metal Surface]<br>Recommended: Create visual reference chart posted in workshop for technician training.",
+                section4_title: "SOP 4: Thrust Bearing Temperature Monitoring",
+                section4_intro: "Continuous monitoring provides early warning before catastrophic failure.",
+                subsection4_1_title: "4.1 Normal Operating Range",
+                temp_limits: "<strong>THRUST BEARING TEMPERATURE LIMITS:</strong><br>Normal: 40-50°C (healthy bearing, clean balance holes)<br>Warning: 50-60°C (increased load or marginal lubrication)<br>Critical: >60°C (STOP UNIT - inspect balance holes and oil quality)<br>Emergency: >70°C (Immediate shutdown - bearing failure imminent)",
+                subsection4_2_title: "4.2 Diagnostic Correlation",
+                subsection4_2_text: "Temperature rise patterns can indicate root cause:",
+                diag1: "<strong>Gradual rise over days/weeks:</strong> Balance holes slowly clogging with silt → Plan cleaning during next scheduled outage.",
+                diag2: "<strong>Sudden spike (hours):</strong> Balance hole(s) suddenly blocked by debris strike → Emergency inspection required.",
+                diag3: "<strong>Temperature rise with vibration increase:</strong> Possible misalignment creating unbalanced thrust → Check shaft alignment (ref: Precision SOP).",
+                subsection4_3_title: "4.3 SCADA Integration",
+                scada1: "<strong>Alarm Setpoints:</strong> Configure SCADA to alarm at 55°C (warning) and 65°C (critical).",
+                scada2: "<strong>Trend Monitoring:</strong> Review thrust bearing temperature trend weekly. Gradual upward trend over months indicates balance hole degradation even if absolute temperature still acceptable.",
+                section5_title: "Summary Checklist",
+                summary_title: "Preventive Maintenance Schedule",
+                sched1: "<strong>Monthly:</strong> Collect oil sample from thrust bearing, visual flake inspection.",
+                sched2: "<strong>Quarterly:</strong> Review thrust bearing temperature trends (SCADA data).",
+                sched3: "<strong>Annually:</strong> Balance hole inspection and cleaning (mandatory for silt-heavy river conditions).",
+                sched4: "<strong>Every Major Overhaul (3-5 years):</strong> Disassemble thrust bearing, inspect Babbitt pads for wear, replace if >30% degraded.",
+                emergency_title: "Emergency Response Protocol",
+                emerg1: "<strong>If thrust temperature >65°C:</strong> Reduce load immediately, prepare for shutdown.",
+                emerg2: "<strong>If metallic flakes detected in oil:</strong> Plan emergency outage within 2 weeks maximum.",
+                emerg3: "<strong>If temperature >70°C:</strong> STOP UNIT - Do not restart until root cause identified and corrected.",
+                back_btn: "← Return to Master Manual"
+            },
+            bs: {
+                title: "Napredni SOP: Aksijalni ležaj i hidraulički balans",
+                subtitle: "\"Zaboravljeni\" balans - Upravljanje aksijalnim potiskom i balansne rupe",
+                intro_title: "⚠️ TIHI UBICA",
+                context_label: "Kontekst:",
+                context_text: "Dok glavni ležajevi nose težinu turbine (radijalno opterećenje), aksijalni ležaj podnosi ogromnu <strong>aksijalnu</strong> (horizontalnu) silu stvorenu pritiskom vode koja pritiska na zadnju stranu radnog kola.",
+                risk1: "<strong>Rizik:</strong> Ako se \"balansne rupe\" u glavčini radnog kola začepe muljem, pritisak vode iza radnog kola dramatično raste, potencijalno <strong>utrostručujući</strong> opterećenje aksijalnog ležaja.",
+                risk2: "<strong>Zašto je zaboravljeno:</strong> Porast temperature aksijalnog ležaja je postepen, pa operateri ne primjećuju dok Babbitt metal već ne počne otkazivati.",
+                risk3: "<strong>Kontekst rijeke bogate muljem:</strong> Rijeka Jedinice 1 nosi značajnu količinu mulja, posebno tokom monsunske sezone. Balansne rupe su vrlo podložne začepljenju.",
+                section1_title: "SOP 1: Logika hidrauličkog potiska",
+                section1_intro: "Razumijevanje sila omogućava prediktivnu detekciju, a ne samo reaktivne popravke.",
+                subsection1_1_title: "1.1 Fizika aksijalnog potiska",
+                subsection1_1_text: "Voda ulazi u turbinu pod visokim pritiskom i izlazi pod niskim pritiskom (sifon). Ova razlika pritiska djeluje na površine radnog kola, stvarajući neto silu koja gura radno kolo <strong>nizvodno</strong> (prema generatoru).",
+                force_calc: "<strong>POJEDNOSTAVLJENI PRORAČUN SILE:</strong><br>Efektivna površina radnog kola: ~1.5 m² (zadnja strana)<br>Uzvodnji pritisak: 15 bara (150 m pada)<br>Nizvodnji pritisak: 0.2 bara (sifon)<br><br>Neto potisak = (15 - 0.2) bara × 1.5 m² = <strong>~220 kN</strong> (22 metričke tone sile!)<br><br><em>Napomena: Ovo je ogromna sila koja kontinuirano pritiska na jastučiće aksijalnog ležaja.</em>",
+                subsection1_2_title: "1.2 Sistem balansnih rupa",
+                subsection1_2_text1: "<strong>Namjena dizajna:</strong> Balansne rupe (obično 4-8 rupa izbušenih kroz glavčinu radnog kola) omogućavaju da se visoki pritisak vode izjednači na obje strane radnog kola, smanjujući neto aksijalni potisak.",
+                subsection1_2_text2: "<strong>Kada funkcionišu pravilno:</strong> Balansne rupe smanjuju potisak za 50-70%, spuštajući opterećenje sa 220 kN na ~80-100 kN.",
+                subsection1_2_text3: "<strong>Kada su začepljene:</strong> Ne dolazi do izjednačavanja pritiska. Puno opterećenje od 220 kN primijenjeno na aksijalni ležaj → brzi porast temperature → otkazivanje Babbitt metala u roku od nekoliko sati.",
+                section2_title: "SOP 2: Procedura inspekcije balansnih rupa",
+                section2_intro: "<strong>Kritičnost:</strong> Zbog uslova rijeke bogate muljem, inspekcija balansnih rupa mora se izvršiti tokom <strong>svakog velikog remonta</strong> i kada god se temperatura aksijalnog ležaja poveća bez objašnjenja.",
+                subsection2_1_title: "2.1 Zahtjevi za pristup",
+                access1: "<strong>Status jedinice:</strong> Potpuno gašenje, MIV zatvoren, sifon ispražnjen.",
+                access2: "<strong>Sigurnost:</strong> Protokol ulaska u zatvoreni prostor za pristup sifonu (monitor gasa, ventilacija, sigurnosni pojas).",
+                access3: "<strong>Alati:</strong> Visokopritisna vodena koplja, boroskop kamera, žičane četke, lampa.",
+                subsection2_2_title: "2.2 Vizuelna inspekcija",
+                inspect1: "<strong>Pristup preko sifona:</strong> Uđite u sifon sa strane odvodnog kanala. Navigirajte do područja glavčine radnog kola.",
+                inspect2: "<strong>Locirajte balansne rupe:</strong> Obično rupe prečnika 6-12mm izbušene radijalno kroz glavčinu radnog kola (obično 4-8 rupa ravnomjerno raspoređenih oko oboda).",
+                inspect3_label: "Vizuelna provjera:",
+                inspect3_text: "Sa lampom, pregledajte svaki otvor rupe:",
+                inspect3_pass: "<strong>PROLAZ:</strong> Rupa je čista, možete vidjeti kroz na drugu stranu ili potvrditi dubinu žičanom sondom.",
+                inspect3_fail: "<strong>PAD:</strong> Rupa je djelimično ili potpuno blokirana muljem, otpadom ili mineralnim naslagama.",
+                subsection2_3_title: "2.3 Procedura čišćenja",
+                clean1: "<strong>Mehaničko čišćenje:</strong> Koristite žičanu četku ili fleksibilnu bušilicu da uklonite naslage mulja.",
+                clean2: "<strong>Visokopritisna voda:</strong> Isperite svaku rupu vodenim kopljem (100-150 bara) da očistite preostali otpad.",
+                clean3: "<strong>Verifikacija:</strong> Umetnite žičani mjerač (6mm prečnika) kroz punu dužinu rupe da potvrdite potpuno čišćenje.",
+                clean4: "<strong>Dokumentacija:</strong> Zabilježite stanje svake rupe u dnevnik održavanja (procjena % začepljenja prije čišćenja).",
+                silt_warning: "<strong>PROTOKOL ZA RIJEKU BOGATU MULJEM:</strong> Tokom monsunske sezone (Jun-Septembar), koncentracija mulja se utrostručuje. Ako jedinica radi kontinuirano tokom ovog perioda, planirajte inspekciju balansnih rupa na kraju sezone (Oktobar) kao preventivno održavanje, a ne samo reaktivno.",
+                section3_title: "SOP 3: Inspekcija jastučića aksijalnog ležaja",
+                section3_intro: "Aksijalni ležaj koristi jastučiće od Babbitt metala koji klize na filmu ulja. Ako aksijalno opterećenje prekorači dizajnerske limite (zbog začepljenih balansnih rupa), film ulja se raspada i dolazi do kontakta metal-na-metal.",
+                subsection3_1_title: "3.1 Analiza ulja - Test \"Ljuspica\"",
+                subsection3_1_text: "<strong>Dijagnostički princip:</strong> Babbitt metal koji otkazuje ispušta mikroskopske metalne ljuspice u ulje ležaja. Ove ljuspice su vidljiv dokaz problema ležaja.",
+                flakes1: "<strong>Prikupljanje uzorka:</strong> Izvucite uzorak ulja iz slivnika aksijalnog ležaja (minimum 50ml u čistoj staklenoj boci).",
+                flakes2_label: "Vizuelna inspekcija:",
+                flakes2_text: "Držite bocu prema izvoru svjetla. Nježno vrtite.",
+                flakes2_pass: "<strong>PROLAZ (Zdravo):</strong> Ulje je prozirno jantarno, nema vidljivih čestica.",
+                flakes2_warn: "<strong>UPOZORENJE:</strong> Fini metalni \"sjaj\" vidljiv pri vrtenju - rano stadijum habanja.",
+                flakes2_crit: "<strong>KRITIČNO:</strong> Vidljive metalne ljuspice koje se talože na dno - aktivna degradacija Babbitt metala.",
+                flakes3: "<strong>Laboratorijska analiza:</strong> Ako se otkriju ljuspice, pošaljite uzorak na spektrografsku analizu da kvantifikujete koncentraciju metala (ppm).",
+                subsection3_2_title: "3.2 Vizuelna inspekcija jastučića aksijalnog ležaja (Tokom remonta)",
+                subsection3_2_text: "<strong>Pristup:</strong> Zahtijeva rastavljanje kućišta aksijalnog ležaja (veliki posao, obično tokom planiranog isključenja).",
+                pad_healthy: "<strong>Zdrav Babbitt:</strong> Glatka srebrna površina, ujednačena debljina, bez ogrebotina ili jamičenja.",
+                pad_early: "<strong>Rano habanje:</strong> Promjena boje površine (tamnjenje), manje linije ogrebotina paralelne sa rotacijom.",
+                pad_advanced: "<strong>Napredni kvar:</strong> Duboke brazde, nedostajući komadi Babbitt metala, izložena čelična podloga.",
+                visual_aid: "[FOTO REFERENCA: Zdrava vs. Pokvarena površina Babbitt metala]<br>Preporučeno: Kreirajte vizuelnu referentnu tabelu postavljenu u radionici za obuku tehničara.",
+                section4_title: "SOP 4: Praćenje temperature aksijalnog ležaja",
+                section4_intro: "Kontinuirano praćenje pruža rano upozorenje prije katastrofalnog kvara.",
+                subsection4_1_title: "4.1 Normalni radni opseg",
+                temp_limits: "<strong>GRANICE TEMPERATURE AKSIJALNOG LEŽAJA:</strong><br>Normalno: 40-50°C (zdrav ležaj, čiste balansne rupe)<br>Upozorenje: 50-60°C (povećano opterećenje ili granično podmazivanje)<br>Kritično: >60°C (ZAUSTAVITE JEDINICU - pregledajte balansne rupe i kvalitet ulja)<br>Hitno: >70°C (Trenutno gašenje - kvar ležaja neizbježan)",
+                subsection4_2_title: "4.2 Dijagnostička korelacija",
+                subsection4_2_text: "Obrasci porasta temperature mogu ukazati na osnovni uzrok:",
+                diag1: "<strong>Postepen porast tokom dana/sedmica:</strong> Balansne rupe se polako začepljuju muljem → Planirajte čišćenje tokom sljedećeg planiranog isključenja.",
+                diag2: "<strong>Nagli skok (sati):</strong> Balansna rupa(e) iznenada blokirana udarom otpada → Potrebna hitna inspekcija.",
+                diag3: "<strong>Porast temperature sa povećanjem vibracija:</strong> Moguća neusklađenost koja stvara neuravnotežen potisak → Provjerite poravnanje osovine (ref: SOP za Preciznost).",
+                subsection4_3_title: "4.3 SCADA integracija",
+                scada1: "<strong>Tačke alarma:</strong> Konfigurišite SCADA da alarmira na 55°C (upozorenje) i 65°C (kritično).",
+                scada2: "<strong>Praćenje trenda:</strong> Pregledajte trend temperature aksijalnog ležaja sedmično. Postepeni trend rasta tokom mjeseci ukazuje na degradaciju balansnih rupa čak i ako je apsolutna temperatura još uvijek prihvatljiva.",
+                section5_title: "Kontrolna lista sažetka",
+                summary_title: "Raspored preventivnog održavanja",
+                sched1: "<strong>Mjesečno:</strong> Prikupite uzorak ulja iz aksijalnog ležaja, vizuelna inspekcija ljuspica.",
+                sched2: "<strong>Kvartalno:</strong> Pregledajte trendove temperature aksijalnog ležaja (SCADA podaci).",
+                sched3: "<strong>Godišnje:</strong> Inspekcija i čišćenje balansnih rupa (obavezno za uslove rijeke bogate muljem).",
+                sched4: "<strong>Svaki veliki remont (3-5 godina):</strong> Rastavite aksijalni ležaj, pregledajte jastučiće od Babbitt metala na habanje, zamijenite ako je >30% degradirano.",
+                emergency_title: "Protokol hitnog odgovora",
+                emerg1: "<strong>Ako je temperatura potiska >65°C:</strong> Odmah smanjite opterećenje, pripremite se za gašenje.",
+                emerg2: "<strong>Ako se otkriju metalne ljuspice u ulju:</strong> Planirajte hitno isključenje u roku od maksimalno 2 sedmice.",
+                emerg3: "<strong>Ako je temperatura >70°C:</strong> ZAUSTAVITE JEDINICU - Ne pokrećite ponovo dok se osnovni uzrok ne identifikuje i ispravi.",
+                back_btn: "← Povratak na Glavni priručnik"
+            }
+        };
+
+        function setLang(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerHTML = i18n[lang][key];
+                }
+            });
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('anohub_lang_pref', lang);
+        }
+
+        // Initialize from storage or default to English
+        const savedLang = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(savedLang);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

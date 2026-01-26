@@ -1,0 +1,24 @@
+name: Forensic Integrity Gate
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify-integrity:
+    name: Verify NC-10.2 Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Run Integrity Verifier
+        run: node scripts/verify_nc102_integrity.cjs

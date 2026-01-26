@@ -1,0 +1,509 @@
+{
+    "common": {
+        "switchLanguage": "Promijeni jezik",
+        "simulate": "Simuliraj",
+        "reset": "Resetuj",
+        "confidence": "Pouzdano",
+        "advice": "Preporuka"
+    },
+    "hpp": {
+        "title": "Projekt Cerebro",
+        "physics_ready": "SISTEM SPREMAN",
+        "recalculating": "PRORAČUN U TOKU...",
+        "hydraulics": "Hidraulika",
+        "mechanical": "Mehanika",
+        "electro": "Elektro",
+        "penstock": "Cjevovod",
+        "bolts": "Vijci",
+        "shaft": "Osovina",
+        "turbine": "Turbina",
+        "generator": "Generator"
+    },
+    "physics": {
+        "grossHead": "Bruto pad",
+        "flow": "Instalisani protok",
+        "netHead": "Neto pad",
+        "efficiency": "Stepen iskorištenja",
+        "powerOutput": "Snaga",
+        "annualProd": "Godišnja proizvodnja",
+        "roi": "Povrat investicije",
+        "waterHammer": "Hidraulički udar",
+        "hoopStress": "Obodno naprezanje",
+        "boltSafety": "Faktor sigurnosti vijaka",
+        "boltLoad": "Opterećenje vijka",
+        "boltCapacity": "Nosivost vijka",
+        "torque": "Moment pritezanja",
+        "grade": "Klasa čvrstoće",
+        "material": "Materijal",
+        "wallThickness": "Debljina stijenke"
+    },
+    "forensics": {
+        "title": "Dijagnostička Forenzika",
+        "subtitle": "Terenska Analiza • Zdravlje Mašine • Uzrok Kvara",
+        "vision_title": "Analiza Teksture",
+        "audio_title": "Zvučni Potpis",
+        "post_mortem": "Post-Mortem Nadzor",
+        "drag_drop": "Prevucite slike oštećenja za analizu.",
+        "scanning": "SKENIRANJE TEKSTURE...",
+        "diagnosis_cavitation": "KAVITACIJA",
+        "diagnosis_erosion": "ABRAZIVNA EROZIJA",
+        "advice_cavitation": "Kritično: Mikro-mlazovi su uklonili materijal. Preporučeno: Odmah navarivanje Stelitom.",
+        "advice_erosion": "Upozorenje: Pijesak polira površinu. Preporučeno: Nanijeti keramički premaz (Volfram Karbid).",
+        "sand_hiss": "Visokofrekventno šištanje (15kHz+)",
+        "sand_diagnosis": "Dijagnoza: Detektovan kvarcni pijesak u Pelton mlaznici. Odmah provjeriti filtere taložnice.",
+        "emergency_cooling": "HITNI PROTOKOL",
+        "seizure_risk": "RIZIK OD ZARIBAVANJA OSOVINE. POKRENUTE POMOĆNE PUMPE ZA HLAĐENJE."
+    },
+    "glossary": {
+        "water_hammer": "Hidraulički udar",
+        "bearing_clearance": "Zazor ležaja",
+        "cavitation": "Kavitacija",
+        "erosion": "Erozija",
+        "bolt_grade": "Klasa vijka"
+    },
+    "insights": {
+        "kaplan_risk": "LEGACY UPOZORENJE: Kaplan na padu > 70m nosi ogroman rizik od kavitacije. Potrebna duboka potopljenost (negativna kota).",
+        "francis_inefficient": "Ekonomska neisplativost: Francis na padu < 20m zahtijeva ogroman spiralni cjevovod.",
+        "price_suspicious": "Cijena značajno ispod tržišne. Provjeriti porijeklo čelika i referentnu listu.",
+        "efficiency_high": "Sumnjivo visoka efikasnost ({{value}}%). Fizički limit je oko {{limit}}%. Tražiti IEC 60041 test izvještaj.",
+        "rotor_height": "Rotor ({{diameter}}m) je viši od tunela ({{height}}m).",
+        "rotor_width": "Rotor je širi od pristupnog puta.",
+        "bridge_capacity": "Težina ({{weight}}t) prelazi nosivost mosta ({{limit}}t).",
+        "split_rotor_required": "Obavezan \"Split Rotor\" dizajn (iz dva dijela) ili zavarivanje na licu mjesta.",
+        "transport_standard": "Standardni transport moguć.",
+        "kaplan_double_reg": "Velike varijacije protoka. Kaplan double-regulated je dobar, ali 2 jedinice (1/3 + 2/3) pokrivaju minimum bolje.",
+        "kaplan_single": "Stabilan protok, 1 velika Kaplan turbina je najjeftinija opcija.",
+        "francis_part_load": "Francis ima lošu efikasnost ispod 40%. Bolje 2 manje jedinice za pokrivanje niskih voda."
+    },
+    "warnings": {
+        "wall_thin_burst": "KRITIČNO: Debljina stijenke {{thickness}}mm nedovoljna za {{head}}m udarnog pritiska. Faktor sigurnosti: {{sf}} (Min 1.5). RIZIK OD PUCANJA.",
+        "bolt_failure_46": "OTKAZIVANJE VIJAKA: Vijci klase 4.6 ne mogu izdržati pritiske > 25 bara. Nadograditi na 8.8.",
+        "corrosion_steel": "BRZA KOROZIJA: Nezaštićeni čelik u abrazivnoj/prljavoj vodi će propasti za < 10 godina.",
+        "corrosion_paint": "Teško Održavanje: Boja će se brzo skidati u muljevitoj vodi. Razmotriti Pocinčavanje."
+    },
+    "notifications": {
+        "title": "Centar za Obavijesti",
+        "settings": "Postavke",
+        "markAllRead": "Označi sve kao pročitano",
+        "empty": "Nema novih obavijesti.",
+        "tempSpike": "KRITIČNO: Zastoj osovine detektovan, ali temperatura raste! Trenutno: {{temp}}°C (Limit: {{limit}}°C)",
+        "vibrationWarning": "Upozorenje: Nivo vibracija se približava Zoni B.",
+        "maintenanceDue": "Info: Planirano održavanje za 3 dana."
+    },
+    "dashboard": {
+        "title": "Izvršna Komanda",
+        "subtitle": "Francis < 5 MW // Heritage Precision Interface",
+        "status_active": "NC-4.2 Komanda Aktivna",
+        "neural_link": "Neuralna Veza",
+        "export_brief": "Izvezi Izvještaj",
+        "heritage_banner": {
+            "title": "Heritage Precision Standard",
+            "alert_desc": "Trenutno odstupanje centriranja ubrzava habanje izvan projektnih parametara.",
+            "subtitle": "Protokol Zlatnog Centriranja",
+            "compliant": "Usklađeno",
+            "deviation": "Odstupanje",
+            "years_lost": "Izgubljene Godine Rada"
+        },
+        "topology": {
+            "title": "Topologija Sistema",
+            "digital_twin": "Digitalni Blizanac",
+            "full_view": "Puni Pregled",
+            "rated_power": "Nominalna Snaga",
+            "grid_freq": "Mrežna Frekvencija"
+        },
+        "kpi": {
+            "active_power": "Aktivna Snaga",
+            "active_power_sub": "Verifikovan Izlaz",
+            "system_health": "Zdravlje Sistema",
+            "net_head": "Neto Pad",
+            "axial_thrust": "Aksijalni Potisak",
+            "axial_thrust_sub": "Max: 250 kN",
+            "structural_life": "Konstruktivni Vijek",
+            "structural_life_sub": "Rezerva Zamora",
+            "performance_gap": "Gap Performansi",
+            "vs_design": "vs Projektovano"
+        },
+        "finance": {
+            "title": "Rizik vs. Finansije",
+            "maint_buffer": "Budžet Održavanja",
+            "annual_loss": "Godišnji Gubitak",
+            "predictive_savings": "Prediktivne Uštede",
+            "profit_index": "Indeks Profita",
+            "profit_basis": "Bazirano na trenutnoj efikasnosti i tržišnim cijenama"
+        },
+        "sentinel": {
+            "title": "Sentinel Preporuke"
+        },
+        "riskStatus": {
+            "label": "STATUS RIZIKA",
+            "normal": "NOMINALNO",
+            "warning": "UPOZORENJE",
+            "critical": "KRITIČNO"
+        }
+    },
+    "sidebar": {
+        "fleet_overview": "Pregled Flote",
+        "mission_sectors": "Sektori Misije",
+        "generate_forensic": "Generiši Forenziku",
+        "hive_link": "Hive Veza",
+        "connected": "Povezano",
+        "offline": "Offline",
+        "search_placeholder": "Brza Pretraga... (Ctrl+K)",
+        "sectors": {
+            "critical_ops": "Kritične Operacije",
+            "mechanical": "Mehanika",
+            "electrical": "Elektro / SCADA",
+            "risk": "Rizik i Forenzika",
+            "knowledge": "Baza Znanja"
+        },
+        "modules": {
+            "mission_control": "Kontrola Misije",
+            "francis_hub": "Francis Čvorište",
+            "diagnostic_twin": "Dijagnostički Blizanac",
+            "shaft_alignment": "Centriranje Osovina",
+            "bolt_torque": "Pritezanje Vijaka",
+            "labyrinth_health": "Zdravlje Labirinata",
+            "hydraulic_maint": "Hidrauličko Održavanje",
+            "maintenance_engine": "Motor Održavanja",
+            "grid_sync": "Sinhronizacija Mreže",
+            "generator_integrity": "Integritet Generatora",
+            "excitation": "Sistem Uzbude",
+            "executive": "Izvršna Tabla",
+            "barlow_audit": "Barlow Strukturalni Audit",
+            "longevity_roadmap": "Mapa Dugovječnosti (50 god)",
+            "forensic_analysis": "Forenzička Analiza",
+            "precision_audit": "Precizni Audit",
+            "sop_manager": "SOP Menadžer",
+            "engineering_manifesto": "Inženjerski Manifest",
+            "learning_lab": "Laboratorija Učenja",
+            "intuition_log": "Dnevnik Intuicije",
+            "logbook": "Dnevnik Održavanja",
+            "hpp_studio": "HPP Studio",
+            "hppBuilder": "HPP Dizajner",
+            "hppBuilderDesc": "Dizajn i simulacija novih postrojenja."
+        },
+        "boltTorque": "Pritezanje Vijaka",
+        "shaftAlignment": "Centriranje Osovina",
+        "hydraulicMaintenance": "Hidrauličko Održavanje",
+        "maintenanceLogbook": "Dnevnik Održavanja",
+        "structuralIntegrity": "Strukturalni Integritet",
+        "shadowEngineer": "Shadow Engineer",
+        "toolboxAnalytics": "Analitika Alata"
+    },
+    "terminal": {
+        "title": "Komandni_Terminal_v4.2",
+        "init": "Inicijalizacija Neuralne Veze... kucaj /help",
+        "placeholder": "Unesi komandu (npr. /explain)..."
+    },
+    "toolbox": {
+        "greeting": {
+            "morning": "Dobro Jutro, Inženjeru",
+            "afternoon": "Dobar Dan, Inženjeru",
+            "evening": "Dobro Veče, Inženjeru"
+        },
+        "engineer": "Glavni Inženjer",
+        "systemOperational": "Sistem Operativan",
+        "assetsOnline": "Sredstava Online",
+        "activeAsset": "Aktivno: {{name}}",
+        "passport": "Pasoš Sredstva",
+        "addAsset": "Dodaj Sredstvo",
+        "zeroState": {
+            "title": "Sistem Hladni Start",
+            "noAssets": "Nema detektovanih sredstava u lokalnom rezervoaru.",
+            "initialize": "Inicijaliziraj Novo Sredstvo"
+        },
+        "sections": {
+            "utilities": "Terenski Alati",
+            "designAnalysis": "Dizajn i Analiza",
+            "operationalModules": "Operativni Moduli",
+            "recentActivity": "Nedavna Aktivnost"
+        },
+        "activity": {
+            "descLogbook": "Pregled dnevnih zapisa i anomalija.",
+            "descStructural": "Monitor zdravlja brane i cjevovoda.",
+            "descShadow": "AI-vođene procedure održavanja.",
+            "descAnalytics": "Izvršni finansijski pregled.",
+            "none": "Nema zabilježenih aktivnosti.",
+            "open": "Otvori Dnevnik",
+            "view": "Vidi Sve Aktivnosti"
+        },
+        "toast": {
+            "generatingPassport": "Generisanje Digitalnog Pasoša za {{asset}}..."
+        },
+        "diagnostics": {
+            "francisTitle": "Francis Dijagnostika",
+            "francisDesc": "Spektralna analiza u realnom vremenu za {{name}}"
+        },
+        "logicHub": {
+            "title": "Logičko Čvorište",
+            "desc": "Centralizovana neuralna kontrolna jedinica"
+        },
+        "pelton": {
+            "title": "Pelton Sistemi",
+            "desc": "Analiza injektora i lopatica"
+        },
+        "kaplan": {
+            "title": "Kaplan Kontrola",
+            "desc": "Ugao lopatica i optimizacija protoka"
+        },
+        "bulb": {
+            "title": "Cijevna Turbina",
+            "desc": "Monitoring potopljenih jedinica"
+        }
+    },
+    "validation": {
+        "limits": {
+            "negative": "{{field}} ne može biti negativan ili ispod {{min}} {{unit}}",
+            "exceeds": "{{field}} od {{value}} {{unit}} prelazi fizički maksimum ({{max}} {{unit}})",
+            "nominal": "Vrijednost unutar inženjerskih limita"
+        },
+        "bearing": {
+            "critical": "KRITIČNO: {{value}}°C prelazi sigurni limit (85°C). Preporučeno hitno zaustavljanje.",
+            "warning": "UPOZORENJE: {{value}}°C se približava kritičnom pragu. Potreban pojačan nadzor."
+        },
+        "alignment": {
+            "critical": "KRITIČNO ODSTUPANJE: {{value}} mm/m je {{ratio}}x veće od Zlatnog Standarada.",
+            "heritage": "HERITAGE ODSTUPANJE: {{value}} mm/m prelazi 0.05 mm/m Zlatni Standard."
+        },
+        "cross_sector": {
+            "thermal_stress": "TERMALNA UZROČNOST: Odstupanje u centriranju ({{alignment}} mm/m) aktivno indukuje {{stress}}% viška termalnog opterećenja na ležajeve.",
+            "oil_degradation": "UBRZANO HABANJE: Životni vijek ulja smanjen za {{years}} godina zbog kontaminacije česticama.",
+            "seal_integrity": "MEHANIČKA EROZIJA: Visoke vibracije ({{value}} mm/s) kompromituju integritet zaptivača.",
+            "insulation_stress": "ELEKTRIČNI STRES: Nestabilnost mreže ({{deviation}} Hz) degradira izolaciju generatora."
+        },
+        "certification": {
+            "alignment_fail": "Centriranje {{value}} mm/m prelazi 0.05 mm/m standard",
+            "vibration_fail": "Vibracije {{value}} mm/s prelaze ISO 'Dobro' prag",
+            "temp_fail": "Temperatura ležaja {{value}}°C izvan optimalnog opsega"
+        }
+    },
+    "hpp_builder": {
+        "assembly": {
+            "title": "Strukturalna Revizija Montaže",
+            "subtitle": "Korak 4: Vertikalna Integracija & Kontrola Tolerancija",
+            "components": {
+                "draft_tube": "Sifonski Dio (Draft Tube)",
+                "spiral_case": "Spiralno Kućište",
+                "stay_ring": "Statorski Prsten",
+                "wicket_gates": "Sprovodne Lopatice",
+                "head_cover": "Poklopac Turbine",
+                "rotor": "Rotor (Kolo)",
+                "main_shaft": "Glavna Osovina",
+                "stator": "Stator Generatora"
+            },
+            "errors": {
+                "seq_001": "Fundamentalna Greška: Sifonski dio se mora prvi instalirati.",
+                "seq_002": "Greška Oslonca: Spiralno kućište zahtijeva temelj sifona.",
+                "seq_003": "Greška Opterećenja: Statorski prsten mora ležati na spirali.",
+                "seq_004": "ERR_SEQ_004: Sprovodne lopatice moraju biti instalirane prije poklopca.",
+                "seq_005": "Greška Zazora: Poklopac turbine obavezan prije spuštanja rotora."
+            },
+            "prompts": {
+                "measure_alignment": "Unesi Izmjereno Centriranje (mm/m)",
+                "bolt_tension": "Potvrdi Moment Pritezanja (Nm)",
+                "clearance_check": "Provjera Zazora",
+                "scraping_contact": "Verifikovan Kontakt Tuširanja"
+            },
+            "status": {
+                "foundation_locked": "Temelj Zaključan",
+                "integrity_verified": "Strukturalni Integritet 100%",
+                "leak_risk": "Detektovan Rizik od Curenja"
+            }
+        }
+    },
+    "generator": {
+        "detail": {
+            "title": "Generator Jedinica",
+            "drillDown": "Detaljna Analiza",
+            "functionalTarget": "Funkcionalni Cilj",
+            "precisionRequirement": "Zahtjev Preciznosti",
+            "heritageTip": "Terenska Instrukcija",
+            "initiateScan": "Pokreni Dijagnostički Sken",
+            "selectHotspot": "Odaberi Tačku",
+            "identifyComponent": "Identifikuj komponentu na zvaničnom crtežu",
+            "frontBearing": {
+                "name": "Prednji Ležaj (DE)",
+                "param": "Preciznost Centriranja",
+                "func": "Primarni radijalni oslonac osovine generatora. Ključan za održavanje koncentričnosti sa vazdušnim zazorom statora.",
+                "precision": "$0.05\\text{ mm/m}$ Heritage Standard",
+                "heritage": "Specifikacija 0.05 mm/m potiče od legacy Švajcarskih proizvođača turbina—zlatni standard koji prevencira neravnomjernu distribuciju vazdušnog zazora."
+            },
+            "rearBearing": {
+                "name": "Zadnji Ležaj (NDE)",
+                "param": "Električna Izolacija",
+                "func": "Sekundarni radijalni oslonac, električno izolovan kako bi spriječio cirkulaciju struja kroz uljni film ležaja.",
+                "precision": "Otpor Izolacije > 1 MΩ",
+                "heritage": "Električna izolacija na NDE ležaju prekida krug struje osovine, štiteći oba ležaja od EDM erozije (elektroerozija)."
+            },
+            "groundingBrush": {
+                "name": "Četka za Uzemljenje",
+                "param": "Kontrola Struja Osovine",
+                "func": "Obezbeđuje put niskog otpora za struje osovine indukovane elektromagnetnim asimetrijama u generatoru.",
+                "precision": "Otpor Kontakta Četke < 10 mΩ",
+                "heritage": "Istrošena četka vodi do mikro-rupičenja u ležajevima, značajno smanjujući životni vijek sredstva. Provjeravati habanje četke svakih 2000 sati."
+            },
+            "lubrication": {
+                "name": "Sistem Podmazivanja",
+                "param": "Integritet Uljnog Filma",
+                "func": "Cirkuliše ulje pod pritiskom za hlađenje i podmazivanje glavnih ležajeva turbine-generatora.",
+                "precision": "5 mikrona - standard filtracije",
+                "heritage": "Čist uljni film je kritičan za dugovječnost kliznih ležaja pod visokim pritiskom. Uvijek verifikovati ISO kod čistoće 16/14/11."
+            },
+            "stator": {
+                "name": "Jezgro Statora i Vazdušni Zazor",
+                "param": "Magnetna Sredina",
+                "func": "Sadrži jezgro i namotaje, obezbeđujući strukturalni oslonac i definirajući elektromagnetnu sredinu mašine.",
+                "precision": "Aksijalna igra < 0.5 mm na Magnetnoj Sredini",
+                "heritage": "Magnetna Sredina je aksijalna pozicija gdje su elektromagnetne sile balansirane. Rad izvan centra stvara potisak na kolo turbine."
+            },
+            "anchorBolts": {
+                "name": "Sidreni Vijci Temelja",
+                "param": "Projektni Moment",
+                "func": "Osigurava okvir generatora na betonski temelj, prenoseći sva dinamička opterećenja na građevinsku strukturu.",
+                "precision": "Moment po M36 Klasa 8.8: 1850 Nm",
+                "heritage": "Pritegnuti u zvjezdastom uzorku kako bi se spriječila deformacija okvira. Nikada ne pritezati sekvencijalno oko perimetra."
+            },
+            "jackingBolts": {
+                "name": "Vijci za Podešavanje (Jacking)",
+                "param": "MORAJU BITI LABAVI",
+                "func": "Koriste se tokom centriranja za fino podešavanje pozicije generatora. Moraju biti olabavljeni nakon pritezanja sidrenih vijaka.",
+                "precision": "Finalno Stanje: Labavo prstima + 1/4 okreta nazad",
+                "heritage": "Ovi vijci služe isključivo za pozicioniranje. Ako se ostave zategnuti, stvaraju parazitski stres koji imitira vibracije neusklađenosti."
+            },
+            "shims": {
+                "name": "Precizne Podmetače za Nivelaciju",
+                "param": "Zlatni Standard",
+                "func": "Nehrđajuće čelične podmetače koje uspostavljaju vertikalni datum centriranja. Ukupna debljina određuje finalnu elevaciju.",
+                "precision": "$0.01\\text{ mm/m}$ Zlatni Standard",
+                "heritage": "Koristiti maksimum 3-4 podmetače po stoporu. Naslagane podmetače djeluju kao opruga, kompromitirajući stabilnost pod dinamičkim opterećenjima."
+            }
+        }
+    },
+    "runner": {
+        "detail": {
+            "title": "Francis Kolo (Runner)",
+            "drillDown": "Hidraulička Analiza",
+            "functionalTarget": "Funkcionalni Cilj",
+            "precisionRequirement": "Zahtjev Preciznosti",
+            "heritageTip": "Terenska Instrukcija",
+            "initiateScan": "Pokreni Hidraulički Sken",
+            "selectHotspot": "Odaberi Tačku",
+            "identifyComponent": "Identifikuj komponentu na hidrauličkom crtežu",
+            "runnerBlades": {
+                "name": "Francis Kolo (Rotor)",
+                "param": "Otpornost na Kavitaciju",
+                "func": "Konvertuje hidrauličku energiju u mehanički obrtni moment kroz precizno profilisane kanale lopatica.",
+                "precision": "Tolerancija profila lopatice: ±0.5 mm",
+                "heritage": "Erozija čelne ivice je prvi indikator rada izvan projektnih uslova. Inspekcija lopatica svakih 5000 sati za šupljikave uzorke."
+            },
+            "spiralCase": {
+                "name": "Sekcija Spiralnog Kućišta",
+                "param": "Strukturni Pritisak",
+                "func": "Distribuira vodu visokog pritiska ravnomjerno oko obima turbinskog kola sa optimizovanim profilom brzine.",
+                "precision": "Glatkoća površine: Ra < 6.3 μm",
+                "heritage": "Spiralna geometrija održava konstantnu brzinu kako bi se spriječilo neravnomjerno opterećenje lopatica, smanjujući zamorni stres."
+            },
+            "wearingGap": {
+                "name": "Zazor Zaptivnog Prstena",
+                "param": "Kritično za Efikasnost",
+                "func": "Zaptivni interfejs između rotirajućeg kola i stacionarnih komponenti, prevencija bypass-a vode visokog pritiska.",
+                "precision": "$0.3 - 0.5\\text{ mm}$ Zlatni Standard",
+                "heritage": "Povećanje zazora za 1mm može smanjiti snagu turbine za >3%. Mjeriti zazor na 4 glavne tačke tokom svakog velikog remonta."
+            },
+            "axialPosition": {
+                "name": "Aksijalna Pozicija Centriranja",
+                "param": "Hidraulična Centralna Linija",
+                "func": "Definiše preciznu vertikalnu dubinu rotora u odnosu na hidrauličnu centralnu liniju turbine.",
+                "precision": "Tolerancija aksijalne igre: ±0.2 mm",
+                "heritage": "Neispravna aksijalna pozicija stvara parazitski potisak na ležajeve generatora, ubrzavajući habanje i smanjujući efikasnost."
+            },
+            "headCover": {
+                "name": "Prednji Poklopac i Zaptivanje",
+                "param": "Cilj Nultog Curenja",
+                "func": "Obezbjeđuje strukturno zatvaranje i zaptivanje gornje komore turbine, zadržavajući visoki pritisak.",
+                "precision": "Moment pritezanja: M24 Klasa 8.8 = 980 Nm",
+                "heritage": "Vijčani spoj mora održavati apsolutni integritet zaptivanja. Redoslijed pritezanja prati zvijezda šemu za ravnomjernu raspodjelu pritiska."
+            },
+            "guideVaneAssembly": {
+                "name": "Sklop Sprovodnih Lopatica (Wicket Gates)",
+                "param": "Regulacija Protoka",
+                "func": "Kontroliše zapreminu i smjer vode koja ulazi u radno kolo. Kliknite za Detalje.",
+                "precision": "Odstupanje sinhronizacije < 0.1°",
+                "heritage": "24 sprovodne lopatice se moraju kretati u savršenom skladu. Jedna lopatica koja kasni stvara asimetrični potisak koji uništava vodeći ležaj."
+            }
+        }
+    },
+    "guidevane": {
+        "detail": {
+            "title": "Sistem Sprovodnih Lopatica",
+            "wicketGates": {
+                "name": "Sprovodne Lopatic",
+                "param": "Sinhronizacija Protoka",
+                "func": "Reguliše protok vode u radno kolo, kontrolišući snagu turbine i održavajući hidrauličku stabilnost.",
+                "precision": "Ugaono Odstupanje < 0.1°",
+                "heritage": "Precizna ugaona sinhronizacija određuje čistoću ulaska toka. Svako odstupanje > 0.1° stvara turbulenciju koja udara u lopatice radnog kola."
+            },
+            "shearPins": {
+                "name": "Sigurnosni Klinovi",
+                "param": "Mehanički Osigurač",
+                "func": "Štite mehanizam regulacije pucanjem pod prekomjernim opterećenjem (npr. zaglavljivanje krhotinama), odvajajući specifičnu lopaticu.",
+                "precision": "Kalibrisana Tačka Pucanja",
+                "heritage": "Nikada ne mijenjajte standardnim vijcima. Koristite samo kalibrisane sigurnosne klinove za zaštitu polužja u slučaju zaglavljivanja stranog tijela."
+            },
+            "vaneClearance": {
+                "name": "Čeoni Zazor Lopatica",
+                "param": "Gubitak Efikasnosti",
+                "func": "Zazor između krajeva lopatica i poklopca/donjeg prstena. Mora biti minimalan da spriječi curenje, ali dovoljan za rad.",
+                "precision": "Zazor < 0.2 mm",
+                "heritage": "Prekomjeran gornji/donji zazor djeluje kao curenje velike brzine, erodirajući površine i smanjujući efikasnost mjerljivo za 0.5-1%."
+            },
+            "operatingRing": {
+                "name": "Regulacioni Prsten i Polužje",
+                "param": "Kinematika Polužja",
+                "func": "Prenosi silu servomotora na sve lopatice istovremeno osiguravajući sinhronizovano otvaranje/zatvaranje.",
+                "precision": "Cilj Nultog Zazora",
+                "heritage": "Glatk rad se oslanja na redovno podmazivanje čaura polužja. Zaglavljeno polužje uzrokuje njihanje regulatora i fluktuacije snage."
+            }
+        },
+        "mechanical": {
+            "detail": {
+                "title": "Mehanička Kičma",
+                "genBearing": {
+                    "name": "Generatorski Vodeći Ležaj (DE)",
+                    "param": "Nosivost Opterećenja",
+                    "func": "Podržava radijalna i aksijalna opterećenja rotora generatora i mase zamajca.",
+                    "precision": "Temp < 65°C",
+                    "heritage": "Podržava značajnu težinu zamajca. Debljina uljnog filma mora se kontinuirano pratiti."
+                },
+                "flywheel": {
+                    "name": "Zamajac",
+                    "param": "Rotaciona Inercija",
+                    "func": "Pohranjuje kinetičku energiju za stabilizaciju brzine turbine tokom odbacivanja tereta i fluktuacija mreže.",
+                    "precision": "Balans G2.5 ISO 1940",
+                    "heritage": "Nikada ne radite bez postavljenog štitnika zamajca. Pohranjena kinetička energija je ogromna i katastrofalna ako se oslobodi."
+                },
+                "coupling": {
+                    "name": "Spojnica Osovina (Ø200)",
+                    "param": "Prenos Momenta",
+                    "func": "Čvrsto povezuje osovinu turbine sa osovinom generatora, prenoseći obrtni moment.",
+                    "precision": "Bacanje < 0.03 mm",
+                    "heritage": "Bacanje osovine na ovoj tački bi trebalo biti < 0.03 mm TIR. Labavi vijci ovdje neminovno pucaju."
+                },
+                "turbBearing": {
+                    "name": "Turbinski Vodeći Ležaj",
+                    "param": "Hidraulička Stabilnost",
+                    "func": "Odupire se radijalnim hidrauličkim silama koje djeluju na radno kolo, održavajući koncentričnost osovine.",
+                    "precision": "Zazor 0.15 - 0.25 mm",
+                    "heritage": "Ležaj najbliži hidrauličkom haosu. Ako ovaj ležaj vibrira, prvo provjerite zaptivne prstenove radnog kola."
+                },
+                "shaftSeal": {
+                    "name": "Zaptivka Osovine Turbine",
+                    "param": "Prevencija Proboja Vode",
+                    "func": "Sprečava putovanje vode uz osovinu iz kućišta turbine u sklop ležaja.",
+                    "precision": "Curenje < 5 L/min",
+                    "heritage": "Karbonski prstenovi moraju biti pravilno 'uhodani'. Zaptivka koja curi poplavljuje turbinu, uzrokujući koroziju kućišta ležaja."
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,941 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Mono:wght@100..700&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Sinhala:wght@100..900&display=swap');
+
+
+:root {
+  /* --- INDUSTRIAL TOKENS (non-emissive) --- */
+  --accent-cyan: #06b6d4; /* subdued cyan */
+  --accent-amber: #b45309; /* muted amber */
+  --accent-red: #ef4444; /* muted red */
+  --accent-glow: rgba(0,0,0,0); /* intentionally non-emissive */
+  --metal-silver: #a1a1aa;
+  --metal-dark: #1e293b;
+  --panel-bg: rgba(2, 6, 23, 0.85);
+
+  /* --- PREMIUM TRANSITION TIMING (Snappy Industrial Feel) --- */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bloom-glow-cyan {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.bloom-glow-amber {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.metallic-border {
+  border: 1px solid var(--metal-silver);
+  box-shadow: inset 0 0 10px rgba(161, 161, 170, 0.2), 0 0 15px rgba(0, 255, 255, 0.1);
+  position: relative;
+}
+
+.metallic-border::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+@keyframes gear-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gear {
+  animation: gear-rotate 10s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+:root[data-theme="commander"] {
+  --bg-carbon: var(--bg-slate-950);
+  --accent-primary: 6, 182, 212;
+  /* Cyan-500 RGB */
+  --accent-health: 52, 211, 153;
+  /* Emerald-400 RGB */
+}
+
+:root[data-theme="tactical-red"] {
+  --accent-primary: 255, 0, 0;
+  /* Tactical Red */
+  --accent-glow: rgba(255, 0, 0, 0.5);
+  --bg-carbon: #030303;
+  /* Dimmer for night vision */
+  --bg-carbon-dim: #010101;
+}
+
+/* --- FIELD CONTRAST MODE (NC-4.2 TURBINE HALL) --- */
+/* Strips all ambient glows and orbs for maximum readability in poorly lit conditions */
+:root[data-theme="field-contrast"] {
+  --accent-primary: 255, 255, 255;
+  --accent-glow: none;
+  --bg-carbon: #000000;
+  --glass-opacity: 0;
+  --glass-blur: 0px;
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --commander-glow: none;
+}
+
+:root.field-mode {
+  /* Override all blur and glow effects */
+  --glass-blur: 0px !important;
+}
+
+:root.field-mode body {
+  background-color: #000000 !important;
+  background-image: none !important;
+}
+
+/* High contrast text */
+:root.field-mode * {
+  text-shadow: none !important;
+}
+
+/* Strip ambient glow orbs */
+:root.field-mode [class*="blur-"],
+:root.field-mode [class*="backdrop-blur"] {
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Remove blur from fixed elements */
+:root.field-mode .fixed[class*="blur"] {
+  opacity: 0 !important;
+}
+
+/* High contrast borders */
+:root.field-mode .glass-panel,
+:root.field-mode .glass-panel-deep {
+  background: #000000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: none !important;
+}
+
+/* Crisp text for field conditions */
+:root.field-mode .text-cyan-400,
+:root.field-mode .text-cyan-500 {
+  color: #00FFFF !important;
+}
+
+:root.field-mode .text-emerald-400,
+:root.field-mode .text-emerald-500 {
+  color: #00FF00 !important;
+}
+
+:root.field-mode .text-amber-400,
+:root.field-mode .text-amber-500 {
+  color: #FFFF00 !important;
+}
+
+:root.field-mode .text-red-400,
+:root.field-mode .text-red-500 {
+  color: #FF0000 !important;
+}
+
+/* High contrast status indicators */
+:root.field-mode .bg-cyan-500,
+:root.field-mode .bg-cyan-400 {
+  background-color: #00FFFF !important;
+}
+
+:root.field-mode .border-cyan-500\/20,
+:root.field-mode .border-cyan-500\/30,
+:root.field-mode .border-cyan-500\/40 {
+  border-color: rgba(0, 255, 255, 0.6) !important;
+}
+
+/* Remove all pulse/glow animations in field mode */
+:root.field-mode [class*="animate-pulse"],
+:root.field-mode [class*="animate-glow"] {
+  animation: none !important;
+}
+
+/* Ensure monospace text remains crisp */
+:root.field-mode .font-mono {
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* --- TYPOGRAPHY PRESETS --- */
+.font-mono {
+  font-family: 'JetBrains Mono', monospace !important;
+  letter-spacing: -0.02em;
+}
+
+.text-data {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+}
+
+@tailwind base;
+@tailwind components;
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2 bg-h-cyan hover:bg-hydro-primary text-h-dark font-bold rounded-lg transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-h-cyan/20;
+  }
+
+  .btn-outline {
+    @apply px-6 py-2 border border-h-border hover:border-h-cyan text-white rounded-lg transition-all bg-transparent hover:bg-h-cyan/10;
+  }
+
+  .btn-hero-xl {
+    @apply px-10 py-4 text-xl uppercase tracking-widest;
+  }
+}
+
+@tailwind utilities;
+
+/* --- TACTICAL COMMAND CENTER THEME --- */
+body {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans Sinhala', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-carbon);
+  /* DEEP CARBON - Command Center */
+  color: #f1f5f9;
+  overflow-x: hidden;
+
+  /* --- TACTICAL GRID (0.5px precision) --- */
+  background-image:
+    linear-gradient(rgba(var(--accent-primary), 0.03) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(var(--accent-primary), 0.03) 0.5px, transparent 0.5px);
+  background-size: 40px 40px;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.03;
+  /* Reduced for tactical clarity */
+  z-index: 50;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.scanline-effect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background-size: 100% 4px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  animation: crt-flicker 0.1s infinite;
+}
+
+@keyframes crt-flicker {
+  0% {
+    opacity: 0.04;
+  }
+
+  50% {
+    opacity: 0.06;
+  }
+
+  100% {
+    opacity: 0.04;
+  }
+}
+
+.bloom-glow-cyan,
+.bloom-glow-emerald,
+.bloom-glow-red,
+.bloom-glow-amber,
+.bloom-glow-purple {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.bevel-industrial {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 1px 1px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.etched-text {
+  color: rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+
+/* --- AUTOMATIC FORM STYLING (Popravak za Login) --- */
+/* Ovo automatski stilizira sva input polja da budu tamna/staklena */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  /* Tamna prozirna */
+  border: 1px solid rgba(51, 65, 85, 0.5) !important;
+  /* Slate border */
+  color: white !important;
+  border-radius: 0.5rem;
+  /* Zaobljeni rubovi */
+  padding: 0.6rem 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Glow efekt kada kliknete na polje */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #06b6d4 !important;
+  /* Cyan border */
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+  /* Cyan glow prsten */
+  background-color: rgba(15, 23, 42, 0.9) !important;
+}
+
+/* Placeholder tekst da bude čitljiv ali suptilan */
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8;
+  /* Slate 400 */
+}
+
+/* Globalna selekcija teksta (Cyberpunk Highlighting) */
+::selection {
+  background: rgba(34, 211, 238, 0.2);
+  /* Cyan sa prozirnošću */
+  color: #fff;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+/* --- TACTICAL MODULE BASE CLASS --- */
+.tactical-module {
+  border: 0.5px solid rgba(var(--accent-primary), 0.1);
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.tactical-module:hover {
+  border-color: rgba(var(--accent-primary), 0.2);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+/* --- CONFLICT HIGHLIGHTING (Truth Delta) --- */
+.glow-purple,
+.glow-amber,
+.glow-emerald,
+.glow-red {
+  box-shadow: none !important;
+  border-color: inherit !important;
+  animation: none !important;
+}
+
+@keyframes pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
+  }
+}
+
+/* Ensure bloom/glow helper classes are inert by default (field-mode overrides elsewhere) */
+.bloom-glow-cyan,
+.bloom-glow-amber,
+.bloom-glow-emerald,
+.bloom-glow-red,
+.bloom-glow-purple,
+.glow-purple,
+.glow-amber,
+.glow-emerald,
+.glow-red {
+  filter: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+@keyframes pulse-amber {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+  }
+}
+
+/* Disabled utility overrides (safe to keep) */
+.animate-pulse-glow { animation: none !important; }
+.animate-pulse { animation: none !important; }
+.animate-glow { animation: none !important; }
+
+@keyframes glow-oath { from { opacity: 1 } to { opacity: 1 } }
+.glow-oath { animation: none !important; box-shadow: none !important; }
+
+/* --- CUSTOM SCROLLBAR (Stealth Mode) --- */
+[class*="glow-"], [class*="bloom-"], [class*="neon-"], [class*="shadow-"] {
+  box-shadow: none !important;
+  filter: none !important;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+/* --- ADVANCED GLASSMORPHISM UTILITIES --- */
+
+/* 1. Base Glass (za panele i kartice) */
+.glass-panel {
+  background: rgba(15, 23, 42, var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 8px 32px 0 rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.02);
+  border-radius: 1.25rem;
+}
+
+.glass-panel-deep {
+  background: rgba(2, 6, 23, 0.6);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 20px 50px rgba(0, 0, 0, 0.9);
+  border-radius: 1.5rem;
+}
+
+.noise-commander {
+  position: relative;
+}
+
+.noise-commander::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 2. Hover Glass (za interaktivne elemente) */
+.glass-panel-hover:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(6, 182, 212, 0.4);
+  /* Cyan border tint */
+  box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05), 0 0 30px rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+/* 3. Input Glass (Custom utility ako zatreba specifično) */
+.glass-input {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+  outline: none;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shine {
+  100% {
+    left: 125%;
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+  }
+
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  }
+}
+
+/* --- ANIMATION CLASSES --- */
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s infinite;
+}
+
+/* --- TELEMETRY & INTERACTIVE ANIMATIONS --- */
+@keyframes wave {
+  0% {
+    transform: scaleY(0.8);
+  }
+
+  50% {
+    transform: scaleY(1.2);
+  }
+
+  100% {
+    transform: scaleY(0.8);
+  }
+}
+
+.animate-wave {
+  animation: wave 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes glow-oath {
+  0% {
+    text-shadow: 0 0 5px rgba(245, 158, 11, 0.2);
+  }
+
+  50% {
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.6), 0 0 30px rgba(245, 158, 11, 0.4);
+  }
+
+  100% {
+    text-shadow: 0 0 5px rgba(245, 158, 11, 0.2);
+  }
+}
+
+.glow-oath {
+  animation: glow-oath 2s infinite;
+}
+
+/* Utility to hide scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* --- PRINT STYLES (Risk Reports) --- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .print-container {
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .print-main {
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    color: black !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Reset glass effects for crisp printing */
+  .glass-panel,
+  .glass-input {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
+
+/* --- LOADER LOGIC (Moved from index.html) --- */
+#root:empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#root:empty::before {
+  content: 'AnoHUB';
+  font-weight: 900;
+  font-size: 3rem;
+  letter-spacing: -0.05em;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+#root:empty::after {
+  content: 'NEURAL CORE HANDSHAKE: PENDING...';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #06b6d4;
+  /* Cyan */
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Pulsing Markers */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.marker-pin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50% 50% 50% 0;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -10px 0 0 -10px;
+}
+
+.marker-pin::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin: 4px 0 0 4px;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  border-radius: 50%;
+}
+
+.shadow-neon {
+  box-shadow: 0 0 15px currentColor;
+}
+
+/* === PREMIUM INTERACTION UTILITIES (GPU-Accelerated) === */
+
+/* Industrial-grade hover effect - GPU accelerated via transform/opacity only */
+.hover-lift {
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.hover-lift:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Touch-safe hover: disable scale on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .hover-lift:hover {
+    transform: none;
+  }
+
+  .hover-lift:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Premium glow effect on hover */
+.hover-glow {
+  transition: box-shadow var(--transition-normal);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15), 0 0 40px rgba(6, 182, 212, 0.05);
+}
+
+/* Interactive card base (combines lift + glow) */
+.interactive-card {
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+  will-change: transform;
+}
+
+.interactive-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.interactive-card:active {
+  transform: scale(0.98);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .interactive-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .interactive-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+  }
+}
+
+/* === TELEMETRY WAITING / MISSING DATA STATES === */
+
+/* Subtle pulse for missing data indicator */
+@keyframes telemetry-pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-telemetry-waiting {
+  animation: telemetry-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  color: var(--color-warning);
+}
+
+/* Data dash placeholder with gentle pulse */
+.data-pending {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.5);
+  animation: telemetry-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  letter-spacing: 0.1em;
+}
+
+/* === SEMANTIC STATUS INDICATORS === */
+
+.status-success {
+  color: var(--color-success);
+}
+
+.status-warning {
+  color: var(--color-warning);
+}
+
+.status-danger {
+  color: var(--color-danger);
+}
+
+.status-info {
+  color: var(--color-info);
+}
+
+/* Status backgrounds */
+.bg-status-success {
+  background-color: var(--color-success-dim);
+  border: 1px solid var(--color-success);
+}
+
+.bg-status-warning {
+  background-color: var(--color-warning-dim);
+  border: 1px solid var(--color-warning);
+}
+
+.bg-status-danger {
+  background-color: var(--color-danger-dim);
+  border: 1px solid var(--color-danger);
+}
+
+/* === METRIC VALUE TYPOGRAPHY === */
+
+.metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-feature-settings: 'tnum' 1;
+}
+
+.metric-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.25em;
+}
+
+.metric-currency {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  margin-right: 0.1em;
+}
+
+/* Digital Twin SVG Container Logic */
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.5));
+}
+
+.svg-container.loading {
+  filter: blur(10px);
+  opacity: 0.5;
+}
+
+/* Final visual hardening: remove residual pulses/neon at global level */
+.animate-pulse, .animate-ping, .animate-glow, .animate-bounce, .animate-spin-slow {
+  animation: none !important;
+}
+
+[class*="glow-"], [class*="bloom-"], [class*="neon-"], [class*="shadow-"] {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Highlight class applied to selected Francis hotspot */
+.francis-selected {
+  outline: 2px solid rgba(6, 182, 212, 0.9) !important;
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.06) !important;
+}

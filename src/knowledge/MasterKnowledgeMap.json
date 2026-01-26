@@ -1,0 +1,53 @@
+{
+    "standardThresholds": {
+        "goldenStandards": {
+            "alignment": {
+                "ideal": 0.05,
+                "failure": 0.15
+            },
+            "axialPlay": {
+                "max": 0.35
+            },
+            "insulation": {
+                "min": 100
+            },
+            "maintenanceCycleHours": 8000
+        },
+        "vibration": {
+            "satisfactory": 1.1,
+            "unsatisfactory": 4.5,
+            "standard": "ISO 10816-3"
+        },
+        "bearingTemperature": {
+            "critical": 80
+        },
+        "oilChemistry": {
+            "waterContent": {
+                "warning": 300
+            },
+            "tan": {
+                "warning": 0.4
+            }
+        }
+    },
+    "failureModes": {
+        "CAVITATION": {
+            "symptom": "High Specific Water Consumption & Acoustic Pulse",
+            "probableCauses": [
+                "Draft tube vacuum breach",
+                "Runner blade erosion",
+                "Off-design operation"
+            ],
+            "kbRef": "KB-CAV-001"
+        },
+        "VIBRATION": {
+            "symptom": "Mechanical oscillation beyond ISO limits",
+            "probableCauses": [
+                "Unbalance",
+                "Misalignment",
+                "Looseness"
+            ],
+            "kbRef": "KB-VIB-001"
+        }
+    }
+}

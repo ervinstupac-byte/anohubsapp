@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: INSTRUMENTATION & SCADA | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #10b981;
+            /* Emerald for Advanced Technical */
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #064e3b 0%, #0c0a09 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: black !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .sensor-pulse {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #10b981;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes ping {
+
+            75%,
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .tech-table th {
+            background: #064e3b;
+            color: white;
+            padding: 12px;
+            font-size: 10px;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        .tech-table td {
+            padding: 12px;
+            font-size: 10px;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-emerald-600 rounded-lg border border-emerald-400/30 text-white">
+                    <i data-lucide="cpu" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-emerald-900/40 text-emerald-300 text-[10px] font-bold border border-emerald-800 uppercase">SOP-CTRL-016</span>
+                        <span class="text-[10px] text-stone-500 uppercase font-bold">REV 2.1</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        INSTRUMENTATION & SCADA INTEGRITY</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-emerald-50 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-emerald-50 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-emerald-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8 space-y-8">
+
+        <!-- 1. The Eyes of the System -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-red-600 bg-red-950/5">
+            <div class="flex justify-between items-start mb-8">
+                <h2 class="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3"
+                    data-i18n="s1_title">
+                    <span class="sensor-pulse"></span> THE EYES OF THE SYSTEM
+                </h2>
+                <span class="px-2 py-1 bg-red-600 text-black text-[9px] font-black rounded uppercase"
+                    data-i18n="drift_alert">DRIFT RISK: HIGH</span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-5 bg-slate-950/40 border border-slate-800 rounded-xl">
+                    <h4 class="text-white text-[10px] font-black uppercase mb-3" data-i18n="h1_title">RTD TEMPERATURE
+                        VALIDATION</h4>
+                    <p class="text-[10px] text-slate-500 mb-4" data-i18n="rtd_desc">Resistance Temperature Detectors
+                        protect Babbit bearings from catastrophic melting.</p>
+                    <ul class="space-y-2 text-[9px] text-slate-300">
+                        <li class="flex gap-2"><i data-lucide="thermometer" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="rtd1">Ice Bath (0°C) or Boiling (100°C) certified check.</span></li>
+                        <li class="flex gap-2"><i data-lucide="thermometer" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="rtd2">Compare digital SCADA vs. analog mercury probe.</span></li>
+                        <li class="flex gap-2"><i data-lucide="thermometer" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="rtd3">Tolerance: > 1.0°C deviation requires loop recalibration.</span></li>
+                    </ul>
+                </div>
+                <div class="p-5 bg-slate-950/40 border border-slate-800 rounded-xl">
+                    <h4 class="text-white text-[10px] font-black uppercase mb-3" data-i18n="h2_title">PRESSURE
+                        TRANSDUCER LOGIC</h4>
+                    <p class="text-[10px] text-slate-500 mb-4" data-i18n="press_desc">Determines Net Head and water
+                        hammer safety levels.</p>
+                    <ul class="space-y-2 text-[9px] text-slate-300">
+                        <li class="flex gap-2"><i data-lucide="bar-chart" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="press1">Zeroing: Atmospheric check @ 0.00 Bar (Drained).</span></li>
+                        <li class="flex gap-2"><i data-lucide="bar-chart" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="press2">Spanning: Compare vs. Analog Bourdon Gauge.</span></li>
+                        <li class="flex gap-2"><i data-lucide="bar-chart" class="w-3 h-3 text-emerald-500"></i> <span
+                                data-i18n="press3">4-20mA Scaling: Adjust PLC offset if drift is linear.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SCADA Integrity & Shielding -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-emerald-600">
+            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="s2_title">4-20mA LOOP
+                INTEGRITY & SHIELDING</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-xl">
+                        <span class="text-emerald-400 text-[9px] font-black uppercase block mb-1">EMI INTERFERENCE
+                            (JITTER)</span>
+                        <p class="text-[10px] text-slate-400" data-i18n="jitter_desc">High-voltage cables parallel to
+                            signal lines cause 'Ghost Spikes'. If signal bounces >2%, check cabinet grounding.</p>
+                    </div>
+                    <div class="p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-xl">
+                        <span class="text-emerald-400 text-[9px] font-black uppercase block mb-1">LOOP HYGIENE</span>
+                        <p class="text-[10px] text-slate-400" data-i18n="loops_desc">Tighten all 24VDC terminals. A
+                            loose lug is the #1 cause of false bearing trips.</p>
+                    </div>
+                </div>
+                <div class="bg-black/40 border border-slate-800 p-6 rounded-2xl">
+                    <h4 class="text-white text-[10px] font-black uppercase mb-4" data-i18n="flow_meter">FLOW METER
+                        HYGIENE</h4>
+                    <p class="text-[10px] text-slate-500 italic mb-4" data-i18n="flow_desc">Silt and algae on electrode
+                        faces interfere with ultrasonic signals. Wipe sensing face annually with alcohol.</p>
+                    <div class="flex items-center gap-3 p-4 bg-red-950/20 border border-red-900/40 rounded-lg">
+                        <i data-lucide="x-circle" class="text-red-500 w-5 h-5"></i>
+                        <span class="text-[10px] text-red-400 font-bold" data-i18n="no_scratch">NEVER scratch electrodes
+                            with metal tools. Use soft cloth only.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Diagnostic & Maintenance Table -->
+        <section class="glass-card rounded-2xl p-8 border-l-4 border-l-emerald-600">
+            <h2 class="text-xl font-black text-white uppercase tracking-tight mb-8" data-i18n="s3_title">SENSORY
+                MAINTENANCE SCHEDULE</h2>
+            <div class="overflow-hidden rounded-xl border border-emerald-900/30">
+                <table class="w-full tech-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="th1">SYSTEM</th>
+                            <th data-i18n="th2">FREQUENCY</th>
+                            <th data-i18n="th3">TEST METHOD / REFERENCE</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-black/20">
+                        <tr>
+                            <td class="text-emerald-400 font-bold">RTDs (Bearings)</td>
+                            <td data-i18n="monthly">Monthly</td>
+                            <td data-i18n="td1_3">Analog Corelation vs mercury thermometers.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-emerald-400 font-bold">Pressure Transducers</td>
+                            <td data-i18n="annual">Annually (Dewatering)</td>
+                            <td data-i18n="td2_3">Zero-sum check at 0.00 Bar atmospheric.</td>
+                        </tr>
+                        <tr>
+                            <td class="text-emerald-400 font-bold">Ultrasonic Flow Meter</td>
+                            <td data-i18n="annual">Annually</td>
+                            <td data-i18n="td3_3">Surface wiping & signal strength (dB) check.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "INSTRUMENTATION & SCADA INTEGRITY",
+                return: "BACK TO DASHBOARD",
+                s1_title: "THE EYES OF THE SYSTEM",
+                drift_alert: "DRIFT RISK: HIGH",
+                h1_title: "RTD TEMPERATURE VALIDATION",
+                rtd_desc: "Resistance Temperature Detectors protect Babbit bearings from catastrophic melting.",
+                rtd1: "Ice Bath (0°C) or Boiling (100°C) certified check.",
+                rtd2: "Compare digital SCADA vs. analog mercury probe.",
+                rtd3: "Tolerance: > 1.0°C deviation requires loop recalibration.",
+                h2_title: "PRESSURE TRANSDUCER LOGIC",
+                press_desc: "Determines Net Head and water hammer safety levels.",
+                press1: "Zeroing: Atmospheric check @ 0.00 Bar (Drained).",
+                press2: "Spanning: Compare vs. Analog Bourdon Gauge.",
+                press3: "4-20mA Scaling: Adjust PLC offset if drift is linear.",
+                s2_title: "4-20mA LOOP INTEGRITY & SHIELDING",
+                jitter_desc: "High-voltage cables parallel to signal lines cause 'Ghost Spikes'. If signal bounces >2%, check cabinet grounding.",
+                loops_desc: "Tighten all 24VDC terminals. A loose lug is the #1 cause of false bearing trips.",
+                flow_meter: "FLOW METER HYGIENE",
+                flow_desc: "Silt and algae on electrode faces interfere with ultrasonic signals. Wipe sensing face annually with alcohol.",
+                no_scratch: "NEVER scratch electrodes with metal tools. Use soft cloth only.",
+                s3_title: "SENSORY MAINTENANCE SCHEDULE",
+                th1: "SYSTEM", th2: "FREQUENCY", th3: "TEST METHOD / REFERENCE",
+                monthly: "Monthly", annual: "Annually",
+                td1_3: "Analog Corelation vs mercury thermometers.",
+                td2_3: "Zero-sum check at 0.00 Bar atmospheric.",
+                td3_3: "Surface wiping & signal strength (dB) check."
+            },
+            bs: {
+                title: "INSTRUMENTACIJA I SCADA INTEGRITET",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                s1_title: "OČI SISTEMA",
+                drift_alert: "RIZIK POMJERANJA: VISOK",
+                h1_title: "VALIDACIJA TEMPERATURE (RTD)",
+                rtd_desc: "RTD sonde štite Babbitt ležajeve od katastrofalnog topljenja.",
+                rtd1: "Provjera u ledenoj kupki (0°C) ili ključaloj vodi (100°C).",
+                rtd2: "Uporedi digitalni SCADA prikaz sa analognom živinom sondom.",
+                rtd3: "Tolerancija: > 1.0°C zahtijeva re-kalibraciju petlje.",
+                h2_title: "LOGIKA PRETVARAČA PRITISKA",
+                press_desc: "Određuje neto pad i nivoe sigurnosti od hidrauličkog udara.",
+                press1: "Nuliranje: Atmosferska provjera @ 0.00 Bar (Drenirano).",
+                press2: "Raspon: Uporedi sa analognim Bourdon manometrom.",
+                press3: "4-20mA Skaliranje: Podesi PLC pomak ako je drift linearan.",
+                s2_title: "INTEGRITET 4-20mA PETLJE I OKLOPANJE",
+                jitter_desc: "Visokonaponski kablovi paralelni signalnim linijama uzrokuju smetnje. Ako signal varira >2%, provjeri uzemljenje.",
+                loops_desc: "Dotegni sve 24VDC terminale. Labava klema je najčešći uzrok lažnih ispada ležaja.",
+                flow_meter: "HIGIJENA MJERAČA PROTOKA",
+                flow_desc: "Mulj i alge na elektrodama ometaju ultrazvučne signale. Brišite glavu senzora godišnje alkoholom.",
+                no_scratch: "NIKADA ne stružite elektrode metalnim alatima. Koristite meku krpu.",
+                s3_title: "PLAN ODRŽAVANJA SENZORA",
+                th1: "SISTEM", th2: "FREKVENCIJA", th3: "METODA TESTA / REFERENCA",
+                monthly: "Mjesečno", annual: "Godišnje",
+                td1_3: "Analogna korelacija sa živinim termometrima.",
+                td2_3: "Nuliranje na 0.00 Bar (atmosferski pritisak).",
+                td3_3: "Brisanje površine i provjera jačine signala (dB)."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+        setLang(localStorage.getItem('anohub_lang_pref') || 'en');
+    </script>
+</body>
+
+</html>

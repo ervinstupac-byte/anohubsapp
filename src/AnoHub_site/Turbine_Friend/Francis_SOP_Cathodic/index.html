@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Cathodic/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Cathodic/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Cathodic Protection System</title>
+    <style>
+        /* Chemical/Science Theme - Teal/Silver */
+        :root {
+            --primary-color: #008B8B;
+            --secondary-color: #20B2AA;
+            --accent-color: #C0C0C0;
+            --warning-color: #FF6347;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #B0E0E6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 139, 139, 0.15);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Language Toggle Switch */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "⚛";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #E0F2F1;
+        }
+
+        .chemical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #F5F5F5;
+            border: 2px solid var(--accent-color);
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .visual-aid {
+            border: 2px dashed var(--accent-color);
+            padding: 15px;
+            margin: 10px 0;
+            background: #fff;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .formula {
+            background: linear-gradient(135deg, #E0F2F1, #F0F8FF);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .warning-box {
+            background: #FFF3CD;
+            border: 2px solid var(--warning-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('bs')">BS</button>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">⚛ Cathodic Protection System</h1>
+            <h2 data-i18n="subtitle">Electrochemical Corrosion Prevention Protocol</h2>
+        </header>
+
+        <!-- SAFETY MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ MANDATORY SAFETY PROTOCOL</h3>
+            <p><strong data-i18n="safety_strong">STOP. READ THIS FIRST.</strong></p>
+            <ul>
+                <li data-i18n="safety1"><strong>De-Watering Required:</strong> The spiral case and draft tube must be
+                    fully drained before anode inspection.</li>
+                <li data-i18n="safety2"><strong>Confined Space Entry:</strong> Follow confined space
+                    protocols—ventilation, gas testing (O₂ > 19.5%), and buddy system.</li>
+                <li data-i18n="safety3"><strong>Electrical Isolation:</strong> Disconnect all cathodic protection
+                    rectifiers before touching anodes to prevent electrical shock.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section1_title">The Battery Effect: Dissimilar Metals</div>
+        <div class="module technical">
+            <p><span data-i18n="section1_intro">When two different metals are submerged in water (an electrolyte), they
+                    form a</span> <strong data-i18n="galvanic_cell">galvanic cell</strong><span
+                    data-i18n="battery_term">—essentially a battery.</span></p>
+
+            <h3 data-i18n="how_it_works">How It Works</h3>
+            <div class="formula" data-i18n="formula1">
+                Anode (Sacrificial Metal) → Oxidation → Electrons Flow → Cathode (Protected Metal)
+            </div>
+
+            <ul>
+                <li data-i18n="work1"><strong>Spiral Case Material:</strong> Typically Carbon Steel or Cast Iron (less
+                    noble).</li>
+                <li data-i18n="work2"><strong>Runner Material:</strong> Stainless Steel 13Cr4Ni or Martensitic Stainless
+                    (more noble).</li>
+                <li data-i18n="work3"><strong>The Problem:</strong> Without protection, the spiral case becomes the
+                    <strong>anode</strong> and corrodes rapidly, especially in aggressive water (high conductivity, low
+                    pH, or dissolved oxygen).</li>
+            </ul>
+
+            <h3 data-i18n="electro_series">The Electrochemical Series</h3>
+            <div class="module chemical">
+                <p><strong data-i18n="most_active">Most Active (Anodic) ↓</strong></p>
+                <ol>
+                    <li data-i18n="series1">Magnesium (Mg) - Most sacrificial</li>
+                    <li data-i18n="series2">Zinc (Zn) - Common choice</li>
+                    <li data-i18n="series3">Aluminum (Al)</li>
+                    <li data-i18n="series4">Carbon Steel (Fe)</li>
+                    <li data-i18n="series5">Stainless Steel (Cr/Ni) - Protected</li>
+                </ol>
+                <p><strong data-i18n="most_noble">Most Noble (Cathodic) ↑</strong></p>
+            </div>
+
+            <p data-i18n="key_principle"><strong>💡 Key Principle:</strong> By installing a more active metal (Zinc or
+                Magnesium), we force it to corrode <em>instead</em> of the turbine components.</p>
+        </div>
+
+        <div class="section-title" data-i18n="section2_title">Sacrificial Anodes: Inspection Protocol</div>
+        <div class="module technical">
+            <h3 data-i18n="step1_title">Step 1: Locate All Anodes</h3>
+            <p data-i18n="step1_text">Typical Francis turbine installations have anodes in:</p>
+            <ul>
+                <li data-i18n="step1_1"><strong>Spiral Case:</strong> 4-8 anodes distributed around the circumference.
+                </li>
+                <li data-i18n="step1_2"><strong>Draft Tube:</strong> 2-4 anodes near the cone section.</li>
+                <li data-i18n="step1_3"><strong>Stay Ring:</strong> Additional anodes if the stay ring is carbon steel.
+                </li>
+            </ul>
+
+            <h3 data-i18n="step2_title">Step 2: Visual Inspection</h3>
+            <ol>
+                <li data-i18n="step2_1"><strong>Surface Condition:</strong> Anodes should show white/gray corrosion
+                    products (zinc oxide/hydroxide).</li>
+                <li data-i18n="step2_2"><strong>Measure Remaining Mass:</strong> Use calipers or a ruler to measure the
+                    remaining thickness/diameter.</li>
+                <li data-i18n="step2_3"><strong>Document:</strong> Take photos and record dimensions for each anode.
+                </li>
+            </ol>
+
+            <div class="visual-aid" data-i18n="visual1">
+                [Visualization: New Anode (100%) vs. 50% Consumed vs. 75% Consumed]
+            </div>
+
+            <h3 data-i18n="step3_title">Step 3: Connection Integrity Check</h3>
+            <p data-i18n="step3_intro">The anode MUST have a clean, metal-to-metal connection to the turbine body.</p>
+            <ul>
+                <li data-i18n="step3_1"><strong>Inspect Mounting Bolt:</strong> Check for corrosion, looseness, or
+                    paint/coating on contact surfaces.</li>
+                <li data-i18n="step3_2"><strong>Continuity Test:</strong> Use a multimeter (resistance mode) to verify
+                    electrical continuity between the anode and the turbine casing (should be < 1 Ω).</li>
+                <li data-i18n="step3_3"><strong>Clean Contact Surfaces:</strong> Use a wire brush to remove any oxide
+                    layer, paint, or debris from the mounting surface.</li>
+            </ul>
+
+            <div class="warning-box" data-i18n="warning_text">
+                <strong>⚠️ CRITICAL:</strong> If the anode is electrically isolated (painted surface, corroded bolt,
+                loose connection), it will NOT protect the turbine. The runner will become the anode and corrode
+                instead.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section3_title">The 50% Rule: Replacement Criteria</div>
+        <div class="module technical">
+            <h3 data-i18n="why50_title">Why 50%?</h3>
+            <p data-i18n="why50_text">Anodes are designed with a <strong>safety margin</strong>. Once 50% of the
+                original mass is consumed:</p>
+            <ul>
+                <li data-i18n="why50_1"><strong>Reduced Surface Area:</strong> The anode's ability to protect decreases
+                    exponentially.</li>
+                <li data-i18n="why50_2"><strong>Increased Resistance:</strong> Corrosion products build up, reducing
+                    electrical contact.</li>
+                <li data-i18n="why50_3"><strong>Risk of Detachment:</strong> Mechanical integrity is compromised—the
+                    anode may fall off.</li>
+            </ul>
+
+            <h3 data-i18n="replace_proc_title">Replacement Procedure</h3>
+            <ol>
+                <li data-i18n="replace_proc_1"><strong>Remove Old Anode:</strong> Unbolt and discard the consumed anode.
+                </li>
+                <li data-i18n="replace_proc_2"><strong>Clean Mounting Surface:</strong> Wire brush the contact area to
+                    bare metal (remove all paint, rust, and corrosion products).</li>
+                <li data-i18n="replace_proc_3"><strong>Install New Anode:</strong> Use a new stainless steel bolt with a
+                    star washer to ensure tight contact.</li>
+                <li data-i18n="replace_proc_4"><strong>Torque Specification:</strong> Tighten to manufacturer's spec
+                    (typically 40-60 Nm for M12 bolts).</li>
+                <li data-i18n="replace_proc_5"><strong>Verify Continuity:</strong> Re-test with multimeter (< 1 Ω).</li>
+            </ol>
+
+            <div class="formula" data-i18n="formula2">
+                If Remaining Mass ≤ 50% → REPLACE IMMEDIATELY
+            </div>
+
+            <div class="module critical" data-i18n="tech_note">
+                <strong>💡 Tech Note:</strong> If you delay replacement beyond 50%, the runner becomes the "sacrificial
+                anode" and will develop pitting corrosion on the blade surfaces—requiring expensive welding repairs.
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section4_title">Anode Continuity: The Metal-to-Metal Rule</div>
+        <div class="module technical">
+            <h3 data-i18n="why_cont_title">Why Continuity Matters</h3>
+            <p data-i18n="why_cont_text">For cathodic protection to work, electrons must flow freely from the anode to
+                the turbine structure.</p>
+
+            <h3 data-i18n="failure_modes_title">Common Failure Modes</h3>
+            <ul>
+                <li data-i18n="fail1"><strong>Painted Surfaces:</strong> Paint acts as an insulator. Always remove paint
+                    from contact areas.</li>
+                <li data-i18n="fail2"><strong>Corroded Bolts:</strong> Rust on the mounting bolt creates high
+                    resistance. Use stainless steel bolts.</li>
+                <li data-i18n="fail3"><strong>Loose Connection:</strong> Vibration can loosen bolts over time. Use lock
+                    washers or Loctite.</li>
+                <li data-i18n="fail4"><strong>Oxide Layer:</strong> Aluminum oxide or zinc oxide can form a
+                    non-conductive layer. Clean before installation.</li>
+            </ul>
+
+            <h3 data-i18n="test_proc_title">Continuity Test Procedure</h3>
+            <ol>
+                <li data-i18n="test1">Set multimeter to resistance (Ω) mode.</li>
+                <li data-i18n="test2">Place one probe on the anode surface.</li>
+                <li data-i18n="test3">Place the other probe on the turbine casing (bare metal).</li>
+                <li data-i18n="test4"><strong>Pass Criteria:</strong> Resistance < 1 Ω.</li>
+                <li data-i18n="test5"><strong>Fail Criteria:</strong> Resistance > 5 Ω or "OL" (open circuit).</li>
+            </ol>
+
+            <div class="visual-aid" data-i18n="visual2">
+                [Visualization: Multimeter Test Setup - Anode → Bolt → Casing]
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section5_title">Materials & Tools Checklist</div>
+        <div class="module">
+            <ul>
+                <li data-i18n="tool1"><strong>Replacement Anodes:</strong> Zinc (Zn) or Magnesium (Mg) anodes per OEM
+                    specification.</li>
+                <li data-i18n="tool2"><strong>Hardware:</strong> Stainless steel bolts (M12 or M16), star washers,
+                    Loctite 243 (Blue).</li>
+                <li data-i18n="tool3"><strong>Tools:</strong> Wire brush, calipers, multimeter, torque wrench.</li>
+                <li data-i18n="tool4"><strong>Safety:</strong> Confined space entry kit, gas detector, ventilation fan.
+                </li>
+                <li data-i18n="tool5"><strong>Documentation:</strong> Camera, inspection log, anode consumption chart.
+                </li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section6_title">Inspection Schedule</div>
+        <div class="module technical">
+            <ul>
+                <li data-i18n="sched1"><strong>Annual Inspection:</strong> Visual check during scheduled outage.</li>
+                <li data-i18n="sched2"><strong>Bi-Annual Measurement:</strong> Measure remaining mass and document
+                    consumption rate.</li>
+                <li data-i18n="sched3"><strong>Immediate Replacement:</strong> If any anode reaches 50% consumption.
+                </li>
+                <li data-i18n="sched4"><strong>Emergency Check:</strong> If unusual corrosion is observed on the runner
+                    or spiral case.</li>
+            </ul>
+        </div>
+
+        <a href="./Francis_Horizontal.html" class="back-btn" data-i18n="back_btn">← Return to Master Manual</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "⚛ Cathodic Protection System",
+                subtitle: "Electrochemical Corrosion Prevention Protocol",
+                safety_title: "⚠️ MANDATORY SAFETY PROTOCOL",
+                safety_strong: "STOP. READ THIS FIRST.",
+                safety1: "<strong>De-Watering Required:</strong> The spiral case and draft tube must be fully drained before anode inspection.",
+                safety2: "<strong>Confined Space Entry:</strong> Follow confined space protocols—ventilation, gas testing (O₂ > 19.5%), and buddy system.",
+                safety3: "<strong>Electrical Isolation:</strong> Disconnect all cathodic protection rectifiers before touching anodes to prevent electrical shock.",
+                section1_title: "The Battery Effect: Dissimilar Metals",
+                section1_intro: "When two different metals are submerged in water (an electrolyte), they form a ",
+                galvanic_cell: "galvanic cell",
+                battery_term: "—essentially a battery.",
+                how_it_works: "How It Works",
+                formula1: "Anode (Sacrificial Metal) → Oxidation → Electrons Flow → Cathode (Protected Metal)",
+                work1: "<strong>Spiral Case Material:</strong> Typically Carbon Steel or Cast Iron (less noble).",
+                work2: "<strong>Runner Material:</strong> Stainless Steel 13Cr4Ni or Martensitic Stainless (more noble).",
+                work3: "<strong>The Problem:</strong> Without protection, the spiral case becomes the <strong>anode</strong> and corrodes rapidly, especially in aggressive water (high conductivity, low pH, or dissolved oxygen).",
+                electro_series: "The Electrochemical Series",
+                most_active: "Most Active (Anodic) ↓",
+                series1: "Magnesium (Mg) - Most sacrificial",
+                series2: "Zinc (Zn) - Common choice",
+                series3: "Aluminum (Al)",
+                series4: "Carbon Steel (Fe)",
+                series5: "Stainless Steel (Cr/Ni) - Protected",
+                most_noble: "Most Noble (Cathodic) ↑",
+                key_principle: "<strong>💡 Key Principle:</strong> By installing a more active metal (Zinc or Magnesium), we force it to corrode <em>instead</em> of the turbine components.",
+                section2_title: "Sacrificial Anodes: Inspection Protocol",
+                step1_title: "Step 1: Locate All Anodes",
+                step1_text: "Typical Francis turbine installations have anodes in:",
+                step1_1: "<strong>Spiral Case:</strong> 4-8 anodes distributed around the circumference.",
+                step1_2: "<strong>Draft Tube:</strong> 2-4 anodes near the cone section.",
+                step1_3: "<strong>Stay Ring:</strong> Additional anodes if the stay ring is carbon steel.",
+                step2_title: "Step 2: Visual Inspection",
+                step2_1: "<strong>Surface Condition:</strong> Anodes should show white/gray corrosion products (zinc oxide/hydroxide).",
+                step2_2: "<strong>Measure Remaining Mass:</strong> Use calipers or a ruler to measure the remaining thickness/diameter.",
+                step2_3: "<strong>Document:</strong> Take photos and record dimensions for each anode.",
+                visual1: "[Visualization: New Anode (100%) vs. 50% Consumed vs. 75% Consumed]",
+                step3_title: "Step 3: Connection Integrity Check",
+                step3_intro: "The anode MUST have a clean, metal-to-metal connection to the turbine body.",
+                step3_1: "<strong>Inspect Mounting Bolt:</strong> Check for corrosion, looseness, or paint/coating on contact surfaces.",
+                step3_2: "<strong>Continuity Test:</strong> Use a multimeter (resistance mode) to verify electrical continuity between the anode and the turbine casing (should be < 1 Ω).",
+                step3_3: "<strong>Clean Contact Surfaces:</strong> Use a wire brush to remove any oxide layer, paint, or debris from the mounting surface.",
+                warning_text: "<strong>⚠️ CRITICAL:</strong> If the anode is electrically isolated (painted surface, corroded bolt, loose connection), it will NOT protect the turbine. The runner will become the anode and corrode instead.",
+                section3_title: "The 50% Rule: Replacement Criteria",
+                why50_title: "Why 50%?",
+                why50_text: "Anodes are designed with a <strong>safety margin</strong>. Once 50% of the original mass is consumed:",
+                why50_1: "<strong>Reduced Surface Area:</strong> The anode's ability to protect decreases exponentially.",
+                why50_2: "<strong>Increased Resistance:</strong> Corrosion products build up, reducing electrical contact.",
+                why50_3: "<strong>Risk of Detachment:</strong> Mechanical integrity is compromised—the anode may fall off.",
+                replace_proc_title: "Replacement Procedure",
+                replace_proc_1: "<strong>Remove Old Anode:</strong> Unbolt and discard the consumed anode.",
+                replace_proc_2: "<strong>Clean Mounting Surface:</strong> Wire brush the contact area to bare metal (remove all paint, rust, and corrosion products).",
+                replace_proc_3: "<strong>Install New Anode:</strong> Use a new stainless steel bolt with a star washer to ensure tight contact.",
+                replace_proc_4: "<strong>Torque Specification:</strong> Tighten to manufacturer's spec (typically 40-60 Nm for M12 bolts).",
+                replace_proc_5: "<strong>Verify Continuity:</strong> Re-test with multimeter (< 1 Ω).",
+                formula2: "If Remaining Mass ≤ 50% → REPLACE IMMEDIATELY",
+                tech_note: "<strong>💡 Tech Note:</strong> If you delay replacement beyond 50%, the runner becomes the \"sacrificial anode\" and will develop pitting corrosion on the blade surfaces—requiring expensive welding repairs.",
+                section4_title: "Anode Continuity: The Metal-to-Metal Rule",
+                why_cont_title: "Why Continuity Matters",
+                why_cont_text: "For cathodic protection to work, electrons must flow freely from the anode to the turbine structure.",
+                failure_modes_title: "Common Failure Modes",
+                fail1: "<strong>Painted Surfaces:</strong> Paint acts as an insulator. Always remove paint from contact areas.",
+                fail2: "<strong>Corroded Bolts:</strong> Rust on the mounting bolt creates high resistance. Use stainless steel bolts.",
+                fail3: "<strong>Loose Connection:</strong> Vibration can loosen bolts over time. Use lock washers or Loctite.",
+                fail4: "<strong>Oxide Layer:</strong> Aluminum oxide or zinc oxide can form a non-conductive layer. Clean before installation.",
+                test_proc_title: "Continuity Test Procedure",
+                test1: "Set multimeter to resistance (Ω) mode.",
+                test2: "Place one probe on the anode surface.",
+                test3: "Place the other probe on the turbine casing (bare metal).",
+                test4: "<strong>Pass Criteria:</strong> Resistance < 1 Ω.",
+                test5: "<strong>Fail Criteria:</strong> Resistance > 5 Ω or \"OL\" (open circuit).",
+                visual2: "[Visualization: Multimeter Test Setup - Anode → Bolt → Casing]",
+                section5_title: "Materials & Tools Checklist",
+                tool1: "<strong>Replacement Anodes:</strong> Zinc (Zn) or Magnesium (Mg) anodes per OEM specification.",
+                tool2: "<strong>Hardware:</strong> Stainless steel bolts (M12 or M16), star washers, Loctite 243 (Blue).",
+                tool3: "<strong>Tools:</strong> Wire brush, calipers, multimeter, torque wrench.",
+                tool4: "<strong>Safety:</strong> Confined space entry kit, gas detector, ventilation fan.",
+                tool5: "<strong>Documentation:</strong> Camera, inspection log, anode consumption chart.",
+                section6_title: "Inspection Schedule",
+                sched1: "<strong>Annual Inspection:</strong> Visual check during scheduled outage.",
+                sched2: "<strong>Bi-Annual Measurement:</strong> Measure remaining mass and document consumption rate.",
+                sched3: "<strong>Immediate Replacement:</strong> If any anode reaches 50% consumption.",
+                sched4: "<strong>Emergency Check:</strong> If unusual corrosion is observed on the runner or spiral case.",
+                back_btn: "← Return to Master Manual"
+            },
+            bs: {
+                title: "⚛ Sistem katodne zaštite",
+                subtitle: "Protokol prevencije elektrohemijske korozije",
+                safety_title: "⚠️ OBAVEZNI SIGURNOSNI PROTOKOL",
+                safety_strong: "STANI. PROČITAJ PRVO OVO.",
+                safety1: "<strong>Odvodnjavanje obavezno:</strong> Spiralno kućište i sifon moraju biti potpuno ispražnjeni prije inspekcije anoda.",
+                safety2: "<strong>Ulazak u zatvoreni prostor:</strong> Slijedite protokole za zatvoreni prostor—ventilacija, testiranje gasa (O₂ > 19.5%) i sistem partnera.",
+                safety3: "<strong>Električna izolacija:</strong> Isključite sve ispravljače katodne zaštite prije dodirivanja anoda kako biste spriječili električni udar.",
+                section1_title: "Baterijski efekat: Različiti metali",
+                section1_intro: "Kada su dva različita metala potopljena u vodu (elektrolit), formiraju ",
+                galvanic_cell: "galvanski članak",
+                battery_term: "—u suštini bateriju.",
+                how_it_works: "Kako to radi",
+                formula1: "Anoda (Žrtveni metal) → Oksidacija → Tok elektrona → Katoda (Zaštićeni metal)",
+                work1: "<strong>Materijal spiralnog kućišta:</strong> Obično ugljenični čelik ili liveno gvožđe (manje plemenito).",
+                work2: "<strong>Materijal radnog kola:</strong> Nerđajući čelik 13Cr4Ni ili martenzitni nerđajući čelik (više plemenit).",
+                work3: "<strong>Problem:</strong> Bez zaštite, spiralno kućište postaje <strong>anoda</strong> i ubrzano korodira, posebno u agresivnoj vodi (visoka provodljivost, nizak pH ili rastvoreni kiseonik).",
+                electro_series: "Elektrohemijski niz",
+                most_active: "Najaktivniji (Anodni) ↓",
+                series1: "Magnezijum (Mg) - Najviše žrtvujući",
+                series2: "Cink (Zn) - Čest izbor",
+                series3: "Aluminijum (Al)",
+                series4: "Ugljenični čelik (Fe)",
+                series5: "Nerđajući čelik (Cr/Ni) - Zaštićen",
+                most_noble: "Najplemenitiji (Katodni) ↑",
+                key_principle: "<strong>💡 Ključni princip:</strong> Instaliranjem aktivnijeg metala (Cink ili Magnezijum), prisiljavamo ga da korodira <em>umjesto</em> turbinskih komponenti.",
+                section2_title: "Žrtvene anode: Protokol inspekcije",
+                step1_title: "Korak 1: Lociranje svih anoda",
+                step1_text: "Tipične instalacije Francis tubina imaju anode u:",
+                step1_1: "<strong>Spiralno kućište:</strong> 4-8 anoda raspoređenih po obimu.",
+                step1_2: "<strong>Sifon:</strong> 2-4 anode blizu konusnog dijela.",
+                step1_3: "<strong>Stator:</strong> Dodatne anode ako je stator od ugljeničnog čelika.",
+                step2_title: "Korak 2: Vizuelna inspekcija",
+                step2_1: "<strong>Stanje površine:</strong> Anode trebaju pokazivati bijele/sive proizvode korozije (cink oksid/hidroksid).",
+                step2_2: "<strong>Izmjerite preostalu masu:</strong> Koristite pomično mjerilo ili lenjir za mjerenje preostale debljine/prečnika.",
+                step2_3: "<strong>Dokumentujte:</strong> Fotografišite i zabilježite dimenzije za svaku anodu.",
+                visual1: "[Vizualizacija: Nova anoda (100%) vs. 50% Potrošena vs. 75% Potrošena]",
+                step3_title: "Korak 3: Provjera integriteta veze",
+                step3_intro: "Anoda MORA imati čist, metal-na-metal spoj sa tijelom turbine.",
+                step3_1: "<strong>Provjerite montažni vijak:</strong> Provjerite koroziju, labavost ili boju/premaz na kontaktnim površinama.",
+                step3_2: "<strong>Test kontinuiteta:</strong> Koristite multimetar (režim otpora) da potvrdite električni kontinuitet između anode i kućišta turbine (treba biti < 1 Ω).",
+                step3_3: "<strong>Očistite kontaktne površine:</strong> Koristite žičanu četku da uklonite oksidni sloj, boju ili nečistoće sa montažne površine.",
+                warning_text: "<strong>⚠️ KRITIČNO:</strong> Ako je anoda električno izolovana (obojena površina, korodirani vijak, labava veza), ona NEĆE štititi turbinu. Radno kolo će postati anoda i korodirati umjesto nje.",
+                section3_title: "Pravilo 50%: Kriterijumi zamjene",
+                why50_title: "Zašto 50%?",
+                why50_text: "Anode su dizajnirane sa <strong>sigurnosnom marginom</strong>. Kada se potroši 50% originalne mase:",
+                why50_1: "<strong>Smanjena površina:</strong> Sposobnost zaštite anode eksponencijalno opada.",
+                why50_2: "<strong>Povećan otpor:</strong> Proizvodi korozije se nakupljaju, smanjujući električni kontakt.",
+                why50_3: "<strong>Rizik od odvajanja:</strong> Mehanički integritet je ugrožen—anoda može otpasti.",
+                replace_proc_title: "Procedura zamjene",
+                replace_proc_1: "<strong>Uklonite staru anodu:</strong> Odvrnite i bacite potrošenu anodu.",
+                replace_proc_2: "<strong>Očistite montažnu površinu:</strong> Očistite kontaktnu površinu žičanom četkom do golog metala (uklonite svu boju, hrđu i proizvode korozije).",
+                replace_proc_3: "<strong>Instalirajte novu anodu:</strong> Koristite novi vijak od nerđajućeg čelika sa zvjezdastom podloškom da osigurate čvrst kontakt.",
+                replace_proc_4: "<strong>Specifikacija momenta:</strong> Zategnite prema specifikaciji proizvođača (obično 40-60 Nm za M12 vijke).",
+                replace_proc_5: "<strong>Potvrdite kontinuitet:</strong> Ponovo testirajte multimetrom (< 1 Ω).",
+                formula2: "Ako je Preostala Masa ≤ 50% → ZAMIJENITE ODMAH",
+                tech_note: "<strong>Tehnička napomena:</strong> Ako odgodite zamjenu nakon 50%, radno kolo postaje \"žrtvena anoda\" i razviće jamičastu koroziju na lopaticama—što zahtijeva skupe popravke zavarivanjem.",
+                section4_title: "Kontinuitet anode: Pravilo metal-na-metal",
+                why_cont_title: "Zašto je kontinuitet važan",
+                why_cont_text: "Da bi katodna zaštita radila, elektroni moraju slobodno teći od anode do strukture turbine.",
+                failure_modes_title: "Uobičajeni načini kvara",
+                fail1: "<strong>Obojene površine:</strong> Boja djeluje kao izolator. Uvijek uklonite boju sa kontaktnih područja.",
+                fail2: "<strong>Korodirani vijci:</strong> Hrđa na montažnom vijku stvara visok otpor. Koristite vijke od nerđajućeg čelika.",
+                fail3: "<strong>Labava veza:</strong> Vibracije mogu vremenom olabaviti vijke. Koristite sigurnosne podloške ili Loctite.",
+                fail4: "<strong>Oksidni sloj:</strong> Aluminijum oksid ili cink oksid mogu formirati neprovodni sloj. Očistite prije instalacije.",
+                test_proc_title: "Procedura testa kontinuiteta",
+                test1: "Postavite multimetar na režim otpora (Ω).",
+                test2: "Postavite jednu sondu na površinu anode.",
+                test3: "Postavite drugu sondu na kućište turbine (goli metal).",
+                test4: "<strong>Kriterijum prolaza:</strong> Otpor < 1 Ω.",
+                test5: "<strong>Kriterijum pada:</strong> Otpor > 5 Ω ili \"OL\" (otvoreno kolo).",
+                visual2: "[Vizualizacija: Postavka testa multimetrom - Anoda → Vijak → Kućište]",
+                section5_title: "Lista materijala i alata",
+                tool1: "<strong>Zamjenske anode:</strong> Cink (Zn) ili Magnezijum (Mg) prema OEM specifikaciji.",
+                tool2: "<strong>Okov:</strong> Vijci od nerđajućeg čelika (M12 ili M16), zvjezdaste podloške, Loctite 243 (Plavi).",
+                tool3: "<strong>Alati:</strong> Žičana četka, pomično mjerilo, multimetar, moment ključ.",
+                tool4: "<strong>Sigurnost:</strong> Komplet za ulazak u zatvoreni prostor, detektor gasa, ventilator.",
+                tool5: "<strong>Dokumentacija:</strong> Kamera, dnevnik inspekcije, tabela potrošnje anoda.",
+                section6_title: "Raspored inspekcije",
+                sched1: "<strong>Godišnja inspekcija:</strong> Vizuelna provjera tokom planiranog zastoja.",
+                sched2: "<strong>Polugodišnje mjerenje:</strong> Izmjerite preostalu masu i dokumentujte stopu potrošnje.",
+                sched3: "<strong>Hitna zamjena:</strong> Ako bilo koja anoda dostigne 50% potrošnje.",
+                sched4: "<strong>Hitna provjera:</strong> Ako se primijeti neobična korozija na radnom kolu ili spiralnom kućištu.",
+                back_btn: "← Povratak na Glavni priručnik"
+
+            }
+        };
+
+        function setLang(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) {
+                    el.innerHTML = i18n[lang][key];
+                }
+            });
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('anohub_lang_pref', lang);
+        }
+
+        // Initialize from storage or default to English
+        const savedLang = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(savedLang);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

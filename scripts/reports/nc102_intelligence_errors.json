@@ -1,0 +1,3421 @@
+{
+  "generatedAt": "2026-01-18T21:53:53.386Z",
+  "errors": [
+    {
+      "file": "case-studies/cs-compliance-shield/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-compliance-shield/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-digital-protocol-roi/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-fish-passage-optimization/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-forensic-ndt-fatigue/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-francis-misalignment/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-hydraulic-hammer-mitigation/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-kaplan-optimization/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-lcc-procurement-audit/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-me-synergy-erosion/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-pelton-abrasion/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-predictive-maintenance-roi/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/cs-shaft-system-stability/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "case-studies/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-1-engineering-immunity/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-10-check-engine-light/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-11-digital-twin/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-12-me-synergy-audit/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-13-sediment-silt/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-14-3d-flow-analysis/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-15-scada-ceo-gap/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-16-ai-paradox/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-17-cultural-betrayal/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-2-low-bid/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-3-winter-challenges/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-4-dach-leadership/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-5-human-sensor/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-6-ticking-bomb/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-7-fortress-maintenance/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-8-symbiosis-standard/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/article-9-holistic-view/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_6.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_7.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_8.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "insights/index_9.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_alignment_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_alignment_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_alignment_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_alignment_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_alignment_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_asset_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_asset_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_asset_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_asset_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_asset_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cavitation_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cavitation_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cavitation_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cavitation_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cavitation_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_core_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_core_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_core_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_core_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_core_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cost_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cost_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cost_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cost_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_cost_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_dam_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_dam_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_dam_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_dam_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_dam_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flood_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flood_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flood_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flood_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flood_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_fluid_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_fluid_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_fluid_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_fluid_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_fluid_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flux_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flux_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flux_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flux_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_flux_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_global_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_global_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_global_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_global_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_global_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_iso_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_iso_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_iso_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_iso_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_iso_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_methodology_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_methodology_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_methodology_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_methodology_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_methodology_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_organization_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_organization_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_organization_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_organization_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_organization_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_predictive_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_predictive_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_predictive_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_predictive_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_predictive_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_protocol_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_protocol_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_protocol_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_protocol_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_protocol_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_quantum_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_quantum_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_quantum_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_quantum_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_quantum_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sat_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sat_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sat_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sat_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sat_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_override_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_override_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_override_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_override_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_override_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_scada_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sync_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sync_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sync_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sync_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_sync_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_synergy_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_synergy_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_synergy_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_synergy_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_synergy_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_thermal_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_thermal_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_thermal_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_thermal_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_thermal_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vibration_v3/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vibration_v3/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vibration_v3/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vibration_v3/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vibration_v3/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vib_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vib_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vib_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vib_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/anohub_vib_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_5.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_emergency_protocols/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_emergency_protocols/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_emergency_protocols/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_emergency_protocols/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_flowchart_startup/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_flowchart_startup/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_flowchart_startup/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_flowchart_startup/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_emergency_protocols/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_emergency_protocols/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_emergency_protocols/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_emergency_protocols/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_flowchart_startup/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_flowchart_startup/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_flowchart_startup/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_flowchart_startup/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal_dashboard/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal_dashboard/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal_dashboard/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_horizontal_dashboard/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_load_rejection/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_load_rejection/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_load_rejection/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_load_rejection/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_logger/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_logger/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_logger/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_logic_logger/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_mission_control/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_mission_control/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_mission_control/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_observation_log/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_observation_log/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_observation_log/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_prestart_checklist/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_prestart_checklist/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_prestart_checklist/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_report_generator/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_report_generator/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_report_generator/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_safety_system_integrity/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_safety_system_integrity/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_safety_system_integrity/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sensory_checklist/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sensory_checklist/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sensory_checklist/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_acoustics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_acoustics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_acoustics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_analytics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_analytics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_analytics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_auxiliary/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_auxiliary/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_auxiliary/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_bearings/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_bearings/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_bearings/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_braking_system/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_braking_system/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_braking_system/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cathodic/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cathodic/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cathodic/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cooling_water/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cooling_water/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_cooling_water/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_coupling/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_coupling/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_coupling/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dc_systems/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dc_systems/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dc_systems/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft_tailrace/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft_tailrace/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_dft_tailrace/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_digital_integrity/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_digital_integrity/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_digital_integrity/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_distributor_sync/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_distributor_sync/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_distributor_sync/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_drainage_pumps/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_drainage_pumps/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_drainage_pumps/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_elec_health/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_elec_health/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_elec_health/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_excitation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_excitation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_excitation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_foundation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_foundation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_foundation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_generator/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_generator/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_generator/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_governor_pid/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_governor_pid/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_governor_pid/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_gov_logic/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_gov_logic/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_gov_logic/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grid_sync/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grid_sync/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grid_sync/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grounding/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grounding/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_grounding/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hidden_guardians/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hidden_guardians/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hidden_guardians/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu_energy/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu_energy/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_hpu_energy/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_instrumentation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_instrumentation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_instrumentation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_intake/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_intake/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_intake/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_linkage/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_linkage/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_linkage/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_lubrication/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_lubrication/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_lubrication/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_mim/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_mim/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_mim/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_bypass/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_bypass/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_bypass/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil_health/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil_health/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_oil_health/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_penstock/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_penstock/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_penstock/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_post_mortem/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_post_mortem/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_post_mortem/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_precision/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_precision/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_precision/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_recovery/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_recovery/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_recovery/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_regulating_ring/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_regulating_ring/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_regulating_ring/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_reporting/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_reporting/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_reporting/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_shaft_alignment/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_shaft_alignment/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_shaft_alignment/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thermal/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thermal/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thermal/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thrust_balance/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thrust_balance/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_thrust_balance/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_transformer/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_transformer/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_transformer/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_vortex_control/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_vortex_control/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_vortex_control/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_water_hammer/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_water_hammer/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_water_hammer/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_welding/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_welding/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_sop_welding/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_symptom_dictionary/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_symptom_dictionary/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_symptom_dictionary/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_wear_analytics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_wear_analytics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/francis_wear_analytics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_h/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal_dashboard/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal_dashboard/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_horizontal_dashboard/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_load_rejection/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_load_rejection/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_load_rejection/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_logger/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_logger/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_logic_logger/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_mission_control/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_mission_control/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_mission_control/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_observation_log/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_observation_log/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_observation_log/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_prestart_checklist/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_prestart_checklist/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_prestart_checklist/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_report_generator/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_report_generator/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_report_generator/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_safety_system_integrity/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_safety_system_integrity/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_safety_system_integrity/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sensory_checklist/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sensory_checklist/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sensory_checklist/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_acoustics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_acoustics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_acoustics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_analytics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_analytics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_analytics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_auxiliary/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_auxiliary/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_auxiliary/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_bearings/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_bearings/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_bearings/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_braking_system/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_braking_system/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_braking_system/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cathodic/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cathodic/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cathodic/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cooling_water/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cooling_water/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_cooling_water/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_coupling/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_coupling/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_coupling/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dc_systems/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dc_systems/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dc_systems/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft_tailrace/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft_tailrace/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_dft_tailrace/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_digital_integrity/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_digital_integrity/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_digital_integrity/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_distributor_sync/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_distributor_sync/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_distributor_sync/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_drainage_pumps/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_drainage_pumps/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_drainage_pumps/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_elec_health/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_elec_health/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_elec_health/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_foundation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_foundation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_foundation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_generator/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_generator/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_generator/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_governor_pid/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_governor_pid/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_governor_pid/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_gov_logic/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_gov_logic/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_gov_logic/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_grounding/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_grounding/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_grounding/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hidden_guardians/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hidden_guardians/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hidden_guardians/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu_energy/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu_energy/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_hpu_energy/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_instrumentation/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_instrumentation/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_instrumentation/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_intake/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_intake/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_intake/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_linkage/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_linkage/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_linkage/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_lubrication/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_lubrication/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_lubrication/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_master_valve_distributor/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_master_valve_distributor/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_master_valve_distributor/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_mim/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_mim/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_mim/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_bypass/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_bypass/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_bypass/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_distributor_detail/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_distributor_detail/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_miv_distributor_detail/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil_health/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil_health/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_oil_health/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_penstock/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_penstock/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_penstock/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_precision/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_precision/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_precision/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_recovery/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_recovery/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_recovery/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_regulating_ring/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_regulating_ring/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_regulating_ring/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_shaft_alignment/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_shaft_alignment/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_shaft_alignment/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thermal/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thermal/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thermal/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thrust_balance/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thrust_balance/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_thrust_balance/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_vortex_control/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_vortex_control/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_vortex_control/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_water_hammer/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_water_hammer/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_water_hammer/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_welding/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_welding/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_sop_welding/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_symptom_dictionary/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_symptom_dictionary/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_symptom_dictionary/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_wear_analytics/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_wear_analytics/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/francis_wear_analytics/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/index_4.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/kaplan_t/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/kaplan_t/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/kaplan_t/index_3.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/pelton_t/index.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/pelton_t/index_2.html",
+      "reason": "Missing operational recommendation"
+    },
+    {
+      "file": "turbine_friend/pelton_t/index_3.html",
+      "reason": "Missing operational recommendation"
+    }
+  ]
+}

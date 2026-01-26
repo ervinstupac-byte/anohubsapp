@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Thermal/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_Thermal/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: Thermal Mapping & IR Diagnostics</title>
+    <style>
+        /* Heat-Map Theme - Black/Neon Orange/Red */
+        :root {
+            --primary-color: #FF4500;
+            --secondary-color: #FF6347;
+            --accent-color: #FFA500;
+            --warning-color: #DC143C;
+            --bg-color: #0a0a0a;
+            --text-color: #FFE4B5;
+            --border-color: #FF4500;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1a0a00, #0a0a0a);
+            padding: 40px;
+            box-shadow: 0 4px 30px rgba(255, 69, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2), rgba(255, 99, 71, 0.1));
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Language Toggle Switch */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: black;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+        }
+
+        h2 {
+            color: var(--accent-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+        }
+
+        .section-title::before {
+            content: "🌡️";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        h3 {
+            color: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background: rgba(255, 69, 0, 0.05);
+        }
+
+        .critical {
+            border-left: 5px solid var(--warning-color);
+            background: rgba(220, 20, 60, 0.1);
+        }
+
+        .thermal-point {
+            border-left: 5px solid var(--accent-color);
+            background: rgba(255, 165, 0, 0.05);
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .point-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .point-label {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .temp-range {
+            background: linear-gradient(90deg, #00FF00 0%, #FFFF00 33%, #FF8C00 66%, #FF0000 100%);
+            height: 30px;
+            border-radius: 4px;
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .temp-marker {
+            position: absolute;
+            top: -5px;
+            width: 3px;
+            height: 40px;
+            background: white;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: bold;
+            border: 1px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .thermal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .thermal-table th,
+        .thermal-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .thermal-table th {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .thermal-table tr:nth-child(even) {
+            background: rgba(255, 69, 0, 0.05);
+        }
+
+        .emissivity-box {
+            background: linear-gradient(135deg, rgba(255, 99, 71, 0.2), rgba(255, 165, 0, 0.1));
+            padding: 15px;
+            border-left: 4px solid var(--accent-color);
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .heat-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('bs')">BS</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 data-i18n="title">🌡️ THERMAL MAPPING & IR DIAGNOSTICS</h1>
+            <h2 data-i18n="subtitle">The Infrared Eyes of Predictive Maintenance</h2>
+            <p style="color: var(--accent-color); font-size: 0.9em; margin-top: 10px;" data-i18n="desc">Using infrared
+                signatures to detect friction and electrical resistance before failure</p>
+        </header>
+
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ IR THERMOGRAPHY SAFETY</h3>
+            <p><strong data-i18n="stop_read">STOP. READ THIS FIRST.</strong></p>
+            <ul>
+                <li data-i18n="safe1"><strong>Electrical Safety:</strong> Never point IR camera at high-voltage
+                    equipment while energized without proper PPE and training.</li>
+                <li data-i18n="safe2"><strong>Arc Flash Risk:</strong> Maintain safe distances from exposed electrical
+                    connections (NFPA 70E guidelines).</li>
+                <li data-i18n="safe3"><strong>Reflective Surfaces:</strong> Be aware that shiny metal surfaces reflect
+                    IR radiation from other hot sources, giving false readings.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section1_title">The Thermal Grid: Critical Inspection Points</div>
+        <p data-i18n="grid_intro">For horizontal Francis turbines, four primary thermal inspection points provide
+            comprehensive health monitoring.</p>
+
+        <!-- POINT A -->
+        <div class="thermal-point">
+            <div class="point-header">
+                <span class="point-label">POINT A</span>
+                <h3 style="margin: 0;" data-i18n="ptA_title">Bearings (Turbine & Generator)</h3>
+            </div>
+            <p><strong data-i18n="target_label">Target Temperature:</strong> <span data-i18n="ptA_target">
+                    < 60°C (< 140°F)</span>
+            </p>
+
+            <div class="temp-range">
+                <div class="temp-marker" style="left: 60%;"></div>
+            </div>
+            <div class="heat-scale">
+                <span>20°C (Normal)</span>
+                <span>40°C (OK)</span>
+                <span>60°C (Limit)</span>
+                <span>80°C (Critical)</span>
+            </div>
+
+            <h4 style="color: var(--accent-color);" data-i18n="look_for">What to Look For:</h4>
+            <ul>
+                <li data-i18n="ptA_look1"><strong>Uniform Temperature:</strong> Bearing housing should have even
+                    temperature distribution around circumference.</li>
+                <li data-i18n="ptA_look2"><strong>Hot Spots:</strong> Localized high temperature indicates misalignment,
+                    insufficient lubrication, or bearing damage.</li>
+                <li data-i18n="ptA_look3"><strong>Temperature Gradient:</strong> Sharp temperature rise from ambient to
+                    bearing = poor heat dissipation (cooling water issue).</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="abnormal_sig">Abnormal Thermal Signatures:</h4>
+            <ul>
+                <li data-i18n="ptA_ab1"><strong>> 65°C:</strong> Misalignment or vibration-induced friction. Check shaft
+                    run-out → <a href="./Francis_SOP_Precision.html" style="color: var(--accent-color);">Alignment
+                        SOP</a></li>
+                <li data-i18n="ptA_ab2"><strong>Asymmetric Heat:</strong> One side hotter = tilted bearing or uneven
+                    load. Inspect bearing clearances.</li>
+                <li data-i18n="ptA_ab3"><strong>> 70°C:</strong> Oil aeration or degraded lubricant. Perform oil
+                    analysis → <a href="./Francis_SOP_Oil.html" style="color: var(--accent-color);">Oil Hygiene SOP</a>
+                </li>
+                <li data-i18n="ptA_ab4"><strong>> 80°C:</strong> CRITICAL - Stop unit immediately. Bearing failure
+                    imminent → <a href="./Francis_SOP_Bearings.html" style="color: var(--accent-color);">Bearings
+                        SOP</a></li>
+            </ul>
+        </div>
+
+        <!-- POINT B -->
+        <div class="thermal-point">
+            <div class="point-header">
+                <span class="point-label">POINT B</span>
+                <h3 style="margin: 0;" data-i18n="ptB_title">Generator Stator Housing</h3>
+            </div>
+            <p><strong data-i18n="target_label">Target Temperature:</strong> <span data-i18n="ptB_target">
+                    < 85°C (< 185°F) - varies by insulation class</span>
+            </p>
+
+            <h4 style="color: var(--accent-color);" data-i18n="look_for">What to Look For:</h4>
+            <ul>
+                <li data-i18n="ptB_look1"><strong>Uniform Heat Distribution:</strong> Stator should have relatively even
+                    temperature across its length.</li>
+                <li data-i18n="ptB_look2"><strong>Hot Spots:</strong> Localized high temperatures indicate insulation
+                    breakdown, shorted turns, or blocked cooling ducts.</li>
+                <li data-i18n="ptB_look3"><strong>Cooling Efficiency:</strong> Temperature should drop near cooling fan
+                    locations if air-cooled.</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="abnormal_sig">Abnormal Thermal Signatures:</h4>
+            <ul>
+                <li data-i18n="ptB_ab1"><strong>Localized Hot Spot (> 95°C):</strong> Insulation breakdown or shorted
+                    winding. Perform insulation resistance test → <a href="./Francis_SOP_Elec_Health.html"
+                        style="color: var(--accent-color);">Electrical Health SOP</a></li>
+                <li data-i18n="ptB_ab2"><strong>Blocked Ventilation Pattern:</strong> High temperature in specific
+                    section = blocked cooling duct. Inspect and clean ventilation system.</li>
+                <li data-i18n="ptB_ab3"><strong>Asymmetric Heating:</strong> Three-phase imbalance. Check phase currents
+                    and voltages.</li>
+                <li data-i18n="ptB_ab4"><strong>> 100°C (for Class F insulation):</strong> CRITICAL - Reduce load or
+                    stop unit to prevent insulation damage.</li>
+            </ul>
+
+            <div class="module">
+                <strong data-i18n="ins_class_ref">💡 Insulation Class Reference:</strong>
+                <ul>
+                    <li>Class B: 130°C maximum</li>
+                    <li>Class F: 155°C maximum</li>
+                    <li>Class H: 180°C maximum</li>
+                </ul>
+                <p style="color: var(--warning-color); margin-top: 10px;" data-i18n="ins_note">Note: These are
+                    <em>insulation</em> ratings. Practical operating limits are 15-20°C lower to ensure lifespan.
+                </p>
+            </div>
+        </div>
+
+        <!-- POINT C -->
+        <div class="thermal-point">
+            <div class="point-header">
+                <span class="point-label">POINT C</span>
+                <h3 style="margin: 0;" data-i18n="ptC_title">Electrical Terminal Box</h3>
+            </div>
+            <p><strong data-i18n="target_label">Target Temperature:</strong> <span data-i18n="ptC_target">
+                    < 50°C above ambient (typically < 70°C total)</span>
+            </p>
+
+            <h4 style="color: var(--accent-color);" data-i18n="look_for">What to Look For:</h4>
+            <ul>
+                <li data-i18n="ptC_look1"><strong>Connection Points:</strong> Scan all cable lugs, bus bars, and
+                    terminal connections.</li>
+                <li data-i18n="ptC_look2"><strong>Current Balance:</strong> All three phases should have similar
+                    temperatures (within ±5°C).</li>
+                <li data-i18n="ptC_look3"><strong>Oxidation Detection:</strong> High resistance at connections due to
+                    oxidation causes heating.</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="abnormal_sig">Abnormal Thermal Signatures:</h4>
+            <ul>
+                <li data-i18n="ptC_ab1"><strong>Hot Lug (> 80°C):</strong> Loose bolt or oxidized connection. The
+                    "vibration effect" - vibration loosens bolts over time. <br><em>Action: De-energize, re-torque all
+                        connections, clean oxidation with contact cleaner.</em></li>
+                <li data-i18n="ptC_ab2"><strong>Phase Imbalance (> 10°C difference):</strong> Unequal current
+                    distribution or loose connection on hot phase.</li>
+                <li data-i18n="ptC_ab3"><strong>> 100°C at any connection:</strong> CRITICAL - Immediate risk of arcing
+                    or fire. Shut down and repair.</li>
+                <li data-i18n="ptC_ab4"><strong>Heat Pattern on Cable:</strong> If heat extends along cable from
+                    termination, cable itself may be undersized or damaged.</li>
+            </ul>
+
+            <div class="module">
+                <strong data-i18n="vib_effect_title">💡 The Vibration Effect:</strong>
+                <p data-i18n="vib_effect_text">Continuous generator vibration (even within acceptable limits) gradually
+                    loosens electrical connections. Thermal imaging detects this before catastrophic failure. Re-torque
+                    all terminal box connections annually.</p>
+            </div>
+        </div>
+
+        <!-- POINT D -->
+        <div class="thermal-point">
+            <div class="point-header">
+                <span class="point-label">POINT D</span>
+                <h3 style="margin: 0;" data-i18n="ptD_title">HPU Solenoids & Pumps</h3>
+            </div>
+            <p><strong data-i18n="target_label">Target Temperature:</strong> <span data-i18n="ptD_target">Solenoids <
+                        55°C, Pumps < 65°C</span>
+            </p>
+
+            <h4 style="color: var(--accent-color);" data-i18n="look_for">What to Look For:</h4>
+            <ul>
+                <li data-i18n="ptD_look1"><strong>Solenoid Coils:</strong> Should be warm (40-50°C) when energized, cool
+                    when de-energized.</li>
+                <li data-i18n="ptD_look2"><strong>Pump Casing:</strong> Gradual temperature rise from inlet to outlet is
+                    normal (energy conversion).</li>
+                <li data-i18n="ptD_look3"><strong>Valve Bodies:</strong> Internal leakage ("stiction") manifests as
+                    localized heating.</li>
+            </ul>
+
+            <h4 style="color: var(--warning-color);" data-i18n="abnormal_sig">Abnormal Thermal Signatures:</h4>
+            <ul>
+                <li data-i18n="ptD_ab1"><strong>Solenoid > 70°C:</strong> Internal leakage in valve causing continuous
+                    current draw. Replace valve → <a href="./Francis_SOP_HPU.html"
+                        style="color: var(--accent-color);">HPU SOP</a></li>
+                <li data-i18n="ptD_ab2"><strong>Pump Casing > 75°C:</strong> Pump wear, cavitation, or bearing damage.
+                    Check pump performance curve.</li>
+                <li data-i18n="ptD_ab3"><strong>Hot Spot on Valve Body:</strong> Internal "stiction" - spool valve stuck
+                    or binding. Indicates contamination in hydraulic oil → <a href="./Francis_SOP_Oil.html"
+                        style="color: var(--accent-color);">Oil Hygiene SOP</a></li>
+                <li data-i18n="ptD_ab4"><strong>Asymmetric Heating on Manifold:</strong> Flow imbalance or blockage in
+                    manifold passages.</li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="section2_title">IR Thermography Standards</div>
+        <div class="module">
+            <h3 data-i18n="emis_title">Emissivity (ε) Settings - Critical for Accuracy</h3>
+            <p data-i18n="emis_intro"><strong>What is Emissivity?</strong> The ratio of IR radiation emitted by a
+                surface compared to a perfect black body (ε = 1.0). Different materials emit different amounts of IR at
+                the same temperature.</p>
+
+            <div class="emissivity-box">
+                <h4 style="color: var(--primary-color);" data-i18n="common_mat">Common Turbine Materials & Emissivity
+                    Values:</h4>
+                <table class="thermal-table">
+                    <tr>
+                        <th data-i18n="th_mat">Material / Surface</th>
+                        <th data-i18n="th_emis">Emissivity (ε)</th>
+                        <th data-i18n="th_app">Application</th>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_ss"><strong>Polished Stainless Steel</strong></td>
+                        <td>0.15 - 0.25</td>
+                        <td>Shaft, runner (bare metal)</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_ox_st"><strong>Oxidized Steel</strong></td>
+                        <td>0.75 - 0.85</td>
+                        <td>Bearing housing (natural patina)</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_paint"><strong>Painted Surfaces (Matte)</strong></td>
+                        <td>0.90 - 0.95</td>
+                        <td>Generator housing, HPU</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_ins"><strong>Electrical Insulation</strong></td>
+                        <td>0.85 - 0.90</td>
+                        <td>Cable, terminal box</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_cu"><strong>Copper (Oxidized)</strong></td>
+                        <td>0.60 - 0.70</td>
+                        <td>Bus bars, electrical connections</td>
+                    </tr>
+                    <tr>
+                        <td data-i18n="mat_al"><strong>Aluminum (Polished)</strong></td>
+                        <td>0.05 - 0.10</td>
+                        <td>Heat sinks, reflectors</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3 data-i18n="set_emis_title">How to Set Emissivity on IR Camera</h3>
+            <ol>
+                <li data-i18n="set_emis1"><strong>Identify Surface Material:</strong> Know what you're measuring
+                    (painted metal vs. bare shaft).</li>
+                <li data-i18n="set_emis2"><strong>Consult Table Above:</strong> Select appropriate emissivity value.
+                </li>
+                <li data-i18n="set_emis3"><strong>Camera Settings:</strong> Access emissivity menu on IR camera (usually
+                    "ε" or "Emis" setting).</li>
+                <li data-i18n="set_emis4"><strong>Verify with Contact Thermometer:</strong> For critical measurements,
+                    verify IR reading against a contact thermometer.</li>
+            </ol>
+
+            <div class="module critical">
+                <strong data-i18n="emis_warn">⚠️ WARNING:</strong> <span data-i18n="emis_warn_text">Incorrect emissivity
+                    can cause 10-30°C error in temperature reading. Always adjust for surface type. Shiny metal surfaces
+                    require lower ε settings!</span>
+            </div>
+
+            <h3 data-i18n="tape_title">Practical Tip: The Black Tape Method</h3>
+            <p data-i18n="tape_intro">For shiny surfaces where emissivity is unknown:</p>
+            <ol>
+                <li data-i18n="tape1">Apply a small piece of electrical (black) tape to the surface.</li>
+                <li data-i18n="tape2">Wait 5 minutes for thermal equilibrium.</li>
+                <li data-i18n="tape3">Set camera emissivity to 0.95 (tape's emissivity).</li>
+                <li data-i18n="tape4">Measure tape temperature.</li>
+                <li data-i18n="tape5">Adjust emissivity until bare metal reads same as tape.</li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="section3_title">Baseline vs. Trend Analysis</div>
+        <div class="module">
+            <h3 data-i18n="baseline_title">Establishing Baseline Temperatures</h3>
+            <p data-i18n="when_baseline"><strong>When to Record Baseline:</strong></p>
+            <ul>
+                <li data-i18n="base1">During commissioning or after major overhaul</li>
+                <li data-i18n="base2">At normal operating load (typically 80-100% rated power)</li>
+                <li data-i18n="base3">After unit has reached thermal steady-state (minimum 2 hours of operation)</li>
+                <li data-i18n="base4">Under typical ambient conditions (note ambient temperature)</li>
+            </ul>
+
+            <h3 data-i18n="rec_proc_title">Baseline Recording Procedure</h3>
+            <ol>
+                <li data-i18n="rec1"><strong>Create Thermal Map:</strong> Sketch unit layout and mark all inspection
+                    points (A-D).</li>
+                <li data-i18n="rec2"><strong>Document Conditions:</strong> Record load (MW), ambient temp, cooling water
+                    temp, operating hours.</li>
+                <li data-i18n="rec3"><strong>Systematic Scan:</strong> Follow same path each time (clockwise from
+                    front).</li>
+                <li data-i18n="rec4"><strong>Capture Images:</strong> Save thermal images with clear labels (e.g.,
+                    "Turbine_Bearing_DE_Baseline_2025-01-15").</li>
+                <li data-i18n="rec5"><strong>Log Data:</strong> Create spreadsheet with Point ID, Temperature, Load,
+                    Date.</li>
+            </ol>
+
+            <h3 data-i18n="trend_title">Trend Analysis (6-Month Inspection)</h3>
+            <p data-i18n="id_abnormal"><strong>How to Identify Abnormal Heat:</strong></p>
+            <ul>
+                <li data-i18n="ab1"><strong>Compare to Baseline:</strong> Temperature increase > 10°C from baseline =
+                    investigate.</li>
+                <li data-i18n="ab2"><strong>Compare to Adjacent Similar Components:</strong> If one bearing is 15°C
+                    hotter than identical bearing on other side = problem.</li>
+                <li data-i18n="ab3"><strong>Track Over Time:</strong> Gradual temperature rise (5°C per year) indicates
+                    degradation in progress.</li>
+                <li data-i18n="ab4"><strong>Normalize for Ambient:</strong> Adjust for ambient temperature changes (rule
+                    of thumb: +1°C component temp per +1°C ambient).</li>
+            </ul>
+
+            <div class="module">
+                <strong data-i18n="ex_trend">💡 Example Trend Analysis:</strong>
+                <p><strong>Turbine Bearing (Point A):</strong></p>
+                <ul>
+                    <li>Jan 2024 Baseline: 48°C @ 5.0 MW, Ambient 22°C</li>
+                    <li>Jul 2024: 52°C @ 5.0 MW, Ambient 28°C → (+4°C component, +6°C ambient) = Normal</li>
+                    <li>Jan 2025: 62°C @ 5.0 MW, Ambient 23°C → (+14°C from baseline) = ABNORMAL - Inspect bearing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="section4_title">Environmental Bias - Seasonal Thermal Shifts</div>
+        <div class="module critical">
+            <h3 data-i18n="wet_adj_title">🌧️ Wet Season Thermal Adjustments</h3>
+            <p data-i18n="wet_context"><strong>Context:</strong> High silt load (> 500 NTU) and cooler water
+                temperatures affect thermal readings.</p>
+
+            <h4 style="color: var(--accent-color);" data-i18n="behav_change">Thermal Behavior Changes:</h4>
+            <ul>
+                <li data-i18n="change1"><strong>cooling Efficiency Drops (Point A):</strong> <br>Silt clogs bearing
+                    cooler tubes → Heat transfer efficiency decreases. <br><strong>Symptom:</strong> Bearing temp rises
+                    despite cooler river water. <br><strong>Action:</strong> If bearing temp rises > 5°C above baseline
+                    in wet season, check cooling water flow immediately.</li>
+                <li data-i18n="change2"><strong>False "Cool" Readings:</strong> <br>Water splashing on turbine bearing
+                    housing (common in floods) cools surface skin. <br><strong>Risk:</strong> Internal bearing is hot,
+                    but housing looks cool on IR. <br><strong>Action:</strong> Measure temp at shielded location or oil
+                    outlet pipe.</li>
+                <li data-i18n="change3"><strong>Generator Heating (Point B):</strong> <br>High humidity reduces air
+                    cooling efficiency. <br><strong>Action:</strong> Expect 3-5°C higher stator interaction temps.</li>
+            </ul>
+
+            <p style="margin-top: 15px;" data-i18n="strat_link"><strong>💡 Strategic Link:</strong> See <a
+                    href="./Francis_SOP_MIM.html" style="color: var(--accent-color); font-weight: bold;">Maintenance
+                    Intensity Matrix</a> for seasonal priority shifts.</p>
+        </div>
+
+        <div class="section-title" data-i18n="section5_title">Inspection Schedule & Reporting</div>
+        <div class="module">
+            <ul>
+                <li data-i18n="sched1"><strong>Monthly:</strong> Quick scan of all four points during routine rounds.
+                </li>
+                <li data-i18n="sched2"><strong>Bi-Annual:</strong> Full thermal survey with image capture and trend
+                    analysis.</li>
+                <li data-i18n="sched3"><strong>After Load Changes:</strong> Scan after unit returns to service from
+                    extended outage.</li>
+                <li data-i18n="sched4"><strong>Emergency:</strong> Immediate thermal scan if abnormal vibration, noise,
+                    or smell detected.</li>
+            </ul>
+
+            <h3 data-i18n="rep_temp">Reporting Template</h3>
+            <table class="thermal-table">
+                <tr>
+                    <th data-i18n="th_pt">Point</th>
+                    <th data-i18n="th_loc">Location</th>
+                    <th data-i18n="th_curr">Current Temp</th>
+                    <th data-i18n="th_base">Baseline Temp</th>
+                    <th>ΔT</th>
+                    <th data-i18n="th_stat">Status</th>
+                </tr>
+                <tr>
+                    <td>A1</td>
+                    <td>Turbine Bearing DE</td>
+                    <td>52°C</td>
+                    <td>48°C</td>
+                    <td>+4°C</td>
+                    <td style="color: #00FF00;">✓ Normal</td>
+                </tr>
+                <tr>
+                    <td>A2</td>
+                    <td>Generator Bearing DE</td>
+                    <td>67°C</td>
+                    <td>55°C</td>
+                    <td>+12°C</td>
+                    <td style="color: var(--warning-color);">⚠ Investigate</td>
+                </tr>
+            </table>
+        </div>
+
+        <a href="./Francis_Horizontal.html" class="back-btn" data-i18n="back_btn">← Return to Master Manual</a>
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "🌡️ THERMAL MAPPING & IR DIAGNOSTICS",
+                subtitle: "The Infrared Eyes of Predictive Maintenance",
+                desc: "Using infrared signatures to detect friction and electrical resistance before failure",
+                safety_title: "⚠️ IR THERMOGRAPHY SAFETY",
+                stop_read: "STOP. READ THIS FIRST.",
+                safe1: "<strong>Electrical Safety:</strong> Never point IR camera at high-voltage equipment while energized without proper PPE and training.",
+                safe2: "<strong>Arc Flash Risk:</strong> Maintain safe distances from exposed electrical connections (NFPA 70E guidelines).",
+                safe3: "<strong>Reflective Surfaces:</strong> Be aware that shiny metal surfaces reflect IR radiation from other hot sources, giving false readings.",
+                section1_title: "The Thermal Grid: Critical Inspection Points",
+                grid_intro: "For horizontal Francis turbines, four primary thermal inspection points provide comprehensive health monitoring.",
+                ptA_title: "Bearings (Turbine & Generator)",
+                target_label: "Target Temperature:",
+                ptA_target: "< 60°C (< 140°F)",
+                look_for: "What to Look For:",
+                ptA_look1: "<strong>Uniform Temperature:</strong> Bearing housing should have even temperature distribution around circumference.",
+                ptA_look2: "<strong>Hot Spots:</strong> Localized high temperature indicates misalignment, insufficient lubrication, or bearing damage.",
+                ptA_look3: "<strong>Temperature Gradient:</strong> Sharp temperature rise from ambient to bearing = poor heat dissipation (cooling water issue).",
+                abnormal_sig: "Abnormal Thermal Signatures:",
+                ptA_ab1: "<strong>> 65°C:</strong> Misalignment or vibration-induced friction. Check shaft run-out → <a href=\"./Francis_SOP_Precision.html\" style=\"color: var(--accent-color);\">Alignment SOP</a>",
+                ptA_ab2: "<strong>Asymmetric Heat:</strong> One side hotter = tilted bearing or uneven load. Inspect bearing clearances.",
+                ptA_ab3: "<strong>> 70°C:</strong> Oil aeration or degraded lubricant. Perform oil analysis → <a href=\"./Francis_SOP_Oil.html\" style=\"color: var(--accent-color);\">Oil Hygiene SOP</a>",
+                ptA_ab4: "<strong>> 80°C:</strong> CRITICAL - Stop unit immediately. Bearing failure imminent → <a href=\"./Francis_SOP_Bearings.html\" style=\"color: var(--accent-color);\">Bearings SOP</a>",
+                ptB_title: "Generator Stator Housing",
+                ptB_target: "< 85°C (< 185°F) - varies by insulation class",
+                ptB_look1: "<strong>Uniform Heat Distribution:</strong> Stator should have relatively even temperature across its length.",
+                ptB_look2: "<strong>Hot Spots:</strong> Localized high temperatures indicate insulation breakdown, shorted turns, or blocked cooling ducts.",
+                ptB_look3: "<strong>Cooling Efficiency:</strong> Temperature should drop near cooling fan locations if air-cooled.",
+                ptB_ab1: "<strong>Localized Hot Spot (> 95°C):</strong> Insulation breakdown or shorted winding. Perform insulation resistance test → <a href=\"./Francis_SOP_Elec_Health.html\" style=\"color: var(--accent-color);\">Electrical Health SOP</a>",
+                ptB_ab2: "<strong>Blocked Ventilation Pattern:</strong> High temperature in specific section = blocked cooling duct. Inspect and clean ventilation system.",
+                ptB_ab3: "<strong>Asymmetric Heating:</strong> Three-phase imbalance. Check phase currents and voltages.",
+                ptB_ab4: "<strong>> 100°C (for Class F insulation):</strong> CRITICAL - Reduce load or stop unit to prevent insulation damage.",
+                ins_class_ref: "💡 Insulation Class Reference:",
+                ins_note: "Note: These are <em>insulation</em> ratings. Practical operating limits are 15-20°C lower to ensure lifespan.",
+                ptC_title: "Electrical Terminal Box",
+                ptC_target: "< 50°C above ambient (typically < 70°C total)",
+                ptC_look1: "<strong>Connection Points:</strong> Scan all cable lugs, bus bars, and terminal connections.",
+                ptC_look2: "<strong>Current Balance:</strong> All three phases should have similar temperatures (within ±5°C).",
+                ptC_look3: "<strong>Oxidation Detection:</strong> High resistance at connections due to oxidation causes heating.",
+                ptC_ab1: "<strong>Hot Lug (> 80°C):</strong> Loose bolt or oxidized connection. The \"vibration effect\" - vibration loosens bolts over time. <br><em>Action: De-energize, re-torque all connections, clean oxidation with contact cleaner.</em>",
+                ptC_ab2: "<strong>Phase Imbalance (> 10°C difference):</strong> Unequal current distribution or loose connection on hot phase.",
+                ptC_ab3: "<strong>> 100°C at any connection:</strong> CRITICAL - Immediate risk of arcing or fire. Shut down and repair.",
+                ptC_ab4: "<strong>Heat Pattern on Cable:</strong> If heat extends along cable from termination, cable itself may be undersized or damaged.",
+                vib_effect_title: "💡 The Vibration Effect:",
+                vib_effect_text: "Continuous generator vibration (even within acceptable limits) gradually loosens electrical connections. Thermal imaging detects this before catastrophic failure. Re-torque all terminal box connections annually.",
+                ptD_title: "HPU Solenoids & Pumps",
+                ptD_target: "Solenoids < 55°C, Pumps < 65°C",
+                ptD_look1: "<strong>Solenoid Coils:</strong> Should be warm (40-50°C) when energized, cool when de-energized.",
+                ptD_look2: "<strong>Pump Casing:</strong> Gradual temperature rise from inlet to outlet is normal (energy conversion).",
+                ptD_look3: "<strong>Valve Bodies:</strong> Internal leakage (\"stiction\") manifests as localized heating.",
+                ptD_ab1: "<strong>Solenoid > 70°C:</strong> Internal leakage in valve causing continuous current draw. Replace valve → <a href=\"./Francis_SOP_HPU.html\" style=\"color: var(--accent-color);\">HPU SOP</a>",
+                ptD_ab2: "<strong>Pump Casing > 75°C:</strong> Pump wear, cavitation, or bearing damage. Check pump performance curve.",
+                ptD_ab3: "<strong>Hot Spot on Valve Body:</strong> Internal \"stiction\" - spool valve stuck or binding. Indicates contamination in hydraulic oil → <a href=\"./Francis_SOP_Oil.html\" style=\"color: var(--accent-color);\">Oil Hygiene SOP</a>",
+                ptD_ab4: "<strong>Asymmetric Heating on Manifold:</strong> Flow imbalance or blockage in manifold passages.",
+                section2_title: "IR Thermography Standards",
+                emis_title: "Emissivity (ε) Settings - Critical for Accuracy",
+                emis_intro: "<strong>What is Emissivity?</strong> The ratio of IR radiation emitted by a surface compared to a perfect black body (ε = 1.0). Different materials emit different amounts of IR at the same temperature.",
+                common_mat: "Common Turbine Materials & Emissivity Values:",
+                th_mat: "Material / Surface",
+                th_emis: "Emissivity (ε)",
+                th_app: "Application",
+                mat_ss: "<strong>Polished Stainless Steel</strong>",
+                mat_ox_st: "<strong>Oxidized Steel</strong>",
+                mat_paint: "<strong>Painted Surfaces (Matte)</strong>",
+                mat_ins: "<strong>Electrical Insulation</strong>",
+                mat_cu: "<strong>Copper (Oxidized)</strong>",
+                mat_al: "<strong>Aluminum (Polished)</strong>",
+                set_emis_title: "How to Set Emissivity on IR Camera",
+                set_emis1: "<strong>Identify Surface Material:</strong> Know what you're measuring (painted metal vs. bare shaft).",
+                set_emis2: "<strong>Consult Table Above:</strong> Select appropriate emissivity value.",
+                set_emis3: "<strong>Camera Settings:</strong> Access emissivity menu on IR camera (usually \"ε\" or \"Emis\" setting).",
+                set_emis4: "<strong>Verify with Contact Thermometer:</strong> For critical measurements, verify IR reading against a contact thermometer.",
+                emis_warn: "⚠️ WARNING:",
+                emis_warn_text: "Incorrect emissivity can cause 10-30°C error in temperature reading. Always adjust for surface type. Shiny metal surfaces require lower ε settings!",
+                tape_title: "Practical Tip: The Black Tape Method",
+                tape_intro: "For shiny surfaces where emissivity is unknown:",
+                tape1: "Apply a small piece of electrical (black) tape to the surface.",
+                tape2: "Wait 5 minutes for thermal equilibrium.",
+                tape3: "Set camera emissivity to 0.95 (tape's emissivity).",
+                tape4: "Measure tape temperature.",
+                tape5: "Adjust emissivity until bare metal reads same as tape.",
+                section3_title: "Baseline vs. Trend Analysis",
+                baseline_title: "Establishing Baseline Temperatures",
+                when_baseline: "<strong>When to Record Baseline:</strong>",
+                base1: "During commissioning or after major overhaul",
+                base2: "At normal operating load (typically 80-100% rated power)",
+                base3: "After unit has reached thermal steady-state (minimum 2 hours of operation)",
+                base4: "Under typical ambient conditions (note ambient temperature)",
+                rec_proc_title: "Baseline Recording Procedure",
+                rec1: "<strong>Create Thermal Map:</strong> Sketch unit layout and mark all inspection points (A-D).",
+                rec2: "<strong>Document Conditions:</strong> Record load (MW), ambient temp, cooling water temp, operating hours.",
+                rec3: "<strong>Systematic Scan:</strong> Follow same path each time (clockwise from front).",
+                rec4: "<strong>Capture Images:</strong> Save thermal images with clear labels (e.g., \"Turbine_Bearing_DE_Baseline_2025-01-15\").",
+                rec5: "<strong>Log Data:</strong> Create spreadsheet with Point ID, Temperature, Load, Date.",
+                trend_title: "Trend Analysis (6-Month Inspection)",
+                id_abnormal: "<strong>How to Identify Abnormal Heat:</strong>",
+                ab1: "<strong>Compare to Baseline:</strong> Temperature increase > 10°C from baseline = investigate.",
+                ab2: "<strong>Compare to Adjacent Similar Components:</strong> If one bearing is 15°C hotter than identical bearing on other side = problem.",
+                ab3: "<strong>Track Over Time:</strong> Gradual temperature rise (5°C per year) indicates degradation in progress.",
+                ab4: "<strong>Normalize for Ambient:</strong> Adjust for ambient temperature changes (rule of thumb: +1°C component temp per +1°C ambient).",
+                ex_trend: "💡 Example Trend Analysis:",
+                section4_title: "Environmental Bias - Seasonal Thermal Shifts",
+                wet_adj_title: "🌧️ Wet Season Thermal Adjustments",
+                wet_context: "<strong>Context:</strong> High silt load (> 500 NTU) and cooler water temperatures affect thermal readings.",
+                behav_change: "Thermal Behavior Changes:",
+                change1: "<strong>cooling Efficiency Drops (Point A):</strong> <br>Silt clogs bearing cooler tubes → Heat transfer efficiency decreases. <br><strong>Symptom:</strong> Bearing temp rises despite cooler river water. <br><strong>Action:</strong> If bearing temp rises > 5°C above baseline in wet season, check cooling water flow immediately.",
+                change2: "<strong>False \"Cool\" Readings:</strong> <br>Water splashing on turbine bearing housing (common in floods) cools surface skin. <br><strong>Risk:</strong> Internal bearing is hot, but housing looks cool on IR. <br><strong>Action:</strong> Measure temp at shielded location or oil outlet pipe.",
+                change3: "<strong>Generator Heating (Point B):</strong> <br>High humidity reduces air cooling efficiency. <br><strong>Action:</strong> Expect 3-5°C higher stator interaction temps.",
+                strat_link: "<strong>💡 Strategic Link:</strong> See <a href=\"./Francis_SOP_MIM.html\" style=\"color: var(--accent-color); font-weight: bold;\">Maintenance Intensity Matrix</a> for seasonal priority shifts.",
+                section5_title: "Inspection Schedule & Reporting",
+                sched1: "<strong>Monthly:</strong> Quick scan of all four points during routine rounds.",
+                sched2: "<strong>Bi-Annual:</strong> Full thermal survey with image capture and trend analysis.",
+                sched3: "<strong>After Load Changes:</strong> Scan after unit returns to service from extended outage.",
+                sched4: "<strong>Emergency:</strong> Immediate thermal scan if abnormal vibration, noise, or smell detected.",
+                rep_temp: "Reporting Template",
+                th_pt: "Point",
+                th_loc: "Location",
+                th_curr: "Current Temp",
+                th_base: "Baseline Temp",
+                th_stat: "Status",
+                back_btn: "← Return to Master Manual"
+            },
+            bs: {
+                title: "🌡️ TERMIČKO MAPIRANJE I IR DIJAGNOSTIKA",
+                subtitle: "Infracrvene oči prediktivnog održavanja",
+                desc: "Korištenje infracrvenih potpisa za otkrivanje trenja i električnog otpora prije kvara",
+                safety_title: "⚠️ SIGURNOST IR TERMOGRAFIJE",
+                stop_read: "STOP. PRVO PROČITAJTE OVO.",
+                safe1: "<strong>Električna sigurnost:</strong> Nikada ne usmjeravajte IR kameru na opremu pod visokim naponom dok je pod naponom bez odgovarajuće OZO i obuke.",
+                safe2: "<strong>Rizik od električnog luka:</strong> Održavajte sigurnu udaljenost od izloženih električnih priključaka (NFPA 70E smjernice).",
+                safe3: "<strong>Reflektivne površine:</strong> Budite svjesni da sjajne metalne površine reflektuju IR zračenje iz drugih vrućih izvora, dajući lažna očitavanja.",
+                section1_title: "Termička mreža: Kritične tačke inspekcije",
+                grid_intro: "Za horizontalne Francis turbine, četiri primarne tačke termičke inspekcije pružaju sveobuhvatno praćenje zdravlja.",
+                ptA_title: "Ležajevi (Turbina i Generator)",
+                target_label: "Ciljna temperatura:",
+                ptA_target: "< 60°C (< 140°F)",
+                look_for: "Šta tražiti:",
+                ptA_look1: "<strong>Ujednačena temperatura:</strong> Kućište ležaja treba imati ravnomjernu distribuciju temperature po obodu.",
+                ptA_look2: "<strong>Vruće tačke:</strong> Lokalizovana visoka temperatura ukazuje na neusklađenost, nedovoljno podmazivanje ili oštećenje ležaja.",
+                ptA_look3: "<strong>Temperaturni gradijent:</strong> Oštar porast temperature od ambijenta do ležaja = loše odvođenje toplote (problem sa vodom za hlađenje).",
+                abnormal_sig: "Nenormalni termički potpisi:",
+                ptA_ab1: "<strong>> 65°C:</strong> Neusklađenost ili trenje izazvano vibracijama. Provjerite bacanje osovine → <a href=\"./Francis_SOP_Precision.html\" style=\"color: var(--accent-color);\">SOP za Poravnanje</a>",
+                ptA_ab2: "<strong>Asimetrična toplota:</strong> Jedna strana toplija = nagnut ležaj ili neujednačeno opterećenje. Pregledajte zazore ležaja.",
+                ptA_ab3: "<strong>> 70°C:</strong> Aeracija ulja ili degradirano mazivo. Izvršite analizu ulja → <a href=\"./Francis_SOP_Oil.html\" style=\"color: var(--accent-color);\">SOP za Higijenu Ulja</a>",
+                ptA_ab4: "<strong>> 80°C:</strong> KRITIČNO - Odmah zaustavite jedinicu. Otkazivanje ležaja neizbježno → <a href=\"./Francis_SOP_Bearings.html\" style=\"color: var(--accent-color);\">SOP za Ležajeve</a>",
+                ptB_title: "Kućište Statora Generatora",
+                ptB_target: "< 85°C (< 185°F) - varira prema klasi izolacije",
+                ptB_look1: "<strong>Ujednačena distribucija toplote:</strong> Stator treba imati relativno ravnomjernu temperaturu po svojoj dužini.",
+                ptB_look2: "<strong>Vruće tačke:</strong> Lokalizovane visoke temperature ukazuju na proboj izolacije, kratke spojeve ili blokirane kanale za hlađenje.",
+                ptB_look3: "<strong>Efikasnost hlađenja:</strong> Temperatura bi trebala pasti blizu lokacija ventilatora za hlađenje ako je hlađenje zračno.",
+                ptB_ab1: "<strong>Lokalizovana vruća tačka (> 95°C):</strong> Proboj izolacije ili kratki spoj namotaja. Izvršite test otpora izolacije → <a href=\"./Francis_SOP_Elec_Health.html\" style=\"color: var(--accent-color);\">SOP za Električno Zdravlje</a>",
+                ptB_ab2: "<strong>Blokiran uzorak ventilacije:</strong> Visoka temperatura u određenom dijelu = blokiran kanal za hlađenje. Pregledajte i očistite ventilacioni sistem.",
+                ptB_ab3: "<strong>Asimetrično grijanje:</strong> Trofazna neravnoteža. Provjerite fazne struje i napone.",
+                ptB_ab4: "<strong>> 100°C (za izolaciju Klase F):</strong> KRITIČNO - Smanjite opterećenje ili zaustavite jedinicu da spriječite oštećenje izolacije.",
+                ins_class_ref: "💡 Referenca Klase Izolacije:",
+                ins_note: "Napomena: Ovo su oznake <em>izolacije</em>. Praktične radne granice su 15-20°C niže radi osiguranja životnog vijeka.",
+                ptC_title: "Električna Priključna Kutija",
+                ptC_target: "< 50°C iznad ambijenta (obično < 70°C ukupno)",
+                ptC_look1: "<strong>Priključne tačke:</strong> Skenirajte sve kablovske stopice, sabirnice i terminalne spojeve.",
+                ptC_look2: "<strong>Balans struje:</strong> Sve tri faze trebaju imati slične temperature (unutar ±5°C).",
+                ptC_look3: "<strong>Detekcija oksidacije:</strong> Visok otpor na spojevima zbog oksidacije uzrokuje grijanje.",
+                ptC_ab1: "<strong>Vruća stopica (> 80°C):</strong> Labav vijak ili oksidiran spoj. \"Efekat vibracija\" - vibracije vremenom olabave vijke. <br><em>Akcija: Isključite napajanje, ponovo zategnite sve spojeve, očistite oksidaciju kontakt sprejem.</em>",
+                ptC_ab2: "<strong>Fazna neravnoteža (> 10°C razlike):</strong> Nejednaka distribucija struje ili labav spoj na vrućoj fazi.",
+                ptC_ab3: "<strong>> 100°C na bilo kojem spoju:</strong> KRITIČNO - Momentalni rizik od luka ili požara. Ugasite i popravite.",
+                ptC_ab4: "<strong>Uzorak toplote na kablu:</strong> Ako se toplota širi duž kabla od terminala, sam kabl može biti nedovoljno dimenzionisan ili oštećen.",
+                vib_effect_title: "💡 Efekat Vibracija:",
+                vib_effect_text: "Kontinuirane vibracije generatora (čak i unutar prihvatljivih granica) postepeno olabavljuju električne spojeve. Termičko snimanje ovo otkriva prije katastrofalnog kvara. Ponovo zategnite sve spojeve u priključnoj kutiji godišnje.",
+                ptD_title: "HPU Solenoidi i Pumpe",
+                ptD_target: "Solenoidi < 55°C, Pumpe < 65°C",
+                ptD_look1: "<strong>Solenoidne zavojnice:</strong> Trebaju biti tople (40-50°C) kada su pod naponom, hladne kada nisu.",
+                ptD_look2: "<strong>Kućište pumpe:</strong> Postepen porast temperature od ulaza do izlaza je normalan (konverzija energije).",
+                ptD_look3: "<strong>Tijela ventila:</strong> Unutrašnje curenje (\"zapinjanje\") se manifestuje kao lokalizovano grijanje.",
+                ptD_ab1: "<strong>Solenoid > 70°C:</strong> Unutrašnje curenje u ventilu uzrokuje kontinuiranu potrošnju struje. Zamijenite ventil → <a href=\"./Francis_SOP_HPU.html\" style=\"color: var(--accent-color);\">HPU SOP</a>",
+                ptD_ab2: "<strong>Kućište pumpe > 75°C:</strong> Habanje pumpe, kavitacija ili oštećenje ležaja. Provjerite krivu performansi pumpe.",
+                ptD_ab3: "<strong>Vruća tačka na tijelu ventila:</strong> Unutrašnje \"zapinjanje\" - klip ventila zaglavljen. Ukazuje na kontaminaciju u hidrauličkom ulju → <a href=\"./Francis_SOP_Oil.html\" style=\"color: var(--accent-color);\">SOP za Higijenu Ulja</a>",
+                ptD_ab4: "<strong>Asimetrično grijanje na razvodniku:</strong> Neravnoteža protoka ili blokada u prolazima razvodnika.",
+                section2_title: "Standardi IR Termografije",
+                emis_title: "Postavke emisivnosti (ε) - Kritično za tačnost",
+                emis_intro: "<strong>Šta je emisivnost?</strong> Odnos IR zračenja koje emituje površina u poređenju sa savršenim crnim tijelom (ε = 1.0). Različiti materijali emituju različite količine IR na istoj temperaturi.",
+                common_mat: "Česti materijali turbine i vrijednosti emisivnosti:",
+                th_mat: "Materijal / Površina",
+                th_emis: "Emisivnost (ε)",
+                th_app: "Primjena",
+                mat_ss: "<strong>Polirani nehrđajući čelik</strong>",
+                mat_ox_st: "<strong>Oksidirani čelik</strong>",
+                mat_paint: "<strong>Obojene površine (Mat)</strong>",
+                mat_ins: "<strong>Električna izolacija</strong>",
+                mat_cu: "<strong>Bakar (Oksidiran)</strong>",
+                mat_al: "<strong>Aluminij (Poliran)</strong>",
+                set_emis_title: "Kako postaviti emisivnost na IR kameri",
+                set_emis1: "<strong>Identifikujte materijal površine:</strong> Znajte šta mjerite (obojeni metal vs. gola osovina).",
+                set_emis2: "<strong>Konsultujte tabelu iznad:</strong> Odaberite odgovarajuću vrijednost emisivnosti.",
+                set_emis3: "<strong>Postavke kamere:</strong> Pristupite meniju emisivnosti na IR kameri (obično \"ε\" ili \"Emis\" postavka).",
+                set_emis4: "<strong>Verifikujte kontaktnim termometrom:</strong> Za kritična mjerenja, verifikujte IR očitavanje kontaktnim termometrom.",
+                emis_warn: "⚠️ UPOZORENJE:",
+                emis_warn_text: "Netačna emisivnost može uzrokovati grešku od 10-30°C u očitavanju temperature. Uvijek prilagodite tipu površine. Sjajne metalne površine zahtijevaju niže ε postavke!",
+                tape_title: "Praktičan savjet: Metoda crne trake",
+                tape_intro: "Za sjajne površine gdje je emisivnost nepoznata:",
+                tape1: "Zalijepite mali komad električne (crne) trake na površinu.",
+                tape2: "Sačekajte 5 minuta za termičku ravnotežu.",
+                tape3: "Postavite emisivnost kamere na 0.95 (emisivnost trake).",
+                tape4: "Izmjerite temperaturu trake.",
+                tape5: "Podešavajte emisivnost dok goli metal ne očitava isto kao traka.",
+                section3_title: "Analiza Osnovne Linije vs. Trenda",
+                baseline_title: "Uspostavljanje osnovnih temperatura",
+                when_baseline: "<strong>Kada snimiti osnovnu liniju:</strong>",
+                base1: "Tokom puštanja u rad ili nakon velikog remonta",
+                base2: "Pri normalnom radnom opterećenju (obično 80-100% nazivne snage)",
+                base3: "Nakon što jedinica postigne termičko stacionarno stanje (minimum 2 sata rada)",
+                base4: "Pod tipičnim ambijentalnim uslovima (zabilježite ambijentalnu temperaturu)",
+                rec_proc_title: "Procedura snimanja osnovne linije",
+                rec1: "<strong>Kreirajte termičku mapu:</strong> Skicirajte raspored jedinice i označite sve tačke inspekcije (A-D).",
+                rec2: "<strong>Dokumentujte uslove:</strong> Zabilježite opterećenje (MW), ambijentalnu temp, temp vode za hlađenje, radne sate.",
+                rec3: "<strong>Sistematsko skeniranje:</strong> Pratite istu putanju svaki put (u smjeru kazaljke na satu od naprijed).",
+                rec4: "<strong>Snimite slike:</strong> Sačuvajte termičke slike sa jasnim oznakama (npr. \"Turbine_Bearing_DE_Baseline_2025-01-15\").",
+                rec5: "<strong>Dnevnik podataka:</strong> Kreirajte tabelu sa ID tačke, Temperaturom, Opterećenjem, Datumom.",
+                trend_title: "Analiza trenda (6-mjesečna inspekcija)",
+                id_abnormal: "<strong>Kako identifikovati nenormalnu toplotu:</strong>",
+                ab1: "<strong>Poređenje sa osnovnom linijom:</strong> Porast temperature > 10°C od osnovne = istražite.",
+                ab2: "<strong>Poređenje sa susjednim sličnim komponentama:</strong> Ako je jedan ležaj 15°C topliji od identičnog ležaja na drugoj strani = problem.",
+                ab3: "<strong>Praćenje tokom vremena:</strong> Postepen porast temperature (5°C godišnje) ukazuje na degradaciju u toku.",
+                ab4: "<strong>Normalizacija za ambijent:</strong> Prilagodite za promjene ambijentalne temperature (pravilo palca: +1°C temp komponente na +1°C ambijenta).",
+                ex_trend: "💡 Primjer analize trenda:",
+                section4_title: "Ekološka pristrasnost - Sezonski termički pomaci",
+                wet_adj_title: "🌧️ Termička prilagođavanja u kišnoj sezoni",
+                wet_context: "<strong>Kontekst:</strong> Visoko opterećenje muljem (> 500 NTU) i hladnije temperature vode utiču na termička očitavanja.",
+                behav_change: "Promjene termičkog ponašanja:",
+                change1: "<strong>Efikasnost hlađenja opada (Tačka A):</strong> <br>Mulj začepljuje cijevi hladnjaka ležaja → Efikasnost prenosa toplote opada. <br><strong>Simptom:</strong> Temp ležaja raste uprkos hladnijoj riječnoj vodi. <br><strong>Akcija:</strong> Ako temp ležaja poraste > 5°C iznad osnovne u kišnoj sezoni, odmah provjerite protok vode za hlađenje.",
+                change2: "<strong>Lažna \"Hladna\" očitavanja:</strong> <br>Prskanje vode po kućištu ležaja turbine (često u poplavama) hladi površinsku kožu. <br><strong>Rizik:</strong> Unutrašnji ležaj je vruć, ali kućište izgleda hladno na IR. <br><strong>Akcija:</strong> Mjerite temp na zaštićenoj lokaciji ili izlaznoj cijevi ulja.",
+                change3: "<strong>Grijanje generatora (Tačka B):</strong> <br>Visoka vlažnost smanjuje efikasnost zračnog hlađenja. <br><strong>Akcija:</strong> Očekujte 3-5°C više temperature interakcije statora.",
+                strat_link: "<strong>💡 Strateška veza:</strong> Pogledajte <a href=\"./Francis_SOP_MIM.html\" style=\"color: var(--accent-color); font-weight: bold;\">Matricu Intenziteta Održavanja</a> za sezonske pomake prioriteta.",
+                section5_title: "Raspored inspekcije i izvještavanje",
+                sched1: "<strong>Mjesečno:</strong> Brzo skeniranje sve četiri tačke tokom rutinskih obilazaka.",
+                sched2: "<strong>Polugodišnje:</strong> Potpuna termička anketa sa snimanjem slika i analizom trenda.",
+                sched3: "<strong>Nakon promjena opterećenja:</strong> Skenirajte nakon što se jedinica vrati u rad iz produženog isključenja.",
+                sched4: "<strong>Hitno:</strong> Odmah termičko skeniranje ako se otkriju nenormalne vibracije, buka ili miris.",
+                rep_temp: "Šablon izvještavanja",
+                th_pt: "Tačka",
+                th_loc: "Lokacija",
+                th_curr: "Trenutna Temp",
+                th_base: "Osnovna Temp",
+                th_stat: "Status",
+                back_btn: "← Povratak na Glavni priručnik"
+            }
+        };
+
+        function setLang(lang) {
+            const content = document.getElementById('content-placeholder');
+            if (content) {
+                // Logic to handle static replacement not using innerHTML for everything if possible
+                // But here we rely on data-i18n attributes within the placeholder content
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (i18n[lang] && i18n[lang][key]) {
+                        el.innerHTML = i18n[lang][key];
+                    }
+                });
+            }
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            localStorage.setItem('anohub_lang_pref', lang);
+        }
+
+        // Initialize from storage or default to English
+        const savedLang = localStorage.getItem('anohub_lang_pref') || 'en';
+        // We will call setLang after content is populated, but here standard init
+        setLang(savedLang);
+    </script>
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

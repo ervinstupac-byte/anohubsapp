@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> | Anohubs | Hydro Turbine Maintenance & Forensic Engineering</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta name="description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_HPU/">
+    <meta property="og:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="og:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="og:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://anohubs.com/Turbine_Friend/Francis_SOP_HPU/">
+    <meta property="twitter:title" content="AnoHUB | Engineering Immunity Protocol">
+    <meta property="twitter:description" content="Global standard for hydro asset integrity. 15+ years of field forensic engineering.">
+    <meta property="twitter:image" content="https://anohubs.com/assets/images/holy_t_trinity.jpg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons & Styling -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        header: ['Oswald', 'sans-serif']
+                    },
+                    colors: {
+                        'h-cyan': '#06b6d4',
+                        'h-green': '#10b981',
+                        'h-red': '#ef4444',
+                        'h-yellow': '#facc15',
+                        'h-gold': '#FFB800',
+                        'h-purple': '#8b5cf6',
+                        'h-dark': '#020617',
+                        'h-panel': '#0f172a',
+                        'h-border': '#1e293b',
+                        'h-cta': '#f59e0b',
+                        'hydro-charcoal': '#111827',
+                        'hydro-primary': '#22d3ee'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-down': 'fadeInDown 0.3s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Extract from index.html styling */
+        html, body { background-color: #020617; color: #f8fafc; overflow-x: hidden; width: 100%; position: relative; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"); pointer-events: none; z-index: 50; opacity: 0.2; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .grid-bg { background-size: 40px 40px; mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent); }
+        .asset-card { position: relative; height: 500px; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .asset-card:hover { transform: translateY(-5px) scale(1.01); border-color: var(--card-color); box-shadow: 0 20px 50px -10px var(--card-shadow); }
+        .asset-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.7s ease; filter: grayscale(100%) contrast(1.1); }
+        .asset-card:hover .asset-bg { transform: scale(1.1); filter: grayscale(0%); }
+        .asset-overlay { position: absolute; inset: 0; background: linear-gradient(to top, #020617 10%, rgba(2, 6, 23, 0.8) 50%, rgba(2, 6, 23, 0.2) 100%); transition: background 0.5s ease; }
+        .tech-card { transition: all 0.3s ease; }
+        .tech-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px -10px rgba(6,182,212,0.2); }
+
+        /* Unified CTA Buttons */
+        .btn-primary { 
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #FFB800; color: black; 
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.2);
+        }
+        .btn-primary:hover { 
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-outline {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; border: 1px solid rgba(255, 255, 255, 0.2); color: white;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem; backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1); border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            display: inline-flex; items-center; justify-content; center;
+            padding: 1rem 2rem; background-color: #ef4444; color: black;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.3s ease; border-radius: 0.25rem;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .btn-danger:hover {
+            background-color: white; transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-hero-xl {
+            padding: 1.25rem 3rem; font-size: 1.125rem;
+        }
+
+        /* SMART HEADER STYLES */
+        header {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+    <header class="fixed w-full z-50 top-0 border-b border-white/5 bg-[#020617]/90 backdrop-blur-md transition-all duration-300 shadow-lg" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <img src="/assets/images/logo.svg" alt="AnoHUB" class="h-10 w-auto transition duration-300 group-hover:brightness-125">
+                <div class="pointer-events-auto">
+                    <h1 class="text-4xl font-divine text-white tracking-[0.2em] drop-shadow-lg group-hover:text-h-gold transition">AnoHUB</h1>
+                    <div class="h-0.5 w-16 bg-h-gold mt-2 group-hover:w-32 transition-all duration-500"></div>
+                    <p class="text-[10px] font-mono text-h-gold mt-1">PROTOCOL INTERFACE v30.0</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center gap-6 text-xs font-bold uppercase tracking-wider">
+                <a href="/about-us-vision/" class="text-slate-400 hover:text-white transition" data-i18n="nav.about">About</a>
+                <a href="/capabilities/" class="text-slate-400 hover:text-white transition" data-i18n="nav.capabilities">Capabilities</a>
+                <a href="/insights/" class="text-slate-400 hover:text-white transition" data-i18n="nav.insights">Insights</a>
+                <a href="/Turbine_Friend/" class="text-slate-400 hover:text-h-cyan transition" data-i18n="nav.knowledge_base">Knowledge Base</a>
+                <a href="/case-studies/" class="text-slate-400 hover:text-white transition" data-i18n="nav.case_studies">Case Studies</a>
+                <a href="/protocol/" class="px-5 py-2 bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/50 rounded-full hover:bg-[#22d3ee] hover:text-black transition" data-i18n="nav.services">SERVICES</a>
+                <a href="/contact/" class="px-5 py-2 bg-[#f59e0b] text-black rounded-full hover:bg-yellow-400 transition" data-i18n="nav.quote">GET A QUOTE</a>
+                <div class="flex items-center gap-3 border-l border-white/10 pl-6 ml-2 font-mono text-[10px]">
+                    <button onclick="changeLanguage('en')" class="lang-btn hover:text-h-cyan transition" data-lang="en">EN</button>
+                    <span class="opacity-20 text-white/20">|</span>
+                    <button onclick="changeLanguage('bs')" class="lang-btn hover:text-h-cyan transition" data-lang="bs">BS</button>
+                </div>
+            </nav>
+            <button id="mobile-menu-button" class="lg:hidden text-white p-2 hover:bg-white/10 rounded transition">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden absolute top-20 left-0 w-full bg-[#020617] border-b border-[#1e293b] p-6 flex flex-col gap-4 animate-fade-in-down">
+            <a href="/about-us-vision/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.about">About Us</a>
+            <a href="/capabilities/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.capabilities">Capabilities</a>
+            <a href="/insights/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.insights">Insights</a>
+            <a href="/Turbine_Friend/" class="text-slate-300 hover:text-[#22d3ee] py-2 border-b border-[#1e293b]" data-i18n="nav.knowledge_base">Knowledge Base</a>
+            <a href="/contact/" class="text-black bg-[#f59e0b] font-bold py-3 text-center rounded-lg mt-2" data-i18n="nav.quote_audit">REQUEST AUDIT</a>
+            <div class="flex justify-center gap-6 pt-4 border-t border-[#1e293b] font-mono text-[10px]">
+                <button onclick="changeLanguage('en')" class="lang-btn text-slate-400" data-lang="en">ENGLISH</button>
+                <div class="text-white/10">|</div>
+                <button onclick="changeLanguage('bs')" class="lang-btn text-slate-400" data-lang="bs">BOSANSKI</button>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div class="noise-overlay"></div>
+
+    <main>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: HPU & Nitrogen Systems</title>
+    <style>
+        /* Shared Architecture from Francis_Horizontal.html */
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0066cc;
+            --accent-color: #d9534f;
+            --warning-color: #f0ad4e;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-color: #dde;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .lang-toggle button {
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            background: transparent;
+            color: var(--secondary-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-toggle button.active {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 15px;
+            margin-top: 40px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "►";
+            margin-right: 10px;
+            font-size: 0.8em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-top: 25px;
+        }
+
+        .module {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+
+        .critical {
+            border-left: 5px solid var(--accent-color);
+            background-color: #fff5f5;
+        }
+
+        .technical {
+            border-left: 5px solid var(--secondary-color);
+            background-color: #f0f7ff;
+        }
+
+        .diagnostic {
+            border-left: 5px solid var(--warning-color);
+            background-color: #fdf8e4;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        .formula-box {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1 data-i18n="title">Critical SOP: HPU & Nitrogen Systems</h1>
+            <h2 data-i18n="subtitle">Ref: 1.3 MW Francis Units | Pressure Hygiene & ESD Protocol</h2>
+            <div class="lang-toggle">
+                <button onclick="setLang('en')" id="btnEn" class="active">EN</button>
+                <button onclick="setLang('bs')" id="btnBs">BS</button>
+            </div>
+        </header>
+
+        <!-- SAFETY MODULE -->
+        <div class="module critical">
+            <h3 data-i18n="safety_title">⚠️ HIGH PRESSURE DANGER</h3>
+            <p><strong data-i18n="danger">DANGER:</strong> <span data-i18n="danger_desc">Hydraulic oil at 100+ bar is
+                    lethal.</span></p>
+            <ul>
+                <li><strong data-i18n="de_energize">De-Energization:</strong> <span data-i18n="de_en_desc">Before any
+                        HPU disassembly, open manual ball valves to drain Accumulators back to tank. Manometer must show
+                        0 bar.</span></li>
+                <li><strong data-i18n="inject_risk">Injection Risk:</strong> <span data-i18n="inject_desc">Never use
+                        hands to check for leaks. Pressurized leak can inject oil into bloodstream.</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="sop1_title">SOP 1: Nitrogen Accumulator Protocol</div>
+        <div class="module technical">
+            <p data-i18n="acc_desc">Accumulators are the "Battery" of the safety system. They allow MIV closing even if
+                power (pumps) fails.</p>
+
+            <h3 data-i18n="esd_title">1.1 ESD Energy Verification (Quarterly)</h3>
+            <p><strong data-i18n="objective">Objective:</strong> <span data-i18n="obj_desc">Ensure sufficient stored
+                    energy for Emergency Shutdown (ESD).</span></p>
+            <ol>
+                <li><strong data-i18n="isolation">Isolation and Drainage:</strong> <span data-i18n="iso_desc">Isolate
+                        one accumulator bank. Drain oil side to tank.</span></li>
+                <li><strong data-i18n="connect">Connect Kit:</strong> <span data-i18n="conn_desc">Attach nitrogen
+                        charging kit to top bladder valve.</span></li>
+                <li><strong data-i18n="meas_p0">Measure Pre-Charge (P0):</strong>
+                    <ul>
+                        <li data-i18n="p0_rule">P0 should be approx. <strong>90% of Minimum Operating Pressure
+                                (Pmin)</strong>.</li>
+                        <li data-i18n="p0_ex"><em>Example:</em> If MIV needs 80 bar to close, P0 should be ~72 bar.</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="pass_crit">Pass Criteria:</strong> <span data-i18n="pass_desc">Pressure > 90% of
+                        Target.</span></li>
+                <li><strong data-i18n="fail_crit">Fail Criteria:</strong> <span data-i18n="fail_desc">Bladder empty or
+                        collapsed. Recharge immediately.</span></li>
+            </ol>
+            <div class="module diagnostic">
+                <strong data-i18n="tech_note">💡 Technical Note:</strong> <span data-i18n="tech_note_desc">If nitrogen
+                    requires frequent recharging, the rubber bladder is likely porous and needs replacement.</span>
+            </div>
+        </div>
+
+        <div class="section-title" data-i18n="sop2_title">SOP 2: Oil Hygiene Standards</div>
+        <div class="module technical">
+            <p data-i18n="sludge_desc">Sludge is the enemy of hydraulic precision. "Stiction" in valves causes jerky MIV
+                movement.</p>
+
+            <h3 data-i18n="iso_prot">2.1 ISO Cleanliness Protocol</h3>
+            <ul>
+                <li><strong data-i18n="oil_type">Oil Type:</strong> <span data-i18n="type_desc">Use only high-quality
+                        <strong>L-HL</strong> or <strong>L-HM</strong> hydraulic oil (ISO VG 46/68).</span></li>
+                <li><strong data-i18n="clean_target">Target Cleanliness:</strong> <span data-i18n="iso_target">maintain
+                        <strong>ISO 4406 18/16/13</strong> or better.</span></li>
+                <li><strong data-i18n="sampling">Sampling:</strong> <span data-i18n="samp_desc">Take samples from middle
+                        zone of tank (not bottom sludge) annually.</span></li>
+            </ul>
+
+            <h3 data-i18n="filter_repl">2.2 High Pressure Filter Replacement</h3>
+            <ol>
+                <li data-i18n="check_ind">Check "Clogging Indicator" on pressure filter housing daily.</li>
+                <li data-i18n="red_flag"><strong>Red Flag = Stop & Replace.</strong> Do not bypass.</li>
+                <li><strong data-i18n="procedure">Procedure:</strong>
+                    <ul>
+                        <li data-i18n="step_1">Switch to duplex standby filter (if exists) or shutdown HPU.</li>
+                        <li data-i18n="step_2">Bleed pressure. Unscrew bowl.</li>
+                        <li data-i18n="step_3">Install new cartridge (Do not clean disposable elements).</li>
+                        <li data-i18n="step_4">Check O-ring condition.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section-title" data-i18n="sop3_title">SOP 3: Hydraulic Hammer & Stroke Time</div>
+        <div class="module critical">
+            <p data-i18n="hammer_desc">Dirty oil leads to valve sticking. If valve sticks then releases suddenly, MIV
+                can slam shut.</p>
+
+            <h3 data-i18n="zhuk_title">3.1 Zhukovsky Equation (Water Hammer)</h3>
+            <div class="formula-box">
+                ΔP = ρ · c · Δv
+            </div>
+            <ul>
+                <li><strong>ΔP:</strong> <span data-i18n="dp_desc">Pressure Rise ("Hammer").</span></li>
+                <li><strong>ρ (Rho):</strong> <span data-i18n="rho_desc">Water density.</span></li>
+                <li><strong>c:</strong> <span data-i18n="c_desc">Speed of sound in water (~1200 m/s).</span></li>
+                <li><strong>Δv:</strong> <span data-i18n="dv_desc">Change in velocity (Water stop).</span></li>
+            </ul>
+
+            <h3 data-i18n="hygiene_link">3.2 Link to Hygiene</h3>
+            <p><strong data-i18n="scenario">Scenario:</strong> <span data-i18n="scen_desc">Sludge causes proportional
+                    valve to stick. MIV doesn't move 5 seconds, then snaps (closes) in 1 second.</span></p>
+            <ul>
+                <li><strong data-i18n="result">Result:</strong> <span data-i18n="res_desc">$\Delta v$ becomes
+                        instantaneous. $\Delta P$ spikes to 50+ bar.</span></li>
+                <li><strong data-i18n="conseq">Consequence:</strong> <span data-i18n="cons_desc">Penstock rupture or
+                        spiral case fracture.</span></li>
+                <li><strong data-i18n="prevent">Prevention:</strong> <span data-i18n="prev_desc">Clean oil ensures
+                        smooth, linear actuation (e.g. controlled 40-second closure).</span></li>
+            </ul>
+        </div>
+
+        <div class="section-title" data-i18n="checklist">Checklist</div>
+        <div class="module">
+            <ul>
+                <li><strong data-i18n="quarterly">Quarterly:</strong> <span data-i18n="check_nitro">Check Nitrogen
+                        Pre-Charge.</span></li>
+                <li><strong data-i18n="daily">Daily:</strong> <span data-i18n="check_filt">Check Filter Clogging
+                        Indicators.</span></li>
+                <li><strong data-i18n="annually">Annually:</strong> <span data-i18n="lab_anal">Lab analysis of L-HM Oil
+                        (ISO 4406).</span></li>
+                <li><strong data-i18n="safe_note">Safety:</strong> <span data-i18n="safe_desc">Never work on pressurized
+                        accumulators.</span></li>
+            </ul>
+        </div>
+
+        <a href="Francis_Horizontal_Dashboard.html" class="back-btn" data-i18n="back_btn">← Return to Operations
+            Center</a>
+
+    </div>
+
+    <script>
+        const i18n = {
+            en: {
+                title: "Critical SOP: HPU & Nitrogen Systems",
+                subtitle: "Ref: 1.3 MW Francis Units | Pressure Hygiene & ESD Protocol",
+                safety_title: "⚠️ HIGH PRESSURE DANGER",
+                danger: "DANGER:",
+                danger_desc: "Hydraulic oil at 100+ bar is lethal.",
+                de_energize: "De-Energization:",
+                de_en_desc: "Before any HPU disassembly, open manual ball valves to drain Accumulators back to tank. Manometer must show 0 bar.",
+                inject_risk: "Injection Risk:",
+                inject_desc: "Never use hands to check for leaks. Pressurized leak can inject oil into bloodstream.",
+                sop1_title: "SOP 1: Nitrogen Accumulator Protocol",
+                acc_desc: "Accumulators are the \"Battery\" of the safety system. They allow MIV closing even if power (pumps) fails.",
+                esd_title: "1.1 ESD Energy Verification (Quarterly)",
+                objective: "Objective:",
+                obj_desc: "Ensure sufficient stored energy for Emergency Shutdown (ESD).",
+                isolation: "Isolation and Drainage:",
+                iso_desc: "Isolate one accumulator bank. Drain oil side to tank.",
+                connect: "Connect Kit:",
+                conn_desc: "Attach nitrogen charging kit to top bladder valve.",
+                meas_p0: "Measure Pre-Charge (P0):",
+                p0_rule: "P0 should be approx. <strong>90% of Minimum Operating Pressure (Pmin)</strong>.",
+                p0_ex: "<em>Example:</em> If MIV needs 80 bar to close, P0 should be ~72 bar.",
+                pass_crit: "Pass Criteria:",
+                pass_desc: "Pressure > 90% of Target.",
+                fail_crit: "Fail Criteria:",
+                fail_desc: "Bladder empty or collapsed. Recharge immediately.",
+                tech_note: "💡 Technical Note:",
+                tech_note_desc: "If nitrogen requires frequent recharging, the rubber bladder is likely porous and needs replacement.",
+                sop2_title: "SOP 2: Oil Hygiene Standards",
+                sludge_desc: "Sludge is the enemy of hydraulic precision. \"Stiction\" in valves causes jerky MIV movement.",
+                iso_prot: "2.1 ISO Cleanliness Protocol",
+                oil_type: "Oil Type:",
+                type_desc: "Use only high-quality <strong>L-HL</strong> or <strong>L-HM</strong> hydraulic oil (ISO VG 46/68).",
+                clean_target: "Target Cleanliness:",
+                iso_target: "maintain <strong>ISO 4406 18/16/13</strong> or better.",
+                sampling: "Sampling:",
+                samp_desc: "Take samples from middle zone of tank (not bottom sludge) annually.",
+                filter_repl: "2.2 High Pressure Filter Replacement",
+                check_ind: "Check \"Clogging Indicator\" on pressure filter housing daily.",
+                red_flag: "Red Flag = Stop & Replace. Do not bypass.",
+                procedure: "Procedure:",
+                step_1: "Switch to duplex standby filter (if exists) or shutdown HPU.",
+                step_2: "Bleed pressure. Unscrew bowl.",
+                step_3: "Install new cartridge (Do not clean disposable elements).",
+                step_4: "Check O-ring condition.",
+                sop3_title: "SOP 3: Hydraulic Hammer & Stroke Time",
+                hammer_desc: "Dirty oil leads to valve sticking. If valve sticks then releases suddenly, MIV can slam shut.",
+                zhuk_title: "3.1 Zhukovsky Equation (Water Hammer)",
+                dp_desc: "Pressure Rise (\"Hammer\").",
+                rho_desc: "Water density.",
+                c_desc: "Speed of sound in water (~1200 m/s).",
+                dv_desc: "Change in velocity (Water stop).",
+                hygiene_link: "3.2 Link to Hygiene",
+                scenario: "Scenario:",
+                scen_desc: "Sludge causes proportional valve to stick. MIV doesn't move 5 seconds, then snaps (closes) in 1 second.",
+                result: "Result:",
+                res_desc: "$\Delta v$ becomes instantaneous. $\Delta P$ spikes to 50+ bar.",
+                conseq: "Consequence:",
+                cons_desc: "Penstock rupture or spiral case fracture.",
+                prevent: "Prevention:",
+                prev_desc: "Clean oil ensures smooth, linear actuation (e.g. controlled 40-second closure).",
+                checklist: "Checklist",
+                quarterly: "Quarterly:",
+                check_nitro: "Check Nitrogen Pre-Charge.",
+                daily: "Daily:",
+                check_filt: "Check Filter Clogging Indicators.",
+                annually: "Annually:",
+                lab_anal: "Lab analysis of L-HM Oil (ISO 4406).",
+                safe_note: "Safety:",
+                safe_desc: "Never work on pressurized accumulators.",
+                back_btn: "← Return to Operations Center"
+            },
+            bs: {
+                title: "Kritični SOP: HPU & Azotni Sistemi",
+                subtitle: "Ref: 1.3 MW Francis Agregati | Higijena Pritiska & ESD Protokol",
+                safety_title: "⚠️ OPASNOST VISOKOG PRITISKA",
+                danger: "OPASNOST:",
+                danger_desc: "Hidraulično ulje na 100+ bara je smrtonosno.",
+                de_energize: "De-Energizacija:",
+                de_en_desc: "Prije bilo kakvog rastavljanja HPU-a, otvorite ručne kuglaste ventile da drenažu Akumulatora nazad u rezervoar. Manometar mora pokazivati 0 bara.",
+                inject_risk: "Rizik Ubrizgavanja:",
+                inject_desc: "Nikada ne koristite ruke za provjeru curenja. Curenje pod pritiskom može ubrizgati ulje u krvotok.",
+                sop1_title: "SOP 1: Protokol Azotnih Akumulatora",
+                acc_desc: "Akumulatori su \"Baterija\" sigurnosnog sistema. Omogućavaju zatvaranje GUV-a čak i ako struja (pumpe) zakaže.",
+                esd_title: "1.1 ESD Verifikacija Energije (Kvartalno)",
+                objective: "Cilj:",
+                obj_desc: "Osigurati dovoljno pohranjene energije za Hitno Zaustavljanje (ESD).",
+                isolation: "Izolacija i Drenaža:",
+                iso_desc: "Izolujte jednu bateriju akumulatora. Drenirajte stranu ulja u rezervoar.",
+                connect: "Spojite Kit:",
+                conn_desc: "Priključite komplet za punjenje azota na gornji ventil mijeha.",
+                meas_p0: "Izmjeri Pred-Punjenje (P0):",
+                p0_rule: "P0 treba biti cca. <strong>90% Minimalnog Radnog Pritiska (Pmin)</strong>.",
+                p0_ex: "<em>Primjer:</em> Ako GUV treba 80 bara za zatvaranje, P0 treba biti ~72 bara.",
+                pass_crit: "Kriterij Prolaza:",
+                pass_desc: "Pritisak > 90% Ciljanog.",
+                fail_crit: "Kriterij Pada:",
+                fail_desc: "Mijeh je prazan ili kolabirao. Odmah dopuniti.",
+                tech_note: "💡 Tehnička Bilješka:",
+                tech_note_desc: "Ako azot zahtijeva često dopunjavanje, gumeni mijeh je vjerovatno porozan i treba zamjenu.",
+                sop2_title: "SOP 2: Standardi Higijene Ulja",
+                sludge_desc: "Mulj je neprijatelj hidrauličke preciznosti. \"Stiction\" (Statičko Trenje) u ventilima uzrokuje trzavo kretanje GUV-a.",
+                iso_prot: "2.1 ISO Protokol Čistoće",
+                oil_type: "Tip Ulja:",
+                type_desc: "Koristite samo visokokvalitetno <strong>L-HL</strong> ili <strong>L-HM</strong> hidraulično ulje (ISO VG 46/68).",
+                clean_target: "Ciljana Čistoća:",
+                iso_target: "održavati <strong>ISO 4406 18/16/13</strong> ili bolje.",
+                sampling: "Uzorkovanje:",
+                samp_desc: "Uzimajte uzorke iz srednje zone rezervoara (ne talog sa dna) godišnje.",
+                filter_repl: "2.2 Zamjena Filtera Visokog Pritiska",
+                check_ind: "Provjerite \"Indikator Začepljenja\" na kućištu tlačnog filtera dnevno.",
+                red_flag: "Crvena Zastavica = Stop & Zamijeni. Ne premoštavajte (bypass).",
+                procedure: "Procedura:",
+                step_1: "Prebacite na dupleks standby filter (ako postoji) ili ugasite HPU.",
+                step_2: "Odzračite pritisak. Odvrnite čašu.",
+                step_3: "Instalirajte novi uložak (Ne čistite jednokratne elemente).",
+                step_4: "Provjerite stanje O-ringa.",
+                sop3_title: "SOP 3: Hidraulički Udar & Vrijeme Hoda",
+                hammer_desc: "Prljavo ulje dovodi do lijepljenja ventila. Ako ventil zaglavi pa naglo otpusti, GUV se može naglo zatvoriti.",
+                zhuk_title: "3.1 Žukovski Jednačina (Hidraulički Udar)",
+                dp_desc: "Porast Pritiska (\"Udar\").",
+                rho_desc: "Gustoća vode.",
+                c_desc: "Brzina zvuka u vodi (~1200 m/s).",
+                dv_desc: "Promjena brzine (Zaustavljanje vode).",
+                hygiene_link: "3.2 Veza sa Higijenom",
+                scenario: "Scenario:",
+                scen_desc: "Mulj uzrokuje da proporcionalni ventil zaglavi. GUV se ne pomjera 5 sekundi, zatim pukne (zatvori) za 1 sekundu.",
+                result: "Rezultat:",
+                res_desc: "$\Delta v$ postaje trenutan. $\Delta P$ skače na 50+ bara.",
+                conseq: "Posljedica:",
+                cons_desc: "Pucanje cjevovoda ili lom spirale.",
+                prevent: "Prevencija:",
+                prev_desc: "Čisto ulje osigurava glatku, linearnu aktuaciju (npr. kontrolisano zatvaranje od 40 sekundi).",
+                checklist: "Kontrolna Lista",
+                quarterly: "Kvartalno:",
+                check_nitro: "Provjeri Pred-Punjenje Azota.",
+                daily: "Dnevno:",
+                check_filt: "Provjeri Indikatore Začepljenja Filtera.",
+                annually: "Godišnje:",
+                lab_anal: "Lab analiza L-HM Ulja (ISO 4406).",
+                safe_note: "Sigurnost:",
+                safe_desc: "Nikada ne radite na presuriziranim akumulatorima.",
+                back_btn: "← Povratak u Operativni Centar"
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+            document.getElementById('btnEn').className = lang === 'en' ? 'active' : '';
+            document.getElementById('btnBs').className = lang === 'bs' ? 'active' : '';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
+            });
+            document.documentElement.lang = lang;
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+
+</body>
+
+</html>
+    </main>
+
+    <footer class="bg-black border-t border-white/5 pt-24 pb-12 relative z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 text-left">
+                <!-- Branding & Intelligence -->
+                <div class="lg:col-span-1">
+                    <img src="/assets/images/logo.svg" alt="Anohubs" class="h-8 w-auto mb-8 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-xs text-slate-500 font-mono leading-relaxed mb-6 uppercase tracking-wider">
+                        Asset Integrity Management & Forensic Engineering. <br>
+                        Field Ops // Diagnostics // Intelligence.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://linkedin.com/company/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-h-cyan hover:border-h-cyan transition-all duration-300">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://github.com/anohubs" class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-slate-500 hover:text-white hover:border-white transition-all duration-300">
+                            <i data-lucide="github" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Strategic Links -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Strategic</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/about-us-vision/" class="hover:text-h-cyan transition">About Us</a></li>
+                        <li><a href="/capabilities/" class="hover:text-h-cyan transition">Capabilities</a></li>
+                        <li><a href="/insights/" class="hover:text-h-cyan transition">Insights</a></li>
+                        <li><a href="/case-studies/" class="hover:text-h-cyan transition">Case Studies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Protocols -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Protocols</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/protocol/" class="hover:text-h-cta transition">Launch Nexus</a></li>
+                        <li><a href="/turbine-francis/" class="hover:text-white transition">Francis Unit</a></li>
+                        <li><a href="/turbine-kaplan/" class="hover:text-white transition">Kaplan Unit</a></li>
+                        <li><a href="/turbine-pelton/" class="hover:text-white transition">Pelton Unit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Governance -->
+                <div>
+                    <h4 class="text-[10px] font-mono font-black text-white uppercase tracking-[0.2em] mb-8">Governance</h4>
+                    <ul class="space-y-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        <li><a href="/contact/" class="hover:text-white transition">Inquiry</a></li>
+                        <li><a href="/privacy-policy/" class="hover:text-white transition">Privacy Protocol</a></li>
+                        <li><a href="/terms-of-use/" class="hover:text-white transition">Terms of Access</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] font-mono text-slate-600 uppercase tracking-[0.15em]">
+                    &copy; <span id="year"></span> ANOHUBS INC. <span class="text-h-green mx-2">//</span> ALL SYSTEMS OPERATIONAL
+                </p>
+                <div class="flex items-center gap-4 text-[10px] font-mono text-slate-700">
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-h-cyan animate-pulse"></div> SARAJEVO_HQ</span>
+                    <span class="flex items-center gap-1"><div class="w-1 h-1 rounded-full bg-slate-700"></div> VIENNA_NODE</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.addEventListener("DOMContentLoaded", () => {
+
+
+            // Year
+            const yearEl = document.getElementById('year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            // Mobile Menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+            }
+
+            // --- SMART HEADER LOGIC ---
+            const header = document.getElementById('navbar');
+            let hideTimeout;
+            const HIDE_DELAY = 3000;
+
+            function showHeader() {
+                header.classList.remove('header-hidden');
+                resetHideTimer();
+            }
+
+            function maybeHideHeader() {
+                // Check if we should actually hide
+                const isHovered = header.matches(':hover');
+                const isMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+
+                if (isHovered || isMenuOpen) {
+                    // Postpone hide if user is busy
+                    resetHideTimer();
+                    return;
+                }
+                header.classList.add('header-hidden');
+            }
+
+            function resetHideTimer() {
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(maybeHideHeader, HIDE_DELAY);
+            }
+
+            // Show on mouse move near top
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY < 50) {
+                    showHeader();
+                }
+            });
+
+            // Interaction listeners
+            document.addEventListener('click', showHeader);
+            document.addEventListener('keydown', showHeader);
+            document.addEventListener('scroll', showHeader);
+
+            // Initial timer
+            resetHideTimer();
+        });
+    </script>
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/436764157846" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-[60] flex items-center gap-3 px-5 py-3 bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-full hover:bg-white/10 hover:border-white/20 hover:scale-105 transition-all duration-300 group shadow-[0_8px_32px_rgba(0,0,0,0.5)] tech-input-focus pointer-events-auto">
+        <div class="w-6 h-6 flex items-center justify-center text-h-green group-hover:text-white transition-colors">
+            <svg viewBox="0 0 24 24" class="w-full h-full fill-current" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </div>
+        <span class="text-[10px] md:text-xs font-mono font-bold tracking-[0.1em] text-slate-300 group-hover:text-white transition-colors" data-i18n="support_label"></span>
+    </a>
+
+    <!-- Vercel Speed Insights -->
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+    <script src="/assets/js/translations.js"></script>
+</body>
+</html>

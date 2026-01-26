@@ -1,0 +1,4 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 lint
+> tsc --noEmit
+

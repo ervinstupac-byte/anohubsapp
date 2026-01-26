@@ -1,0 +1,5142 @@
+{
+  "localBase": "public/archive",
+  "bakBase": "public\\archive.__bak__1768747356701",
+  "totalLocal": 855,
+  "totalBak": 855,
+  "onlyInLocal": [],
+  "onlyInBak": [],
+  "mismatches": [
+    {
+      "rel": "case-studies/cs-compliance-shield/index.html",
+      "kind": "size",
+      "localSize": 14801,
+      "bakSize": 13228
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_2.html",
+      "kind": "size",
+      "localSize": 14719,
+      "bakSize": 13140
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_3.html",
+      "kind": "size",
+      "localSize": 14647,
+      "bakSize": 13066
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_4.html",
+      "kind": "size",
+      "localSize": 14844,
+      "bakSize": 13264
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_5.html",
+      "kind": "size",
+      "localSize": 14695,
+      "bakSize": 13115
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_6.html",
+      "kind": "size",
+      "localSize": 14646,
+      "bakSize": 13067
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_7.html",
+      "kind": "size",
+      "localSize": 14841,
+      "bakSize": 13259
+    },
+    {
+      "rel": "case-studies/cs-compliance-shield/index_8.html",
+      "kind": "size",
+      "localSize": 14712,
+      "bakSize": 13134
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index.html",
+      "kind": "size",
+      "localSize": 14683,
+      "bakSize": 13110
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_2.html",
+      "kind": "size",
+      "localSize": 14901,
+      "bakSize": 13319
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_3.html",
+      "kind": "size",
+      "localSize": 14769,
+      "bakSize": 13186
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_4.html",
+      "kind": "size",
+      "localSize": 14704,
+      "bakSize": 13123
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_5.html",
+      "kind": "size",
+      "localSize": 14889,
+      "bakSize": 13305
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_6.html",
+      "kind": "size",
+      "localSize": 14781,
+      "bakSize": 13198
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_7.html",
+      "kind": "size",
+      "localSize": 14705,
+      "bakSize": 13122
+    },
+    {
+      "rel": "case-studies/cs-digital-protocol-roi/index_8.html",
+      "kind": "size",
+      "localSize": 14903,
+      "bakSize": 13320
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index.html",
+      "kind": "size",
+      "localSize": 14861,
+      "bakSize": 13278
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_2.html",
+      "kind": "size",
+      "localSize": 14805,
+      "bakSize": 13218
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_3.html",
+      "kind": "size",
+      "localSize": 14986,
+      "bakSize": 13399
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_4.html",
+      "kind": "size",
+      "localSize": 14879,
+      "bakSize": 13292
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_5.html",
+      "kind": "size",
+      "localSize": 14805,
+      "bakSize": 13218
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_6.html",
+      "kind": "size",
+      "localSize": 14995,
+      "bakSize": 13407
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_7.html",
+      "kind": "size",
+      "localSize": 14869,
+      "bakSize": 13281
+    },
+    {
+      "rel": "case-studies/cs-fish-passage-optimization/index_8.html",
+      "kind": "size",
+      "localSize": 14807,
+      "bakSize": 13217
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index.html",
+      "kind": "size",
+      "localSize": 14897,
+      "bakSize": 13322
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_2.html",
+      "kind": "size",
+      "localSize": 14805,
+      "bakSize": 13222
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_3.html",
+      "kind": "size",
+      "localSize": 14728,
+      "bakSize": 13146
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_4.html",
+      "kind": "size",
+      "localSize": 14927,
+      "bakSize": 13341
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_5.html",
+      "kind": "size",
+      "localSize": 14790,
+      "bakSize": 13207
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_6.html",
+      "kind": "size",
+      "localSize": 14736,
+      "bakSize": 13152
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_7.html",
+      "kind": "size",
+      "localSize": 14925,
+      "bakSize": 13340
+    },
+    {
+      "rel": "case-studies/cs-forensic-ndt-fatigue/index_8.html",
+      "kind": "size",
+      "localSize": 14802,
+      "bakSize": 13220
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index.html",
+      "kind": "size",
+      "localSize": 18588,
+      "bakSize": 17013
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_2.html",
+      "kind": "size",
+      "localSize": 18674,
+      "bakSize": 17090
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_3.html",
+      "kind": "size",
+      "localSize": 18665,
+      "bakSize": 17086
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_4.html",
+      "kind": "size",
+      "localSize": 18677,
+      "bakSize": 17094
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_5.html",
+      "kind": "size",
+      "localSize": 18658,
+      "bakSize": 17079
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_6.html",
+      "kind": "size",
+      "localSize": 18676,
+      "bakSize": 17093
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_7.html",
+      "kind": "size",
+      "localSize": 18678,
+      "bakSize": 17096
+    },
+    {
+      "rel": "case-studies/cs-francis-misalignment/index_8.html",
+      "kind": "size",
+      "localSize": 18671,
+      "bakSize": 17087
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index.html",
+      "kind": "size",
+      "localSize": 14904,
+      "bakSize": 13320
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_2.html",
+      "kind": "size",
+      "localSize": 14842,
+      "bakSize": 13254
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_3.html",
+      "kind": "size",
+      "localSize": 15028,
+      "bakSize": 13438
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_4.html",
+      "kind": "size",
+      "localSize": 14918,
+      "bakSize": 13329
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_5.html",
+      "kind": "size",
+      "localSize": 14849,
+      "bakSize": 13260
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_6.html",
+      "kind": "size",
+      "localSize": 15046,
+      "bakSize": 13459
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_7.html",
+      "kind": "size",
+      "localSize": 14907,
+      "bakSize": 13319
+    },
+    {
+      "rel": "case-studies/cs-hydraulic-hammer-mitigation/index_8.html",
+      "kind": "size",
+      "localSize": 14842,
+      "bakSize": 13255
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index.html",
+      "kind": "size",
+      "localSize": 14860,
+      "bakSize": 13283
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_2.html",
+      "kind": "size",
+      "localSize": 14757,
+      "bakSize": 13177
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_3.html",
+      "kind": "size",
+      "localSize": 14676,
+      "bakSize": 13093
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_4.html",
+      "kind": "size",
+      "localSize": 14878,
+      "bakSize": 13296
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_5.html",
+      "kind": "size",
+      "localSize": 14742,
+      "bakSize": 13160
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_6.html",
+      "kind": "size",
+      "localSize": 14685,
+      "bakSize": 13103
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_7.html",
+      "kind": "size",
+      "localSize": 14882,
+      "bakSize": 13298
+    },
+    {
+      "rel": "case-studies/cs-kaplan-optimization/index_8.html",
+      "kind": "size",
+      "localSize": 14759,
+      "bakSize": 13178
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index.html",
+      "kind": "size",
+      "localSize": 14706,
+      "bakSize": 13130
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_2.html",
+      "kind": "size",
+      "localSize": 14912,
+      "bakSize": 13327
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_3.html",
+      "kind": "size",
+      "localSize": 14790,
+      "bakSize": 13205
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_4.html",
+      "kind": "size",
+      "localSize": 14724,
+      "bakSize": 13142
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_5.html",
+      "kind": "size",
+      "localSize": 14916,
+      "bakSize": 13330
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_6.html",
+      "kind": "size",
+      "localSize": 14792,
+      "bakSize": 13210
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_7.html",
+      "kind": "size",
+      "localSize": 14724,
+      "bakSize": 13140
+    },
+    {
+      "rel": "case-studies/cs-lcc-procurement-audit/index_8.html",
+      "kind": "size",
+      "localSize": 14921,
+      "bakSize": 13339
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index.html",
+      "kind": "size",
+      "localSize": 14729,
+      "bakSize": 13155
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_2.html",
+      "kind": "size",
+      "localSize": 14689,
+      "bakSize": 13109
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_3.html",
+      "kind": "size",
+      "localSize": 14881,
+      "bakSize": 13301
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_4.html",
+      "kind": "size",
+      "localSize": 14767,
+      "bakSize": 13184
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_5.html",
+      "kind": "size",
+      "localSize": 14689,
+      "bakSize": 13107
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_6.html",
+      "kind": "size",
+      "localSize": 14881,
+      "bakSize": 13301
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_7.html",
+      "kind": "size",
+      "localSize": 14751,
+      "bakSize": 13172
+    },
+    {
+      "rel": "case-studies/cs-me-synergy-erosion/index_8.html",
+      "kind": "size",
+      "localSize": 14691,
+      "bakSize": 13109
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index.html",
+      "kind": "size",
+      "localSize": 14768,
+      "bakSize": 13197
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_2.html",
+      "kind": "size",
+      "localSize": 14680,
+      "bakSize": 13102
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_3.html",
+      "kind": "size",
+      "localSize": 14607,
+      "bakSize": 13028
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_4.html",
+      "kind": "size",
+      "localSize": 14798,
+      "bakSize": 13220
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_5.html",
+      "kind": "size",
+      "localSize": 14661,
+      "bakSize": 13084
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_6.html",
+      "kind": "size",
+      "localSize": 14606,
+      "bakSize": 13027
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_7.html",
+      "kind": "size",
+      "localSize": 14790,
+      "bakSize": 13214
+    },
+    {
+      "rel": "case-studies/cs-pelton-abrasion/index_8.html",
+      "kind": "size",
+      "localSize": 14680,
+      "bakSize": 13103
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index.html",
+      "kind": "size",
+      "localSize": 14820,
+      "bakSize": 13236
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_2.html",
+      "kind": "size",
+      "localSize": 15005,
+      "bakSize": 13417
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_3.html",
+      "kind": "size",
+      "localSize": 14873,
+      "bakSize": 13283
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_4.html",
+      "kind": "size",
+      "localSize": 14827,
+      "bakSize": 13236
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_5.html",
+      "kind": "size",
+      "localSize": 15010,
+      "bakSize": 13419
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_6.html",
+      "kind": "size",
+      "localSize": 14898,
+      "bakSize": 13312
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_7.html",
+      "kind": "size",
+      "localSize": 14829,
+      "bakSize": 13238
+    },
+    {
+      "rel": "case-studies/cs-predictive-maintenance-roi/index_8.html",
+      "kind": "size",
+      "localSize": 15023,
+      "bakSize": 13435
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index.html",
+      "kind": "size",
+      "localSize": 18627,
+      "bakSize": 17046
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_2.html",
+      "kind": "size",
+      "localSize": 18714,
+      "bakSize": 17127
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_3.html",
+      "kind": "size",
+      "localSize": 18705,
+      "bakSize": 17119
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_4.html",
+      "kind": "size",
+      "localSize": 18715,
+      "bakSize": 17130
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_5.html",
+      "kind": "size",
+      "localSize": 18717,
+      "bakSize": 17132
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_6.html",
+      "kind": "size",
+      "localSize": 18704,
+      "bakSize": 17122
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_7.html",
+      "kind": "size",
+      "localSize": 18707,
+      "bakSize": 17121
+    },
+    {
+      "rel": "case-studies/cs-shaft-system-stability/index_8.html",
+      "kind": "size",
+      "localSize": 18715,
+      "bakSize": 17131
+    },
+    {
+      "rel": "case-studies/index.html",
+      "kind": "size",
+      "localSize": 14423,
+      "bakSize": 12871
+    },
+    {
+      "rel": "case-studies/index_2.html",
+      "kind": "size",
+      "localSize": 14338,
+      "bakSize": 12781
+    },
+    {
+      "rel": "case-studies/index_3.html",
+      "kind": "size",
+      "localSize": 14259,
+      "bakSize": 12704
+    },
+    {
+      "rel": "case-studies/index_4.html",
+      "kind": "size",
+      "localSize": 14452,
+      "bakSize": 12896
+    },
+    {
+      "rel": "case-studies/index_5.html",
+      "kind": "size",
+      "localSize": 14329,
+      "bakSize": 12769
+    },
+    {
+      "rel": "case-studies/index_6.html",
+      "kind": "size",
+      "localSize": 14266,
+      "bakSize": 12706
+    },
+    {
+      "rel": "case-studies/index_7.html",
+      "kind": "size",
+      "localSize": 14461,
+      "bakSize": 12899
+    },
+    {
+      "rel": "case-studies/index_8.html",
+      "kind": "size",
+      "localSize": 14341,
+      "bakSize": 12781
+    },
+    {
+      "rel": "case-studies/index_9.html",
+      "kind": "size",
+      "localSize": 14254,
+      "bakSize": 12697
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index.html",
+      "kind": "size",
+      "localSize": 15059,
+      "bakSize": 13480
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_2.html",
+      "kind": "size",
+      "localSize": 14933,
+      "bakSize": 13347
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_3.html",
+      "kind": "size",
+      "localSize": 14877,
+      "bakSize": 13290
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_4.html",
+      "kind": "size",
+      "localSize": 15063,
+      "bakSize": 13480
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_5.html",
+      "kind": "size",
+      "localSize": 14952,
+      "bakSize": 13366
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_6.html",
+      "kind": "size",
+      "localSize": 14879,
+      "bakSize": 13295
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_7.html",
+      "kind": "size",
+      "localSize": 15069,
+      "bakSize": 13487
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_8.html",
+      "kind": "size",
+      "localSize": 14939,
+      "bakSize": 13356
+    },
+    {
+      "rel": "insights/article-1-engineering-immunity/index_9.html",
+      "kind": "size",
+      "localSize": 14877,
+      "bakSize": 13292
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index.html",
+      "kind": "size",
+      "localSize": 14955,
+      "bakSize": 13378
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_2.html",
+      "kind": "size",
+      "localSize": 14833,
+      "bakSize": 13249
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_3.html",
+      "kind": "size",
+      "localSize": 14772,
+      "bakSize": 13185
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_4.html",
+      "kind": "size",
+      "localSize": 14969,
+      "bakSize": 13383
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_5.html",
+      "kind": "size",
+      "localSize": 14833,
+      "bakSize": 13248
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_6.html",
+      "kind": "size",
+      "localSize": 14775,
+      "bakSize": 13191
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_7.html",
+      "kind": "size",
+      "localSize": 14956,
+      "bakSize": 13372
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_8.html",
+      "kind": "size",
+      "localSize": 14820,
+      "bakSize": 13234
+    },
+    {
+      "rel": "insights/article-10-check-engine-light/index_9.html",
+      "kind": "size",
+      "localSize": 14763,
+      "bakSize": 13179
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index.html",
+      "kind": "size",
+      "localSize": 14816,
+      "bakSize": 13244
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_2.html",
+      "kind": "size",
+      "localSize": 14710,
+      "bakSize": 13133
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_3.html",
+      "kind": "size",
+      "localSize": 14650,
+      "bakSize": 13071
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_4.html",
+      "kind": "size",
+      "localSize": 14845,
+      "bakSize": 13265
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_5.html",
+      "kind": "size",
+      "localSize": 14723,
+      "bakSize": 13143
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_6.html",
+      "kind": "size",
+      "localSize": 14648,
+      "bakSize": 13070
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_7.html",
+      "kind": "size",
+      "localSize": 14842,
+      "bakSize": 13263
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_8.html",
+      "kind": "size",
+      "localSize": 14712,
+      "bakSize": 13132
+    },
+    {
+      "rel": "insights/article-11-digital-twin/index_9.html",
+      "kind": "size",
+      "localSize": 14648,
+      "bakSize": 13071
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index.html",
+      "kind": "size",
+      "localSize": 14912,
+      "bakSize": 13336
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_2.html",
+      "kind": "size",
+      "localSize": 14806,
+      "bakSize": 13222
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_3.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13147
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_4.html",
+      "kind": "size",
+      "localSize": 14920,
+      "bakSize": 13337
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_5.html",
+      "kind": "size",
+      "localSize": 14793,
+      "bakSize": 13209
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_6.html",
+      "kind": "size",
+      "localSize": 14728,
+      "bakSize": 13147
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_7.html",
+      "kind": "size",
+      "localSize": 14922,
+      "bakSize": 13340
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_8.html",
+      "kind": "size",
+      "localSize": 14806,
+      "bakSize": 13222
+    },
+    {
+      "rel": "insights/article-12-me-synergy-audit/index_9.html",
+      "kind": "size",
+      "localSize": 14731,
+      "bakSize": 13146
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index.html",
+      "kind": "size",
+      "localSize": 14852,
+      "bakSize": 13276
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_2.html",
+      "kind": "size",
+      "localSize": 14733,
+      "bakSize": 13152
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_3.html",
+      "kind": "size",
+      "localSize": 14666,
+      "bakSize": 13087
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_4.html",
+      "kind": "size",
+      "localSize": 14865,
+      "bakSize": 13283
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_5.html",
+      "kind": "size",
+      "localSize": 14743,
+      "bakSize": 13165
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_6.html",
+      "kind": "size",
+      "localSize": 14668,
+      "bakSize": 13090
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_7.html",
+      "kind": "size",
+      "localSize": 14869,
+      "bakSize": 13286
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_8.html",
+      "kind": "size",
+      "localSize": 14734,
+      "bakSize": 13153
+    },
+    {
+      "rel": "insights/article-13-sediment-silt/index_9.html",
+      "kind": "size",
+      "localSize": 14669,
+      "bakSize": 13090
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index.html",
+      "kind": "size",
+      "localSize": 14914,
+      "bakSize": 13335
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_2.html",
+      "kind": "size",
+      "localSize": 14807,
+      "bakSize": 13223
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_3.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13146
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_4.html",
+      "kind": "size",
+      "localSize": 14921,
+      "bakSize": 13338
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_5.html",
+      "kind": "size",
+      "localSize": 14784,
+      "bakSize": 13205
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_6.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13146
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_7.html",
+      "kind": "size",
+      "localSize": 14907,
+      "bakSize": 13324
+    },
+    {
+      "rel": "insights/article-14-3d-flow-analysis/index_8.html",
+      "kind": "size",
+      "localSize": 14806,
+      "bakSize": 13222
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index.html",
+      "kind": "size",
+      "localSize": 14651,
+      "bakSize": 13079
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_2.html",
+      "kind": "size",
+      "localSize": 14857,
+      "bakSize": 13281
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_3.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13151
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_4.html",
+      "kind": "size",
+      "localSize": 14667,
+      "bakSize": 13089
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_5.html",
+      "kind": "size",
+      "localSize": 14862,
+      "bakSize": 13284
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_6.html",
+      "kind": "size",
+      "localSize": 14746,
+      "bakSize": 13165
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_7.html",
+      "kind": "size",
+      "localSize": 14668,
+      "bakSize": 13090
+    },
+    {
+      "rel": "insights/article-15-scada-ceo-gap/index_8.html",
+      "kind": "size",
+      "localSize": 14865,
+      "bakSize": 13288
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index.html",
+      "kind": "size",
+      "localSize": 14646,
+      "bakSize": 13078
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_2.html",
+      "kind": "size",
+      "localSize": 14609,
+      "bakSize": 13032
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_3.html",
+      "kind": "size",
+      "localSize": 14788,
+      "bakSize": 13213
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_4.html",
+      "kind": "size",
+      "localSize": 14673,
+      "bakSize": 13098
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_5.html",
+      "kind": "size",
+      "localSize": 14611,
+      "bakSize": 13032
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_6.html",
+      "kind": "size",
+      "localSize": 14805,
+      "bakSize": 13230
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_7.html",
+      "kind": "size",
+      "localSize": 14670,
+      "bakSize": 13094
+    },
+    {
+      "rel": "insights/article-16-ai-paradox/index_8.html",
+      "kind": "size",
+      "localSize": 14605,
+      "bakSize": 13031
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index.html",
+      "kind": "size",
+      "localSize": 14933,
+      "bakSize": 13357
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_2.html",
+      "kind": "size",
+      "localSize": 14827,
+      "bakSize": 13241
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_3.html",
+      "kind": "size",
+      "localSize": 14751,
+      "bakSize": 13165
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_4.html",
+      "kind": "size",
+      "localSize": 14946,
+      "bakSize": 13364
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_5.html",
+      "kind": "size",
+      "localSize": 14815,
+      "bakSize": 13229
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_6.html",
+      "kind": "size",
+      "localSize": 14758,
+      "bakSize": 13172
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_7.html",
+      "kind": "size",
+      "localSize": 14943,
+      "bakSize": 13358
+    },
+    {
+      "rel": "insights/article-17-cultural-betrayal/index_8.html",
+      "kind": "size",
+      "localSize": 14823,
+      "bakSize": 13241
+    },
+    {
+      "rel": "insights/article-2-low-bid/index.html",
+      "kind": "size",
+      "localSize": 14499,
+      "bakSize": 12931
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_2.html",
+      "kind": "size",
+      "localSize": 14729,
+      "bakSize": 13155
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_3.html",
+      "kind": "size",
+      "localSize": 14591,
+      "bakSize": 13018
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_4.html",
+      "kind": "size",
+      "localSize": 14528,
+      "bakSize": 12957
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_5.html",
+      "kind": "size",
+      "localSize": 14726,
+      "bakSize": 13151
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_6.html",
+      "kind": "size",
+      "localSize": 14604,
+      "bakSize": 13032
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_7.html",
+      "kind": "size",
+      "localSize": 14527,
+      "bakSize": 12956
+    },
+    {
+      "rel": "insights/article-2-low-bid/index_8.html",
+      "kind": "size",
+      "localSize": 14728,
+      "bakSize": 13155
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index.html",
+      "kind": "size",
+      "localSize": 14777,
+      "bakSize": 13196
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_2.html",
+      "kind": "size",
+      "localSize": 14729,
+      "bakSize": 13147
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_3.html",
+      "kind": "size",
+      "localSize": 14918,
+      "bakSize": 13334
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_4.html",
+      "kind": "size",
+      "localSize": 14802,
+      "bakSize": 13221
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_5.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13146
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_6.html",
+      "kind": "size",
+      "localSize": 14927,
+      "bakSize": 13344
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_7.html",
+      "kind": "size",
+      "localSize": 14784,
+      "bakSize": 13203
+    },
+    {
+      "rel": "insights/article-3-winter-challenges/index_8.html",
+      "kind": "size",
+      "localSize": 14730,
+      "bakSize": 13146
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index.html",
+      "kind": "size",
+      "localSize": 14867,
+      "bakSize": 13292
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_2.html",
+      "kind": "size",
+      "localSize": 14762,
+      "bakSize": 13183
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_3.html",
+      "kind": "size",
+      "localSize": 14688,
+      "bakSize": 13109
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_4.html",
+      "kind": "size",
+      "localSize": 14886,
+      "bakSize": 13307
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_5.html",
+      "kind": "size",
+      "localSize": 14749,
+      "bakSize": 13170
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_6.html",
+      "kind": "size",
+      "localSize": 14680,
+      "bakSize": 13101
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_7.html",
+      "kind": "size",
+      "localSize": 14883,
+      "bakSize": 13302
+    },
+    {
+      "rel": "insights/article-4-dach-leadership/index_8.html",
+      "kind": "size",
+      "localSize": 14766,
+      "bakSize": 13184
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index.html",
+      "kind": "size",
+      "localSize": 14613,
+      "bakSize": 13042
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_2.html",
+      "kind": "size",
+      "localSize": 14834,
+      "bakSize": 13256
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_3.html",
+      "kind": "size",
+      "localSize": 14699,
+      "bakSize": 13120
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_4.html",
+      "kind": "size",
+      "localSize": 14636,
+      "bakSize": 13058
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_5.html",
+      "kind": "size",
+      "localSize": 14830,
+      "bakSize": 13252
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_6.html",
+      "kind": "size",
+      "localSize": 14713,
+      "bakSize": 13133
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_7.html",
+      "kind": "size",
+      "localSize": 14636,
+      "bakSize": 13058
+    },
+    {
+      "rel": "insights/article-5-human-sensor/index_8.html",
+      "kind": "size",
+      "localSize": 14830,
+      "bakSize": 13250
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index.html",
+      "kind": "size",
+      "localSize": 14662,
+      "bakSize": 13091
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_2.html",
+      "kind": "size",
+      "localSize": 14628,
+      "bakSize": 13052
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_3.html",
+      "kind": "size",
+      "localSize": 14818,
+      "bakSize": 13240
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_4.html",
+      "kind": "size",
+      "localSize": 14700,
+      "bakSize": 13126
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_5.html",
+      "kind": "size",
+      "localSize": 14628,
+      "bakSize": 13052
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_6.html",
+      "kind": "size",
+      "localSize": 14822,
+      "bakSize": 13243
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_7.html",
+      "kind": "size",
+      "localSize": 14691,
+      "bakSize": 13115
+    },
+    {
+      "rel": "insights/article-6-ticking-bomb/index_8.html",
+      "kind": "size",
+      "localSize": 14628,
+      "bakSize": 13051
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index.html",
+      "kind": "size",
+      "localSize": 14964,
+      "bakSize": 13385
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_2.html",
+      "kind": "size",
+      "localSize": 14862,
+      "bakSize": 13277
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_3.html",
+      "kind": "size",
+      "localSize": 14789,
+      "bakSize": 13204
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_4.html",
+      "kind": "size",
+      "localSize": 14987,
+      "bakSize": 13400
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_5.html",
+      "kind": "size",
+      "localSize": 14843,
+      "bakSize": 13259
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_6.html",
+      "kind": "size",
+      "localSize": 14789,
+      "bakSize": 13200
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_7.html",
+      "kind": "size",
+      "localSize": 14979,
+      "bakSize": 13392
+    },
+    {
+      "rel": "insights/article-7-fortress-maintenance/index_8.html",
+      "kind": "size",
+      "localSize": 14865,
+      "bakSize": 13278
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index.html",
+      "kind": "size",
+      "localSize": 14738,
+      "bakSize": 13161
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_2.html",
+      "kind": "size",
+      "localSize": 14941,
+      "bakSize": 13357
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_3.html",
+      "kind": "size",
+      "localSize": 14809,
+      "bakSize": 13222
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_4.html",
+      "kind": "size",
+      "localSize": 14747,
+      "bakSize": 13163
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_5.html",
+      "kind": "size",
+      "localSize": 14931,
+      "bakSize": 13348
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_6.html",
+      "kind": "size",
+      "localSize": 14818,
+      "bakSize": 13234
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_7.html",
+      "kind": "size",
+      "localSize": 14747,
+      "bakSize": 13163
+    },
+    {
+      "rel": "insights/article-8-symbiosis-standard/index_8.html",
+      "kind": "size",
+      "localSize": 14944,
+      "bakSize": 13361
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index.html",
+      "kind": "size",
+      "localSize": 14693,
+      "bakSize": 13121
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_2.html",
+      "kind": "size",
+      "localSize": 14646,
+      "bakSize": 13070
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_3.html",
+      "kind": "size",
+      "localSize": 14842,
+      "bakSize": 13262
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_4.html",
+      "kind": "size",
+      "localSize": 14722,
+      "bakSize": 13145
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_5.html",
+      "kind": "size",
+      "localSize": 14655,
+      "bakSize": 13076
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_6.html",
+      "kind": "size",
+      "localSize": 14836,
+      "bakSize": 13256
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_7.html",
+      "kind": "size",
+      "localSize": 14713,
+      "bakSize": 13133
+    },
+    {
+      "rel": "insights/article-9-holistic-view/index_8.html",
+      "kind": "size",
+      "localSize": 14652,
+      "bakSize": 13071
+    },
+    {
+      "rel": "insights/index.html",
+      "kind": "size",
+      "localSize": 14342,
+      "bakSize": 12794
+    },
+    {
+      "rel": "insights/index_2.html",
+      "kind": "size",
+      "localSize": 14276,
+      "bakSize": 12724
+    },
+    {
+      "rel": "insights/index_3.html",
+      "kind": "size",
+      "localSize": 14196,
+      "bakSize": 12642
+    },
+    {
+      "rel": "insights/index_4.html",
+      "kind": "size",
+      "localSize": 14382,
+      "bakSize": 12828
+    },
+    {
+      "rel": "insights/index_5.html",
+      "kind": "size",
+      "localSize": 14257,
+      "bakSize": 12705
+    },
+    {
+      "rel": "insights/index_6.html",
+      "kind": "size",
+      "localSize": 14194,
+      "bakSize": 12641
+    },
+    {
+      "rel": "insights/index_7.html",
+      "kind": "size",
+      "localSize": 14396,
+      "bakSize": 12841
+    },
+    {
+      "rel": "insights/index_8.html",
+      "kind": "size",
+      "localSize": 14268,
+      "bakSize": 12716
+    },
+    {
+      "rel": "insights/index_9.html",
+      "kind": "size",
+      "localSize": 14192,
+      "bakSize": 12638
+    },
+    {
+      "rel": "protocol/anohub_alignment_v2/index.html",
+      "kind": "size",
+      "localSize": 18470,
+      "bakSize": 16903
+    },
+    {
+      "rel": "protocol/anohub_alignment_v2/index_2.html",
+      "kind": "size",
+      "localSize": 18561,
+      "bakSize": 16985
+    },
+    {
+      "rel": "protocol/anohub_alignment_v2/index_3.html",
+      "kind": "size",
+      "localSize": 18562,
+      "bakSize": 16987
+    },
+    {
+      "rel": "protocol/anohub_alignment_v2/index_4.html",
+      "kind": "size",
+      "localSize": 18563,
+      "bakSize": 16988
+    },
+    {
+      "rel": "protocol/anohub_alignment_v2/index_5.html",
+      "kind": "size",
+      "localSize": 18574,
+      "bakSize": 17001
+    },
+    {
+      "rel": "protocol/anohub_asset_v2/index.html",
+      "kind": "size",
+      "localSize": 14462,
+      "bakSize": 12894
+    },
+    {
+      "rel": "protocol/anohub_asset_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14691,
+      "bakSize": 13122
+    },
+    {
+      "rel": "protocol/anohub_asset_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14560,
+      "bakSize": 12987
+    },
+    {
+      "rel": "protocol/anohub_asset_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14493,
+      "bakSize": 12923
+    },
+    {
+      "rel": "protocol/anohub_asset_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14687,
+      "bakSize": 13118
+    },
+    {
+      "rel": "protocol/anohub_cavitation_v2/index.html",
+      "kind": "size",
+      "localSize": 14789,
+      "bakSize": 13217
+    },
+    {
+      "rel": "protocol/anohub_cavitation_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14815,
+      "bakSize": 13240
+    },
+    {
+      "rel": "protocol/anohub_cavitation_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14802,
+      "bakSize": 13227
+    },
+    {
+      "rel": "protocol/anohub_cavitation_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14800,
+      "bakSize": 13224
+    },
+    {
+      "rel": "protocol/anohub_cavitation_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14819,
+      "bakSize": 13242
+    },
+    {
+      "rel": "protocol/anohub_core_v2/index.html",
+      "kind": "size",
+      "localSize": 14622,
+      "bakSize": 13058
+    },
+    {
+      "rel": "protocol/anohub_core_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14552,
+      "bakSize": 12980
+    },
+    {
+      "rel": "protocol/anohub_core_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14476,
+      "bakSize": 12905
+    },
+    {
+      "rel": "protocol/anohub_core_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14663,
+      "bakSize": 13090
+    },
+    {
+      "rel": "protocol/anohub_core_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14536,
+      "bakSize": 12968
+    },
+    {
+      "rel": "protocol/anohub_cost_v2/index.html",
+      "kind": "size",
+      "localSize": 14438,
+      "bakSize": 12874
+    },
+    {
+      "rel": "protocol/anohub_cost_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14661,
+      "bakSize": 13093
+    },
+    {
+      "rel": "protocol/anohub_cost_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14552,
+      "bakSize": 12980
+    },
+    {
+      "rel": "protocol/anohub_cost_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14475,
+      "bakSize": 12905
+    },
+    {
+      "rel": "protocol/anohub_cost_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14675,
+      "bakSize": 13104
+    },
+    {
+      "rel": "protocol/anohub_dam_v2/index.html",
+      "kind": "size",
+      "localSize": 14477,
+      "bakSize": 12916
+    },
+    {
+      "rel": "protocol/anohub_dam_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14459,
+      "bakSize": 12887
+    },
+    {
+      "rel": "protocol/anohub_dam_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14647,
+      "bakSize": 13080
+    },
+    {
+      "rel": "protocol/anohub_dam_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14531,
+      "bakSize": 12962
+    },
+    {
+      "rel": "protocol/anohub_dam_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14452,
+      "bakSize": 12885
+    },
+    {
+      "rel": "protocol/anohub_flood_v2/index.html",
+      "kind": "size",
+      "localSize": 14657,
+      "bakSize": 13089
+    },
+    {
+      "rel": "protocol/anohub_flood_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14560,
+      "bakSize": 12990
+    },
+    {
+      "rel": "protocol/anohub_flood_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14493,
+      "bakSize": 12921
+    },
+    {
+      "rel": "protocol/anohub_flood_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14684,
+      "bakSize": 13112
+    },
+    {
+      "rel": "protocol/anohub_flood_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14571,
+      "bakSize": 13000
+    },
+    {
+      "rel": "protocol/anohub_fluid_v2/index.html",
+      "kind": "size",
+      "localSize": 14455,
+      "bakSize": 12892
+    },
+    {
+      "rel": "protocol/anohub_fluid_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14686,
+      "bakSize": 13116
+    },
+    {
+      "rel": "protocol/anohub_fluid_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14560,
+      "bakSize": 12987
+    },
+    {
+      "rel": "protocol/anohub_fluid_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14504,
+      "bakSize": 12931
+    },
+    {
+      "rel": "protocol/anohub_fluid_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14681,
+      "bakSize": 13110
+    },
+    {
+      "rel": "protocol/anohub_flux_v2/index.html",
+      "kind": "size",
+      "localSize": 14514,
+      "bakSize": 12949
+    },
+    {
+      "rel": "protocol/anohub_flux_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14473,
+      "bakSize": 12905
+    },
+    {
+      "rel": "protocol/anohub_flux_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14668,
+      "bakSize": 13096
+    },
+    {
+      "rel": "protocol/anohub_flux_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14521,
+      "bakSize": 12955
+    },
+    {
+      "rel": "protocol/anohub_flux_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14474,
+      "bakSize": 12906
+    },
+    {
+      "rel": "protocol/anohub_global_v2/index.html",
+      "kind": "size",
+      "localSize": 14672,
+      "bakSize": 13104
+    },
+    {
+      "rel": "protocol/anohub_global_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14587,
+      "bakSize": 13016
+    },
+    {
+      "rel": "protocol/anohub_global_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14518,
+      "bakSize": 12944
+    },
+    {
+      "rel": "protocol/anohub_global_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14710,
+      "bakSize": 13139
+    },
+    {
+      "rel": "protocol/anohub_global_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14579,
+      "bakSize": 13005
+    },
+    {
+      "rel": "protocol/anohub_iso_v2/index.html",
+      "kind": "size",
+      "localSize": 14416,
+      "bakSize": 12852
+    },
+    {
+      "rel": "protocol/anohub_iso_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14639,
+      "bakSize": 13072
+    },
+    {
+      "rel": "protocol/anohub_iso_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14529,
+      "bakSize": 12960
+    },
+    {
+      "rel": "protocol/anohub_iso_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14457,
+      "bakSize": 12887
+    },
+    {
+      "rel": "protocol/anohub_iso_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14640,
+      "bakSize": 13072
+    },
+    {
+      "rel": "protocol/anohub_methodology_v2/index.html",
+      "kind": "size",
+      "localSize": 14657,
+      "bakSize": 13085
+    },
+    {
+      "rel": "protocol/anohub_methodology_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14618,
+      "bakSize": 13039
+    },
+    {
+      "rel": "protocol/anohub_methodology_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14809,
+      "bakSize": 13233
+    },
+    {
+      "rel": "protocol/anohub_methodology_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14683,
+      "bakSize": 13107
+    },
+    {
+      "rel": "protocol/anohub_methodology_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14615,
+      "bakSize": 13039
+    },
+    {
+      "rel": "protocol/anohub_organization_v2/index.html",
+      "kind": "size",
+      "localSize": 14816,
+      "bakSize": 13240
+    },
+    {
+      "rel": "protocol/anohub_organization_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14694,
+      "bakSize": 13117
+    },
+    {
+      "rel": "protocol/anohub_organization_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14638,
+      "bakSize": 13057
+    },
+    {
+      "rel": "protocol/anohub_organization_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14823,
+      "bakSize": 13243
+    },
+    {
+      "rel": "protocol/anohub_organization_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14709,
+      "bakSize": 13131
+    },
+    {
+      "rel": "protocol/anohub_predictive_v2/index.html",
+      "kind": "size",
+      "localSize": 14569,
+      "bakSize": 13000
+    },
+    {
+      "rel": "protocol/anohub_predictive_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14793,
+      "bakSize": 13218
+    },
+    {
+      "rel": "protocol/anohub_predictive_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14655,
+      "bakSize": 13080
+    },
+    {
+      "rel": "protocol/anohub_predictive_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14594,
+      "bakSize": 13018
+    },
+    {
+      "rel": "protocol/anohub_predictive_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14773,
+      "bakSize": 13198
+    },
+    {
+      "rel": "protocol/anohub_protocol_v2/index.html",
+      "kind": "size",
+      "localSize": 14601,
+      "bakSize": 13032
+    },
+    {
+      "rel": "protocol/anohub_protocol_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14558,
+      "bakSize": 12981
+    },
+    {
+      "rel": "protocol/anohub_protocol_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14745,
+      "bakSize": 13173
+    },
+    {
+      "rel": "protocol/anohub_protocol_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14620,
+      "bakSize": 13045
+    },
+    {
+      "rel": "protocol/anohub_protocol_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14557,
+      "bakSize": 12981
+    },
+    {
+      "rel": "protocol/anohub_quantum_v2/index.html",
+      "kind": "size",
+      "localSize": 14700,
+      "bakSize": 13134
+    },
+    {
+      "rel": "protocol/anohub_quantum_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14597,
+      "bakSize": 13023
+    },
+    {
+      "rel": "protocol/anohub_quantum_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14532,
+      "bakSize": 12962
+    },
+    {
+      "rel": "protocol/anohub_quantum_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14731,
+      "bakSize": 13159
+    },
+    {
+      "rel": "protocol/anohub_quantum_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14599,
+      "bakSize": 13026
+    },
+    {
+      "rel": "protocol/anohub_sat_v2/index.html",
+      "kind": "size",
+      "localSize": 14415,
+      "bakSize": 12853
+    },
+    {
+      "rel": "protocol/anohub_sat_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14651,
+      "bakSize": 13086
+    },
+    {
+      "rel": "protocol/anohub_sat_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14531,
+      "bakSize": 12961
+    },
+    {
+      "rel": "protocol/anohub_sat_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14454,
+      "bakSize": 12887
+    },
+    {
+      "rel": "protocol/anohub_sat_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14653,
+      "bakSize": 13085
+    },
+    {
+      "rel": "protocol/anohub_scada_override_v2/index.html",
+      "kind": "size",
+      "localSize": 14724,
+      "bakSize": 13147
+    },
+    {
+      "rel": "protocol/anohub_scada_override_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14672,
+      "bakSize": 13096
+    },
+    {
+      "rel": "protocol/anohub_scada_override_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14868,
+      "bakSize": 13287
+    },
+    {
+      "rel": "protocol/anohub_scada_override_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14753,
+      "bakSize": 13171
+    },
+    {
+      "rel": "protocol/anohub_scada_override_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14673,
+      "bakSize": 13093
+    },
+    {
+      "rel": "protocol/anohub_scada_v2/index.html",
+      "kind": "size",
+      "localSize": 14651,
+      "bakSize": 13088
+    },
+    {
+      "rel": "protocol/anohub_scada_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14560,
+      "bakSize": 12987
+    },
+    {
+      "rel": "protocol/anohub_scada_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14494,
+      "bakSize": 12924
+    },
+    {
+      "rel": "protocol/anohub_scada_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14691,
+      "bakSize": 13118
+    },
+    {
+      "rel": "protocol/anohub_scada_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14570,
+      "bakSize": 12998
+    },
+    {
+      "rel": "protocol/anohub_sync_v2/index.html",
+      "kind": "size",
+      "localSize": 18245,
+      "bakSize": 16679
+    },
+    {
+      "rel": "protocol/anohub_sync_v2/index_2.html",
+      "kind": "size",
+      "localSize": 18344,
+      "bakSize": 16773
+    },
+    {
+      "rel": "protocol/anohub_sync_v2/index_3.html",
+      "kind": "size",
+      "localSize": 18340,
+      "bakSize": 16768
+    },
+    {
+      "rel": "protocol/anohub_sync_v2/index_4.html",
+      "kind": "size",
+      "localSize": 18348,
+      "bakSize": 16777
+    },
+    {
+      "rel": "protocol/anohub_sync_v2/index_5.html",
+      "kind": "size",
+      "localSize": 18335,
+      "bakSize": 16767
+    },
+    {
+      "rel": "protocol/anohub_synergy_v2/index.html",
+      "kind": "size",
+      "localSize": 14576,
+      "bakSize": 13010
+    },
+    {
+      "rel": "protocol/anohub_synergy_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14534,
+      "bakSize": 12961
+    },
+    {
+      "rel": "protocol/anohub_synergy_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14734,
+      "bakSize": 13160
+    },
+    {
+      "rel": "protocol/anohub_synergy_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14593,
+      "bakSize": 13019
+    },
+    {
+      "rel": "protocol/anohub_synergy_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14534,
+      "bakSize": 12960
+    },
+    {
+      "rel": "protocol/anohub_thermal_v2/index.html",
+      "kind": "size",
+      "localSize": 14747,
+      "bakSize": 13180
+    },
+    {
+      "rel": "protocol/anohub_thermal_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14661,
+      "bakSize": 13090
+    },
+    {
+      "rel": "protocol/anohub_thermal_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14588,
+      "bakSize": 13014
+    },
+    {
+      "rel": "protocol/anohub_thermal_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14775,
+      "bakSize": 13202
+    },
+    {
+      "rel": "protocol/anohub_thermal_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14644,
+      "bakSize": 13071
+    },
+    {
+      "rel": "protocol/anohub_vibration_v3/index.html",
+      "kind": "size",
+      "localSize": 14607,
+      "bakSize": 13039
+    },
+    {
+      "rel": "protocol/anohub_vibration_v3/index_2.html",
+      "kind": "size",
+      "localSize": 14841,
+      "bakSize": 13267
+    },
+    {
+      "rel": "protocol/anohub_vibration_v3/index_3.html",
+      "kind": "size",
+      "localSize": 14710,
+      "bakSize": 13136
+    },
+    {
+      "rel": "protocol/anohub_vibration_v3/index_4.html",
+      "kind": "size",
+      "localSize": 14650,
+      "bakSize": 13074
+    },
+    {
+      "rel": "protocol/anohub_vibration_v3/index_5.html",
+      "kind": "size",
+      "localSize": 14842,
+      "bakSize": 13267
+    },
+    {
+      "rel": "protocol/anohub_vib_v2/index.html",
+      "kind": "size",
+      "localSize": 14550,
+      "bakSize": 12989
+    },
+    {
+      "rel": "protocol/anohub_vib_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14524,
+      "bakSize": 12954
+    },
+    {
+      "rel": "protocol/anohub_vib_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14716,
+      "bakSize": 13145
+    },
+    {
+      "rel": "protocol/anohub_vib_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14599,
+      "bakSize": 13030
+    },
+    {
+      "rel": "protocol/anohub_vib_v2/index_5.html",
+      "kind": "size",
+      "localSize": 14524,
+      "bakSize": 12955
+    },
+    {
+      "rel": "protocol/index.html",
+      "kind": "size",
+      "localSize": 14356,
+      "bakSize": 12808
+    },
+    {
+      "rel": "protocol/index_2.html",
+      "kind": "size",
+      "localSize": 14264,
+      "bakSize": 12708
+    },
+    {
+      "rel": "protocol/index_3.html",
+      "kind": "size",
+      "localSize": 14197,
+      "bakSize": 12646
+    },
+    {
+      "rel": "protocol/index_4.html",
+      "kind": "size",
+      "localSize": 14392,
+      "bakSize": 12835
+    },
+    {
+      "rel": "protocol/index_5.html",
+      "kind": "size",
+      "localSize": 14275,
+      "bakSize": 12722
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index.html",
+      "kind": "size",
+      "localSize": 18807,
+      "bakSize": 17210
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_2.html",
+      "kind": "size",
+      "localSize": 18893,
+      "bakSize": 17290
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_3.html",
+      "kind": "size",
+      "localSize": 18886,
+      "bakSize": 17281
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_4.html",
+      "kind": "size",
+      "localSize": 18900,
+      "bakSize": 17296
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_alignment_v2/index_5.html",
+      "kind": "size",
+      "localSize": 18888,
+      "bakSize": 17283
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index.html",
+      "kind": "size",
+      "localSize": 15046,
+      "bakSize": 13451
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15003,
+      "bakSize": 13405
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15197,
+      "bakSize": 13597
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15059,
+      "bakSize": 13460
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_asset_v2/index_5.html",
+      "kind": "size",
+      "localSize": 15006,
+      "bakSize": 13405
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index.html",
+      "kind": "size",
+      "localSize": 15293,
+      "bakSize": 13691
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15335,
+      "bakSize": 13732
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15327,
+      "bakSize": 13722
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15322,
+      "bakSize": 13712
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cavitation_v2/index_5.html",
+      "kind": "size",
+      "localSize": 15311,
+      "bakSize": 13704
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index.html",
+      "kind": "size",
+      "localSize": 14949,
+      "bakSize": 13354
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15179,
+      "bakSize": 13579
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15063,
+      "bakSize": 13461
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_core_v2/index_4.html",
+      "kind": "size",
+      "localSize": 14985,
+      "bakSize": 13385
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index.html",
+      "kind": "size",
+      "localSize": 15145,
+      "bakSize": 13551
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15047,
+      "bakSize": 13447
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14984,
+      "bakSize": 13383
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_cost_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15174,
+      "bakSize": 13574
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index.html",
+      "kind": "size",
+      "localSize": 15002,
+      "bakSize": 13409
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14966,
+      "bakSize": 13365
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15161,
+      "bakSize": 13561
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_dam_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15026,
+      "bakSize": 13429
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index.html",
+      "kind": "size",
+      "localSize": 14970,
+      "bakSize": 13375
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15190,
+      "bakSize": 13591
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15078,
+      "bakSize": 13480
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flood_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15004,
+      "bakSize": 13405
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index.html",
+      "kind": "size",
+      "localSize": 15158,
+      "bakSize": 13565
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15067,
+      "bakSize": 13465
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15004,
+      "bakSize": 13403
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_fluid_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15198,
+      "bakSize": 13598
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index.html",
+      "kind": "size",
+      "localSize": 15022,
+      "bakSize": 13429
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_2.html",
+      "kind": "size",
+      "localSize": 14983,
+      "bakSize": 13384
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15182,
+      "bakSize": 13583
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_flux_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15044,
+      "bakSize": 13448
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index.html",
+      "kind": "size",
+      "localSize": 14991,
+      "bakSize": 13395
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15224,
+      "bakSize": 13623
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15101,
+      "bakSize": 13498
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_global_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15025,
+      "bakSize": 13424
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index.html",
+      "kind": "size",
+      "localSize": 15123,
+      "bakSize": 13531
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15028,
+      "bakSize": 13428
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14965,
+      "bakSize": 13366
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_iso_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15158,
+      "bakSize": 13560
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index.html",
+      "kind": "size",
+      "localSize": 15173,
+      "bakSize": 13570
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15122,
+      "bakSize": 13517
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15322,
+      "bakSize": 13716
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_methodology_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15191,
+      "bakSize": 13583
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index.html",
+      "kind": "size",
+      "localSize": 15121,
+      "bakSize": 13521
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15343,
+      "bakSize": 13732
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15200,
+      "bakSize": 13592
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_organization_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15146,
+      "bakSize": 13538
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index.html",
+      "kind": "size",
+      "localSize": 15271,
+      "bakSize": 13673
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15169,
+      "bakSize": 13563
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15102,
+      "bakSize": 13497
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_predictive_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15283,
+      "bakSize": 13673
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index.html",
+      "kind": "size",
+      "localSize": 15115,
+      "bakSize": 13514
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15056,
+      "bakSize": 13455
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15264,
+      "bakSize": 13659
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_protocol_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15129,
+      "bakSize": 13523
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index.html",
+      "kind": "size",
+      "localSize": 15015,
+      "bakSize": 13417
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15242,
+      "bakSize": 13636
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15122,
+      "bakSize": 13518
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_quantum_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15048,
+      "bakSize": 13445
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index.html",
+      "kind": "size",
+      "localSize": 15121,
+      "bakSize": 13526
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15025,
+      "bakSize": 13430
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_3.html",
+      "kind": "size",
+      "localSize": 14967,
+      "bakSize": 13366
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sat_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15151,
+      "bakSize": 13552
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index.html",
+      "kind": "size",
+      "localSize": 15230,
+      "bakSize": 13626
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15182,
+      "bakSize": 13575
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15380,
+      "bakSize": 13772
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_override_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15248,
+      "bakSize": 13639
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index.html",
+      "kind": "size",
+      "localSize": 14967,
+      "bakSize": 13373
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15199,
+      "bakSize": 13598
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15071,
+      "bakSize": 13470
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_scada_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15006,
+      "bakSize": 13405
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index.html",
+      "kind": "size",
+      "localSize": 18567,
+      "bakSize": 16972
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_2.html",
+      "kind": "size",
+      "localSize": 18668,
+      "bakSize": 17067
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_3.html",
+      "kind": "size",
+      "localSize": 18679,
+      "bakSize": 17078
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_sync_v2/index_4.html",
+      "kind": "size",
+      "localSize": 18667,
+      "bakSize": 17069
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index.html",
+      "kind": "size",
+      "localSize": 15088,
+      "bakSize": 13491
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15049,
+      "bakSize": 13443
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15240,
+      "bakSize": 13639
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_synergy_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15110,
+      "bakSize": 13506
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index.html",
+      "kind": "size",
+      "localSize": 15057,
+      "bakSize": 13462
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15290,
+      "bakSize": 13684
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15175,
+      "bakSize": 13571
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_thermal_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15092,
+      "bakSize": 13486
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index.html",
+      "kind": "size",
+      "localSize": 15179,
+      "bakSize": 13590
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_2.html",
+      "kind": "size",
+      "localSize": 15094,
+      "bakSize": 13496
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_3.html",
+      "kind": "size",
+      "localSize": 15035,
+      "bakSize": 13437
+    },
+    {
+      "rel": "protocol/to_learn_archive/protocols_v0/anohub_vib_v2/index_4.html",
+      "kind": "size",
+      "localSize": 15231,
+      "bakSize": 13630
+    },
+    {
+      "rel": "turbine_friend/francis_emergency_protocols/index.html",
+      "kind": "size",
+      "localSize": 18658,
+      "bakSize": 17076
+    },
+    {
+      "rel": "turbine_friend/francis_emergency_protocols/index_2.html",
+      "kind": "size",
+      "localSize": 18731,
+      "bakSize": 17143
+    },
+    {
+      "rel": "turbine_friend/francis_emergency_protocols/index_3.html",
+      "kind": "size",
+      "localSize": 18724,
+      "bakSize": 17134
+    },
+    {
+      "rel": "turbine_friend/francis_emergency_protocols/index_4.html",
+      "kind": "size",
+      "localSize": 18725,
+      "bakSize": 17134
+    },
+    {
+      "rel": "turbine_friend/francis_flowchart_startup/index.html",
+      "kind": "size",
+      "localSize": 15008,
+      "bakSize": 13426
+    },
+    {
+      "rel": "turbine_friend/francis_flowchart_startup/index_2.html",
+      "kind": "size",
+      "localSize": 15006,
+      "bakSize": 13420
+    },
+    {
+      "rel": "turbine_friend/francis_flowchart_startup/index_3.html",
+      "kind": "size",
+      "localSize": 15041,
+      "bakSize": 13452
+    },
+    {
+      "rel": "turbine_friend/francis_flowchart_startup/index_4.html",
+      "kind": "size",
+      "localSize": 15029,
+      "bakSize": 13442
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_emergency_protocols/index.html",
+      "kind": "size",
+      "localSize": 18755,
+      "bakSize": 17164
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_emergency_protocols/index_2.html",
+      "kind": "size",
+      "localSize": 18833,
+      "bakSize": 17234
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_emergency_protocols/index_3.html",
+      "kind": "size",
+      "localSize": 18840,
+      "bakSize": 17242
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_emergency_protocols/index_4.html",
+      "kind": "size",
+      "localSize": 18832,
+      "bakSize": 17232
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_flowchart_startup/index.html",
+      "kind": "size",
+      "localSize": 15196,
+      "bakSize": 13604
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_flowchart_startup/index_2.html",
+      "kind": "size",
+      "localSize": 15204,
+      "bakSize": 13608
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_flowchart_startup/index_3.html",
+      "kind": "size",
+      "localSize": 15201,
+      "bakSize": 13603
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_flowchart_startup/index_4.html",
+      "kind": "size",
+      "localSize": 15198,
+      "bakSize": 13600
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal/index.html",
+      "kind": "size",
+      "localSize": 15030,
+      "bakSize": 13446
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal/index_2.html",
+      "kind": "size",
+      "localSize": 15063,
+      "bakSize": 13473
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal/index_3.html",
+      "kind": "size",
+      "localSize": 15071,
+      "bakSize": 13479
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal/index_4.html",
+      "kind": "size",
+      "localSize": 15052,
+      "bakSize": 13462
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal_dashboard/index.html",
+      "kind": "size",
+      "localSize": 15254,
+      "bakSize": 13659
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal_dashboard/index_2.html",
+      "kind": "size",
+      "localSize": 15251,
+      "bakSize": 13650
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal_dashboard/index_3.html",
+      "kind": "size",
+      "localSize": 15265,
+      "bakSize": 13666
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_horizontal_dashboard/index_4.html",
+      "kind": "size",
+      "localSize": 15255,
+      "bakSize": 13656
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_load_rejection/index.html",
+      "kind": "size",
+      "localSize": 15256,
+      "bakSize": 13666
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_load_rejection/index_2.html",
+      "kind": "size",
+      "localSize": 15254,
+      "bakSize": 13651
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_load_rejection/index_3.html",
+      "kind": "size",
+      "localSize": 15241,
+      "bakSize": 13645
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_load_rejection/index_4.html",
+      "kind": "size",
+      "localSize": 15250,
+      "bakSize": 13650
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_logger/index.html",
+      "kind": "size",
+      "localSize": 15080,
+      "bakSize": 13494
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_logger/index_2.html",
+      "kind": "size",
+      "localSize": 15090,
+      "bakSize": 13497
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_logger/index_3.html",
+      "kind": "size",
+      "localSize": 15101,
+      "bakSize": 13510
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_logic_logger/index_4.html",
+      "kind": "size",
+      "localSize": 15107,
+      "bakSize": 13514
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_mission_control/index.html",
+      "kind": "size",
+      "localSize": 15143,
+      "bakSize": 13552
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_mission_control/index_2.html",
+      "kind": "size",
+      "localSize": 15149,
+      "bakSize": 13554
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_mission_control/index_3.html",
+      "kind": "size",
+      "localSize": 15156,
+      "bakSize": 13561
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_observation_log/index.html",
+      "kind": "size",
+      "localSize": 15139,
+      "bakSize": 13548
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_observation_log/index_2.html",
+      "kind": "size",
+      "localSize": 15167,
+      "bakSize": 13574
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_observation_log/index_3.html",
+      "kind": "size",
+      "localSize": 15154,
+      "bakSize": 13557
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_prestart_checklist/index.html",
+      "kind": "size",
+      "localSize": 15205,
+      "bakSize": 13615
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_prestart_checklist/index_2.html",
+      "kind": "size",
+      "localSize": 15216,
+      "bakSize": 13620
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_prestart_checklist/index_3.html",
+      "kind": "size",
+      "localSize": 15227,
+      "bakSize": 13628
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_report_generator/index.html",
+      "kind": "size",
+      "localSize": 18746,
+      "bakSize": 17101
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_report_generator/index_2.html",
+      "kind": "size",
+      "localSize": 18838,
+      "bakSize": 17188
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_report_generator/index_3.html",
+      "kind": "size",
+      "localSize": 18835,
+      "bakSize": 17185
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_safety_system_integrity/index.html",
+      "kind": "size",
+      "localSize": 15313,
+      "bakSize": 13720
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_safety_system_integrity/index_2.html",
+      "kind": "size",
+      "localSize": 15315,
+      "bakSize": 13713
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_safety_system_integrity/index_3.html",
+      "kind": "size",
+      "localSize": 15305,
+      "bakSize": 13700
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sensory_checklist/index.html",
+      "kind": "size",
+      "localSize": 15185,
+      "bakSize": 13595
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sensory_checklist/index_2.html",
+      "kind": "size",
+      "localSize": 15207,
+      "bakSize": 13611
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sensory_checklist/index_3.html",
+      "kind": "size",
+      "localSize": 15213,
+      "bakSize": 13615
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_acoustics/index.html",
+      "kind": "size",
+      "localSize": 15095,
+      "bakSize": 13510
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_acoustics/index_2.html",
+      "kind": "size",
+      "localSize": 15108,
+      "bakSize": 13517
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_acoustics/index_3.html",
+      "kind": "size",
+      "localSize": 15117,
+      "bakSize": 13526
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_analytics/index.html",
+      "kind": "size",
+      "localSize": 15087,
+      "bakSize": 13499
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_analytics/index_2.html",
+      "kind": "size",
+      "localSize": 15119,
+      "bakSize": 13528
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_analytics/index_3.html",
+      "kind": "size",
+      "localSize": 15126,
+      "bakSize": 13533
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_auxiliary/index.html",
+      "kind": "size",
+      "localSize": 15081,
+      "bakSize": 13496
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_auxiliary/index_2.html",
+      "kind": "size",
+      "localSize": 15109,
+      "bakSize": 13517
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_auxiliary/index_3.html",
+      "kind": "size",
+      "localSize": 15120,
+      "bakSize": 13526
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_bearings/index.html",
+      "kind": "size",
+      "localSize": 18740,
+      "bakSize": 17151
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_bearings/index_2.html",
+      "kind": "size",
+      "localSize": 18843,
+      "bakSize": 17251
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_bearings/index_3.html",
+      "kind": "size",
+      "localSize": 18833,
+      "bakSize": 17243
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_braking_system/index.html",
+      "kind": "size",
+      "localSize": 15204,
+      "bakSize": 13615
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_braking_system/index_2.html",
+      "kind": "size",
+      "localSize": 15219,
+      "bakSize": 13619
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_braking_system/index_3.html",
+      "kind": "size",
+      "localSize": 15212,
+      "bakSize": 13615
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cathodic/index.html",
+      "kind": "size",
+      "localSize": 15071,
+      "bakSize": 13483
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cathodic/index_2.html",
+      "kind": "size",
+      "localSize": 15107,
+      "bakSize": 13517
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cathodic/index_3.html",
+      "kind": "size",
+      "localSize": 15109,
+      "bakSize": 13515
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cooling_water/index.html",
+      "kind": "size",
+      "localSize": 15237,
+      "bakSize": 13648
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cooling_water/index_2.html",
+      "kind": "size",
+      "localSize": 15248,
+      "bakSize": 13651
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_cooling_water/index_3.html",
+      "kind": "size",
+      "localSize": 15262,
+      "bakSize": 13665
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_coupling/index.html",
+      "kind": "size",
+      "localSize": 15076,
+      "bakSize": 13492
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_coupling/index_2.html",
+      "kind": "size",
+      "localSize": 15109,
+      "bakSize": 13517
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_coupling/index_3.html",
+      "kind": "size",
+      "localSize": 15093,
+      "bakSize": 13500
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dc_systems/index.html",
+      "kind": "size",
+      "localSize": 15111,
+      "bakSize": 13523
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dc_systems/index_2.html",
+      "kind": "size",
+      "localSize": 15122,
+      "bakSize": 13529
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dc_systems/index_3.html",
+      "kind": "size",
+      "localSize": 15139,
+      "bakSize": 13545
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft/index.html",
+      "kind": "size",
+      "localSize": 14957,
+      "bakSize": 13372
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft/index_2.html",
+      "kind": "size",
+      "localSize": 15008,
+      "bakSize": 13422
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft/index_3.html",
+      "kind": "size",
+      "localSize": 15008,
+      "bakSize": 13419
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft_tailrace/index.html",
+      "kind": "size",
+      "localSize": 15164,
+      "bakSize": 13573
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft_tailrace/index_2.html",
+      "kind": "size",
+      "localSize": 15170,
+      "bakSize": 13573
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_dft_tailrace/index_3.html",
+      "kind": "size",
+      "localSize": 15178,
+      "bakSize": 13583
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_digital_integrity/index.html",
+      "kind": "size",
+      "localSize": 15247,
+      "bakSize": 13653
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_digital_integrity/index_2.html",
+      "kind": "size",
+      "localSize": 15291,
+      "bakSize": 13688
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_digital_integrity/index_3.html",
+      "kind": "size",
+      "localSize": 15285,
+      "bakSize": 13685
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_distributor_sync/index.html",
+      "kind": "size",
+      "localSize": 18751,
+      "bakSize": 17158
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_distributor_sync/index_2.html",
+      "kind": "size",
+      "localSize": 18831,
+      "bakSize": 17229
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_distributor_sync/index_3.html",
+      "kind": "size",
+      "localSize": 18834,
+      "bakSize": 17236
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_drainage_pumps/index.html",
+      "kind": "size",
+      "localSize": 15199,
+      "bakSize": 13611
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_drainage_pumps/index_2.html",
+      "kind": "size",
+      "localSize": 15226,
+      "bakSize": 13630
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_drainage_pumps/index_3.html",
+      "kind": "size",
+      "localSize": 15220,
+      "bakSize": 13621
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_elec_health/index.html",
+      "kind": "size",
+      "localSize": 15136,
+      "bakSize": 13545
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_elec_health/index_2.html",
+      "kind": "size",
+      "localSize": 15156,
+      "bakSize": 13562
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_elec_health/index_3.html",
+      "kind": "size",
+      "localSize": 15165,
+      "bakSize": 13571
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_excitation/index.html",
+      "kind": "size",
+      "localSize": 15115,
+      "bakSize": 13526
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_excitation/index_2.html",
+      "kind": "size",
+      "localSize": 15147,
+      "bakSize": 13553
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_excitation/index_3.html",
+      "kind": "size",
+      "localSize": 15138,
+      "bakSize": 13545
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_foundation/index.html",
+      "kind": "size",
+      "localSize": 15206,
+      "bakSize": 13618
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_foundation/index_2.html",
+      "kind": "size",
+      "localSize": 15233,
+      "bakSize": 13640
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_foundation/index_3.html",
+      "kind": "size",
+      "localSize": 15240,
+      "bakSize": 13647
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_generator/index.html",
+      "kind": "size",
+      "localSize": 23518,
+      "bakSize": 21877
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_generator/index_2.html",
+      "kind": "size",
+      "localSize": 18777,
+      "bakSize": 17130
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_generator/index_3.html",
+      "kind": "size",
+      "localSize": 18779,
+      "bakSize": 17131
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_governor_pid/index.html",
+      "kind": "size",
+      "localSize": 15216,
+      "bakSize": 13628
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_governor_pid/index_2.html",
+      "kind": "size",
+      "localSize": 15242,
+      "bakSize": 13644
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_governor_pid/index_3.html",
+      "kind": "size",
+      "localSize": 15247,
+      "bakSize": 13651
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_gov_logic/index.html",
+      "kind": "size",
+      "localSize": 15147,
+      "bakSize": 13561
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_gov_logic/index_2.html",
+      "kind": "size",
+      "localSize": 15183,
+      "bakSize": 13591
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_gov_logic/index_3.html",
+      "kind": "size",
+      "localSize": 15184,
+      "bakSize": 13595
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grid_sync/index.html",
+      "kind": "size",
+      "localSize": 18601,
+      "bakSize": 17015
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grid_sync/index_2.html",
+      "kind": "size",
+      "localSize": 18683,
+      "bakSize": 17091
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grid_sync/index_3.html",
+      "kind": "size",
+      "localSize": 18706,
+      "bakSize": 17109
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grounding/index.html",
+      "kind": "size",
+      "localSize": 15086,
+      "bakSize": 13498
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grounding/index_2.html",
+      "kind": "size",
+      "localSize": 15124,
+      "bakSize": 13529
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_grounding/index_3.html",
+      "kind": "size",
+      "localSize": 15113,
+      "bakSize": 13519
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hidden_guardians/index.html",
+      "kind": "size",
+      "localSize": 15250,
+      "bakSize": 13657
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hidden_guardians/index_2.html",
+      "kind": "size",
+      "localSize": 15246,
+      "bakSize": 13648
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hidden_guardians/index_3.html",
+      "kind": "size",
+      "localSize": 15261,
+      "bakSize": 13664
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu/index.html",
+      "kind": "size",
+      "localSize": 14953,
+      "bakSize": 13373
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu/index_2.html",
+      "kind": "size",
+      "localSize": 15012,
+      "bakSize": 13422
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu/index_3.html",
+      "kind": "size",
+      "localSize": 15005,
+      "bakSize": 13419
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu_energy/index.html",
+      "kind": "size",
+      "localSize": 15121,
+      "bakSize": 13531
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu_energy/index_2.html",
+      "kind": "size",
+      "localSize": 15128,
+      "bakSize": 13535
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_hpu_energy/index_3.html",
+      "kind": "size",
+      "localSize": 15140,
+      "bakSize": 13546
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_instrumentation/index.html",
+      "kind": "size",
+      "localSize": 15225,
+      "bakSize": 13631
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_instrumentation/index_2.html",
+      "kind": "size",
+      "localSize": 15254,
+      "bakSize": 13655
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_instrumentation/index_3.html",
+      "kind": "size",
+      "localSize": 15258,
+      "bakSize": 13660
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_intake/index.html",
+      "kind": "size",
+      "localSize": 15007,
+      "bakSize": 13421
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_intake/index_2.html",
+      "kind": "size",
+      "localSize": 15021,
+      "bakSize": 13433
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_intake/index_3.html",
+      "kind": "size",
+      "localSize": 15032,
+      "bakSize": 13442
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_linkage/index.html",
+      "kind": "size",
+      "localSize": 15046,
+      "bakSize": 13463
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_linkage/index_2.html",
+      "kind": "size",
+      "localSize": 15079,
+      "bakSize": 13490
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_linkage/index_3.html",
+      "kind": "size",
+      "localSize": 15079,
+      "bakSize": 13486
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_lubrication/index.html",
+      "kind": "size",
+      "localSize": 18811,
+      "bakSize": 17220
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_lubrication/index_2.html",
+      "kind": "size",
+      "localSize": 18891,
+      "bakSize": 17296
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_lubrication/index_3.html",
+      "kind": "size",
+      "localSize": 18901,
+      "bakSize": 17304
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index.html",
+      "kind": "size",
+      "localSize": 15425,
+      "bakSize": 13821
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index_2.html",
+      "kind": "size",
+      "localSize": 15437,
+      "bakSize": 13828
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_master_valve_distributor/index_3.html",
+      "kind": "size",
+      "localSize": 15426,
+      "bakSize": 13817
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_mim/index.html",
+      "kind": "size",
+      "localSize": 14966,
+      "bakSize": 13382
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_mim/index_2.html",
+      "kind": "size",
+      "localSize": 14981,
+      "bakSize": 13396
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_mim/index_3.html",
+      "kind": "size",
+      "localSize": 15005,
+      "bakSize": 13419
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_bypass/index.html",
+      "kind": "size",
+      "localSize": 15211,
+      "bakSize": 13623
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_bypass/index_2.html",
+      "kind": "size",
+      "localSize": 15271,
+      "bakSize": 13678
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_bypass/index_3.html",
+      "kind": "size",
+      "localSize": 15251,
+      "bakSize": 13657
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index.html",
+      "kind": "size",
+      "localSize": 15499,
+      "bakSize": 13899
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_2.html",
+      "kind": "size",
+      "localSize": 15491,
+      "bakSize": 13885
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_miv_distributor_detail/index_3.html",
+      "kind": "size",
+      "localSize": 15499,
+      "bakSize": 13895
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil/index.html",
+      "kind": "size",
+      "localSize": 18626,
+      "bakSize": 17047
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil/index_2.html",
+      "kind": "size",
+      "localSize": 18742,
+      "bakSize": 17154
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil/index_3.html",
+      "kind": "size",
+      "localSize": 18738,
+      "bakSize": 17151
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil_health/index.html",
+      "kind": "size",
+      "localSize": 18783,
+      "bakSize": 17195
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil_health/index_2.html",
+      "kind": "size",
+      "localSize": 18869,
+      "bakSize": 17276
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_oil_health/index_3.html",
+      "kind": "size",
+      "localSize": 18874,
+      "bakSize": 17283
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_penstock/index.html",
+      "kind": "size",
+      "localSize": 15004,
+      "bakSize": 13339
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_penstock/index_2.html",
+      "kind": "size",
+      "localSize": 15035,
+      "bakSize": 13369
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_penstock/index_3.html",
+      "kind": "size",
+      "localSize": 15038,
+      "bakSize": 13369
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_post_mortem/index.html",
+      "kind": "size",
+      "localSize": 15127,
+      "bakSize": 13538
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_post_mortem/index_2.html",
+      "kind": "size",
+      "localSize": 15148,
+      "bakSize": 13552
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_post_mortem/index_3.html",
+      "kind": "size",
+      "localSize": 15158,
+      "bakSize": 13564
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_precision/index.html",
+      "kind": "size",
+      "localSize": 15094,
+      "bakSize": 13506
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_precision/index_2.html",
+      "kind": "size",
+      "localSize": 15121,
+      "bakSize": 13528
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_precision/index_3.html",
+      "kind": "size",
+      "localSize": 15127,
+      "bakSize": 13531
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_recovery/index.html",
+      "kind": "size",
+      "localSize": 15059,
+      "bakSize": 13474
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_recovery/index_2.html",
+      "kind": "size",
+      "localSize": 15096,
+      "bakSize": 13505
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_recovery/index_3.html",
+      "kind": "size",
+      "localSize": 15115,
+      "bakSize": 13521
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_regulating_ring/index.html",
+      "kind": "size",
+      "localSize": 15313,
+      "bakSize": 13721
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_regulating_ring/index_2.html",
+      "kind": "size",
+      "localSize": 15340,
+      "bakSize": 13740
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_regulating_ring/index_3.html",
+      "kind": "size",
+      "localSize": 15329,
+      "bakSize": 13729
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_reporting/index.html",
+      "kind": "size",
+      "localSize": 15100,
+      "bakSize": 13510
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_reporting/index_2.html",
+      "kind": "size",
+      "localSize": 15108,
+      "bakSize": 13515
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_reporting/index_3.html",
+      "kind": "size",
+      "localSize": 15114,
+      "bakSize": 13519
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_shaft_alignment/index.html",
+      "kind": "size",
+      "localSize": 18856,
+      "bakSize": 17267
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_shaft_alignment/index_2.html",
+      "kind": "size",
+      "localSize": 18951,
+      "bakSize": 17354
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_shaft_alignment/index_3.html",
+      "kind": "size",
+      "localSize": 18950,
+      "bakSize": 17347
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thermal/index.html",
+      "kind": "size",
+      "localSize": 15113,
+      "bakSize": 13529
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thermal/index_2.html",
+      "kind": "size",
+      "localSize": 15126,
+      "bakSize": 13536
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thermal/index_3.html",
+      "kind": "size",
+      "localSize": 15149,
+      "bakSize": 13560
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thrust_balance/index.html",
+      "kind": "size",
+      "localSize": 15196,
+      "bakSize": 13604
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thrust_balance/index_2.html",
+      "kind": "size",
+      "localSize": 15230,
+      "bakSize": 13631
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_thrust_balance/index_3.html",
+      "kind": "size",
+      "localSize": 15226,
+      "bakSize": 13628
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_transformer/index.html",
+      "kind": "size",
+      "localSize": 15282,
+      "bakSize": 13639
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_transformer/index_2.html",
+      "kind": "size",
+      "localSize": 15292,
+      "bakSize": 13640
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_transformer/index_3.html",
+      "kind": "size",
+      "localSize": 15298,
+      "bakSize": 13649
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_vortex_control/index.html",
+      "kind": "size",
+      "localSize": 15197,
+      "bakSize": 13604
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_vortex_control/index_2.html",
+      "kind": "size",
+      "localSize": 15229,
+      "bakSize": 13630
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_vortex_control/index_3.html",
+      "kind": "size",
+      "localSize": 15218,
+      "bakSize": 13621
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_water_hammer/index.html",
+      "kind": "size",
+      "localSize": 15163,
+      "bakSize": 13573
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_water_hammer/index_2.html",
+      "kind": "size",
+      "localSize": 15175,
+      "bakSize": 13581
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_water_hammer/index_3.html",
+      "kind": "size",
+      "localSize": 15178,
+      "bakSize": 13582
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_welding/index.html",
+      "kind": "size",
+      "localSize": 15041,
+      "bakSize": 13455
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_welding/index_2.html",
+      "kind": "size",
+      "localSize": 15082,
+      "bakSize": 13490
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_sop_welding/index_3.html",
+      "kind": "size",
+      "localSize": 15085,
+      "bakSize": 13494
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_symptom_dictionary/index.html",
+      "kind": "size",
+      "localSize": 15201,
+      "bakSize": 13608
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_symptom_dictionary/index_2.html",
+      "kind": "size",
+      "localSize": 15218,
+      "bakSize": 13619
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_symptom_dictionary/index_3.html",
+      "kind": "size",
+      "localSize": 15222,
+      "bakSize": 13626
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_wear_analytics/index.html",
+      "kind": "size",
+      "localSize": 15133,
+      "bakSize": 13544
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_wear_analytics/index_2.html",
+      "kind": "size",
+      "localSize": 15163,
+      "bakSize": 13571
+    },
+    {
+      "rel": "turbine_friend/francis_h/francis_wear_analytics/index_3.html",
+      "kind": "size",
+      "localSize": 15168,
+      "bakSize": 13575
+    },
+    {
+      "rel": "turbine_friend/francis_h/index.html",
+      "kind": "size",
+      "localSize": 14656,
+      "bakSize": 13091
+    },
+    {
+      "rel": "turbine_friend/francis_h/index_2.html",
+      "kind": "size",
+      "localSize": 14709,
+      "bakSize": 13136
+    },
+    {
+      "rel": "turbine_friend/francis_h/index_3.html",
+      "kind": "size",
+      "localSize": 14713,
+      "bakSize": 13142
+    },
+    {
+      "rel": "turbine_friend/francis_h/index_4.html",
+      "kind": "size",
+      "localSize": 14699,
+      "bakSize": 13128
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal/index.html",
+      "kind": "size",
+      "localSize": 14871,
+      "bakSize": 13295
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal/index_2.html",
+      "kind": "size",
+      "localSize": 14891,
+      "bakSize": 13309
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal/index_3.html",
+      "kind": "size",
+      "localSize": 14866,
+      "bakSize": 13289
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal_dashboard/index.html",
+      "kind": "size",
+      "localSize": 15073,
+      "bakSize": 13487
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal_dashboard/index_2.html",
+      "kind": "size",
+      "localSize": 15097,
+      "bakSize": 13506
+    },
+    {
+      "rel": "turbine_friend/francis_horizontal_dashboard/index_3.html",
+      "kind": "size",
+      "localSize": 15076,
+      "bakSize": 13486
+    },
+    {
+      "rel": "turbine_friend/francis_logic_load_rejection/index.html",
+      "kind": "size",
+      "localSize": 15079,
+      "bakSize": 13498
+    },
+    {
+      "rel": "turbine_friend/francis_logic_load_rejection/index_2.html",
+      "kind": "size",
+      "localSize": 15075,
+      "bakSize": 13485
+    },
+    {
+      "rel": "turbine_friend/francis_logic_load_rejection/index_3.html",
+      "kind": "size",
+      "localSize": 15078,
+      "bakSize": 13489
+    },
+    {
+      "rel": "turbine_friend/francis_logic_logger/index.html",
+      "kind": "size",
+      "localSize": 14899,
+      "bakSize": 13324
+    },
+    {
+      "rel": "turbine_friend/francis_logic_logger/index_2.html",
+      "kind": "size",
+      "localSize": 14936,
+      "bakSize": 13354
+    },
+    {
+      "rel": "turbine_friend/francis_logic_logger/index_3.html",
+      "kind": "size",
+      "localSize": 14926,
+      "bakSize": 13343
+    },
+    {
+      "rel": "turbine_friend/francis_mission_control/index.html",
+      "kind": "size",
+      "localSize": 14968,
+      "bakSize": 13392
+    },
+    {
+      "rel": "turbine_friend/francis_mission_control/index_2.html",
+      "kind": "size",
+      "localSize": 15000,
+      "bakSize": 13413
+    },
+    {
+      "rel": "turbine_friend/francis_mission_control/index_3.html",
+      "kind": "size",
+      "localSize": 14982,
+      "bakSize": 13399
+    },
+    {
+      "rel": "turbine_friend/francis_observation_log/index.html",
+      "kind": "size",
+      "localSize": 14970,
+      "bakSize": 13389
+    },
+    {
+      "rel": "turbine_friend/francis_observation_log/index_2.html",
+      "kind": "size",
+      "localSize": 14982,
+      "bakSize": 13397
+    },
+    {
+      "rel": "turbine_friend/francis_observation_log/index_3.html",
+      "kind": "size",
+      "localSize": 14969,
+      "bakSize": 13386
+    },
+    {
+      "rel": "turbine_friend/francis_prestart_checklist/index.html",
+      "kind": "size",
+      "localSize": 15044,
+      "bakSize": 13463
+    },
+    {
+      "rel": "turbine_friend/francis_prestart_checklist/index_2.html",
+      "kind": "size",
+      "localSize": 15050,
+      "bakSize": 13461
+    },
+    {
+      "rel": "turbine_friend/francis_prestart_checklist/index_3.html",
+      "kind": "size",
+      "localSize": 15033,
+      "bakSize": 13444
+    },
+    {
+      "rel": "turbine_friend/francis_report_generator/index.html",
+      "kind": "size",
+      "localSize": 18632,
+      "bakSize": 17000
+    },
+    {
+      "rel": "turbine_friend/francis_report_generator/index_2.html",
+      "kind": "size",
+      "localSize": 18729,
+      "bakSize": 17088
+    },
+    {
+      "rel": "turbine_friend/francis_report_generator/index_3.html",
+      "kind": "size",
+      "localSize": 18715,
+      "bakSize": 17075
+    },
+    {
+      "rel": "turbine_friend/francis_safety_system_integrity/index.html",
+      "kind": "size",
+      "localSize": 15150,
+      "bakSize": 13562
+    },
+    {
+      "rel": "turbine_friend/francis_safety_system_integrity/index_2.html",
+      "kind": "size",
+      "localSize": 15155,
+      "bakSize": 13562
+    },
+    {
+      "rel": "turbine_friend/francis_safety_system_integrity/index_3.html",
+      "kind": "size",
+      "localSize": 15145,
+      "bakSize": 13550
+    },
+    {
+      "rel": "turbine_friend/francis_sensory_checklist/index.html",
+      "kind": "size",
+      "localSize": 15005,
+      "bakSize": 13423
+    },
+    {
+      "rel": "turbine_friend/francis_sensory_checklist/index_2.html",
+      "kind": "size",
+      "localSize": 15041,
+      "bakSize": 13455
+    },
+    {
+      "rel": "turbine_friend/francis_sensory_checklist/index_3.html",
+      "kind": "size",
+      "localSize": 15020,
+      "bakSize": 13431
+    },
+    {
+      "rel": "turbine_friend/francis_sop_acoustics/index.html",
+      "kind": "size",
+      "localSize": 14929,
+      "bakSize": 13352
+    },
+    {
+      "rel": "turbine_friend/francis_sop_acoustics/index_2.html",
+      "kind": "size",
+      "localSize": 14953,
+      "bakSize": 13371
+    },
+    {
+      "rel": "turbine_friend/francis_sop_acoustics/index_3.html",
+      "kind": "size",
+      "localSize": 14941,
+      "bakSize": 13360
+    },
+    {
+      "rel": "turbine_friend/francis_sop_analytics/index.html",
+      "kind": "size",
+      "localSize": 14926,
+      "bakSize": 13347
+    },
+    {
+      "rel": "turbine_friend/francis_sop_analytics/index_2.html",
+      "kind": "size",
+      "localSize": 14944,
+      "bakSize": 13359
+    },
+    {
+      "rel": "turbine_friend/francis_sop_analytics/index_3.html",
+      "kind": "size",
+      "localSize": 14945,
+      "bakSize": 13363
+    },
+    {
+      "rel": "turbine_friend/francis_sop_auxiliary/index.html",
+      "kind": "size",
+      "localSize": 14922,
+      "bakSize": 13345
+    },
+    {
+      "rel": "turbine_friend/francis_sop_auxiliary/index_2.html",
+      "kind": "size",
+      "localSize": 14951,
+      "bakSize": 13366
+    },
+    {
+      "rel": "turbine_friend/francis_sop_auxiliary/index_3.html",
+      "kind": "size",
+      "localSize": 14948,
+      "bakSize": 13367
+    },
+    {
+      "rel": "turbine_friend/francis_sop_bearings/index.html",
+      "kind": "size",
+      "localSize": 18630,
+      "bakSize": 17052
+    },
+    {
+      "rel": "turbine_friend/francis_sop_bearings/index_2.html",
+      "kind": "size",
+      "localSize": 18725,
+      "bakSize": 17144
+    },
+    {
+      "rel": "turbine_friend/francis_sop_bearings/index_3.html",
+      "kind": "size",
+      "localSize": 18718,
+      "bakSize": 17136
+    },
+    {
+      "rel": "turbine_friend/francis_sop_braking_system/index.html",
+      "kind": "size",
+      "localSize": 15038,
+      "bakSize": 13456
+    },
+    {
+      "rel": "turbine_friend/francis_sop_braking_system/index_2.html",
+      "kind": "size",
+      "localSize": 15042,
+      "bakSize": 13454
+    },
+    {
+      "rel": "turbine_friend/francis_sop_braking_system/index_3.html",
+      "kind": "size",
+      "localSize": 15036,
+      "bakSize": 13447
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cathodic/index.html",
+      "kind": "size",
+      "localSize": 14900,
+      "bakSize": 13326
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cathodic/index_2.html",
+      "kind": "size",
+      "localSize": 14938,
+      "bakSize": 13355
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cathodic/index_3.html",
+      "kind": "size",
+      "localSize": 14926,
+      "bakSize": 13344
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cooling_water/index.html",
+      "kind": "size",
+      "localSize": 15080,
+      "bakSize": 13499
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cooling_water/index_2.html",
+      "kind": "size",
+      "localSize": 15094,
+      "bakSize": 13510
+    },
+    {
+      "rel": "turbine_friend/francis_sop_cooling_water/index_3.html",
+      "kind": "size",
+      "localSize": 15094,
+      "bakSize": 13507
+    },
+    {
+      "rel": "turbine_friend/francis_sop_coupling/index.html",
+      "kind": "size",
+      "localSize": 14894,
+      "bakSize": 13318
+    },
+    {
+      "rel": "turbine_friend/francis_sop_coupling/index_2.html",
+      "kind": "size",
+      "localSize": 14928,
+      "bakSize": 13347
+    },
+    {
+      "rel": "turbine_friend/francis_sop_coupling/index_3.html",
+      "kind": "size",
+      "localSize": 14927,
+      "bakSize": 13344
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dc_systems/index.html",
+      "kind": "size",
+      "localSize": 14960,
+      "bakSize": 13380
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dc_systems/index_2.html",
+      "kind": "size",
+      "localSize": 14975,
+      "bakSize": 13391
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dc_systems/index_3.html",
+      "kind": "size",
+      "localSize": 14972,
+      "bakSize": 13386
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft/index.html",
+      "kind": "size",
+      "localSize": 14786,
+      "bakSize": 13214
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft/index_2.html",
+      "kind": "size",
+      "localSize": 14837,
+      "bakSize": 13259
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft/index_3.html",
+      "kind": "size",
+      "localSize": 14826,
+      "bakSize": 13249
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft_tailrace/index.html",
+      "kind": "size",
+      "localSize": 15004,
+      "bakSize": 13421
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft_tailrace/index_2.html",
+      "kind": "size",
+      "localSize": 15015,
+      "bakSize": 13429
+    },
+    {
+      "rel": "turbine_friend/francis_sop_dft_tailrace/index_3.html",
+      "kind": "size",
+      "localSize": 15001,
+      "bakSize": 13414
+    },
+    {
+      "rel": "turbine_friend/francis_sop_digital_integrity/index.html",
+      "kind": "size",
+      "localSize": 15101,
+      "bakSize": 13515
+    },
+    {
+      "rel": "turbine_friend/francis_sop_digital_integrity/index_2.html",
+      "kind": "size",
+      "localSize": 15116,
+      "bakSize": 13526
+    },
+    {
+      "rel": "turbine_friend/francis_sop_digital_integrity/index_3.html",
+      "kind": "size",
+      "localSize": 15093,
+      "bakSize": 13506
+    },
+    {
+      "rel": "turbine_friend/francis_sop_distributor_sync/index.html",
+      "kind": "size",
+      "localSize": 18656,
+      "bakSize": 17073
+    },
+    {
+      "rel": "turbine_friend/francis_sop_distributor_sync/index_2.html",
+      "kind": "size",
+      "localSize": 18723,
+      "bakSize": 17133
+    },
+    {
+      "rel": "turbine_friend/francis_sop_distributor_sync/index_3.html",
+      "kind": "size",
+      "localSize": 18721,
+      "bakSize": 17131
+    },
+    {
+      "rel": "turbine_friend/francis_sop_drainage_pumps/index.html",
+      "kind": "size",
+      "localSize": 15027,
+      "bakSize": 13444
+    },
+    {
+      "rel": "turbine_friend/francis_sop_drainage_pumps/index_2.html",
+      "kind": "size",
+      "localSize": 15046,
+      "bakSize": 13460
+    },
+    {
+      "rel": "turbine_friend/francis_sop_drainage_pumps/index_3.html",
+      "kind": "size",
+      "localSize": 15044,
+      "bakSize": 13458
+    },
+    {
+      "rel": "turbine_friend/francis_sop_elec_health/index.html",
+      "kind": "size",
+      "localSize": 14981,
+      "bakSize": 13401
+    },
+    {
+      "rel": "turbine_friend/francis_sop_elec_health/index_2.html",
+      "kind": "size",
+      "localSize": 14984,
+      "bakSize": 13397
+    },
+    {
+      "rel": "turbine_friend/francis_sop_elec_health/index_3.html",
+      "kind": "size",
+      "localSize": 14991,
+      "bakSize": 13404
+    },
+    {
+      "rel": "turbine_friend/francis_sop_foundation/index.html",
+      "kind": "size",
+      "localSize": 15050,
+      "bakSize": 13471
+    },
+    {
+      "rel": "turbine_friend/francis_sop_foundation/index_2.html",
+      "kind": "size",
+      "localSize": 15079,
+      "bakSize": 13496
+    },
+    {
+      "rel": "turbine_friend/francis_sop_foundation/index_3.html",
+      "kind": "size",
+      "localSize": 15054,
+      "bakSize": 13470
+    },
+    {
+      "rel": "turbine_friend/francis_sop_generator/index.html",
+      "kind": "size",
+      "localSize": 18587,
+      "bakSize": 16956
+    },
+    {
+      "rel": "turbine_friend/francis_sop_generator/index_2.html",
+      "kind": "size",
+      "localSize": 18675,
+      "bakSize": 17037
+    },
+    {
+      "rel": "turbine_friend/francis_sop_generator/index_3.html",
+      "kind": "size",
+      "localSize": 18660,
+      "bakSize": 17023
+    },
+    {
+      "rel": "turbine_friend/francis_sop_governor_pid/index.html",
+      "kind": "size",
+      "localSize": 15045,
+      "bakSize": 13464
+    },
+    {
+      "rel": "turbine_friend/francis_sop_governor_pid/index_2.html",
+      "kind": "size",
+      "localSize": 15075,
+      "bakSize": 13490
+    },
+    {
+      "rel": "turbine_friend/francis_sop_governor_pid/index_3.html",
+      "kind": "size",
+      "localSize": 15069,
+      "bakSize": 13484
+    },
+    {
+      "rel": "turbine_friend/francis_sop_gov_logic/index.html",
+      "kind": "size",
+      "localSize": 14989,
+      "bakSize": 13414
+    },
+    {
+      "rel": "turbine_friend/francis_sop_gov_logic/index_2.html",
+      "kind": "size",
+      "localSize": 15016,
+      "bakSize": 13434
+    },
+    {
+      "rel": "turbine_friend/francis_sop_gov_logic/index_3.html",
+      "kind": "size",
+      "localSize": 15014,
+      "bakSize": 13428
+    },
+    {
+      "rel": "turbine_friend/francis_sop_grounding/index.html",
+      "kind": "size",
+      "localSize": 14923,
+      "bakSize": 13347
+    },
+    {
+      "rel": "turbine_friend/francis_sop_grounding/index_2.html",
+      "kind": "size",
+      "localSize": 14948,
+      "bakSize": 13364
+    },
+    {
+      "rel": "turbine_friend/francis_sop_grounding/index_3.html",
+      "kind": "size",
+      "localSize": 14934,
+      "bakSize": 13353
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hidden_guardians/index.html",
+      "kind": "size",
+      "localSize": 15076,
+      "bakSize": 13495
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hidden_guardians/index_2.html",
+      "kind": "size",
+      "localSize": 15086,
+      "bakSize": 13497
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hidden_guardians/index_3.html",
+      "kind": "size",
+      "localSize": 15074,
+      "bakSize": 13485
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu/index.html",
+      "kind": "size",
+      "localSize": 14784,
+      "bakSize": 13214
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu/index_2.html",
+      "kind": "size",
+      "localSize": 14825,
+      "bakSize": 13250
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu/index_3.html",
+      "kind": "size",
+      "localSize": 14824,
+      "bakSize": 13246
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu_energy/index.html",
+      "kind": "size",
+      "localSize": 14951,
+      "bakSize": 13373
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu_energy/index_2.html",
+      "kind": "size",
+      "localSize": 14980,
+      "bakSize": 13392
+    },
+    {
+      "rel": "turbine_friend/francis_sop_hpu_energy/index_3.html",
+      "kind": "size",
+      "localSize": 14957,
+      "bakSize": 13371
+    },
+    {
+      "rel": "turbine_friend/francis_sop_instrumentation/index.html",
+      "kind": "size",
+      "localSize": 15053,
+      "bakSize": 13472
+    },
+    {
+      "rel": "turbine_friend/francis_sop_instrumentation/index_2.html",
+      "kind": "size",
+      "localSize": 15083,
+      "bakSize": 13493
+    },
+    {
+      "rel": "turbine_friend/francis_sop_instrumentation/index_3.html",
+      "kind": "size",
+      "localSize": 15064,
+      "bakSize": 13476
+    },
+    {
+      "rel": "turbine_friend/francis_sop_intake/index.html",
+      "kind": "size",
+      "localSize": 14835,
+      "bakSize": 13263
+    },
+    {
+      "rel": "turbine_friend/francis_sop_intake/index_2.html",
+      "kind": "size",
+      "localSize": 14862,
+      "bakSize": 13282
+    },
+    {
+      "rel": "turbine_friend/francis_sop_intake/index_3.html",
+      "kind": "size",
+      "localSize": 14864,
+      "bakSize": 13284
+    },
+    {
+      "rel": "turbine_friend/francis_sop_linkage/index.html",
+      "kind": "size",
+      "localSize": 14878,
+      "bakSize": 13305
+    },
+    {
+      "rel": "turbine_friend/francis_sop_linkage/index_2.html",
+      "kind": "size",
+      "localSize": 14914,
+      "bakSize": 13333
+    },
+    {
+      "rel": "turbine_friend/francis_sop_linkage/index_3.html",
+      "kind": "size",
+      "localSize": 14901,
+      "bakSize": 13318
+    },
+    {
+      "rel": "turbine_friend/francis_sop_lubrication/index.html",
+      "kind": "size",
+      "localSize": 18706,
+      "bakSize": 17127
+    },
+    {
+      "rel": "turbine_friend/francis_sop_lubrication/index_2.html",
+      "kind": "size",
+      "localSize": 18789,
+      "bakSize": 17203
+    },
+    {
+      "rel": "turbine_friend/francis_sop_lubrication/index_3.html",
+      "kind": "size",
+      "localSize": 18785,
+      "bakSize": 17198
+    },
+    {
+      "rel": "turbine_friend/francis_sop_master_valve_distributor/index.html",
+      "kind": "size",
+      "localSize": 15254,
+      "bakSize": 13662
+    },
+    {
+      "rel": "turbine_friend/francis_sop_master_valve_distributor/index_2.html",
+      "kind": "size",
+      "localSize": 15256,
+      "bakSize": 13658
+    },
+    {
+      "rel": "turbine_friend/francis_sop_master_valve_distributor/index_3.html",
+      "kind": "size",
+      "localSize": 15232,
+      "bakSize": 13634
+    },
+    {
+      "rel": "turbine_friend/francis_sop_mim/index.html",
+      "kind": "size",
+      "localSize": 14800,
+      "bakSize": 13231
+    },
+    {
+      "rel": "turbine_friend/francis_sop_mim/index_2.html",
+      "kind": "size",
+      "localSize": 14843,
+      "bakSize": 13266
+    },
+    {
+      "rel": "turbine_friend/francis_sop_mim/index_3.html",
+      "kind": "size",
+      "localSize": 14819,
+      "bakSize": 13245
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_bypass/index.html",
+      "kind": "size",
+      "localSize": 15077,
+      "bakSize": 13499
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_bypass/index_2.html",
+      "kind": "size",
+      "localSize": 15092,
+      "bakSize": 13507
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_bypass/index_3.html",
+      "kind": "size",
+      "localSize": 15090,
+      "bakSize": 13505
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_distributor_detail/index.html",
+      "kind": "size",
+      "localSize": 15337,
+      "bakSize": 13747
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_distributor_detail/index_2.html",
+      "kind": "size",
+      "localSize": 15329,
+      "bakSize": 13734
+    },
+    {
+      "rel": "turbine_friend/francis_sop_miv_distributor_detail/index_3.html",
+      "kind": "size",
+      "localSize": 15324,
+      "bakSize": 13731
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil/index.html",
+      "kind": "size",
+      "localSize": 18515,
+      "bakSize": 16944
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil/index_2.html",
+      "kind": "size",
+      "localSize": 18627,
+      "bakSize": 17049
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil/index_3.html",
+      "kind": "size",
+      "localSize": 18620,
+      "bakSize": 17042
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil_health/index.html",
+      "kind": "size",
+      "localSize": 18684,
+      "bakSize": 17106
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil_health/index_2.html",
+      "kind": "size",
+      "localSize": 18768,
+      "bakSize": 17184
+    },
+    {
+      "rel": "turbine_friend/francis_sop_oil_health/index_3.html",
+      "kind": "size",
+      "localSize": 18759,
+      "bakSize": 17178
+    },
+    {
+      "rel": "turbine_friend/francis_sop_penstock/index.html",
+      "kind": "size",
+      "localSize": 14840,
+      "bakSize": 13188
+    },
+    {
+      "rel": "turbine_friend/francis_sop_penstock/index_2.html",
+      "kind": "size",
+      "localSize": 14867,
+      "bakSize": 13211
+    },
+    {
+      "rel": "turbine_friend/francis_sop_penstock/index_3.html",
+      "kind": "size",
+      "localSize": 14861,
+      "bakSize": 13202
+    },
+    {
+      "rel": "turbine_friend/francis_sop_precision/index.html",
+      "kind": "size",
+      "localSize": 14935,
+      "bakSize": 13359
+    },
+    {
+      "rel": "turbine_friend/francis_sop_precision/index_2.html",
+      "kind": "size",
+      "localSize": 14955,
+      "bakSize": 13374
+    },
+    {
+      "rel": "turbine_friend/francis_sop_precision/index_3.html",
+      "kind": "size",
+      "localSize": 14958,
+      "bakSize": 13375
+    },
+    {
+      "rel": "turbine_friend/francis_sop_recovery/index.html",
+      "kind": "size",
+      "localSize": 14900,
+      "bakSize": 13326
+    },
+    {
+      "rel": "turbine_friend/francis_sop_recovery/index_2.html",
+      "kind": "size",
+      "localSize": 14946,
+      "bakSize": 13362
+    },
+    {
+      "rel": "turbine_friend/francis_sop_recovery/index_3.html",
+      "kind": "size",
+      "localSize": 14920,
+      "bakSize": 13338
+    },
+    {
+      "rel": "turbine_friend/francis_sop_regulating_ring/index.html",
+      "kind": "size",
+      "localSize": 15153,
+      "bakSize": 13569
+    },
+    {
+      "rel": "turbine_friend/francis_sop_regulating_ring/index_2.html",
+      "kind": "size",
+      "localSize": 15167,
+      "bakSize": 13580
+    },
+    {
+      "rel": "turbine_friend/francis_sop_regulating_ring/index_3.html",
+      "kind": "size",
+      "localSize": 15166,
+      "bakSize": 13578
+    },
+    {
+      "rel": "turbine_friend/francis_sop_shaft_alignment/index.html",
+      "kind": "size",
+      "localSize": 18752,
+      "bakSize": 17173
+    },
+    {
+      "rel": "turbine_friend/francis_sop_shaft_alignment/index_2.html",
+      "kind": "size",
+      "localSize": 18841,
+      "bakSize": 17252
+    },
+    {
+      "rel": "turbine_friend/francis_sop_shaft_alignment/index_3.html",
+      "kind": "size",
+      "localSize": 18827,
+      "bakSize": 17240
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thermal/index.html",
+      "kind": "size",
+      "localSize": 14948,
+      "bakSize": 13374
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thermal/index_2.html",
+      "kind": "size",
+      "localSize": 14975,
+      "bakSize": 13392
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thermal/index_3.html",
+      "kind": "size",
+      "localSize": 14973,
+      "bakSize": 13393
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thrust_balance/index.html",
+      "kind": "size",
+      "localSize": 15035,
+      "bakSize": 13452
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thrust_balance/index_2.html",
+      "kind": "size",
+      "localSize": 15065,
+      "bakSize": 13476
+    },
+    {
+      "rel": "turbine_friend/francis_sop_thrust_balance/index_3.html",
+      "kind": "size",
+      "localSize": 15040,
+      "bakSize": 13451
+    },
+    {
+      "rel": "turbine_friend/francis_sop_vortex_control/index.html",
+      "kind": "size",
+      "localSize": 15053,
+      "bakSize": 13472
+    },
+    {
+      "rel": "turbine_friend/francis_sop_vortex_control/index_2.html",
+      "kind": "size",
+      "localSize": 15052,
+      "bakSize": 13468
+    },
+    {
+      "rel": "turbine_friend/francis_sop_vortex_control/index_3.html",
+      "kind": "size",
+      "localSize": 15042,
+      "bakSize": 13455
+    },
+    {
+      "rel": "turbine_friend/francis_sop_water_hammer/index.html",
+      "kind": "size",
+      "localSize": 14995,
+      "bakSize": 13418
+    },
+    {
+      "rel": "turbine_friend/francis_sop_water_hammer/index_2.html",
+      "kind": "size",
+      "localSize": 15009,
+      "bakSize": 13424
+    },
+    {
+      "rel": "turbine_friend/francis_sop_water_hammer/index_3.html",
+      "kind": "size",
+      "localSize": 15004,
+      "bakSize": 13420
+    },
+    {
+      "rel": "turbine_friend/francis_sop_welding/index.html",
+      "kind": "size",
+      "localSize": 14902,
+      "bakSize": 13325
+    },
+    {
+      "rel": "turbine_friend/francis_sop_welding/index_2.html",
+      "kind": "size",
+      "localSize": 14923,
+      "bakSize": 13343
+    },
+    {
+      "rel": "turbine_friend/francis_sop_welding/index_3.html",
+      "kind": "size",
+      "localSize": 14910,
+      "bakSize": 13329
+    },
+    {
+      "rel": "turbine_friend/francis_symptom_dictionary/index.html",
+      "kind": "size",
+      "localSize": 15035,
+      "bakSize": 13451
+    },
+    {
+      "rel": "turbine_friend/francis_symptom_dictionary/index_2.html",
+      "kind": "size",
+      "localSize": 15058,
+      "bakSize": 13469
+    },
+    {
+      "rel": "turbine_friend/francis_symptom_dictionary/index_3.html",
+      "kind": "size",
+      "localSize": 15050,
+      "bakSize": 13459
+    },
+    {
+      "rel": "turbine_friend/francis_wear_analytics/index.html",
+      "kind": "size",
+      "localSize": 14990,
+      "bakSize": 13410
+    },
+    {
+      "rel": "turbine_friend/francis_wear_analytics/index_2.html",
+      "kind": "size",
+      "localSize": 15000,
+      "bakSize": 13417
+    },
+    {
+      "rel": "turbine_friend/francis_wear_analytics/index_3.html",
+      "kind": "size",
+      "localSize": 14986,
+      "bakSize": 13402
+    },
+    {
+      "rel": "turbine_friend/index.html",
+      "kind": "size",
+      "localSize": 14520,
+      "bakSize": 12963
+    },
+    {
+      "rel": "turbine_friend/index_2.html",
+      "kind": "size",
+      "localSize": 14568,
+      "bakSize": 13008
+    },
+    {
+      "rel": "turbine_friend/index_3.html",
+      "kind": "size",
+      "localSize": 14559,
+      "bakSize": 12998
+    },
+    {
+      "rel": "turbine_friend/index_4.html",
+      "kind": "size",
+      "localSize": 14562,
+      "bakSize": 13003
+    },
+    {
+      "rel": "turbine_friend/kaplan_t/index.html",
+      "kind": "size",
+      "localSize": 14648,
+      "bakSize": 13084
+    },
+    {
+      "rel": "turbine_friend/kaplan_t/index_2.html",
+      "kind": "size",
+      "localSize": 14674,
+      "bakSize": 13106
+    },
+    {
+      "rel": "turbine_friend/kaplan_t/index_3.html",
+      "kind": "size",
+      "localSize": 14684,
+      "bakSize": 13117
+    },
+    {
+      "rel": "turbine_friend/pelton_t/index.html",
+      "kind": "size",
+      "localSize": 14653,
+      "bakSize": 13091
+    },
+    {
+      "rel": "turbine_friend/pelton_t/index_2.html",
+      "kind": "size",
+      "localSize": 14677,
+      "bakSize": 13107
+    },
+    {
+      "rel": "turbine_friend/pelton_t/index_3.html",
+      "kind": "size",
+      "localSize": 14694,
+      "bakSize": 13122
+    }
+  ],
+  "originAnalysis": {
+    "existsInLocal": true,
+    "existsInBak": true,
+    "localMtime": 1768754553348.1467,
+    "bakMtime": 1768752815411.2573,
+    "bakTimestampFromName": 1768747356701,
+    "inferred": null
+  }
+}

@@ -1,0 +1,36 @@
+{
+    "troubleshooting": [
+        {
+            "id": "CAV-001",
+            "symptom": "Cavitation",
+            "condition": "state.hydraulic.efficiency < 0.88 && state.physics.specificWaterConsumption > 1.1",
+            "probableCauses": [
+                "Operation at low head / high flow",
+                "Draft tube pressure below vapor pressure",
+                "Runner geometry degradation"
+            ],
+            "remedies": [
+                "Adjust operating point to best efficiency",
+                "Check draft tube aeration",
+                "Surface repair / Stellite welding"
+            ],
+            "kbReference": "KB-REF-04"
+        },
+        {
+            "id": "VIB-001",
+            "symptom": "High Radial Vibration",
+            "condition": "state.mechanical.vibration > 4.5",
+            "probableCauses": [
+                "Mechanical unbalance",
+                "Shaft misalignment",
+                "Bearing clearance excess"
+            ],
+            "remedies": [
+                "Perform dynamic balancing",
+                "Realignment check",
+                "Bearing clearance measurement"
+            ],
+            "kbReference": "KB-REF-VIB"
+        }
+    ]
+}

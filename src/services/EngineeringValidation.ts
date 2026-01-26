@@ -1,0 +1,394 @@
+import i18n from '../i18n';
+import BaseGuardian from './BaseGuardian';
+
+/**
+ * ENGINEERING VALIDATION ENGINE (NC-4.2)
+ * 
+ * "Safety Net" for physically impossible values.
+ * Validates user input against engineering reality.
+ */
+
+export interface ValidationResult {
+    isValid: boolean;
+    field: string;
+    value: number;
+    message: string;
+    severity: 'info' | 'warning' | 'error';
+    suggestedRange?: { min: number; max: number };
+}
+
+export interface CrossSectorEffect {
+    sourceSector: string;
+    sourceField: string;
+    affectedSector: string;
+    affectedField: string;
+    stressMultiplier: number;
+    message: string;
+}
+
+/**
+ * PHYSICAL LIMITS - Based on real engineering constraints
+ */
+const PHYSICAL_LIMITS = {
+    // Mechanical
+    alignment: { min: 0, max: 2.0, unit: 'mm/m', name: 'validation.fields.alignment' },
+    vibration: { min: 0, max: 50, unit: 'mm/s', name: 'validation.fields.vibration' },
+    axialPlay: { min: 0, max: 5.0, unit: 'mm', name: 'validation.fields.axialPlay' },
+
+    // Thermal
+    bearingTemp: { min: -40, max: 200, unit: '°C', name: 'validation.fields.bearingTemp' },
+    oilTemp: { min: -20, max: 120, unit: '°C', name: 'validation.fields.oilTemp' },
+    ambientTemp: { min: -50, max: 60, unit: '°C', name: 'validation.fields.ambientTemp' },
+
+    // Electrical
+    insulationResistance: { min: 0, max: 10000, unit: 'MΩ', name: 'validation.fields.insulationResistance' },
+    gridFrequency: { min: 45, max: 55, unit: 'Hz', name: 'validation.fields.gridFrequency' },
+    voltage: { min: 0, max: 50, unit: 'kV', name: 'validation.fields.voltage' },
+
+    // Hydraulic
+    head: { min: 0, max: 2000, unit: 'm', name: 'validation.fields.netHead' },
+    flow: { min: 0, max: 1000, unit: 'm³/s', name: 'validation.fields.flowRate' },
+    efficiency: { min: 0, max: 100, unit: '%', name: 'validation.fields.efficiency' },
+
+    // Structural
+    hoopStress: { min: 0, max: 500, unit: 'MPa', name: 'validation.fields.hoopStress' },
+    wallThickness: { min: 1, max: 100, unit: 'mm', name: 'validation.fields.wallThickness' },
+    pressure: { min: 0, max: 100, unit: 'bar', name: 'validation.fields.pressure' }
+};
+
+class EngineeringValidationClass extends BaseGuardian {
+    /**
+     * Validate a single field value against physical limits
+     */
+    validateField(field: keyof typeof PHYSICAL_LIMITS, value: number): ValidationResult {
+        const limits = PHYSICAL_LIMITS[field];
+        const fieldName = i18n.t(limits.name);
+
+        if (value < limits.min) {
+            return {
+                isValid: false,
+                field: fieldName,
+                value,
+                message: i18n.t('validation.limits.negative', { field: fieldName, min: limits.min, unit: limits.unit }),
+                severity: 'error',
+                suggestedRange: { min: limits.min, max: limits.max }
+            };
+        }
+
+        if (value > limits.max) {
+            return {
+                isValid: false,
+                field: fieldName,
+                value,
+                message: i18n.t('validation.limits.exceeds', { field: fieldName, value, unit: limits.unit, max: limits.max }),
+                severity: 'error',
+                suggestedRange: { min: limits.min, max: limits.max }
+            };
+        }
+
+        return {
+            isValid: true,
+            field: fieldName,
+            value,
+            message: i18n.t('validation.limits.nominal'),
+            severity: 'info'
+        };
+    }
+
+    /**
+     * Validate bearing temperature specifically
+     * Includes warning thresholds before critical
+     */
+    validateBearingTemp(tempC: number): ValidationResult {
+        const base = this.validateField('bearingTemp', tempC);
+        if (!base.isValid) return base;
+
+        if (tempC > 85) {
+            return {
+                isValid: true,
+                field: i18n.t('validation.fields.bearingTemp'),
+                value: tempC,
+                message: i18n.t('validation.bearing.critical', { value: tempC }),
+                severity: 'error'
+            };
+        }
+
+        if (tempC > 70) {
+            return {
+                isValid: true,
+                field: i18n.t('validation.fields.bearingTemp'),
+                value: tempC,
+                message: i18n.t('validation.bearing.warning', { value: tempC }),
+                severity: 'warning'
+            };
+        }
+
+        return base;
+    }
+
+    /**
+     * Validate alignment with Heritage Standard check
+     */
+    validateAlignment(alignmentMmM: number): ValidationResult {
+        const base = this.validateField('alignment', alignmentMmM);
+        if (!base.isValid) return base;
+
+        const GOLDEN_STANDARD = 0.05;
+
+        if (alignmentMmM > GOLDEN_STANDARD * 4) { // > 0.20 mm/m
+            return {
+                isValid: true,
+                field: i18n.t('validation.fields.alignment'),
+                value: alignmentMmM,
+                message: i18n.t('validation.alignment.critical', { value: alignmentMmM, ratio: (alignmentMmM / GOLDEN_STANDARD).toFixed(1) }),
+                severity: 'error'
+            };
+        }
+
+        if (alignmentMmM > GOLDEN_STANDARD) {
+            return {
+                isValid: true,
+                field: i18n.t('validation.fields.alignment'),
+                value: alignmentMmM,
+                message: i18n.t('validation.alignment.heritage', { value: alignmentMmM }),
+                severity: 'warning'
+            };
+        }
+
+        return base;
+    }
+
+    /**
+     * Batch validate multiple fields
+     */
+    validateBatch(values: Record<string, number>): ValidationResult[] {
+        const results: ValidationResult[] = [];
+
+        for (const [field, value] of Object.entries(values)) {
+            if (field in PHYSICAL_LIMITS) {
+                results.push(this.validateField(field as keyof typeof PHYSICAL_LIMITS, value));
+            }
+        }
+
+        return results.filter(r => !r.isValid || r.severity !== 'info');
+    }
+
+    /**
+     * Get confidence score based on validation accuracy and cross-sector correlation
+     */
+    public getConfidenceScore(validationResults: ValidationResult[] = []): number {
+        if (!validationResults || validationResults.length === 0) return 50;
+        
+        // Higher confidence when validations are consistent and within limits
+        const validCount = validationResults.filter(r => r.isValid).length;
+        const totalCount = validationResults.length;
+        const validityRatio = validCount / totalCount;
+        
+        // Penalize for errors and warnings
+        const errorCount = validationResults.filter(r => r.severity === 'error').length;
+        const warningCount = validationResults.filter(r => r.severity === 'warning').length;
+        
+        let score = validityRatio * 100;
+        score -= errorCount * 20;
+        score -= warningCount * 10;
+        
+        return Math.max(0, Math.min(100, Math.round(score)));
+    }
+}
+
+// Export singleton instance for backwards compatibility
+export const engineeringValidation = new EngineeringValidationClass();
+
+// Export static methods for backwards compatibility
+export const EngineeringValidation = {
+    validateField: engineeringValidation.validateField.bind(engineeringValidation),
+    validateBearingTemp: engineeringValidation.validateBearingTemp.bind(engineeringValidation),
+    validateAlignment: engineeringValidation.validateAlignment.bind(engineeringValidation),
+    validateBatch: engineeringValidation.validateBatch.bind(engineeringValidation)
+};
+
+// Also export the class type for consumers who need it
+export { EngineeringValidationClass };
+
+/**
+ * CROSS-SECTOR DOMINO EFFECT ENGINE
+ * 
+ * Links between sectors to propagate stress effects:
+ * - Misalignment → Bearing stress → Oil degradation
+ * - High vibration → Seal wear → Leakage risk
+ * - Grid instability → Generator stress → Insulation degradation
+ */
+export const CrossSectorEngine = {
+    /**
+     * GOLDEN STANDARD (Heritage)
+     */
+    GOLDEN_ALIGNMENT: 0.05, // mm/m
+
+    /**
+     * Calculate thermal stress multiplier based on alignment deviation
+     * 
+     * Physics: Misalignment causes uneven load distribution on bearings,
+     * increasing friction and heat generation (cubic relationship).
+     */
+    calculateThermalStressFromAlignment(alignmentMmM: number): number {
+        if (alignmentMmM <= this.GOLDEN_ALIGNMENT) {
+            return 1.0; // No additional stress
+        }
+
+        const deviationRatio = alignmentMmM / this.GOLDEN_ALIGNMENT;
+        // Thermal stress increases with square of misalignment
+        return 1.0 + (Math.pow(deviationRatio, 2) - 1) * 0.1;
+    },
+
+    /**
+     * Calculate oil longevity impact from alignment
+     * 
+     * Physics: Misalignment increases particle generation from wear,
+     * accelerating oil contamination.
+     */
+    calculateOilLongevityImpact(alignmentMmM: number): { multiplier: number; yearsLost: number } {
+        const baseOilLife = 5; // years
+
+        if (alignmentMmM <= this.GOLDEN_ALIGNMENT) {
+            return { multiplier: 1.0, yearsLost: 0 };
+        }
+
+        const deviationRatio = alignmentMmM / this.GOLDEN_ALIGNMENT;
+        const wearFactor = Math.pow(deviationRatio, 2);
+        const adjustedLife = baseOilLife / wearFactor;
+
+        return {
+            multiplier: wearFactor,
+            yearsLost: baseOilLife - adjustedLife
+        };
+    },
+
+    /**
+     * Predict bearing temperature increase from alignment stress
+     */
+    predictBearingTempIncrease(
+        currentTempC: number,
+        alignmentMmM: number
+    ): { predictedTemp: number; warning: boolean; message: string } {
+        const stressMultiplier = this.calculateThermalStressFromAlignment(alignmentMmM);
+        const tempIncrease = (stressMultiplier - 1.0) * 15; // ~15°C max increase from misalignment
+        const predictedTemp = currentTempC + tempIncrease;
+
+        const warning = alignmentMmM > this.GOLDEN_ALIGNMENT;
+
+        return {
+            predictedTemp,
+            warning,
+            message: warning
+                ? i18n.t('validation.cross_sector.thermal_stress', { alignment: alignmentMmM.toFixed(3), stress: ((stressMultiplier - 1) * 100).toFixed(0) })
+                : i18n.t('validation.limits.nominal')
+        };
+    },
+
+    /**
+     * Get all cross-sector effects for current state
+     */
+    analyzeCrossSectorEffects(state: {
+        alignment?: number;
+        vibration?: number;
+        bearingTemp?: number;
+        gridFrequency?: number;
+    }): CrossSectorEffect[] {
+        const effects: CrossSectorEffect[] = [];
+        const alignment = state.alignment || 0;
+        const vibration = state.vibration || 0;
+        const frequency = state.gridFrequency || 50;
+
+        // 1. Alignment → Bearing Temperature
+        if (alignment > this.GOLDEN_ALIGNMENT) {
+            const stressMultiplier = this.calculateThermalStressFromAlignment(alignment);
+            effects.push({
+                sourceSector: i18n.t('validation.fields.alignment'),
+                sourceField: i18n.t('validation.fields.alignment'),
+                affectedSector: i18n.t('validation.fields.bearingTemp'),
+                affectedField: i18n.t('validation.fields.bearingTemp'),
+                stressMultiplier,
+                message: i18n.t('validation.cross_sector.thermal_stress', { alignment: alignment.toFixed(3), stress: ((stressMultiplier - 1) * 100).toFixed(0) })
+            });
+        }
+
+        // 2. Alignment → Oil Longevity
+        if (alignment > this.GOLDEN_ALIGNMENT) {
+            const oilImpact = this.calculateOilLongevityImpact(alignment);
+            effects.push({
+                sourceSector: i18n.t('validation.fields.alignment'),
+                sourceField: i18n.t('validation.fields.alignment'),
+                affectedSector: i18n.t('validation.fields.oilLongevity'),
+                affectedField: i18n.t('validation.fields.oilLongevity'),
+                stressMultiplier: oilImpact.multiplier,
+                message: i18n.t('validation.cross_sector.oil_degradation', { years: oilImpact.yearsLost.toFixed(1) })
+            });
+        }
+
+        // 3. Vibration → Seal Integrity
+        if (vibration > 2.8) { // ISO 10816 "Satisfactory" threshold
+            const sealStress = vibration / 2.8;
+            effects.push({
+                sourceSector: i18n.t('validation.fields.vibration'),
+                sourceField: i18n.t('validation.fields.vibration'),
+                affectedSector: i18n.t('validation.fields.sealIntegrity'),
+                affectedField: i18n.t('validation.fields.sealIntegrity'),
+                stressMultiplier: sealStress,
+                message: i18n.t('validation.cross_sector.seal_integrity', { value: vibration.toFixed(2) })
+            });
+        }
+
+        // 4. Grid Frequency → Generator Stress
+        const freqDeviation = Math.abs(frequency - 50);
+        if (freqDeviation > 0.5) {
+            const gridStress = 1 + (freqDeviation * 0.2);
+            effects.push({
+                sourceSector: i18n.t('validation.fields.gridFrequency'),
+                sourceField: i18n.t('validation.fields.gridFrequency'),
+                affectedSector: i18n.t('validation.fields.generatorInsulation'),
+                affectedField: i18n.t('validation.fields.generatorInsulation'),
+                stressMultiplier: gridStress,
+                message: i18n.t('validation.cross_sector.insulation_stress', { deviation: freqDeviation.toFixed(2) })
+            });
+        }
+
+        return effects;
+    },
+
+    /**
+     * Check if thermal stress warning should be shown
+     * even without explicit temperature input
+     */
+    shouldShowThermalWarning(alignmentMmM: number): boolean {
+        return alignmentMmM > this.GOLDEN_ALIGNMENT;
+    },
+
+    /**
+     * Get Heritage Certification status
+     */
+    getHeritageCertification(state: {
+        alignment?: number;
+        vibration?: number;
+        bearingTemp?: number;
+    }): { certified: boolean; reasons: string[] } {
+        const reasons: string[] = [];
+        const alignment = state.alignment || 0;
+        const vibration = state.vibration || 0;
+        const temp = state.bearingTemp || 0;
+
+        if (alignment > this.GOLDEN_ALIGNMENT) {
+            reasons.push(i18n.t('validation.certification.alignment_fail', { value: alignment.toFixed(3) }));
+        }
+        if (vibration > 1.1) { // ISO "Good" threshold
+            reasons.push(i18n.t('validation.certification.vibration_fail', { value: vibration.toFixed(2) }));
+        }
+        if (temp > 65) {
+            reasons.push(i18n.t('validation.certification.temp_fail', { value: temp }));
+        }
+
+        return {
+            certified: reasons.length === 0,
+            reasons
+        };
+    }
+};

@@ -1,0 +1,415 @@
+---
+layout: base.njk
+title: "Francis Lista Provjere Prije Starta | Turbine Friend"
+description: "Kritična verifikaciona lista za autorizaciju pokretanja Horizontalne Francis turbine."
+---
+
+<style>
+    .checklist-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: linear-gradient(to bottom, #0f172a, #020617);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
+
+    .checklist-header {
+        text-align: center;
+        border-bottom: 2px solid rgba(239, 68, 68, 0.3);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+    }
+
+    .checklist-title {
+        font-size: 2rem;
+        font-weight: 900;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+    }
+
+    .checklist-subtitle {
+        color: #94a3b8;
+        font-size: 0.875rem;
+        font-family: 'Courier New', monospace;
+    }
+
+    .verification-section {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .section-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+    }
+
+    .mechanical-icon {
+        background: rgba(100, 116, 139, 0.2);
+        color: #94a3b8;
+    }
+
+    .fluid-icon {
+        background: rgba(6, 182, 212, 0.2);
+        color: #06b6d4;
+    }
+
+    .electrical-icon {
+        background: rgba(245, 158, 11, 0.2);
+        color: #f59e0b;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .checklist-items {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .checklist-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .checkbox {
+        width: 24px;
+        height: 24px;
+        border: 2px solid #64748b;
+        border-radius: 4px;
+        flex-shrink: 0;
+        margin-top: 2px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .checkbox:hover {
+        border-color: #06b6d4;
+        background: rgba(6, 182, 212, 0.1);
+    }
+
+    .item-text {
+        color: #cbd5e1;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        flex: 1;
+    }
+
+    .item-label {
+        font-weight: 600;
+        color: white;
+    }
+
+    .signature-block {
+        background: linear-gradient(to bottom, rgba(239, 68, 68, 0.1), rgba(15, 23, 42, 0.6));
+        border: 2px solid rgba(239, 68, 68, 0.3);
+        border-radius: 8px;
+        padding: 32px;
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .signature-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        color: #ef4444;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 24px;
+    }
+
+    .signature-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+    }
+
+    .signature-field {
+        text-align: left;
+    }
+
+    .field-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+    }
+
+    .field-input {
+        width: 100%;
+        border: none;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        background: transparent;
+        color: white;
+        font-size: 1rem;
+        padding: 8px 0;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .field-input:focus {
+        border-bottom-color: #06b6d4;
+    }
+
+    .warning-note {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #f59e0b;
+        padding: 12px 16px;
+        margin-top: 24px;
+        border-radius: 4px;
+    }
+
+    .warning-note p {
+        color: #fbbf24;
+        font-size: 0.875rem;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .signature-fields {
+            grid-template-columns: 1fr;
+        }
+
+        .checklist-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="checklist-container">
+    <div class="checklist-header">
+        <div class="checklist-title">
+            <i data-lucide="clipboard-check"
+                style="display: inline-block; width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i>
+            LISTA VERIFIKACIJE PRIJE STARTA
+        </div>
+        <div class="checklist-subtitle">FRANCIS HORIZONTALNA TURBINA - AGREGAT 1</div>
+    </div>
+
+    <!-- MECHANICAL VERIFICATION -->
+    <div class="verification-section">
+        <div class="section-header">
+            <div class="section-icon mechanical-icon">
+                <i data-lucide="cog" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="section-title">Mehanička Verifikacija</div>
+        </div>
+        <div class="checklist-items">
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Uklonjeni Sigurnosni Klinovi:</span> Potvrdite da su svi
+                    montažni/održivački
+                    klinovi uklonjeni sa spojke, polužja regulatora i kočnica. Vizuelna potvrda obavezna.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Vijci Spojke Dotegnuti:</span> Svi vijci spojke pritegnuti na propisani
+                    moment
+                    (vidi SOP spojke) uz primjenu Loctite 243. Vrijednosti zabilježene u dnevnik.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Centriranje Vratila Verifikovano:</span> Zazori izmjereni na 12, 3, 6, 9
+                    sati.
+                    Maksimalno odstupanje &lt; 0.05mm. Vrijednosti upisane u precizni dnevnik.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Slobodno Kretanje Polužja:</span> Polužje sprovodnog aparata se kreće
+                    glatko
+                    kroz cijeli opseg (0-100%). Nema zapinjanja ili prekomjernog trenja.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Kućišta Ležajeva Osigurana:</span> Svi vijci kućišta ležajeva pritegnuti.
+                    Nema
+                    vidljivog curenja ulja na zaptivkama ili brtvama.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLUID VERIFICATION -->
+    <div class="verification-section">
+        <div class="section-header">
+            <div class="section-icon fluid-icon">
+                <i data-lucide="droplets" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="section-title">Hidraulička Verifikacija</div>
+        </div>
+        <div class="checklist-items">
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Pritisak HPU-a Nominalan:</span> Hidraulični agregat radi na 150-160
+                    bara. Pred-punjenje akumulatora provjereno. Nema kavitacijske buke pumpe.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Potvrđeno Azotno Pred-Punjenje:</span> Pritisak azota u akumulatoru na
+                    120 bara (±5 bara). Datum zadnjeg punjenja unutar 6 mjeseci.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Ventili Rashladne Vode Otvoreni:</span> Ulazni i izlazni ventili potpuno
+                    otvoreni.
+                    Vizuelna potvrda protoka kroz kontrolno staklo. Temperaturna razlika &lt; 10°C.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Nivo Ulja u Ležaju:</span> Nivoi ulja u glavnom i vodećem ležaju
+                    unutar granica kontrolnog stakla. Kvalitet ulja vizuelno prihvatljiv (bistro, bez emulzije).
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Drenažne Pumpe Operativne:</span> Pumpe u jami strojarnice testirane i
+                    funkcionalne. Alarm visokog nivoa vode testiran i operativan.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ELECTRICAL VERIFICATION -->
+    <div class="verification-section">
+        <div class="section-header">
+            <div class="section-icon electrical-icon">
+                <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="section-title">Električna & Kontrolna Verifikacija</div>
+        </div>
+        <div class="checklist-items">
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Četkice Pravilno Naliježu:</span> Karbonske četkice pregledane i pravilno
+                    naliježu na klizne prstenove. Napetost opruga provjerena. Nema nakupljanja prašine.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Megger Test Prošao:</span> Test otpora izolacije izvršen na statorskim
+                    namotajima. Otpor &gt; 100 MΩ na 500V DC. Rezultati zabilježeni.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">SCADA Komunikacija Zelena:</span> Svi senzori šalju podatke SCADA-i. Nema
+                    komunikacijskih grešaka. RTD, senzori pritiska i vibracija su online.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Hitno Zaustavljanje (ESD) Testirano:</span> Funkcionalnost E-stop tastera
+                    verifikovana. Sistem
+                    reaguje komandom za trenutno isključenje.
+                </div>
+            </div>
+            <div class="checklist-item">
+                <div class="checkbox"></div>
+                <div class="item-text">
+                    <span class="item-label">Zaštitni Releji Podešeni:</span> Prekostrujna, diferencijalna i
+                    zemljospojna
+                    zaštita verifikovana na ispravnim postavkama prema specifikaciji proizvođača.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIGNATURE BLOCK -->
+    <div class="signature-block">
+        <div class="signature-title">
+            <i data-lucide="shield-check"
+                style="display: inline-block; width: 28px; height: 28px; vertical-align: middle; margin-right: 8px;"></i>
+            SPREMNO ZA POKRETANJE
+        </div>
+        <div class="warning-note">
+            <p>⚠️ POTPISOM ISPOD POTVRĐUJEM DA SU SVE GORE NAVEDENE STAVKE VERIFIKOVANE I DA JE AGREGAT SIGURAN ZA
+                ENERGIZACIJU</p>
+        </div>
+        <div class="signature-fields">
+            <div class="signature-field">
+                <div class="field-label">Odgovorni Inženjer</div>
+                <input type="text" class="field-input" placeholder="Štampano Ime">
+            </div>
+            <div class="signature-field">
+                <div class="field-label">Datum i Vrijeme</div>
+                <input type="text" class="field-input" placeholder="DD/MM/GGGG HH:MM">
+            </div>
+            <div class="signature-field">
+                <div class="field-label">Potpis</div>
+                <input type="text" class="field-input" placeholder="Potpiši Ovdje">
+            </div>
+            <div class="signature-field">
+                <div class="field-label">Odobrenje Nadzora</div>
+                <input type="text" class="field-input" placeholder="Štampano Ime">
+            </div>
+        </div>
+    </div>
+
+    <!-- Return Link -->
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="Francis_Horizontal_Dashboard.html"
+            style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); color: #06b6d4; text-decoration: none; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em; transition: all 0.2s;">
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+            <span>POVRATAK U OPERATIVNI CENTAR</span>
+        </a>
+    </div>
+</div>

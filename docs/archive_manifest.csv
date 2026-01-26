@@ -1,0 +1,13 @@
+Path,Type,SizeBytes,Modified,FileCount,TotalBytes,References
+public/Turbine_Grouped.svg,file,3663300,2026-01-22T15:50:23.3855377+01:00,,,"scripts/group_svg.js; scripts/inspect_svg.cjs; scripts/inspect_svg.js; src/components/dashboard/TurbineVisualNavigator.tsx; repomix-output.xml; gh_pages_files.txt; gh_pages_all_remote.txt"
+public/Gemini_Generated_Image_pk5hl3pk5hl3pk5h (1).svg,file,3646553,2026-01-22T15:50:23.3810298+01:00,,,"scripts/group_svg.js; group_svg.js; repomix-output.xml; gh_pages_files.txt; gh_pages_all_remote.txt"
+public/technical_whitepaper.html,file,11045,2026-01-22T15:50:24.1744771+01:00,,,"scripts/verify_nc102_integrity.js; scripts/verify_nc102_integrity.cjs; scripts/reports/nc102_integrity_report.json"
+public/francis-blueprint.jpg,file,385757,2026-01-22T15:50:24.0769658+01:00,,,
+public/francis_runner_info.svg,file,4251947,2026-01-22T15:50:24.1654765+01:00,,,
+public/assets/schematics/francis-h5/main-hall.svg,file,3663228,2026-01-22T15:50:24.0739663+01:00,,,"gh_pages_files.txt; gh_pages_all_remote.txt"
+public/assets/schematics/francis-h5/main-hall-grouped.svg,file,3666668,2026-01-22T15:50:24.0709658+01:00,,,"gh_pages_files.txt; gh_pages_all_remote.txt"
+src/shared/design-tokens.ts,file,4502,2026-01-22T15:50:24.6218088+01:00,,,"no direct code references found (search may be limited)"
+public/archive,folder,,,855,13279772,"used by scripts; archive of protocol/insights HTML snapshots"
+public/archive.__bak__1768747356701,folder,,,855,11767653,"backup archive referenced by some scripts"
+public/francis-docs,folder,,,64,1206537,"served via SOP viewer (src/components/francis/SOPViewer.tsx); many repomix references"
+public/artifacts,folder,,,1,12171,"CI/artifacts (diagnostic)"

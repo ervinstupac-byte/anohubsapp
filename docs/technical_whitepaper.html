@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NC-10 Technical Whitepaper — AnoHubs</title>
+  <style>
+    :root{--bg:#071018;--panel:#0b2530;--neon:#00ff7f;--muted:#9fc6b8;--mono:Consolas,monaco,monospace}
+    body{background:linear-gradient(180deg,var(--bg),#031018);color:#dff6ee;font-family:Inter,system-ui,Segoe UI,Arial,Helvetica,sans-serif;margin:0;padding:32px}
+    .container{max-width:900px;margin:0 auto}
+    header h1{color:var(--neon);margin:0 0 8px}
+    .panel{background:linear-gradient(180deg,var(--panel),#072030);padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.6);margin-bottom:16px}
+    h2{color:var(--neon);margin-top:8px}
+    code{background:#021616;color:var(--neon);padding:2px 6px;border-radius:4px;font-family:var(--mono)}
+    .meta{color:var(--muted);font-size:0.95rem}
+    ul.subtopics{columns:2;margin:0 0 12px 18px}
+    footer{color:var(--muted);font-size:0.9rem;margin-top:24px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="panel">
+      <h1>NC-10 Technical Whitepaper</h1>
+      <p class="meta">Summary of methodology, integrity controls, and QA for NC-10.2 semantic polish — generated: <time id="ts"></time></p>
+    </header>
+
+    <section class="panel">
+      <h2>Executive Summary</h2>
+      <p>This whitepaper documents NC-10, a deterministic, auditable pipeline that enriches archived dossier HTML files with concise engineering dossiers, sensor summaries, maintenance records, and step-by-step technical math. The NC-10.2 pass adds semantic polishing mapping filenames and folders to canonical engineering topics.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Methodology (NC-10.0 → NC-10.2)</h2>
+      <ol>
+        <li>Deterministic injection: each file receives an NC-10.0 block wrapped with a stable ID comment.</li>
+        <li>Content blocks include: Function, Current Analysis, Operational Recommendation, a 5-row sensor log table, maintenance record, and step-by-step math.</li>
+        <li>NC-10.2: semantic polish that maps path/folder cues to one of the engineering topics and tailors recommendations accordingly.</li>
+        <li>All edits are applied in-place with byte-for-byte backups preserved prior to each run.</li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h2>Engineering Sub-topics</h2>
+      <p>NC-10 recognizes and uses the following engineering sub-topics (representative list, 15+):</p>
+      <ul class="subtopics">
+        <li>Hydraulic Runner</li>
+        <li>Main Inlet Valve</li>
+        <li>Generator Unit</li>
+        <li>Electrical Stator/Rotor</li>
+        <li>Transformers</li>
+        <li>Bearings & Lubrication</li>
+        <li>Shaft / Coupling</li>
+        <li>Penstock / Inlet</li>
+        <li>Governor / Control Systems</li>
+        <li>Excitation Systems</li>
+        <li>Vibration Monitoring</li>
+        <li>Sealing & Gland Systems</li>
+        <li>Cooling Systems</li>
+        <li>Braking Systems</li>
+        <li>Instrumentation & Sensors</li>
+        <li>Foundation & Alignment</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Integrity: SHA‑256 Manifest</h2>
+      <p>The canonical manifest <code>scripts/hashes_applied.json</code> records a SHA‑256 digest for every enriched file. Before the NC-10.2 run a byte-for-byte backup was made at:</p>
+      <p class="meta"><a href="/scripts/hashes_applied.json.pre_nc102.1768755693609">scripts/hashes_applied.json.pre_nc102.1768755693609</a></p>
+      <p>Updated manifest and reports are stored under <code>scripts/reports/</code>. This design enables deterministic verification and regression comparisons prior to deployment.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Playwright QA Summary</h2>
+      <p>The local Playwright sweep captured 8 representative pages, produced full-page screenshots, and extracted the Function/Analysis/Recommendation snippets. Key results:</p>
+      <ul>
+        <li>Pages processed: 8 (representative sweep)</li>
+        <li>NC-10.2 polish changes: 854 files originally patched by NC-10.0; subsequent NC-10.2 mapping fixes updated 26 files to correct electrical/generator mapping.</li>
+        <li>Playwright report: <a href="/scripts/reports/nc102_playwright_report.json">scripts/reports/nc102_playwright_report.json</a></li>
+        <li>Screenshots: <a href="/scripts/reports/nc102_screenshots/">scripts/reports/nc102_screenshots/</a></li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Commercial Scalability</h2>
+      <p>The NC-10 framework is intentionally modular: the dossier injector separates physics/content templates from deployment and I/O concerns. To port NC-10 to other asset classes (e.g., Wind Turbines, Solar Arrays, or Power Grids) replace the physics logic and domain templates used to generate the Function/Analysis/Math sections and the sensor-log interpretations. The deterministic injection, integrity manifest, and QA pipeline remain unchanged — enabling rapid, repeatable scaling across domains while preserving auditability and deterministic diffs.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Industrial Disclaimer</h2>
+      <p>For architectural validation we currently simulate sensor values, maintenance notes and technician logs inside enriched dossiers. This simulation supports load testing and workflow verification only. The system is sensor-ready: NC-10 writes deterministic, schema-compatible slots (sensor log table, timestamped maintenance entries, and math sections) that can be populated by live SCADA feeds or telemetry ingestion pipelines without structural changes. Do not treat simulated sensor values as operational telemetry until connected to validated SCADA sources and certified data pipelines.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Deployment Notes</h2>
+      <p>Vercel configuration preserves direct serving of <code>/archive/*</code> via the rewrite in <code>vercel.json</code>, preventing SPA fallback for archived files. No production deploy will occur without explicit approval. A final build will be produced with <code>npm run build</code> on approval.</p>
+    </section>
+
+    <footer>
+      <p>Generated by the NC pipeline — AnoHubs Engineering &middot; <span id="ts2"></span></p>
+    </footer>
+  </div>
+  <script>document.getElementById('ts').textContent=new Date().toISOString();document.getElementById('ts2').textContent=new Date().toLocaleString();</script>
+</body>
+</html>
