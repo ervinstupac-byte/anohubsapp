@@ -31,62 +31,26 @@ export default defineConfig(({ mode }) => {
         build: {
             outDir: 'dist',
             assetsDir: 'assets',
-            sourcemap: false, // Manji bundle, teže za debuggiranje u produkciji (dobro za performance)
+            sourcemap: false,
             emptyOutDir: true,
+            chunkSizeWarningLimit: 5000, // Reduced noise for monoliths
             rollupOptions: {
                 output: {
-                    // Aggressive manualChunks function to isolate heavy deps
-                    manualChunks(id: string) {
-                        if (!id) return null;
-
-                        // Use cross-platform regex for node_modules path separators
-                        const nm = /node_modules[\\/]/.test(id);
-                        if (!nm) return null;
-
-                        const mapChunk = (pkgNames: string[]) => {
-                            for (const p of pkgNames) {
-                                const re = new RegExp(`node_modules[\\/].*${p}`);
-                                if (re.test(id)) return true;
+                    experimentalMinChunkSize: 50000, // 50KB - Aggressive merging
+                    manualChunks(id) {
+                        // 1. VENDOR MONOLITHS
+                        if (id.includes('node_modules')) {
+                            if (id.includes('react') || id.includes('three') || id.includes('@react-three')) {
+                                return 'vendor-heavy';
                             }
-                            return false;
-                        };
-
-                        // 3D renderers and common heavy groups kept as stable names
-                        if (mapChunk(['three', '@react-three'])) return 'vendor-three';
-                        if (mapChunk(['jspdf', 'jspdf-autotable', 'html2canvas'])) return 'vendor-pdf';
-                        if (mapChunk(['react', 'react-dom', 'framer-motion', 'lucide-react', '@radix-ui'])) return 'vendor-ui';
-
-                        // Default: split remaining node_modules by package to avoid giant vendor bundle
-                        const pkgMatch = id.match(/node_modules[\\/](?:@?[^\\/]+[\\/])?([^\\/]+)/);
-                        if (pkgMatch && pkgMatch[1]) {
-                            const pkg = pkgMatch[1].replace('@', '').replace('/', '-');
-                            return `vendor-${pkg}`;
+                            return 'vendor-lib';
                         }
-
-                        // Fallback vendor
-                        return 'vendor';
+                        // 2. APPLICATION MONOLITH (Prevent 100+ lazy chunks)
+                        // Force all src/ code into a single file to survive Windows deployment
+                        return 'app-main';
                     }
                 }
             }
-        ,
-        // Add visualizer plugin only during build to generate an HTML report
-        // It will emit `dist/visualizer-feature-dashboard.html`
-        plugins: [
-            // preserve existing react plugin set above via config-level merging, but include visualizer as an additive plugin here
-            // Use the visualizer in build mode to write a static HTML file with treemap
-            {
-                name: 'temporary-visualizer-adder',
-                apply: 'build',
-                config() {
-                    return {
-                        // Rollup plugin array
-                        rollupOptions: {},
-                    } as any;
-                }
-            },
-            // Rollup plugin: visualizer
-            visualizer({ filename: 'dist/visualizer-feature-dashboard.html', title: 'Bundle Visualizer - feature-dashboard', sourcemap: true, gzipSize: true })
-        ],
         },
 
         test: {

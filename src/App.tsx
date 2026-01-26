@@ -577,25 +577,34 @@ const App: React.FC = () => {
 
     // EMERGENCY INITIALIZATION TIMEOUT (Force Handshake Resolution)
     useEffect(() => {
+        let mounted = true;
         const startBootstrap = async () => {
             console.log('[System] Initiating controlled bootstrap sequence...');
             try {
                 await BootstrapService.boot();
+                if (mounted) {
+                    console.log('[System] Bootstrap complete. Releasing lock.');
+                    setBooting(false);
+                }
             } catch (err) {
                 console.error('[System] Bootstrap failed:', err);
+                if (mounted) setBooting(false); // Fail open
             }
         };
         startBootstrap();
 
         const timer = setTimeout(() => {
-            if (booting) {
+            if (mounted && booting) {
                 console.warn('[System] Force-resolving boot sequence after timeout.');
                 setBooting(false);
             }
         }, 5000); // 5 seconds max
 
-        return () => clearTimeout(timer);
-    }, [booting]);
+        return () => {
+            mounted = false;
+            clearTimeout(timer);
+        };
+    }, []); // Run once on mount
 
     return (
         <HashRouter>
