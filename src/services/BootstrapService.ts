@@ -63,34 +63,37 @@ export class BootstrapService {
     // ========================================================================
 
     private static readonly TIER_1_CRITICAL: ServiceDefinition[] = [
-        { name: 'KKS Asset Registry', tier: 1, task: () => (KKSAssetTagger as any).initializeRegistry?.() },
-        { name: 'Legacy Knowledge Base', tier: 1, task: () => (LegacyKnowledgeService as any).initialize?.() },
-        { name: 'Fire Suppression', tier: 1, task: () => (FireSuppressionSystem as any).initializeFireZones?.() },
-        { name: 'High Voltage Shield', tier: 1, task: () => (HVShield as any).initializeRelays?.() },
+        { name: 'KKS Asset Registry', tier: 1, task: () => (KKSAssetTagger as any)?.initializeRegistry?.() },
+        { name: 'Legacy Knowledge Base', tier: 1, task: () => (LegacyKnowledgeService as any)?.initialize?.() },
+        { name: 'Fire Suppression', tier: 1, task: () => (FireSuppressionSystem as any)?.initializeFireZones?.() },
+        { name: 'High Voltage Shield', tier: 1, task: () => (HVShield as any)?.initializeRelays?.() },
     ];
 
     private static readonly TIER_2_SENSORS: ServiceDefinition[] = [
-        { name: 'Acoustic Analytics', tier: 2, task: () => (CavitationAcousticAnalyser as any).initializeSensors?.() },
-        { name: 'Thermal Modelling', tier: 2, task: () => (DynamicThermalRating as any).initializeSensors?.() },
-        { name: 'Seismic Pulse Network', tier: 2, task: () => (SeismicPulseAnalyser as any).initialize?.() },
-        { name: 'Upstream Sensor Link', tier: 2, task: () => (UpstreamPulseIntegrator as any).initialize?.() },
-        { name: 'Inventory Systems', tier: 2, task: () => (WarehouseIntegrationService as any).initializeInventory?.() },
+        { name: 'Acoustic Analytics', tier: 2, task: () => (CavitationAcousticAnalyser as any)?.initializeSensors?.() },
+        { name: 'Thermal Modelling', tier: 2, task: () => (DynamicThermalRating as any)?.initializeSensors?.() },
+        { name: 'Seismic Pulse Network', tier: 2, task: () => (SeismicPulseAnalyser as any)?.initialize?.() },
+        { name: 'Upstream Sensor Link', tier: 2, task: () => (UpstreamPulseIntegrator as any)?.initialize?.() },
+        { name: 'Inventory Systems', tier: 2, task: () => (WarehouseIntegrationService as any)?.initializeInventory?.() },
         {
             name: 'Blackout Sentinel', tier: 2, task: () => {
-                setInterval(() => (BlackoutSentinel as any).monitorConnectivity?.(), 60000);
-                (BlackoutSentinel as any).monitorConnectivity?.();
+                const sentinel = (BlackoutSentinel as any);
+                if (sentinel?.monitorConnectivity) {
+                    setInterval(() => sentinel.monitorConnectivity(), 60000);
+                    sentinel.monitorConnectivity();
+                }
             }
         },
     ];
 
     private static readonly TIER_3_AI: ServiceDefinition[] = [
-        { name: 'Quantum Sovereignty', tier: 3, task: () => (QuantumResistantSovereignty as any).initialize?.() },
-        { name: 'Additive Manufacturing', tier: 3, task: () => (AdditiveManufacturingService as any).initializeLibrary?.() },
-        { name: 'Robotic Fleet', tier: 3, task: () => (RoboticFleetOrchestrator as any).initializeFleet?.() },
-        { name: 'Nano-Injection Control', tier: 3, task: () => (MicroInjectionControl as any).initialize?.() },
-        { name: 'Decision Swarm', tier: 3, task: () => (MultiAgentSwarm as any).initialize?.() },
-        { name: 'Resonance Harvesters', tier: 3, task: () => (ResonanceHarvesterManager as any).initialize?.() },
-        { name: 'Edge Computer Vision', tier: 3, task: () => (ComputerVisionService as any).initialize?.() },
+        { name: 'Quantum Sovereignty', tier: 3, task: () => (QuantumResistantSovereignty as any)?.initialize?.() },
+        { name: 'Additive Manufacturing', tier: 3, task: () => (AdditiveManufacturingService as any)?.initializeLibrary?.() },
+        { name: 'Robotic Fleet', tier: 3, task: () => (RoboticFleetOrchestrator as any)?.initializeFleet?.() },
+        { name: 'Nano-Injection Control', tier: 3, task: () => (MicroInjectionControl as any)?.initialize?.() },
+        { name: 'Decision Swarm', tier: 3, task: () => (MultiAgentSwarm as any)?.initialize?.() },
+        { name: 'Resonance Harvesters', tier: 3, task: () => (ResonanceHarvesterManager as any)?.initialize?.() },
+        { name: 'Edge Computer Vision', tier: 3, task: () => (ComputerVisionService as any)?.initialize?.() },
     ];
 
     // ========================================================================
