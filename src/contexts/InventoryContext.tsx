@@ -39,24 +39,39 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const fetchInventory = async () => {
         setLoading(true);
-        const { data, error } = await supabase.from('inventory_assets').select('*');
-        if (error) {
-            console.warn('[InventoryContext] Failed to fetch inventory (Table Missing?). Using Guest Fallback.');
+
+        // NC-76.3: Strict 1s timeout for inventory fetch
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Inventory Fetch Timeout')), 1000)
+        );
+
+        try {
+            const { data, error } = await Promise.race([
+                supabase.from('inventory_assets').select('*'),
+                timeoutPromise
+            ]) as any;
+
+            if (error) throw error;
+
+            if (data) {
+                setInventory(data.map((item: any) => ({
+                    id: item.id,
+                    name: item.name,
+                    partNumber: item.part_number,
+                    category: item.category,
+                    quantity: item.quantity,
+                    minStockThreshold: item.min_stock_threshold,
+                    unitPrice: parseFloat(item.unit_price),
+                    turbineTypes: item.turbine_types || [],
+                    maintenanceSpecs: item.maintenance_specs
+                })));
+            }
+        } catch (err: any) {
+            console.debug(`[InventoryContext] Fetch suppressed (${err.message || 'Unknown'}). Using Guest Fallback.`);
             setInventory(INITIAL_GUEST_INVENTORY);
-        } else if (data) {
-            setInventory(data.map((item: any) => ({
-                id: item.id,
-                name: item.name,
-                partNumber: item.part_number,
-                category: item.category,
-                quantity: item.quantity,
-                minStockThreshold: item.min_stock_threshold,
-                unitPrice: parseFloat(item.unit_price),
-                turbineTypes: item.turbine_types || [],
-                maintenanceSpecs: item.maintenance_specs
-            })));
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     useEffect(() => {

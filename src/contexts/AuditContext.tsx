@@ -62,35 +62,43 @@ export const AuditProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // 3. Persist to Supabase (if configured)
         // 3. Persist to Supabase (if configured)
         if (isSupabaseConfigured) {
+            // NC-76.3: Strict 1s timeout to prevent blocking application boot
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Supabase Timeout')), 1000)
+            );
+
             try {
-                const { error } = await supabase
-                    .from('audit_logs')
-                    .insert([
-                        {
-                            timestamp: newEntry.timestamp,
-                            operator_id: newEntry.operatorId,
-                            action: newEntry.action,
-                            target: newEntry.target,
-                            status: newEntry.status,
-                            details: newEntry.details
-                        }
-                    ]);
+                // Race the insert against the 1s timeout
+                const { error } = await Promise.race([
+                    supabase
+                        .from('audit_logs')
+                        .insert([
+                            {
+                                timestamp: newEntry.timestamp,
+                                operator_id: newEntry.operatorId,
+                                action: newEntry.action,
+                                target: newEntry.target,
+                                status: newEntry.status,
+                                details: newEntry.details
+                            }
+                        ]),
+                    timeoutPromise
+                ]) as any;
 
-                if (error) {
-                    // SILENT FALLBACK: If table doesn't exist or permissions fail, define fallback
-                    console.info(`[AuditContext] Remote log failed (${error.code}). Falling back to local storage.`);
+                if (error) throw error;
 
-                    // Fallback: Save to sessionStorage so we don't lose the "paper trail" for this session
-                    try {
-                        const existing = JSON.parse(sessionStorage.getItem('local_audit_logs') || '[]');
-                        existing.push(newEntry);
-                        sessionStorage.setItem('local_audit_logs', JSON.stringify(existing));
-                    } catch (storeErr) {
-                        // storage full or disabled, just console log
-                    }
+            } catch (err: any) {
+                // SILENT FALLBACK: Log as debug only to keep console clean
+                console.debug(`[AuditContext] Remote log suppressed (${err.message || 'Unknown'}). Using local storage.`);
+
+                // Fallback: Save to sessionStorage so we don't lose the "paper trail" for this session
+                try {
+                    const existing = JSON.parse(sessionStorage.getItem('local_audit_logs') || '[]');
+                    existing.push(newEntry);
+                    sessionStorage.setItem('local_audit_logs', JSON.stringify(existing));
+                } catch (storeErr) {
+                    // storage full or disabled, ignore
                 }
-            } catch (err) {
-                console.info('[AuditContext] Supabase connection issue. Using local fallback.');
             }
         }
     };
