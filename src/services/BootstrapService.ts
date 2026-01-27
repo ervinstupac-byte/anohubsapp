@@ -84,6 +84,13 @@ export class BootstrapService {
                 }
             }
         },
+        // NC-85.1: Offload Physics to Web Worker
+        {
+            name: 'Physics Acceleration', tier: 2, task: () => {
+                // Dynamic import to avoid circular dependency issues if any
+                return import('../lib/engines/KaplanEngine').then(m => m.KaplanEngine.initializeWorker());
+            }
+        },
     ];
 
     private static readonly TIER_3_AI: ServiceDefinition[] = [

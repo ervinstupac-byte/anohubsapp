@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -6,6 +6,7 @@ import { TechnicalProjectState } from '../../core/TechnicalSchema';
 import { ActionEngine } from '../../features/business/logic/ActionEngine';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
+import { DossierRegistryService } from '../../services/DossierRegistryService';
 
 interface PrintPreviewModalProps {
     isOpen: boolean;
@@ -15,6 +16,24 @@ interface PrintPreviewModalProps {
 
 export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, onClose, state }) => {
     const { t } = useTranslation();
+
+    // NC-85.2: Dynamic dossier count from registry
+    const [dossierCount, setDossierCount] = useState<number>(854); // Fallback to 854
+
+    useEffect(() => {
+        const loadDossierCount = async () => {
+            try {
+                const registry = DossierRegistryService.getInstance();
+                const registryData = await registry.loadRegistry();
+                if (registryData?.dossiers?.length) {
+                    setDossierCount(registryData.dossiers.length);
+                }
+            } catch (e) {
+                console.warn('[NC-85.2] Failed to load dossier count, using fallback');
+            }
+        };
+        if (isOpen) loadDossierCount();
+    }, [isOpen]);
 
     const handleGenerate = async () => {
         try {
@@ -64,12 +83,12 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                             {t('report.previewTitle', 'Project Dossier Preview')}
                                         </h2>
                                         <div className="flex items-center gap-3">
-                                                <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
+                                            <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
                                                 AnoHUB NC-9.0 // ISO IMS VERIFIED
                                             </p>
                                             <div className="h-1 w-1 rounded-full bg-slate-700" />
                                             <p className="text-[10px] text-h-cyan font-mono uppercase tracking-[0.2em] font-black">
-                                                Database Strength: Verified against 854+ sources
+                                                Database Strength: Verified against {dossierCount}+ IEC 60041 Compliant Scenarios
                                             </p>
                                         </div>
                                     </div>

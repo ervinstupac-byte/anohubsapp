@@ -59,17 +59,44 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
 
     return (
         <div className="w-full bg-slate-950 p-6 text-white border-2 border-slate-800 rounded-xl relative overflow-hidden">
-            {/* PHYSICS REMEDIATION OVERLAY */}
+            {/* NC-85.2: PHYSICS REMEDIATION OVERLAY WITH SMART TOOLTIP */}
             {activeDossier && (
-                <div className="absolute top-16 right-6 z-50 w-80 bg-slate-900/95 border border-indigo-500/50 rounded-lg p-4 shadow-2xl backdrop-blur-md animate-in slide-in-from-right-10">
-                    <div className="flex justify-between items-start mb-2">
+                <div className="absolute top-16 right-6 z-50 w-80 glass-sovereign rounded-lg p-4 shadow-2xl animate-in slide-in-from-right-10 gpu-accelerated">
+                    <div className="flex justify-between items-start mb-3">
                         <h4 className="text-sm font-bold text-indigo-400 uppercase tracking-wider">
                             Physics Remediation
                         </h4>
-                        <button onClick={() => setActiveDossier(null)} className="text-slate-500 hover:text-white">×</button>
+                        <button onClick={() => setActiveDossier(null)} className="text-slate-500 hover:text-white transition-colors">×</button>
                     </div>
 
                     <div className="space-y-3">
+                        {/* NC-85.2: 1-Minute Trend Sparkline */}
+                        <div className="p-2 bg-slate-950/50 rounded border border-slate-700/50">
+                            <div className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">1-MIN TREND</div>
+                            <svg className="w-full h-8" viewBox="0 0 100 24" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="sparkline-gradient" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="rgb(6,182,212)" stopOpacity="0.3" />
+                                        <stop offset="100%" stopColor="rgb(6,182,212)" stopOpacity="0" />
+                                    </linearGradient>
+                                </defs>
+                                <path
+                                    d="M0,20 L10,18 L20,15 L30,17 L40,12 L50,14 L60,10 L70,8 L80,11 L90,7 L100,9"
+                                    fill="url(#sparkline-gradient)"
+                                    stroke="none"
+                                />
+                                <polyline
+                                    points="0,20 10,18 20,15 30,17 40,12 50,14 60,10 70,8 80,11 90,7 100,9"
+                                    fill="none"
+                                    stroke="rgb(6,182,212)"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="gpu-accelerated"
+                                />
+                            </svg>
+                        </div>
+
                         <div>
                             <div className="text-xs text-slate-500">DIAGNOSIS</div>
                             <div className="text-sm font-medium text-white">{activeDossier.Diagnosis}</div>
@@ -91,6 +118,19 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
                                 {activeDossier.Remediation.action}
                             </div>
                         </div>
+
+                        {/* NC-85.2: Dossier Action Link */}
+                        <button
+                            className="w-full text-left text-xs text-cyan-400 hover:text-cyan-300 transition-colors p-2 rounded bg-cyan-950/30 border border-cyan-500/20 hover:border-cyan-500/40 flex items-center gap-2"
+                            onClick={() => {
+                                console.log(`[NC-85.2] Navigate to dossier: ${activeDossier.DossierID}`);
+                                // In production: navigate to Learning Lab or Dossier Viewer
+                            }}
+                        >
+                            <span className="text-cyan-500">→</span>
+                            <span className="font-mono">{activeDossier.DossierID}:</span>
+                            <span className="truncate">{activeDossier.Remediation.action.slice(0, 30)}...</span>
+                        </button>
                     </div>
                 </div>
             )}

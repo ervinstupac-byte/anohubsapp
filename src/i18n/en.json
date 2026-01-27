@@ -616,41 +616,34 @@
                 }
             }
         }
+    },
+    "manifesto": {
+        "classification": "CLASS-1 INDUSTRIAL / FORENSIC INTEGRITY",
+        "version": "NC-10.2 (AnoHUBs Intelligence)",
+        "title": "THE MANIFESTO OF PHYSICAL INTEGRITY",
+        "subtitle": "Bridging the 48% Execution Gap in Global Hydropower",
+        "quote": "'Software cannot fix a misaligned shaft. Precision is a physical discipline.'",
+        "section1": {
+            "title": "15 Years of Field Reality",
+            "content": "Built on 15+ years of global site management and commissioning. We don't solve problems with code alone; we solve them with the knowledge of how metal, water, and pressure interact in the real world.",
+            "quote": "'Discipline in the field. Integrity in the data.'"
+        },
+        "section2": {
+            "title": "SHA-256 Immutable Audit",
+            "content": "Every one of the {{dossierCount}} IEC 60041 compliant dossiers is digitally sealed. We eliminate the 'Human Factor' in documentation, ensuring that maintenance logs and sensor data remain tamper-proof for insurers and investors."
+        },
+        "section3": {
+            "title": "Beyond Hydropower",
+            "content": "This framework is asset-agnostic. From Wind Turbines to Solar Grids, the NC-10.2 protocol ensures physical precision across all critical infrastructure."
+        },
+        "sidebar": {
+            "heritage": "15 Years On-Site",
+            "mtbf": "Reliability Guaranteed",
+            "certified": "Forensic Grade"
+        },
+        "footer": {
+            "approved": "SYSTEM_NOMINAL_NC102",
+            "signed": "[Your Name / Forensic Consultant]"
+        }
     }
-    ,
-"manifesto": {
-    "classification": "CLASS-1 INDUSTRIAL / FORENSIC INTEGRITY",
-    "version": "NC-10.2 (AnoHUBs Intelligence)",
-    "title": "THE MANIFESTO OF PHYSICAL INTEGRITY",
-    "subtitle": "Bridging the 48% Execution Gap in Global Hydropower",
-    "quote": "'Software cannot fix a misaligned shaft. Precision is a physical discipline.'",
-
-    "section1": {
-        "title": "15 Years of Field Reality",
-        "content": "Built on 15+ years of global site management and commissioning. We don't solve problems with code alone; we solve them with the knowledge of how metal, water, and pressure interact in the real world.",
-        "quote": "'Discipline in the field. Integrity in the data.'"
-    },
-
-    "section2": {
-        "title": "SHA-256 Immutable Audit",
-        "content": "Every one of the 854 dossiers is digitally sealed. We eliminate the 'Human Factor' in documentation, ensuring that maintenance logs and sensor data remain tamper-proof for insurers and investors."
-    },
-
-    "section3": {
-        "title": "Beyond Hydropower",
-        "content": "This framework is asset-agnostic. From Wind Turbines to Solar Grids, the NC-10.2 protocol ensures physical precision across all critical infrastructure."
-    },
-
-    "sidebar": {
-        "heritage": "15 Years On-Site",
-        "mtbf": "Reliability Guaranteed",
-        "certified": "Forensic Grade"
-    },
-
-    "footer": {
-        "approved": "SYSTEM_NOMINAL_NC102",
-        "signed": "[Your Name / Forensic Consultant]"
-    }
-}
-
 }

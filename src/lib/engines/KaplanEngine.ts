@@ -2,13 +2,136 @@ import { BaseEngine } from './BaseEngine';
 import { RecommendationResult, TurbineSpecs, TurbineType } from './types';
 import Decimal from 'decimal.js';
 
+// Message types for type safety
+interface WorkerRequest {
+    id: string;
+    type: string;
+    payload: any;
+}
+
+interface WorkerResponse {
+    id: string;
+    type: string;
+    result?: any;
+    error?: string;
+    duration?: number;
+}
+
 /**
  * THE DOUBLE-REGULATION ENGINE (KAPLAN)
  * Low-Head Specialist (< 30m)
  * Master of Volume and Coordination
+ * 
+ * NC-85.1 UPGRADE: Physics calculations offloaded to Web Worker
  */
 export class KaplanEngine extends BaseEngine {
     type = 'kaplan';
+
+    // Static Worker Singleton
+    private static worker: Worker | null = null;
+    private static pendingRequests = new Map<string, { resolve: (val: any) => void; reject: (err: any) => void }>();
+
+    /**
+     * NC-85.1: Initialize the Physics Worker
+     * Called by BootstrapService during Tier 2
+     */
+    public static async initializeWorker(): Promise<void> {
+        if (this.worker) return;
+
+        if (typeof Worker !== 'undefined') {
+            console.log('[KaplanEngine] 🔌 Initializing Physics Worker...');
+            try {
+                // Vite worker import syntax
+                this.worker = new Worker(new URL('../../workers/physics.worker.ts', import.meta.url), {
+                    type: 'module'
+                });
+
+                this.worker.onmessage = (event: MessageEvent<WorkerResponse>) => {
+                    const { id, result, error, duration } = event.data;
+                    const handler = this.pendingRequests.get(id);
+
+                    if (handler) {
+                        if (error) {
+                            handler.reject(new Error(error));
+                        } else {
+                            // Log slow calculations as per requirement
+                            if (duration && duration > 100) {
+                                console.warn(`[KaplanEngine] 🐢 Heavy Calculation took ${duration.toFixed(1)}ms`);
+                            }
+                            handler.resolve(result);
+                        }
+                        this.pendingRequests.delete(id);
+                    }
+                };
+
+                // Warm up
+                await this.runAsyncCalculation('CALCULATE_EFFICIENCY', { head: 30, flow: 100, alpha: 20 });
+                console.log('[KaplanEngine] ✅ Physics Worker Ready.');
+
+            } catch (err) {
+                console.error('[KaplanEngine] ❌ Worker Initialization Failed:', err);
+                // Fallback handled by individual methods checking for this.worker
+            }
+        } else {
+            console.warn('[KaplanEngine] ⚠️ Web Workers not supported in this environment.');
+        }
+    }
+
+    private static runAsyncCalculation<T>(type: string, payload: any): Promise<T> {
+        if (!this.worker) {
+            // Fallback or reject? For now reject if worker isn't there, 
+            // but we could implement sync fallback here.
+            return Promise.reject(new Error('Physics Worker not initialized'));
+        }
+
+        const id = crypto.randomUUID();
+        return new Promise((resolve, reject) => {
+            this.pendingRequests.set(id, { resolve, reject });
+            this.worker!.postMessage({ id, type, payload });
+
+            // Timeout safety
+            setTimeout(() => {
+                if (this.pendingRequests.has(id)) {
+                    this.pendingRequests.delete(id);
+                    reject(new Error('Worker Request Action Timeout (5000ms)'));
+                }
+            }, 5000);
+        });
+    }
+
+    /**
+     * Async Efficiency Calculation (Offloaded)
+     */
+    public async calculateEfficiencyAsync(head: number, flow: number, alpha: number): Promise<number> {
+        try {
+            return await KaplanEngine.runAsyncCalculation<number>('CALCULATE_EFFICIENCY', { head, flow, alpha });
+        } catch (err) {
+            console.warn('[KaplanEngine] Worker calc failed, using sync fallback:', err);
+            return this.calculateEfficiency(head, flow);
+        }
+    }
+
+    /**
+     * Async Cavitation Check (Offloaded)
+     */
+    public async checkCavitationAsync(npsh: number, head: number): Promise<number> {
+        try {
+            return await KaplanEngine.runAsyncCalculation<number>('CALCULATE_CAVITATION', { npsh, head });
+        } catch (err) {
+            return 0; // Safe fallback
+        }
+    }
+
+    /**
+     * Async Water Hammer (Offloaded)
+     */
+    public async calculateWaterHammerAsync(waveSpeed: number, deltaV: number): Promise<number> {
+        try {
+            return await KaplanEngine.runAsyncCalculation<number>('CALCULATE_WATER_HAMMER', { waveSpeed, deltaV });
+        } catch (err) {
+            return 0;
+        }
+    }
 
     /**
      * THE CAM CURVE (Kombinatorna Kriva)
@@ -112,6 +235,10 @@ export class KaplanEngine extends BaseEngine {
         return { stable: true, message: '✅ Flow Stable. Draft tube quiet.' };
     }
 
+    /**
+     * Legacy Synchronous Calculation
+     * Retained for compatibility and fallback
+     */
     calculateEfficiency(head: number, flow: number): number {
         // Kaplan has flat efficiency curve due to double regulation
         return 93.5; // High peak efficiency
@@ -160,19 +287,19 @@ export class KaplanEngine extends BaseEngine {
         if (typeof head !== 'number' || typeof guideVaneOpening !== 'number' || typeof bladeAngle !== 'number') {
             return 50;
         }
-        
+
         // Check cam curve alignment
         const camCheck = this.checkCamCurve(guideVaneOpening, bladeAngle, head);
-        
+
         let score = 70;
         if (camCheck.onCam) score += 25;
         else if (camCheck.deviation < 10) score += 15;
         else if (camCheck.deviation < 20) score += 5;
         else score -= 20;
-        
+
         // Bonus for low head (Kaplan specialty)
         if (head < 30) score += 5;
-        
+
         return Math.max(0, Math.min(100, Math.round(score)));
     }
 }

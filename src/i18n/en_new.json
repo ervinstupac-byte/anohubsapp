@@ -23,14 +23,14 @@
   },
   "manifesto": {
     "classification": "TOP_SECRET // NEURAL_CORE // NC-9.0",
-    "version": "v9.0.854 (Dossier Edition)",
+    "version": "v9.0.{{dossierCount}} (Dossier Edition)",
     "title": "THE FRANCIS INTELLIGENCE MANIFESTO",
     "subtitle": "Autonomous Predictive Maintenance & Forensic Diagnostics",
     "quote": "\"Between failure and stability stands only the precision of our data.\"",
     "section1": {
       "title": "ARCHIVE INTEGRITY (NC-7.0)",
-      "content": "Based on the absolute integrity of 854 physical engineering sources. Every data point is verified via SHA-256 hash algorithm, ensuring diagnoses are immutable and grounded in verified machine history.",
-      "quote": "\"Verified against 854+ sources — knowledge is our first line of defense.\""
+      "content": "Based on the absolute integrity of {{dossierCount}} physical engineering sources. Every data point is verified via SHA-256 hash algorithm, ensuring diagnoses are immutable and grounded in verified machine history.",
+      "quote": "\"Verified against {{dossierCount}}+ sources — knowledge is our first line of defense.\""
     },
     "section2": {
       "title": "PREDICTIVE LOGIC (NC-8.0)",

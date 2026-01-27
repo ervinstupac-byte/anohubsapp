@@ -52,6 +52,49 @@ export const HydrologyLab: React.FC = () => {
         setIsLoading(false);
     };
 
+    // NC-85.2: Async Calculation State with Stale-While-Revalidating
+    const [efficiency, setEfficiency] = useState<number | null>(null);
+    const [staleValue, setStaleValue] = useState<number | null>(null);
+    const [isComputing, setIsComputing] = useState(false);
+
+    // Lazy load the engine to ensure worker is ready
+    useEffect(() => {
+        import('../../lib/engines/KaplanEngine').then(m => {
+            // Initial calculation
+            recalculateEfficiency(hydrology.design_head, hydrology.design_flow);
+        });
+    }, []);
+
+    // Recalculate when inputs change
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            recalculateEfficiency(hydrology.design_head, hydrology.design_flow);
+        }, 300); // Debounce typing
+        return () => clearTimeout(timer);
+    }, [hydrology.design_head, hydrology.design_flow]);
+
+    const recalculateEfficiency = async (head: number, flow: number) => {
+        // NC-85.2: Capture stale value before starting computation
+        if (efficiency !== null) {
+            setStaleValue(efficiency);
+        }
+        setIsComputing(true);
+        try {
+            const { KaplanEngine } = await import('../../lib/engines/KaplanEngine');
+            const engine = new KaplanEngine();
+            // Async Worker Call
+            const eff = await engine.calculateEfficiencyAsync(head, flow, 20); // Alpha=20 placeholder
+            setEfficiency(eff);
+            setStaleValue(null); // Clear stale when fresh value arrives
+        } catch (err) {
+            console.error("Efficiency Calc Failed", err);
+            setStaleValue(null); // Clear stale on error
+        } finally {
+            // Minimal delay for UX smoothness
+            setTimeout(() => setIsComputing(false), 150);
+        }
+    };
+
     const handleSave = async () => {
         setIsLoading(true);
         const { error } = await supabase.from('hydrology_context').upsert(hydrology, { onConflict: 'plant_id' });
@@ -66,6 +109,12 @@ export const HydrologyLab: React.FC = () => {
                 <h2 className="text-3xl font-black text-white tracking-tighter uppercase">
                     Hydrology <span className="text-cyan-400">Lab</span>
                 </h2>
+                {/* NC-85.2: Neural Processing Indicator */}
+                <div className={`flex items-center gap-3 px-4 py-2 rounded-full border border-cyan-500/20 bg-cyan-950/30 transition-opacity duration-300 ${isComputing ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
+                    <span className="text-xs font-mono text-cyan-300 uppercase tracking-widest">Neural Processing</span>
+                </div>
+
                 <div className="flex gap-2">
                     <select
                         className="bg-slate-900 border border-white/10 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:border-cyan-500"
@@ -91,6 +140,7 @@ export const HydrologyLab: React.FC = () => {
                                 value={hydrology.design_head}
                                 onChange={(e: any) => setHydrology({ ...hydrology, design_head: parseFloat(e.target.value) })}
                             />
+
                             <ModernInput
                                 label="Design Flow (m³/s)"
                                 type="number"
@@ -98,6 +148,34 @@ export const HydrologyLab: React.FC = () => {
                                 onChange={(e: any) => setHydrology({ ...hydrology, design_flow: parseFloat(e.target.value) })}
                             />
                         </div>
+
+                        {/* NC-85.2: Real-time Worker Result with Stale-While-Revalidating */}
+                        <div className="grid grid-cols-2 gap-4 p-4 bg-slate-950/50 rounded-xl border border-white/5 gpu-accelerated">
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase tracking-widest text-slate-500">Predicted Efficiency</label>
+                                <div className={`text-2xl numeric-display value-transition ${isComputing && staleValue !== null
+                                        ? 'animate-stale-pulse'
+                                        : 'text-cyan-400'
+                                    }`}>
+                                    {/* Show stale value with pulse during computation, otherwise fresh value */}
+                                    {isComputing && staleValue !== null
+                                        ? staleValue.toFixed(2)
+                                        : (efficiency !== null ? efficiency.toFixed(2) : '--')
+                                    }%
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-end">
+                                {isComputing ? (
+                                    <div className="text-xs text-cyan-500 flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                                        <span className="font-mono uppercase tracking-widest">COMPUTING</span>
+                                    </div>
+                                ) : (
+                                    <div className="text-xs text-emerald-500 font-mono">● WORKER IDLE</div>
+                                )}
+                            </div>
+                        </div>
+
                         <div className="p-4 bg-white/5 rounded-xl border border-white/10 space-y-4">
                             <div className="flex items-center gap-2 text-xs font-black text-slate-500 uppercase tracking-widest">
                                 <Info className="w-4 h-4 text-cyan-500" />
