@@ -59,14 +59,14 @@ const simulateStep = (inputFlow: number) => {
 // LISTENER
 // ============================================================================
 self.onmessage = (e: MessageEvent<SwarmMessage>) => {
-    const { type, payload } = e.data;
+    const message = e.data;
 
-    switch (type) {
+    switch (message.type) {
         case 'INIT_SWARM':
-            initializeSwarm((payload as any).plants);
+            initializeSwarm(message.payload.plants);
             break;
         case 'UPDATE_CASCADE':
-            simulateStep((payload as any).flow);
+            simulateStep(message.payload.flow);
             break;
         case 'TERMINATE':
             swarmActive = false;
