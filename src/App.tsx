@@ -608,27 +608,36 @@ const App: React.FC = () => {
 
     return (
         <HashRouter>
-            <GlobalProvider>
-                <AnimatePresence mode="wait">
-                    {booting ? (
-                        <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
-                    ) : (
-                        <motion.div
-                            key="main-app"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="w-full h-full"
-                        >
-                            <ContextAwarenessProvider>
-                                <Routes>
-                                    <Route path="/login" element={<Login />} />
-                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                </Routes>
-                            </ContextAwarenessProvider>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </GlobalProvider>
+            <ErrorBoundary fallback={
+                <div className="h-screen w-screen flex flex-col items-center justify-center bg-black text-white p-8">
+                    <h1 className="text-3xl font-bold text-red-500 mb-4">CRITICAL SYSTEM FAILURE</h1>
+                    <p className="text-slate-400 mb-8 max-w-lg text-center">The Neural Core encountered an unrecoverable error during initialization.</p>
+                    <button onClick={() => window.location.reload()} className="px-6 py-2 bg-red-600 rounded hover:bg-red-700">REBOOT SYSTEM</button>
+                    <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="mt-4 text-xs text-slate-600 underline">CLEAR CACHE & REBOOT</button>
+                </div>
+            }>
+                <GlobalProvider>
+                    <AnimatePresence mode="wait">
+                        {booting ? (
+                            <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
+                        ) : (
+                            <motion.div
+                                key="main-app"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="w-full h-full"
+                            >
+                                <ContextAwarenessProvider>
+                                    <Routes>
+                                        <Route path="/login" element={<Login />} />
+                                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                    </Routes>
+                                </ContextAwarenessProvider>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </GlobalProvider>
+            </ErrorBoundary>
         </HashRouter>
     );
 };

@@ -109,6 +109,20 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 // Fallback to empty state but STOP LOADING
             } finally {
                 console.log('[AssetContext] Step 4: Finalizing (Loading = False)');
+
+                // FINAL SAFETY CHECK: Ensure selectedAssetId is valid
+                setAssets(currentAssets => {
+                    setSelectedAssetId(currentId => {
+                        const isValid = currentAssets.some(a => a.id === currentId);
+                        if (!isValid && currentId !== null) {
+                            console.warn(`[AssetContext] Invalid Asset ID ${currentId} found. Resetting.`);
+                            return currentAssets.length > 0 ? currentAssets[0].id : null;
+                        }
+                        return currentId;
+                    });
+                    return currentAssets;
+                });
+
                 setLoading(false);
             }
         };
