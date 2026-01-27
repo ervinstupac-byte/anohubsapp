@@ -107,41 +107,58 @@ export class BootstrapService {
      * - Tier 3: AI/Analytics (lazy, on-demand)
      */
     public static async boot(onUpdate?: (progress: BootstrapProgress[]) => void): Promise<void> {
-        if (this.initialized) return;
+        console.log('[BootstrapService] 🔍 boot() called');
+
+        if (this.initialized) {
+            console.log('[BootstrapService] ⚠️  Already initialized, skipping');
+            return;
+        }
         this.initialized = true;
 
         const startTime = performance.now();
         console.log('[Bootstrap NC-76.1] ⚡ Initiating Tiered Neural Core Boot...');
+        console.log('[Bootstrap] 📊 Total services to initialize:', this.TIER_1_CRITICAL.length + this.TIER_2_SENSORS.length + this.TIER_3_AI.length);
 
         // Mark all services as pending
+        console.log('[Bootstrap] 📝 Marking all services as PENDING...');
         [...this.TIER_1_CRITICAL, ...this.TIER_2_SENSORS, ...this.TIER_3_AI].forEach(s => {
             this.updateProgress(s.name, s.tier, 'PENDING', onUpdate);
         });
+        console.log('[Bootstrap] ✅ All services marked PENDING');
 
         // ====================================================================
         // TIER 1: CRITICAL PATH (Parallel, Blocking)
         // ====================================================================
-        console.log('[Bootstrap] ▶ Tier 1: Critical Services...');
-        await Promise.all(
-            this.TIER_1_CRITICAL.map(async (service) => {
-                try {
-                    this.updateProgress(service.name, service.tier, 'INITIALIZING', onUpdate);
-                    await Promise.resolve(service.task());
-                    this.updateProgress(service.name, service.tier, 'COMPLETE', onUpdate);
-                    console.log(`[Bootstrap] ✅ T1: ${service.name}`);
-                } catch (err) {
-                    console.error(`[Bootstrap] ❌ T1: ${service.name}`, err);
-                    this.updateProgress(service.name, service.tier, 'FAILED', onUpdate, String(err));
-                }
-            })
-        );
+        console.log('[Bootstrap] ▶▶▶ TIER 1 STARTED: Critical Services (' + this.TIER_1_CRITICAL.length + ' services)');
+        console.log('[Bootstrap] 🔧 T1 Services:', this.TIER_1_CRITICAL.map(s => s.name).join(', '));
+
+        try {
+            await Promise.all(
+                this.TIER_1_CRITICAL.map(async (service) => {
+                    try {
+                        console.log(`[Bootstrap] 🔄 T1 Starting: ${service.name}`);
+                        this.updateProgress(service.name, service.tier, 'INITIALIZING', onUpdate);
+                        await Promise.resolve(service.task());
+                        this.updateProgress(service.name, service.tier, 'COMPLETE', onUpdate);
+                        console.log(`[Bootstrap] ✅ T1 Complete: ${service.name}`);
+                    } catch (err) {
+                        console.error(`[Bootstrap] ❌ T1 FAILED: ${service.name}`, err);
+                        this.updateProgress(service.name, service.tier, 'FAILED', onUpdate, String(err));
+                    }
+                })
+            );
+        } catch (err) {
+            console.error('[Bootstrap] 🚨 TIER 1 PROMISE.ALL FAILED:', err);
+            throw err;
+        }
 
         const tier1Time = performance.now() - startTime;
-        console.log(`[Bootstrap] ✓ Tier 1 Complete: ${tier1Time.toFixed(0)}ms`);
+        console.log(`[Bootstrap] ✅✅✅ TIER 1 SUCCESS: ${tier1Time.toFixed(0)}ms`);
 
         // ====================================================================
         // TIER 2: SENSOR NETWORK (Deferred via requestIdleCallback)
         // ====================================================================
+        console.log('[Bootstrap] ▶▶ TIER 2: Marking sensors as DEFERRED');
         this.TIER_2_SENSORS.forEach(s => {
             this.progress.set(s.name, {
                 service: s.name,
@@ -153,15 +170,17 @@ export class BootstrapService {
         onUpdate?.(this.getBootStatus());
 
         if (typeof requestIdleCallback !== 'undefined') {
+            console.log('[Bootstrap] 📅 Scheduling Tier 2 via requestIdleCallback');
             requestIdleCallback(() => this.bootTier2(onUpdate), { timeout: 2000 });
         } else {
-            // Fallback for browsers without requestIdleCallback
+            console.log('[Bootstrap] 📅 Scheduling Tier 2 via setTimeout (fallback)');
             setTimeout(() => this.bootTier2(onUpdate), 100);
         }
 
         // ====================================================================
         // TIER 3: AI/ANALYTICS (On-Demand - Not auto-initialized)
         // ====================================================================
+        console.log('[Bootstrap] ▶ TIER 3: Marking AI/Analytics as on-demand DEFERRED');
         this.TIER_3_AI.forEach(s => {
             this.progress.set(s.name, {
                 service: s.name,
@@ -172,7 +191,8 @@ export class BootstrapService {
         });
         onUpdate?.(this.getBootStatus());
 
-        console.log(`[Bootstrap NC-76.1] ⚡ TTI Ready: ${tier1Time.toFixed(0)}ms (Tier 2/3 deferred)`);
+        console.log(`[Bootstrap NC-76.1] 🎉🎉🎉 TTI READY: ${tier1Time.toFixed(0)}ms (Tier 2/3 deferred)`);
+        console.log('[Bootstrap] ✅✅✅ boot() COMPLETE - React should now mount');
     }
 
     /**
