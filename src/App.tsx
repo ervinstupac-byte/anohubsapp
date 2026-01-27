@@ -399,114 +399,102 @@ const AppLayout: React.FC = () => {
                                             </button>
                                         </div>
                                     }>
-                                        <AnimatePresence mode="wait">
-                                            <motion.div
-                                                key={location.pathname}
-                                                initial={{ opacity: 0, y: 30, scale: 0.98, filter: 'blur(20px)' }}
-                                                animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                                                exit={{ opacity: 0, y: -30, scale: 1.02, filter: 'blur(20px)' }}
-                                                transition={{
-                                                    duration: 0.5,
-                                                    ease: [0.22, 1, 0.36, 1] // Custom hydraulic flow curve
-                                                }}
-                                                className="w-full"
-                                            >
-                                                <Routes location={location}>
-                                                    <Route index element={<ToolboxLaunchpad />} />
-                                                    <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
-                                                    {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
-                                                    <Route path="/francis/*" element={<FrancisRouter />} />
-                                                    <Route path="profile" element={<UserProfile />} />
-                                                    <Route path="map" element={<GlobalMap />} />
+                                        <div className="w-full">
+                                            <Routes location={location}>
+                                                <Route index element={<ToolboxLaunchpad />} />
+                                                <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
+                                                {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
+                                                <Route path="/francis/*" element={<FrancisRouter />} />
+                                                <Route path="profile" element={<UserProfile />} />
+                                                <Route path="map" element={<GlobalMap />} />
 
-                                                    {/* RISK: Accessible to all but mostly Manager focused */}
-                                                    <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
-                                                    <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
-                                                    <Route path="risk-report" element={<RiskReport />} />
+                                                {/* RISK: Accessible to all but mostly Manager focused */}
+                                                <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
+                                                <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
+                                                <Route path="risk-report" element={<RiskReport />} />
 
-                                                    {/* PUBLIC-FACING / STAKEHOLDER */}
-                                                    <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                                    {/* Multi-tier entry points */}
-                                                    <Route path="engineer" element={
-                                                        <RoleGuard allowedRoles={['ENGINEER', 'TECHNICIAN', 'MANAGER']}>
-                                                            <EngineerLanding />
-                                                        </RoleGuard>
-                                                    } />
-                                                    <Route path="owner" element={
-                                                        <RoleGuard allowedRoles={['OWNER', 'MANAGER']}>
-                                                            <OwnerLanding />
-                                                        </RoleGuard>
-                                                    } />
-                                                    <Route path="hydroschool" element={<HydroschoolLanding />} />
-                                                    <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
-                                                    <Route path="digital-introduction" element={<DigitalIntroduction />} />
+                                                {/* PUBLIC-FACING / STAKEHOLDER */}
+                                                <Route path="investor-briefing" element={<InvestorBriefing />} />
+                                                {/* Multi-tier entry points */}
+                                                <Route path="engineer" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'TECHNICIAN', 'MANAGER']}>
+                                                        <EngineerLanding />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="owner" element={
+                                                    <RoleGuard allowedRoles={['OWNER', 'MANAGER']}>
+                                                        <OwnerLanding />
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="hydroschool" element={<HydroschoolLanding />} />
+                                                <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
+                                                <Route path="digital-introduction" element={<DigitalIntroduction />} />
 
-                                                    {/* ENGINEERING TOOLS - RESTRICTED */}
-                                                    <Route path="hpp-builder" element={
-                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
-                                                            <HPPBuilder />
-                                                        </RoleGuard>
-                                                    } />
+                                                {/* ENGINEERING TOOLS - RESTRICTED */}
+                                                <Route path="hpp-builder" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                        <HPPBuilder />
+                                                    </RoleGuard>
+                                                } />
 
-                                                    {/* GENERAL INFO */}
-                                                    <Route path="hpp-improvements" element={<HPPImprovements />} />
-                                                    <Route path="installation-guarantee" element={<InstallationGuarantee />} />
-                                                    <Route path="gender-equity" element={<GenderEquity />} />
+                                                {/* GENERAL INFO */}
+                                                <Route path="hpp-improvements" element={<HPPImprovements />} />
+                                                <Route path="installation-guarantee" element={<InstallationGuarantee />} />
+                                                <Route path="gender-equity" element={<GenderEquity />} />
 
-                                                    {/* INFRASTRUCTURE - RESTRICTED */}
-                                                    <Route path="infrastructure/*" element={
-                                                        <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
-                                                            <InfrastructureHub />
-                                                        </RoleGuard>
-                                                    } />
+                                                {/* INFRASTRUCTURE - RESTRICTED */}
+                                                <Route path="infrastructure/*" element={
+                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
+                                                        <InfrastructureHub />
+                                                    </RoleGuard>
+                                                } />
 
-                                                    <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
-                                                    <Route path="phase-guide" element={<ProjectPhaseGuide />} />
-                                                    <Route path="river-wildlife" element={<RiverWildlife />} />
-                                                    <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
-                                                    <Route path="digital-integrity" element={<DigitalIntegrity />} />
-                                                    <Route path="contract-management" element={<ContractManagement />} />
-                                                    <Route path="library" element={<ComponentLibrary />} />
-                                                    <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
-                                                    <Route path="vision" element={<UnderConstruction />} />
+                                                <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
+                                                <Route path="phase-guide" element={<ProjectPhaseGuide />} />
+                                                <Route path="river-wildlife" element={<RiverWildlife />} />
+                                                <Route path="revitalization-strategy" element={<RevitalizationStrategy />} />
+                                                <Route path="digital-integrity" element={<DigitalIntegrity />} />
+                                                <Route path="contract-management" element={<ContractManagement />} />
+                                                <Route path="library" element={<ComponentLibrary />} />
+                                                <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
+                                                <Route path="vision" element={<UnderConstruction />} />
 
-                                                    {/* Maintenance Sub-Router */}
-                                                    <Route path="/maintenance/*" element={<MaintenanceRouter />} />
+                                                {/* Maintenance Sub-Router */}
+                                                <Route path="/maintenance/*" element={<MaintenanceRouter />} />
 
-                                                    {/* EXECUTIVE - RESTRICTED */}
-                                                    <Route path="executive" element={
-                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                            <ExecutiveDashboard />
-                                                        </RoleGuard>
-                                                    } />
+                                                {/* EXECUTIVE - RESTRICTED */}
+                                                <Route path="executive" element={
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                        <ExecutiveDashboard />
+                                                    </RoleGuard>
+                                                } />
 
-                                                    <Route path="structural-integrity" element={<StructuralIntegrity />} />
+                                                <Route path="structural-integrity" element={<StructuralIntegrity />} />
 
-                                                    {/* ADMIN - RESTRICTED */}
-                                                    <Route path="admin-approval" element={
-                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                            <AdminApproval />
-                                                        </RoleGuard>
-                                                    } />
+                                                {/* ADMIN - RESTRICTED */}
+                                                <Route path="admin-approval" element={
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                        <AdminApproval />
+                                                    </RoleGuard>
+                                                } />
 
-                                                    <Route path="admin/health" element={
-                                                        <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                            <AdminHealth />
-                                                        </RoleGuard>
-                                                    } />
+                                                <Route path="admin/health" element={
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                        <AdminHealth />
+                                                    </RoleGuard>
+                                                } />
 
-                                                    <Route path="/forensics" element={<ForensicDashboard />} />
-                                                    <Route path="stress-test" element={<SystemStressTest />} />
-                                                    <Route path="precision-audit" element={<PrecisionAudit />} />
-                                                    <Route path="learning-lab" element={<LearningLab />} />
+                                                <Route path="/forensics" element={<ForensicDashboard />} />
+                                                <Route path="stress-test" element={<SystemStressTest />} />
+                                                <Route path="precision-audit" element={<PrecisionAudit />} />
+                                                <Route path="learning-lab" element={<LearningLab />} />
 
-                                                    {/* ACCESS DENIED PAGE */}
-                                                    <Route path="/access-denied" element={<AccessDenied />} />
+                                                {/* ACCESS DENIED PAGE */}
+                                                <Route path="/access-denied" element={<AccessDenied />} />
 
-                                                    <Route path="*" element={<Navigate to="/" replace />} />
-                                                </Routes>
-                                            </motion.div>
-                                        </AnimatePresence>
+                                                <Route path="*" element={<Navigate to="/" replace />} />
+                                            </Routes>
+                                        </div>
                                     </ErrorBoundary>
                                 </div>
                             </Suspense>
