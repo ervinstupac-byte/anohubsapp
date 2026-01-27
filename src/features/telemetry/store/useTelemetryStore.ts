@@ -141,11 +141,15 @@ export const useTelemetryStore = create<TelemetryState>((set, get) => ({
                     calcContext.hydraulic.flow || 40,
                     20
                 );
-                // We need a way to update just the efficiency without triggering infinite loop
-                // set((s) => ({ physics: { ...s.physics, efficiency } })); 
-                // CAUTION: This might cause loop if not careful. 
-                // For now, we log the worker activity to prove it's happening system-wide.
-                // console.debug('[TelemetryStore] 🧠 Async Efficiency Recalculated:', efficiency);
+
+                // NC-85.2: Apply async physics result to store
+                // We use functional set to merge into existing physics state
+                set((s) => ({
+                    physics: {
+                        ...s.physics,
+                        efficiency
+                    }
+                }));
             });
 
             // We run Expert Diagnosis on the result

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface MetricCardProps {
     title: string;
@@ -31,9 +32,15 @@ export const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit, subt
 
                 <div className="flex flex-col gap-0.5 min-h-0">
                     <div className="flex items-baseline gap-1">
-                        <span className={`text-[clamp(1.2rem,2.5vh,2rem)] font-black font-mono tracking-tighter ${accentColor} ${glowClass} truncate leading-none`}>
+                        <motion.span
+                            key={value}
+                            initial={{ opacity: 0.7, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className={`text-[clamp(1.2rem,2.5vh,2rem)] font-black font-mono tracking-tighter ${accentColor} ${glowClass} truncate leading-none inline-block`}
+                        >
                             {value}
-                        </span>
+                        </motion.span>
                         <span className="text-[clamp(8px,0.8vh,10px)] font-black text-slate-500 uppercase tracking-widest">
                             {unit}
                         </span>

@@ -94,7 +94,18 @@ export const LabyrinthCard: React.FC = () => {
                 <div className="w-16 h-16 lg:w-24 lg:h-24 relative flex items-center justify-center shrink-0">
                     <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                         <circle cx="50" cy="50" r="42" fill="none" stroke="#1e293b" strokeWidth="8" />
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" strokeWidth="8" strokeDasharray="264" strokeDashoffset="198" className="bloom-glow-emerald" />
+                        <motion.circle
+                            cx="50" cy="50" r="42"
+                            fill="none"
+                            stroke="#10b981"
+                            strokeWidth="8"
+                            strokeDasharray="264"
+                            initial={{ strokeDashoffset: 264 }}
+                            animate={{ strokeDashoffset: 198 }}
+                            transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                            className="bloom-glow-emerald"
+                            strokeLinecap="round"
+                        />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center pt-2">
                         <span className="text-[clamp(8px,1vh,10px)] font-black text-white/80 font-mono">65%</span>

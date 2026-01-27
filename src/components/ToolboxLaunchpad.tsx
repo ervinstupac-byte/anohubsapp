@@ -76,7 +76,13 @@ export const ToolboxLaunchpad: React.FC = () => {
                                     <div className="flex-1 space-y-1 min-w-0">
                                         <div className="h-1.5 w-full flex gap-[1px]">
                                             {[...Array(20)].map((_, i) => (
-                                                <div key={i} className={`h-full flex-1 ${i < 15 ? 'bg-cyan-500' : 'bg-slate-800'} ${i < 15 ? 'bloom-glow-cyan' : ''}`} />
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ opacity: 0, scaleY: 0 }}
+                                                    animate={{ opacity: 1, scaleY: 1 }}
+                                                    transition={{ duration: 0.2, delay: i * 0.05 }}
+                                                    className={`h-full flex-1 ${i < 15 ? 'bg-cyan-500' : 'bg-slate-800'} ${i < 15 ? 'bloom-glow-cyan' : ''}`}
+                                                />
                                             ))}
                                         </div>
                                     </div>
