@@ -605,25 +605,18 @@ const App: React.FC = () => {
                 </div>
             }>
                 <GlobalProvider>
-                    <AnimatePresence mode="wait">
-                        {booting ? (
-                            <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
-                        ) : (
-                            <motion.div
-                                key="main-app"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="w-full h-full"
-                            >
-                                <ContextAwarenessProvider>
-                                    <Routes>
-                                        <Route path="/login" element={<Login />} />
-                                        <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
-                                    </Routes>
-                                </ContextAwarenessProvider>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {booting ? (
+                        <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
+                    ) : (
+                        <div className="w-full h-full animate-in fade-in zoom-in duration-300">
+                            <ContextAwarenessProvider>
+                                <Routes>
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                </Routes>
+                            </ContextAwarenessProvider>
+                        </div>
+                    )}
                 </GlobalProvider>
             </ErrorBoundary>
         </HashRouter>
