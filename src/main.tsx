@@ -13,6 +13,12 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
+// Remove initial HTML loader once React is ready to mount
+const initialLoader = document.getElementById('initial-loader');
+if (initialLoader) {
+  initialLoader.remove();
+}
+
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(

@@ -1,23 +1,59 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>AnoHUB | Command Center</title>
-    <meta name="description" content="Dynamic Risk vs Operational Certainty. The Architects of Immunity.">
-    <meta name="theme-color" content="#020617">
 
-    <link rel="stylesheet" href="/src/index.css">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>AnoHUB | Command Center</title>
+  <meta name="description" content="Dynamic Risk vs Operational Certainty. The Architects of Immunity.">
+  <meta name="theme-color" content="#020617">
 
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <link rel="stylesheet" href="/src/index.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="root">
+    <!-- Inline loading screen (removed when React mounts) -->
+    <div id="initial-loader"
+      style="position: fixed; inset: 0; background: #020617; display: flex; align-items: center; justify-content: center; z-index: 9999;">
+      <div style="text-align: center; font-family: 'Inter', sans-serif;">
+        <div style="color: #22D3EE; font-size: 12px; font-weight: 700; letter-spacing: 0.3em; margin-bottom: 16px;">
+          ANOHUB</div>
+        <div
+          style="width: 200px; height: 2px; background: #0F172A; border-radius: 999px; overflow: hidden; margin: 0 auto;">
+          <div style="height: 100%; background: #22D3EE; width: 0%; animation: loading 2.5s ease-in-out infinite;">
+          </div>
+        </div>
+        <div style="color: #64748B; font-size: 10px; margin-top: 16px; letter-spacing: 0.2em;">INITIALIZING NEURAL
+          CORE...</div>
+      </div>
+    </div>
+    <style>
+      @keyframes loading {
+        0% {
+          width: 0%;
+        }
+
+        50% {
+          width: 70%;
+        }
+
+        100% {
+          width: 100%;
+        }
+      }
+    </style>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
