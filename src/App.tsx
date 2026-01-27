@@ -379,7 +379,7 @@ const AppLayout: React.FC = () => {
 
                         <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
                             <Suspense fallback={<LoadingShimmer />}>
-                                <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 animate-fade-in" : "flex-grow w-full animate-fade-in"}>
+                                <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12" : "flex-grow w-full"}>
                                     {!isHub && location.pathname !== '/dashboard' && location.pathname !== '/executive' && <Breadcrumbs />}
                                     <ErrorBoundary fallback={
                                         <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
