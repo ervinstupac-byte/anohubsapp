@@ -196,7 +196,7 @@ export const FrancisHub: React.FC = () => {
                             <div className="absolute top-8 right-8 flex flex-col gap-4 items-end animate-in fade-in slide-in-from-top duration-700">
                                 <div className="flex items-center gap-3 px-4 py-2 bg-h-cyan/10 border border-h-cyan/30 rounded-lg backdrop-blur-md">
                                     <CheckCircle className="w-4 h-4 text-h-cyan" />
-                                    <span className="text-xs font-black text-white uppercase tracking-widest">854 Files Verified</span>
+                                    <span className="text-xs font-black text-white uppercase tracking-widest">50 IEC 60041 Files </span>
                                 </div>
                                 <button className="flex items-center gap-3 px-6 py-3 bg-h-gold text-black rounded-lg font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,184,0,0.3)] hover:scale-105 transition-transform active:scale-95">
                                     <FileText className="w-4 h-4" />

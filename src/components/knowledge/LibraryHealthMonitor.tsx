@@ -29,8 +29,8 @@ export const LibraryHealthMonitor: React.FC = () => {
     const [auditResults, setAuditResults] = useState<{ real: number; missing: number } | null>(null);
     const [auditLog, setAuditLog] = useState<Array<{ name: string; status: 'SUCCESS' | 'ERROR'; hash?: string }>>([]);
 
-    // Dynamic counts
-    const totalFiles = 854;
+    // Dynamic counts (IEC 60041 Compliant Engineering Dossiers)
+    const totalFiles = 50;
     const [realFiles, setRealFiles] = useState(0); // Start at 0 to encourage running the audit or perform an initial check
     const progress = (realFiles / totalFiles) * 100;
 
@@ -185,7 +185,7 @@ export const LibraryHealthMonitor: React.FC = () => {
 
                             <div className="p-4 bg-h-cyan/5 border border-h-cyan/20 rounded-xl space-y-2">
                                 <p className="text-[10px] leading-relaxed italic text-slate-400">
-                                    "The full 854-file expansion is complete. All legacy technical journals, NDT reports, and mechanical core data are now synchronized into the neural bridge."
+                                    "50 Hardened Engineering Dossiers (IEC 60041 Compliant) now active. All legacy technical journals, NDT reports, and mechanical core data are synchronized into the neural bridge."
                                 </p>
                             </div>
                         </div>
@@ -334,13 +334,13 @@ export const LibraryHealthMonitor: React.FC = () => {
                                             <div className="mt-1 flex items-center gap-2 pl-4">
                                                 <span className="text-[8px] font-mono text-slate-600 uppercase">Embedded:</span>
                                                 <span className="text-[8px] font-mono text-h-cyan truncate">{(log as any).hash}</span>
-                                                { (log as any).computed && (
+                                                {(log as any).computed && (
                                                     <>
                                                         <span className="text-[8px] font-mono text-slate-600 uppercase">Computed:</span>
                                                         <span className="text-[8px] font-mono text-slate-400 truncate">{(log as any).computed}</span>
                                                     </>
                                                 )}
-                                                <span className={`ml-auto text-[9px] font-black px-1.5 py-0.5 rounded ${ (log as any).verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400' }`}>{ (log as any).verified ? 'VERIFIED' : 'MISMATCH' }</span>
+                                                <span className={`ml-auto text-[9px] font-black px-1.5 py-0.5 rounded ${(log as any).verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>{(log as any).verified ? 'VERIFIED' : 'MISMATCH'}</span>
                                             </div>
                                         </div>
                                     ))

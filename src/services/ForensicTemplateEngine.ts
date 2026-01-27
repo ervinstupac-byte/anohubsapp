@@ -35,7 +35,7 @@ export function applyCerebroBranding(doc: any, title: string) {
     doc.setTextColor(34, 211, 238);
     doc.setFontSize(7);
     try { doc.setFont("Roboto", "bold"); } catch (e) { }
-    doc.text("DATABASE STRENGTH: Verified against 854+ sources", 60, 32.5);
+    doc.text("DATABASE STRENGTH: 50 IEC 60041 Compliant Sources", 60, 32.5);
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     try { doc.setFont("Roboto", "normal"); } catch (e) { }

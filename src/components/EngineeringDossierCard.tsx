@@ -137,14 +137,14 @@ export const EngineeringDossierCard: React.FC = () => {
                             <h3 className="text-sm font-black text-h-gold uppercase tracking-[0.2em]">
                                 AnoHUB Trust Architecture
                             </h3>
-                            <p className="text-[10px] text-slate-500 font-mono">NC-9.0 Integrity Check: 854 Files Digested</p>
+                            <p className="text-[10px] text-slate-500 font-mono">NC-9.0 Integrity Check: 50 IEC 60041 Compliant Files</p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-h-cyan/10 border border-h-cyan/20 rounded-full">
                         <Database className="w-3 h-3 text-h-cyan" />
                         <span className="text-[10px] font-black text-h-cyan font-mono tracking-widest">
-                            854 SOURCES ACTIVE
+                            50 IEC SOURCES
                         </span>
                     </div>
                 </div>

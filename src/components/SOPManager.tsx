@@ -225,7 +225,7 @@ export const SOPManager: React.FC = () => {
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Search 854 engineering sources..."
+                                placeholder="Search 50 IEC 60041 compliant sources..."
                                 className="w-full bg-slate-950/50 border border-white/10 rounded-lg pl-12 pr-4 py-2.5 text-sm text-white focus:border-cyan-500/50 outline-none transition-all font-mono"
                             />
                         </div>
@@ -267,7 +267,7 @@ export const SOPManager: React.FC = () => {
                         <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded flex items-center gap-3">
                             <AlertTriangle className="w-5 h-5 text-amber-500" />
                             <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">
-                                No Specific Mesh Protocols - Displaying Verified Digital Dossier Library (854 Sources)
+                                No Specific Mesh Protocols - Displaying Verified Digital Dossier Library (50 IEC 60041 Compliant Sources)
                             </span>
                         </div>
                     )}

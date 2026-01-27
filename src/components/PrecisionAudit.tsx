@@ -25,7 +25,7 @@ import { useAssetContext } from '../contexts/AssetContext';
 /**
  * PrecisionAudit Component
  * 
- * Powered by 854 verified engineering files (Protocol NC-5.8)
+ * Powered by 50 IEC 60041 compliant engineering files (Protocol NC-5.8)
  * Cites specific SOPs based on asset type and audit results.
  */
 export const PrecisionAudit: React.FC = () => {
@@ -232,7 +232,7 @@ export const PrecisionAudit: React.FC = () => {
                                             type="text"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
-                                            placeholder="Search 854 Verified Files..."
+                                            placeholder="Search 50 IEC 60041 Compliant Files..."
                                             className="w-full bg-slate-950/50 border border-white/10 rounded px-10 py-2 text-xs font-mono text-white outline-none focus:border-cyan-500/50 transition-colors"
                                         />
                                     </div>
@@ -251,7 +251,7 @@ export const PrecisionAudit: React.FC = () => {
                                         );
                                     })}
                                     <div className="mt-4 text-[8px] font-mono text-slate-600 text-center uppercase">
-                                        Showing {filteredArchive.length} of {searchTerm ? 'results' : '854 verified sources'}
+                                        Showing {filteredArchive.length} of {searchTerm ? 'results' : '50 IEC 60041 compliant sources'}
                                     </div>
                                 </GlassCard>
                             </motion.div>
