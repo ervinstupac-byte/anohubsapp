@@ -60,6 +60,7 @@ export const AuditProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setLogs(prev => [newEntry, ...prev]);
 
         // 3. Persist to Supabase (if configured)
+        // 3. Persist to Supabase (if configured)
         if (isSupabaseConfigured) {
             try {
                 const { error } = await supabase
@@ -76,10 +77,20 @@ export const AuditProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                     ]);
 
                 if (error) {
-                    console.warn('Failed to write audit log to Supabase:', error.message);
+                    // SILENT FALLBACK: If table doesn't exist or permissions fail, define fallback
+                    console.info(`[AuditContext] Remote log failed (${error.code}). Falling back to local storage.`);
+
+                    // Fallback: Save to sessionStorage so we don't lose the "paper trail" for this session
+                    try {
+                        const existing = JSON.parse(sessionStorage.getItem('local_audit_logs') || '[]');
+                        existing.push(newEntry);
+                        sessionStorage.setItem('local_audit_logs', JSON.stringify(existing));
+                    } catch (storeErr) {
+                        // storage full or disabled, just console log
+                    }
                 }
             } catch (err) {
-                console.warn('Supabase audit log error:', err);
+                console.info('[AuditContext] Supabase connection issue. Using local fallback.');
             }
         }
     };

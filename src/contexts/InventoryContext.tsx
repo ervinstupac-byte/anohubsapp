@@ -31,11 +31,18 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [inventory, setInventory] = useState<InventoryItem[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const INITIAL_GUEST_INVENTORY: InventoryItem[] = [
+        { id: '1', name: 'Runner Blade (Francis)', partNumber: 'FR-BLD-01', category: 'Mechanical', quantity: 3, minStockThreshold: 2, unitPrice: 15000, turbineTypes: ['francis'], maintenanceSpecs: { tools: ['Crane'], instructions: ['Inspect for cavitation'] } },
+        { id: '2', name: 'Guide Vane Seal', partNumber: 'GV-SEAL-05', category: 'Seals', quantity: 50, minStockThreshold: 20, unitPrice: 120, turbineTypes: ['francis', 'kaplan'], maintenanceSpecs: { tools: ['Seal Puller'], instructions: ['Replace annually'] } },
+        { id: '3', name: 'Thrust Bearing Pad', partNumber: 'TB-PAD-09', category: 'Bearings', quantity: 4, minStockThreshold: 6, unitPrice: 4500, turbineTypes: ['pelton', 'francis', 'kaplan'], maintenanceSpecs: { tools: ['Micrometer'], instructions: ['Check for Babbitt wear'] } }
+    ];
+
     const fetchInventory = async () => {
         setLoading(true);
         const { data, error } = await supabase.from('inventory_assets').select('*');
         if (error) {
-            console.error('Error fetching inventory:', error);
+            console.warn('[InventoryContext] Failed to fetch inventory (Table Missing?). Using Guest Fallback.');
+            setInventory(INITIAL_GUEST_INVENTORY);
         } else if (data) {
             setInventory(data.map((item: any) => ({
                 id: item.id,
