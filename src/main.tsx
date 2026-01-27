@@ -2,8 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary';
+console.log('[main.tsx] ✅ Core imports loaded');
+
 import './index.css'; // Tvoj globalni dizajn (Glassmorphism, Tailwind)
-import './i18n/index.ts'; // Inicijalizacija prijevoda
+console.log('[main.tsx] ✅ CSS loaded');
+
+// Defensive i18n import - if this crashes, we catch it
+console.log('[main.tsx] 🔧 Importing i18n module...');
+try {
+  await import('./i18n/index.ts'); // Inicijalizacija prijevoda
+  console.log('[main.tsx] ✅ i18n loaded successfully');
+} catch (err) {
+  console.error('[main.tsx] ❌ i18n import FAILED - app will continue without translations:', err);
+}
 
 // --- IMPORT PROVIDERS REMOVED (Moved to App.tsx) ---
 
