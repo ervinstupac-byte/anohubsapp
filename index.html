@@ -2,6 +2,24 @@
 <html lang="en">
 
 <head>
+  <!-- NC-76.3 EMERGENCY ERROR CAPTURE -->
+  <script>
+    window.onerror = function (msg, url, line, col, error) {
+      // Don't alert on ResizeObserver loop limit exceeded
+      if (msg && msg.includes('ResizeObserver')) return false;
+
+      console.error('🚨 FATAL JS ERROR:', msg, 'at', url, line, col, error);
+
+      // Update loader text if visible
+      var loaderText = document.getElementById('loader-text');
+      if (loaderText) {
+        loaderText.innerHTML = '<span style="color:#EF4444">CRITICAL BOOT ERROR: ' + msg.substring(0, 50) + '...</span>';
+      }
+      return false;
+    };
+    console.log('[index.html] ✅ Error handler installed');
+  </script>
+
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,10 +48,12 @@
           ANOHUB</div>
         <div
           style="width: 200px; height: 2px; background: #0F172A; border-radius: 999px; overflow: hidden; margin: 0 auto;">
-          <div style="height: 100%; background: #22D3EE; width: 0%; animation: loading 2.5s ease-in-out infinite;">
+          <div id="loader-bar"
+            style="height: 100%; background: #22D3EE; width: 0%; animation: loading 2.5s ease-in-out infinite;">
           </div>
         </div>
-        <div style="color: #64748B; font-size: 10px; margin-top: 16px; letter-spacing: 0.2em;">INITIALIZING NEURAL
+        <div id="loader-text" style="color: #64748B; font-size: 10px; margin-top: 16px; letter-spacing: 0.2em;">
+          INITIALIZING NEURAL
           CORE...</div>
       </div>
     </div>
@@ -53,7 +73,46 @@
       }
     </style>
   </div>
+
+  <!-- Main React Bundle -->
   <script type="module" src="/src/main.tsx"></script>
+
+  <!-- NC-76.3 KILL-SWITCH: Force-hide loader after 3 seconds regardless of JS state -->
+  <script>
+    console.log('[index.html] ⏱️  Kill-switch armed (3s timeout)');
+    setTimeout(function () {
+      // Check if React has mounted (root should have content)
+      var root = document.getElementById('root');
+      var loader = document.getElementById('initial-loader');
+
+      // If loader is still there...
+      if (loader) {
+        console.warn('[index.html] ⚠️  KILL-SWITCH CHECK: Loader still present after 3s');
+
+        // Hide loader
+        loader.style.display = 'none';
+
+        // If Root is empty, it means React totally failed
+        if (!root || root.children.length === 0 || (root.children.length === 1 && root.children[0].id === 'initial-loader')) {
+          console.error('[index.html] 🚨 REACT MOUNT FAILED');
+
+          // Show Emergency Error Screen directly in Body to bypass React
+          document.body.innerHTML = `
+            <div style="position:fixed;inset:0;background:#020617;color:#94A3B8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;">
+              <h1 style="color:#EF4444;margin-bottom:20px;">SYSTEM BOOT FAILURE</h1>
+              <p>Critical initialization error. React failed to mount.</p>
+              <div style="background:#0F172A;padding:20px;border-radius:8px;margin-top:20px;font-family:monospace;border:1px solid #1E293B;">
+                 Tip: Check F12 Console for "Expected" or "SyntaxError"
+              </div>
+              <p style="margin-top:40px;font-size:12px;opacity:0.5;">NC-76.3 Kill-Switch Active</p>
+            </div>
+           `;
+        }
+      } else {
+        console.log('[index.html] ✅ Boot successful (Loader gone)');
+      }
+    }, 3000);
+  </script>
 </body>
 
 </html>
