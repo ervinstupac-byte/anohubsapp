@@ -1,10 +1,11 @@
-import React, { useRef, forwardRef, useState } from 'react';
+import React, { useRef, forwardRef, useState, useCallback } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, Html, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import { TruthDeltaMap } from '../../utils/TruthDeltaEngine';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { ComponentInfoPanel } from '../ui/ComponentInfoPanel';
 
 // BRANDING COLORS
 const COLORS = {
@@ -269,15 +270,30 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
     deltaIndex?: number;
     diagnosticHighlights?: DiagnosticHighlights;
     investigatedComponents?: string[];
-}>(({ rpm, className, deltaMap, heatmapMode = false, ghostMode = false, baselineDelta, onSelect, highlightId, deltaIndex, diagnosticHighlights, investigatedComponents }, ref) => {
+    showInfoPanel?: boolean;
+}>(({ rpm, className, deltaMap, heatmapMode = false, ghostMode = false, baselineDelta, onSelect, highlightId, deltaIndex, diagnosticHighlights, investigatedComponents, showInfoPanel = true }, ref) => {
     // Determine turbine type from store or context (default to francis)
     const { selectedAsset } = useAssetContext();
     const turbineType = (selectedAsset?.type || 'francis').toLowerCase() as 'francis' | 'kaplan';
 
     const [active, setActive] = useState(false);
+    const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
+    const [infoPanelOpen, setInfoPanelOpen] = useState(false);
+
+    // Handle component selection with side-drawer integration
+    const handleComponentSelect = useCallback((id: string) => {
+        setSelectedComponentId(id);
+        setInfoPanelOpen(true);
+        // Also call the external onSelect if provided
+        if (onSelect) onSelect(id);
+    }, [onSelect]);
+
+    const handleCloseInfoPanel = useCallback(() => {
+        setInfoPanelOpen(false);
+    }, []);
 
     return (
-        <div ref={ref} className={className || "w-full h-full"} onPointerEnter={() => setActive(true)} onPointerLeave={() => setActive(false)}>
+        <div ref={ref} className={`relative ${className || "w-full h-full"}`} onPointerEnter={() => setActive(true)} onPointerLeave={() => setActive(false)}>
             <Canvas gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }} dpr={[1, 2]} frameloop={active ? 'always' : 'demand'}>
                 <PerspectiveCamera makeDefault position={[8, 4, 8]} fov={50} />
                 <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} minDistance={5} maxDistance={20} />
@@ -293,8 +309,8 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
                         heatmapMode={heatmapMode}
                         ghostMode={ghostMode}
                         baselineDelta={baselineDelta}
-                        onSelect={onSelect}
-                        highlightId={highlightId}
+                        onSelect={handleComponentSelect}
+                        highlightId={highlightId || selectedComponentId}
                         deltaIndex={deltaIndex}
                         diagnosticHighlights={diagnosticHighlights}
                         investigatedComponents={investigatedComponents}
@@ -303,6 +319,15 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
                 </group>
                 <Environment preset="night" />
             </Canvas>
+
+            {/* Intelligence Overlay Side-Drawer */}
+            {showInfoPanel && (
+                <ComponentInfoPanel
+                    componentId={selectedComponentId}
+                    onClose={handleCloseInfoPanel}
+                    isOpen={infoPanelOpen}
+                />
+            )}
         </div>
     );
 });
