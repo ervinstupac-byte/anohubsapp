@@ -10,6 +10,7 @@ import { ENABLE_REAL_TELEMETRY } from '../config/featureFlags';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
 import { useNotifications } from './NotificationContext.tsx';
 import idAdapter from '../utils/idAdapter';
+import { HppStatusSchema } from '../schemas/supabase';
 
 // Tipovi za telemetriju
 export interface TelemetryData {
@@ -181,58 +182,66 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 (payload: any) => {
                     const updatedData = payload.new as any;
                     if (updatedData && updatedData.asset_id) {
+                        // Validate realtime payload shape using Zod
+                        const parsed = HppStatusSchema.safeParse(updatedData);
+                        if (!parsed.success) {
+                            try {
+                                loggingService.logEvent({ assetId: null, eventType: 'STRESS_TEST', severity: 'WARNING', details: { message: 'hpp_status validation failed', error: parsed.error } });
+                            } catch (e) { /* swallow */ }
+                        }
+                        const u: any = parsed.success ? parsed.data : updatedData;
                         // REVERT to String/BigInt safe handling (NC-11.3)
-                        const rawId = updatedData.asset_id; // Keep as string/number/BigInt
+                        const rawId = u.asset_id; // Keep as string/number/BigInt
                         const storageKey = idAdapter.toStorage(rawId);
                         setTelemetry(prev => ({
                             ...prev,
                             [storageKey]: {
                                 assetId: rawId,
                                 timestamp: Date.now(),
-                                status: updatedData.status || 'OPTIMAL',
-                                vibration: updatedData.vibration || 0.02,
-                                temperature: updatedData.temperature || 50,
-                                efficiency: updatedData.efficiency || 92,
-                                output: updatedData.output || 0,
-                                piezometricPressure: updatedData.piezometric_pressure || 4.2,
-                                seepageRate: updatedData.seepage_rate || 12.5,
-                                reservoirLevel: updatedData.reservoir_level || 122.5,
-                                foundationDisplacement: updatedData.foundation_displacement || 0.05,
-                                wicketGatePosition: updatedData.wicket_gate_position || 45,
-                                tailwaterLevel: updatedData.tailwater_level || 105.2,
-                                cylinderPressure: updatedData.cylinder_pressure || 45,
-                                actuatorPosition: updatedData.actuator_position || 45,
-                                oilPressureRate: updatedData.oil_pressure_rate || 1.2,
-                                hoseTension: updatedData.hose_tension || 25,
-                                pipeDiameter: updatedData.pipe_diameter || 12,
-                                safetyValveActive: updatedData.safety_valve_active || false,
-                                oilReservoirLevel: updatedData.oil_reservoir_level || 85,
-                                rotorHeadVibration: updatedData.rotor_head_vibration || 0.5,
-                                pumpFlowRate: updatedData.pump_flow_rate || 5,
-                                excitationActive: updatedData.excitation_active !== undefined ? updatedData.excitation_active : true,
-                                vibrationSpectrum: updatedData.vibration_spectrum || [0, 0, 0, 0, 0],
-                                drainagePumpActive: updatedData.drainage_pump_active || false,
-                                drainagePumpFrequency: updatedData.drainage_pump_frequency || 12,
-                                wicketGateSetpoint: updatedData.wicket_gate_setpoint || 45,
-                                lastCommandTimestamp: updatedData.last_command_timestamp || Date.now(),
-                                fatiguePoints: updatedData.fatigue_points || 0,
-                                vibrationPhase: updatedData.vibration_phase || 12,
-                                oilViscosity: updatedData.oil_viscosity || 46,
-                                bearingLoad: updatedData.bearing_load || 850,
-                                statorTemperatures: updatedData.stator_temperatures || [55, 55, 55, 55, 55, 55],
-                                actualBladePosition: updatedData.actual_blade_position || 45,
-                                bypassValveActive: updatedData.bypass_valve_active || false,
-                                hydrostaticLiftActive: updatedData.hydrostatic_lift_active || false,
-                                shaftSag: updatedData.shaft_sag || 0,
-                                responseTimeIndex: updatedData.response_time_index || 0.1,
-                                proximityX: updatedData.proximity_x || 0,
-                                proximityY: updatedData.proximity_y || 0,
-                                excitationCurrent: updatedData.excitation_current || 450,
-                                rotorEccentricity: updatedData.rotor_eccentricity || 0.15,
-                                cavitationIntensity: updatedData.cavitation_intensity || 1.1,
-                                bearingGrindIndex: updatedData.bearing_grind_index || 0.4,
-                                acousticBaselineMatch: updatedData.acoustic_baseline_match || 0.99,
-                                ultrasonicLeakIndex: updatedData.ultrasonic_leak_index || 0.3
+                                status: u.status || 'OPTIMAL',
+                                vibration: u.vibration || 0.02,
+                                temperature: u.temperature || 50,
+                                efficiency: u.efficiency || 92,
+                                output: u.output || 0,
+                                piezometricPressure: u.piezometric_pressure || 4.2,
+                                seepageRate: u.seepage_rate || 12.5,
+                                reservoirLevel: u.reservoir_level || 122.5,
+                                foundationDisplacement: u.foundation_displacement || 0.05,
+                                wicketGatePosition: u.wicket_gate_position || 45,
+                                tailwaterLevel: u.tailwater_level || 105.2,
+                                cylinderPressure: u.cylinder_pressure || 45,
+                                actuatorPosition: u.actuator_position || 45,
+                                oilPressureRate: u.oil_pressure_rate || 1.2,
+                                hoseTension: u.hose_tension || 25,
+                                pipeDiameter: u.pipe_diameter || 12,
+                                safetyValveActive: u.safety_valve_active || false,
+                                oilReservoirLevel: u.oil_reservoir_level || 85,
+                                rotorHeadVibration: u.rotor_head_vibration || 0.5,
+                                pumpFlowRate: u.pump_flow_rate || 5,
+                                excitationActive: u.excitation_active !== undefined ? u.excitation_active : true,
+                                vibrationSpectrum: u.vibration_spectrum || [0, 0, 0, 0, 0],
+                                drainagePumpActive: u.drainage_pump_active || false,
+                                drainagePumpFrequency: u.drainage_pump_frequency || 12,
+                                wicketGateSetpoint: u.wicket_gate_setpoint || 45,
+                                lastCommandTimestamp: u.last_command_timestamp || Date.now(),
+                                fatiguePoints: u.fatigue_points || 0,
+                                vibrationPhase: u.vibration_phase || 12,
+                                oilViscosity: u.oil_viscosity || 46,
+                                bearingLoad: u.bearing_load || 850,
+                                statorTemperatures: u.stator_temperatures || [55, 55, 55, 55, 55, 55],
+                                actualBladePosition: u.actual_blade_position || 45,
+                                bypassValveActive: u.bypass_valve_active || false,
+                                hydrostaticLiftActive: u.hydrostatic_lift_active || false,
+                                shaftSag: u.shaft_sag || 0,
+                                responseTimeIndex: u.response_time_index || 0.1,
+                                proximityX: u.proximity_x || 0,
+                                proximityY: u.proximity_y || 0,
+                                excitationCurrent: u.excitation_current || 450,
+                                rotorEccentricity: u.rotor_eccentricity || 0.15,
+                                cavitationIntensity: u.cavitation_intensity || 1.1,
+                                bearingGrindIndex: u.bearing_grind_index || 0.4,
+                                acousticBaselineMatch: u.acoustic_baseline_match || 0.99,
+                                ultrasonicLeakIndex: u.ultrasonic_leak_index || 0.3
                             }
                         }));
                         // non-blocking journal append for each incoming sample

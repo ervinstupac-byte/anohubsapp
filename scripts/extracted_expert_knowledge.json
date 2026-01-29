@@ -1,0 +1,163 @@
+[
+  {
+    "symptom_key": "DICTIONARY_|_ANOHUB_ENGINEERING_VAULT",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "DICTIONARY",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "DICTIONARY.",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "DICTIONARY._COMPONENT_FRANCIS_SYMPTOM_DICTIONARY_ROLE_DESCRIBED_FOR_DIAGNOSTIC_PRIORITIZATION.",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "CEREBRO_INGESTION:_2026-01-17_18:35:02\n\n\n\nSHA-256:_1D1578B19",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "DICTIONARY._(INSTANCE_2)",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index_2.html"
+  },
+  {
+    "symptom_key": "DICTIONARY._(INSTANCE_3)",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_symptom_dictionary\\index_3.html"
+  },
+  {
+    "symptom_key": "CEREBRO_INGESTION:_2026-01-17_18:35:02\n\n\n\nSHA-256:_20B83DEE2",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "docs\\archive\\historical_protocols\\archive\\turbine_friend\\francis_h\\francis_symptom_dictionary\\index.html"
+  },
+  {
+    "symptom_key": "HUNTING",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_Emergency_Protocols.html"
+  },
+  {
+    "symptom_key": "ERRATIC_GUIDE_VANE_MOVEMENT_(>2%\n___________________________",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_Emergency_Protocols.html"
+  },
+  {
+    "symptom_key": "MILKY",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Bearings.html"
+  },
+  {
+    "symptom_key": "AWARENESS:",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Coupling.html"
+  },
+  {
+    "symptom_key": "SPEED_OSCILLATES_±0.2_-_0.5_RPM_AT_REGULAR_FREQUENCY_(E.G._E",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Governor_PID.html"
+  },
+  {
+    "symptom_key": "SCENARIO:_BYPASS_VALVE_OPENS,_BUT\n____________________SPIRAL",
+    "diagnosis": "Wicket Gates\n                    (Distributor) are leaking water into runner faster than Bypass can fill the spiral.",
+    "recommended_action": "DO NOT bridge the interlock.\nPerform Wicket Gate seal inspection.\nSee Distributor Synchronization SOP.",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_MIV_Bypass.html"
+  },
+  {
+    "symptom_key": "MAPPING_&_ROOT_CAUSES",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Oil_Health.html"
+  },
+  {
+    "symptom_key": "OIL_FOAMS_RHYTHMICALLY_WITH_PUMP_STROKE.",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Oil_Health.html"
+  },
+  {
+    "symptom_key": "ISOLATION",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Post_Mortem.html"
+  },
+  {
+    "symptom_key": "POWER_OUTPUT_\"HUNTING\"_(±5%_OSCILLATION)",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Regulating_Ring.html"
+  },
+  {
+    "symptom_key": "HIGH_HPU_PRESSURE_(>165_BAR_DURING_NORMAL_OPERATION)",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Regulating_Ring.html"
+  },
+  {
+    "symptom_key": "ROOT_CAUSE_1:_STICTION_IN_REGULATING_RING_→_CHECK_HPU_PRESSU",
+    "diagnosis": "",
+    "recommended_action": "Stop unit, release pressure, manually\n                    lubricate ring.\nInvestigation: Check central greasing system - verify pump is\n                    building pressure and all dosage valves are flowing.",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Regulating_Ring.html"
+  },
+  {
+    "symptom_key": "IMMEDIATE_ACTION:_STOP_UNIT,_RELEASE_PRESSURE,_MANUALLY\n____",
+    "diagnosis": "",
+    "recommended_action": "Stop unit, release pressure, manually\n                    lubricate ring.\nInvestigation: Check central greasing system - verify pump is\n                    building pressure and all dosage valves are flowing.",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_SOP_Regulating_Ring.html"
+  },
+  {
+    "symptom_key": "DICTIONARY_-_ERROR_CODE_REPOSITORY",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_Symptom_Dictionary.html"
+  },
+  {
+    "symptom_key": "UNIVERSAL_ERROR_CODES_&_QUICK-REF_LOGIC",
+    "diagnosis": "",
+    "recommended_action": "",
+    "severity": "MEDIUM",
+    "source_file": "public\\assets\\docs\\active_sop\\Francis_Symptom_Dictionary.html"
+  }
+]

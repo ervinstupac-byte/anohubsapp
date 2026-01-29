@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { supabase, getSafeClient } from '../services/supabaseClient.ts';
+import ExperienceLedgerService from '../services/ExperienceLedgerService';
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useRisk } from './RiskContext.tsx';
 import { useToast } from './ToastContext.tsx';
@@ -285,12 +286,27 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     };
 
     const recordLessonLearned = async (lesson: { symptom: string; cause: string; resolution: string }) => {
-        await supabase.from('experience_ledger').insert({
-            symptom_observed: lesson.symptom,
-            actual_cause: lesson.cause,
-            resolution_steps: lesson.resolution
-        });
-        showToast('Experience Ledger updated', 'success');
+        try {
+            await ExperienceLedgerService.record({
+                symptom_observed: lesson.symptom,
+                actual_cause: lesson.cause,
+                resolution_steps: lesson.resolution
+            });
+            showToast('Experience Ledger updated', 'success');
+        } catch (e) {
+            // fallback to direct insert if service fails
+            try {
+                await supabase.from('experience_ledger').insert({
+                    symptom_observed: lesson.symptom,
+                    actual_cause: lesson.cause,
+                    resolution_steps: lesson.resolution
+                });
+                showToast('Experience Ledger updated (fallback)', 'success');
+            } catch (err) {
+                console.warn('Failed to record lesson learned', err);
+                showToast('Failed to update Experience Ledger', 'error');
+            }
+        }
     };
 
     return (

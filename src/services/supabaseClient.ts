@@ -11,8 +11,9 @@ const getEnv = (key: string) => {
     return undefined;
 };
 
-const supabaseUrl = getEnv('VITE_SUPABASE_URL');
-const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY');
+// Support multiple env var names used across scripts and deploy targets.
+const supabaseUrl = getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL') || getEnv('SUPABASE_URL_PUBLIC') || getEnv('VITE_PUBLIC_SUPABASE_URL');
+const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('VITE_PUBLIC_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY') || getEnv('SUPABASE_KEY');
 
 // Build-time tolerant supabase client: if env missing, provide a noop client that
 // implements commonly used methods to avoid import-time throws during CI/Vercel builds.
