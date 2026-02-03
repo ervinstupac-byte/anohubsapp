@@ -7,7 +7,7 @@ interface GlassCardProps extends Omit<HTMLMotionProps<"div">, 'title'> {
     subtitle?: string;
     action?: ReactNode;
     icon?: ReactNode;
-    variant?: 'base' | 'deep' | 'commander';
+    variant?: 'base' | 'deep' | 'commander' | 'alarm';
     noPadding?: boolean;
 }
 
@@ -25,13 +25,18 @@ export const GlassCard = ({
     const variantClasses = {
         base: 'glass-panel',
         deep: 'glass-panel-deep',
-        commander: 'glass-panel-deep noise-commander border-cyan-500/20 shadow-[0_0_40px_rgba(6,182,212,0.1)]'
+        commander: 'glass-panel-deep noise-commander border-cyan-500/20 shadow-[0_0_40px_rgba(6,182,212,0.1)]',
+        alarm: 'glass-panel border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.2)] bg-red-950/20'
     };
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            animate={variant === 'alarm' ? {
+                x: [0, -2, 2, -2, 2, 0],
+                transition: { repeat: Infinity, duration: 0.2, repeatDelay: 3 }
+            } : undefined}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className={`${variantClasses[variant]} ${noPadding ? '' : 'p-6'} 

@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, Shield, Gauge, Activity, Radio, Droplet, FlaskConical, Terminal, Maximize2, Move, Layout, Zap, Search, Briefcase, RotateCcw, Box, BarChart3, FileSearch, Settings } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { TurbineFactory, TurbineType, ITurbineBehavior } from '../models/turbine/TurbineFactory';
 import { SafetyInterlockEngine } from '../services/SafetyInterlockEngine';
+import { PhysicsGuardrailService } from '../services/PhysicsGuardrailService'; // NC-11
 import { ScenarioControl } from './demo/ScenarioControl';
+import { ForensicOverlay } from './demo/ForensicOverlay'; // NC-11
 import { SystemAuditLog } from './ui/SystemAuditLog';
 import { ForensicDeepDive } from './demo/ForensicDeepDive';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
@@ -118,10 +120,24 @@ const PresetButton = ({ preset, isActive, onClick }: { preset: typeof WORKSPACE_
 // --- DEFAULT LAYOUTS ---
 const defaultLayouts: Layouts = workspaceManager.getSavedLayout() || workspaceManager.getDefaultLayout();
 
+
+
 export const UniversalTurbineDashboard: React.FC = () => {
     const { selectedAsset } = useAssetContext();
     const [demoOverrideType, setDemoOverrideType] = useState<TurbineType | null>(null);
     const activeType = (demoOverrideType || selectedAsset?.turbine_type || selectedAsset?.type || 'FRANCIS').toUpperCase() as TurbineType;
+
+    // NC-11: Real-time Physics Guardrails
+    const currentHead = useTelemetryStore(state => state.hydraulic?.head ?? 100);
+    const currentFlow = useTelemetryStore(state => state.hydraulic?.flow ?? 20);
+    const currentRpm = useTelemetryStore(state => state.mechanical?.rpm ?? 500);
+
+    const physicsStatus = useMemo(() => {
+        return PhysicsGuardrailService.analyze(currentFlow, currentHead, currentRpm);
+    }, [currentFlow, currentHead, currentRpm]);
+
+    const isResonanceAlarm = physicsStatus.specificSpeed > 300 && activeType === 'PELTON'; // Example physical impossibility logic
+    const isEfficiencyAlarm = physicsStatus.powerMW < 0.1; // Low power alarm
 
     const [model, setModel] = useState<ITurbineBehavior>(TurbineFactory.create(activeType));
     const [interlockStatus] = useState(SafetyInterlockEngine.getStatus());
@@ -462,10 +478,19 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                     {/* 6. TURBINE 3D VISUALIZATION */}
                     <div key={WIDGET_IDS.TURBINE_3D}>
-                        <GlassCard className="h-full p-4 overflow-hidden rounded-2xl border-white/5 hover:border-cyan-500/30 transition-colors">
+                        <GlassCard
+                            className="h-full p-4 overflow-hidden rounded-2xl border-white/5 hover:border-cyan-500/30 transition-colors"
+                            variant={isResonanceAlarm ? 'alarm' : 'base'}
+                        >
+                            <ForensicOverlay
+                                isVisible={isResonanceAlarm}
+                                targetKKS="20-SEN-01"
+                                targetName="Stator Vibration"
+                                coordinates={{ x: 50, y: 40 }}
+                            />
                             <CardHeader
-                                title="3D Turbine"
-                                icon={<Box className="w-4 h-4 text-cyan-400" />}
+                                title={isResonanceAlarm ? "CRITICAL RESONANCE" : "3D Turbine"}
+                                icon={<Box className={`w-4 h-4 ${isResonanceAlarm ? 'text-red-500 animate-pulse' : 'text-cyan-400'}`} />}
                                 widgetId={WIDGET_IDS.TURBINE_3D}
                             />
                             <div className="h-[calc(100%-3rem)]">

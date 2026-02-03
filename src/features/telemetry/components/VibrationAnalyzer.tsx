@@ -135,6 +135,22 @@ export const VibrationAnalyzer: React.FC = () => {
                             transition={{ duration: 1 }}
                         />
 
+                        {/* PREDICTIVE GHOST LINE (NC-11) */}
+                        <motion.path
+                            d={`M ${((150) / 200) * 400},${150 - (vib / maxAmp) * 120} L 400,${150 - ((vib * 1.5) / maxAmp) * 120}`}
+                            fill="none"
+                            stroke="#ffffff"
+                            strokeWidth="1"
+                            strokeDasharray="4 4"
+                            opacity="0.5"
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ duration: 2, delay: 1 }}
+                        />
+                        <text x="380" y={150 - ((vib * 1.5) / maxAmp) * 120 - 10} fill="#ffffff" fontSize="8" fontFamily="monospace" opacity="0.7">
+                            +10m PREDICTION
+                        </text>
+
                         {/* Interactive Peaks (Hotspots) */}
                         {/* 1x RPM */}
                         <circle
