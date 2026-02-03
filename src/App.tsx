@@ -114,6 +114,7 @@ const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.ts
 const EngineerLanding = React.lazy(() => import('./pages/EngineerLanding').then(m => ({ default: m.EngineerLanding })));
 const OwnerLanding = React.lazy(() => import('./pages/OwnerLanding').then(m => ({ default: m.OwnerLanding })));
 const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding').then(m => ({ default: m.HydroschoolLanding })));
+const PopOutWindow = React.lazy(() => import('./components/ui/PopOutWindow').then(m => ({ default: m.PopOutWindow })));
 
 
 
@@ -618,6 +619,7 @@ const App: React.FC = () => {
                             <ContextAwarenessProvider>
                                 <Routes>
                                     <Route path="/login" element={<Login />} />
+                                    <Route path="/popout/:widgetId" element={<PopOutWindow />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
                                 </Routes>
                             </ContextAwarenessProvider>
