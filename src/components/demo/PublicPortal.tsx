@@ -40,9 +40,9 @@ export const PublicPortal: React.FC = () => {
                 bearingTempRateOfChange: 0.2 // Mock benign unless Misalignment
             },
             spectrum: {
-                peaks: scenario === 'MISALIGNMENT' ? [{ frequencyHz: 7.14, amplitude: 6.0, order: 1 }] :
-                    scenario === 'LOOSENESS' ? [{ frequencyHz: 7.14, amplitude: 2.0, order: 1 }, { frequencyHz: 14.28, amplitude: 2.5, order: 2 }, { frequencyHz: 21.42, amplitude: 1.5, order: 3 }] :
-                        scenario === 'CAVITATION' ? [{ frequencyHz: 250, amplitude: 0.8, order: 35 }] : // 250Hz noise > 0.5 threshold
+                peaks: scenario === 'MISALIGNMENT' ? [{ frequencyHz: 7.14, amplitudeMmS: 6.0, order: 1 }] :
+                    scenario === 'LOOSENESS' ? [{ frequencyHz: 7.14, amplitudeMmS: 2.0, order: 1 }, { frequencyHz: 14.28, amplitudeMmS: 2.5, order: 2 }, { frequencyHz: 21.42, amplitudeMmS: 1.5, order: 3 }] :
+                        scenario === 'CAVITATION' ? [{ frequencyHz: 250, amplitudeMmS: 0.8, order: 35 }] : // 250Hz noise > 0.5 threshold
                             []
             },
             maintenance: {

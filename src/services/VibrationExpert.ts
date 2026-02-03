@@ -7,6 +7,7 @@
 export interface FrequencyPeak {
     frequencyHz: number;
     amplitudeMmS: number;
+    order?: number;
 }
 
 export interface VibrationDiagnosis {

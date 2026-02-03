@@ -11,7 +11,10 @@ export interface RCAInput {
         bearingTempC: number;
         bearingTempRateOfChange: number; // degC/min (NC-130)
     };
-    peaks: FrequencyPeak[];
+    peaks?: FrequencyPeak[];
+    spectrum?: {
+        peaks: FrequencyPeak[];
+    };
     maintenance: {
         shaftPlumbnessDeviation: number; // mm
         // NC-300: Baseline DNA bearing clearances
@@ -46,6 +49,7 @@ export class RCAService {
     public analyze(input: RCAInput): RCAResult[] {
         const results: RCAResult[] = [];
         const f0 = input.rpm / 60;
+        const peaks = input.peaks || input.spectrum?.peaks || [];
 
         // 1. DYNAMIC MISALIGNMENT
         // Profile: 2x RPM Peak + Thermal Gradient + Bad Initial Plumbness
@@ -53,7 +57,7 @@ export class RCAService {
         const evidenceMis: string[] = [];
 
         // Factor A: 2x RPM Component
-        const peak2x = input.peaks.find(p => Math.abs(p.frequencyHz - (f0 * 2)) < 1.0);
+        const peak2x = peaks.find(p => Math.abs(p.frequencyHz - (f0 * 2)) < 1.0);
         if (peak2x && peak2x.amplitudeMmS > 1.5) {
             misalignmentScore += 0.4; // Base indicator
             evidenceMis.push(`2x RPM Peak detected at ${peak2x.amplitudeMmS.toFixed(1)} mm/s`);
@@ -100,7 +104,7 @@ export class RCAService {
         let looseScore = 0;
         const evidenceLoose: string[] = [];
 
-        const peak1x = input.peaks.find(p => Math.abs(p.frequencyHz - f0) < 1.0);
+        const peak1x = peaks.find(p => Math.abs(p.frequencyHz - f0) < 1.0);
         if (peak1x && peak1x.amplitudeMmS > 2.0) {
             looseScore += 0.4;
             evidenceLoose.push(`Strong 1x RPM Fundamental (${peak1x.amplitudeMmS.toFixed(1)} mm/s)`);
@@ -108,7 +112,7 @@ export class RCAService {
 
         // Heuristic: If 1x peak explains almost ALL vibration, it's Unbalance. 
         // If there's 1x peak BUT lots of "fuzz" (harmonics), it's Looseness.
-        const harmonicCount = input.peaks.filter(p => p.amplitudeMmS > 0.5).length;
+        const harmonicCount = peaks.filter(p => p.amplitudeMmS > 0.5).length;
         if (harmonicCount > 4) {
             looseScore += 0.35;
             evidenceLoose.push('Multiple harmonics present (Comb Spectrum) indicating mechanical looseness');
@@ -140,7 +144,7 @@ export class RCAService {
         const isSoftMaterial = input.specifications.runnerMaterial === 'Bronze' || input.specifications.runnerMaterial === 'Cast Steel';
         const noiseThreshold = isSoftMaterial ? 0.3 : 0.5; // Lower threshold for softer materials
 
-        const highFreqNoise = input.peaks.find(p => p.frequencyHz > 150 && p.amplitudeMmS > noiseThreshold);
+        const highFreqNoise = peaks.find(p => p.frequencyHz > 150 && p.amplitudeMmS > noiseThreshold);
 
         if (highFreqNoise) {
             cavScore += 0.45;

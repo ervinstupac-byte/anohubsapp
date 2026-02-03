@@ -127,7 +127,13 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
     deltaIndex?: number;
     showInfoPanel?: boolean;
     highlightId?: string | null;
-}>(({ rpm, className, onSelect, deltaMap, heatmapMode, ghostMode, baselineDelta, deltaIndex, showInfoPanel, highlightId }, ref) => {
+    diagnosticHighlights?: {
+        oil?: number;
+        cavitation?: number;
+        structural?: number;
+    };
+    investigatedComponents?: any[];
+}>(({ rpm, className, onSelect, deltaMap, heatmapMode, ghostMode, baselineDelta, deltaIndex, showInfoPanel, highlightId, diagnosticHighlights, investigatedComponents }, ref) => {
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
     const [crashSafe, setCrashSafe] = useState(true);
