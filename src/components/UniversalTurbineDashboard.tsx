@@ -25,6 +25,7 @@ const TurbineRunner3D = lazy(() => import('./three/TurbineRunner3D').then(m => (
 const VibrationAnalyzer = lazy(() => import('../features/telemetry/components/VibrationAnalyzer').then(m => ({ default: m.VibrationAnalyzer })));
 const ForensicLab = lazy(() => import('./ForensicLab').then(m => ({ default: m.ForensicLab })));
 const ExecutiveSummary = lazy(() => import('./dashboard/ExecutiveSummary').then(m => ({ default: m.ExecutiveSummary })));
+import { ErrorBoundary } from './ErrorBoundary';
 const HPPForge = lazy(() => import('./forge/HPPForge').then(m => ({ default: m.HPPForge })));
 
 const ResponsiveGridLayout = WidthProvider(ResponsiveLayout);
@@ -134,9 +135,21 @@ export const UniversalTurbineDashboard: React.FC = () => {
     const [demoStep, setDemoStep] = useState<string>('');
 
     // NC-800: Liquid Layout State
-    const [layouts, setLayouts] = useState(() => {
-        const saved = localStorage.getItem('turbine_dashboard_layout');
-        return saved ? JSON.parse(saved) : defaultLayouts;
+    const [layouts, setLayouts] = useState<Layouts>(() => {
+        try {
+            const saved = localStorage.getItem('turbine_dashboard_layout');
+            // If saved is literal string "null" or null, fallback
+            if (saved && saved !== 'null') {
+                const parsed = JSON.parse(saved);
+                // Basic structural check
+                if (parsed && typeof parsed === 'object') {
+                    return parsed;
+                }
+            }
+        } catch (e) {
+            console.warn("Failed to load layout, resetting to default", e);
+        }
+        return defaultLayouts;
     });
 
     const [droppedWidgets, setDroppedWidgets] = useState<string[]>([]);
@@ -220,6 +233,30 @@ export const UniversalTurbineDashboard: React.FC = () => {
         return () => window.removeEventListener('DEMO_FAULT_DETECTED', handleFault);
     }, []);
 
+    // --- EMPTY STATE / FIRST RUN ---
+    if (!selectedAsset && !activeType && !demoOverrideType) {
+        return (
+            <div className={`min-h-screen p-6 bg-slate-900 text-white flex items-center justify-center relative overflow-hidden`}>
+                <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.2)_0%,transparent_70%)]" />
+                <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                    <div>
+                        <h1 className="text-5xl font-black mb-6 tracking-tight">
+                            WELCOME TO <span className="text-cyan-400">MONOLIT</span>
+                        </h1>
+                        <p className="text-xl text-slate-400 mb-8 leading-relaxed">
+                            Your fleet is currently empty. Initialize your first Digital Twin using <strong>The Sovereign Forge</strong>.
+                        </p>
+                        <div className="p-6 bg-slate-800/50 rounded-xl border border-white/10">
+                            <Suspense fallback={<LoadingFallback />}>
+                                <HPPForge />
+                            </Suspense>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={`min-h-screen p-6 transition-colors duration-1000 bg-gradient-to-br ${colors.background} relative overflow-hidden`}>
 
@@ -284,239 +321,241 @@ export const UniversalTurbineDashboard: React.FC = () => {
             </header>
 
             {/* LIQUID GRID LAYOUT */}
-            <ResponsiveGridLayout
-                className="layout"
-                layouts={layouts}
-                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-                cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
-                rowHeight={100}
-                onLayoutChange={onLayoutChange}
-                isDroppable={true}
-                onDrop={onDrop}
-                draggableHandle=".drag-handle"
-            >
-                {/* 1. UNIVERSAL VITALS */}
-                <div key="vitals">
-                    <GlassCard className="h-full p-4 border-l-4 overflow-y-auto" style={{ borderColor: colors.primary }}>
-                        <div className="drag-handle cursor-move flex items-center justify-between mb-4 pb-2 border-b border-white/5">
-                            <h3 className="text-sm font-bold text-slate-400 uppercase">Universal Vitals</h3>
-                            <Move className="w-4 h-4 text-slate-600" />
-                        </div>
-                        <div className="grid grid-cols-1 gap-4 h-[calc(100%-3rem)]">
-                            <VibrationMonitor />
-                            <TemperatureChart />
-                            <AcousticMonitor />
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* 2. MAIN ENGINE (MORPHING) */}
-                <div key="main-engine">
-                    <motion.div
-                        key={activeType}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="h-full"
-                    >
-                        <GlassCard className="h-full p-6 relative overflow-hidden">
-                            <div className="drag-handle cursor-move absolute top-0 left-0 right-0 h-6 z-20 hover:bg-white/5 transition-colors" />
-
-                            {/* Background Watermark */}
-                            <div className="absolute top-0 right-0 p-32 opacity-5 pointer-events-none">
-                                <h1 className="text-9xl font-black">{activeType[0]}</h1>
+            <ErrorBoundary>
+                <ResponsiveGridLayout
+                    className="layout"
+                    layouts={layouts}
+                    breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                    cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+                    rowHeight={100}
+                    onLayoutChange={onLayoutChange}
+                    isDroppable={true}
+                    onDrop={onDrop}
+                    draggableHandle=".drag-handle"
+                >
+                    {/* 1. UNIVERSAL VITALS */}
+                    <div key="vitals">
+                        <GlassCard className="h-full p-4 border-l-4 overflow-y-auto" style={{ borderColor: colors.primary }}>
+                            <div className="drag-handle cursor-move flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                                <h3 className="text-sm font-bold text-slate-400 uppercase">Universal Vitals</h3>
+                                <Move className="w-4 h-4 text-slate-600" />
                             </div>
-
-                            <h2 className="text-2xl font-black text-white mb-6 uppercase flex items-center gap-3 relative z-10 pointer-events-none">
-                                <span style={{ color: colors.primary }}>///</span> {activeType} Specific Diagnostics
-                            </h2>
-
-                            {/* KAPLAN UI */}
-                            {activeType === 'KAPLAN' && (
-                                <div className="grid grid-cols-2 gap-4 h-full pb-8">
-                                    <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
-                                        <h3 className="text-cyan-400 font-bold mb-2">Blade-Gate Correlation</h3>
-                                        <div className="h-32 flex items-center justify-center border-t border-r border-cyan-500/20">
-                                            <svg width="100%" height="100%" viewBox="0 0 100 100">
-                                                <path d="M 10,90 Q 50,50 90,10" fill="none" stroke={colors.primary} strokeWidth="2" />
-                                                <circle cx="60" cy="40" r="3" fill="white" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
-                                        <h3 className="text-cyan-400 font-bold mb-2">Draft Tube Vortex</h3>
-                                        <div className="text-center py-4">
-                                            <span className="text-3xl font-black text-white">0.05</span>
-                                            <span className="text-xs block text-slate-500">bar</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* FRANCIS UI */}
-                            {activeType === 'FRANCIS' && (
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg group hover:bg-emerald-900/40 transition">
-                                        <h3 className="text-emerald-400 font-bold mb-2">Labyrinth Seal</h3>
-                                        <div className="text-center py-2">
-                                            <span className="text-2xl font-black text-white">12.4</span>
-                                            <span className="text-xs block text-slate-500">L/min</span>
-                                        </div>
-                                    </div>
-                                    <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg">
-                                        <h3 className="text-emerald-400 font-bold mb-2">Vortex Rope</h3>
-                                        <div className="flex justify-center h-20 items-center">
-                                            <div className="w-10 h-10 rounded-full border-2 border-emerald-500 animate-spin" />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* PELTON UI */}
-                            {activeType === 'PELTON' && (
-                                <div className="p-4 bg-fuchsia-950/30 border border-fuchsia-500/30 rounded-lg h-full">
-                                    <h3 className="text-fuchsia-400 font-bold mb-4">Multi-Nozzle Force Balance</h3>
-                                    <div className="flex justify-between items-end h-32 px-4 pb-2">
-                                        {[1, 2, 3, 4, 5, 6].map(n => (
-                                            <div key={n} className="flex flex-col items-center gap-1">
-                                                <div className="w-6 bg-fuchsia-500 rounded-t-sm" style={{ height: `${80 + Math.random() * 20}%` }} />
-                                                <span className="text-xs font-bold text-slate-300">N{n}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </GlassCard>
-                    </motion.div>
-                </div>
-
-                {/* 3. AI BRAIN */}
-                <div key="ai-brain">
-                    <GlassCard className="h-full p-4 bg-purple-950/20 border border-purple-500/30">
-                        <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
-                            <div className="w-2 h-2 rounded-full bg-purple-500 animate-ping"></div>
-                            <h3 className="text-sm font-bold text-purple-300 uppercase">Decision Engine</h3>
-                        </div>
-                        <p className="text-sm text-white font-medium">"System optimal."</p>
-                    </GlassCard>
-                </div>
-
-                {/* 4. SAFETY GUARD */}
-                <div key="safety-guard">
-                    <GlassCard className="h-full p-4">
-                        <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
-                            <Shield className="w-4 h-4 text-emerald-400" />
-                            <h3 className="text-sm font-bold text-slate-300 uppercase">Hardware Verify</h3>
-                        </div>
-                        <p className="text-xs text-slate-400">12mm-to-16mm Safety Guard Active.</p>
-                    </GlassCard>
-                </div>
-
-                {/* 5. AUDIT LOG */}
-                <div key="audit-log">
-                    <GlassCard className="h-full p-4">
-                        <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
-                            <Terminal className="w-4 h-4 text-cyan-400" />
-                            <h3 className="text-sm font-bold text-slate-300 uppercase">System Audit Log</h3>
-                        </div>
-                        <SystemAuditLog maxEntries={3} />
-                    </GlassCard>
-                </div>
-
-                {/* 6. TURBINE 3D VISUALIZATION */}
-                <div key={WIDGET_IDS.TURBINE_3D}>
-                    <GlassCard className="h-full p-4 overflow-hidden">
-                        <CardHeader
-                            title="3D Turbine"
-                            icon={<Box className="w-4 h-4 text-cyan-400" />}
-                            widgetId={WIDGET_IDS.TURBINE_3D}
-                        />
-                        <div className="h-[calc(100%-3rem)]">
-                            <Suspense fallback={<LoadingFallback />}>
-                                <TurbineRunner3D rpm={150} className="w-full h-full" />
-                            </Suspense>
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* 7. VIBRATION ANALYZER */}
-                <div key={WIDGET_IDS.VIBRATION}>
-                    <GlassCard className="h-full p-4 overflow-auto">
-                        <CardHeader
-                            title="Vibration Analyzer"
-                            icon={<BarChart3 className="w-4 h-4 text-cyan-400" />}
-                            widgetId={WIDGET_IDS.VIBRATION}
-                        />
-                        <div className="h-[calc(100%-3rem)]">
-                            <Suspense fallback={<LoadingFallback />}>
-                                <VibrationAnalyzer />
-                            </Suspense>
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* 8. FORENSIC LAB */}
-                <div key={WIDGET_IDS.FORENSIC}>
-                    <GlassCard className="h-full p-4 overflow-auto">
-                        <CardHeader
-                            title="Forensic Lab"
-                            icon={<FileSearch className="w-4 h-4 text-amber-400" />}
-                            widgetId={WIDGET_IDS.FORENSIC}
-                        />
-                        <div className="h-[calc(100%-3rem)]">
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ForensicLab />
-                            </Suspense>
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* 9. EXECUTIVE SUMMARY */}
-                <div key={WIDGET_IDS.EXECUTIVE}>
-                    <GlassCard className="h-full p-4 overflow-auto">
-                        <CardHeader
-                            title="Executive Summary"
-                            icon={<Briefcase className="w-4 h-4 text-emerald-400" />}
-                            widgetId={WIDGET_IDS.EXECUTIVE}
-                        />
-                        <div className="h-[calc(100%-3rem)]">
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ExecutiveSummary />
-                            </Suspense>
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* 10. NC-900: THE SOVEREIGN FORGE */}
-                <div key={WIDGET_IDS.FORGE}>
-                    <GlassCard className="h-full p-4 overflow-hidden">
-                        <CardHeader
-                            title="The Sovereign Forge"
-                            icon={<Settings className="w-4 h-4 text-amber-400" />}
-                            widgetId={WIDGET_IDS.FORGE}
-                        />
-                        <div className="h-[calc(100%-3rem)]">
-                            <Suspense fallback={<LoadingFallback />}>
-                                <HPPForge />
-                            </Suspense>
-                        </div>
-                    </GlassCard>
-                </div>
-
-
-                {/* DYNAMICALLY DROPPED WIDGETS */}
-                {droppedWidgets.map(id => (
-                    <div key={id} data-grid={{ x: 0, y: Infinity, w: 3, h: 2 }}>
-                        <GlassCard className="h-full p-4 bg-slate-800 border-dashed border-2 border-slate-600">
-                            <div className="drag-handle cursor-move flex justify-between">
-                                <span className="font-mono text-xs text-yellow-400">{id}</span>
-                                <button onClick={() => setDroppedWidgets(prev => prev.filter(w => w !== id))} className="text-red-500">×</button>
+                            <div className="grid grid-cols-1 gap-4 h-[calc(100%-3rem)]">
+                                <VibrationMonitor />
+                                <TemperatureChart />
+                                <AcousticMonitor />
                             </div>
-                            <div className="mt-4 text-center text-slate-400">Analysis Pending...</div>
                         </GlassCard>
                     </div>
-                ))}
 
-            </ResponsiveGridLayout>
+                    {/* 2. MAIN ENGINE (MORPHING) */}
+                    <div key="main-engine">
+                        <motion.div
+                            key={activeType}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="h-full"
+                        >
+                            <GlassCard className="h-full p-6 relative overflow-hidden">
+                                <div className="drag-handle cursor-move absolute top-0 left-0 right-0 h-6 z-20 hover:bg-white/5 transition-colors" />
+
+                                {/* Background Watermark */}
+                                <div className="absolute top-0 right-0 p-32 opacity-5 pointer-events-none">
+                                    <h1 className="text-9xl font-black">{activeType[0]}</h1>
+                                </div>
+
+                                <h2 className="text-2xl font-black text-white mb-6 uppercase flex items-center gap-3 relative z-10 pointer-events-none">
+                                    <span style={{ color: colors.primary }}>///</span> {activeType} Specific Diagnostics
+                                </h2>
+
+                                {/* KAPLAN UI */}
+                                {activeType === 'KAPLAN' && (
+                                    <div className="grid grid-cols-2 gap-4 h-full pb-8">
+                                        <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
+                                            <h3 className="text-cyan-400 font-bold mb-2">Blade-Gate Correlation</h3>
+                                            <div className="h-32 flex items-center justify-center border-t border-r border-cyan-500/20">
+                                                <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                                    <path d="M 10,90 Q 50,50 90,10" fill="none" stroke={colors.primary} strokeWidth="2" />
+                                                    <circle cx="60" cy="40" r="3" fill="white" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
+                                            <h3 className="text-cyan-400 font-bold mb-2">Draft Tube Vortex</h3>
+                                            <div className="text-center py-4">
+                                                <span className="text-3xl font-black text-white">0.05</span>
+                                                <span className="text-xs block text-slate-500">bar</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* FRANCIS UI */}
+                                {activeType === 'FRANCIS' && (
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg group hover:bg-emerald-900/40 transition">
+                                            <h3 className="text-emerald-400 font-bold mb-2">Labyrinth Seal</h3>
+                                            <div className="text-center py-2">
+                                                <span className="text-2xl font-black text-white">12.4</span>
+                                                <span className="text-xs block text-slate-500">L/min</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg">
+                                            <h3 className="text-emerald-400 font-bold mb-2">Vortex Rope</h3>
+                                            <div className="flex justify-center h-20 items-center">
+                                                <div className="w-10 h-10 rounded-full border-2 border-emerald-500 animate-spin" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* PELTON UI */}
+                                {activeType === 'PELTON' && (
+                                    <div className="p-4 bg-fuchsia-950/30 border border-fuchsia-500/30 rounded-lg h-full">
+                                        <h3 className="text-fuchsia-400 font-bold mb-4">Multi-Nozzle Force Balance</h3>
+                                        <div className="flex justify-between items-end h-32 px-4 pb-2">
+                                            {[1, 2, 3, 4, 5, 6].map(n => (
+                                                <div key={n} className="flex flex-col items-center gap-1">
+                                                    <div className="w-6 bg-fuchsia-500 rounded-t-sm" style={{ height: `${80 + Math.random() * 20}%` }} />
+                                                    <span className="text-xs font-bold text-slate-300">N{n}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </GlassCard>
+                        </motion.div>
+                    </div>
+
+                    {/* 3. AI BRAIN */}
+                    <div key="ai-brain">
+                        <GlassCard className="h-full p-4 bg-purple-950/20 border border-purple-500/30">
+                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                                <div className="w-2 h-2 rounded-full bg-purple-500 animate-ping"></div>
+                                <h3 className="text-sm font-bold text-purple-300 uppercase">Decision Engine</h3>
+                            </div>
+                            <p className="text-sm text-white font-medium">"System optimal."</p>
+                        </GlassCard>
+                    </div>
+
+                    {/* 4. SAFETY GUARD */}
+                    <div key="safety-guard">
+                        <GlassCard className="h-full p-4">
+                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                                <Shield className="w-4 h-4 text-emerald-400" />
+                                <h3 className="text-sm font-bold text-slate-300 uppercase">Hardware Verify</h3>
+                            </div>
+                            <p className="text-xs text-slate-400">12mm-to-16mm Safety Guard Active.</p>
+                        </GlassCard>
+                    </div>
+
+                    {/* 5. AUDIT LOG */}
+                    <div key="audit-log">
+                        <GlassCard className="h-full p-4">
+                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                                <Terminal className="w-4 h-4 text-cyan-400" />
+                                <h3 className="text-sm font-bold text-slate-300 uppercase">System Audit Log</h3>
+                            </div>
+                            <SystemAuditLog maxEntries={3} />
+                        </GlassCard>
+                    </div>
+
+                    {/* 6. TURBINE 3D VISUALIZATION */}
+                    <div key={WIDGET_IDS.TURBINE_3D}>
+                        <GlassCard className="h-full p-4 overflow-hidden">
+                            <CardHeader
+                                title="3D Turbine"
+                                icon={<Box className="w-4 h-4 text-cyan-400" />}
+                                widgetId={WIDGET_IDS.TURBINE_3D}
+                            />
+                            <div className="h-[calc(100%-3rem)]">
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <TurbineRunner3D rpm={150} className="w-full h-full" />
+                                </Suspense>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+                    {/* 7. VIBRATION ANALYZER */}
+                    <div key={WIDGET_IDS.VIBRATION}>
+                        <GlassCard className="h-full p-4 overflow-auto">
+                            <CardHeader
+                                title="Vibration Analyzer"
+                                icon={<BarChart3 className="w-4 h-4 text-cyan-400" />}
+                                widgetId={WIDGET_IDS.VIBRATION}
+                            />
+                            <div className="h-[calc(100%-3rem)]">
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <VibrationAnalyzer />
+                                </Suspense>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+                    {/* 8. FORENSIC LAB */}
+                    <div key={WIDGET_IDS.FORENSIC}>
+                        <GlassCard className="h-full p-4 overflow-auto">
+                            <CardHeader
+                                title="Forensic Lab"
+                                icon={<FileSearch className="w-4 h-4 text-amber-400" />}
+                                widgetId={WIDGET_IDS.FORENSIC}
+                            />
+                            <div className="h-[calc(100%-3rem)]">
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ForensicLab />
+                                </Suspense>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+                    {/* 9. EXECUTIVE SUMMARY */}
+                    <div key={WIDGET_IDS.EXECUTIVE}>
+                        <GlassCard className="h-full p-4 overflow-auto">
+                            <CardHeader
+                                title="Executive Summary"
+                                icon={<Briefcase className="w-4 h-4 text-emerald-400" />}
+                                widgetId={WIDGET_IDS.EXECUTIVE}
+                            />
+                            <div className="h-[calc(100%-3rem)]">
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ExecutiveSummary />
+                                </Suspense>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+                    {/* 10. NC-900: THE SOVEREIGN FORGE */}
+                    <div key={WIDGET_IDS.FORGE}>
+                        <GlassCard className="h-full p-4 overflow-hidden">
+                            <CardHeader
+                                title="The Sovereign Forge"
+                                icon={<Settings className="w-4 h-4 text-amber-400" />}
+                                widgetId={WIDGET_IDS.FORGE}
+                            />
+                            <div className="h-[calc(100%-3rem)]">
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <HPPForge />
+                                </Suspense>
+                            </div>
+                        </GlassCard>
+                    </div>
+
+
+                    {/* DYNAMICALLY DROPPED WIDGETS */}
+                    {droppedWidgets.map(id => (
+                        <div key={id} data-grid={{ x: 0, y: Infinity, w: 3, h: 2 }}>
+                            <GlassCard className="h-full p-4 bg-slate-800 border-dashed border-2 border-slate-600">
+                                <div className="drag-handle cursor-move flex justify-between">
+                                    <span className="font-mono text-xs text-yellow-400">{id}</span>
+                                    <button onClick={() => setDroppedWidgets(prev => prev.filter(w => w !== id))} className="text-red-500">×</button>
+                                </div>
+                                <div className="mt-4 text-center text-slate-400">Analysis Pending...</div>
+                            </GlassCard>
+                        </div>
+                    ))}
+
+                </ResponsiveGridLayout>
+            </ErrorBoundary>
 
             {/* Modals & Overlays */}
             {isCommissioningMode && (

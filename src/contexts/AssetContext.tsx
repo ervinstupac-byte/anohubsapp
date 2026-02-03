@@ -87,19 +87,22 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
                     if (localAssets.length > 0) {
                         setAssets(localAssets);
+                        setSelectedAssetId(localAssets[0].id); // Auto-select first local
                     } else {
                         // HARD FALLBACK (If no guest assets exist either)
-                        setAssets([{
+                        const demo = {
                             id: 1,
                             name: 'Unit-1 (Fallback)',
                             type: 'HPP',
                             location: 'Bihac',
-                            coordinates: [44.81, 15.87],
+                            coordinates: [44.81, 15.87] as [number, number],
                             capacity: 12.5,
                             status: 'Operational',
                             turbine_type: 'FRANCIS',
                             specs: {}
-                        }]);
+                        };
+                        setAssets([demo as Asset]);
+                        setSelectedAssetId(demo.id);
                     }
                 }
 
