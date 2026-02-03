@@ -93,52 +93,58 @@ export const HPPForge: React.FC = () => {
                 {/* CONTROL PANEL */}
                 <div className="space-y-6">
                     {/* Head Input */}
-                    <div className="bg-slate-900/50 p-4 rounded-lg border border-white/5">
-                        <div className="flex justify-between mb-2">
-                            <label className="text-sm text-slate-400 flex items-center gap-2">
-                                <ArrowRight className="w-4 h-4 text-violet-400 rotate-90" /> Net Head (H)
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-violet-500/30 transition-colors">
+                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+                        <div className="flex justify-between mb-4 relative z-10">
+                            <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
+                                <ArrowRight className="w-3 h-3 text-violet-400 rotate-90" /> Net Head (H)
                             </label>
-                            <span className="text-violet-300 font-mono font-bold">{head} m</span>
+                            <span className="text-violet-300 font-mono font-black text-lg drop-shadow-[0_0_8px_rgba(167,139,250,0.3)]">{head} m</span>
                         </div>
                         <input
                             type="range" min="10" max="1000" step="1"
                             value={head} onChange={(e) => setHead(Number(e.target.value))}
-                            className="w-full accent-violet-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                            className="input-range-premium relative z-10"
                         />
-                        <div className="flex justify-between text-xs text-slate-600 font-mono mt-1">
+                        <div className="flex justify-between text-[10px] text-slate-600 font-mono mt-2 font-bold uppercase">
                             <span>10m</span>
                             <span>1000m</span>
                         </div>
                     </div>
 
                     {/* Flow Input */}
-                    <div className="bg-slate-900/50 p-4 rounded-lg border border-white/5">
-                        <div className="flex justify-between mb-2">
-                            <label className="text-sm text-slate-400 flex items-center gap-2">
-                                <Droplets className="w-4 h-4 text-cyan-400" /> Design Flow (Q)
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-cyan-500/30 transition-colors">
+                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+                        <div className="flex justify-between mb-4 relative z-10">
+                            <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
+                                <Droplets className="w-3 h-3 text-cyan-400" /> Design Flow (Q)
                             </label>
-                            <span className="text-cyan-300 font-mono font-bold">{flow} m³/s</span>
+                            <span className="text-cyan-300 font-mono font-black text-lg drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">{flow} m³/s</span>
                         </div>
                         <input
                             type="range" min="1" max="200" step="0.5"
                             value={flow} onChange={(e) => setFlow(Number(e.target.value))}
-                            className="w-full accent-cyan-500 h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                            className="input-range-premium relative z-10"
                         />
+                        <div className="flex justify-between text-[10px] text-slate-600 font-mono mt-2 font-bold uppercase">
+                            <span>1 m³/s</span>
+                            <span>200 m³/s</span>
+                        </div>
                     </div>
 
                     {/* RPM Selector */}
-                    <div className="bg-slate-900/50 p-4 rounded-lg border border-white/5">
-                        <div className="flex justify-between mb-2">
-                            <label className="text-sm text-slate-400 flex items-center gap-2">
-                                <Activity className="w-4 h-4 text-emerald-400" /> Speed (n)
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+                        <div className="flex justify-between mb-2 relative z-10">
+                            <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
+                                <Activity className="w-3 h-3 text-emerald-400" /> Speed (n)
                             </label>
                             <select
                                 value={rpm}
                                 onChange={(e) => setRpm(Number(e.target.value))}
-                                className="bg-slate-800 text-white border border-white/10 rounded px-2 py-1 text-sm font-mono focus:outline-none focus:border-emerald-500"
+                                className="bg-black/40 text-emerald-300 border border-emerald-500/30 rounded px-3 py-1 text-sm font-mono font-bold focus:outline-none focus:border-emerald-500 focus:shadow-[0_0_10px_rgba(16,185,129,0.2)] appearance-none cursor-pointer hover:bg-black/60 transition-colors"
                             >
                                 {SYNC_SPEEDS.map(s => (
-                                    <option key={s} value={s}>{s} RPM</option>
+                                    <option key={s} value={s} className="bg-slate-900 text-slate-300">{s} RPM</option>
                                 ))}
                             </select>
                         </div>

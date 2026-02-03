@@ -77,6 +77,7 @@ export const LibraryHealthMonitor: React.FC = () => {
                     } else {
                         (response as any)._fetchedUrl = url;
                     }
+
                     if (response && response.ok) {
                         const html = await response.text();
                         // NC-8.0: Extract SHA-256 hash using regex
@@ -91,11 +92,13 @@ export const LibraryHealthMonitor: React.FC = () => {
 
                         const verified = embedded && embedded === computed;
 
-                        return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified, fetchedUrl: (response as any)._fetchedUrl };
+                        return { ok: true, name: file.path, embedded: embedded || 'NOT_FOUND', computed, verified, fetchedUrl: (response as any)._fetchedUrl, status: 'INTEGRATED' };
                     }
-                    return { ok: false, name: file.path };
+
+                    // NC-9.0: Graceful Fallback for Missing Files
+                    return { ok: false, name: file.path, status: 'MISSING_TEMPLATE_NEEDED' };
                 } catch (e) {
-                    return { ok: false, name: file.path };
+                    return { ok: false, name: file.path, status: 'ERROR_ACCESS' };
                 }
             }));
 
@@ -106,6 +109,7 @@ export const LibraryHealthMonitor: React.FC = () => {
             setAuditLog(prev => [...results.map(r => ({
                 name: r.name,
                 status: r.ok ? 'SUCCESS' as const : 'ERROR' as const,
+                detailStatus: (r as any).status, // Preserve detail status
                 hash: (r as any).embedded || (r as any).hash || 'NOT_FOUND',
                 computed: (r as any).computed,
                 verified: (r as any).verified
@@ -340,7 +344,11 @@ export const LibraryHealthMonitor: React.FC = () => {
                                                         <span className="text-[8px] font-mono text-slate-400 truncate">{(log as any).computed}</span>
                                                     </>
                                                 )}
-                                                <span className={`ml-auto text-[9px] font-black px-1.5 py-0.5 rounded ${(log as any).verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>{(log as any).verified ? 'VERIFIED' : 'MISMATCH'}</span>
+                                                <span className={`rotate-0 ml-auto text-[9px] font-black px-1.5 py-0.5 rounded ${(log as any).verified ? 'bg-emerald-500/10 text-emerald-400' :
+                                                    ((log as any).status === 'MISSING_TEMPLATE_NEEDED' ? 'bg-orange-500/10 text-orange-400' : 'bg-red-500/10 text-red-400')
+                                                    }`}>
+                                                    {(log as any).verified ? 'VERIFIED' : ((log as any).status === 'MISSING_TEMPLATE_NEEDED' ? 'DOWNLOAD TEMPLATE' : 'MISMATCH')}
+                                                </span>
                                             </div>
                                         </div>
                                     ))

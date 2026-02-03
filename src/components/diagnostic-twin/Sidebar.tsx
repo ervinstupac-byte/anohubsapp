@@ -45,7 +45,7 @@ interface FleetSectionProps {
 }
 
 const FleetSection: React.FC<FleetSectionProps> = ({ showMap, onToggleMap, onRegisterAsset }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
     const { t } = useTranslation();
 
     return (
@@ -168,19 +168,23 @@ const SectorAccordion: React.FC<SectorAccordionProps> = ({
                             {filteredModules.map((module) => {
                                 const isActive = currentPath === module.route;
                                 return (
+
                                     <button
                                         key={module.id}
                                         onClick={() => onNavigate(module.route, module.title)}
-                                        className={`w-full text-left px-11 py-2 text-[10px] font-mono flex items-center justify-between transition-all group/item ${isActive ? 'text-black font-black bg-white/40 shadow-sm' : 'text-slate-600 hover:text-black hover:bg-white/20'}`}
+                                        className={`w-full text-left px-11 py-2 text-[10px] font-mono flex items-center justify-between transition-all group/item relative overflow-hidden ${isActive
+                                            ? 'text-cyan-100 font-bold bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                                            : 'text-slate-400 hover:text-cyan-200 hover:bg-white/5'}`}
                                     >
-                                        <div className="flex items-center gap-3">
-                                            <span className="opacity-60 grayscale group-hover/item:grayscale-0 transition-all">{module.icon}</span>
+                                        {isActive && <div className="absolute inset-0 bg-cyan-400/5 blur-md" />}
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <span className={`transition-all duration-300 ${isActive ? 'opacity-100 text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]' : 'opacity-50 grayscale group-hover/item:grayscale-0 group-hover/item:text-cyan-400'}`}>{module.icon}</span>
                                             <span>{module.title}</span>
                                             {module.isoRef && (
-                                                <span className="text-[7px] bg-black/10 px-1 rounded opacity-50">{module.isoRef}</span>
+                                                <span className={`text-[7px] px-1 rounded opacity-50 ${isActive ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-white/5'}`}>{module.isoRef}</span>
                                             )}
                                         </div>
-                                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-cyan-600 shadow-[0_0_8px_rgba(8,145,178,0.5)]" />}
+                                        {isActive && <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,1)] animate-pulse" />}
                                     </button>
                                 );
                             })}
@@ -279,10 +283,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     { id: 'healthMonitor', title: 'System Health', icon: '🩺', route: '/knowledge/health-monitor', isoRef: 'SOURCES: 202' },
                     { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
                     { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
-                            { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
-                            { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '/engineer' },
-                            { id: 'ownerPortal', title: t('sidebar.modules.owner_portal', 'Owner Portal'), icon: '🏛️', route: '/owner' },
-                            { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '/hydroschool' },
+                    { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
+                    { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '/engineer' },
+                    { id: 'ownerPortal', title: t('sidebar.modules.owner_portal', 'Owner Portal'), icon: '🏛️', route: '/owner' },
+                    { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '/hydroschool' },
                 ]
             }
         ];
@@ -347,14 +351,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -280, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] ${industrialGradient} border-r border-[#2f3542]/40 z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] bg-slate-950/80 backdrop-blur-xl z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
                     >
                         {/* BRUSHED METAL TEXTURE */}
                         <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
 
                         {/* EDGE ACCENTS */}
-                        <div className="absolute inset-y-0 left-0 w-[2px] bg-white/40 pointer-events-none" />
-                        <div className="absolute inset-y-0 right-0 w-[1px] bg-black/20 pointer-events-none" />
+                        <div className="absolute inset-y-0 left-0 w-[2px] bg-white/10 pointer-events-none" />
+                        <div className="absolute inset-y-0 right-0 w-[1px] bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none" />
 
                         {/* HEADER */}
                         <div className="p-6 border-b border-black/10 relative z-10 bg-black/5">
@@ -385,8 +389,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             </div>
                         </div>
 
-                        {/* CONTENT */}
-                        <div className="flex-1 overflow-hidden relative z-10">
+                        {/* CONTENT - SCROLLABLE */}
+                        <div className="flex-1 overflow-y-auto overflow-x-hidden relative z-10 scrollbar-cyan scrollbar-gutter-stable pr-1">
                             <FleetSection
                                 showMap={showMap}
                                 onToggleMap={onToggleMap}
@@ -405,22 +409,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         searchQuery={searchQuery}
                                     />
                                 ))}
-
-                                {/* ACTION BUTTON */}
-                                <div className="pt-4 px-2 pb-6">
-                                    <button
-                                        className="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded border-b-4 border-slate-950 active:translate-y-0.5 active:border-b-1 transition-all flex items-center justify-center gap-2 group shadow-lg"
-                                        onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
-                                    >
-                                        <FileText className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">GENERATE_FORENSIC</span>
-                                    </button>
-                                </div>
                             </div>
                         </div>
 
-                        {/* FOOTER */}
-                        <div className="p-4 border-t border-black/10 relative z-10 bg-black/5 flex flex-col items-center">
+                        {/* STICKY ACTION ZONE */}
+                        <div className="p-4 border-t border-black/10 bg-black/5 backdrop-blur-sm z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+                            <button
+                                className="w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white rounded-lg border border-white/5 border-b-4 border-b-black shadow-lg shadow-black/20 active:translate-y-0.5 active:border-b-0 transition-all flex items-center justify-center gap-2 group relative overflow-hidden"
+                                onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
+                            >
+                                <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <FileText className="w-4 h-4 text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] transition-all" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-cyan-50 group-hover:text-cyan-200">GENERATE_FORENSIC</span>
+                            </button>
+                        </div>
+
+                        {/* FOOTER - STATUS */}
+                        <div className="px-4 pb-4 pt-2 bg-black/5 flex flex-col items-center z-20">
                             <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />

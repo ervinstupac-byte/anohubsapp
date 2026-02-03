@@ -51,7 +51,7 @@ const CardHeader = ({ title, icon, widgetId, dragHandle = true }: { title: strin
     <div className={`flex items-center justify-between mb-3 pb-2 border-b border-white/5 ${dragHandle ? 'drag-handle cursor-move' : ''}`}>
         <div className="flex items-center gap-2">
             {icon}
-            <h3 className="text-sm font-bold text-slate-300 uppercase">{title}</h3>
+            <h3 className="text-sm font-bold text-slate-300 uppercase font-sans tracking-widest">{title}</h3>
         </div>
         <div className="flex items-center gap-1">
             <PopOutButton id={widgetId} label={title} />
@@ -335,9 +335,9 @@ export const UniversalTurbineDashboard: React.FC = () => {
                 >
                     {/* 1. UNIVERSAL VITALS */}
                     <div key="vitals">
-                        <GlassCard className="h-full p-4 border-l-4 overflow-y-auto" style={{ borderColor: colors.primary }}>
+                        <GlassCard className="h-full p-4 border-l-4 overflow-y-auto rounded-2xl border-white/5 hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] transition-shadow duration-500" style={{ borderColor: colors.primary }}>
                             <div className="drag-handle cursor-move flex items-center justify-between mb-4 pb-2 border-b border-white/5">
-                                <h3 className="text-sm font-bold text-slate-400 uppercase">Universal Vitals</h3>
+                                <h3 className="text-sm font-bold text-slate-400 uppercase font-sans tracking-wide">Universal Vitals</h3>
                                 <Move className="w-4 h-4 text-slate-600" />
                             </div>
                             <div className="grid grid-cols-1 gap-4 h-[calc(100%-3rem)]">
@@ -356,7 +356,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             className="h-full"
                         >
-                            <GlassCard className="h-full p-6 relative overflow-hidden">
+                            <GlassCard className="h-full p-6 relative overflow-hidden rounded-2xl border-white/5 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-shadow duration-700">
                                 <div className="drag-handle cursor-move absolute top-0 left-0 right-0 h-6 z-20 hover:bg-white/5 transition-colors" />
 
                                 {/* Background Watermark */}
@@ -429,12 +429,12 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                     {/* 3. AI BRAIN */}
                     <div key="ai-brain">
-                        <GlassCard className="h-full p-4 bg-purple-950/20 border border-purple-500/30">
+                        <GlassCard className="h-full p-4 bg-purple-950/20 border border-purple-500/30 rounded-2xl hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-shadow">
                             <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
                                 <div className="w-2 h-2 rounded-full bg-purple-500 animate-ping"></div>
-                                <h3 className="text-sm font-bold text-purple-300 uppercase">Decision Engine</h3>
+                                <h3 className="text-sm font-bold text-purple-300 uppercase font-sans tracking-wide">Decision Engine</h3>
                             </div>
-                            <p className="text-sm text-white font-medium">"System optimal."</p>
+                            <p className="text-sm text-white font-medium font-mono">"System optimal."</p>
                         </GlassCard>
                     </div>
 
@@ -462,7 +462,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                     {/* 6. TURBINE 3D VISUALIZATION */}
                     <div key={WIDGET_IDS.TURBINE_3D}>
-                        <GlassCard className="h-full p-4 overflow-hidden">
+                        <GlassCard className="h-full p-4 overflow-hidden rounded-2xl border-white/5 hover:border-cyan-500/30 transition-colors">
                             <CardHeader
                                 title="3D Turbine"
                                 icon={<Box className="w-4 h-4 text-cyan-400" />}
@@ -526,10 +526,10 @@ export const UniversalTurbineDashboard: React.FC = () => {
 
                     {/* 10. NC-900: THE SOVEREIGN FORGE */}
                     <div key={WIDGET_IDS.FORGE}>
-                        <GlassCard className="h-full p-4 overflow-hidden">
+                        <GlassCard className="h-full p-4 overflow-hidden rounded-2xl border-white/5 group hover:border-amber-500/30 transition-colors">
                             <CardHeader
                                 title="The Sovereign Forge"
-                                icon={<Settings className="w-4 h-4 text-amber-400" />}
+                                icon={<Settings className="w-4 h-4 text-amber-400 group-hover:rotate-90 transition-transform duration-700" />}
                                 widgetId={WIDGET_IDS.FORGE}
                             />
                             <div className="h-[calc(100%-3rem)]">
