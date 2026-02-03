@@ -115,6 +115,8 @@ interface ExpertKnowledgeEntry {
     diagnosis: string;
     recommended_action: string;
     severity: string;
+    physics_principle?: string;
+    common_failure_modes?: string[];
 }
 
 interface TelemetryDataPoint {
@@ -394,6 +396,41 @@ const DecisionSupportPanel: React.FC<{
                     </span>
                 </div>
             </div>
+
+            {/* Physics Principle from Database (if available) */}
+            {criticalEntry.physics_principle && (
+                <div className="mt-3 p-3 bg-slate-950/50 rounded-lg border border-purple-500/30">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Zap className="w-3 h-3 text-purple-400" />
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-purple-400">
+                            Physics Principle (EKB)
+                        </span>
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed font-mono">
+                        {criticalEntry.physics_principle}
+                    </p>
+                </div>
+            )}
+
+            {/* Common Failure Modes from Database (if available) */}
+            {criticalEntry.common_failure_modes && criticalEntry.common_failure_modes.length > 0 && (
+                <div className="mt-3 p-3 bg-slate-950/50 rounded-lg border border-amber-500/30">
+                    <div className="flex items-center gap-2 mb-2">
+                        <AlertTriangle className="w-3 h-3 text-amber-400" />
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400">
+                            Known Failure Modes (EKB)
+                        </span>
+                    </div>
+                    <div className="space-y-1">
+                        {criticalEntry.common_failure_modes.slice(0, 3).map((mode, i) => (
+                            <div key={i} className="flex items-center gap-2 text-xs text-slate-300">
+                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                {mode}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
@@ -600,40 +637,95 @@ export const ComponentInfoPanel: React.FC<ComponentInfoPanelProps> = ({
     // Get component metadata with encyclopedia
     const componentMeta = componentId ? COMPONENT_ENCYCLOPEDIA[componentId] : null;
 
-    // Fetch expert knowledge for the selected component
+    // Fetch expert knowledge for the selected component using mesh ID mapping
     useEffect(() => {
-        if (!componentMeta || !supabase) return;
+        if (!componentId || !supabase) return;
 
         const fetchExpertKnowledge = async () => {
             try {
+                // First try the new RPC function that queries by mesh ID
+                const { data: rpcData, error: rpcError } = await (supabase as any)
+                    .rpc('get_knowledge_for_component', { p_mesh_id: componentId });
+
+                if (!rpcError && rpcData && rpcData.length > 0) {
+                    // Map to ExpertKnowledgeEntry format with physics data
+                    setExpertKnowledge(rpcData.map((d: any) => ({
+                        id: d.symptom_key,
+                        symptom_key: d.symptom_key,
+                        diagnosis: d.diagnosis,
+                        recommended_action: d.recommended_action,
+                        severity: d.severity || 'MEDIUM',
+                        physics_principle: d.physics_principle,
+                        common_failure_modes: d.common_failure_modes
+                    })));
+                    return;
+                }
+
+                // Fallback: Query by component_ids array contains mesh ID
                 const { data, error } = await (supabase as any)
                     .from('expert_knowledge_base')
                     .select('*')
-                    .in('symptom_key', componentMeta.ekb_symptom_keys);
+                    .contains('component_ids', [componentId]);
 
-                if (!error && data) {
-                    setExpertKnowledge(data as ExpertKnowledgeEntry[]);
+                if (!error && data && data.length > 0) {
+                    setExpertKnowledge(data.map((d: any) => ({
+                        id: d.id || d.symptom_key,
+                        symptom_key: d.symptom_key,
+                        diagnosis: d.diagnosis,
+                        recommended_action: d.recommended_action,
+                        severity: d.severity || 'MEDIUM',
+                        physics_principle: d.physics_principle,
+                        common_failure_modes: d.common_failure_modes
+                    })));
+                    return;
+                }
+
+                // Secondary fallback: Use local encyclopedia ekb_symptom_keys
+                if (componentMeta) {
+                    const { data: fallbackData, error: fallbackError } = await (supabase as any)
+                        .from('expert_knowledge_base')
+                        .select('*')
+                        .in('symptom_key', componentMeta.ekb_symptom_keys);
+
+                    if (!fallbackError && fallbackData) {
+                        setExpertKnowledge(fallbackData as ExpertKnowledgeEntry[]);
+                        return;
+                    }
+                }
+
+                // Final fallback: Local knowledge base matching
+                if (componentMeta) {
+                    const localMatches = KNOWLEDGE_BASE.filter(k =>
+                        componentMeta.ekb_symptom_keys.some(key =>
+                            k.id.toLowerCase().includes(key.toLowerCase()) ||
+                            k.title.toLowerCase().includes(key.toLowerCase())
+                        )
+                    );
+                    setExpertKnowledge(localMatches.map(k => ({
+                        id: k.id,
+                        symptom_key: k.id,
+                        diagnosis: k.description,
+                        recommended_action: k.insights?.[0] || 'Consult technical manual',
+                        severity: k.type === 'RISK' ? 'HIGH' : 'MEDIUM'
+                    })));
                 }
             } catch (e) {
-                // Fallback to local knowledge base matching
-                const localMatches = KNOWLEDGE_BASE.filter(k =>
-                    componentMeta.ekb_symptom_keys.some(key =>
-                        k.id.toLowerCase().includes(key.toLowerCase()) ||
-                        k.title.toLowerCase().includes(key.toLowerCase())
-                    )
-                );
-                setExpertKnowledge(localMatches.map(k => ({
-                    id: k.id,
-                    symptom_key: k.id,
-                    diagnosis: k.description,
-                    recommended_action: k.insights?.[0] || 'Consult technical manual',
-                    severity: k.type === 'RISK' ? 'HIGH' : 'MEDIUM'
-                })));
+                console.error('[ComponentInfoPanel] Error fetching knowledge:', e);
+                // Use local encyclopedia as final fallback
+                if (componentMeta) {
+                    setExpertKnowledge([{
+                        id: componentId,
+                        symptom_key: componentMeta.ekb_symptom_keys[0] || componentId.toUpperCase(),
+                        diagnosis: componentMeta.description,
+                        recommended_action: 'Refer to maintenance manual for detailed inspection procedures.',
+                        severity: 'MEDIUM'
+                    }]);
+                }
             }
         };
 
         fetchExpertKnowledge();
-    }, [componentMeta]);
+    }, [componentId, componentMeta]);
 
     // Fetch autonomous decisions log
     const fetchAutonomousDecisions = useCallback(async () => {
