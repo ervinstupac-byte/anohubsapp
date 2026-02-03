@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DollarSign, Activity, TrendingUp, ShieldCheck, PieChart, ArrowUpRight } from 'lucide-react';
 import { ExecutiveReportService, CEOInsight } from '../../lib/analytics/ExecutiveReportService';
 
@@ -84,7 +84,7 @@ export const ExecutiveSummary: React.FC = () => {
                             €{(avoidedCost).toLocaleString()}
                         </div>
                         <p className="text-xs text-emerald-500/80 mt-2 font-medium flex items-center gap-1">
-                            <ArrowUpRight className="w-3 h-3" /> ROI > 850% vs System Cost
+                            <ArrowUpRight className="w-3 h-3" /> ROI &gt; 850% vs System Cost
                         </p>
                     </div>
                 </div>

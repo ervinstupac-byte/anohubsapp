@@ -298,21 +298,19 @@ const NeuralStatusIndicator: React.FC<{
                             decisions.slice(0, 5).map((decision, i) => (
                                 <div
                                     key={decision.id}
-                                    className={`p-3 rounded-lg border-l-4 bg-slate-950/50 ${
-                                        decision.severity === 'CRITICAL' ? 'border-l-red-500' :
-                                        decision.severity === 'HIGH' ? 'border-l-amber-500' :
-                                        'border-l-cyan-500'
-                                    }`}
+                                    className={`p-3 rounded-lg border-l-4 bg-slate-950/50 ${decision.severity === 'CRITICAL' ? 'border-l-red-500' :
+                                            decision.severity === 'HIGH' ? 'border-l-amber-500' :
+                                                'border-l-cyan-500'
+                                        }`}
                                 >
                                     <div className="flex items-center justify-between mb-1">
                                         <span className="text-[9px] font-mono text-slate-400">
                                             {decision.timestamp.toLocaleTimeString()}
                                         </span>
-                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded ${
-                                            decision.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
-                                            decision.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
-                                            'bg-cyan-500/20 text-cyan-400'
-                                        }`}>
+                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded ${decision.severity === 'CRITICAL' ? 'bg-red-500/20 text-red-400' :
+                                                decision.severity === 'HIGH' ? 'bg-amber-500/20 text-amber-400' :
+                                                    'bg-cyan-500/20 text-cyan-400'
+                                            }`}>
                                             {decision.severity}
                                         </span>
                                     </div>
@@ -914,7 +912,7 @@ export const ComponentInfoPanel: React.FC<ComponentInfoPanelProps> = ({
                     autonomousTriggerActive: !!activeIncident,
                     alertLevel: activeIncident ? 'critical' :
                         prev.alertLevel === 'predictive_alert' ? 'predictive_alert' :
-                        telemetryStore.mechanical.vibrationX > 4.5 ? 'warning' : 'nominal'
+                            telemetryStore.mechanical.vibrationX > 4.5 ? 'warning' : 'nominal'
                 }));
             }
         }, 5000);
@@ -1080,8 +1078,8 @@ export const ComponentInfoPanel: React.FC<ComponentInfoPanelProps> = ({
                         <div className="p-4 bg-slate-950/70 rounded-lg min-h-[80px]">
                             <div className="text-[9px] text-slate-500 uppercase mb-1 font-bold">Efficiency</div>
                             <div className="text-xl font-mono font-black text-cyan-400">
-                                {telemetryStore.physics.efficiency
-                                    ? ((telemetryStore.physics.efficiency as number) * 100).toFixed(1)
+                                {telemetryStore.hydraulic.efficiency
+                                    ? ((telemetryStore.hydraulic.efficiency as number) * 100).toFixed(1)
                                     : '92.4'}
                                 <span className="text-xs text-slate-500 ml-1">%</span>
                             </div>

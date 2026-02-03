@@ -21,7 +21,9 @@ const RunnerMesh: React.FC<{
     onMeshClick?: (id: string, point: THREE.Vector3 | null) => void;
     active?: boolean;
     turbineType?: string;
-}> = ({ rpm, onMeshClick, active = true, turbineType = 'francis' }) => {
+    deltaMap?: any;
+    heatmapMode?: boolean;
+}> = ({ rpm, onMeshClick, active = true, turbineType = 'francis', deltaMap, heatmapMode }) => {
     const groupRef = useRef<THREE.Group | null>(null);
 
     useFrame((_, delta) => {
@@ -118,7 +120,14 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
     rpm: number;
     className?: string;
     onSelect?: (id: string) => void;
-}>(({ rpm, className, onSelect }, ref) => {
+    deltaMap?: any;
+    heatmapMode?: boolean;
+    ghostMode?: boolean;
+    baselineDelta?: any;
+    deltaIndex?: number;
+    showInfoPanel?: boolean;
+    highlightId?: string | null;
+}>(({ rpm, className, onSelect, deltaMap, heatmapMode, ghostMode, baselineDelta, deltaIndex, showInfoPanel, highlightId }, ref) => {
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
     const [crashSafe, setCrashSafe] = useState(true);
@@ -152,6 +161,8 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
                         active={active}
                         turbineType={turbineType}
                         onMeshClick={(id) => onSelect?.(id)}
+                        deltaMap={deltaMap}
+                        heatmapMode={heatmapMode}
                     />
                 </ThreeErrorBoundary>
 

@@ -203,7 +203,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         financials: payload.financials || state.financials,
                         structural: payload.structural || state.structural,
                         // fix: ensure physics is a full object, merging partials from state with defaults
-                        physics: { ...DEFAULT_TECHNICAL_STATE.physics, ...state.physics } as Partial<PhysicsResult> as PhysicsResult,
+                        physics: { ...DEFAULT_TECHNICAL_STATE.physics, ...state.physics } as any,
                         diagnosis: state.diagnosis || undefined
                     };
 
