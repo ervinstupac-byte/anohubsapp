@@ -79,7 +79,25 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                             specs: item.specs || {},
                             turbineProfile: item.specs?.turbineProfile
                         }));
-                        setAssets(mappedAssets);
+
+                        if (mappedAssets.length === 0) {
+                            console.warn('[AssetContext] Supabase returned 0 assets. Injecting Born Perfect Francis Demo.');
+                            const demo = {
+                                id: 1,
+                                name: 'Unit-1 (Fallback)',
+                                type: 'HPP',
+                                location: 'Bihac',
+                                coordinates: [44.81, 15.87] as [number, number],
+                                capacity: 12.5,
+                                status: 'Operational',
+                                turbine_type: 'FRANCIS',
+                                specs: {}
+                            };
+                            setAssets([demo as Asset]);
+                            setSelectedAssetId(demo.id);
+                        } else {
+                            setAssets(mappedAssets);
+                        }
                     }
                 } catch (supaErr: any) {
                     // SILENT FALLBACK

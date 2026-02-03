@@ -57,6 +57,7 @@ import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetH
 // lazy-load heavy UI pieces used in the executive dashboard
 const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));
 const EngineeringDossierCard = React.lazy(() => import('../EngineeringDossierCard').then(m => ({ default: m.EngineeringDossierCard })));
+const HPPForge = React.lazy(() => import('../forge/HPPForge').then(m => ({ default: m.HPPForge })));
 
 // --- LONGEVITY IMPACT CALCULATOR ---
 const calculateLongevityLoss = (alignment: number): { years: number; percentage: number } => {
@@ -89,7 +90,7 @@ export const ExecutiveDashboard: React.FC = () => {
         investigatedComponents
     } = useTelemetryStore();
 
-    const { selectedAsset } = useAssetContext();
+    const { selectedAsset, assets: _ctxAssets, loading: _ctxLoading } = useAssetContext();
     const crossActions = useCrossModuleActions(selectedAsset?.id);
     const assetIdentity = selectedAsset?.specs?.machineConfig || identity?.machineConfig || { ratedPowerMW: 4.2 };
 
@@ -616,9 +617,9 @@ export const ExecutiveDashboard: React.FC = () => {
                                         <TurbineRunner3D
                                             rpm={mechanical?.rpm ?? 500}
                                             diagnosticHighlights={{
-                                                oil: unifiedDiagnosis?.expertInsights?.oilHealth ?? undefined,
+                                                oil: typeof unifiedDiagnosis?.expertInsights?.oilHealth === 'number' ? unifiedDiagnosis.expertInsights.oilHealth : 100,
                                                 cavitation: unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'CRITICAL' ? 20 : (unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'WARNING' ? 50 : 100),
-                                                structural: unifiedDiagnosis?.expertInsights?.structuralSafetyFactor ?? undefined
+                                                structural: typeof unifiedDiagnosis?.expertInsights?.structuralSafetyFactor === 'number' ? unifiedDiagnosis.expertInsights.structuralSafetyFactor : undefined
                                             }}
                                             investigatedComponents={investigatedComponents ?? []}
                                         />

@@ -32,6 +32,7 @@ export const HPPForge: React.FC = () => {
             await addAsset({
                 name: assetName,
                 type: 'HPP',
+                status: 'Operational', // Default status for new assets
                 location: 'Forge Simulation',
                 coordinates: [44.0, 15.0], // Default coords
                 capacity: result.powerMW,
