@@ -198,19 +198,26 @@ export class DatabaseSeeder {
 
             for (const unit of units) {
                 // Try insert
-                // ... (simplified logic for concise tool call, respecting existing fallback pattern)
-                // NOTE: Since tool calls replace text, I will replace the single insert block with a loop block.
-
                 let assetPayload = { ...unit };
 
                 const { data: assetData, error: assetError } = await supabase.from('assets').insert([assetPayload]).select().single();
 
                 if (assetError) {
-                    if (assetError.message.includes('specs') || assetError.code === '42703') {
-                        // Fallback logic
-                        const { specs, ...fallbackPayload } = assetPayload;
-                        const { data: fallbackData } = await supabase.from('assets').insert([fallbackPayload]).select().single();
-                        if (fallbackData?.id) { await this.seedHppStatus(fallbackData.id, tablesSeeded); }
+                    if (assetError.message.includes('specs') || assetError.code === '42703' || assetError.message.includes('turbine_type')) {
+                        console.warn(`[DatabaseSeeder] ⚠️ Schema Mismatch for ${unit.name}. Attempting fallback...`);
+                        console.info(`[DatabaseSeeder] 💡 FIX: Run this SQL in Supabase: ALTER TABLE assets ADD COLUMN turbine_type TEXT;`);
+
+                        // Fallback: Remove known new columns that might be missing
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        const { specs, turbine_type, ...fallbackPayload } = assetPayload as any;
+
+                        const { data: fallbackData, error: fallbackError } = await supabase.from('assets').insert([fallbackPayload]).select().single();
+
+                        if (fallbackError) {
+                            console.error(`[DatabaseSeeder] ❌ Fallback failed for ${unit.name}:`, fallbackError.message);
+                        } else if (fallbackData?.id) {
+                            await this.seedHppStatus(fallbackData.id, tablesSeeded);
+                        }
                     } else {
                         console.warn(`[DatabaseSeeder] Failed to seed ${unit.name}:`, assetError.message);
                     }

@@ -79,9 +79,8 @@ export class KaplanEngine extends BaseEngine {
 
     private static runAsyncCalculation<T>(type: string, payload: any): Promise<T> {
         if (!this.worker) {
-            // Fallback or reject? For now reject if worker isn't there, 
-            // but we could implement sync fallback here.
-            return Promise.reject(new Error('Physics Worker not initialized'));
+            // Worker optional in dev/test - fail silently to fallback
+            return Promise.reject('Physics Worker not active');
         }
 
         const id = crypto.randomUUID();
@@ -106,7 +105,7 @@ export class KaplanEngine extends BaseEngine {
         try {
             return await KaplanEngine.runAsyncCalculation<number>('CALCULATE_EFFICIENCY', { head, flow, alpha });
         } catch (err) {
-            console.warn('[KaplanEngine] Worker calc failed, using sync fallback:', err);
+            // Silent fallback for smooth UI
             return this.calculateEfficiency(head, flow);
         }
     }

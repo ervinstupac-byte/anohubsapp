@@ -39,15 +39,16 @@ export interface WorkspacePreset {
 
 // Grid widget identifiers
 export const WIDGET_IDS = {
+    TURBINE_3D: 'turbine-3d',
+    VIBRATION: 'vibration-analyzer', // Key name restored
+    FORENSIC: 'forensic-lab', // Key name restored
+    EXECUTIVE: 'executive-summary', // Key name restored
+    FORGE: 'forge',
     VITALS: 'vitals',
     MAIN_ENGINE: 'main-engine',
-    TURBINE_3D: 'turbine-3d',
-    VIBRATION: 'vibration-analyzer',
-    FORENSIC: 'forensic-lab',
-    EXECUTIVE: 'executive-summary',
     AI_BRAIN: 'ai-brain',
     SAFETY_GUARD: 'safety-guard',
-    AUDIT_LOG: 'audit-log',
+    AUDIT_LOG: 'audit-log'
 } as const;
 
 /**

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, Shield, Gauge, Activity, Radio, Droplet, FlaskConical, Terminal, Maximize2, Move, Layout, Zap, Search, Briefcase, RotateCcw, Box, BarChart3, FileSearch } from 'lucide-react';
+import { Bell, Shield, Gauge, Activity, Radio, Droplet, FlaskConical, Terminal, Maximize2, Move, Layout, Zap, Search, Briefcase, RotateCcw, Box, BarChart3, FileSearch, Settings } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { TurbineFactory, TurbineType, ITurbineBehavior } from '../models/turbine/TurbineFactory';
 import { SafetyInterlockEngine } from '../services/SafetyInterlockEngine';
@@ -25,6 +25,7 @@ const TurbineRunner3D = lazy(() => import('./three/TurbineRunner3D').then(m => (
 const VibrationAnalyzer = lazy(() => import('../features/telemetry/components/VibrationAnalyzer').then(m => ({ default: m.VibrationAnalyzer })));
 const ForensicLab = lazy(() => import('./ForensicLab').then(m => ({ default: m.ForensicLab })));
 const ExecutiveSummary = lazy(() => import('./dashboard/ExecutiveSummary').then(m => ({ default: m.ExecutiveSummary })));
+const HPPForge = lazy(() => import('./forge/HPPForge').then(m => ({ default: m.HPPForge })));
 
 const ResponsiveGridLayout = WidthProvider(ResponsiveLayout);
 
@@ -480,6 +481,22 @@ export const UniversalTurbineDashboard: React.FC = () => {
                         <div className="h-[calc(100%-3rem)]">
                             <Suspense fallback={<LoadingFallback />}>
                                 <ExecutiveSummary />
+                            </Suspense>
+                        </div>
+                    </GlassCard>
+                </div>
+
+                {/* 10. NC-900: THE SOVEREIGN FORGE */}
+                <div key={WIDGET_IDS.FORGE}>
+                    <GlassCard className="h-full p-4 overflow-hidden">
+                        <CardHeader
+                            title="The Sovereign Forge"
+                            icon={<Settings className="w-4 h-4 text-amber-400" />}
+                            widgetId={WIDGET_IDS.FORGE}
+                        />
+                        <div className="h-[calc(100%-3rem)]">
+                            <Suspense fallback={<LoadingFallback />}>
+                                <HPPForge />
                             </Suspense>
                         </div>
                     </GlassCard>

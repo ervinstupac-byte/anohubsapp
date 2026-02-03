@@ -1,13 +1,14 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import { telemetrySync } from '../../services/TelemetrySyncService';
-import { Activity, Gauge, Radio, Box, BarChart3, FileSearch, Briefcase } from 'lucide-react';
+import { Activity, Gauge, Radio, Box, BarChart3, FileSearch, Briefcase, Settings } from 'lucide-react';
 
 // Lazy load heavy components
 const TurbineRunner3D = lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));
 const VibrationAnalyzer = lazy(() => import('../../features/telemetry/components/VibrationAnalyzer').then(m => ({ default: m.VibrationAnalyzer })));
 const ForensicLab = lazy(() => import('../ForensicLab').then(m => ({ default: m.ForensicLab })));
 const ExecutiveSummary = lazy(() => import('../dashboard/ExecutiveSummary').then(m => ({ default: m.ExecutiveSummary })));
+const HPPForge = lazy(() => import('../forge/HPPForge').then(m => ({ default: m.HPPForge })));
 
 const LoadingFallback = () => (
     <div className="h-screen w-screen flex items-center justify-center bg-slate-900 text-slate-400">
@@ -132,6 +133,17 @@ export const PopOutWindow: React.FC = () => {
                     <div className="flex-1 overflow-auto p-4">
                         <Suspense fallback={<LoadingFallback />}>
                             <ExecutiveSummary />
+                        </Suspense>
+                    </div>
+                </div>
+            );
+        case 'forge':
+            return (
+                <div className="h-screen w-screen bg-slate-900 flex flex-col">
+                    <WidgetHeader title="The Sovereign Forge" icon={<Settings className="w-5 h-5 text-amber-400" />} />
+                    <div className="flex-1 overflow-auto p-4">
+                        <Suspense fallback={<LoadingFallback />}>
+                            <HPPForge />
                         </Suspense>
                     </div>
                 </div>
