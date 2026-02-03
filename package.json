@@ -1,5 +1,6 @@
 {
   "name": "anohub-hpp-risk-excellence-platform",
+  "packageManager": "pnpm@10.26.1",
   "private": true,
   "version": "1.0.0",
   "type": "module",
