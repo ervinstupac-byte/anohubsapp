@@ -366,6 +366,7 @@ export const CommandCenter: React.FC = () => {
                                             baselineDelta={deltaMap} // Using current delta as baseline for demo purpose (simulating deviation)
                                             deltaIndex={deltaPerf}
                                             className="h-full"
+                                            showInfoPanel={true}
                                         />
                                     </React.Suspense>
                                 </ErrorBoundary>

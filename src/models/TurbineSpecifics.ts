@@ -11,10 +11,11 @@ export interface PeltonSpecs {
     nozzleCount: 1 | 2 | 3 | 4 | 5 | 6;
     jetDiameterMm: number;
     headRangeM: { min: number; max: number }; // e.g., 200-1000m
+    runnerMaterial: RunnerMaterial; // Added via NC-130
 
     // Mechanical
     bucketWidthMm: number;
-    runnerMaterial: '13Cr4Ni' | 'Cast Steel' | 'Bronze';
+    // runnerMaterial moved to hydraulic/core definition
     deflectorResponseTimeMs: number; // Critical for pressure rise control
 
     // Maintenance Limits
@@ -26,6 +27,7 @@ export interface PeltonSpecs {
 export interface KaplanSpecs {
     // Hydraulic
     runnerBladeCount: 3 | 4 | 5 | 6 | 7;
+    runnerMaterial: RunnerMaterial;
     cavitationFactorSigma: number; // Plant Sigma
 
     // Regulation
@@ -43,6 +45,7 @@ export interface KaplanSpecs {
 // --- 3. BULB (Submersible Axial) ---
 export interface BulbSpecs {
     // Structural / Housing
+    runnerMaterial: RunnerMaterial;
     bulbHousingPressureBar: number; // Internal pressurization for leak prevention
     watertightnessRating: string; // e.g., IP68 equivalent for sensors
 
@@ -61,3 +64,23 @@ export interface BulbSpecs {
 export const isPelton = (specs: any): specs is PeltonSpecs => 'nozzleCount' in specs;
 export const isKaplan = (specs: any): specs is KaplanSpecs => 'bladeAngleRangeDeg' in specs;
 export const isBulb = (specs: any): specs is BulbSpecs => 'bulbHousingPressureBar' in specs;
+
+// --- 4. MATERIAL DNA & SENSITIVITY ---
+export type RunnerMaterial = '13Cr4Ni' | 'Cast Steel' | 'Bronze';
+
+/**
+ * EXPERT LOGIC: Material Sensitivity
+ * Returns the critical Thoma's Sigma (Cavitation Threshold) based on material resilience.
+ * - Bronze: Soft, highly sensitive to pitting.
+ * - Cast Steel: Standard, moderate resistance.
+ * - 13Cr4Ni: Stainless, high resistance, allows lower sigma.
+ */
+export const getCavitationThreshold = (material: RunnerMaterial = 'Cast Steel'): number => {
+    switch (material) {
+        case 'Bronze': return 0.25; // Needs high backpressure (safe)
+        case 'Cast Steel': return 0.15;
+        case '13Cr4Ni': return 0.08; // Can run aggressively
+        default: return 0.15;
+    }
+};
+

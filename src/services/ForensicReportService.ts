@@ -902,10 +902,6 @@ export class ForensicReportService {
         return doc.output('blob');
     }
 
-    /**
-     * SERVICE AUDIT REPORT (AS-FOUND / AS-LEFT)
-     * High-fidelity reporting for technical interventions.
-     */
     public static generateServiceAuditReport(params: {
         assetName: string;
         serviceType: string;
@@ -967,6 +963,235 @@ export class ForensicReportService {
         doc.text("Preporučeno kontinuirano praćenje vibracija u narednih 30 radnih dana.", 15, y);
 
         this.applyForensicFooter(doc);
+        return doc.output('blob');
+    }
+
+    /**
+     * NC-500: SOVEREIGN DIAGNOSTIC AUDIT
+     * The "Sales Closer" PDF - comprehensive forensic report for field evidence.
+     * Includes: Unit ID header, RCA verdict, spectrum comparison, Werkmeister tips.
+     */
+    public static generateSovereignDiagnosticAudit(params: {
+        unitId: string;
+        rcaResult: {
+            cause: string;
+            confidence: number;
+            severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+            evidence: string[];
+            recommendation: string;
+        };
+        baselineData?: {
+            runnerMaterial: string;
+            ceramicCoatingApplied: boolean;
+            commissioningDate: string;
+        } | null;
+        telemetrySnapshot: {
+            vibrationX: number;
+            vibrationY: number;
+            bearingTemp: number;
+            efficiency: number;
+        };
+        spectrumBefore: number[];
+        spectrumAfter: number[];
+        sparklineData: number[];
+        fieldTip?: {
+            tip: string;
+            threshold?: string;
+            action?: string;
+            reference?: string;
+        };
+        t: TFunction;
+    }): Blob {
+        const {
+            unitId,
+            rcaResult,
+            baselineData,
+            telemetrySnapshot,
+            spectrumBefore,
+            spectrumAfter,
+            sparklineData,
+            fieldTip,
+            t
+        } = params;
+
+        const doc = new jsPDF();
+        this.addCustomFont(doc);
+        const pageWidth = doc.internal.pageSize.width;
+
+        // === HEADER BRANDING ===
+        doc.setFillColor(15, 23, 42); // Slate-900
+        doc.rect(0, 0, pageWidth, 45, 'F');
+
+        doc.setFontSize(22);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text("SOVEREIGN DIAGNOSTIC AUDIT", pageWidth / 2, 20, { align: 'center' });
+
+        doc.setFontSize(12);
+        doc.setFont("Roboto", "normal");
+        doc.setTextColor(148, 163, 184); // Slate-400
+        doc.text(`Unit: ${unitId}`, pageWidth / 2, 32, { align: 'center' });
+
+        doc.setFontSize(8);
+        doc.setTextColor(100, 116, 139);
+        doc.text(`Generated: ${new Date().toISOString().split('T')[0]} | MONOLIT Forensic Engine v2.0`, pageWidth / 2, 40, { align: 'center' });
+
+        let y = 55;
+
+        // === RCA VERDICT (THE MONEY SHOT) ===
+        const severityColors: Record<string, [number, number, number]> = {
+            'LOW': [34, 197, 94],      // Green
+            'MEDIUM': [234, 179, 8],   // Amber
+            'HIGH': [249, 115, 22],    // Orange
+            'CRITICAL': [239, 68, 68]  // Red
+        };
+        const sevColor = severityColors[rcaResult.severity] || [100, 116, 139];
+
+        doc.setFillColor(sevColor[0], sevColor[1], sevColor[2]);
+        doc.roundedRect(15, y, pageWidth - 30, 35, 3, 3, 'F');
+
+        doc.setFontSize(14);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(255, 255, 255);
+        doc.text("ROOT CAUSE VERDICT", 25, y + 12);
+
+        doc.setFontSize(18);
+        doc.text(rcaResult.cause.toUpperCase(), 25, y + 26);
+
+        // Confidence badge
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(pageWidth - 55, y + 8, 35, 18, 2, 2, 'F');
+        doc.setFontSize(14);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(sevColor[0], sevColor[1], sevColor[2]);
+        doc.text(`${rcaResult.confidence}%`, pageWidth - 37, y + 20);
+
+        y += 45;
+
+        // === EVIDENCE CHAIN ===
+        doc.setFontSize(12);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(15, 23, 42);
+        doc.text("EVIDENCE CHAIN", 15, y);
+        y += 8;
+
+        const evidenceData = rcaResult.evidence.map((e, i) => [`${i + 1}`, e]);
+        autoTable(doc, {
+            startY: y,
+            body: evidenceData,
+            theme: 'plain',
+            styles: { fontSize: 9, font: 'Roboto', cellPadding: 2 },
+            columnStyles: {
+                0: { cellWidth: 10, fontStyle: 'bold', textColor: [99, 102, 241] }
+            }
+        });
+        y = (doc as any).lastAutoTable.finalY + 10;
+
+        // === TELEMETRY SNAPSHOT ===
+        doc.setFontSize(12);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(15, 23, 42);
+        doc.text("REAL-TIME TELEMETRY SNAPSHOT", 15, y);
+        y += 8;
+
+        const telemetryData = [
+            ['Vibration X', `${telemetrySnapshot.vibrationX.toFixed(2)} mm/s`, telemetrySnapshot.vibrationX > 4.5 ? 'ALARM' : 'OK'],
+            ['Vibration Y', `${telemetrySnapshot.vibrationY.toFixed(2)} mm/s`, telemetrySnapshot.vibrationY > 4.5 ? 'ALARM' : 'OK'],
+            ['Bearing Temp', `${telemetrySnapshot.bearingTemp.toFixed(1)} °C`, telemetrySnapshot.bearingTemp > 80 ? 'ALARM' : 'OK'],
+            ['Efficiency', `${telemetrySnapshot.efficiency.toFixed(1)}%`, telemetrySnapshot.efficiency < 88 ? 'WARNING' : 'OK']
+        ];
+
+        autoTable(doc, {
+            startY: y,
+            head: [['Parameter', 'Value', 'Status']],
+            body: telemetryData,
+            theme: 'grid',
+            headStyles: { fillColor: [99, 102, 241], textColor: [255, 255, 255] },
+            styles: { fontSize: 10, font: 'Roboto' },
+            columnStyles: {
+                2: {
+                    halign: 'center',
+                    fontStyle: 'bold',
+                    cellWidth: 25
+                }
+            },
+            didParseCell: (data) => {
+                if (data.section === 'body' && data.column.index === 2) {
+                    const value = data.cell.raw as string;
+                    if (value === 'ALARM') {
+                        data.cell.styles.textColor = [239, 68, 68];
+                    } else if (value === 'WARNING') {
+                        data.cell.styles.textColor = [234, 179, 8];
+                    } else {
+                        data.cell.styles.textColor = [34, 197, 94];
+                    }
+                }
+            }
+        });
+        y = (doc as any).lastAutoTable.finalY + 12;
+
+        // === BASELINE DNA (if available) ===
+        if (baselineData) {
+            doc.setFontSize(11);
+            doc.setFont("Roboto", "bold");
+            doc.setTextColor(99, 102, 241);
+            doc.text("BASELINE DNA", 15, y);
+            y += 6;
+            doc.setFontSize(9);
+            doc.setFont("Roboto", "normal");
+            doc.setTextColor(71, 85, 105);
+            doc.text(`Runner: ${baselineData.runnerMaterial} | Ceramic: ${baselineData.ceramicCoatingApplied ? 'Applied' : 'None'} | Commissioned: ${baselineData.commissioningDate}`, 15, y);
+            y += 10;
+        }
+
+        // === WERKMEISTER RECOMMENDATION ===
+        doc.setFillColor(245, 158, 11, 30); // Amber background
+        doc.roundedRect(15, y, pageWidth - 30, 25, 2, 2, 'F');
+
+        doc.setFontSize(10);
+        doc.setFont("Roboto", "bold");
+        doc.setTextColor(180, 83, 9);
+        doc.text("WERKMEISTER RECOMMENDATION", 20, y + 8);
+
+        doc.setFontSize(9);
+        doc.setFont("Roboto", "normal");
+        doc.setTextColor(120, 53, 15);
+        const recText = doc.splitTextToSize(rcaResult.recommendation, pageWidth - 40);
+        doc.text(recText, 20, y + 16);
+        y += 30;
+
+        // === FIELD TIP (if available) ===
+        if (fieldTip) {
+            y += 5;
+            doc.setFillColor(254, 243, 199); // Amber-100
+            doc.roundedRect(15, y, pageWidth - 30, 30, 2, 2, 'F');
+
+            doc.setFontSize(9);
+            doc.setFont("Roboto", "bold");
+            doc.setTextColor(180, 83, 9);
+            doc.text("ARCHITECT'S FIELD TIP", 20, y + 8);
+
+            if (fieldTip.reference) {
+                doc.setFontSize(7);
+                doc.setTextColor(161, 98, 7);
+                doc.text(`[${fieldTip.reference}]`, pageWidth - 20, y + 8, { align: 'right' });
+            }
+
+            doc.setFontSize(8);
+            doc.setFont("Roboto", "italic");
+            doc.setTextColor(120, 53, 15);
+            const tipText = doc.splitTextToSize(`"${fieldTip.tip}"`, pageWidth - 45);
+            doc.text(tipText, 20, y + 15);
+
+            if (fieldTip.action) {
+                doc.setFont("Roboto", "bold");
+                doc.text(`Action: ${fieldTip.action}`, 20, y + 26);
+            }
+        }
+
+        // === FOOTER ===
+        this.applyForensicFooter(doc);
+
         return doc.output('blob');
     }
 }

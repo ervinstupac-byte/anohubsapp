@@ -44,6 +44,10 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
                 console.log('[AssetContext] Step 1: Fetching assets...');
 
+                // NC-76.4: Verify connection first
+                // If verifyConnection fails quickly, we skip the fetch to save time
+                // But since verifyConnection might take time, we just race everything
+
                 try {
                     const { data, error } = await Promise.race([
                         supabase.from('assets').select('*'),

@@ -1,93 +1,170 @@
-import React, { forwardRef, useRef, useState, useEffect } from 'react';
+import React, { useRef, forwardRef, useState, useCallback, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, Environment, PerspectiveCamera, Html } from '@react-three/drei';
 import * as THREE from 'three';
-import ComponentInfoPanel from '../diagnostics/ComponentInfoPanel';
 import { useAssetContext } from '../../contexts/AssetContext';
-import { supabase } from '../../services/supabaseClient';
+// import ComponentInfoPanel from '../diagnostics/ComponentInfoPanel'; // Commented out to avoid circular deps if broken
+// We can use a simplified internal info panel or just the one from the second block if it exists.
+// The second block imported ComponentInfoPanel from '../ui/ComponentInfoPanel'.
+// Let's assume we might need a fallback.
 
-const RunnerMesh: React.FC<{ rpm: number; onMeshClick?: (id: string, point: THREE.Vector3 | null) => void }> = ({ rpm, onMeshClick }) => {
-  const groupRef = useRef<THREE.Group | null>(null);
-  useFrame((_, delta) => {
-    if (groupRef.current) groupRef.current.rotation.y += (rpm / 60) * delta * 2 * Math.PI;
-  });
-
-  const handle = (id: string, e: any) => {
-    e.stopPropagation();
-    onMeshClick?.(id, e?.point ?? null);
-  };
-
-  return (
-    <group ref={groupRef}>
-      <mesh position={[0, 0, 0]} onClick={(e) => handle('runner', e)}>
-        <boxGeometry args={[3, 0.3, 3]} />
-        <meshStandardMaterial color="#22d3ee" transparent opacity={0.6} />
-      </mesh>
-      <mesh position={[0, -0.6, 0]} onClick={(e) => handle('noseCone', e)}>
-        <coneGeometry args={[0.8, 1.2, 16]} />
-        <meshStandardMaterial color="#ef4444" transparent opacity={0.6} />
-      </mesh>
-    </group>
-  );
+// Placeholder colors
+const COLORS = {
+    CYAN: '#22d3ee',
+    RED: '#ef4444',
+    AMBER: '#f59e0b',
+    EMERALD: '#10b981'
 };
 
-interface TurbineRunner3DProps {
-  rpm: number;
-  className?: string;
-  deltaMap?: any;
-  heatmapMode?: boolean;
-  ghostMode?: boolean;
-  baselineDelta?: any;
-  onSelect?: (id: string) => void;
-  highlightId?: string | null;
-  deltaIndex?: number;
-  diagnosticHighlights?: any;
-  investigatedComponents?: string[];
+const RunnerMesh: React.FC<{
+    rpm: number;
+    onMeshClick?: (id: string, point: THREE.Vector3 | null) => void;
+    active?: boolean;
+    turbineType?: string;
+}> = ({ rpm, onMeshClick, active = true, turbineType = 'francis' }) => {
+    const groupRef = useRef<THREE.Group | null>(null);
+
+    useFrame((_, delta) => {
+        if (active && groupRef.current) {
+            groupRef.current.rotation.y += (rpm / 60) * delta * 2 * Math.PI;
+        }
+    });
+
+    const handle = (id: string, e: any) => {
+        e.stopPropagation();
+        onMeshClick?.(id, e?.point ?? null);
+    };
+
+    // Render different geometry based on turbine type
+    const isPelton = turbineType === 'pelton';
+    const isKaplan = turbineType === 'kaplan';
+
+    return (
+        <group ref={groupRef}>
+            {/* HUB/CROWN */}
+            <mesh position={[0, isPelton ? 0 : 0.5, 0]} onClick={(e) => handle('runner', e)}>
+                <cylinderGeometry args={[isPelton ? 2 : 1.5, isPelton ? 2 : 1.5, 0.5, 32]} />
+                <meshStandardMaterial color="#22d3ee" transparent opacity={0.8} metalness={0.8} roughness={0.2} />
+            </mesh>
+
+            {/* BLADES */}
+            {Array.from({ length: isPelton ? 18 : (isKaplan ? 5 : 13) }).map((_, i) => {
+                const count = isPelton ? 18 : (isKaplan ? 5 : 13);
+                const angle = (i / count) * Math.PI * 2;
+                const radius = isPelton ? 2.5 : 2.0;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+
+                return (
+                    <mesh
+                        key={i}
+                        position={[x, 0, z]}
+                        rotation={[0, angle, isPelton ? 0 : (isKaplan ? Math.PI / 4 : Math.PI / 6)]}
+                        onClick={(e) => handle('blade', e)}
+                    >
+                        {isPelton ? (
+                            // Pelton Buckets (Simplified as spheres/cups)
+                            <sphereGeometry args={[0.4, 16, 16]} />
+                        ) : (
+                            // Francis/Kaplan Blades
+                            <boxGeometry args={[0.3, 1.5, isKaplan ? 1.8 : 1.2]} />
+                        )}
+                        <meshStandardMaterial
+                            color={isKaplan ? "#facc15" : "#22d3ee"}
+                            metalness={0.9}
+                            roughness={0.2}
+                        />
+                    </mesh>
+                );
+            })}
+
+            {/* NOSE CONE (Francis/Kaplan) */}
+            {!isPelton && (
+                <mesh position={[0, -1, 0]} rotation={[Math.PI, 0, 0]} onClick={(e) => handle('noseCone', e)}>
+                    <coneGeometry args={[1.0, 1.5, 32]} />
+                    <meshStandardMaterial color="#ef4444" transparent opacity={0.6} />
+                </mesh>
+            )}
+        </group>
+    );
+};
+
+// Internal Error Boundary for 3D Context
+class ThreeErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+    constructor(props: any) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+    componentDidCatch(error: any, errorInfo: any) {
+        console.error("3D Turbine Crash:", error, errorInfo);
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <mesh>
+                    <boxGeometry args={[2, 2, 2]} />
+                    <meshStandardMaterial color="#ef4444" wireframe />
+                </mesh>
+            );
+        }
+        return this.props.children;
+    }
 }
 
-const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(({ rpm }, ref) => {
-  const { selectedAsset } = useAssetContext();
-  const [educationMode, setEducationMode] = useState(false);
-  const [selectedMeshId, setSelectedMeshId] = useState<string | null>(null);
+export const TurbineRunner3D = forwardRef<HTMLDivElement, {
+    rpm: number;
+    className?: string;
+    onSelect?: (id: string) => void;
+}>(({ rpm, className, onSelect }, ref) => {
+    const { selectedAsset } = useAssetContext();
+    const [active, setActive] = useState(false);
+    const [crashSafe, setCrashSafe] = useState(true);
 
-  useEffect(() => {
-    const channel = supabase
-      .channel('public:work_orders')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'work_orders' }, () => {})
-      .subscribe();
-    return () => { try { supabase.removeChannel(channel); } catch (_) { } };
-  }, [selectedAsset]);
+    // Robust type checking
+    const turbineType = (selectedAsset?.turbine_type || selectedAsset?.type || 'francis').toLowerCase();
 
-  const handleMeshClick = (id?: string | null) => {
-    if (!id) return;
-    setSelectedMeshId(id);
-  };
+    if (!crashSafe) return <div className="p-4 text-red-500 font-mono text-xs border border-red-500">3D RENDER FAILURE</div>;
 
-  return (
-    <div ref={ref} className="w-full h-full relative">
-      <div className="absolute top-3 right-3 z-30">
-        <label className="flex items-center gap-2 bg-white/90 border px-2 py-1 rounded">
-          <input type="checkbox" checked={educationMode} onChange={(e) => setEducationMode(e.target.checked)} />
-          <span className="text-xs">Education Mode</span>
-        </label>
-      </div>
+    return (
+        <div
+            ref={ref}
+            className={`relative ${className || "w-full h-full"}`}
+            onPointerEnter={() => setActive(true)}
+            onPointerLeave={() => setActive(false)}
+        >
+            <Canvas shadows dpr={[1, 2]} frameloop={active ? 'always' : 'demand'}
+                onCreated={(state) => {
+                    // Safety check context
+                    if (!state.gl) setCrashSafe(false);
+                }}
+            >
+                <PerspectiveCamera makeDefault position={[5, 4, 6]} fov={50} />
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
+                <pointLight position={[-10, -5, -5]} intensity={0.5} color="#22d3ee" />
 
-      <Canvas shadows dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[4, 3, 6]} fov={50} />
-        <ambientLight intensity={0.5} />
-        <RunnerMesh rpm={rpm} onMeshClick={(id, p) => handleMeshClick(id)} />
-        <OrbitControls />
-        <Environment preset="sunset" />
-      </Canvas>
+                <ThreeErrorBoundary>
+                    <RunnerMesh
+                        rpm={rpm}
+                        active={active}
+                        turbineType={turbineType}
+                        onMeshClick={(id) => onSelect?.(id)}
+                    />
+                </ThreeErrorBoundary>
 
-      {selectedMeshId && (
-        <div className="fixed right-0 top-0 h-full z-40 w-96 p-4 bg-white/95">
-          <ComponentInfoPanel meshId={selectedMeshId} onClose={() => setSelectedMeshId(null)} />
+                <OrbitControls enablePan={false} minPolarAngle={0} maxPolarAngle={Math.PI / 1.5} />
+                <Environment preset="city" />
+            </Canvas>
+
+            {/* Type Indicator Overlay */}
+            <div className="absolute top-2 left-2 px-2 py-1 bg-black/50 text-xs text-white font-mono rounded pointer-events-none">
+                TYPE: {turbineType.toUpperCase()}
+            </div>
         </div>
-      )}
-    </div>
-  );
+    );
 });
 
 export default TurbineRunner3D;
-export { TurbineRunner3D };

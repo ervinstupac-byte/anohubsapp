@@ -24,12 +24,15 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
     markers = []
 }) => {
     // Need at least 2 points to draw a line
-    if (!data || data.length < 2) {
+    // NC-700: Zero-Touch Deployment Fix - Guard against NaN/Infinity
+    const validData = data.filter(d => typeof d === 'number' && isFinite(d));
+
+    if (!validData || validData.length < 2) {
         return <div style={{ width, height }} className={`bg-slate-800/30 rounded ${className}`} />;
     }
 
-    const min = Math.min(...data);
-    const max = Math.max(...data);
+    const min = Math.min(...validData);
+    const max = Math.max(...validData);
     const range = max - min || 1; // avoid division by zero
 
     // Calculate Y for a value
@@ -51,6 +54,7 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="drop-shadow-[0_0_2px_rgba(34,211,238,0.5)]" // Neon glow effect
             />
             {/* Markers */}
             {markers.map((marker, i) => {

@@ -7,41 +7,47 @@ interface LiveMetricTokenProps {
 }
 
 export const LiveMetricToken = React.memo<LiveMetricTokenProps>(({ sensorId }) => {
-    // Direct Subscription to Telemetry Store (Atomic)
-    const metricData = useTelemetryStore((state) => {
+    // Select relevant slices only - primitive equality will work for direct value selections if we split them
+    // But since we need multiple fields based on ID, we select the whole slices which are objects.
+    // To prevent infinite re-renders if the slice object identity matches, we rely on Zustand default behavior (strict equality).
+    // However, if the store creates new slice objects on every update, this will trigger renders.
+    // We'll use a safer pattern: select everything needed.
+
+    const mechanical = useTelemetryStore(state => state.mechanical);
+    const physics = useTelemetryStore(state => state.physics);
+
+    // Memoize the derived metric object so it doesn't create new references during render unless data changes
+    const metric = React.useMemo(() => {
         if (sensorId === 'PT-101' || sensorId === 'VIB-901-A') {
             return {
                 label: 'Vibration',
-                value: state.mechanical.vibration,
+                value: mechanical.vibration,
                 unit: 'mm/s',
-                status: state.mechanical.vibration > 4.5 ? 'critical' : (state.mechanical.vibration > 2.8 ? 'warning' : 'nominal'),
-                history: state.mechanical.vibrationHistory?.map(p => p.y)
+                status: mechanical.vibration > 4.5 ? 'critical' : (mechanical.vibration > 2.8 ? 'warning' : 'nominal'),
+                history: mechanical.vibrationHistory?.map((p: any) => p.y) || []
             };
         }
         if (sensorId === 'TMP-404-X') {
             return {
                 label: 'Bearing Temp',
-                value: state.mechanical.bearingTemp,
+                value: mechanical.bearingTemp,
                 unit: '°C',
-                status: state.mechanical.bearingTemp > 80 ? 'critical' : (state.mechanical.bearingTemp > 65 ? 'warning' : 'nominal'),
-                history: []
+                status: mechanical.bearingTemp > 80 ? 'critical' : (mechanical.bearingTemp > 65 ? 'warning' : 'nominal'),
+                history: [] as number[]
             };
         }
         if (sensorId === 'PRE-202-B') {
-            // Mapping to calculated surge pressure from physics engine
-            const pressure = state.physics.surgePressure ? state.physics.surgePressure.toNumber() / 100000 : 0; // Pa to Bar rough
+            const pressure = physics.surgePressure ? physics.surgePressure.toNumber() / 100000 : 0;
             return {
-                label: 'Surge Pressure', // Changed from DT Pressure as we have Surge available
+                label: 'Surge Pressure',
                 value: pressure,
                 unit: 'Bar',
                 status: pressure > 40 ? 'critical' : 'nominal',
-                history: []
+                history: [] as number[]
             };
         }
         return null;
-    });
-
-    const metric = metricData;
+    }, [sensorId, mechanical, physics]);
 
     if (!metric) return <span className="inline-block px-1.5 py-0.5 bg-red-950/20 text-red-500 font-mono text-[10px] font-bold rounded border border-red-500/30 uppercase tracking-widest">ERR: {sensorId}</span>;
 
@@ -65,7 +71,7 @@ export const LiveMetricToken = React.memo<LiveMetricTokenProps>(({ sensorId }) =
                 {typeof metric.value === 'number' ? metric.value.toFixed(1) : metric.value} <span className="text-[9px] opacity-70">{metric.unit}</span>
             </span>
 
-            {metric.history && (
+            {metric.history && metric.history.length > 0 && (
                 <div className="w-10 h-3 opacity-80 group-hover:opacity-100 transition-opacity flex items-center">
                     <Sparkline data={metric.history} width={40} height={12} color={isCritical ? '#f87171' : isWarning ? '#fbbf24' : '#22d3ee'} />
                 </div>

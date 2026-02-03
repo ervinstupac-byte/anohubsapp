@@ -182,6 +182,7 @@ export const ForensicLab: React.FC = () => {
                                         baselineDelta={selectedSnapshot.data.deltaMap} // Use same for now
                                         onSelect={(id) => setFocus(id)}
                                         highlightId={activeComponentId}
+                                        showInfoPanel={true}
                                     />
                                 </div>
                             </TacticalCard>

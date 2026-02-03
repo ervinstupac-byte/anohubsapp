@@ -1,124 +1,111 @@
 import React from 'react';
-import { Network, TrendingUp, Brain, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Activity, AlertTriangle, CheckCircle, Server, Globe } from 'lucide-react';
 
-interface FleetAsset {
-    assetId: string;
-    name: string;
-    status: 'OPERATIONAL' | 'HEALING' | 'OFFLINE';
-    healthEffectiveness: number;
-    currentLoad: number;
-    maxCapacity: number;
-}
+// Mock Fleet Data - In production, this pulls from Supabase/SovereignMemory
+const FLEET_NODES = [
+    { id: 'UNIT-01', name: 'Francis Alpha', type: 'Francis', commissioned: '2024-01-15', baselineEff: 94.5, currentEff: 94.2, status: 'OPTIMAL' },
+    { id: 'UNIT-02', name: 'Francis Beta', type: 'Francis', commissioned: '2024-02-01', baselineEff: 94.5, currentEff: 83.1, status: 'DRIFT_WARNING' }, // Big Drift
+    { id: 'UNIT-03', name: 'Kaplan Gamma', type: 'Kaplan', commissioned: '2024-03-10', baselineEff: 92.0, currentEff: 91.8, status: 'OPTIMAL' },
+    { id: 'UNIT-04', name: 'Pelton Delta', type: 'Pelton', commissioned: '2024-04-22', baselineEff: 90.5, currentEff: 90.4, status: 'OPTIMAL' },
+    { id: 'UNIT-05', name: 'Bulb Epsilon', type: 'Bulb', commissioned: '2024-05-05', baselineEff: 93.0, currentEff: 88.5, status: 'ATTENTION' }, // Moderate Drift
+    { id: 'UNIT-06', name: 'Francis Zeta', type: 'Francis', commissioned: '2024-06-12', baselineEff: 94.8, currentEff: 94.8, status: 'BORN_PERFECT' },
+];
 
-interface FleetOverviewProps {
-    assets: FleetAsset[];
-    totalFleetROI?: number;
-    collectiveKnowledgeIndex?: number;
-}
+export const FleetOverview: React.FC = () => {
 
-export const FleetOverview: React.FC<FleetOverviewProps> = ({
-    assets = [],
-    totalFleetROI = 125480,
-    collectiveKnowledgeIndex = 47
-}) => {
-    const operationalCount = assets.filter(a => a.status === 'OPERATIONAL').length;
-    const healingCount = assets.filter(a => a.status === 'HEALING').length;
-    const avgHeff = assets.length > 0
-        ? assets.reduce((sum, a) => sum + a.healthEffectiveness, 0) / assets.length
-        : 0;
+    const calculateDrift = (baseline: number, current: number) => {
+        return ((baseline - current) / baseline) * 100;
+    };
 
     return (
-        <div className="w-full space-y-4">
-            {/* Header Stats */}
-            <div className="grid grid-cols-3 gap-4">
-                {/* Fleet ROI */}
-                <div className="bg-gradient-to-br from-emerald-950/90 to-green-950/90 border-2 border-emerald-500/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-4 h-4 text-emerald-400" />
-                        <span className="text-xs font-mono uppercase text-emerald-300">Fleet ROI</span>
-                    </div>
-                    <div className="text-3xl font-bold font-mono text-white">
-                        €{totalFleetROI.toLocaleString()}
-                    </div>
-                    <div className="text-[10px] text-emerald-400/70 font-mono mt-1">
-                        Live Fleet Aggregate
-                    </div>
+        <div className="bg-slate-950 p-6 rounded-xl border border-slate-800 shadow-2xl">
+            <div className="flex justify-between items-center mb-6 pt-2">
+                <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        <Globe className="text-cyan-500" /> Global Fleet Command
+                    </h2>
+                    <p className="text-xs text-slate-500 font-mono mt-1">REAL-TIME ASSET SOVEREIGNTY MONITOR</p>
                 </div>
-
-                {/* Collective Knowledge */}
-                <div className="bg-gradient-to-br from-purple-950/90 to-indigo-950/90 border-2 border-purple-500/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Brain className="w-4 h-4 text-purple-400" />
-                        <span className="text-xs font-mono uppercase text-purple-300">Swarm IQ</span>
-                    </div>
-                    <div className="text-3xl font-bold font-mono text-white">
-                        {collectiveKnowledgeIndex}
-                    </div>
-                    <div className="text-[10px] text-purple-400/70 font-mono mt-1">
-                        Shared Learnings
-                    </div>
-                </div>
-
-                {/* Fleet Health */}
-                <div className="bg-gradient-to-br from-cyan-950/90 to-blue-950/90 border-2 border-cyan-500/50 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Network className="w-4 h-4 text-cyan-400" />
-                        <span className="text-xs font-mono uppercase text-cyan-300">Swarm Health</span>
-                    </div>
-                    <div className="text-3xl font-bold font-mono text-white">
-                        {(avgHeff * 100).toFixed(0)}%
-                    </div>
-                    <div className="text-[10px] text-cyan-400/70 font-mono mt-1">
-                        Avg H_eff Across Fleet
+                <div className="flex gap-4 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                        <span className="text-cyan-400">SYNCED</span>
                     </div>
                 </div>
             </div>
 
-            {/* Swarm Health Map */}
-            <div className="bg-slate-900/80 border border-slate-700 rounded-lg p-4">
-                <div className="flex items-center gap-2 mb-3">
-                    <Network className="w-4 h-4 text-cyan-400" />
-                    <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-300">
-                        Swarm Health Map
-                    </span>
-                    <div className="ml-auto text-xs font-mono text-slate-400">
-                        {operationalCount} Operational · {healingCount} Healing
-                    </div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {FLEET_NODES.map((node) => {
+                    const drift = calculateDrift(node.baselineEff, node.currentEff);
+                    const isSevere = drift > 10;
+                    const isWarning = drift > 5 && drift <= 10;
 
-                <div className="grid grid-cols-4 gap-3">
-                    {assets.map((asset, idx) => (
-                        <div
-                            key={asset.assetId}
-                            className={`
-                                relative p-3 rounded border-2 transition-all
-                                ${asset.status === 'OPERATIONAL'
-                                    ? 'bg-emerald-950/50 border-emerald-500/50'
-                                    : asset.status === 'HEALING'
-                                        ? 'bg-amber-950/50 border-amber-500/50 animate-pulse'
-                                        : 'bg-slate-800/50 border-slate-600'}
-                            `}
-                        >
-                            <div className="text-xs font-mono font-bold text-white mb-1">
-                                {asset.name || `Unit ${idx + 1}`}
-                            </div>
-                            <div className="text-[10px] text-slate-400 font-mono">
-                                {asset.currentLoad.toFixed(0)} / {asset.maxCapacity} MW
-                            </div>
-                            <div className="mt-2 flex items-center justify-between">
-                                <span className="text-[10px] text-slate-500 font-mono">H_eff</span>
-                                <span className={`text-xs font-bold font-mono ${asset.healthEffectiveness >= 0.85 ? 'text-emerald-400' : 'text-amber-400'
-                                    }`}>
-                                    {(asset.healthEffectiveness * 100).toFixed(0)}%
-                                </span>
+                    return (
+                        <div key={node.id} className={`group relative bg-slate-900 border ${isSevere ? 'border-red-500/50' : isWarning ? 'border-amber-500/50' : 'border-slate-700'} p-4 rounded hover:bg-slate-800 transition-colors`}>
+                            {/* Status Indicator */}
+                            <div className={`absolute top-3 right-3 w-2 h-2 rounded-full ${isSevere ? 'bg-red-500 animate-ping' : isWarning ? 'bg-amber-500' : 'bg-green-500'}`} />
+
+                            <div className="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 className="text-white font-bold">{node.name}</h3>
+                                    <span className="text-[10px] text-slate-500 font-mono tracking-wider">{node.id} // {node.type.toUpperCase()}</span>
+                                </div>
+                                <Server className={`w-5 h-5 ${isSevere ? 'text-red-500' : 'text-slate-600'}`} />
                             </div>
 
-                            {asset.status === 'HEALING' && (
-                                <Zap className="absolute top-2 right-2 w-3 h-3 text-amber-400 animate-pulse" />
+                            <div className="space-y-3">
+                                <div className="flex justify-between text-xs">
+                                    <span className="text-slate-400">Baseline (Commissioned)</span>
+                                    <span className="text-cyan-300 font-mono">{node.baselineEff}%</span>
+                                </div>
+                                <div className="flex justify-between text-xs">
+                                    <span className="text-slate-400">Current Efficiency</span>
+                                    <span className={`font-mono ${isSevere ? 'text-red-400' : 'text-white'}`}>{node.currentEff}%</span>
+                                </div>
+
+                                {/* Drift Bar */}
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-end">
+                                        <span className="text-[10px] text-slate-500 uppercase tracking-wider">Genetic Drift</span>
+                                        <span className={`text-xs font-bold ${isSevere ? 'text-red-500' : isWarning ? 'text-amber-500' : 'text-green-500'}`}>
+                                            {drift > 0 ? '-' : '+'}{Math.abs(drift).toFixed(2)}%
+                                        </span>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                        <div
+                                            className={`h-full rounded-full transition-all duration-1000 ${isSevere ? 'bg-red-500' : isWarning ? 'bg-amber-500' : 'bg-green-500'}`}
+                                            style={{ width: `${Math.min(Math.abs(drift) * 5, 100)}%` }} // Visual scaling
+                                        />
+                                    </div>
+
+                                    {/* NC-200: ROI LOSS ENGINE */}
+                                    {drift > 0 && (
+                                        <div className="flex items-center justify-between pt-2 border-t border-slate-800/50">
+                                            <span className="text-[10px] text-slate-600 uppercase tracking-wider">Revenue Risk</span>
+                                            <div className="flex items-center gap-1">
+                                                <span className={`font-mono font-bold text-sm ${isSevere ? 'text-red-500' : 'text-amber-500'}`}>
+                                                    -€{((drift / 100) * 100 * 24 * 50).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                                                </span>
+                                                <span className="text-[10px] text-slate-600">/day</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {isSevere && (
+                                <motion.div
+                                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                    className="mt-4 flex items-center gap-2 text-red-400 text-xs font-bold bg-red-950/30 p-2 rounded"
+                                >
+                                    <AlertTriangle className="w-3 h-3" />
+                                    <span>CRITICAL DRIFT DETECTED</span>
+                                </motion.div>
                             )}
                         </div>
-                    ))}
-                </div>
+                    );
+                })}
             </div>
         </div>
     );

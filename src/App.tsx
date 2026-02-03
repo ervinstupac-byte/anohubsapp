@@ -166,6 +166,8 @@ const AppLayout: React.FC = () => {
 
     // Unified Navigation States
     const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
+    const AssetTypeSelector = lazy(() => import('./components/navigation/AssetTypeSelector').then(m => ({ default: m.AssetTypeSelector }))); // <--- NEW Phase 4
+
 
     // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
@@ -522,6 +524,10 @@ const AppLayout: React.FC = () => {
                         </div>
                     )}
                     <GlobalFooter />
+
+                    <Suspense fallback={null}>
+                        <AssetTypeSelector />
+                    </Suspense>
 
                     <SimulationController />
                     <CommanderDemoHUD />

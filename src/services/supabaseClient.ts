@@ -1,6 +1,14 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Cross-environment variable access (Vite vs Node)
+// ============================================================================
+// SUPABASE CLIENT (NC-76.4 - Hardcoded Credentials + Connection Verification)
+// ============================================================================
+
+// HARDCODED CREDENTIALS - Direct connection to production Supabase
+const SUPABASE_URL = 'https://nehxtecejxklqknscbgf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+
+// Cross-environment variable access (Vite vs Node) - FALLBACK only
 const getEnv = (key: string) => {
     if (typeof import.meta !== 'undefined' && import.meta.env) {
         return import.meta.env[key];
@@ -11,28 +19,72 @@ const getEnv = (key: string) => {
     return undefined;
 };
 
-// Support multiple env var names used across scripts and deploy targets.
-const supabaseUrl = getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL') || getEnv('SUPABASE_URL_PUBLIC') || getEnv('VITE_PUBLIC_SUPABASE_URL');
-const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('VITE_PUBLIC_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY') || getEnv('SUPABASE_KEY');
+// Use hardcoded values first, then fall back to env vars
+const supabaseUrl = SUPABASE_URL || getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL');
+const supabaseAnonKey = SUPABASE_ANON_KEY || getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY');
 
-// Build-time tolerant supabase client: if env missing, provide a noop client that
-// implements commonly used methods to avoid import-time throws during CI/Vercel builds.
-let _supabase: any = null;
+// ============================================================================
+// CONNECTION STATE
+// ============================================================================
+export interface ConnectionState {
+    isConnected: boolean;
+    isVerified: boolean;
+    lastCheck: Date | null;
+    error: string | null;
+}
+
+let connectionState: ConnectionState = {
+    isConnected: false,
+    isVerified: false,
+    lastCheck: null,
+    error: null
+};
+
+// ============================================================================
+// SUPABASE CLIENT INITIALIZATION
+// ============================================================================
+let _supabase: SupabaseClient | null = null;
 
 if (supabaseUrl && supabaseAnonKey) {
-    _supabase = createClient(supabaseUrl, supabaseAnonKey);
+    try {
+        _supabase = createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+            },
+            global: {
+                headers: {
+                    'x-client-info': 'anohubs-monolit/1.0'
+                }
+            }
+        });
+        connectionState.isConnected = true;
+        console.log('[SupabaseClient] ✅ Client created successfully');
+    } catch (err) {
+        console.error('[SupabaseClient] ❌ Failed to create client:', err);
+        connectionState.error = String(err);
+    }
 } else {
-    console.warn('[supabaseClient] VITE_SUPABASE env missing — creating noop client for build/CI.');
+    console.warn('[SupabaseClient] ⚠️ Missing credentials - creating noop client');
+}
 
+// ============================================================================
+// NOOP CLIENT (Fallback for build/CI)
+// ============================================================================
+if (!_supabase) {
     const noopFrom = () => ({
         select: async () => ({ data: [], error: null }),
         insert: async () => ({ data: null, error: null }),
         update: async () => ({ data: null, error: null }),
+        upsert: async () => ({ data: null, error: null }),
         delete: async () => ({ data: null, error: null }),
         single: async () => ({ data: null, error: null }),
         eq() { return this; },
+        neq() { return this; },
         order() { return this; },
-        limit() { return this; }
+        limit() { return this; },
+        range() { return this; },
+        maybeSingle: async () => ({ data: null, error: null }),
     });
 
     const noopChannel = () => ({
@@ -54,16 +106,69 @@ if (supabaseUrl && supabaseAnonKey) {
         removeChannel: () => { },
         storage: noopStorage(),
         auth: {
-            getUser: async () => ({ data: null, error: null })
+            getUser: async () => ({ data: null, error: null }),
+            getSession: async () => ({ data: null, error: null }),
+            signOut: async () => ({ error: null }),
+            onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } })
         }
-    };
+    } as any;
 }
 
-export const supabase: any = _supabase;
+export const supabase: SupabaseClient = _supabase as SupabaseClient;
 
-export function getSafeClient() {
-    return _supabase;
+export function getSafeClient(): SupabaseClient {
+    return _supabase as SupabaseClient;
 }
+
+// ============================================================================
+// CONNECTION VERIFICATION
+// ============================================================================
+
+/**
+ * Verify the database connection by attempting a simple query.
+ * Returns true if connection is healthy, false otherwise.
+ */
+export async function verifyConnection(timeoutMs: number = 3000): Promise<boolean> {
+    if (!_supabase || !connectionState.isConnected) {
+        connectionState.isVerified = false;
+        connectionState.error = 'Client not initialized';
+        return false;
+    }
+
+    try {
+        const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Connection timeout')), timeoutMs)
+        );
+
+        // Simple health check query
+        const queryPromise = _supabase.from('assets').select('id', { count: 'exact', head: true });
+
+        await Promise.race([queryPromise, timeoutPromise]);
+
+        connectionState.isVerified = true;
+        connectionState.lastCheck = new Date();
+        connectionState.error = null;
+        console.log('[SupabaseClient] ✅ Connection verified');
+        return true;
+    } catch (err: any) {
+        connectionState.isVerified = false;
+        connectionState.lastCheck = new Date();
+        connectionState.error = err.message || 'Unknown error';
+        console.warn('[SupabaseClient] ⚠️ Connection verification failed:', err.message);
+        return false;
+    }
+}
+
+/**
+ * Get the current connection state
+ */
+export function getConnectionState(): ConnectionState {
+    return { ...connectionState };
+}
+
+// ============================================================================
+// TABLE COUNT UTILITY
+// ============================================================================
 
 /**
  * Get an exact count for a table using a GET with count=exact.
@@ -82,3 +187,8 @@ export async function getTableCount(table: string): Promise<number> {
         return 0;
     }
 }
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+export { SUPABASE_URL, SUPABASE_ANON_KEY };

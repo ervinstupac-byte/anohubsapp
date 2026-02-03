@@ -1,5 +1,6 @@
 import React from 'react';
 import { Settings, AlertTriangle, Activity, BookOpen, ChevronRight, Target } from 'lucide-react';
+import { DiagnosticRCA } from '../../automation/DiagnosticRCA';
 
 export const AnohubSidebar: React.FC = () => {
     return (
@@ -22,6 +23,14 @@ export const AnohubSidebar: React.FC = () => {
                 <NavButton icon={AlertTriangle} color="text-amber-500" glow="bloom-glow-amber" />
                 <NavButton icon={Activity} color="text-emerald-500" glow="bloom-glow-emerald" />
                 <NavButton icon={BookOpen} color="text-blue-500" glow="bloom-glow-cyan" />
+            </div>
+
+            {/* NC-140 DIAGNOSTIC ENGINE (Pops out when needed) */}
+            <div className="absolute left-full top-20 ml-4 w-64 z-50 pointer-events-none">
+                {/* Wrapper to allow pointer events on the diagnostic card itself */}
+                <div className="pointer-events-auto">
+                    <DiagnosticRCA />
+                </div>
             </div>
 
             {/* DECORATIVE ETCHED PLATE */}

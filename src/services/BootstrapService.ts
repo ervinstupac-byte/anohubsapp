@@ -67,6 +67,19 @@ export class BootstrapService {
         { name: 'Legacy Knowledge Base', tier: 1, task: () => (LegacyKnowledgeService as any)?.initialize?.() },
         { name: 'Fire Suppression', tier: 1, task: () => (FireSuppressionSystem as any)?.initializeFireZones?.() },
         { name: 'High Voltage Shield', tier: 1, task: () => (HVShield as any)?.initializeRelays?.() },
+        // NC-76.5: Database Verification & Auto-Seeding
+        {
+            name: 'Supabase Mainframe',
+            tier: 1,
+            task: async () => {
+                // Dynamic import to avoid circular dependencies during initial parse
+                const { DatabaseSeeder } = await import('./DatabaseSeeder');
+                const result = await DatabaseSeeder.seedIfEmpty();
+                if (!result) {
+                    console.warn('[Bootstrap] ⚠️ Database check completed with warnings, but proceeding.');
+                }
+            }
+        },
     ];
 
     private static readonly TIER_2_SENSORS: ServiceDefinition[] = [

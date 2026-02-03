@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, Camera, Mic, MicOff } from 'lucide-react';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
+import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ServiceChecklistEngine } from '../../services/ServiceChecklistEngine';
 import { ChecklistItem } from '../../types/checklist';
 import { PrecisionInput } from '../precision/PrecisionInput';
@@ -14,9 +15,8 @@ import { HistoricalMeasurement, PrecisionMeasurement } from '../../types/trends'
 
 export const ServiceChecklistUI: React.FC = () => {
     const { activeChecklist, updateChecklistItem, addFieldNote } = useMaintenance();
-    // TODO: Re-enable when addMeasurement and addPrecisionMeasurement are implemented
-    // TODO: Re-enable when addMeasurement and addPrecisionMeasurement are implemented in new store
-    // const { addMeasurement, addPrecisionMeasurement } = useTelemetryStore...
+    // NC-300: Wire measurement methods from ProjectContext
+    const { addMeasurement } = useProjectEngine();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 
@@ -53,9 +53,17 @@ export const ServiceChecklistUI: React.FC = () => {
             checklistId: activeChecklist.id
         };
 
-        // TODO: Re-enable when methods are implemented in ProjectContext
-        // 1. Send to Project Context (Trend Analyzer)
-        // addMeasurement(currentItem.id, measurement);
+        // NC-300: Send to Project Context (Trend Analyzer)
+        if (currentItem.measurementConfig) {
+            addMeasurement(
+                activeChecklist.assetId, // Asset ID - now correctly passed as string
+                currentItem.id,
+                response.measurementValue,
+                (currentItem.measurementConfig.unit as 'mm' | 'bar' | 'rpm' | 'celsius') || 'mm',
+                currentItem.measurementConfig.nominalValue,
+                currentItem.measurementConfig.tolerance
+            );
+        }
 
         // 2. If it's a precision item or explicitly marked, add to Engineering Log
         // Assuming tolerance < 0.1mm implies precision requirement
@@ -90,8 +98,8 @@ export const ServiceChecklistUI: React.FC = () => {
                 measurementMethod: 'MICROMETER'
             };
 
-            // TODO: Re-enable when method is implemented
-            // addPrecisionMeasurement(precisionMeasurement);
+            // NC-300: Log precision measurement (would be persisted in a future enhancement)
+            console.log('[ServiceChecklistUI] Precision measurement recorded:', precisionMeasurement);
         }
     };
 
