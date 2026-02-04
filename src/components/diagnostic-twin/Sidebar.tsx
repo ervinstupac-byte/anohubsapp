@@ -479,166 +479,61 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[90] lg:hidden"
                     />
 
-                    {/* MAIN SIDEBAR */}
+                    {/* MAIN SIDEBAR RAIL */}
                     <motion.div
-                        initial={{ x: -320, opacity: 0 }}
+                        initial={{ x: -64, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -320, opacity: 0 }}
+                        exit={{ x: -64, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed lg:static left-0 top-0 bottom-0 h-full w-[320px] bg-slate-950/80 backdrop-blur-xl z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-all lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:static left-0 top-0 bottom-0 h-full w-16 bg-[#020617] border-r border-white/5 z-[100] flex flex-col items-center py-4 shadow-[4px_0_24px_rgba(0,0,0,0.5)] overflow-hidden`}
                     >
-                        {/* BRUSHED METAL TEXTURE */}
-                        <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
-
-                        {/* EDGE ACCENTS */}
-                        <div className="absolute inset-y-0 left-0 w-[2px] bg-white/10 pointer-events-none" />
-                        <div className="absolute inset-y-0 right-0 w-[1px] bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none" />
-
-                        {/* HEADER & WORKSPACE SWITCHER (NC-11) */}
-                        <div className="p-4 border-b border-black/10 relative z-10 bg-black/5 flex flex-col gap-4">
-                            {/* SYSTEM IDENTITY */}
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">MONOLIT OS</h2>
-                                    <div className="text-sm font-black text-slate-100 tracking-tighter flex items-center gap-2">
-                                        <div className={`w-2 h-2 rounded-full shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse ${hiveStatus?.connected ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-amber-500'}`} />
-                                        UNIT_01 COMMAND
-                                    </div>
-                                </div>
-                                <button onClick={onClose} className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
-                                    <ChevronLeft className="w-5 h-5" />
-                                </button>
+                        {/* SYSTEM LOGO / TOP BUTTON */}
+                        <div className="mb-8 flex flex-col items-center gap-4">
+                            <div className="w-8 h-8 rounded bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center group cursor-pointer" onClick={() => navigate('/')}>
+                                <Cpu className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
                             </div>
+                        </div>
 
-                            {/* WORKSPACE SWITCHER */}
-                            <div className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-black/20 border border-white/5">
-                                {(['OPS', 'FOR', 'EXE'] as const).map((mode) => (
+                        {/* NAV ICONS */}
+                        <div className="flex-1 flex flex-col items-center gap-6 w-full">
+                            {[
+                                { id: 'ops', icon: <Target className="w-5 h-5" />, route: ROUTES.HOME, label: 'Operations' },
+                                { id: 'maint', icon: <Settings className="w-5 h-5" />, route: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD), label: 'Maintenance' },
+                                { id: 'exe', icon: <Zap className="w-5 h-5" />, route: '/executive', label: 'Executive' },
+                                { id: 'risk', icon: <Shield className="w-5 h-5" />, route: `/${ROUTES.RISK_ASSESSMENT}`, label: 'Risk' },
+                                { id: 'docs', icon: <BookOpen className="w-5 h-5" />, route: '/knowledge/health-monitor', label: 'Knowledge' },
+                            ].map((item) => {
+                                const isActive = location.pathname.includes(item.route);
+                                return (
                                     <button
-                                        key={mode}
-                                        onClick={() => handleWorkspaceSwitch(mode)}
-                                        className={`py-1.5 text-[10px] font-black font-mono relative overflow-hidden transition-all rounded ${activeWorkspace === mode
-                                            ? 'text-black bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
-                                            : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
-                                            }`}
+                                        key={item.id}
+                                        onClick={() => handleNavigate(item.route, item.label)}
+                                        className={`p-3 rounded-lg transition-all relative group ${isActive ? 'bg-cyan-500/10 text-cyan-400' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                                        title={item.label}
                                     >
-                                        {mode}
-                                    </button>
-                                ))}
-                            </div>
+                                        {item.icon}
+                                        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-500 rounded-r shadow-[0_0_10px_rgba(6,182,212,0.5)]" />}
 
-                            {/* SEARCH */}
-                            <div className="relative flex items-center bg-black/5 rounded-lg border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] px-3 py-2 transition-all focus-within:border-cyan-500/50">
-                                <Search className="w-4 h-4 text-slate-500" />
-                                <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="SCAN_SYSTEM..."
-                                    className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-800 placeholder:text-slate-400 w-full"
-                                />
-                            </div>
-                        </div>
-
-                        {/* CONTENT - SCROLLABLE */}
-                        <div className="flex-1 overflow-y-auto overflow-x-hidden relative z-10 scrollbar-cyan scrollbar-gutter-stable pr-1">
-                            {/* NC-11: SOVEREIGN FORGE LAUNCHPAD */}
-                            <div className="p-2 pb-0">
-                                <button
-                                    onClick={() => handleNavigate(getFrancisPath(ROUTES.FRANCIS.DESIGNER), 'Sovereign Forge')}
-                                    className="w-full py-3 bg-gradient-to-r from-amber-900/40 to-slate-900 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(255,215,0,0.15)] hover:shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:border-amber-400/50 transition-all group relative overflow-hidden flex items-center justify-center gap-3"
-                                >
-                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    <Zap className="w-4 h-4 text-amber-400 animate-pulse" />
-                                    <span className="text-xs font-black text-amber-100 tracking-widest uppercase relative z-10 group-hover:text-white">SOVEREIGN FORGE</span>
-                                </button>
-                            </div>
-
-                            <FleetSection
-                                showMap={showMap}
-                                onToggleMap={onToggleMap}
-                                onRegisterAsset={onRegisterAsset}
-                            />
-
-                            <div className="p-2 space-y-1">
-                                {missionSectors.map((sector) => (
-                                    <SectorAccordion
-                                        key={sector.id}
-                                        sector={sector}
-                                        isExpanded={expandedSectors[sector.id] || false}
-                                        onToggle={() => toggleSector(sector.id)}
-                                        currentPath={location.pathname}
-                                        onNavigate={handleNavigate}
-                                        searchQuery={searchQuery}
-                                        // NC-11: Pass calculated focus state
-                                        anyExpanded={Object.values(expandedSectors).some(v => v)}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* STICKY ACTION ZONE - FORENSIC ANCHOR (NC-11) */}
-                        <div className="p-4 border-t border-black/10 bg-black/5 backdrop-blur-sm z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] relative">
-                            {/* NC-20: Generation Overlay */}
-                            {isGenerating && (
-                                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-30 flex items-center justify-center rounded-t-xl">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <Cpu className="w-5 h-5 text-cyan-400 animate-spin" />
-                                        <span className="text-[10px] font-mono text-cyan-200 animate-pulse">COMPILING DOSSIER...</span>
-                                    </div>
-                                </div>
-                            )}
-
-                            <button
-                                className={`w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white rounded-lg border border-white/5 border-b-4 border-b-black shadow-lg shadow-black/20 active:translate-y-0.5 active:border-b-0 transition-all flex items-center justify-center gap-2 group relative overflow-hidden ${isGenerating ? 'opacity-50 pointer-events-none' : ''}`}
-                                onClick={handleGenerateForensic}
-                            >
-                                {/* NC-11: Neural Pulse Animation on Threshold Breach */}
-                                <div
-                                    className={`absolute inset-0 bg-red-500/10 transition-opacity duration-100 
-                                        ${hiveStatus?.connected && !isSimulating ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}
-                                        ${isSimulating ? 'animate-pulse bg-red-600/30' : ''}`}
-                                    style={isSimulating ? { animationDuration: `${Math.max(0.1, 10 / pulseIntensity)}s` } : {}}
-                                />
-                                <FileText className={`w-4 h-4 transition-all ${hiveStatus?.connected && !isSimulating ? 'text-cyan-400 group-hover:text-cyan-200' : 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'}`} />
-                                <span className={`text-[10px] font-black uppercase tracking-widest group-hover:text-white ${hiveStatus?.connected && !isSimulating ? 'text-cyan-50' : 'text-red-100'}`}>
-                                    {isGenerating ? 'PROCESSING...' : 'GENERATE_FORENSIC'}
-                                </span>
-                            </button>
-
-                            {/* NC-14: Incident Memory */}
-                            <AnimatePresence>
-                                {recentIncidents.length > 0 && (
-                                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} className="mt-3 overflow-hidden">
-                                        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Recent Incidents</div>
-                                        <div className="space-y-1">
-                                            {recentIncidents.slice(0, 3).map(incident => (
-                                                <div key={incident.id} className="flex justify-between items-center text-[8px] font-mono text-white/70 bg-white/5 p-1 rounded">
-                                                    <span className="truncate max-w-[150px]">{incident.title.replace('INCIDENT REPORT ', '')}</span>
-                                                    <span className="text-slate-500">{incident.timestamp}</span>
-                                                </div>
-                                            ))}
+                                        {/* HOVER LABEL TOOLTIP */}
+                                        <div className="absolute left-full ml-4 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 font-mono tracking-widest uppercase">
+                                            {item.label}
                                         </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                    </button>
+                                );
+                            })}
                         </div>
 
-                        {/* FOOTER - STATUS */}
-                        <div className="px-4 pb-4 pt-2 bg-black/5 flex flex-col items-center z-20">
-                            <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
-                                <div className="flex items-center gap-1">
-                                    <Cpu className="w-3 h-3" />
-                                    <span>LINK_{mqttStatus !== 'IDLE' ? 'ESTABLISHED' : 'STANDBY'} // NC-19</span>
-                                </div>
-                                <span className={getStatusColor()}>
-                                    {mqttStatus === 'CONNECTED' ? 'AES-256-GCM' : getStatusText()}
-                                </span>
-                            </div>
-                            <div className="opacity-40 grayscale hover:grayscale-0 transition-all cursor-crosshair">
-                                <QrCode size={40} value={`anohub-nc42:${activeDefinition?.id || 'null'}`} />
-                            </div>
+                        {/* BOTTOM ACTIONS */}
+                        <div className="mt-auto flex flex-col items-center gap-6 pb-4">
+                            <button
+                                onClick={onToggleMap}
+                                className={`p-3 rounded-lg transition-all group ${showMap ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-500 hover:text-white'}`}
+                                title="Fleet Map"
+                            >
+                                <Map className="w-5 h-5" />
+                            </button>
+                            <div className="w-8 h-px bg-white/5" />
+                            <div className={`w-2 h-2 rounded-full ${hiveStatus?.connected ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500'}`} title="System Status" />
                         </div>
                     </motion.div>
                 </>

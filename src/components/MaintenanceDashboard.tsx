@@ -107,175 +107,95 @@ export const MaintenanceDashboard: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-cyan-500/30 overflow-x-hidden pb-24">
+        <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-cyan-500/30 overflow-x-hidden pb-32">
             {/* TOP COMMAND HUD */}
-            <div className="border-b border-white/5 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
-                <div className="max-w-[1800px] mx-auto px-4 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                        <button
-                            onClick={() => navigate('/')}
-                            className="p-2 hover:bg-white/5 rounded-lg transition-colors group"
-                        >
-                            <ArrowLeft className="w-5 h-5 text-slate-400 group-hover:text-white" />
-                        </button>
-                        <div className="h-6 w-px bg-white/10" />
+            <div className="border-b border-white/5 bg-slate-950/20 backdrop-blur-md sticky top-0 z-50">
+                <div className="max-w-[1800px] mx-auto px-6 h-14 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
                         <div className="flex flex-col">
-                            <h1 className="text-xs font-black uppercase tracking-[0.2em] text-cyan-500">Maintenance_Engine_v2.4</h1>
-                            <div className="text-[10px] text-slate-500 font-mono flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                CORE_KERNEL: NOMINAL // NC-22_ENABLED
-                            </div>
+                            <h1 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">System_Monitor_v3.0</h1>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-6">
                         <AssetPicker />
-                        <div className="h-6 w-px bg-white/10" />
-                        <div className="flex items-center gap-3">
-                            <div className="text-right">
-                                <div className="text-[10px] text-slate-500 font-mono uppercase">System Time</div>
-                                <div className="text-xs font-mono numeric-display">{new Date().toLocaleTimeString()}</div>
-                            </div>
-                            <Clock className="w-4 h-4 text-slate-400" />
+                        <div className="h-4 w-px bg-white/10" />
+                        <div className="text-[10px] font-mono text-slate-500 uppercase flex items-center gap-2">
+                            <Clock className="w-3 h-3" />
+                            {new Date().toLocaleTimeString([], { hour12: false })}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-[1800px] mx-auto px-4 pt-6 space-y-6">
-                {/* RULE OF THREE LAYOUT */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                    {/* COLUMN 1: PRIMARY VITALS */}
-                    <div className="space-y-6">
-                        <div className="bg-slate-900/40 border border-white/5 rounded-xl p-6 backdrop-blur-sm relative overflow-hidden group">
-                            <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500 group-hover:w-2 transition-all" />
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Primary Vitals</div>
-                                <Activity className="w-4 h-4 text-cyan-400" />
-                            </div>
-
-                            <div className="space-y-8">
-                                <div>
-                                    <div className="text-4xl font-black text-white numeric-display tracking-tighter">
-                                        {hours.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
-                                        <span className="text-sm text-slate-500 ml-2 font-sans uppercase">Hours</span>
-                                    </div>
-                                    <div className="text-[10px] text-slate-500 mt-1 uppercase">Operational Persistence</div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
-                                    <div>
-                                        <div className="text-2xl font-black text-emerald-400 numeric-display">
-                                            {(state.hydraulic.efficiency * 100).toFixed(1)}%
-                                        </div>
-                                        <div className="text-[9px] text-slate-500 uppercase mt-1">Efficiency ($\eta$)</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-black text-cyan-400 numeric-display">
-                                            0.82
-                                            <span className="text-[10px] text-slate-500 ml-1">mm/s</span>
-                                        </div>
-                                        <div className="text-[9px] text-slate-500 uppercase mt-1">Rotor Vibration</div>
-                                    </div>
-                                </div>
-                            </div>
+            <div className="max-w-[1800px] mx-auto px-6 pt-10">
+                {/* TRIPTYCH HUD: MASSIVE TELEMETRY CARDS */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                    {/* LOAD CARD */}
+                    <div className="bg-slate-900/10 border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-cyan-500/30 transition-all">
+                        <div className="absolute top-0 right-0 p-4">
+                            <Zap className="w-5 h-5 text-cyan-500/50" />
                         </div>
-
-                        <MaintenanceTimelineCard />
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">ACTIVE_LOAD</div>
+                        <div className="text-7xl font-black text-cyan-500 numeric-display tracking-tighter">
+                            12.5<span className="text-xl text-cyan-900 ml-2 font-mono uppercase">MW</span>
+                        </div>
+                        <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-cyan-500 w-[83%] shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+                        </div>
                     </div>
 
-                    {/* COLUMN 2: RISK VECTORS & CORE PROTOCOLS */}
-                    <div className="space-y-6">
-                        <div className="bg-slate-900/40 border border-white/5 rounded-xl p-6 backdrop-blur-sm">
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Risk Vectors</div>
-                                <Shield className="w-4 h-4 text-red-400" />
-                            </div>
-
-                            <div className="space-y-4">
-                                {[
-                                    { label: 'Cavitation Index', value: '1.24', status: 'Nominal', icon: <Waves className="w-4 h-4 text-cyan-400" /> },
-                                    { label: 'Bearing Temp', value: '42.5°C', status: 'Stable', icon: <Thermometer className="w-4 h-4 text-emerald-400" /> },
-                                    { label: 'Fatigue Points', value: '12', status: 'Low Risk', icon: <Gauge className="w-4 h-4 text-slate-400" /> }
-                                ].map((risk, i) => (
-                                    <div key={i} className="flex items-center justify-between p-3 bg-white/[0.02] rounded-lg border border-white/5">
-                                        <div className="flex items-center gap-3">
-                                            {risk.icon}
-                                            <div>
-                                                <div className="text-[10px] text-slate-400 font-bold uppercase">{risk.label}</div>
-                                                <div className="text-xs font-mono numeric-display">{risk.value}</div>
-                                            </div>
-                                        </div>
-                                        <div className="text-[8px] font-black uppercase text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                                            {risk.status}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                    {/* VIBRATION CARD */}
+                    <div className="bg-slate-900/10 border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-amber-500/30 transition-all">
+                        <div className="absolute top-0 right-0 p-4">
+                            <Activity className="w-5 h-5 text-amber-500/50" />
                         </div>
-
-                        <ExpertMaintenanceAdvisorCard />
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">ROTOR_VIB</div>
+                        <div className="text-7xl font-black text-amber-500 numeric-display tracking-tighter">
+                            2.5<span className="text-xl text-amber-900 ml-2 font-mono uppercase">mm/s</span>
+                        </div>
+                        <div className="mt-4 flex items-center gap-2">
+                            <div className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-[8px] font-black text-amber-500 uppercase tracking-widest">THRESHOLD_WARNING</div>
+                            <div className="text-[8px] font-mono text-slate-600 uppercase">Limit: 2.0 mm/s</div>
+                        </div>
                     </div>
 
-                    {/* COLUMN 3: SOVEREIGN ACTIONS & SMART QUEUE */}
-                    <div className="space-y-6">
-                        <div className="bg-slate-900/40 border border-white/5 rounded-xl p-6 backdrop-blur-sm">
-                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Sovereign Actions</div>
-                            <div className="grid grid-cols-1 gap-3">
-                                <button
-                                    onClick={() => showToast("Initializing Tactical Adjustment...", "info")}
-                                    className="w-full flex items-center justify-between p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-xl hover:bg-cyan-500/20 transition-all group"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Settings className="w-5 h-5 text-cyan-400" />
-                                        <div className="text-left">
-                                            <div className="text-[10px] text-cyan-400 font-black uppercase">Execute Adjustment</div>
-                                            <div className="text-[8px] text-slate-500 uppercase">Balance Setpoints</div>
-                                        </div>
-                                    </div>
-                                    <ChevronRight className="w-4 h-4 text-cyan-500 group-hover:translate-x-1 transition-transform" />
-                                </button>
-
-                                <button
-                                    className="w-full flex items-center justify-between p-4 bg-slate-800/40 border border-white/10 rounded-xl hover:bg-slate-800/60 transition-all group"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <FileText className="w-5 h-5 text-slate-300" />
-                                        <div className="text-left">
-                                            <div className="text-[10px] text-slate-300 font-black uppercase">Verification Status</div>
-                                            <div className="text-[8px] text-slate-500 uppercase">Ledger Signed</div>
-                                        </div>
-                                    </div>
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                                </button>
-                            </div>
+                    {/* EFFICIENCY CARD */}
+                    <div className="bg-slate-900/10 border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+                        <div className="absolute top-0 right-0 p-4">
+                            <Gauge className="w-5 h-5 text-emerald-500/50" />
                         </div>
-
-                        <SmartActionList />
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4">SYSTEM_EFF</div>
+                        <div className="text-7xl font-black text-emerald-400 numeric-display tracking-tighter">
+                            92<span className="text-xl text-emerald-900 ml-2 font-mono uppercase">%</span>
+                        </div>
+                        <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500 w-[92%] shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                        </div>
                     </div>
                 </div>
 
-                {/* DIAGNOSTIC DEEP-DIVE: THE ACCORDION LOCKDOWN */}
-                <div className="bg-slate-900/20 border border-white/5 rounded-2xl overflow-hidden mt-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <MaintenanceTimelineCard />
+                    <ExpertMaintenanceAdvisorCard />
+                </div>
+
+                {/* DIAGNOSTIC DEEP-DIVE */}
+                <div className="mt-12 bg-slate-900/5 border border-white/5 rounded-2xl overflow-hidden">
                     <button
-                        className="w-full px-6 py-4 flex items-center justify-between bg-white/[0.02] border-b border-white/5 hover:bg-white/[0.04] transition-colors"
+                        className="w-full px-8 py-5 flex items-center justify-between bg-white/[0.01] hover:bg-white/[0.03] transition-colors"
                         onClick={() => {
                             const el = document.getElementById('deep-dive-panel');
                             if (el) el.classList.toggle('hidden');
                         }}
                     >
-                        <div className="flex items-center gap-3">
-                            <Brain className="w-4 h-4 text-h-purple" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Diagnostic Deep-Dive (Advanced Analytics)</span>
-                        </div>
                         <div className="flex items-center gap-4">
-                            <div className="text-[10px] font-mono text-slate-600">NC-22 // NC-27 ACTIVE</div>
-                            <ChevronRight className="w-4 h-4 text-slate-600" />
+                            <Brain className="w-5 h-5 text-h-purple" />
+                            <span className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500">Diagnostic Deep-Dive</span>
                         </div>
+                        <ChevronRight className="w-5 h-5 text-slate-600" />
                     </button>
-
-                    <div id="deep-dive-panel" className="hidden p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-slate-950/30">
+                    <div id="deep-dive-panel" className="hidden p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 border-t border-white/5">
                         <SealingIntegrity />
                         <SystemResponseAnalytics />
                         <StressCycleCounter />
@@ -289,36 +209,33 @@ export const MaintenanceDashboard: React.FC = () => {
                 </div>
 
                 {/* PROTOCOLS SECTION */}
-                <div className="mt-8">
-                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 text-center">Operational Integrity Protocols</div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="mt-12 pb-20">
+                    <div className="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-8">Operational Continuity Protocols</div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {protocols.map(proto => {
                             const nextDate = selectedAsset ? predictServiceDate(idAdapter.toNumber(selectedAsset.id) || 0, proto.threshold) : null;
                             const progress = (hours % proto.threshold) / proto.threshold * 100;
 
                             return (
-                                <div key={proto.id} className="p-4 rounded-xl bg-slate-900/40 border border-white/5 group hover:border-cyan-500/30 transition-all flex gap-4 pr-16 relative overflow-hidden">
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center">
-                                        <ShieldCheck className={`w-6 h-6 ${progress > 80 ? 'text-amber-500' : 'text-cyan-500'}`} />
+                                <div key={proto.id} className="p-6 rounded-2xl bg-slate-900/10 border border-white/5 hover:border-white/10 transition-all flex flex-col gap-4">
+                                    <div className="flex justify-between items-start">
+                                        <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{proto.name}</h4>
+                                        <div className={`p-1.5 rounded bg-white/5 ${progress > 80 ? 'text-amber-500' : 'text-cyan-500'}`}>
+                                            <ShieldCheck className="w-4 h-4" />
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h4 className="text-[10px] font-black uppercase text-white tracking-widest">{proto.name}</h4>
-                                            <span className="text-[10px] font-mono numeric-display text-slate-500">{progress.toFixed(1)}%</span>
-                                        </div>
-                                        <div className="h-1 bg-white/5 w-full rounded-full overflow-hidden mb-3">
-                                            <div
-                                                className={`h-full ${progress > 80 ? 'bg-amber-500' : 'bg-cyan-500'} transition-all`}
-                                                style={{ width: `${progress}%` }}
-                                            />
-                                        </div>
-                                        <p className="text-[9px] text-slate-500 uppercase leading-relaxed">{proto.description}</p>
+                                    <div className="text-3xl font-black text-white numeric-display">
+                                        {progress.toFixed(1)}%
                                     </div>
-                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-right">
-                                        <div className="text-[9px] text-slate-600 uppercase font-mono mb-1">Schedule</div>
-                                        <div className="text-xs font-mono font-black text-white numeric-display">
-                                            {nextDate ? nextDate.toLocaleDateString() : 'INF'}
-                                        </div>
+                                    <div className="h-1 bg-white/5 w-full rounded-full overflow-hidden">
+                                        <div
+                                            className={`h-full ${progress > 80 ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]'} transition-all`}
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
+                                    <div className="flex justify-between items-center text-[8px] font-mono text-slate-600 uppercase">
+                                        <span>Next Schedule</span>
+                                        <span className="text-slate-400">{nextDate ? nextDate.toLocaleDateString() : 'INF'}</span>
                                     </div>
                                 </div>
                             );
@@ -327,41 +244,57 @@ export const MaintenanceDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* THE COMMAND BAR (FIXED BOTTOM) */}
-            <div className="fixed bottom-0 left-0 w-full bg-slate-950/80 backdrop-blur-xl border-t border-white/10 z-[100] h-20">
-                <div className="max-w-[1800px] mx-auto h-full px-6 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="px-3 py-1 bg-white/5 rounded border border-white/10 flex items-center gap-2">
-                            <Database className="w-3 h-3 text-cyan-400" />
-                            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Ledger: <span className="text-emerald-400">Signed</span></span>
+            {/* FORENSIC DRAWER (INTEGRITY VERIFICATION) */}
+            <div className="fixed bottom-0 left-0 w-full z-[100]">
+                <div className="bg-[#020617] border-t border-white/10 shadow-[0_-8px_32px_rgba(0,0,0,0.8)] px-8">
+                    <button
+                        onClick={() => {
+                            const el = document.getElementById('forensic-drawer-content');
+                            if (el) el.classList.toggle('hidden');
+                        }}
+                        className="w-full h-12 flex items-center justify-between group"
+                    >
+                        <div className="flex items-center gap-3">
+                            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Integrity: <span className="text-emerald-500">Sealed</span> | SHA-256 Verified</span>
                         </div>
-                        <div className="px-3 py-1 bg-white/5 rounded border border-white/10 flex items-center gap-2">
-                            <Lock className="w-3 h-3 text-cyan-400" />
-                            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">Session: <span className="text-emerald-400">Encrypted</span></span>
+                        <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                                <Database className="w-3 h-3 text-slate-600" />
+                                <span className="text-[9px] font-mono text-slate-600 uppercase">Ledger: signed</span>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-white transition-colors rotate-90" />
                         </div>
-                    </div>
+                    </button>
 
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={async () => {
-                                showToast("Verifying Ledger Integrity...", "info");
-                                setTimeout(() => showToast("Ledger Integrity 100% Verified", "success"), 1500);
-                            }}
-                            className="px-6 py-2 bg-slate-800 text-slate-300 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition-all flex items-center gap-2"
-                        >
-                            <FileSearch className="w-4 h-4" />
-                            Verify Ledger Integrity
-                        </button>
-
-                        <button
-                            onClick={() => {
-                                showToast("Generating Grand Dossier...", "info");
-                            }}
-                            className="px-6 py-2 bg-cyan-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-cyan-500 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center gap-2"
-                        >
-                            <FileText className="w-4 h-4" />
-                            Grand Dossier Export
-                        </button>
+                    <div id="forensic-drawer-content" className="hidden py-8 border-t border-white/5 max-h-[40vh] overflow-y-auto custom-scrollbar">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div>
+                                <div className="text-[9px] font-black text-cyan-500 uppercase tracking-widest mb-4">Command History Integrity</div>
+                                <div className="space-y-2">
+                                    {[1, 2, 3, 4].map(v => (
+                                        <div key={v} className="flex items-center justify-between text-[8px] font-mono text-slate-500 p-2 bg-white/[0.02] border border-white/5 rounded">
+                                            <span>RECORD_ID_00{v} // NC-29_ENFORCED</span>
+                                            <span className="text-emerald-500/50">VALIDATED</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex flex-col justify-end gap-4">
+                                <button
+                                    onClick={() => showToast("Verifying Ledger Integrity...", "info")}
+                                    className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-white/5"
+                                >
+                                    Force Full Ledger Re-Sync
+                                </button>
+                                <button
+                                    onClick={() => showToast("Generating Grand Dossier...", "info")}
+                                    className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-cyan-500/20"
+                                >
+                                    Export v1.1 Grand Dossier
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
