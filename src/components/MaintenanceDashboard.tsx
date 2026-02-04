@@ -192,8 +192,8 @@ export const MaintenanceDashboard: React.FC = () => {
                 { i: WIDGET_IDS.TURBINE_HUB, x: 0, y: 2, w: 12, h: 4 },
                 { i: WIDGET_IDS.TIMELINE, x: 0, y: 6, w: 6, h: 3 },
                 { i: WIDGET_IDS.ADVISOR, x: 6, y: 6, w: 6, h: 3 },
-                { i: WIDGET_IDS.HERITAGE_SEARCH, x: 0, y: 9, w: 6, h: 3 },
-                { i: WIDGET_IDS.SAFE_STATE_HMI, x: 6, y: 9, w: 6, h: 3 },
+                // Heritage search and SafeStateHMI removed from default layout to avoid auto-open.
+                // They remain accessible via Sidebar toggles (Sovereign Core).
                 { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 12, w: 12, h: 2 }
             ]
         };
@@ -215,8 +215,7 @@ export const MaintenanceDashboard: React.FC = () => {
                         { i: WIDGET_IDS.TURBINE_HUB, x: 0, y: 2, w: 12, h: 4 },
                         { i: WIDGET_IDS.TIMELINE, x: 0, y: 6, w: 6, h: 3 },
                         { i: WIDGET_IDS.ADVISOR, x: 6, y: 6, w: 6, h: 3 },
-                        { i: WIDGET_IDS.HERITAGE_SEARCH, x: 0, y: 9, w: 6, h: 3 },
-                        { i: WIDGET_IDS.SAFE_STATE_HMI, x: 6, y: 9, w: 6, h: 3 },
+                        // Heritage search and SafeStateHMI intentionally omitted from defaults.
                         { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 12, w: 12, h: 2 }
                     ]
                 });
@@ -272,6 +271,12 @@ export const MaintenanceDashboard: React.FC = () => {
     const [dashboardReady, setDashboardReady] = useState(false);
 
     const [ledgerHash, setLedgerHash] = useState('UNINITIALIZED');
+
+    // NC-93: Deterministic signal formatter — never show fake fallback numbers.
+    const formatSignal = (value?: number | null, unit?: string, decimals = 1) => {
+        if (value === undefined || value === null || Number.isNaN(value)) return 'NO SIGNAL';
+        return `${value.toFixed(decimals)}${unit ? unit : ''}`;
+    };
 
     // --- MS-VS DEBUG BRIDGE (NC-81) ---
     useEffect(() => {
@@ -590,11 +595,11 @@ export const MaintenanceDashboard: React.FC = () => {
                                     <div className="flex gap-4">
                                         <div className="flex items-center gap-1">
                                             <span className="text-slate-600">{'$H_{head}$'}:</span>
-                                            <span className="text-cyan-500 font-black">{physics.head_m?.toFixed(1) || '0.0'}m</span>
+                                            <span className="text-cyan-500 font-black">{formatSignal(physics.head_m, 'm')}</span>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <span className="text-slate-600">{'$Q$'}:</span>
-                                            <span className="text-cyan-500 font-black">{physics.flow_m3s?.toFixed(1) || '0.0'}m³/s</span>
+                                            <span className="text-cyan-500 font-black">{formatSignal(physics.flow_m3s, 'm³/s')}</span>
                                         </div>
                                     </div>
                                 </div>

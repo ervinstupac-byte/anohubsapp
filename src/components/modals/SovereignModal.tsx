@@ -32,7 +32,8 @@ export const SovereignModal: React.FC<SovereignModalProps> = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[150] flex items-center justify-center bg-black/60 backdrop-blur-md p-4"
+                // Use canonical z-layer tokens so modal backdrops fully block interaction
+                className="fixed inset-0 z-[var(--z-top)] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 pointer-events-auto"
                 onClick={onClose}
             >
                 <motion.div
@@ -41,7 +42,7 @@ export const SovereignModal: React.FC<SovereignModalProps> = ({
                     exit={{ scale: 0.9, y: 20, opacity: 0 }}
                     transition={{ type: "spring", damping: 25, stiffness: 200 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-5xl max-h-[90vh] flex flex-col"
+                    className="w-full max-w-5xl max-h-[90vh] flex flex-col z-[var(--z-modal)]"
                 >
                     <GlassCard
                         className={`relative flex flex-col h-full overflow-hidden border-t-2 ${borderColor}`}

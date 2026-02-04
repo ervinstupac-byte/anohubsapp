@@ -315,7 +315,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         });
 
         // Register global event listener for remote triggers (e.g. keyboard shortcuts)
-        const triggerHandler = () => handleGenerateForensic();
+        // Prevent remote/automatic forensic exports: remote triggers will only show a warning.
+        const triggerHandler = () => {
+            try { showToast('Remote forensic trigger ignored: use Forensic Modal Export button', 'warning'); } catch (e) {}
+        };
         window.addEventListener(TRIGGER_FORENSIC_EXPORT, triggerHandler);
 
         return () => {
@@ -522,21 +525,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                 const isActive = item.route ? location.pathname === item.route : activeModal === item.id.toUpperCase();
 
                                 const handleRailClick = () => {
+                                    // Primary nav icons must only toggle modular widgets or navigate.
                                     if (item.id === 'mechanical') {
-                                        setActiveModal('MECHANICAL'); // Keep modal for now if needed, but primarily toggle widget
+                                        // Toggle the mechanical systems widget only
                                         toggleWidget('mechanical-systems');
                                     }
                                     else if (item.id === 'electrical') {
-                                        setActiveModal('ELECTRICAL');
+                                        // Toggle the electrical grid widget only
                                         toggleWidget('electrical-grid');
                                     }
                                     else if (item.id === 'forensics') {
-                                        setActiveModal('FORENSICS');
-                                        toggleWidget('forensic-deep-dive');
+                                        // Map Search -> Heritage search widget to avoid accidental forensic exports
+                                        toggleWidget('heritage-search');
                                     }
                                     else if (item.id === 'docs') {
                                         toggleWidget('engineer-portal');
-                                        showToast("ENGINEER_CONSOLE: Active", "info");
+                                        try { showToast("ENGINEER_CONSOLE: Active", "info"); } catch (e) {}
                                     }
                                     else if (item.route) handleNavigate(item.route, item.label);
                                 };
@@ -556,7 +560,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-500 rounded-r shadow-[0_0_10px_rgba(6,182,212,0.5)]" />}
 
                                         {/* HOVER LABEL TOOLTIP */}
-                                        <div className="absolute left-full ml-4 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 font-mono tracking-widest uppercase">
+                                        <div className="absolute left-full ml-4 px-2 py-1 bg-slate-900 border border-white/10 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-[var(--z-banner)] font-mono tracking-widest uppercase">
                                             {item.label}
                                         </div>
                                     </button>
