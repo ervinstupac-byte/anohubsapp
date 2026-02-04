@@ -1,0 +1,385 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 build C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp
+> npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+
+> anohub-hpp-risk-excellence-platform@1.0.0 build:verify
+> npx tsx scripts/verify_env.ts
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+------------------------------------------
+BUILD CLEANLINESS CHECK: NC-4.2 PROTOCOL
+------------------------------------------
+SUCCESS: All critical environment variables verified.
+------------------------------------------
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+
+> anohub-hpp-risk-excellence-platform@1.0.0 i18n:sync
+> node -e "const fs=require('fs'); try { fs.copyFileSync('src/i18n/locales/en.json', 'src/i18n/en.json'); fs.copyFileSync('src/i18n/locales/bs.json', 'src/i18n/bs.json'); console.log('i18n synced'); } catch(e) { console.error(e); process.exit(1); }"
+
+i18n synced
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm.
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test
+> vitest run
+
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32m✓[39m src/services/__tests__/FinancialImpactEngine.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstderr[2m | src/__tests__/dossier_audit.test.ts[2m > [22m[2mDossier archive integrity (spot checks)[2m > [22m[2mevery manifest entry exists, contains recorded SHA-256, and has an efficiency token[22m[39m
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_3.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_4.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_5.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_6.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_7.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_8.html (looked for η, \eta, or 'efficiency')
+
+ [32m✓[39m src/__tests__/dossier_audit.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ShaftSealGuardian.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 108[2mms[22m[39m
+ [32m✓[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 91[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 98[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src/__tests__/turbine-math.test.ts[2m > [22m[2mTurbine Engineering Math Precision Audit[2m > [22m[2mshould validate Francis Turbine (150m, 30m³/s) with extreme precision[22m[39m
+[DEBUG] Francis: Actual=40.6, Expected=40.6, Diff=0
+
+ [32m✓[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/AIPredictionService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/SyncBadge.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 55[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 65[2mms[22m[39m
+ [32m✓[39m src/features/maintenance/logic/__tests__/Predictor.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ThrustBearingMaster.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/BaseGuardian.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/KaplanBladePhysics.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/TurbineClassifier.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src/services/__tests__/CommissioningSimulation.test.ts[2m > [22m[2mCommissioning Simulation (24h)[2m > [22m[2mruns a 24-hour simulated cycle and persists wisdom[22m[39m
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] wisdom_audit_log
+✅ Analysis complete.Health score: 100/100
+
+ [32m✓[39m src/services/__tests__/CommissioningSimulation.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 14[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx[2m > [22m[2mAssetPassportCard Debug[2m > [22m[2mshould render component without crashing[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 43[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22m[2mQuickCalcCard Component[2m > [22m[2mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 74[2mms[22m[39m
+[90mstdout[2m | src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22m[2mProtocolLaunchpad Component[2m > [22m[2mgenerates report and creates Ledger entry when clicked[22m[39m
+[ProtocolHistory] Logged: Shaft Alignment for Turbine A
+
+ [32m✓[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 281[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/SovereignArchitectReflector.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 1733[2mms[22m[39m
+[90mstdout[2m | src/__tests__/stress_integrity.test.ts[2m > [22m[2mstress integrity: 1000 rapid state changes then snapback to #500[22m[39m
+Journal recorded 1000 events, of which 1000 are state/telemetry updates.
+Attempted snapback to id 1770163934878-r46ym2 -> FAILED
+Event drifting detected in journal sequence:  NO
+
+ [32m✓[39m src/__tests__/stress_integrity.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 5568[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m32 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[32m95 passed[39m[22m[90m (95)[39m
+[2m   Start at [22m 01:12:07
+[2m   Duration [22m 10.28s[2m (transform 3.91s, setup 8.17s, collect 22.91s, tests 8.21s, environment 80.24s, prepare 8.85s)[22m
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+
+/grid.svg referenced in /grid.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[32m✓[39m 3634 modules transformed.
+rendering chunks...
+[1m[33m[plugin:vite:reporter][39m[22m [33m[plugin vite:reporter] 
+(!) C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/services/ForensicReportService.ts is dynamically imported by C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/dashboard/ExecutiveDashboard.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/modals/PrintPreviewModal.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/services/DashboardDataService.ts, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/services/SimulationEngine.ts but also statically imported by C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/CommandCenter.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/ForensicLab.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/HPPBuilder.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/InvestorBriefing.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/MaintenanceDashboard.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/QuestionnaireSummary.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/RiskReport.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/diagnostic-twin/Sidebar.tsx, C:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp/src/components/francis/ShaftAlignment.tsx, dynamic import will not move module into another chunk.
+[39m
+computing gzip size...
+[2mdist/[22m[32mindex.html                                   [39m[1m[2m    4.90 kB[22m[1m[22m[2m │ gzip:     2.20 kB[22m
+[2mdist/[22m[32massets/physics.worker-CSARo6t0.js            [39m[1m[2m   33.27 kB[22m[1m[22m
+[2mdist/[22m[32massets/journal.worker-soOGs8kl.js            [39m[1m[2m  173.33 kB[22m[1m[22m
+[2mdist/[22m[35massets/leaflet-Dgihpmma.css                  [39m[1m[2m   15.04 kB[22m[1m[22m[2m │ gzip:     6.38 kB[22m
+[2mdist/[22m[35massets/index-BnQrPSGp.css                    [39m[1m[2m  270.35 kB[22m[1m[22m[2m │ gzip:    34.34 kB[22m
+[2mdist/[22m[36massets/TurbineMath-DbmZodXt.js               [39m[1m[2m    0.29 kB[22m[1m[22m[2m │ gzip:     0.23 kB[22m[2m │ map:      1.77 kB[22m
+[2mdist/[22m[36massets/filter-DFkxIlGb.js                    [39m[1m[2m    0.37 kB[22m[1m[22m[2m │ gzip:     0.30 kB[22m[2m │ map:      0.84 kB[22m
+[2mdist/[22m[36massets/thermometer-BcvQL-wA.js               [39m[1m[2m    0.38 kB[22m[1m[22m[2m │ gzip:     0.30 kB[22m[2m │ map:      0.86 kB[22m
+[2mdist/[22m[36massets/arrow-right-BPq6A5XR.js               [39m[1m[2m    0.38 kB[22m[1m[22m[2m │ gzip:     0.30 kB[22m[2m │ map:      0.93 kB[22m
+[2mdist/[22m[36massets/gauge-T75vpFd3.js                     [39m[1m[2m    0.39 kB[22m[1m[22m[2m │ gzip:     0.30 kB[22m[2m │ map:      0.91 kB[22m
+[2mdist/[22m[36massets/octagon-DvLJeFav.js                   [39m[1m[2m    0.40 kB[22m[1m[22m[2m │ gzip:     0.29 kB[22m[2m │ map:      0.90 kB[22m
+[2mdist/[22m[36massets/eye-D95NPfES.js                       [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:     0.31 kB[22m[2m │ map:      0.95 kB[22m
+[2mdist/[22m[36massets/check-circle-BYxqBqXI.js              [39m[1m[2m    0.41 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      0.97 kB[22m
+[2mdist/[22m[36massets/lock-BkXFxX1E.js                      [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      1.00 kB[22m
+[2mdist/[22m[36massets/map-pin-fUyUkOmX.js                   [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      0.97 kB[22m
+[2mdist/[22m[36massets/x-circle-DGWJQ4U5.js                  [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      1.04 kB[22m
+[2mdist/[22m[36massets/trending-up-gQriGb1p.js               [39m[1m[2m    0.42 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      0.97 kB[22m
+[2mdist/[22m[36massets/droplet-BKaRa8H3.js                   [39m[1m[2m    0.43 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      0.93 kB[22m
+[2mdist/[22m[36massets/check-square-Dqf0uUy2.js              [39m[1m[2m    0.43 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      0.99 kB[22m
+[2mdist/[22m[36massets/dollar-sign-DT6cJiVo.js               [39m[1m[2m    0.44 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      1.03 kB[22m
+[2mdist/[22m[36massets/library-Dm546HK8.js                   [39m[1m[2m    0.44 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      1.10 kB[22m
+[2mdist/[22m[36massets/timer-CBjwMD7p.js                     [39m[1m[2m    0.45 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      1.14 kB[22m
+[2mdist/[22m[36massets/globe-DhxRMBsy.js                     [39m[1m[2m    0.45 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      1.06 kB[22m
+[2mdist/[22m[36massets/camera-DPxxTl01.js                    [39m[1m[2m    0.46 kB[22m[1m[22m[2m │ gzip:     0.34 kB[22m[2m │ map:      1.05 kB[22m
+[2mdist/[22m[36massets/upload-BfTHY6AD.js                    [39m[1m[2m    0.47 kB[22m[1m[22m[2m │ gzip:     0.35 kB[22m[2m │ map:      1.10 kB[22m
+[2mdist/[22m[36massets/calendar-Cd1UNHvM.js                  [39m[1m[2m    0.47 kB[22m[1m[22m[2m │ gzip:     0.33 kB[22m[2m │ map:      1.19 kB[22m
+[2mdist/[22m[36massets/volume-2-Tz2csW8N.js                  [39m[1m[2m    0.48 kB[22m[1m[22m[2m │ gzip:     0.36 kB[22m[2m │ map:      1.08 kB[22m
+[2mdist/[22m[36massets/alert-triangle-BMg4-3Wd.js            [39m[1m[2m    0.49 kB[22m[1m[22m[2m │ gzip:     0.35 kB[22m[2m │ map:      1.15 kB[22m
+[2mdist/[22m[36massets/alert-octagon-P9IIGm1G.js             [39m[1m[2m    0.53 kB[22m[1m[22m[2m │ gzip:     0.35 kB[22m[2m │ map:      1.26 kB[22m
+[2mdist/[22m[36massets/skull-8pGa3Cd1.js                     [39m[1m[2m    0.57 kB[22m[1m[22m[2m │ gzip:     0.38 kB[22m[2m │ map:      1.32 kB[22m
+[2mdist/[22m[36massets/crosshair-LAJeCLRk.js                 [39m[1m[2m    0.57 kB[22m[1m[22m[2m │ gzip:     0.35 kB[22m[2m │ map:      1.48 kB[22m
+[2mdist/[22m[36massets/hard-hat-BXejzegA.js                  [39m[1m[2m    0.57 kB[22m[1m[22m[2m │ gzip:     0.37 kB[22m[2m │ map:      1.27 kB[22m
+[2mdist/[22m[36massets/snowflake-Bs55lgZ0.js                 [39m[1m[2m    0.58 kB[22m[1m[22m[2m │ gzip:     0.37 kB[22m[2m │ map:      1.46 kB[22m
+[2mdist/[22m[36massets/scale-BJE0F_SD.js                     [39m[1m[2m    0.58 kB[22m[1m[22m[2m │ gzip:     0.38 kB[22m[2m │ map:      1.29 kB[22m
+[2mdist/[22m[36massets/microscope-B66N90C8.js                [39m[1m[2m    0.60 kB[22m[1m[22m[2m │ gzip:     0.38 kB[22m[2m │ map:      1.40 kB[22m
+[2mdist/[22m[36massets/ruler-BZNj1yc-.js                     [39m[1m[2m    0.61 kB[22m[1m[22m[2m │ gzip:     0.38 kB[22m[2m │ map:      1.36 kB[22m
+[2mdist/[22m[36massets/eye-off-B9B_r3Or.js                   [39m[1m[2m    0.61 kB[22m[1m[22m[2m │ gzip:     0.42 kB[22m[2m │ map:      1.36 kB[22m
+[2mdist/[22m[36massets/clipboard-list-CUcyA54U.js            [39m[1m[2m    0.63 kB[22m[1m[22m[2m │ gzip:     0.40 kB[22m[2m │ map:      1.54 kB[22m
+[2mdist/[22m[36massets/waves-Dzdp_UH5.js                     [39m[1m[2m    0.64 kB[22m[1m[22m[2m │ gzip:     0.35 kB[22m[2m │ map:      1.32 kB[22m
+[2mdist/[22m[36massets/Popup-CeHcGQuQ.js                     [39m[1m[2m    0.67 kB[22m[1m[22m[2m │ gzip:     0.40 kB[22m[2m │ map:      2.88 kB[22m
+[2mdist/[22m[36massets/useTelemetrySubscription-3CVlwpEW.js  [39m[1m[2m    0.69 kB[22m[1m[22m[2m │ gzip:     0.45 kB[22m[2m │ map:      2.19 kB[22m
+[2mdist/[22m[36massets/OwnerLanding-DxOmL_2y.js              [39m[1m[2m    0.74 kB[22m[1m[22m[2m │ gzip:     0.42 kB[22m[2m │ map:      1.36 kB[22m
+[2mdist/[22m[36massets/useTheme-KPUy2qZo.js                  [39m[1m[2m    0.81 kB[22m[1m[22m[2m │ gzip:     0.38 kB[22m[2m │ map:      3.43 kB[22m
+[2mdist/[22m[36massets/MapModule-Dsdgb3ZA.js                 [39m[1m[2m    0.84 kB[22m[1m[22m[2m │ gzip:     0.53 kB[22m[2m │ map:      1.63 kB[22m
+[2mdist/[22m[36massets/EngineerLanding-Kx4IXOdJ.js           [39m[1m[2m    0.99 kB[22m[1m[22m[2m │ gzip:     0.55 kB[22m[2m │ map:      1.92 kB[22m
+[2mdist/[22m[36massets/save-DZYlv2lV.js                      [39m[1m[2m    1.14 kB[22m[1m[22m[2m │ gzip:     0.49 kB[22m[2m │ map:      2.67 kB[22m
+[2mdist/[22m[36massets/Skeleton-DBxYLHFw.js                  [39m[1m[2m    1.35 kB[22m[1m[22m[2m │ gzip:     0.58 kB[22m[2m │ map:      4.31 kB[22m
+[2mdist/[22m[36massets/useDigitalLedger-DgIOEfxm.js          [39m[1m[2m    1.48 kB[22m[1m[22m[2m │ gzip:     0.79 kB[22m[2m │ map:      5.81 kB[22m
+[2mdist/[22m[36massets/ModuleFallback-DzHr4M9Y.js            [39m[1m[2m    1.49 kB[22m[1m[22m[2m │ gzip:     0.80 kB[22m[2m │ map:      3.62 kB[22m
+[2mdist/[22m[36massets/StatCard-Cku8uZ4q.js                  [39m[1m[2m    1.71 kB[22m[1m[22m[2m │ gzip:     0.74 kB[22m[2m │ map:      4.19 kB[22m
+[2mdist/[22m[36massets/ActionEngine-DA3mlRe8.js              [39m[1m[2m    1.82 kB[22m[1m[22m[2m │ gzip:     0.92 kB[22m[2m │ map:      5.46 kB[22m
+[2mdist/[22m[36massets/AssetPicker-D7NQUAri.js               [39m[1m[2m    1.96 kB[22m[1m[22m[2m │ gzip:     0.94 kB[22m[2m │ map:      4.85 kB[22m
+[2mdist/[22m[36massets/InfoTooltip-Bq1_jeh0.js               [39m[1m[2m    2.01 kB[22m[1m[22m[2m │ gzip:     0.97 kB[22m[2m │ map:      6.91 kB[22m
+[2mdist/[22m[36massets/TruthHeatmapDemo-SrAvwmm2.js          [39m[1m[2m    2.19 kB[22m[1m[22m[2m │ gzip:     0.90 kB[22m[2m │ map:      5.52 kB[22m
+[2mdist/[22m[36massets/LiveMetricToken-BpNKYoVR.js           [39m[1m[2m    2.33 kB[22m[1m[22m[2m │ gzip:     1.16 kB[22m[2m │ map:      6.37 kB[22m
+[2mdist/[22m[36massets/SolutionArchitect-C-vrcp0v.js         [39m[1m[2m    2.44 kB[22m[1m[22m[2m │ gzip:     1.23 kB[22m[2m │ map:      7.53 kB[22m
+[2mdist/[22m[36massets/NeuralPulse-mJxpyCG1.js               [39m[1m[2m    2.46 kB[22m[1m[22m[2m │ gzip:     0.98 kB[22m[2m │ map:      7.55 kB[22m
+[2mdist/[22m[36massets/constants-SYrGbkOn.js                 [39m[1m[2m    2.47 kB[22m[1m[22m[2m │ gzip:     1.14 kB[22m[2m │ map:      9.73 kB[22m
+[2mdist/[22m[36massets/useMaintenancePrediction-JFrXTuq_.js  [39m[1m[2m    2.62 kB[22m[1m[22m[2m │ gzip:     1.39 kB[22m[2m │ map:     11.46 kB[22m
+[2mdist/[22m[36massets/SecondaryMetricsGrid-D1orw_dQ.js      [39m[1m[2m    2.73 kB[22m[1m[22m[2m │ gzip:     1.20 kB[22m[2m │ map:      6.99 kB[22m
+[2mdist/[22m[36massets/MaintenanceRouter-CbBvRnLy.js         [39m[1m[2m    2.94 kB[22m[1m[22m[2m │ gzip:     1.09 kB[22m[2m │ map:      4.60 kB[22m
+[2mdist/[22m[36massets/AssetTypeSelector-JnHMdzrl.js         [39m[1m[2m    3.41 kB[22m[1m[22m[2m │ gzip:     1.60 kB[22m[2m │ map:     10.35 kB[22m
+[2mdist/[22m[36massets/InfrastructureHub-Cw-nKx8n.js         [39m[1m[2m    3.44 kB[22m[1m[22m[2m │ gzip:     1.51 kB[22m[2m │ map:      6.79 kB[22m
+[2mdist/[22m[36massets/marker-shadow-WydoP1rc.js             [39m[1m[2m    3.53 kB[22m[1m[22m[2m │ gzip:     2.58 kB[22m[2m │ map:      6.35 kB[22m
+[2mdist/[22m[36massets/AdminApproval-BYTMClcq.js             [39m[1m[2m    3.88 kB[22m[1m[22m[2m │ gzip:     1.61 kB[22m[2m │ map:     10.63 kB[22m
+[2mdist/[22m[36massets/ShiftLog-CufLOGKA.js                  [39m[1m[2m    3.89 kB[22m[1m[22m[2m │ gzip:     1.55 kB[22m[2m │ map:      9.84 kB[22m
+[2mdist/[22m[36massets/SOPViewer-qADINnZg.js                 [39m[1m[2m    3.90 kB[22m[1m[22m[2m │ gzip:     1.32 kB[22m[2m │ map:      8.26 kB[22m
+[2mdist/[22m[36massets/MechanismDetailView-rVdmnCVy.js       [39m[1m[2m    4.37 kB[22m[1m[22m[2m │ gzip:     1.78 kB[22m[2m │ map:     12.00 kB[22m
+[2mdist/[22m[36massets/TruthDeltaEngine-C-9fm6DS.js          [39m[1m[2m    4.57 kB[22m[1m[22m[2m │ gzip:     1.61 kB[22m[2m │ map:     15.23 kB[22m
+[2mdist/[22m[36massets/ComponentLibrary-CpChu6xX.js          [39m[1m[2m    4.72 kB[22m[1m[22m[2m │ gzip:     1.58 kB[22m[2m │ map:     11.18 kB[22m
+[2mdist/[22m[36massets/BidEvaluator-BvGlkI7c.js              [39m[1m[2m    5.06 kB[22m[1m[22m[2m │ gzip:     1.96 kB[22m[2m │ map:     14.02 kB[22m
+[2mdist/[22m[36massets/KaplanEngine-CT6LY6r0.js              [39m[1m[2m    5.13 kB[22m[1m[22m[2m │ gzip:     2.49 kB[22m[2m │ map:     21.85 kB[22m
+[2mdist/[22m[36massets/RevenueImpactCard--QE9Rm7k.js         [39m[1m[2m    5.21 kB[22m[1m[22m[2m │ gzip:     2.09 kB[22m[2m │ map:     21.15 kB[22m
+[2mdist/[22m[36massets/ShaftOrbitPlot-55BiGM5O.js            [39m[1m[2m    5.26 kB[22m[1m[22m[2m │ gzip:     2.26 kB[22m[2m │ map:     20.45 kB[22m
+[2mdist/[22m[36massets/DatabaseSeeder-BpT7n3O9.js            [39m[1m[2m    5.49 kB[22m[1m[22m[2m │ gzip:     2.17 kB[22m[2m │ map:     17.66 kB[22m
+[2mdist/[22m[36massets/AgingEstimator-CKU4BpkC.js            [39m[1m[2m    5.50 kB[22m[1m[22m[2m │ gzip:     2.32 kB[22m[2m │ map:     19.65 kB[22m
+[2mdist/[22m[36massets/HydrologyLab-Du60_qBE.js              [39m[1m[2m    5.65 kB[22m[1m[22m[2m │ gzip:     2.06 kB[22m[2m │ map:     16.05 kB[22m
+[2mdist/[22m[36massets/TurbineFactory-DU8b1sQW.js            [39m[1m[2m    5.81 kB[22m[1m[22m[2m │ gzip:     2.67 kB[22m[2m │ map:     25.24 kB[22m
+[2mdist/[22m[36massets/SealRecovery-DgREmpe7.js              [39m[1m[2m    6.10 kB[22m[1m[22m[2m │ gzip:     2.15 kB[22m[2m │ map:     12.60 kB[22m
+[2mdist/[22m[36massets/Manifesto-DWycsVmy.js                 [39m[1m[2m    6.27 kB[22m[1m[22m[2m │ gzip:     1.44 kB[22m[2m │ map:     13.03 kB[22m
+[2mdist/[22m[36massets/HydraulicMaintenance-CRWSoEBg.js      [39m[1m[2m    6.69 kB[22m[1m[22m[2m │ gzip:     2.69 kB[22m[2m │ map:     19.36 kB[22m
+[2mdist/[22m[36massets/DrainagePumps-QS8E3Gpl.js             [39m[1m[2m    6.85 kB[22m[1m[22m[2m │ gzip:     1.97 kB[22m[2m │ map:     14.73 kB[22m
+[2mdist/[22m[36massets/RevitalizationStrategy-bjzhYnmP.js    [39m[1m[2m    6.88 kB[22m[1m[22m[2m │ gzip:     1.91 kB[22m[2m │ map:     15.05 kB[22m
+[2mdist/[22m[36massets/GenderEquity-DMdCeKk_.js              [39m[1m[2m    6.94 kB[22m[1m[22m[2m │ gzip:     1.90 kB[22m[2m │ map:     16.79 kB[22m
+[2mdist/[22m[36massets/UserProfile-Drs7VUjk.js               [39m[1m[2m    7.06 kB[22m[1m[22m[2m │ gzip:     2.72 kB[22m[2m │ map:     20.26 kB[22m
+[2mdist/[22m[36massets/StandardOfExcellence-CPNETtZe.js      [39m[1m[2m    7.14 kB[22m[1m[22m[2m │ gzip:     2.31 kB[22m[2m │ map:     17.02 kB[22m
+[2mdist/[22m[36massets/ContractManagement-CVAFb8il.js        [39m[1m[2m    7.24 kB[22m[1m[22m[2m │ gzip:     2.39 kB[22m[2m │ map:     17.44 kB[22m
+[2mdist/[22m[36massets/ExecutiveSummary-D1FK616N.js          [39m[1m[2m    7.27 kB[22m[1m[22m[2m │ gzip:     2.58 kB[22m[2m │ map:     19.92 kB[22m
+[2mdist/[22m[36massets/StartupFlowchart-5Fueoyuz.js          [39m[1m[2m    7.38 kB[22m[1m[22m[2m │ gzip:     2.37 kB[22m[2m │ map:     16.26 kB[22m
+[2mdist/[22m[36massets/BoltTorqueCalculator-Cd6f9R0A.js      [39m[1m[2m    7.44 kB[22m[1m[22m[2m │ gzip:     2.57 kB[22m[2m │ map:     22.05 kB[22m
+[2mdist/[22m[36massets/Trans-By7p5ks9.js                     [39m[1m[2m    7.49 kB[22m[1m[22m[2m │ gzip:     3.27 kB[22m[2m │ map:     27.68 kB[22m
+[2mdist/[22m[36massets/WaterHammer-Dpjm5Enh.js               [39m[1m[2m    7.61 kB[22m[1m[22m[2m │ gzip:     2.26 kB[22m[2m │ map:     16.47 kB[22m
+[2mdist/[22m[36massets/HPPImprovements-KGBMFHI1.js           [39m[1m[2m    7.87 kB[22m[1m[22m[2m │ gzip:     2.75 kB[22m[2m │ map:     22.47 kB[22m
+[2mdist/[22m[36massets/PopOutWindow-D8v33yR1.js              [39m[1m[2m    7.88 kB[22m[1m[22m[2m │ gzip:     2.45 kB[22m[2m │ map:     17.94 kB[22m
+[2mdist/[22m[36massets/ARManager-C7_6QRHg.js                 [39m[1m[2m    7.94 kB[22m[1m[22m[2m │ gzip:     3.35 kB[22m[2m │ map:     22.54 kB[22m
+[2mdist/[22m[36massets/Intake-CPwlA1q3.js                    [39m[1m[2m    8.14 kB[22m[1m[22m[2m │ gzip:     2.20 kB[22m[2m │ map:     17.14 kB[22m
+[2mdist/[22m[36massets/RiskAssessment-BP8JfS-Q.js            [39m[1m[2m    8.21 kB[22m[1m[22m[2m │ gzip:     3.05 kB[22m[2m │ map:     25.34 kB[22m
+[2mdist/[22m[36massets/StructuralIntegrity-Dq-h1nwN.js       [39m[1m[2m    8.22 kB[22m[1m[22m[2m │ gzip:     2.55 kB[22m[2m │ map:     18.20 kB[22m
+[2mdist/[22m[36massets/DistributorSync-DxWN-sO0.js           [39m[1m[2m    8.42 kB[22m[1m[22m[2m │ gzip:     2.26 kB[22m[2m │ map:     17.81 kB[22m
+[2mdist/[22m[36massets/DigitalIntroduction-y6-NmUrq.js       [39m[1m[2m    8.45 kB[22m[1m[22m[2m │ gzip:     2.61 kB[22m[2m │ map:     15.85 kB[22m
+[2mdist/[22m[36massets/InvestorBriefing-D8e6MZkn.js          [39m[1m[2m    8.49 kB[22m[1m[22m[2m │ gzip:     2.81 kB[22m[2m │ map:     21.46 kB[22m
+[2mdist/[22m[36massets/HydroschoolLanding-C5L3977A.js        [39m[1m[2m    8.68 kB[22m[1m[22m[2m │ gzip:     3.07 kB[22m[2m │ map:     24.14 kB[22m
+[2mdist/[22m[36massets/LubricationSystem-DRgi7_pz.js         [39m[1m[2m    8.71 kB[22m[1m[22m[2m │ gzip:     2.24 kB[22m[2m │ map:     18.32 kB[22m
+[2mdist/[22m[36massets/AuxiliarySystems-B0TFdS0s.js          [39m[1m[2m    8.81 kB[22m[1m[22m[2m │ gzip:     2.04 kB[22m[2m │ map:     18.88 kB[22m
+[2mdist/[22m[36massets/ThrustBalance-C_eRb60E.js             [39m[1m[2m    8.95 kB[22m[1m[22m[2m │ gzip:     2.43 kB[22m[2m │ map:     17.89 kB[22m
+[2mdist/[22m[36massets/AdminHealth-Dv8fMQuJ.js               [39m[1m[2m    8.99 kB[22m[1m[22m[2m │ gzip:     3.41 kB[22m[2m │ map:     28.68 kB[22m
+[2mdist/[22m[36massets/HPU-CUTx6FiP.js                       [39m[1m[2m    9.07 kB[22m[1m[22m[2m │ gzip:     2.24 kB[22m[2m │ map:     18.55 kB[22m
+[2mdist/[22m[36massets/MaintenanceLogbook-CPuRiFsO.js        [39m[1m[2m    9.19 kB[22m[1m[22m[2m │ gzip:     2.66 kB[22m[2m │ map:     27.02 kB[22m
+[2mdist/[22m[36massets/LearningLab-Bxq6iqHU.js               [39m[1m[2m    9.32 kB[22m[1m[22m[2m │ gzip:     3.02 kB[22m[2m │ map:     24.23 kB[22m
+[2mdist/[22m[36massets/PlantMaster-q25ZmEoV.js               [39m[1m[2m    9.50 kB[22m[1m[22m[2m │ gzip:     2.82 kB[22m[2m │ map:     25.16 kB[22m
+[2mdist/[22m[36massets/BrakingSystem-3KeToVaC.js             [39m[1m[2m    9.53 kB[22m[1m[22m[2m │ gzip:     2.36 kB[22m[2m │ map:     19.67 kB[22m
+[2mdist/[22m[36massets/DCSystems-BJNkFuHh.js                 [39m[1m[2m    9.54 kB[22m[1m[22m[2m │ gzip:     2.61 kB[22m[2m │ map:     19.90 kB[22m
+[2mdist/[22m[36massets/Coupling-DkSCQrEj.js                  [39m[1m[2m    9.64 kB[22m[1m[22m[2m │ gzip:     2.35 kB[22m[2m │ map:     19.58 kB[22m
+[2mdist/[22m[36massets/GridSync-Dd1Vqerz.js                  [39m[1m[2m    9.76 kB[22m[1m[22m[2m │ gzip:     2.66 kB[22m[2m │ map:     20.87 kB[22m
+[2mdist/[22m[36massets/LoadRejectionLogic-_uXGIztl.js        [39m[1m[2m    9.84 kB[22m[1m[22m[2m │ gzip:     2.72 kB[22m[2m │ map:     20.30 kB[22m
+[2mdist/[22m[36massets/GlobalMap-B_UP-Dhw.js                 [39m[1m[2m    9.87 kB[22m[1m[22m[2m │ gzip:     3.01 kB[22m[2m │ map:     24.11 kB[22m
+[2mdist/[22m[36massets/HPPForge-RZaMvDM7.js                  [39m[1m[2m    9.92 kB[22m[1m[22m[2m │ gzip:     3.21 kB[22m[2m │ map:     26.39 kB[22m
+[2mdist/[22m[36massets/ElectricalHealth-DpOjmFEk.js          [39m[1m[2m   10.02 kB[22m[1m[22m[2m │ gzip:     2.83 kB[22m[2m │ map:     21.49 kB[22m
+[2mdist/[22m[36massets/CathodicProtection-B5lVE2E4.js        [39m[1m[2m   10.11 kB[22m[1m[22m[2m │ gzip:     2.61 kB[22m[2m │ map:     21.17 kB[22m
+[2mdist/[22m[36massets/GeneratorIntegrity-oloIpfoj.js        [39m[1m[2m   10.57 kB[22m[1m[22m[2m │ gzip:     2.64 kB[22m[2m │ map:     21.61 kB[22m
+[2mdist/[22m[36massets/CoolingWater-NId9heCL.js              [39m[1m[2m   10.89 kB[22m[1m[22m[2m │ gzip:     2.76 kB[22m[2m │ map:     22.94 kB[22m
+[2mdist/[22m[36massets/VortexControl-C35O8d2B.js             [39m[1m[2m   11.06 kB[22m[1m[22m[2m │ gzip:     2.93 kB[22m[2m │ map:     23.16 kB[22m
+[2mdist/[22m[36massets/PrecisionAudit-B1zsbEIE.js            [39m[1m[2m   11.19 kB[22m[1m[22m[2m │ gzip:     3.71 kB[22m[2m │ map:     31.65 kB[22m
+[2mdist/[22m[36massets/FrancisRouter-Can9rc4B.js             [39m[1m[2m   11.20 kB[22m[1m[22m[2m │ gzip:     3.14 kB[22m[2m │ map:     19.08 kB[22m
+[2mdist/[22m[36massets/ForensicLab-DDs0v7zI.js               [39m[1m[2m   11.25 kB[22m[1m[22m[2m │ gzip:     3.68 kB[22m[2m │ map:     37.00 kB[22m
+[2mdist/[22m[36massets/RegulatingRing-CxthgH7d.js            [39m[1m[2m   11.39 kB[22m[1m[22m[2m │ gzip:     2.57 kB[22m[2m │ map:     22.64 kB[22m
+[2mdist/[22m[36massets/Excitation-BM1rTmEz.js                [39m[1m[2m   11.51 kB[22m[1m[22m[2m │ gzip:     3.22 kB[22m[2m │ map:     25.76 kB[22m
+[2mdist/[22m[36massets/Transformer-Bq68lLV5.js               [39m[1m[2m   11.51 kB[22m[1m[22m[2m │ gzip:     2.96 kB[22m[2m │ map:     25.02 kB[22m
+[2mdist/[22m[36massets/Linkage-D1yTk3As.js                   [39m[1m[2m   11.61 kB[22m[1m[22m[2m │ gzip:     2.85 kB[22m[2m │ map:     23.73 kB[22m
+[2mdist/[22m[36massets/EngineeringDossierCard-dxigpq5z.js    [39m[1m[2m   11.84 kB[22m[1m[22m[2m │ gzip:     3.69 kB[22m[2m │ map:     34.30 kB[22m
+[2mdist/[22m[36massets/InstallationGuarantee-CEBxTQzD.js     [39m[1m[2m   11.86 kB[22m[1m[22m[2m │ gzip:     3.82 kB[22m[2m │ map:     32.74 kB[22m
+[2mdist/[22m[36massets/MIVDetail-CptR4lTQ.js                 [39m[1m[2m   11.88 kB[22m[1m[22m[2m │ gzip:     2.78 kB[22m[2m │ map:     26.12 kB[22m
+[2mdist/[22m[36massets/QuestionnaireSummary-clugr629.js      [39m[1m[2m   12.08 kB[22m[1m[22m[2m │ gzip:     4.14 kB[22m[2m │ map:     31.50 kB[22m
+[2mdist/[22m[36massets/DigitalIntegrity-DQ1yBb3n.js          [39m[1m[2m   12.14 kB[22m[1m[22m[2m │ gzip:     4.18 kB[22m[2m │ map:     33.63 kB[22m
+[2mdist/[22m[36massets/EmergencyProtocols-D69KlAKi.js        [39m[1m[2m   12.20 kB[22m[1m[22m[2m │ gzip:     3.02 kB[22m[2m │ map:     25.54 kB[22m
+[2mdist/[22m[36massets/SpecializedDiagnostics-B6a8NMKU.js    [39m[1m[2m   12.43 kB[22m[1m[22m[2m │ gzip:     4.80 kB[22m[2m │ map:     41.80 kB[22m
+[2mdist/[22m[36massets/FrancisHorizontal5MW-CEReOlD4.js      [39m[1m[2m   12.82 kB[22m[1m[22m[2m │ gzip:     4.42 kB[22m[2m │ map:     39.34 kB[22m
+[2mdist/[22m[36massets/RiverWildlife-7w3EqaYg.js             [39m[1m[2m   12.85 kB[22m[1m[22m[2m │ gzip:     2.72 kB[22m[2m │ map:     26.27 kB[22m
+[2mdist/[22m[36massets/BearingsDetail-Cf7GxUi6.js            [39m[1m[2m   13.05 kB[22m[1m[22m[2m │ gzip:     3.24 kB[22m[2m │ map:     28.15 kB[22m
+[2mdist/[22m[36massets/Penstock-DGppJ5Rx.js                  [39m[1m[2m   13.28 kB[22m[1m[22m[2m │ gzip:     3.30 kB[22m[2m │ map:     29.13 kB[22m
+[2mdist/[22m[36massets/GovernorPID-Clroba34.js               [39m[1m[2m   13.40 kB[22m[1m[22m[2m │ gzip:     3.42 kB[22m[2m │ map:     30.35 kB[22m
+[2mdist/[22m[36massets/VibrationAnalyzer-BXHiKphV.js         [39m[1m[2m   13.49 kB[22m[1m[22m[2m │ gzip:     4.71 kB[22m[2m │ map:     42.28 kB[22m
+[2mdist/[22m[36massets/TurbineDetail-BGTot9gr.js             [39m[1m[2m   14.45 kB[22m[1m[22m[2m │ gzip:     4.48 kB[22m[2m │ map:     27.90 kB[22m
+[2mdist/[22m[36massets/RiskReport-D2vmNnLX.js                [39m[1m[2m   14.52 kB[22m[1m[22m[2m │ gzip:     4.78 kB[22m[2m │ map:     45.08 kB[22m
+[2mdist/[22m[36massets/MissionControl-fSwZKA6f.js            [39m[1m[2m   14.81 kB[22m[1m[22m[2m │ gzip:     4.19 kB[22m[2m │ map:     36.14 kB[22m
+[2mdist/[22m[36massets/FrancisHub-D8itI3lQ.js                [39m[1m[2m   15.62 kB[22m[1m[22m[2m │ gzip:     5.09 kB[22m[2m │ map:     46.19 kB[22m
+[2mdist/[22m[36massets/OilHealth-CcQv-7Hk.js                 [39m[1m[2m   15.97 kB[22m[1m[22m[2m │ gzip:     3.49 kB[22m[2m │ map:     34.05 kB[22m
+[2mdist/[22m[36massets/CommandCenter-DVGV2XCa.js             [39m[1m[2m   16.36 kB[22m[1m[22m[2m │ gzip:     5.64 kB[22m[2m │ map:     44.63 kB[22m
+[2mdist/[22m[36massets/PrintPreviewModal-Dlikp9-d.js         [39m[1m[2m   17.42 kB[22m[1m[22m[2m │ gzip:     4.88 kB[22m[2m │ map:     47.12 kB[22m
+[2mdist/[22m[36massets/ForensicDashboard-BNELwr97.js         [39m[1m[2m   19.02 kB[22m[1m[22m[2m │ gzip:     6.25 kB[22m[2m │ map:     51.39 kB[22m
+[2mdist/[22m[36massets/ShaftAlignment-DkvUM4Qm.js            [39m[1m[2m   19.60 kB[22m[1m[22m[2m │ gzip:     5.81 kB[22m[2m │ map:     53.24 kB[22m
+[2mdist/[22m[36massets/ExpertDossierRegistry-NXfxSqzK.js     [39m[1m[2m   20.63 kB[22m[1m[22m[2m │ gzip:     4.97 kB[22m[2m │ map:      0.11 kB[22m
+[2mdist/[22m[36massets/purify.es-C_uT9hQ1.js                 [39m[1m[2m   22.02 kB[22m[1m[22m[2m │ gzip:     8.78 kB[22m[2m │ map:     93.49 kB[22m
+[2mdist/[22m[36massets/ToolboxLaunchpad-DNHZqQdi.js          [39m[1m[2m   23.36 kB[22m[1m[22m[2m │ gzip:     5.13 kB[22m[2m │ map:     48.16 kB[22m
+[2mdist/[22m[36massets/SOPManager-CyddSGGB.js                [39m[1m[2m   24.80 kB[22m[1m[22m[2m │ gzip:     8.58 kB[22m[2m │ map:     70.76 kB[22m
+[2mdist/[22m[36massets/HPPBuilder-C2DzIek4.js                [39m[1m[2m   26.33 kB[22m[1m[22m[2m │ gzip:     8.35 kB[22m[2m │ map:     79.37 kB[22m
+[2mdist/[22m[36massets/MaintenanceDashboard-5GIXUGC8.js      [39m[1m[2m   56.37 kB[22m[1m[22m[2m │ gzip:    14.06 kB[22m[2m │ map:    152.20 kB[22m
+[2mdist/[22m[36massets/TechnicalPassport-C9b1Kz8_.js         [39m[1m[2m   92.00 kB[22m[1m[22m[2m │ gzip:    30.68 kB[22m[2m │ map:    327.12 kB[22m
+[2mdist/[22m[36massets/ExecutiveDashboard-B713Weer.js        [39m[1m[2m  137.78 kB[22m[1m[22m[2m │ gzip:    37.06 kB[22m[2m │ map:    474.37 kB[22m
+[2mdist/[22m[36massets/index.es-DQWuVNs0.js                  [39m[1m[2m  150.56 kB[22m[1m[22m[2m │ gzip:    51.51 kB[22m[2m │ map:    642.38 kB[22m
+[2mdist/[22m[36massets/leaflet-BwC6L2hF.js                   [39m[1m[2m  153.70 kB[22m[1m[22m[2m │ gzip:    44.92 kB[22m[2m │ map:    701.97 kB[22m
+[2mdist/[22m[36massets/html2canvas.esm-CBrSDip1.js           [39m[1m[2m  201.48 kB[22m[1m[22m[2m │ gzip:    48.08 kB[22m[2m │ map:    602.31 kB[22m
+[2mdist/[22m[36massets/jspdf.es.min-HJvhYvkh.js              [39m[1m[2m  357.76 kB[22m[1m[22m[2m │ gzip:   118.05 kB[22m[2m │ map:    951.72 kB[22m
+[2mdist/[22m[36massets/TurbineRunner3D-D40q3b2M.js           [39m[1m[2m  875.92 kB[22m[1m[22m[2m │ gzip:   241.46 kB[22m[2m │ map:  2,974.25 kB[22m
+[2mdist/[22m[36massets/index-CprhrNnN.js                     [39m[1m[2m4,952.04 kB[22m[1m[22m[2m │ gzip: 1,455.27 kB[22m[2m │ map: 19,158.39 kB[22m
+[32m✓ built in 29.33s[39m

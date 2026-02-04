@@ -1,0 +1,201 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp
+> vitest run
+
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32m✓[39m src/services/__tests__/ShaftSealGuardian.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 99[2mms[22m[39m
+ [32m✓[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+[90mstderr[2m | src/__tests__/dossier_audit.test.ts[2m > [22m[2mDossier archive integrity (spot checks)[2m > [22m[2mevery manifest entry exists, contains recorded SHA-256, and has an efficiency token[22m[39m
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_3.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_4.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_5.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_6.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_7.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_8.html (looked for η, \eta, or 'efficiency')
+
+ [32m✓[39m src/__tests__/dossier_audit.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/SyncBadge.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 50[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/FinancialImpactEngine.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src/__tests__/turbine-math.test.ts[2m > [22m[2mTurbine Engineering Math Precision Audit[2m > [22m[2mshould validate Francis Turbine (150m, 30m³/s) with extreme precision[22m[39m
+[DEBUG] Francis: Actual=40.6, Expected=40.6, Diff=0
+
+ [32m✓[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/AIPredictionService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 93[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 136[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 66[2mms[22m[39m
+ [32m✓[39m src/features/maintenance/logic/__tests__/Predictor.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/BaseGuardian.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ThrustBearingMaster.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/TurbineClassifier.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/KaplanBladePhysics.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src/services/__tests__/CommissioningSimulation.test.ts[2m > [22m[2mCommissioning Simulation (24h)[2m > [22m[2mruns a 24-hour simulated cycle and persists wisdom[22m[39m
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] wisdom_audit_log
+✅ Analysis complete.Health score: 100/100
+
+ [32m✓[39m src/services/__tests__/CommissioningSimulation.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx[2m > [22m[2mAssetPassportCard Debug[2m > [22m[2mshould render component without crashing[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+[90mstderr[2m | src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22m[2mQuickCalcCard Component[2m > [22m[2mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 35[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 61[2mms[22m[39m
+ [33m❯[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m ([22m[2m0 test[22m[2m)[22m
+[90mstdout[2m | src/__tests__/stress_integrity.test.ts[2m > [22m[2mstress integrity: 1000 rapid state changes then snapback to #500[22m[39m
+Journal recorded 1000 events, of which 1000 are state/telemetry updates.
+Attempted snapback to id 1770163318450-fa4avo -> FAILED
+Event drifting detected in journal sequence:  NO
+
+ [32m✓[39m src/__tests__/stress_integrity.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 5153[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/SovereignArchitectReflector.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 1683[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Suites 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m[ src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx ][22m
+[31m[1mError[22m: [vitest] No "ClipboardCheck" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+vi[33m.[39m[34mmock[39m([32m"lucide-react"[39m[33m,[39m [35masync[39m (importOriginal) [33m=>[39m {
+  [35mconst[39m actual [33m=[39m [35mawait[39m [34mimportOriginal[39m()
+  [35mreturn[39m {
+    [33m...[39mactual[33m,[39m
+    [90m// your mocked methods[39m
+  }
+})
+
+[36m [2m❯[22m src/components/dashboard/ProtocolLaunchpad.tsx:[2m41:16[22m[39m
+    [90m 39| [39m        name[33m:[39m [32m'Shaft Alignment'[39m[33m,[39m
+    [90m 40| [39m        description[33m:[39m [32m'Precision laser alignment verification'[39m[33m,[39m
+    [90m 41| [39m        icon[33m:[39m [33m<[39m[33mClipboardCheck[39m [33mclassName[39m[33m=[39m[32m"w-5 h-5"[39m [33m/[39m[33m>[39m[33m,[39m
+    [90m   | [39m               [31m^[39m
+    [90m 42| [39m        route[33m:[39m [32m'/maintenance/shaft-alignment'[39m[33m,[39m
+    [90m 43| [39m        generator[33m:[39m [32m'audit'[39m[33m,[39m
+[90m [2m❯[22m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx:[2m23:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m31 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 01:01:51
+[2m   Duration [22m 9.93s[2m (transform 4.18s, setup 7.91s, collect 20.01s, tests 7.47s, environment 82.26s, prepare 9.44s)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Microscope, Activity, ShieldAlert, Wifi, Globe, Lock } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Microscope, Activity, ShieldAlert, Wifi, Globe, Lock, CheckCircle, AlertTriangle, Hash } from 'lucide-react';
 import { VisionAnalyzer } from './VisionAnalyzer';
 import { AudioSpectrogram } from './AudioSpectrogram';
 import { PostMortemMonitor } from './PostMortemMonitor';
@@ -8,9 +8,10 @@ import { useForensics } from '../../hooks/useForensics';
 import { KillSwitch } from './KillSwitch';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SovereignLedger, VerificationResult } from '../../services/SovereignLedger';
 
 // --- PACKET VISUALIZER COMPONENT ---
-const PacketTrafficVisualizer: React.FC<{ history: any[] }> = ({ history }) => {
+const PacketTrafficVisualizer: React.FC<{ history: Array<{ inbound: number; outbound: number }> }> = ({ history }) => {
     if (history.length < 2) return <div className="h-48 flex items-center justify-center text-slate-600">INITIALIZING SENSORS...</div>;
 
     const width = 600;
@@ -47,6 +48,139 @@ const PacketTrafficVisualizer: React.FC<{ history: any[] }> = ({ history }) => {
                 PEAK: {maxVal.toFixed(0)} Mbps
             </div>
         </div>
+    );
+};
+
+// --- NC-26: LEDGER INTEGRITY PANEL ---
+const LedgerIntegrityPanel: React.FC = () => {
+    const { t } = useTranslation();
+    const [verifying, setVerifying] = useState(false);
+    const [result, setResult] = useState<VerificationResult | null>(null);
+    const [showBreach, setShowBreach] = useState(false);
+
+    const handleVerify = async () => {
+        setVerifying(true);
+        setResult(null);
+        setShowBreach(false);
+
+        // Simulate verification delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        const verification = await SovereignLedger.verifyIntegrity();
+        setResult(verification);
+
+        if (!verification.valid) {
+            setShowBreach(true);
+        }
+
+        setVerifying(false);
+    };
+
+    return (
+        <GlassCard className="p-4 border-t-4 border-t-purple-500">
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-purple-400" />
+                    {t('forensics.sovereign_ledger', 'Sovereign Ledger')}
+                </h3>
+                <div className="text-[10px] font-mono text-slate-500">
+                    NC-26 Protocol
+                </div>
+            </div>
+
+            {/* Breach Alert Overlay */}
+            <AnimatePresence>
+                {showBreach && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        className="absolute inset-0 bg-red-950/90 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-xl"
+                    >
+                        <AlertTriangle className="w-16 h-16 text-red-500 animate-pulse mb-4" />
+                        <div className="text-2xl font-black text-red-400 uppercase tracking-widest mb-2">
+                            BREACH DETECTED
+                        </div>
+                        <div className="text-xs text-red-300 text-center max-w-xs">
+                            Ledger integrity compromised at entry #{result?.compromisedEntry?.id}
+                        </div>
+                        <button
+                            onClick={() => setShowBreach(false)}
+                            className="mt-4 px-4 py-2 bg-red-600 text-white text-xs rounded-lg hover:bg-red-500"
+                        >
+                            Acknowledge
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-slate-900/50 rounded-lg p-3 border border-white/5">
+                    <div className="text-[10px] text-slate-400 uppercase mb-1">Entries</div>
+                    <div className="text-xl font-black text-white font-mono">
+                        {result?.totalEntries ?? SovereignLedger.getEntryCount()}
+                    </div>
+                </div>
+                <div className="bg-slate-900/50 rounded-lg p-3 border border-white/5">
+                    <div className="text-[10px] text-slate-400 uppercase mb-1">Status</div>
+                    <div className="flex items-center gap-2">
+                        {result ? (
+                            result.valid ? (
+                                <>
+                                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                                    <span className="text-emerald-400 text-sm font-bold">VERIFIED</span>
+                                </>
+                            ) : (
+                                <>
+                                    <AlertTriangle className="w-4 h-4 text-red-400" />
+                                    <span className="text-red-400 text-sm font-bold">BREACH</span>
+                                </>
+                            )
+                        ) : (
+                            <span className="text-slate-500 text-sm">PENDING</span>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Root Hash */}
+            <div className="bg-slate-900/50 rounded-lg p-3 border border-white/5 mb-4">
+                <div className="flex items-center gap-2 mb-1">
+                    <Hash className="w-3 h-3 text-purple-400" />
+                    <span className="text-[10px] text-slate-400 uppercase">Root Hash (SHA-256)</span>
+                </div>
+                <div className="font-mono text-[9px] text-purple-300 break-all">
+                    {result?.rootHash ?? SovereignLedger.getRootHash()}
+                </div>
+            </div>
+
+            {/* Verify Button */}
+            <button
+                onClick={handleVerify}
+                disabled={verifying}
+                className={`
+                    w-full py-3 rounded-lg font-bold text-sm uppercase tracking-wider
+                    transition-all duration-300 flex items-center justify-center gap-2
+                    ${verifying
+                        ? 'bg-purple-600/50 text-purple-300 cursor-wait'
+                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500'
+                    }
+                `}
+            >
+                {verifying ? (
+                    <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Verifying Ledger...
+                    </>
+                ) : (
+                    <>
+                        <Lock className="w-4 h-4" />
+                        Verify Ledger Integrity
+                    </>
+                )}
+            </button>
+        </GlassCard>
     );
 };
 
@@ -131,7 +265,7 @@ export const ForensicDashboard: React.FC = () => {
                         </div>
                     </GlassCard>
 
-                    <GlassCard className="h-96 flex flex-col">
+                    <GlassCard className="h-72 flex flex-col">
                         <div className="p-4 border-b border-white/5 bg-red-950/10">
                             <h3 className="font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <ShieldAlert className="w-4 h-4 text-red-400" />
@@ -150,6 +284,9 @@ export const ForensicDashboard: React.FC = () => {
                             )}
                         </div>
                     </GlassCard>
+
+                    {/* NC-26: Sovereign Ledger Panel */}
+                    <LedgerIntegrityPanel />
 
                     <KillSwitch isActive={status === 'THREAT_CONTAINED'} onEngage={executeKillSwitch} />
                 </div>

@@ -14,9 +14,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useContextAwareness } from '../../contexts/ContextAwarenessContext';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { QrCode } from '../ui/QrCode';
+import { ArchiveScanner } from '../../services/ArchiveScanner';
+import { MqttBridge, MqttStatus } from '../../services/MqttBridge';
+import { ForensicReportService } from '../../services/ForensicReportService';
 
 // GLOBAL EVENT FOR REMOTE TRIGGER
 export const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
+
 
 // --- MISSION SECTOR DEFINITIONS ---
 interface SectorModule {
@@ -109,10 +113,11 @@ interface SectorAccordionProps {
     currentPath: string;
     onNavigate: (route: string, title: string) => void;
     searchQuery: string;
+    anyExpanded: boolean; // NC-11: New prop for Focus Mode
 }
 
 const SectorAccordion: React.FC<SectorAccordionProps> = ({
-    sector, isExpanded, onToggle, currentPath, onNavigate, searchQuery
+    sector, isExpanded, onToggle, currentPath, onNavigate, searchQuery, anyExpanded
 }) => {
     const filteredModules = useMemo(() => {
         if (!searchQuery) return sector.modules;
@@ -127,8 +132,11 @@ const SectorAccordion: React.FC<SectorAccordionProps> = ({
 
     const hasActiveModule = filteredModules.some(m => currentPath === m.route);
 
+    // NC-11: Smart Focus Mode - Dim if another sector is the primary focus (expanded) but this one isn't
+    const isDimmed = anyExpanded && !isExpanded;
+
     return (
-        <div className="mb-1 transition-all">
+        <div className={`mb-1 transition-all duration-500 ${isDimmed ? 'opacity-30 hover:opacity-100 grayscale' : 'opacity-100'}`}>
             <button
                 onClick={onToggle}
                 className={`w-full px-4 py-2.5 flex items-center justify-between transition-all relative overflow-hidden group/accordion ${hasActiveModule ? 'bg-black/5' : 'hover:bg-white/5'}`}
@@ -217,6 +225,92 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
     const [expandedSectors, setExpandedSectors] = useState<Record<string, boolean>>(() => ({ criticalOps: true }));
 
+    // NC-12: Knowledge Base State
+    const [knowledgeCount, setKnowledgeCount] = useState<number | null>(null);
+    const [isSyncing, setIsSyncing] = useState(false);
+
+    const [isSimulating, setIsSimulating] = useState(false);
+    const [pulseIntensity, setPulseIntensity] = useState(1);
+
+    // NC-12: Scan for real knowledge base size
+    useEffect(() => {
+        const syncKnowledge = async () => {
+            setIsSyncing(true);
+            const result = await ArchiveScanner.scanDocs();
+            setKnowledgeCount(result.verifiedFiles);
+            setIsSyncing(false);
+        };
+        syncKnowledge();
+    }, []);
+
+    // NC-13: Neural Pulse Reaction
+    useEffect(() => {
+        const handleTick = (e: CustomEvent) => {
+            setIsSimulating(true);
+            // Map vibration (2.4 -> 7.1) to intensity (1 -> 0.1s duration or similar logic)
+            // Just toggling a simpler state for css animation speed class also works
+            setPulseIntensity(e.detail.vibration);
+        };
+        const handleEnd = () => setIsSimulating(false);
+
+        // NC-14: Incident Memory
+        const handleIncident = (e: CustomEvent) => {
+            const title = e.detail?.title || "Unknown Incident";
+            setRecentIncidents(prev => [{
+                id: Date.now().toString(),
+                title,
+                timestamp: new Date().toLocaleTimeString()
+            }, ...prev]);
+        };
+
+        window.addEventListener('SIMULATION_TICK', handleTick as EventListener);
+        window.addEventListener('SIMULATION_ENDED', handleEnd);
+        window.addEventListener(TRIGGER_FORENSIC_EXPORT, handleIncident as EventListener);
+        return () => {
+            window.removeEventListener('SIMULATION_TICK', handleTick as EventListener);
+            window.removeEventListener('SIMULATION_ENDED', handleEnd);
+            window.removeEventListener(TRIGGER_FORENSIC_EXPORT, handleIncident as EventListener);
+        };
+    }, []);
+
+    const [recentIncidents, setRecentIncidents] = useState<Array<{ id: string; title: string; timestamp: string }>>([]);
+
+
+    // NC-18: MQTT Status Subscription
+    const [mqttStatus, setMqttStatus] = useState<MqttStatus>(MqttBridge.status);
+    const [isGenerating, setIsGenerating] = useState(false);
+
+    // NC-20: Forensic Generation Handler
+    const handleGenerateForensic = async () => {
+        if (isGenerating) return;
+        setIsGenerating(true);
+        try {
+            // Mock telemetry fetch since Sidebar doesn't have direct store access yet
+            // In a real scenario, we'd pull from useTelemetryStore.getState()
+            const mockTelemetry = { power: 12.5, flow: 85, vibration: 4.8 };
+            await ForensicReportService.generateDossier('UNIT-01 (Generic)', mockTelemetry);
+        } catch (e) {
+            console.error("Forensic Generation Failed", e);
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    useEffect(() => {
+        const unsubscribe = MqttBridge.subscribeStatus((status) => {
+            setMqttStatus(status);
+        });
+
+        // Register global event listener for remote triggers (e.g. keyboard shortcuts)
+        const triggerHandler = () => handleGenerateForensic();
+        window.addEventListener(TRIGGER_FORENSIC_EXPORT, triggerHandler);
+
+        return () => {
+            unsubscribe();
+            window.removeEventListener(TRIGGER_FORENSIC_EXPORT, triggerHandler);
+        };
+    }, []);
+
     const missionSectors: MissionSector[] = useMemo(() => {
         const allSectors: MissionSector[] = [
             {
@@ -280,7 +374,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 borderColor: 'border-cyan-500/20',
                 glowColor: '#3b82f6',
                 modules: [
-                    { id: 'healthMonitor', title: 'System Health', icon: '🩺', route: '/knowledge/health-monitor', isoRef: 'SOURCES: 202' },
+                    {
+                        id: 'healthMonitor',
+                        // NC-12: Dynamic Source Count
+                        title: isSyncing ? 'SYNCING...' : `SOURCES: ${knowledgeCount ?? '---'}`,
+                        icon: '🩺',
+                        route: '/knowledge/health-monitor',
+                        isoRef: 'LIVE_INDEX'
+                    },
                     { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
                     { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
                     { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
@@ -292,7 +393,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         ];
 
         return allSectors; // Force show all sectors for all personas (NC-9.0 Requirement)
-    }, [t, activePersona]);
+    }, [t, activePersona, knowledgeCount, isSyncing]);
 
     const toggleSector = (id: string) => {
         setExpandedSectors(prev => ({ ...prev, [id]: !prev[id] }));
@@ -330,7 +431,40 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         }
     }, [searchQuery, missionSectors]);
 
+    const [activeWorkspace, setActiveWorkspace] = useState<'OPS' | 'FOR' | 'EXE'>('OPS');
+
+    // NC-11: Workspace Mode Switcher Logic
+    const handleWorkspaceSwitch = (mode: 'OPS' | 'FOR' | 'EXE') => {
+        setActiveWorkspace(mode);
+        // Trigger global event for Dashboard to catch
+        window.dispatchEvent(new CustomEvent('ANOHUB_WORKSPACE_CHANGE', { detail: { mode } }));
+        if (mode === 'OPS') handleNavigate(ROUTES.HOME, 'Operational View');
+        if (mode === 'FOR') handleNavigate('/forensics', 'Forensic Lab');
+        if (mode === 'EXE') handleNavigate('/executive', 'Executive Briefing');
+    };
+
     const industrialGradient = "bg-gradient-to-br from-[#f1f2f6] via-[#ced6e0] to-[#747d8c]";
+
+    // Status Logic
+    const getStatusColor = () => {
+        switch (mqttStatus) {
+            case 'CONNECTED': return 'text-emerald-500 font-bold drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]';
+            case 'CONNECTING': return 'text-amber-500 animate-pulse';
+            case 'ERROR': return 'text-red-500 font-bold animate-pulse';
+            case 'IDLE':
+            default: return 'text-blue-400';
+        }
+    };
+
+    const getStatusText = () => {
+        switch (mqttStatus) {
+            case 'CONNECTED': return 'UPLINK_ACTIVE';
+            case 'CONNECTING': return 'SEARCHING...';
+            case 'ERROR': return 'LINK_LOST';
+            case 'IDLE': return 'SIMULATION_CORE';
+            default: return 'OFFLINE';
+        }
+    };
 
     return (
         <AnimatePresence>
@@ -360,19 +494,36 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         <div className="absolute inset-y-0 left-0 w-[2px] bg-white/10 pointer-events-none" />
                         <div className="absolute inset-y-0 right-0 w-[1px] bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none" />
 
-                        {/* HEADER */}
-                        <div className="p-6 border-b border-black/10 relative z-10 bg-black/5">
-                            <div className="flex justify-between items-start mb-4">
+                        {/* HEADER & WORKSPACE SWITCHER (NC-11) */}
+                        <div className="p-4 border-b border-black/10 relative z-10 bg-black/5 flex flex-col gap-4">
+                            {/* SYSTEM IDENTITY */}
+                            <div className="flex justify-between items-start">
                                 <div>
-                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">MISSION SECTORS</h2>
-                                    <div className="text-sm font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
-                                        CRITICAL OPS
+                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">MONOLIT OS</h2>
+                                    <div className="text-sm font-black text-slate-100 tracking-tighter flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse ${hiveStatus?.connected ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-amber-500'}`} />
+                                        UNIT_01 COMMAND
                                     </div>
                                 </div>
-                                <button onClick={onClose} className="lg:hidden p-2 text-slate-600 hover:text-black transition-colors">
+                                <button onClick={onClose} className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
+                            </div>
+
+                            {/* WORKSPACE SWITCHER */}
+                            <div className="grid grid-cols-3 gap-1 p-1 rounded-lg bg-black/20 border border-white/5">
+                                {(['OPS', 'FOR', 'EXE'] as const).map((mode) => (
+                                    <button
+                                        key={mode}
+                                        onClick={() => handleWorkspaceSwitch(mode)}
+                                        className={`py-1.5 text-[10px] font-black font-mono relative overflow-hidden transition-all rounded ${activeWorkspace === mode
+                                            ? 'text-black bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
+                                            : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
+                                            }`}
+                                    >
+                                        {mode}
+                                    </button>
+                                ))}
                             </div>
 
                             {/* SEARCH */}
@@ -383,7 +534,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="SCANNING..."
+                                    placeholder="SCAN_SYSTEM..."
                                     className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-800 placeholder:text-slate-400 w-full"
                                 />
                             </div>
@@ -391,6 +542,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                         {/* CONTENT - SCROLLABLE */}
                         <div className="flex-1 overflow-y-auto overflow-x-hidden relative z-10 scrollbar-cyan scrollbar-gutter-stable pr-1">
+                            {/* NC-11: SOVEREIGN FORGE LAUNCHPAD */}
+                            <div className="p-2 pb-0">
+                                <button
+                                    onClick={() => handleNavigate(getFrancisPath(ROUTES.FRANCIS.DESIGNER), 'Sovereign Forge')}
+                                    className="w-full py-3 bg-gradient-to-r from-amber-900/40 to-slate-900 border border-amber-500/30 rounded-lg shadow-[0_0_15px_rgba(255,215,0,0.15)] hover:shadow-[0_0_25px_rgba(255,215,0,0.3)] hover:border-amber-400/50 transition-all group relative overflow-hidden flex items-center justify-center gap-3"
+                                >
+                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <Zap className="w-4 h-4 text-amber-400 animate-pulse" />
+                                    <span className="text-xs font-black text-amber-100 tracking-widest uppercase relative z-10 group-hover:text-white">SOVEREIGN FORGE</span>
+                                </button>
+                            </div>
+
                             <FleetSection
                                 showMap={showMap}
                                 onToggleMap={onToggleMap}
@@ -407,21 +571,58 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         currentPath={location.pathname}
                                         onNavigate={handleNavigate}
                                         searchQuery={searchQuery}
+                                        // NC-11: Pass calculated focus state
+                                        anyExpanded={Object.values(expandedSectors).some(v => v)}
                                     />
                                 ))}
                             </div>
                         </div>
 
-                        {/* STICKY ACTION ZONE */}
-                        <div className="p-4 border-t border-black/10 bg-black/5 backdrop-blur-sm z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+                        {/* STICKY ACTION ZONE - FORENSIC ANCHOR (NC-11) */}
+                        <div className="p-4 border-t border-black/10 bg-black/5 backdrop-blur-sm z-20 shadow-[0_-4px_12px_rgba(0,0,0,0.1)] relative">
+                            {/* NC-20: Generation Overlay */}
+                            {isGenerating && (
+                                <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm z-30 flex items-center justify-center rounded-t-xl">
+                                    <div className="flex flex-col items-center gap-2">
+                                        <Cpu className="w-5 h-5 text-cyan-400 animate-spin" />
+                                        <span className="text-[10px] font-mono text-cyan-200 animate-pulse">COMPILING DOSSIER...</span>
+                                    </div>
+                                </div>
+                            )}
+
                             <button
-                                className="w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white rounded-lg border border-white/5 border-b-4 border-b-black shadow-lg shadow-black/20 active:translate-y-0.5 active:border-b-0 transition-all flex items-center justify-center gap-2 group relative overflow-hidden"
-                                onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
+                                className={`w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-white rounded-lg border border-white/5 border-b-4 border-b-black shadow-lg shadow-black/20 active:translate-y-0.5 active:border-b-0 transition-all flex items-center justify-center gap-2 group relative overflow-hidden ${isGenerating ? 'opacity-50 pointer-events-none' : ''}`}
+                                onClick={handleGenerateForensic}
                             >
-                                <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <FileText className="w-4 h-4 text-cyan-400 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] transition-all" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-cyan-50 group-hover:text-cyan-200">GENERATE_FORENSIC</span>
+                                {/* NC-11: Neural Pulse Animation on Threshold Breach */}
+                                <div
+                                    className={`absolute inset-0 bg-red-500/10 transition-opacity duration-100 
+                                        ${hiveStatus?.connected && !isSimulating ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}
+                                        ${isSimulating ? 'animate-pulse bg-red-600/30' : ''}`}
+                                    style={isSimulating ? { animationDuration: `${Math.max(0.1, 10 / pulseIntensity)}s` } : {}}
+                                />
+                                <FileText className={`w-4 h-4 transition-all ${hiveStatus?.connected && !isSimulating ? 'text-cyan-400 group-hover:text-cyan-200' : 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]'}`} />
+                                <span className={`text-[10px] font-black uppercase tracking-widest group-hover:text-white ${hiveStatus?.connected && !isSimulating ? 'text-cyan-50' : 'text-red-100'}`}>
+                                    {isGenerating ? 'PROCESSING...' : 'GENERATE_FORENSIC'}
+                                </span>
                             </button>
+
+                            {/* NC-14: Incident Memory */}
+                            <AnimatePresence>
+                                {recentIncidents.length > 0 && (
+                                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} className="mt-3 overflow-hidden">
+                                        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Recent Incidents</div>
+                                        <div className="space-y-1">
+                                            {recentIncidents.slice(0, 3).map(incident => (
+                                                <div key={incident.id} className="flex justify-between items-center text-[8px] font-mono text-white/70 bg-white/5 p-1 rounded">
+                                                    <span className="truncate max-w-[150px]">{incident.title.replace('INCIDENT REPORT ', '')}</span>
+                                                    <span className="text-slate-500">{incident.timestamp}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         {/* FOOTER - STATUS */}
@@ -429,10 +630,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             <div className="w-full flex justify-between items-center text-[7px] font-mono text-slate-500 mb-2 uppercase tracking-tighter">
                                 <div className="flex items-center gap-1">
                                     <Cpu className="w-3 h-3" />
-                                    <span>LINK_{hiveStatus?.connected ? 'ESTABLISHED' : 'STANDBY'} // NC-9.0</span>
+                                    <span>LINK_{mqttStatus !== 'IDLE' ? 'ESTABLISHED' : 'STANDBY'} // NC-19</span>
                                 </div>
-                                <span className={hiveStatus?.connected ? 'text-emerald-600 font-black' : 'text-slate-500'}>
-                                    {hiveStatus?.connected ? 'ENCRYPTED' : 'OFFLINE'}
+                                <span className={getStatusColor()}>
+                                    {mqttStatus === 'CONNECTED' ? 'AES-256-GCM' : getStatusText()}
                                 </span>
                             </div>
                             <div className="opacity-40 grayscale hover:grayscale-0 transition-all cursor-crosshair">

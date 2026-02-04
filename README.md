@@ -90,7 +90,16 @@ Modules are no longer isolated. The system features a "Golden Thread" workflow:
 *   **Action**: A unified "Log Observation" button instantly creates a ticket.
 *   **Routing**: The system navigates to the `Maintenance Logbook`, pre-filling context.
 
-#### 4. Enterprise-Grade Foundation
+#### 4. Grid Handshake Protocol (NC-27)
+*   **Autonomous Negotiation**: Integrated IEC 61850 compliant handshake for real-time power adjustment.
+*   **Sovereign Limits**: Hard-coded 15 MW per unit limit enforced via cryptographic signature.
+*   **Grid Transparency**: Full audit trail of all accepted and declined power requests in the Forensic Dashboard.
+
+#### 5. Mobile HUD & Executive Awareness
+*   **Responsive Control**: Optimized touch interface for site engineers to log observations on-the-go.
+*   **Executive Pulse**: Real-time fleet health aggregation for non-technical stakeholders.
+
+#### 6. Enterprise-Grade Foundation
 *   **Global Command Palette**: `Ctrl+K` navigation to any module instantly.
 *   **Internationalization (i18n)**: Full support for 6 languages (EN, ES, FR, DE, ZH, BS).
 *   **PDF Generation**: Local-first PDF report generation with embedded custom fonts.

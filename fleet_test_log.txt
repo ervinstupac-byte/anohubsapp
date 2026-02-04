@@ -1,0 +1,37 @@
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+[90mstdout[2m | src/services/__tests__/FleetOptimizer.test.ts[2m > [22m[2mFleet Alert SHA-256 Verification[2m > [22m[2mshould log Load Shedding with unified SHA-256 hash in AlertJournal[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+[i18n] ℹ️  No saved language, using default: en
+[i18n] 🚀 Initializing i18next with language: en
+[i18n] ✅✅✅ i18next initialized successfully
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src/services/__tests__/FleetOptimizer.test.ts[2m > [22m[2mFleet Alert SHA-256 Verification[2m > [22m[2mshould log Load Shedding with unified SHA-256 hash in AlertJournal[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [33m❯[39m src/services/__tests__/FleetOptimizer.test.ts [2m ([22m[2m6 tests[22m [2m|[22m [31m1 failed[39m[2m)[22m[33m 2664[2mms[22m[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service - Enhanced NC-23[2m > [22mshould keep turbines in Sweet Spot (70-90% load)[39m
+[31m     → expected 0.5774999999999999 to be greater than or equal to 0.65[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service - Enhanced NC-23[2m > [22mshould keep turbines in Sweet Spot (70-90% load)
+[31m[1mAssertionError[22m: expected 0.5774999999999999 to be greater than or equal to 0.65[39m
+[36m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m35:37[22m[39m
+    [90m 33| [39m            [35mif[39m (allocated [33m>[39m [34m0[39m) {
+    [90m 34| [39m                [90m// Should be in 65-95% range (accounting for DNA varia[39m…
+    [90m 35| [39m                [34mexpect[39m(loadPercent)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m0.65[39m)[33m;[39m
+    [90m   | [39m                                    [31m^[39m
+    [90m 36| [39m                [34mexpect[39m(loadPercent)[33m.[39m[34mtoBeLessThanOrEqual[39m([34m0.95[39m)[33m;[39m
+    [90m 37| [39m            }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 01:31:50
+[2m   Duration [22m 4.50s[2m (transform 1.49s, setup 157ms, collect 16ms, tests 2.66s, environment 805ms, prepare 139ms)[22m
+

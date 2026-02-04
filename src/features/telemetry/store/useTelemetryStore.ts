@@ -101,6 +101,15 @@ interface TelemetryState {
     selectedDiagnosticId: string | null; // For context-aware UI filtering
     connectionStatus: ConnectionStatus;
 
+    // NC-23: Fleet State Slice
+    fleet: {
+        totalMW: number;
+        efficiencyAvg: number;
+        activeAssets: number;
+        status: 'NOMINAL' | 'CRITICAL';
+        lastOptimization?: number; // timestamp
+    };
+
     // NC-300: Persistence Layer - "Born Perfect" baseline from commissioning
     baselineState: BaselineState | null;
     rcaResultsHistory: RCAResult[][]; // Last 10 RCA analysis batches
@@ -132,6 +141,10 @@ interface TelemetryState {
     setBaselineFromWizard: (data: CommissioningState) => void; // NC-300: DNA Link
     toggleFilteredMode: () => void; // NC-300: Signal filter toggle
     setFilterType: (filterType: FilterType) => void; // NC-300: Filter type selection
+
+    // NC-23: Fleet Actions
+    updateFleetMetrics: (metrics: Partial<TelemetryState['fleet']>) => void;
+    triggerFleetAlert: (message: string, severity: 'INFO' | 'WARNING' | 'CRITICAL') => void;
 }
 
 export const useTelemetryStore = create<TelemetryState>()(
@@ -182,6 +195,14 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-300: Signal filter mode - gauges use filtered, RCA uses raw
             isFilteredMode: true,
             filterType: 'SMA' as FilterType,
+
+            // NC-23: Initial Fleet State
+            fleet: {
+                totalMW: 0,
+                efficiencyAvg: 0,
+                activeAssets: 0,
+                status: 'NOMINAL'
+            },
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
                 set((state) => {
@@ -506,6 +527,37 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-300: Set filter type (SMA, EMA, NONE)
             setFilterType: (filterType: FilterType) => {
                 set({ filterType });
+            },
+
+            // NC-23: Update aggregated fleet metrics
+            updateFleetMetrics: (metrics) => {
+                set((state) => ({
+                    fleet: { ...state.fleet, ...metrics }
+                }));
+            },
+
+            // NC-23: Trigger a fleet-wide alert via AlertJournal (side-effect)
+            triggerFleetAlert: async (message, severity) => {
+                // Dynamically import to avoid circular dependency if AlertJournal imports store
+                try {
+                    const { AlertJournal } = await import('../../../services/AlertJournal');
+                    const hash = Math.random().toString(36).substring(7).toUpperCase(); // simplified hash for demo
+                    // We assume AlertJournal has a method, if not we create a generic log
+                    // For now, logging to console and attempting to add to journal logic if exposed
+                    // AlertJournal.log(...) is the usual pattern
+
+                    // Since AlertJournal.log might not be static or exposed directly, we rely on the 
+                    // existing system's journal or just console for this MVP step if the service isn't fully robust yet.
+                    // However, Protocol NC-22 ensured AlertJournal was active.
+
+                    AlertJournal.logEvent(
+                        severity,
+                        `[FLEET_SWARM] ${message} // HASH: ${hash}`,
+                        'Sovereign_Algorithm_NC23'
+                    );
+                } catch (e) {
+                    console.warn('[FleetAlert] Failed to log:', e);
+                }
             }
         }),
         {

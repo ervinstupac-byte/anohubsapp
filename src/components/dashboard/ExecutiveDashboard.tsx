@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Activity, Zap, TrendingUp, DollarSign,
     TrendingDown, Hammer, ExternalLink,
-    Thermometer, Gauge, Link2, Wrench, FileText, ShieldAlert
+    Thermometer, Gauge, Link2, Wrench, FileText, ShieldAlert, Globe, ShieldCheck, Lock, Download
 } from 'lucide-react';
 
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
@@ -58,6 +58,11 @@ import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetH
 const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));
 const EngineeringDossierCard = React.lazy(() => import('../EngineeringDossierCard').then(m => ({ default: m.EngineeringDossierCard })));
 const HPPForge = React.lazy(() => import('../forge/HPPForge').then(m => ({ default: m.HPPForge })));
+import { FleetMap } from './FleetMap';
+import { MqttBridge } from '../../services/MqttBridge';
+import { SovereignExport } from '../../utils/SovereignExport';
+import { FleetCommandView } from './FleetCommandView';
+// Globe, ShieldCheck, Lock, Download are added to main import above
 
 // --- LONGEVITY IMPACT CALCULATOR ---
 const calculateLongevityLoss = (alignment: number): { years: number; percentage: number } => {
@@ -128,6 +133,12 @@ export const ExecutiveDashboard: React.FC = () => {
             return { spares, outage };
         } catch (e) { return null; }
     }, [specializedState]);
+
+    // NC-17: Initialize Neural Link
+    React.useEffect(() => {
+        MqttBridge.connect();
+        return () => MqttBridge.disconnect();
+    }, []);
 
     const brakePreview = React.useMemo(() => {
         try {
@@ -569,6 +580,30 @@ export const ExecutiveDashboard: React.FC = () => {
                         </div>
                     ) : null}
 
+                    {/* NC-17: The Neural Link - Global Command Center */}
+                    <div className="bg-h-panel border border-h-border rounded-xl p-1 mb-6 relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-h-cyan via-blue-500 to-purple-500 opacity-50" />
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                            <div className="lg:col-span-8 relative">
+                                <FleetMap />
+                                {/* Overlay Stats for Map */}
+                                <div className="absolute bottom-4 left-4 z-[400] flex gap-2">
+                                    <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
+                                        <div className="text-[9px] text-slate-400 uppercase font-mono">Active Units</div>
+                                        <div className="text-lg font-mono font-bold text-white">3/3</div>
+                                    </div>
+                                    <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
+                                        <div className="text-[9px] text-slate-400 uppercase font-mono">Global Output</div>
+                                        <div className="text-lg font-mono font-bold text-h-cyan">1,245.5 MW</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="lg:col-span-4 bg-slate-900/50 p-5 flex flex-col justify-center border-l border-white/5 space-y-4">
+                                <FleetCommandView />
+                            </div>
+                        </div>
+                    </div>
+
                     {(() => {
                         const crossSectorEffects = CrossSectorEngine.analyzeCrossSectorEffects({
                             alignment: currentAlignment,
@@ -578,7 +613,7 @@ export const ExecutiveDashboard: React.FC = () => {
                         });
                         if (crossSectorEffects.length === 0) return null;
                         return (
-                            <div className="bg-amber-950/20 border border-amber-500/30 rounded-lg p-4">
+                            <div className="bg-amber-950/20 border border-amber-500/30 rounded-lg p-4 mb-5">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Link2 className="w-4 h-4 text-amber-400" />
                                     <span className="text-[10px] text-amber-400 font-mono font-black uppercase tracking-widest">CROSS-SECTOR DOMINO EFFECT</span>

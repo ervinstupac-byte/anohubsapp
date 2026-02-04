@@ -1,111 +1,155 @@
-/**
- * SIMULATION ENGINE
- * The Sandbox for the Sovereign 🛡️
- * 
- * Runs "What-If" scenarios on historical telemetry to determine the 
- * optimal path forward.
- */
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { TRIGGER_FORENSIC_EXPORT } from '../components/diagnostic-twin/Sidebar';
 
-import { SovereignStrategist, FinancialContext, PrescriptiveAction } from './SovereignStrategist';
-import { TelemetryStream } from '../lib/engines/BaseTurbineEngine';
-import Decimal from 'decimal.js';
-
-export interface SimulationResult {
-    scenarioId: string;
-    totalProfit: number;
-    totalWearCost: number;
-    description: string;
-    winning: boolean;
-}
-
-export interface SimulationInput {
-    history: TelemetryStream[];
-    baselineContext: FinancialContext;
-}
+export const SIMULATION_EVENTS = {
+    TICK: 'SIMULATION_TICK',
+    CRITICAL: 'SIMULATION_CRITICAL',
+    ENDED: 'SIMULATION_ENDED',
+    GRAND_TOUR_TICK: 'SIMULATION_GRAND_TOUR_TICK',
+    NC16_INTERVENTION: 'NC16_INTERVENTION_REQUIRED'
+};
 
 export class SimulationEngine {
+    private static intervalId: NodeJS.Timeout | null = null;
+    private static currentVibration = 2.4;
+    private static readonly CRITICAL_THRESHOLD = 7.1; // ISO 10816-5 Zone C
+    private static readonly RAMP_RATE = 0.5; // mm/s per tick
+    private static readonly TICK_RATE_MS = 500;
 
-    /**
-     * Run comparative analysis: Aggressive vs Conservative
-     */
-    public static runWhatIfAnalysis(input: SimulationInput): SimulationResult[] {
-        const results: SimulationResult[] = [];
+    // NC-16 State
+    private static tourData: { day: number; vibration: number; rul: number }[] = [];
 
-        // 1. Scenario: Aggressive (Max Profit, High Wear)
-        // Simulate modifying market price or operational parameters
-        // For simplicity in this v1, we simulated different 'Maintenance Costs' or 'Thresholds'
-        // But SovereignStrategist uses 'FinanceContext'. 
-        // Let's vary the 'maintenanceHourlyRate' (simulating deferred maintenance vs active)
+    static startNC13StressTest() {
+        if (this.intervalId) return; // Prevent multiple runs
 
-        // Scenario A: "Run to Destruction" (Low Maintenance Cost inputs, High Revenue priority)
-        const aggressiveResult = this.simulatePath(input.history, {
-            ...input.baselineContext,
-            // Simulate perception that maintenance is cheap/ignored (dangerous)
-            maintenanceHourlyRate: 0
+        console.log("NC-13: STRESS TEST INITIATED");
+        this.currentVibration = 2.4; // Reset to baseline
+
+        this.intervalId = setInterval(() => {
+            this.tick();
+        }, this.TICK_RATE_MS);
+    }
+
+    static runGrandTour() {
+        if (this.intervalId) return;
+
+        console.log("NC-16: THE GRAND TOUR INITIATED");
+        let day = 0;
+        this.currentVibration = 2.4;
+        this.tourData = [];
+
+        this.intervalId = setInterval(() => {
+            day++;
+
+            // NC-16 Physics Layer: Exponential wear after Day 15
+            if (day > 15) {
+                this.currentVibration += 0.2;
+            }
+
+            const daysRemaining = 30 - day;
+
+            // Collect Data
+            this.tourData.push({
+                day,
+                vibration: this.currentVibration,
+                rul: daysRemaining
+            });
+
+            // 1. Update Store (real-time graph sync)
+            useTelemetryStore.getState().updateTelemetry({
+                mechanical: { vibration: this.currentVibration }
+            } as any);
+
+            // 2. Dispatch NC-16 Tick (for AssetPassportCard countdown)
+            window.dispatchEvent(new CustomEvent(SIMULATION_EVENTS.GRAND_TOUR_TICK, {
+                detail: {
+                    day,
+                    vibration: this.currentVibration,
+                    daysRemaining,
+                    totalDuration: 30
+                }
+            }));
+
+            // 3. Zero-Day Intervention (Day 25 -> 5 Days Left)
+            if (daysRemaining === 5) {
+                window.dispatchEvent(new CustomEvent(SIMULATION_EVENTS.NC16_INTERVENTION));
+            }
+
+            // 4. Completion
+            if (day >= 30) {
+                this.finishGrandTour();
+            }
+
+        }, 1000); // 1 second = 1 day
+    }
+
+    private static finishGrandTour() {
+        this.stop();
+        console.log("NC-16: GRAND TOUR COMPLETED. Generating Audit...");
+
+        // Generate Report
+        import('./ForensicReportService').then(({ ForensicReportService }) => {
+            const blob = ForensicReportService.generateSovereignLongevityAudit({
+                assetName: "UNIT-1 (SIMULATION)",
+                date: new Date().toISOString().split('T')[0],
+                tourData: this.tourData,
+                complianceSignature: `SIG-NC16-${Date.now().toString(16).toUpperCase()}`
+            });
+
+            // Auto-download/open
+            ForensicReportService.openAndDownloadBlob(blob, "Sovereign_Longevity_Audit_Unit1.pdf", true);
         });
+    }
 
-        results.push({
-            scenarioId: 'AGGRESSIVE',
-            totalProfit: aggressiveResult.profit,
-            totalWearCost: aggressiveResult.wear,
-            description: 'Maximize Output (Ignore Wear)',
-            winning: false
-        });
+    private static tick() {
+        this.currentVibration += this.RAMP_RATE;
 
-        // Scenario B: "Sovereign Balanced" (Actual params)
-        const balancedResult = this.simulatePath(input.history, input.baselineContext);
+        // 1. Update Telemetry Store (for graphs/gauges)
+        useTelemetryStore.getState().updateTelemetry({
+            mechanical: {
+                vibration: this.currentVibration,
+                rpm: useTelemetryStore.getState().mechanical?.rpm // preserve other values if needed or just merge
+            },
+            // Add some jitter to other metrics for realism
+            measurements: {
+                temp: 65 + (this.currentVibration * 1.5),
+                cavitation: Math.min(10, Math.floor(this.currentVibration / 0.8))
+            }
+        } as any); // Casting 'as any' to bypass strict partial check if I'm unsure of exact shape, but trying to be close.
 
-        results.push({
-            scenarioId: 'SOVEREIGN_BALANCED',
-            totalProfit: balancedResult.profit,
-            totalWearCost: balancedResult.wear,
-            description: 'Optimal Profit/Health Ratio',
-            winning: false
-        });
-
-        // Determine Winner (Highest Net Profit considering REAL costs)
-        // We recalculate Aggressive's true cost using the BASELINE context for fairness
-        // (Aggressive thought cost was 0, but reality is Baseline)
-        const realAggressiveProfit = this.recalculateRealProfit(input.history, aggressiveResult.actions, input.baselineContext);
-
-        const winner = balancedResult.profit > realAggressiveProfit ? 'SOVEREIGN_BALANCED' : 'AGGRESSIVE';
-
-        return results.map(r => ({
-            ...r,
-            winning: r.scenarioId === winner
+        // 2. Dispatch Tick Event (for Pulse UI)
+        window.dispatchEvent(new CustomEvent(SIMULATION_EVENTS.TICK, {
+            detail: { vibration: this.currentVibration }
         }));
+
+        // 3. Check Critical Threshold
+        if (this.currentVibration >= this.CRITICAL_THRESHOLD) {
+            this.triggerCriticalState();
+        }
     }
 
-    private static simulatePath(history: TelemetryStream[], context: FinancialContext): { profit: number, wear: number, actions: PrescriptiveAction[][] } {
-        let totalProfit = new Decimal(0);
-        let totalWear = new Decimal(0);
-        const actionLog: PrescriptiveAction[][] = [];
+    private static triggerCriticalState() {
+        console.log("NC-13: CRITICAL THRESHOLD BREACHED");
 
-        history.forEach(telemetry => {
-            // We assume 'accumulatedFatigue' is 0 for the slice simulation or tracked
-            const result = SovereignStrategist.calculateBridge(telemetry, context, { accumulatedFatigue: 0 });
+        // Dispatch Critical Event (for Dashboard Resize & Dossier Pop-up)
+        window.dispatchEvent(new CustomEvent(SIMULATION_EVENTS.CRITICAL, {
+            detail: { vibration: this.currentVibration }
+        }));
 
-            // Accumulate rates * 1 hour (assuming hourly data for simplicity, or 1 sample = 1 unit)
-            // Ideally delta time should be passed. We'll assume these are hourly samples for what-if.
-            totalProfit = totalProfit.plus(result.netProfitRate);
-            totalWear = totalWear.plus(result.molecularDebtRate);
-            actionLog.push(result.recommendations);
-        });
+        // Trigger Forensic Export
+        window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT, {
+            detail: { title: "INCIDENT REPORT NC-13: CAVITATION CRITICALITY" }
+        }));
 
-        return {
-            profit: totalProfit.toNumber(),
-            wear: totalWear.toNumber(),
-            actions: actionLog
-        };
+        this.stop();
     }
 
-    private static recalculateRealProfit(history: TelemetryStream[], actions: PrescriptiveAction[][], realContext: FinancialContext): number {
-        // In a real simulation, actions would feedback into the physics.
-        // Here, we just re-run the financial math on the same telemetry but with REAL cost constants.
-        // This penalizes the "Aggressive" strategy which ignored costs.
-        // (Simplified: Aggressive didn't change physics in this mock, just the financial calc)
-
-        const res = this.simulatePath(history, realContext);
-        return res.profit;
+    static stop() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+            window.dispatchEvent(new CustomEvent(SIMULATION_EVENTS.ENDED));
+            console.log("SIMULATION STOPPED");
+        }
     }
 }

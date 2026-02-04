@@ -1,0 +1,669 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp
+> vitest run
+
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32m✓[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstderr[2m | src/__tests__/dossier_audit.test.ts[2m > [22m[2mDossier archive integrity (spot checks)[2m > [22m[2mevery manifest entry exists, contains recorded SHA-256, and has an efficiency token[22m[39m
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_3.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_4.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_5.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_6.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_7.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_8.html (looked for η, \eta, or 'efficiency')
+
+ [32m✓[39m src/__tests__/dossier_audit.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/ShaftSealGuardian.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 88[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/SyncBadge.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 58[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/FinancialImpactEngine.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src/__tests__/turbine-math.test.ts[2m > [22m[2mTurbine Engineering Math Precision Audit[2m > [22m[2mshould validate Francis Turbine (150m, 30m³/s) with extreme precision[22m[39m
+[DEBUG] Francis: Actual=40.6, Expected=40.6, Diff=0
+
+ [32m✓[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/AIPredictionService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 91[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 111[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx [2m ([22m[2m2 tests[22m[2m)[22m[90m 59[2mms[22m[39m
+ [32m✓[39m src/features/maintenance/logic/__tests__/Predictor.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ThrustBearingMaster.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/BaseGuardian.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/TurbineClassifier.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/KaplanBladePhysics.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+[90mstdout[2m | src/services/__tests__/CommissioningSimulation.test.ts[2m > [22m[2mCommissioning Simulation (24h)[2m > [22m[2mruns a 24-hour simulated cycle and persists wisdom[22m[39m
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] wisdom_audit_log
+✅ Analysis complete.Health score: 100/100
+
+ [32m✓[39m src/services/__tests__/CommissioningSimulation.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx[2m > [22m[2mAssetPassportCard Debug[2m > [22m[2mshould render component without crashing[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+[90mstderr[2m | src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22m[2mQuickCalcCard Component[2m > [22m[2mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 35[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 62[2mms[22m[39m
+ [33m❯[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m ([22m[2m5 tests[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 185[2mms[22m[39m
+[31m   [33m❯[31m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mgenerates report and creates Ledger entry when clicked[39m
+[31m     → Unable to find an element with the text: dashboard.protocolLaunchpad.generatePdf. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"glass-panel p-6 
+                     hover:border-cyan-500/40 transition-all duration-500 
+                     relative overflow-hidden border-l-4 border-l-emerald-500"[31m
+      [33mstyle[31m=[32m"opacity: 0; transform: translateY(20px);"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"relative z-10 h-full"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center justify-between p-4 border-b border-white/5"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex items-center gap-3"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center"[31m
+            [36m>[31m
+              [0micon-file-text[0m
+            [36m</div>[31m
+            [36m<div>[31m
+              [36m<h3[31m
+                [33mclass[31m=[32m"text-sm font-black text-white uppercase tracking-wider"[31m
+              [36m>[31m
+                [0mdashboard.protocolLaunchpad.title[0m
+              [36m</h3>[31m
+              [36m<p[31m
+                [33mclass[31m=[32m"text-[10px] text-slate-500 font-mono"[31m
+              [36m>[31m
+                [0mOne-click field reports[0m
+              [36m</p>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex items-center gap-2"[31m
+          [36m>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-transparent hover:bg-white/5 text-slate-400 hover:text-white border border-transparent active:bg-white/10  text-[10px] px-2 py-1.5 font-bold uppercase tracking-wider hover:bg-emerald-500/10 hover:text-emerald-400"[31m
+            [36m>[31m
+              [0mView Last Audit[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-[10px] px-3 py-1.5 font-bold uppercase tracking-wider"[31m
+            [36m>[31m
+              [0mNew Field Audit[0m
+            [36m</button>[31m
+            [36m<button[31m
+              [33mclass[31m=[32m"
+                flex items-center gap-2 px-3 py-1.5 rounded-lg
+                bg-emerald-500/10 border-emerald-500/30 border
+                text-emerald-400
+                transition-all duration-300
+                hover:scale-105 disabled:hover:scale-100
+                disabled:opacity-60 disabled:cursor-not-allowed
+                
+            "[31m
+              [33mtitle[31m=[32m"Click to sync"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m""[31m
+              [36m>[31m
+                [0micon-check[0m
+              [36m</span>[31m
+            [36m</button>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"p-4 space-y-3"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center justify-between"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"flex items-center gap-3"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[31m
+                [36m>[31m
+                  [0micon-check-circle[0m
+                [36m</div>[31m
+                [36m<div>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-sm font-bold text-white"[31m
+                  [36m>[31m
+                    [0mShaft Alignment[0m
+                  [36m</p>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-[10px] text-slate-500"[31m
+                  [36m>[31m
+                    [0mPrecision laser alignment verification[0m
+                  [36m</p>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[31m
+              [36m>[31m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"mt-2 flex items-center gap-2"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[31m
+              [36m>[31m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center justify-between"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"flex items-center gap-3"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[31m
+                [36m>[31m
+                  [0micon-check-circle[0m
+                [36m</div>[31m
+                [36m<div>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-sm font-bold text-white"[31m
+                  [36m>[31m
+                    [0mBolt Torque[0m
+                  [36m</p>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-[10px] text-slate-500"[31m
+                  [36m>[31m
+                    [0mTension & elongation protocol[0m
+                  [36m</p>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[31m
+              [36m>[31m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"mt-2 flex items-center gap-2"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[31m
+              [36m>[31m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"flex items-center justify-between"[31m
+            [36m>[31m
+              [36m<div[31m
+                [33mclass[31m=[32m"flex items-center gap-3"[31m
+              [36m>[31m
+                [36m<div[31m
+                  [33mclass[31m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[31m
+                [36m>[31m
+                  [0micon-check-circle[0m
+                [36m</div>[31m
+                [36m<div>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-sm font-bold text-white"[31m
+                  [36m>[31m
+                    [0mVibration Check[0m
+                  [36m</p>[31m
+                  [36m<p[31m
+                    [33mclass[31m=[32m"text-[10px] text-slate-500"[31m
+                  [36m>[31m
+                    [0mISO 10816 spectral analysis[0m
+                  [36m</p>[31m
+                [36m</div>[31m
+              [36m</div>[31m
+              [36m<button[31m
+                [33mclass[31m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[31m
+              [36m>[31m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[31m
+            [36m</div>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"mt-2 flex items-center gap-2"[31m
+            [36m>[31m
+              [36m<span[31m
+                [33mclass[31m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[31m
+              [36m>[31m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[31m
+            [36m</div>[31m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+ [32m✓[39m src/services/__tests__/SovereignArchitectReflector.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 1664[2mms[22m[39m
+[90mstdout[2m | src/__tests__/stress_integrity.test.ts[2m > [22m[2mstress integrity: 1000 rapid state changes then snapback to #500[22m[39m
+Journal recorded 1000 events, of which 1000 are state/telemetry updates.
+Attempted snapback to id 1770163427261-vddkbc -> FAILED
+Event drifting detected in journal sequence:  NO
+
+ [32m✓[39m src/__tests__/stress_integrity.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 5589[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx[2m > [22mProtocolLaunchpad Component[2m > [22mgenerates report and creates Ledger entry when clicked
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: dashboard.protocolLaunchpad.generatePdf. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"glass-panel p-6 
+                     hover:border-cyan-500/40 transition-all duration-500 
+                     relative overflow-hidden border-l-4 border-l-emerald-500"[39m
+      [33mstyle[39m=[32m"opacity: 0; transform: translateY(20px);"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 h-full"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center justify-between p-4 border-b border-white/5"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-3"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center"[39m
+            [36m>[39m
+              [0micon-file-text[0m
+            [36m</div>[39m
+            [36m<div>[39m
+              [36m<h3[39m
+                [33mclass[39m=[32m"text-sm font-black text-white uppercase tracking-wider"[39m
+              [36m>[39m
+                [0mdashboard.protocolLaunchpad.title[0m
+              [36m</h3>[39m
+              [36m<p[39m
+                [33mclass[39m=[32m"text-[10px] text-slate-500 font-mono"[39m
+              [36m>[39m
+                [0mOne-click field reports[0m
+              [36m</p>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-transparent hover:bg-white/5 text-slate-400 hover:text-white border border-transparent active:bg-white/10  text-[10px] px-2 py-1.5 font-bold uppercase tracking-wider hover:bg-emerald-500/10 hover:text-emerald-400"[39m
+            [36m>[39m
+              [0mView Last Audit[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-[10px] px-3 py-1.5 font-bold uppercase tracking-wider"[39m
+            [36m>[39m
+              [0mNew Field Audit[0m
+            [36m</button>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"
+                flex items-center gap-2 px-3 py-1.5 rounded-lg
+                bg-emerald-500/10 border-emerald-500/30 border
+                text-emerald-400
+                transition-all duration-300
+                hover:scale-105 disabled:hover:scale-100
+                disabled:opacity-60 disabled:cursor-not-allowed
+                
+            "[39m
+              [33mtitle[39m=[32m"Click to sync"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m""[39m
+              [36m>[39m
+                [0micon-check[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"p-4 space-y-3"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-between"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex items-center gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[39m
+                [36m>[39m
+                  [0micon-check-circle[0m
+                [36m</div>[39m
+                [36m<div>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white"[39m
+                  [36m>[39m
+                    [0mShaft Alignment[0m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-slate-500"[39m
+                  [36m>[39m
+                    [0mPrecision laser alignment verification[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[39m
+              [36m>[39m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-2 flex items-center gap-2"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[39m
+              [36m>[39m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-between"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex items-center gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[39m
+                [36m>[39m
+                  [0micon-check-circle[0m
+                [36m</div>[39m
+                [36m<div>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white"[39m
+                  [36m>[39m
+                    [0mBolt Torque[0m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-slate-500"[39m
+                  [36m>[39m
+                    [0mTension & elongation protocol[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[39m
+              [36m>[39m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-2 flex items-center gap-2"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[39m
+              [36m>[39m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"
+                            p-4 rounded-xl border transition-all
+                            bg-slate-900/50 border-white/10 hover:border-emerald-500/30
+                        "[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"flex items-center justify-between"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"flex items-center gap-3"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"
+                                    w-8 h-8 rounded-lg flex items-center justify-center
+                                    bg-emerald-500/20 text-emerald-400
+                                "[39m
+                [36m>[39m
+                  [0micon-check-circle[0m
+                [36m</div>[39m
+                [36m<div>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-sm font-bold text-white"[39m
+                  [36m>[39m
+                    [0mVibration Check[0m
+                  [36m</p>[39m
+                  [36m<p[39m
+                    [33mclass[39m=[32m"text-[10px] text-slate-500"[39m
+                  [36m>[39m
+                    [0mISO 10816 spectral analysis[0m
+                  [36m</p>[39m
+                [36m</div>[39m
+              [36m</div>[39m
+              [36m<button[39m
+                [33mclass[39m=[32m"relative overflow-hidden rounded-xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-900/20 hover:shadow-cyan-500/40 border border-white/10 active:opacity-90  text-sm px-4 py-2"[39m
+              [36m>[39m
+                [0micon-download[0m
+                [0mdashboard.protocolLaunchpad.generatePdf[0m
+              [36m</button>[39m
+            [36m</div>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"mt-2 flex items-center gap-2"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"
+                                inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold uppercase
+                                bg-emerald-500/20 text-emerald-400
+                            "[39m
+              [36m>[39m
+                [0mdashboard.protocolLaunchpad.completed[0m
+              [36m</span>[39m
+            [36m</div>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx:[2m114:32[22m[39m
+    [90m112| [39m        [34mrender[39m([33m<[39m[33mProtocolLaunchpad[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m113| [39m
+    [90m114| [39m        [35mconst[39m buttons [33m=[39m screen[33m.[39m[34mgetAllByText[39m([32m'dashboard.protocolLaunchp[39m…
+    [90m   | [39m                               [31m^[39m
+    [90m115| [39m        fireEvent[33m.[39m[34mclick[39m(buttons[[34m0[39m])[33m;[39m [90m// Shaft Alignment[39m
+    [90m116| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m31 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m94 passed[39m[22m[90m (95)[39m
+[2m   Start at [22m 01:03:39
+[2m   Duration [22m 10.33s[2m (transform 4.08s, setup 7.98s, collect 23.78s, tests 8.04s, environment 82.78s, prepare 9.56s)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.

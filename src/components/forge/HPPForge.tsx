@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Droplets, Zap, Activity, ArrowRight, Gauge } from 'lucide-react';
+import { Settings, Droplets, Zap, Activity, ArrowRight, Gauge, AlertTriangle } from 'lucide-react';
 import { PhysicsGuardrailService, CalculationResult } from '../../services/PhysicsGuardrailService';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -10,6 +10,9 @@ export const HPPForge: React.FC = () => {
     const [head, setHead] = useState<number>(350); // meters
     const [flow, setFlow] = useState<number>(12); // m3/s
     const [rpm, setRpm] = useState<number>(600);
+    const [selectedType, setSelectedType] = useState<'FRANCIS' | 'KAPLAN' | 'PELTON'>('FRANCIS');
+    const [orientation, setOrientation] = useState<'HORIZONTAL' | 'VERTICAL'>('VERTICAL');
+
     const [result, setResult] = useState<CalculationResult | null>(null);
     const [isGenerating, setIsGenerating] = useState(false);
 
@@ -22,25 +25,30 @@ export const HPPForge: React.FC = () => {
         setResult(res);
     }, [head, flow, rpm]);
 
+    // NC-22: Power Limit Check (15 MW)
+    const powerMW = result?.powerMW || 0;
+    const isPowerLimitBreached = powerMW > 15;
+
     const handleGenerate = async () => {
-        if (!result) return;
+        if (!result || isPowerLimitBreached) return;
         setIsGenerating(true);
 
         try {
-            const assetName = `Forge-${result.recommendedType}-${Math.floor(result.powerMW)}MW`;
+            const assetName = `Forge-${selectedType}-${Math.floor(powerMW)}MW`;
 
             await addAsset({
                 name: assetName,
-                type: 'HPP',
+                type: 'HPP', // This might need to be specific if the system supports it, but preserving HPP as per file
                 status: 'Operational', // Default status for new assets
                 location: 'Forge Simulation',
                 coordinates: [44.0, 15.0], // Default coords
-                capacity: result.powerMW,
+                capacity: powerMW,
+                turbine_type: selectedType, // Explicitly saving the selected type
                 specs: {
                     turbineProfile: {
-                        type: result.recommendedType as any,
-                        orientation: result.recommendedType === 'PELTON' ? 'HORIZONTAL' : 'VERTICAL',
-                        ratedPowerMW: result.powerMW,
+                        type: selectedType, // Use user selection
+                        orientation: orientation,
+                        ratedPowerMW: powerMW,
                         ratedHeadM: head,
                         ratedFlowM3S: flow,
                         ratedSpeedRPM: rpm,
@@ -52,7 +60,7 @@ export const HPPForge: React.FC = () => {
             });
 
             // Visual feedback could be improved, but alert captures attention as "System Notification"
-            alert(`✅ DIGITAL TWIN INITIALIZED: ${assetName}\n\nOptimized for ${result.recommendedType} Operation.`);
+            alert(`✅ DIGITAL TWIN INITIALIZED: ${assetName}\n\nOptimized for ${selectedType} Operation.`);
 
         } catch (error) {
             console.error("Forge Generation Failed:", error);
@@ -91,11 +99,11 @@ export const HPPForge: React.FC = () => {
             <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 overflow-y-auto pr-2">
 
                 {/* CONTROL PANEL */}
-                <div className="space-y-6">
+                <div className="space-y-4">
                     {/* Head Input */}
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-violet-500/30 transition-colors">
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-violet-500/30 transition-colors">
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
-                        <div className="flex justify-between mb-4 relative z-10">
+                        <div className="flex justify-between mb-2 relative z-10">
                             <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
                                 <ArrowRight className="w-3 h-3 text-violet-400 rotate-90" /> Net Head (H)
                             </label>
@@ -104,18 +112,14 @@ export const HPPForge: React.FC = () => {
                         <input
                             type="range" min="10" max="1000" step="1"
                             value={head} onChange={(e) => setHead(Number(e.target.value))}
-                            className="input-range-premium relative z-10"
+                            className="input-range-premium relative z-10 w-full"
                         />
-                        <div className="flex justify-between text-[10px] text-slate-600 font-mono mt-2 font-bold uppercase">
-                            <span>10m</span>
-                            <span>1000m</span>
-                        </div>
                     </div>
 
                     {/* Flow Input */}
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-cyan-500/30 transition-colors">
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-cyan-500/30 transition-colors">
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
-                        <div className="flex justify-between mb-4 relative z-10">
+                        <div className="flex justify-between mb-2 relative z-10">
                             <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
                                 <Droplets className="w-3 h-3 text-cyan-400" /> Design Flow (Q)
                             </label>
@@ -124,28 +128,56 @@ export const HPPForge: React.FC = () => {
                         <input
                             type="range" min="1" max="200" step="0.5"
                             value={flow} onChange={(e) => setFlow(Number(e.target.value))}
-                            className="input-range-premium relative z-10"
+                            className="input-range-premium relative z-10 w-full"
                         />
-                        <div className="flex justify-between text-[10px] text-slate-600 font-mono mt-2 font-bold uppercase">
-                            <span>1 m³/s</span>
-                            <span>200 m³/s</span>
-                        </div>
                     </div>
 
                     {/* RPM Selector */}
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-5 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
-                        <div className="flex justify-between mb-2 relative z-10">
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-4 rounded-xl border border-white/5 shadow-inner relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+                        <div className="flex justify-between items-center relative z-10">
                             <label className="text-xs font-bold text-slate-400 flex items-center gap-2 uppercase tracking-widest">
                                 <Activity className="w-3 h-3 text-emerald-400" /> Speed (n)
                             </label>
                             <select
                                 value={rpm}
                                 onChange={(e) => setRpm(Number(e.target.value))}
-                                className="bg-black/40 text-emerald-300 border border-emerald-500/30 rounded px-3 py-1 text-sm font-mono font-bold focus:outline-none focus:border-emerald-500 focus:shadow-[0_0_10px_rgba(16,185,129,0.2)] appearance-none cursor-pointer hover:bg-black/60 transition-colors"
+                                className="bg-black/40 text-emerald-300 border border-emerald-500/30 rounded px-2 py-1 text-sm font-mono font-bold focus:outline-none focus:border-emerald-500 focus:shadow-[0_0_10px_rgba(16,185,129,0.2)] appearance-none cursor-pointer hover:bg-black/60 transition-colors"
                             >
                                 {SYNC_SPEEDS.map(s => (
                                     <option key={s} value={s} className="bg-slate-900 text-slate-300">{s} RPM</option>
                                 ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Type & Orientation Selectors */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-3 rounded-xl border border-white/5 relative overflow-hidden">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">
+                                Turbine Type
+                            </label>
+                            <select
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value as any)}
+                                className="w-full bg-black/40 text-white border border-white/10 rounded px-2 py-1 text-xs font-bold focus:outline-none focus:border-cyan-500"
+                            >
+                                <option value="FRANCIS">Francis</option>
+                                <option value="KAPLAN">Kaplan</option>
+                                <option value="PELTON">Pelton</option>
+                            </select>
+                        </div>
+
+                        <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-3 rounded-xl border border-white/5 relative overflow-hidden">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">
+                                Orientation
+                            </label>
+                            <select
+                                value={orientation}
+                                onChange={(e) => setOrientation(e.target.value as any)}
+                                className="w-full bg-black/40 text-white border border-white/10 rounded px-2 py-1 text-xs font-bold focus:outline-none focus:border-cyan-500"
+                            >
+                                <option value="VERTICAL">Vertical</option>
+                                <option value="HORIZONTAL">Horizontal</option>
                             </select>
                         </div>
                     </div>
@@ -154,25 +186,33 @@ export const HPPForge: React.FC = () => {
                 {/* RESULTS PANEL */}
                 <div className="flex flex-col gap-4">
                     {/* Power Output */}
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-4 rounded-lg border border-white/10 relative overflow-hidden group">
+                    <div className={`bg-gradient-to-br from-slate-800 to-slate-900 p-4 rounded-lg border relative overflow-hidden group transition-all duration-300 ${isPowerLimitBreached ? 'border-red-500/50 shadow-[0_0_30px_rgba(239,68,68,0.2)]' : 'border-white/10'}`}>
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Zap className="w-24 h-24" />
+                            <Zap className={`w-24 h-24 ${isPowerLimitBreached ? 'text-red-500' : ''}`} />
                         </div>
                         <h3 className="text-slate-400 text-xs font-bold uppercase mb-1">Theoretical Power</h3>
-                        <div className="text-3xl font-bold text-white font-mono flex items-baseline gap-2">
-                            {result?.powerMW.toFixed(2)} <span className="text-sm text-slate-500">MW</span>
+                        <div className={`text-3xl font-bold font-mono flex items-baseline gap-2 ${isPowerLimitBreached ? 'text-red-400' : 'text-white'}`}>
+                            {powerMW.toFixed(2)} <span className="text-sm text-slate-500">MW</span>
                         </div>
+
+                        {isPowerLimitBreached && (
+                            <div className="mt-2 text-[10px] font-bold text-red-500 uppercase tracking-widest flex items-center gap-1">
+                                <AlertTriangle className="w-3 h-3" />
+                                Sovereign Tier 1 limit: 15 MW
+                            </div>
+                        )}
+
                         <div className="w-full h-1.5 bg-slate-700 rounded-full mt-3 overflow-hidden">
                             <div
-                                className="h-full bg-gradient-to-r from-amber-500 to-red-500 transition-all duration-500"
-                                style={{ width: `${Math.min((result?.powerMW || 0) / 500 * 100, 100)}%` }}
+                                className={`h-full transition-all duration-500 ${isPowerLimitBreached ? 'bg-red-500 animate-pulse' : 'bg-gradient-to-r from-amber-500 to-red-500'}`}
+                                style={{ width: `${Math.min(powerMW / 20 * 100, 100)}%` }}
                             />
                         </div>
                     </div>
 
                     {/* Specific Speed & Recommendation */}
                     <div className="flex-1 bg-slate-900/80 p-6 rounded-lg border border-white/10 flex flex-col items-center justify-center text-center relative">
-                        <h3 className="text-slate-400 text-xs font-bold uppercase mb-4">Turbine DNA Analysis</h3>
+                        <h3 className="text-slate-400 text-xs font-bold uppercase mb-4">Physics Recommends</h3>
 
                         <div className="mb-4 relative">
                             <Gauge className={`w-16 h-16 ${getZoneColor(result?.recommendedType || '')} transition-colors duration-500`} />
@@ -187,25 +227,26 @@ export const HPPForge: React.FC = () => {
                             {result?.recommendedType}
                         </div>
                         <p className="text-xs text-slate-500 max-w-[200px]">
-                            Based on Specific Speed ($n_q$) and Head ($H$).
+                            Based on Specific Speed ($n_q$).
+                            {selectedType !== result?.recommendedType && (
+                                <span className="block mt-1 text-amber-400 font-bold">
+                                    (Deviates from your selection: {selectedType})
+                                </span>
+                            )}
                         </p>
-
-                        {/* Warnings */}
-                        {result?.warnings && result.warnings.length > 0 && (
-                            <div className="mt-4 p-2 bg-red-500/10 border border-red-500/20 rounded text-xs text-red-400 text-left w-full">
-                                {result.warnings.map((w, i) => (
-                                    <div key={i}>• {w}</div>
-                                ))}
-                            </div>
-                        )}
                     </div>
 
                     {/* Action Button */}
                     <button
                         onClick={handleGenerate}
-                        className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg shadow-cyan-900/20 border border-cyan-400/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        disabled={isPowerLimitBreached}
+                        className={`w-full py-3 font-bold rounded-lg shadow-lg border transition-all 
+                        ${isPowerLimitBreached
+                                ? 'bg-slate-800 text-slate-500 border-slate-700 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-cyan-900/20 border-cyan-400/20 hover:scale-[1.02] active:scale-[0.98]'
+                            }`}
                     >
-                        INITIALIZE DIGITAL TWIN
+                        {isPowerLimitBreached ? 'POWER LIMIT EXCEEDED' : 'INITIALIZE DIGITAL TWIN'}
                     </button>
                 </div>
             </div>

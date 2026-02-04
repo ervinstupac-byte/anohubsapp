@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowUpFromLine, Thermometer, Layers, Clock } from 'lucide-react';
+import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowUpFromLine, Thermometer, Layers, Clock, Activity } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -11,6 +11,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { Decimal } from 'decimal.js';
 import { TelemetryDrilldownModal } from './TelemetryDrilldownModal';
+import { PrognosticsEngine } from '../../services/PrognosticsEngine';
 // Defer loading the heavy PDF generator until explicitly requested
 
 /**
@@ -45,6 +46,33 @@ export const AssetPassportCard: React.FC = () => {
     const { viewDocument } = useDocumentViewer();
     const { pushNotification } = useNotifications();
     const navigate = useNavigate();
+
+    // --- NC-16: GRAND TOUR SYNC ---
+    const [simulationState, setSimulationState] = useState<{ daysRemaining: number; active: boolean } | null>(null);
+
+    React.useEffect(() => {
+        const handleGrandTour = (e: CustomEvent) => {
+            setSimulationState({
+                daysRemaining: e.detail.daysRemaining,
+                active: true
+            });
+        };
+
+        const handleEnd = () => {
+            // Keep the final state meaningful for a moment or just reset?
+            // User requirement: "Counting down from 30 days to 0"
+            // At 0 it generates report.
+            setTimeout(() => setSimulationState(null), 5000); // Reset after 5s
+        };
+
+        window.addEventListener('SIMULATION_GRAND_TOUR_TICK' as any, handleGrandTour as EventListener);
+        window.addEventListener('SIMULATION_ENDED' as any, handleEnd as EventListener);
+
+        return () => {
+            window.removeEventListener('SIMULATION_GRAND_TOUR_TICK' as any, handleGrandTour as EventListener);
+            window.removeEventListener('SIMULATION_ENDED' as any, handleEnd as EventListener);
+        };
+    }, []);
 
     // --- DRILLDOWN STATE ---
     const [drilldownOpen, setDrilldownOpen] = useState(false);
@@ -188,10 +216,15 @@ export const AssetPassportCard: React.FC = () => {
         <div
             key={field.metricKey}
             onClick={() => handleFieldClick(field)}
+            tabIndex={0}
+            role="button"
+            aria-label={`${field.label}: ${field.value} ${field.unit || ''}, Status: ${field.status}`}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldClick(field); }}
             className={`
                 p-3 rounded-md bg-[#0D141C] border relative group
                 cursor-pointer transition-all duration-200
                 hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]
+                focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none
                 ${field.status === 'critical' ? 'border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]' :
                     field.status === 'warning' ? 'border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]' :
                         'border-slate-800 hover:border-cyan-500/50'}
@@ -266,7 +299,14 @@ export const AssetPassportCard: React.FC = () => {
                             {valOperatingHours.toNumber().toLocaleString()} <span className="text-[10px] text-slate-500">hrs</span>
                         </span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-white/5" onClick={() => handleFieldClick(fieldOverhaul)}>
+                    <div
+                        className="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-white/5 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none cursor-pointer"
+                        onClick={() => handleFieldClick(fieldOverhaul)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Overhaul Date: ${lastOverhaul}`}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleFieldClick(fieldOverhaul); }}
+                    >
                         <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">
                             Overhaul
                         </span>
@@ -277,7 +317,7 @@ export const AssetPassportCard: React.FC = () => {
                 </div>
 
                 {/* NC-5.4: Temporal Logic - 180-Day Alignment Rule */}
-                <div className="px-4 pt-2">
+                <div className="px-4 pt-2 space-y-2">
                     <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20">
                         <div className="flex items-center gap-2">
                             <Clock className="w-3 h-3 text-amber-500" />
@@ -290,6 +330,42 @@ export const AssetPassportCard: React.FC = () => {
                                 {Math.max(0, 180 - Math.floor((Date.now() - new Date(identity.lastAlignmentDate || '2025-10-01').getTime()) / (1000 * 60 * 60 * 24)))}
                                 <span className="text-[10px] ml-1 text-slate-500 font-bold uppercase">Days Left</span>
                             </span>
+                        </div>
+                    </div>
+
+                    {/* NC-15: Neural Prognostics (RUL) */}
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-purple-500/10 to-transparent border border-purple-500/20">
+                        <div className="flex items-center gap-2">
+                            <Activity className={`w-3 h-3 text-purple-400 ${simulationState?.active ? 'animate-spin' : 'animate-pulse'}`} />
+                            <span className="text-[9px] uppercase font-bold text-purple-400 tracking-wider">
+                                {simulationState?.active ? 'SIMULATION ACTIVE' : 'Neural Prognosis (RUL)'}
+                            </span>
+                        </div>
+                        <div className="text-right">
+                            {(() => {
+                                let daysRemaining, confidence, status;
+
+                                if (simulationState?.active) {
+                                    daysRemaining = simulationState.daysRemaining;
+                                    confidence = 99.9;
+                                    status = daysRemaining < 5 ? 'CRITICAL' : daysRemaining < 15 ? 'DEGRADING' : 'STABLE';
+                                } else {
+                                    const est = PrognosticsEngine.estimateRUL(mechanical.vibration || 0);
+                                    daysRemaining = est.daysRemaining;
+                                    confidence = est.confidence;
+                                    status = est.status;
+                                }
+
+                                return (
+                                    <>
+                                        <span className={`text-sm font-mono font-black ${status === 'CRITICAL' ? 'text-red-500' : 'text-purple-400'}`}>
+                                            {daysRemaining}
+                                            <span className="text-[10px] ml-1 text-slate-500 font-bold uppercase">Days</span>
+                                        </span>
+                                        <div className="text-[8px] text-slate-500 uppercase">Confidence: {confidence}%</div>
+                                    </>
+                                );
+                            })()}
                         </div>
                     </div>
                 </div>

@@ -31,14 +31,26 @@ export default defineConfig(({ mode }) => {
                     // Custom chunking was causing the 'createContext' split-brain issue (NC-76.3).
                     manualChunks: undefined
                 }
-            }
+            },
+            terserOptions: {
+                compress: {
+                    drop_console: true,
+                    drop_debugger: true,
+                },
+            },
+        },
+        esbuild: {
+            drop: mode === 'production' ? ['console', 'debugger'] : [],
         },
         test: {
             environment: 'jsdom',
             globals: true,
             setupFiles: 'src/setupTests.ts',
             include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-            testTimeout: 15000
+            testTimeout: 15000,
+            deps: {
+                inline: ['decimal.js', 'react-i18next']
+            }
         }
     };
 });

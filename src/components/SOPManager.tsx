@@ -12,6 +12,7 @@ import { LiveMetricToken } from '../features/telemetry/components/LiveMetricToke
 import { ChevronRight, AlertTriangle, CheckCircle, FileText, Search as SearchIcon, Database } from 'lucide-react';
 import { DOSSIER_LIBRARY, DossierFile } from '../data/knowledge/DossierLibrary';
 import { DossierViewerModal } from './knowledge/DossierViewerModal';
+import { DossierViewer } from './knowledge/DossierViewer';
 
 // Component-specific interfaces (View Model)
 interface ViewSOPStep {
@@ -215,116 +216,107 @@ export const SOPManager: React.FC = () => {
                 <BackButton text="Back to Hub" />
             </div>
 
-            {/* Library Search & Filter */}
-            {(!activeSopId || showFullLibrary) && (
+            {showFullLibrary ? (
                 <div className="px-6">
-                    <div className="bg-slate-900/50 p-4 border border-white/5 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between">
-                        <div className="relative flex-1 w-full">
-                            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                            <input
-                                type="text"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Search 50 IEC 60041 compliant sources..."
-                                className="w-full bg-slate-950/50 border border-white/10 rounded-lg pl-12 pr-4 py-2.5 text-sm text-white focus:border-cyan-500/50 outline-none transition-all font-mono"
-                            />
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => setShowFullLibrary(!showFullLibrary)}
-                                className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${showFullLibrary ? 'bg-cyan-500 text-black' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-                                    }`}
-                            >
-                                <Database className="w-3.5 h-3.5 inline-block mr-2" />
-                                {showFullLibrary ? 'Hide Master Archive' : 'Show Master Archive'}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {!selectedAsset && !showFullLibrary ? (
-                <div className="flex justify-center py-20 px-6">
-                    <GlassCard variant="commander" className="max-w-md w-full text-center p-12 border-dashed border-white/10">
-                        <div className="w-20 h-20 bg-slate-900 border border-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <AlertTriangle className="w-10 h-10 text-slate-700" />
-                        </div>
-                        <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Technical Context Required</h3>
-                        <p className="text-sm text-slate-500 font-mono mb-8 italic">
-                            Select an asset from the sidebar or click below to browse the verified master archive manually.
-                        </p>
-                        <ModernButton
-                            variant="primary"
-                            onClick={() => setShowFullLibrary(true)}
+                    <div className="mb-4 flex justify-end">
+                        <button
+                            onClick={() => setShowFullLibrary(false)}
+                            className="px-4 py-2 bg-slate-800 text-slate-400 hover:bg-slate-700 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
                         >
-                            Open Master Archive
-                        </ModernButton>
-                    </GlassCard>
+                            <Database className="w-3.5 h-3.5 inline-block mr-2" />
+                            Hide Master Archive
+                        </button>
+                    </div>
+                    <DossierViewer />
                 </div>
-            ) : (!selectedAsset || !protocols.length || showFullLibrary) ? (
-                <div className="px-6 space-y-6">
-                    {(selectedAsset && !protocols.length && !showFullLibrary) && (
-                        <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded flex items-center gap-3">
-                            <AlertTriangle className="w-5 h-5 text-amber-500" />
-                            <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">
-                                No Specific Mesh Protocols - Displaying Verified Digital Dossier Library (50 IEC 60041 Compliant Sources)
-                            </span>
+            ) : (
+                <>
+                    {/* Library Search & Filter for SOPs */}
+                    {!activeSopId && (
+                        <div className="px-6">
+                            <div className="bg-slate-900/50 p-4 border border-white/5 rounded-xl flex flex-col md:flex-row gap-4 items-center justify-between">
+                                <div className="relative flex-1 w-full">
+                                    <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Search Protocols..."
+                                        className="w-full bg-slate-950/50 border border-white/10 rounded-lg pl-12 pr-4 py-2.5 text-sm text-white focus:border-cyan-500/50 outline-none transition-all font-mono"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setShowFullLibrary(true)}
+                                        className="px-4 py-2 bg-slate-800 text-slate-400 hover:bg-slate-700 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
+                                    >
+                                        <Database className="w-3.5 h-3.5 inline-block mr-2" />
+                                        Show Master Archive
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredDossiers.slice(0, 100).map((file, i) => (
-                            <div
-                                key={i}
-                                onClick={() => handleOpenFile(file)}
-                                className="w-full p-4 bg-slate-950 border border-white/5 rounded-xl hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all group flex items-start justify-between gap-6 cursor-pointer"
-                            >
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2 bg-slate-800 rounded group-hover:scale-110 transition-transform">
-                                        <FileText className="w-5 h-5 text-cyan-400" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="text-xs font-bold text-white truncate uppercase tracking-tight">{file.path.split('/').pop()}</h4>
-                                        <p className="text-[8px] text-slate-500 font-mono mt-1">{file.category}</p>
-                                    </div>
+                    {!selectedAsset ? (
+                        <div className="flex justify-center py-20 px-6">
+                            <GlassCard variant="commander" className="max-w-md w-full text-center p-12 border-dashed border-white/10">
+                                <div className="w-20 h-20 bg-slate-900 border border-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <AlertTriangle className="w-10 h-10 text-slate-700" />
                                 </div>
-                                <p className="text-[10px] text-slate-400 italic leading-tight mb-4 border-l border-slate-700 pl-3">
-                                    "{file.justification}"
+                                <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Technical Context Required</h3>
+                                <p className="text-sm text-slate-500 font-mono mb-8 italic">
+                                    Select an asset from the sidebar.
                                 </p>
-                                <div className="flex justify-end pt-4 border-t border-white/5">
-                                    <span className="text-[9px] font-black text-cyan-500 uppercase tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                                        OPEN SOURCE <ChevronRight className="w-3 h-3" />
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ) : !activeSopId ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-                    {protocols.map(sop => (
-                        <div
-                            key={sop.id}
-                            onClick={() => setActiveSopId(sop.id)}
-                            className="group bg-slate-900/40 hover:bg-slate-900/80 border border-white/5 hover:border-purple-500/50 rounded-sm p-5 cursor-pointer transition-all duration-300 relative overflow-hidden"
-                        >
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-purple-500/10 to-transparent pointer-events-none" />
-
-                            <h3 className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-purple-400 transition-colors mb-2">
-                                {sop.name}
-                            </h3>
-                            <p className="text-[10px] text-slate-500 font-mono mb-6 uppercase tracking-wider">{sop.targetModule}</p>
-
-                            <div className="flex justify-between items-end border-t border-white/5 pt-4">
-                                <span className="text-[10px] text-slate-400 font-mono">{sop.steps.length} STEPS</span>
-                                <span className="text-[10px] font-bold text-purple-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                                    INITIATE <ChevronRight className="w-3 h-3" />
+                                <ModernButton
+                                    variant="primary"
+                                    onClick={() => setShowFullLibrary(true)}
+                                >
+                                    Open Master Archive
+                                </ModernButton>
+                            </GlassCard>
+                        </div>
+                    ) : !protocols.length ? (
+                        <div className="px-6">
+                            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded flex items-center gap-3">
+                                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                                <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">
+                                    No Specific Mesh Protocols Found
                                 </span>
                             </div>
+                            <div className="mt-4">
+                                <ModernButton onClick={() => setShowFullLibrary(true)}>Browse Master Archive</ModernButton>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            ) : (
+                    ) : !activeSopId ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                            {protocols.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).map(sop => (
+                                <div
+                                    key={sop.id}
+                                    onClick={() => setActiveSopId(sop.id)}
+                                    className="group bg-slate-900/40 hover:bg-slate-900/80 border border-white/5 hover:border-purple-500/50 rounded-sm p-5 cursor-pointer transition-all duration-300 relative overflow-hidden"
+                                >
+                                    {/* SOP Card Content */}
+                                    <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-purple-500/10 to-transparent pointer-events-none" />
+                                    <h3 className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-purple-400 transition-colors mb-2">
+                                        {sop.name}
+                                    </h3>
+                                    <p className="text-[10px] text-slate-500 font-mono mb-6 uppercase tracking-wider">{sop.targetModule}</p>
+                                    <div className="flex justify-between items-end border-t border-white/5 pt-4">
+                                        <span className="text-[10px] text-slate-400 font-mono">{sop.steps.length} STEPS</span>
+                                        <span className="text-[10px] font-bold text-purple-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                            INITIATE <ChevronRight className="w-3 h-3" />
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : null}
+                </>
+            )}
+
+            {activeSopId && !showFullLibrary && (
+
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="bg-slate-950 border border-cyan-900/30 rounded-sm overflow-hidden shadow-2xl shadow-black relative">
                         {/* ACTIVE HEADER */}

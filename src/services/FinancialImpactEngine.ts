@@ -169,21 +169,107 @@ class FinancialImpactEngineClass extends BaseGuardian {
      */
     public getConfidenceScore(state?: TechnicalProjectState, physics?: PhysicsResult): number {
         if (!state || !physics) return 50;
-        
+
         // Check data completeness
         const hasPower = typeof physics.powerMW === 'number' || (physics.powerMW as any)?.toNumber;
         const hasEfficiency = typeof state.hydraulic.efficiency === 'number';
         const hasBaseline = typeof state.hydraulic.baselineOutputMW === 'number' || (state.hydraulic.baselineOutputMW as any)?.toNumber;
-        
+
         let score = 60; // Base score
         if (hasPower) score += 15;
         if (hasEfficiency) score += 15;
         if (hasBaseline) score += 10;
-        
+
         // Penalize if efficiency is very low (indicates data quality issues)
         if (hasEfficiency && state.hydraulic.efficiency < 50) score -= 20;
-        
+
         return Math.max(0, Math.min(100, Math.round(score)));
+    }
+
+    /**
+     * NC-27: Calculate Revenue vs Component Wear Trade-off
+     * Compares operating at 100% load vs 85% "Sweet Spot" load.
+     * 
+     * @param assetCapacityMW Maximum capacity of the asset (capped at 15 MW sovereign limit)
+     * @param pricePerMWh Current energy price in EUR/MWh
+     * @param hoursPerYear Operating hours per year (default: 8760)
+     */
+    calculateRevenueVsWear(
+        assetCapacityMW: number,
+        pricePerMWh: number = 85,
+        hoursPerYear: number = 8760
+    ): {
+        fullLoad: { powerMW: number; revenueEUR: number; wearRate: number; maintenanceCostEUR: number; netRevenueEUR: number };
+        sweetSpot: { powerMW: number; revenueEUR: number; wearRate: number; maintenanceCostEUR: number; netRevenueEUR: number };
+        sustainabilityScore: { fullLoad: number; sweetSpot: number };
+        recommendation: 'FULL_LOAD' | 'SWEET_SPOT';
+        savingsEUR: number;
+    } {
+        // Enforce sovereign limit
+        const effectiveCapacity = Math.min(assetCapacityMW, 15);
+
+        // Full load (100%)
+        const fullLoadMW = effectiveCapacity;
+        const fullLoadRevenue = fullLoadMW * pricePerMWh * hoursPerYear;
+
+        // Sweet Spot (85%)
+        const sweetSpotMW = effectiveCapacity * 0.85;
+        const sweetSpotRevenue = sweetSpotMW * pricePerMWh * hoursPerYear;
+
+        // Wear rate model:
+        // - At 100% load, wear rate is 1.5x baseline (accelerated wear)
+        // - At 85% load, wear rate is 0.8x baseline (optimal)
+        // - Below 70%, wear increases due to rough zone operation
+        const fullLoadWearRate = 1.5;
+        const sweetSpotWearRate = 0.8;
+
+        // Maintenance cost model (based on wear rate)
+        // Base annual maintenance: 2% of asset value
+        // Asset value estimate: 50,000 EUR per MW installed
+        const assetValuePerMW = 50000;
+        const baseMaintenanceRate = 0.02;
+        const baseMaintenanceCost = effectiveCapacity * assetValuePerMW * baseMaintenanceRate;
+
+        const fullLoadMaintenance = baseMaintenanceCost * fullLoadWearRate;
+        const sweetSpotMaintenance = baseMaintenanceCost * sweetSpotWearRate;
+
+        // Net revenue (after maintenance)
+        const fullLoadNet = fullLoadRevenue - fullLoadMaintenance;
+        const sweetSpotNet = sweetSpotRevenue - sweetSpotMaintenance;
+
+        // Sustainability scores (100 = best)
+        const fullLoadSustainability = 50; // High wear = low sustainability
+        const sweetSpotSustainability = 92; // Optimal wear = high sustainability
+
+        // Recommendation based on net revenue
+        const recommendation: 'FULL_LOAD' | 'SWEET_SPOT' =
+            sweetSpotNet >= fullLoadNet * 0.95 ? 'SWEET_SPOT' : 'FULL_LOAD';
+
+        // Savings from Sweet Spot operation (mainly maintenance reduction)
+        const savingsEUR = fullLoadMaintenance - sweetSpotMaintenance;
+
+        return {
+            fullLoad: {
+                powerMW: fullLoadMW,
+                revenueEUR: Math.round(fullLoadRevenue),
+                wearRate: fullLoadWearRate,
+                maintenanceCostEUR: Math.round(fullLoadMaintenance),
+                netRevenueEUR: Math.round(fullLoadNet)
+            },
+            sweetSpot: {
+                powerMW: sweetSpotMW,
+                revenueEUR: Math.round(sweetSpotRevenue),
+                wearRate: sweetSpotWearRate,
+                maintenanceCostEUR: Math.round(sweetSpotMaintenance),
+                netRevenueEUR: Math.round(sweetSpotNet)
+            },
+            sustainabilityScore: {
+                fullLoad: fullLoadSustainability,
+                sweetSpot: sweetSpotSustainability
+            },
+            recommendation,
+            savingsEUR: Math.round(savingsEUR)
+        };
     }
 }
 
@@ -193,10 +279,12 @@ const financialImpactEngine = new FinancialImpactEngineClass();
 // Export as object for backwards compatibility (mimics the old object export)
 export const FinancialImpactEngine = {
     calculateImpact: financialImpactEngine.calculateImpact.bind(financialImpactEngine),
-    calculateNetProfit: financialImpactEngine.calculateNetProfit.bind(financialImpactEngine)
+    calculateNetProfit: financialImpactEngine.calculateNetProfit.bind(financialImpactEngine),
+    calculateRevenueVsWear: financialImpactEngine.calculateRevenueVsWear.bind(financialImpactEngine)
 } as {
     calculateImpact: (state: TechnicalProjectState, physics: PhysicsResult, opts?: any) => any;
     calculateNetProfit: (energyRevenue: number, fcrRevenue: number, carbonRevenue: number, molecularDebt: number) => any;
+    calculateRevenueVsWear: (assetCapacityMW: number, pricePerMWh?: number, hoursPerYear?: number) => any;
 };
 
 // Also export the class for type references if needed

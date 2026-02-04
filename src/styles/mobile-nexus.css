@@ -1,0 +1,318 @@
+/**
+ * Protocol NC-25: Mobile Sovereign HUD
+ * Mobile-First CSS Optimizations for 120Hz displays
+ */
+
+/* ===== BASE MOBILE CONTAINER ===== */
+@media (max-width: 768px) {
+
+    /* Hide desktop sidebar on mobile */
+    .desktop-sidebar {
+        display: none !important;
+    }
+
+    /* Mobile sidebar overlay */
+    .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85vw;
+        max-width: 320px;
+        height: 100vh;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.95));
+        backdrop-filter: blur(20px);
+        z-index: 9999;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Mobile sidebar backdrop */
+    .mobile-sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9998;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .mobile-sidebar-backdrop.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Main content adjustments */
+    .main-content {
+        padding: 12px;
+        padding-top: 60px;
+        /* Account for mobile header */
+    }
+
+    /* Stack grid items vertically */
+    .dashboard-grid {
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* ===== COMPACT TELEMETRY CARD (120Hz optimized) ===== */
+.compact-telemetry-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    /* 120Hz optimization: use GPU-accelerated properties */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.compact-telemetry-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.compact-telemetry-card__title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.compact-telemetry-card__status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse-status 2s ease-in-out infinite;
+}
+
+.compact-telemetry-card__status--nominal {
+    background: #22c55e;
+}
+
+.compact-telemetry-card__status--warning {
+    background: #f59e0b;
+}
+
+.compact-telemetry-card__status--critical {
+    background: #ef4444;
+}
+
+@keyframes pulse-status {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+    }
+}
+
+/* Telemetry value display */
+.compact-telemetry-card__value {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Inter', ui-monospace, monospace;
+    color: white;
+    line-height: 1;
+    /* Smooth number transitions for 120Hz */
+    transition: transform 0.083s linear;
+    /* ~12 frames at 120Hz */
+}
+
+.compact-telemetry-card__unit {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 4px;
+}
+
+.compact-telemetry-card__delta {
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.compact-telemetry-card__delta--up {
+    color: #22c55e;
+}
+
+.compact-telemetry-card__delta--down {
+    color: #ef4444;
+}
+
+.compact-telemetry-card__delta--neutral {
+    color: #94a3b8;
+}
+
+/* ===== MOBILE HEADER ===== */
+.mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 9990;
+}
+
+.mobile-header__hamburger {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.mobile-header__hamburger span {
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 1px;
+    transition: all 0.3s ease;
+}
+
+.mobile-header__logo {
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+}
+
+.mobile-header__alerts {
+    position: relative;
+}
+
+.mobile-header__alerts-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #f59e0b, #a855f7);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(168, 85, 247, 0);
+    }
+}
+
+/* ===== TOUCH OPTIMIZATIONS ===== */
+@media (pointer: coarse) {
+
+    /* Larger touch targets */
+    button,
+    .clickable,
+    [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Disable hover effects on touch */
+    .hover-effect:hover {
+        transform: none !important;
+    }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== SAFE AREA (Notch/Pill devices) ===== */
+:root {
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+    .mobile-header {
+        padding-top: var(--safe-area-top);
+        height: calc(56px + var(--safe-area-top));
+    }
+
+    .main-content {
+        padding-bottom: var(--safe-area-bottom);
+        padding-left: max(12px, var(--safe-area-left));
+        padding-right: max(12px, var(--safe-area-right));
+    }
+
+    /* Compact Telemetry Card - Ensure no overlap with system UI */
+    .compact-telemetry-card {
+        margin-top: calc(var(--safe-area-top) + 60px);
+        margin-left: var(--safe-area-left);
+        margin-right: var(--safe-area-right);
+    }
+
+    /* Mobile sidebar safe area */
+    .mobile-sidebar {
+        padding-top: var(--safe-area-top);
+        padding-bottom: var(--safe-area-bottom);
+        padding-left: var(--safe-area-left);
+    }
+
+    /* AR overlay safe area for FieldGuardian */
+    .ar-overlay {
+        top: var(--safe-area-top);
+        left: var(--safe-area-left);
+        right: var(--safe-area-right);
+        bottom: var(--safe-area-bottom);
+    }
+
+    /* Home indicator avoidance */
+    .bottom-action-bar {
+        padding-bottom: max(16px, var(--safe-area-bottom));
+    }
+}

@@ -1,0 +1,391 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp
+> vitest run
+
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32m✓[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ShaftSealGuardian.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstderr[2m | src/__tests__/dossier_audit.test.ts[2m > [22m[2mDossier archive integrity (spot checks)[2m > [22m[2mevery manifest entry exists, contains recorded SHA-256, and has an efficiency token[22m[39m
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_3.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_4.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_5.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_6.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_7.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_8.html (looked for η, \eta, or 'efficiency')
+
+ [32m✓[39m src/__tests__/dossier_audit.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+ [33m❯[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts [2m ([22m[2m7 tests[22m [2m|[22m [31m2 failed[39m[2m)[22m[90m 8[2mms[22m[39m
+[31m   [33m❯[31m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mcalculates eccentricity for Francis (default)[39m
+[31m     → default.sqrt is not a function[39m
+[31m   [33m❯[31m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mhandles Pelton factors correctly[39m
+[31m     → default.sqrt is not a function[39m
+ [33m❯[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m2 tests[22m [2m|[22m [31m2 failed[39m[2m)[22m[90m 9[2mms[22m[39m
+[31m   [33m❯[31m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould calculate static pressure and hoop stress correctly[39m
+[31m     → K.div(...).div(...).squareRoot is not a function[39m
+[31m   [33m❯[31m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould handle healthy state with 0 risk[39m
+[31m     → K.div(...).div(...).squareRoot is not a function[39m
+ [32m✓[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/FinancialImpactEngine.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/SyncBadge.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 51[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 97[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 124[2mms[22m[39m
+[90mstdout[2m | src/__tests__/turbine-math.test.ts[2m > [22m[2mTurbine Engineering Math Precision Audit[2m > [22m[2mshould validate Francis Turbine (150m, 30m³/s) with extreme precision[22m[39m
+[DEBUG] Francis: Actual=40.6, Expected=40.6, Diff=0
+
+ [32m✓[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/AIPredictionService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 127[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstderr[2m | src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22m[2mForensicDashboard (War Game)[2m > [22m[2mrenders in IDLE state[22m[39m
+Error: [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:105:26)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+Error: [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:105:26)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+The above error occurred in the <ForensicDashboard> component:
+
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:102:25)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22m[2mForensicDashboard (War Game)[2m > [22m[2mshows CRITICAL ALERT during ATTACK_IN_PROGRESS[22m[39m
+Error: [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:105:26)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+Error: [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:105:26)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+The above error occurred in the <ForensicDashboard> component:
+
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:102:25)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+ [33m❯[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx [2m ([22m[2m2 tests[22m [2m|[22m [31m2 failed[39m[2m)[22m[90m 30[2mms[22m[39m
+[31m   [33m❯[31m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mrenders in IDLE state[39m
+[31m     → [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+[31m   [33m❯[31m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mshows CRITICAL ALERT during ATTACK_IN_PROGRESS[39m
+[31m     → [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+ [32m✓[39m src/features/maintenance/logic/__tests__/Predictor.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/services/__tests__/BaseGuardian.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ThrustBearingMaster.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/KaplanBladePhysics.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/TurbineClassifier.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+[90mstderr[2m | src/services/__tests__/CommissioningSimulation.test.ts[2m > [22m[2mCommissioning Simulation (24h)[2m > [22m[2mruns a 24-hour simulated cycle and persists wisdom[22m[39m
+Error analyzing asset SIM-001: TypeError: stiffnessRatio.sqrt is not a function
+    at HydraulicTransientSafety.simulateHardwareChange [90m(C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\[39msrc\services\HydraulicTransientSafety.ts:52:50[90m)[39m
+    at MasterIntelligenceEngine.analyzeAsset [90m(C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\[39msrc\services\MasterIntelligenceEngine.ts:330:61[90m)[39m
+    at [90mC:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\[39msrc\services\__tests__\CommissioningSimulation.test.ts:36:23
+    at runTest [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@1.6.1/node_modules/[4m@vitest/runner[24m/dist/index.js:781:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@1.6.1/node_modules/[4m@vitest/runner[24m/dist/index.js:909:15[90m)[39m
+    at runSuite [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@1.6.1/node_modules/[4m@vitest/runner[24m/dist/index.js:909:15[90m)[39m
+    at runFiles [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@1.6.1/node_modules/[4m@vitest/runner[24m/dist/index.js:958:5[90m)[39m
+    at startTests [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@1.6.1/node_modules/[4m@vitest/runner[24m/dist/index.js:967:3[90m)[39m
+    at [90mfile:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/[4mvitest[24m/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:116:7
+    at withEnv [90m(file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/[39mnode_modules/[4m.pnpm[24m/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/[4mvitest[24m/dist/chunks/runtime-runBaseTests.oAvMKtQC.js:83:5[90m)[39m
+
+ [33m❯[39m src/services/__tests__/CommissioningSimulation.test.ts [2m ([22m[2m1 test[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 10[2mms[22m[39m
+[31m   [33m❯[31m src/services/__tests__/CommissioningSimulation.test.ts[2m > [22mCommissioning Simulation (24h)[2m > [22mruns a 24-hour simulated cycle and persists wisdom[39m
+[31m     → stiffnessRatio.sqrt is not a function[39m
+ [33m❯[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m ([22m[2m0 test[22m[2m)[22m
+[90mstderr[2m | src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx[2m > [22m[2mAssetPassportCard Debug[2m > [22m[2mshould render component without crashing[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 40[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22m[2mQuickCalcCard Component[2m > [22m[2mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 72[2mms[22m[39m
+[90mstdout[2m | src/__tests__/stress_integrity.test.ts[2m > [22m[2mstress integrity: 1000 rapid state changes then snapback to #500[22m[39m
+Journal recorded 1000 events, of which 1000 are state/telemetry updates.
+Attempted snapback to id 1770163158264-fdmqn7 -> FAILED
+Event drifting detected in journal sequence:  NO
+
+ [32m✓[39m src/__tests__/stress_integrity.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 5342[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/SovereignArchitectReflector.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 1667[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Suites 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m[ src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx ][22m
+[31m[1mError[22m: [vitest] No "RefreshCw" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+vi[33m.[39m[34mmock[39m([32m"lucide-react"[39m[33m,[39m [35masync[39m (importOriginal) [33m=>[39m {
+  [35mconst[39m actual [33m=[39m [35mawait[39m [34mimportOriginal[39m()
+  [35mreturn[39m {
+    [33m...[39mactual[33m,[39m
+    [90m// your mocked methods[39m
+  }
+})
+
+[36m [2m❯[22m src/components/dashboard/SyncBadge.tsx:[2m30:16[22m[39m
+    [90m 28| [39m    }[33m,[39m
+    [90m 29| [39m    [33mSYNCING[39m[33m:[39m {
+    [90m 30| [39m        icon[33m:[39m [33m<[39m[33mRefreshCw[39m [33mclassName[39m[33m=[39m[32m"w-4 h-4"[39m [33m/[39m[33m>[39m[33m,[39m
+    [90m   | [39m               [31m^[39m
+    [90m 31| [39m        color[33m:[39m [32m'text-cyan-400'[39m[33m,[39m
+    [90m 32| [39m        bgColor[33m:[39m [32m'bg-cyan-500/10'[39m[33m,[39m
+[90m [2m❯[22m src/components/dashboard/ProtocolLaunchpad.tsx:[2m14:32[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 7 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould calculate static pressure and hoop stress correctly
+[31m[1mTypeError[22m: K.div(...).div(...).squareRoot is not a function[39m
+[36m [2m❯[22m Module.calculateWaveVelocity src/features/physics-core/PhysicsCalculations.logic.ts:[2m60:63[22m[39m
+    [90m 58| [39m    [35mconst[39m rho [33m=[39m [35mnew[39m [33mDecimal[39m([33mSYSTEM_CONSTANTS[39m[33m.[39m[33mPHYSICS[39m[33m.[39m[33mWATER[39m[33m.[39m[33mDENSITY[39m)[33m;[39m
+    [90m 59| [39m    [35mconst[39m elasticFactor [33m=[39m [33mK[39m[33m.[39m[34mdiv[39m(modulusPa)[33m.[39m[34mmul[39m(diameter[33m.[39m[34mdiv[39m(thickness)…
+    [90m 60| [39m    [35mreturn[39m [33mK[39m[33m.[39m[34mdiv[39m(rho)[33m.[39m[34mdiv[39m([35mnew[39m [33mDecimal[39m([34m1[39m)[33m.[39m[34mplus[39m(elasticFactor))[33m.[39m[34msquareRo[39m…
+    [90m   | [39m                                                              [31m^[39m
+    [90m 61| [39m}[33m;[39m
+    [90m 62| [39m
+[90m [2m❯[22m Object.recalculatePhysics src/core/PhysicsEngine.ts:[2m40:51[22m[39m
+[90m [2m❯[22m Object.recalculateProjectPhysics src/core/PhysicsEngine.ts:[2m153:38[22m[39m
+[90m [2m❯[22m src/__tests__/physics-engine-audit.test.ts:[2m28:38[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/__tests__/physics-engine-audit.test.ts[2m > [22mPhysics Engine Precision Verification[2m > [22mshould handle healthy state with 0 risk
+[31m[1mTypeError[22m: K.div(...).div(...).squareRoot is not a function[39m
+[36m [2m❯[22m Module.calculateWaveVelocity src/features/physics-core/PhysicsCalculations.logic.ts:[2m60:63[22m[39m
+    [90m 58| [39m    [35mconst[39m rho [33m=[39m [35mnew[39m [33mDecimal[39m([33mSYSTEM_CONSTANTS[39m[33m.[39m[33mPHYSICS[39m[33m.[39m[33mWATER[39m[33m.[39m[33mDENSITY[39m)[33m;[39m
+    [90m 59| [39m    [35mconst[39m elasticFactor [33m=[39m [33mK[39m[33m.[39m[34mdiv[39m(modulusPa)[33m.[39m[34mmul[39m(diameter[33m.[39m[34mdiv[39m(thickness)…
+    [90m 60| [39m    [35mreturn[39m [33mK[39m[33m.[39m[34mdiv[39m(rho)[33m.[39m[34mdiv[39m([35mnew[39m [33mDecimal[39m([34m1[39m)[33m.[39m[34mplus[39m(elasticFactor))[33m.[39m[34msquareRo[39m…
+    [90m   | [39m                                                              [31m^[39m
+    [90m 61| [39m}[33m;[39m
+    [90m 62| [39m
+[90m [2m❯[22m Object.recalculatePhysics src/core/PhysicsEngine.ts:[2m40:51[22m[39m
+[90m [2m❯[22m Object.recalculateProjectPhysics src/core/PhysicsEngine.ts:[2m153:38[22m[39m
+[90m [2m❯[22m src/__tests__/physics-engine-audit.test.ts:[2m59:38[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/CommissioningSimulation.test.ts[2m > [22mCommissioning Simulation (24h)[2m > [22mruns a 24-hour simulated cycle and persists wisdom
+[31m[1mTypeError[22m: stiffnessRatio.sqrt is not a function[39m
+[36m [2m❯[22m HydraulicTransientSafety.simulateHardwareChange src/services/HydraulicTransientSafety.ts:[2m52:50[22m[39m
+    [90m 50| [39m        [90m// A 33% shift in natural frequency is HUGE for a PID controll[39m…
+    [90m 51| [39m
+    [90m 52| [39m        [35mconst[39m frequencyShiftPct [33m=[39m stiffnessRatio[33m.[39m[34msqrt[39m()[33m.[39m[34mminus[39m([34m1[39m)[33m.[39m[34mmul[39m([34m1[39m…
+    [90m   | [39m                                                 [31m^[39m
+    [90m 53| [39m
+    [90m 54| [39m        [90m// 3. Water Hammer / Pressure Surge[39m
+[90m [2m❯[22m MasterIntelligenceEngine.analyzeAsset src/services/MasterIntelligenceEngine.ts:[2m330:61[22m[39m
+[90m [2m❯[22m src/services/__tests__/CommissioningSimulation.test.ts:[2m36:23[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mrenders in IDLE state
+[31m[1m[7m FAIL [27m[22m[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mshows CRITICAL ALERT during ATTACK_IN_PROGRESS
+[31m[1mError[22m: [vitest] No "Wifi" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+vi[33m.[39m[34mmock[39m([32m"lucide-react"[39m[33m,[39m [35masync[39m (importOriginal) [33m=>[39m {
+  [35mconst[39m actual [33m=[39m [35mawait[39m [34mimportOriginal[39m()
+  [35mreturn[39m {
+    [33m...[39mactual[33m,[39m
+    [90m// your mocked methods[39m
+  }
+})
+
+[36m [2m❯[22m ForensicDashboard src/components/forensics/ForensicDashboard.tsx:[2m105:26[22m[39m
+
+[90m [2m❯[22m renderWithHooks node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m15486:18[22m[39m
+[90m [2m❯[22m mountIndeterminateComponent node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m20103:13[22m[39m
+[90m [2m❯[22m beginWork node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m21626:16[22m[39m
+[90m [2m❯[22m beginWork$1 node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m27465:14[22m[39m
+[90m [2m❯[22m performUnitOfWork node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26599:12[22m[39m
+[90m [2m❯[22m workLoopSync node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26505:5[22m[39m
+[90m [2m❯[22m renderRootSync node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26473:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mcalculates eccentricity for Francis (default)
+[31m[1mTypeError[22m: default.sqrt is not a function[39m
+[36m [2m❯[22m Module.calculateEccentricity src/features/physics-core/PhysicsCalculations.logic.ts:[2m141:20[22m[39m
+    [90m139| [39m    [35mconst[39m ratio [33m=[39m b[33m.[39m[34mpow[39m([34m2[39m)[33m.[39m[34mdiv[39m(a[33m.[39m[34mpow[39m([34m2[39m))[33m;[39m
+    [90m140| [39m    [35mconst[39m val [33m=[39m [33mDecimal[39m[33m.[39m[34mmax[39m([35mnew[39m [33mDecimal[39m([34m0[39m)[33m,[39m [35mnew[39m [33mDecimal[39m([34m1[39m)[33m.[39m[34msub[39m(ratio))[33m;[39m
+    [90m141| [39m    [35mreturn[39m [33mDecimal[39m[33m.[39m[34msqrt[39m(val)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m142| [39m}[33m;[39m
+    [90m143| [39m
+[90m [2m❯[22m src/features/physics-core/__tests__/PhysicsCalculations.test.ts:[2m101:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts[2m > [22mPhysics Calculation Logic[2m > [22mDiagnostics: Eccentricity[2m > [22mhandles Pelton factors correctly
+[31m[1mTypeError[22m: default.sqrt is not a function[39m
+[36m [2m❯[22m Module.calculateEccentricity src/features/physics-core/PhysicsCalculations.logic.ts:[2m141:20[22m[39m
+    [90m139| [39m    [35mconst[39m ratio [33m=[39m b[33m.[39m[34mpow[39m([34m2[39m)[33m.[39m[34mdiv[39m(a[33m.[39m[34mpow[39m([34m2[39m))[33m;[39m
+    [90m140| [39m    [35mconst[39m val [33m=[39m [33mDecimal[39m[33m.[39m[34mmax[39m([35mnew[39m [33mDecimal[39m([34m0[39m)[33m,[39m [35mnew[39m [33mDecimal[39m([34m1[39m)[33m.[39m[34msub[39m(ratio))[33m;[39m
+    [90m141| [39m    [35mreturn[39m [33mDecimal[39m[33m.[39m[34msqrt[39m(val)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m142| [39m}[33m;[39m
+    [90m143| [39m
+[90m [2m❯[22m src/features/physics-core/__tests__/PhysicsCalculations.test.ts:[2m118:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m83 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 00:59:11
+[2m   Duration [22m 10.11s[2m (transform 4.36s, setup 8.14s, collect 20.41s, tests 7.65s, environment 83.61s, prepare 9.50s)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.

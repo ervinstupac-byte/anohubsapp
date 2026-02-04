@@ -1,0 +1,309 @@
+
+> anohub-hpp-risk-excellence-platform@1.0.0 test C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp
+> vitest run
+
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [32m✓[39m src/__tests__/infrastructure_genesis.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/solution-architect.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/features/business/logic/__tests__/FinancialCalculator.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ShaftSealGuardian.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/maturity-audit.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcSidebar.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 92[2mms[22m[39m
+[90mstderr[2m | src/__tests__/dossier_audit.test.ts[2m > [22m[2mDossier archive integrity (spot checks)[2m > [22m[2mevery manifest entry exists, contains recorded SHA-256, and has an efficiency token[22m[39m
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_3.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_4.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_5.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_6.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_7.html (looked for η, \eta, or 'efficiency')
+Warning: No efficiency token found in docs/archive/case_studies/cs-compliance-shield/index_8.html (looked for η, \eta, or 'efficiency')
+
+ [32m✓[39m src/__tests__/dossier_audit.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 12[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/__tests__/expert-thresholds.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/__tests__/physics-engine-audit.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/features/physics-core/__tests__/PhysicsCalculations.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/components/dashboard/__tests__/SyncBadge.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 52[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/FinancialImpactEngine.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/HeritageSearchWidget.test.tsx [2m ([22m[2m6 tests[22m[2m)[22m[90m 99[2mms[22m[39m
+ [32m✓[39m src/__tests__/expert-inference.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src/__tests__/turbine-math.test.ts[2m > [22m[2mTurbine Engineering Math Precision Audit[2m > [22m[2mshould validate Francis Turbine (150m, 30m³/s) with extreme precision[22m[39m
+[DEBUG] Francis: Actual=40.6, Expected=40.6, Diff=0
+
+ [32m✓[39m src/__tests__/turbine-math.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/services/__tests__/AIPredictionService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+ [32m✓[39m src/components/dashboard/__tests__/WorkOrderSummary.test.tsx [2m ([22m[2m5 tests[22m[2m)[22m[90m 128[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+[90mstderr[2m | src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22m[2mForensicDashboard (War Game)[2m > [22m[2mrenders in IDLE state[22m[39m
+Error: [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:118:34)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+Error: [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:118:34)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+The above error occurred in the <ForensicDashboard> component:
+
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:102:25)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+[90mstderr[2m | src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22m[2mForensicDashboard (War Game)[2m > [22m[2mshows CRITICAL ALERT during ATTACK_IN_PROGRESS[22m[39m
+Error: [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:118:34)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+Error: [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+    at VitestMocker.createError (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:79:19)
+    at Object.get (file:///C:/Users/Home/OneDrive/getting%20started/Documents/GitHub/anohubsapp/node_modules/.pnpm/vitest@1.6.1_@types+node@20.19.30_jsdom@27.4.0/node_modules/vitest/dist/vendor/execute.fL3szUAI.js:153:22)
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:118:34)
+    at renderWithHooks (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:15486:18)
+    at mountIndeterminateComponent (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:20103:13)
+    at beginWork (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:21626:16)
+    at HTMLUnknownElement.callCallback (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\react-dom@18.3.1_react@18.3.1\node_modules\react-dom\cjs\react-dom.development.js:4164:14)
+    at HTMLUnknownElement.callTheUserObjectsOperation (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\generated\EventListener.js:26:30)
+    at innerInvokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:360:16)
+    at invokeEventListeners (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\node_modules\.pnpm\jsdom@27.4.0\node_modules\jsdom\lib\jsdom\living\events\EventTarget-impl.js:296:3)
+The above error occurred in the <ForensicDashboard> component:
+
+    at ForensicDashboard (C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\components\forensics\ForensicDashboard.tsx:102:25)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+
+ [33m❯[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx [2m ([22m[2m2 tests[22m [2m|[22m [31m2 failed[39m[2m)[22m[90m 33[2mms[22m[39m
+[31m   [33m❯[31m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mrenders in IDLE state[39m
+[31m     → [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+[31m   [33m❯[31m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mshows CRITICAL ALERT during ATTACK_IN_PROGRESS[39m
+[31m     → [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+ [32m✓[39m src/features/maintenance/logic/__tests__/Predictor.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+[90mstdout[2m | src\services\supabaseClient.ts:62:17[22m[39m
+[SupabaseClient] ✅ Client created successfully
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] 🔧 Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] ℹ️  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] 🚀 Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] ✅✅✅ i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] ✅ Module export ready
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/ThrustBearingMaster.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/KaplanBladePhysics.test.ts [2m ([22m[2m4 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/TurbineClassifier.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/BaseGuardian.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 2[2mms[22m[39m
+ [32m✓[39m src/__tests__/simple.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 1[2mms[22m[39m
+ [32m✓[39m src/__tests__/i18n.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+[90mstdout[2m | src/services/__tests__/CommissioningSimulation.test.ts[2m > [22m[2mCommissioning Simulation (24h)[2m > [22m[2mruns a 24-hour simulated cycle and persists wisdom[22m[39m
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] ancestral_overrides
+[MEMORY SAVE] wisdom_audit_log
+✅ Analysis complete.Health score: 100/100
+
+ [32m✓[39m src/services/__tests__/CommissioningSimulation.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 11[2mms[22m[39m
+ [33m❯[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m ([22m[2m0 test[22m[2m)[22m
+[90mstderr[2m | src/components/dashboard/__tests__/QuickCalcCard.test.tsx[2m > [22m[2mQuickCalcCard Component[2m > [22m[2mrenders Francis-specific targets correctly (Runner Torque & Labyrinth)[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/QuickCalcCard.test.tsx [2m ([22m[2m4 tests[22m[2m)[22m[90m 68[2mms[22m[39m
+[90mstderr[2m | src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx[2m > [22m[2mAssetPassportCard Debug[2m > [22m[2mshould render component without crashing[22m[39m
+⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [32m✓[39m src/components/dashboard/__tests__/AssetPassportCard_debug.test.tsx [2m ([22m[2m1 test[22m[2m)[22m[90m 40[2mms[22m[39m
+ [32m✓[39m src/services/__tests__/SovereignArchitectReflector.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 1683[2mms[22m[39m
+[90mstdout[2m | src/__tests__/stress_integrity.test.ts[2m > [22m[2mstress integrity: 1000 rapid state changes then snapback to #500[22m[39m
+Journal recorded 1000 events, of which 1000 are state/telemetry updates.
+Attempted snapback to id 1770163217334-3p00g3 -> FAILED
+Event drifting detected in journal sequence:  NO
+
+ [32m✓[39m src/__tests__/stress_integrity.test.ts [2m ([22m[2m1 test[22m[2m)[22m[33m 5411[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Suites 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx [2m[ src/components/dashboard/__tests__/ProtocolLaunchpad.test.tsx ][22m
+[31m[1mError[22m: [vitest] No "CloudOff" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+vi[33m.[39m[34mmock[39m([32m"lucide-react"[39m[33m,[39m [35masync[39m (importOriginal) [33m=>[39m {
+  [35mconst[39m actual [33m=[39m [35mawait[39m [34mimportOriginal[39m()
+  [35mreturn[39m {
+    [33m...[39mactual[33m,[39m
+    [90m// your mocked methods[39m
+  }
+})
+
+[36m [2m❯[22m src/components/dashboard/SyncBadge.tsx:[2m37:16[22m[39m
+    [90m 35| [39m    }[33m,[39m
+    [90m 36| [39m    [33mOFFLINE[39m[33m:[39m {
+    [90m 37| [39m        icon[33m:[39m [33m<[39m[33mCloudOff[39m [33mclassName[39m[33m=[39m[32m"w-4 h-4"[39m [33m/[39m[33m>[39m[33m,[39m
+    [90m   | [39m               [31m^[39m
+    [90m 38| [39m        color[33m:[39m [32m'text-slate-400'[39m[33m,[39m
+    [90m 39| [39m        bgColor[33m:[39m [32m'bg-slate-500/10'[39m[33m,[39m
+[90m [2m❯[22m src/components/dashboard/ProtocolLaunchpad.tsx:[2m14:32[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 2 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mrenders in IDLE state
+[31m[1m[7m FAIL [27m[22m[39m src/components/forensics/__tests__/ForensicDashboard.test.tsx[2m > [22mForensicDashboard (War Game)[2m > [22mshows CRITICAL ALERT during ATTACK_IN_PROGRESS
+[31m[1mError[22m: [vitest] No "Globe" export is defined on the "lucide-react" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+[39m
+vi[33m.[39m[34mmock[39m([32m"lucide-react"[39m[33m,[39m [35masync[39m (importOriginal) [33m=>[39m {
+  [35mconst[39m actual [33m=[39m [35mawait[39m [34mimportOriginal[39m()
+  [35mreturn[39m {
+    [33m...[39mactual[33m,[39m
+    [90m// your mocked methods[39m
+  }
+})
+
+[36m [2m❯[22m ForensicDashboard src/components/forensics/ForensicDashboard.tsx:[2m118:34[22m[39m
+    [90m116| [39m                        [33m<[39m[33mdiv[39m [33mclassName[39m[33m=[39m[32m"p-4 bg-slate-900/50 flex justi[39m…
+    [90m117| [39m                            [33m<[39m[33mh3[39m [33mclassName[39m[33m=[39m[32m"font-bold text-white upperc[39m…
+    [90m118| [39m                                [33m<[39m[33mGlobe[39m [33mclassName[39m[33m=[39m[32m"w-4 h-4 text-cyan-40[39m…
+    [90m   | [39m                                 [31m^[39m
+    [90m119| [39m                                [33m{[39m[34mt[39m([32m'forensics.network_traffic'[39m[33m,[39m [32m'Netwo[39m…
+    [90m120| [39m                            [33m<[39m[33m/[39m[33mh3[39m[33m>[39m
+[90m [2m❯[22m renderWithHooks node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m15486:18[22m[39m
+[90m [2m❯[22m mountIndeterminateComponent node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m20103:13[22m[39m
+[90m [2m❯[22m beginWork node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m21626:16[22m[39m
+[90m [2m❯[22m beginWork$1 node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m27465:14[22m[39m
+[90m [2m❯[22m performUnitOfWork node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26599:12[22m[39m
+[90m [2m❯[22m workLoopSync node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26505:5[22m[39m
+[90m [2m❯[22m renderRootSync node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:[2m26473:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m30 passed[39m[22m[90m (32)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m88 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 01:00:10
+[2m   Duration [22m 10.23s[2m (transform 3.67s, setup 7.95s, collect 19.13s, tests 7.70s, environment 82.61s, prepare 9.24s)[22m
+
+ ELIFECYCLE  Test failed. See above for more details.

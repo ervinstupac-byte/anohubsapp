@@ -1,0 +1,104 @@
+[33m[7m[33m Vitest [33m[27m "deps.inline" is deprecated. If you rely on vite-node directly, use "server.deps.inline" instead. Otherwise, consider using "deps.optimizer.web.include"[39m
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+ [33m❯[39m src/services/__tests__/FleetOptimizer.test.ts [2m ([22m[2m6 tests[22m [2m|[22m [31m6 failed[39m[2m)[22m[90m 5[2mms[22m[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould prioritize higher efficiency assets[39m
+[31m     → remainingTarget.greaterThan is not a function[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould respect the Sovereign Limit of 15 MW[39m
+[31m     → remainingTarget.greaterThan is not a function[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould distribute load across multiple units correctly[39m
+[31m     → remainingTarget.greaterThan is not a function[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould handle demand exceeding total fleet capacity[39m
+[31m     → remainingTarget.greaterThan is not a function[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould handle efficiency input as 0-100 or 0-1[39m
+[31m     → remainingTarget.greaterThan is not a function[39m
+[31m   [33m❯[31m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould calculate fleet efficiency potential correctly[39m
+[31m     → eff.times is not a function[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 6 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould prioritize higher efficiency assets
+[31m[1mTypeError[22m: remainingTarget.greaterThan is not a function[39m
+[36m [2m❯[22m FleetOptimizer.calculateOptimalDistribution src/services/FleetOptimizer.ts:[2m74:41[22m[39m
+    [90m 72| [39m            distribution[33m:[39m result[33m,[39m
+    [90m 73| [39m            totalAllocatedMW[33m:[39m totalAllocated[33m.[39m[34mtoNumber[39m()[33m,[39m
+    [90m 74| [39m            residualMW[33m:[39m remainingTarget[33m.[39m[34mgreaterThan[39m([34m0[39m) [33m?[39m remainingTarg…
+    [90m   | [39m                                        [31m^[39m
+    [90m 75| [39m        }[33m;[39m
+    [90m 76| [39m    }
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m33:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould respect the Sovereign Limit of 15 MW
+[31m[1mTypeError[22m: remainingTarget.greaterThan is not a function[39m
+[36m [2m❯[22m FleetOptimizer.calculateOptimalDistribution src/services/FleetOptimizer.ts:[2m74:41[22m[39m
+    [90m 72| [39m            distribution[33m:[39m result[33m,[39m
+    [90m 73| [39m            totalAllocatedMW[33m:[39m totalAllocated[33m.[39m[34mtoNumber[39m()[33m,[39m
+    [90m 74| [39m            residualMW[33m:[39m remainingTarget[33m.[39m[34mgreaterThan[39m([34m0[39m) [33m?[39m remainingTarg…
+    [90m   | [39m                                        [31m^[39m
+    [90m 75| [39m        }[33m;[39m
+    [90m 76| [39m    }
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m45:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould distribute load across multiple units correctly
+[31m[1mTypeError[22m: remainingTarget.greaterThan is not a function[39m
+[36m [2m❯[22m FleetOptimizer.calculateOptimalDistribution src/services/FleetOptimizer.ts:[2m74:41[22m[39m
+    [90m 72| [39m            distribution[33m:[39m result[33m,[39m
+    [90m 73| [39m            totalAllocatedMW[33m:[39m totalAllocated[33m.[39m[34mtoNumber[39m()[33m,[39m
+    [90m 74| [39m            residualMW[33m:[39m remainingTarget[33m.[39m[34mgreaterThan[39m([34m0[39m) [33m?[39m remainingTarg…
+    [90m   | [39m                                        [31m^[39m
+    [90m 75| [39m        }[33m;[39m
+    [90m 76| [39m    }
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m57:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould handle demand exceeding total fleet capacity
+[31m[1mTypeError[22m: remainingTarget.greaterThan is not a function[39m
+[36m [2m❯[22m FleetOptimizer.calculateOptimalDistribution src/services/FleetOptimizer.ts:[2m74:41[22m[39m
+    [90m 72| [39m            distribution[33m:[39m result[33m,[39m
+    [90m 73| [39m            totalAllocatedMW[33m:[39m totalAllocated[33m.[39m[34mtoNumber[39m()[33m,[39m
+    [90m 74| [39m            residualMW[33m:[39m remainingTarget[33m.[39m[34mgreaterThan[39m([34m0[39m) [33m?[39m remainingTarg…
+    [90m   | [39m                                        [31m^[39m
+    [90m 75| [39m        }[33m;[39m
+    [90m 76| [39m    }
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m68:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould handle efficiency input as 0-100 or 0-1
+[31m[1mTypeError[22m: remainingTarget.greaterThan is not a function[39m
+[36m [2m❯[22m FleetOptimizer.calculateOptimalDistribution src/services/FleetOptimizer.ts:[2m74:41[22m[39m
+    [90m 72| [39m            distribution[33m:[39m result[33m,[39m
+    [90m 73| [39m            totalAllocatedMW[33m:[39m totalAllocated[33m.[39m[34mtoNumber[39m()[33m,[39m
+    [90m 74| [39m            residualMW[33m:[39m remainingTarget[33m.[39m[34mgreaterThan[39m([34m0[39m) [33m?[39m remainingTarg…
+    [90m   | [39m                                        [31m^[39m
+    [90m 75| [39m        }[33m;[39m
+    [90m 76| [39m    }
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m83:39[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/services/__tests__/FleetOptimizer.test.ts[2m > [22mFleetOptimizer Service[2m > [22mshould calculate fleet efficiency potential correctly
+[31m[1mTypeError[22m: eff.times is not a function[39m
+[36m [2m❯[22m src/services/FleetOptimizer.ts:[2m91:48[22m[39m
+    [90m 89| [39m            [35mconst[39m cap [33m=[39m [35mnew[39m [33mDecimal[39m([33mDecimal[39m[33m.[39m[34mmin[39m(a[33m.[39mmaxCapacityMW[33m,[39m [33mCONST[39m…
+    [90m 90| [39m            [35mconst[39m eff [33m=[39m [35mnew[39m [33mDecimal[39m(a[33m.[39mefficiency [33m>[39m [34m1[39m [33m?[39m a[33m.[39mefficiency [33m/[39m …
+    [90m 91| [39m            weightedEff [33m=[39m weightedEff[33m.[39m[34mplus[39m(eff[33m.[39m[34mtimes[39m(cap))[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m 92| [39m            totalCap [33m=[39m totalCap[33m.[39m[34mplus[39m(cap)[33m;[39m
+    [90m 93| [39m        })[33m;[39m
+[90m [2m❯[22m FleetOptimizer.calculateFleetEfficiency src/services/FleetOptimizer.ts:[2m88:16[22m[39m
+[90m [2m❯[22m src/services/__tests__/FleetOptimizer.test.ts:[2m97:36[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[90m (6)[39m
+[2m   Start at [22m 01:22:40
+[2m   Duration [22m 1.50s[2m (transform 40ms, setup 114ms, collect 13ms, tests 5ms, environment 626ms, prepare 157ms)[22m
+

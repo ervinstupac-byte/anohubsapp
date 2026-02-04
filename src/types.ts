@@ -49,7 +49,7 @@ export interface Asset {
   location: string;
   coordinates: [number, number];
   capacity: number; // MW
-  status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning';
+  status: 'Operational' | 'Maintenance' | 'Planned' | 'Critical' | 'Warning' | 'Offline';
   imageUrl?: string;
   turbine_type?: string;
   totalOperatingHours?: number;
@@ -339,7 +339,7 @@ export const BaseAssetTemplateSchema = z.object({
   capacity: z.number().positive(),
   location: z.string(),
   coordinates: z.tuple([z.number(), z.number()]),
-  status: z.enum(['Operational', 'Maintenance', 'Planned', 'Critical', 'Warning']),
+  status: z.enum(['Operational', 'Maintenance', 'Planned', 'Critical', 'Warning', 'Offline']),
   specs: z.record(z.any()).optional(),
   assetPassport: z.any().optional() // Can be further specialized per plugin
 });

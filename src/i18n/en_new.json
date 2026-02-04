@@ -1,7 +1,7 @@
 {
   "hub": {
     "welcome": "Welcome, {{name}}",
-    "subtitle": "Global Standard of Excellence Enforcement Platform.",
+    "subtitle": "Global Standard of Excellence Enforcement Platform (MONOLIT OS)",
     "operationalModules": "Operational Modules",
     "strategicIntelligence": "Strategic Intelligence",
     "knowledgeCulture": "Knowledge & Culture",
@@ -16,9 +16,9 @@
     "manifesto": "MANIFESTO",
     "footerText": "Engineered for Perfection",
     "operatorId": "Operator ID",
-    "tagline": "Architects of Immunity",
+    "tagline": "SOVEREIGN HYDRO INTELLIGENCE",
     "info": "INFO",
-    "copyright": "© 2025 Anohubs Inc.",
+    "copyright": "© 2025 MONOLIT Inc.",
     "protocol": "ENGINEERING IMMUNITY PROTOCOL"
   },
   "manifesto": {
@@ -34,7 +34,7 @@
     },
     "section2": {
       "title": "PREDICTIVE LOGIC (NC-8.0)",
-      "content": "We do not wait for thresholds; we predict them. Using linear regression of vibration trends ($VIB\\_X\\_PEAK$), AnoHUB identifies deviations 72 hours before critical failure, pushing the boundaries of PdM."
+      "content": "We do not wait for thresholds; we predict them. Using linear regression of vibration trends ($VIB\\_X\\_PEAK$), MONOLIT identifies deviations 72 hours before critical failure, pushing the boundaries of PdM."
     },
     "section3": {
       "title": "ISO STANDARDIZATION",
@@ -188,7 +188,7 @@
     "pdfDownloaded": "Risk Report PDF Downloaded."
   },
   "login": {
-    "title": "Sign In to AnoHUB",
+    "title": "Sign In to MONOLIT",
     "subtitle": "Enterprise Access",
     "instructions": "Please verify your credentials.",
     "emailLabel": "Email Address",

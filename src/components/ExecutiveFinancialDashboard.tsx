@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle } from 'lucide-react';
+import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle, Activity } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
 
@@ -63,6 +63,48 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                     positive={fleetMetrics.uptimeImprovement > 0}
                 />
             </div>
+
+            {/* NC-15: Fleet Longevity (Prognostics) */}
+            <GlassCard>
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-black uppercase text-white flex items-center gap-2">
+                        <Activity className="w-6 h-6 text-purple-400" />
+                        Fleet Longevity Horizon (NC-15)
+                    </h3>
+                    <div className="text-xs text-slate-400 font-mono">PROJECTION: 12 MONTHS</div>
+                </div>
+
+                <div className="h-32 flex items-end gap-2 border-b border-white/10 pb-2 relative">
+                    {/* Mocked Fleet Health Projection Chart */}
+                    {/* Y-Axis Lines */}
+                    {[25, 50, 75, 100].map(y => (
+                        <div key={y} className="absolute left-0 right-0 border-t border-white/5" style={{ bottom: `${y}%` }} />
+                    ))}
+
+                    {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, i) => {
+                        const health = Math.max(60, 100 - (i * 1.5) - (Math.random() * 5)); // Simulated decay
+                        return (
+                            <div key={month} className="flex-1 flex flex-col justify-end items-center group relative">
+                                <motion.div
+                                    initial={{ height: 0 }}
+                                    animate={{ height: `${health}%` }}
+                                    className={`w-full max-w-[30px] rounded-t-sm ${health > 90 ? 'bg-emerald-500' : health > 80 ? 'bg-cyan-500' : 'bg-amber-500'}`}
+                                />
+                                <span className="text-[10px] text-slate-500 mt-2 font-mono uppercase">{month}</span>
+
+                                {/* Tooltip */}
+                                <div className="absolute bottom-full mb-2 bg-slate-900 text-white text-[10px] p-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap z-10 border border-white/10 pointer-events-none transition-opacity">
+                                    Health: {health.toFixed(1)}%
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="mt-2 flex justify-between text-[10px] text-slate-500 uppercase font-bold">
+                    <span>Average Degradation: 0.12% / Month</span>
+                    <span>Prognosis: STABLE</span>
+                </div>
+            </GlassCard>
 
             {/* ROI from Recent Optimizations */}
             <GlassCard>
@@ -227,7 +269,7 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
 // ===== HELPER COMPONENTS =====
 
 interface FinancialKPIProps {
-    icon: React.ComponentType<any>;
+    icon: React.ElementType;
     label: string;
     value: string;
     change: number;

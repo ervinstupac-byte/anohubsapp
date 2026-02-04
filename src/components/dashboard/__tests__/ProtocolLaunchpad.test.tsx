@@ -111,7 +111,8 @@ describe('ProtocolLaunchpad Component', () => {
     it('generates report and creates Ledger entry when clicked', async () => {
         render(<ProtocolLaunchpad />);
 
-        const buttons = screen.getAllByText('dashboard.protocolLaunchpad.generatePdf');
+        // Use getAllByRole with name matcher to handle text split by icons
+        const buttons = screen.getAllByRole('button', { name: /dashboard.protocolLaunchpad.generatePdf/ });
         fireEvent.click(buttons[0]); // Shaft Alignment
 
         await waitFor(() => {
