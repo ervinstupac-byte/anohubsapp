@@ -181,89 +181,74 @@ export const AIInsightsPanel: React.FC = () => {
                 </div>
             )}
 
-            {/* expert service notes section */}
+            {/* expert service notes section - REFACTORED TO MISSION REPORT LIST */}
             {unifiedDiagnosis.serviceNotes && (
                 <div className="pt-4 border-t border-slate-800 space-y-3">
-                    <h4 className="text-[8px] text-slate-500 uppercase font-mono tracking-[0.2em] mb-2 flex justify-between items-center">
-                        Technical Service Findings
-                        <span className="text-[7px] text-slate-600 bg-slate-800 px-1 rounded">CEREBRO V4.9</span>
-                    </h4>
-                    <div
-                        ref={scrollContainerRef}
-                        className="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar"
-                    >
-                        {unifiedDiagnosis.serviceNotes.length > 0 ? (
-                            unifiedDiagnosis.serviceNotes.map((note, i) => (
-                                <motion.div
-                                    key={i}
-                                    ref={el => noteRefs.current[note.service] = el}
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{
-                                        opacity: 1,
-                                        y: 0,
-                                        scale: focusedService === note.service ? 1.02 : 1,
-                                        boxShadow: focusedService === note.service ? '0 0 15px rgba(6, 182, 212, 0.4)' : 'none'
-                                    }}
-                                    transition={{
-                                        duration: focusedService === note.service ? 0.3 : 0.2,
-                                        repeat: focusedService === note.service ? 2 : 0,
-                                        repeatType: "reverse"
-                                    }}
-                                    className={`p-2 rounded border relative overflow-hidden group/note transition-colors duration-500 ${focusedService === note.service
-                                        ? 'border-cyan-500 bg-cyan-500/10'
-                                        : note.severity === 'CRITICAL' ? 'bg-red-500/5 border-red-500/20' :
-                                            note.severity === 'WARNING' ? 'bg-amber-500/5 border-amber-500/20' :
-                                                'bg-blue-500/5 border-blue-500/20'
-                                        }`}
-                                >
-                                    <div className={`absolute left-0 top-0 w-0.5 h-full ${note.severity === 'CRITICAL' ? 'bg-red-500' :
-                                        note.severity === 'WARNING' ? 'bg-amber-500' :
-                                            'bg-blue-500'
-                                        }`} />
-                                    <div className="flex items-center justify-between mb-1">
-                                        <span className="text-[9px] font-black text-slate-300 uppercase tracking-tighter">{note.service}</span>
-                                        <span className={`text-[7px] font-black font-mono px-1 rounded uppercase ${note.severity === 'CRITICAL' ? 'text-red-400 bg-red-400/10' :
-                                            note.severity === 'WARNING' ? 'text-amber-400 bg-amber-400/10' :
-                                                'text-blue-400 bg-blue-400/10'
-                                            }`}>
-                                            {note.severity}
-                                        </span>
-                                    </div>
-                                    <p className="text-[10px] text-slate-200 font-mono mb-1 leading-tight">{note.message}</p>
+                    <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-[9px] text-slate-400 uppercase font-mono font-black tracking-widest flex items-center gap-2">
+                            <Library className="w-3 h-3 text-cyan-400" />
+                            Technical Service Findings
+                        </h4>
+                        <span className="text-[7px] text-slate-600 font-mono">CEREBRO V4.9 // RAW_DATA_FEED</span>
+                    </div>
 
-                                    {/* NC-5.4: ISO IMS Verified Branding */}
-                                    {note.recommendation.includes('[PROTOCOL_IMS_VERIFIED]') && (
-                                        <div className="flex items-center justify-between mb-2">
-                                            <div className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/30 rounded w-fit">
-                                                <ShieldCheck className="w-2.5 h-2.5 text-emerald-400" />
-                                                <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest">ISO IMS Verified</span>
+                    <div className="bg-slate-950/40 rounded-lg border border-slate-800 overflow-hidden">
+                        <div className="grid grid-cols-[80px_1fr_120px] gap-2 px-3 py-2 border-b border-slate-800 bg-slate-900/50">
+                            <span className="text-[8px] font-mono text-slate-500 uppercase font-bold">Status</span>
+                            <span className="text-[8px] font-mono text-slate-500 uppercase font-bold">Finding / Recommendation</span>
+                            <span className="text-[8px] font-mono text-slate-500 uppercase font-bold">Service</span>
+                        </div>
+
+                        <div
+                            ref={scrollContainerRef}
+                            className="max-h-[300px] overflow-y-auto custom-scrollbar divide-y divide-slate-800/50"
+                        >
+                            {unifiedDiagnosis.serviceNotes.length > 0 ? (
+                                unifiedDiagnosis.serviceNotes.map((note, i) => (
+                                    <motion.div
+                                        key={i}
+                                        ref={el => noteRefs.current[note.service] = el}
+                                        initial={{ opacity: 0 }}
+                                        animate={{
+                                            opacity: 1,
+                                            backgroundColor: focusedService === note.service ? 'rgba(6, 182, 212, 0.1)' : 'transparent'
+                                        }}
+                                        className={`grid grid-cols-[80px_1fr_120px] gap-2 px-3 py-3 hover:bg-white/[0.02] transition-colors group/note relative`}
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-1.5 h-1.5 rounded-full ${note.severity === 'CRITICAL' ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]' :
+                                                    note.severity === 'WARNING' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]' :
+                                                        'bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.6)]'
+                                                }`} />
+                                            <span className={`text-[8px] font-mono font-black ${note.severity === 'CRITICAL' ? 'text-red-400' :
+                                                    note.severity === 'WARNING' ? 'text-amber-400' :
+                                                        'text-cyan-400'
+                                                }`}>
+                                                {note.severity}
+                                            </span>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] text-slate-200 font-mono leading-tight font-bold">{note.message}</p>
+                                            <div className="flex items-start gap-1">
+                                                <ChevronRight className="w-2.5 h-2.5 text-slate-500 mt-0.5" />
+                                                <p className="text-[9px] text-slate-400 font-mono italic">
+                                                    {note.recommendation.replace('[PROTOCOL_IMS_VERIFIED]', '').trim()}
+                                                </p>
                                             </div>
-
+                                            {/* Source Evidence Tooltip remains available on hover */}
                                             {note.sourceFiles && note.sourceFiles.length > 0 && (
-                                                <div className="relative group/evidence">
-                                                    <button
-                                                        className="text-[7px] font-mono font-black text-slate-500 hover:text-cyan-400 uppercase flex items-center gap-1 transition-colors"
-                                                    >
-                                                        <Search className="w-2 h-2" />
-                                                        View Source Evidence
-                                                    </button>
-
-                                                    {/* NC-9.0: Trust Architecture Tooltip (Justified Proof) */}
-                                                    <div className="absolute bottom-full right-0 mb-2 w-72 bg-slate-900 border border-cyan-500/30 rounded-xl p-3 opacity-0 group-hover/evidence:opacity-100 pointer-events-none transition-opacity z-50 shadow-2xl backdrop-blur-md">
-                                                        <p className="text-[8px] text-cyan-500 font-black uppercase mb-2 border-b border-cyan-500/20 pb-1 flex items-center gap-2">
-                                                            <Library className="w-2.5 h-2.5" />
-                                                            Knowledge Base Evidence
-                                                        </p>
-                                                        <div className="space-y-3">
-                                                            {note.sourceFiles.map((source, fIdx) => (
-                                                                <div key={fIdx} className="space-y-1">
-                                                                    <div className="text-[8px] text-slate-300 font-mono flex items-center gap-1 font-bold">
-                                                                        <div className="w-1 h-1 rounded-full bg-cyan-400" />
-                                                                        {source.filename.split('/').pop()}
-                                                                    </div>
-                                                                    <p className="text-[8px] text-slate-500 font-mono leading-tight italic pl-2 border-l border-white/10">
-                                                                        "{source.justification}"
-                                                                    </p>
+                                                <div className="flex items-center gap-1.5 pt-1">
+                                                    <span className="text-[7px] text-emerald-500 font-mono font-bold border border-emerald-500/20 bg-emerald-500/5 px-1 rounded flex items-center gap-1">
+                                                        <ShieldCheck className="w-2 h-2" /> IMS VERIFIED
+                                                    </span>
+                                                    <div className="relative group/evidence">
+                                                        <span className="text-[7px] text-slate-600 font-mono hover:text-cyan-400 cursor-help underline decoration-dotted">EVIDENCE [{note.sourceFiles.length}]</span>
+                                                        <div className="absolute bottom-full left-0 mb-2 w-64 bg-slate-900 border border-slate-700 rounded-lg p-2 opacity-0 group-hover/evidence:opacity-100 pointer-events-none transition-opacity z-50 shadow-2xl">
+                                                            {note.sourceFiles.slice(0, 2).map((source, fIdx) => (
+                                                                <div key={fIdx} className="mb-1 last:mb-0">
+                                                                    <div className="text-[7px] text-slate-400 font-mono line-clamp-1">{source.filename}</div>
+                                                                    <div className="text-[8px] text-slate-500 italic leading-tight">"{source.justification}"</div>
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -271,22 +256,20 @@ export const AIInsightsPanel: React.FC = () => {
                                                 </div>
                                             )}
                                         </div>
-                                    )}
 
-                                    <div className="flex items-start gap-1 group/rec">
-                                        <ChevronRight className="w-2.5 h-2.5 text-cyan-500 mt-0.5" />
-                                        <p className="text-[9px] text-cyan-400 font-mono italic flex-1">
-                                            <span className="text-slate-500 not-italic uppercase text-[7px] font-bold mr-1">Rec:</span>
-                                            {note.recommendation.replace('[PROTOCOL_IMS_VERIFIED]', '').trim()}
-                                        </p>
-                                    </div>
-                                </motion.div>
-                            ))
-                        ) : (
-                            <div className="text-center py-4 border border-dashed border-slate-800 rounded">
-                                <p className="text-[9px] text-slate-600 font-mono italic">No expert service warnings active.</p>
-                            </div>
-                        )}
+                                        <div className="flex items-start justify-end opacity-60 group-hover/note:opacity-100 transition-opacity">
+                                            <span className="text-[8px] font-mono text-slate-500 bg-slate-800/40 px-1.5 py-0.5 rounded border border-white/5 truncate max-w-full">
+                                                {note.service}
+                                            </span>
+                                        </div>
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="text-center py-6 border border-dashed border-slate-800 rounded">
+                                    <p className="text-[9px] text-slate-600 font-mono italic">No expert service warnings active.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

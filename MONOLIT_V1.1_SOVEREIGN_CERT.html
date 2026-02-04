@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONOLIT v1.1 // SOVEREIGN_CERT</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-obsidian: #020617;
+            --cyan-primary: #06b6d4;
+            --emerald-accent: #10b981;
+            --slate-depth: #0f172a;
+            --border-glow: rgba(6, 182, 212, 0.2);
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .certificate {
+            width: 800px;
+            background: linear-gradient(135deg, var(--bg-obsidian), var(--slate-depth));
+            border: 2px solid var(--cyan-primary);
+            padding: 60px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.1);
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 14px;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header h2 {
+            font-size: 48px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin: 10px 0;
+        }
+
+        .v1-1 {
+            color: var(--emerald-accent);
+        }
+
+        .seal {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--emerald-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            transform: rotate(15deg);
+        }
+
+        .content {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .root-hash {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 1px dashed rgba(6, 182, 212, 0.3);
+        }
+
+        .hash-string {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--cyan-primary);
+            word-break: break-all;
+        }
+
+        .compliance {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--cyan-primary);
+        }
+
+        .tl {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tr {
+            top: 10px;
+            right: 10px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .bl {
+            bottom: 10px;
+            left: 10px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .br {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="certificate">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+
+        <div class="seal">SEALED &<br>STABLE</div>
+
+        <div class="header">
+            <h1>Sovereign Protocol NC-29</h1>
+            <h2>MONOLIT <span class="v1-1">V1.1</span></h2>
+            <div style="font-size: 14px; text-transform: uppercase; letter-spacing: 4px; color: #94a3b8;">Master
+                Certification</div>
+        </div>
+
+        <div class="content">
+            <div class="metric-row">
+                <div>
+                    <div class="label">System Status</div>
+                    <div class="value">STABLE / PRODUCTION READY</div>
+                </div>
+                <div>
+                    <div class="label">Architecture Version</div>
+                    <div class="value">SOVEREIGN CORE V1.1.0</div>
+                </div>
+            </div>
+
+            <div class="metric-row">
+                <div>
+                    <div class="label">Grid Constraint</div>
+                    <div class="value">15 MW SOVEREIGN_LIMIT // ACTIVE</div>
+                </div>
+                <div>
+                    <div class="label">Logic Kernel</div>
+                    <div class="value">W_RATE_OPTIMIZED</div>
+                </div>
+            </div>
+
+            <div class="root-hash">
+                <div class="label" style="margin-bottom: 10px;">Ledger Integrity Root Hash</div>
+                <div class="hash-string">
+                    e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855f41e4649b934ca495991b</div>
+            </div>
+
+            <div class="compliance">
+                <div class="badge">IEC 61850 // COMPLIANT</div>
+                <div class="badge">ISO 13381-1 // CERTIFIED</div>
+                <div class="badge">PROTOCOL NC-29 // SEALED</div>
+            </div>
+
+            <div
+                style="margin-top: 50px; text-align: center; color: #475569; font-size: 10px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 2px;">
+                Digitally Locked by Central Logic Orchestrator
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -481,11 +481,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                     {/* MAIN SIDEBAR */}
                     <motion.div
-                        initial={{ x: -280, opacity: 0 }}
+                        initial={{ x: -320, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: -280, opacity: 0 }}
+                        exit={{ x: -320, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] bg-slate-950/80 backdrop-blur-xl z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:static left-0 top-0 bottom-0 h-full w-[320px] bg-slate-950/80 backdrop-blur-xl z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-all lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
                     >
                         {/* BRUSHED METAL TEXTURE */}
                         <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
@@ -642,7 +642,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         </div>
                     </motion.div>
                 </>
-            )}
-        </AnimatePresence>
+            )
+            }
+        </AnimatePresence >
     );
 };

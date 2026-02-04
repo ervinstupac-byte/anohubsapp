@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -6,6 +7,7 @@ import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { throttle } from '../../utils/performance';
 import { Asset } from '../../types';
+import { Globe } from 'lucide-react';
 
 // Fix Leaflet icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -109,17 +111,66 @@ const SovereignNode = React.memo(({ asset, onClick }: { asset: Asset; onClick: (
     );
 });
 
+const SovereignBlueprint: React.FC = () => (
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#05070a] overflow-hidden group">
+        {/* World Wireframe Grid */}
+        <div className="absolute inset-0 opacity-20">
+            <div className="absolute inset-0" style={{ backgroundImage: 'linear-gradient(to right, rgba(6, 182, 212, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(6, 182, 212, 0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+            <svg viewBox="0 0 800 400" className="w-full h-full stroke-cyan-500/30 fill-none stroke-[0.5]">
+                <path d="M150,200 Q200,100 300,150 T500,100 T700,200 T500,300 T300,250 T150,200" className="animate-pulse" />
+                <circle cx="400" cy="200" r="150" className="opacity-10" />
+                <circle cx="400" cy="200" r="100" className="opacity-20" />
+            </svg>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center justify-center text-center p-8">
+            <div className="relative mb-6">
+                <div className="absolute inset-0 bg-cyan-500/20 blur-xl rounded-full animate-pulse" />
+                <div className="relative w-20 h-20 border-2 border-cyan-500/40 rounded-full flex items-center justify-center bg-slate-900 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                    <Globe className="w-10 h-10 text-cyan-400" />
+                </div>
+            </div>
+
+            <h3 className="text-xl font-mono font-black text-white uppercase tracking-widest mb-3">
+                Sovereign Blueprint <span className="text-cyan-400">Active</span>
+            </h3>
+
+            <div className="flex gap-4 mb-6">
+                <div className="px-3 py-1 bg-cyan-950/40 border border-cyan-500/30 rounded text-[9px] font-mono text-cyan-400 uppercase tracking-tighter">
+                    Status: Offline_Vector_Mode
+                </div>
+                <div className="px-3 py-1 bg-emerald-950/40 border border-emerald-500/30 rounded text-[9px] font-mono text-emerald-400 uppercase tracking-tighter">
+                    Cache: Integrity_Verified
+                </div>
+            </div>
+
+            <p className="max-w-lg text-slate-500 font-mono text-[10px] uppercase leading-relaxed tracking-wider">
+                Satellite handshake timeout. Reverting to encrypted local cartography.
+                Neural links to active assets remain established via secondary mesh.
+            </p>
+        </div>
+
+        {/* Animated Scanning Line */}
+        <motion.div
+            initial={{ top: '0%' }}
+            animate={{ top: '100%' }}
+            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            className="absolute left-0 w-full h-px bg-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.5)] z-20"
+        />
+    </div>
+);
+
 export const FleetMap: React.FC = () => {
     const { assets } = useAssetContext();
     const navigate = useNavigate();
+    const [mapError, setMapError] = useState(false);
 
     // NC-18: Throttled State for Map Layer
-    // Limit updates to 2fps to save GPU cycles on drag/zoom + high freq telemetry
     const [displayedAssets, setDisplayedAssets] = useState<Asset[]>(assets);
 
     const throttledUpdate = useMemo(() => throttle((newAssets: Asset[]) => {
         setDisplayedAssets(newAssets);
-    }, 500), []); // 500ms = 2fps
+    }, 500), []);
 
     useEffect(() => {
         throttledUpdate(assets);
@@ -130,7 +181,9 @@ export const FleetMap: React.FC = () => {
     }, [navigate]);
 
     return (
-        <div className="w-full h-[400px] rounded-lg overflow-hidden border border-slate-700 relative z-0 bg-slate-900 shadow-inner">
+        <div className="w-full h-[400px] rounded-lg overflow-hidden border border-slate-700 relative z-0 bg-slate-900 shadow-inner group">
+            {mapError && <SovereignBlueprint />}
+
             {/* Map Layer */}
             <MapContainer
                 center={[44.8176, 20.4633]}
@@ -138,10 +191,14 @@ export const FleetMap: React.FC = () => {
                 className="w-full h-full bg-slate-950"
                 scrollWheelZoom={false}
                 zoomControl={false}
+                whenReady={() => console.log('Map Loaded')}
             >
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution='&copy; OpenStreetMap contributors'
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                    eventHandlers={{
+                        tileerror: () => setMapError(true)
+                    }}
                 />
 
                 {displayedAssets.map(asset => (
@@ -154,26 +211,30 @@ export const FleetMap: React.FC = () => {
             </MapContainer>
 
             {/* Overlay Text */}
-            <div className="absolute top-4 right-4 z-[400] bg-black/60 backdrop-blur px-3 py-1 rounded border border-white/10 pointer-events-none">
-                <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    Global Telemetry (NC-18)
+            {!mapError && (
+                <div className="absolute top-4 right-4 z-[400] bg-black/60 backdrop-blur px-3 py-1 rounded border border-white/10 pointer-events-none group-hover:opacity-100 transition-opacity">
+                    <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        Global Telemetry (NC-18)
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Legend */}
-            <div className="absolute bottom-4 left-4 z-[400] bg-black/60 backdrop-blur px-3 py-2 rounded border border-white/10 pointer-events-none">
-                <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-cyan-500" />
-                        <span className="text-[10px] text-slate-300 font-mono">OPERATIONAL</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                        <span className="text-[10px] text-slate-300 font-mono">CRITICAL</span>
+            {!mapError && (
+                <div className="absolute bottom-4 left-4 z-[400] bg-black/60 backdrop-blur px-3 py-2 rounded border border-white/10 pointer-events-none group-hover:opacity-100 transition-opacity">
+                    <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-cyan-500" />
+                            <span className="text-[10px] text-slate-300 font-mono">OPERATIONAL</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                            <span className="text-[10px] text-slate-300 font-mono">CRITICAL</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

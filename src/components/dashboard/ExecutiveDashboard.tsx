@@ -496,8 +496,8 @@ export const ExecutiveDashboard: React.FC = () => {
             <div className="fixed inset-0 pointer-events-none bg-grid-pattern opacity-10" />
 
             <main className={`relative transition-all duration-1000 ${isBooting ? 'opacity-0 scale-95 blur-xl' : 'opacity-100 scale-100 blur-0'}`}>
-                <div className="relative z-10 p-5 md:p-8 pb-32 space-y-6 max-w-[1700px] mx-auto">
-                    <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-h-border pb-5">
+                <div className="relative z-10 p-4 md:p-6 pb-32 max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-[260px_1fr_400px] gap-6 items-start">
+                    <header className="col-span-1 lg:col-span-3 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-h-border pb-5">
                         <div className="flex items-start gap-4">
                             <img src="/assets/images/logo.svg" alt="AnoHUB Logo" className="w-12 h-12 mt-1 object-contain" />
                             <div>
@@ -544,11 +544,13 @@ export const ExecutiveDashboard: React.FC = () => {
                         </div>
                     </header>
 
-                    {/* Hierarchical Sidebar (War Room navigation) */}
-                    <aside className={`fixed left-4 top-28 z-40 w-56 h-[70vh] overflow-auto bg-h-panel border border-h-border rounded-lg p-3 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="text-xs font-mono font-bold">Systems</div>
-                            <button className="text-xs text-slate-400" onClick={() => setSidebarOpen(s => !s)}>{sidebarOpen ? 'Hide' : 'Show'}</button>
+                    {/* Hierarchical Sidebar (War Room navigation) - Integrated into Grid */}
+                    <aside className={`sticky top-24 z-30 w-full h-[calc(100vh-140px)] overflow-auto bg-h-panel/40 backdrop-blur-md border border-h-border rounded-lg p-3 transition-all ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                        <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+                            <div className="text-[10px] font-mono font-black text-h-cyan uppercase tracking-widest flex items-center gap-2">
+                                <Activity className="w-3 h-3" />
+                                {t('dashboard.systems', 'Asset Hierarchy')}
+                            </div>
                         </div>
                         <nav>
                             <ul className="space-y-1">
@@ -557,86 +559,88 @@ export const ExecutiveDashboard: React.FC = () => {
                         </nav>
                     </aside>
 
-                    <HeritagePrecisionBanner currentAlignment={currentAlignment} onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT))} />
-                    {/* Truth Badge: show Probability of Failure and confidence when high */}
-                    {pf !== null ? (
-                        <div className="mt-3 flex items-center gap-3">
-                            <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-2">
-                                <ShieldAlert className="w-4 h-4 text-red-400" />
-                                <div>
-                                    <div className="text-[10px] uppercase font-bold">Probability of Failure</div>
-                                    <div className="font-black text-lg">{pf.toFixed(2)}%</div>
-                                </div>
-                            </div>
-                            {forecast && (forecast.confidence || 0) >= 0.95 && sampleCount && sampleCount >= 720 ? (
-                                <div className="px-3 py-2 bg-emerald-900/10 border border-emerald-500/20 rounded text-emerald-300 text-sm font-mono inline-flex items-center gap-2">
-                                    <ShieldAlert className="w-4 h-4 text-emerald-400" />
+                    {/* Center Column: Mission Control & 3D Twin */}
+                    <div className="space-y-6 min-w-0">
+
+                        <HeritagePrecisionBanner currentAlignment={currentAlignment} onClick={() => navigate(getFrancisPath(ROUTES.FRANCIS.SOP.ALIGNMENT))} />
+                        {/* Truth Badge: show Probability of Failure and confidence when high */}
+                        {pf !== null ? (
+                            <div className="mt-3 flex items-center gap-3">
+                                <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-red-400" />
                                     <div>
-                                        <div className="text-[10px] uppercase font-bold">High Confidence</div>
-                                        <div className="font-mono">Verified — {sampleCount} hourly samples</div>
+                                        <div className="text-[10px] uppercase font-bold">Probability of Failure</div>
+                                        <div className="font-black text-lg numeric-display">{pf.toFixed(2)}%</div>
                                     </div>
                                 </div>
-                            ) : null}
-                        </div>
-                    ) : null}
-
-                    {/* NC-17: The Neural Link - Global Command Center */}
-                    <div className="bg-h-panel border border-h-border rounded-xl p-1 mb-6 relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-h-cyan via-blue-500 to-purple-500 opacity-50" />
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-                            <div className="lg:col-span-8 relative">
-                                <FleetMap />
-                                {/* Overlay Stats for Map */}
-                                <div className="absolute bottom-4 left-4 z-[400] flex gap-2">
-                                    <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
-                                        <div className="text-[9px] text-slate-400 uppercase font-mono">Active Units</div>
-                                        <div className="text-lg font-mono font-bold text-white">3/3</div>
-                                    </div>
-                                    <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
-                                        <div className="text-[9px] text-slate-400 uppercase font-mono">Global Output</div>
-                                        <div className="text-lg font-mono font-bold text-h-cyan">1,245.5 MW</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="lg:col-span-4 bg-slate-900/50 p-5 flex flex-col justify-center border-l border-white/5 space-y-4">
-                                <FleetCommandView />
-                            </div>
-                        </div>
-                    </div>
-
-                    {(() => {
-                        const crossSectorEffects = CrossSectorEngine.analyzeCrossSectorEffects({
-                            alignment: currentAlignment,
-                            vibration: mechanical?.vibration ?? undefined,
-                            bearingTemp: mechanical?.bearingTemp ?? undefined,
-                            gridFrequency: scadaFrequency
-                        });
-                        if (crossSectorEffects.length === 0) return null;
-                        return (
-                            <div className="bg-amber-950/20 border border-amber-500/30 rounded-lg p-4 mb-5">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Link2 className="w-4 h-4 text-amber-400" />
-                                    <span className="text-[10px] text-amber-400 font-mono font-black uppercase tracking-widest">CROSS-SECTOR DOMINO EFFECT</span>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                    {crossSectorEffects.slice(0, 4).map((effect, idx) => (
-                                        <div key={idx} className="flex items-start gap-3 p-3 bg-slate-900/50 rounded border border-white/5">
-                                            <div className="flex-shrink-0 w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                                                <Thermometer className="w-4 h-4 text-amber-400" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">{effect.sourceSector} → {effect.affectedSector}</div>
-                                                <p className="text-[11px] text-amber-300 font-mono mt-0.5 leading-relaxed">{effect.message}</p>
-                                            </div>
+                                {forecast && (forecast.confidence || 0) >= 0.95 && sampleCount && sampleCount >= 720 ? (
+                                    <div className="px-3 py-2 bg-emerald-900/10 border border-emerald-500/20 rounded text-emerald-300 text-sm font-mono inline-flex items-center gap-2">
+                                        <ShieldAlert className="w-4 h-4 text-emerald-400" />
+                                        <div>
+                                            <div className="text-[10px] uppercase font-bold">High Confidence</div>
+                                            <div className="font-mono numeric-display">Verified — {sampleCount} hourly samples</div>
                                         </div>
-                                    ))}
+                                    </div>
+                                ) : null}
+                            </div>
+                        ) : null}
+
+                        {/* NC-17: The Neural Link - Global Command Center */}
+                        <div className="bg-h-panel border border-h-border rounded-xl p-1 mb-6 relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-h-cyan via-blue-500 to-purple-500 opacity-50" />
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                                <div className="lg:col-span-8 relative">
+                                    <FleetMap />
+                                    {/* Overlay Stats for Map */}
+                                    <div className="absolute bottom-4 left-4 z-[400] flex gap-2">
+                                        <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
+                                            <div className="text-[9px] text-slate-400 uppercase font-mono">Active Units</div>
+                                            <div className="text-lg font-mono font-bold text-white numeric-display">3/3</div>
+                                        </div>
+                                        <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
+                                            <div className="text-[9px] text-slate-400 uppercase font-mono">Global Output</div>
+                                            <div className="text-lg font-mono font-bold text-h-cyan numeric-display">1,245.5 MW</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="lg:col-span-4 bg-slate-900/50 p-5 flex flex-col justify-center border-l border-white/5 space-y-4">
+                                    <FleetCommandView />
                                 </div>
                             </div>
-                        );
-                    })()}
+                        </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6">
-                        <div className="lg:col-span-4">
+                        {(() => {
+                            const crossSectorEffects = CrossSectorEngine.analyzeCrossSectorEffects({
+                                alignment: currentAlignment,
+                                vibration: mechanical?.vibration ?? undefined,
+                                bearingTemp: mechanical?.bearingTemp ?? undefined,
+                                gridFrequency: scadaFrequency
+                            });
+                            if (crossSectorEffects.length === 0) return null;
+                            return (
+                                <div className="bg-amber-950/20 border border-amber-500/30 rounded-lg p-4 mb-5">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Link2 className="w-4 h-4 text-amber-400" />
+                                        <span className="text-[10px] text-amber-400 font-mono font-black uppercase tracking-widest">CROSS-SECTOR DOMINO EFFECT</span>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {crossSectorEffects.slice(0, 4).map((effect, idx) => (
+                                            <div key={idx} className="flex items-start gap-3 p-3 bg-slate-900/50 rounded border border-white/5">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+                                                    <Thermometer className="w-4 h-4 text-amber-400" />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">{effect.sourceSector} → {effect.affectedSector}</div>
+                                                    <p className="text-[11px] text-amber-300 font-mono mt-0.5 leading-relaxed">{effect.message}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })()}
+
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6">
                             <div className="bg-h-panel border border-h-border rounded-xl overflow-hidden h-full">
                                 <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
                                     <div>
@@ -663,19 +667,20 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="grid grid-cols-2 border-t border-white/5">
                                     <div className="p-4 flex flex-col items-center border-r border-white/5">
                                         <span className="text-[8px] text-slate-500 uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.rated_power')}</span>
-                                        <span className="text-xl font-mono text-h-cyan font-black">{(assetIdentity?.ratedPowerMW ?? 4.2).toFixed(1)}<span className="text-[10px] text-slate-500 ml-1">MW</span></span>
+                                        <span className="text-xl font-mono text-h-cyan font-black numeric-display">{(assetIdentity?.ratedPowerMW ?? 4.2).toFixed(1)}<span className="text-[10px] text-slate-500 ml-1 font-sans">MW</span></span>
                                     </div>
                                     <div className="p-4 flex flex-col items-center">
                                         <span className="text-[8px] text-slate-500 uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.grid_freq')}</span>
-                                        <span className={`text-xl font-mono font-black ${Math.abs(scadaFrequency - 50) > 0.5 ? 'text-h-yellow' : 'text-h-green'}`}>
-                                            {scadaFrequency.toFixed(2)}<span className="text-[10px] text-slate-500 ml-1">Hz</span>
+                                        <span className={`text-xl font-mono font-black numeric-display ${Math.abs(scadaFrequency - 50) > 0.5 ? 'text-h-yellow' : 'text-h-green'}`}>
+                                            {scadaFrequency.toFixed(2)}<span className="text-[10px] text-slate-500 ml-1 font-sans">Hz</span>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="lg:col-span-5 flex flex-col gap-5">
+                        {/* Right Column: Telemetry, Insights & Strategy */}
+                        <div className="space-y-6">
                             <AIInsightsPanel />
                             <Suspense fallback={<div className="h-48 bg-gray-900/10 rounded animate-pulse" />}>
                                 <RevenueImpactCard className="rounded-xl shadow-2xl" />
@@ -745,7 +750,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     <div>
                                         <p className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-1">{t('dashboard.kpi.performance_gap')}</p>
                                         <div className="flex items-baseline gap-2">
-                                            <span className={`text-3xl font-black font-mono ${(livePhysics?.performanceGap?.toNumber() ?? 0) > 98 ? 'text-h-green' : 'text-h-yellow'}`}>{(livePhysics?.performanceGap?.toNumber() ?? 96.5).toFixed(1)}%</span>
+                                            <span className={`text-3xl font-black font-mono numeric-display ${(livePhysics?.performanceGap?.toNumber() ?? 0) > 98 ? 'text-h-green' : 'text-h-yellow'}`}>{(livePhysics?.performanceGap?.toNumber() ?? 96.5).toFixed(1)}%</span>
                                             <span className="text-[9px] text-slate-500 font-mono">{t('dashboard.kpi.vs_design')}</span>
                                         </div>
                                     </div>
@@ -802,6 +807,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     variant="instrument"
                                     title={t('dashboard.kpi.axial_thrust')}
                                     value={(livePhysics?.axialThrustKN?.toNumber() ?? 145).toFixed(0)}
+                                    className="numeric-display"
                                     unit="kN"
                                     icon={<Gauge className="w-4 h-4 text-h-purple" />}
                                     status={(livePhysics?.axialThrustKN?.toNumber() ?? 0) > 200 ? 'critical' : (livePhysics?.axialThrustKN?.toNumber() ?? 0) > 180 ? 'warning' : 'nominal'}
@@ -819,6 +825,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     variant="instrument"
                                     title={t('dashboard.kpi.structural_life')}
                                     value={(structural?.remainingLife ?? 87.5).toFixed(1)}
+                                    className="numeric-display"
                                     unit="%"
                                     icon={<Hammer className="w-4 h-4 text-h-gold" />}
                                     status={(structural?.remainingLife ?? 0) < 50 ? 'critical' : (structural?.remainingLife ?? 0) < 75 ? 'warning' : 'nominal'}
@@ -1020,7 +1027,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="space-y-4">
                                     <div>
                                         <div className="text-[9px] text-slate-500 uppercase font-mono font-black mb-1">{t('dashboard.finance.maint_buffer')}</div>
-                                        <div className="text-lg font-mono text-h-gold font-bold">{(financials?.maintenanceBufferEuro ?? 45000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-lg font-mono text-h-gold font-bold numeric-display">{(financials?.maintenanceBufferEuro ?? 45000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
                                     <div>
                                         {/* Engineering Notebook Overlay (hover) */}
@@ -1044,13 +1051,13 @@ export const ExecutiveDashboard: React.FC = () => {
                                             </div>
                                         ) : null}
                                         <div className="text-[9px] text-slate-500 uppercase font-mono font-black mb-1">{t('dashboard.finance.annual_loss')}</div>
-                                        <div className="text-base font-mono text-white font-bold">{(financials?.lostRevenueEuro ?? 12500).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-base font-mono text-white font-bold numeric-display">{(financials?.lostRevenueEuro ?? 12500).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
                                     <div className="pt-3 border-t border-h-gold/20">
                                         <div className="text-[9px] text-h-green uppercase font-mono font-black mb-1 flex items-center justify-between">
                                             {t('dashboard.finance.predictive_savings')}<TrendingDown className="w-3 h-3" />
                                         </div>
-                                        <div className="text-lg font-mono text-h-green font-bold">{(financials?.maintenanceSavingsEuro ?? 28000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-lg font-mono text-h-green font-bold numeric-display">{(financials?.maintenanceSavingsEuro ?? 28000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
                                 </div>
                             </GlassCard>
