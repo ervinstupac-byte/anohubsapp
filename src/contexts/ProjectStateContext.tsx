@@ -12,6 +12,7 @@ import { EventJournal } from '../services/EventJournal';
 import { useTelemetry } from './TelemetryContext';
 import { useAssetContext } from './AssetContext';
 import { PhysicsEngine } from '../core/PhysicsEngine';
+import { calculateHydraulicEfficiency } from '../shared/hydraulics';
 
 type Subscriber = (state: TechnicalProjectState) => void;
 
@@ -178,11 +179,49 @@ class ProjectStateManagerClass {
                 // Map telemetry fields into the canonical state
                 s.hydraulic = { ...(s.hydraulic as any), head: t.reservoirLevel || (s.hydraulic as any).head, flow: t.pumpFlowRate || (s.hydraulic as any).flow, efficiency: (typeof t.efficiency === 'number') ? (t.efficiency / 100) : (s.hydraulic as any).efficiency } as any;
                 s.mechanical = { ...(s.mechanical as any), rpm: t.rpm || (s.mechanical as any).rpm, bearingTemp: t.temperature || (s.mechanical as any).bearingTemp } as any;
-                // attempt to run physics engine to enrich physics block
+                // attempt to run full project physics recalculation to enrich canonical state
                 try {
-                    const result = PhysicsEngine.recalculatePhysics({ identity: s.identity, hydraulic: s.hydraulic, mechanical: s.mechanical, site: s.site } as any);
-                    if (result) {
-                        s.physics = { ...(s.physics as any), netHead: result.netHead ?? (s.physics as any).netHead, volumetricLoss: result.volumetricLoss ?? (s.physics as any).volumetricLoss, eccentricity: result.eccentricity ?? (s.physics as any).eccentricity } as any;
+                    // Use the higher-level recalculation which returns an enriched TechnicalProjectState
+                    const enriched = PhysicsEngine.recalculateProjectPhysics({ ...(s as any) } as any);
+                    if (enriched) {
+                        // copy back physics block values
+                        s.physics = { ...(s.physics as any), ...(enriched.physics as any) } as any;
+
+                        // Compute telemetry-derived efficiency (percent) where possible
+                        try {
+                            const telemetryP_kW = (typeof t.output === 'number' ? t.output : (typeof t.output === 'string' ? Number(t.output) : 0)) * 1000; // MW -> kW
+                            const telemetryQ = (typeof t.pumpFlowRate === 'number' && isFinite(t.pumpFlowRate)) ? t.pumpFlowRate : (typeof t.flow_m3s === 'number' ? t.flow_m3s : (s.hydraulic as any).flow || 0);
+                            const telemetryH = (typeof t.reservoirLevel === 'number' && isFinite(t.reservoirLevel)) ? t.reservoirLevel : (typeof t.head_m === 'number' ? t.head_m : (s.hydraulic as any).head || 0);
+
+                            const telemetryEtaPercent = calculateHydraulicEfficiency(telemetryP_kW, telemetryQ, telemetryH);
+                            const physicsCanonicalPercent = (enriched.site && typeof (enriched.site as any).typicalEfficiency === 'number') ? (enriched.site as any).typicalEfficiency : ((s.hydraulic as any).efficiency ? (s.hydraulic as any).efficiency * 100 : 0);
+
+                            // If we have telemetry and physics numbers, compare and flag discrepancies
+                            const DISCREPANCY_THRESHOLD = 5; // percent absolute
+                            if (telemetryEtaPercent !== null && typeof physicsCanonicalPercent === 'number') {
+                                const diff = Math.abs(telemetryEtaPercent - physicsCanonicalPercent);
+                                // write reconciled canonical efficiency (physics-derived) into canonical hydraulic state (as fraction 0..1)
+                                s.hydraulic = { ...(s.hydraulic as any), efficiency: (physicsCanonicalPercent / 100) } as any;
+
+                                // record discrepancy event for forensic inspection if threshold exceeded
+                                if (diff >= DISCREPANCY_THRESHOLD) {
+                                    try {
+                                        EventJournal.append('efficiency_discrepancy', {
+                                            assetId: s.identity?.assetId || null,
+                                            telemetry: { percent: telemetryEtaPercent, P_kW: telemetryP_kW, Q: telemetryQ, H: telemetryH },
+                                            physics: { percent: physicsCanonicalPercent },
+                                            diff,
+                                            ts: new Date().toISOString()
+                                        });
+                                    } catch (e) { /* swallow */ }
+
+                                    // surface anomaly flag in canonical physics block for UI
+                                    s.physics = { ...(s.physics as any), anomaly: { type: 'SENSOR_DRIFT', severity: diff >= 15 ? 'HIGH' : 'MEDIUM', telemetryPercent: telemetryEtaPercent, physicsPercent: physicsCanonicalPercent, delta: diff } } as any;
+                                }
+                            }
+                        } catch (e) {
+                            // ignore any telemetry parsing/calculation errors
+                        }
                     }
                 } catch (e) {
                     // ignore physics failures — keep previous physics values
