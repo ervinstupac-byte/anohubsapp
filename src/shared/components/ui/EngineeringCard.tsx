@@ -115,7 +115,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 5 }}
                             transition={{ duration: 0.1 }}
-                            className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden backdrop-blur-xl"
+                            className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-[var(--z-banner)] overflow-hidden backdrop-blur-xl"
                         >
                             <div className="py-1">
                                 {actionMenu.map((action, idx) => (
@@ -146,7 +146,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
 
     // Shared Header Wrapper
     const HeaderWrapper = ({ children }: { children: React.ReactNode }) => (
-        <div className="flex justify-between items-start mb-2 relative z-10">
+        <div className="flex justify-between items-start mb-2 relative z-[var(--z-content)]">
             {children}
             {renderActionMenu()}
         </div>
@@ -180,7 +180,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     </div>
                 </HeaderWrapper>
 
-                <div className="flex items-baseline gap-2 relative z-10">
+                <div className="flex items-baseline gap-2 relative z-[var(--z-content)]">
                     <h3 className={`${typo.valueLg} ${colors.text}`}>
                         {value}
                     </h3>
@@ -188,7 +188,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                 </div>
 
                 {(subtitle || trendData) && (
-                    <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 relative z-10">
+                    <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 relative z-[var(--z-content)]">
                         {subtitle && <span className={typo.bodyXs}>{subtitle}</span>}
                         {trendData && trendData.length >= 2 && (
                             <Sparkline data={trendData} width={60} height={16} color={colors.hex} markers={eventMarkers} />
@@ -222,7 +222,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     </>
                 )}
 
-                <div className="absolute top-2 right-2 z-20">
+                <div className="absolute top-2 right-2 z-[var(--z-sidebar)]">
                     {/* Combined Status and Action Menu for Instrument */}
                     <div className="flex items-center gap-1">
                         {!isCompact && (
@@ -234,7 +234,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     </div>
                 </div>
 
-                <div className={`relative z-10 ${spacing.cardPadding}`}>
+                <div className={`relative z-[var(--z-content)] ${spacing.cardPadding}`}>
                     <div className="flex items-start justify-between mb-3 pr-8">
                         <div className="flex items-center gap-2">
                             {icon && (
@@ -300,7 +300,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
             `}
         >
             {(title || headerAction || actionMenu) && (
-                <div className="flex justify-between items-start mb-3 relative z-10">
+                <div className="flex justify-between items-start mb-3 relative z-[var(--z-content)]">
                     <div className="flex items-center gap-3">
                         {icon && <div className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]">{icon}</div>}
                         <div>
@@ -314,7 +314,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     </div>
                 </div>
             )}
-            <div className="relative z-10">
+            <div className="relative z-[var(--z-content)]">
                 {children}
             </div>
         </motion.div>

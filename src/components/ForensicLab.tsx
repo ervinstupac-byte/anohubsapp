@@ -8,9 +8,12 @@ import { TacticalCard } from './ui/TacticalCard';
 import { TurbineRunner3D } from './three/TurbineRunner3D';
 import { Clock, FileText, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
+import guardedAction from '../utils/guardedAction';
+import { useToast } from '../contexts/ToastContext';
 
 export const ForensicLab: React.FC = () => {
     const { t } = useTranslation();
+    const { showToast } = useToast();
     const { snapshots } = useDigitalLedger();
     const { setFocus, activeComponentId } = useContextAwareness(); // Bi-Directional Sync
     const [selectedSnapshot, setSelectedSnapshot] = useState<AuditSnapshot | null>(null);
@@ -189,7 +192,10 @@ export const ForensicLab: React.FC = () => {
 
                             {/* Export Button */}
                             <button
-                                onClick={exportDossier}
+                                onClick={() => {
+                                    const ok = guardedAction('Export Forensic Dossier', () => exportDossier());
+                                    if (!ok) { try { showToast('Export blocked: LOTO active', 'warning'); } catch (e) {} }
+                                }}
                                 className="w-full py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
                             >
                                 <FileText className="w-4 h-4" />

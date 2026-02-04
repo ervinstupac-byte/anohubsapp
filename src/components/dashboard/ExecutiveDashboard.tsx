@@ -51,6 +51,7 @@ import { fetchForecastForAsset } from '../../services/DashboardDataService';
 import { prefetchPredictiveAssets } from '../../services/DashboardDataService';
 import ProjectStateManager from '../../contexts/ProjectStateContext';
 import { useToast } from '../../contexts/ToastContext';
+import guardedAction from '../../utils/guardedAction';
 import { BootSequence } from '../BootSequence';
 import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetHierarchy';
 
@@ -390,10 +391,14 @@ export const ExecutiveDashboard: React.FC = () => {
     const PdfProgressBadge: React.FC = () => {
         if (pdfProgress === null) return null;
         return (
-            <div className="fixed top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm z-50">
+            <div className="fixed top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm z-[var(--z-banner)]">
                 Generating forensic PDF — {Math.round(pdfProgress)}%
                 {pdfError ? (
-                    <button onClick={() => { setPdfError(null); handleGenerateForensicPDF(); }} className="ml-3 underline text-amber-300 text-xs">Retry</button>
+                    <button onClick={() => {
+                        const ok = guardedAction('Retry Generate Forensic PDF', () => { setPdfError(null); });
+                        if (!ok) { try { showToast('Generate forensic PDF blocked: LOTO active', 'warning'); } catch (e) {} return; }
+                        handleGenerateForensicPDF();
+                    }} className="ml-3 underline text-amber-300 text-xs">Retry</button>
                 ) : null}
             </div>
         );
@@ -496,7 +501,7 @@ export const ExecutiveDashboard: React.FC = () => {
             <div className="fixed inset-0 pointer-events-none bg-grid-pattern opacity-10" />
 
             <main className={`relative transition-all duration-1000 ${isBooting ? 'opacity-0 scale-95 blur-xl' : 'opacity-100 scale-100 blur-0'}`}>
-                <div className="relative z-10 p-4 md:p-6 pb-32 max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-[260px_1fr_400px] gap-6 items-start">
+                <div className="relative z-[var(--z-content)] p-4 md:p-6 pb-32 max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-[260px_1fr_400px] gap-6 items-start">
                     <header className="col-span-1 lg:col-span-3 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-h-border pb-5">
                         <div className="flex items-start gap-4">
                             <img src="/assets/images/logo.svg" alt="AnoHUB Logo" className="w-12 h-12 mt-1 object-contain" />
@@ -526,7 +531,10 @@ export const ExecutiveDashboard: React.FC = () => {
                             </div>
                             <ModernButton
                                 variant="primary"
-                                onClick={handleGenerateForensicPDF}
+                                onClick={() => {
+                                    const ok = guardedAction('Generate Forensic PDF', () => handleGenerateForensicPDF());
+                                    if (!ok) { try { showToast('Generate forensic PDF blocked: LOTO active', 'warning'); } catch (e) {} }
+                                }}
                                 id="generate-forensic-pdf-exclusive"
                                 className="btn-primary flex items-center gap-2 !px-4 !py-2 shadow-[0_0_15px_rgba(34,197,94,0.3)]"
                             >
@@ -535,7 +543,10 @@ export const ExecutiveDashboard: React.FC = () => {
                             </ModernButton>
                             <ModernButton
                                 variant="ghost"
-                                onClick={handleExpertOverride}
+                                onClick={() => {
+                                    const ok = guardedAction('Expert Override', () => handleExpertOverride());
+                                    if (!ok) { try { showToast('Override blocked: LOTO active', 'warning'); } catch (e) {} }
+                                }}
                                 id="expert-override-king"
                                 className="!px-3 !py-2 text-[10px] ml-2"
                             >
@@ -545,7 +556,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     </header>
 
                     {/* Hierarchical Sidebar (War Room navigation) - Integrated into Grid */}
-                    <aside className={`sticky top-24 z-30 w-full h-[calc(100vh-140px)] overflow-auto bg-h-panel/40 backdrop-blur-md border border-h-border rounded-lg p-3 transition-all ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                    <aside className={`sticky top-24 z-[var(--z-sidebar)] w-full h-[calc(100vh-140px)] overflow-auto bg-h-panel/40 backdrop-blur-md border border-h-border rounded-lg p-3 transition-all ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                         <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
                             <div className="text-[10px] font-mono font-black text-h-cyan uppercase tracking-widest flex items-center gap-2">
                                 <Activity className="w-3 h-3" />
@@ -592,7 +603,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="lg:col-span-8 relative">
                                     <FleetMap />
                                     {/* Overlay Stats for Map */}
-                                    <div className="absolute bottom-4 left-4 z-[400] flex gap-2">
+                                    <div className="absolute bottom-4 left-4 z-[var(--z-banner)] flex gap-2">
                                         <div className="bg-black/60 backdrop-blur border border-white/10 px-3 py-1 rounded">
                                             <div className="text-[9px] text-slate-400 uppercase font-mono">Active Units</div>
                                             <div className="text-lg font-mono font-bold text-white numeric-display">3/3</div>
@@ -912,6 +923,8 @@ export const ExecutiveDashboard: React.FC = () => {
                                         <button
                                             className="text-[10px] px-2 py-1 bg-h-panel/40 border border-h-border rounded text-slate-300"
                                             onClick={async () => {
+                                                const ok = guardedAction('View Forensic Dossier', () => {});
+                                                if (!ok) { try { showToast('View Forensic Dossier blocked: LOTO active', 'warning'); } catch (e) {} return; }
                                                 try {
                                                     const adapter = new SovereignAuditAdapter();
                                                     const id = (unifiedDiagnosis as any)?.persistedWisdomId || wisdomReport?.id;
@@ -1032,7 +1045,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     <div>
                                         {/* Engineering Notebook Overlay (hover) */}
                                         {wisdomReport && typeof hoveredEntry === 'number' && wisdomReport.entries && wisdomReport.entries[hoveredEntry] ? (
-                                            <div className="fixed right-6 bottom-6 w-96 bg-gradient-to-br from-slate-900/95 to-slate-800/95 border border-white/6 rounded-lg p-4 shadow-2xl z-50">
+                                            <div className="fixed right-6 bottom-6 w-96 bg-gradient-to-br from-slate-900/95 to-slate-800/95 border border-white/6 rounded-lg p-4 shadow-2xl z-[var(--z-banner)]">
                                                 <div className="flex items-start justify-between gap-3">
                                                     <div>
                                                         <div className="text-[11px] font-mono text-slate-300 font-bold">{wisdomReport.entries[hoveredEntry].title}</div>
@@ -1069,7 +1082,7 @@ export const ExecutiveDashboard: React.FC = () => {
 
                     {/* Emergency Mode Banner */}
                     {highRisk ? (
-                        <div className="fixed inset-0 z-50 flex items-start justify-center pointer-events-none">
+                        <div className="fixed inset-0 z-[var(--z-top)] flex items-start justify-center pointer-events-none">
                             <div className="mt-24 bg-rose-900/90 border border-rose-700 rounded-lg p-4 text-white max-w-3xl pointer-events-auto shadow-2xl">
                                 <div className="flex items-center gap-3">
                                     <ShieldAlert className="w-6 h-6 text-white" />
@@ -1083,7 +1096,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     ) : null}
 
                     {/* Dossier Drawer (right) */}
-                    <div className={`fixed top-20 right-4 z-50 w-[520px] h-[80vh] bg-h-panel border border-h-border rounded-lg shadow-2xl p-4 transition-transform ${dossierOpen ? 'translate-x-0' : 'translate-x-96'}`}>
+                    <div className={`fixed top-20 right-4 z-[var(--z-modal)] w-[520px] h-[80vh] bg-h-panel border border-h-border rounded-lg shadow-2xl p-4 transition-transform ${dossierOpen ? 'translate-x-0' : 'translate-x-96'}`}>
                         <div className="flex items-center justify-between mb-3">
                             <div className="text-sm font-mono font-bold">Engineering Dossier</div>
                             <div className="flex items-center gap-2">

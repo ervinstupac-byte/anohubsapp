@@ -10,6 +10,7 @@ import { BackButton } from './BackButton.tsx';
 import { AssetPicker } from './AssetPicker.tsx';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
+import guardedAction from '../utils/guardedAction';
 
 export const HydraulicMaintenance: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -99,23 +100,26 @@ export const HydraulicMaintenance: React.FC = () => {
     }, [assetTele, selectedAsset, triggerEmergency, shutdownExcitation, showToast, triggerVoiceAlert]);
 
     const handleApplyChange = () => {
-        if (!selectedAsset || !simResults) return;
+        const ok = guardedAction('Apply Hydraulic Change', () => {
+            if (!selectedAsset || !simResults) return;
 
-        if (simResults.isCritical) {
-            triggerVoiceAlert("Upozorenje: Rizik od mehaničkog kidanja instalacija uslijed prevelikog protoka.");
-            showToast("BLOCK: Velocity limits exceeded.", "error");
+            if (simResults.isCritical) {
+                triggerVoiceAlert("Upozorenje: Rizik od mehaničkog kidanja instalacija uslijed prevelikog protoka.");
+                showToast("BLOCK: Velocity limits exceeded.", "error");
 
-            recordLessonLearned({
-                symptom: 'SPEC_CHANGE_VAL',
-                cause: `Diameter change ${assetTele?.pipeDiameter}->${diameterInput}mm causes ${simResults.velocityIncrease}% velocity rise.`,
-                resolution: 'Blocked by Change Management protocol.'
-            });
-            return;
-        }
+                recordLessonLearned({
+                    symptom: 'SPEC_CHANGE_VAL',
+                    cause: `Diameter change ${assetTele?.pipeDiameter}->${diameterInput}mm causes ${simResults.velocityIncrease}% velocity rise.`,
+                    resolution: 'Blocked by Change Management protocol.'
+                });
+                return;
+            }
 
-        const numeric = idAdapter.toNumber(selectedAsset.id);
-        if (numeric !== null) updatePipeDiameter(numeric, diameterInput);
-        showToast("Retrofit Validated & Applied", "success");
+            const numeric = idAdapter.toNumber(selectedAsset.id);
+            if (numeric !== null) updatePipeDiameter(numeric, diameterInput);
+            showToast("Retrofit Validated & Applied", "success");
+        });
+        if (!ok) { try { showToast('Apply blocked: LOTO active', 'warning'); } catch (e) {} }
     };
 
     return (

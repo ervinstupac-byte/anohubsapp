@@ -10,6 +10,9 @@ import { FluidForceDiagnostics } from '../FluidForceDiagnostics';
 import { SystemResponseAnalytics } from '../SystemResponseAnalytics';
 import { ShieldCheck, Waves, Gauge, FileText } from 'lucide-react';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
+import { LedgerService } from '../../services/LedgerService';
+import guardedAction from '../../utils/guardedAction';
+import { EventJournal } from '../../services/EventJournal';
 
 export const ForensicDeepDiveModal: React.FC = () => {
     const { activeModal, setActiveModal } = useDiagnostic();
@@ -86,7 +89,19 @@ export const ForensicDeepDiveModal: React.FC = () => {
 
             <div className="mt-8 flex justify-end gap-4">
                 <ModernButton
-                    onClick={() => (window as any).__MONOLIT_DEBUG__?.exportLedgerSnapshot()}
+                    onClick={async () => {
+                        try {
+                            const ok = guardedAction('EXPORT AUDIT', async () => {
+                                const events = EventJournal.recent ? EventJournal.recent(5000) : [];
+                                await LedgerService.signAndExportAudit(events);
+                            });
+                            if (!ok) {
+                                try { /* show toast if provider present */ } catch (e) {}
+                            }
+                        } catch (e) {
+                            console.error('Export audit failed', e);
+                        }
+                    }}
                     variant="secondary"
                     className="border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
                 >

@@ -19,6 +19,8 @@ import { DossierViewerModal } from './knowledge/DossierViewerModal';
 import { ROUTES, getMaintenancePath } from '../routes/paths';
 import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../data/knowledge/DossierLibrary';
 import { useIntelligenceReport } from '../services/useIntelligenceReport';
+import { useToast } from '../contexts/ToastContext';
+import guardedAction from '../utils/guardedAction';
 
 interface DossierCategory {
     label: string;
@@ -123,6 +125,8 @@ export const EngineeringDossierCard: React.FC = () => {
         window.addEventListener('openDossier', handler as EventListener);
         return () => window.removeEventListener('openDossier', handler as EventListener);
     }, []);
+
+    const { showToast } = useToast();
 
     return (
         <>
@@ -252,7 +256,10 @@ export const EngineeringDossierCard: React.FC = () => {
                             </div>
                         </div>
                         <button
-                            onClick={handleEnterVault}
+                            onClick={() => {
+                                const ok = guardedAction('Enter Vault', () => handleEnterVault());
+                                if (!ok) { try { showToast('Enter Vault blocked: LOTO active', 'warning'); } catch (e) {} }
+                            }}
                             className="px-3 py-1.5 bg-h-gold/20 hover:bg-h-gold/30 border border-h-gold/40 rounded flex items-center gap-2 transition-all group/btn"
                         >
                             <span className="text-[9px] font-black text-h-gold uppercase tracking-tighter">Enter Vault</span>
@@ -265,7 +272,7 @@ export const EngineeringDossierCard: React.FC = () => {
             {/* CATEGORY EXPLORER MODAL */}
             <AnimatePresence>
                 {isModalOpen && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 pb-20 lg:pb-6">
+                    <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-6 pb-20 lg:pb-6">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}

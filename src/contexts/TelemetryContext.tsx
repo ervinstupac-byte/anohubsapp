@@ -102,6 +102,8 @@ interface TelemetryContextType {
     shutdownExcitation: (assetId: number) => void;
     updateWicketGateSetpoint: (assetId: number, setpoint: number) => void;
     resetFatigue: (assetId: number) => void;
+    selectedUnit?: string | null;
+    setSelectedUnit?: (id: string | null) => void;
 }
 
 const TelemetryContext = createContext<TelemetryContextType | undefined>(undefined);
@@ -112,6 +114,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: number, timestamp: number } | null>(null);
     const [simSpeed, setSimSpeed] = useState(1);
     const [vibrationOverride, setVibrationOverride] = useState<Record<string, number>>({});
+    const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
 
     // --- MS-VS DEBUG BRIDGE (NC-81) ---
     useEffect(() => {
@@ -249,7 +252,22 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                                 status: u.status || 'OPTIMAL',
                                 vibration: u.vibration || 0.02,
                                 temperature: u.temperature || 50,
-                                efficiency: u.efficiency || 92,
+                                // Compute hydraulic-derived efficiency if available
+                                efficiency: (() => {
+                                    try {
+                                        const outputMW = (u.output !== undefined && u.output !== null) ? Number(u.output) : 0; // MW
+                                        const P_kW = outputMW * 1000; // kW
+                                        const Q = (u.pump_flow_rate !== undefined && u.pump_flow_rate !== null) ? Number(u.pump_flow_rate) : ((u.flow_m3s !== undefined && u.flow_m3s !== null) ? Number(u.flow_m3s) : 0);
+                                        const H = (u.reservoir_level !== undefined && u.reservoir_level !== null) ? Number(u.reservoir_level) : ((u.head_m !== undefined && u.head_m !== null) ? Number(u.head_m) : 0);
+                                        const rho = 1000; const g = 9.81;
+                                        if (Q <= 0 || H <= 0) return u.efficiency ?? 0;
+                                        const pTheoretical_kW = (rho * g * Q * H) / 1000; // kW
+                                        const derivedEff = (pTheoretical_kW > 0) ? (P_kW / pTheoretical_kW) * 100 : (u.efficiency ?? 0);
+                                        return Math.min(98, Math.max(0, parseFloat((derivedEff || 0).toFixed(1))));
+                                    } catch (e) {
+                                        return u.efficiency ?? 0;
+                                    }
+                                })(),
                                 output: u.output || 0,
                                 piezometricPressure: u.piezometric_pressure || 4.2,
                                 seepageRate: u.seepage_rate || 12.5,
@@ -290,8 +308,8 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                                 bearingGrindIndex: u.bearing_grind_index || 0.4,
                                 acousticBaselineMatch: u.acoustic_baseline_match || 0.99,
                                 ultrasonicLeakIndex: u.ultrasonic_leak_index || 0.3,
-                                head_m: u.reservoir_level || 122.5,
-                                flow_m3s: u.pump_flow_rate || 5,
+                                head_m: u.reservoir_level || u.head_m || 122.5,
+                                flow_m3s: u.pump_flow_rate || u.flow_m3s || 5,
                                 trends: {
                                     vibration: 'STABLE',
                                     efficiency: 'STABLE',
@@ -639,6 +657,9 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
             shutdownExcitation,
             updateWicketGateSetpoint,
             resetFatigue
+            ,
+            selectedUnit,
+            setSelectedUnit
         }}>
             {children}
         </TelemetryContext.Provider>

@@ -74,7 +74,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
     if (fullScreen) {
         return (
-            <div className="fixed inset-0 bg-[#020617]/90 backdrop-blur-md z-50 flex items-center justify-center animate-fade-in">
+            <div className="fixed inset-0 bg-[#020617]/90 backdrop-blur-md z-[var(--z-modal)] flex items-center justify-center animate-fade-in">
                 {spinnerContent}
             </div>
         );

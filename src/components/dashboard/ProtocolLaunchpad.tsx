@@ -13,6 +13,8 @@ import { LocalLedger } from '../../services/LocalLedger';
 import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
 import { FieldAuditForm } from './FieldAuditForm';
+import guardedAction from '../../utils/guardedAction';
+import { useToast } from '../../contexts/ToastContext';
 // ForensicReportService is heavy (pdf/html2canvas/jspdf) — dynamically import where needed to avoid bundling into dashboard chunk
 import reportService from '../../services/reportService';
 
@@ -65,6 +67,7 @@ const PROTOCOLS: Protocol[] = [
 
 export const ProtocolLaunchpad: React.FC = () => {
     const { t } = useTranslation();
+    const { showToast } = useToast();
     const { selectedAsset } = useAssetContext();
     const { mechanical, diagnosis } = useTelemetryStore();
     const { hasPendingData, pendingCount, syncStatus, isOnline } = useSyncWatcher();
@@ -314,7 +317,7 @@ export const ProtocolLaunchpad: React.FC = () => {
                                 <ModernButton
                                     variant={protocol.canGenerate ? 'primary' : 'ghost'}
                                     disabled={!protocol.canGenerate || generatingId === protocol.id}
-                                    onClick={() => handleGenerateReport(protocol)}
+                                    onClick={() => { const ok = guardedAction('Generate Protocol Report', () => handleGenerateReport(protocol)); if (!ok) { try { showToast('Report generation blocked: LOTO active','warning'); } catch(e){} } }}
                                     className="text-sm px-4 py-2"
                                 >
                                     {generatingId === protocol.id ? (

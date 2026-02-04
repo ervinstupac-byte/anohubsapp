@@ -18,6 +18,7 @@ import { QrCode } from '../ui/QrCode';
 import { ArchiveScanner } from '../../services/ArchiveScanner';
 import { MqttBridge, MqttStatus } from '../../services/MqttBridge';
 import { ForensicReportService } from '../../services/ForensicReportService';
+import guardedAction from '../../utils/guardedAction';
 
 // GLOBAL EVENT FOR REMOTE TRIGGER
 export const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
@@ -291,18 +292,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
     // NC-20: Forensic Generation Handler
     const handleGenerateForensic = async () => {
-        if (isGenerating) return;
-        setIsGenerating(true);
-        try {
-            // Mock telemetry fetch since Sidebar doesn't have direct store access yet
-            // In a real scenario, we'd pull from useTelemetryStore.getState()
-            const mockTelemetry = { power: 12.5, flow: 85, vibration: 4.8 };
-            await ForensicReportService.generateDossier('UNIT-01 (Generic)', mockTelemetry);
-        } catch (e) {
-            console.error("Forensic Generation Failed", e);
-        } finally {
-            setIsGenerating(false);
-        }
+        const ok = guardedAction('Generate Forensic Dossier', async () => {
+            if (isGenerating) return;
+            setIsGenerating(true);
+            try {
+                // Mock telemetry fetch since Sidebar doesn't have direct store access yet
+                // In a real scenario, we'd pull from useTelemetryStore.getState()
+                const mockTelemetry = { power: 12.5, flow: 85, vibration: 4.8 };
+                await ForensicReportService.generateDossier('UNIT-01 (Generic)', mockTelemetry);
+            } catch (e) {
+                console.error("Forensic Generation Failed", e);
+            } finally {
+                setIsGenerating(false);
+            }
+        });
+        if (!ok) { try { showToast('Forensic generation blocked: LOTO active', 'warning'); } catch (e) {} }
     };
 
     useEffect(() => {

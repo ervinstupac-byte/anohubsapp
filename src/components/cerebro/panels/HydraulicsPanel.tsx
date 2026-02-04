@@ -4,6 +4,8 @@ import { useProjectEngine } from '../../../contexts/ProjectContext';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
+import { useToast } from '../../../contexts/ToastContext';
+import guardedAction from '../../../utils/guardedAction';
 import { GlassCard } from '../../../shared/components/ui/GlassCard';
 import { PipeMaterial } from '../../../core/TechnicalSchema';
 
@@ -15,6 +17,7 @@ export const HydraulicsPanel: React.FC = () => {
     const { physics: livePhysics, hydraulic: liveHydraulic } = useTelemetryStore();
 
     const { t, i18n: { language } } = useTranslation();
+    const { showToast } = useToast();
 
     const { material, wallThickness } = technicalState.penstock; // Keep reading config from TechnicalState for Inputs
 
@@ -133,7 +136,10 @@ export const HydraulicsPanel: React.FC = () => {
                             </p>
                         </div>
                         <button
-                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'STRUCTURAL_RISK' })}
+                            onClick={() => {
+                                const ok = guardedAction('Apply Structural Recovery', () => dispatch({ type: 'APPLY_MITIGATION', payload: 'STRUCTURAL_RISK' }));
+                                if (!ok) { try { showToast('Apply Recovery blocked: LOTO active', 'warning'); } catch (e) {} }
+                            }}
                             className="relative z-10 px-3 py-2 bg-amber-500 text-black text-[10px] font-black rounded hover:bg-amber-400 transition-all flex items-center gap-2"
                         >
                             APPLY RECOVERY <ArrowRight className="w-3 h-3" />

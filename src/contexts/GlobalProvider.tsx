@@ -1,4 +1,6 @@
 import React from 'react';
+import { ShieldAlert } from 'lucide-react';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { AuthProvider } from './AuthContext.tsx';
 import { QuestionnaireProvider } from './QuestionnaireContext.tsx';
 import { HPPDesignProvider } from './HPPDesignContext.tsx';
@@ -35,6 +37,8 @@ interface GlobalProviderProps {
  * The Hierarchy of Truth: Consolidates all core engineering and system contexts.
  */
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
+    const isMaintenanceLocked = useTelemetryStore(state => state.isMaintenanceLocked);
+
     return (
         <DensityProvider>
             <ToastProvider>
@@ -51,6 +55,13 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                                             <MaintenanceProvider>
                                                 <RiskProvider>
                                                     <TelemetryProvider>
+                                                        {/* Global LOTO Banner overlayed across the app */}
+                                                        {isMaintenanceLocked && (
+                                                            <div className="loto-override-banner" role="status" aria-live="polite">
+                                                                <ShieldAlert className="w-5 h-5 mr-3 text-white animate-bounce" />
+                                                                <div className="text-sm font-black uppercase tracking-widest">MAINTENANCE LOCK - LOTO ACTIVE - CONTROL INHIBITED</div>
+                                                            </div>
+                                                        )}
                                                         <QuestionnaireProvider>
                                                             <HPPDesignProvider>
                                                                 <InventoryProvider>

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useToast } from '../../contexts/ToastContext';
 import { AlertTriangle, Power, RotateCcw, CheckCircle } from 'lucide-react';
+import guardedAction from '../../utils/guardedAction';
 
 interface SafeStateHMIProps {
     assetId: string;
@@ -21,6 +24,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
     onReset
 }) => {
     const [confirmStop, setConfirmStop] = useState(false);
+    const { showToast } = useToast();
 
     return (
         <div className="fixed inset-0 bg-slate-950 flex items-center justify-center z-50">
@@ -64,8 +68,8 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                                 setConfirmStop(true);
                                 setTimeout(() => setConfirmStop(false), 3000);
                             } else {
-                                onStop();
-                                setConfirmStop(false);
+                                const ok = guardedAction('Emergency Stop', () => { onStop(); setConfirmStop(false); });
+                                if (!ok) { try { showToast('Emergency stop blocked: LOTO active','warning'); } catch (e) {} setConfirmStop(false); }
                             }
                         }}
                         disabled={!currentStatus.running}
@@ -112,7 +116,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
 
                     {/* START */}
                     <button
-                        onClick={onStart}
+                        onClick={() => { const ok = guardedAction('Start Equipment', () => onStart()); if (!ok) { try { showToast('Start blocked: LOTO active','warning'); } catch (e) {} return; } }}
                         disabled={currentStatus.running || currentStatus.criticalAlarms.length > 0}
                         className={`h-64 rounded-lg border-4 font-bold text-2xl transition-all ${currentStatus.running || currentStatus.criticalAlarms.length > 0
                                 ? 'bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed'
@@ -132,7 +136,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                 {/* Reset Alarms */}
                 <div className="text-center">
                     <button
-                        onClick={onReset}
+                        onClick={() => { const ok = guardedAction('Reset Alarms', () => onReset()); if (!ok) { try { showToast('Reset blocked: LOTO active','warning'); } catch (e) {} return; } }}
                         className="px-8 py-4 bg-amber-950 border-2 border-amber-500 rounded-lg text-amber-300 font-bold text-lg hover:bg-amber-900 transition-all active:scale-95"
                     >
                         <div className="flex items-center gap-3">

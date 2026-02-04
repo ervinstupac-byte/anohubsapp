@@ -12,6 +12,8 @@ import { useCerebro } from '../../contexts/ProjectContext';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
 import { Activity, Zap, Sun, Footprints, AlertTriangle, CheckCircle, Database, FileSearch, Ruler, ArrowLeft, RotateCw, Info, ShieldCheck, Microscope, Target, Calculator, ChevronRight } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { useToast } from '../../contexts/ToastContext';
+import guardedAction from '../../utils/guardedAction';
 import { NeuralPulse } from '../ui/NeuralPulse';
 import { AlignmentVisualizer } from '../ui/AlignmentVisualizer';
 import { InfoTooltip } from '../ui/InfoTooltip'; // NEW
@@ -137,6 +139,8 @@ export const ShaftAlignment: React.FC = () => {
         }
     };
 
+    const { showToast } = useToast();
+
     const handleGenerateReport = () => {
         // ... (Report Generation Logic preserved but omitted for brevity if unchanged, but I must provide valid react code. I'll include it.)
         const snapshot = orbitRef.current?.getSnapshot();
@@ -188,7 +192,7 @@ export const ShaftAlignment: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button onClick={handleGenerateReport} className="flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/30 rounded-full text-[10px] font-black text-emerald-400 hover:bg-emerald-600 hover:text-white transition uppercase tracking-widest">
+                        <button onClick={() => { const ok = guardedAction('Generate Shaft Alignment Dossier', () => handleGenerateReport()); if (!ok) { try { showToast('Dossier export blocked: LOTO active','warning'); } catch(e){} } }} className="flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/30 rounded-full text-[10px] font-black text-emerald-400 hover:bg-emerald-600 hover:text-white transition uppercase tracking-widest">
                             <FileSearch className="w-3 h-3" /> Dossier
                         </button>
                         <button onClick={() => navigate(`/${ROUTES.FRANCIS.HUB}`)} className="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition">

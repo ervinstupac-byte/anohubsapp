@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import { FileText, Download, Sparkles, CheckCircle } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ForensicReportService } from '../services/ForensicReportService';
+import { useToast } from '../contexts/ToastContext';
+import guardedAction from '../utils/guardedAction';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../contexts/AssetContext';
 
@@ -67,6 +69,8 @@ export const AutoReportGenerator: React.FC = () => {
 
     const [serviceType, setServiceType] = useState('Centriranje vratila i optimizacija lopatica');
     const [engineerName, setEngineerName] = useState('Ervin Stupac');
+
+    const { showToast } = useToast();
 
     const handleGenerate = async () => {
         if (!selectedAsset) {
@@ -302,7 +306,7 @@ export const AutoReportGenerator: React.FC = () => {
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={handleGenerate}
+                        onClick={() => { const ok = guardedAction('Generate Service Report', () => { handleGenerate(); }); if (!ok) { try { showToast('Report generation blocked: LOTO active','warning'); } catch(e){} } }}
                     disabled={isGenerating}
                     className="px-12 py-5 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-xl font-black uppercase text-white text-lg flex items-center gap-3 mx-auto hover:shadow-2xl hover:shadow-purple-500/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >

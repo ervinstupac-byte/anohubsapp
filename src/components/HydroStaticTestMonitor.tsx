@@ -2,9 +2,11 @@
 // Detects micro-cracks, air in system, seal leaks
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { motion } from 'framer-motion';
 import { Play, Square, AlertTriangle, CheckCircle, TrendingDown } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
+import { useToast } from '../contexts/ToastContext';
 import { CommissioningService } from '../services/CommissioningService';
 
 interface HydroStaticTestMonitorProps {
@@ -52,6 +54,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
         setTestResult(null);
     };
 
+        const { showToast } = useToast();
     const stopTest = async () => {
         setIsRunning(false);
         if (intervalRef.current) clearInterval(intervalRef.current);
@@ -113,7 +116,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                onClick={startTest}
+                                onClick={() => { if (useTelemetryStore.getState().isMaintenanceLocked) { try { showToast('Start blocked: LOTO active','warning'); } catch (e) {} return; } startTest(); }}
                                 disabled={readings.length > 0}
                                 className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
                             >
@@ -132,6 +135,7 @@ export const HydroStaticTestMonitor: React.FC<HydroStaticTestMonitorProps> = ({ 
                             </motion.button>
                         )}
                     </div>
+                    
 
                     {/* Live Metrics */}
                     <div className="space-y-3">

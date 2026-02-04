@@ -8,6 +8,8 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningWizard } from './CommissioningWizard';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useCommissioning } from '../contexts/CommissioningContext';
+import guardedAction from '../utils/guardedAction';
+import { useToast } from '../contexts/ToastContext';
 
 export const CommissioningModeDashboard: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -21,6 +23,8 @@ export const CommissioningModeDashboard: React.FC = () => {
             </GlassCard>
         );
     }
+
+    const { showToast } = useToast();
 
     if (!isCommissioningMode) {
         return (
@@ -109,7 +113,10 @@ export const CommissioningModeDashboard: React.FC = () => {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={startCommissioningMode}
+                        onClick={() => {
+                            const ok = guardedAction('Enter Commissioning Mode', () => startCommissioningMode());
+                            if (!ok) { try { showToast('Start Commissioning blocked: LOTO active', 'warning'); } catch (e) {} }
+                        }}
                         className="px-12 py-5 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl font-black uppercase text-white text-lg flex items-center gap-3 mx-auto hover:shadow-2xl hover:shadow-cyan-500/50 transition-all"
                     >
                         <Play className="w-6 h-6" />

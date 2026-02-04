@@ -1,6 +1,7 @@
 
 import { SimulationEngine } from './SimulationEngine';
 import { AlertJournal } from './AlertJournal';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 // NC-18: Finite State Machine for MQTT Link
 export type MqttStatus = 'IDLE' | 'CONNECTING' | 'CONNECTED' | 'ERROR';
@@ -256,8 +257,8 @@ class MqttBridgeService {
         this.statusListeners.forEach(l => l(newStatus));
 
         if (newStatus === 'ERROR' || newStatus === 'IDLE') {
-            // Fallback to simulation if link dies
-            SimulationEngine.startNC13StressTest();
+            // Auto-start disabled: simulations must be started manually to respect LOTO
+            AlertJournal.logEvent('WARNING', 'Simulation auto-start suppressed by policy; manual start required', 'MQTT_BRIDGE');
         }
     }
 
@@ -317,6 +318,19 @@ class MqttBridgeService {
         if (this._watchdogTimer) clearTimeout(this._watchdogTimer);
         this._heartbeatInterval = null;
         this._watchdogTimer = null;
+    }
+
+    // Public API: Manual start for simulation (respects maintenance lock)
+    public manualStartSimulation(): void {
+        const isLocked = typeof useTelemetryStore !== 'undefined' && typeof (useTelemetryStore as any).getState === 'function'
+            ? useTelemetryStore.getState().isMaintenanceLocked
+            : false;
+        if (isLocked) {
+            AlertJournal.logEvent('WARNING', 'Manual simulation start blocked: maintenance lock active', 'MQTT_BRIDGE');
+            return;
+        }
+        AlertJournal.logEvent('INFO', 'Manual simulation start invoked via MqttBridge', 'MQTT_BRIDGE');
+        SimulationEngine.startNC13StressTest();
     }
 }
 

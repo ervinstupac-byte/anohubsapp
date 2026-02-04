@@ -43,7 +43,10 @@ export const SovereignModal: React.FC<SovereignModalProps> = ({
                     onClick={(e) => e.stopPropagation()}
                     className="w-full max-w-5xl max-h-[90vh] flex flex-col"
                 >
-                    <GlassCard className={`relative flex flex-col h-full overflow-hidden border-t-2 ${borderColor} shadow-[0_0_40px_${glowColor}]`}>
+                    <GlassCard
+                        className={`relative flex flex-col h-full overflow-hidden border-t-2 ${borderColor}`}
+                        style={{ boxShadow: `0 0 40px ${glowColor}` }}
+                    >
                         {/* HEADER */}
                         <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/40 relative overflow-hidden shrink-0">
                             {/* Animated Background Glow */}

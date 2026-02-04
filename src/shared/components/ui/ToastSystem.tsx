@@ -9,7 +9,7 @@ interface ToastProps {
 
 export const ToastSystem: React.FC<ToastProps> = ({ alerts, onDismiss }) => {
     return (
-        <div className="fixed bottom-8 left-8 z-[60] flex flex-col gap-2 pointer-events-none">
+        <div className="fixed bottom-8 left-8 z-[var(--z-banner)] flex flex-col gap-2 pointer-events-none">
             <AnimatePresence>
                 {alerts.map((alert, index) => (
                     <motion.div

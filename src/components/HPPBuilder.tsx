@@ -23,6 +23,7 @@ import { ModernInput } from '../shared/components/ui/ModernInput';
 import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 import { StructuralAssembly } from './hpp-designer/StructuralAssembly.tsx';
+import guardedAction from '../utils/guardedAction';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { ProjectStateManager } from '../contexts/ProjectStateContext';
 import { loggingService } from '../services/LoggingService';
@@ -43,7 +44,7 @@ const TurbineChart: React.FC<{ head: number; flow: number }> = ({ head, flow }) 
             <div className="absolute bottom-[20%] right-[20%] text-slate-600/50 text-xs font-black tracking-[0.2em] rotate-[-15deg] pointer-events-none">{t('hppBuilder.chart.kaplanZone')}</div>
             <div className="absolute left-3 top-3 text-[10px] text-cyan-500/80 font-mono font-bold">{t('hppBuilder.chart.headAxis')} ▲</div>
             <div className="absolute right-3 bottom-3 text-[10px] text-cyan-500/80 font-mono font-bold">{t('hppBuilder.chart.flowAxis')} ►</div>
-            <div className="absolute w-4 h-4 bg-cyan-400 rounded-full border-[3px] border-white/20 shadow-[0_0_20px_cyan] transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) z-10" style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}>
+            <div className="absolute w-4 h-4 bg-cyan-400 rounded-full border-[3px] border-white/20 shadow-[0_0_20px_cyan] transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1) z-[var(--z-content)]" style={{ top: `${topPos}%`, left: `${leftPos}%`, transform: 'translate(-50%, -50%)' }}>
                 <div className="absolute w-full h-full rounded-full bg-cyan-400/50 animate-ping"></div>
             </div>
         </div>
@@ -646,7 +647,7 @@ export const HPPBuilder: React.FC = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <ModernButton onClick={handleSaveConfiguration} variant="primary" icon={<span>cloud_upload</span>} fullWidth isLoading={isLoading}>{t('hppStudio.buttons.saveToCloud')}</ModernButton>
-                                    <ModernButton onClick={handleGeneratePDF} variant="secondary" icon={<span>picture_as_pdf</span>} fullWidth>{t('hppStudio.buttons.generateReport')}</ModernButton>
+                                    <ModernButton onClick={() => { const ok = guardedAction('Generate HPP PDF', () => handleGeneratePDF()); if (!ok) { try { showToast(t('hppStudio.toasts.lotoBlocked'), 'warning'); } catch (e) {} } }} variant="secondary" icon={<span>picture_as_pdf</span>} fullWidth>{t('hppStudio.buttons.generateReport')}</ModernButton>
                                 </div>
                             </div>
                         </GlassCard>

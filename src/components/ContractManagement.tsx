@@ -8,6 +8,7 @@ import { useToast } from '../contexts/ToastContext.tsx';
 import jsPDF from 'jspdf';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
+import guardedAction from '../utils/guardedAction';
 
 interface ContractStatus {
     status: 'ACTIVE' | 'BREACHED' | 'WARNING' | 'EXPIRED';
@@ -194,7 +195,7 @@ export const ContractManagement: React.FC = () => {
                             </div>
 
                             <ModernButton
-                                onClick={generateLegalNotice}
+                                onClick={() => { const ok = guardedAction('Generate Legal Notice', () => generateLegalNotice()); if (!ok) { try { showToast(t('contractManagement.lotoBlocked', 'Action blocked: LOTO active'), 'warning'); } catch (e) {} } }}
                                 variant={contract.status === 'ACTIVE' ? 'secondary' : 'danger'}
                                 fullWidth
                                 className="py-4 text-sm"

@@ -74,6 +74,7 @@ import { Responsive as ResponsiveLayout } from 'react-grid-layout';
 import * as ReactGridLayoutModule from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import '../styles/nc89-fixes.css';
 import { SovereignStrategist, FinancialContext } from '../services/SovereignStrategist';
 
 const RGL = ReactGridLayoutModule as any;
@@ -94,6 +95,8 @@ const WIDGET_IDS = {
     ROI: 'roi-master',
     ENGINEER: 'engineer-portal',
     HYDROSCHOOL: 'hydroschool-portal'
+    ,HERITAGE_SEARCH: 'heritage-search',
+    SAFE_STATE_HMI: 'safe-state-hmi'
 };
 
 import { AssetTypeSelector } from './navigation/AssetTypeSelector';
@@ -101,6 +104,11 @@ import { useRef } from 'react';
 import { EventJournal } from '../services/EventJournal';
 
 import { AlarmAckPanel } from './dashboard/AlarmAckPanel.tsx';
+
+import { HeritageSearchWidget } from './dashboard/HeritageSearchWidget';
+import { SafeStateHMI } from './dashboard/SafeStateHMI';
+import { MqttBridge } from '../services/MqttBridge';
+import guardedAction from '../utils/guardedAction';
 
 // --- TREND INDICATOR (NC-86) ---
 const TrendArrow: React.FC<{ trend: 'UP' | 'DOWN' | 'STABLE', value?: number, threshold?: number, className?: string }> = ({ trend, value, threshold = 2.0, className }) => {
@@ -147,6 +155,8 @@ export const MaintenanceDashboard: React.FC = () => {
     const [hapticBurst, setHapticBurst] = useState(false);
 
     const { mechanical, hydraulic, physics, fleet, diagnosis, rcaResults, isMaintenanceLocked, toggleLOTO } = useTelemetryStore();
+    // Efficiency percent (0-100) for UI thresholds
+    const effPct = ((hydraulic?.efficiency || 0) * 100);
     const hours = selectedAsset ? operatingHours[idAdapter.toStorage(selectedAsset.id)] || 0 : 0;
 
     const currentType = selectedAsset?.turbine_type || selectedAsset?.type || 'FRANCIS';
@@ -182,7 +192,9 @@ export const MaintenanceDashboard: React.FC = () => {
                 { i: WIDGET_IDS.TURBINE_HUB, x: 0, y: 2, w: 12, h: 4 },
                 { i: WIDGET_IDS.TIMELINE, x: 0, y: 6, w: 6, h: 3 },
                 { i: WIDGET_IDS.ADVISOR, x: 6, y: 6, w: 6, h: 3 },
-                { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 9, w: 12, h: 2 }
+                { i: WIDGET_IDS.HERITAGE_SEARCH, x: 0, y: 9, w: 6, h: 3 },
+                { i: WIDGET_IDS.SAFE_STATE_HMI, x: 6, y: 9, w: 6, h: 3 },
+                { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 12, w: 12, h: 2 }
             ]
         };
     });
@@ -203,7 +215,9 @@ export const MaintenanceDashboard: React.FC = () => {
                         { i: WIDGET_IDS.TURBINE_HUB, x: 0, y: 2, w: 12, h: 4 },
                         { i: WIDGET_IDS.TIMELINE, x: 0, y: 6, w: 6, h: 3 },
                         { i: WIDGET_IDS.ADVISOR, x: 6, y: 6, w: 6, h: 3 },
-                        { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 9, w: 12, h: 2 }
+                        { i: WIDGET_IDS.HERITAGE_SEARCH, x: 0, y: 9, w: 6, h: 3 },
+                        { i: WIDGET_IDS.SAFE_STATE_HMI, x: 6, y: 9, w: 6, h: 3 },
+                        { i: WIDGET_IDS.PROTOCOLS, x: 0, y: 12, w: 12, h: 2 }
                     ]
                 });
             }
@@ -402,6 +416,16 @@ export const MaintenanceDashboard: React.FC = () => {
                         >
                             Request_Load_Alpha
                         </button>
+                        <button
+                            onClick={() => {
+                                const ok = guardedAction('Start Simulation', () => MqttBridge.manualStartSimulation());
+                                if (!ok) { try { showToast('Manual simulation start blocked: LOTO active', 'error'); } catch (e) {} }
+                            }}
+                            disabled={isMaintenanceLocked}
+                            className={`px-3 py-1 rounded text-[10px] font-black transition-all ${isMaintenanceLocked ? 'bg-red-600 text-white' : 'bg-emerald-500 text-black hover:bg-emerald-600'}`}
+                        >
+                            Start Simulation
+                        </button>
                         <AssetPicker />
                         <div className="h-4 w-px bg-white/10" />
                         <div className="text-[10px] font-mono text-slate-500 uppercase flex items-center gap-2">
@@ -469,7 +493,7 @@ export const MaintenanceDashboard: React.FC = () => {
                     cols={{ lg: 12, md: 10, sm: 6, xs: 1, xxs: 1 }}
                     rowHeight={100}
                     onLayoutChange={onLayoutChange}
-                    draggableHandle=".drag-handle"
+                    draggableHandle=".drag-grip"
                     isDraggable={!isMobile}
                     isResizable={!isMobile}
                     useCSSTransforms={!isMobile}
@@ -481,7 +505,9 @@ export const MaintenanceDashboard: React.FC = () => {
                                 data-testid="hud-load-card"
                                 className="h-full bg-slate-900/50 backdrop-blur-[12px] border border-white/10 rounded-2xl p-8 relative overflow-hidden group hover:border-cyan-500/40 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all duration-500"
                             >
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <div className="absolute top-0 right-0 p-4 flex flex-col items-end gap-2 text-shadow-glow">
                                     <Zap className="w-5 h-5 text-cyan-500/50" />
                                     <SimpleSparkline data={[12.1, 12.3, 12.2, 12.5, 12.4, 12.5]} width={60} height={20} />
@@ -507,7 +533,9 @@ export const MaintenanceDashboard: React.FC = () => {
                                 data-testid="hud-vibration-card"
                                 className="h-full bg-slate-900/50 backdrop-blur-[12px] border border-white/10 rounded-2xl p-8 relative overflow-hidden group hover:border-amber-500/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-500"
                             >
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <div className="absolute top-0 right-0 p-4 flex flex-col items-end gap-2 text-shadow-glow">
                                     <Activity className="w-5 h-5 text-amber-500/50" />
                                     <SimpleSparkline data={[2.1, 2.4, 2.2, 2.5, 2.7, 2.5]} width={60} height={20} />
@@ -541,7 +569,9 @@ export const MaintenanceDashboard: React.FC = () => {
                                 data-testid="hud-efficiency-card"
                                 className="h-full bg-slate-900/50 backdrop-blur-[12px] border border-white/10 rounded-2xl p-8 relative overflow-hidden group hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-500"
                             >
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <div className="absolute top-0 right-0 p-4 flex flex-col items-end gap-2 text-shadow-glow">
                                     <Gauge className="w-5 h-5 text-emerald-500/50" />
                                     <SimpleSparkline data={[91, 92, 91.5, 92, 92.2, 92]} width={60} height={20} />
@@ -575,7 +605,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.TURBINE_HUB) && (
                         <div key={WIDGET_IDS.TURBINE_HUB}>
                             <div id="turbine-navigation-hub" data-testid="turbine-navigation-hub" className="h-full bg-slate-900/5 backdrop-blur-md border border-white/5 rounded-3xl p-6 relative group overflow-hidden">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+                                </div>
                                 <div className="absolute inset-0 bg-cyan-500/[0.02] pointer-events-none" />
                                 <div className="h-full flex justify-center items-center">
                                     {currentType.toUpperCase() === 'FRANCIS' && <FrancisTurbineWireframe activeFeature={activeQuery?.toString()} />}
@@ -592,7 +624,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.TIMELINE) && (
                         <div key={WIDGET_IDS.TIMELINE}>
                             <div className="h-full relative group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move z-10 hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <MaintenanceTimelineCard />
                             </div>
                         </div>
@@ -601,7 +635,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.ADVISOR) && (
                         <div key={WIDGET_IDS.ADVISOR}>
                             <div className="h-full relative group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move z-10 hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <ExpertMaintenanceAdvisorCard />
                             </div>
                         </div>
@@ -610,7 +646,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.PROTOCOLS) && (
                         <div key={WIDGET_IDS.PROTOCOLS}>
                             <div className="h-full bg-slate-900/5 border border-white/5 rounded-2xl p-8 relative overflow-hidden group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 cursor-move z-10 hover:bg-white/5" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-20" />
+                                </div>
                                 <div className="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-8">Operational Continuity Protocols</div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     {protocols.map(proto => {
@@ -650,7 +688,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.MECHANICAL) && (
                         <div key={WIDGET_IDS.MECHANICAL}>
                             <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 relative overflow-hidden group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/10" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+                                </div>
                                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
@@ -670,7 +710,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.ELECTRICAL) && (
                         <div key={WIDGET_IDS.ELECTRICAL}>
                             <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 relative overflow-hidden group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/10" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+                                </div>
                                 <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
                                     <div className="flex items-center gap-2">
                                         <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
@@ -689,7 +731,9 @@ export const MaintenanceDashboard: React.FC = () => {
                     {visibleWidgets.includes(WIDGET_IDS.FORENSICS) && (
                         <div key={WIDGET_IDS.FORENSICS}>
                             <div className="h-full bg-[#020617]/90 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 relative overflow-hidden group">
-                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/10" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+                                </div>
                                 <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/10">
                                     <div className="flex items-center gap-2">
                                         <FileSearch className="w-4 h-4 text-purple-500" />
@@ -842,7 +886,9 @@ const ROIMasterCard: React.FC<{ telemetry: any, userRole: string }> = ({ telemet
 
     return (
         <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 relative overflow-hidden group">
-            <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/10" />
+            <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+            </div>
             <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/10">
                 <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-emerald-500" />
@@ -890,7 +936,9 @@ const ROIMasterCard: React.FC<{ telemetry: any, userRole: string }> = ({ telemet
 const PortalWindow: React.FC<{ title: string; icon: React.ReactNode; id: string; onToggle: () => void }> = ({ title, icon, id, onToggle }) => {
     return (
         <div className="h-full bg-slate-900/90 backdrop-blur-2xl border border-white/20 rounded-2xl p-6 relative overflow-hidden flex flex-col">
-            <div className="drag-handle absolute top-0 left-0 right-0 h-8 cursor-move z-10 hover:bg-white/10" />
+            <div className="drag-handle absolute top-0 left-0 right-0 h-8 pointer-events-none">
+                <div className="drag-grip absolute top-0 left-3 w-6 h-8 z-20" />
+            </div>
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
                 <div className="flex items-center gap-2">
                     {icon}

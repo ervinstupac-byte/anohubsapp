@@ -14,6 +14,8 @@ import {
     RotateCcw, Settings2
 } from 'lucide-react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useToast } from '../../contexts/ToastContext';
+import guardedAction from '../../utils/guardedAction';
 import { plcGateway } from '../../core/PLCGateway';
 import { FrequencyPeak } from '../../types/plc';
 
@@ -264,6 +266,7 @@ export const ScenarioControl: React.FC<{ className?: string }> = ({ className = 
     const prevStateRef = useRef<{ bearingTemp: number; timestamp: number } | undefined>(undefined);
 
     const store = useTelemetryStore.getState;
+    const { showToast } = useToast();
 
     // Scenario execution loop with dT/dt tracking
     useEffect(() => {
@@ -415,7 +418,10 @@ export const ScenarioControl: React.FC<{ className?: string }> = ({ className = 
                 {SCENARIOS.map(scenario => (
                     <button
                         key={scenario.id}
-                        onClick={() => startScenario(scenario.id)}
+                        onClick={() => {
+                            const ok = guardedAction(`Start Scenario: ${scenario.name}`, () => startScenario(scenario.id));
+                            if (!ok) { try { showToast('Start blocked: LOTO active', 'warning'); } catch (e) {} }
+                        }}
                         disabled={activeScenario !== null}
                         className={`w-full p-3 rounded border text-left transition-all group ${activeScenario === scenario.id
                             ? `${scenario.bgColor} ${scenario.borderColor}`

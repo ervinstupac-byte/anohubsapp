@@ -16,6 +16,7 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { Camera, Moon, Ghost, FileText, ChevronRight, Shield, X, CheckCircle2, Wrench } from 'lucide-react';
 import { useToast } from '../contexts/ToastContext';
+import guardedAction from '../utils/guardedAction';
 import { useDocumentViewer } from '../contexts/DocumentContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { StructuralSafetyMonitor } from '../features/telemetry/components/StructuralSafetyMonitor';
@@ -216,7 +217,10 @@ export const CommandCenter: React.FC = () => {
 
                         {/* Forensic Dossier */}
                         <button
-                            onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
+                            onClick={() => {
+                                const ok = guardedAction('Trigger Forensic Export', () => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT)));
+                                if (!ok) { try { showToast('Forensic export blocked: LOTO active', 'warning'); } catch (e) {} }
+                            }}
                             className="px-3 py-1.5 rounded-sm border border-slate-700/30 bg-slate-900/20 text-slate-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
                             title="Export Forensic Hypothesis as PDF"
                         >

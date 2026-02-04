@@ -50,7 +50,7 @@ export const EngineeringSkeleton: React.FC<EngineeringSkeletonProps> = ({
                     </>
                 )}
 
-                <div className={`relative z-10 ${spacing.cardPadding}`}>
+                <div className={`relative z-[var(--z-content)] ${spacing.cardPadding}`}>
                     <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-2">
                             <div className={`w-8 h-8 rounded ${shimmer}`} />

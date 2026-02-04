@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { useToast } from '../contexts/ToastContext';
 import { useAIPrediction } from '../contexts/AIPredictionContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
@@ -6,7 +8,9 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 
 export const PrescriptiveRecommendations: React.FC = () => {
     const { prescriptions, executeAction } = useAIPrediction();
+    const { isMaintenanceLocked } = useTelemetryStore();
     const { selectedAsset } = useAssetContext();
+    const { showToast } = useToast();
 
     if (!selectedAsset) return null;
 
@@ -114,7 +118,13 @@ export const PrescriptiveRecommendations: React.FC = () => {
                                                                 </p>
                                                                     {action.executable && (
                                                                     <button
-                                                                        onClick={() => executeAction(idAdapter.toNumber(selectedAsset.id) || 0, action.action, action.value)}
+                                                                        onClick={() => {
+                                                                            if (isMaintenanceLocked) {
+                                                                                try { showToast('Action blocked: LOTO active', 'warning'); } catch (e) { }
+                                                                                return;
+                                                                            }
+                                                                            executeAction(idAdapter.toNumber(selectedAsset.id) || 0, action.action, action.value);
+                                                                        }}
                                                                         className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded text-[9px] font-black text-red-400 hover:bg-red-500 hover:text-white transition-all uppercase tracking-widest"
                                                                     >
                                                                         EXECUTE NOW

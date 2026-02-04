@@ -4,6 +4,7 @@
  * All color semantics, spacing, and typography constants.
  * Import this file to ensure visual consistency across components.
  */
+import zLayers from './zLayers';
 
 // === STATUS COLOR SYSTEM ===
 // Used for alerts, badges, borders, and indicators
@@ -126,12 +127,12 @@ export const getStatusClasses = (status: StatusType) => STATUS_COLORS[status] ||
 // Strict layering to prevent UI overlap conflicts
 export const Z_INDEX = {
     background: 'z-0',
-    content: 'z-10',
-    sidebar: 'z-20',
-    telemetryBar: 'z-30',
-    modal: 'z-40',
-    toast: 'z-50',
-    bootOverlay: 'z-[9999]', // System boot is exceptional
+    content: 'z-[var(--z-content)]',
+    sidebar: 'z-[var(--z-sidebar)]',
+    telemetryBar: 'z-[var(--z-telemetry)]',
+    modal: 'z-[var(--z-modal)]',
+    toast: 'z-[var(--z-toast)]',
+    bootOverlay: `z-[${zLayers.TOP}]`, // System boot is exceptional (uses zLayers.TOP)
 } as const;
 
 // === SECTOR GLOW EFFECTS (Semantic) ===

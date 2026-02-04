@@ -22,6 +22,7 @@ import { Responsive as ResponsiveLayout } from 'react-grid-layout';
 import * as ReactGridLayoutModule from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import '../styles/nc89-fixes.css';
 
 // Fix for missing WidthProvider type definition
 const RGL = ReactGridLayoutModule as any;
@@ -55,14 +56,14 @@ const PopOutButton = ({ id, label }: { id: string; label?: string }) => (
 );
 
 const CardHeader = ({ title, icon, widgetId, dragHandle = true }: { title: string; icon: React.ReactNode; widgetId: string; dragHandle?: boolean }) => (
-    <div className={`flex items-center justify-between mb-3 pb-2 border-b border-white/5 ${dragHandle ? 'drag-handle cursor-move' : ''}`}>
+    <div className={`flex items-center justify-between mb-3 pb-2 border-b border-white/5 ${dragHandle ? 'drag-handle pointer-events-none cursor-default' : ''}`}>
         <div className="flex items-center gap-2">
             {icon}
             <h3 className="text-sm font-bold text-slate-300 uppercase font-sans tracking-widest">{title}</h3>
         </div>
         <div className="flex items-center gap-1">
             <PopOutButton id={widgetId} label={title} />
-            {dragHandle && <Move className="w-4 h-4 text-slate-600" />}
+            {dragHandle && <div className="drag-grip flex items-center"><Move className="w-4 h-4 text-slate-600" /></div>}
         </div>
     </div>
 );
@@ -475,14 +476,14 @@ export const UniversalTurbineDashboard: React.FC = () => {
                     onLayoutChange={onLayoutChange}
                     isDroppable={true}
                     onDrop={onDrop}
-                    draggableHandle=".drag-handle"
+                    draggableHandle=".drag-grip"
                 >
                     {/* 1. UNIVERSAL VITALS */}
                     <div key="vitals">
                         <GlassCard className="h-full p-4 border-l-4 overflow-y-auto rounded-2xl border-white/5 hover:shadow-[0_0_20px_rgba(6,182,212,0.1)] transition-shadow duration-500" style={{ borderColor: colors.primary }}>
-                            <div className="drag-handle cursor-move flex items-center justify-between mb-4 pb-2 border-b border-white/5">
+                            <div className="drag-handle pointer-events-none cursor-default flex items-center justify-between mb-4 pb-2 border-b border-white/5">
                                 <h3 className="text-sm font-bold text-slate-400 uppercase font-sans tracking-wide">Universal Vitals</h3>
-                                <Move className="w-4 h-4 text-slate-600" />
+                                <div className="drag-grip flex items-center"><Move className="w-4 h-4 text-slate-600" /></div>
                             </div>
                             <div className="grid grid-cols-1 gap-4 h-[calc(100%-3rem)]">
                                 <VibrationMonitor />
@@ -501,7 +502,9 @@ export const UniversalTurbineDashboard: React.FC = () => {
                             className="h-full"
                         >
                             <GlassCard className="h-full p-6 relative overflow-hidden rounded-2xl border-white/5 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-shadow duration-700">
-                                <div className="drag-handle cursor-move absolute top-0 left-0 right-0 h-6 z-20 hover:bg-white/5 transition-colors" />
+                                <div className="drag-handle absolute top-0 left-0 right-0 h-6 pointer-events-none">
+                                    <div className="drag-grip absolute top-0 left-3 w-6 h-6 z-30" />
+                                </div>
 
                                 {/* Background Watermark */}
                                 <div className="absolute top-0 right-0 p-32 opacity-5 pointer-events-none">
@@ -583,7 +586,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
                     {/* 3. AI BRAIN */}
                     <div key="ai-brain">
                         <GlassCard className="h-full p-4 bg-purple-950/20 border border-purple-500/30 rounded-2xl hover:shadow-[0_0_20px_rgba(168,85,247,0.2)] transition-shadow">
-                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                            <div className="drag-handle pointer-events-none flex items-center gap-2 mb-3">
+                                <div className="drag-grip w-5 h-5 mr-2" />
                                 <div className="w-2 h-2 rounded-full bg-purple-500 animate-ping"></div>
                                 <h3 className="text-sm font-bold text-purple-300 uppercase font-sans tracking-wide">Decision Engine</h3>
                             </div>
@@ -594,7 +598,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
                     {/* 4. SAFETY GUARD */}
                     <div key="safety-guard">
                         <GlassCard className="h-full p-4">
-                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                            <div className="drag-handle pointer-events-none flex items-center gap-2 mb-3">
+                                <div className="drag-grip w-5 h-5 mr-2" />
                                 <Shield className="w-4 h-4 text-emerald-400" />
                                 <h3 className="text-sm font-bold text-slate-300 uppercase">Hardware Verify</h3>
                             </div>
@@ -605,7 +610,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
                     {/* 5. AUDIT LOG */}
                     <div key="audit-log">
                         <GlassCard className="h-full p-4">
-                            <div className="drag-handle cursor-move flex items-center gap-2 mb-3">
+                            <div className="drag-handle pointer-events-none flex items-center gap-2 mb-3">
+                                <div className="drag-grip w-5 h-5 mr-2" />
                                 <Terminal className="w-4 h-4 text-cyan-400" />
                                 <h3 className="text-sm font-bold text-slate-300 uppercase">System Audit Log</h3>
                             </div>
@@ -707,7 +713,8 @@ export const UniversalTurbineDashboard: React.FC = () => {
                     {droppedWidgets.map(id => (
                         <div key={id} data-grid={{ x: 0, y: Infinity, w: 3, h: 2 }}>
                             <GlassCard className="h-full p-4 bg-slate-800 border-dashed border-2 border-slate-600">
-                                <div className="drag-handle cursor-move flex justify-between">
+                                <div className="drag-handle pointer-events-none flex justify-between">
+                                    <div className="drag-grip w-5 h-5" />
                                     <span className="font-mono text-xs text-yellow-400">{id}</span>
                                     <button onClick={() => setDroppedWidgets(prev => prev.filter(w => w !== id))} className="text-red-500">×</button>
                                 </div>

@@ -1,0 +1,9 @@
+:root {
+  --z-top: 10000;
+  --z-banner: 9500;
+  --z-modal: 9000;
+  --z-toast: 9500;
+  --z-content: 10;
+  --z-sidebar: 20;
+  --z-telemetry: 30;
+}

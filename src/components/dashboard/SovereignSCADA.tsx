@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useToast } from '../../contexts/ToastContext';
+import { useTelemetry } from '../../contexts/TelemetryContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { Activity, AlertTriangle, TrendingUp, Settings, Power, Gauge } from 'lucide-react';
 import { UnityPulse } from './SovereignDashboardV2';
 
@@ -15,7 +18,7 @@ interface TurbineStatus {
 }
 
 export const SovereignSCADA: React.FC = () => {
-    const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
+    const { selectedUnit, setSelectedUnit } = useTelemetry();
     const [viewMode, setViewMode] = useState<'OVERVIEW' | 'DETAIL' | 'TRENDS'>('OVERVIEW');
 
     // Mock fleet data
@@ -81,7 +84,7 @@ export const SovereignSCADA: React.FC = () => {
                             return (
                                 <div
                                     key={unit.id}
-                                    onClick={() => setSelectedUnit(unit.id)}
+                                    onClick={() => setSelectedUnit?.(unit.id)}
                                     className={`p-3 rounded-lg cursor-pointer transition-all ${selectedUnit === unit.id
                                             ? `bg-${color}-950 border-2 border-${color}-500`
                                             : 'bg-slate-800 border border-slate-700 hover:bg-slate-750'
@@ -166,7 +169,7 @@ export const SovereignSCADA: React.FC = () => {
 
                 {/* Right Sidebar - Control Panel */}
                 <div className="w-96 bg-slate-900 border-l border-slate-700 p-4 overflow-y-auto">
-                    <SovereignCommandPanel selectedUnit={selectedUnit} />
+                    <SovereignCommandPanel selectedUnit={selectedUnit ?? null} />
                 </div>
             </div>
 
@@ -240,6 +243,8 @@ const TrendsView: React.FC = () => {
 
 // Sovereign Command Panel
 const SovereignCommandPanel: React.FC<{ selectedUnit: string | null }> = ({ selectedUnit }) => {
+    const isMaintenanceLocked = useTelemetryStore(state => state.isMaintenanceLocked);
+    const { showToast } = useToast();
     return (
         <div className="space-y-4">
             <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
@@ -253,15 +258,27 @@ const SovereignCommandPanel: React.FC<{ selectedUnit: string | null }> = ({ sele
                         <div className="text-sm font-bold mb-3">Manual Control: {selectedUnit}</div>
 
                         <div className="space-y-3">
-                            <button className="w-full px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded text-sm font-mono transition-all">
+                            <button
+                                onClick={() => { if (isMaintenanceLocked) { try { showToast('Trigger Veto blocked: LOTO active','warning'); } catch (e) {} return; } /* trigger veto logic */ }}
+                                disabled={isMaintenanceLocked}
+                                className="w-full px-4 py-2 bg-amber-600 disabled:opacity-50 hover:bg-amber-700 rounded text-sm font-mono transition-all"
+                            >
                                 🛑 Trigger Veto
                             </button>
 
-                            <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-mono transition-all">
+                            <button
+                                onClick={() => { if (isMaintenanceLocked) { try { showToast('Adjust Governor blocked: LOTO active','warning'); } catch (e) {} return; } /* adjust governor logic */ }}
+                                disabled={isMaintenanceLocked}
+                                className="w-full px-4 py-2 bg-blue-600 disabled:opacity-50 hover:bg-blue-700 rounded text-sm font-mono transition-all"
+                            >
                                 ⚙️ Adjust Governor
                             </button>
 
-                            <button className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded text-sm font-mono transition-all">
+                            <button
+                                onClick={() => { if (isMaintenanceLocked) { try { showToast('Approve Action blocked: LOTO active','warning'); } catch (e) {} return; } /* approve action logic */ }}
+                                disabled={isMaintenanceLocked}
+                                className="w-full px-4 py-2 bg-emerald-600 disabled:opacity-50 hover:bg-emerald-700 rounded text-sm font-mono transition-all"
+                            >
                                 ✅ Approve Action
                             </button>
                         </div>

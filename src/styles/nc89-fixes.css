@@ -1,0 +1,73 @@
+/* NC-89 fixes: drag handle, grip, KKS tag, LOTO banner overrides */
+
+@import './zLayers.css';
+
+/* Make the broad drag-handle invisible to pointer events so it doesn't block inner controls */
+.drag-handle {
+  pointer-events: none;
+}
+
+/* Small visible grip used as the actual drag handle targeted by react-grid-layout */
+.drag-grip {
+  pointer-events: auto;
+  cursor: move;
+  touch-action: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+  background: rgba(255,255,255,0.02);
+  transition: background 0.12s ease;
+  z-index: var(--z-modal);
+}
+
+.drag-grip:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+/* Ensure turbine wireframe hotspots are above small drag grips */
+[data-testid="turbine-wireframe-container"] {
+  position: relative;
+  z-index: var(--z-top);
+  pointer-events: auto;
+}
+
+/* LOTO banner override to always overlay HUDs when active */
+.loto-override-banner {
+  position: fixed !important;
+  top: 3.5rem; /* below top HUD (h-14) */
+  left: 0;
+  right: 0;
+  z-index: var(--z-banner) !important;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+  background: rgba(220, 38, 38, 0.92);
+  color: #fff;
+}
+
+/* KKS tag standardized style */
+.kks-tag {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 0.7rem;
+  padding: 0.12rem 0.4rem;
+  background: rgba(0,0,0,0.18);
+  color: rgba(148,163,184,1);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.03);
+  display: inline-block;
+}
+
+/* Efficiency amber pulse */
+.efficiency-warning {
+  animation: pulse 1s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.12);
+}
+
+@keyframes pulse {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-1px); }
+  100% { transform: translateY(0); }
+}

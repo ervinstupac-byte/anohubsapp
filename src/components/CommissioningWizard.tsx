@@ -12,6 +12,8 @@ import { PeltonJetVisualizer } from './PeltonJetVisualizer';
 import { SpecialMeasurementPanel } from './SpecialMeasurementPanel';
 import { CommissioningService, CommissioningSession } from '../services/CommissioningService';
 import { EnhancedAsset } from '../models/turbine/types';
+import guardedAction from '../utils/guardedAction';
+import { useToast } from '../contexts/ToastContext';
 
 interface CommissioningWizardProps {
     asset: EnhancedAsset;
@@ -24,6 +26,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
     const [session, setSession] = useState<CommissioningSession | null>(null);
     const [currentStep, setCurrentStep] = useState<CommissioningStep>('BASELINE');
     const [completedSteps, setCompletedSteps] = useState<Set<CommissioningStep>>(new Set());
+    const { showToast } = useToast();
 
     const steps: Array<{
         id: CommissioningStep;
@@ -118,7 +121,10 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                 <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={startCommissioning}
+                    onClick={() => {
+                        const ok = guardedAction('Start Commissioning', () => { startCommissioning(); });
+                        if (!ok) { try { showToast('Start Commissioning blocked: LOTO active','warning'); } catch (e) {} }
+                    }}
                     className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg font-black uppercase text-white flex items-center gap-2 mx-auto hover:shadow-lg hover:shadow-cyan-500/50 transition-all"
                 >
                     <Play className="w-5 h-5" />

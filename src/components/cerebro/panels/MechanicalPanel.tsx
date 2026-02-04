@@ -6,6 +6,8 @@ import { GlassCard } from '../../../shared/components/ui/GlassCard';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
+import { useToast } from '../../../contexts/ToastContext';
+import guardedAction from '../../../utils/guardedAction';
 
 export const MechanicalPanel: React.FC = () => {
     // 1. LEGACY ENGINE (Writes & Design State)
@@ -16,6 +18,7 @@ export const MechanicalPanel: React.FC = () => {
 
     const { state: cerebroState } = useCerebro();
     const { t, i18n: { language } } = useTranslation();
+    const { showToast } = useToast();
     // Use fallback to technicalState only for writes/initial state, READS come from live store
     const { mechanical } = technicalState; // Needed for binding input fields for updates
 
@@ -142,7 +145,10 @@ export const MechanicalPanel: React.FC = () => {
                             </p>
                         </div>
                         <button
-                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'VIBRATION_CRITICAL' })}
+                            onClick={() => {
+                                const ok = guardedAction('Engage Vibration Recovery', () => dispatch({ type: 'APPLY_MITIGATION', payload: 'VIBRATION_CRITICAL' }));
+                                if (!ok) { try { showToast('Engage Recovery blocked: LOTO active', 'warning'); } catch (e) {} }
+                            }}
                             className="relative z-10 px-3 py-2 bg-red-500 text-white text-[10px] font-black rounded hover:bg-red-400 transition-all flex items-center gap-2"
                         >
                             ENGAGE RECOVERY <Zap className="w-3 h-3" />

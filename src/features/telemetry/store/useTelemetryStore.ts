@@ -557,6 +557,38 @@ export const useTelemetryStore = create<TelemetryState>()(
                 }));
             },
 
+                    // NC-89: 24h projection helper for UI TrendArrow and charts
+                    compute24hProjection: (signalId: string, horizonMs = 24 * 3600 * 1000, steps = 24) => {
+                        try {
+                            const buffer = signalHistoryManager.getBuffer(signalId);
+                            if (!buffer) return { points: [] };
+                            const pts = buffer.getAll().map(dp => ({ t: dp.timestamp, y: dp.value }));
+                            if (pts.length < 2) return { points: [] };
+
+                            const n = pts.length;
+                            const meanT = pts.reduce((s, p) => s + p.t, 0) / n;
+                            const meanY = pts.reduce((s, p) => s + p.y, 0) / n;
+
+                            const Sxx = pts.reduce((s, p) => s + Math.pow(p.t - meanT, 2), 0);
+                            const Sxy = pts.reduce((s, p) => s + (p.t - meanT) * (p.y - meanY), 0);
+                            const a = Sxx === 0 ? 0 : Sxy / Sxx; // slope (y per ms)
+                            const b = meanY - a * meanT; // intercept
+
+                            const now = Date.now();
+                            const interval = Math.max(1, Math.floor(horizonMs / Math.max(1, steps)));
+                            const points: { t: number; y: number }[] = [];
+                            for (let i = 1; i <= steps; i++) {
+                                const t = now + i * interval;
+                                const y = isFinite(a) ? a * t + b : pts[pts.length - 1].y;
+                                points.push({ t, y });
+                            }
+                            return { points };
+                        } catch (e) {
+                            console.warn('[TelemetryStore] compute24hProjection failed', e);
+                            return { points: [] };
+                        }
+                    },
+
             // NC-23: Trigger a fleet-wide alert via AlertJournal (side-effect)
             triggerFleetAlert: async (message, severity) => {
                 // Dynamically import to avoid circular dependency if AlertJournal imports store

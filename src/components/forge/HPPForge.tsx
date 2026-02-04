@@ -3,6 +3,8 @@ import { Settings, Droplets, Zap, Activity, ArrowRight, Gauge, AlertTriangle } f
 import { PhysicsGuardrailService, CalculationResult } from '../../services/PhysicsGuardrailService';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useAssetContext } from '../../contexts/AssetContext';
+import { useToast } from '../../contexts/ToastContext';
+import guardedAction from '../../utils/guardedAction';
 
 export const HPPForge: React.FC = () => {
     const { addAsset } = useAssetContext();
@@ -28,6 +30,8 @@ export const HPPForge: React.FC = () => {
     // NC-22: Power Limit Check (15 MW)
     const powerMW = result?.powerMW || 0;
     const isPowerLimitBreached = powerMW > 15;
+
+    const { showToast } = useToast();
 
     const handleGenerate = async () => {
         if (!result || isPowerLimitBreached) return;
@@ -237,15 +241,20 @@ export const HPPForge: React.FC = () => {
                     </div>
 
                     {/* Action Button */}
-                    <button
-                        onClick={handleGenerate}
-                        disabled={isPowerLimitBreached}
-                        className={`w-full py-3 font-bold rounded-lg shadow-lg border transition-all 
+                                    <button
+                                        onClick={() => {
+                                            const ok = guardedAction('Initialize Digital Twin', () => { handleGenerate(); });
+                                            if (!ok) {
+                                                try { showToast('Initialize blocked: LOTO active', 'warning'); } catch (e) {}
+                                            }
+                                        }}
+                                        disabled={isPowerLimitBreached}
+                                        className={`w-full py-3 font-bold rounded-lg shadow-lg border transition-all 
                         ${isPowerLimitBreached
                                 ? 'bg-slate-800 text-slate-500 border-slate-700 cursor-not-allowed'
                                 : 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-cyan-900/20 border-cyan-400/20 hover:scale-[1.02] active:scale-[0.98]'
                             }`}
-                    >
+                                    >
                         {isPowerLimitBreached ? 'POWER LIMIT EXCEEDED' : 'INITIALIZE DIGITAL TWIN'}
                     </button>
                 </div>

@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import { RCAResult } from '../../lib/automation/RCAService';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useToast } from '../../contexts/ToastContext';
+import guardedAction from '../../utils/guardedAction';
 import { Sparkline } from '../ui/Sparkline';
 
 /**
@@ -191,6 +193,7 @@ export const ForensicDeepDive: React.FC<ForensicDeepDiveProps> = ({
     onExportPDF
 }) => {
     const telemetryHistory = useTelemetryStore(state => state.telemetryHistory);
+    const { showToast } = useToast();
     const baselineState = useTelemetryStore(state => state.baselineState);
     const mechanical = useTelemetryStore(state => state.mechanical);
 
@@ -470,7 +473,14 @@ export const ForensicDeepDive: React.FC<ForensicDeepDiveProps> = ({
                                 </button>
                                 {onExportPDF && (
                                     <button
-                                        onClick={onExportPDF}
+                                        onClick={() => {
+                                            const ok = guardedAction('Export Forensic PDF', () => {
+                                                if (onExportPDF) onExportPDF();
+                                            });
+                                            if (!ok) {
+                                                try { showToast('Export blocked: LOTO active', 'warning'); } catch (e) {}
+                                            }
+                                        }}
                                         className="px-4 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 rounded-lg text-xs font-bold text-cyan-300 flex items-center gap-2 transition-colors"
                                     >
                                         <FileText className="w-3 h-3" />
