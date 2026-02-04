@@ -12,6 +12,18 @@ import { useNotifications } from './NotificationContext.tsx';
 import idAdapter from '../utils/idAdapter';
 import { HppStatusSchema } from '../schemas/supabase';
 
+declare global {
+    interface Window {
+        __MONOLIT_DEBUG__: {
+            setSimSpeed: (multiplier: number) => void;
+            setVibration: (val: number, assetId?: number) => void;
+            injectGridRequest: (power: number) => void;
+            resetSovereignState: () => void;
+            getLedgerHash: () => Promise<string>;
+        };
+    }
+}
+
 // Tipovi za telemetriju
 export interface TelemetryData {
     assetId: string | number; // Support BigInt as string
@@ -70,6 +82,14 @@ export interface TelemetryData {
     bearingGrindIndex: number; // 0-10
     acousticBaselineMatch: number; // 0-1 (1 = perfect match)
     ultrasonicLeakIndex: number; // 0-10 (high-frequency hiss)
+    // NC-87 Prep: Explicit Physics Slots
+    head_m: number; // $H_{head}$
+    flow_m3s: number; // $Q$
+    trends: {
+        vibration: 'UP' | 'DOWN' | 'STABLE';
+        efficiency: 'UP' | 'DOWN' | 'STABLE';
+        output: 'UP' | 'DOWN' | 'STABLE';
+    };
 }
 
 interface TelemetryContextType {
@@ -90,6 +110,27 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     const { assets } = useAssetContext();
     const [telemetry, setTelemetry] = useState<Record<string, TelemetryData>>({});
     const [activeIncident, setActiveIncident] = useState<{ type: string, assetId: number, timestamp: number } | null>(null);
+    const [simSpeed, setSimSpeed] = useState(1);
+    const [vibrationOverride, setVibrationOverride] = useState<Record<string, number>>({});
+
+    // --- MS-VS DEBUG BRIDGE (NC-81) ---
+    useEffect(() => {
+        window.__MONOLIT_DEBUG__ = {
+            ...window.__MONOLIT_DEBUG__,
+            setSimSpeed: (multiplier: number) => {
+                setSimSpeed(multiplier);
+                console.log(`[MS-VS] Simulation speed set to ${multiplier}x`);
+            },
+            setVibration: (val: number, assetId?: number) => {
+                const id = assetId || assets[0]?.id;
+                if (id) {
+                    const key = idAdapter.toStorage(id);
+                    setVibrationOverride(prev => ({ ...prev, [key]: val }));
+                    console.log(`[MS-VS] Vibration override for ${id}: ${val}mm/s`);
+                }
+            }
+        };
+    }, [assets]);
 
     const triggerEmergency = (assetId: number, type: 'vibration_excess' | 'bearing_overheat' | 'hydraulic_interlock' | 'mechanical_blockage' | 'metal_scraping' | 'grid_frequency_critical') => {
         const timestamp = Date.now();
@@ -147,7 +188,14 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     cavitationIntensity: type === 'vibration_excess' ? 8.5 : 1.2,
                     bearingGrindIndex: type === 'bearing_overheat' ? 7.2 : 0.5,
                     acousticBaselineMatch: type === 'metal_scraping' ? 0.3 : 0.98,
-                    ultrasonicLeakIndex: type === 'hydraulic_interlock' ? 8.2 : 0.2
+                    ultrasonicLeakIndex: type === 'hydraulic_interlock' ? 8.2 : 0.2,
+                    head_m: prevTele?.head_m || 122.5,
+                    flow_m3s: prevTele?.flow_m3s || 5,
+                    trends: prevTele?.trends || {
+                        vibration: 'STABLE',
+                        efficiency: 'STABLE',
+                        output: 'STABLE'
+                    }
                 }
             };
         });
@@ -170,7 +218,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         if (!supabase || typeof (supabase as any).channel !== 'function') {
             // No realtime in build/CI environment — simulate signals instead
             generateSignal();
-            const id = setInterval(generateSignal, 10000);
+            const id = setInterval(generateSignal, 10000 / simSpeed);
             return () => clearInterval(id);
         }
 
@@ -241,7 +289,14 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                                 cavitationIntensity: u.cavitation_intensity || 1.1,
                                 bearingGrindIndex: u.bearing_grind_index || 0.4,
                                 acousticBaselineMatch: u.acoustic_baseline_match || 0.99,
-                                ultrasonicLeakIndex: u.ultrasonic_leak_index || 0.3
+                                ultrasonicLeakIndex: u.ultrasonic_leak_index || 0.3,
+                                head_m: u.reservoir_level || 122.5,
+                                flow_m3s: u.pump_flow_rate || 5,
+                                trends: {
+                                    vibration: 'STABLE',
+                                    efficiency: 'STABLE',
+                                    output: 'STABLE'
+                                }
                             }
                         }));
                         // non-blocking journal append for each incoming sample
@@ -301,12 +356,36 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                 newTelemetry[storageKey] = {
                     assetId: asset.id,
                     timestamp: Date.now(),
-                    status: 'OPTIMAL',
-                    vibration: Number(vibBase),
+                    status: (vibrationOverride[storageKey] > 0.05 || (vibBase > 0.05)) ? 'CRITICAL' : 'OPTIMAL',
+                    vibration: vibrationOverride[storageKey] ?? Number(vibBase),
                     temperature: baseState.mechanical?.bearingTemp || 55,
-                    // Telemetry exposes measured efficiency as percent when available. Do not compute physics-derived efficiency here.
-                    efficiency: (baseState.hydraulic?.efficiency && typeof (baseState.hydraulic as any).efficiency === 'number') ? Math.round((baseState.hydraulic as any).efficiency * 100) : 92,
-                    output: asset.capacity ? parseFloat(((asset.capacity as number) * ((baseState.hydraulic as any).efficiency || 0.92)).toFixed(2)) : 0,
+
+                    // NC-87.1: Real-World Physics Coupling
+                    // Efficiency = P / (rho * g * Q * H)
+                    // We simulate P (Power) based on wicket gate % vs Capacity
+                    // Then calculate the "Physics Derived" efficiency.
+
+                    head_m: baseState.site?.reservoirLevel || 122.5,
+                    flow_m3s: baseState.hydraulic?.flow || 5,
+
+                    efficiency: (() => {
+                        const P = asset.capacity ? (asset.capacity * 1000 * ((baseState.mechanical as any).wicketGatePosition || 45) / 100) : 0; // P in kW
+                        const Q = baseState.hydraulic?.flow || 5;
+                        const H = baseState.site?.reservoirLevel || 122.5;
+                        const rho = 1000;
+                        const g = 9.81;
+
+                        // Prevent div by zero
+                        if (Q <= 0 || H <= 0) return 0;
+
+                        // Derived Eff = P_actual / P_theoretical
+                        // P_theoretical = rho * g * Q * H / 1000 (in kW)
+                        const pTheoretical = (rho * g * Q * H) / 1000;
+                        const derivedEff = (P / pTheoretical) * 100;
+
+                        return Math.min(98, Math.max(0, parseFloat((derivedEff).toFixed(1))));
+                    })(),
+                    output: asset.capacity ? parseFloat(((asset.capacity as number) * ((baseState.mechanical as any).wicketGatePosition || 0.45) / 100).toFixed(2)) : 0,
                     piezometricPressure: parseFloat((4.2).toFixed(2)),
                     seepageRate: 0,
                     reservoirLevel: baseState.site?.reservoirLevel || 122.5,
@@ -345,7 +424,13 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     cavitationIntensity: 0.5,
                     bearingGrindIndex: 0,
                     acousticBaselineMatch: 1,
-                    ultrasonicLeakIndex: 0
+                    ultrasonicLeakIndex: 0,
+                    // head_m and flow_m3s already set above in coupling
+                    trends: {
+                        vibration: Math.random() > 0.7 ? 'UP' : Math.random() > 0.7 ? 'DOWN' : 'STABLE',
+                        efficiency: 'STABLE',
+                        output: 'STABLE'
+                    }
                 } as TelemetryData;
             } else {
                 // Legacy demo/randomized telemetry (kept for backward compatibility)

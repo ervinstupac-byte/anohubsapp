@@ -3,13 +3,24 @@ import { useMaintenancePrediction } from '../../features/maintenance/hooks/useMa
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { Clock, TrendingDown, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { EventJournal } from '../../services/EventJournal';
+import { History, Zap, Layout } from 'lucide-react';
 
 export const MaintenanceTimelineCard: React.FC = () => {
     // 1. Connect to the Expert Predictive Hook
     const maintenanceEvents = useMaintenancePrediction();
 
-    // 2. Connect to Telemetry for the mini-gauges
+    // 2. Connect to Telemetry
     const { mechanical } = useTelemetryStore();
+
+    // 3. Get Recent System Events
+    const recentEvents = useMemo(() => {
+        try {
+            return EventJournal.recent().slice(0, 5);
+        } catch (e) {
+            return [];
+        }
+    }, [mechanical.vibrationX]); // Refresh when mechanical data updates
 
     // For this card, we focus on the most urgent event
     const prediction = maintenanceEvents[0];
@@ -83,25 +94,37 @@ export const MaintenanceTimelineCard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Stress Factors Mini-Grid */}
-                <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/5">
-                    <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
-                        <span className="text-[8px] text-slate-500 uppercase tracking-widest">Vibration</span>
-                        <span className={`text-xs font-mono font-bold ${mechanical.vibration > 4.5 ? 'text-amber-400' : 'text-cyan-400'}`}>
-                            {(mechanical.vibration || 0).toFixed(2)}
-                        </span>
+                {/* System Event Stream (NC-86 Sanitization) */}
+                <div className="pt-4 border-t border-white/5">
+                    <div className="flex items-center gap-2 mb-3">
+                        <History className="w-3 h-3 text-slate-500" />
+                        <span className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Sovereign Event Stream</span>
                     </div>
-                    <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
-                        <span className="text-[8px] text-slate-500 uppercase tracking-widest">Temp</span>
-                        <span className={`text-xs font-mono font-bold ${mechanical.bearingTemp > 70 ? 'text-amber-400' : 'text-cyan-400'}`}>
-                            {(mechanical.bearingTemp || 0).toFixed(1)}°
-                        </span>
-                    </div>
-                    <div className="p-2 bg-slate-900/50 rounded flex flex-col items-center">
-                        <span className="text-[8px] text-slate-500 uppercase tracking-widest">Cavitation</span>
-                        <span className={`text-xs font-mono font-bold text-cyan-400`}>
-                            {prediction.reason === 'Standard Wear' ? 'LOW' : 'HIGH'}
-                        </span>
+
+                    <div className="space-y-3">
+                        {recentEvents.length === 0 ? (
+                            <p className="text-[10px] text-slate-600 italic">Listening for system events...</p>
+                        ) : (
+                            recentEvents.map((ev, idx) => (
+                                <div key={idx} className="flex items-start gap-3 group">
+                                    <div className="mt-1">
+                                        {ev.type === 'ALARM_ACK' && <CheckCircle2 className="w-3 h-3 text-emerald-500" />}
+                                        {ev.type === 'LOAD_SHED' && <Zap className="w-3 h-3 text-amber-500" />}
+                                        {ev.type === 'UNIT_TOGGLE' && <Layout className="w-3 h-3 text-cyan-500" />}
+                                        {!['ALARM_ACK', 'LOAD_SHED', 'UNIT_TOGGLE'].includes(ev.type) && <div className="w-1.5 h-1.5 rounded-full bg-slate-700 mt-1 ml-0.5" />}
+                                    </div>
+                                    <div className="flex-grow">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">{ev.type.replace(/_/g, ' ')}</span>
+                                            <span className="text-[8px] font-mono text-slate-600">{new Date(ev.ts).toLocaleTimeString([], { hour12: false, minute: '2-digit', second: '2-digit' })}</span>
+                                        </div>
+                                        <p className="text-[10px] text-slate-500 line-clamp-1 group-hover:text-slate-300 transition-colors">
+                                            {typeof ev.payload === 'string' ? ev.payload : JSON.stringify(ev.payload).substring(0, 40) + '...'}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
 

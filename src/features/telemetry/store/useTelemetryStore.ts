@@ -142,6 +142,10 @@ interface TelemetryState {
     toggleFilteredMode: () => void; // NC-300: Signal filter toggle
     setFilterType: (filterType: FilterType) => void; // NC-300: Filter type selection
 
+    // NC-87.1: Maintenance Safety
+    isMaintenanceLocked: boolean;
+    toggleLOTO: () => void;
+
     // NC-23: Fleet Actions
     updateFleetMetrics: (metrics: Partial<TelemetryState['fleet']>) => void;
     triggerFleetAlert: (message: string, severity: 'INFO' | 'WARNING' | 'CRITICAL') => void;
@@ -202,6 +206,23 @@ export const useTelemetryStore = create<TelemetryState>()(
                 efficiencyAvg: 0,
                 activeAssets: 0,
                 status: 'NOMINAL'
+            },
+
+            // NC-87.1: Maintenance Safety Initial State
+            isMaintenanceLocked: false,
+            toggleLOTO: () => {
+                set((state) => {
+                    const next = !state.isMaintenanceLocked;
+                    // Log to Ledger
+                    import('../../../services/EventJournal').then(({ EventJournal }) => {
+                        EventJournal.append('LOTO_TOGGLE', {
+                            locked: next,
+                            operator: 'MONOLIT_ARCHITECT',
+                            timestamp: new Date().toISOString()
+                        });
+                    });
+                    return { isMaintenanceLocked: next };
+                });
             },
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
@@ -569,7 +590,8 @@ export const useTelemetryStore = create<TelemetryState>()(
                 identity: state.identity,
                 rcaResultsHistory: state.rcaResultsHistory.slice(-10), // Last 10 only
                 isFilteredMode: state.isFilteredMode,
-                filterType: state.filterType
+                filterType: state.filterType,
+                isMaintenanceLocked: state.isMaintenanceLocked
             })
         }
     )

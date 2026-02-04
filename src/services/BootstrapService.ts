@@ -136,7 +136,27 @@ export class BootstrapService {
         this.initialized = true;
 
         const startTime = performance.now();
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         console.log('[Bootstrap NC-76.1] ⚡ Initiating Tiered Neural Core Boot...');
+        if (isMobile) console.log('[Bootstrap] 📱 Mobile agent detected: Watchdog active (4s)');
+
+        // NC-85: Mobile Escape Hatch (4s)
+        let watchdogTriggered = false;
+        if (isMobile) {
+            setTimeout(() => {
+                if (!this.initialized || this.isTierComplete(1)) return; // Already done or T1 done
+                console.warn('[Bootstrap] 🚨 MOBILE WATCHDOG TRIGGERED: Forcing Ready State...');
+                watchdogTriggered = true;
+                // Force Tier 1 to look complete for components that wait
+                this.TIER_1_CRITICAL.forEach(s => {
+                    if (this.progress.get(s.name)?.status !== 'COMPLETE') {
+                        this.updateProgress(s.name, s.tier, 'COMPLETE', onUpdate);
+                    }
+                });
+            }, 4000);
+        }
+
         console.log('[Bootstrap] 📊 Total services to initialize:', this.TIER_1_CRITICAL.length + this.TIER_2_SENSORS.length + this.TIER_3_AI.length);
 
         // Mark all services as pending

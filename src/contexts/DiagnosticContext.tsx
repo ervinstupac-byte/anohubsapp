@@ -37,10 +37,27 @@ export interface ShiftLogEntry {
     timestamp: number;
 }
 
+export type FunctionalModalMode = 'MECHANICAL' | 'ELECTRICAL' | 'FORENSICS' | 'RISK' | null;
+
+export const INITIAL_WIDGETS = [
+    'vitals-load',
+    'vitals-vibration',
+    'vitals-efficiency',
+    'turbine-hub',
+    'maintenance-timeline',
+    'expert-advisor',
+    'continuity-protocols'
+];
+
 interface DiagnosticContextType {
     activeDiagnoses: CorrelationResult[];
     activeQuery: IntuitionQuery | null;
     shiftLogs: ShiftLogEntry[];
+    activeModal: FunctionalModalMode;
+    setActiveModal: (mode: FunctionalModalMode) => void;
+    visibleWidgets: string[];
+    toggleWidget: (id: string) => void;
+    setWidgets: (ids: string[]) => void;
     processInstabilitySummary: (assetId: number) => { sigma: number; samples: number[] } | null;
     getTroubleshootingAdvice: (symptomKey: string) => Promise<Diagnosis | null>;
     recordLessonLearned: (lesson: { symptom: string; cause: string; resolution: string }) => Promise<void>;
@@ -54,10 +71,25 @@ const DiagnosticContext = createContext<DiagnosticContextType | undefined>(undef
 export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [activeDiagnoses, setActiveDiagnoses] = useState<CorrelationResult[]>([]);
     const [activeQuery, setActiveQuery] = useState<IntuitionQuery | null>(null);
+    const [activeModal, setActiveModal] = useState<FunctionalModalMode>(null);
+    const [visibleWidgets, setVisibleWidgets] = useState<string[]>(() => {
+        const saved = localStorage.getItem('anohub_visible_widgets');
+        return saved ? JSON.parse(saved) : INITIAL_WIDGETS;
+    });
     const [shiftLogs, setShiftLogs] = useState<ShiftLogEntry[]>([]);
     const { telemetry } = useTelemetry();
     const { engineeringHealthState, riskState } = useRisk();
     const { showToast } = useToast();
+
+    useEffect(() => {
+        localStorage.setItem('anohub_visible_widgets', JSON.stringify(visibleWidgets));
+    }, [visibleWidgets]);
+
+    const toggleWidget = (id: string) => {
+        setVisibleWidgets(prev =>
+            prev.includes(id) ? prev.filter(w => w !== id) : [...prev, id]
+        );
+    };
 
     // SPC buffers: map numeric assetId -> array of last N eta samples
     const etaBuffersRef = useRef<Record<number, number[]>>({});
@@ -314,6 +346,11 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             activeDiagnoses,
             activeQuery,
             shiftLogs,
+            activeModal,
+            setActiveModal,
+            visibleWidgets,
+            toggleWidget,
+            setWidgets: setVisibleWidgets,
             processInstabilitySummary,
             getTroubleshootingAdvice,
             recordLessonLearned,

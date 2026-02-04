@@ -83,6 +83,31 @@
   font-family: 'JetBrains Mono', monospace !important;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+}
+
+@keyframes scanning-line {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-scanning-line {
+  animation: scanning-line 4s linear infinite;
 }
 
 .bloom-glow-cyan {
@@ -553,15 +578,20 @@ textarea::placeholder {
 
 /* 1. Base Glass (za panele i kartice) */
 .glass-panel {
-  background: rgba(15, 23, 42, var(--glass-opacity));
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  border: 1px solid var(--glass-border);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px) saturate(180%);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 8px 32px 0 rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(255, 255, 255, 0.02);
+    0 8px 32px 0 rgba(0, 0, 0, 0.8);
   border-radius: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  background: rgba(15, 23, 42, 0.8);
 }
 
 .glass-panel-deep {

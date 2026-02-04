@@ -4,9 +4,13 @@ import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
 
-export const SealingIntegrity: React.FC = () => {
+import { FileSearch } from 'lucide-react';
+import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
+
+export const SealingIntegrity: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
+    const { setActiveModal } = useDiagnostic();
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
@@ -31,6 +35,29 @@ export const SealingIntegrity: React.FC = () => {
     }, [assetTele]);
 
     if (!selectedAsset) return null;
+
+    if (minimal) {
+        return (
+            <GlassCard title="Shaft Seal" className={`${integrityStatus.isAlert ? 'border-red-500' : 'border-emerald-500'} h-full flex flex-col justify-between`}>
+                <div className="flex justify-between items-center">
+                    <div className={`w-3 h-3 rounded-full ${integrityStatus.isAlert ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
+                    <span className={`text-xl font-mono font-black ${integrityStatus.isAlert ? 'text-red-400' : 'text-emerald-400'}`}>
+                        {integrityStatus.isAlert ? 'CRITICAL' : 'NOMINAL'}
+                    </span>
+                </div>
+                <div className="mt-4 flex justify-between items-end">
+                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest leading-none">Deviation: +{integrityStatus.deviation}%</p>
+                    <button
+                        onClick={() => setActiveModal('FORENSICS')}
+                        className="text-[9px] text-cyan-500 hover:underline flex items-center gap-1 font-black uppercase"
+                    >
+                        <FileSearch className="w-3 h-3" />
+                        Deep-Dive
+                    </button>
+                </div>
+            </GlassCard>
+        );
+    }
 
     return (
         <GlassCard title="Shaft Seal Integrity (Zaptivka Vratila)" className={integrityStatus.isAlert ? 'border-l-4 border-l-red-500 bg-red-950/20' : 'border-l-4 border-l-cyan-500'}>

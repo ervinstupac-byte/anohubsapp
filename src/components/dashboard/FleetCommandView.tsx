@@ -56,7 +56,9 @@ export const FleetCommandView: React.FC = () => {
     const { t } = useTranslation();
 
     // Access Fleet State (NC-23 integration)
-    const { fleet, updateFleetMetrics, triggerFleetAlert, identity, hydraulic, mechanical } = useTelemetryStore();
+    const { fleet, updateFleetMetrics, triggerFleetAlert, identity, hydraulic, mechanical, isMaintenanceLocked } = useTelemetryStore();
+    const [showRawMetadata, setShowRawMetadata] = useState(false);
+    const [lastOptimization, setLastOptimization] = useState<any>(null);
 
     // Mock other assets to form a "Swarm" for demonstration
     // In a real scenario, this would come from a FleetContext or aggregated API
@@ -95,11 +97,18 @@ export const FleetCommandView: React.FC = () => {
         const target = currentTotal * 0.90; // Shed 10%
 
         const optimization = FleetOptimizer.calculateOptimalDistribution(target, fleetAssets);
+        setLastOptimization(optimization);
 
-        triggerFleetAlert(`FLEET OPTIMIZATION EXECUTED. Target Reduced to ${target.toFixed(1)} MW. Distribution: ${JSON.stringify(optimization.distribution)}`, 'WARNING');
+        const summary = `Optimization successful. Peer distribution adjusted to maintain ${target.toFixed(1)} MW total. Balancing efficiency at ${fleet.efficiencyAvg.toFixed(1)}%.`;
+
+        triggerFleetAlert(`FLEET OPTIMIZATION EXECUTED. ${summary}`, 'WARNING');
 
         // In a real app, this would dispatch commands to other units via MQTT
         // For now, we simulate success
+    };
+
+    const handleFleetOptimization = () => {
+        handleSyncLoadShedding(); // For demo, let's just trigger the same logic
     };
 
     return (
@@ -131,11 +140,7 @@ export const FleetCommandView: React.FC = () => {
                     </div>
                     {/* Visual Bar */}
                     <div className="h-4 bg-slate-800 rounded-full overflow-hidden relative">
-                        {/* Capacity Markers */}
-                        <div className="absolute top-0 bottom-0 left-[25%] border-r border-white/10" />
-                        <div className="absolute top-0 bottom-0 left-[50%] border-r border-white/10" />
-                        <div className="absolute top-0 bottom-0 left-[75%] border-r border-white/10" />
-
+                        {/* stress factors removed (NC-86) */}
                         <div
                             className={`h-full transition-all duration-700 ${fleet.status === 'CRITICAL' ? 'bg-red-500' : 'bg-blue-500'}`}
                             style={{ width: `${Math.min((fleet.totalMW / 52) * 100, 100)}%` }} // Assuming 52MW total cap
@@ -171,13 +176,45 @@ export const FleetCommandView: React.FC = () => {
                     </div>
 
                     <ModernButton
+                        onClick={handleFleetOptimization}
+                        variant="secondary"
+                        disabled={isMaintenanceLocked}
+                        className="w-full justify-center text-[11px] border-cyan-500/30 hover:bg-cyan-500/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                        SHED LOAD (-10%)
+                    </ModernButton>
+
+                    <ModernButton
                         onClick={handleSyncLoadShedding}
                         variant="primary"
-                        className="w-full justify-center bg-amber-600 hover:bg-amber-500 border-amber-400/30 text-[11px]"
+                        disabled={isMaintenanceLocked}
+                        className="w-full justify-center bg-amber-600 hover:bg-amber-500 border-amber-400/30 text-[11px] disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                         <ShieldAlert className="w-3 h-3 mr-2" />
                         SYNC LOAD SHEDDING (-10%)
                     </ModernButton>
+
+                    <div className="mt-4">
+                        <button
+                            onClick={() => setShowRawMetadata(!showRawMetadata)}
+                            className="text-[9px] text-slate-500 hover:text-white uppercase font-black flex items-center gap-1"
+                        >
+                            <BarChart2 className="w-3 h-3" />
+                            {showRawMetadata ? 'Hide Raw Metadata' : 'View Raw Metadata (MS-VS)'}
+                        </button>
+
+                        {showRawMetadata && (
+                            <div className="mt-2 p-3 bg-black/40 border border-white/5 rounded font-mono text-[9px] text-cyan-500 overflow-x-auto">
+                                <pre>{JSON.stringify({
+                                    optimizer_version: 'v4.5.2',
+                                    swarm_id: 'NC-23-SWARM',
+                                    last_distribution: lastOptimization?.distribution || 'None',
+                                    total_capacity: 52,
+                                    optimization_timestamp: new Date().toISOString()
+                                }, null, 2)}</pre>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </GlassCard>

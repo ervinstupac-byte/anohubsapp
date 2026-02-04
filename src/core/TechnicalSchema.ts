@@ -253,6 +253,14 @@ export interface PhysicsResult {
     boltCapacityKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
     netHead?: Decimal; // NEW
     headLoss?: Decimal; // NEW
+    // NC-87 Prep
+    head_m?: number;
+    flow_m3s?: number;
+    trends?: {
+        vibration: 'UP' | 'DOWN' | 'STABLE';
+        efficiency: 'UP' | 'DOWN' | 'STABLE';
+        output: 'UP' | 'DOWN' | 'STABLE';
+    };
 }
 
 export interface DiagnosisMessage {

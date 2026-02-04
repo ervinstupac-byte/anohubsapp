@@ -4,9 +4,13 @@ import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
 
-export const FluidForceDiagnostics: React.FC = () => {
+import { FileSearch } from 'lucide-react';
+import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
+
+export const FluidForceDiagnostics: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
     const { telemetry } = useTelemetry();
     const { selectedAsset } = useAssetContext();
+    const { setActiveModal } = useDiagnostic();
 
     const assetTele = selectedAsset ? telemetry[idAdapter.toStorage(selectedAsset.id)] : null;
 
@@ -62,6 +66,31 @@ export const FluidForceDiagnostics: React.FC = () => {
     }, [assetTele]);
 
     if (!selectedAsset || !assetTele) return null;
+
+    const worstStatus = insights.some(i => i.status === 'CRITICAL') ? 'CRITICAL' : insights.some(i => i.status === 'WARNING') ? 'WARNING' : 'NOMINAL';
+
+    if (minimal) {
+        return (
+            <GlassCard title="Fluid Dynamics" className={`${worstStatus === 'CRITICAL' ? 'border-red-500' : worstStatus === 'WARNING' ? 'border-amber-500' : 'border-emerald-500'} h-full flex flex-col justify-between`}>
+                <div className="flex justify-between items-center">
+                    <div className={`w-3 h-3 rounded-full ${worstStatus === 'CRITICAL' ? 'bg-red-500 animate-pulse' : worstStatus === 'WARNING' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+                    <span className={`text-xl font-mono font-black ${worstStatus === 'CRITICAL' ? 'text-red-400' : worstStatus === 'WARNING' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        {worstStatus}
+                    </span>
+                </div>
+                <div className="mt-4 flex justify-between items-end">
+                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest leading-none">Sag: {(assetTele.shaftSag * 1000).toFixed(1)}µm</p>
+                    <button
+                        onClick={() => setActiveModal('FORENSICS')}
+                        className="text-[9px] text-cyan-500 hover:underline flex items-center gap-1 font-black uppercase"
+                    >
+                        <FileSearch className="w-3 h-3" />
+                        Deep-Dive
+                    </button>
+                </div>
+            </GlassCard>
+        );
+    }
 
     return (
         <GlassCard title="Radial Force & Fluid Diagnostics">

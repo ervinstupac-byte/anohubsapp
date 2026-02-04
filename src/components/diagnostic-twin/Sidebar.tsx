@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import {
     ChevronDown, ChevronRight, Plus, Search, X,
     FileText, Shield, Settings, Zap, BookOpen, Target,
-    AlertTriangle, Cpu, Gauge, Map, ChevronLeft
+    AlertTriangle, Cpu, Gauge, Map, ChevronLeft, LayoutDashboard, Cog
 } from 'lucide-react';
+import { useDiagnostic } from '../../contexts/DiagnosticContext';
 import { FleetOverview } from './FleetOverview.tsx';
 import { ErrorBoundary } from '../ErrorBoundary.tsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,6 +30,7 @@ interface SectorModule {
     icon: string;
     route: string;
     isoRef?: string;
+    onClick?: () => void;
 }
 
 interface MissionSector {
@@ -179,7 +181,10 @@ const SectorAccordion: React.FC<SectorAccordionProps> = ({
 
                                     <button
                                         key={module.id}
-                                        onClick={() => onNavigate(module.route, module.title)}
+                                        onClick={() => {
+                                            if ((module as any).onClick) (module as any).onClick();
+                                            else onNavigate(module.route, module.title);
+                                        }}
                                         className={`w-full text-left px-11 py-2 text-[10px] font-mono flex items-center justify-between transition-all group/item relative overflow-hidden ${isActive
                                             ? 'text-cyan-100 font-bold bg-cyan-500/10 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
                                             : 'text-slate-400 hover:text-cyan-200 hover:bg-white/5'}`}
@@ -204,6 +209,8 @@ const SectorAccordion: React.FC<SectorAccordionProps> = ({
     );
 };
 
+import { useToast } from '../../contexts/ToastContext.tsx';
+
 // --- SIDEBAR COMPONENT ---
 interface SidebarProps {
     isOpen: boolean;
@@ -220,6 +227,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
     const { t } = useTranslation();
     const { activeDefinition, hiveStatus, activePersona } = useContextAwareness();
 
+    const { activeModal, setActiveModal, toggleWidget } = useDiagnostic();
+    const { showToast } = useToast();
     const [searchQuery, setSearchQuery] = useState('');
     const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -385,9 +394,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     { id: 'sopManager', title: t('sidebar.modules.sop_manager'), icon: '👻', route: getMaintenancePath(ROUTES.MAINTENANCE.SHADOW_ENGINEER) },
                     { id: 'learningLab', title: t('sidebar.modules.learning_lab'), icon: '🎓', route: `/${ROUTES.LEARNING_LAB}` },
                     { id: 'hppBuilder', title: t('sidebar.modules.hpp_studio'), icon: '⚡', route: getFrancisPath(ROUTES.FRANCIS.DESIGNER) },
-                    { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '/engineer' },
+                    { id: 'engineerPortal', title: t('sidebar.modules.engineer_portal', 'Engineer Console'), icon: '🛠️', route: '#', onClick: () => toggleWidget('engineer-portal') },
                     { id: 'ownerPortal', title: t('sidebar.modules.owner_portal', 'Owner Portal'), icon: '🏛️', route: '/owner' },
-                    { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '/hydroschool' },
+                    { id: 'hydroschool', title: t('sidebar.modules.hydroschool', 'Hydroschool — Pro‑Bono'), icon: '🎓', route: '#', onClick: () => toggleWidget('hydroschool-portal') },
                 ]
             }
         ];
@@ -486,32 +495,60 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         exit={{ x: -64, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
                         className={`fixed lg:static left-0 top-0 bottom-0 h-full w-16 bg-[#020617] border-r border-white/5 z-[100] flex flex-col items-center py-4 shadow-[4px_0_24px_rgba(0,0,0,0.5)] overflow-hidden`}
+                        id="sidebar-rail"
+                        data-testid="sidebar-rail"
                     >
                         {/* SYSTEM LOGO / TOP BUTTON */}
                         <div className="mb-8 flex flex-col items-center gap-4">
-                            <div className="w-8 h-8 rounded bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center group cursor-pointer" onClick={() => navigate('/')}>
-                                <Cpu className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                            <div className="w-8 h-8 rounded bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center group cursor-pointer transition-all duration-300 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)]" onClick={() => navigate('/')}>
+                                <Cpu className="w-5 h-5 text-cyan-400 group-hover:scale-110 transition-all duration-300 group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
                             </div>
                         </div>
 
                         {/* NAV ICONS */}
                         <div className="flex-1 flex flex-col items-center gap-6 w-full">
                             {[
-                                { id: 'ops', icon: <Target className="w-5 h-5" />, route: ROUTES.HOME, label: 'Operations' },
-                                { id: 'maint', icon: <Settings className="w-5 h-5" />, route: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD), label: 'Maintenance' },
-                                { id: 'exe', icon: <Zap className="w-5 h-5" />, route: '/executive', label: 'Executive' },
+                                { id: 'ops', icon: <LayoutDashboard className="w-5 h-5" />, route: ROUTES.HOME, label: 'Dashboard' },
+                                { id: 'mechanical', icon: <Cog className="w-5 h-5" />, label: 'Mechanical' },
+                                { id: 'electrical', icon: <Zap className="w-5 h-5" />, label: 'Electrical' },
+                                { id: 'forensics', icon: <Search className="w-5 h-5" />, label: 'Forensics' },
                                 { id: 'risk', icon: <Shield className="w-5 h-5" />, route: `/${ROUTES.RISK_ASSESSMENT}`, label: 'Risk' },
-                                { id: 'docs', icon: <BookOpen className="w-5 h-5" />, route: '/knowledge/health-monitor', label: 'Knowledge' },
+                                { id: 'docs', icon: <BookOpen className="w-5 h-5" />, route: '/knowledge/health-monitor', label: 'Docs' },
                             ].map((item) => {
-                                const isActive = location.pathname.includes(item.route);
+                                const isActive = item.route ? location.pathname === item.route : activeModal === item.id.toUpperCase();
+
+                                const handleRailClick = () => {
+                                    if (item.id === 'mechanical') {
+                                        setActiveModal('MECHANICAL'); // Keep modal for now if needed, but primarily toggle widget
+                                        toggleWidget('mechanical-systems');
+                                    }
+                                    else if (item.id === 'electrical') {
+                                        setActiveModal('ELECTRICAL');
+                                        toggleWidget('electrical-grid');
+                                    }
+                                    else if (item.id === 'forensics') {
+                                        setActiveModal('FORENSICS');
+                                        toggleWidget('forensic-deep-dive');
+                                    }
+                                    else if (item.id === 'docs') {
+                                        toggleWidget('engineer-portal');
+                                        showToast("ENGINEER_CONSOLE: Active", "info");
+                                    }
+                                    else if (item.route) handleNavigate(item.route, item.label);
+                                };
+
                                 return (
                                     <button
                                         key={item.id}
-                                        onClick={() => handleNavigate(item.route, item.label)}
-                                        className={`p-3 rounded-lg transition-all relative group ${isActive ? 'bg-cyan-500/10 text-cyan-400' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                                        id={`nav-${item.id}`}
+                                        data-testid={`nav-${item.id}`}
+                                        onClick={handleRailClick}
+                                        className={`p-3 rounded-lg transition-all duration-300 relative group ${isActive ? 'bg-cyan-500/10 text-cyan-400' : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
                                         title={item.label}
                                     >
-                                        {item.icon}
+                                        <div className="group-hover:scale-110 transition-all duration-300 group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">
+                                            {item.icon}
+                                        </div>
                                         {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-500 rounded-r shadow-[0_0_10px_rgba(6,182,212,0.5)]" />}
 
                                         {/* HOVER LABEL TOOLTIP */}

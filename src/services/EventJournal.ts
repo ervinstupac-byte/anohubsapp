@@ -23,10 +23,30 @@ class EventJournalService {
         } catch (e) {
             this.worker = null;
         }
+
+        // NC-87.1: Legal Sovereignty Debug Hook
+        if (typeof window !== 'undefined') {
+            (window as any).__MONOLIT_DEBUG__ = {
+                ...(window as any).__MONOLIT_DEBUG__,
+                exportLedgerSnapshot: () => this.exportSnapshot()
+            };
+        }
+    }
+
+    private exportSnapshot() {
+        const data = JSON.stringify(this.store, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `MONOLIT_LEDGER_AUDIT_${new Date().toISOString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        console.log('✅ [EventJournal] Ledger snapshot exported for forensic audit.');
     }
 
     append(eventType: string, payload: any) {
-        const rec: EventRecord = { id: `${Date.now()}-${Math.random().toString(36).slice(2,8)}`, type: eventType, payload, ts: new Date().toISOString() };
+        const rec: EventRecord = { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, type: eventType, payload, ts: new Date().toISOString() };
         this.store.unshift(rec);
         if (this.store.length > MAX_IN_MEMORY) this.store.pop();
 
@@ -53,8 +73,7 @@ class EventJournalService {
 
     // Request the worker to stream older events starting at a timestamp (ISO string).
     // onRecord will be invoked for each streamed record. Resolves when stream completes or errors.
-    fetchOlderEvents(fromTs: string, onRecord: (r: EventRecord) => void, batchSize = 200): Promise<{ count: number }>
-    {
+    fetchOlderEvents(fromTs: string, onRecord: (r: EventRecord) => void, batchSize = 200): Promise<{ count: number }> {
         return new Promise((resolve, reject) => {
             if (!this.worker) {
                 // fallback: query supabase directly (use static import to keep chunking consistent)
@@ -64,7 +83,7 @@ class EventJournalService {
                         const rows = (data as any[]) || [];
                         for (const r of rows) {
                             let payload = r.payload;
-                            try { payload = typeof payload === 'string' ? JSON.parse(payload) : payload; } catch (e) {}
+                            try { payload = typeof payload === 'string' ? JSON.parse(payload) : payload; } catch (e) { }
                             onRecord({ id: r.id, type: r.kind, payload, ts: r.created_at });
                         }
                         resolve({ count: rows.length });
