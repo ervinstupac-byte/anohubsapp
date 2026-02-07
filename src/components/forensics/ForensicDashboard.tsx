@@ -9,6 +9,7 @@ import { KillSwitch } from './KillSwitch';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SovereignLedger, VerificationResult } from '../../services/SovereignLedger';
+import { EventJournal } from '../../services/EventJournal';
 
 // --- PACKET VISUALIZER COMPONENT ---
 const PacketTrafficVisualizer: React.FC<{ history: Array<{ inbound: number; outbound: number }> }> = ({ history }) => {
@@ -188,6 +189,40 @@ export const ForensicDashboard: React.FC = () => {
     const { t } = useTranslation();
     const { status, trafficHistory, securityEvents, triggerSimulatedAttack, executeKillSwitch, currentLatency } = useForensics();
 
+    // NC-95: Discrepancy Log UI
+    const [discrepancies, setDiscrepancies] = useState<any[]>([]);
+    const [sourceOfTruth, setSourceOfTruth] = useState<'RAW' | 'PHYSICS'>("PHYSICS");
+
+    useEffect(() => {
+        const load = () => {
+            try {
+                const rec = EventJournal.recent(200).filter(r => r.type === 'efficiency_discrepancy');
+                setDiscrepancies(rec.map(r => ({ id: r.id, ts: r.ts, payload: r.payload })));
+            } catch (e) { /* swallow */ }
+        };
+
+        load();
+        const id = setInterval(load, 3000);
+        return () => clearInterval(id);
+    }, []);
+
+    const guessSensor = (payload: any) => {
+        try {
+            const tele = payload?.telemetry || {};
+            const p = tele.P_kW ?? tele.P_kW;
+            const q = tele.Q ?? tele.Q;
+            // simple heuristics
+            if (!q || q <= 0) return 'Flow Meter';
+            if (!p || p <= 0) return 'Power Transducer';
+            const teleEta = tele.percent ?? tele.percent;
+            const physEta = payload?.physics?.percent ?? null;
+            if (typeof teleEta === 'number' && typeof physEta === 'number') {
+                return teleEta < physEta ? 'Flow Meter' : 'Power Transducer';
+            }
+            return 'Unknown Sensor';
+        } catch (e) { return 'Unknown'; }
+    };
+
     // Sound Effect for Attack (Optional)
     useEffect(() => {
         if (status === 'ATTACK_IN_PROGRESS') {
@@ -242,6 +277,14 @@ export const ForensicDashboard: React.FC = () => {
                 </div>
             </header>
 
+            {/* Source of Truth Toggle */}
+            <div className="mb-6 flex items-center justify-end gap-3">
+                <div className="text-[11px] font-mono text-slate-400">Source of Truth</div>
+                <div className={`px-3 py-1 rounded-full text-[12px] font-bold ${sourceOfTruth === 'PHYSICS' ? 'bg-emerald-600 text-black' : 'bg-slate-800 text-slate-300'} cursor-pointer`} onClick={() => setSourceOfTruth(sourceOfTruth === 'PHYSICS' ? 'RAW' : 'PHYSICS')}>
+                    {sourceOfTruth === 'PHYSICS' ? 'Physics-Reconciled' : 'Raw Telemetry'}
+                </div>
+            </div>
+
             <div className="grid grid-cols-12 gap-8 relative z-10">
 
                 {/* 1. NETWORK TRAFFIC & SECURITY (Left Column) */}
@@ -281,6 +324,45 @@ export const ForensicDashboard: React.FC = () => {
                                         {event}
                                     </div>
                                 ))
+                            )}
+                        </div>
+                    </GlassCard>
+
+                    {/* Discrepancy Log (NC-95) */}
+                    <GlassCard className="p-0 overflow-hidden border-t-4 border-t-amber-500">
+                        <div className="p-4 bg-slate-900/50 flex justify-between items-center border-b border-white/5">
+                            <h3 className="font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <Activity className="w-4 h-4 text-amber-400" />
+                                {t('forensics.discrepancy_log', 'Discrepancy Log')}
+                            </h3>
+                            <div className="text-[10px] font-mono text-slate-500">NC-95</div>
+                        </div>
+                        <div className="p-3 max-h-56 overflow-y-auto custom-scrollbar space-y-2">
+                            {discrepancies.length === 0 ? (
+                                <div className="text-xs text-slate-500 italic">No discrepancies recorded.</div>
+                            ) : (
+                                discrepancies.map(d => {
+                                    const payload = d.payload || {};
+                                    const tel = payload.telemetry || {};
+                                    const telemetryPercent = tel.percent ?? tel.telemetry?.percent ?? tel.percent;
+                                    const physicsPercent = payload.physics?.percent ?? payload.physicsPercent ?? null;
+                                    const delta = typeof telemetryPercent === 'number' && typeof physicsPercent === 'number' ? Math.abs(parseFloat((telemetryPercent - physicsPercent).toFixed(2))) : (payload.diff ?? null);
+                                    const sensor = guessSensor(payload);
+                                    return (
+                                        <div key={d.id} className="p-2 rounded-lg bg-slate-900/60 border border-white/5 text-sm flex items-start justify-between gap-3">
+                                            <div className="flex-1">
+                                                <div className="text-[11px] font-mono text-slate-400">{new Date(d.ts).toLocaleString()}</div>
+                                                <div className="text-white font-bold mt-1">Δη: {delta !== null ? `${delta}%` : '—'}</div>
+                                                <div className="text-[11px] text-slate-400 mt-1">Suspected: <span className="font-semibold text-slate-100">{sensor}</span></div>
+                                            </div>
+                                            <div className="text-right">
+                                                <button className="px-3 py-1 text-xs bg-slate-800 rounded border border-white/5" onClick={() => { try { window.dispatchEvent(new CustomEvent('forensics:openDetail', { detail: { id: d.id, payload } })); } catch (e) {} }}>
+                                                    View
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
                             )}
                         </div>
                     </GlassCard>

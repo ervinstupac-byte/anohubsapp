@@ -11,6 +11,7 @@ import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
 import { useNotifications } from './NotificationContext.tsx';
 import idAdapter from '../utils/idAdapter';
 import { HppStatusSchema } from '../schemas/supabase';
+import { calculateHydraulicEfficiency } from '../shared/hydraulics';
 
 declare global {
     interface Window {
@@ -252,18 +253,15 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                                 status: u.status || 'OPTIMAL',
                                 vibration: u.vibration || 0.02,
                                 temperature: u.temperature || 50,
-                                // Compute hydraulic-derived efficiency if available
+                                // Compute hydraulic-derived efficiency if available using shared utility
                                 efficiency: (() => {
                                     try {
                                         const outputMW = (u.output !== undefined && u.output !== null) ? Number(u.output) : 0; // MW
                                         const P_kW = outputMW * 1000; // kW
                                         const Q = (u.pump_flow_rate !== undefined && u.pump_flow_rate !== null) ? Number(u.pump_flow_rate) : ((u.flow_m3s !== undefined && u.flow_m3s !== null) ? Number(u.flow_m3s) : 0);
                                         const H = (u.reservoir_level !== undefined && u.reservoir_level !== null) ? Number(u.reservoir_level) : ((u.head_m !== undefined && u.head_m !== null) ? Number(u.head_m) : 0);
-                                        const rho = 1000; const g = 9.81;
-                                        if (Q <= 0 || H <= 0) return u.efficiency ?? 0;
-                                        const pTheoretical_kW = (rho * g * Q * H) / 1000; // kW
-                                        const derivedEff = (pTheoretical_kW > 0) ? (P_kW / pTheoretical_kW) * 100 : (u.efficiency ?? 0);
-                                        return Math.min(98, Math.max(0, parseFloat((derivedEff || 0).toFixed(1))));
+                                        const derived = calculateHydraulicEfficiency(P_kW, Q, H);
+                                        return derived !== null ? derived : (u.efficiency ?? 0);
                                     } catch (e) {
                                         return u.efficiency ?? 0;
                                     }
@@ -387,21 +385,11 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     flow_m3s: baseState.hydraulic?.flow || 5,
 
                     efficiency: (() => {
-                        const P = asset.capacity ? (asset.capacity * 1000 * ((baseState.mechanical as any).wicketGatePosition || 45) / 100) : 0; // P in kW
+                        const P_kW = asset.capacity ? (asset.capacity * 1000 * ((baseState.mechanical as any).wicketGatePosition || 45) / 100) : 0; // P in kW
                         const Q = baseState.hydraulic?.flow || 5;
                         const H = baseState.site?.reservoirLevel || 122.5;
-                        const rho = 1000;
-                        const g = 9.81;
-
-                        // Prevent div by zero
-                        if (Q <= 0 || H <= 0) return 0;
-
-                        // Derived Eff = P_actual / P_theoretical
-                        // P_theoretical = rho * g * Q * H / 1000 (in kW)
-                        const pTheoretical = (rho * g * Q * H) / 1000;
-                        const derivedEff = (P / pTheoretical) * 100;
-
-                        return Math.min(98, Math.max(0, parseFloat((derivedEff).toFixed(1))));
+                        const derived = calculateHydraulicEfficiency(P_kW, Q, H);
+                        return derived !== null ? derived : 0;
                     })(),
                     output: asset.capacity ? parseFloat(((asset.capacity as number) * ((baseState.mechanical as any).wicketGatePosition || 0.45) / 100).toFixed(2)) : 0,
                     piezometricPressure: parseFloat((4.2).toFixed(2)),

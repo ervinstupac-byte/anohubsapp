@@ -1,0 +1,29 @@
+﻿
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/Home/OneDrive/getting started/Documents/GitHub/anohubsapp[39m
+
+[90mstdout[2m | src\i18n\index.ts:7:9[22m[39m
+[i18n] ­ƒöº Starting bulletproof initialization...
+
+[90mstdout[2m | src\i18n\index.ts:35:15[22m[39m
+[i18n] Ôä╣´©Å  No saved language, using default: en
+
+[90mstdout[2m | src\i18n\index.ts:48:9[22m[39m
+[i18n] ­ƒÜÇ Initializing i18next with language: en
+
+[90mstdout[2m | src\i18n\index.ts:80:11[22m[39m
+[i18n] Ô£àÔ£àÔ£à i18next initialized successfully
+
+[90mstdout[2m | src\i18n\index.ts:109:9[22m[39m
+[i18n] Ô£à Module export ready
+
+ [31m├ù[39m src/__tests__/cyber_resilience.test.ts[2m > [22mMission NC-110: Cyber-Resilience & Predictive Sentinel[2m > [22mTask 1: Predictive Sentinel (Pressure Trend)[2m > [22mshould trigger auto-derate to 50% when pressure rises >5% over 60s
+[31m   ÔåÆ expected false to be true // Object.is equality[39m
+ [32mÔ£ô[39m src/__tests__/cyber_resilience.test.ts[2m > [22mMission NC-110: Cyber-Resilience & Predictive Sentinel[2m > [22mTask 2: Cyber-Hardening (Session Lock)[2m > [22mshould lock session and trigger PURPLE alarm on unauthorized Master ESD
+ [32mÔ£ô[39m src/__tests__/cyber_resilience.test.ts[2m > [22mMission NC-110: Cyber-Resilience & Predictive Sentinel[2m > [22mTask 2: Cyber-Hardening (Session Lock)[2m > [22mshould block further commands when session is locked
+ [32mÔ£ô[39m src/__tests__/cyber_resilience.test.ts[2m > [22mMission NC-110: Cyber-Resilience & Predictive Sentinel[2m > [22mTask 2: Cyber-Hardening (Session Lock)[2m > [22mshould only allow CHIEF_ENGINEER to unlock session
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 17:20:00
+[2m   Duration [22m 1.65s[2m (transform 158ms, setup 120ms, collect 179ms, tests 13ms, environment 602ms, prepare 112ms)[22m
+
