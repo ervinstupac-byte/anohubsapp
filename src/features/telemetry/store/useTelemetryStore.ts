@@ -109,6 +109,8 @@ interface TelemetryState {
         status: 'NOMINAL' | 'CRITICAL';
         lastOptimization?: number; // timestamp
     };
+    units: Record<string, any>;
+    gridFrequency: number;
 
     // NC-300: Persistence Layer - "Born Perfect" baseline from commissioning
     baselineState: BaselineState | null;
@@ -149,6 +151,7 @@ interface TelemetryState {
     // NC-23: Fleet Actions
     updateFleetMetrics: (metrics: Partial<TelemetryState['fleet']>) => void;
     triggerFleetAlert: (message: string, severity: 'INFO' | 'WARNING' | 'CRITICAL') => void;
+    distributeFleetLoad: (targetTotalMW: number) => void;
 }
 
 export const useTelemetryStore = create<TelemetryState>()(
@@ -207,8 +210,8 @@ export const useTelemetryStore = create<TelemetryState>()(
                 activeAssets: 0,
                 status: 'NOMINAL'
             },
-
-            // NC-87.1: Maintenance Safety Initial State
+            units: {},
+            gridFrequency: 50.000,
             isMaintenanceLocked: false,
             toggleLOTO: () => {
                 set((state) => {
@@ -557,39 +560,61 @@ export const useTelemetryStore = create<TelemetryState>()(
                 }));
             },
 
-                    // NC-89: 24h projection helper for UI TrendArrow and charts
-                    compute24hProjection: (signalId: string, horizonMs = 24 * 3600 * 1000, steps = 24) => {
-                        try {
-                            const buffer = signalHistoryManager.getBuffer(signalId);
-                            if (!buffer) return { points: [] };
-                            const pts = buffer.getAll().map(dp => ({ t: dp.timestamp, y: dp.value }));
-                            if (pts.length < 2) return { points: [] };
+            // NC-89: 24h projection helper for UI TrendArrow and charts
+            compute24hProjection: (signalId: string, horizonMs = 24 * 3600 * 1000, steps = 24) => {
+                try {
+                    const buffer = signalHistoryManager.getBuffer(signalId);
+                    if (!buffer) return { points: [] };
+                    const pts = buffer.getAll().map(dp => ({ t: dp.timestamp, y: dp.value }));
+                    if (pts.length < 2) return { points: [] };
 
-                            const n = pts.length;
-                            const meanT = pts.reduce((s, p) => s + p.t, 0) / n;
-                            const meanY = pts.reduce((s, p) => s + p.y, 0) / n;
+                    const n = pts.length;
+                    const meanT = pts.reduce((s, p) => s + p.t, 0) / n;
+                    const meanY = pts.reduce((s, p) => s + p.y, 0) / n;
 
-                            const Sxx = pts.reduce((s, p) => s + Math.pow(p.t - meanT, 2), 0);
-                            const Sxy = pts.reduce((s, p) => s + (p.t - meanT) * (p.y - meanY), 0);
-                            const a = Sxx === 0 ? 0 : Sxy / Sxx; // slope (y per ms)
-                            const b = meanY - a * meanT; // intercept
+                    const Sxx = pts.reduce((s, p) => s + Math.pow(p.t - meanT, 2), 0);
+                    const Sxy = pts.reduce((s, p) => s + (p.t - meanT) * (p.y - meanY), 0);
+                    const a = Sxx === 0 ? 0 : Sxy / Sxx; // slope (y per ms)
+                    const b = meanY - a * meanT; // intercept
 
-                            const now = Date.now();
-                            const interval = Math.max(1, Math.floor(horizonMs / Math.max(1, steps)));
-                            const points: { t: number; y: number }[] = [];
-                            for (let i = 1; i <= steps; i++) {
-                                const t = now + i * interval;
-                                const y = isFinite(a) ? a * t + b : pts[pts.length - 1].y;
-                                points.push({ t, y });
-                            }
-                            return { points };
-                        } catch (e) {
-                            console.warn('[TelemetryStore] compute24hProjection failed', e);
-                            return { points: [] };
-                        }
-                    },
+                    const now = Date.now();
+                    const interval = Math.max(1, Math.floor(horizonMs / Math.max(1, steps)));
+                    const points: { t: number; y: number }[] = [];
+                    for (let i = 1; i <= steps; i++) {
+                        const t = now + i * interval;
+                        const y = isFinite(a) ? a * t + b : pts[pts.length - 1].y;
+                        points.push({ t, y });
+                    }
+                    return { points };
+                } catch (e) {
+                    console.warn('[TelemetryStore] compute24hProjection failed', e);
+                    return { points: [] };
+                }
+            },
 
-            // NC-23: Trigger a fleet-wide alert via AlertJournal (side-effect)
+            updateFleetMetrics: (metrics) => {
+                set((state) => ({
+                    fleet: { ...state.fleet, ...metrics }
+                }));
+            },
+
+            distributeFleetLoad: (targetTotalMW) => {
+                const { units } = get();
+                const nextUnits = { ...units };
+                const plantCount = Object.keys(units).length || 1;
+                const share = targetTotalMW / plantCount;
+
+                Object.keys(units).forEach(id => {
+                    nextUnits[id] = { ...nextUnits[id], targetLoadMW: share };
+                });
+
+                set({ units: nextUnits, fleet: { ...get().fleet, totalMW: targetTotalMW } });
+            },
+
+            setBaselineFromWizard: (data) => set({ baselineState: data }),
+            toggleFilteredMode: () => set((state) => ({ isFilteredMode: !state.isFilteredMode })),
+            setFilterType: (filterType) => set({ filterType }),
+
             triggerFleetAlert: async (message, severity) => {
                 // Dynamically import to avoid circular dependency if AlertJournal imports store
                 try {

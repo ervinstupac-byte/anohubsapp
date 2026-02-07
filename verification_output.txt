@@ -1,0 +1,14 @@
+﻿--- NC-91 Final Verification ---
+
+[Scenario A] Total Load = 110 MW
+NC01: 91 MW (OPERATIONAL)
+NC02: 0 MW (STANDBY)
+
+[Scenario B] Hysteresis (110 -> 112 MW)
+NC01: 91 MW
+NC02: 0 MW
+Distribution Changed: NO (Pass)
+
+[Scenario C] Wear-Leveling (60 MW)
+NC01: 60 MW (Hours: 1000)
+NC02: 0 MW (Hours: 2000)
