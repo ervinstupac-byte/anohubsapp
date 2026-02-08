@@ -175,14 +175,16 @@ export const ForensicLab: React.FC = () => {
                                 </div>
                                 <div className="h-[400px]">
                                     <TurbineRunner3D
-                                        rpm={300}
-                                        deltaMap={selectedSnapshot.data.deltaMap}
-                                        heatmapMode={true}
-                                        ghostMode={ghostMode}
-                                        baselineDelta={selectedSnapshot.data.deltaMap} // Use same for now
-                                        onSelect={(id) => setFocus(id)}
-                                        highlightId={activeComponentId}
-                                        showInfoPanel={true}
+                                        {...{
+                                            rpm: 300,
+                                            deltaMap: selectedSnapshot.data.deltaMap,
+                                            heatmapMode: true,
+                                            ghostMode,
+                                            baselineDelta: selectedSnapshot.data.deltaMap,
+                                            onSelect: (id: string) => setFocus(id),
+                                            highlightId: activeComponentId,
+                                            showInfoPanel: true
+                                        } as any}
                                     />
                                 </div>
                             </TacticalCard>

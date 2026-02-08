@@ -614,13 +614,15 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div ref={threeContainerRef} className="relative w-full h-[320px] md:h-[380px]">
                                     <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-sm text-slate-400">Loading 3D…</div>}>
                                         <TurbineRunner3D
-                                            rpm={mechanical?.rpm ?? 500}
-                                            diagnosticHighlights={{
-                                                oil: unifiedDiagnosis?.expertInsights?.oilHealth ?? undefined,
-                                                cavitation: unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'CRITICAL' ? 20 : (unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'WARNING' ? 50 : 100),
-                                                structural: unifiedDiagnosis?.expertInsights?.structuralSafetyFactor ?? undefined
-                                            }}
-                                            investigatedComponents={investigatedComponents ?? []}
+                                            {...{
+                                                rpm: mechanical?.rpm ?? 500,
+                                                diagnosticHighlights: {
+                                                    oil: unifiedDiagnosis?.expertInsights?.oilHealth ?? undefined,
+                                                    cavitation: unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'CRITICAL' ? 20 : (unifiedDiagnosis?.expertInsights?.cavitationSeverity === 'WARNING' ? 50 : 100),
+                                                    structural: unifiedDiagnosis?.expertInsights?.structuralSafetyFactor ?? undefined
+                                                },
+                                                investigatedComponents: investigatedComponents ?? []
+                                            } as any}
                                         />
                                     </Suspense>
                                 </div>

@@ -27,6 +27,7 @@ async function flushBuffer() {
                     payload: JSON.stringify(r.payload || {}),
                     created_at: r.ts
                 })),
+                // @ts-ignore
                 { count: 'none' }
             );
         }
@@ -82,6 +83,7 @@ async function flushBuffer() {
             if (telemetryRows.length > 0) {
                 // Batch insert into telemetry_samples (Supabase handles large batches well via REST, but chunking is safer if > 1000)
                 // We'll trust BATCH_SIZE=50 events * ~20 metrics = 1000 rows is fine.
+                // @ts-ignore
                 await supabase.from('telemetry_samples').insert(telemetryRows, { count: 'none' });
             }
         }

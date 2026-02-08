@@ -1,0 +1,5 @@
+﻿src/components/dashboard/MasterControlRoom.tsx(3,35): error TS2307: Cannot find module '../../features/telemetry/components/EfficiencyMonitor' or its corresponding type declarations.
+src/components/dashboard/MasterControlRoom.tsx(8,13): error TS2339: Property 'units' does not exist on type 'TelemetryState'.
+src/components/dashboard/MasterControlRoom.tsx(8,20): error TS2339: Property 'gridFrequency' does not exist on type 'TelemetryState'.
+src/components/dashboard/MasterControlRoom.tsx(25,69): error TS18046: 'totalRev' is of type 'unknown'.
+src/components/dashboard/MasterControlRoom.tsx(39,13): error TS2339: Property 'units' does not exist on type 'TelemetryState'.

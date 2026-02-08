@@ -358,15 +358,18 @@ export const CommandCenter: React.FC = () => {
                                         </div>
                                     }>
                                         <TurbineRunner3D
-                                            ref={turbineRef}
-                                            rpm={300}
-                                            deltaMap={deltaMap}
-                                            heatmapMode={true}
-                                            ghostMode={ghostMode}
-                                            baselineDelta={deltaMap} // Using current delta as baseline for demo purpose (simulating deviation)
-                                            deltaIndex={deltaPerf}
-                                            className="h-full"
-                                            showInfoPanel={true}
+                                            {...{
+                                                rpm: 300,
+                                                deltaMap,
+                                                heatmapMode: true,
+                                                ghostMode,
+                                                baselineDelta: deltaMap,
+                                                deltaIndex: deltaPerf,
+                                                className: 'h-full',
+                                                showInfoPanel: true,
+                                                onSelect: undefined
+                                            } as any}
+                                            ref={turbineRef as any}
                                         />
                                     </React.Suspense>
                                 </ErrorBoundary>

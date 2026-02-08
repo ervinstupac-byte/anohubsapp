@@ -198,7 +198,7 @@ export const CommissioningWizard: React.FC<{ onClose: () => void }> = ({ onClose
                                             onChange={e => setFormData({ ...formData, metallurgy: { ...formData.metallurgy, ceramicCoatingApplied: e.target.checked } })}
                                             className="w-5 h-5 accent-cyan-500"
                                         />
-                                        <span className="text-white">Confirmed Application of Ceramic Coating (>300µm)</span>
+                                        <span className="text-white">Confirmed Application of Ceramic Coating (&gt;300µm)</span>
                                     </div>
                                 </div>
                             )}

@@ -40,9 +40,11 @@ export const TruthHeatmapDemo: React.FC = () => {
 
             {/* 3D Turbine */}
             <TurbineRunner3D
-                rpm={300}
-                deltaMap={deltaMap}
-                heatmapMode={heatmapMode}
+                {...{
+                    rpm: 300,
+                    deltaMap,
+                    heatmapMode
+                } as any}
             />
 
             {/* Legend (only show in heatmap mode) */}

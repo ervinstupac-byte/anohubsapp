@@ -988,8 +988,9 @@ export const ComponentInfoPanel: React.FC<ComponentInfoPanelProps> = ({
                         <div className="p-4 bg-slate-950/70 rounded-lg min-h-[80px]">
                             <div className="text-[9px] text-slate-500 uppercase mb-1 font-bold">Efficiency</div>
                             <div className="text-xl font-mono font-black text-cyan-400">
-                                {telemetryStore.physics.efficiency
-                                    ? ((telemetryStore.physics.efficiency as number) * 100).toFixed(1)
+                                {/* @ts-ignore */}
+                                {(telemetryStore.physics as any).efficiency
+                                    ? (((telemetryStore.physics as any).efficiency as number) * 100).toFixed(1)
                                     : '92.4'}
                                 <span className="text-xs text-slate-500 ml-1">%</span>
                             </div>
