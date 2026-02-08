@@ -4,7 +4,7 @@ import { DiagnosticRCA } from '../../automation/DiagnosticRCA';
 
 export const AnohubSidebar: React.FC = () => {
     return (
-        <div className="w-20 bg-gradient-to-br from-[#dfe4ea] via-[#a2a8b1] to-[#747d8c] border-r border-slate-500/40 flex flex-col items-center py-6 gap-8 relative z-40 shadow-[8px_0_24px_rgba(0,0,0,0.5)]">
+        <div className="w-20 h-screen overflow-y-auto custom-scrollbar bg-gradient-to-br from-[#dfe4ea] via-[#a2a8b1] to-[#747d8c] border-r border-slate-500/40 flex flex-col items-center py-6 gap-8 relative z-40 shadow-[8px_0_24px_rgba(0,0,0,0.5)]">
             {/* BRUSHED METAL TEXTURE */}
             <div className="absolute inset-0 opacity-60 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
 

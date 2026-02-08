@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 // EfficiencyMonitor component path unavailable in this build; placeholder panel provided below
 import { ScenarioController } from './ScenarioController';
 import { Globe, ChevronUp, ChevronDown, LayoutDashboard, ShieldCheck, Activity, Zap, TrendingUp, DollarSign } from 'lucide-react';
+import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
 
 const ExecutiveRibbon: React.FC = () => {
     // @ts-ignore
@@ -39,7 +40,7 @@ const ExecutiveRibbon: React.FC = () => {
 
 export const MasterControlRoom: React.FC = () => {
     // @ts-ignore
-    const { units, fleet } = useTelemetryStore();
+    const { units, fleet, hydraulic, physics, deltaToOptimum } = useTelemetryStore() as any;
     const plantName = "MONOLIT_CORE";
 
     const theme = {
@@ -48,8 +49,21 @@ export const MasterControlRoom: React.FC = () => {
         border: 'border-emerald-500 border-opacity-20'
     };
 
+    // NC-300: Optimization HUD data
+    const hud = useMemo(() => {
+        const netHeadM = (physics?.netHead ?? hydraulic?.head ?? 0) as number;
+        const flowM3s = (hydraulic?.flow ?? 0) as number;
+        const effRaw = (hydraulic?.efficiency ?? 0) as number;
+        const currentEta = effRaw <= 1 ? effRaw * 100 : effRaw;
+        const { etaMax } = EfficiencyOptimizer.compute(netHeadM, flowM3s, currentEta);
+        const delta = typeof deltaToOptimum === 'number' ? deltaToOptimum : (etaMax - currentEta);
+        const statusColor = delta > 3 ? 'text-red-400' : 'text-emerald-400';
+        const badgeBg = delta > 3 ? 'bg-red-500/15 border-red-500/30' : 'bg-emerald-500/15 border-emerald-500/30';
+        return { currentEta, etaMax, delta, statusColor, badgeBg };
+    }, [hydraulic, physics, deltaToOptimum]);
+
     return (
-        <div className="flex flex-col h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
+        <div className="flex flex-col h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans relative">
             <ExecutiveRibbon />
 
             <main className="flex-1 p-8 space-y-8 overflow-y-auto">
@@ -158,6 +172,31 @@ export const MasterControlRoom: React.FC = () => {
                     </div>
                 </div>
             </main>
+
+            {/* NC-300: Optimization HUD Overlay */}
+            <div className="absolute bottom-6 right-6 z-[1000] w-80 pointer-events-none hidden md:block">
+                <div className="bg-slate-950/85 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 shadow-2xl space-y-3 overflow-hidden relative">
+                    <div className="absolute inset-0 bg-emerald-500/5" />
+                    <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2 relative z-10">
+                        <Activity className="w-4 h-4 text-emerald-400" />
+                        <p className="text-[10px] text-slate-300 uppercase font-bold tracking-widest">Optimization HUD</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-[10px] font-mono relative z-10">
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">η (Current)</span>
+                            <span className="text-white font-bold">{hud.currentEta.toFixed(2)}%</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-slate-400">η_max (Target)</span>
+                            <span className="text-cyan-400 font-bold">{hud.etaMax.toFixed(2)}%</span>
+                        </div>
+                        <div className={`col-span-2 mt-1 px-2 py-1 rounded border ${hud.badgeBg} flex items-center justify-between`}>
+                            <span className="text-slate-400 uppercase tracking-widest">Δ Optimization</span>
+                            <span className={`font-black ${hud.statusColor}`}>{hud.delta.toFixed(2)}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

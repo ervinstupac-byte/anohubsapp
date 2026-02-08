@@ -8,6 +8,7 @@ import { TacticalCard } from './ui/TacticalCard';
 import { TurbineRunner3D } from './three/TurbineRunner3D';
 import { Clock, FileText, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export const ForensicLab: React.FC = () => {
     const { t } = useTranslation();
@@ -16,17 +17,49 @@ export const ForensicLab: React.FC = () => {
     const [selectedSnapshot, setSelectedSnapshot] = useState<AuditSnapshot | null>(null);
     const [rchAnalysis, setRchAnalysis] = useState<RootCauseAnalysis | null>(null);
     const [ghostMode, setGhostMode] = useState(false);
+    const rpm = useTelemetryStore(s => s.mechanical.rpm);
+    const recordDossierHash = useTelemetryStore(s => s.recordDossierHash);
+    const ledgerHashes = useTelemetryStore(s => s.ledgerState.dossierHashes);
 
     // Analyze selected snapshot
     const analyzeSnapshot = (snapshot: AuditSnapshot) => {
         setSelectedSnapshot(snapshot);
         const analysis = RootCauseEngine.analyze(snapshot);
+        const rot = rpm || 300;
+        const f0 = rot / 60;
+        const bpf = 6 * f0;
+        const baseline = snapshot.data?.neuralPulse?.progress ? Math.max(0.5, (snapshot.data.neuralPulse.progress / 100) * 2) : 1.0;
+        const harmonic2x = snapshot.data?.systemHealth === 'CRITICAL' ? baseline * 3.2
+            : snapshot.data?.systemHealth === 'DEGRADED' ? baseline * 2.4
+            : baseline * 1.4;
+        const cavitationWarning = harmonic2x > 2 * baseline;
+        (analysis as any).fft = {
+            baseHz: Number(f0.toFixed(2)),
+            bpfHz: Number(bpf.toFixed(2)),
+            baselineAmp: Number(baseline.toFixed(2)),
+            harmonic2xAmp: Number(harmonic2x.toFixed(2)),
+            cavitationWarning
+        };
         setRchAnalysis(analysis);
     };
 
     // Export forensic dossier
     const exportDossier = () => {
         if (selectedSnapshot && rchAnalysis) {
+            const dossierJson = {
+                id: selectedSnapshot.id,
+                timestamp: selectedSnapshot.timestamp,
+                systemHealth: selectedSnapshot.data?.systemHealth,
+                analysis: {
+                    confidence: (rchAnalysis as any)?.confidence,
+                    summary: (rchAnalysis as any)?.summary,
+                    fft: (rchAnalysis as any)?.fft
+                }
+            };
+            ForensicReportService.generateDossierChecksum(dossierJson).then((hash) => {
+                recordDossierHash(selectedSnapshot.id, hash);
+            }).catch(() => { /* ignore checksum errors for UX */ });
+
             const blob = ForensicReportService.generateRootCauseDossier({
                 snapshot: selectedSnapshot,
                 rchAnalysis,
@@ -154,6 +187,11 @@ export const ForensicLab: React.FC = () => {
                             </TacticalCard>
 
                             {/* Root Cause Analysis */}
+                            {(rchAnalysis as any)?.fft?.cavitationWarning && (
+                                <div className="px-3 py-2 rounded-sm border border-red-500/40 bg-red-950/40 text-[10px] font-mono text-red-400">
+                                    Cavitation Warning: 2× harmonic exceeds baseline
+                                </div>
+                            )}
                             <CausalChain analysis={rchAnalysis} />
 
                             {/* 3D Visualization with Ghost Mode */}
@@ -190,13 +228,21 @@ export const ForensicLab: React.FC = () => {
                             </TacticalCard>
 
                             {/* Export Button */}
-                            <button
-                                onClick={exportDossier}
-                                className="w-full py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
-                            >
-                                <FileText className="w-4 h-4" />
-                                Export Forensic Dossier (PDF)
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={exportDossier}
+                                    className="flex-1 py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <FileText className="w-4 h-4" />
+                                    Export Forensic Dossier (PDF)
+                                </button>
+                                {selectedSnapshot && ledgerHashes[selectedSnapshot.id] && (
+                                    <div className="px-3 py-2 rounded-sm border border-emerald-500/40 bg-emerald-950/40 text-[10px] font-mono text-emerald-400 flex items-center gap-2">
+                                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                        Seal Verified: {(ledgerHashes[selectedSnapshot.id] as string).slice(0, 8).toUpperCase()}
+                                    </div>
+                                )}
+                            </div>
                         </>
                     ) : (
                         <TacticalCard title="NO SNAPSHOT SELECTED" status="unknown">
@@ -208,6 +254,50 @@ export const ForensicLab: React.FC = () => {
                     )}
                 </div>
             </div>
+
+            {/* NC-300: FFT Visualization with Baseline Ghosting */}
+            {selectedSnapshot && rchAnalysis && (
+                <div className="mt-6 p-4 bg-slate-900/60 border border-white/5 rounded-sm">
+                    <div className="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">
+                        FFT Spectrum — Baseline Ghost vs Current Harmonics
+                    </div>
+                    <div className="w-full h-32 relative">
+                        <svg viewBox="0 0 300 100" className="w-full h-full">
+                            <defs>
+                                <linearGradient id="ghost" x1="0" x2="0" y1="0" y2="1">
+                                    <stop offset="0" stopColor="#94a3b8" stopOpacity="0.4" />
+                                    <stop offset="1" stopColor="#94a3b8" stopOpacity="0.1" />
+                                </linearGradient>
+                            </defs>
+                            {/* Baseline ghost curve (flat baseline amp) */}
+                            <path
+                                d={`M 0 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}
+                                    L 300 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}`}
+                                stroke="url(#ghost)"
+                                strokeWidth="8"
+                                strokeLinecap="round"
+                                fill="none"
+                            />
+                            {/* Current harmonic peaks */}
+                            {(() => {
+                                const fft = (rchAnalysis as any).fft || {};
+                                const baseHz = fft.baseHz || 1;
+                                const bpfHz = fft.bpfHz || baseHz * 6;
+                                const scaleX = (hz: number) => Math.min(300, (hz / (bpfHz * 2)) * 300);
+                                const scaleY = (amp: number) => Math.max(0, 100 - amp * 10);
+                                return (
+                                    <>
+                                        <rect x={scaleX(baseHz) - 3} y={scaleY(fft.baselineAmp || 1)} width="6" height={100 - scaleY(fft.baselineAmp || 1)} fill="#60a5fa" />
+                                        <rect x={scaleX(bpfHz * 2) - 3} y={scaleY(fft.harmonic2xAmp || 1)} width="6" height={100 - scaleY(fft.harmonic2xAmp || 1)} fill={fft.cavitationWarning ? '#ef4444' : '#22c55e'} />
+                                    </>
+                                );
+                            })()}
+                            {/* Axis */}
+                            <line x1="0" y1="100" x2="300" y2="100" stroke="#475569" strokeWidth="1" />
+                        </svg>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -23,6 +23,8 @@ import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
 import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
 import { DrillDownProvider } from './contexts/DrillDownContext.tsx'; // <--- NEW Phase 3
 import { CommandPalette } from './components/ui/CommandPalette.tsx'; // <--- NEW Phase 3
+import { useToast } from './contexts/ToastContext.tsx';
+import { useTelemetryStore } from './features/telemetry/store/useTelemetryStore';
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
@@ -163,6 +165,7 @@ const AppLayout: React.FC = () => {
     const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator(); // Calculated Asset Risk
     const { logAction } = useAudit();
     const { user, signOut } = useAuth(); // Auth integration
+    const { showToast } = useToast();
 
     // Unified Navigation States
     const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
@@ -200,6 +203,14 @@ const AppLayout: React.FC = () => {
         navigateTo('riskAssessment');
     };
 
+    useEffect(() => {
+        try {
+            const didReset = useTelemetryStore.getState().hardResetIfSchemaMismatch?.();
+            if (didReset) {
+                showToast('Sovereign Core: Schema Updated. Workspace Synchronized.', 'info');
+            }
+        } catch { /* noop */ }
+    }, []);
     // Listen for custom wizard trigger event from NeuralFlowMap
     useEffect(() => {
         const onStart = (e: any) => { setReconstructing(true); setReconstructProgress(0); };

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Activity, Zap, Database, Brain, Target } from 'lucide-react';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 interface SovereignPulseProps {
     kernelActive?: boolean;
@@ -13,13 +14,19 @@ export const SovereignPulse: React.FC<SovereignPulseProps> = ({
     currentStage = 'DIAGNOSE'
 }) => {
     const [pulse, setPulse] = useState(0);
+    const rpm = useTelemetryStore(s => s.mechanical.rpm);
+    const speedFactor = useMemo(() => {
+        const r = rpm || 300;
+        return Math.max(0.2, Math.min(3.0, r / 300)); // 300 rpm = 1.0x
+    }, [rpm]);
 
     useEffect(() => {
+        const intervalMs = 50 / speedFactor; // faster with higher RPM
         const interval = setInterval(() => {
             setPulse(p => (p + 1) % 100);
-        }, 50);
+        }, intervalMs);
         return () => clearInterval(interval);
-    }, []);
+    }, [speedFactor]);
 
     const layers = [
         { name: 'FOUNDATION', icon: Database, color: 'cyan', description: 'Telemetry Intake' },
@@ -37,13 +44,19 @@ export const SovereignPulse: React.FC<SovereignPulseProps> = ({
                         className="absolute w-0.5 bg-gradient-to-t from-transparent via-indigo-500 to-transparent"
                         style={{
                             left: `${(i * 5)}%`,
-                            height: `${50 + Math.sin((pulse + i * 10) / 10) * 30}%`,
+                            height: `${50 + Math.sin((pulse + i * 10) / (10 / speedFactor)) * 30}%`,
                             bottom: 0,
                             opacity: 0.6,
                             transition: 'height 0.3s ease-out'
                         }}
                     />
                 ))}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: `radial-gradient(circle at 80% 20%, rgba(16,185,129,${0.08 * speedFactor}), transparent 60%)`
+                    }}
+                />
             </div>
 
             <div className="relative z-10">

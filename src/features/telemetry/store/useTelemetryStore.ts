@@ -12,12 +12,15 @@ import { plcGateway } from '../../../core/PLCGateway';
 import { CommissioningState } from '../../../lib/commissioning/WizardService';
 import { SignalBufferManager, BufferedDataPoint } from '../../../utils/CircularBuffer';
 import { FilterType } from '../../../utils/SignalFilter';
+import { EfficiencyOptimizer } from '../../../services/EfficiencyOptimizer';
 
 // Singleton RCA service for reactive analysis
 const rcaService = new RCAService();
 
 // NC-300: Historical buffer for sparklines (50-point capacity)
 const signalHistoryManager = new SignalBufferManager(50);
+
+const SCHEMA_VERSION = 2;
 
 /**
  * BASELINE STATE
@@ -68,6 +71,8 @@ interface TelemetryState {
     // Derived Calculations
     physics: Partial<PhysicsResult>;
     diagnosis: DiagnosisReport | null;
+    // NC-300: Hill-chart optimizer delta to optimum
+    deltaToOptimum?: number;
 
     // Static / Low-Frequency Config (Required for Physics Math)
     identity: AssetIdentity;
@@ -117,6 +122,7 @@ interface TelemetryState {
     // NC-300: Signal filter mode toggle (UI uses filtered, RCA uses raw)
     isFilteredMode: boolean;
     filterType: FilterType;
+    schemaVersion: number;
 
     // Actions
     updateTelemetry: (payload: TelemetryUpdatePayload) => void;
@@ -132,6 +138,10 @@ interface TelemetryState {
     setBaselineFromWizard: (data: CommissioningState) => void; // NC-300: DNA Link
     toggleFilteredMode: () => void; // NC-300: Signal filter toggle
     setFilterType: (filterType: FilterType) => void; // NC-300: Filter type selection
+    // NC-300: Ledger state for dossier hashes (G99 audit integrity)
+    ledgerState: { dossierHashes: Record<string, string> };
+    recordDossierHash: (snapshotId: string, hash: string) => void;
+    hardResetIfSchemaMismatch: () => boolean;
 }
 
 export const useTelemetryStore = create<TelemetryState>()(
@@ -146,6 +156,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             site: DEFAULT_TECHNICAL_STATE.site,
             penstock: DEFAULT_TECHNICAL_STATE.penstock,
             specializedState: DEFAULT_TECHNICAL_STATE.specializedState,
+            deltaToOptimum: undefined,
 
             financials: DEFAULT_TECHNICAL_STATE.financials,
             structural: DEFAULT_TECHNICAL_STATE.structural,
@@ -182,6 +193,9 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-300: Signal filter mode - gauges use filtered, RCA uses raw
             isFilteredMode: true,
             filterType: 'SMA' as FilterType,
+            // NC-300: Ledger state
+            ledgerState: { dossierHashes: {} },
+            schemaVersion: SCHEMA_VERSION,
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
                 set((state) => {
@@ -211,6 +225,13 @@ export const useTelemetryStore = create<TelemetryState>()(
                     // 3. Run Logic Engines
                     // We use the Pure Physics Engine to get derived physics metrics
                     const physicsResult = PhysicsEngine.recalculatePhysics(calcContext);
+
+                    // NC-300: Hill-chart optimizer (Kaplan S-Type) — compute delta to optimum
+                    const netHeadM = (physicsResult.netHead ? physicsResult.netHead.toNumber() : nextHydraulic.head) || 0;
+                    const flowM3s = nextHydraulic.flow || 0;
+                    const observedEffRaw = nextHydraulic.efficiency || 0;
+                    const observedEffPct = observedEffRaw <= 1 ? observedEffRaw * 100 : observedEffRaw;
+                    const { etaMax, deltaToOptimum } = EfficiencyOptimizer.compute(netHeadM, flowM3s, observedEffPct);
 
                     // NC-85.2: Async efficiency override via Worker
                     // We fire this as a side-effect to avoid locking the store update
@@ -299,6 +320,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         hydraulic: nextHydraulic,
                         mechanical: nextMechanical,
                         physics: physicsResult,
+                        deltaToOptimum,
                         diagnosis: assessment,
                         identity: calcContext.identity, // Update if payload had it
                         site: calcContext.site,
@@ -507,6 +529,72 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-300: Set filter type (SMA, EMA, NONE)
             setFilterType: (filterType: FilterType) => {
                 set({ filterType });
+            },
+
+            // NC-300: Record dossier hash for G99 audits
+            recordDossierHash: (snapshotId: string, hash: string) => {
+                set((state) => ({
+                    ledgerState: {
+                        dossierHashes: {
+                            ...state.ledgerState.dossierHashes,
+                            [snapshotId]: hash
+                        }
+                    }
+                }));
+            },
+
+            hardResetIfSchemaMismatch: () => {
+                try {
+                    const key = 'monolit-telemetry-store';
+                    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+                    if (!raw) return false;
+                    const parsed = JSON.parse(raw);
+                    const saved = parsed?.state?.schemaVersion;
+                    if (saved !== SCHEMA_VERSION) {
+                        if (typeof localStorage !== 'undefined') localStorage.removeItem(key);
+                        set({
+                            hydraulic: DEFAULT_TECHNICAL_STATE.hydraulic,
+                            mechanical: DEFAULT_TECHNICAL_STATE.mechanical,
+                            physics: {},
+                            diagnosis: null,
+                            identity: DEFAULT_TECHNICAL_STATE.identity,
+                            site: DEFAULT_TECHNICAL_STATE.site,
+                            penstock: DEFAULT_TECHNICAL_STATE.penstock,
+                            specializedState: DEFAULT_TECHNICAL_STATE.specializedState,
+                            deltaToOptimum: undefined,
+                            financials: DEFAULT_TECHNICAL_STATE.financials,
+                            structural: DEFAULT_TECHNICAL_STATE.structural,
+                            unifiedDiagnosis: null,
+                            investigatedComponents: [],
+                            geodeticData: { settlement: 0.12, tilt: 0.05 },
+                            magneticData: { eccentricity: 0.25, fluxBalance: 98.5 },
+                            acousticMatch: 99.2,
+                            insulationResistance: 1250,
+                            lastUpdate: new Date().toISOString(),
+                            isCommanderMode: true,
+                            rcaResults: [],
+                            selectedDiagnosticId: null,
+                            connectionStatus: plcGateway.getConnectionStatus(),
+                            baselineState: null,
+                            rcaResultsHistory: [],
+                            telemetryHistory: {
+                                vibrationX: [],
+                                vibrationY: [],
+                                bearingTemp: [],
+                                head: [],
+                                flow: []
+                            },
+                            isFilteredMode: true,
+                            filterType: 'SMA' as FilterType,
+                            ledgerState: { dossierHashes: {} },
+                            schemaVersion: SCHEMA_VERSION
+                        });
+                        return true;
+                    }
+                    return false;
+                } catch {
+                    return false;
+                }
             }
         }),
         {
@@ -518,7 +606,9 @@ export const useTelemetryStore = create<TelemetryState>()(
                 identity: state.identity,
                 rcaResultsHistory: state.rcaResultsHistory.slice(-10), // Last 10 only
                 isFilteredMode: state.isFilteredMode,
-                filterType: state.filterType
+                filterType: state.filterType,
+                ledgerState: state.ledgerState,
+                schemaVersion: state.schemaVersion
             })
         }
     )

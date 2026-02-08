@@ -13,6 +13,7 @@ import { CrossSectorEngine } from '../../services/EngineeringValidation';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { EngineeringCard } from '../../shared/components/ui/EngineeringCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
+import { OptimizationHUD } from '../../shared/components/hud/OptimizationHUD';
 import { HeritagePrecisionBanner } from '../ui/HeritagePrecisionBanner';
 import { FieldModeToggle } from '../ui/FieldModeToggle';
 import { EngineeringWisdomVault } from './EngineeringWisdomVault';
@@ -79,6 +80,7 @@ export const ExecutiveDashboard: React.FC = () => {
 
     const {
         financials,
+        hydraulic,
         physics: livePhysics,
         structural,
         mechanical,
@@ -307,9 +309,9 @@ export const ExecutiveDashboard: React.FC = () => {
             const blob = await ForensicReportService.generateForensicDossier({
                 asset: selectedAsset,
                 diagnosis: unifiedDiagnosis,
-                projectState: {
+                    projectState: {
                     identity: identity ?? undefined,
-                    hydraulic: livePhysics,
+                        hydraulic: hydraulic ?? undefined,
                     mechanical: mechanical ?? undefined,
                     structural: structural ?? undefined,
                     market: financials ?? undefined,
@@ -325,7 +327,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 assetId: idAdapter.toDb(selectedAsset.id),
                 projectState: {
                     identity: identity ?? undefined,
-                    hydraulic: livePhysics,
+                    hydraulic: hydraulic ?? undefined,
                     mechanical: mechanical ?? undefined,
                     structural: structural ?? undefined,
                     market: financials ?? undefined,
@@ -1157,6 +1159,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     </div>
                 </div>
             </main>
+            <OptimizationHUD variant="overlay" />
         </div>
     );
 };

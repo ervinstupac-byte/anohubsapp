@@ -33,6 +33,15 @@ export class ForensicReportService {
         return await signMeasurement(measurement, engineerName, engineerLicense);
     }
 
+    public static async generateDossierChecksum(payload: unknown): Promise<string> {
+        const json = JSON.stringify(payload);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(json);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
     private static addCustomFont(doc: jsPDF) {
         ForensicTemplateEngine.addCustomFont(doc as any, robotoBase64 as any);
     }

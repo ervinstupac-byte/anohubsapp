@@ -10,6 +10,7 @@ import { SystemAuditLog } from './ui/SystemAuditLog';
 import { ForensicDeepDive } from './demo/ForensicDeepDive';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { useAssetContext } from '../contexts/AssetContext'; // NC-600
+import { OptimizationHUD } from '../shared/components/hud/OptimizationHUD';
 
 // Placeholder universal widgets
 const VibrationMonitor = () => <div className="p-4 rounded bg-black/20 text-center"><Activity className="mx-auto mb-2 text-cyan-400" />Vibration: 2.4 mm/s</div>;
@@ -409,6 +410,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
                 onClose={() => setForensicModalOpen(false)}
                 onExportPDF={handleExportPDF}
             />
+            <OptimizationHUD variant="overlay" />
         </div>
     );
 };
