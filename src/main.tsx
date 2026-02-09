@@ -2,27 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { PulseArchiver } from './services/PulseArchiver';
-
-// Start pulse archiving on app boot
-PulseArchiver.startArchiving();
-
-ReactDOM.createRoot(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
 
 console.log('[main.tsx] 🚀 BOOT SEQUENCE STARTED');
 console.log('[main.tsx] ✅ React Core Imports Loaded');
 
-import './index.css';
-
 // ============================================================================
 // NC-76.3: SYNCHRONOUS i18n IMPORT (NO TOP-LEVEL AWAIT)
 // ============================================================================
-// Top-level await is DANGEROUS here. It can block the bundle parser.
-// We stick to standard imports. i18n/index.ts handles its own errors.
 console.log('[main.tsx] 🔧 Importing i18n...');
 import './i18n/index.ts';
 console.log('[main.tsx] ✅ i18n Imported');
@@ -35,8 +21,7 @@ const rootElement = document.getElementById('root');
 if (!rootElement) {
   console.error('[main.tsx] 🚨 FATAL: Root element missing!');
 } else {
-  // Hide the static loader manually - we are taking over.
-  // (index.html has its own 3s kill-switch as backup)
+  // Hide the static loader manually
   const loader = document.getElementById('initial-loader');
   if (loader) {
     loader.style.display = 'none';
@@ -48,15 +33,12 @@ if (!rootElement) {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
       <React.StrictMode>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
+        <App />
       </React.StrictMode>
     );
     console.log('[main.tsx] ✅✅✅ React Mount Command Sent');
   } catch (err) {
     console.error('[main.tsx] 💥 React Mount Crashed:', err);
-    // This alert is a last resort to see the error if console isn't open
     if (window.confirm('React Mount Crashed. Show error?')) {
       alert(String(err));
     }

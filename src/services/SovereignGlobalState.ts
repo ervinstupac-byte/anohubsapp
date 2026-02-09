@@ -35,7 +35,7 @@ export interface GlobalState {
 
 class SovereignGlobalStateSingleton {
     private static instance: SovereignGlobalStateSingleton;
-    private currentState: GlobalState;
+    private currentState: GlobalState | null = null;
 
     private constructor() {
         // Initialize with Safe Defaults
@@ -56,6 +56,18 @@ class SovereignGlobalStateSingleton {
     }
 
     public updateState(partial: Partial<GlobalState>): GlobalState {
+        // Safety guard: ensure currentState exists
+        if (!this.currentState) {
+            console.warn('[SovereignGlobalState] currentState was null, reinitializing');
+            this.currentState = {
+                timestamp: Date.now(),
+                physics: { vibration: 0, temperature: 0, pressure: 0, efficiency: 0, cavitation: 0 },
+                finance: { revenuePerHour: 0, molecularDebtRate: 0, netProfitRate: 0 },
+                integrity: { fatigueAccumulated: 0, remainingLifeEstimates: {} },
+                crossCorrelations: {}
+            };
+        }
+        
         this.currentState = {
             ...this.currentState,
             ...partial,
@@ -66,6 +78,17 @@ class SovereignGlobalStateSingleton {
     }
 
     public getState(): GlobalState {
+        // Safety guard: return safe defaults if currentState is null
+        if (!this.currentState) {
+            console.warn('[SovereignGlobalState] getState called before initialization');
+            return {
+                timestamp: Date.now(),
+                physics: { vibration: 0, temperature: 0, pressure: 0, efficiency: 0, cavitation: 0 },
+                finance: { revenuePerHour: 0, molecularDebtRate: 0, netProfitRate: 0 },
+                integrity: { fatigueAccumulated: 0, remainingLifeEstimates: {} },
+                crossCorrelations: {}
+            };
+        }
         return { ...this.currentState }; // Return copy to enforce immutability
     }
 }
