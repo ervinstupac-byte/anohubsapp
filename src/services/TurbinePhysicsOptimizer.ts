@@ -178,14 +178,17 @@ export class FrancisOptimizer {
         };
     }
 
+
+
     /**
      * Calculate required air injection rate for vortex suppression
      */
     public static calculateAirInjectionRate(vortexAmplitude: number): number {
-        // Empirical formula: Q_air (m³/h) ≈ 500 * (amplitude / 0.5)
         return Math.min(500, 500 * (vortexAmplitude / 0.5));
     }
 }
+
+export { computeEfficiencyFromHillChart } from '../features/physics-core/UnifiedPhysicsCore';
 
 /**
  * Pelton Turbine Optimization

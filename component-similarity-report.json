@@ -1,0 +1,248 @@
+{
+  "scannedDir": [
+    "src/components",
+    "src/shared"
+  ],
+  "focus": "gauge/panel-like components",
+  "maxHamming": 12,
+  "filesConsidered": 59,
+  "pairsAboveThreshold": 680,
+  "topPairs": [
+    {
+      "sim": 0.96875,
+      "dist": 2,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/dashboard/StrategicPrescription.tsx"
+    },
+    {
+      "sim": 0.96875,
+      "dist": 2,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx"
+    },
+    {
+      "sim": 0.96875,
+      "dist": 2,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/PerformanceGuardDashboard.tsx"
+    },
+    {
+      "sim": 0.953125,
+      "dist": 3,
+      "a": "src/components/dashboard/AIInsightsPanel.tsx",
+      "b": "src/components/francis/Excitation.tsx"
+    },
+    {
+      "sim": 0.953125,
+      "dist": 3,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/StrategicPrescription.tsx"
+    },
+    {
+      "sim": 0.953125,
+      "dist": 3,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/dashboard/StrategicPrescription.tsx"
+    },
+    {
+      "sim": 0.953125,
+      "dist": 3,
+      "a": "src/components/dashboard/StrategicPrescription.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx"
+    },
+    {
+      "sim": 0.953125,
+      "dist": 3,
+      "a": "src/components/dashboard/StrategicPrescription.tsx",
+      "b": "src/components/PerformanceGuardDashboard.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/anohub/AnalyticsPanel.tsx",
+      "b": "src/components/francis/Excitation.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/SovereignPulseGauge.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/shared/components/ui/GlassCard.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/SovereignSCADA.tsx",
+      "b": "src/components/GlobalMap.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/dashboard/WeaverDashboard.tsx",
+      "b": "src/components/PerformanceGuardDashboard.tsx"
+    },
+    {
+      "sim": 0.9375,
+      "dist": 4,
+      "a": "src/components/forensics/PostMortemMonitor.tsx",
+      "b": "src/components/GlobalMap.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/cerebro/panels/MechanicalPanel.tsx",
+      "b": "src/components/francis/Excitation.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/AIInsightsPanel.tsx",
+      "b": "src/components/GlobalMap.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/anohub/AnalyticsPanel.tsx",
+      "b": "src/components/DashboardHeader.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/dashboard/SovereignPulseGauge.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/MaintenanceDashboard.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/ExecutiveDashboard.tsx",
+      "b": "src/components/PerformanceGuardDashboard.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/francis/Excitation.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/GlobalMap.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/ToolboxLaunchpad.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/dashboard/SovereignSCADA.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/francis/Excitation.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/SovereignPulseGauge.tsx",
+      "b": "src/components/GlobalMap.tsx"
+    },
+    {
+      "sim": 0.921875,
+      "dist": 5,
+      "a": "src/components/dashboard/SovereignSCADA.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx"
+    }
+  ],
+  "clusters": [
+    [
+      "src/components/BootSequence.tsx",
+      "src/components/cerebro/panels/HydraulicsPanel.tsx",
+      "src/components/cerebro/panels/MechanicalPanel.tsx",
+      "src/components/commissioning/CommissioningWizard.tsx",
+      "src/components/dashboard/AIInsightsPanel.tsx",
+      "src/components/dashboard/anohub/AnalyticsPanel.tsx",
+      "src/components/dashboard/AssetPassportCard.tsx",
+      "src/components/dashboard/ExecutiveDashboard.tsx",
+      "src/components/dashboard/GovernorView.tsx",
+      "src/components/dashboard/HeritageSearchWidget.tsx",
+      "src/components/dashboard/OverdriveDashboard.tsx",
+      "src/components/dashboard/ProtocolLaunchpad.tsx",
+      "src/components/dashboard/QuickCalcCard.tsx",
+      "src/components/dashboard/QuickCalcSidebar.tsx",
+      "src/components/dashboard/RevenueImpactCard.tsx",
+      "src/components/dashboard/ScadaCore.tsx",
+      "src/components/dashboard/SovereignPulseGauge.tsx",
+      "src/components/dashboard/SovereignSCADA.tsx",
+      "src/components/dashboard/StrategicPrescription.tsx",
+      "src/components/dashboard/TelemetrySparklinePanel.tsx",
+      "src/components/dashboard/TurbineDetailView.tsx",
+      "src/components/dashboard/visual/GuideVaneDetailView.tsx",
+      "src/components/dashboard/WeaverDashboard.tsx",
+      "src/components/dashboard/WorkOrderSummary.tsx",
+      "src/components/DashboardHeader.tsx",
+      "src/components/diagnostic-twin/DigitalPanel.tsx",
+      "src/components/diagnostic-twin/NeuralFlowMap.tsx",
+      "src/components/diagnostic-twin/Sidebar.tsx",
+      "src/components/diagnostics/ComponentInfoPanel.tsx",
+      "src/components/ExecutiveFinancialDashboard.tsx",
+      "src/components/forensics/PostMortemMonitor.tsx",
+      "src/components/francis/Excitation.tsx",
+      "src/components/francis/GovernorPID.tsx",
+      "src/components/francis/layout/FrancisHealthWidget.tsx",
+      "src/components/francis/WaterHammer.tsx",
+      "src/components/GenderEquity.tsx",
+      "src/components/GlobalMap.tsx",
+      "src/components/infrastructure/BidEvaluator.tsx",
+      "src/components/KnowledgeCapturePanel.tsx",
+      "src/components/MaintenanceDashboard.tsx",
+      "src/components/modals/SystemOverviewModal.tsx",
+      "src/components/OilAnalysisDashboard.tsx",
+      "src/components/PerformanceGuardDashboard.tsx",
+      "src/components/SpecialMeasurementPanel.tsx",
+      "src/components/TechnicalPassport.tsx",
+      "src/components/ToolboxLaunchpad.tsx",
+      "src/components/turbine/KaplanDashboard.tsx",
+      "src/components/ui/CommandPalette.tsx",
+      "src/components/ui/ControlPanel.tsx",
+      "src/components/ui/WorkflowHeader.tsx",
+      "src/components/UniversalFleetDashboard.tsx",
+      "src/shared/components/ui/GlassCard.tsx"
+    ]
+  ]
+}

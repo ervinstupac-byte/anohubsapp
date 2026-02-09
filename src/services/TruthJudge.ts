@@ -15,6 +15,10 @@ export interface Verdict {
 export interface SensorHistory {
     lastValue: number;
     lastTimestamp: number;
+    // Additional properties for telemetry store integration
+    isReliable?: boolean;
+    confidence?: number;
+    verdict?: Verdict;
 }
 
 export class TruthJudge {
@@ -53,6 +57,49 @@ export class TruthJudge {
         // Update History
         this.history.set(sensorId, { lastValue: newValue, lastTimestamp: timestamp });
         return 'GOOD';
+    }
+
+    /**
+     * VALIDATE SENSOR
+     * Wrapper for sensor health evaluation
+     */
+    validateSensor(
+        sensorId: string, 
+        newValue: number, 
+        lastValue: number, 
+        lastTimestamp: number
+    ): Verdict {
+        const health = this.evaluateSignalHealth(sensorId, newValue, lastTimestamp);
+        
+        if (health === 'GOOD') {
+            return {
+                winner: 'SENSOR_A',
+                confidence: 1.0,
+                reason: 'Sensor reading is reliable',
+                action: 'TRUST_A'
+            };
+        } else if (health === 'BAD_SLEW') {
+            return {
+                winner: 'PREDICTION',
+                confidence: 0.3,
+                reason: `Slew rate violation detected: ${sensorId}`,
+                action: 'USE_FALLBACK'
+            };
+        } else if (health === 'BAD_FROZEN') {
+            return {
+                winner: 'PREDICTION',
+                confidence: 0.2,
+                reason: `Sensor appears frozen: ${sensorId}`,
+                action: 'USE_FALLBACK'
+            };
+        }
+
+        return {
+            winner: 'SENSOR_A',
+            confidence: 1.0,
+            reason: 'Sensor reading is reliable',
+            action: 'TRUST_A'
+        };
     }
 
     /**

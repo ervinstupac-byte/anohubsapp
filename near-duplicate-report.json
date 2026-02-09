@@ -1,0 +1,426 @@
+{
+  "scope": [
+    "src/components",
+    "src/shared"
+  ],
+  "focus": "dashboards + gauges",
+  "criteria": {
+    "maxHamming": 2,
+    "minOverlap": 0.98,
+    "shingleK": 5,
+    "minSizeRatio": 0.85
+  },
+  "filesConsidered": 122,
+  "pairMatches": 41,
+  "clusters": [
+    [
+      {
+        "rel": "src/components/dashboard/ActuatorView.tsx",
+        "bytes": 6921,
+        "shSetSize": 55
+      },
+      {
+        "rel": "src/components/dashboard/AtmosView.tsx",
+        "bytes": 5707,
+        "shSetSize": 61
+      },
+      {
+        "rel": "src/components/dashboard/AuxView.tsx",
+        "bytes": 7422,
+        "shSetSize": 65
+      },
+      {
+        "rel": "src/components/dashboard/CivilView.tsx",
+        "bytes": 5988,
+        "shSetSize": 54
+      },
+      {
+        "rel": "src/components/dashboard/EcoView.tsx",
+        "bytes": 5695,
+        "shSetSize": 56
+      },
+      {
+        "rel": "src/components/dashboard/EdgeView.tsx",
+        "bytes": 6598,
+        "shSetSize": 60
+      },
+      {
+        "rel": "src/components/dashboard/GovernorView.tsx",
+        "bytes": 6646,
+        "shSetSize": 55
+      },
+      {
+        "rel": "src/components/dashboard/MetalView.tsx",
+        "bytes": 6778,
+        "shSetSize": 56
+      },
+      {
+        "rel": "src/components/dashboard/PulseView.tsx",
+        "bytes": 5639,
+        "shSetSize": 67
+      },
+      {
+        "rel": "src/components/dashboard/ShieldView.tsx",
+        "bytes": 5543,
+        "shSetSize": 65
+      },
+      {
+        "rel": "src/components/dashboard/SwarmView.tsx",
+        "bytes": 6805,
+        "shSetSize": 72
+      },
+      {
+        "rel": "src/components/dashboard/SynapseView.tsx",
+        "bytes": 5661,
+        "shSetSize": 53
+      },
+      {
+        "rel": "src/components/dashboard/WarehouseView.tsx",
+        "bytes": 6318,
+        "shSetSize": 68
+      }
+    ],
+    [
+      {
+        "rel": "src/components/dashboard/PlanetPulseDashboard.tsx",
+        "bytes": 9064,
+        "shSetSize": 62
+      },
+      {
+        "rel": "src/components/dashboard/WeaverDashboard.tsx",
+        "bytes": 8462,
+        "shSetSize": 48
+      }
+    ]
+  ],
+  "topPairs": [
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/AuxView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9324979789814066,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/EdgeView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9533304435775177,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9602658575350382,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/MetalView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9793382459182199,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9128738621586476,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AtmosView.tsx",
+      "b": "src/components/dashboard/CivilView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9530728122912492,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AtmosView.tsx",
+      "b": "src/components/dashboard/EcoView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9978973190818293,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AtmosView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8587120072223894,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AtmosView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9919397231470124,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AuxView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8954459714362706,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/AuxView.tsx",
+      "b": "src/components/dashboard/MetalView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9132309350579358,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/EcoView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9510688042752171,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/EdgeView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9075477417399211,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/MetalView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8834464443788729,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/PulseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9417167668670675,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9453907815631263,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9477682811016145,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EcoView.tsx",
+      "b": "src/components/dashboard/EdgeView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8631403455592603,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EcoView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8569064098705989,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EcoView.tsx",
+      "b": "src/components/dashboard/PulseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9901668129938542,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EcoView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9940298507462687,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EcoView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9013928458372903,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EdgeView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9927776105928378,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EdgeView.tsx",
+      "b": "src/components/dashboard/MetalView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9734434936559457,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EdgeView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.8579872688693544,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/MetalView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9805252286810269,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.950647005717725,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/MetalView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9321333726763057,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/PlanetPulseDashboard.tsx",
+      "b": "src/components/dashboard/WeaverDashboard.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9335834068843778,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/PulseView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.9961137608196432,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/SynapseView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 1,
+      "sizeRatio": 0.896011396011396,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/EdgeView.tsx",
+      "b": "src/components/dashboard/WarehouseView.tsx",
+      "dist": 0,
+      "overlap": 0.9833333333333333,
+      "sizeRatio": 0.9575628978478327,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/MetalView.tsx",
+      "b": "src/components/dashboard/SwarmView.tsx",
+      "dist": 0,
+      "overlap": 0.9821428571428571,
+      "sizeRatio": 0.9960323291697282,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/SwarmView.tsx",
+      "dist": 0,
+      "overlap": 0.9818181818181818,
+      "sizeRatio": 0.9832394162693252,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/SwarmView.tsx",
+      "dist": 0,
+      "overlap": 0.9818181818181818,
+      "sizeRatio": 0.9766348273328435,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ActuatorView.tsx",
+      "b": "src/components/dashboard/CivilView.tsx",
+      "dist": 0,
+      "overlap": 0.9814814814814815,
+      "sizeRatio": 0.8651928912006935,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/GovernorView.tsx",
+      "dist": 0,
+      "overlap": 0.9814814814814815,
+      "sizeRatio": 0.9009930785434848,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/ShieldView.tsx",
+      "dist": 0,
+      "overlap": 0.9814814814814815,
+      "sizeRatio": 0.925684702738811,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/CivilView.tsx",
+      "b": "src/components/dashboard/SwarmView.tsx",
+      "dist": 0,
+      "overlap": 0.9814814814814815,
+      "sizeRatio": 0.8799412196914034,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/GovernorView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 0.9811320754716981,
+      "sizeRatio": 0.8517905507071923,
+      "simhashSim": 1
+    },
+    {
+      "a": "src/components/dashboard/ShieldView.tsx",
+      "b": "src/components/dashboard/SynapseView.tsx",
+      "dist": 0,
+      "overlap": 0.9811320754716981,
+      "sizeRatio": 0.9791556262144497,
+      "simhashSim": 1
+    }
+  ]
+}

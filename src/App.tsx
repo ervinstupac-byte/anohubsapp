@@ -48,17 +48,18 @@ import { Breadcrumbs } from './shared/components/ui/Breadcrumbs';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
 import { WorkflowHeader } from './components/ui/WorkflowHeader'; // NEW: Global health status bar
+import { MasterSovereignDashboard } from './components/dashboard/MasterSovereignDashboard';
 import { GlobalFooter } from './components/GlobalFooter.tsx';
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
 const PrintPreviewModal = React.lazy(() => import('./components/modals/PrintPreviewModal.tsx').then(m => ({ default: m.PrintPreviewModal })));
 import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostic-twin/Sidebar.tsx';
 import { useCerebro } from './contexts/ProjectContext';
-import { CommanderDemoHUD } from './components/diagnostic-twin/CommanderDemoHUD';
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
 import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
+import { useProjectConfigStore } from './features/config/ProjectConfigStore';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -91,10 +92,12 @@ const ContractManagement = lazy(() => import('./components/ContractManagement.ts
 const ComponentLibrary = lazy(() => import('./components/ComponentLibrary.tsx').then(m => ({ default: m.ComponentLibrary })));
 const InfrastructureHub = lazy(() => import('./components/infrastructure/InfrastructureHub.tsx').then(m => ({ default: m.InfrastructureHub })));
 const ExecutiveDashboard = lazy(() => import('./components/dashboard/ExecutiveDashboard.tsx').then(m => ({ default: m.ExecutiveDashboard })));
+const ExecutiveFinancialDashboard = lazy(() => import('./components/ExecutiveFinancialDashboard.tsx').then(m => ({ default: m.ExecutiveFinancialDashboard })));
 const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.tsx').then(m => ({ default: m.StructuralIntegrity })));
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
+const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m => ({ default: m.ScadaCore })));
 
 // Maintenance components moved to MaintenanceRouter
 const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
@@ -118,10 +121,45 @@ const OwnerLanding = React.lazy(() => import('./pages/OwnerLanding').then(m => (
 const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding').then(m => ({ default: m.HydroschoolLanding })));
 
 
+// --- 4a. SCADA SAFE FALLBACKS ---
+const LoadingScreen: React.FC = () => (
+    <div className="min-h-screen bg-slate-950 text-slate-100 grid place-items-center">
+        <div className="text-sm font-mono text-slate-400">Loading…</div>
+    </div>
+);
+
+const ScadaRecoveryFallback: React.FC = () => (
+    <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-12 gap-6 p-6">
+        <div className="col-span-8 bg-[#111111] border border-[#222222] rounded-xl relative overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">SCADA Mimic</div>
+                <div className="text-[10px] font-mono text-slate-400">η-head: — • Q: — • RPM: —</div>
+            </div>
+            <div className="p-6">
+                <svg viewBox="0 0 1200 600" className="w-full h-[520px]">
+                    <rect x="0" y="0" width="1200" height="600" fill="#111111" />
+                    <rect x="60" y="120" width="360" height="60" rx="12" fill="#111111" stroke="#444444" strokeWidth="2" />
+                    <text x="80" y="110" fill="#888888" fontSize="14" fontFamily="monospace">Penstock</text>
+                    <circle cx="600" cy="150" r="55" fill="none" stroke="#444444" strokeWidth="4" />
+                    <text x="560" y="240" fill="#888888" fontSize="12" fontFamily="monospace">Runner</text>
+                    <rect x="840" y="120" width="300" height="60" rx="12" fill="#111111" stroke="#444444" strokeWidth="2" />
+                    <rect x="60" y="320" width="1080" height="200" rx="16" fill="#111111" stroke="#444444" strokeWidth="2" />
+                    <text x="80" y="350" fill="#94a3b8" fontSize="12" fontFamily="monospace">Flow • NO DATA</text>
+                    <text x="80" y="400" fill="#94a3b8" fontSize="12" fontFamily="monospace">Static Head • NO DATA</text>
+                    <text x="540" y="300" fill="#ef4444" fontSize="16" fontFamily="monospace">SCADA MODULE RECOVERED • NO DATA</text>
+                </svg>
+            </div>
+        </div>
+        <div className="col-span-4 bg-[#111111] border border-[#222222] rounded-xl p-6">
+            <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">Project Parameters</div>
+            <div className="text-xs text-slate-400 font-mono">No data available</div>
+        </div>
+    </div>
+);
+
 
 // --- 5. COMMAND CENTER DASHBOARD ---
 // Replaced with Toolbox Launchpad for authentic engineering focus
-// const CommandCentreDashboard: React.FC = () => <Hub />;
 
 // --- 6. WRAPPERS ---
 const TurbineDetailWrapper = () => {
@@ -183,7 +221,7 @@ const AppLayout: React.FC = () => {
     const [reconstructing, setReconstructing] = useState(false);
     const [reconstructProgress, setReconstructProgress] = useState<number | null>(null);
     const { state: cerebroState } = useCerebro();
-    const isCriticalDemo = cerebroState?.demoMode?.active && cerebroState?.demoMode?.scenario !== 'NORMAL';
+    const isCriticalDemo = false;
     const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
@@ -209,6 +247,7 @@ const AppLayout: React.FC = () => {
             if (didReset) {
                 showToast('Sovereign Core: Schema Updated. Workspace Synchronized.', 'info');
             }
+            try { useProjectConfigStore.getState().integrityCheck(); } catch {}
         } catch { /* noop */ }
     }, []);
     // Listen for custom wizard trigger event from NeuralFlowMap
@@ -341,14 +380,7 @@ const AppLayout: React.FC = () => {
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
                 <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
-                    {isCriticalDemo && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: [0.1, 0.4, 0.1] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="fixed inset-0 pointer-events-none z-[99] border-[24px] border-red-500/20 shadow-[inset_0_0_150px_rgba(239,68,68,0.3)]"
-                        />
-                    )}
+                    
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
@@ -405,7 +437,7 @@ const AppLayout: React.FC = () => {
                                                 Diagnostic data has been logged to the black box.
                                             </p>
                                             <button
-                                                onClick={() => window.location.reload()}
+                                                onClick={() => { try { localStorage.clear(); } catch {} window.location.reload(); }}
                                                 className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
                                             >
                                                 System Reboot
@@ -478,13 +510,54 @@ const AppLayout: React.FC = () => {
                                                 {/* EXECUTIVE - RESTRICTED */}
                                                 <Route path="executive" element={
                                                     <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                        <ExecutiveDashboard />
+                                                        <ErrorBoundary fallback={
+                                                            <div className="min-h-screen bg-slate-950 text-slate-100 grid place-items-center">
+                                                                <div className="text-center space-y-4">
+                                                                    <div className="text-6xl">⚠️</div>
+                                                                    <h2 className="text-xl font-black text-white uppercase tracking-widest">Executive Dashboard Error</h2>
+                                                                    <p className="text-slate-400 max-w-md">The executive module encountered an error. System has been isolated.</p>
+                                                                    <button
+                                                                        onClick={() => window.location.reload()}
+                                                                        className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
+                                                                    >
+                                                                        System Reboot
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        }>
+                                                            <Suspense fallback={<LoadingScreen />}>
+                                                                <ExecutiveDashboard />
+                                                            </Suspense>
+                                                        </ErrorBoundary>
+                                                    </RoleGuard>
+                                                } />
+                                                <Route path="executive/finance" element={
+                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
+                                                        <ErrorBoundary fallback={
+                                                            <div className="min-h-screen bg-slate-950 text-slate-100 grid place-items-center">
+                                                                <div className="text-center space-y-4">
+                                                                    <div className="text-6xl">⚠️</div>
+                                                                    <h2 className="text-xl font-black text-white uppercase tracking-widest">Financial Dashboard Error</h2>
+                                                                    <p className="text-slate-400 max-w-md">The financial module encountered an error. System has been isolated.</p>
+                                                                    <button
+                                                                        onClick={() => window.location.reload()}
+                                                                        className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
+                                                                    >
+                                                                        System Reboot
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        }>
+                                                            <Suspense fallback={<LoadingScreen />}>
+                                                                <ExecutiveFinancialDashboard />
+                                                            </Suspense>
+                                                        </ErrorBoundary>
                                                     </RoleGuard>
                                                 } />
 
                                                 <Route path="structural-integrity" element={<StructuralIntegrity />} />
 
-                                                {/* ADMIN - RESTRICTED */}
+// ... (rest of the code remains the same)
                                                 <Route path="admin-approval" element={
                                                     <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
                                                         <AdminApproval />
@@ -541,7 +614,6 @@ const AppLayout: React.FC = () => {
                     </Suspense>
 
                     <SimulationController />
-                    <CommanderDemoHUD />
                     <CommanderTerminal />
                     <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
                 </div>
@@ -612,7 +684,7 @@ const App: React.FC = () => {
     }, []); // Run once on mount
 
     return (
-        <HashRouter>
+        <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ErrorBoundary fallback={
                 <div className="h-screen w-screen flex flex-col items-center justify-center bg-black text-white p-8">
                     <h1 className="text-3xl font-bold text-red-500 mb-4">CRITICAL SYSTEM FAILURE</h1>
@@ -630,6 +702,30 @@ const App: React.FC = () => {
                                 <Routes>
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
+                                    <Route
+                                        path="/master"
+                                        element={
+                                            <ProtectedRoute>
+                                                <Suspense fallback={<LoadingScreen />}>
+                                                    <ErrorBoundary fallback={<ScadaRecoveryFallback />}>
+                                                        <MasterSovereignDashboard />
+                                                    </ErrorBoundary>
+                                                </Suspense>
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/scada/core"
+                                        element={
+                                            <ProtectedRoute>
+                                                <Suspense fallback={<LoadingScreen />}>
+                                                    <ErrorBoundary fallback={<ScadaRecoveryFallback />}>
+                                                        <ScadaCore />
+                                                    </ErrorBoundary>
+                                                </Suspense>
+                                            </ProtectedRoute>
+                                        }
+                                    />
                                 </Routes>
                             </ContextAwarenessProvider>
                         </div>

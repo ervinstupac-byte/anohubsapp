@@ -13,12 +13,18 @@ import { CommissioningState } from '../../../lib/commissioning/WizardService';
 import { SignalBufferManager, BufferedDataPoint } from '../../../utils/CircularBuffer';
 import { FilterType } from '../../../utils/SignalFilter';
 import { EfficiencyOptimizer } from '../../../services/EfficiencyOptimizer';
+import { TruthJudge, Verdict, SensorHistory } from '../../../services/TruthJudge';
+import { ThePulseEngine, SovereignPulse } from '../../../services/ThePulseEngine';
+import { PulseArchiver } from '../../../services/PulseArchiver';
 
 // Singleton RCA service for reactive analysis
 const rcaService = new RCAService();
 
 // NC-300: Historical buffer for sparklines (50-point capacity)
 const signalHistoryManager = new SignalBufferManager(50);
+
+// TruthJudge instance for sensor validation
+const truthJudge = new TruthJudge();
 
 const SCHEMA_VERSION = 2;
 
@@ -63,6 +69,15 @@ type TelemetryUpdatePayload = {
 };
 
 export type DemoScenario = 'NOMINAL' | 'CAVITATION' | 'BEARING_HAZARD' | 'STRUCTURAL_ANOMALY' | 'CHRONIC_MISALIGNMENT';
+
+type SessionLedgerEntry = {
+    timestamp: number;
+    action: 'START' | 'MANUAL_OVERRIDE' | 'ACKNOWLEDGE' | 'CONFIG_CHANGE' | 'SNAPSHOT_SAVE' | 'SNAPSHOT_LOAD';
+    componentId: string | null;
+    previousValue: any;
+    newValue: any;
+    hash: string;
+};
 
 interface TelemetryState {
     // High-Frequency Data
@@ -123,6 +138,9 @@ interface TelemetryState {
     isFilteredMode: boolean;
     filterType: FilterType;
     schemaVersion: number;
+    // SCADA: Alarm integration
+    activeAlarms: { id: string; severity: 'CRITICAL' | 'WARNING' | 'INFO'; message: string; timestamp: number; acknowledged: boolean }[];
+    sessionLedger?: SessionLedgerEntry[];
 
     // Actions
     updateTelemetry: (payload: TelemetryUpdatePayload) => void;
@@ -142,6 +160,47 @@ interface TelemetryState {
     ledgerState: { dossierHashes: Record<string, string> };
     recordDossierHash: (snapshotId: string, hash: string) => void;
     hardResetIfSchemaMismatch: () => boolean;
+    
+    // Fleet Management Properties
+    units: Record<string, any>;
+    fleet: Record<string, any>;
+    gridFrequency: number;
+    
+    // Electrical Model Properties for Total Unit Efficiency
+    electrical: {
+        generatorEfficiency: number; // η_generator (0-100%)
+        transformerEfficiency: number; // η_transformer (0-100%)
+        transmissionEfficiency: number; // η_transmission (0-100%)
+    };
+    
+    // TruthJudge Integration - Sensor Validation
+    sensorValidation: {
+        vibrationX: { isReliable: boolean; confidence: number; verdict: Verdict; lastValue?: number; lastTimestamp: number };
+        vibrationY: { isReliable: boolean; confidence: number; verdict: Verdict; lastValue?: number; lastTimestamp: number };
+        bearingTemp: { isReliable: boolean; confidence: number; verdict: Verdict; lastValue?: number; lastTimestamp: number };
+        head: { isReliable: boolean; confidence: number; verdict: Verdict; lastValue?: number; lastTimestamp: number };
+        flow: { isReliable: boolean; confidence: number; verdict: Verdict; lastValue?: number; lastTimestamp: number };
+    };
+    
+    // Sovereign Pulse Integration
+    sovereignPulse: {
+        index: number;
+        subIndices: {
+            physical: number;
+            financial: number;
+            environmental: number;
+            cyber: number;
+        };
+        systemicRisks: string[];
+        globalStatus: 'OPTIMAL' | 'STRESSED' | 'CRITICAL' | 'DORMANT';
+    };
+    // SCADA: Alarm actions
+    pushAlarm: (alarm: { id: string; severity: 'CRITICAL' | 'WARNING' | 'INFO'; message: string }) => void;
+    acknowledgeAllAlarms: () => void;
+    recordLedgerEvent?: (entry: SessionLedgerEntry) => void;
+    // Memory management
+    cleanup: () => void;
+    dispose: () => void;
 }
 
 export const useTelemetryStore = create<TelemetryState>()(
@@ -189,6 +248,41 @@ export const useTelemetryStore = create<TelemetryState>()(
                 head: [],
                 flow: []
             },
+            sessionLedger: [],
+            
+            // Fleet Management - initialized with defaults
+            units: {},
+            fleet: {},
+            gridFrequency: 50.0,
+            
+            // Electrical Model Properties for Total Unit Efficiency
+            electrical: {
+                generatorEfficiency: 0.95, // η_generator (0-100%)
+                transformerEfficiency: 0.98, // η_transformer (0-100%)
+                transmissionEfficiency: 0.99, // η_transmission (0-100%)
+                statorTemp: 65, // °C
+                rotorFlux: 98.5, // %
+                transformerDGA: 0.02 // %
+            },
+            
+            // TruthJudge Integration - Sensor Validation
+            sensorValidation: {
+                vibrationX: { isReliable: true, confidence: 1.0, verdict: { winner: 'SENSOR_A', confidence: 1.0, reason: 'Initial State', action: 'TRUST_A' }, lastValue: 0, lastTimestamp: Date.now() },
+                vibrationY: { isReliable: true, confidence: 1.0, verdict: { winner: 'SENSOR_A', confidence: 1.0, reason: 'Initial State', action: 'TRUST_A' }, lastValue: 0, lastTimestamp: Date.now() },
+                bearingTemp: { isReliable: true, confidence: 1.0, verdict: { winner: 'SENSOR_A', confidence: 1.0, reason: 'Initial State', action: 'TRUST_A' }, lastValue: 0, lastTimestamp: Date.now() },
+                head: { isReliable: true, confidence: 1.0, verdict: { winner: 'SENSOR_A', confidence: 1.0, reason: 'Initial State', action: 'TRUST_A' }, lastValue: 0, lastTimestamp: Date.now() },
+                flow: { isReliable: true, confidence: 1.0, verdict: { winner: 'SENSOR_A', confidence: 1.0, reason: 'Initial State', action: 'TRUST_A' }, lastValue: 0, lastTimestamp: Date.now() }
+            },
+            
+            // Sovereign Pulse Integration - Dynamic Calculation
+            sovereignPulse: ThePulseEngine.calculatePulse(
+                [100], // Initial asset health array
+                0, // Initial revenue rate
+                50, // Market price
+                0, // Active alarms
+                0, // Cyber threat level
+                0  // Eco violations
+            ),
 
             // NC-300: Signal filter mode - gauges use filtered, RCA uses raw
             isFilteredMode: true,
@@ -196,157 +290,199 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-300: Ledger state
             ledgerState: { dossierHashes: {} },
             schemaVersion: SCHEMA_VERSION,
+            activeAlarms: [],
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
-                set((state) => {
-                    // 1. Merge Raw Telemetry
-                    const nextHydraulic = payload.hydraulic ? { ...state.hydraulic, ...payload.hydraulic } : state.hydraulic;
-                    const nextMechanical = payload.mechanical ? { ...state.mechanical, ...payload.mechanical } : state.mechanical;
-
-                    // 2. Construct Calculation Context (Virtual State)
-                    // We use the store's current config + new telemetry
-                    const calcContext: TechnicalProjectState = {
-                        ...DEFAULT_TECHNICAL_STATE, // Fallback for missing top-level fields
-                        ...state, // Spread current store state
-                        hydraulic: nextHydraulic,
-                        mechanical: nextMechanical,
-                        identity: payload.identity || state.identity,
-                        site: payload.site || state.site,
-                        penstock: payload.penstock || state.penstock,
-                        specializedState: payload.specializedState || state.specializedState, // Pass through specialized state
-                        financials: payload.financials || state.financials,
-                        structural: payload.structural || state.structural,
-                        // fix: ensure physics is a full object, merging partials from state with defaults
-                        // @ts-ignore
-                        physics: { ...DEFAULT_TECHNICAL_STATE.physics, ...state.physics } as Partial<PhysicsResult> as PhysicsResult,
-                        diagnosis: state.diagnosis || undefined
-                    };
-
-                    // 3. Run Logic Engines
-                    // We use the Pure Physics Engine to get derived physics metrics
-                    const physicsResult = PhysicsEngine.recalculatePhysics(calcContext);
-
-                    // NC-300: Hill-chart optimizer (Kaplan S-Type) — compute delta to optimum
-                    const netHeadM = (physicsResult.netHead ? physicsResult.netHead.toNumber() : nextHydraulic.head) || 0;
-                    const flowM3s = nextHydraulic.flow || 0;
-                    const observedEffRaw = nextHydraulic.efficiency || 0;
-                    const observedEffPct = observedEffRaw <= 1 ? observedEffRaw * 100 : observedEffRaw;
-                    const { etaMax, deltaToOptimum } = EfficiencyOptimizer.compute(netHeadM, flowM3s, observedEffPct);
-
-                    // NC-85.2: Async efficiency override via Worker
-                    // We fire this as a side-effect to avoid locking the store update
-                    // Ideally we would await this, but that makes the store async.
-                    // For now, we fire-and-forget, and a separate action will update the precise efficiency later.
-                    // OR: We just rely on the component layer for visuals (HydrologyLab)
-                    // But to satisfy "All Charts use Async", we should trigger it here.
-
-                    import('../../../lib/engines/KaplanEngine').then(async ({ KaplanEngine }) => {
-                        const engine = new KaplanEngine();
-                        const efficiency = await engine.calculateEfficiencyAsync(
-                            calcContext.hydraulic.head || 100,
-                            calcContext.hydraulic.flow || 40,
-                            20
-                        );
-
-                        // NC-85.2: Apply async physics result to store
-                        // We use functional set to merge into existing physics state
-                        set((s) => ({
-                            physics: {
-                                ...s.physics,
-                                efficiency
+                const state = get();
+                
+                // TruthJudge validation for each sensor
+                if (payload.hydraulic?.head !== undefined) {
+                    const headVerdict = truthJudge.validateSensor(
+                        'head',
+                        payload.hydraulic.head,
+                        state.sensorValidation.head.lastValue ?? state.hydraulic.head ?? 0,
+                        state.sensorValidation.head.lastTimestamp
+                    );
+                    if (headVerdict.action === 'USE_FALLBACK') {
+                        console.warn('TruthJudge: Head sensor unreliable, using fallback');
+                        payload.hydraulic!.head = state.hydraulic.head;
+                    }
+                    set((s) => ({
+                        ...s,
+                        sensorValidation: {
+                            ...s.sensorValidation,
+                            head: {
+                                ...s.sensorValidation.head,
+                                lastValue: payload.hydraulic?.head || 0,
+                                lastTimestamp: Date.now(),
+                                isReliable: headVerdict.action !== 'USE_FALLBACK',
+                                confidence: headVerdict.confidence,
+                                verdict: headVerdict
                             }
-                        }));
-                    }).catch(err => console.error('Async efficiency calculation failed:', err));
-
-                    // We run Expert Diagnosis on the result
-                    const assessment = ExpertDiagnosisEngine.runExpertDiagnosis(physicsResult, calcContext);
-
-                    // NC-300: Run RCA Engine with reactive trigger
-                    const f0 = (nextMechanical.rpm ?? 0) / 60;
-                    const vibration = nextMechanical.vibrationX ?? 0;
-                    const syntheticPeaks: FrequencyPeak[] = [];
-                    if (vibration > 3.0) syntheticPeaks.push({ frequencyHz: f0, amplitudeMmS: vibration * 0.8 });
-                    if (vibration > 1.5) syntheticPeaks.push({ frequencyHz: f0 * 2, amplitudeMmS: vibration * 0.4 });
-
-                    const rcaInput: RCAInput = {
-                        rpm: nextMechanical.rpm ?? 0,
-                        metrics: {
-                            vibrationMmS: vibration,
-                            efficiencyPercent: nextHydraulic.efficiency ?? 92,
-                            bearingTempC: nextMechanical.bearingTemp ?? 45,
-                            bearingTempRateOfChange: 0.3 // Would be calculated from history
-                        },
-                        peaks: syntheticPeaks,
-                        maintenance: {
-                            // NC-300: Use baseline DNA if available
-                            shaftPlumbnessDeviation: state.baselineState?.plumbnessDeviation ?? 0.02,
-                            // NC-300: Wire bearing clearances from baseline DNA
-                            bearingClearances: state.baselineState?.bearingClearances
-                        },
-                        specifications: {
-                            // NC-300: Use baseline DNA if available
-                            runnerMaterial: (state.baselineState?.runnerMaterial ?? 'Cast Steel') as 'Cast Steel' | '13Cr4Ni' | 'Bronze'
                         }
-                    };
-
-                    // Only run RCA if vibration exceeds watch threshold
-                    const rcaResults = vibration > ENGINEERING_THRESHOLDS.vibration['2x_RPM_WARNING']
-                        ? rcaService.analyze(rcaInput)
-                        : [];
-
-                    // NC-300: Record historical data for sparklines
-                    if (payload.mechanical?.vibrationX !== undefined) {
-                        signalHistoryManager.record('vibrationX', payload.mechanical.vibrationX);
+                    }));
+                }
+                
+                if (payload.mechanical?.vibrationX !== undefined) {
+                    const vibXVerdict = truthJudge.validateSensor(
+                        'vibrationX',
+                        payload.mechanical.vibrationX,
+                        state.sensorValidation.vibrationX.lastValue ?? state.mechanical.vibrationX ?? 0,
+                        state.sensorValidation.vibrationX.lastTimestamp
+                    );
+                    if (vibXVerdict.action === 'USE_FALLBACK') {
+                        console.warn('TruthJudge: VibrationX sensor unreliable, using fallback');
+                        payload.mechanical!.vibrationX = state.mechanical.vibrationX;
                     }
-                    if (payload.mechanical?.vibrationY !== undefined) {
-                        signalHistoryManager.record('vibrationY', payload.mechanical.vibrationY);
-                    }
-                    if (payload.mechanical?.bearingTemp !== undefined) {
-                        signalHistoryManager.record('bearingTemp', payload.mechanical.bearingTemp);
-                    }
-                    if (payload.hydraulic?.head !== undefined) {
-                        signalHistoryManager.record('head', payload.hydraulic.head);
-                    }
-                    if (payload.hydraulic?.flow !== undefined) {
-                        signalHistoryManager.record('flow', payload.hydraulic.flow);
-                    }
-
-                    // NC-300: Update RCA history (keep last 10 batches)
-                    const updatedRcaHistory = rcaResults.length > 0
-                        ? [...state.rcaResultsHistory.slice(-9), rcaResults]
-                        : state.rcaResultsHistory;
-
-                    return {
-                        hydraulic: nextHydraulic,
-                        mechanical: nextMechanical,
-                        physics: physicsResult,
-                        deltaToOptimum,
-                        diagnosis: assessment,
-                        identity: calcContext.identity, // Update if payload had it
-                        site: calcContext.site,
-                        penstock: calcContext.penstock,
-                        specializedState: calcContext.specializedState,
-                        financials: calcContext.financials,
-                        structural: calcContext.structural,
-                        unifiedDiagnosis: payload.unifiedDiagnosis || state.unifiedDiagnosis,
-                        investigatedComponents: payload.investigatedComponents || state.investigatedComponents,
-                        acousticMatch: payload.acousticMatch !== undefined ? payload.acousticMatch : state.acousticMatch,
-                        insulationResistance: payload.insulationResistance !== undefined ? payload.insulationResistance : state.insulationResistance,
-                        geodeticData: payload.geodeticData ? { ...state.geodeticData, ...payload.geodeticData } : state.geodeticData,
-                        lastUpdate: new Date().toISOString(),
-                        // NC-300: Include RCA results and history in state update
-                        rcaResults,
-                        rcaResultsHistory: updatedRcaHistory,
-                        // NC-300: Include telemetry history snapshot for sparklines
-                        telemetryHistory: {
-                            vibrationX: signalHistoryManager.getBuffer('vibrationX')?.getAll() ?? [],
-                            vibrationY: signalHistoryManager.getBuffer('vibrationY')?.getAll() ?? [],
-                            bearingTemp: signalHistoryManager.getBuffer('bearingTemp')?.getAll() ?? [],
-                            head: signalHistoryManager.getBuffer('head')?.getAll() ?? [],
-                            flow: signalHistoryManager.getBuffer('flow')?.getAll() ?? []
+                    set((s) => ({
+                        ...s,
+                        sensorValidation: {
+                            ...s.sensorValidation,
+                            vibrationX: {
+                                ...s.sensorValidation.vibrationX,
+                                lastValue: payload.mechanical?.vibrationX || 0,
+                                lastTimestamp: Date.now(),
+                                isReliable: vibXVerdict.action !== 'USE_FALLBACK',
+                                confidence: vibXVerdict.confidence,
+                                verdict: vibXVerdict
+                            }
                         }
-                    };
-                });
+                    }));
+                }
+                
+                if (payload.mechanical?.vibrationY !== undefined) {
+                    const vibYVerdict = truthJudge.validateSensor(
+                        'vibrationY',
+                        payload.mechanical.vibrationY,
+                        state.sensorValidation.vibrationY.lastValue ?? state.mechanical.vibrationY ?? 0,
+                        state.sensorValidation.vibrationY.lastTimestamp
+                    );
+                    if (vibYVerdict.action === 'USE_FALLBACK') {
+                        console.warn('TruthJudge: VibrationY sensor unreliable, using fallback');
+                        payload.mechanical!.vibrationY = state.mechanical.vibrationY;
+                    }
+                    set((s) => ({
+                        ...s,
+                        sensorValidation: {
+                            ...s.sensorValidation,
+                            vibrationY: {
+                                ...s.sensorValidation.vibrationY,
+                                lastValue: payload.mechanical?.vibrationY || 0,
+                                lastTimestamp: Date.now(),
+                                isReliable: vibYVerdict.action !== 'USE_FALLBACK',
+                                confidence: vibYVerdict.confidence,
+                                verdict: vibYVerdict
+                            }
+                        }
+                    }));
+                }
+                
+                if (payload.mechanical?.bearingTemp !== undefined) {
+                    const tempVerdict = truthJudge.validateSensor(
+                        'bearingTemp',
+                        payload.mechanical.bearingTemp,
+                        state.sensorValidation.bearingTemp.lastValue ?? state.mechanical.bearingTemp ?? 0,
+                        state.sensorValidation.bearingTemp.lastTimestamp
+                    );
+                    if (tempVerdict.action === 'USE_FALLBACK') {
+                        console.warn('TruthJudge: Bearing temp sensor unreliable, using fallback');
+                        payload.mechanical!.bearingTemp = state.mechanical.bearingTemp;
+                    }
+                    set((s) => ({
+                        ...s,
+                        sensorValidation: {
+                            ...s.sensorValidation,
+                            bearingTemp: {
+                                ...s.sensorValidation.bearingTemp,
+                                lastValue: payload.mechanical?.bearingTemp || 0,
+                                lastTimestamp: Date.now(),
+                                isReliable: tempVerdict.action !== 'USE_FALLBACK',
+                                confidence: tempVerdict.confidence,
+                                verdict: tempVerdict
+                            }
+                        }
+                    }));
+                }
+                
+                if (payload.hydraulic?.flow !== undefined) {
+                    const flowVerdict = truthJudge.validateSensor(
+                        'flow',
+                        payload.hydraulic.flow,
+                        state.sensorValidation.flow.lastValue ?? state.hydraulic.flow ?? 0,
+                        state.sensorValidation.flow.lastTimestamp
+                    );
+                    if (flowVerdict.action === 'USE_FALLBACK') {
+                        console.warn('TruthJudge: Flow sensor unreliable, using fallback');
+                        payload.hydraulic!.flow = state.hydraulic.flow;
+                    }
+                    set((s) => ({
+                        ...s,
+                        sensorValidation: {
+                            ...s.sensorValidation,
+                            flow: {
+                                ...s.sensorValidation.flow,
+                                lastValue: payload.hydraulic?.flow || 0,
+                                lastTimestamp: Date.now(),
+                                isReliable: flowVerdict.action !== 'USE_FALLBACK',
+                                confidence: flowVerdict.confidence,
+                                verdict: flowVerdict
+                            }
+                        }
+                    }));
+                }
+
+                // Update telemetry with validated values
+                set((state) => ({
+                    hydraulic: { ...state.hydraulic, ...payload.hydraulic },
+                    mechanical: { ...state.mechanical, ...payload.mechanical },
+                    identity: payload.identity ?? state.identity,
+                    site: payload.site ?? state.site,
+                    penstock: payload.penstock ?? state.penstock,
+                    diagnosis: payload.diagnosis ?? state.diagnosis,
+                    financials: payload.financials ?? state.financials,
+                    structural: payload.structural ?? state.structural,
+                    specializedState: payload.specializedState ?? state.specializedState,
+                    unifiedDiagnosis: payload.unifiedDiagnosis ?? state.unifiedDiagnosis,
+                    investigatedComponents: payload.investigatedComponents ?? state.investigatedComponents,
+                    acousticMatch: payload.acousticMatch ?? state.acousticMatch,
+                    insulationResistance: payload.insulationResistance ?? state.insulationResistance,
+                    geodeticData: payload.geodeticData ?? state.geodeticData,
+                    lastUpdate: new Date().toISOString(),
+                    // Not part of TelemetryUpdatePayload: keep existing store state
+                    magneticData: state.magneticData,
+                    isCommanderMode: state.isCommanderMode,
+                    rcaResults: state.rcaResults,
+                    selectedDiagnosticId: state.selectedDiagnosticId,
+                    connectionStatus: state.connectionStatus,
+                    baselineState: state.baselineState,
+                    rcaResultsHistory: state.rcaResultsHistory,
+                    telemetryHistory: {
+                        vibrationX: payload.mechanical?.vibrationX !== undefined ? 
+                            [...state.telemetryHistory.vibrationX, { value: payload.mechanical.vibrationX, timestamp: Date.now() }] : 
+                            state.telemetryHistory.vibrationX,
+                        vibrationY: payload.mechanical?.vibrationY !== undefined ? 
+                            [...state.telemetryHistory.vibrationY, { value: payload.mechanical.vibrationY, timestamp: Date.now() }] : 
+                            state.telemetryHistory.vibrationY,
+                        bearingTemp: payload.mechanical?.bearingTemp !== undefined ? 
+                            [...state.telemetryHistory.bearingTemp, { value: payload.mechanical.bearingTemp, timestamp: Date.now() }] : 
+                            state.telemetryHistory.bearingTemp,
+                        head: payload.hydraulic?.head !== undefined ? 
+                            [...state.telemetryHistory.head, { value: payload.hydraulic.head, timestamp: Date.now() }] : 
+                            state.telemetryHistory.head,
+                        flow: payload.hydraulic?.flow !== undefined ? 
+                            [...state.telemetryHistory.flow, { value: payload.hydraulic.flow, timestamp: Date.now() }] : 
+                            state.telemetryHistory.flow
+                    },
+                    // Update Sovereign Pulse with new telemetry
+                    sovereignPulse: ThePulseEngine.calculatePulse(
+                        [state.mechanical.vibrationX || 100], // Asset health from vibration
+                        state.financials?.lostRevenueEuro || 0, // Revenue rate
+                        50, // Market price
+                        state.activeAlarms?.length || 0, // Active alarms
+                        0, // Cyber threat level
+                        0  // Eco violations
+                    )
+                }));
             },
 
             setHydraulic: (hydraulic) => {
@@ -595,6 +731,79 @@ export const useTelemetryStore = create<TelemetryState>()(
                 } catch {
                     return false;
                 }
+            },
+
+            pushAlarm: (alarm) => {
+                set((state) => {
+                    const entry = {
+                        id: alarm.id,
+                        severity: alarm.severity,
+                        message: alarm.message,
+                        timestamp: Date.now(),
+                        acknowledged: false
+                    };
+                    const next = [...state.activeAlarms, entry].slice(-25);
+                    return { activeAlarms: next };
+                });
+            },
+
+            acknowledgeAllAlarms: () => {
+                set((state) => {
+                    const acked = state.activeAlarms.map(a => ({ ...a, acknowledged: true }));
+                    return { activeAlarms: acked };
+                });
+            },
+
+            recordLedgerEvent: (entry: SessionLedgerEntry) => {
+                set((state) => ({
+                    sessionLedger: [...(state.sessionLedger || []), entry].slice(-200)
+                }));
+            },
+
+            // Memory management methods
+            cleanup: () => {
+                const state = get();
+                // Clear transient data to prevent memory leaks
+                set({
+                    ...state,
+                    rcaResults: [],
+                    activeAlarms: [],
+                    telemetryHistory: {
+                        vibrationX: signalHistoryManager.getBuffer('vibrationX')?.getAll()?.slice(-20) ?? [],
+                        vibrationY: signalHistoryManager.getBuffer('vibrationY')?.getAll()?.slice(-20) ?? [],
+                        bearingTemp: signalHistoryManager.getBuffer('bearingTemp')?.getAll()?.slice(-20) ?? [],
+                        head: signalHistoryManager.getBuffer('head')?.getAll()?.slice(-20) ?? [],
+                        flow: signalHistoryManager.getBuffer('flow')?.getAll()?.slice(-20) ?? []
+                    }
+                });
+            },
+
+            dispose: () => {
+                // Complete cleanup - clear all buffers and reset state
+                // Clear all signal buffers
+                ['vibrationX', 'vibrationY', 'bearingTemp', 'head', 'flow'].forEach(signalId => {
+                    const buffer = signalHistoryManager.getBuffer(signalId);
+                    if (buffer) buffer.clear();
+                });
+                
+                set({
+                    hydraulic: DEFAULT_TECHNICAL_STATE.hydraulic,
+                    mechanical: DEFAULT_TECHNICAL_STATE.mechanical,
+                    physics: {},
+                    diagnosis: null,
+                    rcaResults: [],
+                    activeAlarms: [],
+                    telemetryHistory: {
+                        vibrationX: [],
+                        vibrationY: [],
+                        bearingTemp: [],
+                        head: [],
+                        flow: []
+                    },
+                    investigatedComponents: [],
+                    selectedDiagnosticId: null,
+                    lastUpdate: new Date().toISOString()
+                });
             }
         }),
         {
@@ -608,6 +817,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                 isFilteredMode: state.isFilteredMode,
                 filterType: state.filterType,
                 ledgerState: state.ledgerState,
+                sessionLedger: state.sessionLedger?.slice(-50) ?? [],
                 schemaVersion: state.schemaVersion
             })
         }

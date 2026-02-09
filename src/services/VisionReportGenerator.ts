@@ -77,12 +77,12 @@ export class VisionReportGenerator {
         let y = 50;
 
         // Status Banner
-        const statusColors = {
-            'GREEN': [34, 197, 94],
-            'YELLOW': [234, 179, 8],
-            'RED': [239, 68, 68]
+        const statusColors: Record<'GREEN' | 'YELLOW' | 'RED', [number, number, number]> = {
+            GREEN: [34, 197, 94],
+            YELLOW: [234, 179, 8],
+            RED: [239, 68, 68]
         };
-        const color = statusColors[summary.status];
+        const color = statusColors[summary.status as keyof typeof statusColors];
 
         doc.setFillColor(color[0], color[1], color[2]);
         doc.rect(14, y, 182, 15, 'F');
@@ -133,7 +133,7 @@ export class VisionReportGenerator {
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(30, 41, 59);
 
-            summary.recommendedActions.forEach((action, i) => {
+            summary.recommendedActions.forEach((action: string, i: number) => {
                 const lines = doc.splitTextToSize(`${i + 1}. ${action}`, 180);
                 doc.text(lines, 14, y);
                 y += lines.length * 5;
@@ -218,7 +218,7 @@ export class VisionReportGenerator {
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
-            vision.recommendations.immediate.forEach(rec => {
+            vision.recommendations.immediate.forEach((rec: string) => {
                 const lines = doc.splitTextToSize(`• ${rec}`, 170);
                 doc.text(lines, 18, y);
                 y += lines.length * 4;
@@ -239,7 +239,7 @@ export class VisionReportGenerator {
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(8);
-            vision.recommendations.shortTerm.forEach(rec => {
+            vision.recommendations.shortTerm.forEach((rec: string) => {
                 const lines = doc.splitTextToSize(`• ${rec}`, 170);
                 doc.text(lines, 18, y);
                 y += lines.length * 4;

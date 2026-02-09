@@ -6,13 +6,32 @@ import { motion } from 'framer-motion';
 import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
+import { useAssetContext } from '../contexts/AssetContext';
 
 interface ExecutiveDashboardProps {
-    assets: EnhancedAsset[];
+    assets?: EnhancedAsset[];
     selectedAsset?: EnhancedAsset;
 }
 
-export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({ assets, selectedAsset }) => {
+export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({ assets: propAssets, selectedAsset: propSelected }) => {
+    const { assets: ctxAssets, selectedAsset: ctxSelected } = useAssetContext();
+    const assets = propAssets ?? (ctxAssets as any as EnhancedAsset[]);
+    const selectedAsset = propSelected ?? (ctxSelected as any as EnhancedAsset | undefined);
+    const { financials, hydraulic, physics, identity, site, structural, selectedAsset: telemetrySelected } = useTelemetryStore() as any;
+    const pricePerMWh = Number(financials?.energyPrice ?? 85);
+    const state = {
+        hydraulic,
+        identity,
+        site,
+        structural,
+        selectedAsset: telemetrySelected
+    } as any;
+    const impact = FinancialImpactEngine.calculateImpact(state, physics, { pricePerMWh });
+    const powerMW = Number(physics?.powerMW?.toNumber?.() ?? physics?.powerMW ?? 0);
+    const energyRevenue = Math.max(0, powerMW) * Math.max(0, pricePerMWh);
+    const net = FinancialImpactEngine.calculateNetProfit(energyRevenue, 0, 0, Number(impact?.maintenanceBufferEuro ?? 0));
     // Calculate fleet-wide financial metrics
     const fleetMetrics = calculateFleetFinancials(assets);
     const assetMetrics = selectedAsset ? calculateAssetFinancials(selectedAsset) : null;
@@ -31,6 +50,23 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                     Financial performance and ROI overview - No technical details
                 </p>
             </div>
+
+            <GlassCard>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <div>
+                        <p className="text-xs text-slate-400 uppercase font-bold">Net Profit (Hourly)</p>
+                        <p className="text-3xl font-black text-white">€{Number(net?.netProfit ?? 0).toFixed(0)}</p>
+                    </div>
+                    <div>
+                        <p className="text-xs text-slate-400 uppercase font-bold">Molecular Debt (Buffer)</p>
+                        <p className="text-3xl font-black text-emerald-400">€{Number(impact?.maintenanceBufferEuro ?? 0).toFixed(0)}</p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-xs text-slate-400 uppercase font-bold">Revenue (Energy)</p>
+                        <p className="text-2xl font-black text-white">€{Number(energyRevenue).toFixed(0)}/h</p>
+                    </div>
+                </div>
+            </GlassCard>
 
             {/* Fleet-Wide KPIs */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

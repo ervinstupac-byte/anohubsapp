@@ -1,13 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import App from './App';
+import './index.css';
+import { PulseArchiver } from './services/PulseArchiver';
+
+// Start pulse archiving on app boot
+PulseArchiver.startArchiving();
+
+ReactDOM.createRoot(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
 
 console.log('[main.tsx] 🚀 BOOT SEQUENCE STARTED');
 console.log('[main.tsx] ✅ React Core Imports Loaded');
 
 import './index.css';
-console.log('[main.tsx] ✅ CSS Loaded');
 
 // ============================================================================
 // NC-76.3: SYNCHRONOUS i18n IMPORT (NO TOP-LEVEL AWAIT)

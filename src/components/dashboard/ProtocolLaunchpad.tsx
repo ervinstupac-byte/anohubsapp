@@ -12,7 +12,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { LocalLedger } from '../../services/LocalLedger';
 import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
-import { FieldAuditForm } from './FieldAuditForm';
+import { FieldAuditForm } from '../../features/discovery-vault/components/dashboard/FieldAuditForm';
 // ForensicReportService is heavy (pdf/html2canvas/jspdf) — dynamically import where needed to avoid bundling into dashboard chunk
 import reportService from '../../services/reportService';
 

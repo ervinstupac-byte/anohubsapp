@@ -4,6 +4,9 @@ import { useTelemetryStore } from '../../features/telemetry/store/useTelemetrySt
 import { ScenarioController } from './ScenarioController';
 import { Globe, ChevronUp, ChevronDown, LayoutDashboard, ShieldCheck, Activity, Zap, TrendingUp, DollarSign } from 'lucide-react';
 import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
+import { SovereignPulse } from './SovereignPulse';
+import { TURBINE_CATEGORIES } from '../../constants';
+import { useState, useEffect } from 'react';
 
 const ExecutiveRibbon: React.FC = () => {
     // @ts-ignore
@@ -42,6 +45,7 @@ export const MasterControlRoom: React.FC = () => {
     // @ts-ignore
     const { units, fleet, hydraulic, physics, deltaToOptimum } = useTelemetryStore() as any;
     const plantName = "MONOLIT_CORE";
+    const [selectedVariant, setSelectedVariant] = useState<string>('pelton_multi_jet');
 
     const theme = {
         bg: 'bg-emerald-500 bg-opacity-10',
@@ -61,6 +65,19 @@ export const MasterControlRoom: React.FC = () => {
         const badgeBg = delta > 3 ? 'bg-red-500/15 border-red-500/30' : 'bg-emerald-500/15 border-emerald-500/30';
         return { currentEta, etaMax, delta, statusColor, badgeBg };
     }, [hydraulic, physics, deltaToOptimum]);
+
+    const variantToFamily = (variant: string): 'KAPLAN' | 'FRANCIS' | 'PELTON' | 'CROSSFLOW' => {
+        if (variant.startsWith('kaplan_')) return 'KAPLAN';
+        if (variant.startsWith('francis_')) return 'FRANCIS';
+        if (variant.startsWith('pelton_')) return 'PELTON';
+        if (variant.startsWith('crossflow_')) return 'CROSSFLOW';
+        return 'FRANCIS';
+    };
+
+    useEffect(() => {
+        const family = variantToFamily(selectedVariant);
+        window.dispatchEvent(new CustomEvent('SET_TURBINE_TYPE', { detail: { family, variant: selectedVariant } }));
+    }, [selectedVariant]);
 
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans relative">
@@ -91,6 +108,35 @@ export const MasterControlRoom: React.FC = () => {
                                 {fleet.totalMW.toFixed(1)} <span className="text-sm text-slate-500 font-normal">MW</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Global Turbine Selector */}
+                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-emerald-500" />
+                            Global Turbine Selector
+                        </h3>
+                        <div className="text-[10px] font-mono text-slate-400">Selected: <span className="text-emerald-300 font-bold">{selectedVariant}</span></div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-7 gap-2">
+                        {Object.entries(TURBINE_CATEGORIES).flatMap(([familyKey, cat]) =>
+                            (cat.types || []).map((t) => (
+                                <button
+                                    key={t.id}
+                                    onClick={() => setSelectedVariant(t.id)}
+                                    className={`px-2 py-2 rounded border text-[10px] font-mono uppercase truncate ${
+                                        selectedVariant === t.id
+                                            ? 'border-emerald-500 bg-emerald-900/20 text-emerald-300'
+                                            : 'border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                    }`}
+                                    title={`${cat.name} • ${t.name}`}
+                                >
+                                    {t.name}
+                                </button>
+                            ))
+                        )}
                     </div>
                 </div>
 
@@ -126,6 +172,15 @@ export const MasterControlRoom: React.FC = () => {
                             <p className="text-[10px] text-slate-500 mt-2">
                                 Module not available in this build. Live charts load in full system.
                             </p>
+                        </div>
+                        <div className="mt-6 bg-slate-900 border border-slate-800 rounded-xl p-6">
+                            <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <Activity className="w-4 h-4 text-emerald-500" />
+                                Sovereign Pulse
+                            </h4>
+                            <div className="mt-4">
+                                <SovereignPulse />
+                            </div>
                         </div>
                     </div>
 

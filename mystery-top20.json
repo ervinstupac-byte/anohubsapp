@@ -1,0 +1,82 @@
+[
+    {
+        "path":  "src/assets/digital_cfd_mesh.png",
+        "bytes":  1355412
+    },
+    {
+        "path":  "src/data/knowledge/DossierLibrary.ts.bak",
+        "bytes":  159947
+    },
+    {
+        "path":  "src/App.tsx",
+        "bytes":  45653
+    },
+    {
+        "path":  "src/services/AIPredictionService.ts",
+        "bytes":  43031
+    },
+    {
+        "path":  "src/features/telemetry/store/useTelemetryStore.ts",
+        "bytes":  39055
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/RunnerDetailView.tsx",
+        "bytes":  35102
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/RunnerDetailView.tsx",
+        "bytes":  35102
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/TurbineVisualNavigator.tsx",
+        "bytes":  34260
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/TurbineVisualNavigator.tsx",
+        "bytes":  34260
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/GeneratorDetailView.tsx",
+        "bytes":  33314
+    },
+    {
+        "path":  "src/features/discovery-vault/vault/schematics-ui/GeneratorDetailView.tsx",
+        "bytes":  33314
+    },
+    {
+        "path":  "src/index.css",
+        "bytes":  28678
+    },
+    {
+        "path":  "src/components/dashboard/visual/FlywheelDetailView.tsx",
+        "bytes":  19363
+    },
+    {
+        "path":  "src/core/PhysicsEngine.ts",
+        "bytes":  19326
+    },
+    {
+        "path":  "src/components/dashboard/visual/GuideVaneDetailView.tsx",
+        "bytes":  18086
+    },
+    {
+        "path":  "src/demos/CaseStudy_NoisyRunner.ts",
+        "bytes":  17141
+    },
+    {
+        "path":  "src/core/TechnicalSchema.ts",
+        "bytes":  16808
+    },
+    {
+        "path":  "src/models/TechnicalSchema.ts",
+        "bytes":  16771
+    },
+    {
+        "path":  "src/services/EngineeringValidation.ts",
+        "bytes":  15157
+    },
+    {
+        "path":  "src/components/hydroschool/HydroschoolSimulator.tsx",
+        "bytes":  14439
+    }
+]

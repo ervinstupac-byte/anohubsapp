@@ -240,6 +240,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     { id: 'boltTorque', title: t('sidebar.modules.bolt_torque'), icon: '🔩', route: getMaintenancePath(ROUTES.MAINTENANCE.BOLT_TORQUE), isoRef: 'EN 1591-1' },
                     { id: 'labyrinthHealth', title: t('sidebar.modules.labyrinth_health'), icon: '🌀', route: getMaintenancePath(ROUTES.MAINTENANCE.HYDRAULIC), isoRef: 'API 610' },
                     { id: 'maintenanceEngine', title: t('sidebar.modules.maintenance_engine'), icon: '⚙️', route: getMaintenancePath(ROUTES.MAINTENANCE.DASHBOARD) },
+                    { id: 'assetPassport', title: 'Asset Passport', icon: '📄', route: getMaintenancePath(ROUTES.MAINTENANCE.ASSET_PASSPORT), isoRef: 'ISO 9001' },
                 ]
             },
             {
@@ -250,9 +251,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 borderColor: 'border-yellow-500/20',
                 glowColor: '#eab308',
                 modules: [
-                    { id: 'gridSync', title: t('sidebar.modules.grid_sync'), icon: '📡', route: '/executive', isoRef: 'IEC 61850' },
+                    { id: 'gridSync', title: t('sidebar.modules.grid_sync'), icon: '📡', route: '/scada/core', isoRef: 'IEC 61850' },
                     { id: 'generatorIntegrity', title: t('sidebar.modules.generator_integrity'), icon: '⚡', route: `/${ROUTES.INFRASTRUCTURE.ROOT}`, isoRef: 'IEEE C50' },
                     { id: 'executive', title: t('sidebar.modules.executive'), icon: '📊', route: '/executive' },
+                    { id: 'operationalScada', title: 'OPERATIONAL SCADA', icon: '🚨', route: '/scada/core', isoRef: 'IEC 61850' },
+                    { id: 'electricalProtection', title: 'ELECTRICAL PROTECTION', icon: '🛡️', route: '/executive/finance', isoRef: 'IEEE C37' },
+                    { id: 'scadaControl', title: 'SCADA CONTROL SYSTEM', icon: '🎛️', route: '/scada/core', isoRef: 'ISA 101' },
+                    { id: 'powerQuality', title: 'POWER QUALITY', icon: '📈', route: '/executive', isoRef: 'IEC 61000' }
                 ]
             },
             {
@@ -326,7 +331,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         }
     }, [searchQuery, missionSectors]);
 
-    const industrialGradient = "bg-gradient-to-br from-[#f1f2f6] via-[#ced6e0] to-[#747d8c]";
+    const modernGlassTheme = "bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-slate-700/50 shadow-[4px_0_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)]";
 
     return (
         <AnimatePresence>
@@ -347,7 +352,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         animate={{ x: 0, opacity: 1 }}
                         exit={{ x: -280, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] ${industrialGradient} border-r border-[#2f3542]/40 z-[100] flex flex-col shadow-[12px_0_32px_rgba(0,0,0,0.5)] overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        className={`fixed lg:relative left-0 top-0 bottom-0 h-full w-[280px] ${modernGlassTheme} z-[100] flex flex-col overflow-hidden transition-transform lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
                     >
                         {/* BRUSHED METAL TEXTURE */}
                         <div className="absolute inset-0 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] pointer-events-none mix-blend-overlay" />
@@ -357,30 +362,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         <div className="absolute inset-y-0 right-0 w-[1px] bg-black/20 pointer-events-none" />
 
                         {/* HEADER */}
-                        <div className="p-6 border-b border-black/10 relative z-10 bg-black/5">
+                        <div className="p-6 border-b border-slate-700/50 relative z-10 bg-slate-900/50 backdrop-blur-sm">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">MISSION SECTORS</h2>
-                                    <div className="text-sm font-black text-slate-900 tracking-tighter flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)] animate-pulse" />
+                                    <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">MISSION SECTORS</h2>
+                                    <div className="text-sm font-black text-white tracking-tighter flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.8)] animate-pulse" />
                                         CRITICAL OPS
                                     </div>
                                 </div>
-                                <button onClick={onClose} className="lg:hidden p-2 text-slate-600 hover:text-black transition-colors">
+                                <button onClick={onClose} className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors">
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
                             </div>
 
                             {/* SEARCH */}
-                            <div className="relative flex items-center bg-black/5 rounded-lg border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] px-3 py-2 transition-all focus-within:border-cyan-500/50">
-                                <Search className="w-4 h-4 text-slate-500" />
+                            <div className="relative flex items-center bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-600/50 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] px-3 py-2 transition-all focus-within:border-cyan-500/50">
+                                <Search className="w-4 h-4 text-slate-400" />
                                 <input
                                     ref={searchInputRef}
                                     type="text"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="SCANNING..."
-                                    className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-800 placeholder:text-slate-400 w-full"
+                                    className="bg-transparent border-none outline-none ml-2 text-[10px] font-mono text-slate-200 placeholder:text-slate-500 w-full"
                                 />
                             </div>
                         </div>

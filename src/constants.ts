@@ -7,9 +7,11 @@ export const TURBINE_CATEGORIES: TurbineCategories = {
         description: 'Adjustable blades for low head (10-70m) and variable flow. High efficiency across wide operating ranges.',
         types: [
             { id: 'kaplan_vertical', name: 'Vertical Kaplan', description: 'Standard for large run-of-river plants.' },
-            { id: 'kaplan_horizontal', name: 'Horizontal (Pit) Kaplan', description: 'Low profile, easier maintenance access.' },
+            { id: 'kaplan_horizontal', name: 'Horizontal Kaplan', description: 'Shaft horizontal orientation.' },
+            { id: 'kaplan_pit', name: 'Pit Kaplan', description: 'Low profile, recessed runner housing.' },
             { id: 'kaplan_bulb', name: 'Bulb Turbine', description: 'Submerged generator for very low heads.' },
             { id: 'kaplan_s', name: 'S-Type Kaplan', description: 'Cost-effective for small hydro.' },
+            { id: 'kaplan_spiral', name: 'Spiral Casing Kaplan', description: 'Variant with spiral casing optimization.' }
         ]
     },
     francis: {
@@ -18,6 +20,8 @@ export const TURBINE_CATEGORIES: TurbineCategories = {
         types: [
             { id: 'francis_vertical', name: 'Vertical Francis', description: 'High capacity, standard configuration.' },
             { id: 'francis_horizontal', name: 'Horizontal Francis', description: 'Smaller units, easier installation.' },
+            { id: 'francis_slow_runner', name: 'Slow Runner Francis', description: 'High torque, low speed configuration.' },
+            { id: 'francis_fast_runner', name: 'Fast Runner Francis', description: 'Optimized for higher specific speed.' }
         ]
     },
     pelton: {
@@ -26,13 +30,14 @@ export const TURBINE_CATEGORIES: TurbineCategories = {
         types: [
             { id: 'pelton_vertical', name: 'Vertical Pelton', description: 'Multi-jet (4-6) for higher power.' },
             { id: 'pelton_horizontal', name: 'Horizontal Pelton', description: '1-2 jets, simple maintenance.' },
+            { id: 'pelton_multi_jet', name: 'Multi-Jet Pelton', description: 'High-head with 4-6 needle jets.' }
         ]
     },
     crossflow: {
         name: 'Crossflow (Banki)',
         description: 'Robust, self-cleaning, varying flow for small hydro.',
         types: [
-            { id: 'crossflow', name: 'Standard Crossflow', description: 'Simple design, easy repair.' },
+            { id: 'crossflow_standard', name: 'Standard Crossflow', description: 'Simple design, easy repair.' }
         ]
     }
 };

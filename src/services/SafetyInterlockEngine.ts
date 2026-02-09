@@ -8,6 +8,7 @@
  * - Emergency Stop (E-Stop)
  * - Dead Man Switch (System heartbeat)
  */
+import { useProjectConfigStore } from '../features/config/ProjectConfigStore';
 
 export interface InterlockStatus {
     tripActive: boolean;
@@ -36,7 +37,20 @@ export class SafetyInterlockEngine {
         speedPct: number,
         activePowerMW: number,
         eStopPressed: boolean,
-        vibrationTotal: number // mm/s
+        vibrationTotal: number, // mm/s
+        context?: {
+            family?: 'PELTON' | 'KAPLAN' | 'FRANCIS' | string;
+            variant?: string;
+            telemetry?: {
+                flowM3s?: number;
+                jetRateChange?: number;
+                wicketGatePct?: number;
+                bladeAngleDeg?: number;
+                offCamDeviationDeg?: number;
+                draftTubeVortexAmplitude?: number;
+                vortexFrequencyHz?: number;
+            };
+        }
     ): InterlockStatus {
 
         // 1. E-STOP (Highest Priority)
@@ -74,6 +88,77 @@ export class SafetyInterlockEngine {
                 tripReason: `HIGH VIBRATION TRIP (${vibrationTotal.toFixed(1)} mm/s)`,
                 actionRequired: 'TRIP'
             };
+        }
+
+        if (context?.family === 'PELTON') {
+            // Water hammer risk estimation using closing time (Joukowsky qualitative)
+            // S = deltaQ / closingTime; thresholds tuned conservatively
+            const rate = Math.abs(context?.telemetry?.jetRateChange ?? 0);
+            const peltonCfg = useProjectConfigStore.getState().getConfig('PELTON');
+            const closing = peltonCfg?.pelton?.nozzleClosingTimeSec ?? 0.6;
+            const surgeIndicator = closing > 0 ? rate / closing : rate;
+            if (surgeIndicator > 20.0) {
+                return {
+                    tripActive: true,
+                    tripReason: `PELTON WATER HAMMER RISK (ΔQ/Δt=${surgeIndicator.toFixed(2)} m³/s²)`,
+                    actionRequired: 'TRIP'
+                };
+            }
+            if (surgeIndicator > 8.0) {
+                return {
+                    tripActive: false,
+                    tripReason: `PELTON NOZZLE SEQUENCING BLOCK (ΔQ/Δt=${surgeIndicator.toFixed(2)} m³/s²)`,
+                    actionRequired: 'BLOCK_START'
+                };
+            }
+        }
+
+        if (context?.family === 'KAPLAN') {
+            const gate = context?.telemetry?.wicketGatePct ?? 0;
+            const blade = context?.telemetry?.bladeAngleDeg ?? 0;
+            const deviation = Math.abs(context?.telemetry?.offCamDeviationDeg ?? (blade - (gate * 0.5)));
+            // Design constraint violation (head too high for Kaplan)
+            const kcfg = useProjectConfigStore.getState().getConfig('KAPLAN');
+            if ((kcfg?.ratedHeadHn ?? 0) > 1000) {
+                return {
+                    tripActive: true,
+                    tripReason: 'DESIGN CONSTRAINT VIOLATION: Kaplan head out of bounds',
+                    actionRequired: 'TRIP'
+                };
+            }
+            if (deviation > 5.0) {
+                return {
+                    tripActive: true,
+                    tripReason: `KAPLAN OFF-CAM (${deviation.toFixed(1)}°)`,
+                    actionRequired: 'TRIP'
+                };
+            }
+            if (deviation > 2.0) {
+                return {
+                    tripActive: false,
+                    tripReason: `KAPLAN OFF-CAM WARNING (${deviation.toFixed(1)}°)`,
+                    actionRequired: 'BLOCK_START'
+                };
+            }
+        }
+
+        if (context?.family === 'FRANCIS') {
+            const amp = context?.telemetry?.draftTubeVortexAmplitude ?? 0;
+            const freq = context?.telemetry?.vortexFrequencyHz ?? 0;
+            if (amp > 0.35 && freq >= 2 && freq <= 4) {
+                return {
+                    tripActive: true,
+                    tripReason: `FRANCIS VORTEX ROPE (${amp.toFixed(2)} amplitude @ ${freq.toFixed(1)} Hz)`,
+                    actionRequired: 'TRIP'
+                };
+            }
+            if (amp > 0.2 && freq >= 2 && freq <= 4) {
+                return {
+                    tripActive: false,
+                    tripReason: `FRANCIS VORTEX WARNING (${amp.toFixed(2)} amplitude)`,
+                    actionRequired: 'BLOCK_START'
+                };
+            }
         }
 
         return {

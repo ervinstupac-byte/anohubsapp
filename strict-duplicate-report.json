@@ -1,0 +1,5 @@
+{
+  "scope": "src/components (dashboard + gauge)",
+  "method": "normalized-text sha1 (comment/whitespace stripped)",
+  "clusters": []
+}

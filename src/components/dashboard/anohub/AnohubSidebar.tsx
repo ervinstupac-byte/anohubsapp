@@ -1,8 +1,10 @@
 import React from 'react';
 import { Settings, AlertTriangle, Activity, BookOpen, ChevronRight, Target } from 'lucide-react';
 import { DiagnosticRCA } from '../../automation/DiagnosticRCA';
+import { useNavigate } from 'react-router-dom';
 
 export const AnohubSidebar: React.FC = () => {
+    const navigate = useNavigate();
     return (
         <div className="w-20 h-screen overflow-y-auto custom-scrollbar bg-gradient-to-br from-[#dfe4ea] via-[#a2a8b1] to-[#747d8c] border-r border-slate-500/40 flex flex-col items-center py-6 gap-8 relative z-40 shadow-[8px_0_24px_rgba(0,0,0,0.5)]">
             {/* BRUSHED METAL TEXTURE */}
@@ -18,11 +20,63 @@ export const AnohubSidebar: React.FC = () => {
             </button>
 
             <div className="flex flex-col gap-8 w-full items-center z-10">
-                <NavButton icon={Target} color="text-red-500" glow="bloom-glow-red" />
-                <NavButton icon={Settings} active color="text-cyan-500" glow="bloom-glow-cyan" />
-                <NavButton icon={AlertTriangle} color="text-amber-500" glow="bloom-glow-amber" />
-                <NavButton icon={Activity} color="text-emerald-500" glow="bloom-glow-emerald" />
-                <NavButton icon={BookOpen} color="text-blue-500" glow="bloom-glow-cyan" />
+                <NavButton
+                    icon={Target}
+                    label="Mission Control"
+                    color="text-red-500"
+                    glow="bloom-glow-red"
+                    onClick={() => navigate('/executive')}
+                />
+                <NavButton
+                    icon={Settings}
+                    label="Francis Hub"
+                    active
+                    color="text-cyan-500"
+                    glow="bloom-glow-cyan"
+                    onClick={() => navigate('/francis/hub')}
+                />
+                <NavButton
+                    icon={Activity}
+                    label="Diagnostic Twin"
+                    color="text-emerald-500"
+                    glow="bloom-glow-emerald"
+                    onClick={() => navigate('/diagnostic-twin')}
+                />
+                <NavButton
+                    icon={AlertTriangle}
+                    label="Mechanical"
+                    color="text-amber-500"
+                    glow="bloom-glow-amber"
+                    onClick={() => navigate('/maintenance/dashboard')}
+                />
+                <NavButton
+                    icon={Activity}
+                    label="Electrical / SCADA"
+                    color="text-emerald-500"
+                    glow="bloom-glow-emerald"
+                    onClick={() => navigate('/scada/core')}
+                />
+                <NavButton
+                    icon={AlertTriangle}
+                    label="Risk & Forensics"
+                    color="text-amber-500"
+                    glow="bloom-glow-amber"
+                    onClick={() => navigate('/forensics')}
+                />
+                <NavButton
+                    icon={BookOpen}
+                    label="Knowledge"
+                    color="text-blue-500"
+                    glow="bloom-glow-cyan"
+                    onClick={() => navigate('/library')}
+                />
+                <NavButton
+                    icon={Activity}
+                    label="OPERATIONAL SCADA"
+                    color="text-emerald-500"
+                    glow="bloom-glow-emerald"
+                    onClick={() => { window.location.hash = '#/scada/core'; }}
+                />
             </div>
 
             {/* NC-140 DIAGNOSTIC ENGINE (Pops out when needed) */}
@@ -42,8 +96,8 @@ export const AnohubSidebar: React.FC = () => {
     );
 };
 
-const NavButton: React.FC<{ icon: React.ElementType, active?: boolean, color?: string, glow?: string }> = ({ icon: Icon, active, color = "text-slate-600", glow = "bloom-glow-cyan" }) => (
-    <button className={`relative p-3 transition-all active:scale-90 group pointer-events-auto`}>
+const NavButton: React.FC<{ icon: React.ElementType, label?: string, active?: boolean, color?: string, glow?: string, onClick?: () => void }> = ({ icon: Icon, label, active, color = "text-slate-600", glow = "bloom-glow-cyan", onClick }) => (
+    <button onClick={onClick} className={`relative p-3 transition-all active:scale-90 group pointer-events-auto`}>
         {/* ETCHED BACKDROP */}
         <div className={`absolute inset-0 rounded bg-black/10 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] border border-white/10 ${active ? 'bg-cyan-500/5' : ''}`} />
 
@@ -57,7 +111,7 @@ const NavButton: React.FC<{ icon: React.ElementType, active?: boolean, color?: s
 
         {/* TOOLTIP (MOCKED) */}
         <div className="absolute left-full ml-4 px-2 py-1 bg-slate-900 text-white text-[10px] font-mono rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-cyan-500/30 z-50">
-            SYSTEM_ACCESS_NODE
+            {label || 'SYSTEM_ACCESS_NODE'}
         </div>
     </button>
 );

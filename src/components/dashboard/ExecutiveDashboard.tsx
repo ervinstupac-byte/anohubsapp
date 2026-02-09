@@ -90,28 +90,38 @@ export const ExecutiveDashboard: React.FC = () => {
         unifiedDiagnosis,
         investigatedComponents
     } = useTelemetryStore();
+    const safeFinancials = financials ?? {};
+    const safeHydraulic = hydraulic ?? {};
+    const safePhysics = livePhysics ?? {};
+    const safeStructural = structural ?? {};
+    const safeMechanical = mechanical ?? {};
+    const safeSpecialized = specializedState ?? { sensors: {} as any };
+    const safeIdentity = identity ?? {};
+    const safeDiagnosis = diagnosis ?? {};
+    const safeUnifiedDiagnosis = unifiedDiagnosis ?? {};
 
-    const { selectedAsset } = useAssetContext();
-    const crossActions = useCrossModuleActions(selectedAsset?.id);
-    const assetIdentity = selectedAsset?.specs?.machineConfig || identity?.machineConfig || { ratedPowerMW: 4.2 };
+    const { selectedAsset } = useAssetContext() || { selectedAsset: null as any };
+    const safeSelectedAsset = selectedAsset ?? null;
+    const crossActions = useCrossModuleActions(safeSelectedAsset?.id);
+    const assetIdentity = safeSelectedAsset?.specs?.machineConfig || safeIdentity?.machineConfig || { ratedPowerMW: 4.2 };
 
-    const scadaFlow = specializedState?.sensors?.flowRate ?? 42.5;
-    const scadaHead = (specializedState?.sensors as any)?.net_head ?? specializedState?.sensors?.draft_tube_pressure ?? 152.0;
-    const scadaFrequency = specializedState?.sensors?.gridFrequency ?? 50.0;
+    const scadaFlow = safeSpecialized?.sensors?.flowRate ?? 42.5;
+    const scadaHead = (safeSpecialized?.sensors as any)?.net_head ?? safeSpecialized?.sensors?.draft_tube_pressure ?? 152.0;
+    const scadaFrequency = safeSpecialized?.sensors?.gridFrequency ?? 50.0;
 
     // Pelton optimizer preview (Live Efficiency Gain + Market Mode)
     const peltonPreview = React.useMemo(() => {
         try {
-            const jetPressureBar = (specializedState?.sensors as any)?.jetPressureBar || scadaHead * 0.0980665; // m -> bar approx
-            const needlePct = (specializedState?.sensors as any)?.needlePositionPct || 100;
-            const activeNozzles = (specializedState?.sensors as any)?.activeNozzles || 1;
-            const shellVibrationMm = (specializedState?.sensors as any)?.shellVibrationMm || (mechanical?.vibration || 0);
-            const bucketHours = (identity?.machineConfig as any)?.totalOperatingHours || 0;
+            const jetPressureBar = (safeSpecialized?.sensors as any)?.jetPressureBar || scadaHead * 0.0980665; // m -> bar approx
+            const needlePct = (safeSpecialized?.sensors as any)?.needlePositionPct || 100;
+            const activeNozzles = (safeSpecialized?.sensors as any)?.activeNozzles || 1;
+            const shellVibrationMm = (safeSpecialized?.sensors as any)?.shellVibrationMm || (safeMechanical?.vibration || 0);
+            const bucketHours = (safeIdentity?.machineConfig as any)?.totalOperatingHours || 0;
 
             const input = { jetPressureBar, needlePositionPct: needlePct, activeNozzles, shellVibrationMm, bucketHours };
             const seq = PeltonPhysicsOptimizer.optimizeNozzles(input);
             const baseline = PeltonPhysicsOptimizer.optimizeNozzles({ ...input, activeNozzles: activeNozzles }).expectedEfficiencyPct;
-            const oracle = { hourlyPricesEurPerMWh: [((financials as any)?.marketPriceEurPerMWh || ((financials as any)?.energyPrice) || 50)] };
+            const oracle = { hourlyPricesEurPerMWh: [((safeFinancials as any)?.marketPriceEurPerMWh || ((safeFinancials as any)?.energyPrice) || 50)] };
             const decision = MarketDrivenStrategy.decideMode(oracle, input, baseline, (assetIdentity?.ratedPowerMW || 10), 200);
             const gain = +(seq.expectedEfficiencyPct - baseline);
             return { seq, baseline, decision, gain };

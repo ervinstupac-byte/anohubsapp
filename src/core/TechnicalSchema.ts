@@ -153,8 +153,12 @@ export interface TechnicalProjectState {
         lostRevenueEuro: number;
         maintenanceBufferEuro: number;
         potentialDamageEUR: number;
-        maintenanceSavingsEuro?: number; // NEW: NC-4.2 MHE Specialization
-        leakageCostYearly?: number; // NEW: NC-4.2 Leakage Monitor
+        maintenanceSavingsEuro?: number | undefined;
+        leakageCostYearly?: number | undefined;
+        currentRevenueEURh?: number;
+        operationalCostsEURh?: number;
+        energyPrice?: number;
+        lossCalculation?: any;
     };
     assetPassport?: AssetPassport;
     images?: InspectionImage[];
