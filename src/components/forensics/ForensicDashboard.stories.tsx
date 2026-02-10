@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ForensicDashboard } from './ForensicDashboard';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n/config'; // Adjust path as needed
+import i18n from '../../i18n'; // Adjust path as needed
 import { useForensics } from '../../hooks/useForensics';
 
 // Mock the hook
