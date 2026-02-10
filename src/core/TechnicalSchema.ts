@@ -40,6 +40,7 @@ export interface HydraulicStream {
     efficiency: number; // Unit: Percentage [0-100] or Ratio [0-1] (Normalized in Service)
     waterHead: Decimal; // Unit: Meters [m] (High-precision)
     flowRate: Decimal;  // Unit: Cubic Meters per Second [m³/s] (High-precision)
+    sigma?: number; // Unit: Dimensionless (Thoma sigma)
     cavitationThreshold: Decimal; // Unit: Sigma [dimensionless]
     currentHoopStress?: Decimal; // Unit: MegaPascals [MPa]
     baselineOutputMW?: Decimal; // Unit: MegaWatts [MW]
