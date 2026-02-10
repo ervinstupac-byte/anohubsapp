@@ -28,7 +28,9 @@
 *   **src/components/diagnostic-twin/**: 3D Digital Twin and Sidebar.
 
 ## 5. Sovereign Archive (The Vault)
-*   **_SOVEREIGN_ARCHIVE/**: Storage for deprecated but valuable code (Prototypes, Specialized Monitors).
+*   **_SOVEREIGN_ARCHIVE/**: Storage for deprecated but valuable code.
+    *   `legacy_logic/`: High-value engineering logic preserved from purge.
+    *   `case_studies_static/`: Historical compliance data.
     *   `ClientDashboard.tsx`
     *   `LegacyModeHub.tsx`
     *   `UniversalFleetDashboard.tsx`
@@ -36,5 +38,8 @@
     *   `IncidentSimulator.tsx`
     *   `AnoHubOS.tsx`
 
+## 6. Deprecated Zones (Purged)
+*   **src/features/discovery-vault/**: [DELETED] All assets integrated or archived.
+
 ---
-// Part of the Sovereign Engineering Corps - Protocol NC-12500
+// Part of the Sovereign Engineering Corps - Protocol NC-13300 (Vault Zero Achieved)

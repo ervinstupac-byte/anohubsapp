@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAIPrediction } from '../contexts/AIPredictionContext.tsx';
-import { useAssetContext } from '../contexts/AssetContext.tsx';
+import { useAIPrediction } from '../contexts/AIPredictionContext';
+import { useAssetContext } from '../contexts/AssetContext';
 import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 

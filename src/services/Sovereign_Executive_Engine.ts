@@ -81,7 +81,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
     private memory: SovereignMemory;
     private basin: BasinCoordinator;
     private factory: MetalFactoryLink;
-    private oracle: AncestralOracle;
+    private oracle: typeof AncestralOracle;
     private kaplanPhysics: KaplanPhysicsEngine;
     private kaplanHub: KaplanHubMonitor;
     private peltonOptimizer: typeof PeltonPhysicsOptimizer;
@@ -101,7 +101,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         this.memory = new SovereignMemory();
         this.basin = new BasinCoordinator();
         this.factory = new MetalFactoryLink();
-        this.oracle = new AncestralOracle();
+        this.oracle = AncestralOracle;
         this.kaplanPhysics = new KaplanPhysicsEngine();
         this.kaplanHub = new KaplanHubMonitor();
         this.peltonOptimizer = PeltonPhysicsOptimizer;

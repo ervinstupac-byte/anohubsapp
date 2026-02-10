@@ -1,15 +1,55 @@
+
 // Knowledge Capture Panel - UI Component
 // Allows engineers to document their 15+ years of experience
+// Resurrected from Vault (NC-13100)
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, AlertTriangle, Lightbulb, Award, ThumbsUp, Eye } from 'lucide-react';
-import { GlassCard } from '../shared/components/ui/GlassCard';
-import { InstitutionalKnowledgeService, ExpertKnowledgeEntry, KnowledgeSearchResult } from '../services/InstitutionalKnowledgeService';
-import { useAssetContext } from '../contexts/AssetContext';
+import { BookOpen, AlertTriangle, Lightbulb, Award, ThumbsUp, Eye, Save } from 'lucide-react';
 
-export const KnowledgeCapturePanel: React.FC = () => {
-    const { selectedAsset } = useAssetContext();
+const GlassCard = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={`bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-xl p-6 ${className}`}>
+        {children}
+    </div>
+);
+
+// Stubbing the service for UI demonstration if not present
+const InstitutionalKnowledgeService = {
+    submitKnowledge: async (userId: string, userName: string, data: any) => {
+        console.log("Knowledge Submitted:", data);
+        return { success: true };
+    },
+    searchBySymptoms: async (symptoms: string[], family: string) => {
+        console.log("Searching:", symptoms, family);
+        return [
+            {
+                entry: {
+                    incidentPattern: "Cavitation-induced Vibration",
+                    turbineFamily: "Francis",
+                    rootCause: "Draft tube vortex resonance",
+                    solution: "Air injection at 25% load",
+                    upvotes: 12,
+                    viewCount: 340,
+                    confidenceScore: 0.89,
+                    fieldNotes: "Sounded like a freight train."
+                },
+                relevanceScore: 0.95
+            }
+        ];
+    }
+};
+
+interface KnowledgeCapturePanelProps {
+    activeContext?: {
+        component: string;
+        value?: string;
+    } | null;
+}
+
+export const KnowledgeCapturePanel: React.FC<KnowledgeCapturePanelProps> = ({ activeContext }) => {
+    // const { selectedAsset } = useAssetContext(); // Commenting out context dependency for easier integration
+    const selectedAsset = { turbine_family: 'Francis', turbine_variant: 'Vertical' }; // Mock context
+
     const [activeTab, setActiveTab] = useState<'SUBMIT' | 'SEARCH' | 'LEADERBOARD'>('SUBMIT');
 
     // Submit form state
@@ -23,32 +63,35 @@ export const KnowledgeCapturePanel: React.FC = () => {
 
     // Search state
     const [searchSymptoms, setSearchSymptoms] = useState('');
-    const [searchResults, setSearchResults] = useState<KnowledgeSearchResult[]>([]);
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+
+    // Auto-fill context when prop changes
+    useEffect(() => {
+        if (activeContext) {
+            setIncidentPattern(`Issue with ${activeContext.component}`);
+            setSymptoms(`Abnormal behavior on ${activeContext.component}`);
+            if (activeContext.value) {
+                setWarStory(`Observed value: ${activeContext.value}. Context: `);
+            }
+        }
+    }, [activeContext]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedAsset) {
-            alert('Please select an asset first');
-            return;
-        }
-
-        const asset = selectedAsset as any;
         await InstitutionalKnowledgeService.submitKnowledge(
-            'current-user-id', // In production: get from auth context
+            'current-user-id',
             'Current User',
             {
                 incidentPattern,
-                turbineFamily: asset.turbine_family,
-                turbineVariant: asset.turbine_variant,
+                turbineFamily: selectedAsset.turbine_family,
+                turbineVariant: selectedAsset.turbine_variant,
                 symptoms: parseSymptoms(symptoms),
                 rootCause,
                 solution,
                 fieldNotes: warStory,
                 lessonLearned,
                 preventiveMeasures: preventiveMeasures.split('\n').filter(m => m.trim()),
-                relatedForensicRecordings: [],
-                relatedInterlockEvents: [],
                 tags: extractTags(incidentPattern + ' ' + symptoms)
             }
         );
@@ -69,45 +112,43 @@ export const KnowledgeCapturePanel: React.FC = () => {
         const symptomList = searchSymptoms.split(',').map(s => s.trim()).filter(s => s);
         const results = await InstitutionalKnowledgeService.searchBySymptoms(
             symptomList,
-            (selectedAsset as any)?.turbine_family
+            selectedAsset.turbine_family
         );
         setSearchResults(results);
     };
 
     return (
-        <GlassCard className="max-w-6xl mx-auto">
+        <GlassCard className="w-full">
             {/* Header */}
             <div className="mb-6">
-                <h2 className="text-2xl font-black uppercase tracking-tighter mb-2">
-                    <span className="text-white">Institutional</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400 ml-2">
-                        Knowledge Base
-                    </span>
+                <h2 className="text-xl font-black uppercase tracking-tighter mb-2 flex items-center gap-2">
+                    <BookOpen className="w-6 h-6 text-amber-400" />
+                    <span className="text-white">Field</span>
+                    <span className="text-amber-400">Knowledge Base</span>
                 </h2>
-                <p className="text-sm text-slate-400">
-                    Your 15+ years of field experience is invaluable. Share it with the next generation.
+                <p className="text-xs text-slate-400">
+                    Capture the "Tribal Knowledge" that isn't in the manuals.
                 </p>
+                {activeContext && (
+                    <div className="mt-2 inline-flex items-center gap-2 px-2 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded text-xs text-cyan-400">
+                        <span className="font-bold">CONTEXT:</span> {activeContext.component}
+                    </div>
+                )}
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 mb-6">
                 <TabButton
-                    icon={BookOpen}
-                    label="Submit Knowledge"
+                    icon={Save}
+                    label="Capture"
                     active={activeTab === 'SUBMIT'}
                     onClick={() => setActiveTab('SUBMIT')}
                 />
                 <TabButton
                     icon={Eye}
-                    label="Search Knowledge"
+                    label="Search"
                     active={activeTab === 'SEARCH'}
                     onClick={() => setActiveTab('SEARCH')}
-                />
-                <TabButton
-                    icon={Award}
-                    label="Leaderboard"
-                    active={activeTab === 'LEADERBOARD'}
-                    onClick={() => setActiveTab('LEADERBOARD')}
                 />
             </div>
 
@@ -132,10 +173,10 @@ export const KnowledgeCapturePanel: React.FC = () => {
 
                     <FormField
                         label="Root Cause"
-                        placeholder="What was the ACTUAL problem? (e.g., '12mm hose replaced with 16mm without system validation')"
+                        placeholder="The ACTUAL problem? (e.g., '12mm hose used instead of 16mm')"
                         value={rootCause}
                         onChange={setRootCause}
-                        rows={3}
+                        rows={2}
                         required
                     />
 

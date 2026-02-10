@@ -64,5 +64,10 @@ export const AncestralOracle = {
             return `[ARCHIVE]: ${results[0].content}`;
         }
         return `[ARCHIVE]: The silence is deafening.`;
+    },
+
+    learnFromOverride: (context: string, data: any) => {
+        // In a real system, this would write to the vector database
+        console.log(`[AncestralOracle] Learning from override: ${context}`, data);
     }
 };

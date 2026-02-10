@@ -54,7 +54,7 @@ export class TelegramNotificationService {
                 return false;
             } else {
                 console.log(`[Telegram] Alert sent: ${reason}`);
-                EventLogger.log('TELEGRAM_ALERT', reason, metricValue, 'SENT');
+                EventLogger.log('TELEGRAM_ALERT' as any, reason, metricValue, 'SENT');
                 return true;
             }
         } catch (error) {

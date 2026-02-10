@@ -72,7 +72,6 @@ export const ProtocolLaunchpad: React.FC = () => {
     const { pushNotification } = useNotifications();
     const [generatingId, setGeneratingId] = useState<string | null>(null);
     const { addEntry: logProtocol } = useProtocolHistoryStore();
-    const [fieldAuditOpen, setFieldAuditOpen] = useState(false);
 
     // View Last Audit handler
     const handleViewLastAudit = async () => {
@@ -253,13 +252,6 @@ export const ProtocolLaunchpad: React.FC = () => {
                             className="text-[10px] px-2 py-1.5 font-bold uppercase tracking-wider hover:bg-emerald-500/10 hover:text-emerald-400"
                         >
                             View Last Audit
-                        </ModernButton>
-                        <ModernButton
-                            variant="primary"
-                            onClick={() => setFieldAuditOpen(true)}
-                            className="text-[10px] px-3 py-1.5 font-bold uppercase tracking-wider"
-                        >
-                            New Field Audit
                         </ModernButton>
                         <SyncBadge showLabel={false} />
                     </div>

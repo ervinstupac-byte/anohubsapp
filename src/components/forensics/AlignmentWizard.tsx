@@ -4,9 +4,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { RotateCw, Bluetooth, Target, CheckCircle, XCircle, AlertTriangle, Lock } from 'lucide-react';
-import { GlassCard } from '../shared/components/ui/GlassCard';
-import { CommissioningService } from '../services/CommissioningService';
-import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { CommissioningService } from '../../services/CommissioningService';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { MECHANICAL_TOLERANCES } from '../../lib/physics/SovereignPhysicsEngine';
 
 interface AlignmentWizardProps {
     sessionId: string;
@@ -72,7 +73,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">
-                            <span className="text-white">0.05 mm Alignment</span>
+                            <span className="text-white">{MECHANICAL_TOLERANCES.ALIGNMENT_MM_M} mm Alignment</span>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
                                 Wizard
                             </span>
@@ -149,14 +150,14 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className={`mt-4 p-4 rounded-lg border-2 ${finalAlignment <= 0.05
+                                className={`mt-4 p-4 rounded-lg border-2 ${finalAlignment <= MECHANICAL_TOLERANCES.ALIGNMENT_MM_M
                                     ? 'bg-emerald-950/20 border-emerald-500'
                                     : 'bg-red-950/20 border-red-500'
                                     }`}
                             >
                                 <div className="flex items-center justify-between mb-2">
                                     <p className="text-sm font-bold text-white">Final Alignment</p>
-                                    {finalAlignment <= 0.05 ? (
+                                    {finalAlignment <= MECHANICAL_TOLERANCES.ALIGNMENT_MM_M ? (
                                         <CheckCircle className="w-6 h-6 text-emerald-400" />
                                     ) : (
                                         <XCircle className="w-6 h-6 text-red-400" />
@@ -165,9 +166,9 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
                                 <p className="text-3xl font-black text-white mb-1">
                                     {finalAlignment.toFixed(3)} mm/m
                                 </p>
-                                <p className={`text-xs font-bold ${finalAlignment <= 0.05 ? 'text-emerald-400' : 'text-red-400'
+                                <p className={`text-xs font-bold ${finalAlignment <= MECHANICAL_TOLERANCES.ALIGNMENT_MM_M ? 'text-emerald-400' : 'text-red-400'
                                     }`}>
-                                    Standard: 0.05 mm/m {finalAlignment <= 0.05 ? '✓ PASS' : '✗ FAIL'}
+                                    Standard: {MECHANICAL_TOLERANCES.ALIGNMENT_MM_M} mm/m {finalAlignment <= MECHANICAL_TOLERANCES.ALIGNMENT_MM_M ? '✓ PASS' : '✗ FAIL'}
                                 </p>
                                 {isHorizontal && (
                                     <p className="text-xs text-slate-400 mt-2">
