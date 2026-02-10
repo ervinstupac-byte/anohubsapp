@@ -37,8 +37,9 @@ import { createClient } from '@supabase/supabase-js';
 // For now, we instantiate a client if env vars are available (mostly for client-side usage if allowed, or server-side).
 // In a strict frontend env, this might fail or expose keys if not careful.
 // Assuming this runs in a context where process.env is available (like the ingestion script or Node backend).
-const SUPABASE_URL = process.env.SUPABASE_URL || import.meta.env?.VITE_SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY || import.meta.env?.VITE_SUPABASE_KEY;
+// NC-11940: Vite Environment Standardization
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = (SUPABASE_URL && SUPABASE_KEY) ? createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 export enum PermissionTier {

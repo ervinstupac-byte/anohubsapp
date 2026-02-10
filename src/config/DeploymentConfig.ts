@@ -7,10 +7,10 @@
 
 export const DeploymentConfig = {
     // Environment
-    isProduction: process.env.NODE_ENV === 'production',
+    isProduction: import.meta.env.PROD,
 
     // API Endpoints (Switch based on env)
-    apiBaseUrl: process.env.NODE_ENV === 'production'
+    apiBaseUrl: import.meta.env.PROD
         ? 'https://api.anohubs-monolit.com/v1'
         : 'http://localhost:3000/api/v1',
 
@@ -18,7 +18,7 @@ export const DeploymentConfig = {
     edgeTimeoutMs: 25, // < 30ms limit for Vercel Edge
 
     // Security (CORS & Headers)
-    corsOrigin: process.env.NODE_ENV === 'production'
+    corsOrigin: import.meta.env.PROD
         ? 'https://anohubs-platform.vercel.app'
         : '*',
 

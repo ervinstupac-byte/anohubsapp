@@ -6,6 +6,10 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
 
     return {
+        // NC-11940: Shim process.env for legacy compatibility
+        define: {
+            'process.env': {}
+        },
         base: '/',
         server: {
             port: 3000,
