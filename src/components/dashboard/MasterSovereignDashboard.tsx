@@ -15,12 +15,8 @@ import { VisionAnalyzer } from '../forensics/VisionAnalyzer';
 import { KillSwitch } from '../forensics/KillSwitch';
 import { SystemHealth } from './SystemHealth';
 import { SovereignVisualizer } from './SovereignVisualizer';
-import { Zap, TrendingDown, Activity, AlertCircle, Shield, Sliders, Calculator, Droplets, Layout, Microscope, BookOpen } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ThePulseEngine } from '../../services/ThePulseEngine';
-import { SovereignGlobalState } from '../../services/SovereignGlobalState';
-import { PulseArchiver } from '../../services/PulseArchiver';
-import SystemBoundaryAnalyzer from '../../services/SystemBoundaryAnalyzer';
+import { SandboxOverlay } from './SandboxOverlay';
+import { Sliders } from 'lucide-react';
 
 export const MasterSovereignDashboard: React.FC = () => {
     const { 
@@ -38,6 +34,15 @@ export const MasterSovereignDashboard: React.FC = () => {
         educationMode,
         toggleEducationMode
     } = useTelemetryStore();
+
+    // Sandbox State (NC-12200)
+    const [isSandboxOpen, setIsSandboxOpen] = useState(false);
+    const [sandboxValues, setSandboxValues] = useState({
+        flow: hydraulic?.flow || 42,
+        head: physics?.netHead || 100,
+        gate: 50
+    });
+    const [sandboxStress, setSandboxStress] = useState<number | null>(null);
 
     // Commander Mode Setpoint State
     const [flowSetpoint, setFlowSetpoint] = useState(hydraulic?.flow || 42);
@@ -524,8 +529,19 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </div>
                         </div>
                         <div className="h-96">
-                            <SovereignVisualizer />
+                            <SovereignVisualizer sandboxStress={sandboxStress} />
                         </div>
+
+                        {/* Sandbox Trigger */}
+                        <button 
+                            onClick={() => setIsSandboxOpen(true)}
+                            className="w-full mt-4 py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
+                        >
+                            <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
+                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
+                                Launch Predictive Sandbox
+                            </span>
+                        </button>
                     </GlassCard>
                 </div>
 
@@ -547,6 +563,23 @@ export const MasterSovereignDashboard: React.FC = () => {
             </div>
                 </>
             )}
+
+            {/* Sandbox Overlay (NC-12200) */}
+            <SandboxOverlay 
+                isOpen={isSandboxOpen}
+                onClose={() => {
+                    setIsSandboxOpen(false);
+                    setSandboxStress(null);
+                }}
+                currentValues={sandboxValues}
+                onUpdate={(vals, results) => {
+                    setSandboxValues(vals);
+                    setSandboxStress(results.stress);
+                }}
+                onCommit={(vals) => {
+                    console.log('Committing Sandbox:', vals);
+                }}
+            />
 
             <EmergencyOverlay />
             <ResonanceAudioSystem />
