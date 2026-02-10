@@ -550,7 +550,7 @@ export class ForensicReportService {
                     let computedLoss = null;
                     try {
                         if (options.projectState) {
-                            const { FinancialImpactEngine } = await import('./FinancialImpactEngine');
+                            const { FinancialImpactEngine } = await import('./core/FinancialImpactEngine');
                             const impact = FinancialImpactEngine.calculateImpact(options.projectState as any, (options.projectState as any).physics || (options.projectState as any).physics);
                             computedLoss = Number((impact.lostRevenueEuro || 0) + (impact.potentialDamageEUR || 0) + (impact.leakageCostYearly || 0));
                         }

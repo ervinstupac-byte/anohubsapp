@@ -11,7 +11,7 @@ import { RevitalizationPlan } from '../../models/RepairContext';
 import i18n from '../../i18n';
 import idAdapter from '../../utils/idAdapter';
 import reportService from '../../services/reportService';
-import { FinancialImpactEngine } from '../../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../../services/core/FinancialImpactEngine';
 import computeEta from '../../utils/eta';
 import designEfficiencyFor from '../../utils/designEfficiency';
 

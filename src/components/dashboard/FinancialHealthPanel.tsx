@@ -1,42 +1,62 @@
 import React from 'react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
-import { TrendingDown, Euro, AlertTriangle, Wrench } from 'lucide-react';
+import { TrendingDown, Euro, AlertTriangle, Wrench, ExternalLink } from 'lucide-react';
+import { FinancialImpactEngine } from '../../services/core/FinancialImpactEngine';
+import { calculateRevenueLoss } from '../../features/business/logic/FinancialCalculator';
 
 export const FinancialHealthPanel: React.FC = () => {
-    const { hydraulic, physics, identity, site } = useTelemetryStore();
+    const { hydraulic, physics, identity, site, mechanical } = useTelemetryStore();
 
-    // Calculate financial impact using current state
-    const calculateFinancials = () => {
-        const baselinePower = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
-        const currentPower = physics?.powerMW ? Number(physics.powerMW) : 0;
-        const powerLossMW = Math.max(0, baselinePower - currentPower);
-        
-        const pricePerMWh = 85; // Default EUR per MWh
-        const hourlyLossEuro = powerLossMW * pricePerMWh;
-        const projection30DayEuro = hourlyLossEuro * 24 * 30;
-        
-        // Simplified maintenance cost (bearing, seal, runner, governor, generator)
-        const components = [
-            { baseProb: 0.02, baseCost: 45000 },
-            { baseProb: 0.04, baseCost: 8000 },
-            { baseProb: 0.005, baseCost: 120000 },
-            { baseProb: 0.01, baseCost: 15000 },
-            { baseProb: 0.008, baseCost: 60000 }
-        ];
-        
-        const expectedMaintenanceCost = components.reduce((sum, comp) => 
-            sum + (comp.baseProb * comp.baseCost), 0
-        );
-
-        return {
-            hourlyLossEuro,
-            projection30DayEuro,
-            expectedMaintenanceCost
+    // NC-1700: Advanced financial impact using FinancialImpactEngine
+    const calculateAdvancedFinancials = () => {
+        // Build state object for FinancialImpactEngine
+        const impactState = {
+            hydraulic: {
+                baselineOutputMW: hydraulic?.baselineOutputMW || 100,
+                efficiency: hydraulic?.efficiency || 90
+            },
+            site: {
+                designFlow: site?.designFlow || 3.0,
+                designPerformanceMW: site?.designPerformanceMW || 5.0
+            },
+            physics: {
+                powerMW: physics?.powerMW || 0,
+                specificWaterConsumption: (physics as any)?.specificWaterConsumption || 0
+            },
+            mechanical: {
+                bearingTemp: mechanical?.bearingTemp || 55,
+                vibrationX: mechanical?.vibrationX || 2.5
+            },
+            riskScore: 0,
+            demoMode: { active: false },
+            structural: {
+                extendedLifeYears: 0
+            },
+            identity: {
+                turbineType: identity?.turbineType || 'FRANCIS'
+            }
         };
+
+        const physicsData = {
+            powerMW: impactState.physics.powerMW
+        };
+
+        // Use FinancialImpactEngine for comprehensive calculation
+        const impact = FinancialImpactEngine.calculateImpact(impactState as any, physicsData as any, {
+            pricePerMWh: 85,
+            inventoryValue: 50000
+        });
+
+        return impact;
     };
 
-    const { hourlyLossEuro, projection30DayEuro, expectedMaintenanceCost } = calculateFinancials();
+    const financials = calculateAdvancedFinancials();
+
+    // Extract values with fallbacks
+    const hourlyLossEuro = (financials as any)?.hourlyLossEuro || 0;
+    const projection30DayEuro = (financials as any)?.projection30DayEuro || 0;
+    const expectedMaintenanceCost = (financials as any)?.expectedMaintenanceCost || 0;
 
     return (
         <GlassCard className="p-6 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
@@ -45,8 +65,17 @@ export const FinancialHealthPanel: React.FC = () => {
                     <Euro className="w-5 h-5 text-green-400" />
                     Financial Health
                 </h3>
-                <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
-                    <span className="text-xs text-green-400 font-medium">LIVE</span>
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => window.open('#/detach/financial', '_blank', 'width=1000,height=800,menubar=no,status=no')}
+                        className="text-slate-500 hover:text-green-400 transition-colors"
+                        title="Detach Module"
+                    >
+                        <ExternalLink className="w-4 h-4" />
+                    </button>
+                    <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
+                        <span className="text-xs text-green-400 font-medium">LIVE</span>
+                    </div>
                 </div>
             </div>
 

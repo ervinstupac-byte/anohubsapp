@@ -3,7 +3,6 @@ import { supabase } from '../services/supabaseClient.ts';
 import type { Asset, AssetContextType, AssetHistoryEntry } from '../types.ts';
 import { useAudit } from './AuditContext.tsx';
 import { useAuth } from './AuthContext.tsx';
-import { debounce } from '../utils/performance.ts';
 import { loadFromStorage, saveToStorage } from '../utils/storageUtils.ts';
 import { ProfileLoader } from '../services/ProfileLoader';
 
@@ -155,11 +154,17 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Create a ref to hold the debounced logging function
     // We use a ref so the debounce timer persists across renders
-    const debouncedLogContextSwitch = useRef(
-        debounce((assetName: string) => {
-            logAction('CONTEXT_SWITCH', assetName, 'SUCCESS');
-        }, 1000) // 1 second delay
-    ).current;
+    const debouncedLogContextSwitch = useRef<(assetName: string) => void>();
+
+    // Initialize the debounced function
+    useEffect(() => {
+        debouncedLogContextSwitch.current = (assetName: string) => {
+            setTimeout(() => {
+                logAction('CONTEXT_SWITCH', assetName, 'SUCCESS');
+            }, 1000); // 1 second delay
+        };
+    }, [logAction]);
+
     const selectAsset = useCallback((id: number | string) => {
         const numeric = typeof id === 'number' ? id : (id ? Number(id) : null);
         if (numeric === null || Number.isNaN(numeric)) {
@@ -170,12 +175,14 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         localStorage.setItem('activeAssetId', String(numeric)); // Save to local storage
 
         // Broadcast to other tabs instantly
+        if (debouncedLogContextSwitch.current) {
+            const asset = assets.find(a => a.id === numeric);
+            if (asset) {
+                debouncedLogContextSwitch.current(asset.name);
+            }
+        }
         assetChannelRef.current?.postMessage({ type: 'ASSET_CHANGED', assetId: numeric });
 
-        const asset = assets.find(a => a.id === numeric);
-        if (asset) {
-            debouncedLogContextSwitch(asset.name);
-        }
     }, [assets, debouncedLogContextSwitch]);
 
     // --- NEW: Clear selection for "Fleet View" mode ---

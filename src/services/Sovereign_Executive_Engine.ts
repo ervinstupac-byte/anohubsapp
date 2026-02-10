@@ -21,7 +21,7 @@ import { BasinCoordinator, UnitStatus } from './BasinCoordinator';
 import { MetalFactoryLink } from './MetalFactoryLink';
 import { AncestralOracle } from './AncestralOracle';
 import { ErosionStatus } from './SandErosionTracker';
-import { FinancialImpactEngine } from './FinancialImpactEngine';
+import { FinancialImpactEngine } from './core/FinancialImpactEngine';
 import { KaplanPhysicsEngine } from './KaplanPhysicsEngine';
 import { KaplanHubMonitor } from './KaplanHubMonitor';
 import PeltonPhysicsOptimizer from './PeltonPhysicsOptimizer';
@@ -29,6 +29,17 @@ import GovernorHPUGuardian from './GovernorHPUGuardian';
 import MarketDrivenStrategy from './MarketDrivenStrategy';
 import SafeControlAdapter from './SafeControlAdapter';
 import BaseGuardian from './BaseGuardian';
+import { TelegramNotificationService } from './TelegramNotificationService';
+import { createClient } from '@supabase/supabase-js';
+
+// NC-11600: Sovereign Audit Logging
+// Ideally, this should be injected or handled by a dedicated service.
+// For now, we instantiate a client if env vars are available (mostly for client-side usage if allowed, or server-side).
+// In a strict frontend env, this might fail or expose keys if not careful.
+// Assuming this runs in a context where process.env is available (like the ingestion script or Node backend).
+const SUPABASE_URL = process.env.SUPABASE_URL || import.meta.env?.VITE_SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY || import.meta.env?.VITE_SUPABASE_KEY;
+const supabase = (SUPABASE_URL && SUPABASE_KEY) ? createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 export enum PermissionTier {
     READ_ONLY = 'READ_ONLY',     // Observe & Log only. No decisions output.
@@ -223,6 +234,17 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         // 8. MASTER HEALTH SIGNAL
         const hMaster = (100 * 0.3) + (molecularHealth.integrityScore * 0.4) + (100 * 0.3);
 
+        // NC-11500: Telegram Alert for Low Trust Score
+        if (hMaster < 70) {
+            TelegramNotificationService.sendAlert(
+                'LOW TRUST SCORE',
+                hMaster.toFixed(1),
+                '%',
+                'SENSOR_INTEGRITY_PROTOCOL',
+                Date.now()
+            );
+        }
+
         const finResult = FinancialImpactEngine.calculateNetProfit(
             order.estimatedRevenueEur, // Energy + Carbon (Assuming order includes carbon bonus if run)
             0, // FCR Revenue (Simulated as 0 if mode is RUN for now, or handled in order)
@@ -275,6 +297,29 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
             // but we ensure fleetAction is nullified.
         }
 
+        // NC-11600: Sovereign Audit Execution
+        // Log every executive decision, especially if protections are active or throttling occurred.
+        if (supabase && (protections.length > 0 || mode !== 'RUN')) {
+            supabase.from('sovereign_audit_log').insert({
+                event_type: 'EXECUTIVE_DECISION',
+                reason: protections.join(' | ') || `Mode: ${mode}`,
+                metric_value: targetMw.toFixed(2),
+                metric_unit: 'MW',
+                active_protection: protections[0] || 'NONE',
+                details: {
+                    mode,
+                    masterHealthScore: hMaster,
+                    operatorMessage: opMsg,
+                    inputs: {
+                        vibration: inputs.vibration,
+                        market: inputs.market
+                    }
+                }
+            }).then(({ error }) => {
+                if (error) console.error('[SovereignAudit] Failed to log decision:', error);
+            });
+        }
+
         return {
             targetLoadMw: targetMw,
             masterHealthScore: hMaster,
@@ -293,6 +338,33 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
 
     private emergencyShutdown(reason: string): ExecutiveState {
         console.error(`💀 SOVEREIGN KILL SWITCH: ${reason}`);
+        
+        // NC-11500: Telegram Alert for Shutdown
+        TelegramNotificationService.sendAlert(
+            'EMERGENCY SHUTDOWN TRIGGERED',
+            0,
+            'RPM',
+            reason,
+            Date.now()
+        );
+
+        // NC-11600: Sovereign Audit Execution (Shutdown)
+        if (supabase) {
+            supabase.from('sovereign_audit_log').insert({
+                event_type: 'PROTOCOL_9',
+                reason: reason,
+                metric_value: '0',
+                metric_unit: 'MW',
+                active_protection: 'EMERGENCY_SHUTDOWN',
+                details: {
+                    action: 'KILL_SWITCH',
+                    operatorMessage: 'CRITICAL FAILURE. MACHINE STOPPED.'
+                }
+            }).then(({ error }) => {
+                if (error) console.error('[SovereignAudit] Failed to log shutdown:', error);
+            });
+        }
+
         return {
             targetLoadMw: 0,
             masterHealthScore: 0,

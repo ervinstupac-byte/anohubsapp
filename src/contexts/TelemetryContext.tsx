@@ -9,8 +9,8 @@ import { EventJournal } from '../services/EventJournal';
 import { ENABLE_REAL_TELEMETRY } from '../config/featureFlags';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
 import { useNotifications } from './NotificationContext.tsx';
-import idAdapter from '../utils/idAdapter';
 import { HppStatusSchema } from '../schemas/supabase';
+import idAdapter from '../utils/idAdapter';
 
 // Tipovi za telemetriju
 export interface TelemetryData {
@@ -96,7 +96,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
         setActiveIncident({ type, assetId, timestamp });
 
         setTelemetry(prev => {
-            const key = idAdapter.toStorage(assetId);
+            const key = String(assetId);
             const prevTele = prev[key] as TelemetryData | undefined;
             return {
                 ...prev,

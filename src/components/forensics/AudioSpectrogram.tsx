@@ -1,11 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mic, Activity, Volume2, AlertOctagon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 export const AudioSpectrogram: React.FC = () => {
+    const { resonanceState } = useTelemetryStore();
     const [isListening, setIsListening] = useState(false);
     const [detectedPattern, setDetectedPattern] = useState<string | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    // Sync resonance state with detected pattern
+    useEffect(() => {
+        if (resonanceState.isResonant) {
+            setDetectedPattern('SAND_HISS');
+            setIsListening(true); // Auto-start visualization
+        } else if (!isListening) {
+             setDetectedPattern(null);
+        }
+    }, [resonanceState.isResonant]);
 
     // Mock Audio Visualizer Animation
     useEffect(() => {
@@ -31,7 +43,11 @@ export const AudioSpectrogram: React.FC = () => {
                 let height = Math.random() * 50;
 
                 // If "Sand" pattern is detected, spike the high freqs (last 20% of bars)
-                if (frame > 100 && i > barCount * 0.8) {
+                // NC-10070: React to real resonance frequency
+                if (resonanceState.isResonant && i > barCount * 0.8) {
+                     height = 100 + Math.random() * 80;
+                } else if (detectedPattern === 'SAND_HISS' && i > barCount * 0.8) {
+                    // Legacy mock fallback
                     height = 100 + Math.random() * 50;
                 }
 
@@ -53,7 +69,8 @@ export const AudioSpectrogram: React.FC = () => {
             }
 
             frame++;
-            if (frame === 200) {
+            if (frame === 200 && !resonanceState.isResonant) {
+                 // Only auto-stop if not driven by live resonance
                 setDetectedPattern('SAND_HISS');
                 setIsListening(false);
             } else {
@@ -63,7 +80,7 @@ export const AudioSpectrogram: React.FC = () => {
 
         draw();
         return () => cancelAnimationFrame(animationId);
-    }, [isListening]);
+    }, [isListening, detectedPattern, resonanceState.isResonant]);
 
     const startListening = () => {
         setDetectedPattern(null);

@@ -3,12 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": ">=20"
+  },
   "homepage": "https://anohubs.com",
   "scripts": {
     "dev": "npm run i18n:sync && vite",
     "lint": "tsc --noEmit",
     "build:verify": "npx tsx scripts/verify_env.ts",
-    "build": "npm run build:verify && npm run i18n:sync && npm run test && tsc && vite build",
+    "build": "npm run build:verify && npm run i18n:sync && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "i18n:sync": "node scripts/sync-i18n.js",

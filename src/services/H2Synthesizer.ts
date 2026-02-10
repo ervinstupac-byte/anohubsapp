@@ -6,6 +6,8 @@
  * Maintains 100% fuel cell readiness for robotic units
  */
 
+import { SovereignGlobalState } from './SovereignGlobalState';
+
 export interface ElectrolysisSession {
     sessionId: string;
     startTime: number;
@@ -148,8 +150,20 @@ export class H2Synthesizer {
         console.log(`Expected H2 Production: ${this.calculateH2Production(powerInput, 1).toFixed(2)} Nm³/hour`);
         console.log('⚡'.repeat(40) + '\n');
 
-        // Simulate production (in production: actual electrolyzer control)
-        this.runElectrolysis(session);
+        // Record in SovereignGlobalState ledger
+        SovereignGlobalState.updateState({
+            physics: {
+                ...SovereignGlobalState.getState().physics,
+                efficiency: this.EFFICIENCY * 100,
+                pressure: this.storage.pressure,
+                temperature: 25 // Electrolysis operating temp
+            },
+            crossCorrelations: {
+                ...SovereignGlobalState.getState().crossCorrelations,
+                h2_production: session.h2Produced,
+                h2_storage_level: this.storage.fillLevel
+            }
+        });
 
         return session;
     }
@@ -243,9 +257,19 @@ export class H2Synthesizer {
         fuelCell.lastRefuel = Date.now();
         fuelCell.readiness = 'READY';
 
-        console.log(`[H2] ✅ ${unitId} refueled: ${h2Required.toFixed(1)} Nm³`);
-        console.log(`  Runtime: ${fuelCell.runtime} hours`);
-        console.log(`  Remaining storage: ${this.storage.fillLevel.toFixed(1)}%`);
+        // Record in SovereignGlobalState immutable ledger
+        SovereignGlobalState.updateState({
+            finance: {
+                ...SovereignGlobalState.getState().finance,
+                molecularDebtRate: -0.1, // H2 refuel cost
+                netProfitRate: SovereignGlobalState.getState().finance.netProfitRate - 0.1
+            },
+            crossCorrelations: {
+                ...SovereignGlobalState.getState().crossCorrelations,
+                fuel_cell_refuel: Date.now(),
+                h2_consumed: h2Required
+            }
+        });
 
         return { success: true, message: 'Refuel complete' };
     }

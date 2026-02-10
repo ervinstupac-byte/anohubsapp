@@ -1,0 +1,42 @@
+{
+  "description": "Ideal Francis Turbine operating point at Best Efficiency Point (BEP)",
+  "inputs": {
+    "vibration": 0.5,
+    "scadaTimestamp": 1704067200000,
+    "sensors": {
+      "a": {
+        "vibration": 0.5,
+        "temperature": 45.0,
+        "pressure": 120.0,
+        "flow": 42.0
+      },
+      "b": {
+        "vibration": 0.51,
+        "temperature": 45.1,
+        "pressure": 119.8,
+        "flow": 42.1
+      }
+    },
+    "market": {
+      "price": 50.0,
+      "fcr": 10.0,
+      "carbon": 25.0
+    },
+    "erosion": {
+      "totalErosion": 0.05,
+      "rate": 0.001
+    },
+    "ph": 7.0,
+    "turbineType": "FRANCIS"
+  },
+  "expectedOutput": {
+    "targetLoadMw": 100,
+    "masterHealthScore": 100,
+    "activeProtections": [],
+    "permissionTier": "AUTONOMOUS",
+    "financials": {
+      "mode": "RUN"
+    },
+    "operatorMessage": "System Nominal. | Unit Independent."
+  }
+}

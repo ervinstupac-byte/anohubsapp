@@ -4,6 +4,7 @@ import { ChevronRight, ChevronDown, Hexagon, Circle, Zap, Anchor, Camera, Sparkl
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { SovereignViewShell } from './SovereignViewShell';
+import { AssetPassportModal } from './AssetPassportModal';
 
 interface TreeNodeProps {
     id: string;
@@ -108,6 +109,20 @@ export const SovereignComponentTree: React.FC = () => {
     const { mechanical, hydraulic, diagnosis } = useTelemetryStore();
     const [selectedId, setSelectedId] = useState<string>('ROOT');
     const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>({ 'ROOT': true, 'HPP': true });
+    
+    // Asset Passport Modal State
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedComponent, setSelectedComponent] = useState<{id: string, name: string, type: string} | null>(null);
+
+    // Handle component double-click to open Asset Passport
+    const handleComponentDoubleClick = (node: TreeNodeProps) => {
+        setSelectedComponent({
+            id: node.id,
+            name: node.label,
+            type: node.icon
+        });
+        setModalOpen(true);
+    };
 
     // Determine health status based on telemetry
     const getHealthStatus = (componentId: string): 'healthy' | 'warning' | 'critical' => {
@@ -161,6 +176,8 @@ export const SovereignComponentTree: React.FC = () => {
                     }`}
                     style={{ paddingLeft: `${level * 20 + 12}px` }}
                     onClick={toggleExpand}
+                    onDoubleClick={() => handleComponentDoubleClick(node)}
+                    title="Double-click to view Asset Passport"
                 >
                     {hasChildren && (
                         <motion.div
@@ -199,19 +216,20 @@ export const SovereignComponentTree: React.FC = () => {
     };
 
     return (
-        <SovereignViewShell
-            config={{
-                sector: 'Component Health Tree',
-                subtitle: 'Real-time component health monitoring with interactive navigation',
-                icon: Sparkles,
-                iconWrapClassName: 'bg-green-500/20 border border-green-500/30',
-                iconClassName: 'text-green-400',
-                headerRight: (
-                    <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
-                        <span className="text-xs text-green-400 font-medium">LIVE</span>
-                    </div>
-                ),
-                panels: [
+        <>
+            <SovereignViewShell
+                config={{
+                    sector: 'Component Health Tree',
+                    subtitle: 'Real-time component health monitoring with interactive navigation',
+                    icon: Sparkles,
+                    iconWrapClassName: 'bg-green-500/20 border border-green-500/30',
+                    iconClassName: 'text-green-400',
+                    headerRight: (
+                        <div className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
+                            <span className="text-xs text-green-400 font-medium">LIVE</span>
+                        </div>
+                    ),
+                    panels: [
                     {
                         key: 'component-tree',
                         title: 'Component Tree',
@@ -254,5 +272,15 @@ export const SovereignComponentTree: React.FC = () => {
                 ]
             }}
         />
-    );
+        
+        {/* Asset Passport Modal */}
+        <AssetPassportModal
+            isOpen={modalOpen}
+            onClose={() => setModalOpen(false)}
+            componentId={selectedComponent?.id || ''}
+            componentName={selectedComponent?.name || ''}
+            componentType={selectedComponent?.type || ''}
+        />
+    </>
+);
 };

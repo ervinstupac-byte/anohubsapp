@@ -1,3 +1,8 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
 # Logs
 logs
 *.log
@@ -17,6 +22,13 @@ coverage
 
 # Local artifacts (diagnostic captures)
 artifacts/
+test-results/
+_SOVEREIGN_ARCHIVE/
+
+# Debug and Logs
+*.log
+*.txt
+debug-*.png
 
 # Editor directories and files
 .vscode/*

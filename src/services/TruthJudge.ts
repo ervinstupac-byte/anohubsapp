@@ -3,13 +3,18 @@
  * The Sensor Conflict Resolver ⚖️🛑
  * Decides which sensor to trust when they disagree.
  * NOW CALIBRATED FOR PHYSICS LIMITS (Phase 24.0)
+ * NC-1500: Integrated SensorIntegritySentinel for cross-sensor correlation
  */
+
+import SensorIntegritySentinel, { SensorSnapshot, IntegrityResult } from './SensorIntegritySentinel';
 
 export interface Verdict {
     winner: 'SENSOR_A' | 'SENSOR_B' | 'PREDICTION' | 'UNCERTAIN';
     confidence: number;
     reason: string;
     action: 'TRUST_A' | 'TRUST_B' | 'USE_FALLBACK' | 'MANUAL_CHECK';
+    sensorDrift?: boolean; // NEW: Flag for Sentinel-detected drift
+    sentinelResult?: IntegrityResult; // NEW: Full Sentinel analysis
 }
 
 export interface SensorHistory {
@@ -190,6 +195,41 @@ export class TruthJudge {
             confidence: 0.5,
             reason: 'Sensors disagree, but neither is clearly the "Liar" based on prediction.',
             action: 'MANUAL_CHECK'
+        };
+    }
+
+    /**
+     * NC-1500: Cross-validate with SensorIntegritySentinel
+     * Uses cross-sensor correlation to detect physical inconsistencies
+     */
+    validateWithSentinel(
+        sensorId: string,
+        snapshot: SensorSnapshot,
+        recentHistory: SensorSnapshot[] = []
+    ): Verdict {
+        // Run Sentinel correlation check
+        const sentinelResult = SensorIntegritySentinel.correlate(snapshot, recentHistory);
+
+        // If Sentinel detects anomaly, mark as sensor drift
+        if (sentinelResult.sensorAnomaly) {
+            return {
+                winner: 'UNCERTAIN',
+                confidence: sentinelResult.confidence || 0.5,
+                reason: `Sensor drift detected by Sentinel: ${sentinelResult.note} (Field: ${sentinelResult.anomalousField})`,
+                action: 'MANUAL_CHECK',
+                sensorDrift: true,
+                sentinelResult
+            };
+        }
+
+        // Otherwise return normal verdict
+        return {
+            winner: 'SENSOR_A',
+            confidence: sentinelResult.confidence || 0.95,
+            reason: sentinelResult.note || 'Cross-sensor correlation OK',
+            action: 'TRUST_A',
+            sensorDrift: false,
+            sentinelResult
         };
     }
 }

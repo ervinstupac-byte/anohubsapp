@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-import { AssetIdentity, TurbineType } from '../types/assetIdentity';
+import { AssetIdentity, FluidIntelligence } from '../types/assetIdentity';
 import { AssetPassport, InspectionImage, Asset } from '../types';
 
 export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS' | 'INFRASTRUCTURE_STRESS';
@@ -35,39 +35,39 @@ export interface MarketData {
 
 
 export interface HydraulicStream {
-    head: number;
-    flow: number;
-    efficiency: number;
-    waterHead: Decimal; // High-precision Decimal for IEC 60041
-    flowRate: Decimal;  // High-precision Decimal for IEC 60041
-    cavitationThreshold: Decimal;
-    currentHoopStress?: Decimal; // High-precision for reporting
-    baselineOutputMW?: Decimal; // Performance benchmark
-    powerKW?: number; // convenience field for quick power lookups (derived)
-    guideVaneOpening?: number; // Guide vane position percentage
+    head: number; // Unit: Meters [m]
+    flow: number; // Unit: Cubic Meters per Second [m³/s]
+    efficiency: number; // Unit: Percentage [0-100] or Ratio [0-1] (Normalized in Service)
+    waterHead: Decimal; // Unit: Meters [m] (High-precision)
+    flowRate: Decimal;  // Unit: Cubic Meters per Second [m³/s] (High-precision)
+    cavitationThreshold: Decimal; // Unit: Sigma [dimensionless]
+    currentHoopStress?: Decimal; // Unit: MegaPascals [MPa]
+    baselineOutputMW?: Decimal; // Unit: MegaWatts [MW]
+    powerKW?: number; // Unit: KiloWatts [kW]
+    guideVaneOpening?: number; // Unit: Percentage [%]
 }
 
 export interface AcousticMetrics {
-    cavitationIntensity: number;
-    ultrasonicLeakIndex: number;
-    bearingGrindIndex: number;
-    acousticBaselineMatch: number;
+    cavitationIntensity: number; // Unit: Decibels [dB] (Relative)
+    ultrasonicLeakIndex: number; // Unit: Index [0-10]
+    bearingGrindIndex: number; // Unit: Index [0-10]
+    acousticBaselineMatch: number; // Unit: Percentage [0-1]
 }
 
 export interface MechanicalStream {
-    alignment: number;
-    vibration: number;
-    vibrationX: number; // Orbit X-axis 
-    vibrationY: number; // Orbit Y-axis
-    rpm: number; // Rotational speed
-    bearingTemp: number;
-    radialClearance: number; // Added for ProfessionalReportEngine
-    shaftAlignmentLimit?: number; // Added for MechanicalPanel
+    alignment: number; // Unit: Millimeters [mm] (Offset)
+    vibration: number; // Unit: Millimeters per Second [mm/s] (RMS)
+    vibrationX: number; // Unit: Millimeters per Second [mm/s]
+    vibrationY: number; // Unit: Millimeters per Second [mm/s]
+    rpm: number; // Unit: Revolutions Per Minute [RPM]
+    bearingTemp: number; // Unit: Celsius [°C]
+    radialClearance: number; // Unit: Millimeters [mm]
+    shaftAlignmentLimit?: number; // Unit: Millimeters [mm]
     boltSpecs: {
         grade: string;
         count: number;
-        torque: number;
-        diameter?: number; // Added for BoltTorqueCalculator
+        torque: number; // Unit: Newton-Meters [Nm]
+        diameter?: number; // Unit: Millimeters [mm]
     };
     bearingType?: string;
     baselineOrbitCenter?: { x: number; y: number }; // For localStorage persistence
@@ -105,36 +105,37 @@ export interface TechnicalProjectState {
     mechanical: MechanicalStream;
     // Added back to fix VisionAnalysis & LiveMathSync
     site: {
-        grossHead: number;
-        designFlow: number;
+        grossHead: number; // Unit: Meters [m]
+        designFlow: number; // Unit: Cubic Meters per Second [m³/s]
         waterQuality: string;
-        temperature: number;
-        designPerformanceMW: number; // Manufacturer design output for benchmarking
+        temperature: number; // Unit: Celsius [°C]
+        designPerformanceMW: number; // Unit: MegaWatts [MW]
     };
+    fluidIntelligence: FluidIntelligence; // NC-10030: Integrated Lube Logic
     penstock: {
-        diameter: number;
-        length: number;
+        diameter: number; // Unit: Meters [m]
+        length: number; // Unit: Meters [m]
         index?: number;
         material: string;
-        wallThickness: number;
-        materialModulus: number; // GPa
-        materialYieldStrength: number; // MPa
+        wallThickness: number; // Unit: Meters [m]
+        materialModulus: number; // Unit: GigaPascals [GPa]
+        materialYieldStrength: number; // Unit: MegaPascals [MPa]
     };
     physics: {
-        boltSafetyFactor: number;
-        boltLoadKN: number;
-        boltCapacityKN: number;
-        hoopStressMPa: number;
-        staticPressureBar: number;
-        surgePressureBar: number;
-        waterHammerPressureBar: number;
-        eccentricity: number; // NEW: Persisted eccentricity for reporting
-        axialThrustKN?: number; // NEW: NC-4.2 MHE Specialization
-        specificWaterConsumption?: number; // m3/kWh - Leakage monitor
+        boltSafetyFactor: number; // Unit: Dimensionless [Ratio]
+        boltLoadKN: number; // Unit: KiloNewtons [kN]
+        boltCapacityKN: number; // Unit: KiloNewtons [kN]
+        hoopStressMPa: number; // Unit: MegaPascals [MPa]
+        staticPressureBar: number; // Unit: Bar [bar]
+        surgePressureBar: number; // Unit: Bar [bar]
+        waterHammerPressureBar: number; // Unit: Bar [bar]
+        eccentricity: number; // Unit: Ratio [0-1]
+        axialThrustKN?: number; // Unit: KiloNewtons [kN]
+        specificWaterConsumption?: number; // Unit: Cubic Meters per KiloWatt-Hour [m³/kWh]
         leakageStatus?: 'NOMINAL' | 'DEGRADING' | 'CRITICAL';
-        volumetricLoss?: number; // NEW: NC-4.2 Volumetric Efficiency Monitor
-        netHead?: number; // NEW
-        headLoss?: number; // NEW
+        volumetricLoss?: number; // Unit: Percentage [%]
+        netHead?: number; // Unit: Meters [m]
+        headLoss?: number; // Unit: Meters [m]
     };
     governor: GovernorState; // NEW: High-precision PID state
     specializedState?: SpecializedState; // NEW: Specialized Hub State
@@ -180,9 +181,6 @@ export const ENGINEERING_CONSTANTS: EngineeringConstants = {
     maintenance: { jackingSafetyFactor: 1.5, efficiencyLossPerHealthPoint: 0.005 },
     physics: { gravity: 9.81, waterDensity: 1000 }
 };
-
-// Backwards compatibility for implicit "EngineeringConstants" used as value
-export const EngineeringConstants = ENGINEERING_CONSTANTS;
 
 export type PipeMaterial = 'STEEL' | 'GRP' | 'CONCRETE';
 
@@ -242,21 +240,21 @@ export type ProjectAction =
  * HARDENING PHASE: IEC 60041 Result Types
  */
 export interface PhysicsResult {
-    hoopStress: Decimal;
-    powerMW: Decimal;
-    surgePressure: Decimal;
-    eccentricity: Decimal; // e = sqrt(1 - (b^2 / a^2))
-    performanceDelta: Decimal; // Delta_Perf = ((Actual - Baseline) / Baseline) * 100
-    axialThrustKN?: Decimal; // NEW: NC-4.2 MHE Specialization
-    specificWaterConsumption: Decimal;
-    performanceGap: Decimal; // (Actual / Design) * 100
+    hoopStress: Decimal; // Unit: MegaPascals [MPa]
+    powerMW: Decimal; // Unit: MegaWatts [MW]
+    surgePressure: Decimal; // Unit: Bar [bar]
+    eccentricity: Decimal; // Unit: Ratio [0-1] (e = sqrt(1 - (b^2 / a^2)))
+    performanceDelta: Decimal; // Unit: Percentage [%] (Delta_Perf = ((Actual - Baseline) / Baseline) * 100)
+    axialThrustKN?: Decimal; // Unit: KiloNewtons [kN] (NC-4.2 MHE Specialization)
+    specificWaterConsumption: Decimal; // Unit: Cubic Meters per KiloWatt-Hour [m³/kWh]
+    performanceGap: Decimal; // Unit: Percentage [%] ((Actual / Design) * 100)
     status: 'NOMINAL' | 'WARNING' | 'CRITICAL';
-    volumetricLoss?: Decimal; // NEW: NC-4.2 Volumetric Efficiency Monitor
-    boltLoadKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
-    boltSafetyFactor?: Decimal; // NEW: Added to sync with TechnicalProjectState
-    boltCapacityKN?: Decimal; // NEW: Added to sync with TechnicalProjectState
-    netHead?: Decimal; // NEW
-    headLoss?: Decimal; // NEW
+    volumetricLoss?: Decimal; // Unit: Percentage [%] (NC-4.2 Volumetric Efficiency Monitor)
+    boltLoadKN?: Decimal; // Unit: KiloNewtons [kN]
+    boltSafetyFactor?: Decimal; // Unit: Dimensionless [Ratio]
+    boltCapacityKN?: Decimal; // Unit: KiloNewtons [kN]
+    netHead?: Decimal; // Unit: Meters [m]
+    headLoss?: Decimal; // Unit: Meters [m]
 }
 
 export interface DiagnosisMessage {
@@ -314,9 +312,27 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
                 nextChangeDue: '',
                 waterContentPPM: 150,
                 tan: 0.12,
-                viscosityCSt: 46
+                viscosityCSt: 46,
+                oilPressureBar: 2.5, // NC-10030: Dynamic Oil Pressure
+                oilTemperatureC: 45, // NC-10030: Dynamic Oil Temp
+                oilLevelPercent: 85  // NC-10030: Dynamic Tank Level
             },
-            filterSystem: { filterType: '10 Micron', installDate: '', deltaPBar: 0, deltaPAlarmBar: 1.5, filterClogged: false },
+            filterSystem: { 
+                filterType: '10 Micron', 
+                installDate: '', 
+                deltaPBar: 0, 
+                deltaPAlarmBar: 1.5, 
+                filterClogged: false,
+                inletPressureBar: 2.5, // NC-10030
+                outletPressureBar: 2.5 // NC-10030
+            },
+            coolingSystem: { // NC-10030
+                coolingWaterInletTempC: 15,
+                coolingWaterOutletTempC: 20,
+                oilInletTempC: 45,
+                oilOutletTempC: 35,
+                coolingWaterFlowLmin: 50
+            },
             temperatureCorrelation: { powerhouseAmbientC: 25, bearingTempsC: [], excessiveHeatDetected: false },
             healthScore: 100
         },
@@ -349,6 +365,40 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         waterHead: new Decimal(450),
         flowRate: new Decimal(2.5),
         cavitationThreshold: new Decimal(0.5)
+    },
+    fluidIntelligence: {
+        oilSystem: {
+            oilType: 'ISO VG 46',
+            oilCapacityLiters: 200,
+            currentHours: 0,
+            changeIntervalHours: 4000,
+            lastChangeDate: '',
+            nextChangeDue: '',
+            waterContentPPM: 150,
+            tan: 0.12,
+            viscosityCSt: 46,
+            oilPressureBar: 2.5,
+            oilTemperatureC: 45,
+            oilLevelPercent: 85
+        },
+        filterSystem: { 
+            filterType: '10 Micron', 
+            installDate: '', 
+            deltaPBar: 0, 
+            deltaPAlarmBar: 1.5, 
+            filterClogged: false,
+            inletPressureBar: 2.5,
+            outletPressureBar: 2.5
+        },
+        coolingSystem: {
+            coolingWaterInletTempC: 15,
+            coolingWaterOutletTempC: 20,
+            oilInletTempC: 45,
+            oilOutletTempC: 35,
+            coolingWaterFlowLmin: 50
+        },
+        temperatureCorrelation: { powerhouseAmbientC: 25, bearingTempsC: [], excessiveHeatDetected: false },
+        healthScore: 100
     },
     mechanical: {
         alignment: 0.02,

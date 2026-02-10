@@ -5,7 +5,7 @@ import { AssetIdentity } from '../types/assetIdentity';
 import { PhysicsEngine } from '../core/PhysicsEngine';
 import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine';
 import { DrTurbineAI } from '../services/DrTurbineAI';
-import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../services/core/FinancialImpactEngine';
 import { ProfileLoader } from '../services/ProfileLoader';
 import { HPPSettingsSchema } from '../schemas/engineering';
 import i18n from '../i18n';

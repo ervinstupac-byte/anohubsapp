@@ -4,7 +4,10 @@
  * Systemic Health & Correlation Engine
  * Aggregates all telemetry into a single "Sovereign Pulse Index" (0-100%).
  * Detects cross-domain correlations (e.g. Temp rise + Partial Discharge).
+ * NC-1500: Integrated GridStabilityGuardian for frequency stability metrics
  */
+
+import GridStabilityGuardian from './GridStabilityGuardian';
 
 export interface SovereignPulse {
     index: number; // 0-100% (The "Life Force" of the plant)
@@ -13,12 +16,20 @@ export interface SovereignPulse {
         financial: number; // Revenue perf
         environmental: number; // Compliance
         cyber: number; // Security
+        gridStability: number; // NEW: Frequency stability & inertia
     };
     systemicRisks: string[]; // Correlation findings
     globalStatus: 'OPTIMAL' | 'STRESSED' | 'CRITICAL' | 'DORMANT';
+    gridMetrics?: {
+        frequencyHz: number;
+        dfdt: number; // Rate of change
+        kineticKickActive: boolean;
+        vCurveExcitation: number;
+    };
 }
 
 export class ThePulseEngine {
+    private gridGuardian = new GridStabilityGuardian();
 
     /**
      * AGGREGATE HEALTH
@@ -45,9 +56,15 @@ export class ThePulseEngine {
             lastUpdate: string;
             alarmsActive: number;
         };
+        grid?: {
+            frequencyHz: number;
+            lastFrequencyHz?: number;
+            voltagePct?: number;
+            timestamp: number;
+        };
     }): SovereignPulse {
 
-        // 1. Physical Health Score (40% weight)
+        // 1. Physical Health Score (35% weight) - reduced to make room for grid
         // Mechanical Health: Vibration analysis
         const vibrationScore = Math.max(0, 100 - (inputs.physical.vibration * 10)); // Lower vibration = higher score
         const temperatureScore = Math.max(0, 100 - Math.abs(inputs.physical.temperature - 45) * 2); // Optimal temp ~45°C
@@ -71,7 +88,7 @@ export class ThePulseEngine {
         
         const environmentalScore = (waterQualityScore * 0.4) + (temperatureEnvScore * 0.3) + (flowScore * 0.3);
 
-        // 4. Cyber Health Score (20% weight)
+        // 4. Cyber Health Score (10% weight) - reduced to make room for grid
         const connectionScore = inputs.cyber.connectionStatus === 'CONNECTED' ? 100 :
                               inputs.cyber.connectionStatus === 'DEGRADED' ? 50 :
                               inputs.cyber.connectionStatus === 'DISCONNECTED' ? 0 : 25;
@@ -83,9 +100,47 @@ export class ThePulseEngine {
         
         const cyberScore = (connectionScore * 0.4) + (lastUpdateScore * 0.3) + (alarmScore * 0.3);
 
-        // 5. Global Index (Weighted: Physical 40%, Financial 20%, Environmental 20%, Cyber 20%)
-        const globalIndex = (physicalScore * 0.4) + (financialScore * 0.2) + 
-                            (environmentalScore * 0.2) + (cyberScore * 0.2);
+        // 5. Grid Stability Score (15% weight) - NEW from GridStabilityGuardian
+        let gridStabilityScore = 100;
+        let gridMetrics = {
+            frequencyHz: 50,
+            dfdt: 0,
+            kineticKickActive: false,
+            vCurveExcitation: 50
+        };
+
+        if (inputs.grid) {
+            // Use GridStabilityGuardian for frequency stability
+            const inertiaAction = this.gridGuardian.assessInertia({
+                timestamp: inputs.grid.timestamp,
+                frequencyHz: inputs.grid.frequencyHz,
+                lastFrequencyHz: inputs.grid.lastFrequencyHz,
+                voltagePct: inputs.grid.voltagePct
+            });
+
+            // Score based on frequency deviation from 50Hz
+            const freqDeviation = Math.abs(inputs.grid.frequencyHz - 50);
+            const frequencyScore = Math.max(0, 100 - (freqDeviation * 20)); // 1Hz off = 20 points lost
+
+            // Penalty for rapid frequency change
+            const dfdtPenalty = Math.abs(inertiaAction.dfdt || 0) * 50; // 0.2 Hz/s = 10 points lost
+            
+            gridStabilityScore = Math.max(0, frequencyScore - dfdtPenalty);
+
+            // V-curve for voltage support
+            const vCurve = this.gridGuardian.computeVCurve(inputs.grid.voltagePct);
+
+            gridMetrics = {
+                frequencyHz: inputs.grid.frequencyHz,
+                dfdt: inertiaAction.dfdt || 0,
+                kineticKickActive: inertiaAction.triggered,
+                vCurveExcitation: vCurve.excitationPct
+            };
+        }
+
+        // 6. Global Index (Weighted: Physical 35%, Financial 20%, Environmental 20%, Cyber 10%, Grid 15%)
+        const globalIndex = (physicalScore * 0.35) + (financialScore * 0.2) + 
+                            (environmentalScore * 0.2) + (cyberScore * 0.1) + (gridStabilityScore * 0.15);
 
         // 6. Systemic Risk Detection
         const risks: string[] = [];
@@ -118,10 +173,12 @@ export class ThePulseEngine {
                 physical: Math.round(physicalScore),
                 financial: Math.round(financialScore),
                 environmental: Math.round(environmentalScore),
-                cyber: Math.round(cyberScore)
+                cyber: Math.round(cyberScore),
+                gridStability: Math.round(gridStabilityScore)
             },
             systemicRisks: risks,
-            globalStatus: status
+            globalStatus: status,
+            gridMetrics: inputs.grid ? gridMetrics : undefined
         };
     }
 
@@ -173,7 +230,8 @@ export class ThePulseEngine {
                 physical: physicalScore,
                 financial: financialScore,
                 environmental: environmentalScore,
-                cyber: cyberScore
+                cyber: cyberScore,
+                gridStability: 100 // Default for static calculation
             },
             systemicRisks: risks,
             globalStatus: status

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { FinancialImpactEngine } from '../FinancialImpactEngine';
+import { FinancialImpactEngine } from '../core/FinancialImpactEngine';
 
 // Minimal mock state and physics
 const baseState: any = {

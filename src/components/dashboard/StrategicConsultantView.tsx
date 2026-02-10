@@ -5,7 +5,7 @@
  * Provides Bid Evaluation and Hydraulic Feasibility Analysis
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Calculator, 
@@ -20,13 +20,18 @@ import {
   Zap,
   Factory,
   Truck,
-  Shield
+  Shield,
+  ScanLine,
+  AlertOctagon
 } from 'lucide-react';
 import { SovereignViewShell } from './SovereignViewShell';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { StrategicPlanningService, Bid, SiteParameters, BidEvaluation, FeasibilityResult } from '../../services/StrategicPlanningService';
 import { TurbineType } from '../../models/turbine/TurbineFactory';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
+import { generateArchitectReport, ArchitectReport } from '../../services/SovereignArchitectReflector';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 
 interface BidInput {
   manufacturer: string;
@@ -51,6 +56,9 @@ interface SiteInput {
 }
 
 export const StrategicConsultantView: React.FC = () => {
+  // NC-1700: Live telemetry from store
+  const { mechanical, hydraulic } = useTelemetryStore();
+
   // Bid Evaluation State
   const [bidInput, setBidInput] = useState<BidInput>({
     manufacturer: '',
@@ -77,6 +85,72 @@ export const StrategicConsultantView: React.FC = () => {
   const [bidResult, setBidResult] = useState<BidEvaluation | null>(null);
   const [feasibilityResult, setFeasibilityResult] = useState<FeasibilityResult | null>(null);
   const [pulseImpact, setPulseImpact] = useState<{ index: number; status: string } | null>(null);
+
+  // NC-1700: Design vs Reality Check with LIVE telemetry
+  const [designCheck, setDesignCheck] = useState<{
+    designBEP_RPM: number;
+    currentRPM: number;
+    deviation: number;
+    alert: 'NONE' | 'WARNING' | 'CRITICAL';
+    message: string;
+    efficiencyAlert: boolean;
+  }>({
+    designBEP_RPM: 600, // Design Best Efficiency Point
+    currentRPM: mechanical?.rpm || 600, // LIVE from telemetry
+    deviation: 0,
+    alert: 'NONE',
+    message: '',
+    efficiencyAlert: false
+  });
+
+  // NC-1700: Perform design check with live telemetry
+  const performDesignCheck = useCallback(() => {
+    const liveRPM = mechanical?.rpm || 600;
+    const deviation = Math.abs((liveRPM - designCheck.designBEP_RPM) / designCheck.designBEP_RPM) * 100;
+    
+    let alert: 'NONE' | 'WARNING' | 'CRITICAL' = 'NONE';
+    let message = 'Operating at design specifications';
+    let efficiencyAlert = false;
+
+    if (deviation > 15) {
+      alert = 'CRITICAL';
+      message = `DESIGN_MISMATCH: Operating ${deviation.toFixed(1)}% from BEP. Severe efficiency loss expected.`;
+      efficiencyAlert = true;
+      // NC-1700: Trigger system-wide EFFICIENCY_ALERT
+      console.error('🔴 EFFICIENCY_ALERT: RPM deviation >15% from BEP!');
+    } else if (deviation > 10) {
+      alert = 'WARNING';
+      message = `DESIGN_MISMATCH: Operating ${deviation.toFixed(1)}% from BEP. Efficiency degradation likely.`;
+      efficiencyAlert = true;
+      // NC-1700: Trigger system-wide EFFICIENCY_ALERT
+      console.warn('🟡 EFFICIENCY_ALERT: RPM deviation >10% from BEP!');
+    }
+
+    setDesignCheck(prev => ({
+      ...prev,
+      currentRPM: liveRPM,
+      deviation,
+      alert,
+      message,
+      efficiencyAlert
+    }));
+
+    // NC-1700: Broadcast to SovereignGlobalState for system-wide alert
+    if (efficiencyAlert) {
+      SovereignGlobalState.updateState({
+        physics: {
+          ...SovereignGlobalState.getState().physics,
+          efficiency: 100 - (deviation * 0.5), // Estimate efficiency loss
+          cavitation: deviation // Store deviation in cavitation field for alerting
+        }
+      });
+    }
+  }, [mechanical?.rpm, designCheck.designBEP_RPM]);
+
+  // Run design check when live RPM changes
+  useEffect(() => {
+    performDesignCheck();
+  }, [performDesignCheck]);
 
   const evaluateBid = useCallback(() => {
     const bid: Bid = {
@@ -417,6 +491,79 @@ export const StrategicConsultantView: React.FC = () => {
                     </GlassCard>
                   </motion.div>
                 )}
+              </div>
+            )
+          },
+          {
+            key: 'design-reality',
+            title: 'Design vs Reality',
+            icon: ScanLine,
+            content: (
+              <div className="space-y-6">
+                <GlassCard className="p-4">
+                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <ScanLine className="w-5 h-5 text-amber-400" />
+                    Architect's Design Intent Check
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-sm text-slate-400 mb-1">Design BEP (RPM)</label>
+                      <input
+                        type="number"
+                        value={designCheck.designBEP_RPM}
+                        onChange={(e) => setDesignCheck({ ...designCheck, designBEP_RPM: parseInt(e.target.value) })}
+                        className="w-full bg-slate-800/50 border border-slate-700 rounded px-3 py-2 text-white"
+                      />
+                      <div className="text-xs text-slate-500 mt-1">Best Efficiency Point from design specs</div>
+                    </div>
+                    <div>
+                      <label className="block text-sm text-slate-400 mb-1">Current Operating RPM</label>
+                      <input
+                        type="number"
+                        value={designCheck.currentRPM}
+                        onChange={(e) => setDesignCheck({ ...designCheck, currentRPM: parseInt(e.target.value) })}
+                        className="w-full bg-slate-800/50 border border-slate-700 rounded px-3 py-2 text-white"
+                      />
+                      <div className="text-xs text-slate-500 mt-1">Actual turbine speed</div>
+                    </div>
+                  </div>
+
+                  <div className={`p-4 rounded-lg border ${
+                    designCheck.alert === 'CRITICAL' ? 'bg-red-500/10 border-red-500/30' :
+                    designCheck.alert === 'WARNING' ? 'bg-yellow-500/10 border-yellow-500/30' :
+                    'bg-green-500/10 border-green-500/30'
+                  }`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      {designCheck.alert === 'CRITICAL' ? <AlertOctagon className="w-5 h-5 text-red-400" /> :
+                       designCheck.alert === 'WARNING' ? <AlertTriangle className="w-5 h-5 text-yellow-400" /> :
+                       <CheckCircle className="w-5 h-5 text-green-400" />}
+                      <span className={`font-semibold ${
+                        designCheck.alert === 'CRITICAL' ? 'text-red-400' :
+                        designCheck.alert === 'WARNING' ? 'text-yellow-400' :
+                        'text-green-400'
+                      }`}>
+                        {designCheck.alert === 'NONE' ? 'DESIGN COMPLIANT' : designCheck.alert}
+                      </span>
+                    </div>
+                    <div className="text-sm text-white mb-2">
+                      Deviation: {designCheck.deviation.toFixed(1)}% from BEP
+                    </div>
+                    <div className="text-xs text-slate-300">
+                      {designCheck.message}
+                    </div>
+                  </div>
+
+                  {designCheck.alert !== 'NONE' && (
+                    <div className="mt-4 p-3 bg-slate-800/50 rounded">
+                      <div className="text-xs text-slate-400 mb-2">Architect Analysis</div>
+                      <div className="text-sm text-slate-300">
+                        The machine is operating outside the Architect's intended design envelope.
+                        Efficiency losses: ~{(designCheck.deviation * 0.5).toFixed(0)}% per 10% deviation from BEP.
+                      </div>
+                    </div>
+                  )}
+                </GlassCard>
               </div>
             )
           }

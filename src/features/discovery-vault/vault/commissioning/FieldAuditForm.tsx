@@ -13,7 +13,7 @@ import { useProtocolHistoryStore } from '../../../../stores/ProtocolHistoryStore
 import { useNotifications } from '../../../../contexts/NotificationContext';
 import { Z_INDEX, SECTOR_GLOW, STATUS_COLORS } from '../../../../shared/design-tokens';
 import { ModernButton } from '../../../../shared/components/ui/ModernButton';
-import { Decimal } from 'decimal.js';
+import Decimal from 'decimal.js';
 import docsData from '../../../../i18n/locales/docs.json';
 // ForensicReportService removed from top-level imports to avoid bundling heavy PDF libs in dashboard chunk
 

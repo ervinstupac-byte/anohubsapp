@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import Decimal from 'decimal.js';
 import { HydraulicStream, MechanicalStream, DiagnosisReport, PhysicsResult, DEFAULT_TECHNICAL_STATE, TechnicalProjectState, SpecializedState } from '../../../core/TechnicalSchema';
 import { AssetIdentity } from '../../../types/assetIdentity';
 import { PhysicsEngine } from '../../../core/PhysicsEngine';
@@ -16,15 +17,20 @@ import { EfficiencyOptimizer } from '../../../services/EfficiencyOptimizer';
 import { TruthJudge, Verdict, SensorHistory } from '../../../services/TruthJudge';
 import { ThePulseEngine, SovereignPulse } from '../../../services/ThePulseEngine';
 import { PulseArchiver } from '../../../services/PulseArchiver';
+import { VibrationForensics, VibrationForensicResult } from '../../../services/core/VibrationForensics';
+import { Sovereign_Executive_Engine, ExecutiveState, PermissionTier } from '../../../services/Sovereign_Executive_Engine';
+import { ErosionStatus } from '../../../services/SandErosionTracker';
 
 // Singleton RCA service for reactive analysis
 const rcaService = new RCAService();
+const sovereignEngine = new Sovereign_Executive_Engine();
 
 // NC-300: Historical buffer for sparklines (50-point capacity)
 const signalHistoryManager = new SignalBufferManager(50);
 
 // TruthJudge instance for sensor validation
 const truthJudge = new TruthJudge();
+const vibrationForensics = new VibrationForensics();
 
 const SCHEMA_VERSION = 2;
 
@@ -53,6 +59,7 @@ export interface BaselineState {
 type TelemetryUpdatePayload = {
     hydraulic?: Partial<HydraulicStream>;
     mechanical?: Partial<MechanicalStream>;
+    physics?: Partial<PhysicsResult>;
     identity?: AssetIdentity;
     site?: TechnicalProjectState['site'];
     penstock?: TechnicalProjectState['penstock'];
@@ -66,6 +73,16 @@ type TelemetryUpdatePayload = {
     acousticMatch?: number;
     insulationResistance?: number;
     geodeticData?: { settlement: number; tilt: number };
+    // NC-10030: Fluid Intelligence
+    fluidIntelligence?: TechnicalProjectState['fluidIntelligence'];
+    // NC-9300
+    resonanceState?: {
+        isResonant: boolean;
+        frequency: number;
+        amplitude: number;
+    };
+    // NC-10080: Erosion Update
+    erosion?: Partial<ErosionStatus>;
 };
 
 export type DemoScenario = 'NOMINAL' | 'CAVITATION' | 'BEARING_HAZARD' | 'STRUCTURAL_ANOMALY' | 'CHRONIC_MISALIGNMENT';
@@ -80,6 +97,10 @@ type SessionLedgerEntry = {
 };
 
 interface TelemetryState {
+    // NC-11400: Education Mode
+    educationMode: boolean;
+    toggleEducationMode: () => void;
+
     // High-Frequency Data
     hydraulic: HydraulicStream;
     mechanical: MechanicalStream;
@@ -88,12 +109,26 @@ interface TelemetryState {
     diagnosis: DiagnosisReport | null;
     // NC-300: Hill-chart optimizer delta to optimum
     deltaToOptimum?: number;
+    
+    // NC-9300: Sovereign Alert Protocol - Resonance Sync
+    resonanceState: {
+        isResonant: boolean;
+        frequency: number; // 120 or 240
+        amplitude: number; // 0-1
+    };
+    
+    // NC-10080: Erosion Status
+    erosion: ErosionStatus;
+
+    // NC-10051: Sovereign Executive Result
+    executiveResult: ExecutiveState | null;
 
     // Static / Low-Frequency Config (Required for Physics Math)
     identity: AssetIdentity;
     site: TechnicalProjectState['site'];
     penstock: TechnicalProjectState['penstock'];
     specializedState: TechnicalProjectState['specializedState']; // Derived/Mocked Specialized Data
+    fluidIntelligence: TechnicalProjectState['fluidIntelligence']; // NC-10030
 
     // New Batch 6 additions
     financials: TechnicalProjectState['financials'];
@@ -118,6 +153,7 @@ interface TelemetryState {
 
     // NC-300: Unified RCA Results (replaces local DiagnosticRCA state)
     rcaResults: RCAResult[];
+    vibrationForensics: VibrationForensicResult | null;
     selectedDiagnosticId: string | null; // For context-aware UI filtering
     connectionStatus: ConnectionStatus;
 
@@ -210,7 +246,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             mechanical: DEFAULT_TECHNICAL_STATE.mechanical,
             physics: {},
             diagnosis: null,
-
+            fluidIntelligence: DEFAULT_TECHNICAL_STATE.fluidIntelligence,
             identity: DEFAULT_TECHNICAL_STATE.identity,
             site: DEFAULT_TECHNICAL_STATE.site,
             penstock: DEFAULT_TECHNICAL_STATE.penstock,
@@ -227,9 +263,15 @@ export const useTelemetryStore = create<TelemetryState>()(
             magneticData: { eccentricity: 0.25, fluxBalance: 98.5 },
             acousticMatch: 99.2,
             insulationResistance: 1250,
+            vibrationForensics: vibrationForensics.analyzeVibration(
+                Date.now(),
+                DEFAULT_TECHNICAL_STATE.mechanical.rpm,
+                DEFAULT_TECHNICAL_STATE.mechanical.vibration,
+                DEFAULT_TECHNICAL_STATE.mechanical.rpm / 60
+            ),
 
             lastUpdate: new Date().toISOString(),
-            isCommanderMode: true,
+            isCommanderMode: false, // Guest Mode initialization
 
             // NC-300: RCA State
             rcaResults: [],
@@ -250,7 +292,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             },
             sessionLedger: [],
             
-            // Fleet Management - initialized with defaults
+            // Fleet Management - initialized with Guest defaults
             units: {},
             fleet: {},
             gridFrequency: 50.0,
@@ -260,9 +302,6 @@ export const useTelemetryStore = create<TelemetryState>()(
                 generatorEfficiency: 0.95, // η_generator (0-100%)
                 transformerEfficiency: 0.98, // η_transformer (0-100%)
                 transmissionEfficiency: 0.99, // η_transmission (0-100%)
-                statorTemp: 65, // °C
-                rotorFlux: 98.5, // %
-                transformerDGA: 0.02 // %
             },
             
             // TruthJudge Integration - Sensor Validation
@@ -289,8 +328,26 @@ export const useTelemetryStore = create<TelemetryState>()(
             filterType: 'SMA' as FilterType,
             // NC-300: Ledger state
             ledgerState: { dossierHashes: {} },
+
+            // NC-9300: Initial Resonance State
+            resonanceState: { isResonant: false, frequency: 0, amplitude: 0 },
+            
+            // NC-10080: Initial Erosion Status
+            erosion: {
+                bucketThinningRate: 0,
+                severity: 'NEGLIGIBLE',
+                recommendation: 'System Nominal',
+                accumulatedThinningMm: 0
+            },
+
+            // NC-10051: Initial Executive State
+            executiveResult: null,
+
             schemaVersion: SCHEMA_VERSION,
             activeAlarms: [],
+
+            educationMode: false,
+            toggleEducationMode: () => set((state) => ({ educationMode: !state.educationMode })),
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
                 const state = get();
@@ -307,7 +364,13 @@ export const useTelemetryStore = create<TelemetryState>()(
                         console.warn('TruthJudge: Head sensor unreliable, using fallback');
                         payload.hydraulic!.head = state.hydraulic.head;
                     }
-                    set((s) => ({
+
+                // Guest Mode: inject 45 MW so ηtotal is non-zero
+                if (payload.physics && !get().isCommanderMode) {
+                    payload.physics.powerMW = new Decimal(45.0);
+                }
+
+                set((s) => ({
                         ...s,
                         sensorValidation: {
                             ...s.sensorValidation,
@@ -432,57 +495,125 @@ export const useTelemetryStore = create<TelemetryState>()(
                 }
 
                 // Update telemetry with validated values
-                set((state) => ({
-                    hydraulic: { ...state.hydraulic, ...payload.hydraulic },
-                    mechanical: { ...state.mechanical, ...payload.mechanical },
-                    identity: payload.identity ?? state.identity,
-                    site: payload.site ?? state.site,
-                    penstock: payload.penstock ?? state.penstock,
-                    diagnosis: payload.diagnosis ?? state.diagnosis,
-                    financials: payload.financials ?? state.financials,
-                    structural: payload.structural ?? state.structural,
-                    specializedState: payload.specializedState ?? state.specializedState,
-                    unifiedDiagnosis: payload.unifiedDiagnosis ?? state.unifiedDiagnosis,
-                    investigatedComponents: payload.investigatedComponents ?? state.investigatedComponents,
-                    acousticMatch: payload.acousticMatch ?? state.acousticMatch,
-                    insulationResistance: payload.insulationResistance ?? state.insulationResistance,
-                    geodeticData: payload.geodeticData ?? state.geodeticData,
-                    lastUpdate: new Date().toISOString(),
-                    // Not part of TelemetryUpdatePayload: keep existing store state
-                    magneticData: state.magneticData,
-                    isCommanderMode: state.isCommanderMode,
-                    rcaResults: state.rcaResults,
-                    selectedDiagnosticId: state.selectedDiagnosticId,
-                    connectionStatus: state.connectionStatus,
-                    baselineState: state.baselineState,
-                    rcaResultsHistory: state.rcaResultsHistory,
-                    telemetryHistory: {
-                        vibrationX: payload.mechanical?.vibrationX !== undefined ? 
-                            [...state.telemetryHistory.vibrationX, { value: payload.mechanical.vibrationX, timestamp: Date.now() }] : 
-                            state.telemetryHistory.vibrationX,
-                        vibrationY: payload.mechanical?.vibrationY !== undefined ? 
-                            [...state.telemetryHistory.vibrationY, { value: payload.mechanical.vibrationY, timestamp: Date.now() }] : 
-                            state.telemetryHistory.vibrationY,
-                        bearingTemp: payload.mechanical?.bearingTemp !== undefined ? 
-                            [...state.telemetryHistory.bearingTemp, { value: payload.mechanical.bearingTemp, timestamp: Date.now() }] : 
-                            state.telemetryHistory.bearingTemp,
-                        head: payload.hydraulic?.head !== undefined ? 
-                            [...state.telemetryHistory.head, { value: payload.hydraulic.head, timestamp: Date.now() }] : 
-                            state.telemetryHistory.head,
-                        flow: payload.hydraulic?.flow !== undefined ? 
-                            [...state.telemetryHistory.flow, { value: payload.hydraulic.flow, timestamp: Date.now() }] : 
-                            state.telemetryHistory.flow
+                set((state) => {
+                    const nextMechanical = { ...state.mechanical, ...payload.mechanical };
+                    const shouldUpdateVibrationForensics =
+                        payload.mechanical?.rpm !== undefined ||
+                        payload.mechanical?.vibration !== undefined ||
+                        payload.mechanical?.vibrationX !== undefined ||
+                        payload.mechanical?.vibrationY !== undefined;
+
+                    return {
+                        hydraulic: { ...state.hydraulic, ...payload.hydraulic },
+                        mechanical: nextMechanical,
+                        fluidIntelligence: payload.fluidIntelligence ? { ...state.fluidIntelligence, ...payload.fluidIntelligence } : state.fluidIntelligence,
+                        physics: { ...state.physics, ...payload.physics },
+                        identity: payload.identity ?? state.identity,
+                        site: payload.site ?? state.site,
+                        penstock: payload.penstock ?? state.penstock,
+                        diagnosis: payload.diagnosis ?? state.diagnosis,
+                        financials: payload.financials ?? state.financials,
+                        structural: payload.structural ?? state.structural,
+                        specializedState: payload.specializedState ?? state.specializedState,
+                        unifiedDiagnosis: payload.unifiedDiagnosis ?? state.unifiedDiagnosis,
+                        investigatedComponents: payload.investigatedComponents ?? state.investigatedComponents,
+                        acousticMatch: payload.acousticMatch ?? state.acousticMatch,
+                        insulationResistance: payload.insulationResistance ?? state.insulationResistance,
+                        geodeticData: payload.geodeticData ?? state.geodeticData,
+                        resonanceState: payload.resonanceState ?? state.resonanceState, // NC-9300
+                        lastUpdate: new Date().toISOString(),
+                        // Not part of TelemetryUpdatePayload: keep existing store state
+                        magneticData: state.magneticData,
+                        isCommanderMode: state.isCommanderMode,
+                        rcaResults: state.rcaResults,
+                        vibrationForensics: shouldUpdateVibrationForensics
+                            ? vibrationForensics.analyzeVibration(
+                                Date.now(),
+                                nextMechanical.rpm,
+                                nextMechanical.vibration,
+                                nextMechanical.rpm > 0 ? nextMechanical.rpm / 60 : 0
+                            )
+                            : state.vibrationForensics,
+                        selectedDiagnosticId: state.selectedDiagnosticId,
+                        connectionStatus: state.connectionStatus,
+                        baselineState: state.baselineState,
+                        rcaResultsHistory: state.rcaResultsHistory,
+                        telemetryHistory: {
+                            vibrationX: payload.mechanical?.vibrationX !== undefined ? 
+                                [...state.telemetryHistory.vibrationX, { value: payload.mechanical.vibrationX, timestamp: Date.now() }] : 
+                                state.telemetryHistory.vibrationX,
+                            vibrationY: payload.mechanical?.vibrationY !== undefined ? 
+                                [...state.telemetryHistory.vibrationY, { value: payload.mechanical.vibrationY, timestamp: Date.now() }] : 
+                                state.telemetryHistory.vibrationY,
+                            bearingTemp: payload.mechanical?.bearingTemp !== undefined ? 
+                                [...state.telemetryHistory.bearingTemp, { value: payload.mechanical.bearingTemp, timestamp: Date.now() }] : 
+                                state.telemetryHistory.bearingTemp,
+                            head: payload.hydraulic?.head !== undefined ? 
+                                [...state.telemetryHistory.head, { value: payload.hydraulic.head, timestamp: Date.now() }] : 
+                                state.telemetryHistory.head,
+                            flow: payload.hydraulic?.flow !== undefined ? 
+                                [...state.telemetryHistory.flow, { value: payload.hydraulic.flow, timestamp: Date.now() }] : 
+                                state.telemetryHistory.flow
+                        },
+                        // Update Sovereign Pulse with new telemetry
+                        sovereignPulse: ThePulseEngine.calculatePulse(
+                            [state.mechanical.vibrationX || 100], // Asset health from vibration
+                            state.financials?.lostRevenueEuro || 0, // Revenue rate
+                            50, // Market price
+                            state.activeAlarms?.length || 0, // Active alarms
+                            0, // Cyber threat level
+                            0  // Eco violations
+                        )
+                    };
+                });
+                
+                // NC-10051: Run Sovereign Executive Engine Cycle
+                const currentState = get();
+                const executiveInputs = {
+                    vibration: currentState.mechanical.vibrationX || 0,
+                    scadaTimestamp: Date.now(),
+                    sensors: {
+                        a: {
+                            vibration: currentState.mechanical.vibrationX,
+                            temperature: currentState.mechanical.bearingTemp
+                        },
+                        b: {
+                            vibration: currentState.mechanical.vibrationY,
+                            temperature: currentState.mechanical.bearingTemp
+                        }
                     },
-                    // Update Sovereign Pulse with new telemetry
-                    sovereignPulse: ThePulseEngine.calculatePulse(
-                        [state.mechanical.vibrationX || 100], // Asset health from vibration
-                        state.financials?.lostRevenueEuro || 0, // Revenue rate
-                        50, // Market price
-                        state.activeAlarms?.length || 0, // Active alarms
-                        0, // Cyber threat level
-                        0  // Eco violations
-                    )
-                }));
+                    market: {
+                        price: 50, 
+                        fcr: 10,
+                        carbon: 25
+                    },
+                    erosion: currentState.erosion,
+                    ph: 7.0,
+                    turbineType: (currentState.identity.turbineType as any) || 'FRANCIS'
+                };
+                
+                try {
+                    const execResult = sovereignEngine.executeCycle(executiveInputs, { tier: PermissionTier.AUTONOMOUS });
+                    
+                    // Push engine protections to alarms
+                    if (execResult.activeProtections && execResult.activeProtections.length > 0) {
+                         // Only push if not already present to avoid spam
+                         const existingMessages = new Set(currentState.activeAlarms.map(a => a.message));
+                         execResult.activeProtections.forEach(prot => {
+                             if (!existingMessages.has(prot)) {
+                                 currentState.pushAlarm({
+                                     id: `SOV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                                     severity: prot.includes('SHUTDOWN') ? 'CRITICAL' : 'WARNING',
+                                     message: prot
+                                 });
+                             }
+                         });
+                    }
+                    
+                    set({ executiveResult: execResult });
+                } catch (e) {
+                    console.error("Sovereign Executive Engine Error:", e);
+                }
             },
 
             setHydraulic: (hydraulic) => {

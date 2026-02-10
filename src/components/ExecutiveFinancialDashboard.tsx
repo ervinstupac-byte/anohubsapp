@@ -7,7 +7,7 @@ import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle } from 'luc
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
-import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../services/core/FinancialImpactEngine';
 import { useAssetContext } from '../contexts/AssetContext';
 
 interface ExecutiveDashboardProps {

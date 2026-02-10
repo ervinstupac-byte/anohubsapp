@@ -175,6 +175,12 @@ const SCENARIOS: Scenario[] = [
                     efficiency,
                     flow: 12.5 - (progress * 0.8),
                     head: 42 - (progress * 2)
+                },
+                // NC-9300: Simulate Cavitation Resonance (120Hz/240Hz)
+                resonanceState: {
+                    isResonant: progress > 0.4,
+                    frequency: progress > 0.7 ? 240 : 120,
+                    amplitude: progress > 0.4 ? Math.min(progress, 0.8) : 0
                 }
             });
 
@@ -320,7 +326,8 @@ export const ScenarioControl: React.FC<{ className?: string }> = ({ className = 
                 efficiency: 92,
                 flow: 12.5,
                 head: 42
-            }
+            },
+            resonanceState: { isResonant: false, frequency: 0, amplitude: 0 }
         });
     };
 

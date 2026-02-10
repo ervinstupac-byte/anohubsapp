@@ -1,4 +1,5 @@
 import math
+from typing import Dict, Any, Optional
 
 class BidEvaluator:
     """
@@ -7,29 +8,40 @@ class BidEvaluator:
     """
     
     # Theoretical maximum efficiency limits (%) based on physics & empirical data (IEC 60041)
-    THEORETICAL_LIMITS = {
+    THEORETICAL_LIMITS: Dict[str, float] = {
         'kaplan': 95.0,
         'francis': 96.5,
         'pelton': 92.5
     }
 
-    def __init__(self, net_head_m: float, design_flow_cms: float):
+    def __init__(self, net_head_m: float, design_flow_cms: float) -> None:
         """
         Initialize with site-specific partials.
-        :param net_head_m: Net Head (Hn) in meters
-        :param design_flow_cms: Design Flow (Q) in cubic meters per second
+        
+        Args:
+            net_head_m (float): Net Head (Hn) in meters
+            design_flow_cms (float): Design Flow (Q) in cubic meters per second
         """
         self.hn = net_head_m
         self.q = design_flow_cms
         # P = rho * g * Q * H * eta_approx (assuming 90% for rough calc)
-        self.approx_power_kw = 1000 * 9.81 * self.q * self.hn * 0.90
+        self.approx_power_kw: float = 1000 * 9.81 * self.q * self.hn * 0.90
 
-    def evaluate_offer(self, manufacturer: str, turbine_type: str, offered_efficiency: float, price_eur: float):
+    def evaluate_offer(self, manufacturer: str, turbine_type: str, offered_efficiency: float, price_eur: float) -> Dict[str, Any]:
         """
-        Evaluates a single bid.
+        Evaluates a single bid against physical constants and economic constraints.
+
+        Args:
+            manufacturer (str): Name of the vendor.
+            turbine_type (str): Type of turbine (Kaplan, Francis, Pelton).
+            offered_efficiency (float): Claimed efficiency percentage (0-100).
+            price_eur (float): Total cost in Euros.
+
+        Returns:
+            Dict[str, Any]: A report containing status, score, and warnings.
         """
         turbine_type = turbine_type.lower()
-        report = {
+        report: Dict[str, Any] = {
             "manufacturer": manufacturer,
             "status": "PENDING",
             "warnings": [],

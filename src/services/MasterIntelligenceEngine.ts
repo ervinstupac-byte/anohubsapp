@@ -1,9 +1,9 @@
 import { aiPredictionService, SynergeticRisk, RULEstimate, IncidentPattern, PrescriptiveAction } from './AIPredictionService';
+import { idAdapter } from '../utils/idAdapter';
 import { AcousticFingerprintingService } from './AcousticFingerprintingService';
 import { SpecialMeasurementsService, CorrelationResult } from './SpecialMeasurementsService';
 import { DynamicToleranceCalculator, TurbinePhysics } from './DynamicToleranceCalculator';
 import { OilAnalysisService } from './OilAnalysisService';
-import idAdapter from '../utils/idAdapter';
 import { CavitationErosionService } from './CavitationErosionService';
 import { StructuralIntegrityService } from './StructuralIntegrityService';
 import { HistoricalTrendAnalyzer } from './HistoricalTrendAnalyzer';
@@ -621,7 +621,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             foundationDisplacement: latest.specialized?.geodeticData?.settlement || 0
         };
 
-        const numericId = idAdapter.toNumber(asset.id);
+        const numericId = idAdapter ? idAdapter.toNumber(asset.id) : Number(asset.id) || 0;
         if (numericId === null) {
             return {
                 synergeticRisks: [],

@@ -48,7 +48,7 @@ export const CenturyROIChart: React.FC = () => {
         let mounted = true;
         (async () => {
             try {
-                const mod = await import('../../services/FinancialImpactEngine');
+                const mod = await import('../../services/core/FinancialImpactEngine');
                 if (!mounted) return;
                 if (mod && typeof mod.FinancialImpactEngine !== 'undefined') {
                     const fakeState: any = {

@@ -22,7 +22,7 @@ export type SovereignViewShellConfig = {
   panels: SovereignViewShellPanel[];
 };
 
-export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig }> = ({ config }) => {
+export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } & { children?: React.ReactNode }> = ({ config, children }) => {
   const HeaderIcon = config.icon;
 
   return (
@@ -63,6 +63,11 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig }> 
           );
         })}
       </div>
+      {children && (
+        <div className="mt-6">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

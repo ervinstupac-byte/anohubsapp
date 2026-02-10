@@ -65,15 +65,31 @@
     "src/demos/GrandFinaleDemo.ts",
     "src/demos/GuardianMentorDemo.ts",
     "src/demos/IntelligentLubricationDemo.ts",
-    "src/demos/KnowledgeSpongeDemo.ts",
-    "verifiedHighValueCore": [
+    "src/demos/KnowledgeSpongeDemo.ts"
+  ],
+  "verifiedHighValueCore": [
     "src/core/PhysicsEngine.ts",
     "src/core/TechnicalSchema.ts",
     "src/features/telemetry/store/useTelemetryStore.ts",
     "src/services/AIPredictionService.ts",
     "src/features/physics-core/ExpertDiagnosisEngine.ts",
-    "src/services/ThrustBearingMaster.ts"
+    "src/services/ThrustBearingMaster.ts",
+    "src/services/ExperienceLedgerService.ts",
+    "src/features/maintenance/logic/Predictor.ts",
+    "src/services/SystemBoundaryAnalyzer.ts",
+    "src/services/GridStabilityGuardian.ts",
+    "src/services/SensorIntegritySentinel.ts",
+    "src/services/SovereignArchitectReflector.ts",
+    "src/demos/CaseStudy_NoisyRunner.ts",
+    "src/services/SovereignGlobalState.ts",
+    "src/features/physics-core/PhysicsCalculations.logic.ts",
+    "src/services/FinancialImpactEngine.ts",
+    "src/features/maintenance/logic/PredictiveAnalytics.ts",
+    "src/features/business/logic/FinancialCalculator.ts",
+    "src/features/reporting/utils/PDFRenderer.ts",
+    "src/components/dashboard/ExecutiveWarRoom.tsx"
   ],
+  "additionalUnknowns": [
     "src/demos/LegacyAuditDemo.ts",
     "src/demos/LegacySealDemo.ts",
     "src/demos/MolecularSentinelDemo.ts",

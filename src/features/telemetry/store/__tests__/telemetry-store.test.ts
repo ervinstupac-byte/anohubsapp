@@ -21,6 +21,16 @@ describe('useTelemetryStore', () => {
     expect(telemetryHistory.vibrationX.length).toBeGreaterThanOrEqual(2);
   });
 
+  it('updateTelemetry computes vibration forensics verdict', () => {
+    const { updateTelemetry } = useTelemetryStore.getState() as any;
+    updateTelemetry({ mechanical: { rpm: 600, vibration: 12, vibrationX: 12, vibrationY: 0 } });
+    const { vibrationForensics } = useTelemetryStore.getState() as any;
+    expect(vibrationForensics).toBeTruthy();
+    expect(vibrationForensics.pattern).toBe('BEARING_WEAR');
+    expect(vibrationForensics.severity).toBe('CRITICAL');
+    expect(Array.isArray(vibrationForensics.recommendations)).toBe(true);
+  });
+
   it('high vibration triggers RCA results', () => {
     const { updateTelemetry } = useTelemetryStore.getState() as any;
     updateTelemetry({ mechanical: { rpm: 600, vibrationX: 9.0 } });

@@ -7,11 +7,19 @@ import { FinancialHealthPanel } from './FinancialHealthPanel';
 import { SovereignComponentTree } from './SovereignComponentTree';
 import { StressTestButton } from './StressTestButton';
 import { StrategicConsultantView } from './StrategicConsultantView';
-import { Zap, TrendingDown, Activity, AlertCircle, Shield, Sliders, Calculator } from 'lucide-react';
+import { GreenHydrogenPanel } from './GreenHydrogenPanel';
+import { EmergencyOverlay } from '../ui/EmergencyOverlay';
+import { ResonanceAudioSystem } from '../ui/ResonanceAudioSystem';
+import { AudioSpectrogram } from '../forensics/AudioSpectrogram';
+import { VisionAnalyzer } from '../forensics/VisionAnalyzer';
+import { KillSwitch } from '../forensics/KillSwitch';
+import { SystemHealth } from './SystemHealth';
+import { Zap, TrendingDown, Activity, AlertCircle, Shield, Sliders, Calculator, Droplets, Layout, Microscope, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
 import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 import { PulseArchiver } from '../../services/PulseArchiver';
+import SystemBoundaryAnalyzer from '../../services/SystemBoundaryAnalyzer';
 
 export const MasterSovereignDashboard: React.FC = () => {
     const { 
@@ -24,14 +32,61 @@ export const MasterSovereignDashboard: React.FC = () => {
         isCommanderMode,
         toggleCommanderMode,
         setHydraulic,
-        setMechanical
+        setMechanical,
+        executiveResult,
+        educationMode,
+        toggleEducationMode
     } = useTelemetryStore();
 
     // Commander Mode Setpoint State
     const [flowSetpoint, setFlowSetpoint] = useState(hydraulic?.flow || 42);
     const [loadSetpoint, setLoadSetpoint] = useState(mechanical?.rpm || 500);
     const [predictedPulse, setPredictedPulse] = useState<number | null>(null);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'strategic'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'strategic' | 'energy'>('dashboard');
+    const [isForensicMode, setIsForensicMode] = useState(false);
+    const [boundaryViolation, setBoundaryViolation] = useState<string | null>(null);
+    
+    const boundaryAnalyzer = new SystemBoundaryAnalyzer();
+
+    // NC-10070: KillSwitch Activation
+    const isShutdown = executiveResult?.activeProtections?.some(p => p.includes('SHUTDOWN')) || false;
+
+    // NC-9200: Auto-Layout Logic
+    const launchTacticalLayout = () => {
+        const screenW = window.screen.availWidth;
+        const screenH = window.screen.availHeight;
+        
+        // Layout: Scada (Left 50%), Finance (Top-Right), Forensics (Bottom-Right)
+        const scadaW = Math.floor(screenW * 0.5);
+        const sideW = screenW - scadaW;
+        const sideH = Math.floor(screenH / 2);
+
+        window.open('#/detach/scada?focus=true', 'detach_scada', `width=${scadaW},height=${screenH},left=0,top=0`);
+        window.open('#/detach/financial', 'detach_financial', `width=${sideW},height=${sideH},left=${scadaW},top=0`);
+        window.open('#/detach/forensics', 'detach_forensics', `width=${sideW},height=${sideH},left=${scadaW},top=${sideH}`);
+    };
+
+    // Check if setpoint is within safe boundaries
+    const checkSetpointBoundaries = (flow: number, rpm: number) => {
+        // Define safe boundaries
+        const diagnosis = {
+            entries: [
+                { type: 'flow', value: flow, limit: 80, name: 'Flow Rate' },
+                { type: 'rpm', value: rpm, limit: 600, name: 'RPM' }
+            ],
+            automatedActions: flow > 80 || rpm > 600 ? ['BOUNDARY_WARNING'] : []
+        };
+        
+        const assessment = boundaryAnalyzer.assessConfidence(diagnosis);
+        
+        if (assessment.score < 60) {
+            setBoundaryViolation(assessment.warning || 'Boundary violation detected');
+        } else {
+            setBoundaryViolation(null);
+        }
+        
+        return assessment.score >= 60;
+    };
 
     // Calculate predicted pulse when setpoints change
     React.useEffect(() => {
@@ -46,6 +101,9 @@ export const MasterSovereignDashboard: React.FC = () => {
     // Calculate predicted pulse when setpoints change
     React.useEffect(() => {
         if (isCommanderMode) {
+            // Check boundaries when setpoints change
+            checkSetpointBoundaries(flowSetpoint, loadSetpoint);
+            
             const pulse = ThePulseEngine.calculatePulse(
                 [mechanical?.vibrationX || 100], // Asset health
                 (flowSetpoint / 50) * 10000, // Revenue estimate
@@ -130,11 +188,12 @@ export const MasterSovereignDashboard: React.FC = () => {
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold text-white mb-2">Master Sovereign Dashboard</h1>
                     <div className="flex items-center gap-3">
+                        <SystemHealth />
                         {/* Strategic View Tab */}
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => setActiveTab(activeTab === 'dashboard' ? 'strategic' : 'dashboard')}
+                            onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
                                 activeTab === 'strategic' 
                                     ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' 
@@ -142,10 +201,55 @@ export const MasterSovereignDashboard: React.FC = () => {
                             }`}
                         >
                             <Calculator className="w-4 h-4" />
-                            {activeTab === 'strategic' ? 'Dashboard' : 'Strategic'}
+                            Strategic
                         </motion.button>
 
-                        {/* Commander Mode Toggle */}
+                        {/* Energy Hub Tab */}
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                                activeTab === 'energy' 
+                                    ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' 
+                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            }`}
+                        >
+                            <Droplets className="w-4 h-4" />
+                            Energy Hub
+                        </motion.button>
+
+                        {/* NC-10070: Forensic Mode Toggle */}
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => setIsForensicMode(!isForensicMode)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                                isForensicMode 
+                                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' 
+                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            }`}
+                        >
+                            <Microscope className="w-4 h-4" />
+                            {isForensicMode ? 'FORENSICS ACTIVE' : 'FORENSICS'}
+                        </motion.button>
+
+                        {/* NC-11400: Education Mode Toggle */}
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={toggleEducationMode}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
+                                educationMode 
+                                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/50' 
+                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            }`}
+                        >
+                            <BookOpen className="w-4 h-4" />
+                            {educationMode ? 'EXPERT GUIDE ON' : 'EXPERT GUIDE'}
+                        </motion.button>
+
+                        {/* Commander Mode Toggle - ALWAYS VISIBLE */}
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
@@ -160,6 +264,18 @@ export const MasterSovereignDashboard: React.FC = () => {
                             {isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}
                         </motion.button>
 
+                        {/* NC-9200: Tactical Layout Launcher */}
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={launchTacticalLayout}
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/30"
+                            title="Open all modules across screens"
+                        >
+                            <Layout className="w-4 h-4" />
+                            TACTICAL MAP
+                        </motion.button>
+
                         <StressTestButton />
                     </div>
                 </div>
@@ -167,12 +283,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                     <span>Asset: {identity?.assetName || 'Unknown'}</span>
                     <span>•</span>
                     <span>Last Update: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : 'Never'}</span>
-                    {isCommanderMode && (
-                        <>
-                            <span>•</span>
-                            <span className="text-amber-400 font-semibold">COMMANDER CONTROL ACTIVE</span>
-                        </>
-                    )}
+                    <span>•</span>
+                    <span className={isCommanderMode ? 'text-amber-400 font-semibold' : 'text-slate-500'}>
+                        {isCommanderMode ? 'COMMANDER CONTROL ACTIVE' : 'GUEST MODE'}
+                    </span>
                 </div>
             </div>
 
@@ -184,6 +298,17 @@ export const MasterSovereignDashboard: React.FC = () => {
                     exit={{ opacity: 0, y: -20 }}
                 >
                     <StrategicConsultantView />
+                </motion.div>
+            )}
+
+            {/* Energy Hub View */}
+            {activeTab === 'energy' && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                >
+                    <GreenHydrogenPanel />
                 </motion.div>
             )}
 
@@ -203,7 +328,23 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <div className="flex items-center gap-3 mb-4">
                                         <Sliders className="w-5 h-5 text-amber-400" />
                                         <h2 className="text-xl font-bold text-amber-400">Commander Setpoint Control</h2>
+                                        {boundaryViolation && (
+                                            <div className="px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-full animate-pulse">
+                                                <span className="text-xs text-red-400 font-medium">⚠ BOUNDARY VIOLATION</span>
+                                            </div>
+                                        )}
                                     </div>
+
+                                    {/* Boundary Violation Warning */}
+                                    {boundaryViolation && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
+                                        >
+                                            <p className="text-sm text-red-400">{boundaryViolation}</p>
+                                        </motion.div>
+                                    )}
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                         {/* Flow Setpoint Slider */}
@@ -367,14 +508,20 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </div>
                         </div>
                         <div className="h-96">
-                            <ScadaCore />
+                            <ScadaCore forensicMode={isForensicMode} />
                         </div>
                     </GlassCard>
                 </div>
 
-                {/* FinancialHealthPanel - 1 column */}
+                {/* FinancialHealthPanel or VisionAnalyzer (Forensic Mode) - 1 column */}
                 <div className="lg:col-span-1">
-                    <FinancialHealthPanel />
+                    {isForensicMode ? (
+                         <div className="h-96">
+                            <VisionAnalyzer />
+                         </div>
+                    ) : (
+                        <FinancialHealthPanel />
+                    )}
                 </div>
             </div>
 
@@ -384,6 +531,57 @@ export const MasterSovereignDashboard: React.FC = () => {
             </div>
                 </>
             )}
+
+            <EmergencyOverlay />
+            <ResonanceAudioSystem />
+
+            {/* NC-10070: KillSwitch Global Overlay */}
+            <AnimatePresence>
+                {isShutdown && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-8"
+                    >
+                        <div className="max-w-2xl w-full text-center space-y-8">
+                            <div className="animate-pulse">
+                                <Shield className="w-24 h-24 text-red-500 mx-auto mb-6" />
+                                <h1 className="text-5xl font-black text-white tracking-tighter mb-4">
+                                    SYSTEM LOCKDOWN
+                                </h1>
+                                <p className="text-xl text-red-400 font-mono">
+                                    SOVEREIGN EXECUTIVE ENGINE HAS TRIGGERED PROTOCOL 9
+                                </p>
+                            </div>
+
+                            <div className="bg-red-950/30 border border-red-500/50 rounded-xl p-6 text-left">
+                                <h3 className="text-red-400 font-bold mb-2 uppercase tracking-widest text-sm">Active Protections</h3>
+                                <ul className="space-y-2">
+                                    {executiveResult?.activeProtections.map((p, i) => (
+                                        <li key={i} className="text-white font-mono flex items-center gap-2">
+                                            <AlertCircle className="w-4 h-4 text-red-500" />
+                                            {p}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="pt-8">
+                                <KillSwitch isActive={true} onEngage={() => {}} />
+                            </div>
+
+                            <p className="text-slate-500 text-xs font-mono mt-8">
+                                MANUAL OVERRIDE REQUIRES PHYSICAL KEY INSERTION
+                            </p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            {/* Watermark */}
+            <div className="fixed bottom-4 right-4 text-[10px] text-slate-700 font-mono pointer-events-none z-0">
+                SOVEREIGN LIVING SYSTEM • ACTIVE • NC-11405
+            </div>
         </div>
     );
 };

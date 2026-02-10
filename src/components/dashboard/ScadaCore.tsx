@@ -1,16 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { Activity, AlertTriangle } from 'lucide-react';
+import { Activity, AlertTriangle, ExternalLink } from 'lucide-react';
 import { SafetyInterlockEngine } from '../../services/SafetyInterlockEngine';
 import { EventLogger } from '../../services/EventLogger';
 import { useProjectConfigStore } from '../../features/config/ProjectConfigStore';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from 'recharts';
 import { computeEfficiencyFromHillChart } from '../../features/physics-core/UnifiedPhysicsCore';
 import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
 import { VortexDiagnostic } from '../../services/VortexDiagnostic';
-import { FinancialImpactEngine } from '../../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../../services/core/FinancialImpactEngine';
+import { PhysicsMathService } from '../../services/core/PhysicsMathService';
+import { LubeStatus } from './LubeStatus';
+import { Eye, EyeOff } from 'lucide-react';
+import { SmartTooltip } from '../ui/SmartTooltip';
 
-export const ScadaCore: React.FC = () => {
+export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }> = ({ focusMode = false, forensicMode = false }) => {
   const store = useTelemetryStore() as any;
   const cfgStore = useProjectConfigStore();
   const peltonCfg = cfgStore.getConfig('PELTON');
@@ -35,10 +39,13 @@ export const ScadaCore: React.FC = () => {
 
   const [selectedVariant, setSelectedVariant] = useState<string>('francis_vertical');
   const [family, setFamily] = useState<'FRANCIS' | 'KAPLAN' | 'PELTON' | 'BANKI'>('FRANCIS');
+  const [hoopStress, setHoopStress] = useState<number | null>(null);
   const [hotspot, setHotspot] = useState<null | { key: 'bearing' | 'stator' | 'rotor' | 'head' | 'flow'; label: string }>(null);
   const [interlock, setInterlock] = useState<{ tripActive: boolean; tripReason: string | null; actionRequired: 'NONE' | 'TRIP' | 'BLOCK_START' }>({
     tripActive: false, tripReason: null, actionRequired: 'NONE'
   });
+  const [showThermalOverlay, setShowThermalOverlay] = useState(false);
+
   const vibrationTotal = useMemo(() => {
     const vx = Number(mechanical?.vibrationX ?? mechanical?.vibration ?? 0);
     const vy = Number(mechanical?.vibrationY ?? 0);
@@ -128,6 +135,21 @@ export const ScadaCore: React.FC = () => {
     const toKpa = (p: number) => p / 1000;
     return { pStaticKpa: toKpa(pStaticPa), pDynamicKpa: toKpa(pDynamicPa) };
   }, [headM, flowM3s, family]);
+
+  const surgePressureBar = useMemo(() => {
+    const fromDecimal = Number(physics?.surgePressure?.toNumber?.() ?? 0);
+    const fromNumbers = Number(physics?.surgePressureBar ?? physics?.waterHammerPressureBar ?? physics?.surgePressure ?? 0);
+    return Number.isFinite(fromDecimal) && fromDecimal !== 0 ? fromDecimal : fromNumbers;
+  }, [physics?.surgePressure, physics?.surgePressureBar, physics?.waterHammerPressureBar, physics?.surgePressure]);
+
+  useEffect(() => {
+    // NC-8001: Removed fallbacks to expose missing data bugs
+    const diameter = Number(store?.penstock?.diameter);
+    const thickness = Number(store?.penstock?.wallThickness);
+    const result = PhysicsMathService.calculateHoopStress(headM, surgePressureBar, diameter, thickness);
+    // Direct assignment - if hs is NaN, let the UI handle (or crash on) it
+    setHoopStress(result.stressMPa);
+  }, [headM, surgePressureBar, store?.penstock?.diameter, store?.penstock?.wallThickness]);
   const variantCfg = useMemo(() => cfgStore.getVariantConfig(selectedVariant) ?? cfgStore.getConfig(family as any), [cfgStore, selectedVariant, family]);
   const runnerD2 = Number(variantCfg?.runnerDiameterD2 ?? 0);
   const runnerArea = runnerD2 > 0 ? Math.PI * (runnerD2 * runnerD2) / 4 : 0;
@@ -245,20 +267,42 @@ export const ScadaCore: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-12 gap-6 p-6">
       <div className="col-span-8 bg-[#111111] border border-[#222222] rounded-xl relative overflow-hidden">
+        {!focusMode && (
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-emerald-400" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mimic Diagram</span>
           </div>
-          <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta*100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>
+          <div className="flex items-center gap-4">
+            <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta*100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>
+            <button 
+                onClick={() => window.open('#/detach/scada', '_blank', 'width=1000,height=800,menubar=no,status=no')}
+                className="text-slate-500 hover:text-cyan-400 transition-colors"
+                title="Detach Module"
+            >
+                <ExternalLink className="w-4 h-4" />
+            </button>
+            {forensicMode && (
+                <button
+                    onClick={() => setShowThermalOverlay(!showThermalOverlay)}
+                    className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-colors ${showThermalOverlay ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
+                >
+                    {showThermalOverlay ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                    Thermal Stress
+                </button>
+            )}
+          </div>
         </div>
+        )}
 
+        {!focusMode && (
         <div className="px-6 py-1">
           {family === 'PELTON' && <div className="text-[10px] font-mono text-slate-400">Pelton Wheel</div>}
           {family === 'KAPLAN' && <div className="text-[10px] font-mono text-slate-400">Inline Bulb</div>}
           {family === 'FRANCIS' && <div className="text-[10px] font-mono text-slate-400">Spiral Case</div>}
           {family === 'BANKI' && <div className="text-[10px] font-mono text-slate-400">Crossflow Runner</div>}
         </div>
+        )}
 
         <div className="p-6">
           <style>
@@ -291,6 +335,11 @@ export const ScadaCore: React.FC = () => {
                 <stop offset="0%" stopColor="#4a5568" />
                 <stop offset="100%" stopColor="#2d3748" />
               </linearGradient>
+              <radialGradient id="thermalStressGradient">
+                <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
+                <stop offset="60%" stopColor="#eab308" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.1" />
+              </radialGradient>
               <radialGradient id="turbineGradient">
                 <stop offset="0%" stopColor="#2d3748" />
                 <stop offset="100%" stopColor="#1a202c" />
@@ -323,19 +372,31 @@ export const ScadaCore: React.FC = () => {
                 {/* Professional Francis Turbine Schematic - ISA 101 Style */}
                 
                 {/* Penstock */}
-                <g className="equipment-shadow">
-                  <rect x="60" y="140" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                  <line x1="60" y1="160" x2="260" y2="160" className="flow-path" 
-                        style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                  <text x="160" y="185" textAnchor="middle" className="sensor-label" fill="#cbd5e1">PENSTOCK</text>
-                </g>
-                
-                {/* Spiral Case */}
-                <g className="equipment-shadow">
-                  <path d="M 280 120 Q 380 100 460 140 T 580 180 L 580 220 Q 500 240 420 220 T 280 180 Z" 
-                        fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                  <text x="430" y="175" textAnchor="middle" className="sensor-label" fill="#cbd5e1">SPIRAL CASE</text>
-                </g>
+                        <g className="equipment-shadow">
+                          <rect x="60" y="140" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
+                          <line x1="60" y1="160" x2="260" y2="160" className="flow-path" 
+                                style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                          <foreignObject x="60" y="185" width="200" height="30">
+                              <div className="text-center">
+                                  <SmartTooltip term="Hoop Stress">
+                                      <span className="sensor-label" style={{ fill: '#cbd5e1' }}>PENSTOCK</span>
+                                  </SmartTooltip>
+                              </div>
+                          </foreignObject>
+                        </g>
+                        
+                        {/* Spiral Case */}
+                        <g className="equipment-shadow">
+                          <path d="M 280 120 Q 380 100 460 140 T 580 180 L 580 220 Q 500 240 420 220 T 280 180 Z" 
+                                fill={showThermalOverlay ? "url(#thermalStressGradient)" : "url(#metalGradient)"} stroke={showThermalOverlay ? "#ef4444" : "#2d3748"} strokeWidth="2" />
+                          <foreignObject x="330" y="175" width="200" height="30">
+                              <div className="text-center">
+                                  <SmartTooltip term="Joukowski Surge">
+                                      <span className="sensor-label" style={{ fill: '#cbd5e1' }}>SPIRAL CASE</span>
+                                  </SmartTooltip>
+                              </div>
+                          </foreignObject>
+                        </g>
                 
                 {/* Runner Assembly */}
                 <g transform="translate(600,300)" className="equipment-shadow">
@@ -359,15 +420,41 @@ export const ScadaCore: React.FC = () => {
                   <circle cx="0" cy="0" r="90" fill="none" stroke="#10b981" strokeWidth="1" 
                           strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
                           style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
+                  
+                  <foreignObject x="-50" y="-15" width="100" height="30">
+                    <div className="text-center">
+                      <SmartTooltip term="Specific Speed">
+                         <span className="sensor-label" style={{ fill: '#cbd5e1', textShadow: '0 0 2px black', fontWeight: 'bold' }}>RUNNER</span>
+                      </SmartTooltip>
+                    </div>
+                  </foreignObject>
                 </g>
                 
                 {/* Draft Tube */}
                 <g className="equipment-shadow">
                   <path d="M 560 380 L 540 450 L 660 450 L 640 380 Z" 
                         fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                  <text x="600" y="420" textAnchor="middle" className="sensor-label" fill="#cbd5e1">DRAFT TUBE</text>
+                  <foreignObject x="540" y="405" width="120" height="30">
+                    <div className="text-center">
+                      <SmartTooltip term="NPSH">
+                        <span className="sensor-label" style={{ fill: '#cbd5e1' }}>DRAFT TUBE</span>
+                      </SmartTooltip>
+                    </div>
+                  </foreignObject>
                 </g>
-                
+
+                {/* Sediment Monitor */}
+                <g className="equipment-shadow">
+                   <rect x="700" y="380" width="100" height="28" rx="4" className="digital-tag" />
+                   <foreignObject x="700" y="380" width="100" height="28">
+                     <div className="flex items-center justify-center h-full">
+                       <SmartTooltip term="Erosion Rate">
+                         <span className="sensor-label" style={{ fill: '#fca5a5', fontSize: '10px' }}>EROSION MON</span>
+                       </SmartTooltip>
+                     </div>
+                   </foreignObject>
+                </g>
+
                 {/* Generator */}
                 <g transform="translate(600,120)" className="equipment-shadow">
                   <rect x="-60" y="-30" width="120" height="60" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
@@ -860,20 +947,32 @@ export const ScadaCore: React.FC = () => {
           <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest mb-2">Manometer</div>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg">
-              <div className="text-xs text-slate-400 mb-1">P_static</div>
+              <div className="text-xs font-mono text-slate-300 mb-1">Hoop Stress</div>
+              <div className="text-2xl font-black text-white">{hoopStress !== null ? hoopStress.toFixed(2) : 'N/A'} MPa</div>
+              <div className="mt-2 h-24 bg-slate-800 rounded relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 right-0 bg-emerald-500" style={{ height: `${Math.max(5, Math.min(100, hoopStress !== null ? hoopStress / 10 : 0))}%` }} />
+              </div>
+            </div>
+            <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg">
+              <div className="text-xs font-mono text-slate-300 mb-1">P_static</div>
               <div className="text-2xl font-black text-white">{pressures.pStaticKpa.toFixed(1)}<span className="text-xs text-slate-400 ml-1">kPa</span></div>
               <div className="mt-2 h-24 bg-slate-800 rounded relative overflow-hidden">
                 <div className="absolute bottom-0 left-0 right-0 bg-emerald-500" style={{ height: `${Math.max(5, Math.min(100, pressures.pStaticKpa / (family === 'PELTON' ? 30 : 10)))}%` }} />
               </div>
             </div>
             <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg">
-              <div className="text-xs text-slate-400 mb-1">P_dynamic</div>
+              <div className="text-xs font-mono text-slate-300 mb-1">P_dynamic</div>
               <div className="text-2xl font-black text-white">{pressures.pDynamicKpa.toFixed(1)}<span className="text-xs text-slate-400 ml-1">kPa</span></div>
               <div className="mt-2 h-24 bg-slate-800 rounded relative overflow-hidden">
                 <div className="absolute bottom-0 left-0 right-0 bg-cyan-500" style={{ height: `${Math.max(5, Math.min(100, pressures.pDynamicKpa / (family === 'PELTON' ? 15 : 5)))}%` }} />
               </div>
             </div>
           </div>
+        </div>
+
+        <div>
+          <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest mb-2">Lubrication System</div>
+          <LubeStatus />
         </div>
       </div>
       {/* Alarm banner */}

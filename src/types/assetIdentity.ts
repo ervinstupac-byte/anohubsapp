@@ -170,6 +170,9 @@ export interface FluidIntelligence {
         waterContentPPM?: number; // ppm
         tan?: number;           // mgKOH/g
         viscosityCSt?: number;  // cSt @ 40C
+        oilPressureBar?: number; // NC-10030
+        oilTemperatureC?: number; // NC-10030
+        oilLevelPercent?: number; // NC-10030
     };
 
     filterSystem: {
@@ -178,6 +181,16 @@ export interface FluidIntelligence {
         deltaPBar: number;
         deltaPAlarmBar: number;
         filterClogged: boolean;
+        inletPressureBar?: number; // NC-10030
+        outletPressureBar?: number; // NC-10030
+    };
+
+    coolingSystem?: { // NC-10030
+        coolingWaterInletTempC: number;
+        coolingWaterOutletTempC: number;
+        oilInletTempC: number;
+        oilOutletTempC: number;
+        coolingWaterFlowLmin: number;
     };
 
     temperatureCorrelation: {

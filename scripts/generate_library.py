@@ -1,49 +1,60 @@
 import os
+from typing import List, Dict, Union
 
 base_dir = r"C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\public\archive"
 output_file = r"C:\Users\Home\OneDrive\getting started\Documents\GitHub\anohubsapp\src\data\knowledge\DossierLibrary.ts"
 
-categories = {
+# Category mapping based on directory structure
+categories: Dict[str, str] = {
     "case-studies": "Case Studies",
     "insights": "Technical Insights",
     "protocol": "Maintenance Protocols",
     "Turbine_Friend": "Turbine Friend Dossiers"
 }
 
-files = []
+files: List[Dict[str, str]] = []
 
-for root, dirs, filenames in os.walk(base_dir):
-    for f in filenames:
-        if f.endswith(".html"):
-            rel_path = os.path.relpath(os.path.join(root, f), base_dir).replace("\\", "/")
-            
-            category = "Turbine Friend Dossiers"
-            for key, val in categories.items():
-                if key in rel_path:
-                    category = val
-                    break
-            
-            # Create a more descriptive justification
-            name = rel_path.split("/")[-2] if "/" in rel_path else rel_path
-            name = name.replace("_", " ").replace("-", " ").title()
-            if name == "Index.Html" or name == "Index":
-                name = rel_path.split("/")[-1]
-            
-            files.append({
-                "path": rel_path,
-                "justification": f"Validated engineering data for {name}.",
-                "category": category
-            })
+def scan_directory(directory: str) -> None:
+    """
+    Recursively scans the directory for HTML files and classifies them.
+    
+    Args:
+        directory (str): The root directory to scan.
+    """
+    for root, dirs, filenames in os.walk(directory):
+        for f in filenames:
+            if f.endswith(".html"):
+                rel_path = os.path.relpath(os.path.join(root, f), directory).replace("\\", "/")
+                
+                category = "Turbine Friend Dossiers"
+                for key, val in categories.items():
+                    if key in rel_path:
+                        category = val
+                        break
+                
+                # Create a more descriptive justification
+                name = rel_path.split("/")[-2] if "/" in rel_path else rel_path
+                name = name.replace("_", " ").replace("-", " ").title()
+                if name == "Index.Html" or name == "Index":
+                    name = rel_path.split("/")[-1]
+                
+                files.append({
+                    "path": rel_path,
+                    "justification": f"Validated engineering data for {name}.",
+                    "category": category
+                })
+
+scan_directory(base_dir)
 
 # Adjusting counts to match UI
-target_distribution = {
+target_distribution: Dict[str, int] = {
     "Case Studies": 105,
     "Technical Insights": 150,
     "Maintenance Protocols": 220,
     "Turbine Friend Dossiers": 379
 }
 
-expanded_files = []
+expanded_files: List[Dict[str, str]] = []
 
 for cat_name, target in target_distribution.items():
     cat_files = [f for f in files if f['category'] == cat_name]

@@ -39,7 +39,7 @@ vi.mock('../../../services/AIPredictionService', () => ({
 }));
 
 // Mock FinancialImpactEngine
-vi.mock('../../../services/FinancialImpactEngine', () => ({
+vi.mock('../../../services/core/FinancialImpactEngine', () => ({
     FinancialImpactEngine: {
         calculateImpact: () => ({ hourlyLossEuro: 120, projection30DayEuro: 120 * 24 * 30, maintenanceBufferEuro: 25000 })
     }

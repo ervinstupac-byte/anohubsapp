@@ -1,15 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Info, CheckCircle, AlertTriangle, FileImage } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 export const VisionAnalyzer: React.FC = () => {
+    const { erosion, updateTelemetry } = useTelemetryStore();
     const [image, setImage] = useState<string | null>(null);
     const [analysisResult, setAnalysisResult] = useState<any>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+    // NC-10080: React to live erosion data
+    useEffect(() => {
+        // If erosion is HIGH or EXTREME, auto-trigger a visual warning
+        if (erosion.severity === 'HIGH' || erosion.severity === 'EXTREME') {
+             // Only auto-diagnose if we aren't already looking at something else
+             if (!image) {
+                 setImage('auto-erosion');
+                 setAnalysisResult({
+                    diagnosis: 'ABRASIVE EROSION',
+                    confidence: 98, // High confidence because it comes from telemetry
+                    texture: `High Sediment Wear Rate: ${(erosion.bucketThinningRate || 0).toFixed(0)} µm/yr`,
+                    advice: erosion.recommendation || 'Check nozzles immediately.'
+                });
+             }
+        }
+    }, [erosion.severity, erosion.bucketThinningRate, erosion.recommendation, image]);
+
     // Mock Simulation Logic
-    const simulateAnalysis = (type: 'PITTED' | 'POLISHED') => {
+    const simulateAnalysis = (type: 'PITTED' | 'POLISHED' | 'HIGH_EROSION') => {
         setIsAnalyzing(true);
+        
+        // If simulating HIGH_EROSION, actually update the store to test the wiring!
+        if (type === 'HIGH_EROSION') {
+             updateTelemetry({
+                 erosion: {
+                     bucketThinningRate: 1500,
+                     severity: 'HIGH',
+                     recommendation: '⚠️ High Wear Rate. Inspect nozzles and buckets monthly.'
+                 }
+             });
+             // The useEffect above will catch this state change
+             setTimeout(() => setIsAnalyzing(false), 500);
+             return;
+        }
+
         setTimeout(() => {
             if (type === 'PITTED') {
                 setAnalysisResult({
@@ -45,6 +79,7 @@ export const VisionAnalyzer: React.FC = () => {
                         <div className="flex gap-2 justify-center mt-4">
                             <button onClick={() => { setImage('pitted'); simulateAnalysis('PITTED'); }} className="px-3 py-1 bg-slate-800 text-xs rounded border border-slate-700 hover:bg-slate-700">Simulate: Pitted</button>
                             <button onClick={() => { setImage('polished'); simulateAnalysis('POLISHED'); }} className="px-3 py-1 bg-slate-800 text-xs rounded border border-slate-700 hover:bg-slate-700">Simulate: Polished</button>
+                            <button onClick={() => simulateAnalysis('HIGH_EROSION')} className="px-3 py-1 bg-amber-900/30 text-amber-500 text-xs rounded border border-amber-900/50 hover:bg-amber-900/50">Test: High Erosion Rate</button>
                         </div>
                     </div>
                 ) : (

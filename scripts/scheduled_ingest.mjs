@@ -9,6 +9,9 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const PRIMARY_SENSOR_URL = (process.env.PRIMARY_SENSOR_URL || '').trim(); // e.g. https://sensors.example/api/recent?hours=24
 const ASSET_ID = process.env.ASSET_ID || '1';
+// NC-11600: Data Lineage Identifiers
+const WORKFLOW_RUN_ID = process.env.GITHUB_RUN_ID || `local-${Date.now()}`;
+const SOURCE_SCRIPT = 'scheduled_ingest.mjs';
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
   console.error('SUPABASE_URL and SUPABASE_KEY must be set');
@@ -59,6 +62,10 @@ function normalizeRow(r) {
     timestamp: r.timestamp ?? r.time ?? r.t,
     output_power: r.output_power ?? r.power_kw ?? r.P_kw ?? null,
     francis_data: r.francis_data ?? r.metrics ?? r.details ?? null,
+    // NC-11600: Data Lineage Population
+    source_script: SOURCE_SCRIPT,
+    ingest_timestamp: new Date().toISOString(),
+    workflow_run_id: WORKFLOW_RUN_ID
   };
 }
 
@@ -79,7 +86,42 @@ async function main() {
     const normalized = samples.map(normalizeRow).map(r => ({ ...r, asset_id: String(r.asset_id) }));
     // ensure timestamps are ISO strings
     const cleaned = normalized.map(r => ({ ...r, timestamp: new Date(r.timestamp).toISOString() }));
-    await upsertRows(cleaned);
+
+    // NC-11500: Ingest Idempotency Guard
+    // Check against existing timestamps to prevent duplicates
+    if (cleaned.length > 0) {
+      const times = cleaned.map(r => new Date(r.timestamp).getTime());
+      const minTime = new Date(Math.min(...times)).toISOString();
+      const maxTime = new Date(Math.max(...times)).toISOString();
+
+      const { data: existing, error: checkErr } = await supabase
+        .from('dynamic_sensor_data')
+        .select('timestamp')
+        .eq('asset_id', ASSET_ID)
+        .gte('timestamp', minTime)
+        .lte('timestamp', maxTime);
+
+      if (!checkErr && existing) {
+        const existingSet = new Set(existing.map(e => new Date(e.timestamp).toISOString()));
+        const unique = cleaned.filter(r => !existingSet.has(r.timestamp));
+        
+        if (unique.length < cleaned.length) {
+          console.log(`[ingest] Idempotency Guard: Filtered ${cleaned.length - unique.length} duplicates.`);
+        }
+
+        if (unique.length > 0) {
+          await upsertRows(unique);
+        } else {
+          console.log('[ingest] Idempotency Guard: No new unique rows to insert.');
+        }
+      } else {
+        console.warn('[ingest] Idempotency check failed, attempting raw upsert:', checkErr);
+        await upsertRows(cleaned);
+      }
+    } else {
+      await upsertRows(cleaned);
+    }
+
     // After ingest, run a quick calibration check by invoking compute_pf_for_asset.mjs
     try {
       const cp = exec(`node ./scripts/compute_pf_for_asset.mjs ${ASSET_ID}`);

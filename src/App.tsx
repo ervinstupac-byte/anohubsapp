@@ -70,6 +70,8 @@ import { BootstrapService } from './services/BootstrapService';
 import { lazyHydratePhysicsSnapshots } from './services/DashboardDataService';
 import { RoleGuard } from './components/auth/RoleGuard.tsx'; // <--- NEW
 import { AccessDenied } from './components/auth/AccessDenied.tsx'; // <--- NEW
+import { DetachedModuleLayout } from './components/DetachedModuleLayout.tsx'; // NC-9000
+import { useSovereignSync } from './hooks/useSovereignSync.ts'; // NC-9000
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -194,6 +196,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 // New component for collapsible fleet section
 // FleetSection removed - Moved to Sidebar.tsx
 const AppLayout: React.FC = () => {
+    useSovereignSync(false); // NC-9000: Commander Mode (Broadcaster)
     useSentinelWatchdog(); // Infrastructure Watchdog
     useSafeExit(); // INFRASTRUCTURE: Guard unsaved data - NEW
     const location = useLocation();
@@ -700,6 +703,9 @@ const App: React.FC = () => {
                         <div className="w-full h-full animate-in fade-in zoom-in duration-300">
                             <ContextAwarenessProvider>
                                 <Routes>
+                                    {/* NC-9000: Detached Module Route (No Layout) */}
+                                    <Route path="/detach/:moduleId" element={<DetachedModuleLayout />} />
+                                    
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
                                     <Route

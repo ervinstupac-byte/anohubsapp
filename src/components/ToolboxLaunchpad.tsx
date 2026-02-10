@@ -12,7 +12,8 @@ import { EngineeringDossierCard } from './EngineeringDossierCard';
 import { computeEfficiencyFromHillChart } from '../features/physics-core/UnifiedPhysicsCore';
 import { EfficiencyOptimizer } from '../services/EfficiencyOptimizer';
 import { VortexDiagnostic } from '../services/VortexDiagnostic';
-import { FinancialImpactEngine } from '../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../services/core/FinancialImpactEngine';
+import { PhysicsMathService } from '../services/core/PhysicsMathService';
 
 /**
  * STRATEGIC COMMAND CENTER - High-Fidelity Industrial Dashboard
@@ -39,13 +40,21 @@ export const ToolboxLaunchpad: React.FC = () => {
     // Total Unit Efficiency Calculation (η_total)
     const totalUnitEfficiency = useMemo(() => {
         const etaTurbineRaw = Number(hydraulic?.efficiency ?? 0);
+        
+        // Use Centralized Physics Service (NC-8001)
+        const etaTotal = PhysicsMathService.calculateTotalEfficiency(
+            etaTurbineRaw,
+            store.electrical.generatorEfficiency / 100,
+            store.electrical.transformerEfficiency / 100,
+            store.electrical.transmissionEfficiency / 100,
+            !store.isCommanderMode
+        );
+
+        // Legacy local vars for individual display
         const etaTurbine = etaTurbineRaw > 1 ? etaTurbineRaw / 100 : etaTurbineRaw;
         const etaGenerator = store.electrical.generatorEfficiency / 100;
         const etaTransformer = store.electrical.transformerEfficiency / 100;
         const etaTransmission = store.electrical.transmissionEfficiency / 100;
-        
-        // Water-to-Wire formula: η_total = η_turbine * η_generator * η_transformer * η_transmission
-        const etaTotal = etaTurbine * etaGenerator * etaTransformer * etaTransmission;
         
         return {
             current: etaTotal * 100, // Convert back to percentage
@@ -56,7 +65,7 @@ export const ToolboxLaunchpad: React.FC = () => {
             transmission: etaTransmission * 100,
             percentage: (etaTotal * 100).toFixed(2)
         };
-    }, [hydraulic?.efficiency, store.electrical]);
+    }, [hydraulic?.efficiency, store.electrical, store.isCommanderMode]);
     
     // Loss Tracer Calculation (€/h) with Vortex Tax Integration
     const lossTracer = useMemo(() => {
@@ -144,7 +153,7 @@ export const ToolboxLaunchpad: React.FC = () => {
                             </div>
                             <div className="flex justify-between items-end">
                                 <div className="text-[clamp(6px,0.7vh,8px)] font-mono text-slate-400">
-                                    η<sub>turbine</sub>: {(totalUnitEfficiency.turbine * 100).toFixed(1)}%
+                                    η<sub>turbine</sub>: {Math.max(0, Math.min(100, totalUnitEfficiency.turbine)).toFixed(1)}%
                                 </div>
                                 <div className="text-[clamp(6px,0.7vh,8px)] font-mono text-slate-400">
                                     η<sub>generator</sub>: {(totalUnitEfficiency.generator * 100).toFixed(1)}%

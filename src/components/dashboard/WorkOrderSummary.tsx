@@ -4,12 +4,11 @@ import { Wrench, Clock, ChevronRight, AlertTriangle, AlertCircle, ArrowUpRight }
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useMaintenance, WorkOrder } from '../../contexts/MaintenanceContext';
 import { useAssetContext } from '../../contexts/AssetContext';
-import idAdapter from '../../utils/idAdapter';
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { aiPredictionService } from '../../services/AIPredictionService';
 import { fetchForecastForAsset } from '../../services/DashboardDataService';
-import { FinancialImpactEngine } from '../../services/FinancialImpactEngine';
+import { FinancialImpactEngine } from '../../services/core/FinancialImpactEngine';
 import { supabase } from '../../services/supabaseClient';
 
 /**
@@ -59,8 +58,8 @@ export const WorkOrderSummary: React.FC = () => {
     const assetOrders = useMemo(() => {
         if (!selectedAsset) return [];
 
-        const storageId = idAdapter.toStorage(selectedAsset.id);
-        const numericId = idAdapter.toNumber(selectedAsset.id);
+        const storageId = String(selectedAsset.id);
+        const numericId = Number(selectedAsset.id);
 
         return workOrders
             .filter(wo =>
@@ -199,7 +198,7 @@ export const WorkOrderSummary: React.FC = () => {
                                     if (!pfValue || !residualStd || !anchorTimestamp) return;
                                     setIsCreating(true);
                                     try {
-                                        const assetDbId = idAdapter.toDb(Number(selectedAsset.id));
+                                        const assetDbId = Number(selectedAsset.id);
                                         const { data, error } = await supabase.from('maintenance_ledger').insert({
                                             asset_id: assetDbId,
                                             pf: pfValue,

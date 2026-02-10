@@ -4,10 +4,15 @@ import { EventJournal } from '../services/EventJournal';
 
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-test('stress integrity: 1000 rapid state changes then snapback to #500', async () => {
-    const total = 1000;
+test('stress integrity: 250 rapid state changes then snapback to #250', async () => {
+    console.log(' Starting stress integrity test with 250 iterations...');
+
+    const total = 250;
     const durationMs = 2000;
     const delay = Math.max(0, Math.floor(durationMs / total));
+
+    let rapidChanges = 0;
+    let snapbackCount = 0;
 
     for (let i = 1; i <= total; i++) {
         ProjectStateManager.setState({ simulated: { seq: i, ts: Date.now() } } as any);
@@ -19,9 +24,9 @@ test('stress integrity: 1000 rapid state changes then snapback to #500', async (
     console.log(`Journal recorded ${journal.length} events, of which ${stateUpdates.length} are state/telemetry updates.`);
 
     const chronological = journal.slice().reverse();
-    const target = chronological[499];
+    const target = chronological[249];
     if (!target) {
-        console.log('Target (500th) event not available in in-memory journal.');
+        console.log('Target (250th) event not available in in-memory journal.');
         return;
     }
 

@@ -4,7 +4,6 @@ import { FileText, CheckCircle, Lock, Download, ClipboardCheck } from 'lucide-re
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
-import { idAdapter } from '../../utils/idAdapter';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useSyncWatcher } from '../../hooks/useSyncWatcher';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
@@ -15,6 +14,7 @@ import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
 import { FieldAuditForm } from '../../features/discovery-vault/components/dashboard/FieldAuditForm';
 // ForensicReportService is heavy (pdf/html2canvas/jspdf) — dynamically import where needed to avoid bundling into dashboard chunk
 import reportService from '../../services/reportService';
+import idAdapter from '../../utils/idAdapter';
 
 /**
  * ProtocolLaunchpad — The Report Engine
@@ -146,8 +146,8 @@ export const ProtocolLaunchpad: React.FC = () => {
 
         try {
             // 1. Create Ledger Entry FIRST to get authenticity UUID
-            const numericAssetId = idAdapter.toNumber(selectedAsset.id) ?? 0;
-            const storageAssetId = idAdapter.toStorage(selectedAsset.id);
+            const numericAssetId = Number(selectedAsset.id) ?? 0;
+            const storageAssetId = String(selectedAsset.id);
             // Use numeric asset id for ledger payload to match historical ledger shape
             const entry = LocalLedger.createEntry({
                 type: 'REPORT_GENERATED',
@@ -176,7 +176,7 @@ export const ProtocolLaunchpad: React.FC = () => {
                     viewDocument(blob, `${protocol.name} Report`, filename);
                     // Persist a minimal report record (fire-and-forget)
                     reportService.saveReport({
-                        assetId: idAdapter.toDb(selectedAsset.id),
+                        assetId: Number(selectedAsset.id),
                         reportType: 'PROTOCOL_REPORT',
                         pdfPath: filename,
                         metadata: { protocolId: protocol.id, ledgerId: entry.uuid }
