@@ -1,0 +1,19 @@
+# Sovereign Exclusion Protocol (NC-11900)
+# Exclude non-production artifacts from Vercel deployment
+
+_SOVEREIGN_ARCHIVE/
+scripts/
+docs/
+*.log
+temp/
+coverage/
+.venv/
+.vs/
+.idea/
+*.test.ts
+*.spec.ts
+*.test.tsx
+*.spec.tsx
+__tests__/
+test-results/
+playwright-report/

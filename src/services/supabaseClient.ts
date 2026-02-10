@@ -4,9 +4,12 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 // SUPABASE CLIENT (NC-76.4 - Hardcoded Credentials + Connection Verification)
 // ============================================================================
 
-// HARDCODED CREDENTIALS - Direct connection to production Supabase
-const SUPABASE_URL = 'https://nehxtecejxklqknscbgf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.warn('⚠️ Supabase credentials missing! Check .env file.');
+}
 
 // Cross-environment variable access (Vite vs Node) - FALLBACK only
 const getEnv = (key: string) => {

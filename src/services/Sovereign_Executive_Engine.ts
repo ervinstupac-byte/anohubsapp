@@ -387,3 +387,5 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         return this.corrToScore(0);
     }
 }
+
+// Part of the Sovereign Engineering Corps - Protocol NC-11700.

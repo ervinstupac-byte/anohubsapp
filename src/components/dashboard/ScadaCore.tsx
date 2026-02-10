@@ -1028,3 +1028,5 @@ const HistorianPanel: React.FC = () => {
     </div>
   );
 };
+
+// Part of the Sovereign Engineering Corps - Protocol NC-11700.

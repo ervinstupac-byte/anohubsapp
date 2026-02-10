@@ -14,6 +14,7 @@ import { AudioSpectrogram } from '../forensics/AudioSpectrogram';
 import { VisionAnalyzer } from '../forensics/VisionAnalyzer';
 import { KillSwitch } from '../forensics/KillSwitch';
 import { SystemHealth } from './SystemHealth';
+import { SovereignVisualizer } from './SovereignVisualizer';
 import { Zap, TrendingDown, Activity, AlertCircle, Shield, Sliders, Calculator, Droplets, Layout, Microscope, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
@@ -509,6 +510,21 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
                         <div className="h-96">
                             <ScadaCore forensicMode={isForensicMode} />
+                        </div>
+                    </GlassCard>
+                </div>
+
+                {/* SovereignVisualizer - New 3D Digital Twin Panel */}
+                <div className="lg:col-span-1">
+                    <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-lg font-semibold text-white">Digital Twin</h3>
+                            <div className="px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full">
+                                <span className="text-xs text-cyan-400 font-medium">3D SYNC</span>
+                            </div>
+                        </div>
+                        <div className="h-96">
+                            <SovereignVisualizer />
                         </div>
                     </GlassCard>
                 </div>
