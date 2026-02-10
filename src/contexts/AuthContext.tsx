@@ -87,6 +87,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } as User;
 
         setUser(guestUser);
+        setSession({
+            access_token: 'mock-token',
+            token_type: 'bearer',
+            expires_in: 3600,
+            refresh_token: 'mock-refresh-token',
+            user: guestUser
+        });
         setLoading(false); // CRITICAL: Allow AuthProvider to render children
         logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
     };

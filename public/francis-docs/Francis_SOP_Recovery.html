@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP: SHAFT SEAL RECOVERY | FRANCIS UNIT 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+
+        :root {
+            --accent-color: #f59e0b;
+            /* Amber for Recovery */
+            --critical-red: #ef4444;
+            --bg-dark: #020617;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #451a03 0%, #1c1917 100%);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .step-indicator {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .step-indicator::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--accent-color);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 0.875rem;
+        }
+
+        .alert-pulse {
+            animation: alert-pulse 2s infinite;
+        }
+
+        @keyframes alert-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        .btn-lang {
+            transition: all 0.2s;
+        }
+
+        .active-lang {
+            background-color: var(--accent-color) !important;
+            color: #000 !important;
+            border-color: var(--accent-color) !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pb-12">
+
+    <!-- Header -->
+    <header class="header-gradient py-8 px-4 md:px-8 mb-8 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-amber-600 rounded-lg border border-amber-400/30">
+                    <i data-lucide="life-buoy" class="text-white w-8 h-8"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded bg-amber-900/30 text-amber-400 text-[10px] font-bold border border-amber-900 uppercase">SOP-REC-001</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold">REV 2.0</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase" data-i18n="title">
+                        SHAFT SEAL RECOVERY PROTOCOL</h1>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <div class="flex gap-2">
+                    <button onclick="setLang('en')" id="btnEn"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-amber-500 transition uppercase">EN</button>
+                    <button onclick="setLang('bs')" id="btnBs"
+                        class="btn-lang px-3 py-1 text-[10px] font-black border border-slate-600 text-slate-400 rounded hover:border-amber-500 transition uppercase">BS</button>
+                </div>
+                <a href="Francis_Horizontal_Dashboard.html"
+                    class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-700 rounded text-[10px] font-bold text-slate-300 hover:text-white hover:border-slate-500 transition">
+                    <i data-lucide="arrow-left" class="w-3 h-3 text-amber-500"></i>
+                    <span data-i18n="return">BACK TO DASHBOARD</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 md:px-8 py-20">
+        <div
+            class="glass-card rounded-3xl p-12 text-center border-amber-500/30 flex flex-col items-center justify-center space-y-8 min-h-[400px]">
+            <div class="relative">
+                <i data-lucide="lock" class="w-24 h-24 text-amber-500/20 absolute -inset-4 blur-xl animate-pulse"></i>
+                <i data-lucide="construction" class="w-16 h-16 text-amber-500 relative z-10"></i>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="text-4xl font-black text-white tracking-tighter uppercase" data-i18n="cs_title">STAY TIGHT...
+                </h2>
+                <p class="text-amber-500 font-bold tracking-[0.2em] uppercase text-sm animate-bounce"
+                    data-i18n="cs_subtitle">Coming Soon</p>
+            </div>
+
+            <div class="max-w-md bg-black/40 p-6 rounded-2xl border border-slate-800">
+                <p class="text-[11px] text-slate-400 leading-relaxed italic" data-i18n="cs_desc">
+                    The Shaft Seal Recovery Protocol is being calibrated for 1.3MW operations.
+                    Restoring engineering constants... please wait for the next deployment.
+                </p>
+            </div>
+
+            <div class="flex gap-2">
+                <div class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></div>
+                <div class="w-2 h-2 rounded-full bg-amber-500/60 animate-ping [animation-delay:200ms]"></div>
+                <div class="w-2 h-2 rounded-full bg-amber-500/30 animate-ping [animation-delay:400ms]"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const i18n = {
+            en: {
+                title: "SHAFT SEAL RECOVERY PROTOCOL",
+                return: "BACK TO DASHBOARD",
+                cs_title: "STAY TIGHT...",
+                cs_subtitle: "Coming Soon",
+                cs_desc: "The Shaft Seal Recovery Protocol is being calibrated for 1.3MW operations. Restoring engineering constants... please wait for the next deployment."
+            },
+            bs: {
+                title: "PROTOKOL OPORAVKA ZAPTIVAČA VRATILA",
+                return: "POVRATAK NA KONTROLNU TABLU",
+                cs_title: "BUDITE SPREMNI...",
+                cs_subtitle: "Uskoro dostupno",
+                cs_desc: "Protokol oporavka ležaja se kalibriše za rad na 1.3MW. Vraćanje inženjerskih konstanti... molimo sačekajte sljedeću verziju."
+            }
+        };
+
+        function setLang(lang) {
+            localStorage.setItem('anohub_lang_pref', lang);
+
+            document.querySelectorAll('.btn-lang').forEach(btn => btn.classList.remove('active-lang'));
+            if (lang === 'en') document.getElementById('btnEn').classList.add('active-lang');
+            else document.getElementById('btnBs').classList.add('active-lang');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+        }
+
+        const pref = localStorage.getItem('anohub_lang_pref') || 'en';
+        setLang(pref);
+    </script>
+</body>
+
+</html>

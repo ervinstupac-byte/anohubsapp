@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIT STATE REPORT GENERATOR | FRANCIS 1.3MW</title>
+    <!-- Using Tailwind via CDN for layout, but custom CSS for print styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+        body {
+            background-color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            color: #111;
+        }
+
+        /* The A4 Paper Simulation */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 10mm auto;
+            border: 1px solid #d3d3d3;
+            border-radius: 2px;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Engineering Frame */
+        .engineering-frame {
+            border: 2px solid #1e3a8a;
+            /* Blue-900 */
+            height: 100%;
+            padding: 2px;
+            position: relative;
+        }
+
+        .inner-frame {
+            border: 1px solid #1e3a8a;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #1e3a8a;
+        }
+
+        /* Print Specifics */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                border: initial;
+                border-radius: initial;
+                width: initial;
+                min-height: initial;
+                box-shadow: initial;
+                background: initial;
+                page-break-after: always;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .input-field {
+            border: none;
+            border-bottom: 1px dashed #94a3b8;
+            width: 100%;
+            font-family: 'Roboto Mono', monospace;
+            color: #0f172a;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-bottom: 1px solid #1e3a8a;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        /* Red */
+        .status-resolved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Green */
+        .status-nominal {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        /* Blue */
+    </style>
+</head>
+
+<body>
+
+    <!-- Control Bar (No Print) -->
+    <div
+        class="no-print fixed top-0 left-0 w-full bg-slate-900 text-white p-3 flex justify-between items-center z-50 shadow-lg">
+        <div class="flex items-center gap-4">
+            <a href="Francis_Horizontal_Dashboard.html"
+                class="flex items-center gap-2 text-slate-400 hover:text-white text-sm font-bold uppercase transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Dashboard
+            </a>
+            <div class="h-4 w-px bg-slate-700"></div>
+            <span class="text-xs text-slate-400 font-mono">REPORT GENERATOR V1.0</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Language Toggle -->
+            <div class="flex bg-slate-800 rounded p-1">
+                <button onclick="setLang('en')" id="btnEn"
+                    class="px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition">EN</button>
+                <button onclick="setLang('bs')" id="btnBs"
+                    class="px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition">BS</button>
+            </div>
+
+            <button onclick="window.print()"
+                class="flex items-center gap-2 bg-white text-slate-900 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-slate-200 transition">
+                <i data-lucide="printer" class="w-4 h-4"></i> Print / Save PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="h-16 no-print"></div> <!-- Spacer for fixed header -->
+
+    <!-- A4 Page Container -->
+    <div class="page">
+        <div class="engineering-frame">
+            <div class="inner-frame flex flex-col justify-between">
+
+                <!-- 1. Header -->
+                <div>
+                    <div class="flex justify-between items-start border-b-2 border-blue-900 pb-4 mb-6">
+                        <div>
+                            <h1 class="text-2xl text-blue-900 mb-1" data-i18n="report_title">UNIT STATE REPORT</h1>
+                            <div class="text-sm font-bold text-slate-500 flex items-center gap-2">
+                                <span class="uppercase">Francis Horizontal 1.3 MW</span> | <span
+                                    class="mono text-xs">S/N: 88-FR-01</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-slate-400 uppercase font-bold" data-i18n="date_label">Date & Time
+                            </div>
+                            <div class="text-sm font-mono font-bold text-slate-900" id="reportDate"></div>
+                        </div>
+                    </div>
+
+                    <!-- Operator Block -->
+                    <div class="grid grid-cols-2 gap-8 mb-8 text-sm">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1"
+                                data-i18n="operator_label">Authorized Operator</label>
+                            <input type="text" class="input-field font-bold bg-yellow-50/50 p-1"
+                                placeholder="[ ENTER NAME ]" value="Eric (Shift Lead)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1"
+                                data-i18n="shift_label">Shift ID</label>
+                            <input type="text" class="input-field font-bold bg-yellow-50/50 p-1" value="A-01-MORNING">
+                        </div>
+                    </div>
+
+                    <!-- 2. Health Score Summary -->
+                    <div class="mb-8">
+                        <div
+                            class="bg-slate-100 border border-slate-300 p-4 rounded-sm flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800 uppercase mb-1"
+                                    data-i18n="system_integrity">System Integrity Score</h2>
+                                <p class="text-xs text-slate-500 max-w-md" data-i18n="score_desc">Calculated based on
+                                    active logic codes and manual safety inputs.</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-4xl font-black text-blue-900 mono" id="healthScoreDisplay">100%</div>
+                                <div class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded inline-block mt-1 uppercase"
+                                    id="healthStatusLabel">Nominal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Anomaly Matrix -->
+                    <div class="mb-4">
+                        <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                            <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="anomaly_matrix">Anomaly
+                                Matrix (Logic Log)</h3>
+                            <span class="text-[10px] font-mono text-slate-400">SOURCE: HEURISTIC_ENGINE_V2.0</span>
+                        </div>
+
+                        <div id="anomalyTableContainer">
+                            <!-- Table populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- 4. Strategic Analysis & Radar Chart -->
+                    <div class="mb-4 grid grid-cols-2 gap-8">
+                        <div>
+                            <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                                <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="safety_guard">Heuristic
+                                    Trend Analysis</h3>
+                            </div>
+
+                            <!-- Radar Chart Visualization -->
+                            <div
+                                class="relative w-full h-48 bg-slate-50 border border-slate-200 flex items-center justify-center">
+                                <div id="radarChart" class="w-full h-full"></div>
+                                <!-- Simple HTML/CSS Radar Overlay Mockup for PDF compatibility without heavy libraries -->
+                                <div
+                                    class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                                    <div class="w-32 h-32 border border-slate-900 rounded-full"></div>
+                                    <div class="w-16 h-16 border border-slate-900 rounded-full absolute"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-0"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-60"></div>
+                                    <div class="w-full h-px bg-slate-900 absolute rotate-120"></div>
+                                </div>
+                                <div class="absolute top-2 text-[9px] font-bold text-slate-500">MECH</div>
+                                <div class="absolute bottom-2 left-2 text-[9px] font-bold text-slate-500">HYDR</div>
+                                <div class="absolute bottom-2 right-2 text-[9px] font-bold text-slate-500">ELEC</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                                <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="risk_title">Rate of
+                                    Change (RoC) Alert</h3>
+                            </div>
+
+                            <!-- Predictive Input Block -->
+                            <div class="border border-slate-300 p-3 bg-red-50/50 mb-2">
+                                <label class="block text-[10px] font-bold text-red-900 uppercase mb-1">Shaft Seal
+                                    Leakage (L/min)</label>
+                                <div class="flex justify-between items-center">
+                                    <div class="w-1/2">
+                                        <input type="number" id="inputLeak"
+                                            class="w-full font-mono text-lg font-bold text-red-900 bg-transparent border-b border-red-300 focus:outline-none"
+                                            placeholder="0.0" onchange="calcRoC()">
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="rocResult" class="text-[10px] font-bold text-slate-400">WAITING DATA...
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- 5. Strategic Output (Inference Engine) -->
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-end mb-2 border-b border-blue-900 pb-1">
+                            <h3 class="font-bold text-blue-900 uppercase text-sm" data-i18n="recommendation_title">
+                                Synthetic Diagnosis (Inference Engine)</h3>
+                        </div>
+
+                        <div class="border-l-4 border-blue-900 bg-slate-50 p-4 min-h-[100px]">
+                            <div class="font-mono text-sm text-slate-800 whitespace-pre-line" id="recommendationText">
+                                INITIATING HEURISTIC SCAN...
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div
+                    class="mt-4 pt-2 border-t border-slate-300 flex justify-between items-end text-[10px] text-slate-400">
+                    <div>
+                        <p class="font-bold uppercase text-slate-600">AnoHUB Engineering Intelligence</p>
+                        <p>Generated via Heuristic Core V2.0</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-mono">DOC-ID: <span id="docId">GEN-001</span></p>
+                        <p>PAGE 1 OF 1</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+
+        // --- I18N DICTIONARY ---
+        const i18n = {
+            en: {
+                report_title: "UNIT STATE REPORT",
+                date_label: "DATE & TIME",
+                operator_label: "AUTHORIZED OPERATOR",
+                shift_label: "SHIFT ID",
+                system_integrity: "SYSTEM INTEGRITY SCORE",
+                score_desc: "Calculated based on active logic codes and manual safety inputs.",
+                anomaly_matrix: "ANOMALY MATRIX (LOGIC LOG)",
+                safety_guard: "HEURISTIC TREND ANALYSIS",
+                risk_title: "RATE OF CHANGE (RoC) ALERT",
+                recommendation_title: "SYNTHETIC DIAGNOSIS (INFERENCE ENGINE)",
+                col_code: "SYMPTOM ID",
+                col_zone: "ZONE",
+                col_ctx: "CONTEXT",
+                col_crit: "CRIT",
+                default_rec: "SYSTEM STATUS STABLE. NO CRITICAL ACTIONS REQUIRED.\nCONTINUE STANDARD OBSERVATION PROTOCOL.",
+                status_nominal: "NOMINAL",
+                status_critical: "CRITICAL"
+            },
+            bs: {
+                report_title: "IZVJEŠTAJ O STANJU JEDINICE",
+                date_label: "DATUM I VRIJEME",
+                operator_label: "OVLAŠTENI OPERATER",
+                shift_label: "ID SMJENE",
+                system_integrity: "OCJENA INTEGRITETA SISTEMA",
+                score_desc: "Izračunato na osnovu aktivnih logičkih kodova i ručnih sigurnosnih unosa.",
+                anomaly_matrix: "TABELA ANOMALIJA (LOGIČKI ZAPIS)",
+                safety_guard: "HEURISTIČKA ANALIZA TRENDA",
+                risk_title: "UPOZORENJE NA STOPU PROMJENE (RoC)",
+                recommendation_title: "SINTETIČKA DIJAGNOZA (MOTOR ZAKLJUČIVANJA)",
+                col_code: "ID SIMPTOMA",
+                col_zone: "ZONA",
+                col_ctx: "KONTEKST",
+                col_crit: "KRIT",
+                default_rec: "SISTEM STABILAN. NISU POTREBNE KRITIČNE MJERE.\nNASTAVITI SA STANDARDNIM PROTOKOLOM POSMATRANJA.",
+                status_nominal: "NOMINALNO",
+                status_critical: "KRITIČNO"
+            }
+        };
+
+        let currentLang = 'en';
+
+        // --- SYNTHETIC LOGIC DATABASE (INFERENCE RULES) ---
+        const inferenceRules = [
+            {
+                // Rule: Bypass + Sync Error = Critical Cavitation Risk
+                condition: (codes) => codes.includes('ERR_LEAK_01') && codes.includes('ERR_SYNC_VAR'),
+                diagnosis: {
+                    en: "CRITICAL RISK: Distributor Sync Error combined with Seal Leakage indicates major mechanical misalignment.\n\nACTION: IMMEDIATE STOP RECOMMENDED. Verify guide vane linkage shear pins and check head cover alignment.",
+                    bs: "KRITIČAN RIZIK: Greška sinhronizacije distributera u kombinaciji sa curenjem zaptivača ukazuje na veliko mehaničko de-centriranje.\n\nAKCIJA: PREPORUČENO TRENUTNO ZAUSTAVLJANJE. Provjerite sigurnosne čivije poluga i centriranje poklopca turbine."
+                }
+            },
+            {
+                // Rule: Low Vib + High Temp = Cooling Flow + Draft Tube issue
+                condition: (codes) => codes.includes('ERR_VIB_LOW') && codes.includes('ERR_TEMP_HI'),
+                diagnosis: {
+                    en: "COMPLEX FAULT: Thermal overload concurrent with Rheingans vibration.\n\nACTION: Draft tube vortex may be restricting cooling water flow if shared intake. Inspect strainers and increase air injection.",
+                    bs: "SLOŽEN KVAR: Termičko preopterećenje istovremeno sa Rheingans vibracijama.\n\nAKCIJA: Vrtlog u usisnoj cijevi možda ograničava protok rashladne vode ako je zahvat zajednički. Pregledajte filtere i povećajte upuhivanje zraka."
+                }
+            }
+        ];
+
+        const singleFaults = {
+            'ERR_N2_PRESS': {
+                en: "CRITICAL: HPU Accumulator Nitrogen pressure is low. Initiate pre-charge sequence immediately.",
+                bs: "KRITIČNO: Nizak pritisak azota u HPU akumulatoru. Odmah pokrenite proceduru dopune."
+            },
+            'ERR_SYNC_VAR': {
+                en: "WARNING: Distributor Sync Variance detected. Inspect shear pins.",
+                bs: "UPOZORENJE: Detektovano odstupanje sinhronizacije sprovodnog aparata. Pregledajte čivije."
+            },
+            'ERR_LEAK_01': {
+                en: "ALERT: Shaft seal leakage above nominal limits. Monitor drainage.",
+                bs: "ALARM: Curenje zaptivača vratila iznad limita. Pratite drenažu."
+            }
+        };
+
+        function setLang(lang) {
+            currentLang = lang;
+
+            // Toggle Buttons
+            if (lang === 'en') {
+                document.getElementById('btnEn').className = "px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition";
+                document.getElementById('btnBs').className = "px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition";
+            } else {
+                document.getElementById('btnBs').className = "px-3 py-1 rounded text-xs font-bold bg-blue-600 text-white transition";
+                document.getElementById('btnEn').className = "px-3 py-1 rounded text-xs font-bold text-slate-400 hover:text-white transition";
+            }
+
+            // Update Text Elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+            });
+
+            // Re-render logic
+            renderData();
+        }
+
+        // --- RATE OF CHANGE (RoC) CALCULATOR ---
+        function calcRoC() {
+            const currentVal = parseFloat(document.getElementById('inputLeak').value);
+            const rocDisplay = document.getElementById('rocResult');
+
+            // Simulate Last Value (in real app, read from history)
+            const lastVal = 4.2; // Baseline
+
+            if (!isNaN(currentVal)) {
+                const change = ((currentVal - lastVal) / lastVal) * 100;
+
+                if (change > 15) {
+                    rocDisplay.innerHTML = `<span class="text-red-600 animate-pulse">▲ ${change.toFixed(1)}% (PREDICTIVE WARNING)</span>`;
+                    // Store high leak in local storage for next time? (Out of scope for simple demo)
+                } else if (change < 0) {
+                    rocDisplay.innerHTML = `<span class="text-green-600">▼ ${Math.abs(change).toFixed(1)}% (IMPROVING)</span>`;
+                } else {
+                    rocDisplay.innerHTML = `<span class="text-slate-500">STABLE (Ref: ${lastVal})</span>`;
+                }
+            }
+        }
+
+        // --- HEURISTIC ENGINE RENDERER ---
+        function renderData() {
+            document.getElementById('reportDate').innerText = new Date().toLocaleString();
+            document.getElementById('docId').innerText = `RPT-${Math.floor(Math.random() * 10000)}`;
+
+            // Fetch Turbine_Health_DB
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('Turbine_Health_DB') || '[]');
+            } catch (e) { console.error("DB Error", e); }
+
+            const container = document.getElementById('anomalyTableContainer');
+
+            if (history.length === 0) {
+                container.innerHTML = `<div class="text-center py-4 text-sm text-slate-400 italic">${currentLang === 'en' ? 'No anomalies recorded.' : 'Nema zabilježenih anomalija.'}</div>`;
+                document.getElementById('recommendationText').innerText = i18n[currentLang].default_rec;
+                updateScore(100);
+                drawRadarChart(100, 100, 100); // Perfect score
+                return;
+            }
+
+            // Render Table
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>${i18n[currentLang].col_zone}</th>
+                        <th>${i18n[currentLang].col_code}</th>
+                        <th>${i18n[currentLang].col_ctx}</th>
+                        <th>${i18n[currentLang].col_crit}</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            const activeCodes = [];
+            let maxCrit = 0;
+
+            // Simplified Radar Scores
+            let mechScore = 100;
+            let hydrScore = 100;
+            let elecScore = 100;
+
+            history.forEach(item => {
+                activeCodes.push(item.symptom_id);
+                if (item.criticality > maxCrit) maxCrit = item.criticality;
+
+                // Radar Logic
+                if (item.zone === 'BEAR' || item.zone === 'MIV') mechScore -= (item.criticality * 10);
+                if (item.zone === 'DIST') hydrScore -= (item.criticality * 10);
+                if (item.zone === 'GEN') elecScore -= (item.criticality * 10);
+
+                html += `<tr>
+                    <td class="font-bold text-slate-700">${item.zone}</td>
+                    <td class="font-mono text-blue-900">${item.symptom_id}</td>
+                    <td class="text-slate-500 text-[10px]">${item.operational_context}</td>
+                    <td><span class="status-badge ${item.criticality >= 4 ? 'status-active' : 'status-nominal'}">Lvl ${item.criticality}</span></td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+
+            // Update Radar Chart
+            drawRadarChart(mechScore, hydrScore, elecScore);
+
+            // Update Health Score
+            let systemHealth = 100 - (maxCrit * 15);
+            if (systemHealth < 0) systemHealth = 0;
+            updateScore(systemHealth);
+
+            // Inference Engine Execution
+            const outputEl = document.getElementById('recommendationText');
+            let diagnosis = null;
+
+            // 1. Check Complex Rules
+            for (const rule of inferenceRules) {
+                if (rule.condition(activeCodes)) {
+                    diagnosis = rule.diagnosis[currentLang];
+                    break; // Priority to complex faults
+                }
+            }
+
+            // 2. Fallback to Primary Fault
+            if (!diagnosis && activeCodes.length > 0) {
+                const primary = activeCodes[0];
+                if (singleFaults[primary]) diagnosis = singleFaults[primary][currentLang];
+                else diagnosis = `${currentLang === 'en' ? 'Standard Fault Protocol:' : 'Standardni Protokol Kvara:'} ${primary}`;
+            }
+
+            // 3. Default
+            if (!diagnosis) diagnosis = i18n[currentLang].default_rec;
+
+            outputEl.innerText = diagnosis;
+        }
+
+        // --- POLYGON RADAR CHART (Canvas-Free) ---
+        function drawRadarChart(m, h, e) {
+            // Visualize via CSS Triangle/Polygon clip-path or simpler div bars for robustness
+            // For this output we will use a SVG overlay which is cleaner
+            const container = document.getElementById('radarChart');
+
+            // Normalize inputs (radius usually 0-50 for percentages in SVG viewbox 0 0 100 100)
+            const rM = (m / 100) * 40; // Top
+            const rH = (h / 100) * 40; // Bottom Left
+            const rE = (e / 100) * 40; // Bottom Right
+
+            // Calc Points (Center is 50,50)
+            const p1 = `50,${50 - rM}`; // Mech (Top)
+            const p2 = `${50 - (rH * 0.866)},${50 + (rH * 0.5)}`; // Hydr (Bot Left)
+            const p3 = `${50 + (rE * 0.866)},${50 + (rE * 0.5)}`; // Elec (Bot Right)
+
+            // Dynamic SVG
+            container.innerHTML = `
+            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg">
+                <polygon points="50,10 15,70 85,70" fill="none" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"/>
+                <circle cx="50" cy="50" r="1" fill="#1e3a8a"/>
+                <polygon points="${p1} ${p2} ${p3}" fill="rgba(30, 58, 138, 0.5)" stroke="#1e3a8a" stroke-width="2"/>
+            </svg>
+            `;
+        }
+
+        // Initialize
+        renderData();
+
+    </script>
+</body>
+
+</html>

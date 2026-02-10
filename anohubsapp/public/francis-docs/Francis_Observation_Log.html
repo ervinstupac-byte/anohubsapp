@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="bs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNEVNIK OPAŽANJA - SISTEMSKA MEMORIJA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #050505;
+            color: #a3a3a3;
+        }
+
+        .log-panel {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-dark {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: #e5e5e5;
+        }
+
+        .input-dark:focus {
+            border-color: #f59e0b;
+            outline: none;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-log {
+            background: linear-gradient(to right, #7c2d12, #9a3412);
+            border: 1px solid #ea580c;
+            transition: all 0.2s;
+        }
+
+        .btn-log:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px rgba(234, 88, 12, 0.4);
+        }
+
+        /* Recommendation Card Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rec-card {
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl mb-8 flex justify-between items-center border-b border-zinc-800 pb-4">
+        <div>
+            <h1 class="text-2xl font-bold text-amber-500 flex items-center gap-3">
+                <i data-lucide="brain-circuit"></i> SISTEMSKA MEMORIJA
+            </h1>
+            <p class="text-xs text-zinc-500 mt-1">OPERATIVNI DNEVNIK OPAŽANJA & INTELIGENCIJA</p>
+        </div>
+        <a href="Francis_Horizontal_Dashboard.html"
+            class="text-xs text-zinc-500 hover:text-white transition flex items-center gap-1">
+            <i data-lucide="arrow-left"></i> POVRATAK U OPERATIVNI CENTAR
+        </a>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+
+        <!-- LEFT: INPUT LOGGER -->
+        <div class="space-y-6">
+            <div class="log-panel p-6 rounded-lg">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="pencil"></i> ZABILJEŽI NOVI DOGAĐAJ
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Zone Selector -->
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1 uppercase">Zona / Komponenta</label>
+                        <select id="zoneSelect" class="w-full p-3 rounded input-dark text-sm">
+                            <option value="">-- ODABERI ZONU --</option>
+                            <option value="unit1">Agregat 1 - Opšte</option>
+                            <option value="hpu">Hidraulični Agregat (HPU)</option>
+                            <option value="miv">Glavni Ulazni Ventil (GUV)</option>
+                            <option value="shaft">Turbinsko Vratilo & Zaptivač</option>
+                            <option value="bearing">Vodeći Ležajevi</option>
+                        </select>
+                    </div>
+
+                    <!-- Symptom Selector -->
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1 uppercase">Tip Opažanja</label>
+                        <select id="symptomSelect" class="w-full p-3 rounded input-dark text-sm">
+                            <option value="">-- ŠTA STE OSJETILI? --</option>
+                            <option value="leak">Vidljivo Curenje / Tečnost</option>
+                            <option value="sound">Nenormalan Zvuk / Lupanje</option>
+                            <option value="vibration">Prekomjerne Vibracije</option>
+                            <option value="heat">Visoka Temperatura / Isparavanje</option>
+                            <option value="smell">Miris (Ozon/Paljevina/Ulje)</option>
+                            <option value="corrosion">Vidljiva Hrđa / Korozija</option>
+                        </select>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label class="block text-xs font-bold text-zinc-500 mb-1 uppercase">Dodatne Bilješke
+                            (Opcionalno)</label>
+                        <textarea id="notesInput" class="w-full p-3 rounded input-dark text-sm h-20"
+                            placeholder="npr., Curenje oko 2 kapi u sekundi..."></textarea>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button onclick="submitLog()"
+                        class="w-full py-4 rounded text-white font-bold tracking-widest uppercase btn-log flex justify-center items-center gap-2">
+                        <i data-lucide="save"></i> Sačuvaj Opažanje
+                    </button>
+                </div>
+            </div>
+
+            <!-- Smart Suggestion Output -->
+            <div id="suggestionBox" class="hidden">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+
+        <!-- RIGHT: RECENT HISTORY -->
+        <div class="log-panel p-6 rounded-lg h-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="history"></i> NEDAVNI ZAPISI
+                </h2>
+                <span class="text-[10px] bg-zinc-800 px-2 py-1 rounded text-zinc-400">ZADNJIH 5 UNOSA</span>
+            </div>
+
+            <div class="space-y-3" id="historyList">
+                <!-- Hardcoded Initial History representing "Memory" -->
+                <div
+                    class="p-3 bg-zinc-900/50 rounded border border-zinc-800 flex justify-between items-start opacity-60 hover:opacity-100 transition">
+                    <div>
+                        <div class="text-xs text-amber-500 font-bold mb-1">AGREGAT 1 • ZVUK</div>
+                        <div class="text-sm text-zinc-300">Zvuk kavitacije u odvodnom kanalu.</div>
+                    </div>
+                    <div class="text-[10px] text-zinc-600 font-mono">PRIJE 2 DANA</div>
+                </div>
+
+                <div
+                    class="p-3 bg-zinc-900/50 rounded border border-zinc-800 flex justify-between items-start opacity-60 hover:opacity-100 transition">
+                    <div>
+                        <div class="text-xs text-red-500 font-bold mb-1">GUV • CURENJE</div>
+                        <div class="text-sm text-zinc-300">Mala lokva ulja ispod cilindra bajpasa.</div>
+                    </div>
+                    <div class="text-[10px] text-zinc-600 font-mono">PRIJE 5 DANA</div>
+                </div>
+
+                <div
+                    class="p-3 bg-zinc-900/50 rounded border border-zinc-800 flex justify-between items-start opacity-60 hover:opacity-100 transition">
+                    <div>
+                        <div class="text-xs text-blue-400 font-bold mb-1">HLAĐENJE • TEMP</div>
+                        <div class="text-sm text-zinc-300">Ulaz izmjenjivača toplote topliji nego inače.</div>
+                    </div>
+                    <div class="text-[10px] text-zinc-600 font-mono">PRIJE 1 SEDMICE</div>
+                </div>
+                <div
+                    class="p-3 bg-zinc-900/50 rounded border border-zinc-800 flex justify-between items-start opacity-60 hover:opacity-100 transition">
+                    <div>
+                        <div class="text-xs text-amber-500 font-bold mb-1">HPU • MIRIS</div>
+                        <div class="text-sm text-zinc-300">Blag miris ozona blizu priključne kutije motora.</div>
+                    </div>
+                    <div class="text-[10px] text-zinc-600 font-mono">PRIJE 2 SEDMICE</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function submitLog() {
+            const zone = document.getElementById('zoneSelect').value;
+            const symptom = document.getElementById('symptomSelect').value;
+            const notes = document.getElementById('notesInput').value || "Nema detaljnih bilješki.";
+
+            if (!zone || !symptom) {
+                alert("Molimo odaberite Zonu i Tip Opažanja.");
+                return;
+            }
+
+            // 1. Add to History (Simulated)
+            const historyList = document.getElementById('historyList');
+            const newEntry = document.createElement('div');
+            newEntry.className = "p-3 bg-zinc-900 rounded border border-amber-900/30 flex justify-between items-start animate-pulse";
+
+            // Map inputs to display text
+            const zoneMap = { 'unit1': 'AGREGAT 1', 'hpu': 'HPU', 'miv': 'GUV', 'shaft': 'VRATILO', 'bearing': 'LEŽAJ' };
+            const symptomMap = { 'leak': 'CURENJE', 'sound': 'ZVUK', 'heat': 'VRUĆINA', 'smell': 'MIRIS', 'vibration': 'VIBRACIJE', 'corrosion': 'KOROZIJA' };
+            const symptomColors = { 'leak': 'text-blue-400', 'sound': 'text-amber-500', 'heat': 'text-red-500', 'smell': 'text-purple-400', 'vibration': 'text-orange-500', 'corrosion': 'text-amber-700' };
+
+            newEntry.innerHTML = `
+                <div>
+                    <div class="text-xs ${symptomColors[symptom] || 'text-white'} font-bold mb-1 uppercase">${zoneMap[zone]} • ${symptomMap[symptom]}</div>
+                    <div class="text-sm text-white">${notes}</div>
+                </div>
+                <div class="text-[10px] text-amber-500 font-bold font-mono">UPRAVO SAD</div>
+            `;
+
+            // Prepend functionality
+            historyList.insertBefore(newEntry, historyList.firstChild);
+
+            // 2. Generate Recommendation
+            generateRecommendation(zone, symptom);
+        }
+
+        function generateRecommendation(zone, symptom) {
+            const box = document.getElementById('suggestionBox');
+            let title = "Sistemska Notifikacija";
+            let message = "Zapis sačuvan u memoriju.";
+            let link = "#";
+            let linkText = "Povratak u Operativni Centar";
+
+            // Logic Matrix
+            if (zone === 'hpu' && symptom === 'leak') {
+                title = "PREPORUČENA AKCIJA: INTEGRITET HPU";
+                message = "Curenje ulja na HPU može dovesti do pada pritiska. Odmah provjerite spojeve crijeva.";
+                link = "Francis_Safety_System_Integrity.html";
+                linkText = "Otvori SOP Sigurnosnog Integriteta";
+            } else if (zone === 'shaft' && symptom === 'leak') {
+                title = "PREPORUČENA AKCIJA: OPORAVAK ZAPTIVAČA";
+                message = "Curenje zaptivača vratila obično ukazuje na istrošenost ili disbalans pritiska.";
+                link = "Francis_SOP_Recovery.html";
+                linkText = "Otvori SOP Oporavka Zaptivača";
+            } else if (zone === 'miv' && (symptom === 'leak' || symptom === 'sound')) {
+                title = "PREPORUČENA AKCIJA: GUV BAJPAS";
+                message = "Zvukovi ili curenje na GUV-u često sugerišu probleme sa sjedištem bajpas ventila.";
+                link = "Francis_SOP_MIV_Bypass.html";
+                linkText = "Otvori SOP GUV Bajpasa";
+            } else if (zone === 'hpu' && symptom === 'sound') {
+                title = "PREPORUČENA AKCIJA: PROVJERA AKUMULATORA";
+                message = "Lupanje u HPU-u često znači nisko pred-punjenje azota.";
+                link = "Francis_SOP_HPU_Energy.html";
+                linkText = "Otvori SOP Azotnog Punjenja";
+            } else if (zone === 'bearing' && symptom === 'heat') {
+                title = "PREPORUČENA AKCIJA: TERMALNO MAPIRANJE";
+                message = "Pregrijavanje ležaja zahtijeva hitnu analizu trenda u odnosu na opterećenje.";
+                link = "Francis_SOP_Bearings.html";
+                linkText = "Otvori SOP Ležajeva";
+            }
+
+            box.innerHTML = `
+                <div class="rec-card bg-amber-900/20 p-4 rounded border border-amber-900/50">
+                    <h3 class="text-amber-500 font-bold text-sm mb-2 flex items-center gap-2">
+                        <i data-lucide="lightbulb"></i> ${title}
+                    </h3>
+                    <p class="text-sm text-zinc-300 mb-4">${message}</p>
+                    <a href="${link}" class="inline-block w-full text-center py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 rounded text-xs font-bold text-white uppercase transition">
+                        ${linkText}
+                    </a>
+                </div>
+            `;
+            box.classList.remove('hidden');
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>

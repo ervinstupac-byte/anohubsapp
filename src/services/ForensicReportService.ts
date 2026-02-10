@@ -360,11 +360,11 @@ export class ForensicReportService {
             startY: 70,
             head: [['Financial KPI', 'Value Projection', 'Priority']],
             body: [
-                ['Return on Investment (ROI)', `${kpis.roi.toFixed(1)}%`, 'CRITICAL'],
-                ['Levelized Cost of Energy', `€${kpis.lcoe.toFixed(2)} / MWh`, 'HIGH'],
-                ['Estimated Total CAPEX', `€${(kpis.capex / 1000000).toFixed(1)}M`, 'HIGH'],
-                ['Payback Period', `${kpis.payback.toFixed(1)} Years`, 'MEDIUM'],
-                ['Annual Revenue Projection', `€${(kpis.revenue / 1000000).toFixed(2)}M`, 'MEDIUM']
+                ['Return on Investment (ROI)', `${kpis.roi?.toFixed(1) || 0}%`, 'CRITICAL'],
+                ['Levelized Cost of Energy', `€${kpis.lcoe?.toFixed(2) || 0} / MWh`, 'HIGH'],
+                ['Estimated Total CAPEX', `€${((kpis.capex || 0) / 1000000).toFixed(1)}M`, 'HIGH'],
+                ['Payback Period', `${kpis.payback?.toFixed(1) || 0} Years`, 'MEDIUM'],
+                ['Annual Revenue Projection', `€${((kpis.revenue || 0) / 1000000).toFixed(2)}M`, 'MEDIUM']
             ],
             theme: 'grid',
             headStyles: { fillColor: [88, 28, 135] }, // purple-900

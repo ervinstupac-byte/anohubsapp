@@ -44,7 +44,7 @@ const ForensicHub: React.FC = () => {
         ...telemetry,
         hydraulic: {
             ...telemetry.hydraulic,
-            sigma: simSigma !== null ? simSigma : (telemetry.hydraulic as any)?.sigma,
+            sigma: simSigma !== null ? simSigma : telemetry.hydraulic?.sigma,
             efficiency: simEff !== null ? simEff : telemetry.hydraulic?.efficiency
         }
     };
