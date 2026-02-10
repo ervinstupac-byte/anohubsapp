@@ -61,6 +61,10 @@ import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx'
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 import { useProjectConfigStore } from './features/config/ProjectConfigStore';
 
+// --- STANDARD IMPORTS (NC-11920) ---
+import { ScadaCore } from './components/dashboard/ScadaCore';
+import { ForensicDashboard } from './components/forensics/ForensicDashboard';
+
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
 import { ROUTES } from './routes/paths.ts';
@@ -99,10 +103,10 @@ const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
-const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m => ({ default: m.ScadaCore })));
+// const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m => ({ default: m.ScadaCore })));
 
 // Maintenance components moved to MaintenanceRouter
-const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
+// const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));

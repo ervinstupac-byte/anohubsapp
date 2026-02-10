@@ -9,6 +9,13 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.warn('⚠️ Supabase credentials missing! Check .env file.');
+  // NC-11920: Visual Feedback for Missing Env Vars
+  if (typeof window !== 'undefined') {
+    const errorBanner = document.createElement('div');
+    errorBanner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ef4444;color:white;text-align:center;padding:12px;font-family:monospace;font-weight:bold;z-index:99999;border-top:2px solid #b91c1c;';
+    errorBanner.innerHTML = '⚠️ CRITICAL: SUPABASE CREDENTIALS MISSING. CHECK .ENV CONFIGURATION.';
+    document.body.appendChild(errorBanner);
+  }
 }
 
 // Cross-environment variable access (Vite vs Node) - FALLBACK only
