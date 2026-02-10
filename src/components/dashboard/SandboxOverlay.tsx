@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Save, RotateCcw, Activity, Gauge, Zap } from 'lucide-react';
+import { X, Save, RotateCcw, Activity, Gauge, Zap, Flame, Waves, BatteryWarning } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SYSTEM_CONSTANTS } from '../../config/SystemConstants';
 import { computeEfficiencyFromHillChart } from '../../features/physics-core/UnifiedPhysicsCore';
@@ -9,6 +9,9 @@ interface SandboxState {
     flow: number;
     head: number;
     gate: number;
+    vibration?: number;
+    temperature?: number;
+    voltage?: number;
 }
 
 interface SandboxOverlayProps {
@@ -23,7 +26,12 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
     isOpen, onClose, currentValues, onUpdate, onCommit 
 }) => {
     const { t } = useTranslation();
-    const [values, setValues] = useState<SandboxState>(currentValues);
+    const [values, setValues] = useState<SandboxState>({
+        ...currentValues,
+        vibration: currentValues.vibration ?? 2.5,
+        temperature: currentValues.temperature ?? 65,
+        voltage: currentValues.voltage ?? -950
+    });
     
     // Physics State
     const [results, setResults] = useState({ stress: 0, efficiency: 0 });
@@ -31,6 +39,24 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
     // Constants (Francis Turbine Estimations)
     const RADIUS = 2.5; // meters
     const THICKNESS = 0.04; // meters (40mm steel)
+
+    const triggerDisaster = (type: 'VIBRATION' | 'THERMAL' | 'CATHODIC') => {
+        setValues(prev => {
+            const next = { ...prev };
+            switch (type) {
+                case 'VIBRATION': 
+                    next.vibration = 12.5; // ISO 10816 Zone D
+                    break;
+                case 'THERMAL': 
+                    next.temperature = 110; // Babbitt Melt
+                    break;
+                case 'CATHODIC': 
+                    next.voltage = -400; // Rapid Oxidation
+                    break;
+            }
+            return next;
+        });
+    };
 
     useEffect(() => {
         // 1. Calculate Pressure (Pa) = rho * g * h
@@ -81,6 +107,39 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
                     <div className="p-4 space-y-4">
                         {/* Inputs */}
                         <div className="space-y-3">
+                            {/* CRITICAL SCENARIOS (NC-12500) */}
+                            <div className="bg-red-500/5 rounded-lg p-2 border border-red-500/10">
+                                <div className="text-[9px] font-black text-red-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                    <Activity className="w-3 h-3" /> Critical Scenarios
+                                </div>
+                                <div className="grid grid-cols-3 gap-1">
+                                    <button 
+                                        onClick={() => triggerDisaster('VIBRATION')}
+                                        className="p-1.5 bg-slate-800 hover:bg-red-500/20 border border-slate-700 hover:border-red-500/50 rounded flex flex-col items-center gap-1 transition-all group"
+                                        title="Trigger Vibration Storm (12.5 mm/s)"
+                                    >
+                                        <Waves className="w-3 h-3 text-slate-400 group-hover:text-red-400" />
+                                        <span className="text-[8px] text-slate-500 font-mono">VIB.STORM</span>
+                                    </button>
+                                    <button 
+                                        onClick={() => triggerDisaster('THERMAL')}
+                                        className="p-1.5 bg-slate-800 hover:bg-orange-500/20 border border-slate-700 hover:border-orange-500/50 rounded flex flex-col items-center gap-1 transition-all group"
+                                        title="Trigger Thermal Meltdown (110°C)"
+                                    >
+                                        <Flame className="w-3 h-3 text-slate-400 group-hover:text-orange-400" />
+                                        <span className="text-[8px] text-slate-500 font-mono">MELTDOWN</span>
+                                    </button>
+                                    <button 
+                                        onClick={() => triggerDisaster('CATHODIC')}
+                                        className="p-1.5 bg-slate-800 hover:bg-amber-500/20 border border-slate-700 hover:border-amber-500/50 rounded flex flex-col items-center gap-1 transition-all group"
+                                        title="Trigger Cathodic Failure (-400mV)"
+                                    >
+                                        <BatteryWarning className="w-3 h-3 text-slate-400 group-hover:text-amber-400" />
+                                        <span className="text-[8px] text-slate-500 font-mono">RUST.FAIL</span>
+                                    </button>
+                                </div>
+                            </div>
+
                             <div className="space-y-1">
                                 <div className="flex justify-between text-[10px] font-mono text-slate-400">
                                     <span>NET HEAD (m)</span>

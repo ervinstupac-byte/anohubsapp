@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -11,6 +11,9 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { ROUTES } from '../../routes/paths';
+import { AncestralOracle, OracleResult } from '../../services/AncestralOracle';
+
+export const TRIGGER_FORENSIC_EXPORT = 'TRIGGER_FORENSIC_EXPORT';
 
 // --- TYPES ---
 interface SidebarModule {
@@ -137,6 +140,30 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
                         className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all"
                     />
                 </div>
+                
+                {/* ORACLE RESULTS (NC-12500) */}
+                <AnimatePresence>
+                    {oracleResults.length > 0 && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="mt-2 bg-amber-900/20 border border-amber-500/30 rounded overflow-hidden"
+                        >
+                            <div className="px-3 py-1.5 bg-amber-500/10 text-[9px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-2">
+                                <BookOpen className="w-3 h-3" /> Ancestral Oracle
+                            </div>
+                            <div className="p-1">
+                                {oracleResults.map(res => (
+                                    <div key={res.id} className="p-2 hover:bg-amber-500/10 rounded cursor-pointer transition-colors group">
+                                        <div className="text-[10px] font-bold text-amber-200 group-hover:text-white">{res.title}</div>
+                                        <div className="text-[9px] text-amber-500/70">{res.excerpt}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* 2. SCROLLABLE NAVIGATION */}

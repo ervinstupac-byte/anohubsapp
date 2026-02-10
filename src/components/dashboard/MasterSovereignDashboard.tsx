@@ -529,7 +529,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </div>
                         </div>
                         <div className="h-96">
-                            <SovereignVisualizer sandboxStress={sandboxStress} />
+                            <SovereignVisualizer sandboxStress={sandboxStress} sandboxValues={sandboxValues} />
                         </div>
 
                         {/* Sandbox Trigger */}

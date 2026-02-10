@@ -28,6 +28,15 @@ function verify() {
         console.warn("NOTICE: .env file not found. Assuming CI/CD environment with injected variables.");
     }
 
+    // PRIORITY 0: Check Vercel Installation Phase
+    // If Vercel is just installing dependencies (CI=1), we skip validation.
+    // The build phase comes later, where vars should be present.
+    if (process.env.CI && process.env.VERCEL) {
+        console.log("NOTICE: Running in Vercel CI environment. Skipping strict ENV check for install phase.");
+        console.log("------------------------------------------\n");
+        return;
+    }
+
     const missing = [];
 
     for (const v of REQUIRED_VARS) {

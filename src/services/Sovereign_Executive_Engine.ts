@@ -38,6 +38,7 @@ import { createClient } from '@supabase/supabase-js';
 // In a strict frontend env, this might fail or expose keys if not careful.
 // Assuming this runs in a context where process.env is available (like the ingestion script or Node backend).
 // NC-11940: Vite Environment Standardization
+// FIXED: Replaced process.env usage with import.meta.env
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = (SUPABASE_URL && SUPABASE_KEY) ? createClient(SUPABASE_URL, SUPABASE_KEY) : null;

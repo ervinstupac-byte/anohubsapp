@@ -46,7 +46,8 @@ export const useSovereignSync = (isDetached: boolean = false) => {
                 if (now - lastBroadcastRef.current >= SYNC_INTERVAL_MS) {
                     // Throttle to 60fps
                     // We only broadcast high-frequency data to avoid payload overhead
-                    const payload = {
+                    // NC-12350: Ensure payload is serializable (Clean JSON)
+                    const payload = JSON.parse(JSON.stringify({
                         hydraulic: state.hydraulic,
                         mechanical: state.mechanical,
                         physics: state.physics,
@@ -54,7 +55,7 @@ export const useSovereignSync = (isDetached: boolean = false) => {
                         resonanceState: state.resonanceState, // NC-9300: Audio Sync
                         isCommanderMode: state.isCommanderMode, // Sync guest/commander state
                         timestamp: Date.now()
-                    };
+                    }));
                     
                     // Use RAF to decouple from React render cycle if needed
                     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -69,7 +70,8 @@ export const useSovereignSync = (isDetached: boolean = false) => {
             channel.onmessage = (event) => {
                 if (event.data?.type === 'SYNC_REQUEST') {
                     const state = useTelemetryStore.getState();
-                    channel.postMessage({
+                    // NC-12350: Ensure payload is serializable
+                    channel.postMessage(JSON.parse(JSON.stringify({
                         hydraulic: state.hydraulic,
                         mechanical: state.mechanical,
                         physics: state.physics,
@@ -77,7 +79,7 @@ export const useSovereignSync = (isDetached: boolean = false) => {
                         resonanceState: state.resonanceState,
                         isCommanderMode: state.isCommanderMode,
                         timestamp: Date.now()
-                    });
+                    })));
                 }
             };
 
