@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
 /**
- * verify_env.ts
+ * verify_env.mjs
  * "Build Cleanliness Check" - Industrial Safety Protocol
  * 
  * Verifies that critical Supabase environment variables are present
