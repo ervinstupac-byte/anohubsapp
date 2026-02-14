@@ -56,7 +56,7 @@ export class ThrustBearingMaster extends BaseGuardian {
 
     addMeasurement(m: ThrustMeasurement): ThrustAction {
         // Compute film thickness
-        const hMin = this.calculateFilmThickness(m.axialLoadN, m.oilViscosityPas, m.shaftSpeedRpm, m.padAreaM2 ?? this.defaultPadArea, m.radiusM ?? this.defaultRadius, m.padTempsC.length);
+        const hMin = ThrustBearingMaster.calculateFilmThickness(m.axialLoadN, m.oilViscosityPas, m.shaftSpeedRpm, m.padAreaM2 ?? this.defaultPadArea, m.radiusM ?? this.defaultRadius, m.padTempsC.length);
 
         // Pad symmetry
         const sigma = this.computeStdDev(m.padTempsC);
@@ -97,7 +97,7 @@ export class ThrustBearingMaster extends BaseGuardian {
      * - U: m/s surface speed = omega * radius, omega = 2*pi*(rpm/60)
      * - p_surface: Pa = (axialLoadN / nPads) / padArea
      */
-    calculateFilmThickness(axialLoadN: number, etaPas: number, shaftRpm: number, padAreaM2: number, radiusM: number, nPads = 8): number {
+    static calculateFilmThickness(axialLoadN: number, etaPas: number, shaftRpm: number, padAreaM2: number, radiusM: number, nPads = 8): number {
         const omega = 2 * Math.PI * (shaftRpm / 60); // rad/s
         const U = omega * radiusM; // m/s (surface speed)
 

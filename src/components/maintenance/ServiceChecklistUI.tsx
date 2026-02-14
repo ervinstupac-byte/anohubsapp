@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, Camera, Mic, MicOff } from 'lucide-react';
 import { useMaintenance } from '../../contexts/MaintenanceContext';
-import { useProjectEngine } from '../../contexts/ProjectContext';
 import { ServiceChecklistEngine } from '../../services/ServiceChecklistEngine';
 import { ChecklistItem } from '../../types/checklist';
 import { PrecisionInput } from '../precision/PrecisionInput';
@@ -15,9 +14,6 @@ import { HistoricalMeasurement, PrecisionMeasurement } from '../../types/trends'
 
 export const ServiceChecklistUI: React.FC = () => {
     const { activeChecklist, updateChecklistItem, addFieldNote } = useMaintenance();
-    // NC-300: Wire measurement methods from ProjectContext
-    // Using explicit any cast to bypass type checking until ProjectContext is fully updated
-    const { addMeasurement } = useProjectEngine() as any;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isRecording, setIsRecording] = useState(false);
 
@@ -54,14 +50,19 @@ export const ServiceChecklistUI: React.FC = () => {
             checklistId: activeChecklist.id
         };
 
-        // NC-300: Send to Project Context (Trend Analyzer)
+        // NC-300: Use ServiceChecklistEngine directly
         if (currentItem.measurementConfig) {
-            addMeasurement(
-                activeChecklist.assetId, // Asset ID - now correctly passed as string
+            const minValue = currentItem.measurementConfig.nominalValue - (currentItem.measurementConfig.tolerance * 3);
+            const maxValue = currentItem.measurementConfig.nominalValue + (currentItem.measurementConfig.tolerance * 3);
+            
+            ServiceChecklistEngine.addMeasurement(
+                activeChecklist.assetId,
                 currentItem.id,
                 response.measurementValue,
                 (currentItem.measurementConfig.unit as 'mm' | 'bar' | 'rpm' | 'celsius') || 'mm',
                 currentItem.measurementConfig.nominalValue,
+                minValue,
+                maxValue,
                 currentItem.measurementConfig.tolerance
             );
         }

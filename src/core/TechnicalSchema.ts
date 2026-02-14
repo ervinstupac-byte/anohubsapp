@@ -201,6 +201,10 @@ export interface SpecializedState {
     healthScore: number;
     activeRisks: string[];
     sensors?: Record<string, any>;
+    acoustic?: {
+        fingerprintMatch: number;
+        harmonics: Record<number, number>;
+    };
 }
 
 export interface GovernorState {

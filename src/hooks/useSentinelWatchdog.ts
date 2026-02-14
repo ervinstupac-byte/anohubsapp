@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useCerebro } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { useAppStore } from '../stores/useAppStore';
 import { useNotifications } from '../contexts/NotificationContext';
 import { SentinelKernel } from '../services/SentinelKernel';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,8 @@ import { useTranslation } from 'react-i18next';
  * Monitors the technical state and bridges SentinelKernel diagnostics to the notification system.
  */
 export const useSentinelWatchdog = () => {
-    const { state: techState } = useCerebro();
+    const { mechanical, identity, activeScenario } = useTelemetryStore();
+    const { demoMode } = useAppStore();
     const { pushNotification } = useNotifications();
     const { t } = useTranslation();
 
@@ -23,11 +25,11 @@ export const useSentinelWatchdog = () => {
         if (now - lastCheck.current < 5000) return;
         lastCheck.current = now;
 
-        const assetId = techState.identity.assetId;
+        const assetId = identity.assetId;
 
         // 1. Check Standby Grease Risk
-        const status = techState.demoMode.active ? 'STBY' : 'RUNNING';
-        const standbyCycles = techState.demoMode.scenario === 'BEARING_FAILURE' ? 25 : 5;
+        const status = demoMode ? 'STBY' : 'RUNNING';
+        const standbyCycles = activeScenario === 'BEARING_HAZARD' ? 25 : 5;
         const greaseRisk = SentinelKernel.checkGreaseRisk(status, standbyCycles);
 
         if (greaseRisk.risk && !alertedRisks.current.has('grease')) {
@@ -42,7 +44,7 @@ export const useSentinelWatchdog = () => {
 
         // 2. Thermal Inertia (Bearing Temperatures)
         // We simulate history since Cerebro is mostly instant for now
-        const tempHistory = [techState.mechanical.vibration > 1 ? 75 : 55, techState.mechanical.vibration > 3 ? 82 : 56];
+        const tempHistory = [mechanical.vibration > 1 ? 75 : 55, mechanical.vibration > 3 ? 82 : 56];
         const thermalAlert = SentinelKernel.checkThermalInertia(tempHistory, [now - 10000, now]);
 
         if (thermalAlert.risk && !alertedRisks.current.has('thermal')) {
@@ -56,7 +58,7 @@ export const useSentinelWatchdog = () => {
         }
 
         // 3. Magnetic Unbalance (Excitation vs Temperature)
-        const statorTemps = [55, 56, 55, techState.demoMode.scenario === 'BEARING_FAILURE' ? 88 : 56, 55, 55];
+        const statorTemps = [55, 56, 55, activeScenario === 'BEARING_HAZARD' ? 88 : 56, 55, 55];
         const excitation = 450;
         const magAlert = SentinelKernel.checkMagneticUnbalance(statorTemps, excitation);
 
@@ -75,5 +77,5 @@ export const useSentinelWatchdog = () => {
             alertedRisks.current.clear();
         }
 
-    }, [techState]);
+    }, [mechanical, activeScenario, demoMode, identity]);
 };

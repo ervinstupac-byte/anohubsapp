@@ -3,6 +3,8 @@ import { useAssetContext } from '../../contexts/AssetContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { Settings, CheckCircle, AlertTriangle, Activity } from 'lucide-react';
 import { TurbineType } from '../../types/assetIdentity';
+import { dispatch } from '../../lib/events';
+import { AssetOnboardingWizard } from '../digital-twin/AssetOnboardingWizard';
 
 // Pre-defined "Born Perfect" constants for each type
 const TURBINE_CONSTANTS = {
@@ -40,6 +42,8 @@ export const AssetTypeSelector: React.FC = () => {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [isSwitching, setIsSwitching] = useState(false);
+    const [showWizard, setShowWizard] = useState(false);
+    const [targetType, setTargetType] = useState<TurbineType>('FRANCIS');
 
     // Only authorized engineers/admins can switch core types
     // But for demo, we allow anyone
@@ -48,64 +52,14 @@ export const AssetTypeSelector: React.FC = () => {
 
     const handleSwitch = async (type: TurbineType) => {
         if (isSwitching) return;
-        setIsSwitching(true);
-
-        try {
-            console.log(`[AssetTypeSelector] Switching to ${type}...`);
-
-            // In a real app, we would patch the existing asset.
-            // For this rigorous demo, we prefer creating a fresh 'Perfect' asset of that type
-            // to ensure the DNA is clean.
-
-            const config = TURBINE_CONSTANTS[type as keyof typeof TURBINE_CONSTANTS];
-
-            // Event Feed Integration (Task 3)
-            // Log high-authority kernel messages
-            // We use a custom event that SystemAuditLog might listen to, OR direct audit log
-            // Assuming generic logAction for now, but formatted as requested.
-
-            // Dispatch legacy event for UI components that might listen
-            dispatch.systemKernelLog({
-                level: 'CRITICAL',
-                source: 'KERNEL',
-                message: `Switched to ${type} Logic Gates`
-            });
-            dispatch.systemKernelLog({
-                level: 'INFO',
-                source: 'PHYSICS',
-                message: `Adjusting Efficiency Constants for ${type} Config`
-            });
-
-            await addAsset({
-                name: `${type.charAt(0) + type.slice(1).toLowerCase()} Demo Unit`,
-                type: 'HPP',
-                location: 'Virtual Test Bench',
-                coordinates: [44.0, 15.0],
-                capacity: type === 'PELTON' ? 8.5 : type === 'KAPLAN' ? 15.0 : 12.5,
-                status: 'Operational',
-                turbine_type: type,
-                specs: {
-                    turbineProfile: {
-                        type: type,
-                        ...config.specs
-                    }
-                }
-            });
-
-            // The addAsset function handles selection and logging
-
-        } catch (error) {
-            console.error('Failed to switch turbine type:', error);
-        } finally {
-            setTimeout(() => {
-                setIsSwitching(false);
-                setIsOpen(false);
-            }, 800);
-        }
+        setTargetType(type);
+        setShowWizard(true);
+        setIsOpen(false);
     };
 
     return (
-        <div className="fixed left-0 top-1/2 -translate-y-1/2 z-20">
+        <>
+            <div className="fixed left-0 top-1/2 -translate-y-1/2 z-20">
             {/* Trigger Tab */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -155,5 +109,12 @@ export const AssetTypeSelector: React.FC = () => {
                 </div>
             )}
         </div>
+            
+            <AssetOnboardingWizard 
+                isOpen={showWizard} 
+                onClose={() => setShowWizard(false)} 
+                initialType={targetType}
+            />
+        </>
     );
 };

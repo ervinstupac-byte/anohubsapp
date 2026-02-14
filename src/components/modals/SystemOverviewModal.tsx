@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { X, Activity, Cpu, Server, Shield, Zap, Clock, Network, Layers, Box } from 'lucide-react';
+import { X, Activity, Cpu, Server, Shield, Zap, Clock, Network, Layers, Box, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EcosystemMap } from '../ui/EcosystemMap';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -57,6 +57,12 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/10 bg-slate-950/80 shrink-0">
                             <div className="flex items-center gap-4">
+                                <button 
+                                    onClick={onClose}
+                                    className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors lg:hidden"
+                                >
+                                    <ArrowLeft className="w-6 h-6" />
+                                </button>
                                 <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
                                     <Server className="w-6 h-6 text-cyan-400" />
                                 </div>

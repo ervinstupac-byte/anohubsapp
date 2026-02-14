@@ -79,7 +79,7 @@ export default function AdminHealth() {
         title: 'Confirm Historical Backfill',
         message: 'This operation will process historical telemetry and write aggregated records to the database. It can be heavy on DB I/O. Do you want to proceed?',
         confirmLabel: 'Proceed',
-        variant: 'warning',
+        variant: 'danger',
         onConfirm: handleTriggerBackfill
     });
   };

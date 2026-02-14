@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { PhysicsEngine } from '../../core/PhysicsEngine';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -14,9 +15,10 @@ import { AudioSpectrogram } from '../forensics/AudioSpectrogram';
 import { VisionAnalyzer } from '../forensics/VisionAnalyzer';
 import { KillSwitch } from '../forensics/KillSwitch';
 import { SystemHealth } from './SystemHealth';
-import { SovereignVisualizer } from './SovereignVisualizer';
+import { SovereignVisualizer } from './SovereignVisualizer'; // Re-import for side panel
+import { SovereignLedgerPanel } from './SovereignLedgerPanel';
 import { SandboxOverlay } from './SandboxOverlay';
-import { Sliders, Calculator, Droplets, Microscope, BookOpen, Shield, Layout, Zap, Activity, AlertCircle, TrendingDown } from 'lucide-react';
+import { Sliders, Calculator, Droplets, Microscope, BookOpen, Shield, Layout, Zap, Activity, AlertCircle, TrendingDown, ArrowLeft, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PulseArchiver } from '../../services/PulseArchiver';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
@@ -24,6 +26,7 @@ import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 import SystemBoundaryAnalyzer from '../../services/SystemBoundaryAnalyzer';
 
 export const MasterSovereignDashboard: React.FC = () => {
+    const navigate = useNavigate();
     const {
         hydraulic,
         mechanical,
@@ -197,7 +200,16 @@ export const MasterSovereignDashboard: React.FC = () => {
             {/* Header */}
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-3xl font-bold text-white mb-2">Master Sovereign Dashboard</h1>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => navigate('/')}
+                            className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
+                            title="Back to Hub"
+                        >
+                            <Home className="w-6 h-6" />
+                        </button>
+                        <h1 className="text-3xl font-bold text-white">Master Sovereign Dashboard</h1>
+                    </div>
                     <div className="flex items-center gap-3">
                         <SystemHealth />
                         {/* Strategic View Tab */}
@@ -516,30 +528,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </GlassCard>
                         </div>
 
-                        {/* SovereignVisualizer - New 3D Digital Twin Panel */}
+                        {/* SovereignLedgerPanel - Immutable Record (Replaces Visualizer in Default View) */}
                         <div className="lg:col-span-1">
-                            <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-semibold text-white">Digital Twin</h3>
-                                    <div className="px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full">
-                                        <span className="text-xs text-cyan-400 font-medium">3D SYNC</span>
-                                    </div>
-                                </div>
-                                <div className="h-96">
-                                    <SovereignVisualizer sandboxStress={sandboxStress} sandboxValues={sandboxValues} />
-                                </div>
-
-                                {/* Sandbox Trigger */}
-                                <button
-                                    onClick={() => setIsSandboxOpen(true)}
-                                    className="w-full mt-4 py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
-                                >
-                                    <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
-                                    <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
-                                        Launch Predictive Sandbox
-                                    </span>
-                                </button>
-                            </GlassCard>
+                            <SovereignLedgerPanel />
                         </div>
 
                         {/* FinancialHealthPanel or VisionAnalyzer (Forensic Mode) - 1 column */}
@@ -549,7 +540,22 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <VisionAnalyzer />
                                 </div>
                             ) : (
-                                <FinancialHealthPanel />
+                                <div className="space-y-6">
+                                    <FinancialHealthPanel />
+                                    
+                                    {/* Sandbox Trigger (Moved here) */}
+                                    <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                                         <button
+                                            onClick={() => setIsSandboxOpen(true)}
+                                            className="w-full py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
+                                        >
+                                            <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
+                                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
+                                                Predictive Sandbox
+                                            </span>
+                                        </button>
+                                    </GlassCard>
+                                </div>
                             )}
                         </div>
                     </div>

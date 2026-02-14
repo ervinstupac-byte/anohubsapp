@@ -90,6 +90,45 @@ export class ErrorHandlerService {
     }
 
     /**
+     * GET FULL MONSTER REPORT
+     * Combines cavitation and erosion risks into a single threat assessment
+     */
+    getFullMonsterReport(
+        telemetry: TelemetryStream,
+        waterQuality?: { sedimentPPM: number; particleSize: number }
+    ): {
+        cavitation: CavitationStatus;
+        erosion: ErosionStatus;
+        overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+        recommendations: string[];
+    } {
+        const cavitation = this.monitorCavitation(telemetry);
+        const erosion = this.monitorErosion(telemetry, waterQuality);
+
+        let overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' = 'LOW';
+        const recs: string[] = [];
+
+        // Determine Overall Risk
+        if (cavitation.riskLevel === 'CRITICAL' || erosion.riskLevel === 'SEVERE') {
+            overallRisk = 'CRITICAL';
+        } else if (cavitation.riskLevel === 'DANGER' || erosion.riskLevel === 'HIGH') {
+            overallRisk = 'HIGH';
+        } else if (cavitation.riskLevel === 'CAUTION' || erosion.riskLevel === 'MODERATE') {
+            overallRisk = 'MEDIUM';
+        }
+
+        // Collect Recommendations
+        if (cavitation.recommendation) recs.push(`CAVITATION: ${cavitation.recommendation}`);
+        if (erosion.recommendation) recs.push(`EROSION: ${erosion.recommendation}`);
+
+        return {
+            cavitation,
+            erosion,
+            overallRisk,
+            recommendations: recs
+        };
+    }
+    /**
      * Monitor erosion risk from sediment
      */
     monitorErosion(
@@ -159,47 +198,7 @@ export class ErrorHandlerService {
         return (n * Math.sqrt(Q)) / Math.pow(H, 0.75);
     }
 
-    /**
-     * Get comprehensive invisible monsters report
-     */
-    getFullMonsterReport(
-        telemetry: TelemetryStream,
-        waterQuality?: { sedimentPPM: number; particleSize: number }
-    ): {
-        cavitation: CavitationStatus;
-        erosion: ErosionStatus;
-        overallRisk: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
-        recommendations: string[];
-    } {
-        const cavitation = this.monitorCavitation(telemetry);
-        const erosion = this.monitorErosion(telemetry, waterQuality);
 
-        // Determine overall risk
-        const risks = [cavitation.riskLevel, erosion.riskLevel];
-        let overallRisk: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
-
-        if (risks.includes('CRITICAL') || cavitation.riskLevel === 'CRITICAL') {
-            overallRisk = 'CRITICAL';
-        } else if (risks.includes('DANGER') || erosion.riskLevel === 'SEVERE') {
-            overallRisk = 'HIGH';
-        } else if (risks.includes('CAUTION') || erosion.riskLevel === 'HIGH' || erosion.riskLevel === 'MODERATE') {
-            overallRisk = 'MODERATE';
-        } else {
-            overallRisk = 'LOW';
-        }
-
-        // Collect recommendations
-        const recommendations: string[] = [];
-        if (cavitation.recommendation) recommendations.push(cavitation.recommendation);
-        if (erosion.recommendation) recommendations.push(erosion.recommendation);
-
-        return {
-            cavitation,
-            erosion,
-            overallRisk,
-            recommendations
-        };
-    }
 }
 
 /**

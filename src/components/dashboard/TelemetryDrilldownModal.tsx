@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, TrendingUp, AlertTriangle, Wrench, Info, Zap, Microscope, Clock } from 'lucide-react';
+import { X, TrendingUp, AlertTriangle, Wrench, Info, Zap, Microscope, Clock, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useAssetContext } from '../../contexts/AssetContext';
@@ -119,12 +119,22 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
                     exit={{ scale: 0.95, opacity: 0, y: 10 }}
                     className="relative w-full max-w-4xl"
                 >
-                    <GlassCard className="border-cyan-500/30 overflow-hidden flex flex-col shadow-2xl">
+                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-cyan-500/30 p-0">
                         {/* Header */}
-                        <div className="px-6 py-4 border-b border-white/10 bg-slate-950/80 flex items-center justify-between">
+                        <div className="h-16 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
                             <div className="flex items-center gap-4">
-                                <div className={`p-3 rounded-lg bg-white/5 border border-white/10 ${getStatusColor()}`}>
-                                    <Activity className="w-6 h-6" />
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                                    title={t('common.back', 'Back')}
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
+                                <div className={`p-2 rounded-lg border ${status === 'critical' ? 'bg-red-500/10 border-red-500/20' :
+                                    status === 'warning' ? 'bg-amber-500/10 border-amber-500/20' :
+                                        'bg-emerald-500/10 border-emerald-500/20'
+                                    }`}>
+                                    <Microscope className={`w-5 h-5 ${getStatusColor()}`} />
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-bold text-white tracking-wide">{metricLabel}</h2>

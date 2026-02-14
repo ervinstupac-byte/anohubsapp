@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Info, ArrowLeft } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 
 interface ConfirmModalProps {
@@ -56,7 +56,13 @@ export default function ConfirmModal({
                         className="relative w-full max-w-md"
                     >
                         <GlassCard className={`p-6 border-${variant === 'danger' ? 'red' : variant === 'success' ? 'green' : 'blue'}-500/30`}>
-                            <div className="flex items-start gap-4">
+                            <button
+                                onClick={onCancel}
+                                className="absolute top-4 right-4 p-1.5 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                            </button>
+                            <div className="flex items-start gap-4 pr-8">
                                 <div className={`p-3 rounded-full bg-${variant === 'danger' ? 'red' : variant === 'success' ? 'green' : 'blue'}-500/10 border border-${variant === 'danger' ? 'red' : variant === 'success' ? 'green' : 'blue'}-500/20`}>
                                     {getIcon()}
                                 </div>

@@ -12,7 +12,7 @@ import { TelemetryStream } from '../lib/engines/BaseTurbineEngine';
 import { KaplanOptimizer, FrancisOptimizer, PeltonOptimizer, TurbineType } from './TurbinePhysicsOptimizer';
 import { CrossCorrelationService } from './CrossCorrelationService';
 import { ForensicDiagnosticService, CausalChain } from './ForensicDiagnosticService';
-import { SovereignHealerService, HealingResult } from './SovereignHealerService';
+import { SovereignHealerService, HealingResult, SystemRecoveryService } from './SovereignHealerService';
 import { ROIMonitorService } from './ROIMonitorService';
 import { SovereignGlobalState, GlobalState } from './SovereignGlobalState';
 

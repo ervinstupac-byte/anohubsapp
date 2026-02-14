@@ -160,10 +160,10 @@ export class SovereignOrchestrator {
      */
     private static wireKernelObservers(): void {
         // Wire ROI monitor to kernel
-        SovereignKernel.observe((telemetry: EnrichedTelemetry) => {
+        SovereignKernel.subscribe((telemetry: EnrichedTelemetry) => {
             // Check for critical anomalies
-            if (telemetry.physics.vibration > 0.15) {
-                console.warn('[SovereignKernel] ⚠️ HIGH VIBRATION DETECTED:', telemetry.physics.vibration);
+            if (telemetry.mechanical.vibration > 0.15) {
+                console.warn('[SovereignKernel] ⚠️ HIGH VIBRATION DETECTED:', telemetry.mechanical.vibration);
             }
         });
     }

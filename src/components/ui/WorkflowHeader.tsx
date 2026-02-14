@@ -39,7 +39,7 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
     const location = useLocation();
     const { selectedAsset, assets, selectAsset } = useAssetContext();
     const { diagnosis, mechanical } = useTelemetryStore();
-    const { mode } = useDensity();
+    const { densityMode: mode } = useDensity();
     const { logNavigation } = useWorkflow();
     const [showMap, setShowMap] = React.useState(false); // NEW
     const [isOffline, setIsOffline] = React.useState(!navigator.onLine); // NEW

@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Download, Printer, Share2, FileText, Check } from 'lucide-react';
+import { X, Download, Printer, Share2, FileText, Check, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -81,6 +81,12 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 bg-slate-900/90 border-b border-white/10">
                             <div className="flex items-center gap-4">
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <ArrowLeft className="w-5 h-5" />
+                                </button>
                                 <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20">
                                     <FileText className="w-6 h-6 text-red-400" />
                                 </div>

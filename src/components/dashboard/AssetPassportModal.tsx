@@ -24,11 +24,13 @@ import {
   ShieldCheck,
   Printer,
   Download,
-  Share2
+  Share2,
+  ArrowLeft
 } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { calculateMaintenancePrediction } from '../../features/maintenance/logic/Predictor';
 import { useTranslation } from 'react-i18next';
+import { saveLog } from '../../services/PersistenceService';
 
 interface AssetPassportModalProps {
   isOpen: boolean;
@@ -125,6 +127,18 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
       };
       
       setRulData(rulResult);
+
+      // NC-25100: Log Passport Access
+      saveLog({
+        event_type: 'ASSET_PASSPORT_VIEWED',
+        reason: `User inspected passport for ${componentName}`,
+        active_protection: 'NONE',
+        details: {
+          componentId,
+          healthScore: rulResult.healthScore,
+          remainingYears: rulResult.remainingYears
+        }
+      });
     } catch (error) {
       console.error('Failed to fetch RUL:', error);
     } finally {
@@ -168,34 +182,42 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
           />
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-5xl h-[85vh] flex flex-col"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-5xl h-[90vh] flex flex-col"
           >
-            <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] p-0">
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-white/10 bg-slate-950/80">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                            <FileText className="w-6 h-6 text-cyan-400" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-bold text-white tracking-wide flex items-center gap-2">
-                                Asset Passport
-                                <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] text-cyan-400 uppercase tracking-widest">
-                                    Official Record
-                                </span>
-                            </h2>
-                            <div className="flex items-center gap-2 text-sm text-slate-400 mt-1">
-                                <span className="text-white font-medium">{componentName}</span>
-                                <span className="text-slate-600">•</span>
-                                <span className="font-mono text-xs text-slate-500">{componentId}</span>
-                                <span className="text-slate-600">•</span>
-                                <span className="text-xs text-slate-500">{componentType}</span>
-                            </div>
-                        </div>
+            <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 p-0 shadow-[0_0_50px_rgba(6,182,212,0.15)]">
+              {/* Header */}
+              <div className="h-16 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-4">
+                  <button
+                      onClick={onClose}
+                      className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                      title={t('common.back', 'Back')}
+                  >
+                      <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                      onClick={onClose}
+                      className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                      title={t('common.back', 'Back')}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+                    <ShieldCheck className="w-6 h-6 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white tracking-wide">{componentName}</h2>
+                    <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
+                      <span className="text-cyan-400">{componentId}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-600" />
+                      <span>{componentType}</span>
                     </div>
+                  </div>
+                </div>
                     <div className="flex items-center gap-3">
                         <button className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-cyan-400" title="Verify Integrity">
                             <ShieldCheck className="w-5 h-5" />

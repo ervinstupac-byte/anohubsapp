@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Activity, Lightbulb, AlertTriangle, ArrowRight, X, FileText, Wrench, Zap, Database, Play, Pause, History, ShieldAlert, CheckCircle, TrendingUp } from 'lucide-react';
 import { ForensicVisualizer } from '../components/dashboard/ForensicVisualizer';
-import { HistoricalDataService, WisdomTooltip, HISTORICAL_PATTERNS } from '../services/HistoricalDataService';
+import { HistoricalDataService, WisdomTooltip, HISTORICAL_PATTERNS, ANCESTRAL_PATTERNS } from '../services/HistoricalDataService';
 import { KnowledgeBaseService } from '../services/KnowledgeBaseService';
 import { SovereignExecutiveService, ExecutiveVerdict } from '../services/SovereignExecutiveService';
 import { Sovereign_Executive_Engine, PermissionTier } from '../services/Sovereign_Executive_Engine';
@@ -38,6 +38,8 @@ import { KineticPolarView } from '../components/forensics/KineticPolarView';
 import { SovereignSoundEngine } from '../components/ui/SovereignSoundEngine';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
+import { useAssetContext } from '../contexts/AssetContext';
+import { mapAssetToEnhancedAsset } from '../utils/assetMapper';
 
 import OutageOptimizer from '../services/OutageOptimizer';
 
@@ -91,6 +93,8 @@ const ForensicHub: React.FC = () => {
     const [simRpm, setSimRpm] = useState<number | null>(null);
     const [simLooseness, setSimLooseness] = useState(false);
     const [calculatedLoss, setCalculatedLoss] = useState<string | null>(null);
+
+    const { selectedAsset } = useAssetContext();
 
     // Telemetry & Alarms
     const activeAlarms = useTelemetryStore(state => state.activeAlarms);
@@ -227,16 +231,13 @@ const ForensicHub: React.FC = () => {
 
 
 
-        // Auditor Export (Compliance)
-        const compReport = AuditorExportService.generateComplianceReport('UNIT-1', {
-            start: Date.now() - 2592000000,
-            end: Date.now()
-        });
-        setComplianceReport(compReport);
+        // Auditor Export (Compliance) - Already handled above
+        // const compReport = AuditorExportService.generateComplianceReport('UNIT-1', { ... });
+        // setComplianceReport(compReport);
 
-        // Outage Optimizer (Strategic)
-        const plan = OutageOptimizer.findOptimalWindow(48, new Date());
-        setOutagePlan(plan);
+        // Outage Optimizer (Strategic) - Handled in subsequent effect
+        // const plan = OutageOptimizer.findOptimalWindow(48, new Date());
+        // setOutagePlan(plan);
 
         // Civil Security (Mock)
         CivilSecurityModule.registerPiezometer({ id: 'PZ-01', location: 'Foundation Left', elevation: 85, pressure: 2.1, upliftForce: 0, timestamp: Date.now() });
@@ -315,7 +316,7 @@ const ForensicHub: React.FC = () => {
             scadaTimestamp: Date.now(),
             sensors: { a: {}, b: {} }, // Mock validation inputs
             market: { price: 65, fcr: 0, carbon: 0 },
-            erosion: { sandConcentrationPPM: 10, erosionRateMmYr: 0.1, estimatedLifeYears: 20 },
+            erosion: { sedimentPPM: 10, bucketThinningRate: 100, estimatedBucketLife: 20 },
             ph: 7.2
         }, { tier: PermissionTier.ADVISORY });
         setExecutiveResult(execState);
@@ -393,7 +394,7 @@ const ForensicHub: React.FC = () => {
         else if (label.includes('GROUND') || label.includes('ELECTRICAL')) oracleKey = 'SHAFT_CURRENT';
 
         if (oracleKey) {
-            const wisdom = AncestralOracleService.getWisdom(oracleKey);
+            const wisdom = HistoricalDataService.getWisdom(oracleKey);
             addWisdom({
                 ...wisdom,
                 id: `${wisdom.id}-${Date.now()}` // Unique ID for animation
@@ -1208,11 +1209,16 @@ const ForensicHub: React.FC = () => {
                                             if (critical) {
                                                 PurchaseOrderService.generatePurchaseOrder({
                                                     requisitionId: `REQ-${Date.now()}`,
+                                                    componentId: critical.componentId,
                                                     part: critical,
                                                     requestedQuantity: critical.reorderPoint + 2,
                                                     urgency: 'CRITICAL',
-                                                    requestorId: 'FORENSIC-HUB-AUTO',
-                                                    notes: 'Auto-generated for stockout'
+                                                    reason: 'Manual Auto-Order for Critical Stockout',
+                                                    rulDays: 0,
+                                                    logisticsGapDays: 0,
+                                                    estimatedFailureDate: Date.now(),
+                                                    estimatedCost: (critical.reorderPoint + 2) * critical.unitCost,
+                                                    createdAt: Date.now()
                                                 });
                                                 alert(`PO generated for ${critical.partNumber}. Check console.`);
                                             }
@@ -1891,6 +1897,7 @@ const ForensicHub: React.FC = () => {
                                 </button>
                                 <AlignmentWizard
                                     sessionId={`SESSION-${Date.now()}`}
+                                    asset={selectedAsset ? mapAssetToEnhancedAsset(selectedAsset) : undefined as any}
                                     onComplete={() => {
                                         setShowAlignmentWizard(false);
                                         addWisdom({

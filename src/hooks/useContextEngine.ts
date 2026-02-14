@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useCerebro } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { useAppStore } from '../stores/useAppStore';
+import { DEFAULT_TECHNICAL_STATE, TechnicalProjectState } from '../core/TechnicalSchema';
 import { useMaintenance } from '../contexts/MaintenanceContext';
 import { KnowledgeNode, ContextTrigger } from '../models/knowledge/ContextTypes';
 import { KNOWLEDGE_BASE } from '../data/knowledge/KnowledgeBase';
@@ -39,8 +41,64 @@ export interface DiagnosticInsight {
  */
 export const useContextEngine = () => {
     const location = useLocation();
-    const { state: techState } = useCerebro();
+    
+    // MODERN TELEMETRY STORE
+    const { 
+        identity, 
+        mechanical, 
+        hydraulic, 
+        site, 
+        penstock, 
+        specializedState, 
+        structural, 
+        appliedMitigations, 
+        physics, 
+        activeScenario,
+    } = useTelemetryStore();
+    
+    // Local state for features not yet in TelemetryStore or managed locally
+    const [patternWeights, setPatternWeights] = useState<Record<string, number>>({});
+    const [hiveStatus, setHiveStatus] = useState<any>(null);
+
+    const reinforcePattern = useCallback((patternId: string) => {
+        setPatternWeights(prev => ({
+            ...prev,
+            [patternId]: (prev[patternId] || 0) + 1
+        }));
+    }, []);
+    
+    const { demoMode } = useAppStore();
     const { workOrders, createWorkOrder } = useMaintenance();
+
+    // Construct TechnicalProjectState for compatibility with ExpertInference
+    const techState = useMemo(() => ({
+        identity,
+        mechanical,
+        hydraulic,
+        site,
+        penstock,
+        specializedState,
+        structural,
+        appliedMitigations,
+        demoMode: { active: demoMode, scenario: activeScenario },
+        physics: {
+            ...DEFAULT_TECHNICAL_STATE.physics,
+            // Map Decimal physics to number for legacy compatibility where needed
+            hoopStressMPa: physics.hoopStress?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.hoopStressMPa,
+            waterHammerPressureBar: physics.surgePressure?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.waterHammerPressureBar,
+            specificWaterConsumption: physics.specificWaterConsumption?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.specificWaterConsumption,
+            // Add other mappings as required by ExpertInference
+            leakageStatus: DEFAULT_TECHNICAL_STATE.physics.leakageStatus // Fallback
+        },
+        financials: DEFAULT_TECHNICAL_STATE.financials, // Placeholder if needed
+        hydrology: DEFAULT_TECHNICAL_STATE.hydrology,
+        market: DEFAULT_TECHNICAL_STATE.market,
+        riskScore: 0,
+        lastRecalculation: new Date().toISOString(),
+        manualRules: [],
+        componentHealth: {},
+        investigatedComponents: [],
+    } as unknown as TechnicalProjectState), [identity, mechanical, hydraulic, site, penstock, specializedState, structural, appliedMitigations, physics, demoMode, activeScenario]);
 
     const [activeNodes, setActiveNodes] = useState<KnowledgeNode[]>([]);
     const [activeLogs, setActiveLogs] = useState<any[]>([]);
@@ -62,9 +120,11 @@ export const useContextEngine = () => {
     };
 
     // 5.1 HEURISTIC LEARNING (The Feedback Loop & Federated Learning)
-    const [patternWeights, setPatternWeights] = useState<Record<string, number>>({});
-    const [hiveStatus, setHiveStatus] = useState<{ connected: boolean; lastSync: number }>({ connected: false, lastSync: 0 });
-
+    // Note: patternWeights and hiveStatus seem to be local to this hook in previous version.
+    // I should check if useTelemetryStore provides them.
+    // Checking store: `patternWeights` and `hiveStatus` are NOT in useTelemetryStore based on my previous read.
+    // So I must keep them local here.
+    
     // HIVE INFLOW: Periodically pull global weights
     useEffect(() => {
         const syncHive = async () => {
@@ -87,7 +147,7 @@ export const useContextEngine = () => {
     }, []);
 
 
-    const reinforcePattern = useCallback(async (patternId: string, feedback: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => {
+    const handleReinforcePattern = useCallback(async (patternId: string, feedback: 'CONFIRMED' | 'REJECTED' | 'OVERRIDE') => {
         setPatternWeights(prev => {
             const current = prev[patternId] || 1.0;
             // Boost by 10% if confirmed/override, penalty if rejected (mute)
@@ -480,8 +540,8 @@ export const useContextEngine = () => {
 
     return {
         activeContext: activeNodes,
-        hiveStatus, // Exposed for Sidebar UI
-        patternWeights, // Exposed for Learning Lab
+        hiveStatus: hiveStatus, // Exposed for Sidebar UI
+        patternWeights: patternWeights, // Exposed for Learning Lab
         activeComponentId,
         activeLogs,
         activeWorkOrders,
@@ -524,7 +584,7 @@ export const useContextEngine = () => {
             scrubTo,
             togglePlay
         },
-        reinforcePattern,
+        reinforcePattern: handleReinforcePattern,
         setFocus // Expose Bi-Directional Sync Method
     };
 };

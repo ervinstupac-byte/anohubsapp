@@ -14,7 +14,7 @@ const Manifesto = React.lazy(() => import('../components/francis/Manifesto').the
 const MIVDetail = React.lazy(() => import('../components/francis/MIVDetail').then(module => ({ default: module.MIVDetail })));
 const BearingsDetail = React.lazy(() => import('../components/francis/BearingsDetail').then(module => ({ default: module.BearingsDetail })));
 // NC-20900: Directed to new Alignment Wizard in maintenance
-const ShaftAlignment = React.lazy(() => import('../components/maintenance/AlignmentWizard').then(module => ({ default: module.AlignmentWizard })));
+const ShaftAlignment = React.lazy(() => import('../components/maintenance/AlignmentWizardWrapper').then(module => ({ default: module.AlignmentWizardWrapper })));
 const CoolingWater = React.lazy(() => import('../components/francis/CoolingWater'));
 const DrainagePumps = React.lazy(() => import('../components/francis/DrainagePumps'));
 const OilHealth = React.lazy(() => import('../components/francis/OilHealth'));

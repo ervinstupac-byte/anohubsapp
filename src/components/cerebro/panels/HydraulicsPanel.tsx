@@ -1,41 +1,50 @@
 import React from 'react';
 import { Activity, ArrowRight, TrendingDown, Shield } from 'lucide-react';
-import { useProjectEngine } from '../../../contexts/ProjectContext';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
 import { GlassCard } from '../../../shared/components/ui/GlassCard';
-import { PipeMaterial } from '../../../core/TechnicalSchema';
+import { PipeMaterial, DEFAULT_TECHNICAL_STATE } from '../../../core/TechnicalSchema';
 
 export const HydraulicsPanel: React.FC = () => {
-    // 1. LEGACY (Writes & Config)
-    const { technicalState, updatePenstockSpecs, dispatch } = useProjectEngine();
-
-    // 2. NEW TELEMETRY (Read Live Physics)
-    const { physics: livePhysics, hydraulic: liveHydraulic } = useTelemetryStore();
+    // 1. MODERN TELEMETRY STORE (Read/Write)
+    const { 
+        penstock, 
+        physics: livePhysics, 
+        setConfig, 
+        appliedMitigations, 
+        applyMitigation 
+    } = useTelemetryStore();
 
     const { t, i18n: { language } } = useTranslation();
 
-    const { material, wallThickness } = technicalState.penstock; // Keep reading config from TechnicalState for Inputs
+    const { material, wallThickness } = penstock;
+
+    // Helper to update penstock config
+    const updatePenstockSpecs = (updates: Partial<typeof penstock>) => {
+        setConfig({
+            penstock: { ...penstock, ...updates }
+        });
+    };
 
     // DATA BRIDGE: Live Physics or Fallback
     // Note: ProjectEngine splits surge vs hammer. PhysicsEngine has 'surgePressure'.
     // We map 'surgePressure' to the display value.
     const activeSurge = livePhysics?.surgePressure
         ? livePhysics.surgePressure.toNumber()
-        : (technicalState.physics?.waterHammerPressureBar || 0);
+        : (DEFAULT_TECHNICAL_STATE.physics?.waterHammerPressureBar || 0);
 
     const activeHoopStress = livePhysics?.hoopStress
         ? livePhysics.hoopStress.toNumber()
-        : (technicalState.physics?.hoopStressMPa || 0);
+        : (DEFAULT_TECHNICAL_STATE.physics?.hoopStressMPa || 0);
 
     const activeHeadLoss = livePhysics?.headLoss
         ? livePhysics.headLoss.toNumber()
-        : (technicalState.physics?.headLoss || 0);
+        : (DEFAULT_TECHNICAL_STATE.physics?.headLoss || 0);
 
     const activeNetHead = livePhysics?.netHead
         ? livePhysics.netHead.toNumber()
-        : (technicalState.physics?.netHead || 0);
+        : (DEFAULT_TECHNICAL_STATE.physics?.netHead || 0);
 
     return (
         <div className="space-y-6">
@@ -122,7 +131,7 @@ export const HydraulicsPanel: React.FC = () => {
                     </div>
                 </div>
 
-                {activeHoopStress > 200 && !technicalState.appliedMitigations.includes('STRUCTURAL_RISK') && (
+                {activeHoopStress > 200 && !appliedMitigations.includes('STRUCTURAL_RISK') && (
                     <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
                         <div className="relative z-10">
                             <h4 className="text-xs font-bold text-amber-500 uppercase flex items-center gap-2">
@@ -133,7 +142,7 @@ export const HydraulicsPanel: React.FC = () => {
                             </p>
                         </div>
                         <button
-                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'STRUCTURAL_RISK' })}
+                            onClick={() => applyMitigation('STRUCTURAL_RISK')}
                             className="relative z-10 px-3 py-2 bg-amber-500 text-black text-[10px] font-black rounded hover:bg-amber-400 transition-all flex items-center gap-2"
                         >
                             APPLY RECOVERY <ArrowRight className="w-3 h-3" />

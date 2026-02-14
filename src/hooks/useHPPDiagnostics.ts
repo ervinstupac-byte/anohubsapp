@@ -5,7 +5,7 @@
  */
 
 import { useMemo } from 'react';
-import { useProjectEngine } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine';
 import { injectExpertInsights } from '../services/KnowledgeInjector';
 // import { calculateFinancialRisk } from '../components/dashboard/FinancialRiskTicker'; // Removed in favor of KnowledgeInjector
@@ -17,21 +17,22 @@ const GRAVITY = 9.81;
 export const THOMA_SIGMA_CRITICAL = 0.12; // Typical for high specific speed Francis
 
 export const useHPPDiagnostics = () => {
-    const { technicalState, createComplexIdentity } = useProjectEngine();
-    const { identity } = technicalState;
-    const assetIdentity = createComplexIdentity(); // Use the COMPLEX ONE for the engine
+    const { identity, site, hydraulic } = useTelemetryStore();
 
     const diagnostics = useMemo(() => {
-        if (!assetIdentity) return null;
+        if (!identity) return null;
+
+        const liveFlow = hydraulic.flow ?? 0;
+        const liveHead = hydraulic.head ?? 0;
 
         // 1. Run Base Expert Diagnosis
         const baseDiagnostics = ExpertDiagnosisEngine.runDiagnostics(
-            assetIdentity,
-            technicalState.site.temperature,
-            assetIdentity.fluidIntelligence.oilSystem.oilType === 'MINERAL_ISO_VG_46' ? 'OIL' : 'GREASE',
+            identity,
+            site.temperature,
+            identity.fluidIntelligence.oilSystem.oilType === 'MINERAL_ISO_VG_46' ? 'OIL' : 'GREASE',
             50, // Rotor weight default
-            assetIdentity.operationalMapping?.currentPoint?.flowM3S ?? 0, // Pass Live Flow
-            assetIdentity.operationalMapping?.currentPoint?.headM ?? 0, // Pass Live Head
+            liveFlow, // Pass Live Flow
+            liveHead, // Pass Live Head
             50.0 // Grid Frequency (Default to 50, could be live if available)
         );
 
@@ -43,9 +44,9 @@ export const useHPPDiagnostics = () => {
         // Replaces manual logic with Knowledge Base rules
         const insights = injectExpertInsights(
             health,
-            assetIdentity.operationalMapping.currentPoint?.flowM3S || assetIdentity.machineConfig.ratedFlowM3S,
-            assetIdentity.operationalMapping.currentPoint?.headM || assetIdentity.machineConfig.ratedHeadM,
-            assetIdentity.specializedAdvanced?.frontRunnerClearanceMM || 0.35
+            liveFlow || identity.machineConfig.ratedFlowM3S,
+            liveHead || identity.machineConfig.ratedHeadM,
+            identity.specializedAdvanced?.frontRunnerClearanceMM || 0.35
         );
 
         // Apply Insights
@@ -87,7 +88,7 @@ export const useHPPDiagnostics = () => {
             isCavitationRisk: likelyCause?.includes('kavitacije') ?? false,
             baseDiagnostics
         };
-    }, [technicalState]);
+    }, [identity, site, hydraulic]);
 
     return diagnostics;
 };

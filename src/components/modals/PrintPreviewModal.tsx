@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler, Settings, Loader2, Check, Printer, FileBarChart, Layers } from 'lucide-react';
+import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler, Settings, Loader2, Check, Printer, FileBarChart, Layers, ArrowLeft } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { TechnicalProjectState } from '../../core/TechnicalSchema';
 import { ActionEngine } from '../../features/business/logic/ActionEngine';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 import { DossierRegistryService } from '../../services/DossierRegistryService';
+import { saveLog } from '../../services/PersistenceService';
 
 interface PrintPreviewModalProps {
     isOpen: boolean;
@@ -57,6 +58,18 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                 projectState: state,
                 reportType: 'PROJECT_DOSSIER'
             });
+
+            // NC-25100: Log audit export
+            saveLog({
+                event_type: 'AUDIT_REPORT_GENERATED',
+                reason: `Generated project dossier for ${state.identity.assetName}`,
+                active_protection: 'NONE',
+                details: {
+                    settings,
+                    assetName: state.identity.assetName || (state.identity as any).name || 'Unknown Asset',
+                    dossierCount
+                }
+            });
         } catch (e) {
             console.warn('Print preview generate failed', e);
         } finally {
@@ -87,10 +100,18 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                     >
                         {/* Sidebar: Settings */}
                         <div className="w-80 bg-slate-900 border-r border-white/10 p-6 flex flex-col">
-                            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                <Settings className="w-4 h-4" />
-                                Print Configuration
-                            </h3>
+                            <div className="flex items-center gap-3 mb-6">
+                                <button 
+                                    onClick={onClose}
+                                    className="p-1.5 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                </button>
+                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                    <Settings className="w-4 h-4" />
+                                    Print Configuration
+                                </h3>
+                            </div>
 
                             <div className="space-y-6 flex-1">
                                 <div className="space-y-2">
@@ -207,7 +228,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                                 </div>
                                                 <div className="flex justify-between items-end border-b border-slate-200 pb-2">
                                                     <span className="text-sm font-bold text-slate-400 uppercase">Rated Power</span>
-                                                    <span className="text-xl font-bold text-slate-800">{state.technical.ratedPowerMW} MW</span>
+                                                    <span className="text-xl font-bold text-slate-800">{state.identity.machineConfig.ratedPowerMW} MW</span>
                                                 </div>
                                             </div>
 

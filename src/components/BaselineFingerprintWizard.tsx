@@ -59,7 +59,7 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
                 outlet: 20,
                 servo: (tData as any).cylinderPressure || 60
             },
-            powerOutput: (tData as any).output_power || (asset as any).capacity * (loadLevel / 100),
+            powerOutput: (tData as any).output_power || asset.capacity * (loadLevel / 100),
             efficiency: 90 + loadLevel / 20, // Mock efficiency curve
             waterFlow: (asset.turbine_config.design_flow || 0) * (loadLevel / 100)
         });

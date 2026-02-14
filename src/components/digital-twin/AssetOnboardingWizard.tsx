@@ -7,23 +7,24 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Check, AlertCircle, Settings, Cpu, Gauge, Droplets, Mountain } from 'lucide-react';
-import { useProjectEngine } from '../../contexts/ProjectContext';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { AssetIdentity, TurbineType, Orientation, TransmissionType, PenstockMaterial } from '../../types/assetIdentity';
 import { AssetIdentityService } from '../../services/AssetIdentityService';
 import { useNavigate } from 'react-router-dom';
+import { GlassCard } from '../../shared/components/ui/GlassCard';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 type WizardStep = 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
 
-export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
-    const { dispatch } = useProjectEngine();
+export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => void; initialType?: TurbineType }> = ({ isOpen, onClose, initialType }) => {
+    const { setConfig } = useTelemetryStore();
     const { addAsset } = useAssetContext();
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState<WizardStep>('physical');
     const [assetData, setAssetData] = useState<Partial<AssetIdentity>>({});
 
     // Physical Architecture State
-    const [turbineType, setTurbineType] = useState<TurbineType>('FRANCIS');
+    const [turbineType, setTurbineType] = useState<TurbineType>(initialType || 'FRANCIS');
     const [orientation, setOrientation] = useState<Orientation>('VERTICAL');
     const [transmission, setTransmission] = useState<TransmissionType>('DIRECT');
     const [penstockType, setPenstockType] = useState<PenstockMaterial>('STEEL');
@@ -142,6 +143,12 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
             identity.specializedAdvanced.pressureDifferenceBar = balance.pressureDifference;
         }
 
+        // Update telemetry store with new configuration
+        setConfig({ identity });
+        
+        // Sensor Matrix logic...
+
+
         // Sensor Matrix
         if (hasGeneratorVibSensor) {
             identity.sensorMatrix.vibrationSensors.generator.push({
@@ -193,10 +200,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
         };
         const properCaseType = typeMap[turbineType] || 'Francis';
 
-        // 1. Dispatch to Project Context (Current Session)
-        dispatch({ type: 'SET_ASSET', payload: { id: identity.assetId, name: identity.assetName, location: 'New Asset', type: properCaseType } });
-
-        // 2. Persist to Global Asset Store (Permanent)
+        // 1. Persist to Global Asset Store (Permanent)
         addAsset({
             name: identity.assetName,
             type: 'HPP', // Always HPP for this wizard
@@ -215,17 +219,27 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                 }
             }
         }).then(() => {
-            onComplete();
+            onClose();
             navigate('/fleet'); // Redirect to fleet view
         }).catch(err => {
             console.error("Failed to persist asset:", err);
             // Still complete locally
-            onComplete();
+            onClose();
         });
     };
 
+    if (!isOpen) return null;
+
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white p-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in duration-200">
+            <div className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-[#0a0a0a] text-white p-8 rounded-3xl border border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <button 
+                    onClick={onClose}
+                    className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                >
+                    ✕
+                </button>
+
             {/* Progress Steps */}
             <div className="mb-8">
                 <div className="flex items-center justify-between max-w-4xl mx-auto">
@@ -614,6 +628,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                 </div>
             )}
         </div>
+    </div>
     );
 };
 

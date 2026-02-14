@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, RefreshCw, Database, Archive, AlertTriangle, Info, Zap, TrendingUp } from 'lucide-react';
+import { Settings, Save, RefreshCw, Database, Archive, AlertTriangle, Info, Zap, TrendingUp, Camera, Image as ImageIcon, ShieldAlert, Activity } from 'lucide-react';
+import Decimal from 'decimal.js';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { calculateOperatingZone, calculateCavitationRisk } from '../features/physics-core/PhysicsCalculations.logic';
+import { ErrorHandlerService, CavitationStatus, ErosionStatus } from '../services/ErrorHandlerService';
+import { FrancisHorizontalEngine } from '../lib/engines/FrancisHorizontalEngine';
 import { VibrationForensics } from '../services/core/VibrationForensics';
 import { VibrationExpert } from '../services/VibrationExpert';
 import { ForensicDiagnosticService } from '../services/ForensicDiagnosticService';
 import { generateSignature } from '../services/ForensicSignatureService';
 import { OilAnalysisService } from '../services/OilAnalysisService';
 import { AIPredictionService } from '../services/AIPredictionService';
+import { DrTurbineAI, ActionCard } from '../services/DrTurbineAI';
 import { ResonanceHarvesterManager } from '../services/ResonanceHarvesterManager';
 import { LifeExtensionEngine } from '../services/LifeExtensionEngine';
 import { StructuralIntegrityService } from '../services/StructuralIntegrityService';
@@ -25,7 +29,7 @@ import { ShaftSealGuardian } from '../services/ShaftSealGuardian';
 import { GovernorHPUGuardian } from '../services/GovernorHPUGuardian';
 import { DamStabilityAnalyser } from '../services/DamStabilityAnalyser';
 import { TrashRackRobot } from '../services/TrashRackRobot';
-import { TimeSpoofingDetector } from '../services/TimeSpoofingDetector';
+import { TimeSpoofingDetector, TimeSourceStatus } from '../services/TimeSpoofingDetector';
 import { ThrustBearingMaster } from '../services/ThrustBearingMaster';
 import { SpecialistNotebook, DamageReport } from '../services/SpecialistNotebook';
 import { ComputerVisionService, DetectionResult } from '../services/ComputerVisionService'; 
@@ -50,11 +54,11 @@ export const ManualDataEntry: React.FC = () => {
     const mechanical = useTelemetryStore(state => state.mechanical);
 
     const [formState, setFormState] = useState({
-        flowRate: hydraulic.flowRate || 45.0,
-        netHead: hydraulic.netHead || 150.0,
-        activePower: mechanical.activePower || 42.0,
-        vibration: mechanical.vibration?.x || 0.05,
-        temperature: mechanical.bearingTemp?.thrust || 55.0,
+        flowRate: (hydraulic as any).flowRate || 45.0,
+        netHead: (hydraulic as any).netHead || 150.0,
+        activePower: (mechanical as any).activePower || 42.0,
+        vibration: (mechanical as any).vibration?.x || 0.05,
+        temperature: (mechanical as any).bearingTemp?.thrust || 55.0,
         rpm: mechanical.rpm || 428,
         frequency: 120, // Default diagnostic frequency
         // New Advanced Inputs
@@ -140,7 +144,12 @@ export const ManualDataEntry: React.FC = () => {
     const [particleResult, setParticleResult] = useState<any>(null);
     const [videoResult, setVideoResult] = useState<any>(null);
     const [drTurbineResult, setDrTurbineResult] = useState<{ cards: ActionCard[]; healthScore: number; voiceMessage: string } | null>(null);
-    const [monsterResult, setMonsterResult] = useState<{ cavitation: CavitationStatus; erosion: ErosionStatus } | null>(null);
+    const [monsterResult, setMonsterResult] = useState<{ 
+        cavitation: CavitationStatus; 
+        erosion: ErosionStatus;
+        overallRisk: string;
+        recommendations: string[];
+    } | null>(null);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -158,8 +167,8 @@ export const ManualDataEntry: React.FC = () => {
         rootCause?: { rootMetric: string; description: string; confidence: number };
         oilAnalysis?: { healthScore: number; overallHealth: string; findings: any[] };
         aiPrediction?: { synergeticRisk: any };
-        energyHarvest?: { powerW: number; annualEur: number };
-        lifeExtension?: { yearsAdded: number };
+        energyHarvest?: { powerW: number; annualEur: number; bearingLifeExtensionHours: number };
+        lifeExtension?: { yearsAdded: number; currentStress: number; mitigationFactor: number };
         structural?: { mawp: number; margin: number; status: string };
         erosion?: { massLoss: number; rec: string };
         hydraulicSafety?: { approved: boolean; reason: string; stiffness: number };
@@ -173,9 +182,9 @@ export const ManualDataEntry: React.FC = () => {
         stator?: { action: string; severity: string };
         seal?: { action: string; prob: number };
         governor?: { action: string; reason: string };
-        dam?: { status: string; sliding: number };
+        dam?: { status: string; sliding: number; seepage: number };
         trash?: { clean: boolean; reason: string };
-        cyber?: { spoof: boolean; offset: number };
+        cyber?: { spoof: boolean; offset: number; source: string };
         thrust?: { action: string; hMin: number; sigma: number };
         cooling?: { fouling: boolean; pFail: number; lmtd: number };
         brake?: { ready: boolean; steps: number };
@@ -467,7 +476,7 @@ export const ManualDataEntry: React.FC = () => {
             const report = SpecialistNotebook.diagnoseDamage(
                 formState.damageType as any,
                 formState.damageDescription || 'Manual observation from field walkdown',
-                ['manual_entry']
+                {}
             );
             setDamageReport(report);
         } else {
@@ -578,10 +587,13 @@ export const ManualDataEntry: React.FC = () => {
             },
             energyHarvest: {
                 powerW: harvest.totalPowerRecovered,
-                annualEur: harvest.monetaryValue
+                annualEur: harvest.monetaryValue,
+                bearingLifeExtensionHours: 0
             },
             lifeExtension: {
-                yearsAdded
+                yearsAdded,
+                currentStress: 0,
+                mitigationFactor: 0
             },
             structural: {
                 mawp,
@@ -643,17 +655,17 @@ export const ManualDataEntry: React.FC = () => {
             },
             dam: {
                 status: damResult.status,
-                slidingFactor: damResult.slidingSafetyFactor,
+                sliding: damResult.slidingSafetyFactor,
                 seepage: formState.seepageFlow
             },
             trash: {
-                shouldClean: trashResult.shouldClean,
+                clean: trashResult.shouldClean,
                 reason: trashResult.reason
             },
             cyber: {
-                spoofing: cyberResult.status === 'SPOOFING_DETECTED',
-                offsetMs: cyberResult.offsetMs,
-                source: cyberResult.primarySource
+                spoof: cyberResult.spoofingDetected,
+                offset: cyberResult.offsetMs,
+                source: cyberResult.activeSource
             },
             thrust: {
                 action: thrustAction,
@@ -716,22 +728,19 @@ export const ManualDataEntry: React.FC = () => {
         // Update Hydraulic State
         updateTelemetry({
             hydraulic: {
-                flowRate: formState.flowRate,
-                netHead: formState.netHead
+                flow: formState.flowRate,
+                head: formState.netHead
             },
             mechanical: {
-                activePower: formState.activePower,
+                // activePower is not in MechanicalStream, moved to physics update below if needed or handled separately
                 rpm: formState.rpm,
-                vibration: {
-                    x: formState.vibration,
-                    y: formState.vibration * 0.9, // correlated
-                    z: formState.vibration * 0.4
-                },
-                bearingTemp: {
-                    thrust: formState.temperature,
-                    guide: formState.temperature - 5,
-                    journal: formState.temperature - 2
-                }
+                vibration: formState.vibration, // Main RMS
+                vibrationX: formState.vibration,
+                vibrationY: formState.vibration * 0.9,
+                bearingTemp: formState.temperature
+            },
+            physics: {
+                powerMW: new Decimal(formState.activePower)
             }
         });
         
@@ -881,9 +890,9 @@ export const ManualDataEntry: React.FC = () => {
 
             // Phase 4: Electro-Mechanical
             thermalAnalysis: analysis?.thermal ? {
-                oilViscosity_cP: analysis.thermal.viscosity,
-                recommendedValvePositionPct: analysis.thermal.valveRec,
-                controlAction: analysis.thermal.action
+                viscosity: analysis.thermal.viscosity,
+                valveRec: analysis.thermal.valveRec,
+                action: analysis.thermal.action
             } : undefined,
             wicketGateAnalysis: analysis?.wicket ? {
                 action: analysis.wicket.action,
@@ -919,16 +928,16 @@ export const ManualDataEntry: React.FC = () => {
             // NC-Unused-Code Integration Phase 6
             damStability: analysis?.dam ? {
                 status: analysis.dam.status,
-                slidingFactor: analysis.dam.slidingFactor,
+                slidingFactor: analysis.dam.sliding,
                 seepage: analysis.dam.seepage
             } : undefined,
             trashRack: analysis?.trash ? {
-                shouldClean: analysis.trash.shouldClean,
+                shouldClean: analysis.trash.clean,
                 reason: analysis.trash.reason
             } : undefined,
             cyberDefense: analysis?.cyber ? {
-                spoofing: analysis.cyber.spoofing,
-                offsetMs: analysis.cyber.offsetMs,
+                spoofing: analysis.cyber.spoof,
+                offsetMs: analysis.cyber.offset,
                 source: analysis.cyber.source
             } : undefined,
             thrustBearing: analysis?.thrust ? {

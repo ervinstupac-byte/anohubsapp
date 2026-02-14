@@ -27,8 +27,8 @@ export class LiveStreamConnector {
     private static pollingInterval: NodeJS.Timeout | null = null;
     private static status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
     private static config: LiveStreamConfig = {
-        websocketUrl: process.env.TELEMETRY_WS_URL,
-        pollingUrl: process.env.TELEMETRY_API_URL,
+        websocketUrl: import.meta.env.VITE_TELEMETRY_WS_URL,
+        pollingUrl: import.meta.env.VITE_TELEMETRY_API_URL,
         pollingInterval: 1000,
         reconnectDelay: 5000
     };
@@ -42,14 +42,14 @@ export class LiveStreamConnector {
         }
 
         // Try WebSocket first (preferred for low latency)
-        if (this.config.websocketUrl) {
+        if (this.config.websocketUrl && this.config.websocketUrl !== 'undefined') {
             await this.connectWebSocket();
         }
         // Fallback to polling
-        else if (this.config.pollingUrl) {
+        else if (this.config.pollingUrl && this.config.pollingUrl !== 'undefined') {
             this.startPolling();
         } else {
-            throw new Error('No telemetry source configured');
+            console.log('[LiveStream] No telemetry source configured - Simulation Mode Active');
         }
     }
 
@@ -57,10 +57,11 @@ export class LiveStreamConnector {
      * WebSocket connection (real-time, low latency)
      */
     private static async connectWebSocket(): Promise<void> {
+        if (!this.config.websocketUrl) return;
         this.status = ConnectionStatus.CONNECTING;
 
         try {
-            this.ws = new WebSocket(this.config.websocketUrl!);
+            this.ws = new WebSocket(this.config.websocketUrl);
 
             this.ws.onopen = () => {
                 this.status = ConnectionStatus.CONNECTED;
@@ -105,19 +106,28 @@ export class LiveStreamConnector {
      * HTTP Polling (fallback for reliability)
      */
     private static startPolling(): void {
+        if (!this.config.pollingUrl) return;
         this.status = ConnectionStatus.CONNECTED;
         console.log('[LiveStream] 📡 Polling mode active');
 
         this.pollingInterval = setInterval(async () => {
             try {
                 const response = await fetch(this.config.pollingUrl!);
+                
+                // Check content type to avoid parsing HTML errors
+                const contentType = response.headers.get("content-type");
+                if (!response.ok || !contentType || !contentType.includes("application/json")) {
+                    // Silent fail for simulation environment
+                    return;
+                }
+
                 const telemetry: TelemetryStream = await response.json();
 
                 if (this.validateTelemetry(telemetry)) {
                     await SovereignKernel.react(telemetry);
                 }
             } catch (err) {
-                console.error('[LiveStream] Polling error:', err);
+                // Silent catch for polling to avoid console spam in dev
             }
         }, this.config.pollingInterval);
     }

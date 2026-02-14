@@ -19,6 +19,7 @@ import { DossierViewerModal } from './knowledge/DossierViewerModal';
 import { ROUTES, getMaintenancePath } from '../routes/paths';
 import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../data/knowledge/DossierLibrary';
 import { useIntelligenceReport } from '../services/useIntelligenceReport';
+import { EVENTS } from '../lib/events';
 
 interface DossierCategory {
     label: string;

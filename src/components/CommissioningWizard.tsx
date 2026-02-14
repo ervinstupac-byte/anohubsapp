@@ -182,6 +182,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                         <AlignmentWizard
                             sessionId={session.id}
                             onComplete={() => completeStep('ALIGNMENT')}
+                            asset={asset}
                         />
                     )}
 
@@ -195,6 +196,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
                     {currentStep === 'JET_SYNC' && asset.turbine_family === 'PELTON' && (
                         <PeltonJetVisualizer
                             sessionId={session.id}
+                            asset={asset}
                             onComplete={() => completeStep('JET_SYNC')}
                         />
                     )}

@@ -14,6 +14,9 @@ import { useSmartSuggestions, SmartCommand } from '../../hooks/useSmartSuggestio
 import { StatusIndicator } from '../../shared/components/ui/StatusIndicator';
 import { dispatch, EVENTS } from '../../lib/events';
 import { useToast } from '../../stores/useAppStore';
+import { SystemOverviewModal } from '../modals/SystemOverviewModal';
+import { PrintPreviewModal } from '../modals/PrintPreviewModal';
+import { AssetPassportModal } from '../dashboard/AssetPassportModal';
 
 interface CommandResult {
     id: string;
@@ -33,13 +36,20 @@ export const CommandPalette = React.memo(() => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const navigate = useNavigate();
     const { assets, selectAsset, selectedAsset } = useAssetContext();
-    const { mode } = useDensity();
+    const { densityMode: mode } = useDensity();
     const { drillDown } = useDrillDown();
     const { confirm } = useConfirm();
     const { validateTask } = useValidation();
     const { t } = useTranslation();
     const smartSuggestions = useSmartSuggestions();
     const { showToast } = useToast();
+
+    // Modal States
+    const [showSystemOverview, setShowSystemOverview] = useState(false);
+    const [showPrintPreview, setShowPrintPreview] = useState(false);
+    const [showPassport, setShowPassport] = useState(false);
+    // Placeholder for technical state needed by PrintPreview
+    const [technicalState] = useState<any>(null); 
 
     const isCompact = mode === 'compact';
     const typo = isCompact ? TYPOGRAPHY_COMPACT : TYPOGRAPHY;
@@ -180,7 +190,7 @@ export const CommandPalette = React.memo(() => {
         const assetResults: CommandResult[] = safeAssets
             .filter(a => (a?.name || '').toLowerCase().includes(lowerQuery) || (a?.type || '').toLowerCase().includes(lowerQuery))
             .map(a => ({
-                id: idAdapter.toStorage(a.id),
+                id: `asset-${idAdapter.toStorage(a.id)}`,
                 label: a.name,
                 type: 'asset',
                 icon: <Box className="text-cyan-400" />,
@@ -228,99 +238,104 @@ export const CommandPalette = React.memo(() => {
     }, [isOpen, results, selectedIndex]);
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4">
-                    {/* Backdrop */}
+        <>
+            <AnimatePresence>
+                {isOpen && (
                     <motion.div
+                        key="command-palette-container"
+                        className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setIsOpen(false)}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-                    />
-
-                    {/* Palette */}
-                    <motion.div
-                        initial={{ scale: 0.95, opacity: 0, y: -20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.95, opacity: 0, y: -20 }}
-                        className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden relative z-10 flex flex-col max-h-[60vh]"
                     >
-                        {/* Search Input */}
-                        <div className="flex items-center gap-3 px-4 py-4 border-b border-slate-700 bg-slate-900/50">
-                            <Search className="w-5 h-5 text-slate-400" />
-                            <input
-                                autoFocus
-                                type="text"
-                                value={query}
-                                onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
-                                placeholder={t('command.placeholder', 'Type a command or search assets...')}
-                                className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-500 text-lg"
-                            />
-                            <div className="hidden sm:flex items-center gap-1">
-                                <span className="text-xs text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">ESC</span>
-                            </div>
-                        </div>
+                        {/* Backdrop */}
+                        <motion.div
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                            onClick={() => setIsOpen(false)}
+                        />
 
-                        {/* Results */}
-                        <div className="overflow-y-auto custom-scrollbar p-2">
-                            {results.length === 0 ? (
-                                <div className="p-8 text-center text-slate-500">
-                                    <Command className="w-12 h-12 mx-auto mb-2 opacity-20" />
-                                    <p>No results found</p>
+                        {/* Palette */}
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: -20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: -20 }}
+                            className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden relative z-10 flex flex-col max-h-[60vh]"
+                        >
+                            {/* Search Input */}
+                            <div className="flex items-center gap-3 px-4 py-4 border-b border-slate-700 bg-slate-900/50">
+                                <Search className="w-5 h-5 text-slate-400" />
+                                <input
+                                    autoFocus
+                                    type="text"
+                                    value={query}
+                                    onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
+                                    placeholder={t('command.placeholder', 'Type a command or search assets...')}
+                                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-500 text-lg"
+                                />
+                                <div className="hidden sm:flex items-center gap-1">
+                                    <span className="text-xs text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">ESC</span>
                                 </div>
-                            ) : (
-                                <div className="space-y-1">
-                                    {results.map((result, index) => (
-                                        <button
-                                            key={result.id}
-                                            onClick={() => { result.action(); }}
-                                            onMouseEnter={() => setSelectedIndex(index)}
-                                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors group ${
-                                                index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-slate-800'
-                                            }`}
-                                        >
-                                            <div className={`p-2 rounded-md ${
-                                                result.variant === 'danger' ? 'bg-red-500/20 text-red-400' :
-                                                result.variant === 'warning' ? 'bg-amber-500/20 text-amber-400' :
-                                                index === selectedIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'
-                                            }`}>
-                                                {result.icon}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <div className={`font-medium truncate ${
-                                                    result.variant === 'danger' ? 'text-red-400' :
-                                                    index === selectedIndex ? 'text-cyan-100' : 'text-slate-200'
+                            </div>
+
+                            {/* Results */}
+                            <div className="overflow-y-auto custom-scrollbar p-2">
+                                {results.length === 0 ? (
+                                    <div className="p-8 text-center text-slate-500">
+                                        <Command className="w-12 h-12 mx-auto mb-2 opacity-20" />
+                                        <p>No results found</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-1">
+                                        {results.map((result, index) => (
+                                            <button
+                                                key={`${result.id}-${index}`}
+                                                onClick={() => { result.action(); }}
+                                                onMouseEnter={() => setSelectedIndex(index)}
+                                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors group ${
+                                                    index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-slate-800'
+                                                }`}
+                                            >
+                                                <div className={`p-2 rounded-md ${
+                                                    result.variant === 'danger' ? 'bg-red-500/20 text-red-400' :
+                                                    result.variant === 'warning' ? 'bg-amber-500/20 text-amber-400' :
+                                                    index === selectedIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'
                                                 }`}>
-                                                    {result.label}
+                                                    {result.icon}
                                                 </div>
-                                                {result.subtitle && (
-                                                    <div className="text-xs text-slate-500 truncate">{result.subtitle}</div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className={`font-medium truncate ${
+                                                        result.variant === 'danger' ? 'text-red-400' :
+                                                        index === selectedIndex ? 'text-cyan-100' : 'text-slate-200'
+                                                    }`}>
+                                                        {result.label}
+                                                    </div>
+                                                    {result.subtitle && (
+                                                        <div className="text-xs text-slate-500 truncate">{result.subtitle}</div>
+                                                    )}
+                                                </div>
+                                                {index === selectedIndex && (
+                                                    <ChevronRight className="w-4 h-4 text-cyan-500" />
                                                 )}
-                                            </div>
-                                            {index === selectedIndex && (
-                                                <ChevronRight className="w-4 h-4 text-cyan-500" />
-                                            )}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
 
-                        {/* Footer */}
-                        <div className="px-4 py-2 bg-slate-950 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
-                            <div className="flex gap-3">
-                                <span><strong className="text-slate-400">↑↓</strong> to navigate</span>
-                                <span><strong className="text-slate-400">↵</strong> to select</span>
+                            {/* Footer */}
+                            <div className="px-4 py-2 bg-slate-950 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
+                                <div className="flex gap-3">
+                                    <span><strong className="text-slate-400">↑↓</strong> to navigate</span>
+                                    <span><strong className="text-slate-400">↵</strong> to select</span>
+                                </div>
+                                <div>
+                                    Sovereign Command v2.4
+                                </div>
                             </div>
-                            <div>
-                                Sovereign Command v2.4
-                            </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
             
             {/* Global Modals Triggered by Command Palette */}
             <SystemOverviewModal 
@@ -344,6 +359,6 @@ export const CommandPalette = React.memo(() => {
                     componentType={assets[0].type || 'GENERIC'}
                 />
             )}
-        </AnimatePresence>
+        </>
     );
 });

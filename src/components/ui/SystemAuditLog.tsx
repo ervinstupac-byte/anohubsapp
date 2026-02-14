@@ -8,6 +8,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Terminal, CheckCircle, AlertCircle, Zap, Database, Cpu } from 'lucide-react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { EVENTS } from '../../lib/events';
+import { getAuditLogs } from '../../services/PersistenceService';
+import { FullAuditLogModal } from '../modals/FullAuditLogModal';
+import { Maximize2 } from 'lucide-react';
 
 interface LogEntry {
     timestamp: Date;
@@ -29,6 +32,7 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
     className = ''
 }) => {
     const [logs, setLogs] = useState<LogEntry[]>([]);
+    const [showFullLog, setShowFullLog] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Subscribe to store changes
@@ -49,6 +53,20 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
 
     // Initial boot messages
     useEffect(() => {
+        // Load historical logs
+        getAuditLogs(maxEntries).then(records => {
+            if (records.length > 0) {
+                const historicalLogs: LogEntry[] = records.map(r => ({
+                    timestamp: new Date(r.timestamp),
+                    source: 'SYSTEM',
+                    message: `${r.event_type}: ${r.reason}`,
+                    type: r.active_protection && r.active_protection !== 'NONE' ? 'warning' : 'info'
+                }));
+                setLogs(prev => [...historicalLogs, ...prev]);
+                addLog('SYSTEM', `Restored ${records.length} audit records from local black box`, 'success');
+            }
+        });
+
         addLog('SYSTEM', 'Monolit Kernel v300.0 initialized', 'success');
         addLog('SYSTEM', `Persistence layer loaded from localStorage`, 'info');
 
@@ -64,7 +82,16 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
             }
         };
 
+        const handleSovereignLog = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            if (customEvent.detail) {
+                const r = customEvent.detail;
+                addLog('SYSTEM', `${r.event_type}: ${r.reason}`, r.active_protection !== 'NONE' ? 'warning' : 'info');
+            }
+        };
+
         window.addEventListener(EVENTS.SYSTEM_KERNEL_LOG, handleKernelLog);
+        window.addEventListener('SOVEREIGN_AUDIT_LOG', handleSovereignLog);
 
         if (baselineState) {
             addLog('DNA', `Turbine DNA verified - Commissioned ${new Date(baselineState.commissioningDate).toLocaleDateString()}`, 'success');
@@ -77,6 +104,7 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
 
         return () => {
             window.removeEventListener(EVENTS.SYSTEM_KERNEL_LOG, handleKernelLog);
+            window.removeEventListener('SOVEREIGN_AUDIT_LOG', handleSovereignLog);
         };
     }, []);
 
@@ -121,6 +149,13 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
                     </span>
                 </div>
                 <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => setShowFullLog(true)}
+                        className="text-slate-500 hover:text-cyan-400 transition-colors"
+                        title="Expand Forensic View"
+                    >
+                        <Maximize2 className="w-3 h-3" />
+                    </button>
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span className="text-[9px] text-slate-600 font-mono">
                         {logs.length} entries
@@ -171,6 +206,8 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
                     ))}
                 </div>
             </div>
+
+            <FullAuditLogModal isOpen={showFullLog} onClose={() => setShowFullLog(false)} />
         </div>
     );
 };

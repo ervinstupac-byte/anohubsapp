@@ -172,7 +172,14 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                 );
 
                                 // Send mobile notification (placeholder for future integration)
-                                sendMobileNotification(orderId, numericAssetId, rul.componentType, failureProbability, showToast, logAction);
+                                sendMobileNotification(
+                                    orderId, 
+                                    numericAssetId, 
+                                    rul.componentType, 
+                                    failureProbability, 
+                                    showToast, 
+                                    (action, details, status) => logAction(action, details, status as any)
+                                );
 
                                 // Sync with Maintenance Context
                                 if (maintenanceContext) {

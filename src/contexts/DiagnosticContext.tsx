@@ -23,6 +23,7 @@ export interface CorrelationResult {
 }
 
 export interface IntuitionQuery {
+    id: string;
     assetId: number;
     primarySymptom: string;
     query: string;

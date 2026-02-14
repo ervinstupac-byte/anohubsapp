@@ -3,7 +3,7 @@ import { EVENTS, AssetPassportPayload } from '../../lib/events';
 import { SystemOverviewModal } from '../modals/SystemOverviewModal';
 import { AssetPassportModal } from '../dashboard/AssetPassportModal';
 import { useCerebro } from '../../contexts/ProjectContext';
-import { AssetRegistrationWizard } from '../AssetRegistrationWizard';
+import { AssetOnboardingWizard } from '../digital-twin/AssetOnboardingWizard';
 
 // Lazy load heavy print modal
 const PrintPreviewModal = React.lazy(() => import('../modals/PrintPreviewModal').then(m => ({ default: m.PrintPreviewModal })));
@@ -93,8 +93,8 @@ export const GlobalModalManager: React.FC = () => {
                 />
             )}
 
-            {/* Asset Registration Wizard */}
-            <AssetRegistrationWizard 
+            {/* Asset Onboarding Wizard */}
+            <AssetOnboardingWizard 
                 isOpen={isWizardOpen} 
                 onClose={() => setIsWizardOpen(false)} 
             />

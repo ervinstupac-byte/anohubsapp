@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useFleet } from '../contexts/FleetContext.tsx';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore.ts';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { reportGenerator } from '../services/ReportGenerator.ts';
 import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { DrTurbineAI, ActionCard } from '../services/DrTurbineAI.ts';
-import { useProjectEngine } from '../contexts/ProjectContext.tsx';
+import { PhysicsEngine } from '../core/PhysicsEngine.ts';
+import { ExpertDiagnosisEngine } from '../features/physics-core/ExpertDiagnosisEngine.ts';
 import idAdapter from '../utils/idAdapter.ts';
+import { Decimal } from 'decimal.js';
+import { ENGINEERING_CONSTANTS } from '../core/TechnicalSchema.ts';
+import { FinancialImpactEngine } from '../services/core/FinancialImpactEngine.ts';
 
 // --- ENHANCED TECHNICAL TURBINE SILHOUETTE WITH GLASSMORPHISM ---
 const TurbineSilhouette: React.FC<{
@@ -216,7 +221,11 @@ const TurbineSilhouette: React.FC<{
 export const ExecutiveDashboard: React.FC = () => {
     const { fleetReports, totalMoneyAtRisk, globalFleetHealth } = useFleet();
     const { triggerEmergency, telemetry } = useTelemetry();
-    const { technicalState, connectSCADAToExpertEngine, calculateIntegratedFinancialRisk, createComplexIdentity } = useProjectEngine();
+    const telemetryStore = useTelemetryStore();
+    
+    // Legacy context replacement - using telemetryStore as the source of truth
+    const technicalState = telemetryStore;
+
     const [selectedAssetId, setSelectedAssetId] = useState<number | null>(fleetReports[0]?.assetId || null);
 
     // SCADA Integration State
@@ -233,27 +242,93 @@ export const ExecutiveDashboard: React.FC = () => {
     const [aiMessage, setAiMessage] = useState("AI analyzing SCADA signals...");
     const [scadaDiagnostics, setScadaDiagnostics] = useState<any>(null);
 
-    // Real-time Financial Risk from integrated calculations
+    // Helper to bridge Simple Identity -> Complex AssetIdentity
+    const createComplexIdentity = () => {
+        if (!telemetryStore.identity) return null;
+        return {
+            ...telemetryStore.identity,
+            manufacturer: telemetryStore.identity.manufacturer || 'AnoHUB Legacy',
+            machineConfig: telemetryStore.identity.machineConfig || {
+                orientation: 'VERTICAL',
+                transmissionType: 'DIRECT',
+                ratedPowerMW: 10,
+                ratedSpeedRPM: 500,
+                ratedHeadM: 100,
+                ratedFlowM3S: 10,
+                runnerDiameterMM: 1500,
+                numberOfBlades: 15
+            }
+        };
+    };
+
+    // Helper for SCADA connection
+    const connectSCADAToExpertEngine = (flow: number, head: number, frequency: number) => {
+        // Construct simulated state for physics engine
+        const scadaState: any = {
+            ...telemetryStore,
+            hydraulic: {
+                ...telemetryStore.hydraulic,
+                flowRate: new Decimal(flow),
+                waterHead: new Decimal(head),
+                flow: flow,
+                head: head
+            },
+            physics: {
+                ...telemetryStore.physics,
+                hoopStress: telemetryStore.physics.hoopStress || new Decimal(0),
+                powerMW: new Decimal(0), // Will be recalculated
+                surgePressure: telemetryStore.physics.surgePressure || new Decimal(0),
+            },
+            penstock: {
+                ...telemetryStore.penstock,
+                materialYieldStrength: telemetryStore.penstock.materialYieldStrength || 355
+            }
+        };
+
+        const physicsResult = PhysicsEngine.recalculatePhysics(scadaState);
+        const diagnosis = ExpertDiagnosisEngine.runExpertDiagnosis(physicsResult, scadaState);
+
+        const criticalAlarms = diagnosis.messages
+            .filter(m => diagnosis.severity === 'CRITICAL')
+            .map(m => ({ message: m.en }));
+
+        return {
+            healthScore: diagnosis.severity === 'CRITICAL' ? 40 : diagnosis.severity === 'WARNING' ? 70 : 98,
+            criticalAlarms,
+            diagnostics: diagnosis
+        };
+    };
+
+    // Real-time Financial Risk
+    const calculateIntegratedFinancialRisk = () => {
+        if (!selectedReport) return totalMoneyAtRisk;
+        // Simple override: if critical, assume high risk
+        if (scadaDiagnostics?.healthScore < 50) return 50000;
+        return selectedReport.moneyAtRisk;
+    };
+
     const integratedRisk = calculateIntegratedFinancialRisk();
 
     // --- EFFECT: SCADA Integration with Expert Diagnosis Engine ---
     useEffect(() => {
-        if (technicalState.identity) {
+        if (telemetryStore.identity) {
             // Connect SCADA inputs to Expert Diagnosis Engine
             const diagnostics = connectSCADAToExpertEngine(scadaFlow, scadaHead, scadaFreq);
             setScadaDiagnostics(diagnostics);
 
             // Enhanced Dr. Turbine consultation with SCADA data
-            const consultation = DrTurbineAI.consult(
-                createComplexIdentity(), // Use adapter instead of direct property access
+            const complexIdentity = createComplexIdentity();
+            if (complexIdentity) {
+                const consultation = DrTurbineAI.consult(
+                    complexIdentity,
+                    scadaFlow,
+                    scadaHead,
+                    scadaFreq
+                );
 
-                scadaFlow,
-                scadaHead,
-                scadaFreq
-            );
-
-            setAiCards(consultation.cards);
-            setAiMessage(consultation.voiceMessage);
+                setAiCards(consultation.cards);
+                setAiMessage(consultation.voiceMessage);
+            }
 
             // Trigger critical alarm for frequency 98.2 Hz
             if (scadaFreq >= 98.2) {
@@ -262,7 +337,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 const criticalFreqCard: ActionCard = {
                     id: 'critical-frequency-98-2',
                     title: 'GRID FREQUENCY CRITICAL',
-                    message: `Frequency: ${scadaFreq} Hz exceeds safe limits (&gt;55 Hz). Risk of mechanical destruction at 98.2 Hz.`,
+                    message: `Frequency: ${scadaFreq} Hz exceeds safe limits (>55 Hz). Risk of mechanical destruction at 98.2 Hz.`,
                     severity: 'CRITICAL',
                     actionLabel: 'EMERGENCY SHUTDOWN',
                     actionFunction: 'emergency_shutdown'
@@ -270,7 +345,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 setAiCards(prev => [criticalFreqCard, ...prev]);
             }
         }
-    }, [technicalState, scadaFlow, scadaHead, scadaFreq, connectSCADAToExpertEngine]);
+    }, [telemetryStore.identity, scadaFlow, scadaHead, scadaFreq]);
 
     const handleExport = () => {
         const reportData = {
@@ -394,7 +469,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="backdrop-blur-xl bg-black/25 p-4 rounded-xl border border-white/15 shadow-lg">
                                         <span className="text-[10px] text-slate-400 uppercase block font-bold">Active Power</span>
-                                        <span className="text-2xl font-mono text-white font-black">{(liveTelemetry?.output || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
+                                        <span className="text-2xl font-mono text-white font-black">{(telemetryStore.physics?.powerMW?.toNumber?.() || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
                                     </div>
                                     <div className="backdrop-blur-xl bg-black/25 p-4 rounded-xl border border-white/15 shadow-lg">
                                         <span className="text-[10px] text-slate-400 uppercase block font-bold">Health Score</span>

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, AlertTriangle, TrendingUp, Settings, Power, Gauge } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { UnityPulse } from './SovereignDashboardV2';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
 interface TurbineStatus {
     id: string;
@@ -218,10 +220,6 @@ const TurbineDetailView: React.FC<{ unit: TurbineStatus }> = ({ unit }) => {
     );
 };
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { useEffect, useState } from 'react';
-
 // Trends Analytics View
 const TrendsView: React.FC = () => {
     const mechanical = useTelemetryStore(state => state.mechanical);
@@ -236,9 +234,9 @@ const TrendsView: React.FC = () => {
                 const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
                 const newPoint = {
                     time: timeStr,
-                    vibration: mechanical.vibration?.x || 0,
-                    power: mechanical.activePower || 0,
-                    head: hydraulic.netHead || 0
+                    vibration: mechanical.vibrationX || 0,
+                    power: (mechanical.powerKW || 0) / 1000,
+                    head: hydraulic.head || 0
                 };
                 const newData = [...prev, newPoint];
                 if (newData.length > 20) newData.shift(); // Keep last 20 points

@@ -648,9 +648,37 @@
     },
 
     "footer": {
-        "approved": "SYSTEM_NOMINAL_NC102",
-        "signed": "[Your Name / Forensic Consultant]"
+            "approved": "SYSTEM_NOMINAL_NC102",
+            "signed": "[Your Name / Forensic Consultant]"
+        }
+    },
+    "onboarding": {
+        "next": "Next",
+        "back": "Back",
+        "skip": "Skip",
+        "initialize": "Initialize System",
+        "steps": {
+            "0": {
+                "title": "Welcome to AnoHub",
+                "subtitle": "INTELLIGENT HYDROPOWER MANAGEMENT",
+                "content": "You have accessed the world's most advanced autonomous hydropower fleet management system. AnoHub integrates physics-based modeling with real-time neural diagnostics."
+            },
+            "1": {
+                "title": "Connect Your Fleet",
+                "subtitle": "SEAMLESS SCADA INTEGRATION",
+                "content": "Securely bridge your existing OT infrastructure. Our Neural Link compatible protocol supports IEC 60870-5-104 and Modbus TCP for instant telemetry ingestion."
+            },
+            "2": {
+                "title": "Real-Time Forensics",
+                "subtitle": "PREDICTIVE MAINTENANCE ENGINE",
+                "content": "Stop reacting to failures. AnoHub's Master Intelligence Engine continuously analyzes vibration, acoustic, and thermal signatures to predict component fatigue years in advance."
+            },
+            "3": {
+                "title": "Command Authority",
+                "subtitle": "EXECUTIVE DECISION SUPPORT",
+                "content": "Take control. The Executive Dashboard provides a unified view of fleet health, financial risk, and operational efficiency. Your command center is ready."
+            }
+        }
     }
-}
 
 }

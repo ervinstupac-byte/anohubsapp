@@ -70,8 +70,8 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
     docKey, // NEW
     className = ''
 }) => {
-    const { mode } = useDensity();
-    const isCompact = mode === 'compact';
+    const { densityMode } = useDensity();
+    const isCompact = densityMode === 'compact';
     const typo = isCompact ? TYPOGRAPHY_COMPACT : TYPOGRAPHY;
     const spacing = isCompact ? SPACING_COMPACT : SPACING;
 

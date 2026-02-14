@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 // MIGRATED: From useProjectEngine to specialized stores
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { dispatch } from '../../lib/events';
 import { useDemoMode } from '../../stores/useAppStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath.ts';
 import { Tooltip } from '../../shared/components/ui/Tooltip';
@@ -533,7 +534,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => navigate('/maintenance/shaft-alignment')}
+                                    onClick={() => navigate('/francis/sop-shaft-alignment')}
                                     className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
                                 >
                                     {t('neuralFlow.launchAlignmentWizard')}

@@ -13,8 +13,8 @@ export const EngineeringSkeleton: React.FC<EngineeringSkeletonProps> = ({
     height,
     className = ''
 }) => {
-    const { mode } = useDensity();
-    const isCompact = mode === 'compact';
+    const { densityMode } = useDensity();
+    const isCompact = densityMode === 'compact';
     const spacing = isCompact ? SPACING_COMPACT : SPACING;
 
     // Base shimmer effect (non-emissive for field-mode)

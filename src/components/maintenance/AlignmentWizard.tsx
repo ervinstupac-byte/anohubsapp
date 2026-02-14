@@ -9,15 +9,18 @@ import { CommissioningService } from '../../services/CommissioningService';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { MECHANICAL_TOLERANCES } from '../../lib/physics/SovereignPhysicsEngine';
 import { RunoutFitter, RunoutPoint, RunoutResult } from '../../utils/math/RunoutFitter';
+import { EnhancedAsset } from '../../models/turbine/types';
 
 interface AlignmentWizardProps {
     sessionId?: string;
     onComplete?: () => void;
+    asset: EnhancedAsset;
 }
 
 export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
     sessionId = `DEMO-${Date.now()}`,
-    onComplete = () => console.log('Alignment Complete')
+    onComplete = () => console.log('Alignment Complete'),
+    asset
 }) => {
     // HYBRID MIGRATION: Use Telemetry Store for Identity and Safety Checks
     const { identity, mechanical } = useTelemetryStore();
@@ -34,9 +37,9 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
     const [fittingResult, setFittingResult] = useState<RunoutResult | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
 
-    const assetName = identity?.assetName || '—';
-    const isHorizontal = assetName.toLowerCase().includes('horizontal') || identity?.turbineType === 'PELTON';
-    const bearingSpan = 5.0; // Default or from project site params
+    const assetName = asset.name;
+    const isHorizontal = asset.turbine_variant.includes('horizontal');
+    const bearingSpan = asset.turbine_config.bearing_span || 5.0; // Use config or default
 
     const addRunoutPoint = async () => {
         const runout = parseFloat(manualRunout);

@@ -24,6 +24,8 @@ import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema.ts';
 import { DataBridge } from '../hooks/useSyncLegacyToNew';
 import { WorkflowProvider } from './WorkflowContext.tsx'; // NEW: Cross-module workflow state
 import { ToastContainer } from '../components/ui/ToastContainer';
+import { ConfirmProvider } from './ConfirmContext';
+import { ValidationProvider } from './ValidationContext';
 
 interface GlobalProviderProps {
     children: React.ReactNode;

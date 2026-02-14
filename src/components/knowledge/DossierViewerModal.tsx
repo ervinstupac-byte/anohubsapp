@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, ShieldCheck, Download, Minimize2, AlertCircle, Activity, PanelRight, FileText, Tag, User, Calendar, Printer, Lock, FileCode, CheckCircle } from 'lucide-react';
+import { X, ExternalLink, ShieldCheck, Download, Minimize2, AlertCircle, Activity, PanelRight, FileText, Tag, User, Calendar, Printer, Lock, FileCode, CheckCircle, ArrowLeft } from 'lucide-react';
 import { resolveDossier } from '../../data/knowledge/DossierLibrary';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useTranslation } from 'react-i18next';
@@ -88,6 +88,13 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
                             {/* Header */}
                             <div className="h-14 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
                                 <div className="flex items-center gap-4">
+                                    <button 
+                                        onClick={onClose}
+                                        className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                                        title={t('common.back', 'Back')}
+                                    >
+                                        <ArrowLeft className="w-5 h-5" />
+                                    </button>
                                     <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
                                         <FileText className="w-5 h-5 text-cyan-400" />
                                     </div>

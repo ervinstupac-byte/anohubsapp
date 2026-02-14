@@ -3,6 +3,7 @@ import { useDiagnostic, IntuitionQuery } from '../contexts/DiagnosticContext.tsx
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, ArrowRight, SkipForward, CheckCircle2, History, RotateCcw } from 'lucide-react';
+import { saveLog } from '../services/PersistenceService';
 
 interface GuidedDiagnosisModalProps {
     query: IntuitionQuery;
@@ -23,6 +24,19 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
     const handleOptionSelect = async (value: string) => {
         setSelectedOption(value);
         setIsSubmitting(true);
+        
+        // NC-25100: Log diagnosis step
+        saveLog({
+            event_type: 'DIAGNOSIS_STEP_SELECTED',
+            reason: `User selected option: ${value}`,
+            active_protection: 'NONE',
+            details: {
+                query: query.query,
+                selection: value,
+                timestamp: Date.now()
+            }
+        });
+
         // Simulate thinking time for better UX
         setTimeout(() => {
             submitQueryResponse(value);

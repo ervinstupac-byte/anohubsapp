@@ -96,7 +96,7 @@ export const StrategicConsultantView: React.FC = () => {
     efficiencyAlert: boolean;
   }>({
     designBEP_RPM: 600, // Design Best Efficiency Point
-    currentRPM: mechanical?.rpm || 600, // LIVE from telemetry
+    currentRPM: mechanical?.rpm ?? 600, // LIVE from telemetry
     deviation: 0,
     alert: 'NONE',
     message: '',
@@ -105,7 +105,20 @@ export const StrategicConsultantView: React.FC = () => {
 
   // NC-1700: Perform design check with live telemetry
   const performDesignCheck = useCallback(() => {
-    const liveRPM = mechanical?.rpm || 600;
+    const liveRPM = mechanical?.rpm ?? 600;
+
+    // NC-1700: Ignore stopped state to prevent false efficiency alerts
+    if (liveRPM < 10) {
+      setDesignCheck(prev => ({
+        ...prev,
+        currentRPM: liveRPM,
+        alert: 'NONE',
+        message: 'Machine Stopped',
+        efficiencyAlert: false
+      }));
+      return;
+    }
+
     const deviation = Math.abs((liveRPM - designCheck.designBEP_RPM) / designCheck.designBEP_RPM) * 100;
     
     let alert: 'NONE' | 'WARNING' | 'CRITICAL' = 'NONE';

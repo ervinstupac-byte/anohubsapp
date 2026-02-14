@@ -1,27 +1,35 @@
-import React, { useRef, forwardRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, forwardRef, useState, useCallback, useEffect, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useAssetContext } from '../../contexts/AssetContext';
-// import ComponentInfoPanel from '../diagnostics/ComponentInfoPanel'; // Commented out to avoid circular deps if broken
-// We can use a simplified internal info panel or just the one from the second block if it exists.
-// The second block imported ComponentInfoPanel from '../ui/ComponentInfoPanel'.
-// Let's assume we might need a fallback.
 
 // Placeholder colors
 const COLORS = {
     CYAN: '#22d3ee',
     RED: '#ef4444',
     AMBER: '#f59e0b',
-    EMERALD: '#10b981'
+    EMERALD: '#10b981',
+    GRAY: '#64748b'
 };
 
-const RunnerMesh: React.FC<{
+interface RunnerMeshProps {
     rpm: number;
     onMeshClick?: (id: string, point: THREE.Vector3 | null) => void;
     active?: boolean;
     turbineType?: string;
-}> = ({ rpm, onMeshClick, active = true, turbineType = 'francis' }) => {
+    heatmapMode?: boolean;
+    deltaMap?: Record<string, number>; // Component ID -> Delta Value (0-100)
+}
+
+const RunnerMesh: React.FC<RunnerMeshProps> = ({ 
+    rpm, 
+    onMeshClick, 
+    active = true, 
+    turbineType = 'francis',
+    heatmapMode = false,
+    deltaMap = {}
+}) => {
     const groupRef = useRef<THREE.Group | null>(null);
 
     useFrame((_, delta) => {
@@ -35,6 +43,18 @@ const RunnerMesh: React.FC<{
         onMeshClick?.(id, e?.point ?? null);
     };
 
+    // Helper to get color based on delta map
+    const getComponentColor = (componentId: string, defaultColor: string) => {
+        if (!heatmapMode || !deltaMap) return defaultColor;
+        
+        const delta = deltaMap[componentId] || 0;
+        // Heatmap gradient: Green (0) -> Yellow (50) -> Red (100)
+        if (delta > 80) return COLORS.RED;
+        if (delta > 40) return COLORS.AMBER;
+        if (delta > 0) return COLORS.EMERALD; // Explicit agreement
+        return COLORS.GRAY; // No data
+    };
+
     // Render different geometry based on turbine type
     const isPelton = turbineType === 'pelton';
     const isKaplan = turbineType === 'kaplan';
@@ -42,9 +62,15 @@ const RunnerMesh: React.FC<{
     return (
         <group ref={groupRef}>
             {/* HUB/CROWN */}
-            <mesh position={[0, isPelton ? 0 : 0.5, 0]} onClick={(e) => handle('runner', e)}>
+            <mesh position={[0, isPelton ? 0 : 0.5, 0]} onClick={(e) => handle('runner_hub', e)}>
                 <cylinderGeometry args={[isPelton ? 2 : 1.5, isPelton ? 2 : 1.5, 0.5, 32]} />
-                <meshStandardMaterial color="#22d3ee" transparent opacity={0.8} metalness={0.8} roughness={0.2} />
+                <meshStandardMaterial 
+                    color={getComponentColor('runner_hub', "#22d3ee")} 
+                    transparent 
+                    opacity={0.8} 
+                    metalness={0.8} 
+                    roughness={0.2} 
+                />
             </mesh>
 
             {/* BLADES */}
@@ -54,13 +80,14 @@ const RunnerMesh: React.FC<{
                 const radius = isPelton ? 2.5 : 2.0;
                 const x = Math.cos(angle) * radius;
                 const z = Math.sin(angle) * radius;
+                const bladeId = `blade_${i + 1}`;
 
                 return (
                     <mesh
                         key={i}
                         position={[x, 0, z]}
                         rotation={[0, angle, isPelton ? 0 : (isKaplan ? Math.PI / 4 : Math.PI / 6)]}
-                        onClick={(e) => handle('blade', e)}
+                        onClick={(e) => handle(bladeId, e)}
                     >
                         {isPelton ? (
                             // Pelton Buckets (Simplified as spheres/cups)
@@ -70,7 +97,7 @@ const RunnerMesh: React.FC<{
                             <boxGeometry args={[0.3, 1.5, isKaplan ? 1.8 : 1.2]} />
                         )}
                         <meshStandardMaterial
-                            color={isKaplan ? "#facc15" : "#22d3ee"}
+                            color={getComponentColor('blades', isKaplan ? "#facc15" : "#22d3ee")}
                             metalness={0.9}
                             roughness={0.2}
                         />
@@ -80,9 +107,13 @@ const RunnerMesh: React.FC<{
 
             {/* NOSE CONE (Francis/Kaplan) */}
             {!isPelton && (
-                <mesh position={[0, -1, 0]} rotation={[Math.PI, 0, 0]} onClick={(e) => handle('noseCone', e)}>
+                <mesh position={[0, -1, 0]} rotation={[Math.PI, 0, 0]} onClick={(e) => handle('nose_cone', e)}>
                     <coneGeometry args={[1.0, 1.5, 32]} />
-                    <meshStandardMaterial color="#ef4444" transparent opacity={0.6} />
+                    <meshStandardMaterial 
+                        color={getComponentColor('nose_cone', "#ef4444")} 
+                        transparent 
+                        opacity={0.6} 
+                    />
                 </mesh>
             )}
         </group>
@@ -114,11 +145,21 @@ class ThreeErrorBoundary extends React.Component<{ children: React.ReactNode }, 
     }
 }
 
-export const TurbineRunner3D = forwardRef<HTMLDivElement, {
+export interface TurbineRunner3DProps {
     rpm: number;
     className?: string;
     onSelect?: (id: string) => void;
-}>(({ rpm, className, onSelect }, ref) => {
+    heatmapMode?: boolean;
+    deltaMap?: Record<string, number>;
+}
+
+export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(({ 
+    rpm, 
+    className, 
+    onSelect,
+    heatmapMode,
+    deltaMap
+}, ref) => {
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
     const [crashSafe, setCrashSafe] = useState(true);
@@ -159,13 +200,10 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
                     state.gl.domElement.addEventListener('webglcontextlost', (event) => {
                         event.preventDefault();
                         console.warn('[TurbineRunner3D] ⚠️ WebGL Context Lost - Attempting recovery');
-                        // Do NOT set crashSafe=false immediately, wait for restore attempt
-                        // setCrashSafe(false); 
                     });
                     state.gl.domElement.addEventListener('webglcontextrestored', () => {
                         console.log('[TurbineRunner3D] ♻️ WebGL Context Restored');
                         setCrashSafe(true);
-                        // Force re-render if needed
                         setActive(true);
                         setTimeout(() => setActive(false), 100);
                     });
@@ -182,6 +220,8 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
                         active={active}
                         turbineType={turbineType}
                         onMeshClick={(id) => onSelect?.(id)}
+                        heatmapMode={heatmapMode}
+                        deltaMap={deltaMap}
                     />
                 </ThreeErrorBoundary>
 
@@ -196,5 +236,3 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
         </div>
     );
 });
-
-export default TurbineRunner3D;

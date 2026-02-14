@@ -42,6 +42,11 @@ export interface AuditLogRecord {
     metric_unit?: string;
     active_protection?: string;
     details?: any;
+    global_context?: {
+        mode: string;
+        health_score: number;
+        tier: string;
+    };
 }
 
 // ─── DATABASE ────────────────────────────────────────────────────
@@ -191,14 +196,53 @@ export async function saveLog(entry: {
     metric_unit?: string;
     active_protection?: string;
     details?: any;
+    global_context?: any;
 }): Promise<void> {
     try {
-        await db.auditLogs.add({
+        // Capture global context if available (NC-25100 Enhancement)
+        let globalContext = entry.global_context;
+        if (!globalContext) {
+            try {
+                // @ts-ignore - Dynamic import to avoid circular dependency
+                const { useTelemetryStore } = await import('../features/telemetry/store/useTelemetryStore');
+                const state = useTelemetryStore.getState();
+                if (state && state.executiveResult) {
+                    globalContext = {
+                        mode: state.executiveResult.financials?.mode || 'UNKNOWN',
+                        health_score: state.executiveResult.masterHealthScore || 0,
+                        tier: state.executiveResult.permissionTier || 'READ_ONLY'
+                    };
+                }
+            } catch (e) {
+                // Store might not be initialized or accessible in this context
+            }
+        }
+
+        const record: AuditLogRecord = {
             timestamp: Date.now(),
-            ...entry
-        });
+            ...entry,
+            global_context: globalContext
+        };
+
+        await db.auditLogs.add(record);
+        
+        // Dispatch event for UI updates
+        window.dispatchEvent(new CustomEvent('SOVEREIGN_AUDIT_LOG', { detail: record }));
     } catch (e) {
         console.warn('[Persistence] Log save failed:', e);
+    }
+}
+
+export async function getAuditLogs(limit: number = 100): Promise<AuditLogRecord[]> {
+    try {
+        return await db.auditLogs
+            .orderBy('timestamp')
+            .reverse()
+            .limit(limit)
+            .toArray();
+    } catch (e) {
+        console.warn('[Persistence] Log fetch failed:', e);
+        return [];
     }
 }
 

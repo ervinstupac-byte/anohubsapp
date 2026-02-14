@@ -21,6 +21,7 @@ import { VibrationForensics, VibrationForensicResult } from '../../../services/c
 import { Sovereign_Executive_Engine, ExecutiveState, PermissionTier } from '../../../services/Sovereign_Executive_Engine';
 import { ErosionStatus } from '../../../services/SandErosionTracker';
 import { PatternEater, EfficiencyMap } from '../../../services/PatternEater';
+import { EventLogger } from '../../../services/EventLogger';
 import { persistAlarm, loadAlarms, saveTelemetryBatch, getRecentHistory } from '../../../services/PersistenceService'; // NC-24000 Refined
 
 
@@ -347,6 +348,7 @@ interface TelemetryState {
     // NC-15300: Forensic Ledger & Playback
     snapshots: DiagnosticSnapshot[];
     playbackSnapshot: DiagnosticSnapshot | null;
+    activeScenario: DemoScenario | null;
     addSnapshot: (snapshot: DiagnosticSnapshot) => void;
     setPlaybackSnapshot: (snapshot: DiagnosticSnapshot | null) => void;
 
@@ -397,6 +399,10 @@ interface TelemetryState {
     penstock: TechnicalProjectState['penstock'];
     specializedState: TechnicalProjectState['specializedState']; // Derived/Mocked Specialized Data
     fluidIntelligence: TechnicalProjectState['fluidIntelligence']; // NC-10030
+
+    // NC-4.2 Persistent Mitigations
+    appliedMitigations: string[];
+    applyMitigation: (mitigation: string) => void;
 
     // New Batch 6 additions
     financials: TechnicalProjectState['financials'];
@@ -506,6 +512,7 @@ interface TelemetryState {
     };
     // SCADA: Alarm actions
     pushAlarm: (alarm: { id: string; severity: 'CRITICAL' | 'WARNING' | 'INFO'; message: string }) => void;
+    acknowledgeAlarm: (id: string) => void;
     acknowledgeAllAlarms: () => void;
     recordLedgerEvent?: (entry: SessionLedgerEntry) => void;
     // Memory management
@@ -527,6 +534,12 @@ export const useTelemetryStore = create<TelemetryState>()(
             site: DEFAULT_TECHNICAL_STATE.site,
             penstock: DEFAULT_TECHNICAL_STATE.penstock,
             specializedState: DEFAULT_TECHNICAL_STATE.specializedState,
+            appliedMitigations: [],
+            applyMitigation: (mitigation: string) => set((state) => ({
+                appliedMitigations: [...state.appliedMitigations, mitigation],
+                // Apply logic if needed, e.g., reduce stress
+                physics: mitigation === 'STRUCTURAL_RISK' ? { ...state.physics, hoopStress: (state.physics.hoopStress as any)?.mul?.(0.85) ?? new Decimal(0) } : state.physics
+            })),
             deltaToOptimum: undefined,
 
             financials: DEFAULT_TECHNICAL_STATE.financials,
@@ -536,6 +549,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             // NC-15300: Forensic Ledger
             snapshots: [],
             playbackSnapshot: null,
+            activeScenario: null,
 
             // NC-16000: Fleet Initialization
             fleet: [
@@ -935,7 +949,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                     const eff = currentState.hydraulic.efficiency || 0;
                     // Handle Decimal or number for power
                     const power = (currentState.physics.powerMW as any)?.toNumber?.() ?? currentState.physics.powerMW ?? 0;
-                    const rated = currentState.identity.machineConfig.ratedPowerMW || 10;
+                    const rated = currentState.identity.machineConfig?.ratedPowerMW || 10;
                     
                     if (power > rated * 1.05) return 'OVERLOAD';
                     if (power < rated * 0.4) return 'PART_LOAD';
@@ -1027,13 +1041,13 @@ export const useTelemetryStore = create<TelemetryState>()(
                     type: 'HPP',
                     location: state.identity.location || 'Unknown',
                     coordinates: [0, 0],
-                    capacity: state.identity.machineConfig.ratedPowerMW,
+                    capacity: state.identity.machineConfig?.ratedPowerMW || 10,
                     turbine_family: 'FRANCIS',
                     turbine_variant: 'francis_vertical',
                     status: 'Operational',
                     turbine_config: {
-                        head: state.identity.machineConfig.ratedHeadM || 150,
-                        flow_max: state.identity.machineConfig.ratedFlowM3S || 45,
+                        head: state.identity.machineConfig?.ratedHeadM || 150,
+                        flow_max: state.identity.machineConfig?.ratedFlowM3S || 45,
                         runner_diameter: 1.2,
                         commissioning_date: '2020-01-01',
                         manufacturer: 'ANOHUBS',
@@ -1053,7 +1067,10 @@ export const useTelemetryStore = create<TelemetryState>()(
                                 netHead: state.hydraulic.head || 150,
                                 geodeticData: state.geodeticData,
                                 acoustic: {
-                                    fingerprintMatch: state.acousticMatch
+                                    fingerprintMatch: state.acousticMatch,
+                                    spectrum: [], // Mock spectrum for acoustic analysis
+                                    rmsLevel: 0,   // Mock RMS level
+                                    ...(state.specializedState?.acoustic || {})
                                 }
                             } as any
                         },
@@ -1062,7 +1079,9 @@ export const useTelemetryStore = create<TelemetryState>()(
                 };
 
                 try {
-                    const diagnosis = await MasterIntelligenceEngine.analyzeAsset(mockAsset as EnhancedAsset, []);
+                    // Fix: Pass the current telemetry as history so the engine has data to analyze
+                    const history = [mockAsset.telemetry.latest];
+                    const diagnosis = await MasterIntelligenceEngine.analyzeAsset(mockAsset as EnhancedAsset, history as any);
                     set({ unifiedDiagnosis: diagnosis });
                 } catch (error) {
                     console.error("Deep AI Analysis failed:", error);
@@ -1082,6 +1101,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             },
 
             loadScenario: (scenario) => {
+                set({ activeScenario: scenario });
                 const { updateTelemetry, runDeepAnalysis } = get();
 
                 switch (scenario) {
@@ -1303,6 +1323,14 @@ export const useTelemetryStore = create<TelemetryState>()(
                 });
             },
 
+            acknowledgeAlarm: (id) => {
+                set((state) => ({
+                    activeAlarms: state.activeAlarms.map(a =>
+                        a.id === id ? { ...a, acknowledged: true } : a
+                    )
+                }));
+            },
+
             acknowledgeAllAlarms: () => {
                 set((state) => {
                     const acked = state.activeAlarms.map(a => ({ ...a, acknowledged: true }));
@@ -1379,3 +1407,8 @@ export const useTelemetryStore = create<TelemetryState>()(
         }
     )
 );
+
+// NC-11500: Initialize EventLogger with store dispatch
+EventLogger.initialize((entry) => {
+    useTelemetryStore.getState().recordLedgerEvent?.(entry);
+});

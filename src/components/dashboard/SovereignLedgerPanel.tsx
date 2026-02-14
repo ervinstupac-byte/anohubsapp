@@ -19,23 +19,26 @@ import {
   CheckCircle,
   ChevronDown,
   ChevronUp,
-  Filter
+  Filter,
+  Maximize2
 } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { SovereignGlobalState, GlobalState } from '../../services/SovereignGlobalState';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
 import ExperienceLedgerService from '../../services/ExperienceLedgerService';
+import { getAuditLogs, AuditLogRecord } from '../../services/PersistenceService';
+import { FullAuditLogModal } from '../modals/FullAuditLogModal';
 
 // Ledger Entry Type
 interface LedgerEntry {
   id: string;
   timestamp: number;
-  action: 'COMMANDER_SETPOINT' | 'SYSTEM_OVERRIDE' | 'PULSE_UPDATE' | 'EXPERT_VALIDATION';
+  action: string;
   actor: string;
   componentId?: string;
-  previousPulseIndex: number;
-  newPulseIndex: number;
-  pulseDelta: number;
+  previousPulseIndex?: number;
+  newPulseIndex?: number;
+  pulseDelta?: number;
   details: string;
   severity: 'INFO' | 'WARNING' | 'CRITICAL';
 }
@@ -45,50 +48,44 @@ export const SovereignLedgerPanel: React.FC = () => {
   const [expandedEntry, setExpandedEntry] = useState<string | null>(null);
   const [filter, setFilter] = useState<'ALL' | 'COMMANDER' | 'SYSTEM' | 'CRITICAL'>('ALL');
   const [currentPulseIndex, setCurrentPulseIndex] = useState(100);
+  const [showFullLog, setShowFullLog] = useState(false);
 
-  // Subscribe to SovereignGlobalState updates
+  // Load from PersistenceService (Audit Logs)
   useEffect(() => {
-    const checkForUpdates = () => {
-      const state = SovereignGlobalState.getState();
-      const newPulse = ThePulseEngine.calculatePulse(
-        [state.physics.efficiency],
-        state.finance.revenuePerHour,
-        50,
-        0,
-        0,
-        0
-      );
-      
-      const newIndex = Math.round(newPulse.index);
-      
-      // Detect significant changes
-      if (Math.abs(newIndex - currentPulseIndex) > 2) {
-        const delta = newIndex - currentPulseIndex;
-        const entry: LedgerEntry = {
-          id: `pulse-${Date.now()}`,
-          timestamp: Date.now(),
-          action: 'PULSE_UPDATE',
-          actor: 'System',
-          previousPulseIndex: currentPulseIndex,
-          newPulseIndex: newIndex,
-          pulseDelta: delta,
-          details: `Pulse index changed by ${delta > 0 ? '+' : ''}${delta}% due to telemetry update`,
-          severity: Math.abs(delta) > 10 ? 'CRITICAL' : Math.abs(delta) > 5 ? 'WARNING' : 'INFO'
-        };
-        
-        setLedgerHistory(prev => [entry, ...prev].slice(0, 100)); // Keep last 100 entries
-        setCurrentPulseIndex(newIndex);
-      }
+    const loadLogs = async () => {
+        const logs = await getAuditLogs(100);
+        const mapped: LedgerEntry[] = logs.map(l => ({
+            id: String(l.id || Date.now()),
+            timestamp: l.timestamp,
+            action: l.event_type,
+            actor: 'System',
+            details: `${l.reason} ${l.metric_value ? `(${l.metric_value} ${l.metric_unit})` : ''}`,
+            severity: (l.active_protection && l.active_protection !== 'NONE' ? 'WARNING' : 'INFO') as LedgerEntry['severity']
+        }));
+        setLedgerHistory(mapped);
     };
 
-    // Check every 5 seconds
-    const interval = setInterval(checkForUpdates, 5000);
+    loadLogs();
     
-    // Initial check
-    checkForUpdates();
-    
-    return () => clearInterval(interval);
-  }, [currentPulseIndex]);
+    // Listen for new logs
+    const handleSovereignLog = (e: Event) => {
+        const customEvent = e as CustomEvent;
+        if (customEvent.detail) {
+            const r = customEvent.detail;
+            setLedgerHistory(prev => [{
+                id: String(Date.now()),
+                timestamp: Date.now(),
+                action: r.event_type,
+                actor: 'System',
+                details: `${r.reason} ${r.metric_value ? `(${r.metric_value} ${r.metric_unit})` : ''}`,
+                severity: (r.active_protection && r.active_protection !== 'NONE' ? 'WARNING' : 'INFO') as LedgerEntry['severity']
+            }, ...prev].slice(0, 100));
+        }
+    };
+
+    window.addEventListener('SOVEREIGN_AUDIT_LOG', handleSovereignLog);
+    return () => window.removeEventListener('SOVEREIGN_AUDIT_LOG', handleSovereignLog);
+  }, []);
 
   // Manual entry logger using ExperienceLedgerService high-level logic
   const logCommanderAction = useCallback(async (
@@ -181,28 +178,41 @@ export const SovereignLedgerPanel: React.FC = () => {
   const commanderActions = ledgerHistory.filter(e => e.action === 'COMMANDER_SETPOINT').length;
   const systemUpdates = ledgerHistory.filter(e => e.action === 'PULSE_UPDATE').length;
   const avgPulseChange = ledgerHistory.length > 0
-    ? ledgerHistory.reduce((acc, e) => acc + Math.abs(e.pulseDelta), 0) / ledgerHistory.length
+    ? ledgerHistory.reduce((acc, e) => acc + Math.abs(e.pulseDelta || 0), 0) / ledgerHistory.length
     : 0;
 
   return (
     <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center gap-3">
           <History className="w-5 h-5 text-purple-400" />
-          <h3 className="text-lg font-semibold text-white">Sovereign Ledger</h3>
-          <span className="text-xs text-slate-500">Immutable History</span>
+          <div>
+            <h2 className="text-lg font-bold text-white">Sovereign Ledger</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400">NC-1100 Immutable Record</span>
+              <div className="px-1.5 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-[10px] text-purple-300 font-mono">
+                {ledgerHistory.length} ENTRIES
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">Current Pulse:</span>
-          <span className={`text-lg font-bold ${
-            currentPulseIndex > 90 ? 'text-green-400' :
-            currentPulseIndex > 70 ? 'text-yellow-400' : 'text-red-400'
-          }`}>
-            {currentPulseIndex}%
-          </span>
+        <div className="flex gap-2">
+            <button
+                onClick={() => setShowFullLog(true)}
+                className="p-2 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg transition-colors border border-slate-700 hover:border-slate-600 text-purple-400"
+                title="Open Full Forensic Log"
+            >
+                <Maximize2 className="w-4 h-4" />
+            </button>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-white">{currentPulseIndex}%</div>
+              <div className="text-xs text-slate-400">CURRENT PULSE</div>
+            </div>
         </div>
       </div>
+
+      <FullAuditLogModal isOpen={showFullLog} onClose={() => setShowFullLog(false)} />
 
       {/* Statistics */}
       <div className="grid grid-cols-4 gap-3 mb-4">
@@ -279,16 +289,16 @@ export const SovereignLedgerPanel: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1">
-                      {entry.pulseDelta > 0 ? (
+                      {(entry.pulseDelta || 0) > 0 ? (
                         <TrendingUp className="w-3 h-3 text-green-400" />
-                      ) : entry.pulseDelta < 0 ? (
+                      ) : (entry.pulseDelta || 0) < 0 ? (
                         <TrendingDown className="w-3 h-3 text-red-400" />
                       ) : null}
                       <span className={`text-sm font-bold ${
-                        entry.pulseDelta > 0 ? 'text-green-400' : 
-                        entry.pulseDelta < 0 ? 'text-red-400' : 'text-slate-400'
+                        (entry.pulseDelta || 0) > 0 ? 'text-green-400' : 
+                        (entry.pulseDelta || 0) < 0 ? 'text-red-400' : 'text-slate-400'
                       }`}>
-                        {entry.pulseDelta > 0 ? '+' : ''}{entry.pulseDelta}%
+                        {(entry.pulseDelta || 0) > 0 ? '+' : ''}{entry.pulseDelta}%
                       </span>
                     </div>
                     {expandedEntry === entry.id ? (

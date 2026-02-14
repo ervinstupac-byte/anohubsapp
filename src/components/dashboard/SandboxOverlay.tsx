@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Save, RotateCcw, Activity, Gauge, Zap, Flame, Waves, BatteryWarning } from 'lucide-react';
+import { X, Save, RotateCcw, Activity, Gauge, Zap, Flame, Waves, BatteryWarning, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SYSTEM_CONSTANTS } from '../../config/SystemConstants';
 import { computeEfficiencyFromHillChart } from '../../features/physics-core/UnifiedPhysicsCore';
+import { saveLog } from '../../services/PersistenceService';
 
 interface SandboxState {
     flow: number;
@@ -41,6 +42,17 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
     const THICKNESS = 0.04; // meters (40mm steel)
 
     const triggerDisaster = (type: 'VIBRATION' | 'THERMAL' | 'CATHODIC') => {
+        // NC-25100: Log simulation scenario
+        saveLog({
+            event_type: 'SIMULATION_SCENARIO_TRIGGERED',
+            reason: `User injected ${type} failure scenario`,
+            active_protection: 'NONE',
+            details: {
+                scenario: type,
+                timestamp: Date.now()
+            }
+        });
+
         setValues(prev => {
             const next = { ...prev };
             switch (type) {
@@ -77,6 +89,18 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
     const handleCommit = () => {
         // Mock Ingest Call
         console.log('[SovereignSandbox] Committing values to lineage:', values);
+
+        // NC-25100: Log commit
+        saveLog({
+            event_type: 'SIMULATION_COMMITTED',
+            reason: 'User applied simulation parameters to system',
+            active_protection: 'NONE',
+            details: {
+                values,
+                results
+            }
+        });
+
         onCommit(values);
         onClose();
     };
@@ -93,6 +117,12 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-emerald-500/10">
                         <div className="flex items-center gap-2">
+                            <button
+                                onClick={onClose}
+                                className="p-1 hover:bg-emerald-500/20 rounded-full text-emerald-600 hover:text-emerald-400 transition-colors"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                            </button>
                             <Activity className="w-4 h-4 text-emerald-400" />
                             <span className="text-xs font-black uppercase tracking-widest text-emerald-100">
                                 Predictive Sandbox

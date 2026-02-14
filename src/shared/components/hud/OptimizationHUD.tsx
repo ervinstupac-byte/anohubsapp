@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { Activity } from 'lucide-react';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { EfficiencyOptimizer } from '../../../services/EfficiencyOptimizer';
@@ -9,7 +10,12 @@ type OptimizationHUDProps = {
 };
 
 export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({ variant = 'overlay', className }) => {
-  const { hydraulic, physics } = useTelemetryStore((s) => ({ hydraulic: s.hydraulic, physics: s.physics }));
+  const { hydraulic, physics } = useTelemetryStore(
+    useShallow((state) => ({
+      hydraulic: state.hydraulic,
+      physics: state.physics,
+    }))
+  );
 
   const data = useMemo(() => {
     const netHead =

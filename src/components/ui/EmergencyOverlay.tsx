@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { PhysicsMathService } from '../../services/core/PhysicsMathService';
 import { MaterialService } from '../../services/core/MaterialLibrary';
+import { saveLog } from '../../services/PersistenceService';
 
 /**
  * NC-9300: Global Emergency Overlay
@@ -56,11 +57,34 @@ export const EmergencyOverlay: React.FC = () => {
     // Hard Shutdown Trigger
     useEffect(() => {
         if (isCatastrophic) {
-            // In a real app, this would dispatch a STOP_SIMULATION action.
-            // For now, we will just console log and rely on the visual overlay to indicate "Simulation Stop" state
+            // NC-25100: Log catastrophic failure
+            saveLog({
+                event_type: 'CATASTROPHIC_FAILURE',
+                reason: 'Yield strength exceeded. Structural collapse imminent.',
+                active_protection: 'EMERGENCY_SHUTDOWN',
+                metric_value: hoopStress.toFixed(1),
+                metric_unit: 'MPa',
+                details: {
+                    utilizationRatio,
+                    material: penstock?.material
+                }
+            });
+
             console.error("CATASTROPHIC FAILURE: YIELD STRENGTH EXCEEDED. SIMULATION HALTED.");
+        } else if (isCritical) {
+            // Log warning
+             saveLog({
+                event_type: 'CRITICAL_STRESS_WARNING',
+                reason: 'Hoop stress approaching yield limit.',
+                active_protection: 'NONE',
+                metric_value: hoopStress.toFixed(1),
+                metric_unit: 'MPa',
+                details: {
+                    utilizationRatio
+                }
+            });
         }
-    }, [isCatastrophic]);
+    }, [isCatastrophic, isCritical]);
 
     if (!isCritical) return null;
 

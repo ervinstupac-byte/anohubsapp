@@ -54,7 +54,7 @@ import ProjectStateManager from '../../contexts/ProjectStateContext';
 import { useToast } from '../../stores/useAppStore';
 import { BootSequence } from '../BootSequence';
 import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetHierarchy';
-import { dispatch } from '../../lib/events';
+import { dispatch, EVENTS } from '../../lib/events';
 
 // lazy-load heavy UI pieces used in the executive dashboard
 const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));

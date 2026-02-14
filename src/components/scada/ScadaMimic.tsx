@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 import { useTelemetry } from '../../contexts/TelemetryContext.tsx';
-import { useProjectEngine } from '../../contexts/ProjectContext.tsx';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore.ts';
 import { Tooltip } from '../ui/Tooltip.tsx';
 import { ModernButton } from '../ui/ModernButton.tsx';
 import { useNavigate } from 'react-router-dom';
+import { Decimal } from 'decimal.js';
+import { PhysicsEngine } from '../../core/PhysicsEngine.ts';
+import { ExpertDiagnosisEngine } from '../../features/physics-core/ExpertDiagnosisEngine.ts';
 
 import { DigitalDisplay } from './DigitalDisplay.tsx';
 import { dispatch } from '../../lib/events';
+import { ActiveAlarmsModal } from '../dashboard/ActiveAlarmsModal';
 
 const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'stopped'; mw: number }> = React.memo(({ name, status, mw }) => (
     <div className="relative group">
@@ -56,9 +60,49 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
 export const ScadaMimic: React.FC = React.memo(() => {
     const { selectedAsset } = useAssetContext();
     const { telemetry } = useTelemetry();
-    const { connectSCADAToExpertEngine } = useProjectEngine();
+    const { updateTelemetry } = useTelemetryStore();
+    const telemetryStore = useTelemetryStore();
+    
+    // Local helper to replace legacy ProjectEngine
+    const connectSCADAToExpertEngine = (flow: number, head: number, frequency: number) => {
+        const scadaState: any = {
+            ...telemetryStore,
+            hydraulic: {
+                ...telemetryStore.hydraulic,
+                flowRate: new Decimal(flow),
+                waterHead: new Decimal(head),
+                flow: flow,
+                head: head
+            },
+            physics: {
+                ...telemetryStore.physics,
+                hoopStress: telemetryStore.physics.hoopStress || new Decimal(0),
+                powerMW: new Decimal(0), 
+                surgePressure: telemetryStore.physics.surgePressure || new Decimal(0),
+            },
+            penstock: {
+                ...telemetryStore.penstock,
+                materialYieldStrength: telemetryStore.penstock.materialYieldStrength || 355
+            }
+        };
+
+        const physicsResult = PhysicsEngine.recalculatePhysics(scadaState);
+        const diagnosis = ExpertDiagnosisEngine.runExpertDiagnosis(physicsResult, scadaState);
+
+        const criticalAlarms = diagnosis.messages
+            .filter(m => diagnosis.severity === 'CRITICAL')
+            .map(m => ({ message: m.en }));
+
+        return {
+            healthScore: diagnosis.severity === 'CRITICAL' ? 40 : diagnosis.severity === 'WARNING' ? 70 : 98,
+            criticalAlarms,
+            diagnostics: diagnosis
+        };
+    };
+
     const [isLoading, setIsLoading] = useState(true);
     const [scadaAlarms, setScadaAlarms] = useState<any[]>([]);
+    const [showAlarmsModal, setShowAlarmsModal] = useState(false);
 
     const liveData = selectedAsset ? telemetry[selectedAsset.id] : null;
     const isCritical = liveData?.status === 'CRITICAL';
@@ -96,6 +140,16 @@ export const ScadaMimic: React.FC = React.memo(() => {
         // Extract SCADA values from display (simulated critical condition: 98.2 Hz)
         const flowRate = 42.5; // m³/s from display
         const headPressure = 152.0; // m from display
+
+        // MIGRATION: Update Telemetry Store directly instead of legacy ProjectEngine
+        updateTelemetry({
+            hydraulic: {
+                flow: flowRate,
+                head: headPressure,
+                efficiency: isCritical ? 65 : 92
+            }
+        });
+
         const gridFreq = 98.2; // Hz from display (CRITICAL!)
 
         // Connect to ExpertDiagnosisEngine
@@ -113,7 +167,7 @@ export const ScadaMimic: React.FC = React.memo(() => {
             // Could trigger emergency shutdown here
             console.error('CRITICAL: Grid frequency at', gridFreq, 'Hz - Risk of mechanical destruction!');
         }
-    }, [selectedAsset, isLoading, connectSCADAToExpertEngine]);
+    }, [selectedAsset, isLoading, isCritical, updateTelemetry, connectSCADAToExpertEngine]);
 
     if (isLoading) {
         return (
@@ -270,21 +324,41 @@ export const ScadaMimic: React.FC = React.memo(() => {
                 {/* SCADA ALARMS DISPLAY - Premium styling */}
                 {scadaAlarms.length > 0 && (
                     <div className="mt-6 p-6 bg-gradient-to-br from-red-950/60 to-red-900/40 border-2 border-red-500/50 rounded-2xl shadow-[0_8px_30px_rgba(239,68,68,0.2)] backdrop-blur-md">
-                        <h4 className="text-red-400 font-black uppercase text-base mb-4 tracking-wider flex items-center gap-3">
-                            <span className="text-xl animate-pulse">⚠️</span>
-                            EXPERT ENGINE ALARMS
-                        </h4>
+                        <div className="flex items-center justify-between mb-4">
+                            <h4 className="text-red-400 font-black uppercase text-base tracking-wider flex items-center gap-3">
+                                <span className="text-xl animate-pulse">⚠️</span>
+                                EXPERT ENGINE ALARMS
+                            </h4>
+                            <button
+                                onClick={() => setShowAlarmsModal(true)}
+                                className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded text-[10px] font-bold text-red-400 uppercase tracking-widest transition-all"
+                            >
+                                VIEW ALL ({scadaAlarms.length})
+                            </button>
+                        </div>
                         <div className="space-y-2">
-                            {scadaAlarms.map((alarm, idx) => (
+                            {scadaAlarms.slice(0, 3).map((alarm, idx) => (
                                 <div key={idx} className="text-red-300 text-sm font-medium animate-pulse flex items-start gap-2 p-2 bg-red-950/30 rounded-lg">
                                     <span className="text-red-500 font-bold">●</span>
                                     <span>{alarm.message}</span>
                                 </div>
                             ))}
+                            {scadaAlarms.length > 3 && (
+                                <div className="text-center pt-2">
+                                    <span className="text-xs text-red-500/70 font-mono cursor-pointer hover:text-red-400" onClick={() => setShowAlarmsModal(true)}>
+                                        + {scadaAlarms.length - 3} MORE ALERTS
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
             </div>
+            {/* Active Alarms Modal */}
+            <ActiveAlarmsModal 
+                isOpen={showAlarmsModal} 
+                onClose={() => setShowAlarmsModal(false)} 
+            />
         </div>
     );
 });

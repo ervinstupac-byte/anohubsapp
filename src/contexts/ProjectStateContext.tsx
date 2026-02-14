@@ -94,7 +94,7 @@ class ProjectStateManagerClass {
             if (!oldest) return false;
 
             // notify UI that reconstruction is starting
-            try { dispatch.reconstruction.start({ requestedId: id, base: oldest.id }); } catch (e) { /* ignore */ }
+            try { dispatch.reconstructionStart({ requestedId: id, base: oldest.id }); } catch (e) { /* ignore */ }
 
             let reconstructed = cloneDeep(oldest.snapshot);
             let processed = 0;
@@ -104,7 +104,7 @@ class ProjectStateManagerClass {
                 try {
                     if (found) return; // ignore further streamed events once found
                     processed += 1;
-                    try { dispatch.reconstruction.progress({ processed }); } catch (e) { }
+                    try { dispatch.reconstructionProgress({ processed }); } catch (e) { }
                     const p = rec.payload as any;
                     if (p && p.snapshot) {
                         reconstructed = cloneDeep(p.snapshot);

@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from './paths.ts';
+import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
+import { createThrustBearingWithHistory } from '../models/MaintenanceChronicles';
 
 // Lazy load components
 const MaintenanceDashboard = lazy(() => import('../components/MaintenanceDashboard.tsx').then(m => ({ default: m.MaintenanceDashboard })));
@@ -13,9 +15,20 @@ const ARManager = lazy(() => import('../components/ARManager').then(m => ({ defa
 const TechnicalPassport = lazy(() => import('../components/TechnicalPassport').then(m => ({ default: m.TechnicalPassport })));
 
 // NC-20600: Re-wired orphan components
-const MounterQuickCardPage = lazy(() => import('../components/MounterQuickCard').then(m => ({ default: m.DemoMounterQuickCard })));
+const MounterQuickCardLazy = lazy(() => import('../components/MounterQuickCard').then(m => ({ default: m.MounterQuickCard })));
 const SpecialistDamageCardLazy = lazy(() => import('../components/SpecialistDamageCard').then(m => ({ default: m.SpecialistDamageCard })));
 const AssetPassportCard = lazy(() => import('../components/dashboard/AssetPassportCard').then(m => ({ default: m.AssetPassportCard })));
+
+const MounterQuickCardPage: React.FC = () => {
+    // Mock asset for demonstration
+    const asset = createThrustBearingWithHistory();
+    return (
+        <MounterQuickCardLazy 
+            asset={asset} 
+            onClose={() => window.history.back()} 
+        />
+    );
+};
 
 // NC-20600: Wrapper for SpecialistDamageCard (requires props)
 const SpecialistDamageCardPage: React.FC = () => (
@@ -26,8 +39,6 @@ const SpecialistDamageCardPage: React.FC = () => (
         onClose={() => window.history.back()}
     />
 );
-
-import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
 
 const MaintenanceRouter: React.FC = () => {
     return (

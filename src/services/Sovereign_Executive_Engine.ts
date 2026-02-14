@@ -207,7 +207,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
             }
         }
 
-        const molecularHealth = this.molecularMonitor.calculateCrystalStress('U1', 10000, inputs.vibration, 24);
+        const molecularHealth = this.molecularMonitor.calculateCrystalStress('U1', 50, inputs.vibration, 24);
         this.factory.checkAndOrder(molecularHealth.integrityScore, 'D42-Rev9');
 
         // 4. MARKET DECISION
@@ -398,7 +398,12 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
     }
 
     private judgeSensors(a: any, b: any, pred: number): { score: number, verdict: Verdict } {
-        const v = this.truthJudge.reconcileTruth(a, b, pred);
+        const valA = a?.vibration ?? a?.value ?? 0;
+        const valB = b?.vibration ?? b?.value ?? 0;
+        const sensorA = { id: 'SensorA', value: valA, timestamp: Date.now() };
+        const sensorB = { id: 'SensorB', value: valB, timestamp: Date.now() };
+        
+        const v = this.truthJudge.reconcileTruth(sensorA, sensorB, pred);
         return { score: v.winner === 'UNCERTAIN' ? 0 : 100, verdict: v };
     }
 

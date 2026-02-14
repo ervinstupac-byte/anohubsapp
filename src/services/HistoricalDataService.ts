@@ -76,6 +76,8 @@ export const HISTORICAL_PATTERNS = {
     }
 } as const;
 
+export const ANCESTRAL_PATTERNS = HISTORICAL_PATTERNS;
+
 export class HistoricalDataService {
     
     /**

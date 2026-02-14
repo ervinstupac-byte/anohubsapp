@@ -1,6 +1,77 @@
 import Decimal from 'decimal.js';
 import { SYSTEM_CONSTANTS } from '../../config/SystemConstants';
 
+export interface CavitationStatus {
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    sigma: number;
+    details: string;
+}
+
+export interface ErosionStatus {
+    rate: number; // mm/year
+    severity: 'NONE' | 'MINOR' | 'MODERATE' | 'SEVERE';
+    estimatedLifeRemaining: number; // years
+}
+
+export const calculateOperatingZone = (
+    powerMW: number,
+    ratedPowerMW: number,
+    head: number,
+    flow: number,
+    efficiency: number
+): { zone: string; message: string; efficiencyDetails?: string } => {
+    const loadPct = (powerMW / ratedPowerMW) * 100;
+    
+    if (loadPct > 110) {
+        return { zone: 'OVERLOAD', message: 'Exceeding rated capacity. Monitor temperature.', efficiencyDetails: 'Efficiency drops due to turbulence.' };
+    } else if (loadPct >= 80) {
+        return { zone: 'OPTIMAL', message: 'Operating within peak efficiency range.', efficiencyDetails: 'Peak efficiency.' };
+    } else if (loadPct >= 50) {
+        return { zone: 'PARTIAL', message: 'Acceptable but suboptimal efficiency.', efficiencyDetails: 'Efficiency reduced by ~5-10%.' };
+    } else {
+        return { zone: 'ROUGH_ZONE', message: 'High turbulence and cavitation risk. Avoid prolonged operation.', efficiencyDetails: 'Efficiency significantly degraded.' };
+    }
+};
+
+export const calculateCavitationRisk = (
+    head: number,
+    flow: number,
+    tailwaterEl: number,
+    runnerEl: number,
+    waterTemp: number
+): { risk: string; details: string; sigma: number } => {
+    // Thoma's Sigma Calculation
+    // sigma = (Ha - Hv - Hs) / H
+    // Ha = Atmospheric pressure head (approx 10.3m at sea level)
+    // Hv = Vapor pressure head (depends on temp)
+    // Hs = Suction head (Runner El - Tailwater El)
+    // H = Net Head
+
+    const Ha = 10.3; // simplified
+    // Vapor pressure of water approx formula: 0.611 * exp(17.27 * T / (T + 237.3)) kPa
+    // Approx Hv in meters:
+    const Hv = 0.1 + (waterTemp / 100) * 0.5; // Very rough approx for 0-40C
+
+    const Hs = runnerEl - tailwaterEl;
+    const sigma = (Ha - Hv - Hs) / head;
+
+    let risk = 'LOW';
+    let details = 'Safe operation margin.';
+
+    if (sigma < 0.05) {
+        risk = 'CRITICAL';
+        details = 'Incipient cavitation likely. Sigma critical.';
+    } else if (sigma < 0.1) {
+        risk = 'HIGH';
+        details = 'Low margin to cavitation.';
+    } else if (sigma < 0.15) {
+        risk = 'MEDIUM';
+        details = 'Monitor for noise/vibration.';
+    }
+
+    return { risk, details, sigma };
+};
+
 /**
  * Pure Physics Calculations
  * Decoupled from React State and UI dependencies.
@@ -263,78 +334,4 @@ export const generateTurbineSpecs = (type: string, head: number, flow: number) =
     }
 };
 
-import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
-import { CavitationWatcher } from '../../services/CavitationWatcher';
 
-/**
- * ANALYSIS & EDUCATION MODE LOGIC
- * Heuristics for operator feedback
- */
-
-export const calculateOperatingZone = (
-    currentPowerMW: number,
-    ratedPowerMW: number = 100, // Default to 100MW if unknown
-    netHead: number,
-    flowRate: number,
-    currentEfficiency: number
-): { zone: 'ROUGH' | 'OPTIMAL' | 'OVERLOAD'; message: string; efficiencyDetails?: string } => {
-    
-    // 1. Legacy Load Factor Check
-    const loadFactor = currentPowerMW / ratedPowerMW;
-    let baseZone: 'ROUGH' | 'OPTIMAL' | 'OVERLOAD' = 'OPTIMAL';
-    let message = 'Optimal Operating Range.';
-
-    if (loadFactor < 0.40) {
-        baseZone = 'ROUGH';
-        message = 'Rough Load Zone: High turbulence and cavitation risk.';
-    } else if (loadFactor > 1.05) {
-        baseZone = 'OVERLOAD';
-        message = 'Overload: Generator thermal limits exceeded.';
-    }
-
-    // 2. Advanced Hill Chart Optimization (Integration)
-    const optimizerResult = EfficiencyOptimizer.compute(netHead, flowRate, currentEfficiency);
-    const effMessage = `Hill Chart: Max potential η=${optimizerResult.etaMax.toFixed(1)}% (Delta: ${optimizerResult.deltaToOptimum.toFixed(1)}%)`;
-
-    return { 
-        zone: baseZone, 
-        message: `${message} ${effMessage}`,
-        efficiencyDetails: effMessage
-    };
-};
-
-export const calculateCavitationRisk = (
-    netHead: number,
-    flowRate: number,
-    tailwaterEl: number = 85.0, // Default tailwater
-    runnerEl: number = 82.0,    // Default runner
-    waterTemp: number = 15      // Default temp
-): { risk: 'LOW' | 'MEDIUM' | 'HIGH'; details: string; metrics?: any } => {
-    
-    // Use Advanced CavitationWatcher
-    const analysis = CavitationWatcher.analyze(
-        tailwaterEl,
-        runnerEl,
-        netHead,
-        waterTemp
-    );
-
-    let risk: 'LOW' | 'MEDIUM' | 'HIGH' = 'LOW';
-    let details = 'Safe Suction Head';
-
-    if (analysis.riskLevel === 'FULL_CAVITATION') {
-        risk = 'HIGH';
-        details = `CRITICAL: NPSH_A (${analysis.npshAvailable.toFixed(2)}m) < NPSH_R (${analysis.npshRequired.toFixed(2)}m)`;
-    } else if (analysis.riskLevel === 'INCEPTION') {
-        risk = 'MEDIUM';
-        details = `WARNING: Incipient Cavitation. Sigma Plant: ${analysis.sigmaPlant.toFixed(3)}`;
-    } else {
-        details = `Nominal. Margin: ${(analysis.npshAvailable - analysis.npshRequired).toFixed(2)}m`;
-    }
-
-    return {
-        risk,
-        details,
-        metrics: analysis
-    };
-};

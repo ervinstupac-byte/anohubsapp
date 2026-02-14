@@ -55,10 +55,11 @@ export const useSmartSuggestions = () => {
         }
 
         // 1. CRITICAL DIAGNOSTICS
-        if (diagnosis && (diagnosis.severity === 'CRITICAL' || diagnosis.severity === 'HIGH')) {
+        if (diagnosis && (diagnosis.severity === 'CRITICAL' || diagnosis.severity === 'WARNING')) {
+            const title = diagnosis.messages?.[0]?.en || 'Unknown Issue';
             list.push({
                 id: 'sugg-diag-critical',
-                label: `Resolve: ${diagnosis.title}`,
+                label: `Resolve: ${title}`,
                 type: 'suggestion',
                 icon: <AlertTriangle className="text-red-500" />,
                 action: () => navigate('/forensic-hub'),
@@ -82,13 +83,14 @@ export const useSmartSuggestions = () => {
 
         // 3. EROSION MAINTENANCE
         if (erosion.severity === 'HIGH' || erosion.severity === 'EXTREME') {
+            const rateMm = (erosion.bucketThinningRate || 0) / 1000;
             list.push({
                 id: 'sugg-erosion',
                 label: 'Schedule Runner Coating',
                 type: 'suggestion',
                 icon: <ShieldAlert className="text-orange-500" />,
                 action: () => navigate('/maintenance/hydraulic'),
-                subtitle: `Erosion rate critical (${erosion.rateMmPerYear.toFixed(1)} mm/yr)`,
+                subtitle: `Erosion rate critical (${rateMm.toFixed(1)} mm/yr)`,
                 priority: 'medium'
             });
         }

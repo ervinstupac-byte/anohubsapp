@@ -1,9 +1,10 @@
 // Legacy Validation Modal - Pre-Task Warning System
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, AlertTriangle, CheckCircle, X, Terminal, CheckSquare, Square } from 'lucide-react';
+import { Shield, AlertTriangle, CheckCircle, X, Terminal, CheckSquare, Square, ArrowLeft } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
 import { LegacyKnowledgeService } from '../services/LegacyKnowledgeService';
+import { saveLog } from '../services/PersistenceService';
 
 export interface LegacyValidationModalProps {
     isOpen: boolean;
@@ -52,6 +53,18 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
 
     const handleProceed = () => {
         if (canProceed) {
+            // NC-25100: Log validation confirmation
+            saveLog({
+                event_type: 'LEGACY_VALIDATION_CONFIRMED',
+                reason: `User validated ${turbineFamily} ${component} protocol`,
+                active_protection: 'NONE',
+                details: {
+                    component,
+                    turbineFamily,
+                    taskDescription,
+                    checklistCompleted: true
+                }
+            });
             onProceed();
         }
     };
@@ -87,6 +100,12 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                             {/* Terminal Header */}
                             <div className="flex items-center justify-between p-4 bg-amber-500/10 border-b border-amber-500/30">
                                 <div className="flex items-center gap-3">
+                                    <button 
+                                        onClick={onClose}
+                                        className="p-1.5 hover:bg-amber-500/20 rounded-full text-amber-600 hover:text-amber-400 transition-colors"
+                                    >
+                                        <ArrowLeft className="w-4 h-4" />
+                                    </button>
                                     <div className="p-2 bg-amber-500/20 rounded border border-amber-500/30">
                                         <Terminal className="w-5 h-5 text-amber-400" />
                                     </div>

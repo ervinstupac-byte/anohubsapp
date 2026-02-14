@@ -7,6 +7,7 @@ import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
 import { SovereignPulse } from './SovereignPulse';
 import { TURBINE_CATEGORIES } from '../../constants';
 import { useState, useEffect } from 'react';
+import { dispatch } from '../../lib/events';
 
 const ExecutiveRibbon: React.FC = () => {
     // @ts-ignore

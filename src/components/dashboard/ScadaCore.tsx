@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { Activity, AlertTriangle, ExternalLink } from 'lucide-react';
+import { Activity, AlertTriangle, ExternalLink, ArrowLeft, Home } from 'lucide-react';
 import { SafetyInterlockEngine } from '../../services/SafetyInterlockEngine';
 import { EventLogger } from '../../services/EventLogger';
 import { useProjectConfigStore } from '../../features/config/ProjectConfigStore';
@@ -14,9 +15,12 @@ import { SmartStartService } from '../../services/SmartStartService';
 import { LubeStatus } from './LubeStatus';
 import { Eye, EyeOff } from 'lucide-react';
 import { SmartTooltip } from '../ui/SmartTooltip';
+import { ActiveAlarmsModal } from './ActiveAlarmsModal';
+import { EVENTS } from '../../lib/events';
 import { TURBINE_LIMITS } from '../../config/IndustrialStandards';
 
 export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }> = ({ focusMode = false, forensicMode = false }) => {
+  const navigate = useNavigate();
   const store = useTelemetryStore() as any;
   const cfgStore = useProjectConfigStore();
   const peltonCfg = cfgStore.getConfig('PELTON');
@@ -38,6 +42,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
   const flowM3s = useMemo(() => Number(hydraulic?.flow ?? 0), [hydraulic]);
   const [preStartChecks, setPreStartChecks] = useState<any[]>([]);
   const [showPreStartModal, setShowPreStartModal] = useState(false);
+  const [showAlarmsModal, setShowAlarmsModal] = useState(false);
 
   useEffect(() => {
       const checks = SmartStartService.generateChecklist('UNIT-1');
@@ -55,6 +60,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
     tripActive: false, tripReason: null, actionRequired: 'NONE'
   });
   const [showThermalOverlay, setShowThermalOverlay] = useState(false);
+  const [isComfortMode, setIsComfortMode] = useState(false);
 
   const vibrationTotal = useMemo(() => {
     const vx = Number(mechanical?.vibrationX ?? mechanical?.vibration ?? 0);
@@ -248,6 +254,11 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
     return interlock.tripActive || interlock.actionRequired !== 'NONE' || speedPct >= 115 || vibrationTotal > 8.0 || powerMW < -2.0 || familyRules;
   }, [interlock, ratedSpeed, rpm, vibrationTotal, physics, family, flowM3s, headM]);
 
+  // PHYSICS-BASED VISUAL EFFECTS
+  const shakeStyle = vibrationTotal > 5 ? { animation: `shake ${Math.max(0.1, 10 / vibrationTotal)}s infinite` } : {};
+  const cavitationRisk = physics?.cavitationRisk ?? 0;
+  const showCavitation = cavitationRisk > 0.7; // >70% risk shows bubbles
+
   const lastVerifiedValue = useMemo(() => {
     const map = {
       bearing: Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp : [],
@@ -280,6 +291,28 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         {!focusMode && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                title="Back"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => navigate('/')} 
+                className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                title="Main Menu"
+              >
+                <Home className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => setIsComfortMode(!isComfortMode)} 
+                className={`p-1 hover:bg-slate-800 rounded transition-colors ${isComfortMode ? 'text-cyan-400' : 'text-slate-400'}`}
+                title="Visual Comfort Mode"
+              >
+                <Eye className="w-4 h-4" />
+              </button>
+              <div className="w-px h-4 bg-slate-800 mx-2" />
               <Activity className="w-4 h-4 text-emerald-400" />
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mimic Diagram</span>
             </div>
@@ -314,22 +347,25 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
           </div>
         )}
 
-        <div className="p-6">
+        <div className={`p-6 transition-all duration-500 ${isComfortMode ? 'sepia-[.3] contrast-125' : ''}`}>
           <style>
             {`
               @keyframes dashFlow { to { stroke-dashoffset: -200; } }
               @keyframes pulseRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+              @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+              @keyframes bubbleRise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-50px) scale(1.5); opacity: 0; } }
               .cad-grid { fill: url(#gridPattern); }
-              .flow-path { stroke: url(#flowGradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 8 10; }
-              .sensor-label { font-family: monospace; font-size: 12px; }
-              .digital-tag { fill: #0b0b0b; stroke: #2a2a2a; stroke-width: 1; rx: 6; }
+              .flow-path { stroke: url(#flowGradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 8 10; filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.5)); }
+              .sensor-label { font-family: monospace; font-size: 12px; font-weight: bold; }
+              .digital-tag { fill: ${isComfortMode ? '#1e293b' : '#0b0b0b'}; stroke: #2a2a2a; stroke-width: 1; rx: 6; }
               .isa-pipe { stroke: #4a5568; stroke-width: 3; fill: none; }
               .isa-valve { stroke: #2d3748; stroke-width: 2; fill: #1a202c; }
               .isa-pump { stroke: #2d3748; stroke-width: 2; fill: #2d3748; }
               .isa-turbine { stroke: #2d3748; stroke-width: 2; fill: #1a202c; }
               .isa-generator { stroke: #2d3748; stroke-width: 2; fill: #2d3748; }
               .technical-line { stroke: #718096; stroke-width: 1; stroke-dasharray: 2,4; }
-              .equipment-shadow { filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
+              .equipment-shadow { filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.5)); }
+              .cavitation-bubble { fill: rgba(255, 255, 255, 0.4); stroke: rgba(255, 255, 255, 0.8); stroke-width: 1; animation: bubbleRise 2s infinite ease-in; }
             `}
           </style>
           <svg viewBox="0 0 1200 600" className="w-full h-[520px]">
@@ -409,9 +445,19 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 </g>
 
                 {/* Runner Assembly */}
-                <g transform="translate(600,300)" className="equipment-shadow">
-                  <circle cx="0" cy="0" r="85" fill="url(#turbineGradient)" stroke="#2d3748" strokeWidth="3" />
+                <g transform="translate(600,300)" className="equipment-shadow" style={shakeStyle}>
+                  <circle cx="0" cy="0" r="85" fill="url(#turbineGradient)" stroke={eta > 0.9 ? "#10b981" : eta < 0.7 ? "#ef4444" : "#2d3748"} strokeWidth="3" />
                   <circle cx="0" cy="0" r="75" fill="none" stroke="#4a5568" strokeWidth="1" />
+
+                  {/* Physics: Cavitation Bubbles */}
+                  {showCavitation && (
+                    <g>
+                      <circle cx="40" cy="40" r="4" className="cavitation-bubble" style={{ animationDelay: '0s' }} />
+                      <circle cx="-40" cy="40" r="3" className="cavitation-bubble" style={{ animationDelay: '0.5s' }} />
+                      <circle cx="40" cy="-40" r="5" className="cavitation-bubble" style={{ animationDelay: '1s' }} />
+                      <circle cx="-40" cy="-40" r="2" className="cavitation-bubble" style={{ animationDelay: '1.5s' }} />
+                    </g>
+                  )}
 
                   {/* Professional Runner Blades */}
                   {Array.from({ length: 16 }).map((_, i) => (
@@ -928,12 +974,18 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   type="number"
                   value={Number(cfgStore.getConfig(family)?.ratedHeadHn ?? 0)}
                   onChange={(e) => {
-                    const v = Number(e.target.value);
-                    if (family === 'KAPLAN' && v > 100) {
-                      pushAlarm?.({ id: `HEAD_INPUT_${Date.now()}`, severity: 'WARN', message: 'Blocked: Kaplan head cannot exceed 100 m' });
-                      return;
+                    try {
+                        const v = Number(e.target.value);
+                        if (family === 'KAPLAN' && v > 100) {
+                          pushAlarm?.({ id: `HEAD_INPUT_${Date.now()}`, severity: 'WARN', message: 'Blocked: Kaplan head cannot exceed 100 m' });
+                          return;
+                        }
+                        if (family && cfgStore.getConfig(family)) {
+                            cfgStore.setConfig(family as any, { ratedHeadHn: v });
+                        }
+                    } catch (err) {
+                        console.error("Failed to update rated head:", err);
                     }
-                    cfgStore.setConfig(family as any, { ratedHeadHn: v });
                   }}
                 />
                 <div className="px-2 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-[10px] font-mono text-slate-400">m</div>
@@ -947,11 +999,21 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   type="number"
                   value={Number(cfgStore.getConfig(family)?.ratedFlowQn ?? 0)}
                   onChange={(e) => {
-                    const v = Number(e.target.value);
-                    cfgStore.setConfig(family as any, { ratedFlowQn: v });
-                    const etaChk = computeEfficiencyFromHillChart(family as any, cfgStore.getConfig(family as any)?.ratedHeadHn ?? 0, v);
-                    if (etaChk > 0.98) {
-                      pushAlarm?.({ id: `ETA_INPUT_${Date.now()}`, severity: 'WARN', message: 'Design Conflict: Efficiency exceeds 98%' });
+                    try {
+                        const v = Number(e.target.value);
+                        if (family && cfgStore.getConfig(family)) {
+                            cfgStore.setConfig(family as any, { ratedFlowQn: v });
+                            try {
+                                const etaChk = computeEfficiencyFromHillChart(family as any, cfgStore.getConfig(family as any)?.ratedHeadHn ?? 0, v);
+                                if (etaChk > 0.98) {
+                                  pushAlarm?.({ id: `ETA_INPUT_${Date.now()}`, severity: 'WARN', message: 'Design Conflict: Efficiency exceeds 98%' });
+                                }
+                            } catch (calcErr) {
+                                // Ignore hill chart calculation errors during input
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Failed to update rated flow:", err);
                     }
                   }}
                 />

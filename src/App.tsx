@@ -36,7 +36,6 @@ import { Spinner } from './shared/components/ui/Spinner';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
-// Hub removed (Legacy)
 import { Sidebar } from './components/diagnostic-twin/Sidebar.tsx';
 import { NeuralFlowMap } from './components/diagnostic-twin/NeuralFlowMap.tsx';
 import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
@@ -118,7 +117,7 @@ const PrecisionAudit = lazy(() => import('./components/PrecisionAudit.tsx').then
 const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
 const LegacySOPViewer = React.lazy(() => import('./components/francis/LegacySOPViewer').then(module => ({ default: module.LegacySOPViewer }))); // NC-21000
-const AlignmentWizard = React.lazy(() => import('./components/maintenance/AlignmentWizard').then(module => ({ default: module.AlignmentWizard }))); // NC-21000
+const AlignmentWizardWrapper = React.lazy(() => import('./components/maintenance/AlignmentWizardWrapper').then(module => ({ default: module.AlignmentWizardWrapper }))); // NC-21000
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
@@ -293,7 +292,7 @@ const AppLayout: React.FC = () => {
         
         // I will remove the entire useEffect block that handles these events, and the state definitions.
         
-        // Also remove AssetRegistrationWizard import.
+
     }, []);
 
 
@@ -467,7 +466,7 @@ const AppLayout: React.FC = () => {
                                                 {/* NC-25200: Black Hole Fix - Redirect to Fleet */}
                                                 <Route index element={<Navigate to="/fleet" replace />} />
                                                 <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
-                                                <Route path="/asset-onboarding" element={<AssetOnboardingWizard onComplete={() => window.history.back()} />} />
+                                                <Route path="/asset-onboarding" element={<AssetOnboardingWizard isOpen={true} onClose={() => window.history.back()} />} />
                                                 <Route path="/sandbox" element={<Suspense fallback={<LoadingScreen />}><SandboxPage /></Suspense>} />
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />
@@ -515,8 +514,8 @@ const AppLayout: React.FC = () => {
                                                 <Route path="alerts" element={<Suspense fallback={<LoadingScreen />}><ScadaCore /></Suspense>} />
                                                 <Route path="forensic-hub" element={<Suspense fallback={<LoadingScreen />}><ForensicHub /></Suspense>} />
                                                 <Route path="forensics" element={<Suspense fallback={<LoadingScreen />}><ForensicDashboard /></Suspense>} />
-                                                <Route path="maintenance/alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizard /></Suspense>} />
-                                                <Route path="/francis/sop-shaft-alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizard /></Suspense>} />
+                                                <Route path="maintenance/alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizardWrapper /></Suspense>} />
+                                                <Route path="/francis/sop-shaft-alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizardWrapper /></Suspense>} />
                                                 <Route path="/francis/legacy/:sopId" element={<Suspense fallback={<LoadingScreen />}><LegacySOPViewer /></Suspense>} />
                                                 <Route path="forensics/deep-dive" element={<Suspense fallback={<LoadingScreen />}><ForensicDeepDive /></Suspense>} />
                                                 <Route path="*" element={<Navigate to="/" replace />} />

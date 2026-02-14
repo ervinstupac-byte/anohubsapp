@@ -34,8 +34,9 @@ export const SystemHealth: React.FC = () => {
                 
                 if (error) throw error;
                 setDbStatus('connected');
-            } catch (e) {
-                console.error('DB Check Failed:', e);
+            } catch (e: any) {
+                // Graceful fallback - warn instead of error to keep console clean
+                console.warn('[SystemHealth] DB Check Warning:', e.message || 'Connection failed');
                 setDbStatus('error');
             }
         };

@@ -8,6 +8,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningWizard } from './CommissioningWizard';
 import { useAssetContext } from '../contexts/AssetContext';
 import { useCommissioning } from '../contexts/CommissioningContext';
+import { mapAssetToEnhancedAsset } from '../utils/assetMapper';
 
 export const CommissioningModeDashboard: React.FC = () => {
     const { selectedAsset } = useAssetContext();
@@ -29,7 +30,7 @@ export const CommissioningModeDashboard: React.FC = () => {
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-black uppercase tracking-tighter mb-3">
                         <span className="text-white">Commissioning</span>
-                        <span className="text-cyan-400 font-bold ml-2">{(selectedAsset as any)?.turbine_family?.toUpperCase()}</span>
+                        <span className="text-cyan-400 font-bold ml-2">{mapAssetToEnhancedAsset(selectedAsset).turbine_family?.toUpperCase()}</span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 ml-2">
                             Mode
                         </span>
@@ -87,7 +88,7 @@ export const CommissioningModeDashboard: React.FC = () => {
                     />
                 </div>
 
-                {(selectedAsset as any).turbine_family === 'PELTON' && (
+                {mapAssetToEnhancedAsset(selectedAsset).turbine_family === 'PELTON' && (
                     <GlassCard className="p-6 bg-gradient-to-br from-purple-950/30 to-pink-950/30 border-purple-500/30">
                         <div className="flex items-center gap-3 mb-3">
                             <Zap className="w-6 h-6 text-purple-400" />
@@ -123,7 +124,7 @@ export const CommissioningModeDashboard: React.FC = () => {
     return (
         <div className="max-w-6xl mx-auto">
             <CommissioningWizard
-                asset={selectedAsset as any}
+                asset={mapAssetToEnhancedAsset(selectedAsset)}
                 onComplete={(session) => {
                     alert('✅ Commissioning Complete! Session saved.');
                     exitCommissioningMode();

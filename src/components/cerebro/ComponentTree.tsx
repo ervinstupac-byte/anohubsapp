@@ -20,7 +20,6 @@ interface ComponentTreeProps {
 }
 
 export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSelect }) => {
-    const { technicalState } = useProjectEngine();
     const { t } = useTranslation();
 
     // Recursive Tree Node Component

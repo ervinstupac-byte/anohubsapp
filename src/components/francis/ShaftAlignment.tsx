@@ -16,6 +16,7 @@ import { NeuralPulse } from '../ui/NeuralPulse';
 import { AlignmentVisualizer } from '../ui/AlignmentVisualizer';
 import { InfoTooltip } from '../ui/InfoTooltip'; // NEW
 import { useDensity } from '../../stores/useAppStore'; // NEW
+import { SPACING, SPACING_COMPACT } from '../../shared/design-tokens';
 
 // --- API 686 / ISO 10816 CONSTANTS ---
 const RPM_TIERS = [
@@ -32,7 +33,8 @@ export const ShaftAlignment: React.FC = () => {
     const { viewDocument } = useDocumentViewer();
     const { state, dispatch } = useCerebro();
     const { orbit: orbitAnalysis, vibration } = useEngineeringMath();
-    const { mode: densityMode, spacing } = useDensity(); // NEW
+    const { densityMode } = useDensity(); // NEW
+    const spacing = densityMode === 'compact' ? SPACING_COMPACT : SPACING;
     const [confirmedSteps, setConfirmedSteps] = useState<string[]>([]);
     const orbitRef = useRef<ShaftOrbitPlotHandle>(null);
 
@@ -204,9 +206,9 @@ export const ShaftAlignment: React.FC = () => {
                 <section className="bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-1 overflow-hidden backdrop-blur-sm relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-cyan-500 to-amber-500 opacity-30" />
 
-                    <div className={`grid grid-cols-1 lg:grid-cols-12 ${spacing.gap}`}>
+                    <div className={`grid grid-cols-1 lg:grid-cols-12 ${spacing.sectionGap}`}>
                         {/* Inputs */}
-                        <div className={`col-span-12 lg:col-span-4 bg-black/20 ${spacing.padding} rounded-[2.5rem]`}>
+                        <div className={`col-span-12 lg:col-span-4 bg-black/20 ${spacing.cardPadding} rounded-[2.5rem]`}>
                             <div className="flex items-center gap-3 mb-6">
                                 <Calculator className="w-5 h-5 text-amber-500" />
                                 <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest">API 686 Calculator</h3>
@@ -338,7 +340,7 @@ export const ShaftAlignment: React.FC = () => {
                 </section>
 
                 {/* 2. ORBIT ANALYSIS (NC-9.0) - Preserved but styled to fit density */}
-                <div className={`grid grid-cols-1 lg:grid-cols-3 ${spacing.gap}`}>
+                <div className={`grid grid-cols-1 lg:grid-cols-3 ${spacing.sectionGap}`}>
                     <div className="lg:col-span-2">
                         <GlassCard title="Shaft Orbit Dynamic Stability" icon={<Microscope className="text-cyan-400" />}>
                             <div className="flex flex-col md:flex-row gap-6 items-center">
@@ -356,7 +358,7 @@ export const ShaftAlignment: React.FC = () => {
                                 </div>
                                 <div className="flex-1 w-full space-y-4">
                                     {/* Metric Cards */}
-                                    <div className={`grid grid-cols-2 ${spacing.gap}`}>
+                                    <div className={`grid grid-cols-2 ${spacing.sectionGap}`}>
                                         <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
                                             <div className="text-[9px] text-slate-500 font-black uppercase mb-1">Eccentricity</div>
                                             <div className="text-xl font-black font-mono text-cyan-400">{new Decimal(orbitAnalysis.eccentricity).toFixed(3)}</div>

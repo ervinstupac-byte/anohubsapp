@@ -100,7 +100,7 @@ const HISTORICAL_INCIDENTS = [
 
 // --- AI PREDICTION SERVICE ---
 
-class AIPredictionService {
+export class AIPredictionService {
     /**
      * MULTI-SENSOR CORRELATION (Spider Logic)
      * Detects synergetic risk when all 3 parameters oscillate simultaneously

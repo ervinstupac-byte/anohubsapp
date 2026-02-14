@@ -7,13 +7,16 @@ import { Radio, Play, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { PeltonJetSyncService, JetAnalysis } from '../services/PeltonJetSyncService';
 
+import { EnhancedAsset } from '../models/turbine/types';
+
 interface PeltonJetVisualizerProps {
     sessionId: string;
+    asset: EnhancedAsset;
     onComplete: () => void;
 }
 
-export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessionId, onComplete }) => {
-    const [nozzleCount, setNozzleCount] = useState(4);
+export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessionId, asset, onComplete }) => {
+    const [nozzleCount, setNozzleCount] = useState(asset.turbine_config.nozzle_count || 4);
     const [jetAnalyses, setJetAnalyses] = useState<JetAnalysis[]>([]);
     const [forceBalance, setForceBalance] = useState<any>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
