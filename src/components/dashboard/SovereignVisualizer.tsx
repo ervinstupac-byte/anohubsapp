@@ -4,7 +4,7 @@ import { PerspectiveCamera, Environment, TorusKnot, Lathe, CameraControls } from
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import * as THREE from 'three';
 import { Camera, AlertTriangle, X, Database } from 'lucide-react';
-import { AncestralOracle } from '../../services/AncestralOracle';
+import { KnowledgeBaseService } from '../../services/KnowledgeBaseService';
 
 // --- PROPS ---
 interface SovereignVisualizerProps {
@@ -20,8 +20,8 @@ interface SovereignVisualizerProps {
 }
 
 // --- 3D MODEL ---
-const FrancisTurbineModel: React.FC<{ 
-    rpm: number; 
+const FrancisTurbineModel: React.FC<{
+    rpm: number;
     stress: number | null;
     sandboxValues: SovereignVisualizerProps['sandboxValues'];
     onCameraFocus: (target: THREE.Object3D) => void;
@@ -69,16 +69,16 @@ const FrancisTurbineModel: React.FC<{
         const safeColor = new THREE.Color('#10b981'); // Emerald
         const criticalColor = new THREE.Color('#ef4444'); // Red
         const t = stress ? Math.min(Math.max((stress - 50) / 250, 0), 1) : 0;
-        
-        return new THREE.MeshStandardMaterial({ 
+
+        return new THREE.MeshStandardMaterial({
             color: safeColor.clone().lerp(criticalColor, t),
-            metalness: 0.6, 
+            metalness: 0.6,
             roughness: 0.2,
             emissive: stress && stress > 200 ? '#ef4444' : '#000000',
             emissiveIntensity: stress && stress > 200 ? 0.5 : 0
         });
     }, [stress]);
-    
+
     // NC-12600: Thermal Material (Glows > 70C)
     const bearingMaterial = useMemo(() => {
         const isOverheating = temperature > 70;
@@ -91,9 +91,9 @@ const FrancisTurbineModel: React.FC<{
         });
     }, [temperature]);
 
-    const runnerMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+    const runnerMaterial = useMemo(() => new THREE.MeshStandardMaterial({
         color: '#0ea5e9', // Cyan-500
-        metalness: 0.9, 
+        metalness: 0.9,
         roughness: 0.1,
         emissive: '#0ea5e9',
         emissiveIntensity: rpm > 0 ? 0.2 : 0
@@ -121,12 +121,12 @@ const FrancisTurbineModel: React.FC<{
             <group ref={runnerRef}>
                 {/* Hub (Lathe) */}
                 <Lathe args={[runnerProfile, 32]} material={runnerMaterial} rotation={[0, 0, 0]} />
-                
+
                 {/* Blades */}
                 {Array.from({ length: 13 }).map((_, i) => (
-                    <mesh 
-                        key={i} 
-                        position={[Math.sin(i * Math.PI / 6.5) * 1.2, 0, Math.cos(i * Math.PI / 6.5) * 1.2]} 
+                    <mesh
+                        key={i}
+                        position={[Math.sin(i * Math.PI / 6.5) * 1.2, 0, Math.cos(i * Math.PI / 6.5) * 1.2]}
                         rotation={[0, -i * Math.PI / 6.5, 0.2]}
                         material={runnerMaterial}
                     >
@@ -152,7 +152,7 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
     const { mechanical } = useTelemetryStore();
     const rpm = Number(mechanical?.rpm ?? 0);
     const cameraControlsRef = useRef<CameraControls>(null);
-    
+
     // Snapshot State
     const [snapshotOpen, setSnapshotOpen] = useState(false);
     const [snapshotData, setSnapshotData] = useState<any>(null);
@@ -166,7 +166,7 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
         // 1. Gather Data
         const vibration = sandboxValues?.vibration ?? 0;
         const temp = sandboxValues?.temperature ?? 0;
-        const oracleWarning = AncestralOracle.consult(
+        const oracleWarning = KnowledgeBaseService.consult(
             vibration > 10 ? 'vibration' : temp > 90 ? 'thermal' : 'corrosion'
         );
 
@@ -196,28 +196,28 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
             </div>
 
             {/* Snapshot Trigger */}
-            <button 
+            <button
                 onClick={generateIncidentSnapshot}
                 className="absolute top-4 right-4 z-10 bg-slate-900/50 hover:bg-slate-800 border border-slate-700 rounded-lg p-2 text-slate-400 hover:text-white transition-all opacity-0 group-hover:opacity-100"
                 title="Capture Incident Snapshot"
             >
                 <Camera className="w-4 h-4" />
             </button>
-            
+
             <Canvas shadows dpr={[1, 2]}>
                 <PerspectiveCamera makeDefault position={[6, 4, 6]} fov={45} />
                 <CameraControls ref={cameraControlsRef} maxPolarAngle={Math.PI / 1.5} minDistance={2} maxDistance={20} />
-                
+
                 {/* Lighting */}
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
                 <pointLight position={[-5, 5, -5]} intensity={0.5} color="#0ea5e9" />
                 <Environment preset="city" />
 
-                <FrancisTurbineModel 
-                    rpm={rpm} 
-                    stress={sandboxStress} 
-                    sandboxValues={sandboxValues} 
+                <FrancisTurbineModel
+                    rpm={rpm}
+                    stress={sandboxStress}
+                    sandboxValues={sandboxValues}
                     onCameraFocus={handleCameraFocus}
                 />
             </Canvas>
@@ -243,7 +243,7 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
                                     <p className="text-xs text-slate-500 font-mono">{snapshotData.timestamp}</p>
                                 </div>
                             </div>
-                            
+
                             <div className="bg-slate-950 rounded p-3 font-mono text-[10px] text-slate-300 space-y-1 border border-slate-800">
                                 <div className="flex justify-between">
                                     <span>VIBRATION:</span>
@@ -273,7 +273,7 @@ export const SovereignVisualizer: React.FC<SovereignVisualizerProps> = ({ sandbo
                             </div>
                         </div>
                         <div className="px-4 py-3 bg-slate-950 border-t border-slate-800 flex justify-end">
-                            <button 
+                            <button
                                 onClick={() => setSnapshotOpen(false)}
                                 className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-white rounded transition-colors"
                             >

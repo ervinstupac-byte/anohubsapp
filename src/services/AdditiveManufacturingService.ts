@@ -6,11 +6,13 @@
  * Enables material sovereignty and supply chain independence
  */
 
+export type PrintMaterial = 'TITANIUM_ALLOY' | 'STAINLESS_316L' | 'INCONEL_718' | 'BRONZE' | 'POLYMER' | 'STEEL' | 'PLA' | 'TPU' | 'NYLON_CF' | 'METAL_SLS';
+
 export interface PrintableComponent {
     kksCode: string;
     componentName: string;
     cadModel: string; // Path to STEP/STL file
-    material: 'TITANIUM_ALLOY' | 'STAINLESS_316L' | 'INCONEL_718' | 'BRONZE' | 'POLYMER';
+    material: PrintMaterial;
     printTime: number; // hours
     materialRequired: number; // kg
     postProcessing: string[];
@@ -93,6 +95,11 @@ export class AdditiveManufacturingService {
         this.materialInventory.set('INCONEL_718', 25); // 25 kg
         this.materialInventory.set('BRONZE', 40); // 40 kg
         this.materialInventory.set('POLYMER', 30); // 30 kg
+        this.materialInventory.set('STEEL', 200); // 200 kg (Legacy fallback)
+        this.materialInventory.set('PLA', 50); // Prototyping
+        this.materialInventory.set('TPU', 40); // Seals/Gaskets
+        this.materialInventory.set('NYLON_CF', 30); // Structural
+        this.materialInventory.set('METAL_SLS', 100); // High-performance Sintering
 
         console.log(`[3D Print] ✅ ${this.componentLibrary.size} components registered`);
         console.log(`[3D Print] Material inventory initialized`);

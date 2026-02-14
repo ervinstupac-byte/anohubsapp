@@ -3,7 +3,7 @@ import { supabase, getSafeClient } from '../services/supabaseClient.ts';
 import ExperienceLedgerService from '../services/ExperienceLedgerService';
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useRisk } from './RiskContext.tsx';
-import { useToast } from './ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import idAdapter from '../utils/idAdapter';
 import { sanitizeEtaInputs } from '../utils/etaSanitizer';
 
@@ -50,6 +50,8 @@ interface DiagnosticContextType {
 }
 
 const DiagnosticContext = createContext<DiagnosticContextType | undefined>(undefined);
+
+import { GuidedDiagnosisModal } from '../components/GuidedDiagnosisModal';
 
 export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [activeDiagnoses, setActiveDiagnoses] = useState<CorrelationResult[]>([]);
@@ -322,6 +324,7 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             addShiftLog
         }}>
             {children}
+            {activeQuery && <GuidedDiagnosisModal query={activeQuery} />}
         </DiagnosticContext.Provider>
     );
 };

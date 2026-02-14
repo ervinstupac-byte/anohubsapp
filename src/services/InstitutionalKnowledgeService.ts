@@ -324,6 +324,18 @@ export class InstitutionalKnowledgeService {
 
         return suggestion;
     }
+
+    /**
+     * Initialize with seed data
+     */
+    static async initializeWithSeedData(): Promise<void> {
+        if (this.knowledgeBase.size > 0) return;
+        
+        console.log('[InstitutionalKnowledge] Seeding knowledge base...');
+        for (const seed of SEED_KNOWLEDGE) {
+            await this.submitKnowledge('SYSTEM', 'System Architect', seed);
+        }
+    }
 }
 
 // ===== SEED DATA (Examples of institutional knowledge) =====

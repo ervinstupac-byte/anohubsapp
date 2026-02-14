@@ -7,7 +7,7 @@ import { useInventory } from '../contexts/InventoryContext.tsx';
 import { useWorkOrder } from '../contexts/WorkOrderContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { MaintenanceTimelineCard } from './maintenance/MaintenanceTimelineCard';

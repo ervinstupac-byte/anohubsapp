@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { supabase } from '../services/supabaseClient.ts';
-import { useToast } from './ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { useInventory } from './InventoryContext.tsx';
 
 export interface WorkOrderStep {

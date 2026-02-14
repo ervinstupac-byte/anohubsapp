@@ -8,7 +8,7 @@ import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { GlobalProvider } from './contexts/GlobalProvider.tsx';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
-import { useRisk } from './contexts/RiskContext.tsx';
+import { useRisk, RiskProvider } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
 import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
@@ -16,54 +16,49 @@ import { DEFAULT_TECHNICAL_STATE } from './core/TechnicalSchema.ts';
 // ClientProvider removed (Simulation)
 import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
 import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
-import { AssetProvider } from './contexts/AssetContext.tsx'; // <--- NEW
-import { RiskProvider } from './contexts/RiskContext.tsx'; // <--- NEW (Ensuring it exists)
-import { useRiskCalculator } from './hooks/useRiskCalculator.ts'; // <--- NEW
-import { DocumentProvider } from './contexts/DocumentContext.tsx'; // <--- NEW
+import { AssetProvider } from './contexts/AssetContext.tsx';
+import { useRiskCalculator } from './hooks/useRiskCalculator.ts';
+import { DocumentProvider } from './contexts/DocumentContext.tsx';
 import { ContextAwarenessProvider } from './contexts/ContextAwarenessContext.tsx';
 import { DrillDownProvider } from './contexts/DrillDownContext.tsx'; // <--- NEW Phase 3
 import { CommandPalette } from './components/ui/CommandPalette.tsx'; // <--- NEW Phase 3
-import { useToast } from './contexts/ToastContext.tsx';
+import { useToast } from './stores/useAppStore';
 import { useTelemetryStore } from './features/telemetry/store/useTelemetryStore';
+import { useAppStore } from './stores/useAppStore';
 
 // --- 2. CORE COMPONENTS ---
 import { Login } from './components/Login.tsx';
 import { Feedback } from './components/Feedback.tsx';
 // ClientDashboard removed (Simulation)
-import { MaintenanceLogbook } from './components/MaintenanceLogbook.tsx'; // Logbook
+// MaintenanceLogbook removed (Unused)
 import { Onboarding } from './components/Onboarding.tsx';
 import { Spinner } from './shared/components/ui/Spinner';
 import { LanguageSelector } from './components/LanguageSelector.tsx';
 import { SystemStressTest } from './components/debug/SystemStressTest.tsx'; // Debug
 
-import { Hub } from './components/Hub.tsx';
+// Hub removed (Legacy)
 import { Sidebar } from './components/diagnostic-twin/Sidebar.tsx';
 import { NeuralFlowMap } from './components/diagnostic-twin/NeuralFlowMap.tsx';
 import { FleetOverview } from './components/diagnostic-twin/FleetOverview.tsx';
 import { DigitalPanel } from './components/diagnostic-twin/DigitalPanel.tsx';
-import { AssetRegistrationWizard } from './components/AssetRegistrationWizard.tsx';
 import { UnderConstruction } from './components/ui/UnderConstruction.tsx';
 import { LoadingShimmer } from './shared/components/ui/LoadingShimmer';
 import { Breadcrumbs } from './shared/components/ui/Breadcrumbs';
 import { VoiceAssistant } from './components/VoiceAssistant.tsx';
 import { DashboardHeader } from './components/DashboardHeader.tsx';
 import { WorkflowHeader } from './components/ui/WorkflowHeader'; // NEW: Global health status bar
-import { MasterSovereignDashboard } from './components/dashboard/MasterSovereignDashboard';
+import { AssetOnboardingWizard } from './components/digital-twin/AssetOnboardingWizard.tsx'; // NC-21000
+const MasterSovereignDashboard = lazy(() => import('./components/dashboard/MasterSovereignDashboard').then(m => ({ default: m.MasterSovereignDashboard })));
 import { GlobalFooter } from './components/GlobalFooter.tsx';
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
-const PrintPreviewModal = React.lazy(() => import('./components/modals/PrintPreviewModal.tsx').then(m => ({ default: m.PrintPreviewModal })));
-import { TRIGGER_FORENSIC_EXPORT } from './components/diagnostic-twin/Sidebar.tsx';
+import { GlobalModalManager } from './components/managers/GlobalModalManager';
 import { useCerebro } from './contexts/ProjectContext';
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
 import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 import { useProjectConfigStore } from './features/config/ProjectConfigStore';
-
-// --- STANDARD IMPORTS (NC-11920) ---
-import { ScadaCore } from './components/dashboard/ScadaCore';
-import { ForensicDashboard } from './components/forensics/ForensicDashboard';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -76,6 +71,7 @@ import { RoleGuard } from './components/auth/RoleGuard.tsx'; // <--- NEW
 import { AccessDenied } from './components/auth/AccessDenied.tsx'; // <--- NEW
 import { DetachedModuleLayout } from './components/DetachedModuleLayout.tsx'; // NC-9000
 import { useSovereignSync } from './hooks/useSovereignSync.ts'; // NC-9000
+import { SovereignOrchestrator } from './services/SovereignOrchestrator'; // NC-Sovereign-Integration
 
 // --- 4. LAZY LOADED MODULES ---
 const UserProfile = lazy(() => import('./components/UserProfile.tsx').then(m => ({ default: m.UserProfile })));
@@ -103,17 +99,26 @@ const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
-// const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m => ({ default: m.ScadaCore })));
 
-// Maintenance components moved to MaintenanceRouter
-// const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
+// NC-20701: Ghost Protocol Pages
+const ProjectGenesisPage = lazy(() => import('./pages/ProjectGenesisPage'));
+const KnowledgeCapturePage = lazy(() => import('./pages/KnowledgeCapturePage'));
+const SovereignLedgerPage = lazy(() => import('./pages/SovereignLedgerPage'));
+const ScadaCore = lazy(() => import('./components/dashboard/ScadaCore').then(m => ({ default: m.ScadaCore }))); // NC-21100
+const SystemAuditLog = lazy(() => import('./components/ui/SystemAuditLog').then(m => ({ default: m.SystemAuditLog })));
+const ForensicDashboard = lazy(() => import('./components/forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
+const ForensicDeepDive = lazy(() => import('./components/forensics/ForensicDeepDive').then(m => ({ default: m.ForensicDeepDive }))); // NC-21100
 
+const ForensicHub = lazy(() => import('./pages/ForensicHub').then(m => ({ default: m.default })));
+const SandboxPage = lazy(() => import('./pages/SandboxPage'));
 const ToolboxLaunchpad = lazy(() => import('./components/ToolboxLaunchpad.tsx').then(m => ({ default: m.ToolboxLaunchpad })));
 const SpecializedDiagnostics = lazy(() => import('./components/SpecializedDiagnostics.tsx').then(m => ({ default: m.SpecializedDiagnostics })));
 const LearningLab = lazy(() => import('./components/diagnostic-twin/LearningLab.tsx').then(m => ({ default: m.LearningLab })));
 const PrecisionAudit = lazy(() => import('./components/PrecisionAudit.tsx').then(m => ({ default: m.PrecisionAudit })));
 const FrancisHub = React.lazy(() => import('./features/francis/components/FrancisHub').then(module => ({ default: module.FrancisHub })));
 const SOPViewer = React.lazy(() => import('./components/francis/SOPViewer').then(module => ({ default: module.SOPViewer })));
+const LegacySOPViewer = React.lazy(() => import('./components/francis/LegacySOPViewer').then(module => ({ default: module.LegacySOPViewer }))); // NC-21000
+const AlignmentWizard = React.lazy(() => import('./components/maintenance/AlignmentWizard').then(module => ({ default: module.AlignmentWizard }))); // NC-21000
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 // Francis Turbine Module - All routes extracted to dedicated sub-router
 const FrancisRouter = React.lazy(() => import('./routes/FrancisRouter'));
@@ -125,6 +130,10 @@ const MaintenanceRouter = React.lazy(() => import('./routes/MaintenanceRouter.ts
 const EngineerLanding = React.lazy(() => import('./pages/EngineerLanding').then(m => ({ default: m.EngineerLanding })));
 const OwnerLanding = React.lazy(() => import('./pages/OwnerLanding').then(m => ({ default: m.OwnerLanding })));
 const HydroschoolLanding = React.lazy(() => import('./pages/HydroschoolLanding').then(m => ({ default: m.HydroschoolLanding })));
+
+// Unified Navigation States
+const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule })));
+const AssetTypeSelector = lazy(() => import('./components/navigation/AssetTypeSelector').then(m => ({ default: m.AssetTypeSelector })));
 
 
 // --- 4a. SCADA SAFE FALLBACKS ---
@@ -191,7 +200,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
     }, [loading, user, navigate]);
 
     if (loading) return null; // Boot screen already parallelizes this. Avoid double spinner.
-    if (!user) return <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] text-slate-400">{t('auth.accessDenied', 'Access Denied')}</div>;
+    if (!user) return null; // useEffect handles redirect to /login
     return <>{children}</>;
 };
 
@@ -213,20 +222,12 @@ const AppLayout: React.FC = () => {
     const { showToast } = useToast();
 
     // Unified Navigation States
-    const MapModule = lazy(() => import('./components/MapModule.tsx').then(m => ({ default: m.MapModule }))); // Import MapModule
-    const AssetTypeSelector = lazy(() => import('./components/navigation/AssetTypeSelector').then(m => ({ default: m.AssetTypeSelector }))); // <--- NEW Phase 4
-
-
-    // Unified Navigation States
     const [isFeedbackVisible, setIsFeedbackVisible] = useState(false);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
     const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
-    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-    const [reconstructing, setReconstructing] = useState(false);
-    const [reconstructProgress, setReconstructProgress] = useState<number | null>(null);
     const { state: cerebroState } = useCerebro();
     const isCriticalDemo = false;
     const { state: technicalState } = useCerebro();
@@ -254,36 +255,66 @@ const AppLayout: React.FC = () => {
             if (didReset) {
                 showToast('Sovereign Core: Schema Updated. Workspace Synchronized.', 'info');
             }
-            try { useProjectConfigStore.getState().integrityCheck(); } catch {}
+            try { useProjectConfigStore.getState().integrityCheck(); } catch { }
+
+            // Initialize Sovereign Orchestrator
+            SovereignOrchestrator.initialize().catch(err => 
+                console.error('[App] Sovereign Orchestrator failed to initialize:', err)
+            );
         } catch { /* noop */ }
     }, []);
     // Listen for custom wizard trigger event from NeuralFlowMap
     useEffect(() => {
-        const onStart = (e: any) => { setReconstructing(true); setReconstructProgress(0); };
-        const onProgress = (e: any) => { setReconstructProgress(e?.detail?.processed || null); };
-        const onComplete = (e: any) => { setReconstructing(false); setReconstructProgress(null); };
-        window.addEventListener('reconstruction:start', onStart as any);
-        window.addEventListener('reconstruction:progress', onProgress as any);
-        window.addEventListener('reconstruction:complete', onComplete as any);
-
-        const handleOpenWizard = () => setIsWizardOpen(true);
-        const handleOpenPreview = () => setIsPreviewOpen(true);
-
-        window.addEventListener('openAssetWizard', handleOpenWizard);
-        window.addEventListener(TRIGGER_FORENSIC_EXPORT, handleOpenPreview);
-
-        return () => {
-            window.removeEventListener('openAssetWizard', handleOpenWizard);
-            window.removeEventListener(TRIGGER_FORENSIC_EXPORT, handleOpenPreview);
-            window.removeEventListener('reconstruction:start', onStart as any);
-            window.removeEventListener('reconstruction:progress', onProgress as any);
-            window.removeEventListener('reconstruction:complete', onComplete as any);
-        };
+        // Reconstruction event listeners (moved to GlobalModalManager, but keeping reconstruction listeners here for now if they are used elsewhere? 
+        // Actually GlobalModalManager handles the UI for reconstruction. 
+        // But AppLayout had the listeners. If I remove them from AppLayout, does anything else break?
+        // AppLayout state 'reconstructing' was unused in the JSX I saw! 
+        // Wait, I didn't see 'reconstructing' state in AppLayout JSX.
+        // Let's look at the listeners in AppLayout again.
+        // const onStart = (e: any) => { setReconstructing(true); ... };
+        // But I don't see 'const [reconstructing, setReconstructing] = useState(false)' in the AppLayout code I read!
+        // I saw 'const [isWizardOpen, setIsWizardOpen] = useState(false);'
+        // I saw 'const [isPreviewOpen, setIsPreviewOpen] = useState(false);' (implied by usage, but wait, I didn't see the useState definition for isPreviewOpen in the read output!
+        // Let me check lines 225-235 again.
+        // 229→    const [isWizardOpen, setIsWizardOpen] = useState(false);
+        // 230→    const [isMapOpen, setIsMapOpen] = useState(false); // Map State
+        // 231→    const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
+        // I DO NOT see 'isPreviewOpen' or 'reconstructing' state in AppLayout!
+        // But the useEffect (lines 268-289) uses them:
+        // 269→        const onStart = (e: any) => { setReconstructing(true); setReconstructProgress(0); };
+        // 277→        const handleOpenPreview = () => setIsPreviewOpen(true);
+        // This implies I missed the useState definitions or they are defined elsewhere?
+        // Or maybe I missed a chunk of code in my read?
+        // Lines 212-238 seem to cover the state definitions.
+        // If they are missing, then App.tsx might have errors or I misread.
+        // Wait, 'const [isPreviewOpen, setIsPreviewOpen] = useState(false);' MUST be there if it's used.
+        // Maybe I missed it in the truncation or skip?
+        // Regardless, I want to REMOVE them.
+        
+        // I will remove the entire useEffect block that handles these events, and the state definitions.
+        
+        // Also remove AssetRegistrationWizard import.
     }, []);
+
 
     useEffect(() => {
         const hasCompleted = localStorage.getItem('hasCompletedOnboarding') === 'true';
         if (!hasCompleted) setShowOnboarding(true);
+    }, []);
+
+    // NC-20400: Global click diagnostic logger (DEV only)
+    useEffect(() => {
+        if (!import.meta.env.DEV) return;
+        const handler = (e: MouseEvent) => {
+            const el = e.target as HTMLElement;
+            if (!el) return;
+            const tag = el.tagName;
+            const cls = (el.className || '').toString().slice(0, 80);
+            const zi = window.getComputedStyle(el).zIndex;
+            console.log(`[ClickTrace] <${tag}> z:${zi} class="${cls}"`);
+        };
+        window.addEventListener('click', handler, true);
+        return () => window.removeEventListener('click', handler, true);
     }, []);
 
     // Lazy hydration: prefetch physics snapshots shortly after user session starts
@@ -353,9 +384,11 @@ const AppLayout: React.FC = () => {
             'executiveDashboard': '/executive',
             'structuralIntegrity': '/structural-integrity',
             'shaftAlignment': '/francis/sop-shaft-alignment',
+            'forensicHub': '/forensic-hub',
             'adminApproval': '/admin-approval',
             'clientPortal': '/client-portal',
-            'francisHub': '/francis/hub'
+            'francisHub': '/francis/hub',
+            'assetOnboarding': '/asset-onboarding'
         };
         const target = routeMap[view];
         if (target) {
@@ -386,22 +419,14 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'lg:grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
-                    
+                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
                         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-900/20 blur-[120px] rounded-full" />
                         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full" />
                         <div className="noise-overlay opacity-20" />
                     </div>
-
-                    {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
-                    {isWizardOpen && <AssetRegistrationWizard isOpen={isWizardOpen} onClose={() => setIsWizardOpen(false)} />}
-
-                    {/* GLOBAL MAP MODAL */}
-                    <Suspense fallback={<Spinner />}>
-                        <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
-                    </Suspense>
 
                     {/* NEURAL BRIDGE (DATA SYNC V4.5) */}
                     <DataSyncBridge />
@@ -413,94 +438,54 @@ const AppLayout: React.FC = () => {
                         showMap={isMapOpen}
                         onToggleMap={() => setIsMapOpen(!isMapOpen)}
                         onRegisterAsset={() => {
-                            setIsWizardOpen(true);
+                            navigate('/asset-onboarding');
                             setIsSidebarOpen(false);
                         }}
                     />
 
                     {/* MAIN AREA */}
-                    <div className="flex-1 flex flex-col min-h-0 relative z-20 overflow-y-auto custom-scrollbar">
+                    {/* MAIN AREA */}
+                    {/* NC-25400: FIXED - COL-START-2 PREVENTS SIDEBAR OVERLAP */}
+                    <div className="col-start-2 flex-1 flex flex-col min-h-0 relative overflow-y-auto custom-scrollbar w-full bg-slate-900/20">
 
                         {/* NEW: Global Workflow Header - Machine Health & Navigation */}
                         <WorkflowHeader />
 
                         <DashboardHeader
                             onToggleSidebar={() => setIsSidebarOpen(true)}
-                            title={<span className="text-h-gold">ANOHUB // NC-9.0 NEURAL CORE</span>}
                         />
 
-                        <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}> {/* Renamed main to div so we dont nest mains */}
+                        <div className={`flex-grow w-full relative z-10 ${isFullPage ? 'flex flex-col' : ''}`}>
                             <Suspense fallback={<LoadingShimmer />}>
                                 <div className={!isFullPage ? "max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12" : "flex-grow w-full"}>
                                     {!isHub && location.pathname !== '/dashboard' && location.pathname !== '/executive' && <Breadcrumbs />}
                                     <ErrorBoundary fallback={
-                                        <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-                                            <div className="p-4 rounded-full bg-red-500/10 border border-red-500/20">
-                                                <span className="text-4xl">⚠️</span>
-                                            </div>
-                                            <h2 className="text-xl font-black text-white uppercase tracking-widest">Module System Failure</h2>
-                                            <p className="text-slate-400 max-w-md text-center">
-                                                The requested module encountered a critical runtime error.
-                                                Diagnostic data has been logged to the black box.
-                                            </p>
-                                            <button
-                                                onClick={() => { try { localStorage.clear(); } catch {} window.location.reload(); }}
-                                                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
-                                            >
-                                                System Reboot
-                                            </button>
-                                        </div>
+                                        <div className="p-8 text-center text-red-500">CRITICAL ROUTER ERROR</div>
                                     }>
                                         <div className="w-full">
                                             <Routes location={location}>
-                                                <Route index element={<ToolboxLaunchpad />} />
+                                                {/* NC-25200: Black Hole Fix - Redirect to Fleet */}
+                                                <Route index element={<Navigate to="/fleet" replace />} />
                                                 <Route path={ROUTES.DIAGNOSTIC_TWIN} element={<NeuralFlowMap />} />
-                                                {/* Francis Turbine Module - All routes handled by dedicated sub-router */}
+                                                <Route path="/asset-onboarding" element={<AssetOnboardingWizard onComplete={() => window.history.back()} />} />
+                                                <Route path="/sandbox" element={<Suspense fallback={<LoadingScreen />}><SandboxPage /></Suspense>} />
                                                 <Route path="/francis/*" element={<FrancisRouter />} />
                                                 <Route path="profile" element={<UserProfile />} />
                                                 <Route path="map" element={<GlobalMap />} />
-
-                                                {/* RISK: Accessible to all but mostly Manager focused */}
                                                 <Route path="risk-assessment" element={<QuestionnaireWrapper />} />
                                                 <Route path="questionnaire-summary" element={<QuestionnaireSummary />} />
                                                 <Route path="risk-report" element={<RiskReport />} />
-
-                                                {/* PUBLIC-FACING / STAKEHOLDER */}
                                                 <Route path="investor-briefing" element={<InvestorBriefing />} />
-                                                {/* Multi-tier entry points */}
-                                                <Route path="engineer" element={
-                                                    <RoleGuard allowedRoles={['ENGINEER', 'TECHNICIAN', 'MANAGER']}>
-                                                        <EngineerLanding />
-                                                    </RoleGuard>
-                                                } />
-                                                <Route path="owner" element={
-                                                    <RoleGuard allowedRoles={['OWNER', 'MANAGER']}>
-                                                        <OwnerLanding />
-                                                    </RoleGuard>
-                                                } />
+                                                <Route path="engineer" element={<RoleGuard allowedRoles={['ENGINEER', 'TECHNICIAN', 'MANAGER']}><EngineerLanding /></RoleGuard>} />
+                                                <Route path="owner" element={<RoleGuard allowedRoles={['OWNER', 'MANAGER']}><OwnerLanding /></RoleGuard>} />
                                                 <Route path="hydroschool" element={<HydroschoolLanding />} />
                                                 <Route path="standard-of-excellence" element={<StandardOfExcellence onCommit={() => { }} />} />
                                                 <Route path="digital-introduction" element={<DigitalIntroduction />} />
-
-                                                {/* ENGINEERING TOOLS - RESTRICTED */}
-                                                <Route path="hpp-builder" element={
-                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
-                                                        <HPPBuilder />
-                                                    </RoleGuard>
-                                                } />
-
-                                                {/* GENERAL INFO */}
+                                                <Route path="hpp-builder" element={<RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}><HPPBuilder /></RoleGuard>} />
                                                 <Route path="hpp-improvements" element={<HPPImprovements />} />
                                                 <Route path="installation-guarantee" element={<InstallationGuarantee />} />
                                                 <Route path="gender-equity" element={<GenderEquity />} />
-
-                                                {/* INFRASTRUCTURE - RESTRICTED */}
-                                                <Route path="infrastructure/*" element={
-                                                    <RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}>
-                                                        <InfrastructureHub />
-                                                    </RoleGuard>
-                                                } />
-
+                                                <Route path="infrastructure/*" element={<RoleGuard allowedRoles={['ENGINEER', 'MANAGER', 'TECHNICIAN']}><InfrastructureHub /></RoleGuard>} />
                                                 <Route path="turbine/:id" element={<TurbineDetailWrapper />} />
                                                 <Route path="phase-guide" element={<ProjectPhaseGuide />} />
                                                 <Route path="river-wildlife" element={<RiverWildlife />} />
@@ -510,81 +495,30 @@ const AppLayout: React.FC = () => {
                                                 <Route path="library" element={<ComponentLibrary />} />
                                                 <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
                                                 <Route path="vision" element={<UnderConstruction />} />
-
-                                                {/* Maintenance Sub-Router */}
-                                                <Route path="/maintenance/*" element={<MaintenanceRouter />} />
-
-                                                {/* EXECUTIVE - RESTRICTED */}
-                                                <Route path="executive" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                        <ErrorBoundary fallback={
-                                                            <div className="min-h-screen bg-slate-950 text-slate-100 grid place-items-center">
-                                                                <div className="text-center space-y-4">
-                                                                    <div className="text-6xl">⚠️</div>
-                                                                    <h2 className="text-xl font-black text-white uppercase tracking-widest">Executive Dashboard Error</h2>
-                                                                    <p className="text-slate-400 max-w-md">The executive module encountered an error. System has been isolated.</p>
-                                                                    <button
-                                                                        onClick={() => window.location.reload()}
-                                                                        className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
-                                                                    >
-                                                                        System Reboot
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        }>
-                                                            <Suspense fallback={<LoadingScreen />}>
-                                                                <ExecutiveDashboard />
-                                                            </Suspense>
-                                                        </ErrorBoundary>
-                                                    </RoleGuard>
-                                                } />
-                                                <Route path="executive/finance" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                        <ErrorBoundary fallback={
-                                                            <div className="min-h-screen bg-slate-950 text-slate-100 grid place-items-center">
-                                                                <div className="text-center space-y-4">
-                                                                    <div className="text-6xl">⚠️</div>
-                                                                    <h2 className="text-xl font-black text-white uppercase tracking-widest">Financial Dashboard Error</h2>
-                                                                    <p className="text-slate-400 max-w-md">The financial module encountered an error. System has been isolated.</p>
-                                                                    <button
-                                                                        onClick={() => window.location.reload()}
-                                                                        className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded transition-colors uppercase tracking-wider text-sm"
-                                                                    >
-                                                                        System Reboot
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        }>
-                                                            <Suspense fallback={<LoadingScreen />}>
-                                                                <ExecutiveFinancialDashboard />
-                                                            </Suspense>
-                                                        </ErrorBoundary>
-                                                    </RoleGuard>
-                                                } />
-
+                                                <Route path="forensic-hub" element={<ForensicHub />} />
+                                                <Route path="maintenance/*" element={<MaintenanceRouter />} />
+                                                <Route path="executive" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><ExecutiveDashboard /></RoleGuard>} />
+                                                <Route path="executive/finance" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><ExecutiveFinancialDashboard /></RoleGuard>} />
                                                 <Route path="structural-integrity" element={<StructuralIntegrity />} />
-
-// ... (rest of the code remains the same)
-                                                <Route path="admin-approval" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                        <AdminApproval />
-                                                    </RoleGuard>
-                                                } />
-
-                                                <Route path="admin/health" element={
-                                                    <RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}>
-                                                        <AdminHealth />
-                                                    </RoleGuard>
-                                                } />
-
-                                                <Route path="/forensics" element={<ForensicDashboard />} />
+                                                <Route path="admin-approval" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><AdminApproval /></RoleGuard>} />
+                                                <Route path="admin/health" element={<RoleGuard allowedRoles={['MANAGER', 'TECHNICIAN']}><AdminHealth /></RoleGuard>} />
+                                                <Route path="/forensics" element={<Suspense fallback={<LoadingScreen />}><ForensicDashboard /></Suspense>} />
+                                                <Route path="audit" element={<SystemAuditLog />} />
                                                 <Route path="stress-test" element={<SystemStressTest />} />
                                                 <Route path="precision-audit" element={<PrecisionAudit />} />
                                                 <Route path="learning-lab" element={<LearningLab />} />
-
-                                                {/* ACCESS DENIED PAGE */}
                                                 <Route path="/access-denied" element={<AccessDenied />} />
-
+                                                <Route path="/genesis" element={<ProjectGenesisPage />} />
+                                                <Route path="/knowledge/capture" element={<KnowledgeCapturePage />} />
+                                                <Route path="/governance/ledger" element={<SovereignLedgerPage />} />
+                                                <Route path="fleet" element={<FleetOverview showMap={isMapOpen} onToggleMap={() => setIsMapOpen(!isMapOpen)} onRegisterAsset={() => { navigate('/asset-onboarding'); setIsSidebarOpen(false); }} />} />
+                                                <Route path="alerts" element={<Suspense fallback={<LoadingScreen />}><ScadaCore /></Suspense>} />
+                                                <Route path="forensic-hub" element={<Suspense fallback={<LoadingScreen />}><ForensicHub /></Suspense>} />
+                                                <Route path="forensics" element={<Suspense fallback={<LoadingScreen />}><ForensicDashboard /></Suspense>} />
+                                                <Route path="maintenance/alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizard /></Suspense>} />
+                                                <Route path="/francis/sop-shaft-alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizard /></Suspense>} />
+                                                <Route path="/francis/legacy/:sopId" element={<Suspense fallback={<LoadingScreen />}><LegacySOPViewer /></Suspense>} />
+                                                <Route path="forensics/deep-dive" element={<Suspense fallback={<LoadingScreen />}><ForensicDeepDive /></Suspense>} />
                                                 <Route path="*" element={<Navigate to="/" replace />} />
                                             </Routes>
                                         </div>
@@ -593,43 +527,35 @@ const AppLayout: React.FC = () => {
                             </Suspense>
                         </div>
                     </div>
-                    <VoiceAssistant />
-                    {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
-                    <Suspense fallback={<div />}>
-                        <PrintPreviewModal
-                            isOpen={isPreviewOpen}
-                            onClose={() => setIsPreviewOpen(false)}
-                            state={technicalState}
-                        />
-                    </Suspense>
-                    {reconstructing && (
-                        <div className="fixed inset-0 z-[120] flex items-center justify-center">
-                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                            <div className="relative z-10 p-6 bg-white/6 border border-white/10 rounded-lg text-center max-w-lg">
-                                <h3 className="text-lg font-black text-white mb-2">Reconstructing Reality...</h3>
-                                <p className="text-sm text-slate-300 mb-3">Replaying historical events to restore the requested snapshot. This may take a few seconds.</p>
-                                {reconstructProgress !== null ? (
-                                    <div className="text-sm text-slate-300">Processed: {reconstructProgress}</div>
-                                ) : null}
-                            </div>
-                        </div>
-                    )}
                     <GlobalFooter />
+                </div >
 
-                    <Suspense fallback={null}>
-                        <AssetTypeSelector />
-                    </Suspense>
+                <VoiceAssistant />
+                {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
+                
+                {/* Global Modals Manager (Handles System Overview, Print, Passport, etc.) */}
+                <GlobalModalManager />
 
-                    <SimulationController />
-                    <CommanderTerminal />
-                    <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
-                </div>
-            </DrillDownProvider>
-        </NavigationProvider>
+                <Suspense fallback={null}>
+                    <AssetTypeSelector />
+                </Suspense>
+
+                <SimulationController />
+                <CommanderTerminal />
+                <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
+
+                {/* Modals moved outside layout to prevent clipping */}
+                {showOnboarding && <Onboarding onComplete={handleOnboardingComplete} />}
+                <Suspense fallback={<Spinner />}>
+                    <MapModule isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
+                </Suspense>
+            </DrillDownProvider >
+        </NavigationProvider >
     );
 };
 
 const App: React.FC = () => {
+    // BOOT SEQUENCE STATE (useEffect will resolve this)
     const [booting, setBooting] = useState(true);
 
     // DNS/DOMAIN REDIRECT GUARD: Redirect www.app.anohubs.com to app.anohubs.com
@@ -659,9 +585,17 @@ const App: React.FC = () => {
         }
     }, []);
 
+    // NC-24000: Hydrate persistence layer
+    useEffect(() => {
+        useTelemetryStore.getState().hydrate();
+        useAppStore.getState().hydrateSettings();
+    }, []);
+
     // EMERGENCY INITIALIZATION TIMEOUT (Force Handshake Resolution)
     useEffect(() => {
         let mounted = true;
+        let timer: NodeJS.Timeout;
+
         const startBootstrap = async () => {
             console.log('[System] Initiating controlled bootstrap sequence...');
             try {
@@ -669,16 +603,19 @@ const App: React.FC = () => {
                 if (mounted) {
                     console.log('[System] Bootstrap complete. Releasing lock.');
                     setBooting(false);
+                    clearTimeout(timer);
                 }
             } catch (err) {
                 console.error('[System] Bootstrap failed:', err);
-                if (mounted) setBooting(false); // Fail open
+                // FORCE UNLOCK ON ERROR - SMASH THE WALL
+                setBooting(false);
+                clearTimeout(timer);
             }
         };
         startBootstrap();
 
-        const timer = setTimeout(() => {
-            if (mounted && booting) {
+        timer = setTimeout(() => {
+            if (mounted) {
                 console.warn('[System] Force-resolving boot sequence after timeout.');
                 setBooting(false);
             }
@@ -709,7 +646,7 @@ const App: React.FC = () => {
                                 <Routes>
                                     {/* NC-9000: Detached Module Route (No Layout) */}
                                     <Route path="/detach/:moduleId" element={<DetachedModuleLayout />} />
-                                    
+
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/*" element={<ProtectedRoute><AppLayout /></ProtectedRoute>} />
                                     <Route

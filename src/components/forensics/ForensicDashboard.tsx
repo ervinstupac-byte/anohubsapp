@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Microscope, Activity, ShieldAlert, Wifi, Globe, Lock } from 'lucide-react';
-import { VisionAnalyzer } from './VisionAnalyzer';
-import { AudioSpectrogram } from './AudioSpectrogram';
-import { PostMortemMonitor } from './PostMortemMonitor';
+const VisionAnalyzer = React.lazy(() => import('./VisionAnalyzer').then(m => ({ default: m.VisionAnalyzer })));
+const AudioSpectrogram = React.lazy(() => import('./AudioSpectrogram').then(m => ({ default: m.AudioSpectrogram })));
+const PostMortemMonitor = React.lazy(() => import('./PostMortemMonitor').then(m => ({ default: m.PostMortemMonitor })));
 import { useTranslation } from 'react-i18next';
 import { useForensics } from '../../hooks/useForensics';
 import { KillSwitch } from './KillSwitch';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const ModuleLoader = () => (
+    <div className="w-full h-full flex items-center justify-center bg-slate-900/30 rounded-xl border border-slate-800 animate-pulse">
+        <div className="text-xs font-mono text-slate-500">LOADING MODULE...</div>
+    </div>
+);
 
 // --- PACKET VISUALIZER COMPONENT ---
 const PacketTrafficVisualizer: React.FC<{ history: any[] }> = ({ history }) => {
@@ -158,17 +164,23 @@ export const ForensicDashboard: React.FC = () => {
                 <div className="col-span-12 lg:col-span-8 space-y-8">
                     {/* Visual Forensics */}
                     <div className="h-[450px]">
-                        <VisionAnalyzer />
+                        <Suspense fallback={<ModuleLoader />}>
+                            <VisionAnalyzer />
+                        </Suspense>
                     </div>
 
                     <div className="grid grid-cols-2 gap-8">
                         {/* Audio Forensics */}
                         <div className="h-[300px]">
-                            <AudioSpectrogram />
+                            <Suspense fallback={<ModuleLoader />}>
+                                <AudioSpectrogram />
+                            </Suspense>
                         </div>
                         {/* Post-Mortem */}
                         <div className="h-[300px]">
-                            <PostMortemMonitor />
+                            <Suspense fallback={<ModuleLoader />}>
+                                <PostMortemMonitor />
+                            </Suspense>
                         </div>
                     </div>
                 </div>

@@ -5,7 +5,7 @@ import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { ModernInput } from '../../shared/components/ui/ModernInput';
 import { HydraulicIntegrity } from '../../services/HydraulicIntegrity.ts';
 import { supabase } from '../../services/supabaseClient.ts';
-import { useToast } from '../../contexts/ToastContext.tsx';
+import { useToast } from '../../stores/useAppStore';
 import { BarChart3, ShieldAlert, CheckCircle2, AlertTriangle, Scale } from 'lucide-react';
 
 export const BidEvaluator: React.FC = () => {

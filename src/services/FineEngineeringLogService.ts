@@ -193,7 +193,7 @@ export class FineEngineeringLogService {
      */
     static createLog(assetId: string): FineEngineeringLog {
         return {
-            assetId,
+            assetId: assetId as any,
             measurements: [],
             lastUpdated: new Date().toISOString()
         };

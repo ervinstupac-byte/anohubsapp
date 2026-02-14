@@ -80,6 +80,15 @@ export class CivilSecurityModule {
         this.updateStabilityGauge();
     }
 
+
+
+    /**
+     * Get recent seismic events
+     */
+    public static getSeismicHistory(): SeismicData[] {
+        return Array.from(this.seismicStations.values()).sort((a, b) => b.timestamp - a.timestamp);
+    }
+
     /**
      * Update dam stability gauge in real-time
      */

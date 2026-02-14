@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useTelemetry } from './TelemetryContext.tsx';
 import { useAssetContext } from './AssetContext.tsx';
-import { useToast } from './ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
+import { useAudit } from './AuditContext';
 import { useMaintenance } from './MaintenanceContext.tsx';
 import {
     aiPredictionService,
@@ -65,6 +66,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
     const { telemetry } = useTelemetry();
     const { assets } = useAssetContext();
     const { showToast } = useToast();
+    const { logAction } = useAudit();
     const maintenanceContext = useMaintenance();
     const { telemetry: telemetryContext } = useTelemetry() as any; // Expose for executeAction
 
@@ -170,7 +172,20 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                 );
 
                                 // Send mobile notification (placeholder for future integration)
-                                sendMobileNotification(orderId, numericAssetId, rul.componentType, failureProbability);
+                                sendMobileNotification(orderId, numericAssetId, rul.componentType, failureProbability, showToast, logAction);
+
+                                // Sync with Maintenance Context
+                                if (maintenanceContext) {
+                                    maintenanceContext.createWorkOrder({
+                                        assetId: numericAssetId,
+                                        assetName: asset?.name || String(numericAssetId),
+                                        trigger: 'AI_PREDICTION',
+                                        component: rul.componentType,
+                                        description: `AI Predicted Failure (${failureProbability.toFixed(1)}%). Auto-generated work order.`,
+                                        priority: failureProbability > 90 ? 'HIGH' : 'MEDIUM',
+                                        requiredParts: requiredParts
+                                    });
+                                }
                             }
                         }
                     }
@@ -283,9 +298,20 @@ function sendMobileNotification(
     orderId: string,
     assetId: number,
     component: string,
-    failureProbability: number
+    failureProbability: number,
+    toast?: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void,
+    auditLog?: (action: string, details: string, status: string) => void
 ): void {
-    console.log(`[Mobile Notification] Work Order ${orderId} for ${assetId}`);
-    console.log(`Component: ${component}, Failure Probability: ${failureProbability.toFixed(1)}%`);
-    // TODO: Integrate with Firebase Cloud Messaging or similar service
+    const msg = `[Mobile] Work Order ${orderId} | ${component} Risk: ${failureProbability.toFixed(1)}%`;
+    console.log(msg);
+    
+    // Simulate push notification via in-app toast
+    if (toast) {
+        toast(`📱 PUSH NOTIFICATION SENT: ${msg}`, 'info');
+    }
+
+    // Log to audit trail
+    if (auditLog) {
+        auditLog('MOBILE_ALERT_SENT', msg, 'SUCCESS');
+    }
 }

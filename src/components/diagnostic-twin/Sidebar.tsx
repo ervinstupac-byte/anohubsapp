@@ -1,19 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { 
-    Search, ChevronDown, ChevronRight, 
-    Activity, Shield, FileText, Zap, 
-    Cpu, Microscope, Settings, 
+import {
+    Search, ChevronDown, ChevronRight,
+    Activity, Shield, FileText, Zap,
+    Cpu, Microscope, Settings,
     LayoutDashboard, AlertTriangle, Lock,
     Gauge, Target, BookOpen, Map
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { ROUTES } from '../../routes/paths';
-import { AncestralOracle, OracleResult } from '../../services/AncestralOracle';
-
-export const TRIGGER_FORENSIC_EXPORT = 'TRIGGER_FORENSIC_EXPORT';
+import { KnowledgeBaseService } from '../../services/KnowledgeBaseService';
 
 // --- TYPES ---
 interface SidebarModule {
@@ -39,8 +37,14 @@ const SECTIONS: SidebarSection[] = [
         modules: [
             { id: 'scada', title: 'SCADA Core', path: '/scada/core', icon: <Activity className="w-3 h-3" /> },
             { id: 'master', title: 'Master Dashboard', path: '/master', icon: <LayoutDashboard className="w-3 h-3" /> },
+            { id: 'francisHub', title: 'Francis Turbine Hub', path: '/francis/hub', icon: <Zap className="w-3 h-3" /> }, // NC-20701
             { id: 'fleet', title: 'Fleet Overview', path: '/fleet', icon: <Map className="w-3 h-3" /> },
-            { id: 'alerts', title: 'Active Alarms', path: '/alerts', icon: <AlertTriangle className="w-3 h-3" /> }
+            { id: 'alerts', title: 'Active Alarms', path: '/alerts', icon: <AlertTriangle className="w-3 h-3" /> },
+            { id: 'mounterCard', title: 'Mounter Quick Card', path: `/maintenance/${ROUTES.MAINTENANCE.MOUNTER_CARD}`, icon: <Gauge className="w-3 h-3" /> },
+            { id: 'damageCard', title: 'Damage Diagnosis', path: `/maintenance/${ROUTES.MAINTENANCE.DAMAGE_CARD}`, icon: <AlertTriangle className="w-3 h-3" /> },
+            { id: 'assetPassportCard', title: 'Asset Passport', path: `/maintenance/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}`, icon: <FileText className="w-3 h-3" /> },
+            { id: 'onboarding', title: 'Asset Onboarding', path: '/asset-onboarding', icon: <Cpu className="w-3 h-3" /> }, // NC-21000
+            { id: 'alignmentWizard', title: 'Alignment Wizard', path: '/francis/sop-shaft-alignment', icon: <Activity className="w-3 h-3" /> } // NC-20900
         ]
     },
     {
@@ -48,6 +52,7 @@ const SECTIONS: SidebarSection[] = [
         title: 'FORENSICS',
         icon: <Microscope className="w-4 h-4" />,
         modules: [
+            { id: 'riskReport', title: 'Full Risk Dossier', path: '/risk-report', icon: <FileText className="w-3 h-3" /> }, // NC-20701
             { id: 'lab', title: 'Forensic Lab', path: '/forensics', icon: <Microscope className="w-3 h-3" /> },
             { id: 'audio', title: 'Audio Spectrum', path: '/forensics/audio', icon: <Activity className="w-3 h-3" /> },
             { id: 'vision', title: 'Vision Analyzer', path: '/forensics/vision', icon: <Target className="w-3 h-3" /> },
@@ -60,6 +65,7 @@ const SECTIONS: SidebarSection[] = [
         icon: <Shield className="w-4 h-4" />,
         modules: [
             { id: 'audit', title: 'Audit Trail', path: '/audit', icon: <FileText className="w-3 h-3" /> },
+            { id: 'knowledge', title: 'Knowledge Bank', path: '/knowledge/capture', icon: <BookOpen className="w-3 h-3" /> }, // NC-20701
             { id: 'constitution', title: 'AI Constitution', path: '/docs/constitution', icon: <BookOpen className="w-3 h-3" /> },
             { id: 'admin', title: 'Admin Health', path: '/admin/health', icon: <Lock className="w-3 h-3" /> },
             { id: 'settings', title: 'System Settings', path: '/settings', icon: <Settings className="w-3 h-3" /> }
@@ -68,11 +74,19 @@ const SECTIONS: SidebarSection[] = [
 ];
 
 // --- COMPONENT ---
-export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+    showMap?: boolean;
+    onToggleMap?: () => void;
+    onRegisterAsset?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onToggleMap, onRegisterAsset }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    
+
     // Telemetry Hooks
     const store = useTelemetryStore() as any; // Type assertion for flexibility
     const healthScore = store.executiveResult?.masterHealthScore ?? 100;
@@ -96,13 +110,25 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
     // Filter Modules
     const filteredSections = useMemo(() => {
         if (!searchQuery) return SECTIONS;
-        
+
         return SECTIONS.map(section => ({
             ...section,
-            modules: section.modules.filter(m => 
+            modules: section.modules.filter(m =>
                 m.title.toLowerCase().includes(searchQuery.toLowerCase())
             )
         })).filter(section => section.modules.length > 0);
+    }, [searchQuery]);
+
+    // NC-17600: Oracle Logic Integration (with failsafe)
+    const oracleResults = useMemo(() => {
+        try {
+            if (!searchQuery || searchQuery.length < 2) return [];
+            const results = KnowledgeBaseService.search(searchQuery);
+            return Array.isArray(results) ? results : [];
+        } catch (e) {
+            console.error("Oracle Failure:", e);
+            return [];
+        }
     }, [searchQuery]);
 
     // Health Color Logic
@@ -112,12 +138,15 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         return 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]';
     };
 
+    // EMERGENCY HARD FALLBACK (NC-19600): Ensure oracleResults is ALWAYS an array
+    const safeOracleResults = Array.isArray(oracleResults) ? oracleResults : [];
+
     return (
-        <motion.div 
+        <motion.div
             initial={{ x: -300 }}
             animate={{ x: isOpen ? 0 : -300 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 left-0 w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-50 shadow-2xl"
+            className="fixed inset-y-0 left-0 w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-40 shadow-2xl"
         >
             {/* 1. HEADER & OMNIBAR */}
             <div className="p-4 border-b border-slate-800 bg-slate-950/50 backdrop-blur-sm">
@@ -129,10 +158,10 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
                         SOVEREIGN
                     </span>
                 </div>
-                
+
                 <div className="relative group">
                     <Search className="absolute left-2.5 top-2 w-3.5 h-3.5 text-slate-500 group-focus-within:text-emerald-500 transition-colors" />
-                    <input 
+                    <input
                         type="text"
                         placeholder="Search modules..."
                         value={searchQuery}
@@ -140,10 +169,10 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
                         className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all"
                     />
                 </div>
-                
+
                 {/* ORACLE RESULTS (NC-12500) */}
                 <AnimatePresence>
-                    {oracleResults.length > 0 && (
+                    {safeOracleResults && safeOracleResults.length > 0 && (
                         <motion.div
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
@@ -154,7 +183,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
                                 <BookOpen className="w-3 h-3" /> Ancestral Oracle
                             </div>
                             <div className="p-1">
-                                {oracleResults.map(res => (
+                                {safeOracleResults.map(res => (
                                     <div key={res.id} className="p-2 hover:bg-amber-500/10 rounded cursor-pointer transition-colors group">
                                         <div className="text-[10px] font-bold text-amber-200 group-hover:text-white">{res.title}</div>
                                         <div className="text-[9px] text-amber-500/70">{res.excerpt}</div>
@@ -170,14 +199,14 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
             <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
                 {filteredSections.map(section => (
                     <div key={section.id} className="mb-2">
-                        <button 
+                        <button
                             onClick={() => toggleSection(section.id)}
                             className="w-full px-4 py-2 flex items-center justify-between group hover:bg-white/5 transition-colors"
                         >
                             <div className="flex items-center gap-3">
                                 {/* Status Pulse */}
                                 <div className={`w-1.5 h-1.5 rounded-full ${getHealthColor(healthScore)}`} />
-                                
+
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-200 transition-colors">
                                     {section.title}
                                 </span>
@@ -205,8 +234,8 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
                                                     key={module.id}
                                                     onClick={() => navigate(module.path)}
                                                     className={`w-full text-left px-4 py-2 pl-10 flex items-center gap-3 text-[11px] font-mono transition-all
-                                                        ${isActive 
-                                                            ? 'text-emerald-400 bg-emerald-500/10 border-r-2 border-emerald-500' 
+                                                        ${isActive
+                                                            ? 'text-emerald-400 bg-emerald-500/10 border-r-2 border-emerald-500'
                                                             : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
                                                         }`}
                                                 >

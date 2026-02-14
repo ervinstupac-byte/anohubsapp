@@ -268,7 +268,7 @@ export const generateAssetPassport = (asset: Asset, logs: AssetHistoryEntry[], t
 
     doc.setFontSize(10);
     doc.text(`${t('pdf.passport.generated')}: ${new Date().toLocaleDateString()}`, pageWidth - 60, 20);
-    doc.text(`${t('pdf.passport.id')}: ${asset.id.substring(0, 8).toUpperCase()}`, pageWidth - 60, 30);
+    doc.text(`${t('pdf.passport.id')}: ${String(asset.id).substring(0, 8).toUpperCase()}`, pageWidth - 60, 30);
 
     // Section: ASSET IDENTITY
     let yPos = 60;

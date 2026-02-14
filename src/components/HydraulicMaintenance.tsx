@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import idAdapter from '../utils/idAdapter';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { StatCard } from './ui/StatCard.tsx';

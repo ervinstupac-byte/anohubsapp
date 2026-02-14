@@ -5,7 +5,7 @@ import { STATUS_COLORS, StatusType, TYPOGRAPHY, TYPOGRAPHY_COMPACT, GLASS, RADIU
 import { StatusIndicator } from './StatusIndicator';
 import { Sparkline } from '../../../components/ui/Sparkline';
 import { InfoTooltip } from '../../../components/ui/InfoTooltip'; // NEW
-import { useDensity } from '../../../contexts/DensityContext';
+import { useDensity } from '../../../stores/useAppStore';
 
 // === TYPES ===
 type CardVariant = 'stat' | 'instrument' | 'info' | 'tactical';

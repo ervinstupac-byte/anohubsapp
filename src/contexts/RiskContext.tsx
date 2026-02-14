@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import type { Answers, } from '../types.ts';
-import { useToast } from './ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 
 // --- RISK CONFIGURATION ---
 const riskKeywords: Record<string, { high: string[], medium: string[] }> = {

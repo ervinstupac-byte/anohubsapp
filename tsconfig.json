@@ -40,6 +40,7 @@
     "exclude": [
         "node_modules",
         "dist",
-        "src/features/discovery-vault"
+        "src/features/discovery-vault",
+        "src/**/*.stories.tsx"
     ]
 }

@@ -14,7 +14,7 @@ describe('ScadaCore Pelton nozzle binding', () => {
     const s = useProjectConfigStore.getState();
     s.setConfig('PELTON', { pelton: { nozzleCount: 4 } });
     render(<ScadaCore />);
-    window.dispatchEvent(new CustomEvent('SET_TURBINE_TYPE', { detail: { family: 'PELTON', variant: 'pelton_multi_jet' } }));
+    dispatch.setTurbineType({ family: 'PELTON', variant: 'pelton_multi_jet' });
     // The mimic creates a path per jet between penstock and wheel
     const label = await screen.findByText(/Pelton Wheel/i);
     const container = label.parentElement?.parentElement as HTMLElement;

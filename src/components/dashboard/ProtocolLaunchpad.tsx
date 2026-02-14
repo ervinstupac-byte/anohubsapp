@@ -92,16 +92,16 @@ export const ProtocolLaunchpad: React.FC = () => {
             return;
         }
 
-            // Generate PDF (dynamically import heavy reporter)
-            try {
-                const { ForensicReportService } = await import('../../services/ForensicReportService');
-                const blob = ForensicReportService.generateFieldAuditReport({ auditData, t });
-                ForensicReportService.openAndDownloadBlob(blob, `Audit_Report_${selectedAsset.name}_${Date.now()}.pdf`, true);
-                pushNotification('INFO', 'Executive audit report downloaded');
-            } catch (e) {
-                console.warn('Failed to load report generator', e);
-                pushNotification('WARNING', 'Failed to generate audit PDF');
-            }
+        // Generate PDF (dynamically import heavy reporter)
+        try {
+            const { ForensicReportService } = await import('../../services/ForensicReportService');
+            const blob = ForensicReportService.generateFieldAuditReport({ auditData, t });
+            ForensicReportService.openAndDownloadBlob(blob, `Audit_Report_${selectedAsset.name}_${Date.now()}.pdf`, true);
+            pushNotification('INFO', 'Executive audit report downloaded');
+        } catch (e) {
+            console.warn('Failed to load report generator', e);
+            pushNotification('WARNING', 'Failed to generate audit PDF');
+        }
     };
 
     // Check which protocols have data available
@@ -157,7 +157,7 @@ export const ProtocolLaunchpad: React.FC = () => {
 
             if (protocol.generator === 'audit') {
                 const { ForensicReportService } = await import('../../services/ForensicReportService');
-                const blob = ForensicReportService.generateAuditReport({
+                const blob = ForensicReportService.generateProtocolReport({
                     contextTitle: `${selectedAsset.name} - ${protocol.name}`,
                     slogan: `Protocol completed on ${new Date().toLocaleDateString()}`,
                     metrics: [{ label: 'Protocol', value: protocol.name }],
@@ -178,7 +178,7 @@ export const ProtocolLaunchpad: React.FC = () => {
                         reportType: 'PROTOCOL_REPORT',
                         pdfPath: filename,
                         metadata: { protocolId: protocol.id, ledgerId: entry.uuid }
-                    }).catch((e:any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
+                    }).catch((e: any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
                 }
             } else {
                 const { ForensicReportService } = await import('../../services/ForensicReportService');
@@ -199,7 +199,7 @@ export const ProtocolLaunchpad: React.FC = () => {
                         reportType: 'PROTOCOL_DIAGNOSTIC',
                         pdfPath: filename,
                         metadata: { protocolId: protocol.id, ledgerId: entry.uuid }
-                    }).catch((e:any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
+                    }).catch((e: any) => console.warn('ProtocolLaunchpad.saveReport failed:', e?.message || e));
                 }
             }
 

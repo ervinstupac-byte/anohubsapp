@@ -16,14 +16,19 @@ import { KillSwitch } from '../forensics/KillSwitch';
 import { SystemHealth } from './SystemHealth';
 import { SovereignVisualizer } from './SovereignVisualizer';
 import { SandboxOverlay } from './SandboxOverlay';
-import { Sliders } from 'lucide-react';
+import { Sliders, Calculator, Droplets, Microscope, BookOpen, Shield, Layout, Zap, Activity, AlertCircle, TrendingDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { PulseArchiver } from '../../services/PulseArchiver';
+import { ThePulseEngine } from '../../services/ThePulseEngine';
+import { SovereignGlobalState } from '../../services/SovereignGlobalState';
+import SystemBoundaryAnalyzer from '../../services/SystemBoundaryAnalyzer';
 
 export const MasterSovereignDashboard: React.FC = () => {
-    const { 
-        hydraulic, 
-        mechanical, 
-        physics, 
-        identity, 
+    const {
+        hydraulic,
+        mechanical,
+        physics,
+        identity,
         sovereignPulse,
         lastUpdate,
         isCommanderMode,
@@ -39,7 +44,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     const [isSandboxOpen, setIsSandboxOpen] = useState(false);
     const [sandboxValues, setSandboxValues] = useState({
         flow: hydraulic?.flow || 42,
-        head: physics?.netHead || 100,
+        head: typeof physics?.netHead === 'object' && 'toNumber' in (physics.netHead as any) ? (physics.netHead as any).toNumber() : Number(physics?.netHead || 100),
         gate: 50
     });
     const [sandboxStress, setSandboxStress] = useState<number | null>(null);
@@ -51,7 +56,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'dashboard' | 'strategic' | 'energy'>('dashboard');
     const [isForensicMode, setIsForensicMode] = useState(false);
     const [boundaryViolation, setBoundaryViolation] = useState<string | null>(null);
-    
+
     const boundaryAnalyzer = new SystemBoundaryAnalyzer();
 
     // NC-10070: KillSwitch Activation
@@ -61,7 +66,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     const launchTacticalLayout = () => {
         const screenW = window.screen.availWidth;
         const screenH = window.screen.availHeight;
-        
+
         // Layout: Scada (Left 50%), Finance (Top-Right), Forensics (Bottom-Right)
         const scadaW = Math.floor(screenW * 0.5);
         const sideW = screenW - scadaW;
@@ -82,15 +87,15 @@ export const MasterSovereignDashboard: React.FC = () => {
             ],
             automatedActions: flow > 80 || rpm > 600 ? ['BOUNDARY_WARNING'] : []
         };
-        
+
         const assessment = boundaryAnalyzer.assessConfidence(diagnosis);
-        
+
         if (assessment.score < 60) {
             setBoundaryViolation(assessment.warning || 'Boundary violation detected');
         } else {
             setBoundaryViolation(null);
         }
-        
+
         return assessment.score >= 60;
     };
 
@@ -98,7 +103,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     React.useEffect(() => {
         // Safe boot: Start pulse archiving only after store is hydrated
         PulseArchiver.startArchiving();
-        
+
         return () => {
             PulseArchiver.stopArchiving();
         };
@@ -109,7 +114,7 @@ export const MasterSovereignDashboard: React.FC = () => {
         if (isCommanderMode) {
             // Check boundaries when setpoints change
             checkSetpointBoundaries(flowSetpoint, loadSetpoint);
-            
+
             const pulse = ThePulseEngine.calculatePulse(
                 [mechanical?.vibrationX || 100], // Asset health
                 (flowSetpoint / 50) * 10000, // Revenue estimate
@@ -158,17 +163,17 @@ export const MasterSovereignDashboard: React.FC = () => {
     const currentPower = physics?.powerMW ? Number(physics.powerMW) : 0;
     const efficiency = hydraulic?.efficiency || 0;
     const pulseIndex = sovereignPulse?.index || 100;
-    
+
     // Calculate cavitation risk using PhysicsEngine
     const cavitationRisk = React.useMemo(() => {
         if (!hydraulic?.head || !hydraulic?.flow || !mechanical?.vibrationX) return 0;
-        
+
         const sigma = Math.sqrt(hydraulic.flow * 9.81 * hydraulic.head) / 1000; // Simplified Thoma number approximation
         const riskPercent = Math.min(100, Math.max(0, (sigma - 0.1) * 500)); // Scale to 0-100%
-        
+
         return riskPercent;
     }, [hydraulic?.head, hydraulic?.flow, mechanical?.vibrationX]);
-    
+
     // Calculate hourly loss
     const baselinePower = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
     const powerLossMW = Math.max(0, baselinePower - currentPower);
@@ -200,11 +205,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                                activeTab === 'strategic' 
-                                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50' 
-                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'strategic'
+                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                                }`}
                         >
                             <Calculator className="w-4 h-4" />
                             Strategic
@@ -215,11 +219,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                                activeTab === 'energy' 
-                                    ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' 
-                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'energy'
+                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                                }`}
                         >
                             <Droplets className="w-4 h-4" />
                             Energy Hub
@@ -230,11 +233,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setIsForensicMode(!isForensicMode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                                isForensicMode 
-                                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' 
-                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isForensicMode
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                                }`}
                         >
                             <Microscope className="w-4 h-4" />
                             {isForensicMode ? 'FORENSICS ACTIVE' : 'FORENSICS'}
@@ -245,11 +247,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={toggleEducationMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                                educationMode 
-                                    ? 'bg-sky-500/20 text-sky-400 border border-sky-500/50' 
-                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${educationMode
+                                ? 'bg-sky-500/20 text-sky-400 border border-sky-500/50'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                                }`}
                         >
                             <BookOpen className="w-4 h-4" />
                             {educationMode ? 'EXPERT GUIDE ON' : 'EXPERT GUIDE'}
@@ -260,11 +261,10 @@ export const MasterSovereignDashboard: React.FC = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={toggleCommanderMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                                isCommanderMode 
-                                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' 
-                                    : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
-                            }`}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isCommanderMode
+                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                                }`}
                         >
                             <Shield className="w-4 h-4" />
                             {isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}
@@ -400,10 +400,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                                         {/* Predicted Pulse Impact */}
                                         <div className="bg-slate-800/50 rounded-lg p-3">
                                             <div className="text-xs text-slate-400 mb-1">Predicted Pulse Index</div>
-                                            <div className={`text-2xl font-bold ${
-                                                (predictedPulse || 100) > 90 ? 'text-green-400' :
+                                            <div className={`text-2xl font-bold ${(predictedPulse || 100) > 90 ? 'text-green-400' :
                                                 (predictedPulse || 100) > 70 ? 'text-yellow-400' : 'text-red-400'
-                                            }`}>
+                                                }`}>
                                                 {predictedPulse !== null ? predictedPulse.toFixed(1) : pulseIndex.toFixed(0)}%
                                             </div>
                                             <div className="text-xs text-slate-500 mt-1">
@@ -431,141 +430,139 @@ export const MasterSovereignDashboard: React.FC = () => {
 
                     {/* Top Row: 4 Metric Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {/* Active Power */}
-                <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Zap className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm text-slate-400">Active Power</span>
-                    </div>
-                    <div className="text-2xl font-bold text-white">
-                        {currentPower.toFixed(1)}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-1">MW</div>
-                </GlassCard>
-
-                {/* Efficiency */}
-                <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Activity className="w-4 h-4 text-green-400" />
-                        <span className="text-sm text-slate-400">Efficiency</span>
-                    </div>
-                    <div className={`text-2xl font-bold ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
-                        {efficiency.toFixed(1)}%
-                    </div>
-                    <div className="text-xs text-slate-500 mt-1">hydraulic</div>
-                    
-                    {/* Cavitation Risk Progress Bar */}
-                    <div className="mt-3">
-                        <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs text-slate-400">Cavitation Risk</span>
-                            <span className={`text-xs font-medium ${
-                                cavitationRisk > 70 ? 'text-red-400' : 
-                                cavitationRisk > 40 ? 'text-yellow-400' : 'text-green-400'
-                            }`}>
-                                {cavitationRisk.toFixed(0)}%
-                            </span>
-                        </div>
-                        <div className="w-full bg-slate-700 rounded-full h-2">
-                            <div 
-                                className={`h-2 rounded-full transition-all duration-300 ${
-                                    cavitationRisk > 70 ? 'bg-red-500' : 
-                                    cavitationRisk > 40 ? 'bg-yellow-500' : 'bg-green-500'
-                                }`}
-                                style={{ width: `${cavitationRisk}%` }}
-                            />
-                        </div>
-                    </div>
-                </GlassCard>
-
-                {/* Sovereign Pulse Index */}
-                <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                    <div className="flex items-center gap-2 mb-2">
-                        <AlertCircle className="w-4 h-4 text-purple-400" />
-                        <span className="text-sm text-slate-400">Sovereign Pulse</span>
-                    </div>
-                    <div className={`text-2xl font-bold ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
-                        {pulseIndex.toFixed(0)}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-1">index</div>
-                </GlassCard>
-
-                {/* Hourly Loss */}
-                <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                    <div className="flex items-center gap-2 mb-2">
-                        <TrendingDown className="w-4 h-4 text-red-400" />
-                        <span className="text-sm text-slate-400">Hourly Loss</span>
-                    </div>
-                    <div className="text-2xl font-bold text-red-300">
-                        €{hourlyLossEuro.toFixed(2)}
-                    </div>
-                    <div className="text-xs text-slate-500 mt-1">per hour</div>
-                </GlassCard>
-            </div>
-
-            {/* Middle Row: ScadaCore (2/3) + FinancialHealthPanel (1/3) */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                {/* ScadaCore - 2 columns */}
-                <div className="lg:col-span-2">
-                    <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-white">SCADA Core</h3>
-                            <div className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                                <span className="text-xs text-blue-400 font-medium">LIVE</span>
+                        {/* Active Power */}
+                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Zap className="w-4 h-4 text-blue-400" />
+                                <span className="text-sm text-slate-400">Active Power</span>
                             </div>
-                        </div>
-                        <div className="h-96">
-                            <ScadaCore forensicMode={isForensicMode} />
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* SovereignVisualizer - New 3D Digital Twin Panel */}
-                <div className="lg:col-span-1">
-                    <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-white">Digital Twin</h3>
-                            <div className="px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full">
-                                <span className="text-xs text-cyan-400 font-medium">3D SYNC</span>
+                            <div className="text-2xl font-bold text-white">
+                                {currentPower.toFixed(1)}
                             </div>
+                            <div className="text-xs text-slate-500 mt-1">MW</div>
+                        </GlassCard>
+
+                        {/* Efficiency */}
+                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                            <div className="flex items-center gap-2 mb-2">
+                                <Activity className="w-4 h-4 text-green-400" />
+                                <span className="text-sm text-slate-400">Efficiency</span>
+                            </div>
+                            <div className={`text-2xl font-bold ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
+                                {efficiency.toFixed(1)}%
+                            </div>
+                            <div className="text-xs text-slate-500 mt-1">hydraulic</div>
+
+                            {/* Cavitation Risk Progress Bar */}
+                            <div className="mt-3">
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-xs text-slate-400">Cavitation Risk</span>
+                                    <span className={`text-xs font-medium ${cavitationRisk > 70 ? 'text-red-400' :
+                                        cavitationRisk > 40 ? 'text-yellow-400' : 'text-green-400'
+                                        }`}>
+                                        {cavitationRisk.toFixed(0)}%
+                                    </span>
+                                </div>
+                                <div className="w-full bg-slate-700 rounded-full h-2">
+                                    <div
+                                        className={`h-2 rounded-full transition-all duration-300 ${cavitationRisk > 70 ? 'bg-red-500' :
+                                            cavitationRisk > 40 ? 'bg-yellow-500' : 'bg-green-500'
+                                            }`}
+                                        style={{ width: `${cavitationRisk}%` }}
+                                    />
+                                </div>
+                            </div>
+                        </GlassCard>
+
+                        {/* Sovereign Pulse Index */}
+                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                            <div className="flex items-center gap-2 mb-2">
+                                <AlertCircle className="w-4 h-4 text-purple-400" />
+                                <span className="text-sm text-slate-400">Sovereign Pulse</span>
+                            </div>
+                            <div className={`text-2xl font-bold ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
+                                {pulseIndex.toFixed(0)}
+                            </div>
+                            <div className="text-xs text-slate-500 mt-1">index</div>
+                        </GlassCard>
+
+                        {/* Hourly Loss */}
+                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                            <div className="flex items-center gap-2 mb-2">
+                                <TrendingDown className="w-4 h-4 text-red-400" />
+                                <span className="text-sm text-slate-400">Hourly Loss</span>
+                            </div>
+                            <div className="text-2xl font-bold text-red-300">
+                                €{hourlyLossEuro.toFixed(2)}
+                            </div>
+                            <div className="text-xs text-slate-500 mt-1">per hour</div>
+                        </GlassCard>
+                    </div>
+
+                    {/* Middle Row: ScadaCore (2/3) + FinancialHealthPanel (1/3) */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        {/* ScadaCore - 2 columns */}
+                        <div className="lg:col-span-2">
+                            <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-semibold text-white">SCADA Core</h3>
+                                    <div className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
+                                        <span className="text-xs text-blue-400 font-medium">LIVE</span>
+                                    </div>
+                                </div>
+                                <div className="h-96">
+                                    <ScadaCore forensicMode={isForensicMode} />
+                                </div>
+                            </GlassCard>
                         </div>
-                        <div className="h-96">
-                            <SovereignVisualizer sandboxStress={sandboxStress} sandboxValues={sandboxValues} />
+
+                        {/* SovereignVisualizer - New 3D Digital Twin Panel */}
+                        <div className="lg:col-span-1">
+                            <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-semibold text-white">Digital Twin</h3>
+                                    <div className="px-2 py-1 bg-cyan-500/20 border border-cyan-500/30 rounded-full">
+                                        <span className="text-xs text-cyan-400 font-medium">3D SYNC</span>
+                                    </div>
+                                </div>
+                                <div className="h-96">
+                                    <SovereignVisualizer sandboxStress={sandboxStress} sandboxValues={sandboxValues} />
+                                </div>
+
+                                {/* Sandbox Trigger */}
+                                <button
+                                    onClick={() => setIsSandboxOpen(true)}
+                                    className="w-full mt-4 py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
+                                >
+                                    <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
+                                    <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
+                                        Launch Predictive Sandbox
+                                    </span>
+                                </button>
+                            </GlassCard>
                         </div>
 
-                        {/* Sandbox Trigger */}
-                        <button 
-                            onClick={() => setIsSandboxOpen(true)}
-                            className="w-full mt-4 py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
-                        >
-                            <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
-                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
-                                Launch Predictive Sandbox
-                            </span>
-                        </button>
-                    </GlassCard>
-                </div>
+                        {/* FinancialHealthPanel or VisionAnalyzer (Forensic Mode) - 1 column */}
+                        <div className="lg:col-span-1">
+                            {isForensicMode ? (
+                                <div className="h-96">
+                                    <VisionAnalyzer />
+                                </div>
+                            ) : (
+                                <FinancialHealthPanel />
+                            )}
+                        </div>
+                    </div>
 
-                {/* FinancialHealthPanel or VisionAnalyzer (Forensic Mode) - 1 column */}
-                <div className="lg:col-span-1">
-                    {isForensicMode ? (
-                         <div className="h-96">
-                            <VisionAnalyzer />
-                         </div>
-                    ) : (
-                        <FinancialHealthPanel />
-                    )}
-                </div>
-            </div>
-
-            {/* Bottom Row: SovereignComponentTree - Full Width */}
-            <div className="w-full">
-                <SovereignComponentTree />
-            </div>
+                    {/* Bottom Row: SovereignComponentTree - Full Width */}
+                    <div className="w-full">
+                        <SovereignComponentTree />
+                    </div>
                 </>
             )}
 
             {/* Sandbox Overlay (NC-12200) */}
-            <SandboxOverlay 
+            <SandboxOverlay
                 isOpen={isSandboxOpen}
                 onClose={() => {
                     setIsSandboxOpen(false);
@@ -587,7 +584,7 @@ export const MasterSovereignDashboard: React.FC = () => {
             {/* NC-10070: KillSwitch Global Overlay */}
             <AnimatePresence>
                 {isShutdown && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -617,7 +614,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                             </div>
 
                             <div className="pt-8">
-                                <KillSwitch isActive={true} onEngage={() => {}} />
+                                <KillSwitch isActive={true} onEngage={() => { }} />
                             </div>
 
                             <p className="text-slate-500 text-xs font-mono mt-8">

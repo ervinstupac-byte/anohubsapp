@@ -76,7 +76,7 @@ export const MasterControlRoom: React.FC = () => {
 
     useEffect(() => {
         const family = variantToFamily(selectedVariant);
-        window.dispatchEvent(new CustomEvent('SET_TURBINE_TYPE', { detail: { family, variant: selectedVariant } }));
+        dispatch.setTurbineType({ family, variant: selectedVariant });
     }, [selectedVariant]);
 
     return (

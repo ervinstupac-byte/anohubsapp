@@ -1,18 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Activity, AlertTriangle, CheckCircle, Server, Globe } from 'lucide-react';
-
-// Mock Fleet Data - In production, this pulls from Supabase/SovereignMemory
-const FLEET_NODES = [
-    { id: 'UNIT-01', name: 'Francis Alpha', type: 'Francis', commissioned: '2024-01-15', baselineEff: 94.5, currentEff: 94.2, status: 'OPTIMAL' },
-    { id: 'UNIT-02', name: 'Francis Beta', type: 'Francis', commissioned: '2024-02-01', baselineEff: 94.5, currentEff: 83.1, status: 'DRIFT_WARNING' }, // Big Drift
-    { id: 'UNIT-03', name: 'Kaplan Gamma', type: 'Kaplan', commissioned: '2024-03-10', baselineEff: 92.0, currentEff: 91.8, status: 'OPTIMAL' },
-    { id: 'UNIT-04', name: 'Pelton Delta', type: 'Pelton', commissioned: '2024-04-22', baselineEff: 90.5, currentEff: 90.4, status: 'OPTIMAL' },
-    { id: 'UNIT-05', name: 'Bulb Epsilon', type: 'Bulb', commissioned: '2024-05-05', baselineEff: 93.0, currentEff: 88.5, status: 'ATTENTION' }, // Moderate Drift
-    { id: 'UNIT-06', name: 'Francis Zeta', type: 'Francis', commissioned: '2024-06-12', baselineEff: 94.8, currentEff: 94.8, status: 'BORN_PERFECT' },
-];
+import { useFleetIntelligence } from '../../hooks/useFleetIntelligence';
 
 export const FleetOverview: React.FC = () => {
+    const { plants } = useFleetIntelligence();
 
     const calculateDrift = (baseline: number, current: number) => {
         return ((baseline - current) / baseline) * 100;
@@ -36,8 +28,8 @@ export const FleetOverview: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {FLEET_NODES.map((node) => {
-                    const drift = calculateDrift(node.baselineEff, node.currentEff);
+                {plants.map((node) => {
+                    const drift = calculateDrift(node.baselineEff, node.efficiency);
                     const isSevere = drift > 10;
                     const isWarning = drift > 5 && drift <= 10;
 
@@ -61,7 +53,7 @@ export const FleetOverview: React.FC = () => {
                                 </div>
                                 <div className="flex justify-between text-xs">
                                     <span className="text-slate-400">Current Efficiency</span>
-                                    <span className={`font-mono ${isSevere ? 'text-red-400' : 'text-white'}`}>{node.currentEff}%</span>
+                                    <span className={`font-mono ${isSevere ? 'text-red-400' : 'text-white'}`}>{node.efficiency.toFixed(1)}%</span>
                                 </div>
 
                                 {/* Drift Bar */}

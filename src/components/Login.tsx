@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext'; // Pazi da putanja odgovara tvojoj strukturi
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from '../stores/useAppStore';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from './LanguageSelector';

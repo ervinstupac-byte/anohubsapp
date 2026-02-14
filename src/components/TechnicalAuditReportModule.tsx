@@ -56,7 +56,7 @@ export const TechnicalAuditReportModule: React.FC = () => {
             }
         };
 
-        const blob = ForensicReportService.generateAuditReport({
+        const blob = ForensicReportService.generateProtocolReport({
             contextTitle: mockData.assetDetails.name,
             slogan: "High-Fidelity Technical Audit Report",
             metrics: [

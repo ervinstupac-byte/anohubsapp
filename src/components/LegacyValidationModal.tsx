@@ -1,7 +1,7 @@
 // Legacy Validation Modal - Pre-Task Warning System
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, AlertTriangle, CheckCircle, X } from 'lucide-react';
+import { Shield, AlertTriangle, CheckCircle, X, Terminal, CheckSquare, Square } from 'lucide-react';
 import { GlassCard } from './ui/GlassCard';
 import { LegacyKnowledgeService } from '../services/LegacyKnowledgeService';
 
@@ -83,41 +83,42 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="max-w-3xl w-full max-h-[90vh] overflow-y-auto"
                     >
-                        <GlassCard className="p-6 border-2 border-amber-500 bg-amber-950/20">
-                            {/* Header */}
-                            <div className="flex items-start justify-between mb-6">
+                        <GlassCard className="p-0 border-2 border-amber-500/50 bg-slate-950 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.15)]">
+                            {/* Terminal Header */}
+                            <div className="flex items-center justify-between p-4 bg-amber-500/10 border-b border-amber-500/30">
                                 <div className="flex items-center gap-3">
-                                    <Shield className="w-8 h-8 text-amber-400" />
+                                    <div className="p-2 bg-amber-500/20 rounded border border-amber-500/30">
+                                        <Terminal className="w-5 h-5 text-amber-400" />
+                                    </div>
                                     <div>
-                                        <h2 className="text-2xl font-black text-white">Legacy Validation</h2>
-                                        <p className="text-sm text-amber-300">
-                                            Postoji zabilježen specifičan rizik za ovaj tip turbine
-                                        </p>
+                                        <h2 className="text-lg font-mono font-bold text-amber-400 uppercase tracking-widest">
+                                            Legacy_Validation_Protocol_v3.2
+                                        </h2>
                                     </div>
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="text-slate-400 hover:text-white transition-colors"
+                                    className="p-2 hover:bg-amber-500/20 rounded transition-colors text-amber-500/50 hover:text-amber-400"
                                 >
-                                    <X className="w-6 h-6" />
+                                    <X className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            {/* Task Info */}
-                            <div className="mb-6 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
-                                <p className="text-xs text-slate-400 uppercase font-bold mb-1">Zadatak</p>
-                                <p className="text-sm text-white font-bold mb-2">{taskDescription}</p>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <p className="text-xs text-slate-400">Turbina</p>
-                                        <p className="text-sm text-purple-400 font-bold uppercase">{turbineFamily}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-slate-400">Komponenta</p>
-                                        <p className="text-sm text-cyan-400 font-bold">{component}</p>
+                            <div className="p-6 space-y-6">
+                                {/* Task Info Block */}
+                                <div className="p-4 bg-slate-900/80 border border-slate-700 font-mono text-sm relative overflow-hidden group">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-amber-500/50" />
+                                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                                        <span className="text-slate-500 uppercase">Target_Task:</span>
+                                        <span className="text-white font-bold">{taskDescription}</span>
+                                        
+                                        <span className="text-slate-500 uppercase">Turbine_ID:</span>
+                                        <span className="text-purple-400">{turbineFamily}</span>
+                                        
+                                        <span className="text-slate-500 uppercase">Component:</span>
+                                        <span className="text-cyan-400">{component}</span>
                                     </div>
                                 </div>
-                            </div>
 
                             {validation && (
                                 <>
@@ -142,27 +143,31 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
 
                                     {/* Pre-Task Checklist */}
                                     <div className="mb-6">
-                                        <h3 className="text-lg font-black text-white mb-3 flex items-center gap-2">
-                                            <CheckCircle className="w-5 h-5 text-emerald-400" />
-                                            Provjeri PRIJE početka:
+                                        <h3 className="text-sm font-mono font-bold text-emerald-400 mb-4 flex items-center gap-2 uppercase tracking-wider">
+                                            <span className="animate-pulse">_</span>
+                                            Pre_Flight_Checklist:
                                         </h3>
                                         <div className="space-y-2">
                                             {validation.checklistBefore.map((item, index) => (
-                                                <label
+                                                <div
                                                     key={index}
-                                                    className={`flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${checklistStatus.get(index)
-                                                            ? 'border-emerald-500 bg-emerald-950/20'
-                                                            : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
-                                                        }`}
+                                                    onClick={() => toggleChecklistItem(index)}
+                                                    className={`
+                                                        group flex items-start gap-3 p-3 rounded cursor-pointer border transition-all font-mono text-xs
+                                                        ${checklistStatus.get(index)
+                                                            ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-300'
+                                                            : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600 hover:bg-slate-800'}
+                                                    `}
                                                 >
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checklistStatus.get(index) || false}
-                                                        onChange={() => toggleChecklistItem(index)}
-                                                        className="mt-0.5 w-5 h-5 rounded border-slate-600"
-                                                    />
-                                                    <span className="text-sm text-slate-300">{item}</span>
-                                                </label>
+                                                    <div className={`mt-0.5 ${checklistStatus.get(index) ? 'text-emerald-500' : 'text-slate-600 group-hover:text-slate-400'}`}>
+                                                        {checklistStatus.get(index) ? (
+                                                            <CheckSquare className="w-4 h-4" />
+                                                        ) : (
+                                                            <Square className="w-4 h-4" />
+                                                        )}
+                                                    </div>
+                                                    <span className="leading-relaxed pt-0.5">{item}</span>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
@@ -241,29 +246,30 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                             )}
 
                             {/* Action Buttons */}
-                            <div className="flex gap-3">
+                            <div className="flex gap-3 pt-4 border-t border-slate-800">
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={onClose}
-                                    className="flex-1 px-6 py-3 bg-slate-700 rounded-lg font-bold text-white hover:bg-slate-600 transition-colors"
+                                    className="flex-1 px-6 py-3 bg-slate-800/50 border border-slate-700 rounded text-slate-400 font-mono text-xs uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
                                 >
-                                    Odustani
+                                    [ ABORT_SEQUENCE ]
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: canProceed ? 1.02 : 1 }}
                                     whileTap={{ scale: canProceed ? 0.98 : 1 }}
                                     onClick={handleProceed}
                                     disabled={!canProceed && !!validation}
-                                    className={`flex-1 px-6 py-3 rounded-lg font-bold transition-all ${canProceed || !validation
-                                            ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-emerald-500/50'
-                                            : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                                    className={`flex-1 px-6 py-3 rounded font-mono text-xs uppercase tracking-wider transition-all border ${canProceed || !validation
+                                            ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400 hover:bg-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
+                                            : 'bg-slate-900 border-slate-800 text-slate-600 cursor-not-allowed'
                                         }`}
                                 >
-                                    {canProceed || !validation ? 'Nastavi sa zadatkom ✓' : 'Potvrdi sve stavke'}
+                                    {canProceed || !validation ? '[ EXECUTE_TASK ]' : '[ AWAITING_VALIDATION ]'}
                                 </motion.button>
                             </div>
-                        </GlassCard>
+                        </div>
+                    </GlassCard>
                     </motion.div>
                 </motion.div>
             )}

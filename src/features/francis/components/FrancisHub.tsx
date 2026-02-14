@@ -4,6 +4,7 @@ import SurgicalDigitalTwin from './SurgicalDigitalTwin';
 import { useAssetContext } from '../../../contexts/AssetContext.tsx';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
 import { Shield, LayoutGrid, FileText, CheckCircle } from 'lucide-react';
+import { EVENTS } from '../../../lib/events';
 
 /**
  * Technical Asset Definition for the Surgical Index
@@ -24,6 +25,7 @@ const ASSETS = [
     { id: 'relief-pipes', label: 'Relief Pipes', detail: 'Pressure Relief' },
     { id: 'runner', label: 'Francis Runner', detail: 'Core Energy Transfer', xrayOnly: true },
     { id: 'generator', label: 'Generator', detail: 'Primary AC Unit' },
+    { id: 'legacy-intelligence', label: 'Legacy Intelligence', detail: 'SOP Archive' },
 ];
 
 /**
@@ -55,8 +57,8 @@ export const FrancisHub: React.FC = () => {
             }
         };
 
-        window.addEventListener('twin:asset-click', handler as EventListener);
-        return () => window.removeEventListener('twin:asset-click', handler as EventListener);
+        window.addEventListener(EVENTS.TWIN_ASSET_CLICK, handler as EventListener);
+        return () => window.removeEventListener(EVENTS.TWIN_ASSET_CLICK, handler as EventListener);
     }, []);
 
     // when X‑Ray is turned off, ensure any xray-only active asset is cleared
@@ -141,7 +143,14 @@ export const FrancisHub: React.FC = () => {
                                     key={asset.id}
                                     onMouseEnter={() => setActiveAssetId(asset.id)}
                                     onMouseLeave={() => setActiveAssetId(null)}
-                                    onClick={() => { setActiveAssetId(asset.id); if (asset.id === 'generator') setViewMode('generator'); }}
+                                    onClick={() => {
+                                        setActiveAssetId(asset.id);
+                                        if (asset.id === 'generator') setViewMode('generator');
+                                        if (asset.id === 'legacy-intelligence') {
+                                            setBigViewAsset('legacy-intelligence');
+                                            setBigViewOpen(true);
+                                        }
+                                    }}
                                     className={`w-full text-left group transition-all duration-300 relative overflow-hidden rounded-lg border
                       ${activeAssetId === asset.id
                                             ? 'bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
@@ -273,26 +282,39 @@ export const FrancisHub: React.FC = () => {
                 )}
             </div>
 
-            {/* Big View Modal - displays an enlarged twin for selected asset */}
+            {/* Big View Modal - displays an enlarged twin for selected asset OR Legacy SOP iframe */}
             {bigViewOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-                    <div className="relative w-[90%] max-w-[1200px] h-[90%] bg-[#070814] border border-cyan-900/40 rounded-lg p-4 shadow-xl">
-                        <button
-                            onClick={() => { setBigViewOpen(false); setBigViewAsset(null); }}
-                            className="absolute top-3 right-3 text-slate-300 bg-black/40 hover:bg-black/60 p-2 rounded"
-                            aria-label="Close Big View"
-                        >
-                            ×
-                        </button>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+                    <div className="relative w-[95%] h-[90%] bg-[#070814] border border-cyan-900/40 rounded-lg shadow-2xl overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between p-3 border-b border-cyan-900/40 bg-black/40">
+                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-[0.2em] font-bold">
+                                {bigViewAsset === 'legacy-intelligence' ? 'LEGACY INTELLIGENCE // FRANCIS SOP DATABASE' : 'SURGICAL COMPONENT INSPECTION'}
+                            </div>
+                            <button
+                                onClick={() => { setBigViewOpen(false); setBigViewAsset(null); }}
+                                className="text-slate-300 hover:text-white px-3 py-1 rounded bg-white/5 hover:bg-white/10"
+                                aria-label="Close Big View"
+                            >
+                                CLOSE
+                            </button>
+                        </div>
 
-                        <div className="w-full h-full">
-                            <SurgicalDigitalTwin
-                                viewMode={viewMode}
-                                setViewMode={setViewMode}
-                                activeAssetId={bigViewAsset}
-                                xrayEnabled={xrayEnabled}
-                                setXrayEnabled={setXrayEnabled}
-                            />
+                        <div className="flex-1 w-full h-full relative">
+                            {bigViewAsset === 'legacy-intelligence' ? (
+                                <iframe
+                                    src="/AnoHub_site/Turbine_Friend/Francis_H/index.html"
+                                    className="w-full h-full border-none bg-white"
+                                    title="Francis Legacy SOPs"
+                                />
+                            ) : (
+                                <SurgicalDigitalTwin
+                                    viewMode={viewMode}
+                                    setViewMode={setViewMode}
+                                    activeAssetId={bigViewAsset}
+                                    xrayEnabled={xrayEnabled}
+                                    setXrayEnabled={setXrayEnabled}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

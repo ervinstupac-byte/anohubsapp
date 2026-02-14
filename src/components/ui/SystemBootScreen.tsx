@@ -56,7 +56,7 @@ export const SystemBootScreen: React.FC<{ onComplete?: () => void }> = ({ onComp
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed inset-0 z-[9999] bg-[#020617] flex flex-col items-center justify-center overflow-hidden"
+                    className={`fixed inset-0 z-[9999] bg-[#020617] flex flex-col items-center justify-center overflow-hidden ${progress >= 100 ? 'pointer-events-none' : ''}`}
                 >
                     {/* Background Grid/Effect */}
                     <div className="absolute inset-0 opacity-10 pointer-events-none">

@@ -1,23 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Command, Smartphone, Box, Zap, FileText, Settings, X, ChevronRight } from 'lucide-react';
+import { Search, Command, Smartphone, Box, Zap, FileText, Settings, X, ChevronRight, RefreshCw, ShieldAlert, CheckCircle, ShieldCheck, Activity, Printer } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../../contexts/AssetContext';
 import idAdapter from '../../utils/idAdapter';
-import { useDensity } from '../../contexts/DensityContext';
+import { useDensity } from '../../stores/useAppStore';
 import { useDrillDown } from '../../contexts/DrillDownContext';
+import { useConfirm } from '../../contexts/ConfirmContext';
+import { useValidation } from '../../contexts/ValidationContext';
 import { GLASS, RADIUS, TYPOGRAPHY_COMPACT, TYPOGRAPHY, SPACING, SPACING_COMPACT, STATUS_COLORS } from '../../shared/design-tokens';
+import { useSmartSuggestions, SmartCommand } from '../../hooks/useSmartSuggestions';
 import { StatusIndicator } from '../../shared/components/ui/StatusIndicator';
+import { dispatch, EVENTS } from '../../lib/events';
+import { useToast } from '../../stores/useAppStore';
 
 interface CommandResult {
     id: string;
     label: string;
-    type: 'asset' | 'module' | 'action';
+    type: 'asset' | 'module' | 'action' | 'suggestion';
     icon: React.ReactNode;
     action: () => void;
     status?: string;
     subtitle?: string;
+    isSuggestion?: boolean;
+    variant?: 'danger' | 'warning' | 'default';
 }
 
 export const CommandPalette = React.memo(() => {
@@ -25,10 +32,14 @@ export const CommandPalette = React.memo(() => {
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const navigate = useNavigate();
-    const { assets, selectAsset } = useAssetContext();
+    const { assets, selectAsset, selectedAsset } = useAssetContext();
     const { mode } = useDensity();
     const { drillDown } = useDrillDown();
+    const { confirm } = useConfirm();
+    const { validateTask } = useValidation();
     const { t } = useTranslation();
+    const smartSuggestions = useSmartSuggestions();
+    const { showToast } = useToast();
 
     const isCompact = mode === 'compact';
     const typo = isCompact ? TYPOGRAPHY_COMPACT : TYPOGRAPHY;
@@ -53,10 +64,10 @@ export const CommandPalette = React.memo(() => {
         };
 
         window.addEventListener('keydown', handleKeyDown);
-        window.addEventListener('openCommandPalette', handleOpenEvent);
+        window.addEventListener(EVENTS.OPEN_COMMAND_PALETTE, handleOpenEvent);
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
-            window.removeEventListener('openCommandPalette', handleOpenEvent);
+            window.removeEventListener(EVENTS.OPEN_COMMAND_PALETTE, handleOpenEvent);
         };
     }, []);
 
@@ -69,12 +80,99 @@ export const CommandPalette = React.memo(() => {
         { id: 'mod-5', label: 'Settings', type: 'module', icon: <Settings />, action: () => navigate('/profile'), subtitle: 'User preferences' },
     ];
 
+    // System Actions (Protected)
+    const systemActions: CommandResult[] = [
+        { 
+            id: 'sys-1', 
+            label: 'System Reset', 
+            type: 'action', 
+            icon: <RefreshCw />, 
+            subtitle: 'Clear cache and reload',
+            variant: 'danger',
+            action: () => {
+                confirm({
+                    title: 'System Reset',
+                    message: 'Are you sure you want to clear the local cache and reload the application? Unsaved data may be lost.',
+                    variant: 'danger',
+                    confirmLabel: 'Reset System',
+                    onConfirm: () => {
+                        localStorage.clear();
+                        window.location.reload();
+                    }
+                });
+                setIsOpen(false);
+            }
+        },
+        { 
+            id: 'sys-2', 
+            label: 'Maintenance Protocol', 
+            type: 'action', 
+            icon: <ShieldAlert />, 
+            subtitle: 'Initiate standard maintenance workflow',
+            variant: 'warning',
+            action: () => {
+                validateTask({
+                    turbineFamily: 'FRANCIS',
+                    component: 'WICKET_GATE', // Default for demo
+                    taskDescription: 'Routine Inspection & Calibration',
+                    onProceed: () => {
+                        navigate('/maintenance/dashboard');
+                    }
+                });
+                setIsOpen(false);
+            }
+        },
+        {
+            id: 'sys-overview',
+            label: 'System Topology',
+            type: 'action',
+            icon: <Activity className="text-emerald-400" />,
+            subtitle: 'View ecosystem map & live telemetry',
+            action: () => {
+                dispatch.openSystemOverview();
+                setIsOpen(false);
+            }
+        },
+        {
+            id: 'sys-print',
+            label: 'Print Dossier',
+            type: 'action',
+            icon: <Printer className="text-cyan-400" />,
+            subtitle: 'Generate technical report PDF',
+            action: () => {
+                dispatch.triggerForensicExport();
+                setIsOpen(false);
+            }
+        },
+        {
+            id: 'sys-passport',
+            label: 'View Asset Passport',
+            type: 'action',
+            icon: <ShieldCheck className="text-amber-400" />,
+            subtitle: 'Official component registry & RUL',
+            action: () => {
+                const target = selectedAsset || (assets && assets.length > 0 ? assets[0] : null);
+                
+                if (target) {
+                    dispatch.openAssetPassport({
+                        id: target.id?.toString() || 'unknown',
+                        name: target.name || 'Unknown Asset',
+                        type: target.type || target.turbine_type || 'GENERIC'
+                    });
+                    setIsOpen(false);
+                } else {
+                    showToast('No assets available', 'error');
+                }
+            }
+        }
+    ];
+
     // Safe assets access
     const safeAssets = Array.isArray(assets) ? assets : [];
 
     // Search Logic
     const results = useMemo(() => {
-        if (!query) return modules; // Show limited recent/modules by default
+        if (!query) return [...modules, ...systemActions]; // Show limited recent/modules by default
 
         const lowerQuery = query.toLowerCase();
 
@@ -91,16 +189,22 @@ export const CommandPalette = React.memo(() => {
                 action: () => {
                     if (selectAsset) selectAsset(Number(a.id));
                     navigate('/'); // Go to toolbox with asset selected
+                    setIsOpen(false);
                 }
             }));
 
         // Filter Modules
-        const moduleResults = modules.filter(m =>
-            m.label.toLowerCase().includes(lowerQuery) || (m.subtitle || '').toLowerCase().includes(lowerQuery)
+        const moduleResults = modules.filter(m => 
+            m.label.toLowerCase().includes(lowerQuery) || m.subtitle?.toLowerCase().includes(lowerQuery)
         );
 
-        return [...assetResults, ...moduleResults].slice(0, 8);
-    }, [query, safeAssets, modules, navigate, selectAsset]);
+        // Filter Actions
+        const actionResults = systemActions.filter(a => 
+            a.label.toLowerCase().includes(lowerQuery) || a.subtitle?.toLowerCase().includes(lowerQuery)
+        );
+
+        return [...assetResults, ...moduleResults, ...actionResults];
+    }, [query, assets, modules, systemActions]);
 
     // Keyboard Navigation
     useEffect(() => {
@@ -117,138 +221,129 @@ export const CommandPalette = React.memo(() => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 results[selectedIndex]?.action();
-                setIsOpen(false);
             }
         };
         window.addEventListener('keydown', handleNav);
         return () => window.removeEventListener('keydown', handleNav);
     }, [isOpen, results, selectedIndex]);
 
-    // Reset selection when results change
-    useEffect(() => setSelectedIndex(0), [results]);
-
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4">
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
-                onClick={() => setIsOpen(false)}
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] px-4">
+                    {/* Backdrop */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsOpen(false)}
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                    />
+
+                    {/* Palette */}
+                    <motion.div
+                        initial={{ scale: 0.95, opacity: 0, y: -20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.95, opacity: 0, y: -20 }}
+                        className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden relative z-10 flex flex-col max-h-[60vh]"
+                    >
+                        {/* Search Input */}
+                        <div className="flex items-center gap-3 px-4 py-4 border-b border-slate-700 bg-slate-900/50">
+                            <Search className="w-5 h-5 text-slate-400" />
+                            <input
+                                autoFocus
+                                type="text"
+                                value={query}
+                                onChange={(e) => { setQuery(e.target.value); setSelectedIndex(0); }}
+                                placeholder={t('command.placeholder', 'Type a command or search assets...')}
+                                className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-500 text-lg"
+                            />
+                            <div className="hidden sm:flex items-center gap-1">
+                                <span className="text-xs text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">ESC</span>
+                            </div>
+                        </div>
+
+                        {/* Results */}
+                        <div className="overflow-y-auto custom-scrollbar p-2">
+                            {results.length === 0 ? (
+                                <div className="p-8 text-center text-slate-500">
+                                    <Command className="w-12 h-12 mx-auto mb-2 opacity-20" />
+                                    <p>No results found</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-1">
+                                    {results.map((result, index) => (
+                                        <button
+                                            key={result.id}
+                                            onClick={() => { result.action(); }}
+                                            onMouseEnter={() => setSelectedIndex(index)}
+                                            className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors group ${
+                                                index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-slate-800'
+                                            }`}
+                                        >
+                                            <div className={`p-2 rounded-md ${
+                                                result.variant === 'danger' ? 'bg-red-500/20 text-red-400' :
+                                                result.variant === 'warning' ? 'bg-amber-500/20 text-amber-400' :
+                                                index === selectedIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'
+                                            }`}>
+                                                {result.icon}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className={`font-medium truncate ${
+                                                    result.variant === 'danger' ? 'text-red-400' :
+                                                    index === selectedIndex ? 'text-cyan-100' : 'text-slate-200'
+                                                }`}>
+                                                    {result.label}
+                                                </div>
+                                                {result.subtitle && (
+                                                    <div className="text-xs text-slate-500 truncate">{result.subtitle}</div>
+                                                )}
+                                            </div>
+                                            {index === selectedIndex && (
+                                                <ChevronRight className="w-4 h-4 text-cyan-500" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Footer */}
+                        <div className="px-4 py-2 bg-slate-950 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between">
+                            <div className="flex gap-3">
+                                <span><strong className="text-slate-400">↑↓</strong> to navigate</span>
+                                <span><strong className="text-slate-400">↵</strong> to select</span>
+                            </div>
+                            <div>
+                                Sovereign Command v2.4
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+            
+            {/* Global Modals Triggered by Command Palette */}
+            <SystemOverviewModal 
+                isOpen={showSystemOverview} 
+                onClose={() => setShowSystemOverview(false)} 
+            />
+            
+            <PrintPreviewModal 
+                isOpen={showPrintPreview} 
+                onClose={() => setShowPrintPreview(false)} 
+                state={technicalState}
             />
 
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: -20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                className={`w-full max-w-xl ${GLASS.commander} ${RADIUS.cardLg} overflow-hidden shadow-2xl flex flex-col relative z-[101]`}
-            >
-                <div className="flex items-center px-4 py-4 border-b border-white/5 gap-3">
-                    <Search className="w-5 h-5 text-slate-400" />
-                    <input
-                        autoFocus
-                        value={query}
-                        onChange={e => setQuery(e.target.value)}
-                        placeholder="Type a command or search assets..."
-                        className="flex-grow bg-transparent border-none outline-none text-white placeholder-slate-500 font-mono text-sm h-6"
-                    />
-                    <div className="flex gap-2">
-                        <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded border border-slate-700 bg-slate-800 px-1.5 font-mono text-[10px] font-medium text-slate-400 opacity-100">
-                            ESC
-                        </kbd>
-                    </div>
-                </div>
-
-                <div className="max-h-[60vh] overflow-y-auto py-2">
-                    {results.length === 0 ? (
-                        <div className="p-8 text-center text-slate-500 font-mono text-sm">
-                            No results found.
-                        </div>
-                    ) : (
-                        results.map((result, index) => (
-                            <div
-                                key={result.id}
-                                onClick={() => {
-                                    result.action();
-                                    setIsOpen(false);
-                                }}
-                                className={`
-                                    px-4 py-3 mx-2 rounded-lg flex items-center justify-between cursor-pointer group transition-colors
-                                    ${index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-white/5'}
-                                `}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded ${index === selectedIndex ? 'text-cyan-400' : 'text-slate-400'}`}>
-                                        {result.icon}
-                                    </div>
-                                    <div>
-                                        <div className={`text-sm font-bold ${index === selectedIndex ? 'text-white' : 'text-slate-200'}`}>
-                                            {result.label}
-                                        </div>
-                                        {result.subtitle && (
-                                            <div className="text-[10px] text-slate-500 font-mono uppercase tracking-wide">
-                                                {result.subtitle}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    {result.type === 'asset' && (
-                                        <StatusIndicator status="nominal" size="xs" />
-                                    )}
-                                    {index === selectedIndex && (
-                                        <ChevronRight className="w-4 h-4 text-cyan-500" />
-                                    )}
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-
-                <div className="bg-slate-950/50 p-2 border-t border-white/5 flex justify-between px-4">
-                    <div className="text-[10px] text-slate-600 font-mono">
-                        <span className="text-cyan-500/50">ANOHUB</span> INTELLIGENCE
-                    </div>
-                    <div className="text-[10px] text-slate-600 font-mono flex gap-3">
-                        <span>↑↓ to navigate</span>
-                        <span>↵ to select</span>
-                    </div>
-                </div>
-            </motion.div>
-        </div>
+            {/* Asset Passport - Uses first asset or selected if available */}
+            {assets && assets.length > 0 && (
+                <AssetPassportModal
+                    isOpen={showPassport}
+                    onClose={() => setShowPassport(false)}
+                    componentId={assets[0].id?.toString() || 'unknown'}
+                    componentName={assets[0].name || 'Unknown Asset'}
+                    componentType={assets[0].type || 'GENERIC'}
+                />
+            )}
+        </AnimatePresence>
     );
 });
-
-// Error Boundary Wrapper for CommandPalette
-class CommandPaletteErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
-    constructor(props: { children: React.ReactNode }) {
-        super(props);
-        this.state = { hasError: false };
-    }
-
-    static getDerivedStateFromError(error: any) {
-        return { hasError: true };
-    }
-
-    componentDidCatch(error: any, errorInfo: any) {
-        console.error("CommandPalette crashed:", error, errorInfo);
-    }
-
-    render() {
-        if (this.state.hasError) {
-            return null; // Fail silently
-        }
-
-        return this.props.children;
-    }
-}
-
-const SafeCommandPalette = () => (
-    <CommandPaletteErrorBoundary>
-        <CommandPalette />
-    </CommandPaletteErrorBoundary>
-);
-
-export default SafeCommandPalette;

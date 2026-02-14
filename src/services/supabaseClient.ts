@@ -8,14 +8,14 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn('⚠️ Supabase credentials missing! Check .env file.');
-  // NC-11920: Visual Feedback for Missing Env Vars
-  if (typeof window !== 'undefined') {
-    const errorBanner = document.createElement('div');
-    errorBanner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ef4444;color:white;text-align:center;padding:12px;font-family:monospace;font-weight:bold;z-index:99999;border-top:2px solid #b91c1c;';
-    errorBanner.innerHTML = '⚠️ CRITICAL: SUPABASE CREDENTIALS MISSING. CHECK .ENV CONFIGURATION.';
-    document.body.appendChild(errorBanner);
-  }
+    console.warn('⚠️ Supabase credentials missing! Check .env file.');
+    // NC-11920: Visual Feedback for Missing Env Vars
+    if (typeof window !== 'undefined') {
+        const errorBanner = document.createElement('div');
+        errorBanner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ef4444;color:white;text-align:center;padding:12px;font-family:monospace;font-weight:bold;z-index:99999;border-top:2px solid #b91c1c;';
+        errorBanner.innerHTML = '⚠️ CRITICAL: SUPABASE CREDENTIALS MISSING. CHECK .ENV CONFIGURATION.';
+        document.body.appendChild(errorBanner);
+    }
 }
 
 // Cross-environment variable access (Vite vs Node) - FALLBACK only
@@ -81,7 +81,7 @@ if (supabaseUrl && supabaseAnonKey) {
 // ============================================================================
 // NOOP CLIENT (Fallback for build/CI)
 // ============================================================================
-if (!_supabase) {
+const createNoopClient = (): any => {
     const noopFrom = () => ({
         select: async () => ({ data: [], error: null }),
         insert: async () => ({ data: null, error: null }),
@@ -100,6 +100,7 @@ if (!_supabase) {
     const noopChannel = () => ({
         on() { return this; },
         subscribe: async () => ({}),
+        unsubscribe: async () => ({}),
     });
 
     const noopStorage = () => ({
@@ -110,23 +111,47 @@ if (!_supabase) {
         })
     });
 
-    _supabase = {
+    return {
         from: noopFrom,
         channel: noopChannel,
         removeChannel: () => { },
         storage: noopStorage(),
         auth: {
             getUser: async () => ({ data: null, error: null }),
-            getSession: async () => ({ data: null, error: null }),
+            getSession: async () => ({ data: { session: null }, error: null }),
             signOut: async () => ({ error: null }),
             onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } })
         }
-    } as any;
+    };
+};
+
+if (!_supabase) {
+    _supabase = createNoopClient();
 }
 
-export const supabase: SupabaseClient = _supabase as SupabaseClient;
+// Proxy wrapper to switch to NOOP if connection fails (Offline Mode)
+const proxyHandler = {
+    get(target: any, prop: string | symbol) {
+        // If we are offline/verified failed, redirect 'from', 'channel', 'storage' to NOOP
+        if (connectionState.isVerified === false && connectionState.lastCheck !== null) {
+            // Only intercept data calls, allow auth/helpers if needed? 
+            // Actually, safer to just use NOOP for everything to prevent 404s.
+            if (['from', 'channel', 'storage'].includes(String(prop))) {
+                // Return NOOP implementation for these properties
+                return createNoopClient()[prop];
+            }
+        }
+        return target[prop];
+    }
+};
+
+export const supabase: SupabaseClient = new Proxy(_supabase as any, proxyHandler) as SupabaseClient;
 
 export function getSafeClient(): SupabaseClient {
+    // Return NOOP if not connected
+    if (connectionState.isVerified === false && connectionState.lastCheck !== null) {
+        return createNoopClient();
+    }
     return _supabase as SupabaseClient;
 }
 

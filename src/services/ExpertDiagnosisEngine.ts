@@ -369,17 +369,17 @@ export class ExpertDiagnosisEngine {
         } as EngineeringConstants;
 
         // Thermal risk using reactive constants
-        const avgClearance = assetIdentity.francisAdvanced
-            ? (assetIdentity.francisAdvanced.frontRunnerClearanceMM + assetIdentity.francisAdvanced.backRunnerClearanceMM) / 2
+        const avgClearance = assetIdentity.specializedAdvanced
+            ? (assetIdentity.specializedAdvanced.frontRunnerClearanceMM + assetIdentity.specializedAdvanced.backRunnerClearanceMM) / 2
             : safeConstants.hydraulic.targetRunnerClearance;
 
         const thermalRisk = this.assessThermalRisk(ambientTempC, lubrication, avgClearance, safeConstants);
 
         // Axial thrust (Francis only)
-        const axialThrustRisk = assetIdentity.francisAdvanced
+        const axialThrustRisk = assetIdentity.specializedAdvanced
             ? this.assessAxialThrust(
-                assetIdentity.francisAdvanced.frontRunnerClearanceMM,
-                assetIdentity.francisAdvanced.backRunnerClearanceMM
+                assetIdentity.specializedAdvanced.frontRunnerClearanceMM,
+                assetIdentity.specializedAdvanced.backRunnerClearanceMM
             )
             : undefined;
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { AssetPicker } from './AssetPicker.tsx';

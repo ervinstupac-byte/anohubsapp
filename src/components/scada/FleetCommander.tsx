@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFleetIntelligence, PlantStatus } from '../../hooks/useFleetIntelligence';
+import { useFleetIntelligence, PlantStatus, HiveEvent } from '../../hooks/useFleetIntelligence';
 import { Activity, Zap, Share2, Globe, AlertTriangle, ArrowRight } from 'lucide-react';
 import { Sparkline } from '../ui/Sparkline';
 
-const FleetMap = ({ plants, events }: { plants: PlantStatus[], events: any[] }) => {
+const FleetMap = ({ plants, events }: { plants: PlantStatus[], events: HiveEvent[] }) => {
     return (
         <div className="relative w-full h-[400px] bg-slate-950/50 rounded-xl overflow-hidden border border-white/5 shadow-inner">
             {/* Grid Background */}

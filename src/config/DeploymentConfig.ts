@@ -12,7 +12,7 @@ export const DeploymentConfig = {
     // API Endpoints (Switch based on env)
     apiBaseUrl: import.meta.env.PROD
         ? 'https://api.anohubs-monolit.com/v1'
-        : 'http://localhost:3000/api/v1',
+        : (typeof window !== 'undefined' ? `${window.location.origin}/api/v1` : 'http://localhost:3000/api/v1'),
 
     // Edge Function Limits
     edgeTimeoutMs: 25, // < 30ms limit for Vercel Edge

@@ -22,6 +22,14 @@ export const MATERIAL_LIBRARY: Record<string, MaterialProperties> = {
         elasticModulusGPa: 210,
         description: 'Standard structural steel for general applications.'
     },
+    // Alias for generic legacy references
+    STEEL: {
+        name: 'Standard Steel (Generic)',
+        density: 7850,
+        yieldStrengthMPa: 235,
+        elasticModulusGPa: 210,
+        description: 'Generic steel fallback (mapped to S235 properties).'
+    },
     S355: {
         name: 'S355 High-Strength Steel',
         density: 7850,

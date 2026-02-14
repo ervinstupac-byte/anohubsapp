@@ -15,9 +15,7 @@ import { useMaintenance } from '../../contexts/MaintenanceContext';
 import { IndustrialDataBridge } from '../../services/IndustrialDataBridge';
 import { QrCode } from '../ui/QrCode';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
-
-// GLOBAL EVENT FOR REMOTE TRIGGER
-export const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
+import { dispatch } from '../../lib/events';
 
 // --- FLEET SECTION COMPONENT ---
 interface FleetSectionProps {
@@ -119,9 +117,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: `/${ROUTES.STRUCTURAL_INTEGRITY}` },
         { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: `/${ROUTES.INSTALLATION_GUARANTEE}` },
         { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: `/${ROUTES.HPP_BUILDER}` },
+        { id: 'mounterCard', title: t('sidebar.mounterCard', 'Mounter Quick Card'), icon: '🔧', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.MOUNTER_CARD}` },
+        { id: 'damageCard', title: t('sidebar.damageCard', 'Damage Diagnosis'), icon: '🩺', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DAMAGE_CARD}` },
+        { id: 'assetPassportCard', title: t('sidebar.assetPassportCard', 'Asset Passport'), icon: '🪪', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}` },
+        { id: 'genesis', title: 'Field Ingestion', icon: '📋', route: '/genesis' }, // NC-20701
     ];
 
     const secondaryModules = [
+        { id: 'ledger', title: 'Black Box Ledger', icon: '🛡️', route: '/governance/ledger' }, // NC-20701
         { id: 'learningLab', title: 'Learning Lab', icon: <BrainCircuit className="w-4 h-4 text-purple-400" />, route: `/${ROUTES.LEARNING_LAB}` }
     ];
 
@@ -409,7 +412,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         <div className="px-3 pt-2 pb-6">
                             <button
                                 onClick={() => {
-                                    window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT));
+                                    dispatch.triggerForensicExport();
                                     if (window.innerWidth < 1024) onClose();
                                 }}
                                 className="w-full py-3 bg-red-950/30 hover:bg-red-900/40 border border-red-500/30 text-red-400 rounded flex items-center justify-center gap-2 group transition-all"

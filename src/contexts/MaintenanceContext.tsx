@@ -137,6 +137,12 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     // --- SUPABASE SYNC ---
     React.useEffect(() => {
+        // NC-25100: Cloud Amputation
+        if (import.meta.env.VITE_OFFLINE_MODE === 'true') {
+            setIsLoading(false);
+            return;
+        }
+
         fetchData();
 
         // Realtime Subscription

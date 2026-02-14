@@ -34,8 +34,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }, 5000);
 
             supabase.auth.getSession()
-                .then(({ data: { session } }: any) => {
+                .then(({ data }: any) => {
                     clearTimeout(timeout);
+                    const session = data?.session ?? null;
                     setSession(session);
                     setUser(session?.user ?? null);
                     setLoading(false);

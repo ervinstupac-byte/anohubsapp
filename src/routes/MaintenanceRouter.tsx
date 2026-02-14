@@ -12,6 +12,20 @@ const ShiftLog = lazy(() => import('../components/ShiftLog').then(m => ({ defaul
 const ARManager = lazy(() => import('../components/ARManager').then(m => ({ default: m.ARManager })));
 const TechnicalPassport = lazy(() => import('../components/TechnicalPassport').then(m => ({ default: m.TechnicalPassport })));
 
+// NC-20600: Re-wired orphan components
+const MounterQuickCardPage = lazy(() => import('../components/MounterQuickCard').then(m => ({ default: m.DemoMounterQuickCard })));
+const SpecialistDamageCardLazy = lazy(() => import('../components/SpecialistDamageCard').then(m => ({ default: m.SpecialistDamageCard })));
+const AssetPassportCard = lazy(() => import('../components/dashboard/AssetPassportCard').then(m => ({ default: m.AssetPassportCard })));
+
+// NC-20600: Wrapper for SpecialistDamageCard (requires props)
+const SpecialistDamageCardPage: React.FC = () => (
+    <SpecialistDamageCardLazy
+        damageDescription="Sponge-like pitting with deep craters on blade outlet edge"
+        location="Runner blade suction side - outlet"
+        operatingConditions={{ sigma: 0.08, flowPercent: 65 }}
+        onClose={() => window.history.back()}
+    />
+);
 
 import { LoadingShimmer } from '../shared/components/ui/LoadingShimmer';
 
@@ -30,6 +44,11 @@ const MaintenanceRouter: React.FC = () => {
                 <Route path={ROUTES.MAINTENANCE.INTUITION_LOG} element={<ShiftLog />} />
                 <Route path={ROUTES.MAINTENANCE.AR_GUIDE} element={<ARManager />} />
                 <Route path={ROUTES.MAINTENANCE.ASSET_PASSPORT} element={<TechnicalPassport />} />
+
+                {/* NC-20600: Re-wired orphan components */}
+                <Route path={ROUTES.MAINTENANCE.MOUNTER_CARD} element={<MounterQuickCardPage />} />
+                <Route path={ROUTES.MAINTENANCE.DAMAGE_CARD} element={<SpecialistDamageCardPage />} />
+                <Route path={ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD} element={<AssetPassportCard />} />
 
                 {/* Catch-all */}
                 <Route path="*" element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />

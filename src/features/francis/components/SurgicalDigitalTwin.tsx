@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { dispatch } from '../../../lib/events';
 
 interface Props {
     viewMode: 'hall' | 'generator';
@@ -149,7 +150,7 @@ const SurgicalDigitalTwin: React.FC<Props> = ({ viewMode, setViewMode, activeAss
             const fn = () => {
                 // dispatch a window-level custom event so the parent hub can react
                 try {
-                    window.dispatchEvent(new CustomEvent('twin:asset-click', { detail: normalized }));
+                    dispatch.twinAssetClick(normalized);
                 } catch (e) {
                     // fallback: no-op
                     // eslint-disable-next-line no-console

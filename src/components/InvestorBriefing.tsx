@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
@@ -97,6 +97,7 @@ export const InvestorBriefing: React.FC = () => {
             incidentType: activeIncident?.type || 'Unspecified Event',
             deviation: liveData?.incidentDetails || 'Out of tolerance',
             timestamp: new Date().toISOString(),
+            status: activeIncident ? 'CRITICAL' : 'REPORTED',
             t
         });
         ForensicReportService.openAndDownloadBlob(blob, `INCIDENT_REPORT_${selectedAsset.name}.pdf`, true, {

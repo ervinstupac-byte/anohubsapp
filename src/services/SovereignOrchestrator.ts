@@ -27,6 +27,27 @@ export class SovereignOrchestrator {
     private static state: SystemState = SystemState.UNINITIALIZED;
     private static startTime: number = 0;
     private static dailyReportSchedule: NodeJS.Timeout | null = null;
+    private static listeners: Set<(state: SystemState) => void> = new Set();
+
+    /**
+     * Get current system state
+     */
+    public static getSystemState(): SystemState {
+        return this.state;
+    }
+
+    /**
+     * Subscribe to state changes
+     */
+    public static subscribe(listener: (state: SystemState) => void): () => void {
+        this.listeners.add(listener);
+        return () => this.listeners.delete(listener);
+    }
+
+    private static setState(newState: SystemState) {
+        this.state = newState;
+        this.listeners.forEach(l => l(newState));
+    }
 
     /**
      * Initialize the entire Sovereign system in correct dependency order
@@ -36,7 +57,7 @@ export class SovereignOrchestrator {
         console.log('🌟 SOVEREIGN SYSTEM INITIALIZATION');
         console.log('═══════════════════════════════════════════════════════════\n');
 
-        this.state = SystemState.INITIALIZING;
+        this.setState(SystemState.INITIALIZING);
         this.startTime = Date.now();
 
         try {
@@ -67,7 +88,10 @@ export class SovereignOrchestrator {
 
             // STEP 6: Start live data stream
             console.log('[6/6] 📡 Starting LiveStreamConnector...');
-            await this.startLiveStream();
+            await LiveStreamConnector.connect({
+                pollingUrl: '/api/mock/telemetry', // Default for now
+                pollingInterval: 2000
+            });
             console.log('      ✓ Telemetry stream active\n');
 
             // Original STEP 5: System health check - now implicitly part of operational state
@@ -75,7 +99,7 @@ export class SovereignOrchestrator {
             // const health = await this.performHealthCheck();
             // console.log(`      ✓ System Integrity: ${health.integrity.toFixed(1)}%\n`);
 
-            this.state = SystemState.OPERATIONAL;
+            this.setState(SystemState.OPERATIONAL);
 
             console.log('═══════════════════════════════════════════════════════════');
             console.log('✨ SOVEREIGN SYSTEM OPERATIONAL');
@@ -84,7 +108,7 @@ export class SovereignOrchestrator {
             console.log('═══════════════════════════════════════════════════════════\n');
 
         } catch (error) {
-            this.state = SystemState.FAILED;
+            this.setState(SystemState.FAILED);
             console.error('❌ INITIALIZATION FAILED:', error);
             throw error;
         }
@@ -135,40 +159,11 @@ export class SovereignOrchestrator {
      * Wire SovereignKernel observers for persistence and monitoring
      */
     private static wireKernelObservers(): void {
-        // Observer 1: Cryptographic locking
-        SovereignKernel.subscribe((enriched: EnrichedTelemetry) => {
-            const trace = SovereignKernel.getLastTrace();
-            if (trace) {
-                SovereigntyLock.lockTrace(trace);
-            }
-        });
-
-        // Observer 2: Database persistence (would integrate with Supabase)
-        SovereignKernel.subscribe(async (enriched: EnrichedTelemetry) => {
-            // In production: Save to database
-            // await supabase.from('enriched_telemetry').insert(enriched)
-            console.log(`[DB] Telemetry persisted: ${enriched.timestamp}`);
-        });
-
-        // Observer 3: Alert processing through Silence Protocol
-        SovereignKernel.subscribe((enriched: EnrichedTelemetry) => {
-            if (enriched.healingAction && !enriched.healingAction.executed) {
-                const alert = SilenceProtocol.createHealingFailureAlert(
-                    enriched.causalChain?.rootCause.metric || 'unknown',
-                    true,
-                    false
-                );
-
-                const health = {
-                    unityIndex: 1.0,
-                    averageHeff: 0.9,
-                    healingSuccessRate: 0.85
-                };
-
-                const shouldAlert = SilenceProtocol.processAlert(alert, health);
-                if (shouldAlert) {
-                    console.log(`[ALERT] ${alert.message}`);
-                }
+        // Wire ROI monitor to kernel
+        SovereignKernel.observe((telemetry: EnrichedTelemetry) => {
+            // Check for critical anomalies
+            if (telemetry.physics.vibration > 0.15) {
+                console.warn('[SovereignKernel] ⚠️ HIGH VIBRATION DETECTED:', telemetry.physics.vibration);
             }
         });
     }
@@ -209,29 +204,14 @@ export class SovereignOrchestrator {
     }
 
     /**
-     * Schedule daily sovereign dossier generation at 08:00
+     * Schedule daily reports
      */
     private static scheduleDailyReports(): void {
-        const scheduleNextReport = () => {
-            const now = new Date();
-            const next8AM = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate() + (now.getHours() >= 8 ? 1 : 0),
-                8, 0, 0, 0
-            );
-
-            const msUntilNext = next8AM.getTime() - now.getTime();
-
-            this.dailyReportSchedule = setTimeout(async () => {
-                await this.generateDailyReport();
-                scheduleNextReport(); // Schedule next day's report
-            }, msUntilNext);
-
-            console.log(`      → Next daily report: ${next8AM.toLocaleString()}`);
-        };
-
-        scheduleNextReport();
+        // Simple interval for now (24h)
+        this.dailyReportSchedule = setInterval(async () => {
+            const snapshot = await SnapshotService.generateSnapshot();
+            console.log('[SovereignOrchestrator] 📄 Daily Snapshot Generated:', snapshot);
+        }, 24 * 60 * 60 * 1000);
     }
 
     /**

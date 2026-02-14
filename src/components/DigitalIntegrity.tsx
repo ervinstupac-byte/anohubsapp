@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next'; // IMPORT
 import { BackButton } from './BackButton.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { AssetPicker } from './AssetPicker.tsx';

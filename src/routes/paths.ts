@@ -12,6 +12,9 @@ export const ROUTES = {
         AR_GUIDE: 'ar-guide', // ARManager
         EXECUTIVE: 'executive',
         ASSET_PASSPORT: 'asset-passport',
+        MOUNTER_CARD: 'mounter-card',
+        DAMAGE_CARD: 'damage-card',
+        ASSET_PASSPORT_CARD: 'asset-passport-card',
     },
     FRANCIS: {
         ROOT: 'francis',
@@ -75,6 +78,7 @@ export const ROUTES = {
     STRUCTURAL_INTEGRITY: 'structural-integrity',
     INSTALLATION_GUARANTEE: 'installation-guarantee',
     LEARNING_LAB: 'learning-lab',
+    FORENSIC_HUB: 'forensic-hub',
 } as const;
 
 // Helper to build full paths

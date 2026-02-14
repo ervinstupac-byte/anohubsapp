@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { TelemetryDrilldownModal } from '../components/dashboard/TelemetryDrilldownModal';
 
 interface DrillDownLevel {
     label: string;
@@ -13,6 +14,7 @@ interface DrillDownContextType {
     goBack: () => void;
     currentLevel: DrillDownLevel | undefined;
     resetDrillDown: () => void;
+    openMetricDrilldown: (key: string, label: string, value: number, unit: string, threshold: any) => void;
 }
 
 const DrillDownContext = createContext<DrillDownContextType | undefined>(undefined);
@@ -29,6 +31,7 @@ export const DrillDownProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const navigate = useNavigate();
     const location = useLocation();
     const [breadcrumbs, setBreadcrumbs] = useState<DrillDownLevel[]>([{ label: 'Home', path: '/' }]);
+    const [activeMetric, setActiveMetric] = useState<{ key: string; label: string; value: number; unit: string; threshold: any } | null>(null);
 
     const drillDown = useCallback((level: DrillDownLevel) => {
         setBreadcrumbs(prev => {
@@ -61,17 +64,34 @@ export const DrillDownProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         }
     }, [location]);
 
+    const openMetricDrilldown = useCallback((key: string, label: string, value: number, unit: string, threshold: any) => {
+        setActiveMetric({ key, label, value, unit, threshold });
+    }, []);
+
     const value = {
         breadcrumbs,
         drillDown,
         goBack,
         currentLevel: breadcrumbs[breadcrumbs.length - 1],
-        resetDrillDown
+        resetDrillDown,
+        openMetricDrilldown
     };
 
     return (
         <DrillDownContext.Provider value={value}>
             {children}
+            {activeMetric && (
+                <TelemetryDrilldownModal
+                    isOpen={!!activeMetric}
+                    onClose={() => setActiveMetric(null)}
+                    metricKey={activeMetric.key as any}
+                    metricLabel={activeMetric.label}
+                    currentValue={activeMetric.value}
+                    unit={activeMetric.unit}
+                    threshold={activeMetric.threshold}
+                    status={activeMetric.value > activeMetric.threshold.critical ? 'critical' : activeMetric.value > (activeMetric.threshold.warning || 0) ? 'warning' : 'nominal'}
+                />
+            )}
         </DrillDownContext.Provider>
     );
 };

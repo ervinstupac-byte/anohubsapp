@@ -24,10 +24,10 @@ export interface ErosionStatus {
 }
 
 /**
- * THE SIGMA SPY 🔍
- * Monitors cavitation risk in real-time
+ * ERROR HANDLER SERVICE (Formerly Invisible Monsters)
+ * Monitors cavitation and erosion risks
  */
-export class InvisibleMonstersDetector {
+export class ErrorHandlerService {
     private engine: FrancisHorizontalEngine;
 
     constructor(engine: FrancisHorizontalEngine) {
@@ -234,7 +234,7 @@ export class DamageLearningService {
         hoursAtCondition: number,
         sedimentPPM?: number
     ): void {
-        const detector = new InvisibleMonstersDetector(new FrancisHorizontalEngine());
+        const detector = new ErrorHandlerService(new FrancisHorizontalEngine());
         const cavStatus = detector.monitorCavitation(telemetry);
 
         const correlation: DamageConditionCorrelation = {
@@ -270,7 +270,7 @@ export class DamageLearningService {
         erosionRisk: number;     // 0-100%
         warnings: string[];
     } {
-        const detector = new InvisibleMonstersDetector(new FrancisHorizontalEngine());
+        const detector = new ErrorHandlerService(new FrancisHorizontalEngine());
         const cavStatus = detector.monitorCavitation(telemetry);
 
         const warnings: string[] = [];

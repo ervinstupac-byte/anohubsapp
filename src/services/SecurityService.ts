@@ -22,7 +22,7 @@ export interface QuantumSignature {
     messageHash: string;
 }
 
-export class QuantumResistantSovereignty {
+export class SecurityService {
     private static keyPairs: Map<string, QuantumKeyPair> = new Map();
     private static readonly KEY_ROTATION_DAYS = 90; // Rotate every 90 days
 

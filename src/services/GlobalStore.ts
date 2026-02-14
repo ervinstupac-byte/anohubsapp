@@ -25,7 +25,7 @@ export interface StrategicDirective {
     priorityScore: number;
 }
 
-export class SovereignBrainCore {
+export class GlobalStore {
 
     /**
      * EVALUATE STRATEGY (Optimization)

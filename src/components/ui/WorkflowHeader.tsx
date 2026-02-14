@@ -5,10 +5,11 @@ import { Activity, ChevronRight, Home, Wrench, BarChart3, Settings, Monitor } fr
 import { motion } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { useDensity } from '../../contexts/DensityContext';
+import { useDensity } from '../../stores/useAppStore';
 import { useWorkflow, ModuleType } from '../../contexts/WorkflowContext';
 import { SystemOverviewModal } from '../modals/SystemOverviewModal'; // NEW
 import { Map, ZapOff } from 'lucide-react'; // NEW Icons
+import { SovereignOrchestrator, SystemState } from '../../services/SovereignOrchestrator';
 
 interface WorkflowHeaderProps {
     className?: string;
@@ -42,15 +43,23 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
     const { logNavigation } = useWorkflow();
     const [showMap, setShowMap] = React.useState(false); // NEW
     const [isOffline, setIsOffline] = React.useState(!navigator.onLine); // NEW
+    const [systemState, setSystemState] = React.useState<SystemState>(SystemState.UNINITIALIZED);
 
     React.useEffect(() => {
         const handleOnline = () => setIsOffline(false);
         const handleOffline = () => setIsOffline(true);
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
+
+        // Initialize system state
+        setSystemState(SovereignOrchestrator.getSystemState());
+        // Subscribe to changes
+        const unsubscribe = SovereignOrchestrator.subscribe(setSystemState);
+
         return () => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOffline);
+            unsubscribe();
         };
     }, []);
 
@@ -158,6 +167,20 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
 
             {/* RIGHT: Asset Selector & System Tools */}
             <div className="flex items-center gap-6">
+                {/* System Status */}
+                {systemState !== SystemState.OPERATIONAL && (
+                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded border transition-all ${
+                        systemState === SystemState.FAILED ? 'text-red-500 bg-red-500/10 border-red-500/20' :
+                        systemState === SystemState.INITIALIZING ? 'text-blue-500 bg-blue-500/10 border-blue-500/20 animate-pulse' :
+                        'text-slate-500 bg-slate-500/10 border-slate-500/20'
+                    }`}>
+                        <Activity className="w-3 h-3" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">
+                            {systemState === SystemState.INITIALIZING ? 'BOOTING...' : systemState}
+                        </span>
+                    </div>
+                )}
+
                 {/* NEW: Local Mode Indicator */}
                 {isOffline && (
                     <div className="flex items-center gap-1 text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">

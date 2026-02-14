@@ -33,7 +33,7 @@ export interface HealingResult {
     executed: boolean;
 }
 
-export class SovereignHealerService {
+export class SystemRecoveryService {
 
     /**
      * Core method: Diagnose → Match Protocol → Simulate → Execute/Advise

@@ -38,10 +38,10 @@ export const SovereignSCADA: React.FC = () => {
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <Activity className="w-6 h-6 text-purple-400 animate-pulse" />
-                        <span className="text-xl font-bold">SOVEREIGN SCADA</span>
+                        <span className="text-xl font-bold">HYDRO INTELLIGENCE PLATFORM</span>
                     </div>
                     <div className="text-xs text-slate-400 font-mono">
-                        HE Fleet Control System v31.0 | Unity Index: 1.000
+                        Analysis Core v31.0 | Unity Index: 1.000
                     </div>
                 </div>
 
@@ -218,20 +218,92 @@ const TurbineDetailView: React.FC<{ unit: TurbineStatus }> = ({ unit }) => {
     );
 };
 
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { useEffect, useState } from 'react';
+
 // Trends Analytics View
 const TrendsView: React.FC = () => {
+    const mechanical = useTelemetryStore(state => state.mechanical);
+    const hydraulic = useTelemetryStore(state => state.hydraulic);
+    
+    const [data, setData] = useState<any[]>([]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setData(prev => {
+                const now = new Date();
+                const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+                const newPoint = {
+                    time: timeStr,
+                    vibration: mechanical.vibration?.x || 0,
+                    power: mechanical.activePower || 0,
+                    head: hydraulic.netHead || 0
+                };
+                const newData = [...prev, newPoint];
+                if (newData.length > 20) newData.shift(); // Keep last 20 points
+                return newData;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [mechanical, hydraulic]);
+
     return (
-        <div className="h-full flex flex-col p-4">
+        <div className="h-full flex flex-col p-4 space-y-4">
             <div className="text-2xl font-bold mb-4 flex items-center gap-2">
                 <TrendingUp className="w-6 h-6 text-emerald-400" />
                 Real-Time Trend Analytics
             </div>
 
-            <div className="flex-1 bg-slate-900 rounded-lg border border-slate-700 p-6">
-                <div className="text-center text-slate-400 mt-20">
-                    <div className="text-4xl mb-4">📈</div>
-                    <div className="text-lg">Vibration vs Power (Last 60 min)</div>
-                    <div className="text-sm mt-2">Chart would render here using historical data from PersistenceLayer</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
+                {/* Vibration vs Power */}
+                <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 flex flex-col">
+                    <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase tracking-wider">Vibration vs Power</h3>
+                    <div className="flex-1 w-full min-h-[200px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={data}>
+                                <defs>
+                                    <linearGradient id="colorPower" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                                    </linearGradient>
+                                    <linearGradient id="colorVib" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3}/>
+                                        <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                <XAxis dataKey="time" stroke="#64748b" fontSize={10} />
+                                <YAxis yAxisId="left" stroke="#10b981" fontSize={10} domain={[0, 'auto']} />
+                                <YAxis yAxisId="right" orientation="right" stroke="#f59e0b" fontSize={10} domain={[0, 'auto']} />
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9' }}
+                                    itemStyle={{ fontSize: 12 }}
+                                />
+                                <Area yAxisId="left" type="monotone" dataKey="power" stroke="#10b981" fillOpacity={1} fill="url(#colorPower)" name="Power (MW)" />
+                                <Area yAxisId="right" type="monotone" dataKey="vibration" stroke="#f59e0b" fillOpacity={1} fill="url(#colorVib)" name="Vibration (mm/s)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Hydraulic Head */}
+                <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 flex flex-col">
+                    <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase tracking-wider">Hydraulic Head Stability</h3>
+                    <div className="flex-1 w-full min-h-[200px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={data}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                <XAxis dataKey="time" stroke="#64748b" fontSize={10} />
+                                <YAxis stroke="#06b6d4" fontSize={10} domain={['auto', 'auto']} />
+                                <Tooltip 
+                                    contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9' }}
+                                    itemStyle={{ fontSize: 12 }}
+                                />
+                                <Line type="stepAfter" dataKey="head" stroke="#06b6d4" strokeWidth={2} dot={false} name="Net Head (m)" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
                 </div>
             </div>
         </div>

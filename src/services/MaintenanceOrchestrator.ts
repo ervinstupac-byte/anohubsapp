@@ -5,7 +5,9 @@
  */
 
 import { CausalChain } from './ForensicDiagnosticService';
-import { HealingResult } from './SovereignHealerService';
+import { HealingResult } from './SystemRecoveryService';
+import { ForensicReportService } from './ForensicReportService';
+import { DiagnosticSnapshot } from '../features/telemetry/store/useTelemetryStore';
 
 export interface ForensicDossier {
     incidentId: string;
@@ -72,21 +74,42 @@ export class MaintenanceOrchestrator {
      * Generate PDF forensic report
      */
     private static async generatePDFReport(dossier: ForensicDossier): Promise<string> {
-        // Mock PDF generation
-        const mockPath = `/forensic_reports/${dossier.incidentId}.pdf`;
+        try {
+            // Convert Dossier to Snapshot for the report generator
+            // We map the causal chain data into a diagnostic snapshot structure
+            const snapshot: DiagnosticSnapshot = {
+                id: dossier.incidentId,
+                timestamp: dossier.timestamp,
+                triggerType: 'AUTO',
+                pathology: `${dossier.causalChain.rootCause.metric.toUpperCase()} ANOMALY`,
+                telemetry: {
+                    rpm: 0, // Placeholder
+                    vibrationX: dossier.causalChain.rootCause.metric === 'vibration' ? dossier.causalChain.rootCause.value : 0,
+                    vibrationY: 0,
+                    bearingTemp: dossier.causalChain.rootCause.metric === 'temperature' ? dossier.causalChain.rootCause.value : 0
+                },
+                kineticState: {
+                    eccentricity: 0.05, // Assumed nominal
+                    phase: 0,
+                    rsquared: 1.0,
+                    offset: 0
+                },
+                oracleWisdom: {
+                    title: `Severity: ${dossier.severity}`,
+                    message: dossier.causalChain.description,
+                    action: dossier.maintenanceTicketId ? `Ticket #${dossier.maintenanceTicketId} Created` : 'Monitor Closely'
+                }
+            };
 
-        console.log(`[Orchestrator] 📄 Generating Forensic Dossier: ${mockPath}`);
-        console.log(`[Orchestrator]    Root Cause: ${dossier.causalChain.rootCause.metric} (${dossier.causalChain.rootCause.value})`);
-        console.log(`[Orchestrator]    Severity: ${dossier.severity}`);
-
-        // In real system:
-        // const pdf = new PDFDocument();
-        // pdf.text(`Forensic Report: ${dossier.incidentId}`);
-        // pdf.text(`Root Cause: ${dossier.causalChain.description}`);
-        // ... add causal chain visualization, healing results, etc.
-        // await pdf.save(mockPath);
-
-        return mockPath;
+            const service = new ForensicReportService();
+            const blob = service.generateForensicSnapshotReport(snapshot);
+            
+            // Return Object URL for immediate display/download
+            return URL.createObjectURL(blob);
+        } catch (err) {
+            console.error('[Orchestrator] PDF Generation Failed:', err);
+            return `/forensic_reports/fallback_${dossier.incidentId}.pdf`;
+        }
     }
 
     /**

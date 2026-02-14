@@ -51,9 +51,10 @@ import { supabase } from '../../services/supabaseClient';
 import { fetchForecastForAsset } from '../../services/DashboardDataService';
 import { prefetchPredictiveAssets } from '../../services/DashboardDataService';
 import ProjectStateManager from '../../contexts/ProjectStateContext';
-import { useToast } from '../../contexts/ToastContext';
+import { useToast } from '../../stores/useAppStore';
 import { BootSequence } from '../BootSequence';
 import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetHierarchy';
+import { dispatch } from '../../lib/events';
 
 // lazy-load heavy UI pieces used in the executive dashboard
 const TurbineRunner3D = React.lazy(() => import('../three/TurbineRunner3D').then(m => ({ default: m.TurbineRunner3D })));
@@ -184,6 +185,14 @@ export const ExecutiveDashboard: React.FC = () => {
             const canonicalNetHead = (ps?.physics && (ps as any).physics.netHead) || (ps?.hydraulic && (ps as any).hydraulic.head) || null;
             const canonicalAssetName = ps?.identity?.assetName || null;
             setAuditLog(prev => [{ timestamp: Date.now(), source: 'ProjectState', asset: canonicalAssetName, canonicalEfficiencyPct, canonicalNetHead }, ...prev].slice(0, 40));
+
+            // NC-20900: Francis Big Brother Engine Activation
+            // We instantiate it to ensure the logic path is active and available for forensic audits
+            import('../../lib/engines/FrancisBigBrotherEngine').then(({ FrancisBigBrotherEngine }) => {
+                const bigBrother = new FrancisBigBrotherEngine();
+                console.log('[ExecutiveDashboard] 👁️ Francis Big Brother Engine ONLINE. Monitoring Auxiliary Systems:', bigBrother.variant);
+            });
+
             // also expose to console for quick verification
             // eslint-disable-next-line no-console
             console.info('[ExecutiveDashboard] ProjectState canonical snapshot', { canonicalEfficiencyPct, canonicalNetHead, canonicalAssetName });
@@ -281,8 +290,8 @@ export const ExecutiveDashboard: React.FC = () => {
                 }
             } catch (err) { /* ignore */ }
         };
-        window.addEventListener('openDossier', handler as any);
-        return () => window.removeEventListener('openDossier', handler as any);
+        window.addEventListener(EVENTS.OPEN_DOSSIER, handler as any);
+        return () => window.removeEventListener(EVENTS.OPEN_DOSSIER, handler as any);
     }, []);
 
     const eventMarkers = useMemo(() => {
@@ -319,9 +328,9 @@ export const ExecutiveDashboard: React.FC = () => {
             const blob = await ForensicReportService.generateForensicDossier({
                 asset: selectedAsset,
                 diagnosis: unifiedDiagnosis,
-                    projectState: {
+                projectState: {
                     identity: identity ?? undefined,
-                        hydraulic: hydraulic ?? undefined,
+                    hydraulic: hydraulic ?? undefined,
                     mechanical: mechanical ?? undefined,
                     structural: structural ?? undefined,
                     market: financials ?? undefined,
@@ -364,7 +373,7 @@ export const ExecutiveDashboard: React.FC = () => {
             // Immediately adjust priors minimally (1 true positive of 1 sample) to close the expert loop
             loop.adjustPriors(guardianKey, 1, 1);
             // quick feedback to user
-            window.dispatchEvent(new CustomEvent('expertFeedbackRecorded', { detail: { guardianKey } }));
+            dispatch.expertFeedbackRecorded({ guardianKey });
         } catch (e) {
             console.warn('Expert override failed', e);
         }
@@ -787,7 +796,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     subtitle={t('dashboard.kpi.axial_thrust_sub')}
                                     onClick={() => {
                                         try {
-                                            window.dispatchEvent(new CustomEvent('openDossier', { detail: { keyword: 'penstock' } }));
+                                            dispatch.openDossier({ keyword: 'penstock' });
                                         } catch (err) {
                                             console.error('[ExecutiveDashboard] Failed to dispatch openDossier event:', err);
                                         }
@@ -803,7 +812,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     subtitle={t('dashboard.kpi.structural_life_sub')}
                                     onClick={() => {
                                         try {
-                                            window.dispatchEvent(new CustomEvent('openDossier', { detail: { keyword: 'generator' } }));
+                                            dispatch.openDossier({ keyword: 'generator' });
                                         } catch (err) {
                                             console.error('[ExecutiveDashboard] Failed to dispatch openDossier event:', err);
                                         }

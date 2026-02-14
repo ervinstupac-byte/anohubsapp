@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Orbit, Fan, Droplets, CircleDotDashed, Zap, RefreshCcw, Sun, Wind } from 'lucide-react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { GlassCard } from '../shared/components/ui/GlassCard';

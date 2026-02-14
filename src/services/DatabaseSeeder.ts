@@ -141,15 +141,31 @@ export class DatabaseSeeder {
      * Check if the database needs seeding (is empty) and seed if necessary.
      * Returns true if seeding was performed or skipped (DB already has data).
      */
+    /**
+     * NC-20301: Race wrapper — bail in 2s if network is slow
+     */
     public static async seedIfEmpty(
+        onProgress?: (progress: SeedProgress) => void
+    ): Promise<boolean> {
+        const raceTimeout = new Promise<boolean>((resolve) =>
+            setTimeout(() => {
+                console.warn('[DatabaseSeeder] ⚠️ Seed check timed out after 2s — proceeding with local data');
+                this.updateProgress('FAILED', 'Seed timeout (2s)', onProgress, 'Network too slow');
+                resolve(false);
+            }, 2000)
+        );
+        return Promise.race([this._seedIfEmptyCore(onProgress), raceTimeout]);
+    }
+
+    private static async _seedIfEmptyCore(
         onProgress?: (progress: SeedProgress) => void
     ): Promise<boolean> {
         console.log('[DatabaseSeeder] 🌱 Starting seed check...');
 
         this.updateProgress('CHECKING', 'Verifying database connection...', onProgress);
 
-        // Step 1: Verify connection
-        const isConnected = await verifyConnection(5000);
+        // Step 1: Verify connection (capped at 2s by outer race)
+        const isConnected = await verifyConnection(2000);
         if (!isConnected) {
             this.updateProgress('FAILED', 'Database connection failed', onProgress, 'Unable to connect to Supabase');
             console.error('[DatabaseSeeder] ❌ Connection verification failed');

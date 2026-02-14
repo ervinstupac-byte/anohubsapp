@@ -39,6 +39,20 @@ const InstitutionalKnowledgeService = {
     }
 };
 
+interface KnowledgeSearchResult {
+    entry: {
+        incidentPattern: string;
+        turbineFamily: string;
+        rootCause: string;
+        solution: string;
+        upvotes: number;
+        viewCount: number;
+        confidenceScore: number;
+        fieldNotes: string;
+    };
+    relevanceScore: number;
+}
+
 interface KnowledgeCapturePanelProps {
     activeContext?: {
         component: string;

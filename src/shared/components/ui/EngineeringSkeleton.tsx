@@ -1,6 +1,6 @@
 import React from 'react';
 import { GLASS, RADIUS, SPACING, SPACING_COMPACT } from '../../design-tokens';
-import { useDensity } from '../../../contexts/DensityContext';
+import { useDensity } from '../../../stores/useAppStore';
 
 interface EngineeringSkeletonProps {
     variant?: 'stat' | 'instrument' | 'info' | 'tactical';

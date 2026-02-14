@@ -4,7 +4,7 @@ import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { ModernInput } from '../../shared/components/ui/ModernInput';
 import { supabase } from '../../services/supabaseClient.ts';
-import { useToast } from '../../contexts/ToastContext.tsx';
+import { useToast } from '../../stores/useAppStore';
 import { Droplets, Info, TrendingUp, Waves } from 'lucide-react';
 
 export const HydrologyLab: React.FC = () => {

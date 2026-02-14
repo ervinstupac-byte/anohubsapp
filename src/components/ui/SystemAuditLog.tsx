@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Terminal, CheckCircle, AlertCircle, Zap, Database, Cpu } from 'lucide-react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { EVENTS } from '../../lib/events';
 
 interface LogEntry {
     timestamp: Date;
@@ -51,6 +52,20 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
         addLog('SYSTEM', 'Monolit Kernel v300.0 initialized', 'success');
         addLog('SYSTEM', `Persistence layer loaded from localStorage`, 'info');
 
+        const handleKernelLog = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            if (customEvent.detail) {
+                const { level, source, message } = customEvent.detail;
+                // Map level to type
+                const type = level === 'CRITICAL' || level === 'ERROR' ? 'warning' : level === 'SUCCESS' ? 'success' : 'info';
+                // Map source to known sources or default to SYSTEM
+                const validSource = Object.keys(sourceConfig).includes(source) ? source : 'SYSTEM';
+                addLog(validSource as any, message, type);
+            }
+        };
+
+        window.addEventListener(EVENTS.SYSTEM_KERNEL_LOG, handleKernelLog);
+
         if (baselineState) {
             addLog('DNA', `Turbine DNA verified - Commissioned ${new Date(baselineState.commissioningDate).toLocaleDateString()}`, 'success');
         } else {
@@ -59,6 +74,10 @@ export const SystemAuditLog: React.FC<{ maxEntries?: number; className?: string 
 
         addLog('FILTER', `Signal filter: ${isFilteredMode ? `${filterType} active` : 'Bypassed (Raw mode)'}`, 'info');
         addLog('RCA', 'Baseline comparison engine active', 'success');
+
+        return () => {
+            window.removeEventListener(EVENTS.SYSTEM_KERNEL_LOG, handleKernelLog);
+        };
     }, []);
 
     // React to filter changes

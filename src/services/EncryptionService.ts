@@ -1,7 +1,7 @@
 /**
- * QuantumResistantLayer.ts
+ * EncryptionService.ts
  * 
- * Post-Quantum Cryptography (PQC) Wrapper
+ * Encryption Wrapper
  * Updated to use Web Crypto / TextEncoder for Edge Runtime Compatibility.
  * (Node.js Buffer removed).
  */
@@ -14,7 +14,7 @@ export interface PQCMessage {
     verified: boolean;
 }
 
-export class QuantumResistantLayer {
+export class EncryptionService {
 
     // Polyfill for Edge environments if needed (mocked here natively supported in modern JS)
 

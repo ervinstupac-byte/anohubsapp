@@ -19,10 +19,10 @@ const meta: Meta<typeof ForensicDashboard> = {
   title: 'Forensics/Dashboard',
   component: ForensicDashboard,
   decorators: [
-    (Story) => (
+    (Story: any) => (
       <I18nextProvider i18n={i18n}>
         <div className="bg-black min-h-screen">
-            <Story />
+          <Story />
         </div>
       </I18nextProvider>
     ),
@@ -38,8 +38,8 @@ type Story = StoryObj<typeof ForensicDashboard>;
 export const Idle: Story = {};
 
 export const AttackInProgress: Story = {
-    // Note: Since we can't easily mock the internal hook state without a Context, 
-    // this story might just render the default state unless we modify the component to accept props 
-    // or use a mock provider.
-    // Ideally, ForensicDashboard should accept `status` as a prop or get it from a Context we can mock.
+  // Note: Since we can't easily mock the internal hook state without a Context, 
+  // this story might just render the default state unless we modify the component to accept props 
+  // or use a mock provider.
+  // Ideally, ForensicDashboard should accept `status` as a prop or get it from a Context we can mock.
 };

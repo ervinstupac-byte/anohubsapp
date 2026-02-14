@@ -10,9 +10,11 @@ import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
 import { VortexDiagnostic } from '../../services/VortexDiagnostic';
 import { FinancialImpactEngine } from '../../services/core/FinancialImpactEngine';
 import { PhysicsMathService } from '../../services/core/PhysicsMathService';
+import { SmartStartService } from '../../services/SmartStartService';
 import { LubeStatus } from './LubeStatus';
 import { Eye, EyeOff } from 'lucide-react';
 import { SmartTooltip } from '../ui/SmartTooltip';
+import { TURBINE_LIMITS } from '../../config/IndustrialStandards';
 
 export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }> = ({ focusMode = false, forensicMode = false }) => {
   const store = useTelemetryStore() as any;
@@ -34,6 +36,14 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
   const rpm = useMemo(() => Number(mechanical?.rpm ?? 0), [mechanical]);
   const headM = useMemo(() => Number(hydraulic?.head ?? physics?.netHead ?? 0), [hydraulic, physics]);
   const flowM3s = useMemo(() => Number(hydraulic?.flow ?? 0), [hydraulic]);
+  const [preStartChecks, setPreStartChecks] = useState<any[]>([]);
+  const [showPreStartModal, setShowPreStartModal] = useState(false);
+
+  useEffect(() => {
+      const checks = SmartStartService.generateChecklist('UNIT-1');
+      setPreStartChecks(checks);
+  }, []);
+
   const starting = rpm > 0 && rpm < 200;
   const ratedSpeed = useMemo(() => Number(identity?.machineConfig?.ratedSpeedRPM ?? 500), [identity]);
 
@@ -63,9 +73,9 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         } else {
           setSelectedVariant(
             fam === 'KAPLAN' ? 'kaplan_bulb' :
-            fam === 'PELTON' ? 'pelton_multi_jet' :
-            fam === 'CROSSFLOW' ? 'crossflow_standard' :
-            'francis_vertical'
+              fam === 'PELTON' ? 'pelton_multi_jet' :
+                fam === 'CROSSFLOW' ? 'crossflow_standard' :
+                  'francis_vertical'
           );
         }
       } else {
@@ -73,11 +83,9 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         setSelectedVariant('francis_vertical');
       }
     };
-    window.addEventListener('SET_TURBINE_TYPE', handler as any);
-    window.addEventListener('variant-select', handler as any);
+    window.addEventListener(EVENTS.SET_TURBINE_TYPE, handler as any);
     return () => {
-      window.removeEventListener('SET_TURBINE_TYPE', handler as any);
-      window.removeEventListener('variant-select', handler as any);
+      window.removeEventListener(EVENTS.SET_TURBINE_TYPE, handler as any);
     };
   }, []);
 
@@ -112,14 +120,16 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
   }, [rpm, ratedSpeed, physics, vibrationTotal, pushAlarm, telemetryHistory, family, selectedVariant, flowM3s]);
 
   const gauge = useMemo(() => {
+    // NC-22100: RPM gauge anchored to IndustrialStandards.ts
+    const TL = TURBINE_LIMITS.FRANCIS_5MW.RPM;
     const maxRpm =
       family === 'KAPLAN' ? 300 :
-      family === 'FRANCIS' ? 600 :
-      1200;
+        family === 'FRANCIS' ? TL.trip :     // 900 RPM (trip point)
+          1200;
     const redline =
-      family === 'KAPLAN' ? Math.round(maxRpm * 0.85) :
-      family === 'FRANCIS' ? Math.round(maxRpm * 0.85) :
-      1000;
+      family === 'KAPLAN' ? 255 :
+        family === 'FRANCIS' ? TL.overspeed : // 840 RPM (overspeed)
+          1000;
     const pct = Math.max(0, Math.min(1, rpm / maxRpm));
     const angle = -120 + pct * 240;
     const redStart = -120 + (redline / maxRpm) * 240;
@@ -197,13 +207,13 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
   useEffect(() => {
     const [min, max] = specificSpeedRange;
     if (specificSpeed < min || specificSpeed > max) {
-      pushAlarm?.({ id: `DESIGN_${Date.now()}`, severity: 'WARN', message: 'Design Conflict: Specific Speed out of range' });
+      pushAlarm?.({ id: `DESIGN_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, severity: 'WARN', message: 'Design Conflict: Specific Speed out of range' });
     }
     if (family === 'KAPLAN' && (cfgStore.getConfig('KAPLAN')?.ratedHeadHn ?? 0) > 100) {
-      pushAlarm?.({ id: `HEAD_${Date.now()}`, severity: 'WARN', message: 'Design Conflict: Kaplan head exceeds limit' });
+      pushAlarm?.({ id: `HEAD_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, severity: 'WARN', message: 'Design Conflict: Kaplan head exceeds limit' });
     }
     if (eta > 0.98) {
-      pushAlarm?.({ id: `ETA_${Date.now()}`, severity: 'WARN', message: 'Design Conflict: Efficiency exceeds 98%' });
+      pushAlarm?.({ id: `ETA_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, severity: 'WARN', message: 'Design Conflict: Efficiency exceeds 98%' });
     }
   }, [specificSpeed, specificSpeedRange, family, cfgStore, eta, pushAlarm]);
 
@@ -268,40 +278,40 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
     <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-12 gap-6 p-6">
       <div className="col-span-8 bg-[#111111] border border-[#222222] rounded-xl relative overflow-hidden">
         {!focusMode && (
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-emerald-400" />
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mimic Diagram</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta*100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>
-            <button 
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-emerald-400" />
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Mimic Diagram</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-[10px] font-mono text-slate-400">P_mech: {mechPowerMW.toFixed(2)} MW • η: {(eta * 100).toFixed(1)}% • v₂: {dischargeVelocityV2.toFixed(2)} m/s</div>
+              <button
                 onClick={() => window.open('#/detach/scada', '_blank', 'width=1000,height=800,menubar=no,status=no')}
                 className="text-slate-500 hover:text-cyan-400 transition-colors"
                 title="Detach Module"
-            >
+              >
                 <ExternalLink className="w-4 h-4" />
-            </button>
-            {forensicMode && (
+              </button>
+              {forensicMode && (
                 <button
-                    onClick={() => setShowThermalOverlay(!showThermalOverlay)}
-                    className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-colors ${showThermalOverlay ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
+                  onClick={() => setShowThermalOverlay(!showThermalOverlay)}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-colors ${showThermalOverlay ? 'bg-red-500/20 text-red-400 border-red-500/50' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
                 >
-                    {showThermalOverlay ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                    Thermal Stress
+                  {showThermalOverlay ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                  Thermal Stress
                 </button>
-            )}
+              )}
+            </div>
           </div>
-        </div>
         )}
 
         {!focusMode && (
-        <div className="px-6 py-1">
-          {family === 'PELTON' && <div className="text-[10px] font-mono text-slate-400">Pelton Wheel</div>}
-          {family === 'KAPLAN' && <div className="text-[10px] font-mono text-slate-400">Inline Bulb</div>}
-          {family === 'FRANCIS' && <div className="text-[10px] font-mono text-slate-400">Spiral Case</div>}
-          {family === 'BANKI' && <div className="text-[10px] font-mono text-slate-400">Crossflow Runner</div>}
-        </div>
+          <div className="px-6 py-1">
+            {family === 'PELTON' && <div className="text-[10px] font-mono text-slate-400">Pelton Wheel</div>}
+            {family === 'KAPLAN' && <div className="text-[10px] font-mono text-slate-400">Inline Bulb</div>}
+            {family === 'FRANCIS' && <div className="text-[10px] font-mono text-slate-400">Spiral Case</div>}
+            {family === 'BANKI' && <div className="text-[10px] font-mono text-slate-400">Crossflow Runner</div>}
+          </div>
         )}
 
         <div className="p-6">
@@ -346,11 +356,11 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               </radialGradient>
             </defs>
             <rect x="0" y="0" width="1200" height="600" className="cad-grid" />
-            
+
             {/* Loss Tracer Display - Professional Industrial Style */}
             <g className="equipment-shadow">
-              <rect x="940" y="30" width="220" height="40" rx="4" className="digital-tag" 
-                    fill={lossTracer.isRope ? '#3a0c0c' : '#0f1419'} stroke={lossTracer.isRope ? '#dc2626' : '#374151'} />
+              <rect x="940" y="30" width="220" height="40" rx="4" className="digital-tag"
+                fill={lossTracer.isRope ? '#3a0c0c' : '#0f1419'} stroke={lossTracer.isRope ? '#dc2626' : '#374151'} />
               <text x="950" y="50" className="sensor-label" fill={lossTracer.isRope ? '#fca5a5' : '#a7f3d0'} fontWeight="bold">
                 LOSS TRACER: €{Number(lossTracer.value || 0).toFixed(0)}/h
               </text>
@@ -358,7 +368,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <circle cx="1150" cy="50" r="8" fill="#dc2626" className="animate-pulse" />
               )}
             </g>
-            
+
             {noData && (
               <g>
                 <rect x="400" y="250" width="400" height="100" fill="#1a202c" stroke="#dc2626" strokeWidth="2" rx="8" />
@@ -366,74 +376,74 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <text x="600" y="315" textAnchor="middle" fill="#718096" fontSize="12" fontFamily="monospace">NO TELEMTRY DATA</text>
               </g>
             )}
-            
+
             {family === 'FRANCIS' && (
               <>
                 {/* Professional Francis Turbine Schematic - ISA 101 Style */}
-                
+
                 {/* Penstock */}
-                        <g className="equipment-shadow">
-                          <rect x="60" y="140" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                          <line x1="60" y1="160" x2="260" y2="160" className="flow-path" 
-                                style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                          <foreignObject x="60" y="185" width="200" height="30">
-                              <div className="text-center">
-                                  <SmartTooltip term="Hoop Stress">
-                                      <span className="sensor-label" style={{ fill: '#cbd5e1' }}>PENSTOCK</span>
-                                  </SmartTooltip>
-                              </div>
-                          </foreignObject>
-                        </g>
-                        
-                        {/* Spiral Case */}
-                        <g className="equipment-shadow">
-                          <path d="M 280 120 Q 380 100 460 140 T 580 180 L 580 220 Q 500 240 420 220 T 280 180 Z" 
-                                fill={showThermalOverlay ? "url(#thermalStressGradient)" : "url(#metalGradient)"} stroke={showThermalOverlay ? "#ef4444" : "#2d3748"} strokeWidth="2" />
-                          <foreignObject x="330" y="175" width="200" height="30">
-                              <div className="text-center">
-                                  <SmartTooltip term="Joukowski Surge">
-                                      <span className="sensor-label" style={{ fill: '#cbd5e1' }}>SPIRAL CASE</span>
-                                  </SmartTooltip>
-                              </div>
-                          </foreignObject>
-                        </g>
-                
-                {/* Runner Assembly */}
-                <g transform="translate(600,300)" className="equipment-shadow">
-                  <circle cx="0" cy="0" r="85" fill="url(#turbineGradient)" stroke="#2d3748" strokeWidth="3" />
-                  <circle cx="0" cy="0" r="75" fill="none" stroke="#4a5568" strokeWidth="1" />
-                  
-                  {/* Professional Runner Blades */}
-                  {Array.from({ length: 16 }).map((_, i) => (
-                    <g key={i} transform={`rotate(${i * 22.5})`}>
-                      <path d="M 0,-70 L 8,-60 L 12,-40 L 8,-20 L 0,-15 L -8,-20 L -12,-40 L -8,-60 Z" 
-                            fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
-                      <line x1="0" y1="-15" x2="0" y2="0" stroke="#2d3748" strokeWidth="2" />
-                    </g>
-                  ))}
-                  
-                  {/* Center Hub */}
-                  <circle cx="0" cy="0" r="15" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
-                  <circle cx="0" cy="0" r="8" fill="#4a5568" />
-                  
-                  {/* Rotation Indicator */}
-                  <circle cx="0" cy="0" r="90" fill="none" stroke="#10b981" strokeWidth="1" 
-                          strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
-                          style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
-                  
-                  <foreignObject x="-50" y="-15" width="100" height="30">
+                <g className="equipment-shadow">
+                  <rect x="60" y="140" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
+                  <line x1="60" y1="160" x2="260" y2="160" className="flow-path"
+                    style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                  <foreignObject x="60" y="185" width="200" height="30">
                     <div className="text-center">
-                      <SmartTooltip term="Specific Speed">
-                         <span className="sensor-label" style={{ fill: '#cbd5e1', textShadow: '0 0 2px black', fontWeight: 'bold' }}>RUNNER</span>
+                      <SmartTooltip term="Hoop Stress">
+                        <span className="sensor-label" style={{ fill: '#cbd5e1' }}>PENSTOCK</span>
                       </SmartTooltip>
                     </div>
                   </foreignObject>
                 </g>
-                
+
+                {/* Spiral Case */}
+                <g className="equipment-shadow">
+                  <path d="M 280 120 Q 380 100 460 140 T 580 180 L 580 220 Q 500 240 420 220 T 280 180 Z"
+                    fill={showThermalOverlay ? "url(#thermalStressGradient)" : "url(#metalGradient)"} stroke={showThermalOverlay ? "#ef4444" : "#2d3748"} strokeWidth="2" />
+                  <foreignObject x="330" y="175" width="200" height="30">
+                    <div className="text-center">
+                      <SmartTooltip term="Joukowski Surge">
+                        <span className="sensor-label" style={{ fill: '#cbd5e1' }}>SPIRAL CASE</span>
+                      </SmartTooltip>
+                    </div>
+                  </foreignObject>
+                </g>
+
+                {/* Runner Assembly */}
+                <g transform="translate(600,300)" className="equipment-shadow">
+                  <circle cx="0" cy="0" r="85" fill="url(#turbineGradient)" stroke="#2d3748" strokeWidth="3" />
+                  <circle cx="0" cy="0" r="75" fill="none" stroke="#4a5568" strokeWidth="1" />
+
+                  {/* Professional Runner Blades */}
+                  {Array.from({ length: 16 }).map((_, i) => (
+                    <g key={i} transform={`rotate(${i * 22.5})`}>
+                      <path d="M 0,-70 L 8,-60 L 12,-40 L 8,-20 L 0,-15 L -8,-20 L -12,-40 L -8,-60 Z"
+                        fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
+                      <line x1="0" y1="-15" x2="0" y2="0" stroke="#2d3748" strokeWidth="2" />
+                    </g>
+                  ))}
+
+                  {/* Center Hub */}
+                  <circle cx="0" cy="0" r="15" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
+                  <circle cx="0" cy="0" r="8" fill="#4a5568" />
+
+                  {/* Rotation Indicator */}
+                  <circle cx="0" cy="0" r="90" fill="none" stroke="#10b981" strokeWidth="1"
+                    strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
+                    style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
+
+                  <foreignObject x="-50" y="-15" width="100" height="30">
+                    <div className="text-center">
+                      <SmartTooltip term="Specific Speed">
+                        <span className="sensor-label" style={{ fill: '#cbd5e1', textShadow: '0 0 2px black', fontWeight: 'bold' }}>RUNNER</span>
+                      </SmartTooltip>
+                    </div>
+                  </foreignObject>
+                </g>
+
                 {/* Draft Tube */}
                 <g className="equipment-shadow">
-                  <path d="M 560 380 L 540 450 L 660 450 L 640 380 Z" 
-                        fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
+                  <path d="M 560 380 L 540 450 L 660 450 L 640 380 Z"
+                    fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <foreignObject x="540" y="405" width="120" height="30">
                     <div className="text-center">
                       <SmartTooltip term="NPSH">
@@ -445,14 +455,14 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
                 {/* Sediment Monitor */}
                 <g className="equipment-shadow">
-                   <rect x="700" y="380" width="100" height="28" rx="4" className="digital-tag" />
-                   <foreignObject x="700" y="380" width="100" height="28">
-                     <div className="flex items-center justify-center h-full">
-                       <SmartTooltip term="Erosion Rate">
-                         <span className="sensor-label" style={{ fill: '#fca5a5', fontSize: '10px' }}>EROSION MON</span>
-                       </SmartTooltip>
-                     </div>
-                   </foreignObject>
+                  <rect x="700" y="380" width="100" height="28" rx="4" className="digital-tag" />
+                  <foreignObject x="700" y="380" width="100" height="28">
+                    <div className="flex items-center justify-center h-full">
+                      <SmartTooltip term="Erosion Rate">
+                        <span className="sensor-label" style={{ fill: '#fca5a5', fontSize: '10px' }}>EROSION MON</span>
+                      </SmartTooltip>
+                    </div>
+                  </foreignObject>
                 </g>
 
                 {/* Generator */}
@@ -462,38 +472,38 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   <circle cx="0" cy="0" r="20" fill="none" stroke="#4a5568" strokeWidth="1" />
                   <text x="0" y="5" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">GEN</text>
                 </g>
-                
+
                 {/* Shaft Connection */}
                 <line x1="600" y1="150" x2="600" y2="215" stroke="#2d3748" strokeWidth="8" />
                 <line x1="600" y1="385" x2="600" y2="450" stroke="#2d3748" strokeWidth="8" />
-                
+
                 {/* Flow Indicators */}
-                <path d="M 260 160 L 280 160" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                <path d="M 640 450 L 800 450" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                
+                <path d="M 260 160 L 280 160" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                <path d="M 640 450 L 800 450" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+
                 {/* Professional Sensor Tags */}
                 <g className="equipment-shadow">
                   <rect x="620" y="50" width="120" height="28" rx="4" className="digital-tag" />
                   <text x="630" y="68" className="sensor-label" fill="#a7f3d0">BEARING {isNaN(Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined))) ? 'N/A' : Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined)).toFixed(1)}°C</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="820" y="430" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="830" y="447" className="sensor-label" fill="#93c5fd">P {pressures.pStaticKpa.toFixed(1)} kPa</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="720" y="250" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="730" y="267" className="sensor-label" fill="#fde68a">V {vibrationTotal.toFixed(2)} mm/s</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="480" y="200" width="140" height="28" rx="4" className="digital-tag" />
                   <text x="490" y="217" className="sensor-label" fill="#7dd3fc">WICKET GATES {gateOpening.toFixed(1)}%</text>
                 </g>
-                
+
                 {/* Technical Annotations */}
                 <g opacity="0.6">
                   <line x1="100" y1="100" x2="100" y2="500" className="technical-line" />
@@ -506,47 +516,47 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
             {family === 'PELTON' && (
               <>
                 {/* Professional Pelton Turbine Schematic - ISA 101 Style */}
-                
+
                 {/* Penstock and Nozzle Assembly */}
                 <g className="equipment-shadow">
                   <rect x="60" y="140" width="300" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <text x="210" y="165" textAnchor="middle" className="sensor-label" fill="#cbd5e1">PENSTOCK</text>
-                  
+
                   {/* Nozzles */}
                   {Array.from({ length: Math.max(1, Math.min(6, (variantCfg?.pelton?.nozzleCount ?? cfgStore.getConfig('PELTON')?.pelton?.nozzleCount ?? 2))) }).map((_, i) => (
                     <g key={i} transform={`translate(${380 + i * 80}, 160)`}>
                       <path d="M 0 0 L 40 -15 L 40 15 Z" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                       <circle cx="45" cy="0" r="8" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
-                      <line x1="40" y1="0" x2="120" y2="0" className="flow-path" 
-                            style={{ animation: `dashFlow ${Math.max(0.4, 2 - flowM3s / 40)}s linear infinite` }} />
+                      <line x1="40" y1="0" x2="120" y2="0" className="flow-path"
+                        style={{ animation: `dashFlow ${Math.max(0.4, 2 - flowM3s / 40)}s linear infinite` }} />
                     </g>
                   ))}
                 </g>
-                
+
                 {/* Pelton Runner */}
                 <g transform="translate(640,280)" className="equipment-shadow">
                   <circle cx="0" cy="0" r="120" fill="url(#turbineGradient)" stroke="#2d3748" strokeWidth="3" />
                   <circle cx="0" cy="0" r="110" fill="none" stroke="#4a5568" strokeWidth="1" />
-                  
+
                   {/* Professional Pelton Buckets */}
                   {Array.from({ length: 20 }).map((_, i) => (
                     <g key={i} transform={`rotate(${i * 18})`}>
-                      <path d="M 0,-100 L 15,-85 L 20,-70 L 15,-55 L 0,-50 L -15,-55 L -20,-70 L -15,-85 Z" 
-                            fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
+                      <path d="M 0,-100 L 15,-85 L 20,-70 L 15,-55 L 0,-50 L -15,-55 L -20,-70 L -15,-85 Z"
+                        fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
                       <line x1="0" y1="-50" x2="0" y2="0" stroke="#2d3748" strokeWidth="2" />
                     </g>
                   ))}
-                  
+
                   {/* Center Hub */}
                   <circle cx="0" cy="0" r="25" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
                   <circle cx="0" cy="0" r="15" fill="#4a5568" />
-                  
+
                   {/* Rotation Indicator */}
-                  <circle cx="0" cy="0" r="130" fill="none" stroke="#10b981" strokeWidth="1" 
-                          strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
-                          style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
+                  <circle cx="0" cy="0" r="130" fill="none" stroke="#10b981" strokeWidth="1"
+                    strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
+                    style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
                 </g>
-                
+
                 {/* Generator */}
                 <g transform="translate(640,120)" className="equipment-shadow">
                   <rect x="-70" y="-35" width="140" height="70" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
@@ -554,32 +564,32 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   <circle cx="0" cy="0" r="25" fill="none" stroke="#4a5568" strokeWidth="1" />
                   <text x="0" y="5" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">GENERATOR</text>
                 </g>
-                
+
                 {/* Shaft */}
                 <line x1="640" y1="155" x2="640" y2="160" stroke="#2d3748" strokeWidth="10" />
-                
+
                 {/* Casing and Discharge */}
                 <g className="equipment-shadow">
                   <rect x="500" y="420" width="280" height="60" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <text x="640" y="455" textAnchor="middle" className="sensor-label" fill="#cbd5e1">CASING/DISCHARGE</text>
                 </g>
-                
+
                 {/* Professional Sensor Tags */}
                 <g className="equipment-shadow">
                   <rect x="720" y="80" width="120" height="28" rx="4" className="digital-tag" />
                   <text x="730" y="97" className="sensor-label" fill="#a7f3d0">BEARING {isNaN(Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined))) ? 'N/A' : Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined)).toFixed(1)}°C</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="920" y="270" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="930" y="287" className="sensor-label" fill="#93c5fd">P {pressures.pStaticKpa.toFixed(1)} kPa</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="520" y="350" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="530" y="367" className="sensor-label" fill="#fde68a">V {vibrationTotal.toFixed(2)} mm/s</text>
                 </g>
-                
+
                 {/* Technical Annotations */}
                 <g opacity="0.6">
                   <line x1="100" y1="100" x2="100" y2="500" className="technical-line" />
@@ -592,39 +602,39 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
             {family === 'KAPLAN' && (
               <>
                 {/* Professional Kaplan Turbine Schematic - ISA 101 Style */}
-                
+
                 {/* Inlet Conduit */}
                 <g className="equipment-shadow">
                   <rect x="60" y="180" width="200" height="60" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                  <line x1="60" y1="210" x2="260" y2="210" className="flow-path" 
-                        style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                  <line x1="60" y1="210" x2="260" y2="210" className="flow-path"
+                    style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
                   <text x="160" y="245" textAnchor="middle" className="sensor-label" fill="#cbd5e1">INLET CONDUIT</text>
                 </g>
-                
+
                 {/* Bulb Turbine Assembly */}
                 <g transform="translate(600,250)" className="equipment-shadow">
                   <ellipse cx="0" cy="0" rx="120" ry="60" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="3" />
                   <ellipse cx="0" cy="0" rx="110" ry="50" fill="none" stroke="#4a5568" strokeWidth="1" />
-                  
+
                   {/* Kaplan Runner Blades */}
                   {Array.from({ length: (variantCfg?.kaplan?.bladeCount ?? cfgStore.getConfig('KAPLAN')?.kaplan?.bladeCount ?? 4) }).map((_, i) => (
                     <g key={i} transform={`rotate(${i * (360 / (variantCfg?.kaplan?.bladeCount ?? cfgStore.getConfig('KAPLAN')?.kaplan?.bladeCount ?? 4))})`}>
-                      <path d="M 0,-50 L 12,-45 L 18,-30 L 15,-15 L 0,-10 L -15,-15 L -18,-30 L -12,-45 Z" 
-                            fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
+                      <path d="M 0,-50 L 12,-45 L 18,-30 L 15,-15 L 0,-10 L -15,-15 L -18,-30 L -12,-45 Z"
+                        fill="#4a5568" stroke="#2d3748" strokeWidth="1" />
                       <line x1="0" y1="-10" x2="0" y2="0" stroke="#2d3748" strokeWidth="2" />
                     </g>
                   ))}
-                  
+
                   {/* Center Hub */}
                   <circle cx="0" cy="0" r="20" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
                   <circle cx="0" cy="0" r="12" fill="#4a5568" />
-                  
+
                   {/* Rotation Indicator */}
-                  <ellipse cx="0" cy="0" rx="130" ry="70" fill="none" stroke="#10b981" strokeWidth="1" 
-                          strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
-                          style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
+                  <ellipse cx="0" cy="0" rx="130" ry="70" fill="none" stroke="#10b981" strokeWidth="1"
+                    strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
+                    style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
                 </g>
-                
+
                 {/* Generator (integrated) */}
                 <g transform="translate(600,180)" className="equipment-shadow">
                   <rect x="-80" y="-25" width="160" height="50" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
@@ -632,47 +642,47 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   <circle cx="0" cy="0" r="15" fill="none" stroke="#4a5568" strokeWidth="1" />
                   <text x="0" y="5" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">GEN</text>
                 </g>
-                
+
                 {/* Adjustable Blades Control */}
                 <g className="equipment-shadow">
                   <rect x="750" y="230" width="80" height="40" rx="4" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <text x="790" y="255" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">BLADE CTL</text>
                 </g>
-                
+
                 {/* Draft Tube */}
                 <g className="equipment-shadow">
-                  <path d="M 540 310 L 520 400 L 680 400 L 660 310 Z" 
-                        fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
+                  <path d="M 540 310 L 520 400 L 680 400 L 660 310 Z"
+                    fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <text x="600" y="365" textAnchor="middle" className="sensor-label" fill="#cbd5e1">DRAFT TUBE</text>
                 </g>
-                
+
                 {/* Flow Path */}
-                <path d="M 260 210 L 480 210" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                <path d="M 720 250 L 900 250" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                
+                <path d="M 260 210 L 480 210" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                <path d="M 720 250 L 900 250" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+
                 {/* Professional Sensor Tags */}
                 <g className="equipment-shadow">
                   <rect x="720" y="150" width="120" height="28" rx="4" className="digital-tag" />
                   <text x="730" y="167" className="sensor-label" fill="#a7f3d0">BEARING {isNaN(Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined))) ? 'N/A' : Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined)).toFixed(1)}°C</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="920" y="230" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="930" y="247" className="sensor-label" fill="#93c5fd">P {pressures.pStaticKpa.toFixed(1)} kPa</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="520" y="280" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="530" y="297" className="sensor-label" fill="#fde68a">V {vibrationTotal.toFixed(2)} mm/s</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="840" y="270" width="140" height="28" rx="4" className="digital-tag" />
                   <text x="850" y="287" className="sensor-label" fill="#7dd3fc">BLADE ANGLE {gateOpening.toFixed(1)}°</text>
                 </g>
-                
+
                 {/* Technical Annotations */}
                 <g opacity="0.6">
                   <line x1="100" y1="100" x2="100" y2="500" className="technical-line" />
@@ -685,20 +695,20 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
             {family === 'BANKI' && (
               <>
                 {/* Professional Crossflow (Banki) Turbine Schematic - ISA 101 Style */}
-                
+
                 {/* Inlet Pipe */}
                 <g className="equipment-shadow">
                   <rect x="60" y="220" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
-                  <line x1="60" y1="240" x2="260" y2="240" className="flow-path" 
-                        style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                  <line x1="60" y1="240" x2="260" y2="240" className="flow-path"
+                    style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
                   <text x="160" y="265" textAnchor="middle" className="sensor-label" fill="#cbd5e1">INLET PIPE</text>
                 </g>
-                
+
                 {/* Crossflow Runner */}
                 <g transform="translate(600,280)" className="equipment-shadow">
                   <ellipse cx="0" cy="0" rx="140" ry="50" fill="url(#turbineGradient)" stroke="#2d3748" strokeWidth="3" />
                   <ellipse cx="0" cy="0" rx="130" ry="40" fill="none" stroke="#4a5568" strokeWidth="1" />
-                  
+
                   {/* Crossflow Blades */}
                   {Array.from({ length: 24 }).map((_, i) => {
                     const angle = (i * 15) * Math.PI / 180;
@@ -714,17 +724,17 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                       </g>
                     );
                   })}
-                  
+
                   {/* Center Hub */}
                   <circle cx="0" cy="0" r="30" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
                   <circle cx="0" cy="0" r="20" fill="#4a5568" />
-                  
+
                   {/* Rotation Indicator */}
-                  <ellipse cx="0" cy="0" rx="150" ry="60" fill="none" stroke="#10b981" strokeWidth="1" 
-                          strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
-                          style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
+                  <ellipse cx="0" cy="0" rx="150" ry="60" fill="none" stroke="#10b981" strokeWidth="1"
+                    strokeDasharray="5,5" opacity={rpm > 0 ? 0.8 : 0.3}
+                    style={{ animation: rpm > 0 ? `pulseRotate ${Math.max(2, 10 - rpm / 50)}s linear infinite` : 'none' }} />
                 </g>
-                
+
                 {/* Generator */}
                 <g transform="translate(600,180)" className="equipment-shadow">
                   <rect x="-70" y="-30" width="140" height="60" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
@@ -732,45 +742,45 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   <circle cx="0" cy="0" r="20" fill="none" stroke="#4a5568" strokeWidth="1" />
                   <text x="0" y="5" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">GEN</text>
                 </g>
-                
+
                 {/* Shaft */}
                 <line x1="600" y1="210" x2="600" y2="220" stroke="#2d3748" strokeWidth="8" />
-                
+
                 {/* Casing */}
                 <g className="equipment-shadow">
                   <rect x="420" y="200" width="360" height="160" rx="12" fill="none" stroke="#2d3748" strokeWidth="3" />
                   <rect x="420" y="200" width="360" height="160" rx="12" fill="url(#metalGradient)" opacity="0.3" />
                   <text x="600" y="195" textAnchor="middle" className="sensor-label" fill="#cbd5e1">CASING</text>
                 </g>
-                
+
                 {/* Discharge */}
                 <g className="equipment-shadow">
                   <rect x="780" y="270" width="200" height="40" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <text x="880" y="295" textAnchor="middle" className="sensor-label" fill="#cbd5e1">DISCHARGE</text>
                 </g>
-                
+
                 {/* Flow Path */}
-                <path d="M 260 240 L 420 240" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                <path d="M 780 290 L 980 290" className="flow-path" 
-                      style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
-                
+                <path d="M 260 240 L 420 240" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+                <path d="M 780 290 L 980 290" className="flow-path"
+                  style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+
                 {/* Professional Sensor Tags */}
                 <g className="equipment-shadow">
                   <rect x="680" y="140" width="120" height="28" rx="4" className="digital-tag" />
                   <text x="690" y="157" className="sensor-label" fill="#a7f3d0">BEARING {isNaN(Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined))) ? 'N/A' : Number((Array.isArray(telemetryHistory?.bearingTemp) ? telemetryHistory.bearingTemp.slice(-1)[0]?.value : undefined)).toFixed(1)}°C</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="1000" y="270" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="1010" y="287" className="sensor-label" fill="#93c5fd">P {pressures.pStaticKpa.toFixed(1)} kPa</text>
                 </g>
-                
+
                 <g className="equipment-shadow">
                   <rect x="480" y="340" width="100" height="28" rx="4" className="digital-tag" />
                   <text x="490" y="357" className="sensor-label" fill="#fde68a">V {vibrationTotal.toFixed(2)} mm/s</text>
                 </g>
-                
+
                 {/* Technical Annotations */}
                 <g opacity="0.6">
                   <line x1="100" y1="100" x2="100" y2="500" className="technical-line" />
@@ -782,6 +792,60 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
             )}
           </svg>
         </div>
+
+        {showPreStartModal && (
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="bg-slate-900 border border-slate-700 rounded-xl w-[600px] shadow-2xl">
+                    <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-950/50">
+                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                            <Activity className="w-4 h-4 text-cyan-400" />
+                            Pre-Start Checklist
+                        </h3>
+                        <button onClick={() => setShowPreStartModal(false)} className="text-slate-400 hover:text-white">✕</button>
+                    </div>
+                    <div className="p-4 max-h-[60vh] overflow-y-auto space-y-2">
+                        {preStartChecks.map(check => (
+                            <div key={check.id} className={`p-3 rounded border flex justify-between items-center ${
+                                check.status === 'CRITICAL' ? 'bg-red-950/30 border-red-500/50' :
+                                check.status === 'WARNING' ? 'bg-amber-950/30 border-amber-500/50' :
+                                'bg-slate-800/50 border-slate-700'
+                            }`}>
+                                <div>
+                                    <div className={`text-xs font-bold ${
+                                        check.status === 'CRITICAL' ? 'text-red-400' :
+                                        check.status === 'WARNING' ? 'text-amber-400' :
+                                        'text-slate-200'
+                                    }`}>
+                                        {check.label}
+                                    </div>
+                                    <div className="text-[10px] text-slate-400 mt-1">{check.value}</div>
+                                    {check.actionRequired && (
+                                        <div className="text-[10px] text-red-300 mt-1 font-mono bg-red-900/20 px-1 py-0.5 rounded inline-block">
+                                            ACTION: {check.actionRequired}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={`text-[10px] font-black px-2 py-1 rounded ${
+                                    check.status === 'OK' ? 'bg-emerald-900/30 text-emerald-400' :
+                                    check.status === 'WARNING' ? 'bg-amber-900/30 text-amber-400' :
+                                    'bg-red-900/30 text-red-400 animate-pulse'
+                                }`}>
+                                    {check.status}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="p-4 border-t border-slate-700 bg-slate-950/50 flex justify-end">
+                        <button 
+                            onClick={() => setShowPreStartModal(false)}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded uppercase tracking-wider"
+                        >
+                            Acknowledge
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
 
         {starting && (
           <div className="absolute top-4 right-4 bg-slate-900/90 border border-slate-700 rounded-xl p-4">
@@ -909,9 +973,19 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         <div className="flex items-center justify-between">
           <div className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Controls</div>
           <div className="flex items-center gap-2">
-            <button
+              <button
+                  onClick={() => setShowPreStartModal(true)}
+                  className={`text-xs px-3 py-2 rounded border font-bold uppercase tracking-wider ${
+                      preStartChecks.some(c => c.status === 'CRITICAL') 
+                          ? 'bg-red-900/50 border-red-500 text-red-400 animate-pulse'
+                          : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                  }`}
+              >
+                  Pre-Start Checks ({preStartChecks.filter(c => c.status !== 'OK').length})
+              </button>
+              <button
               className={`text-xs px-3 py-2 rounded border ${blockedStart ? 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed' : 'bg-emerald-700 border-emerald-600 text-white'}`}
-              disabled={blockedStart}
+              disabled={blockedStart || preStartChecks.some(c => c.status === 'CRITICAL')}
               onClick={() => {
                 EventLogger.log('START', null, null, 'INITIATED');
                 pushAlarm?.({ id: `CMD_${Date.now()}`, severity: 'INFO', message: 'Start Sequence initiated' });

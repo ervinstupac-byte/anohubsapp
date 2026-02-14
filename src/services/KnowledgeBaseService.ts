@@ -37,17 +37,17 @@ const KNOWLEDGE_BASE = [
 ];
 
 /**
- * ANCESTRAL ORACLE
+ * KNOWLEDGE_BASE SERVICE (Formerly Historical Data Service)
  * The Living Archive 🗣️📜
  * Answers questions from the future using the Master's preserved logic.
  */
-export const AncestralOracle = {
+export const KnowledgeBaseService = {
     search: (query: string): OracleResult[] => {
         if (!query || query.length < 2) return [];
-        
+
         const q = query.toLowerCase();
-        return KNOWLEDGE_BASE.filter(item => 
-            item.title.toLowerCase().includes(q) || 
+        return KNOWLEDGE_BASE.filter(item =>
+            item.title.toLowerCase().includes(q) ||
             item.content.toLowerCase().includes(q)
         ).map(item => ({
             ...item,
@@ -59,7 +59,7 @@ export const AncestralOracle = {
 
     // Legacy method for backward compatibility if needed
     consult: (query: string): string => {
-        const results = AncestralOracle.search(query);
+        const results = KnowledgeBaseService.search(query);
         if (results.length > 0) {
             return `[ARCHIVE]: ${results[0].content}`;
         }
@@ -68,6 +68,6 @@ export const AncestralOracle = {
 
     learnFromOverride: (context: string, data: any) => {
         // In a real system, this would write to the vector database
-        console.log(`[AncestralOracle] Learning from override: ${context}`, data);
+        console.log(`[KnowledgeBase] Learning from override: ${context}`, data);
     }
 };

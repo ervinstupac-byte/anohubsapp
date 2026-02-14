@@ -8,7 +8,7 @@ export const VoiceAssistant: React.FC = () => {
         return (
             <button
                 onClick={startAssistant}
-                className="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 hover:scale-110 transition-all z-50 group"
+                className="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 border border-emerald-500/30 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 hover:scale-110 transition-all z-30 group"
             >
                 <span className="text-2xl group-hover:animate-pulse">🎙️</span>
             </button>

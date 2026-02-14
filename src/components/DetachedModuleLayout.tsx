@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useSovereignSync } from '../hooks/useSovereignSync';
-import { ScadaCore } from './dashboard/ScadaCore';
-import { ExecutiveWarRoom } from './dashboard/ExecutiveWarRoom';
-import { FinancialHealthPanel } from './dashboard/FinancialHealthPanel';
-import { ForensicDashboard } from './forensics/ForensicDashboard';
+const ScadaCore = React.lazy(() => import('./dashboard/ScadaCore').then(m => ({ default: m.ScadaCore })));
+const ExecutiveWarRoom = React.lazy(() => import('./dashboard/ExecutiveWarRoom').then(m => ({ default: m.ExecutiveWarRoom })));
+const FinancialHealthPanel = React.lazy(() => import('./dashboard/FinancialHealthPanel').then(m => ({ default: m.FinancialHealthPanel })));
+const ForensicDashboard = React.lazy(() => import('./forensics/ForensicDashboard').then(m => ({ default: m.ForensicDashboard })));
 import { EmergencyOverlay } from './ui/EmergencyOverlay';
 import { ResonanceAudioSystem } from './ui/ResonanceAudioSystem';
 import { Target } from 'lucide-react';
@@ -86,26 +86,28 @@ export const DetachedModuleLayout: React.FC = () => {
              <EmergencyOverlay />
              <ResonanceAudioSystem />
 
-             {moduleId === 'scada' && (
-                 <div className="flex-1 p-4">
-                     <ScadaCore focusMode={isFocusMode} />
-                 </div>
-             )}
-             {moduleId === 'war-room' && (
-                 <div className="flex-1 p-4">
-                     <ExecutiveWarRoom />
-                 </div>
-             )}
-             {moduleId === 'financial' && (
-                 <div className="flex-1 p-4">
-                     <FinancialHealthPanel />
-                 </div>
-             )}
-             {moduleId === 'forensics' && (
-                 <div className="flex-1 p-4">
-                     <ForensicDashboard />
-                 </div>
-             )}
+             <Suspense fallback={<div className="p-8 text-center text-slate-500 animate-pulse">Initializing Module Link...</div>}>
+                 {moduleId === 'scada' && (
+                     <div className="flex-1 p-4">
+                         <ScadaCore focusMode={isFocusMode} />
+                     </div>
+                 )}
+                 {moduleId === 'war-room' && (
+                     <div className="flex-1 p-4">
+                         <ExecutiveWarRoom />
+                     </div>
+                 )}
+                 {moduleId === 'financial' && (
+                     <div className="flex-1 p-4">
+                         <FinancialHealthPanel />
+                     </div>
+                 )}
+                 {moduleId === 'forensics' && (
+                     <div className="flex-1 p-4">
+                         <ForensicDashboard />
+                     </div>
+                 )}
+             </Suspense>
              
              {/* 404 / Loading */}
              {!['scada', 'war-room', 'financial', 'forensics'].includes(moduleId || '') && (

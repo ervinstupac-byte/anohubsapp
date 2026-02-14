@@ -65,20 +65,16 @@ export const AssetTypeSelector: React.FC = () => {
             // Assuming generic logAction for now, but formatted as requested.
 
             // Dispatch legacy event for UI components that might listen
-            window.dispatchEvent(new CustomEvent('SYSTEM_KERNEL_LOG', {
-                detail: {
-                    level: 'CRITICAL',
-                    source: 'KERNEL',
-                    message: `Switched to ${type} Logic Gates`
-                }
-            }));
-            window.dispatchEvent(new CustomEvent('SYSTEM_KERNEL_LOG', {
-                detail: {
-                    level: 'INFO',
-                    source: 'PHYSICS',
-                    message: `Adjusting Efficiency Constants for ${type} Config`
-                }
-            }));
+            dispatch.systemKernelLog({
+                level: 'CRITICAL',
+                source: 'KERNEL',
+                message: `Switched to ${type} Logic Gates`
+            });
+            dispatch.systemKernelLog({
+                level: 'INFO',
+                source: 'PHYSICS',
+                message: `Adjusting Efficiency Constants for ${type} Config`
+            });
 
             await addAsset({
                 name: `${type.charAt(0) + type.slice(1).toLowerCase()} Demo Unit`,
@@ -109,7 +105,7 @@ export const AssetTypeSelector: React.FC = () => {
     };
 
     return (
-        <div className="fixed left-0 top-1/2 -translate-y-1/2 z-50">
+        <div className="fixed left-0 top-1/2 -translate-y-1/2 z-20">
             {/* Trigger Tab */}
             <button
                 onClick={() => setIsOpen(!isOpen)}

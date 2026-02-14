@@ -262,3 +262,79 @@ export const generateTurbineSpecs = (type: string, head: number, flow: number) =
             return { specificSpeed: nsq };
     }
 };
+
+import { EfficiencyOptimizer } from '../../services/EfficiencyOptimizer';
+import { CavitationWatcher } from '../../services/CavitationWatcher';
+
+/**
+ * ANALYSIS & EDUCATION MODE LOGIC
+ * Heuristics for operator feedback
+ */
+
+export const calculateOperatingZone = (
+    currentPowerMW: number,
+    ratedPowerMW: number = 100, // Default to 100MW if unknown
+    netHead: number,
+    flowRate: number,
+    currentEfficiency: number
+): { zone: 'ROUGH' | 'OPTIMAL' | 'OVERLOAD'; message: string; efficiencyDetails?: string } => {
+    
+    // 1. Legacy Load Factor Check
+    const loadFactor = currentPowerMW / ratedPowerMW;
+    let baseZone: 'ROUGH' | 'OPTIMAL' | 'OVERLOAD' = 'OPTIMAL';
+    let message = 'Optimal Operating Range.';
+
+    if (loadFactor < 0.40) {
+        baseZone = 'ROUGH';
+        message = 'Rough Load Zone: High turbulence and cavitation risk.';
+    } else if (loadFactor > 1.05) {
+        baseZone = 'OVERLOAD';
+        message = 'Overload: Generator thermal limits exceeded.';
+    }
+
+    // 2. Advanced Hill Chart Optimization (Integration)
+    const optimizerResult = EfficiencyOptimizer.compute(netHead, flowRate, currentEfficiency);
+    const effMessage = `Hill Chart: Max potential η=${optimizerResult.etaMax.toFixed(1)}% (Delta: ${optimizerResult.deltaToOptimum.toFixed(1)}%)`;
+
+    return { 
+        zone: baseZone, 
+        message: `${message} ${effMessage}`,
+        efficiencyDetails: effMessage
+    };
+};
+
+export const calculateCavitationRisk = (
+    netHead: number,
+    flowRate: number,
+    tailwaterEl: number = 85.0, // Default tailwater
+    runnerEl: number = 82.0,    // Default runner
+    waterTemp: number = 15      // Default temp
+): { risk: 'LOW' | 'MEDIUM' | 'HIGH'; details: string; metrics?: any } => {
+    
+    // Use Advanced CavitationWatcher
+    const analysis = CavitationWatcher.analyze(
+        tailwaterEl,
+        runnerEl,
+        netHead,
+        waterTemp
+    );
+
+    let risk: 'LOW' | 'MEDIUM' | 'HIGH' = 'LOW';
+    let details = 'Safe Suction Head';
+
+    if (analysis.riskLevel === 'FULL_CAVITATION') {
+        risk = 'HIGH';
+        details = `CRITICAL: NPSH_A (${analysis.npshAvailable.toFixed(2)}m) < NPSH_R (${analysis.npshRequired.toFixed(2)}m)`;
+    } else if (analysis.riskLevel === 'INCEPTION') {
+        risk = 'MEDIUM';
+        details = `WARNING: Incipient Cavitation. Sigma Plant: ${analysis.sigmaPlant.toFixed(3)}`;
+    } else {
+        details = `Nominal. Margin: ${(analysis.npshAvailable - analysis.npshRequired).toFixed(2)}m`;
+    }
+
+    return {
+        risk,
+        details,
+        metrics: analysis
+    };
+};

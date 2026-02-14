@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
-import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid } from 'lucide-react';
+import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid, Network } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
@@ -12,7 +12,8 @@ import { useRiskCalculator } from '../hooks/useRiskCalculator';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { useAssetContext } from '../contexts/AssetContext'; // <--- NEW
 import { useContextAwareness } from '../contexts/ContextAwarenessContext'; // <--- NEW
-import { useDensity } from '../contexts/DensityContext'; // <--- Density Control Phase 4
+import { useDensity } from '../stores/useAppStore'; // <--- Density Control Phase 4
+import { dispatch } from '../lib/events';
 
 interface DashboardHeaderProps {
     onToggleSidebar: () => void;
@@ -36,6 +37,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     // const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [showSignOutDialog, setShowSignOutDialog] = useState(false);
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
+    const [isSystemOverviewOpen, setIsSystemOverviewOpen] = useState(false);
 
     // Heritage (NC-9.0) Logic
     const alignment = techState.mechanical.alignment || 0;
@@ -47,7 +49,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     // Search Index Removed - Replaced by Global CommandPalette.tsx (Ctrl+K)
 
     const triggerCommandPalette = () => {
-        window.dispatchEvent(new CustomEvent('openCommandPalette'));
+        dispatch.openCommandPalette();
     };
 
     // Badge Logic
@@ -150,6 +152,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                                             <Zap className="w-4 h-4" />
                                             <span className="text-xs font-bold">{t('header.viewFleet', 'View Full Fleet')}</span>
                                         </button>
+                                        <button
+                                            onClick={() => { dispatch.triggerForensicExport(); setIsQuickActionsOpen(false); }}
+                                            className="w-full flex items-center gap-3 px-3 py-2 mt-1 rounded-lg text-left bg-red-950/20 hover:bg-red-900/30 border border-red-500/20 text-red-400 hover:text-red-300 transition-all"
+                                        >
+                                            <Activity className="w-4 h-4" />
+                                            <span className="text-xs font-bold">{t('header.forensicExport', 'Forensic Export')}</span>
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -174,6 +183,18 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                                 {hiveStatus?.connected ? 'LIVE' : 'OFFLINE'}
                             </span>
                         </div>
+
+                        <span className="text-slate-700">|</span>
+
+                        {/* 4. SYSTEM TOPOLOGY */}
+                        <button
+                            onClick={() => dispatch.openSystemOverview()}
+                            className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-cyan-400 transition-colors"
+                            title="Open System Topology Map"
+                        >
+                            <Network className="w-3.5 h-3.5" />
+                            <span className="hidden xl:inline">TOPOLOGY</span>
+                        </button>
 
                     </div>
 
@@ -283,6 +304,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
                     </div>
                 </div>
             )}
+
         </>
     );
 };

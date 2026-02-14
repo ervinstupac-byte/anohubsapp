@@ -3,7 +3,7 @@ import { runForensicPulseCheck, IntegrityReport } from '../services/SystemIntegr
 import { runBackfill } from '../services/BackfillService';
 import { persistCenturyPlanForAsset } from '../services/CenturyPlanner';
 import { supabase } from '../services/supabaseClient';
-import ConfirmModal from '../components/ConfirmModal';
+import { useConfirm } from '../contexts/ConfirmContext';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export default function AdminHealth() {
@@ -11,7 +11,7 @@ export default function AdminHealth() {
   const [loading, setLoading] = useState(false);
   const [backfillRunning, setBackfillRunning] = useState(false);
   const [backfillMessage, setBackfillMessage] = useState<string | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const { confirm } = useConfirm();
   // SCADA Grid Sync
   // @ts-ignore
   const { gridFrequency = 50.0 } = useTelemetryStore() as any;
@@ -74,6 +74,16 @@ export default function AdminHealth() {
     }
   };
 
+  const confirmBackfill = () => {
+    confirm({
+        title: 'Confirm Historical Backfill',
+        message: 'This operation will process historical telemetry and write aggregated records to the database. It can be heavy on DB I/O. Do you want to proceed?',
+        confirmLabel: 'Proceed',
+        variant: 'warning',
+        onConfirm: handleTriggerBackfill
+    });
+  };
+
   if (loading) return <div className="p-6">Running health checks…</div>;
   if (!report) return <div className="p-6">No report available.</div>;
 
@@ -132,21 +142,13 @@ export default function AdminHealth() {
       <div className="mb-6">
         <h2 className="font-semibold">Backfill & Century Planning</h2>
         <div className="mt-2 flex items-center gap-3">
-          <button onClick={() => setConfirmOpen(true)} disabled={backfillRunning} className="px-3 py-1 bg-slate-700 rounded">
+          <button onClick={confirmBackfill} disabled={backfillRunning} className="px-3 py-1 bg-slate-700 rounded">
             {backfillRunning ? 'Backfilling…' : 'Trigger Historical Backfill (30d)'}
           </button>
           {backfillRunning && <div className="text-sm text-slate-400">Processing historical telemetry — this may take a few minutes.</div>}
         </div>
         {backfillMessage && <div className="mt-2 text-sm text-slate-300">{backfillMessage}</div>}
       </div>
-
-      <ConfirmModal
-        open={confirmOpen}
-        title="Confirm Historical Backfill"
-        message="This operation will process historical telemetry and write aggregated records to the database. It can be heavy on DB I/O. Do you want to proceed?"
-        onCancel={() => setConfirmOpen(false)}
-        onConfirm={async () => { setConfirmOpen(false); await handleTriggerBackfill(); }}
-      />
 
       <section className="mb-6">
         <h2 className="font-semibold">Physics Check (η invariant)</h2>

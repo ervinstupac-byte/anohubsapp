@@ -383,7 +383,7 @@ export const useProjectEngine = (): any => {
         return {
             assetId: state.identity.assetId,
             assetName: state.identity.assetName,
-            turbineType: state.identity.turbineType, // 'PELTON' | 'KAPLAN' ...
+            turbineType: (state.identity.turbineType?.toUpperCase() as any) || 'FRANCIS',
             manufacturer: 'AnoHUB Legacy',
             commissioningYear: 2020,
             totalOperatingHours: 0,

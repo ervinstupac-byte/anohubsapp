@@ -1,8 +1,21 @@
 /**
  * SafetyInterlockEngine.ts
- * 
- * HARDWIRED PROTECTION LOGIC
- * Critical overrides that supersede ALL automation and operator commands.
+ *
+ * ⚠️ DISCLAIMER: VISUALIZATION / SIMULATION ONLY ⚠️
+ *
+ * This module provides SIMULATED safety interlock logic for UI display
+ * and training/demonstration purposes. It does NOT control real equipment.
+ *
+ * REAL safety interlocks MUST be implemented in:
+ *   - PLC / DCS firmware (IEC 61131-3)
+ *   - Safety Instrumented Systems (SIS per IEC 61511)
+ *   - Hardwired relay logic (fail-safe design)
+ *
+ * This client-side code has NO authority to trip, block, or prevent
+ * any physical operation. Relying on browser JavaScript for safety-critical
+ * decisions would violate IEC 62443 and industry best practices.
+ *
+ * Checks modeled:
  * - Overspeed (>115%)
  * - Reverse Power (Motoring)
  * - Emergency Stop (E-Stop)

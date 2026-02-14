@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useContextAwareness } from '../contexts/ContextAwarenessContext.tsx';
 
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { BackButton } from './BackButton.tsx';

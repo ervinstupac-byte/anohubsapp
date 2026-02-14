@@ -8,13 +8,17 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronLeft, Check, AlertCircle, Settings, Cpu, Gauge, Droplets, Mountain } from 'lucide-react';
 import { useProjectEngine } from '../../contexts/ProjectContext';
+import { useAssetContext } from '../../contexts/AssetContext';
 import { AssetIdentity, TurbineType, Orientation, TransmissionType, PenstockMaterial } from '../../types/assetIdentity';
 import { AssetIdentityService } from '../../services/AssetIdentityService';
+import { useNavigate } from 'react-router-dom';
 
 type WizardStep = 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
 
 export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
     const { dispatch } = useProjectEngine();
+    const { addAsset } = useAssetContext();
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState<WizardStep>('physical');
     const [assetData, setAssetData] = useState<Partial<AssetIdentity>>({});
 
@@ -76,7 +80,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
     const handleComplete = () => {
         // Build complete AssetIdentity
         const identity = AssetIdentityService.createDefaultIdentity(
-            `asset_${Date.now()}`,
+            Date.now(),
             'New HPP Asset',
             turbineType,
             'System Admin'
@@ -108,7 +112,7 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
 
         // Francis Advanced (if Francis)
         if (showFrancisModule) {
-            identity.francisAdvanced = {
+            identity.specializedAdvanced = {
                 frontRunnerClearanceMM: frontClearance,
                 backRunnerClearanceMM: backClearance,
                 spiralClearanceMM: 0.5,
@@ -133,9 +137,9 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
                 pressureDifferenceBar: 0
             };
 
-            const balance = AssetIdentityService.calculateAxialThrustBalance(identity.francisAdvanced);
-            identity.francisAdvanced.axialThrustBalanced = balance.balanced;
-            identity.francisAdvanced.pressureDifferenceBar = balance.pressureDifference;
+            const balance = AssetIdentityService.calculateAxialThrustBalance(identity.specializedAdvanced);
+            identity.specializedAdvanced.axialThrustBalanced = balance.balanced;
+            identity.specializedAdvanced.pressureDifferenceBar = balance.pressureDifference;
         }
 
         // Sensor Matrix
@@ -189,8 +193,35 @@ export const AssetOnboardingWizard: React.FC<{ onComplete: () => void }> = ({ on
         };
         const properCaseType = typeMap[turbineType] || 'Francis';
 
+        // 1. Dispatch to Project Context (Current Session)
         dispatch({ type: 'SET_ASSET', payload: { id: identity.assetId, name: identity.assetName, location: 'New Asset', type: properCaseType } });
-        onComplete();
+
+        // 2. Persist to Global Asset Store (Permanent)
+        addAsset({
+            name: identity.assetName,
+            type: 'HPP', // Always HPP for this wizard
+            location: 'New Asset Location', // TODO: Add location step
+            coordinates: [44.0, 18.0], // Default coordinates
+            capacity: 0, // TODO: Add capacity step
+            status: 'Operational',
+            turbine_type: turbineType,
+            specs: {
+                identity: identity, // Store full identity
+                turbineProfile: {
+                    type: properCaseType.toLowerCase() as any,
+                    configuration: orientation.toLowerCase() as any,
+                    rpmNominal: 500, // Default
+                    specificParams: {}
+                }
+            }
+        }).then(() => {
+            onComplete();
+            navigate('/fleet'); // Redirect to fleet view
+        }).catch(err => {
+            console.error("Failed to persist asset:", err);
+            // Still complete locally
+            onComplete();
+        });
     };
 
     return (

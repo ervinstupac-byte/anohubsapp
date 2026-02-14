@@ -130,13 +130,13 @@ export const FrancisHub: React.FC = () => {
 
     // Live Physics Data Hook (Mock for now or derive from techState)
     const simData: Partial<FrancisSensorData> = {
-        rpm: techState.francis?.sensors?.rpm || 428.5,
-        gridFrequency: techState.francis?.sensors?.gridFrequency || 50.02,
-        activePower: techState.francis?.sensors?.activePower || 142.5
+        rpm: techState.specializedState?.sensors?.rpm || 428.5,
+        gridFrequency: techState.specializedState?.sensors?.gridFrequency || 50.02,
+        activePower: techState.specializedState?.sensors?.activePower || 142.5
     };
 
-    // Fallback if state.francis is undefined
-    const moduleStates = techState.francis?.modules || {
+    // Fallback if specializedState is undefined
+    const moduleStates = techState.specializedState?.modules || {
         miv: 'green',
         penstock: 'green',
         cooling: 'green',
@@ -208,7 +208,7 @@ export const FrancisHub: React.FC = () => {
         else if (current === 'yellow') next = 'red';
 
         dispatch({
-            type: 'UPDATE_FRANCIS_MODULE',
+            type: 'UPDATE_SPECIALIZED_MODULE',
             payload: { moduleId: key, status: next }
         });
     };

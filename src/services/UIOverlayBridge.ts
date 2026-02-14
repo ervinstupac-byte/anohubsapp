@@ -40,7 +40,7 @@ export interface ARDataFrame {
     latency: number; // ms
 }
 
-export class HolographicBridge {
+export class UIOverlayBridge {
     private static frameCounter = 0;
     private static subscribers: Map<string, WebSocket> = new Map();
     private static updateInterval: NodeJS.Timeout | null = null;

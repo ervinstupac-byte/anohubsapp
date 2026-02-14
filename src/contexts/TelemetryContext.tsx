@@ -11,6 +11,8 @@ import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
 import { useNotifications } from './NotificationContext.tsx';
 import { HppStatusSchema } from '../schemas/supabase';
 import idAdapter from '../utils/idAdapter';
+import { TURBINE_LIMITS } from '../config/IndustrialStandards';
+import { saveTelemetryBatch, loadLatestTelemetry } from '../services/PersistenceService';
 
 // Tipovi za telemetriju
 export interface TelemetryData {
@@ -168,8 +170,14 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     useEffect(() => {
         if (!supabase || typeof (supabase as any).channel !== 'function') {
-            // No realtime in build/CI environment — simulate signals instead
-            generateSignal();
+            // No realtime in build/CI environment - try load from DB first, then simulate
+            loadLatestTelemetry().then(snapshot => {
+                if (snapshot && Object.keys(snapshot).length > 0) {
+                    setTelemetry(prev => ({ ...prev, ...(snapshot as any) }));
+                }
+                // Then start generating new data
+                generateSignal();
+            });
             const id = setInterval(generateSignal, 10000);
             return () => clearInterval(id);
         }
@@ -348,35 +356,50 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                     ultrasonicLeakIndex: 0
                 } as TelemetryData;
             } else {
-                // Legacy demo/randomized telemetry (kept for backward compatibility)
-                const baseVibration = asset.status === 'Critical' ? 0.08 : 0.02;
-                const vibration = parseFloat((baseVibration + (Math.random() * 0.02)).toFixed(3));
-                const temp = Math.floor(45 + Math.random() * 15);
-                const eff = Math.floor(90 + Math.random() * 5);
-                let status: 'OPTIMAL' | 'WARNING' | 'CRITICAL' = 'OPTIMAL';
-                if (vibration > 0.05) status = 'CRITICAL';
-                else if (vibration > 0.04) status = 'WARNING';
+                // NC-22100: Industrial-grade telemetry — drift around nominal values from TURBINE_LIMITS
+                const T = TURBINE_LIMITS.FRANCIS_5MW;
+                const G = TURBINE_LIMITS.GENERATOR_CLASS_F;
+                const H = TURBINE_LIMITS.HYDRAULICS;
+
+                // Helper: small random drift around a center value
+                const drift = (center: number, range: number) =>
+                    parseFloat((center + (Math.random() - 0.5) * 2 * range).toFixed(2));
 
                 const currentTele = telemetry[storageKey];
+
+                // Core signals anchored to real engineering limits
+                const vibration = drift(T.VIBRATION_ISO_MMS.zone_A, 0.5); // ~2.0–3.0 mm/s (Zone A nominal)
+                const bearingTemp = drift(T.BEARING_TEMP_C.normal, 5);     // ~55–65 °C (Babbitt safe)
+                const oilPressure = drift(T.OIL_PRESSURE_BAR.nominal, 3);  // ~37–43 bar (HPU nominal)
+                const penstockP = drift(H.PENSTOCK_PRESSURE_BAR.nominal, 1); // ~11–13 bar
+                const headMid = (H.HEAD_LEVEL_M.min + H.HEAD_LEVEL_M.max) / 2; // 120 m
+                const headLevel = drift(headMid, 3);                        // ~117–123 m
+                const eff = drift(92, 1.5);                                 // ~90.5–93.5 %
+
+                // ISO 10816-5 status classification (mm/s thresholds)
+                let status: 'OPTIMAL' | 'WARNING' | 'CRITICAL' = 'OPTIMAL';
+                if (vibration > T.VIBRATION_ISO_MMS.zone_C) status = 'CRITICAL';
+                else if (vibration > T.VIBRATION_ISO_MMS.zone_B) status = 'WARNING';
+
+                // Stator temps anchored to Generator Class F limits
+                const statorNom = G.STATOR_TEMP_C.normal;
+                const statorTemps: [number, number, number, number, number, number] = [
+                    drift(statorNom, 3), drift(statorNom, 3), drift(statorNom, 3),
+                    drift(statorNom, 3), drift(statorNom, 3), drift(statorNom, 3)
+                ];
 
                 newTelemetry[storageKey] = {
                     assetId: asset.id,
                     timestamp: Date.now(),
                     status,
-                    vibration: (() => {
-                        const baseVib = parseFloat((baseVibration + (Math.random() * 0.02)).toFixed(3));
-                        const excitation = currentTele?.excitationCurrent || 450;
-                        const eccentricity = currentTele?.rotorEccentricity || 0.15;
-                        const magneticVibration = (excitation > 400 && eccentricity > 0.1) ? 0.04 : 0;
-                        return parseFloat((baseVib + magneticVibration).toFixed(3));
-                    })(),
-                    temperature: temp,
-                    efficiency: eff,
+                    vibration,
+                    temperature: bearingTemp,
+                    efficiency: Math.round(eff),
                     output: asset.capacity ? parseFloat((asset.capacity * (eff / 100)).toFixed(1)) : 0,
-                    piezometricPressure: parseFloat((4.2 + (Math.random() * 0.4)).toFixed(2)),
-                    seepageRate: parseFloat((12.5 + (Math.random() * 2)).toFixed(1)),
-                    reservoirLevel: parseFloat((122.5 + (Math.random() * 0.5)).toFixed(1)),
-                    foundationDisplacement: parseFloat((0.05 + (Math.random() * 0.05)).toFixed(3)),
+                    piezometricPressure: penstockP,
+                    seepageRate: drift(0.5, 0.3),                           // l/min (low = healthy)
+                    reservoirLevel: headLevel,
+                    foundationDisplacement: drift(0.02, 0.01),              // um/m (micro-displacement)
                     wicketGateSetpoint: currentTele?.wicketGateSetpoint || 45,
                     wicketGatePosition: (() => {
                         const setpoint = currentTele?.wicketGateSetpoint || 45;
@@ -386,74 +409,57 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                         return parseFloat((current + (setpoint - current) * lagFactor).toFixed(2));
                     })(),
                     lastCommandTimestamp: currentTele?.lastCommandTimestamp || Date.now(),
-                    tailwaterLevel: parseFloat((105.2 + (Math.random() * 0.3)).toFixed(2)),
-                    cylinderPressure: parseFloat((40 + (Math.random() * 10)).toFixed(1)),
-                    actuatorPosition: (() => {
-                        const basePos = parseFloat((45 + (Math.random() * 5)).toFixed(1));
-                        return basePos;
-                    })(),
-                    oilPressureRate: parseFloat((1.0 + (Math.random() * 0.5)).toFixed(2)),
-                    hoseTension: parseFloat((20 + (Math.random() * 10)).toFixed(1)),
+                    tailwaterLevel: drift(105.2, 0.5),
+                    cylinderPressure: oilPressure,
+                    actuatorPosition: drift(47, 2),
+                    oilPressureRate: drift(1.2, 0.3),                       // bar/s (stable)
+                    hoseTension: drift(25, 3),                              // kN
                     pipeDiameter: currentTele?.pipeDiameter || 12,
                     safetyValveActive: false,
-                    oilReservoirLevel: parseFloat((85 + (Math.random() * 0.5)).toFixed(1)),
-                    rotorHeadVibration: parseFloat((0.5 + (Math.random() * 0.2)).toFixed(2)),
-                    pumpFlowRate: parseFloat((5 + (Math.random() * 2)).toFixed(1)),
+                    oilReservoirLevel: drift(85, 2),                        // % (healthy = 80-90)
+                    rotorHeadVibration: drift(T.VIBRATION_ISO_MMS.zone_A * 0.3, 0.1), // fraction of shaft vib
+                    pumpFlowRate: drift(5, 1),                              // l/s
                     excitationActive: currentTele?.excitationActive !== undefined ? currentTele.excitationActive : true,
-                    vibrationSpectrum: [Math.random() * 0.2, Math.random() * 0.2, Math.random() * 0.2, Math.random() * 0.2, Math.random() * 0.2],
-                    drainagePumpActive: Math.random() > 0.8,
-                    drainagePumpFrequency: parseFloat((10 + (Math.random() * 5)).toFixed(1)),
+                    vibrationSpectrum: [drift(0.05, 0.02), drift(0.08, 0.03), drift(0.04, 0.02), drift(0.06, 0.02), drift(0.03, 0.01)],
+                    drainagePumpActive: false,                              // normally inactive
+                    drainagePumpFrequency: drift(2, 1),                     // activations/day (low = healthy)
                     fatiguePoints: (() => {
                         const currentPoints = currentTele?.fatiguePoints || 0;
-                        const pressureRate = parseFloat((1.0 + (Math.random() * 5.5)).toFixed(2));
-                        if (pressureRate > 5) return currentPoints + 0.5;
+                        // Only accumulate fatigue above alarm thresholds
+                        if (vibration > T.VIBRATION_ISO_MMS.zone_B) return currentPoints + 0.5;
                         return currentPoints;
                     })(),
-                    vibrationPhase: parseFloat((12 + (Math.random() * 2)).toFixed(1)),
-                    oilViscosity: parseFloat((46 + (Math.random() * 2)).toFixed(1)),
-                    bearingLoad: parseFloat((850 + (Math.random() * 50)).toFixed(1)),
-                    statorTemperatures: [
-                        parseFloat((55 + (Math.random() * 5)).toFixed(1)),
-                        parseFloat((55 + (Math.random() * 5)).toFixed(1)),
-                        parseFloat((55 + (Math.random() * 5)).toFixed(1)),
-                        parseFloat((55 + (Math.random() * 30)).toFixed(1)),
-                        parseFloat((55 + (Math.random() * 5)).toFixed(1)),
-                        parseFloat((55 + (Math.random() * 5)).toFixed(1))
-                    ],
-                    actualBladePosition: (() => {
-                        const currentActPos = parseFloat((45 + (Math.random() * 5)).toFixed(1));
-                        return parseFloat((currentActPos - (Math.random() * 2.5)).toFixed(1));
-                    })(),
+                    vibrationPhase: drift(12, 2),                           // deg
+                    oilViscosity: drift(46, 1),                             // cSt (ISO VG 46)
+                    bearingLoad: drift(850, 30),                            // kN
+                    statorTemperatures: statorTemps,
+                    actualBladePosition: drift(45, 2),
                     bypassValveActive: currentTele?.oilPressureRate ? currentTele.oilPressureRate > 5.5 : false,
-                    hydrostaticLiftActive: (currentTele?.temperature || 55) > 75,
-                    shaftSag: parseFloat((0.005 + (vibration / 10) + (Math.random() * 0.005)).toFixed(4)),
-                    responseTimeIndex: (() => {
-                        const oilTemp = temp;
-                        const baseLag = 0.1;
-                        const degradation = asset.status === 'Critical' ? 0.4 : 0.05;
-                        const tempFactor = (70 - oilTemp) / 100;
-                        return Math.max(0, parseFloat((baseLag + tempFactor + degradation + (Math.random() * 0.1)).toFixed(2)));
-                    })(),
+                    hydrostaticLiftActive: bearingTemp > T.BEARING_TEMP_C.alarm,
+                    shaftSag: drift(0.005, 0.002),                          // mm
+                    responseTimeIndex: drift(0.15, 0.05),                   // 0-1 (lower = healthier)
                     proximityX: (() => {
                         const time = Date.now() * 0.001;
-                        const r = 5 + (vibration * 100);
-                        return parseFloat((r * Math.cos(time) + (Math.random() * 2)).toFixed(2));
+                        return parseFloat((5 * Math.cos(time) + drift(0, 1)).toFixed(2));
                     })(),
                     proximityY: (() => {
                         const time = Date.now() * 0.001;
-                        const rhy = 5 + (vibration * 150);
-                        return parseFloat((rhy * Math.sin(time) + (Math.random() * 2)).toFixed(2));
+                        return parseFloat((5 * Math.sin(time) + drift(0, 1)).toFixed(2));
                     })(),
-                    excitationCurrent: parseFloat((450 + (Math.random() * 20)).toFixed(1)),
-                    rotorEccentricity: parseFloat((0.15 + (Math.random() * 0.05)).toFixed(2)),
-                    cavitationIntensity: parseFloat((1.0 + (asset.status === 'Warning' ? 3.0 : asset.status === 'Critical' ? 6.5 : 0.5) + (Math.random() * 1.5)).toFixed(1)),
-                    bearingGrindIndex: parseFloat((0.4 + (asset.status === 'Critical' ? 4.5 : 0) + (Math.random() * 0.5)).toFixed(1)),
-                    acousticBaselineMatch: parseFloat((0.95 - (asset.status !== 'Operational' ? 0.2 : 0) + (Math.random() * 0.05)).toFixed(2)),
-                    ultrasonicLeakIndex: parseFloat((0.2 + (asset.status === 'Warning' ? 2.5 : asset.status === 'Critical' ? 5.2 : 0) + (Math.random() * 1.5)).toFixed(1))
+                    excitationCurrent: drift(450, 10),                      // A
+                    rotorEccentricity: drift(0.15, 0.03),                   // mm
+                    cavitationIntensity: drift(1.2, 0.5),                   // 0-10 (low = healthy)
+                    bearingGrindIndex: drift(0.4, 0.2),                     // 0-10
+                    acousticBaselineMatch: drift(0.97, 0.02),               // 0-1 (1 = perfect)
+                    ultrasonicLeakIndex: drift(0.3, 0.2)                    // 0-10
                 } as TelemetryData;
             }
         });
-        setTelemetry(prev => ({ ...prev, ...newTelemetry }));
+
+        setTelemetry(prev => {
+            const next = { ...prev, ...newTelemetry };
+            return next;
+        });
         // Batch non-blocking journal appends for generated telemetry
         try {
             Object.keys(newTelemetry).forEach(k => {

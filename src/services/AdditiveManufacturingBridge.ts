@@ -6,10 +6,12 @@
  * Eliminates lead times for printable components (seals, bushings, impellers).
  */
 
+import { PrintMaterial } from './AdditiveManufacturingService';
+
 export interface PrintJob {
     jobId: string;
     partId: string;
-    material: 'PLA' | 'TPU' | 'NYLON_CF' | 'METAL_SLS';
+    material: PrintMaterial;
     printTimeHours: number;
     status: 'QUEUED' | 'PRINTING' | 'COMPLETED' | 'FAILED';
     progressPct: number;

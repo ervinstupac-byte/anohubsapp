@@ -81,24 +81,33 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         setAssets(mappedAssets);
                     }
                 } catch (supaErr: any) {
-                    // SILENT FALLBACK
-                    console.debug(`[AssetContext] Remote fetch suppressed (${supaErr.message || 'Unknown'}). Using Local/Guest fallback.`);
+                    // SILENT FALLBACK (NC-20801 FORCE MODE)
+                    console.debug(`[AssetContext] Remote fetch suppressed (${supaErr.message || 'Unknown'}). FORCE-LOADING LOCAL DATA.`);
 
                     if (localAssets.length > 0) {
                         setAssets(localAssets);
                     } else {
-                        // HARD FALLBACK (If no guest assets exist either)
-                        setAssets([{
-                            id: 1,
-                            name: 'Unit-1 (Fallback)',
-                            type: 'HPP',
-                            location: 'Bihac',
-                            coordinates: [44.81, 15.87],
-                            capacity: 12.5,
-                            status: 'Operational',
-                            turbine_type: 'FRANCIS',
-                            specs: {}
-                        }]);
+                        // HARD FALLBACK - BORN PERFECT DEMO SQUAD
+                        setAssets([
+                            {
+                                id: 1,
+                                name: 'Francis Demo Unit',
+                                type: 'HPP',
+                                location: 'Bihać, Bosnia & Herzegovina',
+                                coordinates: [44.817, 15.872],
+                                capacity: 12.5,
+                                status: 'Operational',
+                                turbine_type: 'FRANCIS',
+                                specs: {
+                                    turbineProfile: {
+                                        type: 'FRANCIS',
+                                        ratedPowerMW: 12.5,
+                                        ratedHeadM: 85,
+                                        manufacturer: 'Voith Hydro'
+                                    }
+                                }
+                            }
+                        ]);
                     }
                 }
 

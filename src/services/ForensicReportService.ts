@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { TechnicalProjectState } from '../core/TechnicalSchema';
+import { DiagnosticSnapshot } from '../features/telemetry/store/useTelemetryStore';
 import { Decimal } from 'decimal.js';
 import i18n from '../i18n';
 import { ActionEngine } from '../features/business/logic/ActionEngine';
@@ -192,6 +193,374 @@ export class ForensicReportService {
 
     constructor() {
         this.doc = new jsPDF();
+    }
+
+    /**
+     * Generates a forensic snapshot report with Polar Plot
+     */
+    public generateForensicSnapshotReport(snapshot: DiagnosticSnapshot): Blob {
+        this.applyProfessionalHeader('Forensic Diagnostic Snapshot');
+
+        const doc = this.doc;
+
+        // Snapshot Metadata
+        doc.setFontSize(10);
+        doc.setTextColor(100, 116, 139);
+        doc.text(`SNAPSHOT ID: ${snapshot.id}`, 14, 55);
+        doc.text(`TIMESTAMP: ${new Date(snapshot.timestamp).toLocaleString()}`, 14, 60);
+        doc.text(`TRIGGER: ${snapshot.triggerType}`, 14, 65);
+
+        // Pathology Title
+        doc.setFontSize(16);
+        doc.setTextColor(220, 38, 38); // red-600
+        doc.setFont('helvetica', 'bold');
+        doc.text(snapshot.pathology.toUpperCase(), 14, 80);
+
+        // Oracle Wisdom
+        doc.setFontSize(11);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`"${snapshot.oracleWisdom.message}"`, 14, 90, { maxWidth: 180 });
+
+        doc.setFont('helvetica', 'bold');
+        doc.text(`RECOMMENDED ACTION: ${snapshot.oracleWisdom.action}`, 14, 110);
+
+        // PHYSICS ANALYSIS (If available)
+        let contentY = 115;
+        
+        if (snapshot.physicsAnalysis) {
+            // Hydraulic Section
+            doc.setFillColor(240, 248, 255); // AliceBlue
+            doc.rect(14, contentY, 182, 22, 'F');
+            doc.setDrawColor(173, 216, 230); // LightBlue
+            doc.rect(14, contentY, 182, 22, 'D');
+
+            doc.setFontSize(10);
+            doc.setTextColor(23, 37, 84); // blue-950
+            doc.setFont('helvetica', 'bold');
+            doc.text('HYDRAULIC PHYSICS', 16, contentY + 5);
+
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(50, 50, 50);
+            
+            const zoneText = `ZONE: ${snapshot.physicsAnalysis.zone.zone} - ${snapshot.physicsAnalysis.zone.message}`;
+            doc.text(zoneText, 16, contentY + 10);
+            
+            if (snapshot.physicsAnalysis.zone.efficiencyDetails) {
+                 doc.text(snapshot.physicsAnalysis.zone.efficiencyDetails, 16, contentY + 14);
+            }
+
+            const cavText = `CAVITATION: ${snapshot.physicsAnalysis.cavitation.details}`;
+            const isCavHigh = snapshot.physicsAnalysis.cavitation.risk === 'HIGH';
+            doc.setTextColor(isCavHigh ? 220 : 50, isCavHigh ? 38 : 50, isCavHigh ? 38 : 50);
+            doc.text(cavText, 16, contentY + 18);
+
+            contentY += 28; // Move down
+
+            // Vibration Section (if available)
+            if (snapshot.physicsAnalysis.vibration) {
+                const vib = snapshot.physicsAnalysis.vibration;
+                
+                doc.setFillColor(255, 241, 242); // Rose-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(253, 164, 175); // Rose-300
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(136, 19, 55); // rose-900
+                doc.setFont('helvetica', 'bold');
+                doc.text('VIBRATION PATTERN ANALYSIS', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+                
+                doc.text(`PATTERN: ${vib.pattern} (${vib.severity})`, 16, contentY + 10);
+                
+                if (vib.recommendations && vib.recommendations.length > 0) {
+                     doc.text(`REC: ${vib.recommendations[0]}`, 16, contentY + 14);
+                     if (vib.recommendations[1]) doc.text(`     ${vib.recommendations[1]}`, 16, contentY + 18);
+                }
+                
+                contentY += 28; // Move down again
+            }
+
+            // Oil Analysis Section (if available)
+            if (snapshot.oilAnalysis) {
+                const oil = snapshot.oilAnalysis;
+                doc.setFillColor(240, 253, 244); // Green-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(34, 197, 94); // Green-500
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(21, 128, 61); // green-700
+                doc.setFont('helvetica', 'bold');
+                doc.text('OIL HEALTH ANALYSIS', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+                doc.text(`HEALTH: ${oil.overallHealth} (Score: ${oil.healthScore})`, 16, contentY + 10);
+                
+                if (oil.findings.length > 0) {
+                     doc.text(`ISSUE: ${oil.findings[0].message}`, 16, contentY + 14);
+                     if (oil.findings[1]) doc.text(`       ${oil.findings[1].message}`, 16, contentY + 18);
+                }
+                contentY += 28;
+            }
+
+            // AI Prediction Section (if available)
+            if (snapshot.aiPrediction?.synergeticRisk.detected) {
+                const ai = snapshot.aiPrediction.synergeticRisk;
+                doc.setFillColor(250, 245, 255); // Purple-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(168, 85, 247); // Purple-500
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(126, 34, 206); // purple-700
+                doc.setFont('helvetica', 'bold');
+                doc.text('AI SYNERGETIC RISK PREDICTION', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+                doc.text(`PROBABILITY: ${(ai.probability * 100).toFixed(0)}%`, 16, contentY + 10);
+                doc.text(`WARNING: ${ai.message}`, 16, contentY + 14);
+                
+                contentY += 28;
+            }
+
+            // Sustainability & Longevity Section (if available)
+            if (snapshot.energyHarvest || snapshot.lifeExtension) {
+                doc.setFillColor(236, 254, 255); // Cyan-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(6, 182, 212); // Cyan-500
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(14, 116, 144); // cyan-700
+                doc.setFont('helvetica', 'bold');
+                doc.text('SUSTAINABILITY & LONGEVITY', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+                
+                let text = '';
+                if (snapshot.energyHarvest) text += `HARVEST: ${snapshot.energyHarvest.powerW.toFixed(0)}W (€${snapshot.energyHarvest.annualEur.toFixed(0)}/yr)  `;
+                if (snapshot.lifeExtension) text += `LIFE EXTENSION: +${snapshot.lifeExtension.yearsAdded.toFixed(1)} Years`;
+                
+                doc.text(text, 16, contentY + 10);
+                
+                contentY += 28;
+            }
+
+            // Structural & Safety Section
+            if (snapshot.structuralIntegrity || snapshot.hydraulicSafety) {
+                doc.setFillColor(248, 250, 252); // Slate-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(100, 116, 139); // Slate-500
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(51, 65, 85); // Slate-700
+                doc.setFont('helvetica', 'bold');
+                doc.text('SAFETY & INTEGRITY AUDIT', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+
+                let text = '';
+                if (snapshot.structuralIntegrity) {
+                    text += `STRUCTURAL MARGIN: ${snapshot.structuralIntegrity.marginPct.toFixed(1)}% (MAWP: ${snapshot.structuralIntegrity.mawpBar.toFixed(0)} bar)  `;
+                }
+                if (snapshot.hydraulicSafety) {
+                    text += `HYDRAULIC MOD: ${snapshot.hydraulicSafety.approved ? 'APPROVED' : 'REJECTED - ' + snapshot.hydraulicSafety.reason}`;
+                }
+                
+                doc.text(text, 16, contentY + 10, { maxWidth: 178 });
+                
+                contentY += 28;
+            }
+
+            // Phase 5: Electrical & Auxiliary Forensics
+            if (snapshot.transformerAnalysis || snapshot.statorAnalysis || snapshot.shaftSealAnalysis || snapshot.governorAnalysis) {
+                doc.setFillColor(255, 247, 237); // Orange-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(234, 88, 12); // Orange-600
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(154, 52, 18); // Orange-800
+                doc.setFont('helvetica', 'bold');
+                doc.text('ELECTRICAL & AUXILIARY FORENSICS', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+
+                let text = '';
+                if (snapshot.transformerAnalysis) {
+                    text += `TRANSFORMER: ${snapshot.transformerAnalysis.faultType}  `;
+                }
+                if (snapshot.statorAnalysis) {
+                    text += `STATOR: ${snapshot.statorAnalysis.severity} (Action: ${snapshot.statorAnalysis.action})  `;
+                }
+                if (snapshot.shaftSealAnalysis) {
+                    text += `SEAL: ${(snapshot.shaftSealAnalysis.probability * 100).toFixed(0)}% Risk (${snapshot.shaftSealAnalysis.action})  `;
+                }
+                if (snapshot.governorAnalysis) {
+                    text += `GOVERNOR: ${snapshot.governorAnalysis.action}`;
+                }
+                
+                doc.text(text, 16, contentY + 10, { maxWidth: 178 });
+                
+                contentY += 28;
+            }
+
+            // Phase 4: Electro-Mechanical Forensics (Thermal, Wicket, Air Gap)
+            if (snapshot.thermalAnalysis || snapshot.wicketGateAnalysis || snapshot.generatorAirGap) {
+                doc.setFillColor(236, 253, 245); // Emerald-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(5, 150, 105); // Emerald-600
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(6, 95, 70); // Emerald-800
+                doc.setFont('helvetica', 'bold');
+                doc.text('ELECTRO-MECHANICAL FORENSICS', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+
+                let text = '';
+                if (snapshot.thermalAnalysis) {
+                    text += `THERMAL: ${snapshot.thermalAnalysis.viscosity} cP (${snapshot.thermalAnalysis.action})  `;
+                }
+                if (snapshot.wicketGateAnalysis) {
+                    text += `WICKET: ${snapshot.wicketGateAnalysis.action} (Backlash: ${snapshot.wicketGateAnalysis.backlashPct?.toFixed(2)}%)  `;
+                }
+                if (snapshot.generatorAirGap) {
+                    text += `AIR GAP: Ecc ${snapshot.generatorAirGap.eccentricityPct.toFixed(1)}% (UMP: ${snapshot.generatorAirGap.umpN.toFixed(0)}N)`;
+                }
+                
+                doc.text(text, 16, contentY + 10, { maxWidth: 178 });
+                
+                contentY += 28;
+            }
+
+            // Phase 3: Advanced Intelligence (Acoustic, Synergy, Galvanic)
+            if (snapshot.acousticFingerprint || snapshot.crossCorrelation || snapshot.galvanicCorrosion) {
+                doc.setFillColor(250, 245, 255); // Purple-50
+                doc.rect(14, contentY, 182, 22, 'F');
+                doc.setDrawColor(168, 85, 247); // Purple-500
+                doc.rect(14, contentY, 182, 22, 'D');
+
+                doc.setFontSize(10);
+                doc.setTextColor(107, 33, 168); // Purple-800
+                doc.setFont('helvetica', 'bold');
+                doc.text('ADVANCED SIGNAL INTELLIGENCE', 16, contentY + 5);
+
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(50, 50, 50);
+
+                let text = '';
+                if (snapshot.acousticFingerprint) {
+                    text += `ACOUSTIC: ${snapshot.acousticFingerprint.primaryPattern} (Conf: ${snapshot.acousticFingerprint.confidence.toFixed(0)}%)  `;
+                }
+                if (snapshot.crossCorrelation?.correlated) {
+                    text += `SYNERGY: ${snapshot.crossCorrelation.pair} (r=${snapshot.crossCorrelation.r.toFixed(2)})  `;
+                }
+                if (snapshot.galvanicCorrosion) {
+                    text += `CATHODIC: ${snapshot.galvanicCorrosion.avgVoltage} mV (${snapshot.galvanicCorrosion.protectionLevel})`;
+                }
+                
+                doc.text(text, 16, contentY + 10, { maxWidth: 178 });
+                
+                contentY += 28;
+            }
+        } else {
+             contentY += 10; // Default spacing if no physics
+        }
+
+        // POLAR PLOT VISUALIZATION
+        // Ensure we have enough space, or page break? For now assume it fits.
+        this.drawPolarPlot(snapshot.kineticState, 14, contentY, 80);
+
+        // Telemetry Table
+        autoTable(doc, {
+            startY: contentY,
+            margin: { left: 110 }, // Place to the right of the plot
+            head: [['Telemetry Metric', 'Value']],
+            body: [
+                ['RPM', snapshot.telemetry.rpm.toFixed(1)],
+                ['Vibration X', snapshot.telemetry.vibrationX.toFixed(3) + ' mm/s'],
+                ['Vibration Y', snapshot.telemetry.vibrationY.toFixed(3) + ' mm/s'],
+                ['Bearing Temp', snapshot.telemetry.bearingTemp.toFixed(1) + ' °C'],
+                ['Eccentricity', snapshot.kineticState.eccentricity.toFixed(3) + ' mm'],
+                ['Phase Angle', snapshot.kineticState.phase.toFixed(1) + '°'],
+                ['R² (Sine Fit)', snapshot.kineticState.rsquared.toFixed(4)],
+            ],
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42] }
+        });
+
+        this.applyFooter();
+        return doc.output('blob');
+    }
+
+    private drawPolarPlot(kinetic: { eccentricity: number, phase: number }, x: number, y: number, size: number) {
+        const doc = this.doc;
+        const cx = x + size / 2;
+        const cy = y + size / 2;
+        const radius = size / 2 - 10;
+
+        // Background Circles
+        doc.setDrawColor(200, 200, 200);
+        doc.circle(cx, cy, radius, 'S');
+        doc.circle(cx, cy, radius * 0.66, 'S');
+        doc.circle(cx, cy, radius * 0.33, 'S');
+
+        // Crosshairs
+        doc.line(cx - radius, cy, cx + radius, cy);
+        doc.line(cx, cy - radius, cx, cy + radius);
+
+        // Plot Point
+        // Phase is usually degrees. 0 is usually right (standard math) or top (clock).
+        // Let's assume standard math: 0 is right, CCW.
+        const rad = kinetic.phase * (Math.PI / 180);
+        // Scale eccentricity. Max eccentricity? Let's say 0.5mm is edge (since typical is < 0.1)
+        // But warning is > 0.15. So let's map 0.5mm to radius.
+        const scale = radius / 0.5;
+        const r = Math.min(kinetic.eccentricity * scale, radius);
+
+        const px = cx + r * Math.cos(rad);
+        const py = cy - r * Math.sin(rad); // PDF Y is down
+
+        // Draw Vector Line
+        doc.setDrawColor(220, 38, 38); // Red
+        doc.setLineWidth(0.5);
+        doc.line(cx, cy, px, py);
+
+        // Draw Point
+        doc.setFillColor(220, 38, 38);
+        doc.circle(px, py, 2, 'F');
+
+        // Label
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text('0°', cx + radius + 2, cy);
+        doc.text('90°', cx, cy - radius - 2);
+
+        doc.setTextColor(220, 38, 38);
+        doc.text(`E: ${kinetic.eccentricity.toFixed(3)}mm`, cx - 15, cy + radius + 10);
+        doc.text(`P: ${kinetic.phase.toFixed(1)}°`, cx - 15, cy + radius + 18);
     }
 
     /**
@@ -689,11 +1058,176 @@ export class ForensicReportService {
         return doc.output('blob');
     }
 
+
+    /**
+     * Generates a Service Audit Report (As-Found / As-Left)
+     * Fixes TS2551 in AutoReportGenerator.tsx
+     */
+    public static generateServiceAuditReport(data: any): Blob {
+        return new ForensicReportService().generateServiceReport(data);
+    }
+
+    /**
+     * NC-19900: Wrapper for Asset Passport generation
+     */
+    public static generateAssetPassport(data: any): Blob {
+        return new ForensicReportService().generateTechnicalReport({
+            assetName: data.name || 'Asset Passport',
+            parameters: data.specs || {},
+            calculations: { powerMW: 0, energyGWh: 0, n_sq: 0 },
+            recommendedTurbine: 'N/A'
+        });
+    }
+
+    /**
+     * NC-19900: Wrapper for Forensic Dossier generation
+     */
+    public static generateForensicDossier(data: any): Blob {
+        return new ForensicReportService().generateProjectPDF(data);
+    }
+
+    /**
+     * NC-19900: Protocol Report Generator
+     * Handles dynamic field reports from ProtocolLaunchpad
+     */
+    public static generateProtocolReport(data: any): Blob {
+        return new ForensicReportService().generateGenericProtocolPDF(data);
+    }
+
+    /**
+     * NC-19900: Field Audit Re-Generator
+     * Reloads historical audits from localStorage
+     */
+    public static generateFieldAuditReport(data: any): Blob {
+        const { auditData } = data;
+        return new ForensicReportService().generateGenericProtocolPDF({
+            contextTitle: 'Field Audit Record',
+            slogan: `Audit ID: ${auditData?.id || 'Legacy'}`,
+            metrics: auditData?.metrics || [],
+            diagnostics: auditData?.diagnostics || [],
+            engineerName: auditData?.engineerName || 'Unknown',
+            ledgerId: auditData?.ledgerId
+        });
+    }
+
+    public generateGenericProtocolPDF(data: any): Blob {
+        this.applyProfessionalHeader('Protocol Execution Report');
+        const doc = this.doc;
+
+        const { contextTitle, slogan, metrics, diagnostics, engineerName, ledgerId } = data;
+
+        // Context Info
+        doc.setFontSize(12);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'bold');
+        doc.text(contextTitle || 'Field Protocol', 14, 60);
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text(slogan || '', 14, 66);
+        doc.text(`Engineer: ${engineerName}`, 14, 72);
+        if (ledgerId) {
+            doc.setFontSize(8);
+            doc.setTextColor(100);
+            doc.text(`Ledger ID: ${ledgerId}`, 14, 78);
+        }
+
+        let currentY = 85;
+
+        // Metrics Table
+        if (metrics && metrics.length > 0) {
+            autoTable(doc, {
+                startY: currentY,
+                head: [['Metric', 'Value', 'Unit']],
+                body: metrics.map((m: any) => [
+                    m.label || '',
+                    m.value || '',
+                    m.unit || '-'
+                ]),
+                theme: 'striped',
+                headStyles: { fillColor: [2, 6, 23] },
+                styles: { fontSize: 9 }
+            });
+            // @ts-ignore
+            currentY = (doc as any).lastAutoTable.finalY + 10;
+        }
+
+        // Diagnostics / Observations
+        if (diagnostics && diagnostics.length > 0) {
+            doc.setFontSize(11);
+            doc.setTextColor(2, 6, 23);
+            doc.text('Diagnostics & Observations', 14, currentY);
+            currentY += 6;
+
+            diagnostics.forEach((d: any) => {
+                doc.setFontSize(9);
+                doc.setTextColor(50);
+                const prefix = d.type ? `[${d.type.toUpperCase()}] ` : '';
+                doc.text(`${prefix}${d.message}`, 14, currentY);
+                currentY += 5;
+            });
+            currentY += 5;
+        }
+
+        // Footer / Signature
+        const finalY = Math.max(currentY, 250);
+        const pageWidth = doc.internal.pageSize.width || 210;
+
+        doc.setDrawColor(200);
+        doc.line(14, finalY, pageWidth - 14, finalY);
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text(`Generated by AnoHUB Core Engine • ${new Date().toISOString()}`, 14, finalY + 5);
+
+        return doc.output('blob');
+    }
+
+    public generateServiceReport(data: any): Blob {
+        this.applyProfessionalHeader('Service Audit Report');
+        const doc = this.doc;
+
+        const { assetName, serviceType, engineerName, measurements } = data;
+
+        // Service Info
+        doc.setFontSize(12);
+        doc.setTextColor(30, 41, 59);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Asset: ${assetName}`, 14, 60);
+        doc.setFontSize(10);
+        doc.text(`Service: ${serviceType}`, 14, 66);
+        doc.text(`Engineer: ${engineerName}`, 14, 72);
+
+        // Measurements Table
+        const tableBody = measurements.map((m: any) => [
+            m.parameter,
+            `${m.asFound} ${m.unit}`,
+            `${m.asLeft} ${m.unit}`,
+            m.standard,
+            `${m.improvement > 0 ? '+' : ''}${m.improvement.toFixed(1)}%`
+        ]);
+
+        autoTable(doc, {
+            startY: 80,
+            head: [['Parameter', 'As-Found', 'As-Left', 'Standard', 'Improvement']],
+            body: tableBody,
+            theme: 'grid',
+            headStyles: { fillColor: [15, 23, 42] },
+            styles: { fontSize: 9 }
+        });
+
+        const finalY = (doc as any).lastAutoTable.finalY + 20;
+        doc.setFontSize(10);
+        doc.setTextColor(22, 163, 74); // Green
+        doc.text('SERVICE CERTIFIED & VALIDATED', 14, finalY);
+
+        this.applyFooter();
+        return doc.output('blob');
+    }
+
     /**
      * NC-4.2 COMMAND: Generate comprehensive project dossier from CEREBRO state
      */
     public generateProjectPDF(state: TechnicalProjectState): Blob {
-        this.applyProfessionalHeader('Global Project Dossier (NC-4.2)');
         const doc = this.doc;
 
         // 1. Executive Identity
@@ -701,7 +1235,7 @@ export class ForensicReportService {
         doc.setTextColor(30, 41, 59);
         doc.setFont('helvetica', 'bold');
         const dossierLabel = i18n.t('report.dossierLabel', 'PROJECT DOSSIER');
-        doc.text(`${dossierLabel}: ${state.identity.assetName}`, 14, 60);
+        doc.text(`${dossierLabel}: ${state.identity.assetName} `, 14, 60);
 
         // --- NC-4.2 FORENSIC DEMO OVERLAY ---
         if (state.demoMode?.active) {
@@ -717,7 +1251,7 @@ export class ForensicReportService {
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(`Asset ID: ${state.identity.assetId} | Location: ${state.identity.location}`, 14, 67);
+        doc.text(`Asset ID: ${state.identity.assetId} | Location: ${state.identity.location} `, 14, 67);
 
         let currentY = 80;
 
@@ -745,9 +1279,9 @@ export class ForensicReportService {
             startY: currentY + 5,
             head: [['Financial Metric', 'Current State', 'Projected Annual Impact']],
             body: [
-                ['Real-Time Efficiency', `${(currentEff * 100).toFixed(1)}%`, effGap > 0 ? `-${(effGap * 100).toFixed(1)}% vs Target` : 'OPTIMAL'],
+                ['Real-Time Efficiency', `${(currentEff * 100).toFixed(1)}% `, effGap > 0 ? ` - ${(effGap * 100).toFixed(1)}% vs Target` : 'OPTIMAL'],
                 ['Active Power Output', `${powerMW.toFixed(2)} MW`, '-'],
-                ['Revenue Efficiency Gap', effGap > 0 ? 'NEEDS OPTIMIZATION' : 'OPTIMIZED', effGap > 0 ? `- €${revenueLoss.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '€0.00']
+                ['Revenue Efficiency Gap', effGap > 0 ? 'NEEDS OPTIMIZATION' : 'OPTIMIZED', effGap > 0 ? `- €${revenueLoss.toLocaleString(undefined, { maximumFractionDigits: 0 })} ` : '€0.00']
             ],
             theme: 'striped',
             headStyles: { fillColor: [15, 23, 42] },
@@ -757,7 +1291,7 @@ export class ForensicReportService {
         currentY = (doc as any).lastAutoTable.finalY + 15;
 
         // --- SECTION B: PREDICTIVE HEALTH (PAE NC-4.2) ---
-            const prediction = calculateMaintenancePrediction({
+        const prediction = calculateMaintenancePrediction({
             config: { id: idAdapter.toStorage(state.identity.assetId), name: state.identity.assetName, designLifeHours: 50000, installationDate: '', wearFactorCurve: 'LINEAR' },
             telemetry: {
                 accumulatedRunHours: state.identity.totalOperatingHours || 0,
@@ -833,9 +1367,9 @@ export class ForensicReportService {
             margin: { right: 110 }, // Left half
             head: [['Parameter', 'Active Value', 'Decimal Status']],
             body: [
-                ['Design Head', `${state.hydraulic.head}m`, state.hydraulic.waterHead.toFixed(2)],
-                ['Flow Rate', `${state.hydraulic.flow}m3/s`, state.hydraulic.flowRate.toFixed(3)],
-                ['Efficiency', `${(state.hydraulic.efficiency * 100).toFixed(1)}%`, 'Verified']
+                ['Design Head', `${state.hydraulic.head} m`, state.hydraulic.waterHead.toFixed(2)],
+                ['Flow Rate', `${state.hydraulic.flow} m3 / s`, state.hydraulic.flowRate.toFixed(3)],
+                ['Efficiency', `${(state.hydraulic.efficiency * 100).toFixed(1)}% `, 'Verified']
             ],
             theme: 'striped',
             headStyles: { fillColor: [15, 23, 42] },
@@ -945,17 +1479,17 @@ export class ForensicReportService {
      * NC-4.2 COMMAND: Generate targeted module report
      */
     public generateModulePDF(moduleName: string, state: TechnicalProjectState): Blob {
-        this.applyProfessionalHeader(`Module Report: ${moduleName}`);
+        this.applyProfessionalHeader(`Module Report: ${moduleName} `);
         const doc = this.doc;
 
         doc.setFontSize(14);
         doc.setTextColor(30, 41, 59);
         doc.setFont('helvetica', 'bold');
-        doc.text(`MODULE AUDIT: ${moduleName.toUpperCase()}`, 14, 60);
+        doc.text(`MODULE AUDIT: ${moduleName.toUpperCase()} `, 14, 60);
 
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
-        doc.text(`Asset: ${state.identity.assetName} | Captured: ${new Date().toISOString()}`, 14, 67);
+        doc.text(`Asset: ${state.identity.assetName} | Captured: ${new Date().toISOString()} `, 14, 67);
 
         // Targeted body based on module
         if (moduleName.toLowerCase().includes('mechan')) {

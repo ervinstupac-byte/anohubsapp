@@ -96,7 +96,7 @@ export class SovereignKernel {
             if (enriched.causalChain && enriched.causalChain.rootCause.contribution > 0.9) {
                 const healStart = performance.now();
 
-                enriched.healingAction = await SovereignHealerService.heal(enriched.causalChain);
+                enriched.healingAction = await SystemRecoveryService.heal(enriched.causalChain);
 
                 trace.stages.push({
                     stage: 'HEAL',

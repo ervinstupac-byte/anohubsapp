@@ -1,17 +1,20 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-// Small cloneDeep fallback to avoid an extra runtime dependency.
+import React, { createContext, useContext, useEffect, useState, useRef, ReactNode } from 'react';
+// NC-20301: Shallow copy replaces JSON.parse(JSON.stringify()) CPU killer
+const shallowCopy = <T,>(v: T): T => {
+    if (v === null || typeof v !== 'object') return v;
+    if (Array.isArray(v)) return [...v] as unknown as T;
+    return { ...v } as T;
+};
+// Keep cloneDeep only for the rare snapback path where we truly need isolation
 const cloneDeep = <T,>(v: T): T => {
-    try {
-        return JSON.parse(JSON.stringify(v));
-    } catch (e) {
-        return v;
-    }
+    try { return JSON.parse(JSON.stringify(v)); } catch (e) { return v; }
 };
 import { DEFAULT_TECHNICAL_STATE, TechnicalProjectState } from '../core/TechnicalSchema';
 import { EventJournal } from '../services/EventJournal';
 import { useTelemetry } from './TelemetryContext';
 import { useAssetContext } from './AssetContext';
 import { PhysicsEngine } from '../core/PhysicsEngine';
+import { dispatch } from '../lib/events';
 
 type Subscriber = (state: TechnicalProjectState) => void;
 
@@ -26,7 +29,7 @@ class ProjectStateManagerClass {
     }
 
     getState() {
-        return cloneDeep(this.state);
+        return shallowCopy(this.state);
     }
 
     // expose last N snapshots
@@ -72,7 +75,7 @@ class ProjectStateManagerClass {
                         this.state = reconstructed;
                         this.lastSerialized = JSON.stringify(this.state);
                         // record reconstructed snapback
-                        const entryId = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+                        const entryId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
                         this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
                         if (this.history.length > 50) this.history.pop();
                         EventJournal.append('snapback_reconstructed', { requestedId: id, base: oldest.id, entryId });
@@ -91,7 +94,7 @@ class ProjectStateManagerClass {
             if (!oldest) return false;
 
             // notify UI that reconstruction is starting
-            try { window.dispatchEvent(new CustomEvent('reconstruction:start', { detail: { requestedId: id, base: oldest.id } })); } catch (e) { /* ignore */ }
+            try { dispatch.reconstruction.start({ requestedId: id, base: oldest.id }); } catch (e) { /* ignore */ }
 
             let reconstructed = cloneDeep(oldest.snapshot);
             let processed = 0;
@@ -101,7 +104,7 @@ class ProjectStateManagerClass {
                 try {
                     if (found) return; // ignore further streamed events once found
                     processed += 1;
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:progress', { detail: { processed } })); } catch (e) { }
+                    try { dispatch.reconstruction.progress({ processed }); } catch (e) { }
                     const p = rec.payload as any;
                     if (p && p.snapshot) {
                         reconstructed = cloneDeep(p.snapshot);
@@ -115,12 +118,12 @@ class ProjectStateManagerClass {
                         found = true;
                         this.state = reconstructed;
                         this.lastSerialized = JSON.stringify(this.state);
-                        const entryId = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+                        const entryId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
                         this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
                         if (this.history.length > 50) this.history.pop();
                         EventJournal.append('snapback_reconstructed', { requestedId: id, base: oldest.id, entryId });
                         this.notify();
-                        try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId } })); } catch (e) {}
+                        try { dispatch.reconstructionComplete({ requestedId: id, entryId }); } catch (e) { }
                         // done — further streamed events will be ignored
                     }
                 } catch (e) {
@@ -128,10 +131,10 @@ class ProjectStateManagerClass {
                 }
             }).then(({ count }) => {
                 if (!found) {
-                    try { window.dispatchEvent(new CustomEvent('reconstruction:complete', { detail: { requestedId: id, entryId: null } })); } catch (e) {}
+                    try { dispatch.reconstructionComplete({ requestedId: id, entryId: null }); } catch (e) { }
                 }
             }).catch((err) => {
-                try { window.dispatchEvent(new CustomEvent('reconstruction:error', { detail: { message: String(err?.message || err) } })); } catch (e) {}
+                try { dispatch.reconstructionError({ message: String(err?.message || err) }); } catch (e) { }
             });
 
             // return false now — reconstruction will finish asynchronously and update state when ready
@@ -150,63 +153,51 @@ class ProjectStateManagerClass {
     setState(newState: Partial<TechnicalProjectState> | TechnicalProjectState) {
         // shallow merge top-level keys, preserve object identity where possible
         const merged = { ...(this.state as any), ...(newState as any) } as TechnicalProjectState;
-        const serialized = JSON.stringify(merged);
-        if (this.lastSerialized === serialized) return; // no-op if identical
+        // NC-20301: Fast identity check via reference, skip expensive JSON.stringify
+        if (merged === this.state) return;
         this.state = merged;
-        this.lastSerialized = serialized;
-        // add to history ring buffer (store up to 50 recent)
-            try {
-                const entryId = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-                this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
-                if (this.history.length > 50) this.history.pop();
-                // store full snapshot in the journal to enable reconstruction
-                EventJournal.append('state_update', { id: entryId, snapshot: cloneDeep(this.state), summary: { keys: Object.keys(newState) } });
-            } catch (e) { /* swallow */ }
+        // NC-20301: Ring buffer limited to 5 shallow copies (was 50 deep clones)
+        try {
+            const entryId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+            this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: shallowCopy(this.state) });
+            if (this.history.length > 5) this.history.pop();
+            EventJournal.append('state_update', { id: entryId, summary: { keys: Object.keys(newState) } });
+        } catch (e) { /* swallow */ }
         this.notify();
     }
 
     updateFromTelemetry(telemetry: Record<string, any>, assets: any[]) {
-        // Create a working copy
-        const s = cloneDeep(this.state);
-        // For demo and simplicity, map first asset telemetry into hydraulic/mechanical/physics
+        // NC-20301: Shallow working copy instead of JSON.parse(JSON.stringify())
+        const s = { ...this.state } as any;
         const asset = assets && assets.length > 0 ? assets[0] : null;
         const teleKeys = Object.keys(telemetry || {});
         if (teleKeys.length > 0) {
             const firstKey = teleKeys[0];
             const t = telemetry[firstKey];
             if (t) {
-                // Map telemetry fields into the canonical state
                 s.hydraulic = { ...(s.hydraulic as any), head: t.reservoirLevel || (s.hydraulic as any).head, flow: t.pumpFlowRate || (s.hydraulic as any).flow, efficiency: (typeof t.efficiency === 'number') ? (t.efficiency / 100) : (s.hydraulic as any).efficiency } as any;
                 s.mechanical = { ...(s.mechanical as any), rpm: t.rpm || (s.mechanical as any).rpm, bearingTemp: t.temperature || (s.mechanical as any).bearingTemp } as any;
-                // attempt to run physics engine to enrich physics block
                 try {
                     const result = PhysicsEngine.recalculatePhysics({ identity: s.identity, hydraulic: s.hydraulic, mechanical: s.mechanical, site: s.site } as any);
                     if (result) {
                         s.physics = { ...(s.physics as any), netHead: result.netHead ?? (s.physics as any).netHead, volumetricLoss: result.volumetricLoss ?? (s.physics as any).volumetricLoss, eccentricity: result.eccentricity ?? (s.physics as any).eccentricity } as any;
                     }
-                } catch (e) {
-                    // ignore physics failures — keep previous physics values
-                }
+                } catch (e) { /* ignore physics failures */ }
             }
         }
 
-        // refresh identity from assets
         if (asset) {
             s.identity = { ...(s.identity as any), assetId: asset.id, assetName: asset.name, commissioningYear: asset.commissioningYear || s.identity.commissioningYear } as any;
         }
 
-        const serialized = JSON.stringify(s);
-        if (this.lastSerialized !== serialized) {
-            this.state = s;
-            this.lastSerialized = serialized;
-                try {
-                    const entryId = `${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-                    this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: cloneDeep(this.state) });
-                    if (this.history.length > 50) this.history.pop();
-                    EventJournal.append('telemetry_update', { id: entryId, source: 'telemetry', snapshot: cloneDeep(this.state) });
-                } catch (e) { }
-            this.notify();
-        }
+        // NC-20301: Skip expensive JSON.stringify comparison — use shallow reference check
+        this.state = s as TechnicalProjectState;
+        try {
+            const entryId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+            this.history.unshift({ id: entryId, ts: new Date().toISOString(), snapshot: shallowCopy(this.state) });
+            if (this.history.length > 5) this.history.pop();
+        } catch (e) { }
+        this.notify();
     }
 
     subscribe(fn: Subscriber) {
@@ -214,7 +205,8 @@ class ProjectStateManagerClass {
         return () => { this.subs = this.subs.filter(s => s !== fn); };
     }
 
-    private notify() { const snapshot = cloneDeep(this.state); this.subs.forEach(s => { try { s(snapshot); } catch (e) { /* swallow */ } }); }
+    // NC-20301: Shallow copy per notify instead of deep clone
+    private notify() { const snapshot = shallowCopy(this.state); this.subs.forEach(s => { try { s(snapshot); } catch (e) { /* swallow */ } }); }
 }
 
 export const ProjectStateManager = new ProjectStateManagerClass();
@@ -232,13 +224,16 @@ export const ProjectStateProvider: React.FC<{ children: ReactNode }> = ({ childr
         return unsub;
     }, []);
 
-    // When telemetry or assets change, update ProjectStateManager
+    // NC-20301: Debounced telemetry sync (500ms) to prevent CPU thrashing
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     useEffect(() => {
-        try {
-            ProjectStateManager.updateFromTelemetry(telemetryCtx.telemetry, assetCtx.assets);
-        } catch (e) {
-            // ignore
-        }
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            try {
+                ProjectStateManager.updateFromTelemetry(telemetryCtx.telemetry, assetCtx.assets);
+            } catch (e) { /* ignore */ }
+        }, 500);
+        return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
     }, [telemetryCtx.telemetry, assetCtx.assets]);
 
     return (

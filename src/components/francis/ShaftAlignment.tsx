@@ -15,7 +15,7 @@ import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 import { AlignmentVisualizer } from '../ui/AlignmentVisualizer';
 import { InfoTooltip } from '../ui/InfoTooltip'; // NEW
-import { useDensity } from '../../contexts/DensityContext'; // NEW
+import { useDensity } from '../../stores/useAppStore'; // NEW
 
 // --- API 686 / ISO 10816 CONSTANTS ---
 const RPM_TIERS = [

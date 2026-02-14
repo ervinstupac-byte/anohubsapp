@@ -15,7 +15,7 @@ import { HVShield } from './HVShield';
 import { KKSAssetTagger } from './KKSAssetTagger';
 import { MicroInjectionControl } from './MicroInjectionControl';
 import { MultiAgentSwarm } from './MultiAgentSwarm';
-import { QuantumResistantSovereignty } from './QuantumResistantSovereignty';
+import { SecurityService } from './SecurityService';
 import { ResonanceHarvesterManager } from './ResonanceHarvesterManager';
 import { RoboticFleetOrchestrator } from './RoboticFleetOrchestrator';
 import { SeismicPulseAnalyser } from './SeismicPulseAnalyser';
@@ -72,6 +72,12 @@ export class BootstrapService {
             name: 'Supabase Mainframe',
             tier: 1,
             task: async () => {
+                // NC-25100: Cloud Amputation
+                if (import.meta.env.VITE_OFFLINE_MODE === 'true') {
+                    console.log('[Bootstrap] ☁️ CLOUD AMPUTATION: Skipping Supabase Mainframe.');
+                    return;
+                }
+
                 // Dynamic import to avoid circular dependencies during initial parse
                 const { DatabaseSeeder } = await import('./DatabaseSeeder');
                 const result = await DatabaseSeeder.seedIfEmpty();
@@ -107,7 +113,15 @@ export class BootstrapService {
     ];
 
     private static readonly TIER_3_AI: ServiceDefinition[] = [
-        { name: 'Quantum Sovereignty', tier: 3, task: () => (QuantumResistantSovereignty as any)?.initialize?.() },
+        // 5. Security Protocols (renamed from QuantumResistantSovereignty)
+        {
+            name: 'Security Protocols',
+            tier: 3,
+            task: async () => {
+                console.log('   - Initializing Security Service...');
+                await SecurityService.initialize();
+            }
+        },
         { name: 'Additive Manufacturing', tier: 3, task: () => (AdditiveManufacturingService as any)?.initializeLibrary?.() },
         { name: 'Robotic Fleet', tier: 3, task: () => (RoboticFleetOrchestrator as any)?.initializeFleet?.() },
         { name: 'Nano-Injection Control', tier: 3, task: () => (MicroInjectionControl as any)?.initialize?.() },

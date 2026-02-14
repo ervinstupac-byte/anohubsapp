@@ -45,7 +45,9 @@ export type AppView =
     | 'adminApproval'
     | 'clientPortal'
     | 'logbook'
-    | 'francisHub';
+    | 'francisHub'
+    | 'forensicHub'
+    | 'assetOnboarding';
 
 interface NavigationContextType {
     currentPage: AppView;

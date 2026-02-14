@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, Circle, Play, Save, AlertCircle } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { BaselineFingerprintWizard } from './BaselineFingerprintWizard';
-import { AlignmentWizard } from './AlignmentWizard';
+import { AlignmentWizard } from './maintenance/AlignmentWizard';
 import { HydroStaticTestMonitor } from './HydroStaticTestMonitor';
 import { PeltonJetVisualizer } from './PeltonJetVisualizer';
 import { SpecialMeasurementPanel } from './SpecialMeasurementPanel';

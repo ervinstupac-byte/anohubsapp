@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext.tsx';
-import { useToast } from './ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { useInventory } from './InventoryContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 

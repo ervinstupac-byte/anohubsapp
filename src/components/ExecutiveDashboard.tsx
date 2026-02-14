@@ -6,6 +6,7 @@ import { GlassCard } from './ui/GlassCard.tsx';
 import { ModernButton } from './ui/ModernButton.tsx';
 import { DrTurbineAI, ActionCard } from '../services/DrTurbineAI.ts';
 import { useProjectEngine } from '../contexts/ProjectContext.tsx';
+import idAdapter from '../utils/idAdapter.ts';
 
 // --- ENHANCED TECHNICAL TURBINE SILHOUETTE WITH GLASSMORPHISM ---
 const TurbineSilhouette: React.FC<{
@@ -216,7 +217,7 @@ export const ExecutiveDashboard: React.FC = () => {
     const { fleetReports, totalMoneyAtRisk, globalFleetHealth } = useFleet();
     const { triggerEmergency, telemetry } = useTelemetry();
     const { technicalState, connectSCADAToExpertEngine, calculateIntegratedFinancialRisk, createComplexIdentity } = useProjectEngine();
-    const [selectedAssetId, setSelectedAssetId] = useState<string | null>(fleetReports[0]?.assetId || null);
+    const [selectedAssetId, setSelectedAssetId] = useState<number | null>(fleetReports[0]?.assetId || null);
 
     // SCADA Integration State
     const [scadaFlow, setScadaFlow] = useState<number>(42.5);
@@ -308,7 +309,7 @@ export const ExecutiveDashboard: React.FC = () => {
                     <select
                         className="bg-black/20 backdrop-blur-md border border-white/20 rounded-xl px-6 py-3 text-sm text-white outline-none font-bold uppercase cursor-pointer hover:border-cyan-500/50 transition-all shadow-lg"
                         value={selectedAssetId || ''}
-                        onChange={(e) => setSelectedAssetId(e.target.value)}
+                        onChange={(e) => setSelectedAssetId(idAdapter.toNumber(e.target.value))}
                     >
                         {fleetReports.map(r => <option key={r.assetId} value={r.assetId}>{r.assetName}</option>)}
                     </select>
@@ -640,6 +641,6 @@ export const ExecutiveDashboard: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };

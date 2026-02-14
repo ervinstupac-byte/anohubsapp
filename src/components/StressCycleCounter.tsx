@@ -3,7 +3,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 
 export const StressCycleCounter: React.FC = () => {
     const { telemetry, resetFatigue } = useTelemetry();

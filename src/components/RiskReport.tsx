@@ -12,7 +12,7 @@ import idAdapter from '../utils/idAdapter';
 import { aiPredictionService } from '../services/AIPredictionService';
 import { fetchForecastForAsset, forecastExcludingDates } from '../services/DashboardDataService';
 import { useAuth } from '../contexts/AuthContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { Skeleton } from '../shared/components/ui/Skeleton';
 import { ModernButton } from '../shared/components/ui/ModernButton';

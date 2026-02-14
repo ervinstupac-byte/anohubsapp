@@ -1,12 +1,12 @@
 /**
- * PROJECT SWALLOWER
+ * DATA INGESTION SERVICE (Formerly Project Swallower)
  * The Automatic Assimilator 🏗️😋
  * Ingests raw, unstructured site data and maps it to our Fortress Hierarchy.
  */
 
 import { AssetNode, AssetNodeType } from '../models/AssetHierarchy';
 
-export class ProjectSwallower {
+export class DataIngestionService {
 
     /**
      * SWALLOW PROJECT

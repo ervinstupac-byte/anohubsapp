@@ -4,7 +4,7 @@ import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { ModernInput } from '../../shared/components/ui/ModernInput';
 import { supabase } from '../../services/supabaseClient.ts';
-import { useToast } from '../../contexts/ToastContext.tsx';
+import { useToast } from '../../stores/useAppStore';
 import { Globe, MapPin, Wind, Thermometer, Droplets, Shield, Zap } from 'lucide-react';
 import { PlantMap } from './PlantMap.tsx';
 

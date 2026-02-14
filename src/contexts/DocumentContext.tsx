@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { UnifiedPDFViewer } from '../components/ui/UnifiedPDFViewer';
+import { PdfPreviewModal } from '../components/modals/PdfPreviewModal';
 
 interface DocumentContextType {
     viewDocument: (blob: Blob, title: string, fileName?: string) => void;
@@ -10,35 +10,28 @@ const DocumentContext = createContext<DocumentContextType | undefined>(undefined
 
 export const DocumentProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-    const [docTitle, setDocTitle] = useState("Document");
+    const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
     const [docFileName, setDocFileName] = useState("document.pdf");
 
     const viewDocument = (blob: Blob, title: string, fileName: string = "document.pdf") => {
-        const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
-        setDocTitle(title);
+        setPdfBlob(blob);
         setDocFileName(fileName);
         setIsOpen(true);
     };
 
     const closeDocument = () => {
         setIsOpen(false);
-        if (pdfUrl) {
-            URL.revokeObjectURL(pdfUrl);
-            setPdfUrl(null);
-        }
+        setPdfBlob(null);
     };
 
     return (
         <DocumentContext.Provider value={{ viewDocument, closeDocument }}>
             {children}
-            <UnifiedPDFViewer
+            <PdfPreviewModal
                 isOpen={isOpen}
                 onClose={closeDocument}
-                pdfUrl={pdfUrl}
-                title={docTitle}
-                fileName={docFileName}
+                pdfBlob={pdfBlob}
+                filename={docFileName}
             />
         </DocumentContext.Provider>
     );

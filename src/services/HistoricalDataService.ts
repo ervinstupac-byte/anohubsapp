@@ -18,7 +18,7 @@ export interface WisdomTooltip {
     severity: 'INFO' | 'WARNING' | 'CRITICAL';
 }
 
-export const ANCESTRAL_PATTERNS = {
+export const HISTORICAL_PATTERNS = {
     // VIBRATION PATTERNS
     MISALIGNMENT_2X: {
         id: 'MISALIGNMENT_2X',
@@ -55,10 +55,28 @@ export const ANCESTRAL_PATTERNS = {
         standard: 'IEEE 112',
         action: 'Inspect grounding brush contact resistance (<10mΩ).',
         severity: 'WARNING'
+    },
+
+    // KINETIC PATTERNS (NC-15200)
+    PURE_UNBALANCE: {
+        id: 'PURE_UNBALANCE',
+        pattern: 'High E + High R²',
+        message: 'High Eccentricity with perfect sine fit indicates Mass Unbalance.',
+        standard: 'ISO 21940',
+        action: 'Calculate trim weight at phase opposition.',
+        severity: 'WARNING'
+    },
+    MECHANICAL_LOOSENESS: {
+        id: 'MECHANICAL_LOOSENESS',
+        pattern: 'High E + Low R²',
+        message: 'High Eccentricity with erratic phase fit indicates Structural Looseness.',
+        standard: 'VDI 2056',
+        action: 'Check bolt torque and soleplate integrity.',
+        severity: 'CRITICAL'
     }
 } as const;
 
-export class AncestralOracleService {
+export class HistoricalDataService {
     
     /**
      * Consults the Oracle for wisdom based on active alarms.
@@ -67,6 +85,37 @@ export class AncestralOracleService {
      * @returns WisdomTooltip | null
      */
     static consult(alarms: string[], telemetry: any): WisdomTooltip | null {
+        
+        // 0. CHECK KINETIC ALIGNMENT (NC-15200)
+        // This takes precedence as it's a calculated pathology
+        if (telemetry.alignment) {
+            const { eccentricity, rsquared } = telemetry.alignment;
+            
+            // Rule 1: Mechanical Looseness (High Runout, Poor Fit)
+            if (eccentricity > 0.15 && rsquared < 0.90) {
+                 return {
+                    id: ANCESTRAL_PATTERNS.MECHANICAL_LOOSENESS.id,
+                    title: 'Sovereign Warning: Looseness',
+                    message: `Detected E=${eccentricity.toFixed(2)}mm with erratic phase (R²=${rsquared.toFixed(2)}).`,
+                    standard: ANCESTRAL_PATTERNS.MECHANICAL_LOOSENESS.standard,
+                    action: ANCESTRAL_PATTERNS.MECHANICAL_LOOSENESS.action,
+                    severity: 'CRITICAL'
+                } as WisdomTooltip;
+            }
+
+            // Rule 2: Pure Unbalance (High Runout, Perfect Fit)
+            if (eccentricity > 0.10 && rsquared >= 0.95) {
+                 return {
+                    id: HISTORICAL_PATTERNS.PURE_UNBALANCE.id,
+                    title: 'System Insight: Unbalance',
+                    message: `Clean sine wave (R²=${rsquared.toFixed(2)}) at E=${eccentricity.toFixed(2)}mm suggests mass unbalance.`,
+                    standard: ANCESTRAL_PATTERNS.PURE_UNBALANCE.standard,
+                    action: ANCESTRAL_PATTERNS.PURE_UNBALANCE.action,
+                    severity: 'WARNING'
+                } as WisdomTooltip;
+            }
+        }
+
         // 1. Check for specific mechanical alarms from NC-13000
         if (alarms.includes('SOVEREIGN_MECHANICAL_ALARM')) {
             // Contextualize based on telemetry
@@ -92,11 +141,11 @@ export class AncestralOracleService {
             // Wearing Gap Context (if we had access to it in the alarm string, or passed telemetry)
              // For now, default to Looseness if generic mechanical alarm
              return {
-                id: ANCESTRAL_PATTERNS.LOOSENESS_PHASE.id,
-                title: 'Sovereign Tip: Structure',
-                message: ANCESTRAL_PATTERNS.LOOSENESS_PHASE.message,
-                standard: ANCESTRAL_PATTERNS.LOOSENESS_PHASE.standard,
-                action: ANCESTRAL_PATTERNS.LOOSENESS_PHASE.action,
+                id: HISTORICAL_PATTERNS.LOOSENESS_PHASE.id,
+                title: 'System Tip: Structure',
+                message: HISTORICAL_PATTERNS.LOOSENESS_PHASE.message,
+                standard: HISTORICAL_PATTERNS.LOOSENESS_PHASE.standard,
+                action: HISTORICAL_PATTERNS.LOOSENESS_PHASE.action,
                 severity: 'CRITICAL'
              } as WisdomTooltip;
         }
@@ -117,14 +166,14 @@ export class AncestralOracleService {
         return null;
     }
 
-    static getWisdom(key: keyof typeof ANCESTRAL_PATTERNS): WisdomTooltip {
+    static getWisdom(key: keyof typeof HISTORICAL_PATTERNS): WisdomTooltip {
         return {
-            id: ANCESTRAL_PATTERNS[key].id,
-            title: `Sovereign Tip: ${key.split('_')[0]}`,
-            message: ANCESTRAL_PATTERNS[key].message,
-            standard: ANCESTRAL_PATTERNS[key].standard,
-            action: ANCESTRAL_PATTERNS[key].action,
-            severity: ANCESTRAL_PATTERNS[key].severity
+            id: HISTORICAL_PATTERNS[key].id,
+            title: `System Tip: ${key.split('_')[0]}`,
+            message: HISTORICAL_PATTERNS[key].message,
+            standard: HISTORICAL_PATTERNS[key].standard,
+            action: HISTORICAL_PATTERNS[key].action,
+            severity: HISTORICAL_PATTERNS[key].severity
         };
     }
 }

@@ -3,7 +3,6 @@ import { AuthProvider } from './AuthContext.tsx';
 import { QuestionnaireProvider } from './QuestionnaireContext.tsx';
 import { HPPDesignProvider } from './HPPDesignContext.tsx';
 import { RiskProvider } from './RiskContext.tsx';
-import { ToastProvider } from './ToastContext.tsx';
 import { AssetProvider } from './AssetContext.tsx';
 import { TelemetryProvider } from './TelemetryContext.tsx';
 import { AuditProvider } from './AuditContext.tsx';
@@ -23,8 +22,8 @@ import { AssetConfigProvider } from './AssetConfigContext.tsx'; // NEW: Static c
 import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema.ts';
 // NEW: Sync Engine Bridge for incremental migration
 import { DataBridge } from '../hooks/useSyncLegacyToNew';
-import { DensityProvider } from './DensityContext.tsx';
 import { WorkflowProvider } from './WorkflowContext.tsx'; // NEW: Cross-module workflow state
+import { ToastContainer } from '../components/ui/ToastContainer';
 
 interface GlobalProviderProps {
     children: React.ReactNode;
@@ -36,10 +35,9 @@ interface GlobalProviderProps {
  */
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     return (
-        <DensityProvider>
-            <ToastProvider>
-                <AuditProvider>
-                    <NotificationProvider>
+        <AuditProvider>
+            <ToastContainer />
+            <NotificationProvider>
                         <AuthProvider>
                             {/* NEW STORES: Zustand stores don't need providers, but AssetConfig does */}
                             <AssetConfigProvider>
@@ -61,9 +59,13 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                                                                                     <ForensicsProvider>
                                                                                         <CommissioningProvider>
                                                                                             <DocumentProvider>
-                                                                                                <WorkflowProvider>
-                                                                                                    {children}
-                                                                                                </WorkflowProvider>
+                                                                                                <ConfirmProvider>
+                                                                                                    <ValidationProvider>
+                                                                                                        <WorkflowProvider>
+                                                                                                            {children}
+                                                                                                        </WorkflowProvider>
+                                                                                                    </ValidationProvider>
+                                                                                                </ConfirmProvider>
                                                                                             </DocumentProvider>
                                                                                         </CommissioningProvider>
                                                                                     </ForensicsProvider>
@@ -84,7 +86,5 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
                         </AuthProvider>
                     </NotificationProvider>
                 </AuditProvider>
-            </ToastProvider>
-        </DensityProvider>
     );
 };

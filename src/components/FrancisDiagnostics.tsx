@@ -63,8 +63,8 @@ export const FrancisDiagnostics: React.FC = () => {
         // Construct Sensor Data from Form Inputs
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
-            assetId: 'manual-diag',
-            turbineFamily: 'francis',
+            assetId: 0,
+            turbineFamily: 'FRANCIS',
             common: {
                 vibration: inputs.vibration,
                 temperature: inputs.bearingTemp, // Mapping bearing temp to common temp for now
@@ -72,7 +72,7 @@ export const FrancisDiagnostics: React.FC = () => {
                 efficiency: 90,
                 status: 'OPTIMAL'
             },
-            francis: {
+            specialized: {
                 // Inferring some values for the sake of the model check
                 guide_vane_opening: inputs.loadMw > 10 ? 60 : 30, // Rough inference
                 runner_clearance: 1.0,

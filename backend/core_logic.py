@@ -149,4 +149,4 @@ if __name__ == "__main__":
     print(AuditEngine.validate_manufacturer_bid(98.0, "FRANCIS", hn))
     
     # Test 3: Thermal Offset
-    print(ThermalOffsetCalculator.calculate_pelton_expansion(shuffle_length_m=5.0, ambient_c=12, operating_c=55))
+    print(ThermalOffsetCalculator.calculate_pelton_expansion(shaft_length_m=5.0, ambient_c=12, operating_c=55))

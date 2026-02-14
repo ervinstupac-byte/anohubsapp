@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContextAwareness, UserPersona } from '../../contexts/ContextAwarenessContext';
 import { Navigate } from 'react-router-dom';
-import { useToast } from '../../contexts/ToastContext';
+import { useToast } from '../../stores/useAppStore';
 
 interface RoleGuardProps {
     children: React.ReactNode;

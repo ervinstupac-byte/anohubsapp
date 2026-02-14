@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import Decimal from 'decimal.js';
 import { BackButton } from './BackButton.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { supabase } from '../services/supabaseClient.ts';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { AssetPicker } from './AssetPicker.tsx';

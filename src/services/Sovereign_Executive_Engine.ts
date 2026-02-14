@@ -19,7 +19,7 @@ import { ErosionCorrosionSynergy } from './ErosionCorrosionSynergy';
 import { SovereignMemory } from './SovereignMemory';
 import { BasinCoordinator, UnitStatus } from './BasinCoordinator';
 import { MetalFactoryLink } from './MetalFactoryLink';
-import { AncestralOracle } from './AncestralOracle';
+import { KnowledgeBaseService } from './KnowledgeBaseService';
 import { ErosionStatus } from './SandErosionTracker';
 import { FinancialImpactEngine } from './core/FinancialImpactEngine';
 import { KaplanPhysicsEngine } from './KaplanPhysicsEngine';
@@ -30,6 +30,7 @@ import MarketDrivenStrategy from './MarketDrivenStrategy';
 import SafeControlAdapter from './SafeControlAdapter';
 import BaseGuardian from './BaseGuardian';
 import { TelegramNotificationService } from './TelegramNotificationService';
+import { saveLog } from './PersistenceService'; // NC-25100
 import { createClient } from '@supabase/supabase-js';
 
 // NC-11600: Sovereign Audit Logging
@@ -81,7 +82,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
     private memory: SovereignMemory;
     private basin: BasinCoordinator;
     private factory: MetalFactoryLink;
-    private oracle: typeof AncestralOracle;
+    private oracle: typeof KnowledgeBaseService;
     private kaplanPhysics: KaplanPhysicsEngine;
     private kaplanHub: KaplanHubMonitor;
     private peltonOptimizer: typeof PeltonPhysicsOptimizer;
@@ -101,7 +102,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         this.memory = new SovereignMemory();
         this.basin = new BasinCoordinator();
         this.factory = new MetalFactoryLink();
-        this.oracle = AncestralOracle;
+        this.oracle = KnowledgeBaseService;
         this.kaplanPhysics = new KaplanPhysicsEngine();
         this.kaplanHub = new KaplanHubMonitor();
         this.peltonOptimizer = PeltonPhysicsOptimizer;
@@ -129,12 +130,35 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
             tailwaterLevel?: number
             // Pelton specifics may be provided under inputs.pelton
             , pelton?: { jetPressureBar?: number; needlePositionPct?: number; activeNozzles?: number; shellVibrationMm?: number; bucketHours?: number }
+            // Physics Analysis (NC-300)
+            , physicsAnalysis?: {
+                cavitation: { risk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' };
+                zone: { zone: 'OPTIMAL' | 'ROUGH' | 'OVERLOAD' | 'PART_LOAD' };
+            }
         },
         metadata?: ExecutionMetadata
     ): ExecutiveState {
         const tier = metadata?.tier || PermissionTier.ADVISORY;
         const protections: string[] = [];
         let opMsg = 'System Nominal.';
+
+        // 0. PHYSICS ANALYSIS (Cavitation & Rough Zone)
+        // High cavitation risk forces a STOP_ORDER (NC-300)
+        if (inputs.physicsAnalysis) {
+            const { cavitation, zone } = inputs.physicsAnalysis;
+            
+            if (cavitation.risk === 'HIGH' || cavitation.risk === 'CRITICAL') {
+                return this.emergencyShutdown(`CRITICAL CAVITATION RISK (${cavitation.risk})`);
+            }
+
+            if (zone.zone === 'ROUGH') {
+                protections.push('ROUGH_ZONE_OP: Vibration monitoring intensified.');
+                opMsg = 'WARNING: Operating in Rough Zone.';
+            } else if (zone.zone === 'OVERLOAD') {
+                protections.push('OVERLOAD_ZONE: Efficiency penalty active.');
+                opMsg = 'CAUTION: Overload Zone.';
+            }
+        }
 
         // 1. DATA PULSE & SAFETY CHECK (Dead Man Switch)
         const heartbeatAge = Date.now() - inputs.scadaTimestamp;
@@ -300,9 +324,9 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         }
 
         // NC-11600: Sovereign Audit Execution
-        // Log every executive decision, especially if protections are active or throttling occurred.
-        if (supabase && (protections.length > 0 || mode !== 'RUN')) {
-            supabase.from('sovereign_audit_log').insert({
+        // NC-25100: Cloud Amputation -> Local Logging
+        if (protections.length > 0 || mode !== 'RUN') {
+            saveLog({
                 event_type: 'EXECUTIVE_DECISION',
                 reason: protections.join(' | ') || `Mode: ${mode}`,
                 metric_value: targetMw.toFixed(2),
@@ -317,8 +341,6 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
                         market: inputs.market
                     }
                 }
-            }).then(({ error }) => {
-                if (error) console.error('[SovereignAudit] Failed to log decision:', error);
             });
         }
 
@@ -340,7 +362,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
 
     private emergencyShutdown(reason: string): ExecutiveState {
         console.error(`💀 SOVEREIGN KILL SWITCH: ${reason}`);
-        
+
         // NC-11500: Telegram Alert for Shutdown
         TelegramNotificationService.sendAlert(
             'EMERGENCY SHUTDOWN TRIGGERED',
@@ -351,21 +373,19 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         );
 
         // NC-11600: Sovereign Audit Execution (Shutdown)
-        if (supabase) {
-            supabase.from('sovereign_audit_log').insert({
-                event_type: 'PROTOCOL_9',
-                reason: reason,
-                metric_value: '0',
-                metric_unit: 'MW',
-                active_protection: 'EMERGENCY_SHUTDOWN',
-                details: {
-                    action: 'KILL_SWITCH',
-                    operatorMessage: 'CRITICAL FAILURE. MACHINE STOPPED.'
-                }
-            }).then(({ error }) => {
-                if (error) console.error('[SovereignAudit] Failed to log shutdown:', error);
-            });
-        }
+        // NC-11600: Sovereign Audit Execution (Shutdown)
+        // NC-25100: Cloud Amputation
+        saveLog({
+            event_type: 'PROTOCOL_9',
+            reason: reason,
+            metric_value: '0',
+            metric_unit: 'MW',
+            active_protection: 'EMERGENCY_SHUTDOWN',
+            details: {
+                action: 'KILL_SWITCH',
+                operatorMessage: 'CRITICAL FAILURE. MACHINE STOPPED.'
+            }
+        });
 
         return {
             targetLoadMw: 0,

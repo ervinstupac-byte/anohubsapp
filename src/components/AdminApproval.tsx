@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '../services/supabaseClient.ts';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import { BackButton } from './BackButton.tsx';
 
 interface Measurement {

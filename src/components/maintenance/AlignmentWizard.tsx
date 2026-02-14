@@ -8,13 +8,17 @@ import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { CommissioningService } from '../../services/CommissioningService';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { MECHANICAL_TOLERANCES } from '../../lib/physics/SovereignPhysicsEngine';
+import { RunoutFitter, RunoutPoint, RunoutResult } from '../../utils/math/RunoutFitter';
 
 interface AlignmentWizardProps {
-    sessionId: string;
-    onComplete: () => void;
+    sessionId?: string;
+    onComplete?: () => void;
 }
 
-export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onComplete }) => {
+export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
+    sessionId = `DEMO-${Date.now()}`,
+    onComplete = () => console.log('Alignment Complete')
+}) => {
     // HYBRID MIGRATION: Use Telemetry Store for Identity and Safety Checks
     const { identity, mechanical } = useTelemetryStore();
 
@@ -22,11 +26,12 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     const currentRpm = mechanical?.rpm || 0;
     const isRotating = currentRpm > 5; // >5 RPM considered unsafe for manual alignment
 
-    const [runoutPoints, setRunoutPoints] = useState<Array<{ angle: number; runout: number }>>([]);
+    const [runoutPoints, setRunoutPoints] = useState<RunoutPoint[]>([]);
     const [currentAngle, setCurrentAngle] = useState(0);
     const [manualRunout, setManualRunout] = useState('');
     const [isBluetoothConnected, setIsBluetoothConnected] = useState(false);
     const [finalAlignment, setFinalAlignment] = useState<number | null>(null);
+    const [fittingResult, setFittingResult] = useState<RunoutResult | null>(null);
     const [shaftSag, setShaftSag] = useState(0);
 
     const assetName = identity?.assetName || '—';
@@ -44,7 +49,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
             isHorizontal
         );
 
-        setRunoutPoints(prev => [...prev, { angle: currentAngle, runout }]);
+        setRunoutPoints(prev => [...prev, { angle: currentAngle, value: runout }]);
         setManualRunout('');
 
         // Auto-increment angle
@@ -52,6 +57,24 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
     };
 
     const finalizeAlignment = async () => {
+        // Perform Sine-Wave Fitting (NC-15000)
+        let fit: RunoutResult | null = null;
+        if (runoutPoints.length >= 4) {
+            fit = RunoutFitter.fit(runoutPoints);
+            setFittingResult(fit);
+
+            // NC-15100: Persist fit to Telemetry Store for Kinetic Visualization
+            useTelemetryStore.getState().updateTelemetry({
+                alignment: {
+                    eccentricity: fit.eccentricity,
+                    phase: fit.phase,
+                    offset: fit.offset,
+                    rsquared: fit.rsquared,
+                    timestamp: Date.now()
+                }
+            });
+        }
+
         const result = await CommissioningService.finalizeAlignment(sessionId, bearingSpan);
         setFinalAlignment(result.finalAlignment);
         setShaftSag(result.shaftSag);
@@ -282,7 +305,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
                                                 <RotateCw className="w-3 h-3 inline mr-1" />
                                                 {point.angle}°
                                             </span>
-                                            <span className="text-xs font-bold text-white">{point.runout.toFixed(3)} mm</span>
+                                            <span className="text-xs font-bold text-white">{point.value.toFixed(3)} mm</span>
                                         </div>
                                     ))
                                 )}
@@ -313,7 +336,7 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({ sessionId, onC
 // ===== RUNOUT POLAR DIAGRAM =====
 
 const RunoutDiagram: React.FC<{
-    points: Array<{ angle: number; runout: number }>;
+    points: Array<{ angle: number; value: number }>;
     shaftSag: number;
     isHorizontal: boolean;
 }> = ({ points, shaftSag, isHorizontal }) => {
@@ -322,7 +345,7 @@ const RunoutDiagram: React.FC<{
     const radius = 150;
 
     // Find max runout for scaling
-    const maxRunout = points.length > 0 ? Math.max(...points.map(p => p.runout)) : 0.1;
+    const maxRunout = points.length > 0 ? Math.max(...points.map(p => p.value)) : 0.1;
 
     return (
         <div className="p-4 bg-slate-900/50 rounded-lg border border-slate-700/50">
@@ -378,7 +401,7 @@ const RunoutDiagram: React.FC<{
                     <path
                         d={points.map((point, i) => {
                             const rad = (point.angle * Math.PI) / 180;
-                            const r = (point.runout / maxRunout) * radius;
+                            const r = (point.value / maxRunout) * radius;
                             const x = centerX + Math.cos(rad - Math.PI / 2) * r;
                             const y = centerY + Math.sin(rad - Math.PI / 2) * r;
                             return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
@@ -392,7 +415,7 @@ const RunoutDiagram: React.FC<{
                 {/* Runout points */}
                 {points.map((point, i) => {
                     const rad = (point.angle * Math.PI) / 180;
-                    const r = (point.runout / maxRunout) * radius;
+                    const r = (point.value / maxRunout) * radius;
                     const x = centerX + Math.cos(rad - Math.PI / 2) * r;
                     const y = centerY + Math.sin(rad - Math.PI / 2) * r;
 

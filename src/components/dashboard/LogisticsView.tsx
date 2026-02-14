@@ -14,8 +14,8 @@ export const LogisticsView: React.FC<LogisticsViewProps> = ({ requisitions, inve
     const stockouts = inventory.filter(p => p.stockQuantity === 0);
 
     return (
-        <div className="w-full bg-slate-950 p-6">
-            <div className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <div className="w-full">
+            <div className="text-2xl font-bold mb-4 flex items-center gap-2 text-white">
                 <Package className="w-6 h-6 text-orange-400" />
                 Supply Chain & Logistics
             </div>
@@ -138,23 +138,31 @@ export const LogisticsView: React.FC<LogisticsViewProps> = ({ requisitions, inve
 
 const RequisitionCard: React.FC<{ requisition: ProcurementRequisition }> = ({ requisition }) => {
     const isLate = requisition.logisticsGapDays > 0;
-    const urgencyColors = {
-        ROUTINE: 'blue',
-        URGENT: 'amber',
-        CRITICAL: 'red'
-    };
-    const color = urgencyColors[requisition.urgency];
+    
+    const borderClass = {
+        ROUTINE: 'border-blue-500/30',
+        URGENT: 'border-amber-500/30',
+        CRITICAL: 'border-red-500/30'
+    }[requisition.urgency];
+
+    const iconColorClass = {
+        ROUTINE: 'text-blue-400',
+        URGENT: 'text-amber-400',
+        CRITICAL: 'text-red-400'
+    }[requisition.urgency];
+
+    const badgeClass = {
+        ROUTINE: 'bg-blue-950 text-blue-300',
+        URGENT: 'bg-amber-950 text-amber-300',
+        CRITICAL: 'bg-red-950 text-red-300'
+    }[requisition.urgency];
 
     return (
-        <div className={`bg-slate-900 border-2 rounded-lg p-4 ${isLate ? 'border-red-500' : `border-${color}-500/30`
-            }`}>
+        <div className={`bg-slate-900 border-2 rounded-lg p-4 ${isLate ? 'border-red-500' : borderClass}`}>
             <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold ${requisition.urgency === 'CRITICAL' ? 'bg-red-950 text-red-300' :
-                            requisition.urgency === 'URGENT' ? 'bg-amber-950 text-amber-300' :
-                                'bg-blue-950 text-blue-300'
-                            }`}>
+                        <div className={`px-3 py-1 rounded-full text-xs font-bold ${badgeClass}`}>
                             {requisition.urgency}
                         </div>
                         <div className="text-xs text-slate-500 font-mono">{requisition.requisitionId}</div>
@@ -163,7 +171,7 @@ const RequisitionCard: React.FC<{ requisition: ProcurementRequisition }> = ({ re
                     <div className="text-xs text-slate-400">{requisition.reason}</div>
                 </div>
 
-                <Truck className={`w-8 h-8 ${isLate ? 'text-red-400' : `text-${color}-400`}`} />
+                <Truck className={`w-8 h-8 ${isLate ? 'text-red-400' : iconColorClass}`} />
             </div>
 
             {/* Timeline Visualization */}

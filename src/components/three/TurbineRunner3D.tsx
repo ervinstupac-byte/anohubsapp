@@ -122,6 +122,20 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
     const [crashSafe, setCrashSafe] = useState(true);
+    const glRef = useRef<any>(null);
+
+    // NC-20301: Dispose WebGL context on unmount to prevent GPU leak
+    useEffect(() => {
+        return () => {
+            if (glRef.current) {
+                try {
+                    glRef.current.dispose();
+                    console.log('[TurbineRunner3D] 🧹 WebGL context disposed');
+                } catch (e) { /* ignore */ }
+                glRef.current = null;
+            }
+        };
+    }, []);
 
     // Robust type checking
     const turbineType = (selectedAsset?.turbine_type || selectedAsset?.type || 'francis').toLowerCase();
@@ -136,9 +150,25 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, {
             onPointerLeave={() => setActive(false)}
         >
             <Canvas shadows dpr={[1, 2]} frameloop={active ? 'always' : 'demand'}
+                gl={{ preserveDrawingBuffer: true, powerPreference: 'high-performance' }}
                 onCreated={(state) => {
-                    // Safety check context
+                    // NC-20301: Capture gl ref for cleanup
+                    glRef.current = state.gl;
                     if (!state.gl) setCrashSafe(false);
+                    // NC-20801: Handle Context Loss
+                    state.gl.domElement.addEventListener('webglcontextlost', (event) => {
+                        event.preventDefault();
+                        console.warn('[TurbineRunner3D] ⚠️ WebGL Context Lost - Attempting recovery');
+                        // Do NOT set crashSafe=false immediately, wait for restore attempt
+                        // setCrashSafe(false); 
+                    });
+                    state.gl.domElement.addEventListener('webglcontextrestored', () => {
+                        console.log('[TurbineRunner3D] ♻️ WebGL Context Restored');
+                        setCrashSafe(true);
+                        // Force re-render if needed
+                        setActive(true);
+                        setTimeout(() => setActive(false), 100);
+                    });
                 }}
             >
                 <PerspectiveCamera makeDefault position={[5, 4, 6]} fov={50} />

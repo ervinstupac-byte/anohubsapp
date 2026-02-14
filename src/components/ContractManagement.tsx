@@ -4,7 +4,7 @@ import { BackButton } from './BackButton.tsx';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useRisk } from '../contexts/RiskContext.tsx';
-import { useToast } from '../contexts/ToastContext.tsx';
+import { useToast } from '../stores/useAppStore';
 import jsPDF from 'jspdf';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';

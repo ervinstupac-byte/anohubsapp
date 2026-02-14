@@ -4,11 +4,11 @@
  * Quantifying the impact of the Sovereign Fortress.
  */
 
-export class GlobalPeaceDividend {
+export class GlobalEfficiencyMetric {
 
     generateLegacyReport(): string {
         return `
-THE PLATINUM LEGACY REPORT (v2.0)
+THE EFFICIENCY METRIC REPORT (v2.0)
 =================================
 "The Fortress built a shield around the valley, and a bridge to the future."
 

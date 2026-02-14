@@ -326,12 +326,47 @@ export class SentinelKernel {
         }
     }
 
-        public static getConfidenceScore(..._args: any[]): number {
-            return 50;
-        }
+    public static getConfidenceScore(..._args: any[]): number {
+        return 50;
+    }
 }
 
 
-// --- SENTINEL PATTERN LIBRARY ---
+
+export const SENTINEL_PATTERNS: HeuristicPattern[] = [
+    {
+        id: 'cavitation-complex',
+        name: 'Hydro-Acoustic Cavitation',
+        description: 'Vapor bubble collapse signature detected in Draft Tube.',
+        baseSeverity: 'CRITICAL',
+        slogan: 'BUBBLE COLLAPSE // SHOCKWAVE DETECTED',
+        conditions: [
+            { variableId: 'vibration', operator: 'GREATER', threshold: 0.8, weight: 0.4 },
+            { variableId: 'draftTubePressure', operator: 'VARIANCE_MATCH', threshold: 0.1, weight: 0.3 },
+            { variableId: 'efficiency', operator: 'LESS', threshold: 92, weight: 0.3 }
+        ],
+        actions: [
+            { type: 'FOCUS_3D', label: 'Inspect Draft Tube', targetId: 'Mesh_DraftTube_01', icon: 'Box' },
+            { type: 'OPEN_SOP', label: 'Air Injection Protocol', targetId: 'SOP-CAV-01', icon: 'Wind' }
+        ],
+        physicsNarrative: (prob: number, vectors: string[]) => `Cavitation intensity at ${(prob * 100).toFixed(0)}%. ${vectors[0]}`
+    },
+    {
+        id: 'bearing-thermal-instability',
+        name: 'Bearing Thermal Runaway',
+        description: 'Pad temperature rising despite cooling flow.',
+        baseSeverity: 'CRITICAL',
+        slogan: 'THERMAL RUNAWAY // OIL FILM FAILURE',
+        conditions: [
+            { variableId: 'bearingTemp', operator: 'SLOPE_GREATER', threshold: 0.5, weight: 0.5 },
+            { variableId: 'oilPressure', operator: 'LESS', threshold: 4.0, weight: 0.3 },
+            { variableId: 'coolingFlow', operator: 'LESS', threshold: 100, weight: 0.2 }
+        ],
+        actions: [
+            { type: 'FOCUS_3D', label: 'Zoom to Guide Bearing', targetId: 'Mesh_Bearing_01', icon: 'Disc' },
+            { type: 'OPEN_SOP', label: 'Emergency Lube Boost', targetId: 'SOP-LUB-99', icon: 'Droplet' }
+        ]
+    }
+];
 
 

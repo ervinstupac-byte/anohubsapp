@@ -82,21 +82,30 @@ export class LegacyBridgeService {
      * - GlobalPeaceDividend.ts
      * - EternalLog.ts
      */
-    generateLegacyReport(type: ReportType): string {
+    generateLegacyReport(type: ReportType): { filename: string, content: string } | null {
         return this.safeLegacyCall(`generateLegacyReport(${type})`, () => {
+            let content = '';
             switch (type) {
                 case 'IMMORTAL_LEGACY':
-                    return this.generateImmortalLegacy();
+                    content = this.generateImmortalLegacy();
+                    break;
                 case 'GOVERNMENT_NATIONAL':
-                    return this.generateNationalReport();
+                    content = this.generateNationalReport();
+                    break;
                 case 'PEACE_DIVIDEND':
-                    return this.generatePeaceDividend();
+                    content = this.generateEfficiencyReport(); // Mapped to Efficiency
+                    break;
                 case 'ETERNAL_2050':
-                    return this.generate2050Report();
+                    content = this.generate2050Report();
+                    break;
                 default:
-                    return '[LegacyBridge] Unknown report type';
+                    return null;
             }
-        }) || '[LegacyBridge] Error generating report';
+            return {
+                filename: `${type}_REPORT_${new Date().toISOString().slice(0, 10)}.txt`,
+                content: content
+            };
+        }) || null;
     }
 
     private generateImmortalLegacy(): string {
@@ -134,9 +143,9 @@ MESSAGE TO PRESIDENT:
 `;
     }
 
-    private generatePeaceDividend(): string {
+    private generateEfficiencyReport(): string {
         return `
-THE PLATINUM LEGACY REPORT (v2.0)
+THE EFFICIENCY METRIC REPORT (v2.0)
 =================================
 "The Fortress built a shield around the valley, and a bridge to the future."
 
@@ -153,7 +162,7 @@ THE PLATINUM LEGACY REPORT (v2.0)
    (Self-Repair Active. Supply Chain Active. Evolution Active.)
 
 VERDICT:
-The Ant is King. The Mountain is Safe. The Vision is Immortal.
+System Nominal. Operations Optimal. Efficiency Maximized.
 `;
     }
 

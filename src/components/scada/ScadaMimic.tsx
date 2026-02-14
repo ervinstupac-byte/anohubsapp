@@ -7,6 +7,7 @@ import { ModernButton } from '../ui/ModernButton.tsx';
 import { useNavigate } from 'react-router-dom';
 
 import { DigitalDisplay } from './DigitalDisplay.tsx';
+import { dispatch } from '../../lib/events';
 
 const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'stopped'; mw: number }> = React.memo(({ name, status, mw }) => (
     <div className="relative group">
@@ -63,7 +64,7 @@ export const ScadaMimic: React.FC = React.memo(() => {
     const isCritical = liveData?.status === 'CRITICAL';
 
     // Mock Data
-    const seed = selectedAsset ? selectedAsset.id.charCodeAt(0) : 0;
+    const seed = selectedAsset ? String(selectedAsset.id).charCodeAt(0) : 0;
     const baseMw = isCritical ? 0 : (200 + (seed % 50));
 
     const [t1Mw, setT1Mw] = useState(baseMw);
@@ -156,14 +157,13 @@ export const ScadaMimic: React.FC = React.memo(() => {
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <ModernButton
-                            variant="primary"
-                            icon={<span>🏭</span>}
-                            onClick={() => {
+                            variant="primary" 
+                            icon={<span>⚡</span>}
+                            onClick={() => {  
                                 // Trigger registration wizard (same as sidebar)
-                                const event = new CustomEvent('openAssetWizard');
-                                window.dispatchEvent(event);
+                                dispatch.openAssetWizard();
                             }}
-                            className="px-8 py-4 text-lg shadow-cyan-500/30 shadow-2xl"
+                            className="px-8 py-4 text-lg shadow-cyan-500/30 shadow-2xl"     
                         >
                             Create Your Plant
                         </ModernButton>
@@ -230,7 +230,7 @@ export const ScadaMimic: React.FC = React.memo(() => {
                 {/* Premium Header Bar */}
                 <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
                     <div className="text-xs sm:text-sm font-black text-slate-400 tracking-[0.25em] border-2 border-cyan-500/20 px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/5 rounded-lg backdrop-blur-md shadow-lg">
-                        NEURAL INTERFACE :: SCADA
+                        NEURAL INTERFACE :: INTELLIGENCE
                     </div>
                     <div className="text-xs sm:text-sm font-bold text-cyan-400 uppercase tracking-[0.2em] truncate max-w-[150px] sm:max-w-none drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] flex items-center gap-2">
                         <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>

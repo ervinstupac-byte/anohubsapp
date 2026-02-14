@@ -15,15 +15,13 @@ import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { Camera, Moon, Ghost, FileText, ChevronRight, Shield, X, CheckCircle2, Wrench } from 'lucide-react';
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from '../stores/useAppStore';
 import { useDocumentViewer } from '../contexts/DocumentContext';
 import { useCerebro } from '../contexts/ProjectContext';
 import { StructuralSafetyMonitor } from '../features/telemetry/components/StructuralSafetyMonitor';
 import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
 import { SolutionArchitect } from '../services/SolutionArchitect';
-
-const TRIGGER_FORENSIC_EXPORT = 'ANOHUB_TRIGGER_FORENSIC_EXPORT';
-
+import { dispatch } from '../lib/events';
 
 export const CommandCenter: React.FC = () => {
     const { t } = useTranslation();
@@ -216,12 +214,11 @@ export const CommandCenter: React.FC = () => {
 
                         {/* Forensic Dossier */}
                         <button
-                            onClick={() => window.dispatchEvent(new CustomEvent(TRIGGER_FORENSIC_EXPORT))}
-                            className="px-3 py-1.5 rounded-sm border border-slate-700/30 bg-slate-900/20 text-slate-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
-                            title="Export Forensic Hypothesis as PDF"
+                            onClick={() => dispatch.triggerForensicExport()}
+                            className="p-2 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                            title="Print / Export View"
                         >
-                            <FileText className="w-3 h-3 inline mr-1" />
-                            DOSSIER
+                            <FileText className="w-5 h-5" />
                         </button>
 
                         {/* Audit Snapshot */}

@@ -120,8 +120,8 @@ export const EngineeringDossierCard: React.FC = () => {
                 console.error('openDossier handler failed', err);
             }
         };
-        window.addEventListener('openDossier', handler as EventListener);
-        return () => window.removeEventListener('openDossier', handler as EventListener);
+        window.addEventListener(EVENTS.OPEN_DOSSIER, handler as EventListener);
+        return () => window.removeEventListener(EVENTS.OPEN_DOSSIER, handler as EventListener);
     }, []);
 
     return (

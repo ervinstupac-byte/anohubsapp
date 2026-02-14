@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Shield, Zap, Target, Layers, Info } from 'lucide-react';
+import { Shield, Zap, Target, Layers, Info, Droplets } from 'lucide-react';
 import { TORQUE_STANDARDS } from '../../lib/data/TorqueStandards';
 import { MECHANICAL_TOLERANCES } from '../../lib/physics/SovereignPhysicsEngine';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
@@ -37,7 +37,7 @@ interface ForensicVisualizerProps {
 export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode, onHotspotSelect }) => {
     const { t } = useTranslation();
     const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
-    
+
     // Connect to Telemetry Store for ISO 10816-5 Pulse Logic
     const mechanical = useTelemetryStore(state => state.mechanical);
     const activeAlarms = useTelemetryStore(state => state.activeAlarms);
@@ -155,7 +155,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
         const isActive = activeHotspot === spot.id;
         const nextState = isActive ? null : spot.id;
         setActiveHotspot(nextState);
-        
+
         if (nextState && onHotspotSelect) {
             const data = getStandardData(spot.type);
             onHotspotSelect(spot.id, {
@@ -169,16 +169,16 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
     const isAlarmActive = (type: string) => {
         // 1. Check specific alarms
         const hasMechAlarm = activeAlarms.some(a => a.message.includes('SOVEREIGN_MECHANICAL_ALARM'));
-        
+
         // 2. Check Raw Values (ISO 10816-5 Logic)
         if (type === 'ALIGNMENT') {
             const maxVib = Math.max(mechanical.vibrationX || 0, mechanical.vibrationY || 0);
             return maxVib > 0.1 || hasMechAlarm; // 0.1 mm/s threshold for demo pulse
         }
         if (type === 'GAP') {
-             // Logic: If efficiency drops drastically, wearing gap might be issue
-             // For visualizer, we assume alarm state is sufficient
-             return hasMechAlarm;
+            // Logic: If efficiency drops drastically, wearing gap might be issue
+            // For visualizer, we assume alarm state is sufficient
+            return hasMechAlarm;
         }
         return false;
     };
@@ -187,14 +187,14 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
 
     return (
         <div className="relative w-full h-[600px] bg-slate-900/50 rounded-xl border border-slate-700 overflow-hidden group shadow-2xl">
-            
+
             {/* Background Layer with Blueprint Filter */}
             <div className="absolute inset-0 flex items-center justify-center p-8 opacity-60 group-hover:opacity-100 transition-opacity duration-700">
-                <img 
-                    src={bgImage} 
-                    alt="Blueprint" 
+                <img
+                    src={bgImage}
+                    alt="Blueprint"
                     className="w-full h-full object-contain"
-                    style={{ filter: 'sepia(1) hue-rotate(180deg) saturate(1.5) brightness(0.8)' }} 
+                    style={{ filter: 'sepia(1) hue-rotate(180deg) saturate(1.5) brightness(0.8)' }}
                 />
             </div>
 
@@ -203,10 +203,10 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                 {hotspots.map((spot) => {
                     const isCritical = isAlarmActive(spot.type);
                     const pulseColor = isCritical ? '#ef4444' : (spot.id === activeHotspot ? '#22d3ee' : '#94a3b8');
-                    
+
                     return (
-                        <g 
-                            key={spot.id} 
+                        <g
+                            key={spot.id}
                             onClick={() => handleHotspotClick(spot)}
                             className="cursor-pointer hover:opacity-100 transition-opacity"
                         >
@@ -218,21 +218,21 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                                 fill="transparent"
                                 stroke={pulseColor}
                                 strokeWidth={isCritical ? "0.5" : "0.2"}
-                                animate={{ 
-                                    r: isCritical ? [3, 8, 3] : [3, 4, 3], 
-                                    opacity: isCritical ? [0.8, 0, 0.8] : [0.5, 1, 0.5] 
+                                animate={{
+                                    r: isCritical ? [3, 8, 3] : [3, 4, 3],
+                                    opacity: isCritical ? [0.8, 0, 0.8] : [0.5, 1, 0.5]
                                 }}
                                 transition={{ duration: isCritical ? 1 : 2, repeat: Infinity }}
                             />
-                            
+
                             {/* Core Dot */}
-                            <circle 
-                                cx={spot.x} 
-                                cy={spot.y} 
-                                r="1.5" 
-                                className={isCritical ? "fill-red-500" : "fill-cyan-500/80"} 
+                            <circle
+                                cx={spot.x}
+                                cy={spot.y}
+                                r="1.5"
+                                className={isCritical ? "fill-red-500" : "fill-cyan-500/80"}
                             />
-                            
+
                             {/* Leader Line (Visible on Hover/Active) */}
                             <AnimatePresence>
                                 {(activeHotspot === spot.id || isCritical) && (
@@ -241,16 +241,16 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                     >
-                                        <line 
-                                            x1={spot.x} y1={spot.y} 
-                                            x2={spot.x + 10} y2={spot.y - 10} 
-                                            stroke={pulseColor} 
-                                            strokeWidth="0.2" 
+                                        <line
+                                            x1={spot.x} y1={spot.y}
+                                            x2={spot.x + 10} y2={spot.y - 10}
+                                            stroke={pulseColor}
+                                            strokeWidth="0.2"
                                         />
-                                        <text 
-                                            x={spot.x + 12} y={spot.y - 12} 
-                                            fill={pulseColor} 
-                                            fontSize="3" 
+                                        <text
+                                            x={spot.x + 12} y={spot.y - 12}
+                                            fill={pulseColor}
+                                            fontSize="3"
                                             fontWeight="bold"
                                             fontFamily="monospace"
                                         >
@@ -282,7 +282,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                                 <div className="text-sm font-black text-white">{activeData.title}</div>
                             </div>
                         </div>
-                        
+
                         <div className="space-y-3">
                             <div>
                                 <div className="text-[10px] text-slate-500 uppercase font-bold">Target Value</div>
@@ -290,7 +290,7 @@ export const ForensicVisualizer: React.FC<ForensicVisualizerProps> = ({ viewMode
                                     {activeData.value}
                                 </div>
                             </div>
-                            
+
                             <div className="flex items-start gap-2 bg-slate-800/50 p-2 rounded">
                                 <Info className="w-3 h-3 text-slate-400 mt-0.5" />
                                 <div className="text-xs text-slate-300 italic">
