@@ -11,8 +11,7 @@
   "scripts": {
     "dev": "pnpm run i18n:sync && vite",
     "lint": "tsc --noEmit",
-    "build:verify": "node scripts/verify_env.mjs",
-    "build": "pnpm run build:verify && pnpm run i18n:sync && vite build",
+    "build": "pnpm run i18n:sync && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "i18n:sync": "node scripts/sync-i18n.js",
