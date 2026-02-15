@@ -1,37 +1,35 @@
 import React from 'react';
 import { Settings, AlertTriangle, Info, Zap, Activity } from 'lucide-react';
-import { useProjectEngine, useCerebro } from '../../../contexts/ProjectContext';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
+import { useComponentStore } from '../../../stores/useComponentStore';
 import { GlassCard } from '../../../shared/components/ui/GlassCard';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { formatNumber } from '../../../utils/i18nUtils';
 
 export const MechanicalPanel: React.FC = () => {
-    // 1. LEGACY ENGINE (Writes & Design State)
-    const { technicalState, updateMechanicalDetails, dispatch } = useProjectEngine();
+    // 1. TELEMETRY STORE (Read/Write)
+    const telemetry = useTelemetryStore();
+    const { mechanical: liveMechanical, physics: livePhysics, identity: liveIdentity, setMechanical, applyMitigation, appliedMitigations } = telemetry;
+    
+    // 2. COMPONENT STORE (Health)
+    const { componentHealth: componentHealthRegistry } = useComponentStore();
 
-    // 2. NEW TELEMETRY STORE (Read Live Physics)
-    const { mechanical: liveMechanical, physics: livePhysics, identity: liveIdentity } = useTelemetryStore();
-
-    const { state: cerebroState } = useCerebro();
     const { t, i18n: { language } } = useTranslation();
-    // Use fallback to technicalState only for writes/initial state, READS come from live store
-    const { mechanical } = technicalState; // Needed for binding input fields for updates
 
     // DATA BRIDGE: Priority to Live Telemetry
-    const activeBoltLoad = livePhysics?.boltLoadKN ? livePhysics.boltLoadKN.toNumber() : (technicalState.physics.boltLoadKN || 0);
-    const activeBoltCapacity = livePhysics?.boltCapacityKN ? livePhysics.boltCapacityKN.toNumber() : (technicalState.physics.boltCapacityKN || 0);
-    const activeSafetyFactor = livePhysics?.boltSafetyFactor ? livePhysics.boltSafetyFactor.toNumber() : (technicalState.physics.boltSafetyFactor || 0);
+    const activeBoltLoad = livePhysics?.boltLoadKN || 0;
+    const activeBoltCapacity = livePhysics?.boltCapacityKN || 0;
+    const activeSafetyFactor = livePhysics?.boltSafetyFactor || 0;
     const activeVibration = liveMechanical?.vibration ?? 0;
-    const currentShaftAlignmentLimit = liveMechanical?.shaftAlignmentLimit || technicalState.mechanical.shaftAlignmentLimit || 1.0;
+    const currentShaftAlignmentLimit = liveMechanical?.shaftAlignmentLimit || 1.0;
 
-    // Get component health data from CEREBRO
-    const componentHealth = (cerebroState.componentHealth as Record<string, any>)?.[String(liveIdentity?.assetId ?? '')] || {};
+    // Get component health data from ComponentStore
+    const componentHealth = componentHealthRegistry?.[Number(liveIdentity?.assetId ?? 0)] || {};
 
-    const handleParamChange = (key: keyof typeof mechanical.boltSpecs, value: any) => {
-        updateMechanicalDetails({
-            boltSpecs: { ...mechanical.boltSpecs, [key]: value }
+    const handleParamChange = (key: keyof typeof liveMechanical.boltSpecs, value: any) => {
+        setMechanical({
+            boltSpecs: { ...liveMechanical.boltSpecs, [key]: value }
         });
     };
 
@@ -53,7 +51,7 @@ export const MechanicalPanel: React.FC = () => {
                                 <button
                                     key={grade}
                                     onClick={() => handleParamChange('grade', grade)}
-                                    className={`px-3 py-1 text-xs font-bold rounded border transition-all ${mechanical.boltSpecs.grade === grade
+                                    className={`px-3 py-1 text-xs font-bold rounded border transition-all ${liveMechanical.boltSpecs.grade === grade
                                         ? 'bg-[#2dd4bf] text-black border-[#2dd4bf]'
                                         : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                                         }`}
@@ -69,12 +67,13 @@ export const MechanicalPanel: React.FC = () => {
                         <label className="text-xs font-bold text-slate-500 uppercase">{t('physics.torque', 'Torque')} (Nm)</label>
                         <input
                             type="number"
-                            value={mechanical.boltSpecs.torque}
+                            value={liveMechanical.boltSpecs.torque}
                             onChange={(e) => handleParamChange('torque', parseFloat(e.target.value))}
                             className="w-full bg-slate-900 border border-slate-800 rounded p-2 text-white font-mono"
                         />
                     </div>
                 </div>
+
 
                 {/* Real-time Physics Feedback */}
                 <div className="mt-6 p-4 rounded bg-black/20 border border-white/5">
@@ -111,7 +110,7 @@ export const MechanicalPanel: React.FC = () => {
                     <div>
                         <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-2">{t('physics.shaftAlignment', 'Shaft Alignment')}</h3>
                         <p className="text-xs text-slate-400 mb-4">
-                            Max allowed radial runout based on bearing type <b>{mechanical.bearingType}</b>.
+                            Max allowed radial runout based on bearing type <b>{liveMechanical.bearingType}</b>.
                         </p>
                     </div>
                     <button className="p-2 hover:bg-white/10 rounded-full transition-colors text-amber-500" title="Legacy Story">
@@ -131,7 +130,7 @@ export const MechanicalPanel: React.FC = () => {
                     <span>Limit: {formatNumber(currentShaftAlignmentLimit, language, 3)} mm</span>
                 </div>
 
-                {activeVibration > 4.5 && !cerebroState.appliedMitigations.includes('VIBRATION_CRITICAL') && (
+                {activeVibration > 4.5 && !appliedMitigations.includes('VIBRATION_CRITICAL') && (
                     <div className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-center justify-between group overflow-hidden relative">
                         <div className="relative z-10">
                             <h4 className="text-xs font-bold text-red-500 uppercase flex items-center gap-2">
@@ -142,7 +141,7 @@ export const MechanicalPanel: React.FC = () => {
                             </p>
                         </div>
                         <button
-                            onClick={() => dispatch({ type: 'APPLY_MITIGATION', payload: 'VIBRATION_CRITICAL' })}
+                            onClick={() => applyMitigation('VIBRATION_CRITICAL')}
                             className="relative z-10 px-3 py-2 bg-red-500 text-white text-[10px] font-black rounded hover:bg-red-400 transition-all flex items-center gap-2"
                         >
                             ENGAGE RECOVERY <Zap className="w-3 h-3" />

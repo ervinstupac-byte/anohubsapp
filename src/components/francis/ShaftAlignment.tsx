@@ -8,7 +8,7 @@ import { useAudit } from '../../contexts/AuditContext';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
 import { ForensicReportService } from '../../services/ForensicReportService';
 import { ShaftOrbitPlot, ShaftOrbitPlotHandle } from '../../features/telemetry/components/ShaftOrbitPlot';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
 import { Activity, Zap, Sun, Footprints, AlertTriangle, CheckCircle, Database, FileSearch, Ruler, ArrowLeft, RotateCw, Info, ShieldCheck, Microscope, Target, Calculator, ChevronRight } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
@@ -31,7 +31,8 @@ export const ShaftAlignment: React.FC = () => {
     const navigate = useNavigate();
     const { logAction } = useAudit();
     const { viewDocument } = useDocumentViewer();
-    const { state, dispatch } = useCerebro();
+    const telemetry = useTelemetryStore();
+    const { updateTelemetry, setMechanical } = telemetry;
     const { orbit: orbitAnalysis, vibration } = useEngineeringMath();
     const { densityMode } = useDensity(); // NEW
     const spacing = densityMode === 'compact' ? SPACING_COMPACT : SPACING;
@@ -83,11 +84,8 @@ export const ShaftAlignment: React.FC = () => {
         const points = orbitRef.current?.getCurrentPoints();
         const snapshot = orbitRef.current?.getSnapshot();
         if (points) {
-            dispatch({
-                type: 'UPDATE_MECHANICAL',
-                payload: {
-                    baselineOrbitCenter: orbitAnalysis.currentCenter
-                }
+            setMechanical({
+                baselineOrbitCenter: orbitAnalysis.currentCenter
             });
             if (snapshot) localStorage.setItem('nc4.2_baseline_snapshot', snapshot);
             logAction('PIN_BASELINE', 'Baseline orbit reference captured and persisted to Neural Core.', 'SUCCESS');
@@ -95,11 +93,8 @@ export const ShaftAlignment: React.FC = () => {
     };
 
     const handleResetBaseline = () => {
-        dispatch({
-            type: 'UPDATE_MECHANICAL',
-            payload: {
-                baselineOrbitCenter: { x: 0, y: 0 }
-            }
+        setMechanical({
+            baselineOrbitCenter: { x: 0, y: 0 }
         });
         localStorage.removeItem('nc4.2_baseline_snapshot');
         logAction('RESET_BASELINE', 'Baseline reference cleared from Neural Core.', 'SUCCESS');
@@ -112,16 +107,22 @@ export const ShaftAlignment: React.FC = () => {
             const base = confirmedSteps.includes('laser_alignment') ? 0.05 : 0.15;
             const trend = confirmedSteps.includes('laser_alignment') ? 1.1 : 2.5;
 
-            dispatch({
-                type: 'UPDATE_VIBRATION_HISTORY',
-                payload: {
-                    x: Math.cos(time) * base + (Math.random() - 0.5) * 0.01,
-                    y: Math.sin(time) * base * trend + (Math.random() - 0.5) * 0.01
+            const newPoint = {
+                x: Math.cos(time) * base + (Math.random() - 0.5) * 0.01,
+                y: Math.sin(time) * base * trend + (Math.random() - 0.5) * 0.01
+            };
+
+            // Manually append to history for demo purposes
+            // In a real app, this would come from the store's stream
+            const currentHistory = useTelemetryStore.getState().mechanical.vibrationHistory || [];
+            updateTelemetry({
+                mechanical: {
+                    vibrationHistory: [...currentHistory.slice(-49), newPoint]
                 }
             });
         }, 100);
         return () => clearInterval(interval);
-    }, [confirmedSteps, dispatch]);
+    }, [confirmedSteps, updateTelemetry]);
 
     const confirmStep = async (stepId: string, description: string) => {
         if (confirmedSteps.includes(stepId)) return;
@@ -349,10 +350,11 @@ export const ShaftAlignment: React.FC = () => {
                                         ref={orbitRef}
                                         vibrationX={vibration.x}
                                         vibrationY={vibration.y}
-                                        baselinePoints={state.mechanical.vibrationHistory || []}
+                                        baselinePoints={telemetry.mechanical.vibrationHistory || []}
                                         centerPath={[]}
                                         onAnalysis={(analysis) => {
-                                            dispatch({ type: 'UPDATE_CENTER_PATH', payload: analysis.currentCenter });
+                                            const currentCenterPath = useTelemetryStore.getState().mechanical.centerPath || [];
+                                            setMechanical({ centerPath: [...currentCenterPath.slice(-49), analysis.currentCenter] });
                                         }}
                                     />
                                 </div>

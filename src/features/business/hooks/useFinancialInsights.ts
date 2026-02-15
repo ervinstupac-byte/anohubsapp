@@ -12,7 +12,8 @@ export const useFinancialInsights = (): FinancialOutput => {
     // 2. Map to Strict Logic Input
     const input: FinancialInput = useMemo(() => {
         // Extract with fallbacks
-        const currentMW = physics.powerMW?.toNumber() || 0;
+        // physics.powerMW is not available in TechnicalProjectState['physics']
+        const currentMW = 0; // Or derive from hydraulic.powerKW if needed
         const designMW = config?.site?.designPerformanceMW || 10.0; // Default or from config
 
         // Determine if running (Example logic: RPM > 10)

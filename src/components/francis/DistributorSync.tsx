@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Skull, Settings2, Zap, Activity, ArrowLeft, ShieldAlert, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const DistributorSync: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Telemetry from CEREBRO
-    const guideVaneOpening = state.specializedState?.sensors?.guide_vane_opening ?? 45.2; // %
+    // Telemetry from TelemetryStore
+    const guideVaneOpening = telemetry.hydraulic?.guideVaneOpening ?? 45.2; // %
     const syncDelta = 0.08; // mm (Mocked for current context)
     const isOutOfSync = syncDelta > 0.5;
 

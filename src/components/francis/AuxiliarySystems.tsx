@@ -3,14 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, AlertTriangle, ShieldAlert, Cpu, Activity, Settings, Zap, Clock, Calendar } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const AuxiliarySystems: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
+
+    // Mock Telemetry (Pending integration)
+    const dcVoltage = 110.2; // VDC
+    const brakesStatus = 'Ready';
+    const drainageStatus = 'Optimal';
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
@@ -46,7 +51,7 @@ export const AuxiliarySystems: React.FC = () => {
                                 <Cpu className="w-3 h-3 text-cyan-400" /> DC Control Voltage
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter">
-                                110.2 <span className="text-xs text-slate-500">VDC</span>
+                                {dcVoltage} <span className="text-xs text-slate-500">VDC</span>
                             </p>
                         </div>
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
@@ -54,7 +59,7 @@ export const AuxiliarySystems: React.FC = () => {
                                 <Zap className="w-3 h-3 text-amber-400" /> Brakes Hydraulic
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase">
-                                Ready
+                                {brakesStatus}
                             </p>
                         </div>
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
@@ -62,7 +67,7 @@ export const AuxiliarySystems: React.FC = () => {
                                 <Activity className="w-3 h-3 text-blue-400" /> Drainage System
                             </p>
                             <p className="text-3xl font-black text-emerald-400 font-mono tracking-tighter uppercase">
-                                Optimal
+                                {drainageStatus}
                             </p>
                         </div>
                     </div>

@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Merge, ArrowLeft, Crosshair, AlertTriangle, Activity, Zap, ShieldCheck } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const GridSync: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
     // Synchroscope rotation simulation (Visual-only)
     const [rotation, setRotation] = useState(0);
     const [syncLocked, setSyncLocked] = useState(false);
 
-    // Mock constants from CEREBRO in future
+    // Mock constants (Pending Telemetry Integration)
     const machineFreq = 50.02;
     const gridFreq = 50.00;
     const phaseDelta = 4.2; // Degrees

@@ -6,6 +6,7 @@ import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 
 export const TruthHeatmapDemo: React.FC = () => {
     const [heatmapMode, setHeatmapMode] = useState(false);
+    const [selectedPart, setSelectedPart] = useState<string | null>(null);
     const { diagnostics, activeLogs } = useContextAwareness();
 
     // Calculate truth delta map
@@ -43,6 +44,9 @@ export const TruthHeatmapDemo: React.FC = () => {
                 rpm={300}
                 deltaMap={deltaMap as unknown as Record<string, number>}
                 heatmapMode={heatmapMode}
+                selectedPart={selectedPart}
+                onSelect={setSelectedPart}
+                showInfoPanel={true}
             />
 
             {/* Legend (only show in heatmap mode) */}

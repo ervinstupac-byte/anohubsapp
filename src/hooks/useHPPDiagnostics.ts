@@ -1,7 +1,7 @@
 /**
  * useHPPDiagnostics Hook
  * Advanced Expert System for HPP Diagnostics
- * Integrates ProjectContext with ExpertDiagnosisEngine and Physics Rules
+ * Integrates useTelemetryStore with ExpertDiagnosisEngine and Physics Rules
  */
 
 import { useMemo } from 'react';

@@ -76,9 +76,9 @@ export const ScadaMimic: React.FC = React.memo(() => {
             },
             physics: {
                 ...telemetryStore.physics,
-                hoopStress: telemetryStore.physics.hoopStress || new Decimal(0),
-                powerMW: new Decimal(0), 
-                surgePressure: telemetryStore.physics.surgePressure || new Decimal(0),
+                hoopStressMPa: telemetryStore.physics.hoopStressMPa || 0,
+                // powerMW: 0, // Removed as it is not in TechnicalProjectState['physics']
+                surgePressureBar: telemetryStore.physics.surgePressureBar || 0,
             },
             penstock: {
                 ...telemetryStore.penstock,

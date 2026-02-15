@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Zap, Activity, ToggleLeft, ToggleRight, AlertTriangle, CheckCircle, Info, Cpu, Settings, ShieldAlert } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const Excitation: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
 
     // States
     const [mode, setMode] = useState<'AUTO' | 'MANUAL'>('AUTO'); // AVR vs FCR

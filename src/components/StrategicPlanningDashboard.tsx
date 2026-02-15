@@ -25,12 +25,47 @@ import { HydraulicsPanel } from './cerebro/panels/HydraulicsPanel';
 import { LiveMathSync, SystemHealth } from '../services/LiveMathSync'; // Engine
 import { LiveHUD } from './cerebro/LiveHUD'; // HUD
 import { ToastSystem } from '../shared/components/ui/ToastSystem'; // Legacy Guard
-import { useProjectEngine } from '../contexts/ProjectContext'; // Context
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema';
 
 export const StrategicPlanningDashboard: React.FC = () => {
-    // Context Hook (Replaces local state for granular parts)
-    const { siteParams, updateSiteConditions, technicalState } = useProjectEngine();
+    // Telemetry Store (Replaces Context)
+    const { 
+        site, 
+        penstock, 
+        mechanical, 
+        hydraulic, 
+        physics, 
+        identity,
+        setConfig 
+    } = useTelemetryStore();
     const { t, i18n: { language } } = useTranslation();
+
+    // Construct TechnicalProjectState for compatibility
+    const technicalState = React.useMemo(() => ({
+        ...DEFAULT_TECHNICAL_STATE,
+        site,
+        penstock,
+        mechanical,
+        hydraulic,
+        physics: {
+            ...DEFAULT_TECHNICAL_STATE.physics,
+            boltSafetyFactor: physics?.boltSafetyFactor ?? DEFAULT_TECHNICAL_STATE.physics.boltSafetyFactor,
+            boltLoadKN: physics?.boltLoadKN ?? DEFAULT_TECHNICAL_STATE.physics.boltLoadKN,
+            boltCapacityKN: physics?.boltCapacityKN ?? DEFAULT_TECHNICAL_STATE.physics.boltCapacityKN,
+            hoopStressMPa: physics?.hoopStressMPa ?? DEFAULT_TECHNICAL_STATE.physics.hoopStressMPa,
+            staticPressureBar: physics?.staticPressureBar ?? DEFAULT_TECHNICAL_STATE.physics.staticPressureBar,
+            surgePressureBar: physics?.surgePressureBar ?? DEFAULT_TECHNICAL_STATE.physics.surgePressureBar,
+            waterHammerPressureBar: physics?.waterHammerPressureBar ?? DEFAULT_TECHNICAL_STATE.physics.waterHammerPressureBar,
+            eccentricity: physics?.eccentricity ?? DEFAULT_TECHNICAL_STATE.physics.eccentricity,
+        },
+        identity
+    }), [site, penstock, mechanical, hydraulic, physics, identity]);
+
+    const updateSiteConditions = (updates: any) => {
+        // Map updates to site config
+        setConfig({ site: { ...site, ...updates } });
+    };
 
     const [feasibility, setFeasibility] = useState<FeasibilityResult | null>(null);
 

@@ -4,7 +4,7 @@ import { supabase } from '../services/supabaseClient.ts';
 import { loggingService } from '../services/LoggingService.ts';
 import { SentinelKernel } from '../services/SentinelKernel.ts';
 import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema';
-import ProjectStateManager from './ProjectStateContext';
+import { ProjectStateManager } from '../core/ProjectStateManager';
 import { EventJournal } from '../services/EventJournal';
 import { ENABLE_REAL_TELEMETRY } from '../config/featureFlags';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';

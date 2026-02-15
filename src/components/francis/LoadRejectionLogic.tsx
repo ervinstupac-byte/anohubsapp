@@ -3,19 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ZapOff, ArrowLeft, Activity, GitPullRequestClosed, Info, AlertTriangle, ShieldAlert, Cpu, Timer } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const LoadRejectionLogic: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Data from CEREBRO
+    // Data from Telemetry
     const [scanned, setScanned] = useState(false);
-    const machineSpeed = state.mechanical.rpm; // RPM
-    const waterHammerPressure = state.physics.staticPressureBar * 1.4; // Simulated dynamic rise
+    const waterHammerPressure = (telemetry.physics?.staticPressureBar ?? 0) * 1.4; // Simulated dynamic rise
 
     useEffect(() => {
         const timer = setTimeout(() => {

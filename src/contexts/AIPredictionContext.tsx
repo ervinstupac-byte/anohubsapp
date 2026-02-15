@@ -12,7 +12,7 @@ import {
     PrescriptiveRecommendation
 } from '../services/AIPredictionService.ts';
 import idAdapter from '../utils/idAdapter';
-import ProjectStateManager from './ProjectStateContext';
+import { ProjectStateManager } from '../core/ProjectStateManager';
 
 // NEW: Sensor aggregation types
 export interface AggregatedSensorData {

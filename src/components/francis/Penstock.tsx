@@ -37,8 +37,8 @@ export const Penstock: React.FC = () => {
 
     // Live telemetry from TelemetryStore (with null safety)
     // Note: PhysicsResult uses Decimal.js, we convert to number for display
-    const hoopStress = physics?.hoopStress?.toNumber?.() ?? 0;
-    const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
+    const hoopStress = physics?.hoopStressMPa ?? 0;
+    const surgePressure = physics?.surgePressureBar ?? 0;
     const burstSF = waterHammer?.burstSafetyFactor ?? 1.0;
     const isDanger = burstSF < 1.5;
 

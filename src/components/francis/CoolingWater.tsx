@@ -16,20 +16,20 @@ import {
     Waves
 } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const CoolingWater: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
     const [activeTab, setActiveTab] = useState<'winter' | 'summer' | 'failure'>('winter');
 
-    // Telemetry from CEREBRO
+    // Telemetry from TelemetryStore
     const coolingFlow = 120; // L/s (Mock or from francis.sensors)
     const coolingPressure = 4.2; // Bar
-    const inletTemp = state.site.temperature - 6.6; // Computed delta for cooling water
+    const inletTemp = (telemetry.site?.temperature ?? 20) - 6.6; // Computed delta for cooling water
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12 selection:bg-cyan-500/30">

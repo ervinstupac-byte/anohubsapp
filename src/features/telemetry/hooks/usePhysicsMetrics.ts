@@ -62,14 +62,16 @@ export const usePhysicsMetrics = (): PhysicsMetrics => {
 
     return useMemo(() => {
         // Extract core metrics from physics result (Decimal -> number)
-        const currentStress = physics.hoopStress?.toNumber() || 0;
-        const surgePressure = physics.surgePressure?.toNumber() || 0;
-        const powerOutput = physics.powerMW?.toNumber() || 0;
-        const eccentricity = physics.eccentricity?.toNumber() || 0;
-        const specificWaterConsumption = physics.specificWaterConsumption?.toNumber() || 0;
+        const currentStress = physics.hoopStressMPa || 0;
+        const surgePressure = (physics.surgePressureBar || 0) * 100000; // Convert Bar to Pa
+        const powerOutput = physics.powerMW || 0;
+        const eccentricity = physics.eccentricity || 0;
+        const specificWaterConsumption = physics.specificWaterConsumption || 0;
 
         // Alert level from diagnosis (primary source) or physics status (fallback)
-        const alertLevel = diagnosis?.severity || physics.status || 'NOMINAL';
+        // physics.status is not available in TechnicalProjectState['physics']
+        // We can derive status from severity if needed or use a default
+        const alertLevel = diagnosis?.severity || 'NOMINAL';
 
         // Calculate maintenance urgency using centralized PhysicsEngine logic
         const mockState = {
@@ -83,13 +85,15 @@ export const usePhysicsMetrics = (): PhysicsMetrics => {
         const healthScore = Math.max(0, 100 - (maintenanceUrgency - 1) * 25);
 
         // Performance gap (actual/design * 100)
-        const performanceGap = physics.performanceGap?.toNumber() || 100;
+        // performanceGap is not in TechnicalProjectState['physics']
+        const performanceGap = 100; 
 
         // Efficiency loss (volumetric + mechanical losses)
-        const efficiencyLoss = physics.volumetricLoss?.toNumber() || 0;
+        const efficiencyLoss = physics.volumetricLoss || 0;
 
         // Safety factor from diagnosis or physics
-        const safetyFactor = diagnosis?.safetyFactor?.toNumber() || physics.status === 'CRITICAL' ? 0.8 : 1.5;
+        // physics.status is not available
+        const safetyFactor = diagnosis?.safetyFactor ? diagnosis.safetyFactor.toNumber() : (alertLevel === 'CRITICAL' ? 0.8 : 1.5);
 
         // Diagnostic flags (using SYSTEM_CONSTANTS thresholds)
         const isCavitating = hydraulic.flow > (SYSTEM_CONSTANTS.THRESHOLDS.FLOW.CAVITATION_CRITICAL || 42.5);

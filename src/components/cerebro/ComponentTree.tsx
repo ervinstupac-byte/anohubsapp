@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, Hexagon, Circle, Zap, Anchor, Camera, Sparkles, Activity, FileCheck, Droplet, Settings, AlertTriangle } from 'lucide-react';
-import { useProjectEngine } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { InspectionImage } from '../../services/StrategicPlanningService';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,9 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
     // Recursive Tree Node Component
     const TreeNode = ({ node, level = 0 }: { node: TreeNodeProps, level?: number }) => {
         const [expanded, setExpanded] = useState<Record<string, boolean>>({ 'ROOT': true, 'HPP': true });
+        
+        // Use TelemetryStore to store inspection images
+        const { addInspectionImage } = useTelemetryStore();
 
         // Local toggle for specific node if needed, or use global state
         const [isExpanded, setIsExpanded] = useState(true);
@@ -51,21 +54,19 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
                     tags = ['Kavitation', 'Materialabtrag'];
                 }
 
-                const newImg: InspectionImage = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    componentId: nodeId,
+                const newImg: any = {
                     src: src,
-                    description: caption,
-                    aiTags: tags,
-                    metadata: {
-                        timestamp: new Date().toLocaleString('de-DE'),
-                        gps: "44.123N, 18.456E" // Mock GPS
-                    }
+                    tag: tags[0], // Use first tag as primary
+                    timestamp: new Date().toISOString(),
+                    notes: caption
                 };
 
-                // TODO: Re-enable when addInspectionImage is implemented in ProjectContext
-                // addInspectionImage(newImg);
-                alert(`Bild hochgeladen für ${nodeId}! KI-Diagnose: ${tags.join(', ')}`);
+                if (addInspectionImage) {
+                    addInspectionImage(1, nodeId, newImg);
+                    alert(t('common.success', 'Image uploaded successfully'));
+                } else {
+                    console.warn('addInspectionImage not available in context');
+                }
             };
 
             reader.readAsDataURL(file);

@@ -51,9 +51,10 @@ export const useContextEngine = () => {
         penstock, 
         specializedState, 
         structural, 
-        appliedMitigations, 
+        appliedMitigations,
         physics, 
         activeScenario,
+        manualRules,
     } = useTelemetryStore();
     
     // Local state for features not yet in TelemetryStore or managed locally
@@ -84,9 +85,9 @@ export const useContextEngine = () => {
         physics: {
             ...DEFAULT_TECHNICAL_STATE.physics,
             // Map Decimal physics to number for legacy compatibility where needed
-            hoopStressMPa: physics.hoopStress?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.hoopStressMPa,
-            waterHammerPressureBar: physics.surgePressure?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.waterHammerPressureBar,
-            specificWaterConsumption: physics.specificWaterConsumption?.toNumber() ?? DEFAULT_TECHNICAL_STATE.physics.specificWaterConsumption,
+            hoopStressMPa: physics.hoopStressMPa ?? DEFAULT_TECHNICAL_STATE.physics.hoopStressMPa,
+            waterHammerPressureBar: physics.waterHammerPressureBar ?? DEFAULT_TECHNICAL_STATE.physics.waterHammerPressureBar,
+            specificWaterConsumption: physics.specificWaterConsumption ?? DEFAULT_TECHNICAL_STATE.physics.specificWaterConsumption,
             // Add other mappings as required by ExpertInference
             leakageStatus: DEFAULT_TECHNICAL_STATE.physics.leakageStatus // Fallback
         },
@@ -95,7 +96,7 @@ export const useContextEngine = () => {
         market: DEFAULT_TECHNICAL_STATE.market,
         riskScore: 0,
         lastRecalculation: new Date().toISOString(),
-        manualRules: [],
+        manualRules,
         componentHealth: {},
         investigatedComponents: [],
     } as unknown as TechnicalProjectState), [identity, mechanical, hydraulic, site, penstock, specializedState, structural, appliedMitigations, physics, demoMode, activeScenario]);

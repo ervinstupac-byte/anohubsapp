@@ -163,15 +163,14 @@ export const AssetConfigProvider: React.FC<{ children: ReactNode }> = ({ childre
         setError(null);
 
         try {
-            // TODO: Replace with actual API call
-            // const response = await fetch(`/api/assets/${assetId}/config`);
-            // const data = await response.json();
-
-            // For now, simulate API delay
+            // Mock API call - in production this would fetch from Supabase
+            // const { data, error } = await supabase.from('asset_configs').select('*').eq('asset_id', assetId).single();
+            
+            // For now, simulate API delay and return default config
             await new Promise(resolve => setTimeout(resolve, 100));
 
             console.log(`[AssetConfigContext] Loaded config for asset: ${assetId}`);
-            // setConfig(data);
+            // if (data) setConfig(data);
         } catch (err) {
             console.error('[AssetConfigContext] Failed to load config:', err);
             setError(err instanceof Error ? err.message : 'Unknown error');

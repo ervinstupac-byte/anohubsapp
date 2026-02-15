@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
-import { useCerebro } from '../contexts/ProjectContext.tsx';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export const AcousticDiagnosticModule: React.FC = () => {
-    const { state } = useCerebro();
+    const mechanical = useTelemetryStore(state => state.mechanical);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const lastWarningTime = useRef<number>(0);
 
-    const metrics = state.mechanical.acousticMetrics || {
+    const metrics = mechanical?.acousticMetrics || {
         cavitationIntensity: 0,
         ultrasonicLeakIndex: 0,
         bearingGrindIndex: 0,

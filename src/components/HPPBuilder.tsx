@@ -8,9 +8,9 @@ import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
 import { AssetPicker } from './AssetPicker.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
-import { useTelemetry } from '../contexts/TelemetryContext.tsx';
-import { useCerebro } from '../contexts/ProjectContext.tsx';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import idAdapter from '../utils/idAdapter';
+import { useDemoMode } from '../stores/useAppStore';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
 import { AssetIdentity, TurbineType } from '../types/assetIdentity.ts';
 import type { SavedConfiguration, HPPSettings, TurbineRecommendation } from '../types.ts';
@@ -24,7 +24,7 @@ import { TurbineFactory } from '../lib/engines/TurbineFactory.ts';
 import { useVoiceAssistant } from '../contexts/VoiceAssistantContext.tsx';
 import { StructuralAssembly } from './hpp-designer/StructuralAssembly.tsx';
 import { ForensicReportService } from '../services/ForensicReportService';
-import { ProjectStateManager } from '../contexts/ProjectStateContext';
+import { ProjectStateManager } from '../core/ProjectStateManager';
 import { loggingService } from '../services/LoggingService';
 
 const LOCAL_STORAGE_KEY = 'hpp-builder-settings';
@@ -56,9 +56,8 @@ export const HPPBuilder: React.FC = () => {
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset, updateAsset, logActivity } = useAssetContext();
-    const { telemetry } = useTelemetry();
     const { t } = useTranslation();
-    const { state, dispatch } = useCerebro(); // Only CEREBRO - no broken contexts!
+    const { hydraulic, identity, setHydraulic, setConfig } = useTelemetryStore();
     const { triggerVoiceAlert } = useVoiceAssistant();
     const lastAlertTime = useRef<number>(0);
 
@@ -114,8 +113,8 @@ export const HPPBuilder: React.FC = () => {
         try {
             // SAFE FALLBACKS FROM TECHNICAL SCHEMA - SINGLE SOURCE OF TRUTH
             const turbineType = selectedAsset?.turbine_type ?? 'kaplan';
-            const headVal = settings?.head ?? state.hydraulic.head ?? DEFAULT_TECHNICAL_STATE.hydraulic.head;
-            const flowVal = settings?.flow ?? state.hydraulic.flow ?? DEFAULT_TECHNICAL_STATE.hydraulic.flow;
+            const headVal = settings?.head ?? hydraulic.head ?? DEFAULT_TECHNICAL_STATE.hydraulic.head;
+            const flowVal = settings?.flow ?? hydraulic.flow ?? DEFAULT_TECHNICAL_STATE.hydraulic.flow;
             const effVal = settings?.efficiency ?? 92;
 
             // SAFE ENGINE CREATION WITH OPTIONAL CHAINING
@@ -163,7 +162,7 @@ export const HPPBuilder: React.FC = () => {
 
             return fallbackResults;
         }
-    }, [settings, selectedAsset, configName, state, showToast, t]);
+    }, [settings, selectedAsset, configName, hydraulic, showToast, t]);
 
     // --- RISK THRESHOLD SYNC (Physics-Based CEREBRO Integration) ---
     // Replaces useHPPData logic directly in component
@@ -251,8 +250,8 @@ export const HPPBuilder: React.FC = () => {
     const updateSettings = (key: keyof HPPSettings, value: any) => {
         setSettings(prev => {
             const newSettings = { ...prev, [key]: value };
-            if (key === 'head') dispatch({ type: 'UPDATE_HYDRAULIC', payload: { head: Number(value) || DEFAULT_TECHNICAL_STATE.hydraulic.head } });
-            if (key === 'flow') dispatch({ type: 'UPDATE_HYDRAULIC', payload: { flow: Number(value) || DEFAULT_TECHNICAL_STATE.hydraulic.flow } });
+            if (key === 'head') setHydraulic({ head: Number(value) || DEFAULT_TECHNICAL_STATE.hydraulic.head });
+            if (key === 'flow') setHydraulic({ flow: Number(value) || DEFAULT_TECHNICAL_STATE.hydraulic.flow });
             return newSettings;
         });
     };
@@ -263,7 +262,7 @@ export const HPPBuilder: React.FC = () => {
         const blob = ForensicReportService.generateHPPSpecification({
             asset: selectedAsset,
             projectState: {
-                identity: state.identity,
+                identity: identity,
                 hydraulic: {
                     head: settings.head,
                     flow: settings.flow,
@@ -280,7 +279,7 @@ export const HPPBuilder: React.FC = () => {
         ForensicReportService.openAndDownloadBlob(blob, `HPP_Spec_${selectedAsset.name}_${Date.now()}.pdf`, true, {
             assetId: idAdapter.toDb(selectedAsset.id),
             projectState: {
-                identity: state.identity,
+                identity: identity,
                 hydraulic: {
                     head: settings.head,
                     flow: settings.flow,
@@ -402,7 +401,6 @@ export const HPPBuilder: React.FC = () => {
 
     const autoLoadLatestConfig = async () => {
         if (!user || !selectedAsset) return;
-        const { idAdapter } = await import('../utils/idAdapter');
         const numeric = idAdapter.toNumber(selectedAsset.id);
         const assetDbId = numeric !== null ? idAdapter.toDb(numeric) : undefined;
         const { data } = await supabase.from('turbine_designs').select('*').eq('user_id', user.id).eq('asset_id', assetDbId).order('created_at', { ascending: false }).limit(1).single();
@@ -411,7 +409,7 @@ export const HPPBuilder: React.FC = () => {
 
     const handleTurbineSelect = (type: string) => {
         // Defensive Guard: Check if Context/State exists before execution
-        if (!state || !state.identity) {
+        if (!identity) {
             console.warn("CEREBRO: Attempted click on uninitialized Asset Identity.");
             return;
         }
@@ -419,7 +417,7 @@ export const HPPBuilder: React.FC = () => {
         const turbineType = type as TurbineType;
         const generatedPowerMW = calculations.powerMW || 10;
         const newIdentity: AssetIdentity = {
-            ...state.identity, // Ensure we are extending or using existing identity safely if applicable, or just creating new. 
+            ...identity, // Ensure we are extending or using existing identity safely if applicable, or just creating new. 
             // Actually user code snippet was just a guard. The original code creates a NEW identity.
             // I will keep original logic but wrap it.
             assetId: -Date.now(),
@@ -481,7 +479,7 @@ export const HPPBuilder: React.FC = () => {
                 axialThrustBalanced: true, pressureDifferenceBar: 0.1
             };
         }
-        dispatch({ type: 'SET_ASSET', payload: { ...state.identity, turbineType: turbineType } });
+        setConfig({ identity: { ...identity, turbineType: turbineType } });
         showToast(t('hppStudio.toasts.turbineInitialized', { type: turbineType }), 'success');
         navigateToTurbineDetail(type);
     };

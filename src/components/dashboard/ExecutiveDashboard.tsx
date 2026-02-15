@@ -50,7 +50,7 @@ import { aiPredictionService } from '../../services/AIPredictionService';
 import { supabase } from '../../services/supabaseClient';
 import { fetchForecastForAsset } from '../../services/DashboardDataService';
 import { prefetchPredictiveAssets } from '../../services/DashboardDataService';
-import ProjectStateManager from '../../contexts/ProjectStateContext';
+import { ProjectStateManager } from '../../core/ProjectStateManager';
 import { useToast } from '../../stores/useAppStore';
 import { BootSequence } from '../BootSequence';
 import { createFrancisHorizontalAssetTree, AssetNode } from '../../models/AssetHierarchy';
@@ -75,6 +75,7 @@ const calculateLongevityLoss = (alignment: number): { years: number; percentage:
 
 // === MAIN EXECUTIVE DASHBOARD ===
 export const ExecutiveDashboard: React.FC = () => {
+    console.log('Rendering ExecutiveDashboard');
     const { t } = useTranslation();
     const navigate = useNavigate();
     const threeContainerRef = useRef<HTMLDivElement>(null);
@@ -188,10 +189,12 @@ export const ExecutiveDashboard: React.FC = () => {
 
             // NC-20900: Francis Big Brother Engine Activation
             // We instantiate it to ensure the logic path is active and available for forensic audits
+            /*
             import('../../lib/engines/FrancisBigBrotherEngine').then(({ FrancisBigBrotherEngine }) => {
                 const bigBrother = new FrancisBigBrotherEngine();
                 console.log('[ExecutiveDashboard] 👁️ Francis Big Brother Engine ONLINE. Monitoring Auxiliary Systems:', bigBrother.variant);
             });
+            */
 
             // also expose to console for quick verification
             // eslint-disable-next-line no-console
@@ -732,13 +735,13 @@ export const ExecutiveDashboard: React.FC = () => {
                                     <div>
                                         <p className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-1">{t('dashboard.kpi.performance_gap')}</p>
                                         <div className="flex items-baseline gap-2">
-                                            <span className={`text-3xl font-black font-mono ${(livePhysics?.performanceGap?.toNumber() ?? 0) > 98 ? 'text-h-green' : 'text-h-yellow'}`}>{(livePhysics?.performanceGap?.toNumber() ?? 96.5).toFixed(1)}%</span>
+                                            <span className={`text-3xl font-black font-mono ${(livePhysics?.performanceGap ?? 0) > 98 ? 'text-h-green' : 'text-h-yellow'}`}>{(livePhysics?.performanceGap ?? 96.5).toFixed(1)}%</span>
                                             <span className="text-[9px] text-slate-500 font-mono">{t('dashboard.kpi.vs_design')}</span>
                                         </div>
                                     </div>
                                     <div className="w-1/2">
                                         <div className="h-3 bg-h-dark rounded overflow-hidden relative">
-                                            <motion.div className="h-full bg-gradient-to-r from-h-green to-h-cyan" initial={{ width: 0 }} animate={{ width: `${Math.min(100, livePhysics?.performanceGap?.toNumber() ?? 96.5)}%` }} transition={{ duration: 0.5 }} />
+                                            <motion.div className="h-full bg-gradient-to-r from-h-green to-h-cyan" initial={{ width: 0 }} animate={{ width: `${Math.min(100, livePhysics?.performanceGap ?? 96.5)}%` }} transition={{ duration: 0.5 }} />
                                         </div>
                                     </div>
                                 </div>
@@ -788,10 +791,10 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <EngineeringCard
                                     variant="instrument"
                                     title={t('dashboard.kpi.axial_thrust')}
-                                    value={(livePhysics?.axialThrustKN?.toNumber() ?? 145).toFixed(0)}
+                                    value={(livePhysics?.axialThrustKN ?? 145).toFixed(0)}
                                     unit="kN"
                                     icon={<Gauge className="w-4 h-4 text-h-purple" />}
-                                    status={(livePhysics?.axialThrustKN?.toNumber() ?? 0) > 200 ? 'critical' : (livePhysics?.axialThrustKN?.toNumber() ?? 0) > 180 ? 'warning' : 'nominal'}
+                                    status={(livePhysics?.axialThrustKN ?? 0) > 200 ? 'critical' : (livePhysics?.axialThrustKN ?? 0) > 180 ? 'warning' : 'nominal'}
                                     trendData={trendData.thrust}
                                     subtitle={t('dashboard.kpi.axial_thrust_sub')}
                                     onClick={() => {
@@ -1074,7 +1077,7 @@ export const ExecutiveDashboard: React.FC = () => {
                             <div className="text-[11px] text-slate-300 font-mono mb-2">Keyword: <span className="font-bold">{dossierKeyword || '—'}</span></div>
                             <div className="mb-3">
                                 <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Latest Telemetry</div>
-                                <div className="text-sm text-slate-300">Alignment: {(mechanical?.alignment || 0).toFixed(3)} mm/m — Thrust: {(livePhysics?.axialThrustKN?.toNumber() || 0).toFixed(0)} kN</div>
+                                <div className="text-sm text-slate-300">Alignment: {(mechanical?.alignment || 0).toFixed(3)} mm/m — Thrust: {(livePhysics?.axialThrustKN || 0).toFixed(0)} kN</div>
                             </div>
                             <div className="mb-3">
                                 <div className="flex items-center justify-between">

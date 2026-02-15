@@ -1,20 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 import { useAssetContext } from '../contexts/AssetContext';
 import { idAdapter } from '../utils/idAdapter';
-import { useCerebro } from '../contexts/ProjectContext';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import Decimal from 'decimal.js';
 
 /**
  * DataSyncBridge (CEREBRO v4.5 Hardened)
  * 
- * Synchronizes the selected asset from AssetContext with the ProjectContext (Cerebro).
+ * Synchronizes the selected asset from AssetContext with the Telemetry Store.
  * ensures engineering utilities are always reactive to the real machine specs.
  */
 export const DataSyncBridge: React.FC = () => {
     const { selectedAsset } = useAssetContext();
-    const { dispatch, state: techState } = useCerebro();
-    const { updateTelemetry } = useTelemetryStore();
+    const { 
+        updateTelemetry, 
+        hydraulic, 
+        mechanical, 
+        penstock,
+        identity 
+    } = useTelemetryStore();
 
     // Persistence Ref to prevent redundant sync loops
     const lastSyncedSpecsRef = useRef<string>("");
@@ -38,10 +42,9 @@ export const DataSyncBridge: React.FC = () => {
 
         // 1. Sync Identity
         const numericAssetId = idAdapter.toNumber(selectedAsset.id);
-        dispatch({
-            type: 'SET_ASSET',
-            payload: {
-                ...techState.identity,
+        updateTelemetry({
+            identity: {
+                ...identity,
                 assetId: numericAssetId !== null ? numericAssetId : selectedAsset.id,
                 assetName: selectedAsset.name,
                 turbineType: mappedType || 'FRANCIS'
@@ -57,24 +60,10 @@ export const DataSyncBridge: React.FC = () => {
                 const headValue = parseFloat(specs.head);
                 const flowValue = parseFloat(specs.flow);
 
-                // Legacy Context Sync
-                dispatch({
-                    type: 'UPDATE_HYDRAULIC',
-                    payload: {
-                        head: headValue || techState.hydraulic.head,
-                        flow: flowValue || techState.hydraulic.flow,
-                        waterHead: new Decimal(specs.head || techState.hydraulic.head),
-                        flowRate: new Decimal(specs.flow || techState.hydraulic.flow)
-                    }
-                });
-
-                // New Telemetry Store Sync
-                // New Telemetry Store Sync
                 updateTelemetry({
                     hydraulic: {
                         head: headValue,
                         flow: flowValue,
-                        // netHead removed - not in schema
                     }
                 });
             }
@@ -82,25 +71,17 @@ export const DataSyncBridge: React.FC = () => {
             // Sync Mechanical
             if (specs.boltDiameter || specs.boltCount || specs.boltGrade) {
                 // Ensure defaults to match strict requirements if values are missing
-                const safeCount = specs.boltCount ? parseInt(specs.boltCount.toString()) : techState.mechanical.boltSpecs.count;
-                const safeGrade = specs.boltGrade || techState.mechanical.boltSpecs.grade;
-                const safeDiameter = specs.boltDiameter ? parseInt(specs.boltDiameter.toString()) : techState.mechanical.boltSpecs.diameter;
+                const safeCount = specs.boltCount ? parseInt(specs.boltCount.toString()) : (mechanical.boltSpecs?.count || 12);
+                const safeGrade = specs.boltGrade || (mechanical.boltSpecs?.grade || '8.8');
+                const safeDiameter = specs.boltDiameter ? parseInt(specs.boltDiameter.toString()) : (mechanical.boltSpecs?.diameter || 24);
 
                 const boltSpecsPayload = {
                     diameter: safeDiameter,
                     count: safeCount,
                     grade: safeGrade,
-                    torque: techState.mechanical.boltSpecs.torque // Preserve existing
+                    torque: mechanical.boltSpecs?.torque || 0
                 };
 
-                dispatch({
-                    type: 'UPDATE_MECHANICAL',
-                    payload: {
-                        boltSpecs: boltSpecsPayload
-                    }
-                });
-
-                // New Telemetry Store Sync
                 updateTelemetry({
                     mechanical: {
                         boltSpecs: boltSpecsPayload
@@ -111,18 +92,12 @@ export const DataSyncBridge: React.FC = () => {
             // Sync Penstock
             if (specs.penstockDiameter || specs.penstockLength || specs.penstockMaterial) {
                 const penstockUpdate = {
-                    diameter: specs.penstockDiameter || techState.penstock.diameter,
-                    length: specs.penstockLength || techState.penstock.length,
-                    material: specs.penstockMaterial || techState.penstock.material,
-                    wallThickness: specs.penstockWallThickness || techState.penstock.wallThickness
+                    diameter: specs.penstockDiameter || penstock.diameter,
+                    length: specs.penstockLength || penstock.length,
+                    material: specs.penstockMaterial || penstock.material,
+                    wallThickness: specs.penstockWallThickness || penstock.wallThickness
                 };
 
-                dispatch({
-                    type: 'UPDATE_PENSTOCK',
-                    payload: penstockUpdate
-                });
-
-                // New Telemetry Store Sync
                 updateTelemetry({
                     penstock: penstockUpdate as any
                 });
@@ -131,7 +106,7 @@ export const DataSyncBridge: React.FC = () => {
 
         lastSyncedSpecsRef.current = specFingerprint;
 
-    }, [selectedAsset, dispatch, techState.hydraulic.head, techState.hydraulic.flow, techState.mechanical.boltSpecs, techState.penstock.diameter]);
+    }, [selectedAsset, hydraulic.head, hydraulic.flow, mechanical.boltSpecs, penstock.diameter]);
 
     return null; // Pure logic component
 };

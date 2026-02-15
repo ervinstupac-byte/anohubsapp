@@ -3,18 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Activity, EyeOff, Sparkles, Thermometer, CircuitBoard, Zap, ShieldAlert, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const ElectricalHealth: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Mapping from CEREBRO
-    const genVoltage = state.physics.staticPressureBar * 0.18; // Mock derivation for current context
-    const isHighVoltage = genVoltage > 13.8;
+
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">

@@ -1,3 +1,4 @@
+import React from 'react';
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
@@ -15,14 +16,27 @@ vi.mock('react-i18next', () => ({
   },
 }));
 
-// Mock Recharts to avoid ResizeObserver errors
-vi.mock('recharts', async (importOriginal) => {
-  const OriginalModule = await importOriginal<typeof import('recharts')>();
+// Mock Recharts to avoid ResizeObserver errors and memory issues
+vi.mock('recharts', () => {
   return {
-    ...OriginalModule,
     ResponsiveContainer: ({ children }: { children: any }) => (
       <div style={{ width: 800, height: 800 }}>{children}</div>
     ),
+    LineChart: () => <div>LineChart</div>,
+    Line: () => <div>Line</div>,
+    XAxis: () => <div>XAxis</div>,
+    YAxis: () => <div>YAxis</div>,
+    CartesianGrid: () => <div>CartesianGrid</div>,
+    Tooltip: () => <div>Tooltip</div>,
+    Legend: () => <div>Legend</div>,
+    AreaChart: () => <div>AreaChart</div>,
+    Area: () => <div>Area</div>,
+    BarChart: () => <div>BarChart</div>,
+    Bar: () => <div>Bar</div>,
+    PieChart: () => <div>PieChart</div>,
+    Pie: () => <div>Pie</div>,
+    Cell: () => <div>Cell</div>,
+    Sector: () => <div>Sector</div>
   };
 });
 

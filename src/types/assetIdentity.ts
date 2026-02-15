@@ -282,6 +282,10 @@ export interface AssetIdentity {
     lastAlignmentDate?: string;
     location: string;
 
+    // NEW: Operational State (Task 2 Port)
+    operationalStatus?: 'RUNNING' | 'STOPPED' | 'STBY' | 'MAINTENANCE';
+    standbyCyclesCounter?: number;
+
     // Configuration
     machineConfig: MachineConfiguration;
 

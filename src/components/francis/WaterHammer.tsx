@@ -15,14 +15,12 @@ import {
     AlertTriangle
 } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 
 export const WaterHammer: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
     const { waterHammer } = useEngineeringMath();
 
     const isOverLimit = new Decimal(waterHammer.maxSurgeBar).gt(17.0);

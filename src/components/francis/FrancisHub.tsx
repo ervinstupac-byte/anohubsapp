@@ -11,7 +11,7 @@ import {
     ShieldAlert, Lock, ZapOff, BatteryCharging, Printer, Settings2, Merge, ArrowRight, RefreshCw, Link as LinkIcon, ArrowRightLeft, Wind, Wifi, Radio,
     ChevronDown, ChevronRight, Zap, Building2, Wrench
 } from 'lucide-react';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { FrancisSensorData } from '../../models/turbine/types';
 
 
@@ -126,17 +126,18 @@ export const FrancisHub: React.FC = () => {
     const navigate = useNavigate();
 
     // Connect to Global Engineering State
-    const { state: techState, dispatch } = useCerebro();
+    const telemetry = useTelemetryStore();
+    const { updateTelemetry } = telemetry;
 
     // Live Physics Data Hook (Mock for now or derive from techState)
     const simData: Partial<FrancisSensorData> = {
-        rpm: techState.specializedState?.sensors?.rpm || 428.5,
-        gridFrequency: techState.specializedState?.sensors?.gridFrequency || 50.02,
-        activePower: techState.specializedState?.sensors?.activePower || 142.5
+        rpm: telemetry.specializedState?.sensors?.rpm || 428.5,
+        gridFrequency: telemetry.specializedState?.sensors?.gridFrequency || 50.02,
+        activePower: telemetry.specializedState?.sensors?.activePower || 142.5
     };
 
     // Fallback if specializedState is undefined
-    const moduleStates = techState.specializedState?.modules || {
+    const moduleStates = telemetry.specializedState?.modules || {
         miv: 'green',
         penstock: 'green',
         cooling: 'green',
@@ -207,9 +208,14 @@ export const FrancisHub: React.FC = () => {
         if (current === 'green') next = 'yellow';
         else if (current === 'yellow') next = 'red';
 
-        dispatch({
-            type: 'UPDATE_SPECIALIZED_MODULE',
-            payload: { moduleId: key, status: next }
+        updateTelemetry({
+            specializedState: {
+                ...telemetry.specializedState!,
+                modules: {
+                    ...telemetry.specializedState?.modules,
+                    [key]: next
+                }
+            }
         });
     };
 
@@ -236,7 +242,7 @@ export const FrancisHub: React.FC = () => {
         if (moduleStates.pid === 'red') startScore -= 40;
 
         setHealthScore(Math.max(0, Math.round(startScore)));
-    }, [moduleStates, techState.identity]);
+    }, [moduleStates, telemetry.identity]);
 
     const getDialColor = (pct: number) => {
         if (pct < 50) return '#ef4444';

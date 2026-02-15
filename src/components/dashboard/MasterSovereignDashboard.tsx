@@ -163,7 +163,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     };
 
     // Calculate metrics
-    const currentPower = physics?.powerMW ? Number(physics.powerMW) : 0;
+    const currentPower = physics?.powerMW || 0;
     const efficiency = hydraulic?.efficiency || 0;
     const pulseIndex = sovereignPulse?.index || 100;
 
@@ -178,7 +178,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     }, [hydraulic?.head, hydraulic?.flow, mechanical?.vibrationX]);
 
     // Calculate hourly loss
-    const baselinePower = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
+    const baselinePower = hydraulic?.baselineOutputMW ? hydraulic.baselineOutputMW.toNumber() : 100;
     const powerLossMW = Math.max(0, baselinePower - currentPower);
     const pricePerMWh = 85;
     const hourlyLossEuro = powerLossMW * pricePerMWh;

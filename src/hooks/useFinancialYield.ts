@@ -29,9 +29,8 @@ export const useFinancialYield = (): FinancialYieldMetrics => {
 
     // 2. Technical Data from Stores
     // Safe fallback to 0 if data missing
-    const currentPowerMW = physics.powerMW?.toNumber() ||
-        ((9.81 * (hydraulic.flow || 0) * (hydraulic.head || 0) * (hydraulic.efficiency || 0)) / 1000) ||
-        0;
+    const currentPowerMW = physics.powerMW ||
+        (hydraulic.flow * hydraulic.head * 9.81 * 0.9 * (hydraulic.efficiency || 0.9)) / 1000;
 
     const designPowerMW = config?.site?.designPerformanceMW || 10.0;
 

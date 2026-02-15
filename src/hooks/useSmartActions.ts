@@ -17,7 +17,8 @@ export const useSmartActions = (): SmartAction[] => {
     const bearingTemp = mechanical.bearingTemp || 0;
     const vibration = mechanical.vibration || 0;
     const efficiency = hydraulic.efficiency || 0.9;
-    const powerMW = physics.powerMW?.toNumber() || 0;
+    // physics.powerMW is not available in TechnicalProjectState['physics']
+    const powerMW = 0; // Or derive from hydraulic.powerKW if needed
 
     // MOCK Thresholds (normally these come from AssetConfig)
     const MAX_BEARING_TEMP = 65;

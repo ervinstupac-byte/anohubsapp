@@ -16,16 +16,16 @@ import {
     Thermometer
 } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const BearingsDetail: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const { mechanical } = useTelemetryStore();
 
-    const bearingTemp = state.mechanical.bearingTemp;
+    const bearingTemp = mechanical?.bearingTemp ?? 0;
     const isHighTemp = bearingTemp > 60;
     const isCriticalTemp = bearingTemp > 70;
 
@@ -120,7 +120,7 @@ export const BearingsDetail: React.FC = () => {
                                         <Activity className="w-3 h-3 text-purple-400" /> Vibration Sync
                                     </p>
                                     <p className="text-3xl font-black text-white font-mono tracking-tighter">
-                                        {state.mechanical.vibration.toFixed(2)} <span className="text-xs text-slate-500">mm/s</span>
+                                        {mechanical.vibration.toFixed(2)} <span className="text-xs text-slate-500">mm/s</span>
                                     </p>
                                 </div>
                             </div>

@@ -3,22 +3,22 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Wind, Activity, Timer, AlertTriangle, Check, Volume2, ShieldAlert, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const VortexControl: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Mapping from CEREBRO
-    const headRelative = state.site.grossHead / 152 * 100; // % of rated head
-    const flowRelative = state.hydraulic.flow / 42.5 * 100; // % of rated flow
+    // Mapping from Telemetry
+    const headRelative = (telemetry.site?.grossHead ?? 152) / 152 * 100; // % of rated head
+    const flowRelative = (telemetry.hydraulic?.flow ?? 42.5) / 42.5 * 100; // % of rated flow
 
     // Vortex intensity estimation logic
     const isVortexLikely = flowRelative < 65 || flowRelative > 95;
-    const vortexFrequency = (state.mechanical.rpm / 60) * 0.3; // Rheingans frequency
+    const vortexFrequency = ((telemetry.mechanical?.rpm ?? 0) / 60) * 0.3; // Rheingans frequency
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
@@ -77,7 +77,7 @@ export const VortexControl: React.FC = () => {
                                 <Volume2 className="w-3 h-3 text-amber-400" /> Acoustic Intensity
                             </p>
                             <p className="text-3xl font-black text-white font-mono tracking-tighter uppercase tabular-nums">
-                                {state.mechanical.acousticMetrics?.cavitationIntensity.toFixed(1) ?? '2.4'} <span className="text-[10px] text-slate-500 font-bold ml-1">RMS</span>
+                                {telemetry.mechanical?.acousticMetrics?.cavitationIntensity?.toFixed(1) ?? '2.4'} <span className="text-[10px] text-slate-500 font-bold ml-1">RMS</span>
                             </p>
                         </div>
                     </div>
@@ -110,7 +110,7 @@ export const VortexControl: React.FC = () => {
                         <div className="w-full md:w-80 p-6 bg-slate-950/60 border border-slate-800 rounded-3xl shadow-inner">
                             <h4 className="text-emerald-400 text-[10px] font-black uppercase mb-6 tracking-[0.2em]">{t('francis.vortex.freqCalc')} (RHEINGANS)</h4>
                             <ul className="space-y-4 text-[11px] text-slate-400 font-mono">
-                                <li className="flex justify-between border-b border-white/5 pb-2"><span>Rated Speed (fn):</span> <span className="text-white">{(state.mechanical.rpm / 60).toFixed(2)} Hz</span></li>
+                                <li className="flex justify-between border-b border-white/5 pb-2"><span>Rated Speed (fn):</span> <span className="text-white">{((telemetry.mechanical?.rpm ?? 0) / 60).toFixed(2)} Hz</span></li>
                                 <li className="flex justify-between text-white font-black pt-2 bg-emerald-950/20 p-2 rounded-xl">
                                     <span>Vortex Mode (fv):</span>
                                     <span className="text-emerald-400">{(vortexFrequency).toFixed(2)} Hz</span>

@@ -197,11 +197,11 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     }, [selectedFile]);
 
     // Calculate MW output from physics (with null safety)
-    const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
+    const surgePressure = physics?.surgePressureBar ?? 0;
     const mwOutput = surgePressure ? surgePressure * 2.5 : 45.0;
 
     // Risk score approximation (would come from diagnosis in production)
-    const riskScore = physics?.hoopStress?.toNumber?.() ?? 0 > 140 ? 30 : 10;
+    const riskScore = (physics?.hoopStressMPa ?? 0) > 140 ? 30 : 10;
 
     // Integrity summary derived from the manifest (fallback)
     const integrity = computeIntegritySummary(DOSSIER_LIBRARY as DossierFile[]);

@@ -6,7 +6,6 @@ import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
 import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid, Network } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useCerebro } from '../contexts/ProjectContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
@@ -25,13 +24,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const navigate = useNavigate();
     const location = useLocation();
     const { user, signOut } = useAuth();
-    const { state: techState } = useCerebro();
+    const telemetry = useTelemetryStore();
     const { riskState: questionnaireRisk } = useRisk();
     const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator();
     const { selectedAsset } = useAssetContext(); // <--- Get Active Asset
     const { activePersona, hiveStatus } = useContextAwareness(); // <--- Get Persona & Sync
     const { densityMode: mode, toggleDensity } = useDensity();
-    const { isCommanderMode, toggleCommanderMode } = useTelemetryStore();
+    const { isCommanderMode, toggleCommanderMode } = telemetry;
 
     // const [searchQuery, setSearchQuery] = useState(''); // Removed in favor of Global Command Palette
     // const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -40,9 +39,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const [isSystemOverviewOpen, setIsSystemOverviewOpen] = useState(false);
 
     // Heritage (NC-9.0) Logic
-    const alignment = techState?.mechanical?.alignment || 0;
-    const water = techState?.identity?.fluidIntelligence?.oilSystem?.waterContentPPM || 0;
-    const tan = techState?.identity?.fluidIntelligence?.oilSystem?.tan || 0;
+    const alignment = telemetry.mechanical?.alignment || 0;
+    const water = telemetry.fluidIntelligence?.oilSystem?.waterContentPPM || 0;
+    const tan = telemetry.fluidIntelligence?.oilSystem?.tan || 0;
     const isHeritageCertified = alignment <= 0.05 && water <= 500 && tan <= 0.5 && tan > 0;
 
 

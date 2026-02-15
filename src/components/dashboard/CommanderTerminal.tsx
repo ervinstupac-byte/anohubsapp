@@ -3,10 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { Terminal, Shield, Zap, AlertTriangle, ChevronRight, X } from 'lucide-react';
 import { ExpertInference } from '../../services/ExpertInference';
 import { MaintenanceEngine, ActionStep } from '../../services/MaintenanceEngine';
+import { TechnicalProjectState, DEFAULT_TECHNICAL_STATE } from '../../core/TechnicalSchema';
 
 interface TerminalMessage {
     id: string;
@@ -16,7 +17,29 @@ interface TerminalMessage {
 }
 
 export const CommanderTerminal: React.FC = () => {
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
+    
+    // Construct state for ExpertInference
+    const state: TechnicalProjectState = {
+        ...DEFAULT_TECHNICAL_STATE,
+        identity: telemetry.identity,
+        hydraulic: telemetry.hydraulic,
+        mechanical: telemetry.mechanical,
+        physics: {
+             ...DEFAULT_TECHNICAL_STATE.physics,
+             ...telemetry.physics
+        } as any,
+        site: telemetry.site,
+        penstock: telemetry.penstock,
+        specializedState: telemetry.specializedState,
+        structural: telemetry.structural,
+        market: {
+            ...DEFAULT_TECHNICAL_STATE.market,
+            energyPrice: telemetry.financials?.energyPrice || DEFAULT_TECHNICAL_STATE.market?.energyPrice || 85
+        },
+        financials: telemetry.financials,
+    };
+
     const [messages, setMessages] = useState<TerminalMessage[]>([]);
     const [input, setInput] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);

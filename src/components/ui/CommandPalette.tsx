@@ -346,7 +346,7 @@ export const CommandPalette = React.memo(() => {
             <PrintPreviewModal 
                 isOpen={showPrintPreview} 
                 onClose={() => setShowPrintPreview(false)} 
-                state={technicalState}
+                // state={technicalState} // Removed as PrintPreviewModal no longer accepts state prop (it builds it internally)
             />
 
             {/* Asset Passport - Uses first asset or selected if available */}

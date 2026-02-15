@@ -23,7 +23,7 @@ export const useEngineeringMath = () => {
     const hydraulic = telemetry.hydraulic ?? DEFAULT_TECHNICAL_STATE.hydraulic;
     const physics = telemetry.physics ?? {};
     const penstock = telemetry.penstock ?? DEFAULT_TECHNICAL_STATE.penstock;
-    const governor = DEFAULT_TECHNICAL_STATE.governor; // Governor still from defaults for now
+    const governor = telemetry.governor ?? DEFAULT_TECHNICAL_STATE.governor;
     const identity = telemetry.identity ?? DEFAULT_TECHNICAL_STATE.identity;
 
     return useMemo(() => {
@@ -112,8 +112,8 @@ export const useEngineeringMath = () => {
 
         // --- BURST SAFETY FACTOR ---
         const yieldStrength = new Decimal(penstock.materialYieldStrength || 250);
-        // physics.hoopStress is a Decimal from PhysicsResult; extract numeric value
-        const hoopStressValue = physics.hoopStress?.toNumber?.() ?? 1;
+        // physics.hoopStressMPa is a number
+        const hoopStressValue = physics.hoopStressMPa ?? 1;
         const hoopStressDecimal = new Decimal(hoopStressValue > 0 ? hoopStressValue : 1);
         const burstSafetyFactor = yieldStrength.div(hoopStressDecimal);
 
@@ -133,8 +133,8 @@ export const useEngineeringMath = () => {
 
         // --- PERFORMANCE DELTA ---
         let performanceDelta = new Decimal(0);
-        // physics.surgePressure is a Decimal from PhysicsResult
-        const actualPower = new Decimal(physics.surgePressure?.toNumber?.() ?? 0);
+        // physics.powerMW is a number
+        const actualPower = new Decimal(physics.powerMW ?? 0);
         const baselinePower = new Decimal(hydraulic.baselineOutputMW || 100);
 
         if (baselinePower.greaterThan(0)) {

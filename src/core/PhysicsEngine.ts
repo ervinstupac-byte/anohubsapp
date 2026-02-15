@@ -31,7 +31,7 @@ export const PhysicsEngine = {
         const d = new Decimal(penstock.diameter);
         const t = new Decimal(penstock.wallThickness);
         const E = new Decimal(penstock.materialModulus).mul(1e9); // GPa to Pa
-        const baselinePower = hydraulic.baselineOutputMW || new Decimal(100); // Default placeholder
+        const baselinePower = new Decimal(hydraulic.baselineOutputMW || 100); // Default placeholder
 
         // 1. Flow Velocity (v = Q / A)
         const velocity = PhysicsLogic.calculateFlowVelocity(flow, d);
@@ -165,8 +165,35 @@ export const PhysicsEngine = {
         if (result.specificWaterConsumption.gt(designSWC.mul(SYSTEM_CONSTANTS.THRESHOLDS.LEAKAGE.CRITICAL_MULTIPLIER))) leakageStatus = 'CRITICAL';
         else if (result.specificWaterConsumption.gt(designSWC.mul(SYSTEM_CONSTANTS.THRESHOLDS.LEAKAGE.DEGRADING_MULTIPLIER))) leakageStatus = 'DEGRADING';
 
+        // NEW: Legacy Watcher Logic (Task 2)
+        const greaseRisk = PhysicsEngine.checkGreaseRisk(
+            state.identity.operationalStatus || 'RUNNING',
+            state.identity.standbyCyclesCounter || 0
+        );
+
+        const thermalInertia = PhysicsEngine.checkThermalInertia(
+            state.mechanical.bearingTempHistory || [],
+            state.mechanical.bearingTempTimestamps || []
+        );
+
+        let peltonExpansion = null;
+        if (turbineType === 'PELTON') {
+             peltonExpansion = PhysicsEngine.calculatePeltonExpansion(
+                state.mechanical.shaftLengthM || 5.0,
+                state.site.temperature || 20,
+                state.mechanical.bearingTemp || 45
+             );
+        }
+
+        const legacyWatch = {
+            greaseRisk,
+            thermalInertia,
+            peltonExpansion
+        };
+
         const newState: TechnicalProjectState = {
             ...state,
+            legacyWatch,
             physics: {
                 ...state.physics,
                 hoopStressMPa: result.hoopStress.toNumber(),
@@ -174,6 +201,7 @@ export const PhysicsEngine = {
                 surgePressureBar: result.surgePressure.toNumber(),
                 waterHammerPressureBar: result.surgePressure.toNumber(),
                 eccentricity: result.eccentricity.toNumber(),
+                powerMW: result.powerMW.toNumber(),
                 axialThrustKN: result.axialThrustKN ? result.axialThrustKN.toNumber() : 0,
                 specificWaterConsumption: result.specificWaterConsumption.toNumber(),
                 leakageStatus: leakageStatus,
@@ -182,7 +210,9 @@ export const PhysicsEngine = {
                 headLoss: result.headLoss ? result.headLoss.toNumber() : 0,
                 boltLoadKN: result.boltLoadKN ? result.boltLoadKN.toNumber() : 0,
                 boltCapacityKN: result.boltCapacityKN ? result.boltCapacityKN.toNumber() : 0,
-                boltSafetyFactor: result.boltSafetyFactor ? result.boltSafetyFactor.toNumber() : 0
+                boltSafetyFactor: result.boltSafetyFactor ? result.boltSafetyFactor.toNumber() : 0,
+                performanceGap: result.performanceGap ? result.performanceGap.toNumber() : 0,
+                performanceDelta: result.performanceDelta ? result.performanceDelta.toNumber() : 0
             },
             riskScore: result.status === 'CRITICAL' ? 100 : (result.status === 'WARNING' ? 50 : 0),
             lastRecalculation: new Date().toISOString(),
@@ -361,4 +391,99 @@ export const PhysicsEngine = {
 
         return score;
     },
+
+    // ==========================================
+    // PORTED PYTHON LOGIC (Task 2)
+    // ==========================================
+
+    /**
+     * LEGACY WATCHER: Grease Risk
+     * Legacy #3: Detects excessive greasing during standby.
+     */
+    checkGreaseRisk: (status: string, cycles: number) => {
+        const MAX_STANDBY_GREASE_CYCLES = 20;
+        if (['STOPPED', 'STBY'].includes(status) && cycles > MAX_STANDBY_GREASE_CYCLES) {
+            return {
+                id: "LEGACY #3",
+                risk: "CRITICAL",
+                message: `Excessive Grease (${cycles} cycles). Seal blowout risk!`,
+                preventionValueEur: 45000
+            };
+        }
+        return null;
+    },
+
+    /**
+     * LEGACY WATCHER: Thermal Inertia
+     * Detects post-shutdown bearing temperature surge.
+     */
+    checkThermalInertia: (history: number[], timestamps: number[]) => {
+        if (history.length < 2 || timestamps.length < 2) return null;
+
+        const DANGEROUS_TEMP_RISE_RATE = 2.0; // Deg C / min
+
+        const t1 = timestamps[timestamps.length - 2];
+        const t2 = timestamps[timestamps.length - 1];
+        const temp1 = history[history.length - 2];
+        const temp2 = history[history.length - 1];
+
+        const deltaMin = (t2 - t1) / 60000.0; // ms to min
+        if (deltaMin <= 0) return null;
+
+        const rate = (temp2 - temp1) / deltaMin;
+
+        if (rate > DANGEROUS_TEMP_RISE_RATE) {
+            return {
+                id: "LEGACY_THERMAL_INERTIA",
+                risk: "EMERGENCY",
+                message: `Rapid Compounding Heat detected! Rate: ${rate.toFixed(1)}°C/min. SHAFT SEIZURE IMMINENT.`,
+                action: "Enable Emergency AC/DC Oil Pump & Cooling Boost"
+            };
+        }
+        return null;
+    },
+
+    /**
+     * THERMAL OFFSET MODULE
+     * Legacy #4: Calculates required misalignment to compensate for expansion.
+     */
+    calculatePeltonExpansion: (shaftLengthM: number, ambientC: number, operatingC: number) => {
+        const STEEL_EXPANSION_COEFF = new Decimal(12e-6);
+        const deltaT = new Decimal(operatingC).sub(ambientC);
+        const lengthMm = new Decimal(shaftLengthM).mul(1000);
+        
+        const expansionMm = lengthMm.mul(STEEL_EXPANSION_COEFF).mul(deltaT);
+        const requiredOffset = expansionMm.mul(-1);
+
+        return {
+            deltaT: deltaT.toNumber(),
+            expansionMm: expansionMm.toDecimalPlaces(4).toNumber(),
+            requiredColdOffsetMm: requiredOffset.toDecimalPlaces(4).toNumber(),
+            validationNote: `Set machine center ${requiredOffset.toFixed(4)}mm lower/shorter to align at ${operatingC}°C.`
+        };
+    },
+
+    /**
+     * AUDIT ENGINE: Manufacturer Bid Validator
+     * Flags if offered efficiency is theoretical 'Marketing Lies'.
+     */
+    validateManufacturerBid: (bidEfficiencyPercent: number, turbineType: string) => {
+        const limits: Record<string, number> = {
+            "PELTON": 92.5,
+            "FRANCIS": 96.5,
+            "KAPLAN": 95.5
+        };
+
+        const baseType = turbineType.split('_')[0].toUpperCase();
+        const limit = limits[baseType] || 94.0;
+
+        const isLie = bidEfficiencyPercent > limit;
+
+        return {
+            bidValue: bidEfficiencyPercent,
+            physicsLimit: limit,
+            verdict: isLie ? "MARKETING_LIE" : "PLAUSIBLE",
+            message: isLie ? `Bid ${bidEfficiencyPercent}% exceeds limit ${limit}%!` : "Efficiency within physical bounds."
+        };
+    }
 };

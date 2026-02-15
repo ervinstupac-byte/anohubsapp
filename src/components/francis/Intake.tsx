@@ -3,16 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Filter, Waves, AlertTriangle, Droplets, ShieldAlert, Cpu, Activity } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const Intake: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Mapping from CEREBRO
+    // Mock Telemetry (Pending integration into HydraulicStream)
     const trashBuildUp = 12; // % (Mocked for context)
     const deltaP = 0.45; // meters
     const isAlarm = deltaP > 2.0;

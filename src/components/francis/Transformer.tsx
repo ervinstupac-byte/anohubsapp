@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Zap, Thermometer, Fan, AlertTriangle, AlertOctagon, Activity, ShieldCheck, Cpu, Waves } from 'lucide-react';
 import { ROUTES } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const Transformer: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
 
     // Simulation Config
     const OIL_ALARM = 85;

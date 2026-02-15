@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText, Download, ShieldCheck, Activity, Droplets, Zap, Ruler, Settings, Loader2, Check, Printer, FileBarChart, Layers, ArrowLeft } from 'lucide-react';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
-import { TechnicalProjectState } from '../../core/TechnicalSchema';
+import { TechnicalProjectState, DEFAULT_TECHNICAL_STATE } from '../../core/TechnicalSchema';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { ActionEngine } from '../../features/business/logic/ActionEngine';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
@@ -12,11 +13,41 @@ import { saveLog } from '../../services/PersistenceService';
 interface PrintPreviewModalProps {
     isOpen: boolean;
     onClose: () => void;
-    state: TechnicalProjectState;
 }
 
-export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, onClose, state }) => {
+export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
+    const telemetry = useTelemetryStore();
+
+    // Construct state for report service from Telemetry Store
+    const state: TechnicalProjectState = {
+        ...DEFAULT_TECHNICAL_STATE,
+        identity: telemetry.identity,
+        hydraulic: telemetry.hydraulic,
+        mechanical: telemetry.mechanical,
+        physics: {
+            ...DEFAULT_TECHNICAL_STATE.physics,
+            ...telemetry.physics
+        } as any, // Cast to any to avoid strict partial checks, or use defaults
+        site: telemetry.site,
+        penstock: telemetry.penstock,
+        specializedState: telemetry.specializedState,
+        fluidIntelligence: telemetry.fluidIntelligence,
+        governor: telemetry.governor,
+        diagnosis: telemetry.diagnosis || undefined,
+        // riskScore is in TechnicalProjectState, checking if it is in telemetry
+        riskScore: telemetry.riskScore || 0,
+        lastRecalculation: telemetry.lastUpdate,
+        demoMode: { 
+            active: telemetry.activeScenario !== null, 
+            scenario: telemetry.activeScenario 
+        },
+        structural: telemetry.structural,
+        manualRules: telemetry.manualRules,
+        appliedMitigations: telemetry.appliedMitigations,
+        financials: telemetry.financials,
+        images: telemetry.images
+    };
 
     // NC-85.2: Dynamic dossier count from registry
     const [dossierCount, setDossierCount] = useState<number>(854); // Fallback to 854

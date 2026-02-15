@@ -30,21 +30,10 @@ export const HydraulicsPanel: React.FC = () => {
     // DATA BRIDGE: Live Physics or Fallback
     // Note: ProjectEngine splits surge vs hammer. PhysicsEngine has 'surgePressure'.
     // We map 'surgePressure' to the display value.
-    const activeSurge = livePhysics?.surgePressure
-        ? livePhysics.surgePressure.toNumber()
-        : (DEFAULT_TECHNICAL_STATE.physics?.waterHammerPressureBar || 0);
-
-    const activeHoopStress = livePhysics?.hoopStress
-        ? livePhysics.hoopStress.toNumber()
-        : (DEFAULT_TECHNICAL_STATE.physics?.hoopStressMPa || 0);
-
-    const activeHeadLoss = livePhysics?.headLoss
-        ? livePhysics.headLoss.toNumber()
-        : (DEFAULT_TECHNICAL_STATE.physics?.headLoss || 0);
-
-    const activeNetHead = livePhysics?.netHead
-        ? livePhysics.netHead.toNumber()
-        : (DEFAULT_TECHNICAL_STATE.physics?.netHead || 0);
+    const activeSurge = livePhysics?.surgePressureBar || 0;
+    const activeHoopStress = livePhysics?.hoopStressMPa || 0;
+    const activeHeadLoss = livePhysics?.headLoss || 0;
+    const activeNetHead = livePhysics?.netHead || 0;
 
     return (
         <div className="space-y-6">

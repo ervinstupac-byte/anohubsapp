@@ -11,7 +11,6 @@ import { NavigationProvider } from './contexts/NavigationContext.tsx';
 import { useRisk, RiskProvider } from './contexts/RiskContext.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import { useAudit } from './contexts/AuditContext.tsx';
-import { ProjectProvider } from './contexts/ProjectContext.tsx'; // Technical Backbone
 import { DEFAULT_TECHNICAL_STATE } from './core/TechnicalSchema.ts';
 // ClientProvider removed (Simulation)
 import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
@@ -52,7 +51,6 @@ import { GlobalFooter } from './components/GlobalFooter.tsx';
 import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
 import { GlobalModalManager } from './components/managers/GlobalModalManager';
-import { useCerebro } from './contexts/ProjectContext';
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
 import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
@@ -227,9 +225,7 @@ const AppLayout: React.FC = () => {
     const [isWizardOpen, setIsWizardOpen] = useState(false);
     const [isMapOpen, setIsMapOpen] = useState(false); // Map State
     const [showSignOutDialog, setShowSignOutDialog] = useState(false); // Sign Out Dialog
-    const { state: cerebroState } = useCerebro();
     const isCriticalDemo = false;
-    const { state: technicalState } = useCerebro();
 
     const isHub = location.pathname === '/';
     const isFullPage = isHub || location.pathname === '/map';

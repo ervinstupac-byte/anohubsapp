@@ -17,7 +17,7 @@ import { AssetPicker } from './AssetPicker.tsx';
 import { BackButton } from './BackButton.tsx';
 import { WorkOrderOrchestrator } from './WorkOrderOrchestrator.tsx';
 import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
-import { useCerebro } from '../contexts/ProjectContext.tsx';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { GuidedDiagnosisModal } from './GuidedDiagnosisModal.tsx';
 import { SealingIntegrity } from './SealingIntegrity.tsx';
 import { SystemResponseAnalytics } from './SystemResponseAnalytics.tsx';
@@ -62,7 +62,7 @@ export const MaintenanceDashboard: React.FC = () => {
     const { activeWorkOrder, startWorkOrder } = useWorkOrder();
     const { showToast } = useToast();
     const { activeQuery } = useDiagnostic();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
     const hours = selectedAsset ? operatingHours[idAdapter.toStorage(selectedAsset.id)] || 0 : 0;
 
@@ -121,7 +121,7 @@ export const MaintenanceDashboard: React.FC = () => {
                                 <div className="flex items-center gap-2">
                                     <span className="text-[10px] text-slate-500 uppercase font-bold">Current Load:</span>
                                     <span className="text-[10px] text-emerald-400 font-mono font-bold animate-pulse">
-                                        RUNNING • {state.hydraulic.efficiency * 100}% EFFICIENCY
+                                        RUNNING • {telemetry.hydraulic.efficiency * 100}% EFFICIENCY
                                     </span>
                                 </div>
                             </GlassCard>

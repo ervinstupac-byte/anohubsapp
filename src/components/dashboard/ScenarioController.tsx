@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, ShieldCheck, Droplets, Zap, Activity } from 'lucide-react';
-import { useTelemetryStore, DemoScenario } from '../../features/telemetry/store/useTelemetryStore';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
+import { DemoScenario } from '../../core/TechnicalSchema';
 
 export const ScenarioController: React.FC = () => {
     const { loadScenario } = useTelemetryStore();

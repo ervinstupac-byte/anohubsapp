@@ -54,7 +54,9 @@ export const ExpertDiagnosisEngine = {
         // 1. Structural Integrity Check (Hoop Stress vs Yield Strength)
         // Safety Factor = Yield Strength / Actual Hoop Stress
         const yieldStrength = new Decimal(state.penstock.materialYieldStrength);
-        const safetyFactor = yieldStrength.div(physics.hoopStress);
+        const safetyFactor = physics.hoopStress.isZero()
+            ? new Decimal(100)
+            : yieldStrength.div(physics.hoopStress);
         reports.safetyFactor = safetyFactor;
 
         if (safetyFactor.lt(SYSTEM_CONSTANTS.THRESHOLDS.SAFETY_FACTOR.CRITICAL)) {

@@ -14,20 +14,16 @@ export const EmergencyOverlay: React.FC = () => {
     
     const { hoopStress, utilizationRatio } = useMemo(() => {
         // Prefer pre-calculated physics result from store if available
-        const storedStress = physics?.hoopStress;
+        const storedStress = physics?.hoopStressMPa;
         
         let currentStress = 0;
         if (storedStress !== undefined) {
-            currentStress = typeof storedStress === 'object' && 'toNumber' in storedStress 
-                ? storedStress.toNumber() 
-                : Number(storedStress);
+            currentStress = storedStress;
         } else {
             // Fallback: Calculate live
             const head = Number(hydraulic?.head ?? 0);
-            const surgeVal = physics?.surgePressure;
-            const surge = typeof surgeVal === 'object' && 'toNumber' in surgeVal 
-                ? surgeVal.toNumber() 
-                : Number(surgeVal ?? 0);
+            const surgeVal = physics?.surgePressureBar;
+            const surge = surgeVal ?? 0;
                 
             const d = Number(penstock?.diameter ?? 1.5);
             const t = Number(penstock?.wallThickness ?? 0.02);
@@ -46,7 +42,7 @@ export const EmergencyOverlay: React.FC = () => {
         const ratio = currentStress / (yieldStrength || 235);
         
         return { hoopStress: currentStress, utilizationRatio: ratio };
-    }, [hydraulic?.head, physics?.surgePressure, physics?.hoopStress, penstock]);
+    }, [hydraulic?.head, physics?.surgePressureBar, physics?.hoopStressMPa, penstock]);
 
     // NC-10100: Alert Sync
     // Pulse if ratio > 0.85

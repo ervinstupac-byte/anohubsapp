@@ -15,13 +15,8 @@ import { VoiceAssistantProvider } from './VoiceAssistantContext.tsx';
 import { ForensicsProvider } from './ForensicsContext.tsx';
 import { CommissioningProvider } from './CommissioningContext.tsx';
 import { DocumentProvider } from './DocumentContext.tsx';
-import { ProjectProvider } from './ProjectContext.tsx';
 import { NotificationProvider } from './NotificationContext.tsx';
-import { HydrologyProvider } from './HydrologyContext.tsx';
 import { AssetConfigProvider } from './AssetConfigContext.tsx'; // NEW: Static configuration
-import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema.ts';
-// NEW: Sync Engine Bridge for incremental migration
-import { DataBridge } from '../hooks/useSyncLegacyToNew';
 import { WorkflowProvider } from './WorkflowContext.tsx'; // NEW: Cross-module workflow state
 import { ToastContainer } from '../components/ui/ToastContainer';
 import { ConfirmProvider } from './ConfirmContext';
@@ -40,53 +35,47 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         <AuditProvider>
             <ToastContainer />
             <NotificationProvider>
-                        <AuthProvider>
-                            {/* NEW STORES: Zustand stores don't need providers, but AssetConfig does */}
-                            <AssetConfigProvider>
-                                <ProjectProvider initialState={DEFAULT_TECHNICAL_STATE}>
-                                    {/* SYNC ENGINE: Bridges legacy ProjectContext → New Stores */}
-                                    <DataBridge />
-                                    <HydrologyProvider>
-                                        <AssetProvider>
-                                            <MaintenanceProvider>
-                                                <RiskProvider>
-                                                    <TelemetryProvider>
-                                                        <QuestionnaireProvider>
-                                                            <HPPDesignProvider>
-                                                                <InventoryProvider>
-                                                                    <WorkOrderProvider>
-                                                                        <DiagnosticProvider>
-                                                                            <FleetProvider>
-                                                                                <VoiceAssistantProvider>
-                                                                                    <ForensicsProvider>
-                                                                                        <CommissioningProvider>
-                                                                                            <DocumentProvider>
-                                                                                                <ConfirmProvider>
-                                                                                                    <ValidationProvider>
-                                                                                                        <WorkflowProvider>
-                                                                                                            {children}
-                                                                                                        </WorkflowProvider>
-                                                                                                    </ValidationProvider>
-                                                                                                </ConfirmProvider>
-                                                                                            </DocumentProvider>
-                                                                                        </CommissioningProvider>
-                                                                                    </ForensicsProvider>
-                                                                                </VoiceAssistantProvider>
-                                                                            </FleetProvider>
-                                                                        </DiagnosticProvider>
-                                                                    </WorkOrderProvider>
-                                                                </InventoryProvider>
-                                                            </HPPDesignProvider>
-                                                        </QuestionnaireProvider>
-                                                    </TelemetryProvider>
-                                                </RiskProvider>
-                                            </MaintenanceProvider>
-                                        </AssetProvider>
-                                    </HydrologyProvider>
-                                </ProjectProvider>
-                            </AssetConfigProvider>
-                        </AuthProvider>
-                    </NotificationProvider>
-                </AuditProvider>
+                <AuthProvider>
+                    {/* NEW STORES: Zustand stores don't need providers, but AssetConfig does */}
+                    <AssetConfigProvider>
+                        <AssetProvider>
+                            <MaintenanceProvider>
+                                <RiskProvider>
+                                    <TelemetryProvider>
+                                        <QuestionnaireProvider>
+                                            <HPPDesignProvider>
+                                                <InventoryProvider>
+                                                    <WorkOrderProvider>
+                                                        <DiagnosticProvider>
+                                                            <FleetProvider>
+                                                                <VoiceAssistantProvider>
+                                                                    <ForensicsProvider>
+                                                                        <CommissioningProvider>
+                                                                            <DocumentProvider>
+                                                                                <ConfirmProvider>
+                                                                                    <ValidationProvider>
+                                                                                        <WorkflowProvider>
+                                                                                            {children}
+                                                                                        </WorkflowProvider>
+                                                                                    </ValidationProvider>
+                                                                                </ConfirmProvider>
+                                                                            </DocumentProvider>
+                                                                        </CommissioningProvider>
+                                                                    </ForensicsProvider>
+                                                                </VoiceAssistantProvider>
+                                                            </FleetProvider>
+                                                        </DiagnosticProvider>
+                                                    </WorkOrderProvider>
+                                                </InventoryProvider>
+                                            </HPPDesignProvider>
+                                        </QuestionnaireProvider>
+                                    </TelemetryProvider>
+                                </RiskProvider>
+                            </MaintenanceProvider>
+                        </AssetProvider>
+                    </AssetConfigProvider>
+                </AuthProvider>
+            </NotificationProvider>
+        </AuditProvider>
     );
 };

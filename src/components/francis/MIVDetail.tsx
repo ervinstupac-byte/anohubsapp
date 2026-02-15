@@ -3,19 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { GitPullRequest, ArrowLeft, AlertTriangle, Compass, RefreshCw, Flame, ShieldAlert, Activity, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const MIVDetail: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Telemetry from CEREBRO
+    // Mock Telemetry (Pending integration into HydraulicStream)
     const mivPosition = 100; // % Open
-    const mivSealPressure = 152.4; // Bar
-    const isMIVFault = false;
+    const mivSealPressure = (telemetry.physics?.staticPressureBar ?? 150) + 2.4; // Derived from static pressure
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">

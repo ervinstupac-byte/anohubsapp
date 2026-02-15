@@ -17,7 +17,8 @@ import { ForensicReportService } from '../services/ForensicReportService';
 import { Camera, Moon, Ghost, FileText, ChevronRight, Shield, X, CheckCircle2, Wrench } from 'lucide-react';
 import { useToast } from '../stores/useAppStore';
 import { useDocumentViewer } from '../contexts/DocumentContext';
-import { useCerebro } from '../contexts/ProjectContext';
+import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { DEFAULT_TECHNICAL_STATE, TechnicalProjectState } from '../core/TechnicalSchema';
 import { StructuralSafetyMonitor } from '../features/telemetry/components/StructuralSafetyMonitor';
 import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
 import { SolutionArchitect } from '../services/SolutionArchitect';
@@ -40,9 +41,10 @@ export const CommandCenter: React.FC = () => {
     const { mode, toggleNightOps } = useTheme();
     const { showToast } = useToast();
     const { viewDocument } = useDocumentViewer();
-    const { state: technicalState } = useCerebro();
+    const telemetry = useTelemetryStore();
     const [ghostMode, setGhostMode] = React.useState(false);
     const [activeSop, setActiveSop] = React.useState<SOPMapping | null>(null);
+    const [selected3DPart, setSelected3DPart] = React.useState<string | null>(null);
     const turbineRef = useRef<HTMLDivElement>(null);
 
     // Calculate Performance Delta (Baseline vs Actual)
@@ -314,8 +316,8 @@ export const CommandCenter: React.FC = () => {
                     <TacticalCard title="SHAFT ORBIT (X/Y)" status="nominal">
                         <div className="flex justify-center p-2 bg-slate-900/40 rounded border border-white/5">
                             <ShaftOrbitPlot
-                                vibrationX={technicalState.mechanical.vibrationX || 2.4}
-                                vibrationY={technicalState.mechanical.vibrationY || 2.1}
+                                vibrationX={telemetry.mechanical.vibrationX || 2.4}
+                                vibrationY={telemetry.mechanical.vibrationY || 2.1}
                                 size={140}
                             />
                         </div>
@@ -364,7 +366,8 @@ export const CommandCenter: React.FC = () => {
                                                 deltaIndex: deltaPerf,
                                                 className: 'h-full',
                                                 showInfoPanel: true,
-                                                onSelect: undefined
+                                                selectedPart: selected3DPart,
+                                                onSelect: setSelected3DPart
                                             } as any}
                                             ref={turbineRef as any}
                                         />
@@ -393,8 +396,8 @@ export const CommandCenter: React.FC = () => {
 
                     <StructuralSafetyMonitor
                         margin={structuralSafetyMargin || 100}
-                        hoopStress={technicalState.physics.hoopStressMPa}
-                        yieldStrength={technicalState.penstock.materialYieldStrength}
+                        hoopStress={telemetry.physics.hoopStressMPa || 0}
+                        yieldStrength={telemetry.penstock.materialYieldStrength}
                     />
                 </div>
             </div>
@@ -440,6 +443,12 @@ export const CommandCenter: React.FC = () => {
 
                             {/* Required Tools (NC-9.0) */}
                             {(() => {
+                                const technicalState: TechnicalProjectState = {
+                                    ...DEFAULT_TECHNICAL_STATE,
+                                    ...telemetry,
+                                    diagnosis: telemetry.diagnosis || undefined,
+                                    physics: { ...DEFAULT_TECHNICAL_STATE.physics, ...telemetry.physics }
+                                };
                                 const path = SolutionArchitect.getRecoveryPath(activeSop.failureMode, technicalState);
                                 if (path.actions.length === 0) return null;
 

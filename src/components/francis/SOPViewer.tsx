@@ -3,14 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ExternalLink, FileText, Cpu, ShieldCheck } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const SOPViewer: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { state } = useCerebro();
 
     const activeDoc = id || 'index';
 

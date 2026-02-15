@@ -275,9 +275,9 @@ export const ExecutiveDashboard: React.FC = () => {
             },
             physics: {
                 ...telemetryStore.physics,
-                hoopStress: telemetryStore.physics.hoopStress || new Decimal(0),
-                powerMW: new Decimal(0), // Will be recalculated
-                surgePressure: telemetryStore.physics.surgePressure || new Decimal(0),
+                hoopStressMPa: telemetryStore.physics.hoopStressMPa || 0,
+                // powerMW: 0, // Not available in Partial<TechnicalProjectState['physics']>
+                surgePressureBar: telemetryStore.physics.surgePressureBar || 0,
             },
             penstock: {
                 ...telemetryStore.penstock,
@@ -469,7 +469,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="backdrop-blur-xl bg-black/25 p-4 rounded-xl border border-white/15 shadow-lg">
                                         <span className="text-[10px] text-slate-400 uppercase block font-bold">Active Power</span>
-                                        <span className="text-2xl font-mono text-white font-black">{(telemetryStore.physics?.powerMW?.toNumber?.() || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
+                                        <span className="text-2xl font-mono text-white font-black">{(telemetryStore.physics?.powerMW || 0).toFixed(1)} <span className="text-cyan-400 text-sm">MW</span></span>
                                     </div>
                                     <div className="backdrop-blur-xl bg-black/25 p-4 rounded-xl border border-white/15 shadow-lg">
                                         <span className="text-[10px] text-slate-400 uppercase block font-bold">Health Score</span>

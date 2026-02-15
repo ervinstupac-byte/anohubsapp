@@ -69,8 +69,8 @@ export const DigitalIntegrity: React.FC = () => {
         } else if (operation === 'Shaft Alignment Check' && mechanical?.rpm !== undefined) {
             setValue(mechanical.rpm > 1 ? `Dynamic Run-out @ ${mechanical.rpm.toFixed(0)} RPM` : 'Static Alignment OK');
             showToast('Fetched Alignment Context', 'success');
-        } else if (operation.includes('Seal') && physics?.surgePressure !== undefined) {
-            const pressure = typeof physics.surgePressure === 'number' ? physics.surgePressure : physics.surgePressure.toNumber();
+        } else if (operation.includes('Seal') && physics?.surgePressureBar !== undefined) {
+            const pressure = physics.surgePressureBar;
             setValue(`${pressure.toFixed(2)} Bar (Live)`);
             showToast('Fetched Live Pressure Data', 'success');
         } else {

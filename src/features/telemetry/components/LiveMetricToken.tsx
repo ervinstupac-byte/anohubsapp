@@ -37,7 +37,7 @@ export const LiveMetricToken = React.memo<LiveMetricTokenProps>(({ sensorId }) =
             };
         }
         if (sensorId === 'PRE-202-B') {
-            const pressure = physics.surgePressure ? physics.surgePressure.toNumber() / 100000 : 0;
+            const pressure = physics.surgePressureBar ? physics.surgePressureBar / 100000 : 0;
             return {
                 label: 'Surge Pressure',
                 value: pressure,

@@ -12,18 +12,11 @@ export const SmartManual: React.FC = () => {
     const { physics } = useTelemetryStore();
 
     // Logic: Identify active critical triggers for SOP surfacing
-    // Note: physics properties in TelemetryStore are Decimal | number | undefined, handled via loading/optional chaining
-    // Note: physics properties in TelemetryStore are Decimal | number | undefined, handled via loading/optional chaining
-    const axialThrust = physics?.axialThrustKN
-        ? (typeof physics.axialThrustKN === 'number' ? physics.axialThrustKN : physics.axialThrustKN.toNumber())
-        : 0;
+    // Note: physics properties in TelemetryStore are number | undefined
+    const axialThrust = physics?.axialThrustKN || 0;
 
-    // Check hoopStress - safely handle Decimal types if they exist or fallback to 0
-    // Using property access if available or defaulting
-    const hoopStressVal = physics?.hoopStress ?
-        (typeof physics.hoopStress === 'number' ? physics.hoopStress :
-            typeof physics.hoopStress.toNumber === 'function' ? physics.hoopStress.toNumber() : 0)
-        : 0;
+    // Check hoopStress - safely handle if they exist or fallback to 0
+    const hoopStressVal = physics?.hoopStressMPa || 0;
 
     const cavitationRisk = hoopStressVal > 140; // Simplified trigger
 

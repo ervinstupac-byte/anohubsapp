@@ -3,19 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, AlertTriangle, Settings, Ruler, Droplets, Activity, CheckCircle2, ShieldAlert, Cpu } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const RegulatingRing: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Telemetry from CEREBRO (Mocked for current context)
-    const frictionFactor = 0.42;
-    const huntingActive = false;
-    const ringPressure = state.physics.staticPressureBar * 0.95;
+    // Telemetry from Telemetry Store
+    const frictionFactor = 0.42; // Placeholder for now
+    const huntingActive = false; // Placeholder for now
+    const ringPressure = (telemetry.physics?.staticPressureBar ?? 0) * 0.95;
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">

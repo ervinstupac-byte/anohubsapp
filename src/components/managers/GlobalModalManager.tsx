@@ -2,14 +2,12 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { EVENTS, AssetPassportPayload } from '../../lib/events';
 import { SystemOverviewModal } from '../modals/SystemOverviewModal';
 import { AssetPassportModal } from '../dashboard/AssetPassportModal';
-import { useCerebro } from '../../contexts/ProjectContext';
 import { AssetOnboardingWizard } from '../digital-twin/AssetOnboardingWizard';
 
 // Lazy load heavy print modal
 const PrintPreviewModal = React.lazy(() => import('../modals/PrintPreviewModal').then(m => ({ default: m.PrintPreviewModal })));
 
 export const GlobalModalManager: React.FC = () => {
-    const { state: technicalState } = useCerebro();
 
     // Modal States
     const [isSystemOverviewOpen, setIsSystemOverviewOpen] = useState(false);
@@ -78,7 +76,6 @@ export const GlobalModalManager: React.FC = () => {
                 <PrintPreviewModal
                     isOpen={isPreviewOpen}
                     onClose={() => setIsPreviewOpen(false)}
-                    state={technicalState}
                 />
             </Suspense>
 

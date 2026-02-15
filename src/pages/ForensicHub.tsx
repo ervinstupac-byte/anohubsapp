@@ -29,8 +29,8 @@ import { LegacyBridgeService } from '../services/LegacyBridgeService';
 import { runForensicPulseCheck, IntegrityReport } from '../services/SystemIntegrityService';
 import { SafetyInterlockEngine } from '../services/SafetyInterlockEngine';
 import { ProfessionalReportEngine } from '../features/reporting/ProfessionalReportEngine';
-import { useCerebro } from '../contexts/ProjectContext';
 import { useTelemetryStore, DiagnosticSnapshot } from '../features/telemetry/store/useTelemetryStore';
+import { DEFAULT_TECHNICAL_STATE, TechnicalProjectState } from '../core/TechnicalSchema';
 import { ForensicReportService } from '../services/ForensicReportService';
 import { MaintenanceOrchestrator } from '../services/MaintenanceOrchestrator';
 import { AlignmentWizard } from '../components/maintenance/AlignmentWizard';
@@ -85,7 +85,38 @@ const ForensicHub: React.FC = () => {
     const [integrityReport, setIntegrityReport] = useState<IntegrityReport | null>(null);
     const [safetyStatus, setSafetyStatus] = useState<any>(null);
 
-    const { state: technicalState } = useCerebro();
+    const { 
+        identity, 
+        site, 
+        mechanical, 
+        hydraulic, 
+        physics, 
+        penstock, 
+        structural,
+        financials,
+        specializedState,
+        appliedMitigations
+    } = useTelemetryStore();
+
+    // Reconstruct technicalState for legacy compatibility
+    const technicalState = React.useMemo(() => ({
+        ...DEFAULT_TECHNICAL_STATE,
+        identity,
+        site,
+        mechanical,
+        hydraulic,
+        penstock,
+        structural,
+        financials,
+        specializedState,
+        appliedMitigations,
+        physics: {
+            ...DEFAULT_TECHNICAL_STATE.physics,
+            ...physics,
+            // Ensure Decimal values are handled if needed, or use raw physics if compatible
+            // Assuming physics in store is compatible or partial
+        }
+    }), [identity, site, mechanical, hydraulic, physics, penstock, structural, financials, specializedState, appliedMitigations]);
 
     // NC-13800: STRESS TEST STATE
     const [simSigma, setSimSigma] = useState<number | null>(null);
@@ -423,7 +454,11 @@ const ForensicHub: React.FC = () => {
 
         try {
             // Use ProfessionalReportEngine for a full Technical Audit
-            await ProfessionalReportEngine.generateTechnicalAudit(technicalState, 'FORENSIC-HUB-AUDIT');
+            // Fix: physics properties must be numbers, not Decimals
+            // Ensure technicalState matches TechnicalProjectState structure exactly if passed to engine
+            const compliantState: TechnicalProjectState = technicalState;
+
+            await ProfessionalReportEngine.generateTechnicalAudit(compliantState, 'FORENSIC-HUB-AUDIT');
         } catch (err) {
             console.error('Failed to generate professional report:', err);
             // Fallback to legacy

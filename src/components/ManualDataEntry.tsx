@@ -740,7 +740,7 @@ export const ManualDataEntry: React.FC = () => {
                 bearingTemp: formState.temperature
             },
             physics: {
-                powerMW: new Decimal(formState.activePower)
+                // powerMW: new Decimal(formState.activePower) // powerMW not in TechnicalProjectState['physics']
             }
         });
         

@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AlertOctagon, LayoutDashboard, Megaphone, ZapOff, Hand, ChevronRight, AlertTriangle, ShieldAlert, Cpu, Activity } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const EmergencyProtocols: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Data from CEREBRO Context
-    const gridFreq = 98.2; // Hz (Mocked example)
-    const isGridCrit = gridFreq < 48.0; // Assuming 50Hz grid
+    // Data from Telemetry Store
+    const gridFreq = telemetry.governor?.actualValue?.toNumber() ?? 50.0;
+    const isGridCrit = gridFreq < 48.0;
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">

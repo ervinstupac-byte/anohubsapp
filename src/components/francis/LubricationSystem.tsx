@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Droplet, ArrowLeft, Settings, AlertTriangle, MapPin, Activity, CheckCircle2, Info } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const LubricationSystem: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Derived State from CEREBRO
-    const oilHealthScore = 92.4; // %
+    // Derived State from Telemetry Store
+    const oilHealthScore = telemetry.fluidIntelligence?.healthScore ?? 92.4; // %
     const isActiveCycle = true;
 
     return (

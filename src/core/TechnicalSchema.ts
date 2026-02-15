@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 import { AssetIdentity, FluidIntelligence } from '../types/assetIdentity';
 import { AssetPassport, InspectionImage, Asset } from '../types';
 
-export type DemoScenario = 'NORMAL' | 'WATER_HAMMER' | 'BEARING_FAILURE' | 'CAVITATION' | 'GRID_LOSS' | 'INFRASTRUCTURE_STRESS';
+export type DemoScenario = 'NOMINAL' | 'NORMAL' | 'WATER_HAMMER' | 'BEARING_HAZARD' | 'BEARING_FAILURE' | 'CAVITATION' | 'STRUCTURAL_ANOMALY' | 'CHRONIC_MISALIGNMENT' | 'GRID_LOSS' | 'INFRASTRUCTURE_STRESS';
 
 export interface DemoState {
     active: boolean;
@@ -71,6 +71,9 @@ export interface MechanicalStream {
         diameter?: number; // Unit: Millimeters [mm]
     };
     bearingType?: string;
+    bearingTempHistory?: number[]; // New: Thermal Inertia
+    bearingTempTimestamps?: number[]; // New: Thermal Inertia
+    shaftLengthM?: number; // New: Thermal Offset
     baselineOrbitCenter?: { x: number; y: number }; // For localStorage persistence
     vibrationHistory?: { x: number; y: number }[]; // For centralized engineering math history
     centerPath?: { x: number; y: number }[]; // For thermal drift visualization
@@ -98,6 +101,12 @@ export interface ComponentHealthRegistry {
     [assetId: number]: {
         [componentId: string]: ComponentHealthData;
     };
+}
+
+export interface LegacyWatchStatus {
+    greaseRisk?: { risk: string; message: string; preventionValueEur: number } | null;
+    thermalInertia?: { risk: string; message: string; action: string } | null;
+    peltonExpansion?: { deltaT: number; expansionMm: number; requiredColdOffsetMm: number; validationNote: string } | null;
 }
 
 export interface TechnicalProjectState {
@@ -131,12 +140,15 @@ export interface TechnicalProjectState {
         surgePressureBar: number; // Unit: Bar [bar]
         waterHammerPressureBar: number; // Unit: Bar [bar]
         eccentricity: number; // Unit: Ratio [0-1]
+        powerMW: number; // Unit: MegaWatts [MW]
         axialThrustKN?: number; // Unit: KiloNewtons [kN]
         specificWaterConsumption?: number; // Unit: Cubic Meters per KiloWatt-Hour [m³/kWh]
         leakageStatus?: 'NOMINAL' | 'DEGRADING' | 'CRITICAL';
         volumetricLoss?: number; // Unit: Percentage [%]
         netHead?: number; // Unit: Meters [m]
         headLoss?: number; // Unit: Meters [m]
+        performanceGap?: number; // Unit: Percentage [%]
+        performanceDelta?: number; // Unit: Percentage [%]
     };
     governor: GovernorState; // NEW: High-precision PID state
     specializedState?: SpecializedState; // NEW: Specialized Hub State
@@ -149,6 +161,7 @@ export interface TechnicalProjectState {
     structural: StructuralMetrics;
     hydrology: HydrologyContext;
     market: MarketData;
+    legacyWatch?: LegacyWatchStatus; // New: Ported Python Logic
     manualRules: string[];
     appliedMitigations: string[]; // NEW: NC-4.2 Persistent Mitigations
     financials?: {
@@ -239,6 +252,7 @@ export type ProjectAction =
     | { type: 'UPDATE_MARKET'; payload: Partial<MarketData> }
     | { type: 'ADD_MANUAL_RULE'; payload: string }
     | { type: 'APPLY_MITIGATION'; payload: string }
+    | { type: 'ADD_INSPECTION_IMAGE'; payload: { assetId: number; component: string; imageData: InspectionImage } }
     | { type: 'RESET_TO_DEMO' };
 
 /**
@@ -291,6 +305,8 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         lastMajorOverhaul: '2023-01-15',
         lastAlignmentDate: '2025-10-01',
         location: 'Demo Site',
+        operationalStatus: 'RUNNING',
+        standbyCyclesCounter: 0,
         machineConfig: {
             orientation: 'HORIZONTAL',
             transmissionType: 'DIRECT',
@@ -412,6 +428,9 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         vibrationY: 0,
         rpm: 500,
         bearingTemp: 45,
+        bearingTempHistory: [],
+        bearingTempTimestamps: [],
+        shaftLengthM: 5.0,
         radialClearance: 0.5,
         insulationResistance: 850,
         axialPlay: 0.15,
@@ -448,7 +467,13 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         surgePressureBar: 55,
         waterHammerPressureBar: 12.5,
         eccentricity: 0.25,
-        axialThrustKN: 0
+        powerMW: 8.5,
+        axialThrustKN: 0,
+        specificWaterConsumption: 0,
+        leakageStatus: 'NOMINAL',
+        volumetricLoss: 0,
+        netHead: 0,
+        headLoss: 0
     },
     governor: {
         setpoint: new Decimal(50.0),

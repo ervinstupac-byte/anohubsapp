@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { Book, Save, Plus, Trash2, ShieldAlert } from 'lucide-react';
 
 export const EngineeringWisdomVault: React.FC = () => {
-    const { state, dispatch } = useCerebro();
+    const { manualRules, addManualRule } = useTelemetryStore();
     const [newRule, setNewRule] = useState('');
 
     const handleAddRule = () => {
         if (newRule.trim()) {
-            dispatch({ type: 'ADD_MANUAL_RULE', payload: newRule });
+            addManualRule(newRule);
             setNewRule('');
         }
     };
@@ -49,12 +49,12 @@ export const EngineeringWisdomVault: React.FC = () => {
 
                 <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                     <AnimatePresence>
-                        {state.manualRules.length === 0 ? (
+                        {manualRules.length === 0 ? (
                             <div className="text-center py-12 text-slate-500 text-[10px] font-mono uppercase tracking-widest">
                                 No manual rules injected
                             </div>
                         ) : (
-                            state.manualRules.map((rule, idx) => (
+                            manualRules.map((rule, idx) => (
                                 <motion.div
                                     key={idx}
                                     initial={{ opacity: 0, x: -10 }}

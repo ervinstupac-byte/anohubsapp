@@ -1,7 +1,7 @@
 import { TelemetryData } from '../contexts/TelemetryContext.tsx';
 import { supabase } from './supabaseClient.ts';
 import idAdapter from '../utils/idAdapter';
-import ProjectStateManager from '../contexts/ProjectStateContext';
+import { ProjectStateManager } from '../core/ProjectStateManager';
 import { TechnicalProjectState, PhysicsResult } from '../core/TechnicalSchema';
 import { PhysicsEngine } from '../core/PhysicsEngine';
 import Decimal from 'decimal.js';

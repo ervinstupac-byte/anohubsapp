@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import Decimal from 'decimal.js';
-import { HydraulicStream, MechanicalStream, DiagnosisReport, PhysicsResult, DEFAULT_TECHNICAL_STATE, TechnicalProjectState, SpecializedState } from '../../../core/TechnicalSchema';
+import { HydraulicStream, MechanicalStream, DiagnosisReport, PhysicsResult, DEFAULT_TECHNICAL_STATE, TechnicalProjectState, SpecializedState, GovernorState, DemoScenario } from '../../../core/TechnicalSchema';
 import { AssetIdentity } from '../../../types/assetIdentity';
+import { InspectionImage } from '../../../types';
 import { PhysicsEngine } from '../../../core/PhysicsEngine';
 import { ExpertDiagnosisEngine } from '../../physics-core/ExpertDiagnosisEngine';
 import { UnifiedDiagnosis, MasterIntelligenceEngine } from '../../../services/MasterIntelligenceEngine';
@@ -65,7 +66,8 @@ export interface BaselineState {
 type TelemetryUpdatePayload = {
     hydraulic?: Partial<HydraulicStream>;
     mechanical?: Partial<MechanicalStream>;
-    physics?: Partial<PhysicsResult>;
+    physics?: Partial<TechnicalProjectState['physics']>;
+    governor?: Partial<GovernorState>;
     identity?: AssetIdentity;
     site?: TechnicalProjectState['site'];
     penstock?: TechnicalProjectState['penstock'];
@@ -99,7 +101,7 @@ type TelemetryUpdatePayload = {
     };
 };
 
-export type DemoScenario = 'NOMINAL' | 'CAVITATION' | 'BEARING_HAZARD' | 'STRUCTURAL_ANOMALY' | 'CHRONIC_MISALIGNMENT';
+// DemoScenario imported from TechnicalSchema
 
 // NC-15300: Expert Witness Diagnostic Snapshot
 export interface DiagnosticSnapshot {
@@ -366,8 +368,10 @@ interface TelemetryState {
     hydraulic: HydraulicStream;
     mechanical: MechanicalStream;
     // Derived Calculations
-    physics: Partial<PhysicsResult>;
+    physics: Partial<TechnicalProjectState['physics']>;
+    governor: GovernorState;
     diagnosis: DiagnosisReport | null;
+    riskScore: number;
     // NC-300: Hill-chart optimizer delta to optimum
     deltaToOptimum?: number;
 
@@ -392,6 +396,14 @@ interface TelemetryState {
 
     // NC-10051: Sovereign Executive Result
     executiveResult: ExecutiveState | null;
+
+    // NC-11500: Engineering Wisdom Vault
+    manualRules: string[];
+    addManualRule: (rule: string) => void;
+
+    // NC-Inspection: Visual Inspection Images
+    images: InspectionImage[];
+    addInspectionImage: (assetId: number, component: string, imageData: InspectionImage) => void;
 
     // Static / Low-Frequency Config (Required for Physics Math)
     identity: AssetIdentity;
@@ -528,6 +540,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             alignment: null,
             units: {},
             physics: {},
+            governor: DEFAULT_TECHNICAL_STATE.governor,
             diagnosis: null,
             fluidIntelligence: DEFAULT_TECHNICAL_STATE.fluidIntelligence,
             identity: DEFAULT_TECHNICAL_STATE.identity,
@@ -535,10 +548,18 @@ export const useTelemetryStore = create<TelemetryState>()(
             penstock: DEFAULT_TECHNICAL_STATE.penstock,
             specializedState: DEFAULT_TECHNICAL_STATE.specializedState,
             appliedMitigations: [],
+            manualRules: [],
+            addManualRule: (rule: string) => set((state) => ({ manualRules: [...state.manualRules, rule] })),
+            
+            images: [],
+            addInspectionImage: (assetId: number, component: string, imageData: InspectionImage) => set((state) => ({
+                images: [...(state.images || []), imageData]
+            })),
+
             applyMitigation: (mitigation: string) => set((state) => ({
                 appliedMitigations: [...state.appliedMitigations, mitigation],
                 // Apply logic if needed, e.g., reduce stress
-                physics: mitigation === 'STRUCTURAL_RISK' ? { ...state.physics, hoopStress: (state.physics.hoopStress as any)?.mul?.(0.85) ?? new Decimal(0) } : state.physics
+                physics: mitigation === 'STRUCTURAL_RISK' ? { ...state.physics, hoopStressMPa: (state.physics.hoopStressMPa || 0) * 0.85 } : state.physics
             })),
             deltaToOptimum: undefined,
 
@@ -729,7 +750,7 @@ export const useTelemetryStore = create<TelemetryState>()(
 
                     // Guest Mode: inject 45 MW so ηtotal is non-zero
                     if (payload.physics && !get().isCommanderMode) {
-                        payload.physics.powerMW = new Decimal(45.0);
+                        payload.physics.powerMW = 45.0;
                     }
 
                     set((s) => ({
@@ -870,6 +891,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         mechanical: nextMechanical,
                         fluidIntelligence: payload.fluidIntelligence ? { ...state.fluidIntelligence, ...payload.fluidIntelligence } : state.fluidIntelligence,
                         physics: { ...state.physics, ...payload.physics },
+                        governor: payload.governor ? { ...state.governor, ...payload.governor } : state.governor,
                         identity: payload.identity ?? state.identity,
                         site: payload.site ?? state.site,
                         penstock: payload.penstock ?? state.penstock,
@@ -938,7 +960,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                     const acoustic = currentState.mechanical.acousticMetrics?.cavitationIntensity || 0;
                     // Handle Decimal or number for sigma/threshold
                     const sigma = currentState.hydraulic.sigma || 1.0;
-                    const threshold = (currentState.hydraulic.cavitationThreshold as any)?.toNumber?.() ?? currentState.hydraulic.cavitationThreshold ?? 0.5;
+                    const threshold = currentState.hydraulic.cavitationThreshold ? currentState.hydraulic.cavitationThreshold.toNumber() : 0.5;
                     
                     if (acoustic > 80 || sigma < threshold) return 'HIGH';
                     if (acoustic > 50 || sigma < threshold * 1.2) return 'MEDIUM';
@@ -948,7 +970,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                 const operatingZone = (() => {
                     const eff = currentState.hydraulic.efficiency || 0;
                     // Handle Decimal or number for power
-                    const power = (currentState.physics.powerMW as any)?.toNumber?.() ?? currentState.physics.powerMW ?? 0;
+                    const power = currentState.physics.powerMW || 0;
                     const rated = currentState.identity.machineConfig?.ratedPowerMW || 10;
                     
                     if (power > rated * 1.05) return 'OVERLOAD';

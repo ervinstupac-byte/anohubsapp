@@ -16,7 +16,7 @@ import {
     ClipboardList
 } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
@@ -24,10 +24,8 @@ import { NeuralPulse } from '../ui/NeuralPulse';
 export const GovernorPID: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const { governor } = useTelemetryStore();
     const { governor: governorMath, waterHammer } = useEngineeringMath();
-
-    const governor = state.governor;
     const burstRate = 14.2; // ms, placeholder for reflex loop speed
 
     return (

@@ -9,7 +9,7 @@ export const SecondaryMetricsGrid: React.FC = () => {
     const metrics = [
         {
             label: 'Hoop Stress',
-            value: physics.hoopStress?.toFixed(2) || '0.00',
+            value: physics.hoopStressMPa?.toFixed(2) || '0.00',
             unit: 'MPa',
             icon: ShieldAlert,
             color: 'text-rose-400',

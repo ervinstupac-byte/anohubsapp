@@ -31,7 +31,7 @@ export const BoltTorqueCalculator: React.FC = () => {
 
     // Live Data Bridge
     // If we have live physics for bolt load, we display it for comparison
-    const liveBoltLoad = livePhysics?.boltLoadKN ? livePhysics.boltLoadKN.toNumber() : 0;
+    const liveBoltLoad = livePhysics?.boltLoadKN || 0;
 
     const calculations = useMemo(() => {
         // Source of Truth: technicalState from CEREBRO (Design Parameters)

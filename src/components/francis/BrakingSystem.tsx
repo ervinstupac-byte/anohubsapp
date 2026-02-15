@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Octagon, ArrowLeft, Wind, ShieldAlert, Fan, ArrowUpCircle, Cpu, Activity, Info } from 'lucide-react';
 import { FRANCIS_PATHS } from '../../routes/paths';
-import { useCerebro } from '../../contexts/ProjectContext';
+import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { NeuralPulse } from '../ui/NeuralPulse';
 
 export const BrakingSystem: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { state } = useCerebro();
+    const telemetry = useTelemetryStore();
 
-    // Mapping from CEREBRO
-    const rpm = state.mechanical.rpm;
+    // Mapping from Telemetry
+    const rpm = telemetry.mechanical?.rpm ?? 0;
     const rpmPerc = (rpm / 428.5) * 100;
     const airPressure = 7.0; // Bar (Mocked)
     const canBrake = rpmPerc < 20;
