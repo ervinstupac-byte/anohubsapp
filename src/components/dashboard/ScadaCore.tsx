@@ -293,21 +293,21 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => navigate(-1)} 
-                className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                className="p-1 hover:bg-slate-800 border border-transparent hover:border-slate-600 text-slate-400 hover:text-white transition-colors"
                 title="Back"
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => navigate('/')} 
-                className="p-1 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                className="p-1 hover:bg-slate-800 border border-transparent hover:border-slate-600 text-slate-400 hover:text-white transition-colors"
                 title="Main Menu"
               >
                 <Home className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => setIsComfortMode(!isComfortMode)} 
-                className={`p-1 hover:bg-slate-800 rounded transition-colors ${isComfortMode ? 'text-cyan-400' : 'text-slate-400'}`}
+                className={`p-1 hover:bg-slate-800 border border-transparent hover:border-slate-600 transition-colors ${isComfortMode ? 'text-cyan-400' : 'text-slate-400'}`}
                 title="Visual Comfort Mode"
               >
                 <Eye className="w-4 h-4" />
@@ -521,7 +521,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
                 {/* Generator */}
                 <g transform="translate(600,120)" className="equipment-shadow">
-                  <rect x="-60" y="-30" width="120" height="60" rx="8" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
+                  <rect x="-60" y="-30" width="120" height="60" rx="0" fill="url(#metalGradient)" stroke="#2d3748" strokeWidth="2" />
                   <circle cx="0" cy="0" r="25" fill="#1a202c" stroke="#2d3748" strokeWidth="2" />
                   <circle cx="0" cy="0" r="20" fill="none" stroke="#4a5568" strokeWidth="1" />
                   <text x="0" y="5" textAnchor="middle" className="sensor-label" fill="#cbd5e1" fontSize="10">GEN</text>

@@ -151,7 +151,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             {/* 1. HEADER & OMNIBAR */}
             <div className="p-4 border-b border-slate-800 bg-slate-950/50 backdrop-blur-sm">
                 <div className="flex items-center gap-2 mb-4">
-                    <div className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-none bg-emerald-500/20 flex items-center justify-center">
                         <Cpu className="w-4 h-4 text-emerald-400" />
                     </div>
                     <span className="text-xs font-black tracking-[0.2em] text-slate-100">

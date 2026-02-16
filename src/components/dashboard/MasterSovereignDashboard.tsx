@@ -201,7 +201,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/')}
-                            className="p-2 hover:bg-scada-panel rounded-sm text-scada-muted hover:text-scada-text transition-colors"
+                            className="p-2 hover:bg-scada-panel rounded-none text-scada-muted hover:text-scada-text transition-colors"
                             title="Back to Hub"
                         >
                             <Home className="w-6 h-6" />
@@ -213,7 +213,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Strategic View Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'strategic'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'strategic'
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -225,7 +225,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Energy Hub Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'energy'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'energy'
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -237,7 +237,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-10070: Forensic Mode Toggle */}
                         <button
                             onClick={() => setIsForensicMode(!isForensicMode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${isForensicMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isForensicMode
                                 ? 'bg-status-ok/20 text-status-ok border border-status-ok/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -249,7 +249,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-11400: Education Mode Toggle */}
                         <button
                             onClick={toggleEducationMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${educationMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${educationMode
                                 ? 'bg-status-info/20 text-status-info border border-status-info/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -261,7 +261,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Commander Mode Toggle - ALWAYS VISIBLE */}
                         <button
                             onClick={toggleCommanderMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${isCommanderMode
+                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isCommanderMode
                                 ? 'bg-status-warning/20 text-status-warning border border-status-warning/50'
                                 : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
@@ -273,7 +273,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-9200: Tactical Layout Launcher */}
                         <button
                             onClick={launchTacticalLayout}
-                            className="flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
+                            className="flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
                             title="Open all modules across screens"
                         >
                             <Layout className="w-4 h-4" />

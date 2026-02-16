@@ -401,7 +401,7 @@ export const ExecutiveDashboard: React.FC = () => {
     const PdfProgressBadge: React.FC = () => {
         if (pdfProgress === null) return null;
         return (
-            <div className="fixed top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-md text-sm z-50">
+            <div className="fixed top-4 right-4 bg-black/90 border border-status-ok/50 text-white px-3 py-1 rounded-none text-sm z-50 font-mono">
                 Generating forensic PDF — {Math.round(pdfProgress)}%
                 {pdfError ? (
                     <button onClick={() => { setPdfError(null); handleGenerateForensicPDF(); }} className="ml-3 underline text-amber-300 text-xs">Retry</button>
@@ -519,12 +519,12 @@ export const ExecutiveDashboard: React.FC = () => {
                             <ModernButton
                                 variant="secondary"
                                 onClick={() => navigate('/maintenance/dashboard')}
-                                className="text-[10px] py-2 flex items-center gap-2 rounded-sm border-scada-border hover:bg-scada-border"
+                                className="text-[10px] py-2 flex items-center gap-2 rounded-none border-scada-border hover:bg-scada-border"
                             >
                                 <Wrench className="w-3 h-3" />
                                 {t('dashboard.performMaintenance', 'MAINTENANCE')}
                             </ModernButton>
-                            <div className="px-3 py-1.5 bg-scada-panel border border-status-ok/30 rounded-sm flex items-center gap-2">
+                            <div className="px-3 py-1.5 bg-scada-panel border border-status-ok/30 rounded-none flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 bg-status-ok rounded-none" />
                                 <span className="text-[10px] text-status-ok font-mono font-bold uppercase tracking-wider">{t('dashboard.neural_link')}</span>
                             </div>
@@ -532,7 +532,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 variant="primary"
                                 onClick={handleGenerateForensicPDF}
                                 id="generate-forensic-pdf-exclusive"
-                                className="btn-primary flex items-center gap-2 !px-4 !py-2 rounded-sm border border-status-ok bg-status-ok/10 hover:bg-status-ok/20 text-status-ok shadow-scada-card"
+                                className="btn-primary flex items-center gap-2 !px-4 !py-2 rounded-none border border-status-ok bg-status-ok/10 hover:bg-status-ok/20 text-status-ok shadow-none"
                             >
                                 <FileText className="w-3 h-3" />
                                 {t('dashboard.export_forensic', 'GENERATE FORENSIC PDF')}
@@ -541,7 +541,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                 variant="ghost"
                                 onClick={handleExpertOverride}
                                 id="expert-override-king"
-                                className="!px-3 !py-2 text-[10px] ml-2 rounded-sm border border-scada-border text-scada-muted hover:text-scada-text hover:bg-scada-border"
+                                className="!px-3 !py-2 text-[10px] ml-2 rounded-none border border-scada-border text-scada-muted hover:text-scada-text hover:bg-scada-border"
                             >
                                 {t('dashboard.override', 'OVERRIDE')}
                             </ModernButton>
