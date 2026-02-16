@@ -30,34 +30,33 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
                         <button
                             onClick={() => selectAsset(asset.id)}
                             className={`
-                                w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative overflow-hidden
+                                w-full flex items-center gap-3 px-3 py-2.5 border transition-all group relative overflow-hidden
                                 ${selectedAsset?.id === asset.id
-                                    ? 'bg-cyan-950/40 border border-cyan-500/30 text-white shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                                    : 'hover:bg-slate-800/50 border border-transparent text-slate-400'}
+                                    ? 'bg-slate-800 border-emerald-500 text-emerald-400 font-bold'
+                                    : 'hover:bg-slate-800/50 border-slate-700 text-slate-400'}
                             `}
                         >
                             {/* Status Dot */}
                             <div className={`
-                                w-2 h-2 rounded-full shrink-0
+                                w-2 h-2 shrink-0
                                  ${asset.status === 'Critical' ? 'bg-red-500 animate-pulse' :
                                     asset.status === 'Warning' || asset.status === 'Maintenance' ? 'bg-amber-400' :
                                         'bg-emerald-500'}
                              `}></div>
 
-                            {/* Asset Name + Waveform */}
+                            {/* Asset Name + Simple Indicator */}
                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <span className="text-[11px] font-black uppercase truncate text-left tracking-wider">
+                                <span className="text-[11px] font-mono font-bold uppercase truncate text-left tracking-wider">
                                     {asset.name}
                                 </span>
-                                <div className="flex items-end gap-0.5 h-3 overflow-hidden opacity-50 group-hover:opacity-100 transition-opacity">
-                                    {[1, 2, 3, 4, 5].map(i => (
+                                {/* Industrial Status Bars (No Animation) */}
+                                <div className="flex items-end gap-1 h-3 opacity-75">
+                                    {[1, 2, 3].map(i => (
                                         <div
                                             key={i}
-                                            className="w-[2px] bg-cyan-400 animate-wave"
+                                            className={`w-[3px] ${selectedAsset?.id === asset.id ? 'bg-emerald-500' : 'bg-slate-600'}`}
                                             style={{
-                                                height: `${40 + Math.random() * 60}%`,
-                                                animationDelay: `${i * 0.15}s`,
-                                                animationDuration: `${0.8 + Math.random()}s`
+                                                height: `${40 + (i * 20)}%`
                                             }}
                                         />
                                     ))}
@@ -66,7 +65,7 @@ export const FleetOverview: React.FC<FleetOverviewProps> = React.memo(({ onToggl
 
                             {/* Selected Indicator */}
                             {selectedAsset?.id === asset.id && (
-                                <span className="text-[10px] text-h-cyan animate-pulse">▶</span>
+                                <span className="text-[10px] text-emerald-500 font-mono">ACTIVE</span>
                             )}
                         </button>
 

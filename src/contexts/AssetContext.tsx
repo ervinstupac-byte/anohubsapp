@@ -238,26 +238,51 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 const updatedGuestAssets = [...existingGuestAssets, newAsset];
                 saveToStorage('guest_assets', updatedGuestAssets);
             } else {
-                const { data, error } = await supabase
-                    .from('assets')
-                    .insert([dbPayload])
-                    .select()
-                    .single();
+                try {
+                    const { data, error } = await supabase
+                        .from('assets')
+                        .insert([dbPayload])
+                        .select()
+                        .single();
 
-                if (error) throw error;
+                    if (error) throw error;
 
-                newAsset = {
-                    id: data.id, // Keep raw
-                    name: data.name,
-                    type: data.type,
-                    location: data.location,
-                    coordinates: [data.lat, data.lng],
-                    capacity: parseFloat(data.power_output),
-                    status: data.status,
-                    turbine_type: (function () { const t = data.turbine_type || data.type; if (!t) return 'PELTON'; const lower = String(t).toLowerCase(); if (['pelton', 'francis', 'kaplan', 'crossflow'].includes(lower)) return lower.toUpperCase(); return 'PELTON'; })(),
-                    specs: data.specs || {},
-                    turbineProfile: data.specs?.turbineProfile
-                };
+                    newAsset = {
+                        id: data.id, // Keep raw
+                        name: data.name,
+                        type: data.type,
+                        location: data.location,
+                        coordinates: [data.lat, data.lng],
+                        capacity: parseFloat(data.power_output),
+                        status: data.status,
+                        turbine_type: (function () { const t = data.turbine_type || data.type; if (!t) return 'PELTON'; const lower = String(t).toLowerCase(); if (['pelton', 'francis', 'kaplan', 'crossflow'].includes(lower)) return lower.toUpperCase(); return 'PELTON'; })(),
+                        specs: data.specs || {},
+                        turbineProfile: data.specs?.turbineProfile
+                    };
+                } catch (err) {
+                    console.warn('[AssetContext] Online creation failed. Falling back to OFFLINE STORAGE.', err);
+                    
+                    // FALLBACK: Save locally even if authenticated
+                    newAsset = {
+                        id: -Date.now(), // Negative ID for local
+                        name: dbPayload.name,
+                        type: dbPayload.type,
+                        location: dbPayload.location,
+                        coordinates: [dbPayload.lat, dbPayload.lng],
+                        capacity: dbPayload.power_output,
+                        status: dbPayload.status as Asset['status'],
+                        specs: dbPayload.specs,
+                        turbineProfile: dbPayload.specs?.turbineProfile
+                    };
+
+                    const existingGuestAssets = loadFromStorage<Asset[]>('guest_assets') || [];
+                    const updatedGuestAssets = [...existingGuestAssets, newAsset];
+                    saveToStorage('guest_assets', updatedGuestAssets);
+                    
+                    // Notify user (optional, but good for UX)
+                    // We don't have toast here directly but logAction helps
+                    logAction('ASSET_REGISTER', `${newAsset.name} (OFFLINE)`, 'WARNING');
+                }
             }
 
             setAssets(prev => [...prev, newAsset]);

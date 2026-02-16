@@ -133,9 +133,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
     // Health Color Logic
     const getHealthColor = (score: number) => {
-        if (score >= 90) return 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]';
-        if (score >= 70) return 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]';
-        return 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]';
+        if (score >= 90) return 'bg-emerald-600';
+        if (score >= 70) return 'bg-amber-600';
+        return 'bg-rose-600';
     };
 
     // EMERGENCY HARD FALLBACK (NC-19600): Ensure oracleResults is ALWAYS an array
