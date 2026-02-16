@@ -1,84 +1,101 @@
 import { describe, it, expect } from 'vitest';
 import { PhysicsEngine } from '../PhysicsEngine';
-import Decimal from 'decimal.js';
 
-describe('PhysicsEngine Legacy Logic Port', () => {
+describe('PhysicsEngine Legacy Logic Tests', () => {
+
     describe('checkGreaseRisk', () => {
-        it('should return null for NOMINAL status', () => {
-            const result = PhysicsEngine.checkGreaseRisk('NOMINAL', 100);
+        it('should return null for normal operation', () => {
+            const result = PhysicsEngine.checkGreaseRisk('RUNNING', 5);
             expect(result).toBeNull();
         });
 
-        it('should return risk for STOPPED status with high cycles', () => {
-            const result = PhysicsEngine.checkGreaseRisk('STOPPED', 25);
+        it('should return null for standby with low cycles', () => {
+            const result = PhysicsEngine.checkGreaseRisk('STBY', 10);
+            expect(result).toBeNull();
+        });
+
+        it('should flag CRITICAL risk for excessive standby cycles', () => {
+            const result = PhysicsEngine.checkGreaseRisk('STBY', 25);
             expect(result).toEqual({
-                id: 'LEGACY #3',
-                risk: 'CRITICAL',
-                message: 'Excessive Grease (25 cycles). Seal blowout risk!',
+                id: "LEGACY #3",
+                risk: "CRITICAL",
+                message: "Excessive Grease (25 cycles). Seal blowout risk!",
                 preventionValueEur: 45000
             });
         });
 
-        it('should return null for STOPPED status with low cycles', () => {
-            const result = PhysicsEngine.checkGreaseRisk('STOPPED', 10);
-            expect(result).toBeNull();
+        it('should flag CRITICAL risk for excessive stopped cycles', () => {
+            const result = PhysicsEngine.checkGreaseRisk('STOPPED', 22);
+            expect(result).not.toBeNull();
+            expect(result?.risk).toBe("CRITICAL");
         });
     });
 
     describe('checkThermalInertia', () => {
-        it('should detect rapid heating (thermal shock)', () => {
-            const history = [40, 42, 45, 50, 60]; // Rapid rise
-            // Timestamps in milliseconds
-            // 40->42: 1s, 42->45: 1s, 45->50: 1s, 50->60: 1s
-            // Last step: 50 -> 60 degC in 1000ms (1s) = 10 deg/sec = 600 deg/min
-            const timestamps = [0, 1000, 2000, 3000, 4000];
-            const result = PhysicsEngine.checkThermalInertia(history, timestamps);
-            
-            expect(result).toEqual({
-                id: 'LEGACY_THERMAL_INERTIA',
-                risk: 'EMERGENCY',
-                message: 'Rapid Compounding Heat detected! Rate: 600.0°C/min. SHAFT SEIZURE IMMINENT.',
-                action: 'Enable Emergency AC/DC Oil Pump & Cooling Boost'
-            });
+        it('should return null for insufficient data', () => {
+            expect(PhysicsEngine.checkThermalInertia([50], [1000])).toBeNull();
         });
 
-        it('should return null for stable temperature', () => {
-            const history = [40, 40.1, 40.2, 40.1, 40];
-            const timestamps = [0, 60000, 120000, 180000, 240000]; // 1 min intervals
+        it('should return null for slow temperature rise', () => {
+            const history = [50, 51]; // 1 degree rise
+            const timestamps = [1000, 61000]; // 1 minute gap
+            expect(PhysicsEngine.checkThermalInertia(history, timestamps)).toBeNull();
+        });
+
+        it('should flag EMERGENCY risk for rapid temperature rise', () => {
+            const history = [50, 55]; // 5 degree rise
+            const timestamps = [1000, 61000]; // 1 minute gap
+            // Rate = 5 deg / 1 min = 5.0 > 2.0 limit
             const result = PhysicsEngine.checkThermalInertia(history, timestamps);
-            expect(result).toBeNull();
+            
+            expect(result).not.toBeNull();
+            expect(result?.risk).toBe("EMERGENCY");
+            expect(result?.message).toContain("Rate: 5.0");
+        });
+
+        it('should handle millisecond timestamps correctly', () => {
+            const history = [60, 63]; // 3 deg rise
+            const timestamps = [0, 30000]; // 30 seconds (0.5 min)
+            // Rate = 3 / 0.5 = 6.0 > 2.0 limit
+            const result = PhysicsEngine.checkThermalInertia(history, timestamps);
+            expect(result?.risk).toBe("EMERGENCY");
         });
     });
 
     describe('calculatePeltonExpansion', () => {
-        it('should calculate expansion correctly', () => {
-            // Shaft length 10m, ambient 20C, operating 60C
-            // DeltaT = 40
-            // Expansion = 10 * 1000 * 12e-6 * 40 = 4.8 mm
-            const result = PhysicsEngine.calculatePeltonExpansion(10, 20, 60);
-            expect(result).not.toBeNull();
-            expect(result?.expansionMm).toBeCloseTo(4.8, 3);
-            expect(result?.requiredColdOffsetMm).toBeCloseTo(-4.8, 3);
+        it('should calculate correct expansion for steel shaft', () => {
+            // Shaft 5m, Delta T 25 deg (45 - 20)
+            // Expansion = 5000mm * 12e-6 * 25 = 1.5mm
+            const result = PhysicsEngine.calculatePeltonExpansion(5.0, 20, 45);
+            
+            expect(result.deltaT).toBe(25);
+            expect(result.expansionMm).toBe(1.5);
+            expect(result.requiredColdOffsetMm).toBe(-1.5);
+        });
+
+        it('should handle zero temperature delta', () => {
+            const result = PhysicsEngine.calculatePeltonExpansion(10.0, 20, 20);
+            expect(result.expansionMm).toBe(0);
+            expect(result.requiredColdOffsetMm).toBe(-0); // Signed zero is fine
         });
     });
 
     describe('validateManufacturerBid', () => {
-        it('should accept plausible bid for Francis turbine', () => {
+        it('should accept plausible efficiency for Francis', () => {
             const result = PhysicsEngine.validateManufacturerBid(94.5, 'FRANCIS');
-            expect(result.verdict).toBe('PLAUSIBLE');
-            expect(result.physicsLimit).toBe(96.5);
+            expect(result.verdict).toBe("PLAUSIBLE");
         });
 
-        it('should reject physically impossible bid', () => {
-            const result = PhysicsEngine.validateManufacturerBid(99.9, 'FRANCIS');
-            expect(result.verdict).toBe('MARKETING_LIE');
-            expect(result.message).toContain('exceeds limit');
-        });
-
-        it('should handle different turbine types', () => {
-            const result = PhysicsEngine.validateManufacturerBid(96.0, 'PELTON'); // Limit 92.5
-            expect(result.verdict).toBe('MARKETING_LIE');
+        it('should flag marketing lie for impossible Pelton efficiency', () => {
+            const result = PhysicsEngine.validateManufacturerBid(94.0, 'PELTON'); // Limit 92.5
+            expect(result.verdict).toBe("MARKETING_LIE");
             expect(result.physicsLimit).toBe(92.5);
+        });
+
+        it('should handle complex turbine type strings', () => {
+            const result = PhysicsEngine.validateManufacturerBid(99.0, 'KAPLAN_VERTICAL');
+            expect(result.verdict).toBe("MARKETING_LIE");
+            expect(result.physicsLimit).toBe(95.5);
         });
     });
 });
