@@ -54,7 +54,6 @@ export const Sparkline: React.FC<SparklineProps> = React.memo(({
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="drop-shadow-[0_0_2px_rgba(34,211,238,0.5)]" // Neon glow effect
             />
             {/* Markers */}
             {markers.map((marker, i) => {

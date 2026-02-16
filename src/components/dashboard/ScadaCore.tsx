@@ -287,7 +287,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 grid grid-cols-12 gap-6 p-6">
-      <div className="col-span-8 bg-[#111111] border border-[#222222] rounded-xl relative overflow-hidden">
+      <div className="col-span-8 bg-slate-900 border border-slate-600 rounded-none relative">
         {!focusMode && (
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
             <div className="flex items-center gap-2">
@@ -355,7 +355,7 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
               @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
               @keyframes bubbleRise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-50px) scale(1.5); opacity: 0; } }
               .cad-grid { fill: url(#gridPattern); }
-              .flow-path { stroke: url(#flowGradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 8 10; filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.5)); }
+              .flow-path { stroke: url(#flowGradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 8 10; }
               .sensor-label { font-family: monospace; font-size: 12px; font-weight: bold; }
               .digital-tag { fill: ${isComfortMode ? '#1e293b' : '#0b0b0b'}; stroke: #2a2a2a; stroke-width: 1; rx: 6; }
               .isa-pipe { stroke: #4a5568; stroke-width: 3; fill: none; }
@@ -378,8 +378,8 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <stop offset="100%" stopColor="#22d3ee" />
               </linearGradient>
               <linearGradient id="metalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#4a5568" />
-                <stop offset="100%" stopColor="#2d3748" />
+                <stop offset="0%" stopColor="#334155" />
+                <stop offset="100%" stopColor="#334155" />
               </linearGradient>
               <radialGradient id="thermalStressGradient">
                 <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
@@ -387,8 +387,8 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                 <stop offset="100%" stopColor="#22c55e" stopOpacity="0.1" />
               </radialGradient>
               <radialGradient id="turbineGradient">
-                <stop offset="0%" stopColor="#2d3748" />
-                <stop offset="100%" stopColor="#1a202c" />
+                <stop offset="0%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#1e293b" />
               </radialGradient>
             </defs>
             <rect x="0" y="0" width="1200" height="600" className="cad-grid" />
@@ -431,6 +431,10 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                   </foreignObject>
                 </g>
 
+                {/* Connection: Penstock to Spiral Case */}
+                <rect x="260" y="140" width="20" height="40" fill="url(#metalGradient)" stroke="none" />
+                <line x1="260" y1="160" x2="280" y2="160" className="flow-path" style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
+
                 {/* Spiral Case */}
                 <g className="equipment-shadow">
                   <path d="M 280 120 Q 380 100 460 140 T 580 180 L 580 220 Q 500 240 420 220 T 280 180 Z"
@@ -443,6 +447,10 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
                     </div>
                   </foreignObject>
                 </g>
+
+                {/* Connection: Spiral Case to Runner */}
+                <rect x="580" y="180" width="20" height="40" fill="url(#metalGradient)" stroke="none" />
+                <line x1="580" y1="200" x2="600" y2="200" className="flow-path" style={{ animation: `dashFlow ${Math.max(0.5, 3 - flowM3s / 30)}s linear infinite` }} />
 
                 {/* Runner Assembly */}
                 <g transform="translate(600,300)" className="equipment-shadow" style={shakeStyle}>
@@ -1111,27 +1119,28 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
           <LubeStatus />
         </div>
       </div>
-      {/* Alarm banner */}
-      <div className="col-span-12">
-        <div className="fixed bottom-0 left-0 right-0">
-          <div className="mx-6 mb-4 bg-slate-900/95 border border-slate-700 rounded-xl">
-            <div className="flex items-center justify-between px-4 py-2">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Alarms</span>
-                <span className={`w-2 h-2 rounded-full ${activeAlarms?.length ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
-              </div>
-              <button className="text-xs px-2 py-1 rounded bg-slate-800 border border-slate-700" onClick={() => { EventLogger.log('ACKNOWLEDGE', null, null, 'ALL'); acknowledgeAllAlarms?.(); }}>Acknowledge All</button>
+      {/* Alarm banner - SCADA Standard: Integrated, not Floating */}
+      <div className="col-span-12 mt-4">
+        <div className="bg-slate-900 border border-slate-700 rounded-none">
+          <div className="flex items-center justify-between px-4 py-2 bg-slate-800/50 border-b border-slate-700">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Active Alarms</span>
+              <span className={`w-2 h-2 rounded-full ${activeAlarms?.length ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
             </div>
-            <div className="px-4 pb-3 space-y-1">
-              {(activeAlarms ?? []).slice(-5).map((a: any) => (
-                <div key={a.id} className={`text-xs font-mono ${a.severity === 'CRITICAL' ? 'text-red-400' : a.severity === 'WARNING' ? 'text-amber-300' : 'text-slate-300'}`}>
-                  [{a.severity}] {a.message}
-                </div>
-              ))}
-            </div>
+            <button className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => { EventLogger.log('ACKNOWLEDGE', null, null, 'ALL'); acknowledgeAllAlarms?.(); }}>ACK ALL</button>
           </div>
-          <HistorianPanel />
+          <div className="px-4 py-2 space-y-1 max-h-32 overflow-y-auto">
+            {(activeAlarms ?? []).length === 0 && <div className="text-xs font-mono text-slate-500 italic">No active alarms</div>}
+            {(activeAlarms ?? []).slice(-5).map((a: any) => (
+              <div key={a.id} className={`text-xs font-mono flex gap-2 ${a.severity === 'CRITICAL' ? 'text-red-400' : a.severity === 'WARNING' ? 'text-amber-300' : 'text-slate-300'}`}>
+                <span className="font-bold">[{a.severity}]</span>
+                <span>{a.message}</span>
+                <span className="ml-auto text-slate-600">{new Date(a.timestamp).toLocaleTimeString()}</span>
+              </div>
+            ))}
+          </div>
         </div>
+        <HistorianPanel />
       </div>
     </div>
   );
@@ -1143,19 +1152,23 @@ const HistorianPanel: React.FC = () => {
   const { sessionLedger } = useTelemetryStore() as any;
   const [open, setOpen] = useState(false);
   return (
-    <div className={`mx-6 mb-4 ${open ? 'translate-y-0' : 'translate-y-24'} transition-transform`}>
-      <div className="bg-slate-900/95 border border-slate-700 rounded-xl">
-        <div className="flex items-center justify-between px-4 py-2">
+    <div className="mt-4">
+      <div className="bg-slate-900 border border-slate-700 rounded-none">
+        <div className="flex items-center justify-between px-4 py-2 bg-slate-800/50 border-b border-slate-700">
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-slate-400 uppercase font-mono tracking-widest">Event Historian</span>
           </div>
-          <button className="text-xs px-2 py-1 rounded bg-slate-800 border border-slate-700" onClick={() => setOpen(!open)}>{open ? 'Hide' : 'Show'}</button>
+          <button className="text-xs px-2 py-1 rounded-none bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-300 font-mono" onClick={() => setOpen(!open)}>{open ? 'HIDE' : 'SHOW'}</button>
         </div>
         {open && (
-          <div className="px-4 pb-3 space-y-1 max-h-48 overflow-y-auto">
+          <div className="px-4 py-2 space-y-1 max-h-48 overflow-y-auto">
             {(sessionLedger ?? []).slice(-20).reverse().map((e: any, i: number) => (
-              <div key={`${e.hash}-${i}`} className="text-xs font-mono text-slate-300">
-                [{new Date(e.timestamp).toLocaleTimeString()}] {e.action} {e.componentId ?? '-'} {String(e.previousValue ?? '')} → {String(e.newValue ?? '')} #{e.hash}
+              <div key={`${e.hash}-${i}`} className="text-xs font-mono text-slate-300 border-b border-slate-800/50 pb-1 mb-1 last:border-0">
+                <span className="text-slate-500 mr-2">[{new Date(e.timestamp).toLocaleTimeString()}]</span>
+                <span className="text-cyan-600 font-bold mr-2">{e.action}</span>
+                <span className="text-slate-400">{e.componentId ?? '-'}</span>
+                <span className="mx-2 text-slate-600">→</span>
+                <span className="text-slate-200">{String(e.newValue ?? '')}</span>
               </div>
             ))}
           </div>

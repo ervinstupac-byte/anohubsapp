@@ -63,8 +63,13 @@ export const AssetPassportCard: React.FC = () => {
     const shaftLiftMax = new Decimal(specs.shaftLiftRange?.max || 0.35);
 
     // --- Live Telemetry (Decimal.js) ---
+    // NC-1100: Safety Clamp for Sensor Corruption (Fixes -2B degree bug)
+    const rawTemp = mechanical.bearingTemp || 0;
+    // Clamp between 0°C (frozen) and 200°C (melted), ignore physics glitches
+    const clampedTemp = Number.isFinite(rawTemp) ? Math.max(0, Math.min(200, rawTemp)) : 20; 
+    
     const valLabyrinth = new Decimal(mechanical.radialClearance || 0);
-    const valBearingTemp = new Decimal(mechanical.bearingTemp || 0);
+    const valBearingTemp = new Decimal(clampedTemp);
     const valAxialPlay = new Decimal(mechanical.axialPlay || 0);
     const valOperatingHours = new Decimal(specs.totalOperatingHours || identity.totalOperatingHours || 0);
     const valOilTAN = new Decimal(identity.fluidIntelligence?.oilSystem?.tan || 0);
@@ -187,16 +192,16 @@ export const AssetPassportCard: React.FC = () => {
             key={field.metricKey}
             onClick={() => handleFieldClick(field)}
             className={`
-                p-3 rounded-sm bg-scada-bg border relative group
+                p-3 rounded-none bg-slate-900 border relative group
                 cursor-pointer transition-all duration-200
-                hover:bg-scada-panel hover:shadow-scada-card
-                ${field.status === 'critical' ? 'border-status-error/50 bg-status-error/5' :
-                    field.status === 'warning' ? 'border-status-warning/50 bg-status-warning/5' :
-                        'border-scada-border hover:border-status-info/50'}
+                hover:bg-slate-800
+                ${field.status === 'critical' ? 'border-red-600 bg-red-900/10' :
+                    field.status === 'warning' ? 'border-amber-600 bg-amber-900/10' :
+                        'border-slate-600 hover:border-slate-500'}
             `}
         >
             <div className="flex items-center justify-between mb-1.5">
-                <div className="text-[9px] text-scada-muted font-bold uppercase tracking-widest truncate font-mono">
+                <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest truncate font-mono">
                     {field.label}
                 </div>
                 <div className={`opacity-50 group-hover:opacity-100 transition-opacity ${field.status !== 'nominal' ? 'animate-pulse' : ''}`}>
@@ -206,17 +211,17 @@ export const AssetPassportCard: React.FC = () => {
 
             <div className={`
                 text-xl font-mono font-black mb-1 tabular-nums
-                ${field.status === 'critical' ? 'text-status-error' :
-                    field.status === 'warning' ? 'text-status-warning' :
-                        'text-scada-text group-hover:text-status-info transition-colors'}
+                ${field.status === 'critical' ? 'text-red-500' :
+                    field.status === 'warning' ? 'text-amber-500' :
+                        'text-slate-200 group-hover:text-white transition-colors'}
             `}>
                 {field.value}
-                {field.unit && <span className="text-[10px] text-scada-muted ml-1 font-sans font-bold lowercase">{field.unit}</span>}
+                {field.unit && <span className="text-[10px] text-slate-500 ml-1 font-mono font-bold lowercase">{field.unit}</span>}
             </div>
 
             {field.isoRef && (
-                <div className="text-[8px] font-mono text-scada-text/60 border-t border-scada-border pt-1 mt-1">
-                    REF: <span className="text-scada-muted">{field.isoRef}</span>
+                <div className="text-[8px] font-mono text-slate-500 border-t border-slate-700 pt-1 mt-1">
+                    REF: <span className="text-slate-400">{field.isoRef}</span>
                 </div>
             )}
         </div>
@@ -226,8 +231,9 @@ export const AssetPassportCard: React.FC = () => {
         <>
             <div
                 className={`
-                    relative overflow-hidden bg-scada-panel border rounded-sm shadow-scada-card
-                    ${hasWarnings ? 'border-l-4 border-l-status-warning' : 'border-l-4 border-l-status-info'}
+                    relative overflow-hidden bg-slate-900 border rounded-none shadow-none
+                    ${hasWarnings ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-emerald-500'}
+                    border-t border-r border-b border-slate-700
                 `}
             >
                 {/* Header */}
