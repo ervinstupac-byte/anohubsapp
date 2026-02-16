@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronLeft, Check, AlertCircle, Settings, Cpu, Gauge, Droplets, Mountain } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Check, AlertCircle, Settings, Cpu, Gauge, Droplets, Mountain, MapPin } from 'lucide-react';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { AssetIdentity, TurbineType, Orientation, TransmissionType, PenstockMaterial } from '../../types/assetIdentity';
 import { AssetIdentityService } from '../../services/AssetIdentityService';
@@ -14,14 +14,19 @@ import { useNavigate } from 'react-router-dom';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 
-type WizardStep = 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
+type WizardStep = 'general' | 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
 
 export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => void; initialType?: TurbineType }> = ({ isOpen, onClose, initialType }) => {
     const { setConfig } = useTelemetryStore();
     const { addAsset } = useAssetContext();
     const navigate = useNavigate();
-    const [currentStep, setCurrentStep] = useState<WizardStep>('physical');
+    const [currentStep, setCurrentStep] = useState<WizardStep>('general');
     const [assetData, setAssetData] = useState<Partial<AssetIdentity>>({});
+
+    // General Info State
+    const [assetName, setAssetName] = useState('New HPP Asset');
+    const [location, setLocation] = useState('');
+    const [capacityMW, setCapacityMW] = useState(10);
 
     // Physical Architecture State
     const [turbineType, setTurbineType] = useState<TurbineType>(initialType || 'FRANCIS');
@@ -57,7 +62,7 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
     const manualInspectionRequired = !hasGeneratorVibSensor && !hasTurbineVibSensor;
 
     const handleNext = () => {
-        const steps: WizardStep[] = ['physical', 'sensors'];
+        const steps: WizardStep[] = ['general', 'physical', 'sensors'];
         if (showFrancisModule) steps.push('francis');
         steps.push('hydraulics', 'environmental', 'review');
 
@@ -68,7 +73,7 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
     };
 
     const handlePrevious = () => {
-        const steps: WizardStep[] = ['physical', 'sensors'];
+        const steps: WizardStep[] = ['general', 'physical', 'sensors'];
         if (showFrancisModule) steps.push('francis');
         steps.push('hydraulics', 'environmental', 'review');
 
@@ -82,10 +87,12 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
         // Build complete AssetIdentity
         const identity = AssetIdentityService.createDefaultIdentity(
             Date.now(),
-            'New HPP Asset',
+            assetName,
             turbineType,
             'System Admin'
         );
+        identity.location = location;
+        identity.machineConfig.ratedPowerMW = capacityMW;
 
         // Apply configurations
         identity.machineConfig.orientation = orientation;
@@ -204,9 +211,9 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
         addAsset({
             name: identity.assetName,
             type: 'HPP', // Always HPP for this wizard
-            location: 'New Asset Location', // TODO: Add location step
+            location: location || 'New Asset Location',
             coordinates: [44.0, 18.0], // Default coordinates
-            capacity: 0, // TODO: Add capacity step
+            capacity: capacityMW,
             status: 'Operational',
             turbine_type: turbineType,
             specs: {
@@ -243,9 +250,11 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
             {/* Progress Steps */}
             <div className="mb-8">
                 <div className="flex items-center justify-between max-w-4xl mx-auto">
-                    <StepIndicator active={currentStep === 'physical'} complete={currentStep !== 'physical'} icon={<Settings />} label="Physical" />
+                    <StepIndicator active={currentStep === 'general'} complete={currentStep !== 'general'} icon={<MapPin />} label="General" />
                     <div className="flex-1 h-1 bg-slate-800 mx-2" />
-                    <StepIndicator active={currentStep === 'sensors'} complete={currentStep !== 'sensors' && currentStep !== 'physical'} icon={<Cpu />} label="Sensors" />
+                    <StepIndicator active={currentStep === 'physical'} complete={currentStep !== 'physical' && currentStep !== 'general'} icon={<Settings />} label="Physical" />
+                    <div className="flex-1 h-1 bg-slate-800 mx-2" />
+                    <StepIndicator active={currentStep === 'sensors'} complete={currentStep !== 'sensors' && currentStep !== 'physical' && currentStep !== 'general'} icon={<Cpu />} label="Sensors" />
                     {showFrancisModule && (
                         <>
                             <div className="flex-1 h-1 bg-slate-800 mx-2" />
@@ -261,6 +270,52 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
 
             {/* Step Content */}
             <AnimatePresence mode="wait">
+                {currentStep === 'general' && (
+                    <motion.div
+                        key="general"
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -100 }}
+                        className="max-w-2xl mx-auto"
+                    >
+                        <h2 className="text-3xl font-bold mb-2 text-[#2dd4bf]">General Information</h2>
+                        <p className="text-slate-400 mb-8">Basic identification and location</p>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-bold mb-3">Asset Name</label>
+                                <input
+                                    type="text"
+                                    value={assetName}
+                                    onChange={(e) => setAssetName(e.target.value)}
+                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-[#2dd4bf] outline-none"
+                                    placeholder="e.g. Unit 1"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-bold mb-3">Location</label>
+                                <input
+                                    type="text"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-[#2dd4bf] outline-none"
+                                    placeholder="e.g. Powerhouse A, Level 2"
+                                />
+                            </div>
+
+                            <MeasurementInput
+                                label="Rated Capacity"
+                                value={capacityMW}
+                                onChange={setCapacityMW}
+                                unit="MW"
+                                min={1}
+                                max={500}
+                            />
+                        </div>
+                    </motion.div>
+                )}
+
                 {currentStep === 'physical' && (
                     <motion.div
                         key="physical"
@@ -573,7 +628,10 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
                         <h2 className="text-3xl font-bold mb-2 text-[#2dd4bf]">Review Configuration</h2>
                         <p className="text-slate-400 mb-8">Asset DNA Summary</p>
 
-                        <div className="space-y-4 bg-slate-900 border border-slate-800 rounded p-6">
+                        <div className="space-y-4 bg-slate-900 border border-slate-700 rounded p-6">
+                            <ReviewItem label="Asset Name" value={assetName} />
+                            <ReviewItem label="Location" value={location || 'N/A'} />
+                            <ReviewItem label="Capacity" value={`${capacityMW} MW`} />
                             <ReviewItem label="Turbine Type" value={turbineType} />
                             <ReviewItem label="Orientation" value={orientation} />
                             <ReviewItem label="Transmission" value={transmission} />
@@ -612,7 +670,7 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
                 <div className="flex gap-4 max-w-2xl mx-auto mt-8">
                     <button
                         onClick={handlePrevious}
-                        disabled={currentStep === 'physical'}
+                        disabled={currentStep === 'general'}
                         className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed rounded flex items-center justify-center gap-2"
                     >
                         <ChevronLeft className="w-5 h-5" />

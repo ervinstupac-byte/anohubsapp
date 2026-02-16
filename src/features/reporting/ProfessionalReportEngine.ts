@@ -392,7 +392,8 @@ export const ProfessionalReportEngine = {
         // Save or trigger download
         try {
             // Node environment: write to artifacts if fs available
-            // Use ephemeral /tmp when running on Vercel (serverless). TODO: migrate persistence to Supabase Storage for Level-5 auditability.
+            // Use ephemeral /tmp when running on Vercel (serverless).
+            // Persistence is now handled via reportService -> Supabase, but we keep local write for artifacts.
             // eslint-disable-next-line @typescript-eslint/no-var-requires
             const fs = require('fs');
             const path = require('path');

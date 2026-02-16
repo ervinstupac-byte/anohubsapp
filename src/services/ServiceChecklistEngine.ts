@@ -240,8 +240,8 @@ export class ServiceChecklistEngine extends BaseGuardian {
         text: string,
         targetLang: 'de' | 'en' = 'de'
     ): Promise<string> {
-        // TODO: Integrate real translation API
-        // For now, return placeholder
+        // Mock translation logic for now, as external API integration requires API keys.
+        // In a real production environment, this would call Google Translate or DeepL API.
         if (targetLang === 'de') {
             return `[DE] ${text}`;
         }

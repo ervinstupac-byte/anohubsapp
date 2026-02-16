@@ -36,13 +36,15 @@ const COLORS = {
     GRAY: '#64748b'
 };
 
+export type DeltaMap = Record<string, number | { color: string }>;
+
 interface RunnerMeshProps {
     rpm: number;
     onMeshClick?: (id: string, point: THREE.Vector3 | null) => void;
     active?: boolean;
     turbineType?: string;
     heatmapMode?: boolean;
-    deltaMap?: any; // Component ID -> Delta Value (0-100) or TruthDelta Object
+    deltaMap?: DeltaMap; // Component ID -> Delta Value (0-100) or TruthDelta Object
     selectedPart?: string | null;
     showInfoPanel?: boolean;
 }
@@ -53,7 +55,7 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
     active = true, 
     turbineType = 'francis',
     heatmapMode = false,
-    deltaMap = {},
+    deltaMap,
     selectedPart,
     showInfoPanel
 }) => {
@@ -155,7 +157,7 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
         if (!heatmapMode || !deltaMap) return defaultColor;
         
         const delta = deltaMap[componentId];
-        if (!delta) return COLORS.GRAY; // No data
+        if (delta === undefined || delta === null) return COLORS.GRAY; // No data
 
         // Handle TruthDelta object (from TruthDeltaEngine)
         if (typeof delta === 'object' && 'color' in delta) {
@@ -167,7 +169,7 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
             // Heatmap gradient: Green (0) -> Yellow (50) -> Red (100)
             if (delta > 80) return COLORS.RED;
             if (delta > 40) return COLORS.AMBER;
-            if (delta > 0) return COLORS.EMERALD; // Explicit agreement
+            if (delta >= 0) return COLORS.EMERALD; // Explicit agreement
         }
         
         return COLORS.GRAY;
@@ -282,14 +284,14 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
 
 // Internal Error Boundary for 3D Context
 class ThreeErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
-    constructor(props: any) {
+    constructor(props: { children: React.ReactNode }) {
         super(props);
         this.state = { hasError: false };
     }
     static getDerivedStateFromError() {
         return { hasError: true };
     }
-    componentDidCatch(error: any, errorInfo: any) {
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
         console.error("3D Turbine Crash:", error, errorInfo);
     }
     render() {
@@ -310,7 +312,7 @@ export interface TurbineRunner3DProps {
     className?: string;
     onSelect?: (id: string) => void;
     heatmapMode?: boolean;
-    deltaMap?: any;
+    deltaMap?: DeltaMap;
     selectedPart?: string | null;
     showInfoPanel?: boolean;
 }
@@ -327,7 +329,7 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
     const [crashSafe, setCrashSafe] = useState(true);
-    const glRef = useRef<any>(null);
+    const glRef = useRef<THREE.WebGLRenderer | null>(null);
 
     // NC-20301: Dispose WebGL context on unmount to prevent GPU leak
     useEffect(() => {

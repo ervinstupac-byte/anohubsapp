@@ -13,6 +13,7 @@ export interface TruthDelta {
 }
 
 export interface TruthDeltaMap {
+    [key: string]: TruthDelta;
     runner: TruthDelta;
     crown: TruthDelta;
     band: TruthDelta;
