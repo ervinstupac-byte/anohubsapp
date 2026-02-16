@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FileText, Calendar, Settings, AlertTriangle, Download, Droplets, ArrowUpFromLine, Thermometer, Layers, Clock } from 'lucide-react';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
@@ -99,7 +98,7 @@ export const AssetPassportCard: React.FC = () => {
         value: lastOverhaul,
         rawValue: specs.lastOverhaulDate ? new Date(specs.lastOverhaulDate).getTime() : 0,
         status: 'nominal',
-        icon: <Calendar className="w-3 h-3 text-slate-400" />,
+        icon: <Calendar className="w-3 h-3 text-scada-muted" />,
         metricKey: 'overhaul',
         threshold: { critical: Date.now() - 365 * 24 * 60 * 60 * 1000 * 5 }
     };
@@ -112,7 +111,7 @@ export const AssetPassportCard: React.FC = () => {
             rawValue: valBearingTemp.toNumber(),
             status: babbittStatus,
             isoRef: `Lim: ${limitBabbittAlarm}/${limitBabbittTrip}°C`,
-            icon: <Thermometer className="w-3 h-3 text-slate-400" />,
+            icon: <Thermometer className="w-3 h-3 text-scada-muted" />,
             metricKey: 'babbitt',
             threshold: { warning: limitBabbittAlarm.toNumber(), critical: limitBabbittTrip.toNumber() }
         },
@@ -122,7 +121,7 @@ export const AssetPassportCard: React.FC = () => {
             rawValue: valOilTAN.toNumber(),
             unit: 'mg KOH/g',
             status: tanStatus,
-            icon: <Droplets className="w-3 h-3 text-slate-400" />,
+            icon: <Droplets className="w-3 h-3 text-scada-muted" />,
             metricKey: 'oilTan',
             threshold: { warning: 0.4, critical: 0.5 }
         }
@@ -136,7 +135,7 @@ export const AssetPassportCard: React.FC = () => {
             unit: 'mm',
             status: shaftLiftStatus,
             isoRef: `Rng: ${shaftLiftMin}-${shaftLiftMax}`,
-            icon: <ArrowUpFromLine className="w-3 h-3 text-slate-400" />,
+            icon: <ArrowUpFromLine className="w-3 h-3 text-scada-muted" />,
             metricKey: 'shaftLift',
             threshold: { warning: shaftLiftMax.toNumber() * 0.9, critical: shaftLiftMax.toNumber() }
         },
@@ -147,7 +146,7 @@ export const AssetPassportCard: React.FC = () => {
             unit: 'mm',
             status: isLabyrinthBreach ? 'critical' : isLabyrinthWarning ? 'warning' : 'nominal',
             isoRef: `Max: ${limitLabyrinth.toFixed(2)} mm`,
-            icon: <Settings className="w-3 h-3 text-slate-400" />,
+            icon: <Settings className="w-3 h-3 text-scada-muted" />,
             metricKey: 'labyrinth',
             threshold: { warning: limitLabyrinth.toNumber() * 0.85, critical: limitLabyrinth.toNumber() }
         }
@@ -188,16 +187,16 @@ export const AssetPassportCard: React.FC = () => {
             key={field.metricKey}
             onClick={() => handleFieldClick(field)}
             className={`
-                p-3 rounded-md bg-[#0D141C] border relative group
+                p-3 rounded-sm bg-scada-bg border relative group
                 cursor-pointer transition-all duration-200
-                hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]
-                ${field.status === 'critical' ? 'border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]' :
-                    field.status === 'warning' ? 'border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.2)]' :
-                        'border-slate-800 hover:border-cyan-500/50'}
+                hover:bg-scada-panel hover:shadow-scada-card
+                ${field.status === 'critical' ? 'border-status-error/50 bg-status-error/5' :
+                    field.status === 'warning' ? 'border-status-warning/50 bg-status-warning/5' :
+                        'border-scada-border hover:border-status-info/50'}
             `}
         >
             <div className="flex items-center justify-between mb-1.5">
-                <div className="text-[9px] text-slate-500 font-bold uppercase tracking-widest truncate">
+                <div className="text-[9px] text-scada-muted font-bold uppercase tracking-widest truncate font-mono">
                     {field.label}
                 </div>
                 <div className={`opacity-50 group-hover:opacity-100 transition-opacity ${field.status !== 'nominal' ? 'animate-pulse' : ''}`}>
@@ -206,18 +205,18 @@ export const AssetPassportCard: React.FC = () => {
             </div>
 
             <div className={`
-                text-xl font-mono font-black mb-1
-                ${field.status === 'critical' ? 'text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]' :
-                    field.status === 'warning' ? 'text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' :
-                        'text-white group-hover:text-cyan-400 transition-colors'}
+                text-xl font-mono font-black mb-1 tabular-nums
+                ${field.status === 'critical' ? 'text-status-error' :
+                    field.status === 'warning' ? 'text-status-warning' :
+                        'text-scada-text group-hover:text-status-info transition-colors'}
             `}>
                 {field.value}
-                {field.unit && <span className="text-[10px] text-slate-500 ml-1 font-sans font-bold lowercase">{field.unit}</span>}
+                {field.unit && <span className="text-[10px] text-scada-muted ml-1 font-sans font-bold lowercase">{field.unit}</span>}
             </div>
 
             {field.isoRef && (
-                <div className="text-[8px] font-mono text-slate-600 border-t border-white/5 pt-1 mt-1">
-                    REF: <span className="text-slate-500">{field.isoRef}</span>
+                <div className="text-[8px] font-mono text-scada-text/60 border-t border-scada-border pt-1 mt-1">
+                    REF: <span className="text-scada-muted">{field.isoRef}</span>
                 </div>
             )}
         </div>
@@ -225,30 +224,30 @@ export const AssetPassportCard: React.FC = () => {
 
     return (
         <>
-            <GlassCard
+            <div
                 className={`
-                    relative overflow-hidden
-                    ${hasWarnings ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-cyan-500'}
+                    relative overflow-hidden bg-scada-panel border rounded-sm shadow-scada-card
+                    ${hasWarnings ? 'border-l-4 border-l-status-warning' : 'border-l-4 border-l-status-info'}
                 `}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-white/5">
+                <div className="flex items-center justify-between p-4 border-b border-scada-border">
                     <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hasWarnings ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
-                            <FileText className={`w-5 h-5 ${hasWarnings ? 'text-amber-400' : 'text-cyan-400'}`} />
+                        <div className={`w-10 h-10 rounded-sm flex items-center justify-center ${hasWarnings ? 'bg-status-warning/20' : 'bg-status-info/20'}`}>
+                            <FileText className={`w-5 h-5 ${hasWarnings ? 'text-status-warning' : 'text-status-info'}`} />
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-white uppercase tracking-wider">
+                            <h3 className="text-sm font-black text-scada-text uppercase tracking-wider font-header">
                                 {t('dashboard.assetPassport.title')}
                             </h3>
-                            <p className="text-[10px] text-slate-500 font-mono">{selectedAsset.name}</p>
+                            <p className="text-[10px] text-scada-muted font-mono">{selectedAsset.name}</p>
                         </div>
                     </div>
 
                     {hasWarnings && (
-                        <div className="flex items-center gap-2 px-2 py-1 bg-amber-500/20 rounded border border-amber-500/30 animate-pulse">
-                            <AlertTriangle className="w-3 h-3 text-amber-400" />
-                            <span className="text-[9px] font-bold text-amber-400 uppercase">
+                        <div className="flex items-center gap-2 px-2 py-1 bg-status-warning/20 rounded-sm border border-status-warning/30 animate-pulse">
+                            <AlertTriangle className="w-3 h-3 text-status-warning" />
+                            <span className="text-[9px] font-bold text-status-warning uppercase font-mono">
                                 {t('dashboard.assetPassport.toleranceBreach')}
                             </span>
                         </div>
@@ -257,19 +256,19 @@ export const AssetPassportCard: React.FC = () => {
 
                 {/* Operating Hours & Overhaul Banner */}
                 <div className="px-4 pt-3 grid grid-cols-2 gap-3">
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-white/5">
-                        <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">
+                    <div className="flex items-center justify-between p-2 rounded-sm bg-scada-bg border border-scada-border">
+                        <span className="text-[9px] uppercase font-bold text-scada-muted tracking-wider font-mono">
                             {t('dashboard.assetPassport.operatingHours')}
                         </span>
-                        <span className="text-sm font-mono font-bold text-white">
-                            {valOperatingHours.toNumber().toLocaleString()} <span className="text-[10px] text-slate-500">hrs</span>
+                        <span className="text-sm font-mono font-bold text-scada-text tabular-nums">
+                            {valOperatingHours.toNumber().toLocaleString()} <span className="text-[10px] text-scada-muted">hrs</span>
                         </span>
                     </div>
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/40 border border-white/5" onClick={() => handleFieldClick(fieldOverhaul)}>
-                        <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">
+                    <div className="flex items-center justify-between p-2 rounded-sm bg-scada-bg border border-scada-border cursor-pointer hover:border-status-info/30 transition-colors" onClick={() => handleFieldClick(fieldOverhaul)}>
+                        <span className="text-[9px] uppercase font-bold text-scada-muted tracking-wider font-mono">
                             Overhaul
                         </span>
-                        <span className="text-sm font-mono font-bold text-cyan-400 cursor-pointer">
+                        <span className="text-sm font-mono font-bold text-status-info">
                             {lastOverhaul}
                         </span>
                     </div>
@@ -277,17 +276,17 @@ export const AssetPassportCard: React.FC = () => {
 
                 {/* NC-5.4: Temporal Logic - 180-Day Alignment Rule */}
                 <div className="px-4 pt-2">
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20">
+                    <div className="flex items-center justify-between p-2 rounded-sm bg-status-warning/5 border border-status-warning/20">
                         <div className="flex items-center gap-2">
-                            <Clock className="w-3 h-3 text-amber-500" />
-                            <span className="text-[9px] uppercase font-bold text-amber-500 tracking-wider">
+                            <Clock className="w-3 h-3 text-status-warning" />
+                            <span className="text-[9px] uppercase font-bold text-status-warning tracking-wider font-mono">
                                 Laser Alignment Countdown
                             </span>
                         </div>
                         <div className="text-right">
-                            <span className="text-sm font-mono font-black text-amber-400">
+                            <span className="text-sm font-mono font-black text-status-warning tabular-nums">
                                 {Math.max(0, 180 - Math.floor((Date.now() - new Date(identity.lastAlignmentDate || '2025-10-01').getTime()) / (1000 * 60 * 60 * 24)))}
-                                <span className="text-[10px] ml-1 text-slate-500 font-bold uppercase">Days Left</span>
+                                <span className="text-[10px] ml-1 text-scada-muted font-bold uppercase">Days Left</span>
                             </span>
                         </div>
                     </div>
@@ -297,7 +296,7 @@ export const AssetPassportCard: React.FC = () => {
                 <div className="p-4 grid grid-cols-2 gap-4">
                     {/* Lubrication Group */}
                     <div className="space-y-2">
-                        <h4 className="text-[9px] text-slate-600 font-black uppercase tracking-widest pl-1 border-b border-slate-800 pb-1 mb-2">
+                        <h4 className="text-[9px] text-scada-muted font-black uppercase tracking-widest pl-1 border-b border-scada-border pb-1 mb-2 font-mono">
                             Lubrication & Bearings
                         </h4>
                         <div className="grid grid-cols-1 gap-2">
@@ -307,7 +306,7 @@ export const AssetPassportCard: React.FC = () => {
 
                     {/* Mechanical Group */}
                     <div className="space-y-2">
-                        <h4 className="text-[9px] text-slate-600 font-black uppercase tracking-widest pl-1 border-b border-slate-800 pb-1 mb-2">
+                        <h4 className="text-[9px] text-scada-muted font-black uppercase tracking-widest pl-1 border-b border-scada-border pb-1 mb-2 font-mono">
                             Mechanical Alignment
                         </h4>
                         <div className="grid grid-cols-1 gap-2">
@@ -317,10 +316,10 @@ export const AssetPassportCard: React.FC = () => {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="p-4 border-t border-white/5 flex gap-2">
+                <div className="p-4 border-t border-scada-border flex gap-2">
                     <ModernButton
                         variant="ghost"
-                        className="flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide hover:bg-purple-500/10 hover:text-purple-400"
+                        className="flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide hover:bg-h-purple/10 hover:text-h-purple border-scada-border"
                         onClick={() => navigate('/hpp-builder', { state: { highlightAsset: String(selectedAsset?.id), fromPassport: true } })}
                     >
                         <Layers className="w-4 h-4" />
@@ -328,7 +327,7 @@ export const AssetPassportCard: React.FC = () => {
                     </ModernButton>
                     <ModernButton
                         variant="ghost"
-                        className="flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide hover:bg-cyan-500/10 hover:text-cyan-400"
+                        className="flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide hover:bg-status-info/10 hover:text-status-info border-scada-border"
                         onClick={() => navigate('/hpp-builder')}
                     >
                         <Settings className="w-4 h-4" />
@@ -337,8 +336,8 @@ export const AssetPassportCard: React.FC = () => {
                     <ModernButton
                         variant="ghost"
                         className={`
-                            flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide
-                            ${hasWarnings ? 'hover:bg-amber-500/10 hover:text-amber-400' : 'hover:bg-cyan-500/10 hover:text-cyan-400'}
+                            flex-1 flex items-center justify-center gap-2 text-xs uppercase font-bold tracking-wide border-scada-border
+                            ${hasWarnings ? 'hover:bg-status-warning/10 hover:text-status-warning' : 'hover:bg-status-info/10 hover:text-status-info'}
                         `}
                         onClick={handleDownloadPassport}
                     >
@@ -346,7 +345,7 @@ export const AssetPassportCard: React.FC = () => {
                         {t('dashboard.assetPassport.downloadFull')}
                     </ModernButton>
                 </div>
-            </GlassCard>
+            </div>
 
             {/* DEEP TELEMETRY DRILLDOWN MODAL */}
             {activeDrilldown && (

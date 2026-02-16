@@ -26,15 +26,15 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
   const HeaderIcon = config.icon;
 
   return (
-    <div className="w-full bg-slate-950 p-6 text-white border-2 border-slate-800 rounded-xl">
-      <div className="flex items-center justify-between mb-6">
+    <div className="w-full bg-scada-bg p-6 text-scada-text border border-scada-border rounded-sm">
+      <div className="flex items-center justify-between mb-6 border-b border-scada-border pb-4">
         <div className="flex items-center gap-3">
-          <div className={`p-3 rounded-full ${config.iconWrapClassName}`}>
+          <div className={`p-2 rounded-sm ${config.iconWrapClassName}`}>
             <HeaderIcon className={`w-6 h-6 ${config.iconClassName}`} />
           </div>
           <div>
-            <h2 className="text-xl font-bold">{config.sector}</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-xl font-bold uppercase tracking-wide font-header">{config.sector}</h2>
+            <p className="text-xs text-scada-muted font-mono uppercase">
               {config.subtitle}
               {config.unitId ? ` • ${config.unitId}` : ''}
             </p>
@@ -44,15 +44,15 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
         {config.headerRight}
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {config.panels.map((p) => {
           const PanelIcon = p.icon;
           const colSpan = p.colSpan ?? 1;
-          const colSpanClass = colSpan === 3 ? 'col-span-3' : colSpan === 2 ? 'col-span-2' : 'col-span-1';
+          const colSpanClass = colSpan === 3 ? 'lg:col-span-3' : colSpan === 2 ? 'lg:col-span-2' : 'lg:col-span-1';
 
           return (
             <div key={p.key} className={`${colSpanClass} ${p.className ?? ''}`.trim()}>
-              <h3 className="text-sm font-bold text-slate-300 mb-4 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-scada-text mb-2 flex items-center gap-2 uppercase tracking-wider font-header">
                 {PanelIcon ? (
                   <PanelIcon className={`w-4 h-4 ${p.iconClassName ?? ''}`.trim()} />
                 ) : null}

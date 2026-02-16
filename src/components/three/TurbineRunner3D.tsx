@@ -8,7 +8,7 @@ import aiPredictionService, { PredictionReport } from '../../services/AIPredicti
 import { TelemetryData } from '../../contexts/TelemetryContext';
 
 // Educational Content Dictionary
-const COMPONENT_INFO: Record<string, { title: string; desc: string; metricKey: string; unit: string; aiType?: 'bearing' | 'cavitation' | 'efficiency' }> = {
+export const COMPONENT_INFO: Record<string, { title: string; desc: string; metricKey: string; unit: string; aiType?: 'bearing' | 'cavitation' | 'efficiency' }> = {
     runner_hub: {
         title: "Runner Hub (Crown)",
         desc: "Central mounting interface. Critical thermal zone for bearing heat dissipation.",
@@ -33,7 +33,7 @@ const COMPONENT_INFO: Record<string, { title: string; desc: string; metricKey: s
 };
 
 // Placeholder colors
-const COLORS = {
+export const COLORS = {
     CYAN: '#22d3ee',
     RED: '#ef4444',
     AMBER: '#f59e0b',
@@ -114,27 +114,27 @@ const AIPredictionOverlay = ({ type, assetId }: { type: 'bearing' | 'cavitation'
     if (!prediction || prediction.probability < 0.1) return null;
 
     return (
-        <div className="mt-2 pt-2 border-t border-slate-700/50">
+        <div className="mt-2 pt-2 border-t border-scada-border">
             <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-1">
-                    <div className={`w-1.5 h-1.5 rounded-full ${prediction.probability > 0.5 ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
-                    <span className="text-purple-400 text-[10px] font-mono uppercase font-bold tracking-wider">AI Forecast</span>
+                    <div className={`w-1.5 h-1.5 rounded-full ${prediction.probability > 0.5 ? 'bg-status-error animate-pulse' : 'bg-status-ok'}`} />
+                    <span className="text-status-warning text-[10px] font-mono uppercase font-bold tracking-wider">AI Forecast</span>
                 </div>
-                <span className={`text-[9px] font-bold ${prediction.probability > 0.5 ? 'text-red-400' : 'text-emerald-400'}`}>
+                <span className={`text-[9px] font-bold ${prediction.probability > 0.5 ? 'text-status-error' : 'text-status-ok'}`}>
                     {(prediction.probability * 100).toFixed(0)}% Risk
                 </span>
             </div>
             
             {prediction.timeToFailureHours !== null && (
                 <div className="flex justify-between items-center text-[10px] mb-1">
-                    <span className="text-slate-400">Est. TTF:</span>
-                    <span className="font-mono font-bold text-white bg-slate-800 px-1 rounded">
+                    <span className="text-scada-muted">Est. TTF:</span>
+                    <span className="font-mono font-bold text-scada-text bg-scada-panel px-1 rounded-sm border border-scada-border">
                         {prediction.timeToFailureHours < 1 ? '<1' : prediction.timeToFailureHours.toFixed(1)}h
                     </span>
                 </div>
             )}
             
-            <p className="text-[9px] text-slate-400 leading-tight italic border-l-2 border-purple-500/30 pl-1">
+            <p className="text-[9px] text-scada-muted leading-tight italic border-l-2 border-status-warning/30 pl-1">
                 {prediction.mitigationAction}
             </p>
         </div>
@@ -827,12 +827,12 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
             {/* Info Panel Overlay */}
             {showInfoPanel && info && (
                 <Html position={[2, 2, 0]} center style={{ pointerEvents: 'none' }}>
-                    <div className="w-64 bg-slate-900/90 backdrop-blur border border-cyan-500/50 p-4 rounded shadow-2xl">
-                        <h3 className="text-cyan-400 font-bold font-mono text-sm uppercase mb-1">{info.title}</h3>
-                        <p className="text-slate-300 text-xs mb-3 leading-relaxed">{info.desc}</p>
+                    <div className="w-64 bg-scada-panel border border-status-info/30 p-4 rounded-sm shadow-scada-card">
+                        <h3 className="text-status-info font-bold font-mono text-sm uppercase mb-1">{info.title}</h3>
+                        <p className="text-scada-text text-xs mb-3 leading-relaxed">{info.desc}</p>
                         
-                        <div className="flex items-center justify-between bg-black/40 p-2 rounded border border-white/10">
-                            <span className="text-slate-400 text-[10px] font-mono uppercase">Live Metric</span>
+                        <div className="flex items-center justify-between bg-scada-bg p-2 rounded-sm border border-scada-border">
+                            <span className="text-scada-muted text-[10px] font-mono uppercase">Live Metric</span>
                             <LiveMetricDisplay metricKey={info.metricKey} unit={info.unit} />
                         </div>
 
@@ -1065,7 +1065,7 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(
             </Canvas>
 
             {/* Type Indicator Overlay */}
-            <div className="absolute top-2 left-2 px-2 py-1 bg-black/50 text-xs text-white font-mono rounded pointer-events-none">
+            <div className="absolute top-2 left-2 px-2 py-1 bg-scada-panel/90 border border-scada-border text-xs text-scada-text font-mono rounded-sm pointer-events-none">
                 TYPE: {turbineType.toUpperCase()}
             </div>
         </div>

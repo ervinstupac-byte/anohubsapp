@@ -58,76 +58,70 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
     };
 
     return (
-        <div className="w-full bg-slate-950 p-6 text-white border-2 border-slate-800 rounded-xl relative overflow-hidden">
+        <div className="w-full bg-scada-bg p-6 text-scada-text border-2 border-scada-border rounded-sm relative overflow-hidden">
             {/* NC-85.2: PHYSICS REMEDIATION OVERLAY WITH SMART TOOLTIP */}
             {activeDossier && (
-                <div className="absolute top-16 right-6 z-50 w-80 glass-sovereign rounded-lg p-4 shadow-2xl animate-in slide-in-from-right-10 gpu-accelerated">
+                <div className="absolute top-16 right-6 z-50 w-80 bg-scada-panel border border-scada-border rounded-sm p-4 shadow-scada-card">
                     <div className="flex justify-between items-start mb-3">
-                        <h4 className="text-sm font-bold text-indigo-400 uppercase tracking-wider">
+                        <h4 className="text-sm font-bold text-status-info uppercase tracking-wider font-header">
                             Physics Remediation
                         </h4>
-                        <button onClick={() => setActiveDossier(null)} className="text-slate-500 hover:text-white transition-colors">×</button>
+                        <button onClick={() => setActiveDossier(null)} className="text-scada-muted hover:text-scada-text transition-colors">×</button>
                     </div>
 
                     <div className="space-y-3">
                         {/* NC-85.2: 1-Minute Trend Sparkline */}
-                        <div className="p-2 bg-slate-950/50 rounded border border-slate-700/50">
-                            <div className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">1-MIN TREND</div>
+                        <div className="p-2 bg-scada-bg rounded-sm border border-scada-border">
+                            <div className="text-[9px] text-scada-muted uppercase tracking-widest mb-1 font-mono">1-MIN TREND</div>
                             <svg className="w-full h-8" viewBox="0 0 100 24" preserveAspectRatio="none">
-                                <defs>
-                                    <linearGradient id="sparkline-gradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="rgb(6,182,212)" stopOpacity="0.3" />
-                                        <stop offset="100%" stopColor="rgb(6,182,212)" stopOpacity="0" />
-                                    </linearGradient>
-                                </defs>
                                 <path
                                     d="M0,20 L10,18 L20,15 L30,17 L40,12 L50,14 L60,10 L70,8 L80,11 L90,7 L100,9"
-                                    fill="url(#sparkline-gradient)"
+                                    fill="none"
                                     stroke="none"
                                 />
                                 <polyline
                                     points="0,20 10,18 20,15 30,17 40,12 50,14 60,10 70,8 80,11 90,7 100,9"
                                     fill="none"
-                                    stroke="rgb(6,182,212)"
+                                    stroke="currentColor"
                                     strokeWidth="1.5"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="gpu-accelerated"
+                                    className="text-status-info"
                                 />
                             </svg>
                         </div>
 
                         <div>
-                            <div className="text-xs text-slate-500">DIAGNOSIS</div>
-                            <div className="text-sm font-medium text-white">{activeDossier.Diagnosis}</div>
+                            <div className="text-xs text-scada-muted font-mono">DIAGNOSIS</div>
+                            <div className="text-sm font-medium text-scada-text font-mono">{activeDossier.Diagnosis}</div>
                         </div>
 
                         <div>
-                            <div className="text-xs text-slate-500">PHYSICS MODEL</div>
-                            <div className="text-xs font-mono text-emerald-400">
+                            <div className="text-xs text-scada-muted font-mono">PHYSICS MODEL</div>
+                            <div className="text-xs font-mono text-status-ok">
                                 {activeDossier.PhysicsModel.primary} ({activeDossier.PhysicsModel.iecCompliance})
                             </div>
                         </div>
 
-                        <div className={`p-3 rounded border ${activeDossier.Remediation.priority === 'CRITICAL' ? 'bg-red-900/20 border-red-500/50' : 'bg-slate-800 border-slate-600'}`}>
-                            <div className="text-xs font-bold mb-1 flex items-center justify-between">
-                                <span>ACTION REQUIRED</span>
-                                <span className="text-[10px] bg-red-500 text-white px-1 rounded">{activeDossier.Remediation.priority}</span>
+                        <div className={`p-3 rounded-sm border ${activeDossier.Remediation.priority === 'CRITICAL' ? 'bg-status-error/10 border-status-error' : 'bg-scada-bg border-scada-border'}`}>
+                            <div className="text-xs font-bold mb-1 flex items-center justify-between font-mono">
+                                <span className="text-scada-text">ACTION REQUIRED</span>
+                                <span className="text-[10px] bg-status-error text-scada-bg px-1 rounded-sm">{activeDossier.Remediation.priority}</span>
                             </div>
-                            <div className="text-sm text-slate-200">
+                            <div className="text-sm text-scada-text font-mono">
                                 {activeDossier.Remediation.action}
                             </div>
                         </div>
 
                         {/* NC-85.2: Dossier Action Link */}
                         <button
-                            className="w-full text-left text-xs text-cyan-400 hover:text-cyan-300 transition-colors p-2 rounded bg-cyan-950/30 border border-cyan-500/20 hover:border-cyan-500/40 flex items-center gap-2"
+                            className="w-full text-left text-xs text-status-info hover:text-status-info/80 transition-colors p-2 rounded-sm bg-status-info/10 border border-status-info/20 hover:border-status-info/40 flex items-center gap-2 font-mono"
                             onClick={() => {
                                 console.log(`[NC-85.2] Navigate to dossier: ${activeDossier.DossierID}`);
                                 // In production: navigate to Learning Lab or Dossier Viewer
                             }}
                         >
-                            <span className="text-cyan-500">→</span>
+                            <span className="text-status-info">→</span>
                             <span className="font-mono">{activeDossier.DossierID}:</span>
                             <span className="truncate">{activeDossier.Remediation.action.slice(0, 30)}...</span>
                         </button>
@@ -145,69 +139,66 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
 
             {/* Offline Banner */}
             {isOffline && (
-                <div className="absolute top-0 left-0 w-full bg-amber-500 text-black text-center text-xs font-bold py-1 z-50">
+                <div className="absolute top-0 left-0 w-full bg-status-warning text-scada-bg text-center text-xs font-bold py-1 z-50 font-mono uppercase tracking-widest">
                     <WifiOff className="inline w-3 h-3 mr-1" /> OFFLINE MODE - CONNECTIVITY LOST
                 </div>
             )}
 
             {/* ... rest of existing code ... */}
 
-            {/* Background Pulse Effect */}
-            <div className={`absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse`} />
-
             <div className="flex items-center justify-between mb-8 relative z-10 pt-4">
                 <div className="flex items-center gap-4">
-                    <div className="p-4 bg-indigo-950 rounded-full border border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.3)]">
-                        <Brain className="w-8 h-8 text-indigo-400" />
+                    <div className="p-4 bg-scada-panel rounded-full border border-scada-border shadow-scada-card">
+                        <Brain className="w-8 h-8 text-status-info" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-white">Sovereign<span className="text-indigo-400">Core</span></h1>
-                        <p className="text-sm text-slate-400 font-mono">NC-73.0 • UNIFIED CONSCIOUSNESS</p>
+                        <h1 className="text-3xl font-black tracking-tight text-scada-text font-header">Sovereign<span className="text-status-info">Core</span></h1>
+                        <p className="text-sm text-scada-muted font-mono">NC-73.0 • UNIFIED CONSCIOUSNESS</p>
                     </div>
                 </div>
 
                 <div className="text-right">
-                    <div className="text-xs text-slate-500 uppercase tracking-widest mb-1">System Pulse</div>
-                    <div className={`text-4xl font-black ${data.pulse.index > 80 ? 'text-emerald-400' : data.pulse.index > 50 ? 'text-amber-400' : 'text-red-500'}`}>
+                    <div className="text-xs text-scada-muted uppercase tracking-widest mb-1 font-mono">System Pulse</div>
+                    <div className={`text-4xl font-black font-mono tabular-nums ${data.pulse.index > 80 ? 'text-status-ok' : data.pulse.index > 50 ? 'text-status-warning' : 'text-status-error'}`}>
                         {data.pulse.index.toFixed(0)}%
                     </div>
-                    <div className="text-xs font-bold text-indigo-300">{data.pulse.status}</div>
+                    <div className="text-xs font-bold text-status-info font-mono">{data.pulse.status}</div>
                 </div>
             </div>
 
             <div className="grid grid-cols-12 gap-6 relative z-10">
 
                 {/* 1. STRATEGIC CORTEX */}
-                <div className="col-span-8 bg-slate-900/80 backdrop-blur border border-slate-700 rounded-xl p-6 flex flex-col justify-between min-h-[250px]">
+                <div className="col-span-8 bg-scada-panel border border-scada-border rounded-sm p-6 flex flex-col justify-between min-h-[250px] shadow-scada-card">
                     <div>
-                        <h3 className="text-sm font-bold text-slate-400 uppercase mb-4 flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-scada-muted uppercase mb-4 flex items-center gap-2 font-header">
                             <Activity className="w-4 h-4" />
                             Current Strategic Directive
                         </h3>
-                        <div className="text-4xl font-black text-white mb-4">
+                        <div className="text-4xl font-black text-scada-text mb-4 font-mono uppercase">
                             {data.strategy.mode.replace('_', ' ')}
                         </div>
-                        <p className="text-lg text-slate-300 font-light border-l-4 border-indigo-500 pl-4 py-2">
+                        <p className="text-lg text-scada-text font-light border-l-4 border-status-info pl-4 py-2 font-mono">
                             "{data.strategy.rationale}"
                         </p>
                     </div>
 
                     <div className="mt-6 flex justify-between items-end">
                         <div className="flex gap-4">
-                            <div className="px-3 py-1 bg-slate-800 rounded border border-slate-600 text-xs text-slate-400 flex items-center gap-2">
+                            <div className="px-3 py-1 bg-scada-bg rounded-sm border border-scada-border text-xs text-scada-muted flex items-center gap-2 font-mono">
                                 <Menu className="w-3 h-3" />
-                                Dominant Module: <span className="text-white font-bold">{data.hierarchy.winner}</span>
+                                Dominant Module: <span className="text-scada-text font-bold">{data.hierarchy.winner}</span>
                             </div>
                             {data.hierarchy.overrides > 0 && (
-                                <div className="px-3 py-1 bg-slate-800 rounded border border-slate-600 text-xs text-slate-400">
-                                    Overrides Active: <span className="text-amber-400 font-bold">{data.hierarchy.overrides}</span>
+                                <div className="px-3 py-1 bg-scada-bg rounded-sm border border-scada-border text-xs text-scada-muted font-mono">
+                                    Overrides Active: <span className="text-status-warning font-bold">{data.hierarchy.overrides}</span>
                                 </div>
                             )}
                         </div>
 
                         <button
                             onClick={() => setManualOverride(!manualOverride)}
-                            className={`px-4 py-2 rounded text-xs font-bold border flex items-center gap-2 ${manualOverride ? 'bg-amber-500 text-black border-amber-400' : 'bg-slate-800 border-slate-600 hover:bg-slate-700'}`}
+                            className={`px-4 py-2 rounded-sm text-xs font-bold border flex items-center gap-2 font-mono uppercase tracking-wider transition-colors ${manualOverride ? 'bg-status-warning text-scada-bg border-status-warning' : 'bg-scada-bg border-scada-border hover:bg-scada-border text-scada-muted hover:text-scada-text'}`}
                         >
                             <Settings className="w-3 h-3" />
                             {manualOverride ? 'MANUAL OVERRIDE ACTIVE' : 'ENABLE OVERRIDE'}
@@ -216,30 +207,30 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
 
                     {/* MANUAL OVERRIDE PANEL (Physics Guardrails) */}
                     {manualOverride && (
-                        <div className="mt-4 p-4 bg-slate-950/50 rounded border border-amber-500/30 grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
+                        <div className="mt-4 p-4 bg-scada-bg rounded-sm border border-status-warning/30 grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-xs text-slate-400 block mb-1">Target Load (MW)</label>
+                                <label className="text-xs text-scada-muted block mb-1 font-mono uppercase">Target Load (MW)</label>
                                 <input
                                     type="number"
                                     value={targetLoad}
                                     onChange={handleLoadChange}
                                     min={LIMITS.targetLoad.min}
                                     max={LIMITS.targetLoad.max}
-                                    className="w-full bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white font-mono"
+                                    className="w-full bg-scada-panel border border-scada-border rounded-sm px-2 py-1 text-scada-text font-mono focus:border-status-info focus:outline-none"
                                 />
-                                <div className="text-[10px] text-slate-500 mt-1">Limit: {LIMITS.targetLoad.min}-{LIMITS.targetLoad.max} MW</div>
+                                <div className="text-[10px] text-scada-muted mt-1 font-mono">Limit: {LIMITS.targetLoad.min}-{LIMITS.targetLoad.max} MW</div>
                             </div>
                             <div>
-                                <label className="text-xs text-slate-400 block mb-1">Blade Angle (°)</label>
+                                <label className="text-xs text-scada-muted block mb-1 font-mono uppercase">Blade Angle (°)</label>
                                 <input
                                     type="number"
                                     value={bladeAngle}
                                     onChange={(e) => setBladeAngle(Math.min(32, Math.max(0, parseFloat(e.target.value))))}
                                     min={LIMITS.bladeAngle.min}
                                     max={LIMITS.bladeAngle.max}
-                                    className="w-full bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white font-mono"
+                                    className="w-full bg-scada-panel border border-scada-border rounded-sm px-2 py-1 text-scada-text font-mono focus:border-status-info focus:outline-none"
                                 />
-                                <div className="text-[10px] text-slate-500 mt-1">Limit: {LIMITS.bladeAngle.min}-{LIMITS.bladeAngle.max}°</div>
+                                <div className="text-[10px] text-scada-muted mt-1 font-mono">Limit: {LIMITS.bladeAngle.min}-{LIMITS.bladeAngle.max}°</div>
                             </div>
                         </div>
                     )}
@@ -247,37 +238,37 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
 
                 {/* 2. SUB-INDICES */}
                 <div className="col-span-4 grid grid-cols-2 gap-4">
-                    <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center">
-                        <Heart className="w-5 h-5 text-emerald-400 mb-2" />
-                        <div className="text-2xl font-bold">{data.indices.phy.toFixed(0)}</div>
-                        <div className="text-[10px] text-slate-500 uppercase">Physical</div>
+                    <div className="bg-scada-panel border border-scada-border rounded-sm p-4 flex flex-col items-center justify-center shadow-scada-card">
+                        <Heart className="w-5 h-5 text-status-ok mb-2" />
+                        <div className="text-2xl font-bold font-mono text-scada-text">{data.indices.phy.toFixed(0)}</div>
+                        <div className="text-[10px] text-scada-muted uppercase font-mono tracking-wider">Physical</div>
                     </div>
-                    <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-amber-400 mb-2" />
-                        <div className="text-2xl font-bold">{data.indices.fin.toFixed(0)}</div>
-                        <div className="text-[10px] text-slate-500 uppercase">Financial</div>
+                    <div className="bg-scada-panel border border-scada-border rounded-sm p-4 flex flex-col items-center justify-center shadow-scada-card">
+                        <TrendingUp className="w-5 h-5 text-status-warning mb-2" />
+                        <div className="text-2xl font-bold font-mono text-scada-text">{data.indices.fin.toFixed(0)}</div>
+                        <div className="text-[10px] text-scada-muted uppercase font-mono tracking-wider">Financial</div>
                     </div>
-                    <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center">
-                        <Brain className="w-5 h-5 text-sky-400 mb-2" />
-                        <div className="text-2xl font-bold">{data.indices.eco.toFixed(0)}</div>
-                        <div className="text-[10px] text-slate-500 uppercase">Eco</div>
+                    <div className="bg-scada-panel border border-scada-border rounded-sm p-4 flex flex-col items-center justify-center shadow-scada-card">
+                        <Brain className="w-5 h-5 text-status-info mb-2" />
+                        <div className="text-2xl font-bold font-mono text-scada-text">{data.indices.eco.toFixed(0)}</div>
+                        <div className="text-[10px] text-scada-muted uppercase font-mono tracking-wider">Eco</div>
                     </div>
-                    <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-4 flex flex-col items-center justify-center">
-                        <Shield className="w-5 h-5 text-purple-400 mb-2" />
-                        <div className="text-2xl font-bold">{data.indices.cyb.toFixed(0)}</div>
-                        <div className="text-[10px] text-slate-500 uppercase">Cyber</div>
+                    <div className="bg-scada-panel border border-scada-border rounded-sm p-4 flex flex-col items-center justify-center shadow-scada-card">
+                        <Shield className="w-5 h-5 text-status-info mb-2" />
+                        <div className="text-2xl font-bold font-mono text-scada-text">{data.indices.cyb.toFixed(0)}</div>
+                        <div className="text-[10px] text-scada-muted uppercase font-mono tracking-wider">Cyber</div>
                     </div>
                 </div>
 
                 {/* 3. SYSTEMIC RISKS */}
                 {data.pulse.risks.length > 0 && (
-                    <div className="col-span-12 bg-red-950/20 border border-red-500/30 rounded-xl p-4 flex items-start gap-4 animate-pulse">
-                        <div className="p-2 bg-red-900/50 rounded-full">
-                            <Activity className="w-5 h-5 text-red-500" />
+                    <div className="col-span-12 bg-status-error/10 border border-status-error/30 rounded-sm p-4 flex items-start gap-4">
+                        <div className="p-2 bg-status-error/20 rounded-sm">
+                            <Activity className="w-5 h-5 text-status-error" />
                         </div>
                         <div>
-                            <h4 className="text-sm font-bold text-red-400 uppercase mb-1">Systemic Correlation Detected</h4>
-                            <div className="text-sm text-red-200">
+                            <h4 className="text-sm font-bold text-status-error uppercase mb-1 font-mono tracking-wider">Systemic Correlation Detected</h4>
+                            <div className="text-sm text-scada-text font-mono">
                                 {data.pulse.risks.join(' • ')}
                             </div>
                         </div>

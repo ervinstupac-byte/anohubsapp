@@ -3,11 +3,10 @@
  * 
  * NC-1100: Asset Passport Integration
  * Displays detailed component information with RUL from AIPredictionService
- * Enhanced with Glassmorphism and Integrity Checks
+ * Enhanced with SCADA Industrial Design and Integrity Checks
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, 
   Clock, 
@@ -27,7 +26,6 @@ import {
   Share2,
   ArrowLeft
 } from 'lucide-react';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { calculateMaintenancePrediction } from '../../features/maintenance/logic/Predictor';
 import { useTranslation } from 'react-i18next';
 import { saveLog } from '../../services/PersistenceService';
@@ -147,353 +145,333 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-400';
-    if (score >= 60) return 'text-amber-400';
-    return 'text-red-400';
+    if (score >= 80) return 'text-status-ok';
+    if (score >= 60) return 'text-status-warning';
+    return 'text-status-error';
   };
 
   const getHealthBg = (score: number) => {
-    if (score >= 80) return 'bg-emerald-500/10 border-emerald-500/20';
-    if (score >= 60) return 'bg-amber-500/10 border-amber-500/20';
-    return 'bg-red-500/10 border-red-500/20';
+    if (score >= 80) return 'bg-status-ok/10 border-status-ok/20';
+    if (score >= 60) return 'bg-status-warning/10 border-status-warning/20';
+    return 'bg-status-error/10 border-status-error/20';
   };
 
   const getTimelineIcon = (type: string) => {
     switch (type) {
-      case 'BIRTH': return <CheckCircle className="w-4 h-4 text-emerald-400" />;
-      case 'MAINTENANCE': return <Clock className="w-4 h-4 text-cyan-400" />;
-      case 'REPAIR': return <Activity className="w-4 h-4 text-amber-400" />;
-      case 'INCIDENT': return <AlertTriangle className="w-4 h-4 text-red-400" />;
-      case 'PROJECTED_FAILURE': return <TrendingDown className="w-4 h-4 text-purple-400" />;
-      default: return <History className="w-4 h-4 text-slate-400" />;
+      case 'BIRTH': return <CheckCircle className="w-4 h-4 text-status-ok" />;
+      case 'MAINTENANCE': return <Clock className="w-4 h-4 text-status-info" />;
+      case 'REPAIR': return <Activity className="w-4 h-4 text-status-warning" />;
+      case 'INCIDENT': return <AlertTriangle className="w-4 h-4 text-status-error" />;
+      case 'PROJECTED_FAILURE': return <TrendingDown className="w-4 h-4 text-h-purple" />;
+      default: return <History className="w-4 h-4 text-scada-muted" />;
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/90 backdrop-blur-md"
-          />
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div
+        onClick={onClose}
+        className="absolute inset-0"
+      />
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl h-[90vh] flex flex-col"
-          >
-            <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 p-0 shadow-[0_0_50px_rgba(6,182,212,0.15)]">
-              {/* Header */}
-              <div className="h-16 px-6 bg-slate-950/80 border-b border-white/10 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-4">
-                  <button
-                      onClick={onClose}
-                      className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
-                      title={t('common.back', 'Back')}
-                  >
-                      <ArrowLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                      onClick={onClose}
-                      className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
-                      title={t('common.back', 'Back')}
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
-                  <div className="p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
-                    <ShieldCheck className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold text-white tracking-wide">{componentName}</h2>
-                    <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
-                      <span className="text-cyan-400">{componentId}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-600" />
-                      <span>{componentType}</span>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-5xl h-[90vh] flex flex-col bg-scada-panel border border-scada-border rounded-sm shadow-scada-card"
+      >
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="h-16 px-6 bg-scada-bg border-b border-scada-border flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-4">
+              <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-scada-panel rounded-full text-scada-muted hover:text-scada-text transition-colors"
+                  title={t('common.back', 'Back')}
+              >
+                  <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="p-2 bg-status-info/10 rounded-sm border border-status-info/20">
+                <ShieldCheck className="w-6 h-6 text-status-info" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-scada-text tracking-wide font-header uppercase">{componentName}</h2>
+                <div className="flex items-center gap-3 text-xs text-scada-muted font-mono">
+                  <span className="text-status-info">{componentId}</span>
+                  <span className="w-1 h-1 rounded-full bg-scada-muted" />
+                  <span>{componentType}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+                <button className="p-2 hover:bg-scada-panel rounded-full transition-colors text-scada-muted hover:text-status-info" title="Verify Integrity">
+                    <ShieldCheck className="w-5 h-5" />
+                </button>
+                <button className="p-2 hover:bg-scada-panel rounded-full transition-colors text-scada-muted hover:text-scada-text" title="Print Passport">
+                    <Printer className="w-5 h-5" />
+                </button>
+                <div className="w-px h-6 bg-scada-border mx-2" />
+                <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-status-error/10 rounded-full transition-colors text-scada-muted hover:text-status-error"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+            </div>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex border-b border-scada-border bg-scada-bg/50 px-6">
+            {(['overview', 'timeline', 'health', 'docs'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 font-mono ${
+                  activeTab === tab
+                    ? 'text-status-info border-status-info bg-status-info/5'
+                    : 'text-scada-muted border-transparent hover:text-scada-text hover:border-scada-border'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-scada-panel">
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center h-full gap-4">
+                <div className="w-12 h-12 border-4 border-status-info/30 border-t-status-info rounded-full animate-spin" />
+                <p className="text-sm text-status-info font-mono animate-pulse">ANALYZING ASSET TELEMETRY...</p>
+              </div>
+            ) : rulData ? (
+              <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                {activeTab === 'overview' && (
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left Column: Health & Stats */}
+                    <div className="lg:col-span-2 space-y-6">
+                      {/* Health Score Card */}
+                      <div className={`p-6 border rounded-sm ${getHealthBg(rulData.healthScore)}`}>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-bold text-scada-muted uppercase tracking-widest mb-1 font-mono">Asset Health Score</div>
+                            <div className={`text-5xl font-black font-mono tabular-nums ${getHealthColor(rulData.healthScore)}`}>
+                              {rulData.healthScore}%
+                            </div>
+                            <div className="flex items-center gap-2 mt-2">
+                              <div className={`w-2 h-2 rounded-full ${rulData.healthScore >= 80 ? 'bg-status-ok' : 'bg-status-warning'}`} />
+                              <span className="text-xs font-mono text-scada-text/80 uppercase">
+                                {rulData.healthScore >= 80 ? 'OPERATIONAL - OPTIMAL' : 'OPERATIONAL - DEGRADED'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xs font-bold text-scada-muted uppercase tracking-widest mb-1 font-mono">Prediction Confidence</div>
+                            <div className="text-3xl font-bold text-scada-text font-mono tabular-nums">
+                              {(rulData.confidence * 100).toFixed(0)}%
+                            </div>
+                            <div className="text-xs text-scada-muted mt-1 font-mono">Based on 35k run hours</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* RUL Metrics */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="p-5 rounded-sm bg-scada-bg border border-scada-border">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Clock className="w-4 h-4 text-status-info" />
+                            <span className="text-xs font-bold text-scada-muted uppercase font-mono">Remaining Useful Life</span>
+                          </div>
+                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">
+                            {rulData.remainingYears.toFixed(1)} <span className="text-sm text-scada-muted font-normal">years</span>
+                          </div>
+                          <div className="w-full h-1 bg-scada-border rounded-full mt-3 overflow-hidden">
+                            <div 
+                              className="h-full bg-status-info" 
+                              style={{ width: `${(rulData.remainingYears / 10) * 100}%` }} 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-5 rounded-sm bg-scada-bg border border-scada-border">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Calendar className="w-4 h-4 text-status-warning" />
+                            <span className="text-xs font-bold text-scada-muted uppercase font-mono">Next Maintenance</span>
+                          </div>
+                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">
+                            {new Date(rulData.nextMaintenanceDate).toLocaleDateString()}
+                          </div>
+                          <div className="text-xs text-status-warning/80 mt-2 font-mono uppercase">
+                            SCHEDULED OUTAGE REQUIRED
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Risk Factors */}
+                    <div className="lg:col-span-1">
+                      <div className="h-full p-5 rounded-sm bg-status-error/5 border border-status-error/20">
+                        <div className="flex items-center gap-2 mb-4">
+                          <AlertTriangle className="w-4 h-4 text-status-error" />
+                          <h3 className="text-sm font-bold text-status-error uppercase tracking-wide font-mono">Active Risk Factors</h3>
+                        </div>
+                        <div className="space-y-3">
+                          {rulData.riskFactors.map((risk, index) => (
+                            <div
+                              key={index}
+                              className="p-3 bg-status-error/10 border border-status-error/20 rounded-sm"
+                            >
+                              <span className="text-xs font-medium text-status-error leading-relaxed block font-mono">{risk}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-status-error/20">
+                          <p className="text-[10px] text-status-error/60 leading-relaxed font-mono">
+                            Automated risk assessment based on vibration signatures and cavitation indices.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                    <div className="flex items-center gap-3">
-                        <button className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-cyan-400" title="Verify Integrity">
-                            <ShieldCheck className="w-5 h-5" />
-                        </button>
-                        <button className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white" title="Print Passport">
-                            <Printer className="w-5 h-5" />
-                        </button>
-                        <div className="w-px h-6 bg-white/10 mx-2" />
-                        <button
-                            onClick={onClose}
-                            className="p-2 hover:bg-red-500/10 rounded-full transition-colors text-slate-400 hover:text-red-400"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
+                )}
+
+                {activeTab === 'timeline' && (
+                  <div className="max-w-3xl mx-auto py-4">
+                    <h3 className="text-sm font-bold text-scada-muted uppercase tracking-widest mb-6 font-mono">Lifecycle Events</h3>
+                    <div className="relative pl-8 border-l border-scada-border space-y-8">
+                      {timeline.map((event, index) => (
+                        <div key={index} className="relative">
+                          {/* Timeline Dot */}
+                          <div className={`absolute -left-[39px] w-5 h-5 rounded-full border-4 border-scada-bg ${
+                            event.type === 'PROJECTED_FAILURE' ? 'bg-h-purple' :
+                            event.type === 'INCIDENT' ? 'bg-status-error' :
+                            event.type === 'BIRTH' ? 'bg-status-ok' :
+                            'bg-scada-border'
+                          }`} />
+
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-sm bg-scada-bg border border-scada-border hover:border-scada-text/30 transition-colors">
+                            <div className="flex items-start gap-3">
+                              <div className="mt-0.5">{getTimelineIcon(event.type)}</div>
+                              <div>
+                                <div className="font-bold text-scada-text text-sm font-mono">{event.event}</div>
+                                <div className="text-xs text-scada-muted mt-1 font-mono">{new Date(event.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                              </div>
+                            </div>
+                            {event.severity && (
+                              <span className={`text-[10px] font-bold px-2 py-1 rounded-sm border uppercase tracking-wider font-mono ${
+                                event.severity === 'HIGH' ? 'bg-status-error/10 text-status-error border-status-error/30' :
+                                'bg-status-warning/10 text-status-warning border-status-warning/30'
+                              }`}>
+                                {event.severity} SEVERITY
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                </div>
+                  </div>
+                )}
 
-                {/* Tabs */}
-                <div className="flex border-b border-white/10 bg-black/20 px-6">
-                    {(['overview', 'timeline', 'health', 'docs'] as const).map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 ${
-                        activeTab === tab
-                            ? 'text-cyan-400 border-cyan-400 bg-cyan-500/5'
-                            : 'text-slate-500 border-transparent hover:text-slate-300 hover:border-slate-700'
-                        }`}
-                    >
-                        {tab}
-                    </button>
-                    ))}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-slate-900/50">
-                    {isLoading ? (
-                    <div className="flex flex-col items-center justify-center h-full gap-4">
-                        <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
-                        <p className="text-sm text-cyan-400 font-mono animate-pulse">ANALYZING ASSET TELEMETRY...</p>
+                {activeTab === 'health' && (
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono">Real-time Telemetry</h3>
+                      <div className="flex items-center gap-2 text-[10px] text-status-ok font-mono">
+                        <div className="w-1.5 h-1.5 rounded-full bg-status-ok animate-pulse" />
+                        LIVE STREAM ACTIVE
+                      </div>
                     </div>
-                    ) : rulData ? (
-                    <motion.div
-                        key={activeTab}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        {activeTab === 'overview' && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Left Column: Health & Stats */}
-                            <div className="lg:col-span-2 space-y-6">
-                                {/* Health Score Card */}
-                                <GlassCard className={`p-6 ${getHealthBg(rulData.healthScore)}`}>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <div className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Asset Health Score</div>
-                                            <div className={`text-5xl font-black ${getHealthColor(rulData.healthScore)}`}>
-                                            {rulData.healthScore}%
-                                            </div>
-                                            <div className="flex items-center gap-2 mt-2">
-                                                <div className={`w-2 h-2 rounded-full ${rulData.healthScore >= 80 ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-                                                <span className="text-xs font-mono text-slate-300">
-                                                    {rulData.healthScore >= 80 ? 'OPERATIONAL - OPTIMAL' : 'OPERATIONAL - DEGRADED'}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Prediction Confidence</div>
-                                            <div className="text-3xl font-bold text-white">
-                                            {(rulData.confidence * 100).toFixed(0)}%
-                                            </div>
-                                            <div className="text-xs text-slate-400 mt-1">Based on 35k run hours</div>
-                                        </div>
-                                    </div>
-                                </GlassCard>
-
-                                {/* RUL Metrics */}
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-5 rounded-xl bg-slate-900/50 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <Clock className="w-4 h-4 text-cyan-400" />
-                                            <span className="text-xs font-bold text-slate-400 uppercase">Remaining Useful Life</span>
-                                        </div>
-                                        <div className="text-2xl font-bold text-white">
-                                            {rulData.remainingYears.toFixed(1)} <span className="text-sm text-slate-500 font-normal">years</span>
-                                        </div>
-                                        <div className="w-full h-1 bg-slate-800 rounded-full mt-3 overflow-hidden">
-                                            <div 
-                                                className="h-full bg-cyan-500" 
-                                                style={{ width: `${(rulData.remainingYears / 10) * 100}%` }} 
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="p-5 rounded-xl bg-slate-900/50 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <Calendar className="w-4 h-4 text-amber-400" />
-                                            <span className="text-xs font-bold text-slate-400 uppercase">Next Maintenance</span>
-                                        </div>
-                                        <div className="text-2xl font-bold text-white">
-                                            {new Date(rulData.nextMaintenanceDate).toLocaleDateString()}
-                                        </div>
-                                        <div className="text-xs text-amber-400/80 mt-2 font-mono">
-                                            SCHEDULED OUTAGE REQUIRED
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right Column: Risk Factors */}
-                            <div className="lg:col-span-1">
-                                <div className="h-full p-5 rounded-xl bg-red-950/10 border border-red-500/20">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <AlertTriangle className="w-4 h-4 text-red-400" />
-                                        <h3 className="text-sm font-bold text-red-100 uppercase tracking-wide">Active Risk Factors</h3>
-                                    </div>
-                                    <div className="space-y-3">
-                                        {rulData.riskFactors.map((risk, index) => (
-                                            <div
-                                            key={index}
-                                            className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
-                                            >
-                                                <span className="text-xs font-medium text-red-200 leading-relaxed block">{risk}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-4 pt-4 border-t border-red-500/20">
-                                        <p className="text-[10px] text-red-300/60 leading-relaxed">
-                                            Automated risk assessment based on vibration signatures and cavitation indices.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                    
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Thermometer className="w-4 h-4 text-status-warning" />
+                          <span className="text-xs font-bold text-scada-muted uppercase font-mono">Temperature</span>
                         </div>
-                        )}
+                        <div className="text-2xl font-black text-scada-text font-mono tabular-nums">68<span className="text-lg text-scada-muted font-normal">°C</span></div>
+                        <div className="mt-2 text-[10px] text-status-ok font-mono uppercase">NOMINAL RANGE</div>
+                      </div>
 
-                        {activeTab === 'timeline' && (
-                        <div className="max-w-3xl mx-auto py-4">
-                            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Lifecycle Events</h3>
-                            <div className="relative pl-8 border-l border-slate-800 space-y-8">
-                                {timeline.map((event, index) => (
-                                    <div key={index} className="relative">
-                                        {/* Timeline Dot */}
-                                        <div className={`absolute -left-[39px] w-5 h-5 rounded-full border-4 border-slate-900 ${
-                                            event.type === 'PROJECTED_FAILURE' ? 'bg-purple-500' :
-                                            event.type === 'INCIDENT' ? 'bg-red-500' :
-                                            event.type === 'BIRTH' ? 'bg-emerald-500' :
-                                            'bg-slate-600'
-                                        }`} />
-
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                                            <div className="flex items-start gap-3">
-                                                <div className="mt-0.5">{getTimelineIcon(event.type)}</div>
-                                                <div>
-                                                    <div className="font-bold text-white text-sm">{event.event}</div>
-                                                    <div className="text-xs text-slate-400 mt-1">{new Date(event.date).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                                                </div>
-                                            </div>
-                                            {event.severity && (
-                                                <span className={`text-[10px] font-bold px-2 py-1 rounded border uppercase tracking-wider ${
-                                                    event.severity === 'HIGH' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
-                                                    'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                                                }`}>
-                                                    {event.severity} SEVERITY
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Activity className="w-4 h-4 text-status-info" />
+                          <span className="text-xs font-bold text-scada-muted uppercase font-mono">Vibration</span>
                         </div>
-                        )}
+                        <div className="text-2xl font-black text-scada-text font-mono tabular-nums">2.4<span className="text-lg text-scada-muted font-normal">mm/s</span></div>
+                        <div className="mt-2 text-[10px] text-status-warning font-mono uppercase">ELEVATED WARN</div>
+                      </div>
 
-                        {activeTab === 'health' && (
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-bold text-white uppercase tracking-wide">Real-time Telemetry</h3>
-                                <div className="flex items-center gap-2 text-[10px] text-emerald-400">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                    LIVE STREAM ACTIVE
-                                </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                <GlassCard className="p-4 bg-slate-900/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                    <Thermometer className="w-4 h-4 text-orange-400" />
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Temperature</span>
-                                    </div>
-                                    <div className="text-2xl font-black text-white">68<span className="text-lg text-slate-500 font-normal">°C</span></div>
-                                    <div className="mt-2 text-[10px] text-emerald-400 font-mono">NOMINAL RANGE</div>
-                                </GlassCard>
-
-                                <GlassCard className="p-4 bg-slate-900/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                    <Activity className="w-4 h-4 text-blue-400" />
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Vibration</span>
-                                    </div>
-                                    <div className="text-2xl font-black text-white">2.4<span className="text-lg text-slate-500 font-normal">mm/s</span></div>
-                                    <div className="mt-2 text-[10px] text-amber-400 font-mono">ELEVATED WARN</div>
-                                </GlassCard>
-
-                                <GlassCard className="p-4 bg-slate-900/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                    <Zap className="w-4 h-4 text-yellow-400" />
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Efficiency</span>
-                                    </div>
-                                    <div className="text-2xl font-black text-white">94.2<span className="text-lg text-slate-500 font-normal">%</span></div>
-                                    <div className="mt-2 text-[10px] text-emerald-400 font-mono">OPTIMAL</div>
-                                </GlassCard>
-
-                                <GlassCard className="p-4 bg-slate-900/50">
-                                    <div className="flex items-center gap-2 mb-3">
-                                    <Cpu className="w-4 h-4 text-purple-400" />
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Load Factor</span>
-                                    </div>
-                                    <div className="text-2xl font-black text-white">87<span className="text-lg text-slate-500 font-normal">%</span></div>
-                                    <div className="mt-2 text-[10px] text-slate-400 font-mono">NOMINAL</div>
-                                </GlassCard>
-                            </div>
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Zap className="w-4 h-4 text-status-warning" />
+                          <span className="text-xs font-bold text-scada-muted uppercase font-mono">Efficiency</span>
                         </div>
-                        )}
+                        <div className="text-2xl font-black text-scada-text font-mono tabular-nums">94.2<span className="text-lg text-scada-muted font-normal">%</span></div>
+                        <div className="mt-2 text-[10px] text-status-ok font-mono uppercase">OPTIMAL</div>
+                      </div>
 
-                        {activeTab === 'docs' && (
-                        <div className="space-y-4">
-                            <h3 className="text-sm font-bold text-white uppercase tracking-wide">Technical Documentation</h3>
-                            <div className="grid gap-3">
-                                {docs.map((doc, idx) => (
-                                    <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors flex items-center justify-between group cursor-pointer">
-                                        <div className="flex items-center gap-4">
-                                            <div className="p-3 bg-blue-500/10 rounded-lg group-hover:bg-blue-500/20 transition-colors">
-                                                <FileText className="w-5 h-5 text-blue-400" />
-                                            </div>
-                                            <div>
-                                                <div className="font-bold text-white text-sm">{doc.name}</div>
-                                                <div className="flex items-center gap-2 text-xs text-slate-400 mt-1">
-                                                    <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">{doc.type}</span>
-                                                    <span>•</span>
-                                                    <span>{doc.size}</span>
-                                                    <span>•</span>
-                                                    <span>{doc.date}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                                                <Share2 className="w-4 h-4" />
-                                            </button>
-                                            <button className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors shadow-lg shadow-blue-900/20">
-                                                <Download className="w-3 h-3" />
-                                                DOWNLOAD
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Cpu className="w-4 h-4 text-h-purple" />
+                          <span className="text-xs font-bold text-scada-muted uppercase font-mono">Load Factor</span>
                         </div>
-                        )}
-                    </motion.div>
-                    ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                        <AlertTriangle className="w-12 h-12 text-red-400 mb-4 opacity-50" />
-                        <h3 className="text-lg font-bold text-white">Data Unavailable</h3>
-                        <p className="text-slate-400 text-sm mt-2">Could not retrieve asset passport data from the secure vault.</p>
-                        <button onClick={fetchRUL} className="mt-6 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-bold text-white transition-colors">
-                            Retry Connection
-                        </button>
+                        <div className="text-2xl font-black text-scada-text font-mono tabular-nums">87<span className="text-lg text-scada-muted font-normal">%</span></div>
+                        <div className="mt-2 text-[10px] text-scada-muted font-mono uppercase">NOMINAL</div>
+                      </div>
                     </div>
-                    )}
-                </div>
-            </GlassCard>
-          </motion.div>
+                  </div>
+                )}
+
+                {activeTab === 'docs' && (
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono">Technical Documentation</h3>
+                    <div className="grid gap-3">
+                      {docs.map((doc, idx) => (
+                        <div key={idx} className="p-4 rounded-sm bg-scada-bg border border-scada-border hover:border-status-info/30 transition-colors flex items-center justify-between group cursor-pointer">
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 bg-status-info/10 rounded-sm border border-status-info/20 group-hover:bg-status-info/20 transition-colors">
+                              <FileText className="w-5 h-5 text-status-info" />
+                            </div>
+                            <div>
+                              <div className="font-bold text-scada-text text-sm font-mono">{doc.name}</div>
+                              <div className="flex items-center gap-2 text-xs text-scada-muted mt-1 font-mono">
+                                <span className="px-1.5 py-0.5 rounded-sm bg-scada-panel text-scada-muted">{doc.type}</span>
+                                <span>•</span>
+                                <span>{doc.size}</span>
+                                <span>•</span>
+                                <span>{doc.date}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button className="p-2 text-scada-muted hover:text-scada-text hover:bg-scada-panel rounded-sm transition-colors">
+                              <Share2 className="w-4 h-4" />
+                            </button>
+                            <button className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-scada-bg bg-status-info hover:bg-status-info/90 rounded-sm transition-colors font-mono">
+                              <Download className="w-3 h-3" />
+                              DOWNLOAD
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-center py-12">
+                <AlertTriangle className="w-12 h-12 text-status-error mb-4 opacity-50" />
+                <h3 className="text-lg font-bold text-scada-text font-header">Data Unavailable</h3>
+                <p className="text-scada-muted text-sm mt-2 font-mono">Could not retrieve asset passport data from the secure vault.</p>
+                <button onClick={fetchRUL} className="mt-6 px-4 py-2 bg-scada-bg hover:bg-scada-panel border border-scada-border rounded-sm text-sm font-bold text-scada-text transition-colors font-mono uppercase">
+                  Retry Connection
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 };
 

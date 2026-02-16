@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { PhysicsEngine } from '../../core/PhysicsEngine';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { ScadaCore } from './ScadaCore';
 import { FinancialHealthPanel } from './FinancialHealthPanel';
 import { SovereignComponentTree } from './SovereignComponentTree';
@@ -19,7 +18,6 @@ import { SovereignVisualizer } from './SovereignVisualizer'; // Re-import for si
 import { SovereignLedgerPanel } from './SovereignLedgerPanel';
 import { SandboxOverlay } from './SandboxOverlay';
 import { Sliders, Calculator, Droplets, Microscope, BookOpen, Shield, Layout, Zap, Activity, AlertCircle, TrendingDown, ArrowLeft, Home } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { PulseArchiver } from '../../services/PulseArchiver';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
 import { SovereignGlobalState } from '../../services/SovereignGlobalState';
@@ -196,103 +194,91 @@ export const MasterSovereignDashboard: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 p-6 text-white">
+        <div className="min-h-screen bg-scada-bg p-6 text-scada-text">
             {/* Header */}
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/')}
-                            className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors"
+                            className="p-2 hover:bg-scada-panel rounded-sm text-scada-muted hover:text-scada-text transition-colors"
                             title="Back to Hub"
                         >
                             <Home className="w-6 h-6" />
                         </button>
-                        <h1 className="text-3xl font-bold text-white">Master Sovereign Dashboard</h1>
+                        <h1 className="text-3xl font-bold text-scada-text font-header tracking-tight uppercase">Master Sovereign Dashboard</h1>
                     </div>
                     <div className="flex items-center gap-3">
                         <SystemHealth />
                         {/* Strategic View Tab */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'strategic'
-                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/50'
-                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'strategic'
+                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
+                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
                         >
                             <Calculator className="w-4 h-4" />
                             Strategic
-                        </motion.button>
+                        </button>
 
                         {/* Energy Hub Tab */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === 'energy'
-                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50'
-                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${activeTab === 'energy'
+                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
+                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
                         >
                             <Droplets className="w-4 h-4" />
                             Energy Hub
-                        </motion.button>
+                        </button>
 
                         {/* NC-10070: Forensic Mode Toggle */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={() => setIsForensicMode(!isForensicMode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isForensicMode
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'
-                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${isForensicMode
+                                ? 'bg-status-ok/20 text-status-ok border border-status-ok/50'
+                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
                         >
                             <Microscope className="w-4 h-4" />
                             {isForensicMode ? 'FORENSICS ACTIVE' : 'FORENSICS'}
-                        </motion.button>
+                        </button>
 
                         {/* NC-11400: Education Mode Toggle */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={toggleEducationMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${educationMode
-                                ? 'bg-sky-500/20 text-sky-400 border border-sky-500/50'
-                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${educationMode
+                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
+                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
                         >
                             <BookOpen className="w-4 h-4" />
                             {educationMode ? 'EXPERT GUIDE ON' : 'EXPERT GUIDE'}
-                        </motion.button>
+                        </button>
 
                         {/* Commander Mode Toggle - ALWAYS VISIBLE */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={toggleCommanderMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${isCommanderMode
-                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50'
-                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white'
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors ${isCommanderMode
+                                ? 'bg-status-warning/20 text-status-warning border border-status-warning/50'
+                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
                                 }`}
                         >
                             <Shield className="w-4 h-4" />
                             {isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}
-                        </motion.button>
+                        </button>
 
                         {/* NC-9200: Tactical Layout Launcher */}
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                        <button
                             onClick={launchTacticalLayout}
-                            className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors bg-purple-500/20 text-purple-400 border border-purple-500/50 hover:bg-purple-500/30"
+                            className="flex items-center gap-2 px-4 py-2 rounded-sm font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
                             title="Open all modules across screens"
                         >
                             <Layout className="w-4 h-4" />
                             TACTICAL MAP
-                        </motion.button>
+                        </button>
 
                         <StressTestButton />
                     </div>
@@ -310,222 +296,201 @@ export const MasterSovereignDashboard: React.FC = () => {
 
             {/* Strategic Consultant View */}
             {activeTab === 'strategic' && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                >
+                <div className="animate-in fade-in duration-300">
                     <StrategicConsultantView />
-                </motion.div>
+                </div>
             )}
 
             {/* Energy Hub View */}
             {activeTab === 'energy' && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                >
+                <div className="animate-in fade-in duration-300">
                     <GreenHydrogenPanel />
-                </motion.div>
+                </div>
             )}
 
             {/* Main Dashboard View */}
             {activeTab === 'dashboard' && (
                 <>
                     {/* Commander Mode Setpoint Controls */}
-                    <AnimatePresence>
-                        {isCommanderMode && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                className="mb-6"
-                            >
-                                <GlassCard className="p-6 bg-gradient-to-br from-amber-900/20 to-slate-900/95 border border-amber-500/30">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <Sliders className="w-5 h-5 text-amber-400" />
-                                        <h2 className="text-xl font-bold text-amber-400">Commander Setpoint Control</h2>
-                                        {boundaryViolation && (
-                                            <div className="px-3 py-1 bg-red-500/20 border border-red-500/30 rounded-full animate-pulse">
-                                                <span className="text-xs text-red-400 font-medium">⚠ BOUNDARY VIOLATION</span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Boundary Violation Warning */}
+                    {isCommanderMode && (
+                        <div className="mb-6 animate-in slide-in-from-top-4 duration-300">
+                            <div className="p-6 bg-scada-panel border border-status-warning rounded-sm shadow-scada-card">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <Sliders className="w-5 h-5 text-status-warning" />
+                                    <h2 className="text-xl font-bold text-status-warning uppercase tracking-tight font-header">Commander Setpoint Control</h2>
                                     {boundaryViolation && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: -10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg"
-                                        >
-                                            <p className="text-sm text-red-400">{boundaryViolation}</p>
-                                        </motion.div>
+                                        <div className="px-3 py-1 bg-status-error/20 border border-status-error/30 rounded-sm">
+                                            <span className="text-xs text-status-error font-mono font-bold uppercase">⚠ BOUNDARY VIOLATION</span>
+                                        </div>
                                     )}
+                                </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                        {/* Flow Setpoint Slider */}
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-sm text-slate-400">Flow Setpoint</label>
-                                                <span className="text-amber-400 font-bold">{flowSetpoint.toFixed(1)} m³/s</span>
-                                            </div>
-                                            <input
-                                                type="range"
-                                                min="0"
-                                                max="100"
-                                                step="0.5"
-                                                value={flowSetpoint}
-                                                onChange={(e) => setFlowSetpoint(parseFloat(e.target.value))}
-                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
-                                            />
-                                            <div className="flex justify-between text-xs text-slate-500 mt-1">
-                                                <span>0</span>
-                                                <span>50</span>
-                                                <span>100</span>
-                                            </div>
+                                {/* Boundary Violation Warning */}
+                                {boundaryViolation && (
+                                    <div className="mb-4 p-3 bg-status-error/10 border border-status-error/20 rounded-sm">
+                                        <p className="text-sm text-status-error font-mono">{boundaryViolation}</p>
+                                    </div>
+                                )}
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    {/* Flow Setpoint Slider */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <label className="text-xs uppercase tracking-wider text-scada-muted font-bold font-mono">Flow Setpoint</label>
+                                            <span className="text-status-warning font-mono font-bold tabular-nums">{flowSetpoint.toFixed(1)} m³/s</span>
                                         </div>
-
-                                        {/* RPM Setpoint Slider */}
-                                        <div>
-                                            <div className="flex items-center justify-between mb-2">
-                                                <label className="text-sm text-slate-400">RPM Setpoint</label>
-                                                <span className="text-amber-400 font-bold">{loadSetpoint.toFixed(0)} RPM</span>
-                                            </div>
-                                            <input
-                                                type="range"
-                                                min="300"
-                                                max="750"
-                                                step="10"
-                                                value={loadSetpoint}
-                                                onChange={(e) => setLoadSetpoint(parseFloat(e.target.value))}
-                                                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500"
-                                            />
-                                            <div className="flex justify-between text-xs text-slate-500 mt-1">
-                                                <span>300</span>
-                                                <span>525</span>
-                                                <span>750</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Predicted Pulse Impact */}
-                                        <div className="bg-slate-800/50 rounded-lg p-3">
-                                            <div className="text-xs text-slate-400 mb-1">Predicted Pulse Index</div>
-                                            <div className={`text-2xl font-bold ${(predictedPulse || 100) > 90 ? 'text-green-400' :
-                                                (predictedPulse || 100) > 70 ? 'text-yellow-400' : 'text-red-400'
-                                                }`}>
-                                                {predictedPulse !== null ? predictedPulse.toFixed(1) : pulseIndex.toFixed(0)}%
-                                            </div>
-                                            <div className="text-xs text-slate-500 mt-1">
-                                                {predictedPulse !== null ? 'Based on setpoints' : 'Current'}
-                                            </div>
-                                        </div>
-
-                                        {/* Apply Button */}
-                                        <div className="flex items-end">
-                                            <motion.button
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={applySetpoints}
-                                                className="w-full py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 rounded-lg text-amber-400 font-semibold flex items-center justify-center gap-2"
-                                            >
-                                                <Shield className="w-5 h-5" />
-                                                Apply Commander Setpoints
-                                            </motion.button>
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="100"
+                                            step="0.5"
+                                            value={flowSetpoint}
+                                            onChange={(e) => setFlowSetpoint(parseFloat(e.target.value))}
+                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                        />
+                                        <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
+                                            <span>0</span>
+                                            <span>50</span>
+                                            <span>100</span>
                                         </div>
                                     </div>
-                                </GlassCard>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+
+                                    {/* RPM Setpoint Slider */}
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <label className="text-xs uppercase tracking-wider text-scada-muted font-bold font-mono">RPM Setpoint</label>
+                                            <span className="text-status-warning font-mono font-bold tabular-nums">{loadSetpoint.toFixed(0)} RPM</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="300"
+                                            max="750"
+                                            step="10"
+                                            value={loadSetpoint}
+                                            onChange={(e) => setLoadSetpoint(parseFloat(e.target.value))}
+                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                        />
+                                        <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
+                                            <span>300</span>
+                                            <span>525</span>
+                                            <span>750</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Predicted Pulse Impact */}
+                                    <div className="bg-scada-bg border border-scada-border rounded-sm p-3">
+                                        <div className="text-[10px] uppercase font-mono text-scada-muted mb-1">Predicted Pulse Index</div>
+                                        <div className={`text-2xl font-bold font-mono tabular-nums ${(predictedPulse || 100) > 90 ? 'text-status-ok' :
+                                            (predictedPulse || 100) > 70 ? 'text-status-warning' : 'text-status-error'
+                                            }`}>
+                                            {predictedPulse !== null ? predictedPulse.toFixed(1) : pulseIndex.toFixed(0)}%
+                                        </div>
+                                        <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">
+                                            {predictedPulse !== null ? 'Based on setpoints' : 'Current'}
+                                        </div>
+                                    </div>
+
+                                    {/* Apply Button */}
+                                    <div className="flex items-end">
+                                        <button
+                                            onClick={applySetpoints}
+                                            className="w-full py-3 bg-status-warning/20 hover:bg-status-warning/30 border border-status-warning/50 rounded-sm text-status-warning font-semibold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95"
+                                        >
+                                            <Shield className="w-4 h-4" />
+                                            Apply Commander Setpoints
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Top Row: 4 Metric Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         {/* Active Power */}
-                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
-                                <Zap className="w-4 h-4 text-blue-400" />
-                                <span className="text-sm text-slate-400">Active Power</span>
+                                <Zap className="w-4 h-4 text-status-info" />
+                                <span className="text-xs font-mono uppercase text-scada-muted">Active Power</span>
                             </div>
-                            <div className="text-2xl font-bold text-white">
+                            <div className="text-2xl font-bold font-mono text-scada-text tabular-nums">
                                 {currentPower.toFixed(1)}
                             </div>
-                            <div className="text-xs text-slate-500 mt-1">MW</div>
-                        </GlassCard>
+                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">MW</div>
+                        </div>
 
                         {/* Efficiency */}
-                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
-                                <Activity className="w-4 h-4 text-green-400" />
-                                <span className="text-sm text-slate-400">Efficiency</span>
+                                <Activity className="w-4 h-4 text-status-ok" />
+                                <span className="text-xs font-mono uppercase text-scada-muted">Efficiency</span>
                             </div>
-                            <div className={`text-2xl font-bold ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
+                            <div className={`text-2xl font-bold font-mono tabular-nums ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
                                 {efficiency.toFixed(1)}%
                             </div>
-                            <div className="text-xs text-slate-500 mt-1">hydraulic</div>
+                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">hydraulic</div>
 
                             {/* Cavitation Risk Progress Bar */}
                             <div className="mt-3">
                                 <div className="flex items-center justify-between mb-1">
-                                    <span className="text-xs text-slate-400">Cavitation Risk</span>
-                                    <span className={`text-xs font-medium ${cavitationRisk > 70 ? 'text-red-400' :
-                                        cavitationRisk > 40 ? 'text-yellow-400' : 'text-green-400'
+                                    <span className="text-[10px] uppercase font-mono text-scada-muted">Cavitation Risk</span>
+                                    <span className={`text-[10px] font-mono font-medium ${cavitationRisk > 70 ? 'text-status-error' :
+                                        cavitationRisk > 40 ? 'text-status-warning' : 'text-status-ok'
                                         }`}>
                                         {cavitationRisk.toFixed(0)}%
                                     </span>
                                 </div>
-                                <div className="w-full bg-slate-700 rounded-full h-2">
+                                <div className="w-full bg-scada-bg border border-scada-border rounded-sm h-1.5">
                                     <div
-                                        className={`h-2 rounded-full transition-all duration-300 ${cavitationRisk > 70 ? 'bg-red-500' :
-                                            cavitationRisk > 40 ? 'bg-yellow-500' : 'bg-green-500'
+                                        className={`h-full rounded-sm transition-all duration-300 ${cavitationRisk > 70 ? 'bg-status-error' :
+                                            cavitationRisk > 40 ? 'bg-status-warning' : 'bg-status-ok'
                                             }`}
                                         style={{ width: `${cavitationRisk}%` }}
                                     />
                                 </div>
                             </div>
-                        </GlassCard>
+                        </div>
 
                         {/* Sovereign Pulse Index */}
-                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
-                                <AlertCircle className="w-4 h-4 text-purple-400" />
-                                <span className="text-sm text-slate-400">Sovereign Pulse</span>
+                                <AlertCircle className="w-4 h-4 text-status-info" />
+                                <span className="text-xs font-mono uppercase text-scada-muted">Sovereign Pulse</span>
                             </div>
-                            <div className={`text-2xl font-bold ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
+                            <div className={`text-2xl font-bold font-mono tabular-nums ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
                                 {pulseIndex.toFixed(0)}
                             </div>
-                            <div className="text-xs text-slate-500 mt-1">index</div>
-                        </GlassCard>
+                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">index</div>
+                        </div>
 
                         {/* Hourly Loss */}
-                        <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                             <div className="flex items-center gap-2 mb-2">
-                                <TrendingDown className="w-4 h-4 text-red-400" />
-                                <span className="text-sm text-slate-400">Hourly Loss</span>
+                                <TrendingDown className="w-4 h-4 text-status-error" />
+                                <span className="text-xs font-mono uppercase text-scada-muted">Hourly Loss</span>
                             </div>
-                            <div className="text-2xl font-bold text-red-300">
+                            <div className="text-2xl font-bold font-mono text-status-error tabular-nums">
                                 €{hourlyLossEuro.toFixed(2)}
                             </div>
-                            <div className="text-xs text-slate-500 mt-1">per hour</div>
-                        </GlassCard>
+                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">per hour</div>
+                        </div>
                     </div>
 
                     {/* Middle Row: ScadaCore (2/3) + FinancialHealthPanel (1/3) */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                         {/* ScadaCore - 2 columns */}
                         <div className="lg:col-span-2">
-                            <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                            <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-semibold text-white">SCADA Core</h3>
-                                    <div className="px-2 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                                        <span className="text-xs text-blue-400 font-medium">LIVE</span>
+                                    <h3 className="text-lg font-bold text-scada-text font-header uppercase tracking-tight">SCADA Core</h3>
+                                    <div className="px-2 py-1 bg-status-info/20 border border-status-info/30 rounded-sm">
+                                        <span className="text-xs text-status-info font-black uppercase tracking-widest">LIVE</span>
                                     </div>
                                 </div>
                                 <div className="h-96">
                                     <ScadaCore forensicMode={isForensicMode} />
                                 </div>
-                            </GlassCard>
+                            </div>
                         </div>
 
                         {/* SovereignLedgerPanel - Immutable Record (Replaces Visualizer in Default View) */}
@@ -544,17 +509,17 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <FinancialHealthPanel />
                                     
                                     {/* Sandbox Trigger (Moved here) */}
-                                    <GlassCard className="p-4 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl border border-slate-700/50">
+                                    <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                                          <button
                                             onClick={() => setIsSandboxOpen(true)}
-                                            className="w-full py-3 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors group"
+                                            className="w-full py-3 bg-scada-bg border border-scada-border rounded-sm flex items-center justify-center gap-2 hover:bg-scada-panel transition-colors group"
                                         >
-                                            <Sliders className="w-4 h-4 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
-                                            <span className="text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-400">
+                                            <Sliders className="w-4 h-4 text-status-ok group-hover:rotate-180 transition-transform duration-500" />
+                                            <span className="text-xs font-black uppercase tracking-widest text-scada-muted group-hover:text-status-ok">
                                                 Predictive Sandbox
                                             </span>
                                         </button>
-                                    </GlassCard>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -588,50 +553,43 @@ export const MasterSovereignDashboard: React.FC = () => {
             <ResonanceAudioSystem />
 
             {/* NC-10070: KillSwitch Global Overlay */}
-            <AnimatePresence>
-                {isShutdown && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-8"
-                    >
-                        <div className="max-w-2xl w-full text-center space-y-8">
-                            <div className="animate-pulse">
-                                <Shield className="w-24 h-24 text-red-500 mx-auto mb-6" />
-                                <h1 className="text-5xl font-black text-white tracking-tighter mb-4">
-                                    SYSTEM LOCKDOWN
-                                </h1>
-                                <p className="text-xl text-red-400 font-mono">
-                                    SOVEREIGN EXECUTIVE ENGINE HAS TRIGGERED PROTOCOL 9
-                                </p>
-                            </div>
-
-                            <div className="bg-red-950/30 border border-red-500/50 rounded-xl p-6 text-left">
-                                <h3 className="text-red-400 font-bold mb-2 uppercase tracking-widest text-sm">Active Protections</h3>
-                                <ul className="space-y-2">
-                                    {executiveResult?.activeProtections.map((p, i) => (
-                                        <li key={i} className="text-white font-mono flex items-center gap-2">
-                                            <AlertCircle className="w-4 h-4 text-red-500" />
-                                            {p}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="pt-8">
-                                <KillSwitch isActive={true} onEngage={() => { }} />
-                            </div>
-
-                            <p className="text-slate-500 text-xs font-mono mt-8">
-                                MANUAL OVERRIDE REQUIRES PHYSICAL KEY INSERTION
+            {isShutdown && (
+                <div className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-8 animate-in fade-in duration-300">
+                    <div className="max-w-2xl w-full text-center space-y-8">
+                        <div className="animate-pulse">
+                            <Shield className="w-24 h-24 text-status-error mx-auto mb-6" />
+                            <h1 className="text-5xl font-black text-white tracking-tighter mb-4">
+                                SYSTEM LOCKDOWN
+                            </h1>
+                            <p className="text-xl text-status-error font-mono">
+                                SOVEREIGN EXECUTIVE ENGINE HAS TRIGGERED PROTOCOL 9
                             </p>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+
+                        <div className="bg-status-error/10 border border-status-error/50 rounded-sm p-6 text-left">
+                            <h3 className="text-status-error font-bold mb-2 uppercase tracking-widest text-sm">Active Protections</h3>
+                            <ul className="space-y-2">
+                                {executiveResult?.activeProtections.map((p, i) => (
+                                    <li key={i} className="text-white font-mono flex items-center gap-2">
+                                        <AlertCircle className="w-4 h-4 text-status-error" />
+                                        {p}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="pt-8">
+                            <KillSwitch isActive={true} onEngage={() => { }} />
+                        </div>
+
+                        <p className="text-scada-muted text-xs font-mono mt-8">
+                            MANUAL OVERRIDE REQUIRES PHYSICAL KEY INSERTION
+                        </p>
+                    </div>
+                </div>
+            )}
             {/* Watermark */}
-            <div className="fixed bottom-4 right-4 text-[10px] text-slate-700 font-mono pointer-events-none z-0">
+            <div className="fixed bottom-4 right-4 text-[10px] text-scada-muted font-mono pointer-events-none z-0">
                 SOVEREIGN LIVING SYSTEM • ACTIVE • NC-11405
             </div>
         </div>

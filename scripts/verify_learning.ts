@@ -97,8 +97,29 @@ async function verify() {
     // Learned Threshold (+15%): 11.5 (Suppresses)
     const telemetry: TelemetryStream = {
         timestamp: Date.now(),
-        hydraulic: { powerKW: 80000 },
-        mechanical: { vibration: 0.05 }
+        hydraulic: { 
+            powerKW: 80000,
+            head: 450,
+            flow: 2.5,
+            efficiency: 0.92,
+            waterHead: new Decimal(450),
+            flowRate: new Decimal(2.5),
+            cavitationThreshold: new Decimal(0.5)
+        },
+        mechanical: { 
+            vibration: 0.05,
+            alignment: 0.02,
+            vibrationX: 0.05,
+            vibrationY: 0.05,
+            rpm: 500,
+            bearingTemp: 45,
+            radialClearance: 0.5,
+            boltSpecs: {
+                grade: '8.8',
+                count: 12,
+                torque: 450
+            }
+        }
     };
     const finance: FinancialContext = {
         marketPriceEurPerMWh: 0.85,

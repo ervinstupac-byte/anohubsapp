@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TrendingDown, TrendingUp, AlertCircle, Activity } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useFinancialInsights } from '../../features/business/hooks/useFinancialInsights';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { MetricValue } from '../ui/MetricValue';
 import { InfoTooltip } from '../ui/InfoTooltip';
 import { CardSkeleton } from '../../shared/components/ui/Skeleton';
@@ -11,7 +9,7 @@ import { CardSkeleton } from '../../shared/components/ui/Skeleton';
 /**
  * REVENUE IMPACT CARD
  * Visualizes real-time financial efficiency loss.
- * Design: High-contrast Alert/Success states with premium MetricValue display.
+ * Design: High-contrast Alert/Success states with SCADA-compliant display.
  */
 export const RevenueImpactCard: React.FC<{ className?: string }> = React.memo(({ className = '' }) => {
     const { t } = useTranslation();
@@ -23,30 +21,27 @@ export const RevenueImpactCard: React.FC<{ className?: string }> = React.memo(({
     const isOptimal = loss <= 0;
     const hasData = data?.currentRevenuePerHour !== undefined && data?.currentRevenuePerHour !== null;
 
-    // Color Logic
+    // Color Logic - SCADA Standard
     const variants = {
         critical: {
-            bg: 'bg-red-500/10',
-            border: 'border-red-500/30',
-            text: 'text-red-400',
+            bg: 'bg-status-error/10',
+            border: 'border-status-error',
+            text: 'text-status-error',
             icon: AlertCircle,
-            glow: 'shadow-[0_0_20px_rgba(239,68,68,0.2)]',
             status: 'danger' as const
         },
         optimal: {
-            bg: 'bg-emerald-500/10',
-            border: 'border-emerald-500/30',
-            text: 'text-emerald-400',
+            bg: 'bg-status-ok/10',
+            border: 'border-status-ok',
+            text: 'text-status-ok',
             icon: TrendingUp,
-            glow: 'shadow-[0_0_20px_rgba(16,185,129,0.1)]',
             status: 'success' as const
         },
         warning: {
-            bg: 'bg-amber-500/10',
-            border: 'border-amber-500/30',
-            text: 'text-amber-400',
+            bg: 'bg-status-warning/10',
+            border: 'border-status-warning',
+            text: 'text-status-warning',
             icon: Activity,
-            glow: 'shadow-[0_0_20px_rgba(245,158,11,0.1)]',
             status: 'warning' as const
         }
     };
@@ -55,16 +50,16 @@ export const RevenueImpactCard: React.FC<{ className?: string }> = React.memo(({
     const style = variants[statusKey];
     const Icon = style.icon;
 
-    // Loading State with premium CardSkeleton
+    // Loading State
     if (!data) {
         return <CardSkeleton className={className} />;
     }
 
     return (
-        <GlassCard
-            className={`relative overflow-hidden ${style.border} ${style.bg} ${style.glow} ${className}`}
+        <div
+            className={`relative overflow-hidden bg-scada-panel border rounded-sm shadow-scada-card ${style.border} ${className}`}
         >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-4">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
                         <Icon className={`w-4 h-4 ${style.text}`} />
@@ -98,7 +93,7 @@ export const RevenueImpactCard: React.FC<{ className?: string }> = React.memo(({
 
                 {/* Trend / Context Indicator */}
                 <div className="text-right">
-                    <p className="text-[9px] text-slate-500 uppercase font-mono mb-1">Efficiency Delta</p>
+                    <p className="text-[9px] text-scada-text/70 uppercase font-mono mb-1">Efficiency Delta</p>
                     <div className="flex items-center justify-end gap-1">
                         <MetricValue
                             value={data.efficiencyLossPercent}
@@ -112,17 +107,14 @@ export const RevenueImpactCard: React.FC<{ className?: string }> = React.memo(({
                 </div>
             </div>
 
-            {/* Micro-Interaction: Progress Bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-900/20">
-                <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${Math.min(100, data.efficiencyLossPercent * 5)}%` }}
-                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    className={`h-full ${isOptimal ? 'bg-emerald-500' : 'bg-red-500'}`}
-                    style={{ willChange: 'width' }}
+            {/* Micro-Interaction: Progress Bar (Static for SCADA) */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-scada-bg">
+                <div
+                    className={`h-full ${isOptimal ? 'bg-status-ok' : 'bg-status-error'}`}
+                    style={{ width: `${Math.min(100, data.efficiencyLossPercent * 5)}%` }}
                 />
             </div>
-        </GlassCard>
+        </div>
     );
 });
 

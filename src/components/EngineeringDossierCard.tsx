@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
     Library,
@@ -14,7 +13,6 @@ import {
     X,
     Filter
 } from 'lucide-react';
-import { GlassCard } from '../shared/components/ui/GlassCard';
 import { DossierViewerModal } from './knowledge/DossierViewerModal';
 import { ROUTES, getMaintenancePath } from '../routes/paths';
 import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../data/knowledge/DossierLibrary';
@@ -45,10 +43,10 @@ export const EngineeringDossierCard: React.FC = () => {
     const PAGE_SIZE = 50;
 
     const categories: DossierCategory[] = [
-        { label: 'Case Studies', count: 105, icon: <ScrollText className="w-4 h-4" />, color: 'text-cyan-400' },
-        { label: 'Technical Insights', count: 150, icon: <BookOpen className="w-4 h-4" />, color: 'text-blue-400' },
-        { label: 'Maintenance Protocols', count: 220, icon: <ShieldCheck className="w-4 h-4" />, color: 'text-emerald-400' },
-        { label: 'Turbine Friend Dossiers', count: 379, icon: <FileText className="w-4 h-4" />, color: 'text-amber-400' },
+        { label: 'Case Studies', count: 105, icon: <ScrollText className="w-4 h-4" />, color: 'text-status-info' },
+        { label: 'Technical Insights', count: 150, icon: <BookOpen className="w-4 h-4" />, color: 'text-status-info' },
+        { label: 'Maintenance Protocols', count: 220, icon: <ShieldCheck className="w-4 h-4" />, color: 'text-status-ok' },
+        { label: 'Turbine Friend Dossiers', count: 379, icon: <FileText className="w-4 h-4" />, color: 'text-status-warning' },
     ];
 
     const provenSources: DossierFile[] = DOSSIER_LIBRARY;
@@ -127,24 +125,24 @@ export const EngineeringDossierCard: React.FC = () => {
 
     return (
         <>
-            <GlassCard className="relative overflow-hidden group border-h-gold/30 bg-gradient-to-br from-slate-900/90 to-black/90">
+            <div className="relative overflow-hidden group bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                 {/* Header */}
-                <div className="p-4 border-b border-h-gold/20 flex items-center justify-between bg-h-gold/5">
+                <div className="p-4 border-b border-scada-border flex items-center justify-between bg-scada-bg">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-h-gold/10 flex items-center justify-center border border-h-gold/20">
-                            <Library className="w-5 h-5 text-h-gold" />
+                        <div className="w-10 h-10 rounded-sm bg-status-info/10 flex items-center justify-center border border-status-info/20">
+                            <Library className="w-5 h-5 text-status-info" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-h-gold uppercase tracking-[0.2em]">
+                            <h3 className="text-sm font-black text-scada-text uppercase tracking-[0.2em]">
                                 AnoHUB Trust Architecture
                             </h3>
-                            <p className="text-[10px] text-slate-500 font-mono">NC-9.0 Integrity Check: 854 Files Digested</p>
+                            <p className="text-[10px] text-scada-muted font-mono uppercase">NC-9.0 Integrity Check: 854 Files Digested</p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-h-cyan/10 border border-h-cyan/20 rounded-full">
-                        <Database className="w-3 h-3 text-h-cyan" />
-                        <span className="text-[10px] font-black text-h-cyan font-mono tracking-widest">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-status-info/10 border border-status-info/20 rounded-full">
+                        <Database className="w-3 h-3 text-status-info" />
+                        <span className="text-[10px] font-black text-status-info font-mono tracking-widest">
                             854 SOURCES ACTIVE
                         </span>
                     </div>
@@ -154,73 +152,70 @@ export const EngineeringDossierCard: React.FC = () => {
                     {/* Stats Grid */}
                     <div className="grid grid-cols-2 gap-4">
                         {categories.map((cat, idx) => (
-                            <motion.div
+                            <div
                                 key={cat.label}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.05 }}
                                 onClick={() => handleCategoryClick(cat.label)}
-                                className="bg-slate-900/60 border border-slate-800 p-4 rounded-xl hover:border-h-gold/40 transition-all group/item hover:shadow-[0_0_20px_rgba(234,179,8,0.1)] cursor-pointer"
+                                className="bg-scada-bg border border-scada-border p-4 rounded-sm hover:bg-scada-panel transition-all cursor-pointer group/item"
                             >
                                 <div className="flex items-center justify-between mb-2">
-                                    <div className={`p-2 rounded-lg bg-slate-800 ${cat.color} border border-white/5 group-hover/item:scale-110 transition-transform`}>
+                                    <div className={`p-2 rounded-sm bg-scada-panel ${cat.color} border border-scada-border`}>
                                         {cat.icon}
                                     </div>
-                                    <span className="text-2xl font-mono font-black text-white">
+                                    <span className="text-2xl font-mono font-black text-scada-text">
                                         {cat.count}
                                     </span>
                                 </div>
-                                <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                <div className="text-[10px] text-scada-muted font-black uppercase tracking-widest">
                                     {cat.label}
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
 
                     {/* Search & Proof List */}
                     <div className="flex flex-col gap-4">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-scada-muted" />
                             <input
                                 type="text"
                                 placeholder="Search Knowledge Base Evidence..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-black/40 border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-xs font-mono text-cyan-400 focus:border-h-cyan/50 focus:outline-none transition-colors"
+                                className="w-full bg-scada-bg border border-scada-border rounded-sm py-2 pl-10 pr-4 text-xs font-mono text-scada-text focus:border-status-info focus:outline-none transition-colors placeholder-scada-muted"
                             />
                         </div>
 
-                        <div className="flex-1 bg-black/40 border border-slate-800 rounded-xl overflow-hidden max-h-[160px] overflow-y-auto custom-scrollbar">
-                            <div className="p-2 border-b border-white/5 bg-white/5 flex items-center justify-between">
-                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Recent Source Verification</span>
-                                <span className="text-[8px] text-h-cyan font-mono">Turbine_Friend Module</span>
+                        <div className="flex-1 bg-scada-bg border border-scada-border rounded-sm overflow-hidden max-h-[160px] overflow-y-auto custom-scrollbar">
+                            <div className="p-2 border-b border-scada-border bg-scada-panel flex items-center justify-between">
+                                <span className="text-[9px] font-black text-scada-muted uppercase tracking-widest">Recent Source Verification</span>
+                                <span className="text-[8px] text-status-info font-mono uppercase">Turbine_Friend Module</span>
                             </div>
-                            <div className="divide-y divide-white/5">
+                            <div className="divide-y divide-scada-border">
                                 {displayedSources.map((source, sIdx) => (
                                     <div
                                         key={sIdx}
                                         onClick={() => handleOpenFile(source)}
-                                        className="p-3 hover:bg-h-cyan/5 transition-colors group/source cursor-pointer"
+                                        className="p-3 hover:bg-scada-panel transition-colors group/source cursor-pointer"
                                     >
                                         <div className="flex items-center justify-between mb-1">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-h-cyan group-hover/source:animate-ping" />
-                                                <span className="text-[10px] font-mono text-slate-300 font-bold truncate max-w-[200px]">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-status-info" />
+                                                <span className="text-[10px] font-mono text-scada-text font-bold truncate max-w-[200px] uppercase">
                                                     {source.path.split('/').pop()}
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[8px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-500 font-mono uppercase">
+                                                <span className="text-[8px] px-1.5 py-0.5 rounded-sm bg-scada-panel border border-scada-border text-scada-muted font-mono uppercase">
                                                     {source.category.slice(0, 3)}
                                                 </span>
                                                 {intelMap[(source.path || '').toLowerCase()] && (
-                                                    <span className="text-[8px] px-1.5 py-0.5 rounded bg-rose-900 text-rose-300 font-mono uppercase">
+                                                    <span className="text-[8px] px-1.5 py-0.5 rounded-sm bg-status-error/10 text-status-error font-mono uppercase border border-status-error/20">
                                                         {intelMap[(source.path || '').toLowerCase()].classification || 'NOMINAL'}
                                                     </span>
                                                 )}
                                             </div>
                                         </div>
-                                        <p className="text-[9px] text-slate-500 leading-tight italic">
+                                        <p className="text-[9px] text-scada-muted leading-tight italic font-mono">
                                             "{source.justification}"
                                         </p>
                                     </div>
@@ -229,7 +224,7 @@ export const EngineeringDossierCard: React.FC = () => {
                                     <div className="p-3 flex items-center justify-center">
                                         <button
                                             onClick={() => setPage(prev => prev + 1)}
-                                            className="px-4 py-2 bg-h-cyan/10 border border-h-cyan/30 rounded text-sm font-mono text-h-cyan"
+                                            className="px-4 py-2 bg-scada-panel border border-scada-border rounded-sm text-xs font-mono text-status-info uppercase hover:bg-scada-bg transition-colors"
                                         >
                                             Load more ({filteredSources.length - displayedSources.length} more)
                                         </button>
@@ -242,135 +237,122 @@ export const EngineeringDossierCard: React.FC = () => {
 
                 {/* Footer Tagline */}
                 <div className="px-6 pb-6 mt-2">
-                    <div className="p-3 rounded-lg bg-h-gold/5 border border-h-gold/10 flex items-center justify-between gap-4">
+                    <div className="p-3 rounded-sm bg-scada-bg border border-scada-border flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
-                            <ShieldCheck className="w-5 h-5 text-h-gold" />
+                            <ShieldCheck className="w-5 h-5 text-status-ok" />
                             <div>
-                                <span className="text-[10px] text-white font-black uppercase tracking-widest block">Validated Engineering Intelligence</span>
-                                <span className="text-[9px] text-slate-500 font-mono leading-tight">
+                                <span className="text-[10px] text-scada-text font-black uppercase tracking-widest block">Validated Engineering Intelligence</span>
+                                <span className="text-[9px] text-scada-muted font-mono leading-tight">
                                     100% of AI diagnostic logic is cross-referenced against the AnoHUB Dossier Library.
                                 </span>
                             </div>
                         </div>
                         <button
                             onClick={handleEnterVault}
-                            className="px-3 py-1.5 bg-h-gold/20 hover:bg-h-gold/30 border border-h-gold/40 rounded flex items-center gap-2 transition-all group/btn"
+                            className="px-3 py-1.5 bg-scada-panel hover:bg-scada-bg border border-scada-border rounded-sm flex items-center gap-2 transition-all group/btn"
                         >
-                            <span className="text-[9px] font-black text-h-gold uppercase tracking-tighter">Enter Vault</span>
-                            <ChevronRight className="w-3 h-3 text-h-gold group-hover/btn:translate-x-1 transition-transform" />
+                            <span className="text-[9px] font-black text-status-info uppercase tracking-tighter">Enter Vault</span>
+                            <ChevronRight className="w-3 h-3 text-status-info group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </div>
-            </GlassCard>
+            </div>
 
             {/* CATEGORY EXPLORER MODAL */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 pb-20 lg:pb-6">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsModalOpen(false)}
-                            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
-                        />
-                        <motion.div
-                            initial={{ y: 50, opacity: 0, scale: 0.9 }}
-                            animate={{ y: 0, opacity: 1, scale: 1 }}
-                            exit={{ y: 20, opacity: 0, scale: 0.95 }}
-                            className="relative w-full max-w-4xl max-h-full bg-slate-900 border border-h-gold/30 rounded-2xl shadow-[0_0_100px_rgba(0,0,0,1)] overflow-hidden flex flex-col"
-                        >
-                            {/* Modal Header */}
-                            <div className="p-6 border-b border-white/10 flex justify-between items-center bg-h-gold/5">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-h-gold/20 rounded-xl border border-h-gold/30">
-                                        <Filter className="w-6 h-6 text-h-gold" />
-                                    </div>
-                                    <div>
-                                        <h2 className="text-xl font-black text-white uppercase tracking-tighter">
-                                            {selectedCategory || 'Dossier Explorer'}
-                                        </h2>
-                                        <p className="text-[10px] text-h-gold font-mono uppercase tracking-[0.2em] font-black">
-                                            Knowledge Base Audit // verified
-                                        </p>
-                                    </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 pb-20 lg:pb-6 animate-in fade-in duration-200">
+                    <div
+                        onClick={() => setIsModalOpen(false)}
+                        className="absolute inset-0 bg-black/90"
+                    />
+                    <div className="relative w-full max-w-4xl max-h-full bg-scada-bg border border-scada-border rounded-sm shadow-scada-card overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-scada-border flex justify-between items-center bg-scada-panel">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-scada-bg rounded-sm border border-scada-border">
+                                    <Filter className="w-6 h-6 text-status-info" />
                                 </div>
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="p-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white"
-                                >
-                                    <X className="w-6 h-6" />
-                                </button>
-                            </div>
-
-                            {/* Modal Search Bar */}
-                            <div className="px-6 py-4 bg-black/20 border-b border-white/5">
-                                <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                                    <input
-                                        type="text"
-                                        placeholder={`Search in ${selectedCategory}...`}
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="w-full bg-slate-950/50 border border-slate-800 rounded-xl py-4 pl-12 pr-6 text-sm font-mono text-cyan-400 focus:border-h-cyan/50 focus:outline-none transition-all"
-                                    />
+                                <div>
+                                    <h2 className="text-xl font-black text-scada-text uppercase tracking-tighter">
+                                        {selectedCategory || 'Dossier Explorer'}
+                                    </h2>
+                                    <p className="text-[10px] text-status-info font-mono uppercase tracking-[0.2em] font-black">
+                                        Knowledge Base Audit // verified
+                                    </p>
                                 </div>
                             </div>
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="p-3 bg-scada-bg hover:bg-scada-panel rounded-sm transition-colors text-scada-muted hover:text-scada-text border border-scada-border"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                        </div>
 
-                            {/* Modal Content */}
-                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                                <div className="grid grid-cols-1 gap-3">
-                                    {filteredSources.length > 0 ? (
-                                        filteredSources.map((file, fIdx) => (
-                                            <motion.div
-                                                key={fIdx}
-                                                initial={{ x: -20, opacity: 0 }}
-                                                animate={{ x: 0, opacity: 1 }}
-                                                transition={{ delay: fIdx * 0.03 }}
-                                                onClick={() => handleOpenFile(file)}
-                                                className="p-4 bg-slate-950/40 border border-white/5 rounded-xl hover:border-h-cyan/30 hover:bg-h-cyan/5 transition-all group flex items-start justify-between gap-6 cursor-pointer"
-                                            >
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-3 mb-2">
-                                                        <FileText className="w-4 h-4 text-slate-500 group-hover:text-h-cyan transition-colors" />
-                                                        <span className="text-xs font-mono font-bold text-slate-200 truncate">
-                                                            {file.path}
-                                                        </span>
-                                                    </div>
-                                                    <p className="text-[11px] text-slate-500 font-medium leading-relaxed italic border-l-2 border-h-cyan/20 pl-4">
-                                                        "{file.justification}"
-                                                    </p>
-                                                </div>
-                                                <div className="shrink-0 flex flex-col items-end gap-3 text-right">
-                                                    <span className="text-[9px] px-2 py-1 bg-slate-800 rounded font-mono text-slate-400 uppercase tracking-widest">
-                                                        VERIFIED
+                        {/* Modal Search Bar */}
+                        <div className="px-6 py-4 bg-scada-bg border-b border-scada-border">
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-scada-muted" />
+                                <input
+                                    type="text"
+                                    placeholder={`Search in ${selectedCategory}...`}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full bg-scada-panel border border-scada-border rounded-sm py-4 pl-12 pr-6 text-sm font-mono text-scada-text focus:border-status-info focus:outline-none transition-all placeholder-scada-muted"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Modal Content */}
+                        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar bg-scada-bg">
+                            <div className="grid grid-cols-1 gap-3">
+                                {filteredSources.length > 0 ? (
+                                    filteredSources.map((file, fIdx) => (
+                                        <div
+                                            key={fIdx}
+                                            onClick={() => handleOpenFile(file)}
+                                            className="p-4 bg-scada-panel border border-scada-border rounded-sm hover:border-status-info/50 transition-all group flex items-start justify-between gap-6 cursor-pointer"
+                                        >
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <FileText className="w-4 h-4 text-scada-muted group-hover:text-status-info transition-colors" />
+                                                    <span className="text-xs font-mono font-bold text-scada-text truncate uppercase">
+                                                        {file.path}
                                                     </span>
-                                                    <span className="text-[9px] font-black text-h-cyan uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        OPEN SOURCE
-                                                    </span>
-                                                    <ExternalLink className="w-4 h-4 text-slate-600 group-hover:text-h-cyan transition-colors" />
                                                 </div>
-                                            </motion.div>
-                                        ))
-                                    ) : (
-                                        <div className="py-20 flex flex-col items-center justify-center text-slate-600 text-center">
-                                            <Search className="w-12 h-12 mb-4 opacity-20" />
-                                            <p className="font-mono text-sm">NO EVIDENCE MATCHING SCAN PARAMETERS</p>
+                                                <p className="text-[11px] text-scada-muted font-medium leading-relaxed italic border-l-2 border-status-info/20 pl-4 font-mono">
+                                                    "{file.justification}"
+                                                </p>
+                                            </div>
+                                            <div className="shrink-0 flex flex-col items-end gap-3 text-right">
+                                                <span className="text-[9px] px-2 py-1 bg-scada-bg border border-scada-border rounded-sm font-mono text-scada-muted uppercase tracking-widest">
+                                                    VERIFIED
+                                                </span>
+                                                <span className="text-[9px] font-black text-status-info uppercase tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    OPEN SOURCE
+                                                </span>
+                                                <ExternalLink className="w-4 h-4 text-scada-muted group-hover:text-status-info transition-colors" />
+                                            </div>
                                         </div>
-                                    )}
-                                </div>
+                                    ))
+                                ) : (
+                                    <div className="py-20 flex flex-col items-center justify-center text-scada-muted text-center">
+                                        <Search className="w-12 h-12 mb-4 opacity-20" />
+                                        <p className="font-mono text-sm uppercase">NO EVIDENCE MATCHING SCAN PARAMETERS</p>
+                                    </div>
+                                )}
                             </div>
+                        </div>
 
-                            {/* Modal Footer */}
-                            <div className="p-4 bg-h-gold/5 border-t border-white/5 text-center">
-                                <p className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.3em]">
-                                    NC-9.0 Integrity Layer // SHA-256 Validated
-                                </p>
-                            </div>
-                        </motion.div>
+                        {/* Modal Footer */}
+                        <div className="p-4 bg-scada-panel border-t border-scada-border text-center">
+                            <p className="text-[9px] text-scada-muted font-mono uppercase tracking-[0.3em]">
+                                NC-9.0 Integrity Layer // SHA-256 Validated
+                            </p>
+                        </div>
                     </div>
-                )}
-            </AnimatePresence>
+                </div>
+            )}
 
             {/* DOSSIER VIEWER MODAL */}
             {selectedFile && (

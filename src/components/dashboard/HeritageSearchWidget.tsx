@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, AlertCircle, BookOpen, ChevronRight, X, AlertTriangle } from 'lucide-react';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { LegacyKnowledgeService, WTFCase } from '../../services/LegacyKnowledgeService';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,17 +15,17 @@ import { formatDistanceToNow } from 'date-fns';
  */
 
 const severityColors: Record<string, string> = {
-    CRITICAL: 'bg-red-500 text-white border-red-400',
-    HIGH: 'bg-amber-500 text-black border-amber-400',
-    MEDIUM: 'bg-yellow-500 text-black border-yellow-400',
-    LOW: 'bg-slate-500 text-white border-slate-400'
+    CRITICAL: 'bg-status-error text-white border-status-error',
+    HIGH: 'bg-status-warning text-black border-status-warning',
+    MEDIUM: 'bg-status-info text-white border-status-info',
+    LOW: 'bg-scada-muted text-white border-scada-border'
 };
 
 const severityBg: Record<string, string> = {
-    CRITICAL: 'bg-red-500/10 border-red-500/20 hover:bg-red-500/20',
-    HIGH: 'bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20',
-    MEDIUM: 'bg-yellow-500/10 border-yellow-500/20 hover:bg-yellow-500/20',
-    LOW: 'bg-slate-900/50 border-white/5 hover:bg-slate-800/80'
+    CRITICAL: 'bg-status-error/10 border-status-error/20 hover:bg-status-error/20',
+    HIGH: 'bg-status-warning/10 border-status-warning/20 hover:bg-status-warning/20',
+    MEDIUM: 'bg-status-info/10 border-status-info/20 hover:bg-status-info/20',
+    LOW: 'bg-scada-bg border-scada-border hover:bg-scada-panel'
 };
 
 export const HeritageSearchWidget: React.FC = () => {
@@ -85,27 +84,27 @@ export const HeritageSearchWidget: React.FC = () => {
     };
 
     return (
-        <GlassCard className="relative overflow-hidden">
+        <div className="relative overflow-hidden bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
             {/* Header */}
             <div
-                className="flex items-center justify-between p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors"
+                className="flex items-center justify-between p-4 border-b border-scada-border cursor-pointer hover:bg-scada-bg transition-colors"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center border border-purple-500/30">
-                        <BookOpen className="w-5 h-5 text-purple-400" />
+                    <div className="w-10 h-10 rounded-sm bg-status-info/20 flex items-center justify-center border border-status-info/30">
+                        <BookOpen className="w-5 h-5 text-status-info" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider">
+                        <h3 className="text-sm font-bold text-scada-text uppercase tracking-wider font-header">
                             {t('dashboard.heritageSearch.title')}
                         </h3>
-                        <p className="text-[10px] text-slate-500 font-mono">
+                        <p className="text-[10px] text-scada-muted font-mono uppercase">
                             Legacy Knowledge Base
                         </p>
                     </div>
                 </div>
                 <ChevronRight
-                    className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
+                    className={`w-5 h-5 text-scada-muted transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
                 />
             </div>
 
@@ -114,20 +113,20 @@ export const HeritageSearchWidget: React.FC = () => {
                 <div className="p-4 space-y-4 animate-in slide-in-from-top-2 duration-300">
                     {/* Search Input - High Contrast */}
                     <div className="relative group">
-                        <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${isSearching ? 'text-purple-400 animate-pulse' : 'text-slate-400'}`} />
+                        <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${isSearching ? 'text-status-info animate-pulse' : 'text-scada-muted'}`} />
                         <input
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder={t('dashboard.heritageSearch.placeholder', 'Search symptoms, codes...')}
-                            className="w-full pl-10 pr-10 py-3 bg-black/40 border-2 border-slate-700/50 rounded-xl text-white text-base placeholder:text-slate-500 focus:outline-none focus:border-purple-500 focus:bg-black/60 transition-all"
+                            className="w-full pl-10 pr-10 py-2 bg-scada-bg border border-scada-border rounded-sm text-scada-text text-sm font-mono placeholder:text-scada-muted focus:outline-none focus:border-status-info transition-all uppercase"
                         />
                         {query.length > 0 && (
                             <button
                                 onClick={clearSearch}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-slate-700 rounded-full transition-colors"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-scada-panel rounded-sm transition-colors"
                             >
-                                <X className="w-4 h-4 text-slate-400" />
+                                <X className="w-4 h-4 text-scada-muted hover:text-scada-text" />
                             </button>
                         )}
                     </div>
@@ -137,41 +136,41 @@ export const HeritageSearchWidget: React.FC = () => {
                         {/* Loading State */}
                         {isSearching && (
                             <div className="text-center py-4">
-                                <span className="text-xs text-purple-400 font-mono animate-pulse">Searching Archive...</span>
+                                <span className="text-xs text-status-info font-mono animate-pulse uppercase">Searching Archive...</span>
                             </div>
                         )}
 
                         {/* Valid Results */}
                         {!isSearching && results.length > 0 && (
                             <div className="flex flex-col gap-2">
-                                <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider ml-1">
+                                <span className="text-[10px] uppercase font-bold text-scada-muted tracking-wider ml-1 font-mono">
                                     Matches Found ({results.length})
                                 </span>
                                 {results.map((caseItem) => (
                                     <button
                                         key={caseItem.id}
                                         onClick={() => handleResultClick(caseItem)}
-                                        className={`w-full p-3 rounded-lg border text-left transition-all group relative overflow-hidden ${severityBg[caseItem.severity]}`}
+                                        className={`w-full p-3 rounded-sm border text-left transition-all group relative overflow-hidden ${severityBg[caseItem.severity]}`}
                                     >
                                         <div className="flex items-start justify-between gap-3 relative z-10">
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 mb-1.5">
-                                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase border ${severityColors[caseItem.severity]}`}>
+                                                    <span className={`px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase border ${severityColors[caseItem.severity]}`}>
                                                         {caseItem.severity}
                                                     </span>
-                                                    <span className="text-[10px] text-slate-400 font-mono">
+                                                    <span className="text-[10px] text-scada-muted font-mono tabular-nums">
                                                         {formatDistanceToNow(caseItem.dateOccurred, { addSuffix: true })}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm text-slate-200 font-medium line-clamp-2 leading-snug group-hover:text-white transition-colors">
+                                                <p className="text-sm text-scada-text font-medium line-clamp-2 leading-snug group-hover:text-status-info transition-colors font-mono">
                                                     {caseItem.symptom}
                                                 </p>
-                                                <div className="text-[10px] text-slate-500 mt-1.5 line-clamp-1 flex items-center gap-1">
+                                                <div className="text-[10px] text-scada-muted mt-1.5 line-clamp-1 flex items-center gap-1 font-mono uppercase">
                                                     <BookOpen className="w-3 h-3" />
                                                     {caseItem.realCause}
                                                 </div>
                                             </div>
-                                            <ChevronRight className="w-5 h-5 text-slate-600 group-hover:text-purple-400 transition-colors flex-shrink-0 self-center" />
+                                            <ChevronRight className="w-5 h-5 text-scada-muted group-hover:text-status-info transition-colors flex-shrink-0 self-center" />
                                         </div>
                                     </button>
                                 ))}
@@ -180,12 +179,12 @@ export const HeritageSearchWidget: React.FC = () => {
 
                         {/* No Results Fallback */}
                         {!isSearching && debouncedQuery.length >= 2 && results.length === 0 && (
-                            <div className="flex flex-col items-center justify-center p-6 bg-slate-900/30 rounded-xl border border-dashed border-slate-700/50 text-center">
-                                <AlertCircle className="w-8 h-8 text-slate-600 mb-2" />
-                                <span className="text-sm text-slate-400 font-medium">
+                            <div className="flex flex-col items-center justify-center p-6 bg-scada-bg rounded-sm border border-dashed border-scada-border text-center">
+                                <AlertCircle className="w-8 h-8 text-scada-muted mb-2 opacity-50" />
+                                <span className="text-sm text-scada-muted font-medium font-mono uppercase">
                                     {t('dashboard.heritageSearch.noResults', 'No exact matches found')}
                                 </span>
-                                <span className="text-[10px] text-slate-500 mt-1 max-w-[200px]">
+                                <span className="text-[10px] text-scada-muted mt-1 max-w-[200px] font-mono">
                                     Try distinct keywords like "vibration" or "bearing".
                                 </span>
                             </div>
@@ -195,8 +194,8 @@ export const HeritageSearchWidget: React.FC = () => {
                         {!isSearching && debouncedQuery.length < 2 && (
                             <div className="space-y-3 pt-2">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <AlertTriangle className="w-3 h-3 text-red-400" />
-                                    <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">
+                                    <AlertTriangle className="w-3 h-3 text-status-error" />
+                                    <span className="text-[9px] text-scada-muted font-bold uppercase tracking-wider font-mono">
                                         Active Critical Alerts ({turbineFamily})
                                     </span>
                                 </div>
@@ -204,16 +203,16 @@ export const HeritageSearchWidget: React.FC = () => {
                                     <button
                                         key={caseItem.id}
                                         onClick={() => handleResultClick(caseItem)}
-                                        className="w-full p-2.5 bg-red-500/5 hover:bg-red-500/10 rounded-lg border border-red-500/20 transition-all text-left group"
+                                        className="w-full p-2.5 bg-status-error/5 hover:bg-status-error/10 rounded-sm border border-status-error/20 transition-all text-left group"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+                                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-status-error animate-pulse flex-shrink-0" />
                                             <div>
-                                                <p className="text-xs text-slate-300 font-medium group-hover:text-red-300 transition-colors line-clamp-1">
+                                                <p className="text-xs text-scada-text font-medium group-hover:text-status-error transition-colors line-clamp-1 font-mono">
                                                     {caseItem.symptom}
                                                 </p>
                                                 <div className="flex items-center gap-2 mt-1">
-                                                    <span className="text-[9px] text-slate-500 font-mono">
+                                                    <span className="text-[9px] text-scada-muted font-mono tabular-nums">
                                                         {formatDistanceToNow(caseItem.dateOccurred, { addSuffix: true })}
                                                     </span>
                                                 </div>
@@ -222,13 +221,13 @@ export const HeritageSearchWidget: React.FC = () => {
                                     </button>
                                 ))}
                                 {recommendedCases.length === 0 && (
-                                    <p className="text-[10px] text-slate-600 italic pl-2">No critical alerts for this unit type.</p>
+                                    <p className="text-[10px] text-scada-muted italic pl-2 font-mono">No critical alerts for this unit type.</p>
                                 )}
                             </div>
                         )}
                     </div>
                 </div>
             )}
-        </GlassCard>
+        </div>
     );
 };

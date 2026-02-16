@@ -2,9 +2,7 @@
 // Shows ONLY financial metrics, ROI, and business KPIs
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { TrendingUp, DollarSign, Calendar, Zap, Award, AlertTriangle } from 'lucide-react';
-import { GlassCard } from '../shared/components/ui/GlassCard';
 import { EnhancedAsset } from '../models/turbine/types';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { FinancialImpactEngine } from '../services/core/FinancialImpactEngine';
@@ -37,36 +35,36 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
     const assetMetrics = selectedAsset ? calculateAssetFinancials(selectedAsset) : null;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 bg-scada-bg p-6">
             {/* Header */}
-            <div className="mb-6">
-                <h2 className="text-3xl font-black uppercase tracking-tighter mb-2">
-                    <span className="text-white">Executive</span>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400 ml-2">
+            <div className="mb-6 border-b border-scada-border pb-4">
+                <h2 className="text-3xl font-black uppercase tracking-tighter mb-2 text-scada-text font-header">
+                    Executive
+                    <span className="text-status-ok ml-2">
                         Dashboard
                     </span>
                 </h2>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-scada-muted font-mono">
                     Financial performance and ROI overview - No technical details
                 </p>
             </div>
 
-            <GlassCard>
+            <div className="bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                     <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">Net Profit (Hourly)</p>
-                        <p className="text-3xl font-black text-white">€{Number(net?.netProfit ?? 0).toFixed(0)}</p>
+                        <p className="text-xs text-scada-muted uppercase font-bold font-mono mb-1">Net Profit (Hourly)</p>
+                        <p className="text-3xl font-black text-scada-text font-mono tabular-nums">€{Number(net?.netProfit ?? 0).toFixed(0)}</p>
                     </div>
                     <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">Molecular Debt (Buffer)</p>
-                        <p className="text-3xl font-black text-emerald-400">€{Number(impact?.maintenanceBufferEuro ?? 0).toFixed(0)}</p>
+                        <p className="text-xs text-scada-muted uppercase font-bold font-mono mb-1">Molecular Debt (Buffer)</p>
+                        <p className="text-3xl font-black text-status-ok font-mono tabular-nums">€{Number(impact?.maintenanceBufferEuro ?? 0).toFixed(0)}</p>
                     </div>
                     <div className="text-right">
-                        <p className="text-xs text-slate-400 uppercase font-bold">Revenue (Energy)</p>
-                        <p className="text-2xl font-black text-white">€{Number(energyRevenue).toFixed(0)}/h</p>
+                        <p className="text-xs text-scada-muted uppercase font-bold font-mono mb-1">Revenue (Energy)</p>
+                        <p className="text-2xl font-black text-scada-text font-mono tabular-nums">€{Number(energyRevenue).toFixed(0)}/h</p>
                     </div>
                 </div>
-            </GlassCard>
+            </div>
 
             {/* Fleet-Wide KPIs */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -101,9 +99,9 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
             </div>
 
             {/* ROI from Recent Optimizations */}
-            <GlassCard>
-                <h3 className="text-xl font-black uppercase mb-4 text-white flex items-center gap-2">
-                    <Award className="w-6 h-6 text-emerald-400" />
+            <div className="bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-6">
+                <h3 className="text-xl font-black uppercase mb-4 text-scada-text flex items-center gap-2 font-header">
+                    <Award className="w-6 h-6 text-status-ok" />
                     Return on Investment - Last 12 Months
                 </h3>
 
@@ -134,24 +132,24 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                     />
                 </div>
 
-                <div className="mt-6 p-4 bg-emerald-950/30 border border-emerald-500/30 rounded-lg">
+                <div className="mt-6 p-4 bg-status-ok/5 border border-status-ok/30 rounded-sm">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-emerald-400 font-bold uppercase mb-1">Total ROI (12 months)</p>
-                            <p className="text-3xl font-black text-white">$1.795M</p>
-                            <p className="text-xs text-slate-400">on $550k invested</p>
+                            <p className="text-sm text-status-ok font-bold uppercase mb-1 font-mono">Total ROI (12 months)</p>
+                            <p className="text-3xl font-black text-scada-text font-mono tabular-nums">$1.795M</p>
+                            <p className="text-xs text-scada-muted font-mono">on $550k invested</p>
                         </div>
                         <div className="text-right">
-                            <p className="text-5xl font-black text-emerald-400">226%</p>
-                            <p className="text-xs text-slate-400 uppercase font-bold">Average ROI</p>
+                            <p className="text-5xl font-black text-status-ok font-mono tabular-nums">226%</p>
+                            <p className="text-xs text-scada-muted uppercase font-bold font-mono">Average ROI</p>
                         </div>
                     </div>
                 </div>
-            </GlassCard>
+            </div>
 
             {/* Cost Savings Breakdown */}
-            <GlassCard>
-                <h3 className="text-xl font-black uppercase mb-4 text-white">
+            <div className="bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-6">
+                <h3 className="text-xl font-black uppercase mb-4 text-scada-text font-header">
                     Cost Savings Breakdown
                 </h3>
 
@@ -160,38 +158,38 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                         category="Reduced Downtime"
                         amount={420000}
                         percentage={35}
-                        color="emerald"
+                        color="bg-status-ok"
                     />
                     <SavingsBar
                         category="Energy Efficiency Gains"
                         amount={385000}
                         percentage={32}
-                        color="green"
+                        color="bg-status-info"
                     />
                     <SavingsBar
                         category="Prevented Major Failures"
                         amount={290000}
                         percentage={24}
-                        color="teal"
+                        color="bg-status-warning"
                     />
                     <SavingsBar
                         category="Optimized Spare Parts Inventory"
                         amount={110000}
                         percentage={9}
-                        color="cyan"
+                        color="bg-scada-muted"
                     />
                 </div>
 
                 <div className="mt-4 text-right">
-                    <p className="text-sm text-slate-400">Total Annual Savings</p>
-                    <p className="text-2xl font-black text-emerald-400">$1.205M</p>
+                    <p className="text-sm text-scada-muted font-mono">Total Annual Savings</p>
+                    <p className="text-2xl font-black text-status-ok font-mono tabular-nums">$1.205M</p>
                 </div>
-            </GlassCard>
+            </div>
 
             {/* Risk Alerts (Financial Impact Only) */}
-            <GlassCard>
-                <h3 className="text-xl font-black uppercase mb-4 text-white flex items-center gap-2">
-                    <AlertTriangle className="w-6 h-6 text-amber-400" />
+            <div className="bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-6">
+                <h3 className="text-xl font-black uppercase mb-4 text-scada-text flex items-center gap-2 font-header">
+                    <AlertTriangle className="w-6 h-6 text-status-warning" />
                     Financial Risks & Opportunities
                 </h3>
 
@@ -218,12 +216,12 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                         roi={null}
                     />
                 </div>
-            </GlassCard>
+            </div>
 
             {/* Comparison to Industry Benchmarks */}
             {selectedAsset && assetMetrics && (
-                <GlassCard>
-                    <h3 className="text-xl font-black uppercase mb-4 text-white">
+                <div className="bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-6">
+                    <h3 className="text-xl font-black uppercase mb-4 text-scada-text font-header">
                         {selectedAsset.name} - Financial Performance
                     </h3>
 
@@ -254,7 +252,7 @@ export const ExecutiveFinancialDashboard: React.FC<ExecutiveDashboardProps> = ({
                             unit="%"
                         />
                     </div>
-                </GlassCard>
+                </div>
             )}
         </div>
     );
@@ -271,16 +269,16 @@ interface FinancialKPIProps {
 }
 
 const FinancialKPI: React.FC<FinancialKPIProps> = ({ icon: Icon, label, value, change, positive }) => (
-    <GlassCard className="p-4">
+    <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
         <div className="flex items-center justify-between mb-2">
-            <Icon className="w-8 h-8 text-emerald-400" />
-            <div className={`text-sm font-bold ${positive ? 'text-emerald-400' : 'text-red-400'}`}>
+            <Icon className="w-8 h-8 text-status-ok" />
+            <div className={`text-sm font-bold font-mono ${positive ? 'text-status-ok' : 'text-status-error'}`}>
                 {positive ? '+' : ''}{change.toFixed(1)}%
             </div>
         </div>
-        <p className="text-xs text-slate-400 uppercase font-bold mb-1">{label}</p>
-        <p className="text-2xl font-black text-white">{value}</p>
-    </GlassCard>
+        <p className="text-xs text-scada-muted uppercase font-bold font-mono mb-1">{label}</p>
+        <p className="text-2xl font-black text-scada-text font-mono tabular-nums">{value}</p>
+    </div>
 );
 
 const ROICard: React.FC<{
@@ -291,31 +289,31 @@ const ROICard: React.FC<{
     paybackMonths: number;
     status: 'COMPLETED' | 'IN_PROGRESS';
 }> = ({ title, investment, returns, roi, paybackMonths, status }) => (
-    <div className="p-4 bg-slate-800/30 border border-emerald-500/30 rounded-lg">
+    <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
         <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-bold text-white">{title}</h4>
-            <span className={`px-2 py-1 rounded text-xs font-bold ${status === 'COMPLETED' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
+            <h4 className="text-sm font-bold text-scada-text font-mono">{title}</h4>
+            <span className={`px-2 py-1 rounded-sm text-xs font-bold font-mono ${status === 'COMPLETED' ? 'bg-status-ok/10 text-status-ok' : 'bg-status-warning/10 text-status-warning'
                 }`}>
                 {status === 'COMPLETED' ? 'DONE' : 'IN PROGRESS'}
             </span>
         </div>
 
-        <div className="space-y-2 text-xs">
+        <div className="space-y-2 text-xs font-mono">
             <div className="flex justify-between">
-                <span className="text-slate-400">Investment:</span>
-                <span className="text-white font-bold">${(investment / 1000).toFixed(0)}k</span>
+                <span className="text-scada-muted">Investment:</span>
+                <span className="text-scada-text font-bold tabular-nums">${(investment / 1000).toFixed(0)}k</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-slate-400">Returns:</span>
-                <span className="text-emerald-400 font-bold">${(returns / 1000).toFixed(0)}k</span>
+                <span className="text-scada-muted">Returns:</span>
+                <span className="text-status-ok font-bold tabular-nums">${(returns / 1000).toFixed(0)}k</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-slate-400">ROI:</span>
-                <span className="text-white font-black text-lg">{roi}%</span>
+                <span className="text-scada-muted">ROI:</span>
+                <span className="text-scada-text font-black text-lg tabular-nums">{roi}%</span>
             </div>
             <div className="flex justify-between">
-                <span className="text-slate-400">Payback:</span>
-                <span className="text-white font-bold">{paybackMonths.toFixed(1)} months</span>
+                <span className="text-scada-muted">Payback:</span>
+                <span className="text-scada-text font-bold tabular-nums">{paybackMonths.toFixed(1)} months</span>
             </div>
         </div>
     </div>
@@ -329,14 +327,13 @@ const SavingsBar: React.FC<{
 }> = ({ category, amount, percentage, color }) => (
     <div>
         <div className="flex items-center justify-between mb-1">
-            <span className="text-sm text-slate-300">{category}</span>
-            <span className="text-sm font-bold text-white">${(amount / 1000).toFixed(0)}k</span>
+            <span className="text-sm text-scada-muted font-mono">{category}</span>
+            <span className="text-sm font-bold text-scada-text font-mono tabular-nums">${(amount / 1000).toFixed(0)}k</span>
         </div>
-        <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-            <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${percentage}%` }}
-                className={`h-full bg-gradient-to-r from-${color}-500 to-${color}-400`}
+        <div className="w-full h-2 bg-scada-bg rounded-sm overflow-hidden">
+            <div
+                style={{ width: `${percentage}%` }}
+                className={`h-full ${color}`}
             />
         </div>
     </div>
@@ -350,21 +347,21 @@ const RiskAlert: React.FC<{
     roi: number | null;
 }> = ({ severity, title, financialImpact, recommendation, roi }) => {
     const severityColors = {
-        HIGH: 'border-red-500/50 bg-red-950/20',
-        MEDIUM: 'border-amber-500/50 bg-amber-950/20',
-        LOW: 'border-blue-500/50 bg-blue-950/20'
+        HIGH: 'border-status-error/50 bg-status-error/5',
+        MEDIUM: 'border-status-warning/50 bg-status-warning/5',
+        LOW: 'border-status-info/50 bg-status-info/5'
     };
 
     return (
-        <div className={`p-4 border rounded-lg ${severityColors[severity]}`}>
+        <div className={`p-4 border rounded-sm ${severityColors[severity]}`}>
             <div className="flex items-start justify-between mb-2">
                 <div>
-                    <h4 className="text-sm font-bold text-white mb-1">{title}</h4>
-                    <p className="text-xs text-slate-400">{recommendation}</p>
+                    <h4 className="text-sm font-bold text-scada-text mb-1 font-mono">{title}</h4>
+                    <p className="text-xs text-scada-muted font-mono">{recommendation}</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-lg font-black text-red-400">{financialImpact}</p>
-                    {roi && <p className="text-xs text-emerald-400">ROI: {roi}%</p>}
+                    <p className="text-lg font-black text-status-error font-mono tabular-nums">{financialImpact}</p>
+                    {roi && <p className="text-xs text-status-ok font-mono tabular-nums">ROI: {roi}%</p>}
                 </div>
             </div>
         </div>
@@ -383,16 +380,16 @@ const BenchmarkCard: React.FC<{
     const percentage = Math.abs((difference / industryAverage) * 100);
 
     return (
-        <div className="p-4 bg-slate-800/30 rounded-lg">
-            <p className="text-xs text-slate-400 uppercase font-bold mb-2">{metric}</p>
+        <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+            <p className="text-xs text-scada-muted uppercase font-bold mb-2 font-mono">{metric}</p>
             <div className="flex items-end justify-between">
                 <div>
-                    <p className="text-2xl font-black text-white">{yourValue}{unit}</p>
-                    <p className="text-xs text-slate-500">vs {industryAverage}{unit} avg</p>
+                    <p className="text-2xl font-black text-scada-text font-mono tabular-nums">{yourValue}{unit}</p>
+                    <p className="text-xs text-scada-muted font-mono">vs {industryAverage}{unit} avg</p>
                 </div>
-                <div className={`text-right ${isGood ? 'text-emerald-400' : 'text-amber-400'}`}>
+                <div className={`text-right ${isGood ? 'text-status-ok' : 'text-status-warning'}`}>
                     <p className="text-lg font-black">{isGood ? '✓' : '!'}</p>
-                    <p className="text-xs font-bold">{isGood ? '+' : ''}{percentage.toFixed(0)}%</p>
+                    <p className="text-xs font-bold font-mono tabular-nums">{isGood ? '+' : ''}{percentage.toFixed(0)}%</p>
                 </div>
             </div>
         </div>

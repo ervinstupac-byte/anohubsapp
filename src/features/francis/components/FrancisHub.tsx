@@ -72,22 +72,22 @@ export const FrancisHub: React.FC = () => {
     }, [xrayEnabled, activeAssetId]);
 
     return (
-        <div className="flex flex-col h-screen w-full bg-[#0b1121] text-white overflow-hidden transition-colors duration-500">
+        <div className="flex flex-col h-screen w-full bg-scada-bg text-scada-text overflow-hidden transition-colors duration-500">
             {/* Top Header Section */}
-            <header className="px-6 py-4 border-b border-cyan-900/40 flex items-center justify-between bg-black/20 backdrop-blur-md z-50">
+            <header className="px-6 py-4 border-b border-scada-border flex items-center justify-between bg-scada-panel z-50">
                 <div className="flex items-center gap-6 font-mono tracking-tighter uppercase">
                     <div className="flex flex-col">
-                        <span className="text-cyan-500 text-xs font-bold">Project Cerebro</span>
-                        <span className="text-white text-lg leading-none">Francis Hub</span>
+                        <span className="text-status-info text-xs font-bold">Project Cerebro</span>
+                        <span className="text-scada-text text-lg leading-none">Francis Hub</span>
                     </div>
-                    <div className="h-8 w-[1px] bg-cyan-900/50 mx-2" />
+                    <div className="h-8 w-[1px] bg-scada-border mx-2" />
                     <div className="flex flex-col opacity-60">
                         <span className="text-[10px]">Current Schema</span>
                         <span className="text-sm">{viewMode === 'hall' ? 'Machine Hall NC-4.4' : 'Generator Detail (Surgical)'}</span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-8 font-mono text-[10px] uppercase tracking-widest text-cyan-500/60">
+                <div className="flex items-center gap-8 font-mono text-[10px] uppercase tracking-widest text-scada-muted">
                     <button
                         onClick={() => {
                             setXrayEnabled(prev => {
@@ -99,13 +99,13 @@ export const FrancisHub: React.FC = () => {
                                 return next;
                             });
                         }}
-                        className={`px-2 py-1 rounded transition-all ${xrayEnabled ? 'bg-cyan-500 text-black' : 'bg-black/20 text-cyan-300'}`}
+                        className={`px-2 py-1 rounded-sm transition-all ${xrayEnabled ? 'bg-status-info text-scada-bg' : 'bg-scada-bg border border-scada-border text-status-info'}`}
                     >
                         X‑Ray
                     </button>
 
                     <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-status-info" />
                         <span>Telemetry Link: Active</span>
                     </div>
 
@@ -114,12 +114,11 @@ export const FrancisHub: React.FC = () => {
                     {/* Commander Mode Toggle (NC-8.0) */}
                     <button
                         onClick={toggleCommanderMode}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded border transition-all ${isCommanderMode ? 'border-h-gold bg-h-gold/20 text-h-gold shadow-[0_0_15px_rgba(255,184,0,0.2)]' : 'border-white/10 text-slate-500 hover:border-white/20'}`}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-sm border transition-all ${isCommanderMode ? 'border-status-warning bg-status-warning/20 text-status-warning' : 'border-scada-border text-scada-muted hover:border-scada-text'}`}
                     >
                         <Shield className={`w-3 h-3 ${isCommanderMode ? 'fill-current' : ''}`} />
                         <span className="font-bold tracking-widest">{isCommanderMode ? 'COMMANDER ACTIVE // NC-9.0' : 'COMMANDER MODE // NC-9.0'}</span>
                     </button>
-
                     <div className="opacity-30">|</div>
 
                     <div>{selectedAsset?.name || 'Bihac'} / {selectedAsset?.specs?.power_output || '50.8'} MW</div>
@@ -131,10 +130,10 @@ export const FrancisHub: React.FC = () => {
 
                 {/* Left Panel: Surgical Index (Hidden in Commander Mode) */}
                 {!isCommanderMode && (
-                    <aside className="border-r border-cyan-900/20 bg-black/10 flex flex-col overflow-hidden">
-                        <div className="p-6 bg-cyan-950/20 border-b border-cyan-900/30">
-                            <h2 className="text-cyan-400 font-mono text-xs uppercase tracking-[0.2em] mb-1">Surgical Index</h2>
-                            <p className="text-slate-500 text-[9px] font-mono leading-tight">Inspect component metadata via hover selection.</p>
+                    <aside className="border-r border-scada-border bg-scada-panel flex flex-col overflow-hidden">
+                        <div className="p-6 bg-scada-bg border-b border-scada-border">
+                            <h2 className="text-status-info font-mono text-xs uppercase tracking-[0.2em] mb-1">Surgical Index</h2>
+                            <p className="text-scada-muted text-[9px] font-mono leading-tight">Inspect component metadata via hover selection.</p>
                         </div>
 
                         <nav className="flex-1 overflow-y-auto px-4 py-2 space-y-1 custom-scrollbar scroll-p-2">
@@ -151,25 +150,25 @@ export const FrancisHub: React.FC = () => {
                                             setBigViewOpen(true);
                                         }
                                     }}
-                                    className={`w-full text-left group transition-all duration-300 relative overflow-hidden rounded-lg border
+                                    className={`w-full text-left group transition-all duration-300 relative overflow-hidden rounded-sm border
                       ${activeAssetId === asset.id
-                                            ? 'bg-cyan-500/10 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                                            : 'bg-transparent border-transparent hover:bg-white/[0.03]'}`}
+                                            ? 'bg-status-info/10 border-status-info/50 shadow-scada-card'
+                                            : 'bg-transparent border-transparent hover:bg-scada-bg'}`}
                                 >
                                     <div className="p-4 relative z-10">
                                         <div className="flex items-center justify-between mb-1">
                                             <span className={`font-mono text-xs font-bold uppercase transition-colors
-                          ${activeAssetId === asset.id ? 'text-cyan-400' : 'text-slate-400 group-hover:text-slate-200'}`}>
+                          ${activeAssetId === asset.id ? 'text-status-info' : 'text-scada-muted group-hover:text-scada-text'}`}>
                                                 {asset.label}
                                             </span>
                                             {asset.id === 'generator' && (
-                                                <span className="text-[8px] px-1.5 py-0.5 rounded border border-cyan-500/50 text-cyan-500 font-bold bg-cyan-950/20">
+                                                <span className="text-[8px] px-1.5 py-0.5 rounded-sm border border-status-info/50 text-status-info font-bold bg-status-info/10">
                                                     SOP PORTAL
                                                 </span>
                                             )}
                                         </div>
                                         <div className={`text-[10px] font-mono leading-none transition-opacity
-                        ${activeAssetId === asset.id ? 'text-cyan-500/60' : 'text-slate-600'}`}>
+                        ${activeAssetId === asset.id ? 'text-status-info/60' : 'text-scada-muted'}`}>
                                             {asset.detail}
                                         </div>
                                     </div>
@@ -177,7 +176,7 @@ export const FrancisHub: React.FC = () => {
                                     {activeAssetId === asset.id && (
                                         <motion.div
                                             layoutId="active-marker"
-                                            className="absolute left-0 top-0 bottom-0 w-1 bg-cyan-500"
+                                            className="absolute left-0 top-0 bottom-0 w-1 bg-status-info"
                                         />
                                     )}
                                 </button>
@@ -187,9 +186,9 @@ export const FrancisHub: React.FC = () => {
                 )}
 
                 {/* Center Panel: Surgical Digital Twin */}
-                <main className="relative flex items-center justify-center h-full bg-[#05080f] overflow-hidden group">
+                <main className="relative flex items-center justify-center h-full bg-scada-bg overflow-hidden group">
                     {/* Visual ambience glow */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.1)_0%,transparent_70%)] pointer-events-none" />
+                    <div className="absolute inset-0 bg-scada-bg pointer-events-none" />
 
                     <SurgicalDigitalTwin
                         viewMode={viewMode}
@@ -202,20 +201,20 @@ export const FrancisHub: React.FC = () => {
                     {/* Commander Mode Overlay (NC-8.0) */}
                     {isCommanderMode && (
                         <>
-                            <div className="absolute top-8 right-8 flex flex-col gap-4 items-end animate-in fade-in slide-in-from-top duration-700">
-                                <div className="flex items-center gap-3 px-4 py-2 bg-h-cyan/10 border border-h-cyan/30 rounded-lg backdrop-blur-md">
-                                    <CheckCircle className="w-4 h-4 text-h-cyan" />
-                                    <span className="text-xs font-black text-white uppercase tracking-widest">50 IEC 60041 Files </span>
+                            <div className="absolute top-8 right-8 flex flex-col gap-4 items-end">
+                                <div className="flex items-center gap-3 px-4 py-2 bg-status-info/10 border border-status-info/30 rounded-sm">
+                                    <CheckCircle className="w-4 h-4 text-status-info" />
+                                    <span className="text-xs font-black text-scada-text uppercase tracking-widest">50 IEC 60041 Files </span>
                                 </div>
-                                <button className="flex items-center gap-3 px-6 py-3 bg-h-gold text-black rounded-lg font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,184,0,0.3)] hover:scale-105 transition-transform active:scale-95">
+                                <button className="flex items-center gap-3 px-6 py-3 bg-status-warning text-scada-bg rounded-sm font-black text-xs uppercase tracking-[0.2em] shadow-scada-card hover:bg-status-warning/90 transition-transform active:scale-95">
                                     <FileText className="w-4 h-4" />
                                     Generate Forensic PDF
                                 </button>
                             </div>
 
-                            <div className="absolute bottom-8 left-8 p-4 bg-black/40 border border-white/5 rounded-xl backdrop-blur-md max-w-xs animate-in fade-in slide-in-from-left duration-700">
-                                <div className="text-[10px] font-mono text-h-gold uppercase mb-2">Predictive Insight</div>
-                                <div className="text-[11px] text-slate-300 italic leading-relaxed">
+                            <div className="absolute bottom-8 left-8 p-4 bg-scada-panel border border-scada-border rounded-sm max-w-xs">
+                                <div className="text-[10px] font-mono text-status-warning uppercase mb-2">Predictive Insight</div>
+                                <div className="text-[11px] text-scada-muted italic leading-relaxed">
                                     "Linear regression suggests 100% stable structural integrity for the current operational window. No breaches predicted within 72h."
                                 </div>
                             </div>
@@ -223,26 +222,26 @@ export const FrancisHub: React.FC = () => {
                     )}
 
                     {/* Perspective View Label */}
-                    <div className="absolute top-6 left-6 pointer-events-none border border-cyan-900/40 px-3 py-1 bg-black/40 rounded backdrop-blur-sm">
-                        <span className="text-cyan-500 font-mono text-[10px] uppercase tracking-widest">Orthographic Projection</span>
+                    <div className="absolute top-6 left-6 pointer-events-none border border-scada-border px-3 py-1 bg-scada-panel rounded-sm">
+                        <span className="text-status-info font-mono text-[10px] uppercase tracking-widest">Orthographic Projection</span>
                     </div>
                 </main>
 
                 {/* Right Panel: Data & Telemetry Intelligence (Hidden in Commander Mode) */}
                 {!isCommanderMode && (
-                    <aside className="border-l border-cyan-900/20 bg-black/10 flex flex-col p-6 overflow-y-auto overflow-x-hidden">
+                    <aside className="border-l border-scada-border bg-scada-panel flex flex-col p-6 overflow-y-auto overflow-x-hidden">
                         {viewMode === 'generator' ? (
                             <div className="space-y-8 h-full animate-in fade-in slide-in-from-right duration-500">
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded bg-cyan-500/20 border border-cyan-500/50">
-                                            <span className="text-cyan-500 font-bold">AC</span>
+                                        <div className="p-2 rounded-sm bg-status-info/20 border border-status-info/50">
+                                            <span className="text-status-info font-bold">AC</span>
                                         </div>
-                                        <h3 className="text-white font-mono text-sm font-bold uppercase">Generator Integrity</h3>
+                                        <h3 className="text-scada-text font-mono text-sm font-bold uppercase">Generator Integrity</h3>
                                     </div>
                                     <button
                                         onClick={() => setViewMode('hall')}
-                                        className="w-full py-4 border-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500 hover:text-black transition-all font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                                        className="w-full py-4 border-2 border-status-info/50 text-status-info hover:bg-status-info hover:text-scada-bg transition-all font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
                                     >
                                         <span>&larr;</span>
                                         <span>Exit Detail View</span>
@@ -250,15 +249,15 @@ export const FrancisHub: React.FC = () => {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="p-4 border border-cyan-500/20 rounded-xl bg-cyan-950/20 font-mono">
-                                        <div className="text-cyan-500/40 text-[9px] uppercase mb-2">Diagnostic Log</div>
-                                        <div className="text-[10px] text-cyan-500/80 leading-relaxed italic">
+                                    <div className="p-4 border border-status-info/20 rounded-sm bg-status-info/10 font-mono">
+                                        <div className="text-status-info/40 text-[9px] uppercase mb-2">Diagnostic Log</div>
+                                        <div className="text-[10px] text-status-info/80 leading-relaxed italic">
                                             "Structural analysis pending for Generator NC-2. Vibration levels nominal. Stator temperature threshold monitored..."
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         {[1, 2, 3, 4].map(i => (
-                                            <div key={i} className="h-16 border border-slate-800 rounded bg-black/40 flex items-center justify-center text-[9px] text-slate-700 font-mono uppercase">
+                                            <div key={i} className="h-16 border border-scada-border rounded-sm bg-scada-bg flex items-center justify-center text-[9px] text-scada-muted font-mono uppercase">
                                                 Snsr_{i}
                                             </div>
                                         ))}
@@ -268,13 +267,13 @@ export const FrancisHub: React.FC = () => {
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center space-y-6 opacity-40">
                                 <div className="relative">
-                                    <div className="w-16 h-16 border-2 border-cyan-500/20 rounded-full animate-[ping_3s_linear_infinite]" />
+                                    <div className="w-16 h-16 border-2 border-status-info/20 rounded-full" />
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="w-8 h-8 bg-cyan-500/20 rounded-full blur-xl" />
+                                        <div className="w-8 h-8 bg-status-info/20 rounded-full" />
                                     </div>
                                 </div>
                                 <div className="text-center space-y-2">
-                                    <p className="text-cyan-400 font-mono text-[9px] uppercase font-bold tracking-widest">Ready</p>
+                                    <p className="text-status-info font-mono text-[9px] uppercase font-bold tracking-widest">Ready</p>
                                 </div>
                             </div>
                         )}
@@ -284,15 +283,15 @@ export const FrancisHub: React.FC = () => {
 
             {/* Big View Modal - displays an enlarged twin for selected asset OR Legacy SOP iframe */}
             {bigViewOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-                    <div className="relative w-[95%] h-[90%] bg-[#070814] border border-cyan-900/40 rounded-lg shadow-2xl overflow-hidden flex flex-col">
-                        <div className="flex items-center justify-between p-3 border-b border-cyan-900/40 bg-black/40">
-                            <div className="text-cyan-400 font-mono text-xs uppercase tracking-[0.2em] font-bold">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-scada-bg">
+                    <div className="relative w-[95%] h-[90%] bg-scada-bg border border-scada-border rounded-sm shadow-scada-card overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between p-3 border-b border-scada-border bg-scada-panel">
+                            <div className="text-status-info font-mono text-xs uppercase tracking-[0.2em] font-bold">
                                 {bigViewAsset === 'legacy-intelligence' ? 'LEGACY INTELLIGENCE // FRANCIS SOP DATABASE' : 'SURGICAL COMPONENT INSPECTION'}
                             </div>
                             <button
                                 onClick={() => { setBigViewOpen(false); setBigViewAsset(null); }}
-                                className="text-slate-300 hover:text-white px-3 py-1 rounded bg-white/5 hover:bg-white/10"
+                                className="text-scada-muted hover:text-scada-text px-3 py-1 rounded-sm bg-scada-bg hover:bg-scada-border"
                                 aria-label="Close Big View"
                             >
                                 CLOSE
@@ -321,7 +320,7 @@ export const FrancisHub: React.FC = () => {
             )}
 
             {/* Logic Integrity Footer */}
-            <footer className="px-6 py-2 border-t border-cyan-900/30 flex items-center justify-between bg-black/40 text-[9px] font-mono opacity-50 uppercase tracking-tighter">
+            <footer className="px-6 py-2 border-t border-scada-border flex items-center justify-between bg-scada-panel text-[9px] font-mono opacity-50 uppercase tracking-tighter">
                 <span>Logic Integrity: [OPTIMAL]</span>
                 <div className="flex gap-4">
                     <span>Lat: 44.81&deg; N</span>

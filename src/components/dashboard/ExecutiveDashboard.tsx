@@ -10,7 +10,6 @@ import {
 
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { CrossSectorEngine } from '../../services/EngineeringValidation';
-import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { EngineeringCard } from '../../shared/components/ui/EngineeringCard';
 import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { OptimizationHUD } from '../../shared/components/hud/OptimizationHUD';
@@ -481,7 +480,7 @@ export const ExecutiveDashboard: React.FC = () => {
     // ... existing renders ...
 
     return (
-        <div className="relative min-h-screen bg-hydro-charcoal text-slate-200 overflow-x-hidden">
+        <div className="relative min-h-screen bg-scada-bg text-scada-text overflow-x-hidden font-sans">
             <VetoControl
                 actionPending={!!pendingAction}
                 actionDescription={pendingAction?.desc || ''}
@@ -501,66 +500,59 @@ export const ExecutiveDashboard: React.FC = () => {
             {/* Inside the dashboard grid, near Ticker */}
             {/* ... */}
 
-            <AnimatePresence>
-                {isBooting && <BootSequence onComplete={() => setIsBooting(false)} speed={100} />}
-            </AnimatePresence>
-
-            <div className="fixed inset-0 pointer-events-none bg-grid-pattern opacity-10" />
-
-            <main className={`relative transition-all duration-1000 ${isBooting ? 'opacity-0 scale-95 blur-xl' : 'opacity-100 scale-100 blur-0'}`}>
-                <div className="relative z-10 p-5 md:p-8 pb-32 space-y-6 max-w-[1700px] mx-auto">
-                    <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-h-border pb-5">
+            <div className="relative z-10 p-4 md:p-6 pb-32 space-y-4 max-w-[1700px] mx-auto">
+                    <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-scada-border pb-4 bg-scada-panel/50 p-4 border-l-4 border-l-status-info">
                         <div className="flex items-start gap-4">
-                            <img src="/assets/images/logo.svg" alt="AnoHUB Logo" className="w-12 h-12 mt-1 object-contain" />
+                            <img src="/assets/images/logo.svg" alt="AnoHUB Logo" className="w-10 h-10 mt-1 object-contain grayscale opacity-80" />
                             <div>
                                 <div className="flex items-center gap-2 mb-1">
-                                    <div className="w-2 h-2 bg-h-cyan rounded-full" />
-                                    <span className="text-[9px] text-h-cyan font-mono font-bold uppercase tracking-[0.2em]">{t('dashboard.status_active')}</span>
+                                    <div className="w-2 h-2 bg-status-ok rounded-none" />
+                                    <span className="text-[10px] text-status-ok font-mono font-bold uppercase tracking-widest">{t('dashboard.status_active')}</span>
                                 </div>
-                                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase font-mono">{t('dashboard.title')}</h1>
-                                <p className="text-[11px] text-slate-500 font-mono mt-1 tracking-wider">{t('dashboard.subtitle')}</p>
+                                <h1 className="text-2xl md:text-4xl font-bold text-scada-text tracking-tight uppercase font-header">{t('dashboard.title')}</h1>
+                                <p className="text-xs text-scada-muted font-mono mt-0.5 tracking-wider">{t('dashboard.subtitle')}</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <FieldModeToggle />
                             <ModernButton
                                 variant="secondary"
                                 onClick={() => navigate('/maintenance/dashboard')}
-                                className="text-[10px] py-2 flex items-center gap-2"
+                                className="text-[10px] py-2 flex items-center gap-2 rounded-sm border-scada-border hover:bg-scada-border"
                             >
                                 <Wrench className="w-3 h-3" />
-                                {t('dashboard.performMaintenance', 'Perform Maintenance')}
+                                {t('dashboard.performMaintenance', 'MAINTENANCE')}
                             </ModernButton>
-                            <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                                <span className="text-[10px] text-emerald-400 font-mono font-black uppercase tracking-wider">{t('dashboard.neural_link')}</span>
+                            <div className="px-3 py-1.5 bg-scada-panel border border-status-ok/30 rounded-sm flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 bg-status-ok rounded-none" />
+                                <span className="text-[10px] text-status-ok font-mono font-bold uppercase tracking-wider">{t('dashboard.neural_link')}</span>
                             </div>
                             <ModernButton
                                 variant="primary"
                                 onClick={handleGenerateForensicPDF}
                                 id="generate-forensic-pdf-exclusive"
-                                className="btn-primary flex items-center gap-2 !px-4 !py-2 shadow-[0_0_15px_rgba(34,197,94,0.3)]"
+                                className="btn-primary flex items-center gap-2 !px-4 !py-2 rounded-sm border border-status-ok bg-status-ok/10 hover:bg-status-ok/20 text-status-ok shadow-scada-card"
                             >
                                 <FileText className="w-3 h-3" />
-                                {t('dashboard.export_forensic', 'Generate Forensic PDF')}
+                                {t('dashboard.export_forensic', 'GENERATE FORENSIC PDF')}
                             </ModernButton>
                             <ModernButton
                                 variant="ghost"
                                 onClick={handleExpertOverride}
                                 id="expert-override-king"
-                                className="!px-3 !py-2 text-[10px] ml-2"
+                                className="!px-3 !py-2 text-[10px] ml-2 rounded-sm border border-scada-border text-scada-muted hover:text-scada-text hover:bg-scada-border"
                             >
-                                {t('dashboard.override', 'Override')}
+                                {t('dashboard.override', 'OVERRIDE')}
                             </ModernButton>
                         </div>
                     </header>
 
                     {/* Hierarchical Sidebar (War Room navigation) */}
-                    <aside className={`fixed left-4 top-28 z-40 w-56 h-[70vh] overflow-auto bg-h-panel border border-h-border rounded-lg p-3 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
+                    <aside className={`fixed left-4 top-28 z-40 w-56 h-[70vh] overflow-auto bg-scada-panel border border-scada-border rounded-sm p-3 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-64'}`}>
                         <div className="flex items-center justify-between mb-2">
-                            <div className="text-xs font-mono font-bold">Systems</div>
-                            <button className="text-xs text-slate-400" onClick={() => setSidebarOpen(s => !s)}>{sidebarOpen ? 'Hide' : 'Show'}</button>
+                            <div className="text-xs font-mono font-bold uppercase text-scada-text">Systems</div>
+                            <button className="text-xs text-scada-muted hover:text-white uppercase font-mono" onClick={() => setSidebarOpen(s => !s)}>{sidebarOpen ? 'Hide' : 'Show'}</button>
                         </div>
                         <nav>
                             <ul className="space-y-1">
@@ -573,19 +565,19 @@ export const ExecutiveDashboard: React.FC = () => {
                     {/* Truth Badge: show Probability of Failure and confidence when high */}
                     {pf !== null ? (
                         <div className="mt-3 flex items-center gap-3">
-                            <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-2">
-                                <ShieldAlert className="w-4 h-4 text-red-400" />
+                            <div className="px-3 py-2 bg-status-error/10 border border-status-error rounded-sm text-status-error text-sm font-mono inline-flex items-center gap-2">
+                                <ShieldAlert className="w-4 h-4 text-status-error" />
                                 <div>
                                     <div className="text-[10px] uppercase font-bold">Probability of Failure</div>
-                                    <div className="font-black text-lg">{pf.toFixed(2)}%</div>
+                                    <div className="font-black text-lg tabular-nums">{pf.toFixed(2)}%</div>
                                 </div>
                             </div>
                             {forecast && (forecast.confidence || 0) >= 0.95 && sampleCount && sampleCount >= 720 ? (
-                                <div className="px-3 py-2 bg-emerald-900/10 border border-emerald-500/20 rounded text-emerald-300 text-sm font-mono inline-flex items-center gap-2">
-                                    <ShieldAlert className="w-4 h-4 text-emerald-400" />
+                                <div className="px-3 py-2 bg-status-ok/10 border border-status-ok rounded-sm text-status-ok text-sm font-mono inline-flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-status-ok" />
                                     <div>
                                         <div className="text-[10px] uppercase font-bold">High Confidence</div>
-                                        <div className="font-mono">Verified — {sampleCount} hourly samples</div>
+                                        <div className="font-mono tabular-nums">Verified — {sampleCount} hourly samples</div>
                                     </div>
                                 </div>
                             ) : null}
@@ -601,20 +593,20 @@ export const ExecutiveDashboard: React.FC = () => {
                         });
                         if (crossSectorEffects.length === 0) return null;
                         return (
-                            <div className="bg-amber-950/20 border border-amber-500/30 rounded-lg p-4">
+                            <div className="bg-scada-panel border border-status-warning rounded-sm p-4">
                                 <div className="flex items-center gap-2 mb-3">
-                                    <Link2 className="w-4 h-4 text-amber-400" />
-                                    <span className="text-[10px] text-amber-400 font-mono font-black uppercase tracking-widest">CROSS-SECTOR DOMINO EFFECT</span>
+                                    <Link2 className="w-4 h-4 text-status-warning" />
+                                    <span className="text-[10px] text-status-warning font-mono font-black uppercase tracking-widest">CROSS-SECTOR DOMINO EFFECT</span>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {crossSectorEffects.slice(0, 4).map((effect, idx) => (
-                                        <div key={idx} className="flex items-start gap-3 p-3 bg-slate-900/50 rounded border border-white/5">
-                                            <div className="flex-shrink-0 w-8 h-8 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                                                <Thermometer className="w-4 h-4 text-amber-400" />
+                                        <div key={idx} className="flex items-start gap-3 p-3 bg-scada-bg rounded-sm border border-scada-border">
+                                            <div className="flex-shrink-0 w-8 h-8 rounded-sm bg-status-warning/10 border border-status-warning/30 flex items-center justify-center">
+                                                <Thermometer className="w-4 h-4 text-status-warning" />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <div className="text-[9px] text-slate-500 font-mono uppercase tracking-wider">{effect.sourceSector} → {effect.affectedSector}</div>
-                                                <p className="text-[11px] text-amber-300 font-mono mt-0.5 leading-relaxed">{effect.message}</p>
+                                                <div className="text-[9px] text-scada-muted font-mono uppercase tracking-wider">{effect.sourceSector} → {effect.affectedSector}</div>
+                                                <p className="text-[11px] text-status-warning font-mono mt-0.5 leading-relaxed">{effect.message}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -625,18 +617,18 @@ export const ExecutiveDashboard: React.FC = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-6">
                         <div className="lg:col-span-4">
-                            <div className="bg-h-panel border border-h-border rounded-xl overflow-hidden h-full">
-                                <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
+                            <div className="bg-scada-panel border border-scada-border rounded-sm overflow-hidden h-full">
+                                <div className="px-5 py-4 border-b border-scada-border flex items-center justify-between">
                                     <div>
-                                        <h3 className="text-[10px] text-slate-500 font-mono font-black uppercase tracking-widest">{t('dashboard.topology.title')}</h3>
-                                        <span className="text-xs text-h-cyan font-mono">{t('dashboard.topology.digital_twin')}</span>
+                                        <h3 className="text-[10px] text-scada-muted font-mono font-black uppercase tracking-widest">{t('dashboard.topology.title')}</h3>
+                                        <span className="text-xs text-status-info font-mono">{t('dashboard.topology.digital_twin')}</span>
                                     </div>
-                                    <button onClick={() => navigate(`/${ROUTES.DIAGNOSTIC_TWIN}`)} className="text-[9px] text-h-cyan/70 hover:text-h-cyan font-mono uppercase flex items-center gap-1">
+                                    <button onClick={() => navigate(`/${ROUTES.DIAGNOSTIC_TWIN}`)} className="text-[9px] text-status-info/70 hover:text-status-info font-mono uppercase flex items-center gap-1">
                                         {t('dashboard.topology.full_view')} <ExternalLink className="w-3 h-3" />
                                     </button>
                                 </div>
                                 <div ref={threeContainerRef} className="relative w-full h-[320px] md:h-[380px]">
-                                    <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-sm text-slate-400">Loading 3D…</div>}>
+                                    <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-sm text-scada-muted">Loading 3D…</div>}>
                                         <TurbineRunner3D
                                             {...{
                                                 rpm: mechanical?.rpm ?? 500,
@@ -650,15 +642,15 @@ export const ExecutiveDashboard: React.FC = () => {
                                         />
                                     </Suspense>
                                 </div>
-                                <div className="grid grid-cols-2 border-t border-white/5">
-                                    <div className="p-4 flex flex-col items-center border-r border-white/5">
-                                        <span className="text-[8px] text-slate-500 uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.rated_power')}</span>
-                                        <span className="text-xl font-mono text-h-cyan font-black">{(assetIdentity?.ratedPowerMW ?? 4.2).toFixed(1)}<span className="text-[10px] text-slate-500 ml-1">MW</span></span>
+                                <div className="grid grid-cols-2 border-t border-scada-border">
+                                    <div className="p-4 flex flex-col items-center border-r border-scada-border">
+                                        <span className="text-[8px] text-scada-muted uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.rated_power')}</span>
+                                        <span className="text-xl font-mono text-status-info font-black tabular-nums">{(assetIdentity?.ratedPowerMW ?? 4.2).toFixed(1)}<span className="text-[10px] text-scada-muted ml-1">MW</span></span>
                                     </div>
                                     <div className="p-4 flex flex-col items-center">
-                                        <span className="text-[8px] text-slate-500 uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.grid_freq')}</span>
-                                        <span className={`text-xl font-mono font-black ${Math.abs(scadaFrequency - 50) > 0.5 ? 'text-h-yellow' : 'text-h-green'}`}>
-                                            {scadaFrequency.toFixed(2)}<span className="text-[10px] text-slate-500 ml-1">Hz</span>
+                                        <span className="text-[8px] text-scada-muted uppercase font-mono tracking-widest mb-1">{t('dashboard.topology.grid_freq')}</span>
+                                        <span className={`text-xl font-mono font-black tabular-nums ${Math.abs(scadaFrequency - 50) > 0.5 ? 'text-status-warning' : 'text-status-ok'}`}>
+                                            {scadaFrequency.toFixed(2)}<span className="text-[10px] text-scada-muted ml-1">Hz</span>
                                         </span>
                                     </div>
                                 </div>
@@ -667,8 +659,8 @@ export const ExecutiveDashboard: React.FC = () => {
 
                         <div className="lg:col-span-5 flex flex-col gap-5">
                             <AIInsightsPanel />
-                            <Suspense fallback={<div className="h-48 bg-gray-900/10 rounded animate-pulse" />}>
-                                <RevenueImpactCard className="rounded-xl shadow-2xl" />
+                            <Suspense fallback={<div className="h-48 bg-gray-900/10 rounded-sm animate-pulse" />}>
+                                <RevenueImpactCard className="rounded-sm shadow-scada-card" />
                             </Suspense>
 
                             {/* NC-11.0 Strategic Bridge */}
@@ -696,7 +688,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     title={t('dashboard.kpi.active_power')}
                                     value={(assetIdentity?.ratedPowerMW ?? 4.2).toFixed(1)}
                                     unit="MW"
-                                    icon={<Zap className="w-4 h-4 text-h-cyan" />}
+                                    icon={<Zap className="w-4 h-4 text-status-info" />}
                                     status="nominal"
                                     trendData={trendData.power}
                                     subtitle={`IEC 60041 • ${t('dashboard.kpi.active_power_sub')}`}
@@ -708,7 +700,7 @@ export const ExecutiveDashboard: React.FC = () => {
                                     title={t('dashboard.kpi.system_health')}
                                     value={scadaDiagnostics?.healthScore ?? 85}
                                     unit="%"
-                                    icon={<Activity className={`w-4 h-4 ${(scadaDiagnostics?.healthScore ?? 85) < 50 ? 'text-h-red' : 'text-h-green'}`} />}
+                                    icon={<Activity className={`w-4 h-4 ${(scadaDiagnostics?.healthScore ?? 85) < 50 ? 'text-status-error' : 'text-status-ok'}`} />}
                                     status={(scadaDiagnostics?.healthScore ?? 85) < 50 ? 'critical' : (scadaDiagnostics?.healthScore ?? 85) < 80 ? 'warning' : 'nominal'}
                                     trendData={trendData.health}
                                     subtitle="ISO 10816-3"
@@ -730,18 +722,18 @@ export const ExecutiveDashboard: React.FC = () => {
                                 />
                             </div>
 
-                            <div className="bg-h-panel border border-h-border rounded-lg p-5">
+                            <div className="bg-scada-panel border border-scada-border rounded-sm p-5">
                                 <div className="flex justify-between items-center mb-3">
                                     <div>
-                                        <p className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-1">{t('dashboard.kpi.performance_gap')}</p>
+                                        <p className="text-[9px] text-scada-muted uppercase font-mono font-black tracking-widest mb-1">{t('dashboard.kpi.performance_gap')}</p>
                                         <div className="flex items-baseline gap-2">
-                                            <span className={`text-3xl font-black font-mono ${(livePhysics?.performanceGap ?? 0) > 98 ? 'text-h-green' : 'text-h-yellow'}`}>{(livePhysics?.performanceGap ?? 96.5).toFixed(1)}%</span>
-                                            <span className="text-[9px] text-slate-500 font-mono">{t('dashboard.kpi.vs_design')}</span>
+                                            <span className={`text-3xl font-black font-mono tabular-nums ${(livePhysics?.performanceGap ?? 0) > 98 ? 'text-status-ok' : 'text-status-warning'}`}>{(livePhysics?.performanceGap ?? 96.5).toFixed(1)}%</span>
+                                            <span className="text-[9px] text-scada-muted font-mono">{t('dashboard.kpi.vs_design')}</span>
                                         </div>
                                     </div>
                                     <div className="w-1/2">
-                                        <div className="h-3 bg-h-dark rounded overflow-hidden relative">
-                                            <motion.div className="h-full bg-gradient-to-r from-h-green to-h-cyan" initial={{ width: 0 }} animate={{ width: `${Math.min(100, livePhysics?.performanceGap ?? 96.5)}%` }} transition={{ duration: 0.5 }} />
+                                        <div className="h-3 bg-scada-bg rounded-sm overflow-hidden relative">
+                                            <div className="h-full bg-status-ok transition-all duration-500" style={{ width: `${Math.min(100, livePhysics?.performanceGap ?? 96.5)}%` }} />
                                         </div>
                                     </div>
                                 </div>
@@ -749,41 +741,41 @@ export const ExecutiveDashboard: React.FC = () => {
 
                             {/* Pelton Live Efficiency Preview */}
                             {peltonPreview ? (
-                                <div className="bg-h-panel border border-h-border rounded-lg p-4 mt-4">
+                                <div className="bg-scada-panel border border-scada-border rounded-sm p-4 mt-4">
                                     <div className="flex items-center justify-between mb-3">
                                         <div>
-                                            <div className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest">Live Efficiency Gain</div>
-                                            <div className="text-2xl font-mono font-black text-h-cyan">{(peltonPreview.gain || 0).toFixed(2)}% <span className="text-sm text-slate-400 font-normal">vs baseline</span></div>
+                                            <div className="text-[9px] text-scada-muted uppercase font-mono font-black tracking-widest">Live Efficiency Gain</div>
+                                            <div className="text-2xl font-mono font-black text-status-info tabular-nums">{(peltonPreview.gain || 0).toFixed(2)}% <span className="text-sm text-scada-muted font-normal">vs baseline</span></div>
                                         </div>
                                         <div className="text-right">
-                                            <div className="text-[9px] text-slate-500 uppercase font-mono">Recommended Mode</div>
-                                            <div className={`mt-1 px-3 py-1 rounded font-mono font-black ${peltonPreview.decision.mode === 'PERFORMANCE' ? 'bg-h-cyan text-slate-900' : peltonPreview.decision.mode === 'BALANCE' ? 'bg-h-green text-slate-900' : 'bg-h-yellow text-slate-900'}`}>{peltonPreview.decision.mode}</div>
+                                            <div className="text-[9px] text-scada-muted uppercase font-mono">Recommended Mode</div>
+                                            <div className={`mt-1 px-3 py-1 rounded-sm font-mono font-black ${peltonPreview.decision.mode === 'PERFORMANCE' ? 'bg-status-info text-scada-bg' : peltonPreview.decision.mode === 'BALANCE' ? 'bg-status-ok text-scada-bg' : 'bg-status-warning text-scada-bg'}`}>{peltonPreview.decision.mode}</div>
                                         </div>
                                     </div>
-                                    <div className="text-sm text-slate-400 font-mono">Expected net: {(peltonPreview.decision.expectedNetBenefitEurPerHour || 0).toFixed(2)} €/h — sequence: {peltonPreview.seq.activeNozzles} nozzles</div>
+                                    <div className="text-sm text-scada-muted font-mono">Expected net: {(peltonPreview.decision.expectedNetBenefitEurPerHour || 0).toFixed(2)} €/h — sequence: {peltonPreview.seq.activeNozzles} nozzles</div>
                                 </div>
                             ) : null}
 
                             {/* Logistics & Brake Readiness */}
                             <div className="grid grid-cols-2 gap-4 mt-4">
-                                <div className="bg-h-panel border border-h-border rounded-lg p-4">
-                                    <div className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-2">Logistics Status</div>
+                                <div className="bg-scada-panel border border-scada-border rounded-sm p-4">
+                                    <div className="text-[9px] text-scada-muted uppercase font-mono font-black tracking-widest mb-2">Logistics Status</div>
                                     {logisticsPreview ? (
                                         <div>
                                             <div className="text-sm text-slate-300">Spares Suggested: {logisticsPreview.spares.length}</div>
-                                            <div className="text-xs text-slate-400">Bundle recommendations: {(logisticsPreview.outage.bundles || []).length}</div>
+                                            <div className="text-xs text-scada-muted">Bundle recommendations: {(logisticsPreview.outage.bundles || []).length}</div>
                                         </div>
-                                    ) : <div className="text-sm text-slate-500">No data</div>}
+                                    ) : <div className="text-sm text-scada-muted">No data</div>}
                                 </div>
 
-                                <div className="bg-h-panel border border-h-border rounded-lg p-4">
-                                    <div className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-2">Brake System Readiness</div>
+                                <div className="bg-scada-panel border border-scada-border rounded-sm p-4">
+                                    <div className="text-[9px] text-scada-muted uppercase font-mono font-black tracking-widest mb-2">Brake System Readiness</div>
                                     {brakePreview ? (
                                         <div>
-                                            <div className={`text-lg font-mono font-black ${brakePreview.readiness.ready ? 'text-h-green' : 'text-h-yellow'}`}>{brakePreview.readiness.ready ? 'READY' : 'NOT READY'}</div>
-                                            <div className="text-xs text-slate-400">Pad wear: {brakePreview.padWear}% — Pressure: {brakePreview.pressure} bar</div>
+                                            <div className={`text-lg font-mono font-black ${brakePreview.readiness.ready ? 'text-status-ok' : 'text-status-warning'}`}>{brakePreview.readiness.ready ? 'READY' : 'NOT READY'}</div>
+                                            <div className="text-xs text-scada-muted">Pad wear: {brakePreview.padWear}% — Pressure: {brakePreview.pressure} bar</div>
                                         </div>
-                                    ) : <div className="text-sm text-slate-500">No data</div>}
+                                    ) : <div className="text-sm text-scada-muted">No data</div>}
                                 </div>
                             </div>
 
@@ -835,40 +827,40 @@ export const ExecutiveDashboard: React.FC = () => {
 
                             {/* Guardian Confidence Scores */}
                             {(unifiedDiagnosis as any)?.guardianConfidence ? (
-                                <div className="bg-h-panel border border-h-border rounded-lg p-4">
-                                    <h3 className="text-[9px] text-slate-500 uppercase font-mono font-black tracking-widest mb-3 flex items-center gap-2">
-                                        <Activity className="w-3 h-3 text-h-cyan" />
+                                <div className="bg-scada-panel border border-scada-border rounded-sm p-4">
+                                    <h3 className="text-[9px] text-scada-muted uppercase font-mono font-black tracking-widest mb-3 flex items-center gap-2">
+                                        <Activity className="w-3 h-3 text-status-info" />
                                         Guardian Confidence Scores
                                     </h3>
                                     <div className="grid grid-cols-2 gap-3">
                                         {(unifiedDiagnosis as any).guardianConfidence.shaftSeal !== undefined && (
-                                            <div className="flex items-center justify-between p-2 bg-slate-900/50 rounded border border-white/5">
-                                                <span className="text-[9px] text-slate-400 font-mono uppercase">Shaft Seal</span>
-                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.shaftSeal >= 80) ? 'text-h-green' : ((unifiedDiagnosis as any).guardianConfidence.shaftSeal >= 60) ? 'text-h-yellow' : 'text-h-red'}`}>
+                                            <div className="flex items-center justify-between p-2 bg-scada-bg rounded-sm border border-scada-border">
+                                                <span className="text-[9px] text-scada-muted font-mono uppercase">Shaft Seal</span>
+                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.shaftSeal >= 80) ? 'text-status-ok' : ((unifiedDiagnosis as any).guardianConfidence.shaftSeal >= 60) ? 'text-status-warning' : 'text-status-error'}`}>
                                                     {((unifiedDiagnosis as any).guardianConfidence.shaftSeal).toFixed(0)}%
                                                 </span>
                                             </div>
                                         )}
                                         {(unifiedDiagnosis as any).guardianConfidence.governorHPU !== undefined && (
-                                            <div className="flex items-center justify-between p-2 bg-slate-900/50 rounded border border-white/5">
-                                                <span className="text-[9px] text-slate-400 font-mono uppercase">Governor HPU</span>
-                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.governorHPU >= 80) ? 'text-h-green' : ((unifiedDiagnosis as any).guardianConfidence.governorHPU >= 60) ? 'text-h-yellow' : 'text-h-red'}`}>
+                                            <div className="flex items-center justify-between p-2 bg-scada-bg rounded-sm border border-scada-border">
+                                                <span className="text-[9px] text-scada-muted font-mono uppercase">Governor HPU</span>
+                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.governorHPU >= 80) ? 'text-status-ok' : ((unifiedDiagnosis as any).guardianConfidence.governorHPU >= 60) ? 'text-status-warning' : 'text-status-error'}`}>
                                                     {((unifiedDiagnosis as any).guardianConfidence.governorHPU).toFixed(0)}%
                                                 </span>
                                             </div>
                                         )}
                                         {(unifiedDiagnosis as any).guardianConfidence.statorInsulation !== undefined && (
-                                            <div className="flex items-center justify-between p-2 bg-slate-900/50 rounded border border-white/5">
-                                                <span className="text-[9px] text-slate-400 font-mono uppercase">Stator Insulation</span>
-                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.statorInsulation >= 80) ? 'text-h-green' : ((unifiedDiagnosis as any).guardianConfidence.statorInsulation >= 60) ? 'text-h-yellow' : 'text-h-red'}`}>
+                                            <div className="flex items-center justify-between p-2 bg-scada-bg rounded-sm border border-scada-border">
+                                                <span className="text-[9px] text-scada-muted font-mono uppercase">Stator Insulation</span>
+                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.statorInsulation >= 80) ? 'text-status-ok' : ((unifiedDiagnosis as any).guardianConfidence.statorInsulation >= 60) ? 'text-status-warning' : 'text-status-error'}`}>
                                                     {((unifiedDiagnosis as any).guardianConfidence.statorInsulation).toFixed(0)}%
                                                 </span>
                                             </div>
                                         )}
                                         {(unifiedDiagnosis as any).guardianConfidence.transformerOil !== undefined && (
-                                            <div className="flex items-center justify-between p-2 bg-slate-900/50 rounded border border-white/5">
-                                                <span className="text-[9px] text-slate-400 font-mono uppercase">Transformer Oil</span>
-                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.transformerOil >= 80) ? 'text-h-green' : ((unifiedDiagnosis as any).guardianConfidence.transformerOil >= 60) ? 'text-h-yellow' : 'text-h-red'}`}>
+                                            <div className="flex items-center justify-between p-2 bg-scada-bg rounded-sm border border-scada-border">
+                                                <span className="text-[9px] text-scada-muted font-mono uppercase">Transformer Oil</span>
+                                                <span className={`text-sm font-mono font-black ${((unifiedDiagnosis as any).guardianConfidence.transformerOil >= 80) ? 'text-status-ok' : ((unifiedDiagnosis as any).guardianConfidence.transformerOil >= 60) ? 'text-status-warning' : 'text-status-error'}`}>
                                                     {((unifiedDiagnosis as any).guardianConfidence.transformerOil).toFixed(0)}%
                                                 </span>
                                             </div>
@@ -877,23 +869,23 @@ export const ExecutiveDashboard: React.FC = () => {
                                 </div>
                             ) : null}
 
-                            <Suspense fallback={<div className="text-sm text-slate-400">Loading vibration analyzer…</div>}>
+                            <Suspense fallback={<div className="text-sm text-scada-muted">Loading vibration analyzer…</div>}>
                                 <VibrationAnalyzer />
                             </Suspense>
                         </div>
 
                         <div className="lg:col-span-3 flex flex-col gap-5">
                             {/* Wisdom Feed */}
-                            <div className="bg-h-panel border border-h-border rounded-xl p-4">
+                            <div className="bg-scada-panel border border-scada-border rounded-sm p-4">
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
-                                        <Brain className="w-4 h-4 text-h-cyan" />
-                                        <div className="text-[10px] text-slate-400 font-mono font-black uppercase">Wisdom Feed</div>
+                                        <Brain className="w-4 h-4 text-status-info" />
+                                        <div className="text-[10px] text-scada-muted font-mono font-black uppercase">Wisdom Feed</div>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <div className="text-[9px] text-slate-500 font-mono">{wisdomReport ? new Date(wisdomReport.generatedAt).toLocaleString() : '—'}</div>
                                         <button
-                                            className="text-[10px] px-2 py-1 bg-h-panel/40 border border-h-border rounded text-slate-300"
+                                            className="text-[10px] px-2 py-1 bg-scada-panel border border-scada-border rounded-sm text-scada-muted hover:text-scada-text hover:bg-scada-border"
                                             onClick={async () => {
                                                 try {
                                                     const adapter = new SovereignAuditAdapter();
@@ -933,29 +925,29 @@ export const ExecutiveDashboard: React.FC = () => {
                                 <div className="space-y-2 max-h-48 overflow-y-auto">
                                     {wisdomReport && wisdomReport.entries && wisdomReport.entries.length ? (
                                         wisdomReport.entries.slice(0, 6).map((e: any, idx: number) => (
-                                            <div key={idx} className={`p-2 rounded border ${e.severity === 'CRITICAL' ? 'border-rose-600 bg-rose-900/5' : 'border-amber-600 bg-amber-900/5'}`} onMouseEnter={() => setHoveredEntry(idx)} onMouseLeave={() => setHoveredEntry(null)}>
+                                            <div key={idx} className={`p-2 rounded-sm border ${e.severity === 'CRITICAL' ? 'border-status-error bg-status-error/5' : 'border-status-warning bg-status-warning/5'}`} onMouseEnter={() => setHoveredEntry(idx)} onMouseLeave={() => setHoveredEntry(null)}>
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2">
                                                         <div className="text-sm font-mono font-bold">{e.title}</div>
-                                                        {e.contextualNote ? <Crown className="w-3 h-3 text-yellow-400" /> : null}
+                                                        {e.contextualNote ? <Crown className="w-3 h-3 text-status-warning" /> : null}
                                                     </div>
-                                                    <div className="text-xs font-mono text-slate-400">{e.severity}</div>
+                                                    <div className="text-xs font-mono text-scada-muted">{e.severity}</div>
                                                 </div>
-                                                <div className="text-[11px] text-slate-400 mt-1">{e.recommendedAction || e.legacyTip}</div>
+                                                <div className="text-[11px] text-scada-muted mt-1">{e.recommendedAction || e.legacyTip}</div>
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="text-sm text-slate-500">No wisdom to display.</div>
+                                        <div className="text-sm text-scada-muted">No wisdom to display.</div>
                                     )}
                                 </div>
                             </div>
 
                             {/* Audit History */}
-                            <div className="bg-h-panel border border-h-border rounded-xl p-4 mt-4">
+                            <div className="bg-scada-panel border border-scada-border rounded-sm p-4 mt-4">
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-2">
-                                        <FileText className="w-4 h-4 text-h-cyan" />
-                                        <div className="text-[10px] text-slate-400 font-mono font-black uppercase">Audit History</div>
+                                        <FileText className="w-4 h-4 text-status-info" />
+                                        <div className="text-[10px] text-scada-muted font-mono font-black uppercase">Audit History</div>
                                     </div>
                                     <div className="text-[9px] text-slate-500 font-mono">{auditLog && auditLog.length ? `${auditLog.length} entries` : '—'}</div>
                                 </div>
@@ -970,34 +962,34 @@ export const ExecutiveDashboard: React.FC = () => {
                                             const summary = report.executiveSummary || (report.entries && report.entries[0] && `${report.entries[0].title} — ${report.entries[0].legacyTip}`) || 'No summary';
                                             const lowConfidence = typeof conf === 'number' && conf < 70;
                                             return (
-                                                <div ref={idx === 0 ? auditListRef : null} data-entry-id={entry.id} key={entry.id || idx} className={`p-2 rounded border ${lowConfidence ? 'border-rose-600 bg-rose-900/5' : 'border-slate-700 bg-slate-900/5'}`}>
+                                                <div ref={idx === 0 ? auditListRef : null} data-entry-id={entry.id} key={entry.id || idx} className={`p-2 rounded-sm border ${lowConfidence ? 'border-status-error bg-status-error/5' : 'border-scada-border bg-scada-bg'}`}>
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-3">
                                                             <div className="text-sm font-mono font-bold">{new Date(entry.timestamp).toLocaleString()}</div>
-                                                            <div className="text-xs text-slate-400 font-mono">Mode: <span className="font-bold text-slate-200 ml-1">{mode}</span></div>
+                                                            <div className="text-xs text-scada-muted font-mono">Mode: <span className="font-bold text-scada-text ml-1">{mode}</span></div>
                                                         </div>
                                                         <div className="text-xs font-mono">
-                                                            Confidence: <span className={`font-bold ${lowConfidence ? 'text-rose-400' : 'text-emerald-300'}`}>{conf !== null && conf !== undefined ? `${conf}%` : 'N/A'}</span>
+                                                            Confidence: <span className={`font-bold ${lowConfidence ? 'text-status-error' : 'text-status-ok'}`}>{conf !== null && conf !== undefined ? `${conf}%` : 'N/A'}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="text-[11px] text-slate-400 mt-1">{summary}</div>
+                                                    <div className="text-[11px] text-scada-muted mt-1">{summary}</div>
                                                     {lowConfidence ? (
-                                                        <div className="mt-2 text-rose-300 text-[11px] font-mono font-bold">⚠️ Manual Verification Required</div>
+                                                        <div className="mt-2 text-status-error text-[11px] font-mono font-bold">⚠️ Manual Verification Required</div>
                                                     ) : null}
                                                     <div className="mt-2 text-[10px] text-slate-500 font-mono">ID: {entry.id}</div>
                                                 </div>
                                             );
                                         })
                                     ) : (
-                                        <div className="text-sm text-slate-500">No audit history available.</div>
+                                        <div className="text-sm text-scada-muted">No audit history available.</div>
                                     )}
                                 </div>
                             </div>
 
                             <ScenarioController />
-                            <div className="bg-h-panel border border-h-border rounded-xl p-5 shadow-inner">
-                                <h3 className="text-[10px] text-slate-500 font-mono font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <Activity className="w-3 h-3 text-h-green" />
+                            <div className="bg-scada-panel border border-scada-border rounded-sm p-5 shadow-scada-card">
+                                <h3 className="text-[10px] text-scada-muted font-mono font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <Activity className="w-3 h-3 text-status-ok" />
                                     {t('dashboard.live_telemetry')}
                                 </h3>
                                 <div className="space-y-4">
@@ -1006,44 +998,48 @@ export const ExecutiveDashboard: React.FC = () => {
                                     <LiveMetricToken sensorId="TMP-404-X" />
                                 </div>
                             </div>
-                            <GlassCard title={t('dashboard.finance.title')} icon={<DollarSign className="w-4 h-4 text-h-gold" />} className="border-h-gold/20 bg-h-gold/5">
+                            <div className="bg-status-warning/5 border border-status-warning/20 rounded-sm p-4 shadow-scada-card">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <DollarSign className="w-4 h-4 text-status-warning" />
+                                    <h3 className="text-lg font-bold text-scada-text uppercase tracking-tight font-header">{t('dashboard.finance.title')}</h3>
+                                </div>
                                 <div className="space-y-4">
                                     <div>
-                                        <div className="text-[9px] text-slate-500 uppercase font-mono font-black mb-1">{t('dashboard.finance.maint_buffer')}</div>
-                                        <div className="text-lg font-mono text-h-gold font-bold">{(financials?.maintenanceBufferEuro ?? 45000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-[9px] text-scada-muted uppercase font-mono font-black mb-1">{t('dashboard.finance.maint_buffer')}</div>
+                                        <div className="text-lg font-mono text-status-warning font-bold">{(financials?.maintenanceBufferEuro ?? 45000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
                                     <div>
                                         {/* Engineering Notebook Overlay (hover) */}
                                         {wisdomReport && typeof hoveredEntry === 'number' && wisdomReport.entries && wisdomReport.entries[hoveredEntry] ? (
-                                            <div className="fixed right-6 bottom-6 w-96 bg-gradient-to-br from-slate-900/95 to-slate-800/95 border border-white/6 rounded-lg p-4 shadow-2xl z-50">
+                                            <div className="fixed right-6 bottom-6 w-96 bg-scada-panel border border-scada-border rounded-sm p-4 shadow-scada-card z-50">
                                                 <div className="flex items-start justify-between gap-3">
                                                     <div>
-                                                        <div className="text-[11px] font-mono text-slate-300 font-bold">{wisdomReport.entries[hoveredEntry].title}</div>
-                                                        <div className="text-xs text-slate-400 mt-1">{wisdomReport.entries[hoveredEntry].severity} — {wisdomReport.entries[hoveredEntry].contextualNote || ''}</div>
+                                                        <div className="text-[11px] font-mono text-scada-text font-bold">{wisdomReport.entries[hoveredEntry].title}</div>
+                                                        <div className="text-xs text-scada-muted mt-1">{wisdomReport.entries[hoveredEntry].severity} — {wisdomReport.entries[hoveredEntry].contextualNote || ''}</div>
                                                     </div>
                                                     <div className="flex items-center gap-2">
-                                                        <Crown className="w-4 h-4 text-yellow-400" />
+                                                        <Crown className="w-4 h-4 text-status-warning" />
                                                     </div>
                                                 </div>
-                                                <div className="mt-3 text-sm text-slate-200">
+                                                <div className="mt-3 text-sm text-scada-text">
                                                     <div className="font-mono font-semibold mb-1">Mechanical Explanation</div>
-                                                    <div className="text-slate-300 text-sm leading-snug">{wisdomReport.entries[hoveredEntry].mechanicalExplanation}</div>
+                                                    <div className="text-scada-muted text-sm leading-snug">{wisdomReport.entries[hoveredEntry].mechanicalExplanation}</div>
                                                     <div className="font-mono font-semibold mt-3 mb-1">Legacy Tip</div>
-                                                    <div className="text-slate-300 text-sm leading-snug">{wisdomReport.entries[hoveredEntry].legacyTip}</div>
+                                                    <div className="text-scada-muted text-sm leading-snug">{wisdomReport.entries[hoveredEntry].legacyTip}</div>
                                                 </div>
                                             </div>
                                         ) : null}
-                                        <div className="text-[9px] text-slate-500 uppercase font-mono font-black mb-1">{t('dashboard.finance.annual_loss')}</div>
-                                        <div className="text-base font-mono text-white font-bold">{(financials?.lostRevenueEuro ?? 12500).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-[9px] text-scada-muted uppercase font-mono font-black mb-1">{t('dashboard.finance.annual_loss')}</div>
+                                        <div className="text-base font-mono text-scada-text font-bold">{(financials?.lostRevenueEuro ?? 12500).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
-                                    <div className="pt-3 border-t border-h-gold/20">
-                                        <div className="text-[9px] text-h-green uppercase font-mono font-black mb-1 flex items-center justify-between">
+                                    <div className="pt-3 border-t border-status-warning/20">
+                                        <div className="text-[9px] text-status-ok uppercase font-mono font-black mb-1 flex items-center justify-between">
                                             {t('dashboard.finance.predictive_savings')}<TrendingDown className="w-3 h-3" />
                                         </div>
-                                        <div className="text-lg font-mono text-h-green font-bold">{(financials?.maintenanceSavingsEuro ?? 28000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
+                                        <div className="text-lg font-mono text-status-ok font-bold">{(financials?.maintenanceSavingsEuro ?? 28000).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}</div>
                                     </div>
                                 </div>
-                            </GlassCard>
+                            </div>
                             <MaintenanceTimeline />
                             <EngineeringWisdomVault />
                             <SmartManual />
@@ -1053,11 +1049,11 @@ export const ExecutiveDashboard: React.FC = () => {
                     {/* Emergency Mode Banner */}
                     {highRisk ? (
                         <div className="fixed inset-0 z-50 flex items-start justify-center pointer-events-none">
-                            <div className="mt-24 bg-rose-900/90 border border-rose-700 rounded-lg p-4 text-white max-w-3xl pointer-events-auto shadow-2xl">
+                            <div className="mt-24 bg-status-error/10 border border-status-error rounded-sm p-4 text-scada-text max-w-3xl pointer-events-auto shadow-scada-card">
                                 <div className="flex items-center gap-3">
-                                    <ShieldAlert className="w-6 h-6 text-white" />
+                                    <ShieldAlert className="w-6 h-6 text-status-error" />
                                     <div>
-                                        <div className="font-black text-lg">HIGH-RISK EMERGENCY MODE</div>
+                                        <div className="font-black text-lg text-status-error">HIGH-RISK EMERGENCY MODE</div>
                                         <div className="text-sm opacity-90">Probability of failure exceeded threshold — prioritize emergency actions and SOPs.</div>
                                     </div>
                                 </div>
@@ -1066,24 +1062,24 @@ export const ExecutiveDashboard: React.FC = () => {
                     ) : null}
 
                     {/* Dossier Drawer (right) */}
-                    <div className={`fixed top-20 right-4 z-50 w-[520px] h-[80vh] bg-h-panel border border-h-border rounded-lg shadow-2xl p-4 transition-transform ${dossierOpen ? 'translate-x-0' : 'translate-x-96'}`}>
+                    <div className={`fixed top-20 right-4 z-50 w-[520px] h-[80vh] bg-scada-panel border border-scada-border rounded-sm shadow-scada-card p-4 transition-transform ${dossierOpen ? 'translate-x-0' : 'translate-x-96'}`}>
                         <div className="flex items-center justify-between mb-3">
-                            <div className="text-sm font-mono font-bold">Engineering Dossier</div>
+                            <div className="text-sm font-mono font-bold text-scada-text">Engineering Dossier</div>
                             <div className="flex items-center gap-2">
-                                <button className="text-xs text-slate-400" onClick={() => setDossierOpen(false)}>Close</button>
+                                <button className="text-xs text-scada-muted hover:text-scada-text" onClick={() => setDossierOpen(false)}>Close</button>
                             </div>
                         </div>
                         <div className="overflow-auto h-[calc(100%-48px)]">
-                            <div className="text-[11px] text-slate-300 font-mono mb-2">Keyword: <span className="font-bold">{dossierKeyword || '—'}</span></div>
+                            <div className="text-[11px] text-scada-muted font-mono mb-2">Keyword: <span className="font-bold text-scada-text">{dossierKeyword || '—'}</span></div>
                             <div className="mb-3">
-                                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Latest Telemetry</div>
-                                <div className="text-sm text-slate-300">Alignment: {(mechanical?.alignment || 0).toFixed(3)} mm/m — Thrust: {(livePhysics?.axialThrustKN || 0).toFixed(0)} kN</div>
+                                <div className="text-[10px] text-scada-muted uppercase font-mono mb-1">Latest Telemetry</div>
+                                <div className="text-sm text-scada-text">Alignment: {(mechanical?.alignment || 0).toFixed(3)} mm/m — Thrust: {(livePhysics?.axialThrustKN || 0).toFixed(0)} kN</div>
                             </div>
                             <div className="mb-3">
                                 <div className="flex items-center justify-between">
-                                    <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Wisdom Report</div>
+                                    <div className="text-[10px] text-scada-muted uppercase font-mono mb-1">Wisdom Report</div>
                                     <div>
-                                        <button className="text-xs px-2 py-1 bg-h-panel/40 border border-h-border rounded text-slate-300" onClick={async () => {
+                                        <button className="text-xs px-2 py-1 bg-scada-panel/40 border border-scada-border rounded-sm text-scada-muted hover:text-scada-text" onClick={async () => {
                                             try {
                                                 const adapter = new SovereignAuditAdapter();
                                                 // if dossierKeyword looks like a persisted id, fetch directly
@@ -1109,29 +1105,29 @@ export const ExecutiveDashboard: React.FC = () => {
                                     </div>
                                 </div>
                                 {wisdomReport ? (
-                                    <div className="text-sm text-slate-300">
+                                    <div className="text-sm text-scada-text">
                                         <div className="font-bold mb-1">{wisdomReport.executiveSummary || 'Executive summary'}</div>
-                                        <div className="text-xs text-slate-400 mb-2">Generated: {wisdomReport.generatedAt ? new Date(wisdomReport.generatedAt).toLocaleString() : '—'}</div>
+                                        <div className="text-xs text-scada-muted mb-2">Generated: {wisdomReport.generatedAt ? new Date(wisdomReport.generatedAt).toLocaleString() : '—'}</div>
                                         <div className="text-sm leading-snug">{wisdomReport.architectSummary || (wisdomReport.entries && wisdomReport.entries[0] && wisdomReport.entries[0].mechanicalExplanation) || 'No dossier content available.'}</div>
                                     </div>
-                                ) : <div className="text-sm text-slate-500">No wisdom available.</div>}
+                                ) : <div className="text-sm text-scada-muted">No wisdom available.</div>}
                             </div>
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Confidence</div>
-                                    <div className="text-sm text-slate-300">System Confidence: {(wisdomReport && wisdomReport.systemConfidence && typeof wisdomReport.systemConfidence.score === 'number') ? `${wisdomReport.systemConfidence.score}%` : 'N/A'}</div>
-                                    <div className="text-xs text-slate-400 mt-2">Confidence Reason</div>
-                                    <div className="text-sm text-slate-300 mt-1">{wisdomReport && wisdomReport.systemConfidence && Array.isArray(wisdomReport.systemConfidence.reasons) && wisdomReport.systemConfidence.reasons.length ? wisdomReport.systemConfidence.reasons.join('; ') : (wisdomReport && wisdomReport.systemConfidence && wisdomReport.systemConfidence.warning) || 'No specific reason available.'}</div>
-                                    <div className="text-xs text-slate-400 mt-3">Legacy Tips</div>
-                                    <div className="text-sm text-slate-300 mt-1">{wisdomReport && wisdomReport.entries && wisdomReport.entries[0] ? wisdomReport.entries[0].legacyTip : 'No legacy tips available.'}</div>
+                                    <div className="text-[10px] text-scada-muted uppercase font-mono mb-1">Confidence</div>
+                                    <div className="text-sm text-scada-text">System Confidence: {(wisdomReport && wisdomReport.systemConfidence && typeof wisdomReport.systemConfidence.score === 'number') ? `${wisdomReport.systemConfidence.score}%` : 'N/A'}</div>
+                                    <div className="text-xs text-scada-muted mt-2">Confidence Reason</div>
+                                    <div className="text-sm text-scada-text mt-1">{wisdomReport && wisdomReport.systemConfidence && Array.isArray(wisdomReport.systemConfidence.reasons) && wisdomReport.systemConfidence.reasons.length ? wisdomReport.systemConfidence.reasons.join('; ') : (wisdomReport && wisdomReport.systemConfidence && wisdomReport.systemConfidence.warning) || 'No specific reason available.'}</div>
+                                    <div className="text-xs text-scada-muted mt-3">Legacy Tips</div>
+                                    <div className="text-sm text-scada-text mt-1">{wisdomReport && wisdomReport.entries && wisdomReport.entries[0] ? wisdomReport.entries[0].legacyTip : 'No legacy tips available.'}</div>
                                 </div>
                                 <div>
-                                    <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Mini Telemetry</div>
+                                    <div className="text-[10px] text-scada-muted uppercase font-mono mb-1">Mini Telemetry</div>
                                     <div className="space-y-2">
-                                        <div className="text-xs text-slate-400">Alignment</div>
-                                        <div className="h-8 w-full bg-slate-900/20 rounded overflow-hidden">{renderSparkline((mechanical && (mechanical as any).alignmentSeries) || trendData.power)}</div>
-                                        <div className="text-xs text-slate-400">Vibration</div>
-                                        <div className="h-8 w-full bg-slate-900/20 rounded overflow-hidden">{renderSparkline((mechanical && (mechanical as any).vibrationSeries) || trendData.thrust, '#f97316')}</div>
+                                        <div className="text-xs text-scada-muted">Alignment</div>
+                                        <div className="h-8 w-full bg-scada-bg rounded-sm overflow-hidden">{renderSparkline((mechanical && (mechanical as any).alignmentSeries) || trendData.power)}</div>
+                                        <div className="text-xs text-scada-muted">Vibration</div>
+                                        <div className="h-8 w-full bg-scada-bg rounded-sm overflow-hidden">{renderSparkline((mechanical && (mechanical as any).vibrationSeries) || trendData.thrust, '#f97316')}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1143,16 +1139,16 @@ export const ExecutiveDashboard: React.FC = () => {
                         <div className="mt-3 space-y-2">
                             {/* Confidence Warning when insufficient samples or low confidence */}
                             {(forecast.confidence < 0.5 || (sampleCount !== null && sampleCount < 720)) ? (
-                                <div className="px-3 py-2 bg-rose-900/10 border border-rose-600/20 rounded text-rose-300 text-sm font-mono inline-flex items-center gap-3">
-                                    <ShieldAlert className="w-4 h-4 text-rose-400" />
+                                <div className="px-3 py-2 bg-status-error/10 border border-status-error/20 rounded-sm text-status-error text-sm font-mono inline-flex items-center gap-3">
+                                    <ShieldAlert className="w-4 h-4 text-status-error" />
                                     <div>
                                         <div className="text-[10px] uppercase font-bold">Confidence Warning</div>
                                         <div className="font-mono">Low Confidence ({(forecast.confidence || 0).toFixed(3)}) - Required 720 samples, found {sampleCount ?? 'N/A'}</div>
                                     </div>
                                 </div>
                             ) : forecast.predictedTimestamp ? (
-                                <div className="px-3 py-2 bg-amber-900/10 border border-amber-500/20 rounded text-amber-300 text-sm font-mono inline-flex items-center gap-2">
-                                    <ShieldAlert className="w-4 h-4 text-amber-400" />
+                                <div className="px-3 py-2 bg-status-warning/10 border border-status-warning/20 rounded-sm text-status-warning text-sm font-mono inline-flex items-center gap-2">
+                                    <ShieldAlert className="w-4 h-4 text-status-warning" />
                                     <div>
                                         <div className="text-[10px] uppercase">Predicted Efficiency Breach (90%)</div>
                                         <div className="font-bold">{new Date(forecast.predictedTimestamp).toLocaleDateString()}</div>
@@ -1162,8 +1158,8 @@ export const ExecutiveDashboard: React.FC = () => {
 
                             {/* Dec25 Critical Event Alert */}
                             {dec25Present ? (
-                                <div className="px-3 py-2 bg-red-900/10 border border-red-600/20 rounded text-red-300 text-sm font-mono inline-flex items-center gap-3">
-                                    <ShieldAlert className="w-4 h-4 text-red-400" />
+                                <div className="px-3 py-2 bg-status-error/10 border border-status-error/20 rounded-sm text-status-error text-sm font-mono inline-flex items-center gap-3">
+                                    <ShieldAlert className="w-4 h-4 text-status-error" />
                                     <div>
                                         <div className="text-[10px] uppercase font-bold">Model-Distorting Anomaly</div>
                                         <div className="font-mono">Dec 25 hourly spike detected — Investigate Flow Surge Impact</div>
@@ -1179,8 +1175,7 @@ export const ExecutiveDashboard: React.FC = () => {
                             <EngineeringDossierCard />
                         </Suspense>
                     </div>
-                </div>
-            </main>
+            </div>
             <OptimizationHUD variant="overlay" />
         </div>
     );

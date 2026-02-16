@@ -172,19 +172,19 @@ export const CommandCenter: React.FC = () => {
     return (
         <div className="min-h-screen bg-transparent pb-16">
             {/* Header */}
-            <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-sm border-b border-cyan-500/20">
+            <div className="sticky top-0 z-30 bg-scada-panel border-b border-scada-border">
                 <div className="px-6 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <h1 className="text-sm font-black uppercase tracking-[0.3em] text-white font-mono">
-                            ANOHUB <span className="text-cyan-400">//</span> NC-9.0
+                        <h1 className="text-sm font-black uppercase tracking-[0.3em] text-scada-text font-mono">
+                            ANOHUB <span className="text-status-info">//</span> NC-9.0
                         </h1>
                         <div className="flex flex-col">
                             {activeDefinition && (
-                                <span className="text-[10px] text-slate-400 font-mono">
+                                <span className="text-[10px] text-scada-muted font-mono">
                                     / {activeDefinition.title}
                                 </span>
                             )}
-                            <span className="text-[8px] text-slate-600 font-mono italic">Pro-Bono Engineering // Fundamental Physics Engine</span>
+                            <span className="text-[8px] text-scada-muted font-mono italic">Pro-Bono Engineering // Fundamental Physics Engine</span>
                         </div>
                     </div>
 
@@ -193,8 +193,8 @@ export const CommandCenter: React.FC = () => {
                         <button
                             onClick={toggleNightOps}
                             className={`px-3 py-1.5 rounded-sm border text-[10px] font-mono font-bold uppercase tracking-wider transition-all ${mode === 'tactical-red'
-                                ? 'bg-red-950/40 border-red-500/30 text-red-400'
-                                : 'bg-slate-900/40 border-slate-700/30 text-slate-400 hover:border-cyan-500/30'
+                                ? 'bg-status-error/10 border-status-error text-status-error'
+                                : 'bg-scada-bg border-scada-border text-scada-muted hover:border-status-info hover:text-status-info'
                                 }`}
                             title="Toggle Night Operations Mode"
                         >
@@ -206,8 +206,8 @@ export const CommandCenter: React.FC = () => {
                         <button
                             onClick={() => setGhostMode(!ghostMode)}
                             className={`px-3 py-1.5 rounded-sm border text-[10px] font-mono font-bold uppercase tracking-wider transition-all ${ghostMode
-                                ? 'bg-purple-950/40 border-purple-500/30 text-purple-400'
-                                : 'bg-slate-900/40 border-slate-700/30 text-slate-400 hover:border-purple-500/30'
+                                ? 'bg-status-warning/10 border-status-warning text-status-warning'
+                                : 'bg-scada-bg border-scada-border text-scada-muted hover:border-status-warning hover:text-status-warning'
                                 }`}
                             title="Toggle Retrofit Comparison (Ghost Mode)"
                         >
@@ -218,7 +218,7 @@ export const CommandCenter: React.FC = () => {
                         {/* Forensic Dossier */}
                         <button
                             onClick={() => dispatch.triggerForensicExport()}
-                            className="p-2 hover:bg-slate-800 rounded text-slate-400 hover:text-white transition-colors"
+                            className="p-2 hover:bg-scada-border rounded-sm text-scada-muted hover:text-scada-text transition-colors"
                             title="Print / Export View"
                         >
                             <FileText className="w-5 h-5" />
@@ -227,7 +227,7 @@ export const CommandCenter: React.FC = () => {
                         {/* Audit Snapshot */}
                         <button
                             onClick={captureSnapshot}
-                            className="px-3 py-1.5 rounded-sm border border-cyan-500/30 bg-cyan-950/20 text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all"
+                            className="px-3 py-1.5 rounded-sm border border-status-info bg-status-info/10 text-status-info text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-status-info/20 transition-all"
                             title="Capture Audit Snapshot"
                         >
                             <Camera className="w-3 h-3 inline mr-1" />
@@ -236,10 +236,10 @@ export const CommandCenter: React.FC = () => {
 
                         {/* System Health */}
                         <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${systemHealth === 'OPTIMAL' ? 'bg-cyan-500' :
-                                systemHealth === 'DEGRADED' ? 'bg-amber-500' :
-                                    'bg-red-500'
-                                } animate-pulse`} />
+                            <div className={`w-2 h-2 rounded-full ${systemHealth === 'OPTIMAL' ? 'bg-status-ok' :
+                                systemHealth === 'DEGRADED' ? 'bg-status-warning' :
+                                    'bg-status-error'
+                                }`} />
                             <span className={`text-xs font-mono font-bold ${healthColor}`}>
                                 SYSTEM: {systemHealth}
                             </span>
@@ -255,13 +255,13 @@ export const CommandCenter: React.FC = () => {
                     <TacticalCard
                         title="NEURAL FOCUS TREE"
                         status={hasCriticalRisks ? 'critical' : 'nominal'}
-                        className={hasCriticalRisks ? 'glow-amber' : ''}
+                        className=""
                     >
                         <div className="space-y-2">
                             {diagnostics.slice(0, 5).map((diag, i) => (
                                 <div
                                     key={diag.id}
-                                    className="p-2 bg-slate-900/40 border border-white/5 rounded-sm cursor-pointer hover:border-cyan-500/50 transition-all group"
+                                    className="p-2 bg-scada-bg border border-scada-border rounded-sm cursor-pointer hover:border-status-info transition-colors group"
                                     onClick={() => {
                                         if (diag.sopCode) {
                                             const sop = MaintenanceEngine.getSOP(diag.sopCode);
@@ -274,35 +274,35 @@ export const CommandCenter: React.FC = () => {
                                 >
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
-                                            <div className={`w-1.5 h-1.5 rounded-full ${diag.type === 'critical' ? 'bg-red-500' :
-                                                diag.type === 'warning' ? 'bg-amber-500' :
-                                                    'bg-cyan-500'
+                                            <div className={`w-1.5 h-1.5 rounded-none ${diag.type === 'critical' ? 'bg-status-error' :
+                                                diag.type === 'warning' ? 'bg-status-warning' :
+                                                    'bg-status-info'
                                                 }`} />
-                                            <span className="text-[9px] font-mono text-white group-hover:text-cyan-400">
+                                            <span className="text-[9px] font-mono text-scada-text group-hover:text-white">
                                                 {diag.messageKey}
                                             </span>
                                         </div>
-                                        <ChevronRight className="w-3 h-3 text-slate-600 group-hover:text-cyan-500" />
+                                        <ChevronRight className="w-3 h-3 text-scada-muted group-hover:text-status-info" />
                                     </div>
                                     {diag.value && (
-                                        <div className="mt-1 text-[8px] font-mono text-slate-400">
+                                        <div className="mt-1 text-[8px] font-mono text-scada-muted">
                                             {diag.value}
                                         </div>
                                     )}
                                     {diag.reasoning && (
-                                        <div className="mt-2 p-1.5 bg-black/40 rounded italic text-[8px] text-slate-300 leading-tight border-l border-cyan-500/30">
+                                        <div className="mt-2 p-1.5 bg-scada-panel rounded-sm italic text-[8px] text-scada-text leading-tight border-l border-status-info/50">
                                             {diag.reasoning}
                                         </div>
                                     )}
                                     {diag.slogan && (
-                                        <div className="mt-2 text-[7px] font-black text-cyan-500 uppercase tracking-widest">
+                                        <div className="mt-2 text-[7px] font-black text-status-info uppercase tracking-widest">
                                             {diag.slogan}
                                         </div>
                                     )}
                                     {diag.vectors && diag.vectors.length > 0 && (
                                         <div className="mt-1 flex flex-wrap gap-1">
                                             {diag.vectors.map((v: string, idx: number) => (
-                                                <span key={idx} className="px-1 py-0.5 bg-cyan-500/10 border border-cyan-500/20 text-[6px] text-cyan-400 rounded-sm">
+                                                <span key={idx} className="px-1 py-0.5 bg-status-info/10 border border-status-info/20 text-[6px] text-status-info rounded-sm">
                                                     {v}
                                                 </span>
                                             ))}
@@ -315,7 +315,7 @@ export const CommandCenter: React.FC = () => {
 
                     {/* SHAFT ORBIT MONITOR */}
                     <TacticalCard title="SHAFT ORBIT (X/Y)" status="nominal">
-                        <div className="flex justify-center p-2 bg-slate-900/40 rounded border border-white/5">
+                        <div className="flex justify-center p-2 bg-scada-bg rounded-sm border border-scada-border">
                             <ShaftOrbitPlot
                                 vibrationX={telemetry.mechanical.vibrationX || 2.4}
                                 vibrationY={telemetry.mechanical.vibrationY || 2.1}
@@ -329,12 +329,12 @@ export const CommandCenter: React.FC = () => {
                             {activeLogs.slice(0, 3).map((log) => (
                                 <div
                                     key={log.id}
-                                    className="p-2 bg-slate-900/40 border border-white/5 rounded-sm"
+                                    className="p-2 bg-scada-bg border border-scada-border rounded-sm"
                                 >
-                                    <div className="text-[8px] font-mono text-cyan-400">
+                                    <div className="text-[8px] font-mono text-status-info">
                                         {new Date(log.timestamp).toLocaleTimeString()}
                                     </div>
-                                    <div className="text-[9px] text-white mt-1">
+                                    <div className="text-[9px] text-scada-text mt-1">
                                         {log.summaryDE || log.commentBS}
                                     </div>
                                 </div>
@@ -352,8 +352,8 @@ export const CommandCenter: React.FC = () => {
                                     <React.Suspense fallback={
                                         <div className="flex items-center justify-center h-full">
                                             <div className="flex flex-col items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
-                                                <span className="text-[10px] text-cyan-500 font-mono animate-pulse">Initializing WebGL Core...</span>
+                                                <div className="w-8 h-8 rounded-full border-2 border-status-info border-t-transparent animate-spin" />
+                                                <span className="text-[10px] text-status-info font-mono animate-pulse">Initializing WebGL Core...</span>
                                             </div>
                                         </div>
                                     }>
@@ -391,6 +391,7 @@ export const CommandCenter: React.FC = () => {
                         </div>
                     </TacticalCard>
 
+
                     <StructuralSafetyMonitor
                         margin={structuralSafetyMargin || 100}
                         hoopStress={telemetry.physics.hoopStressMPa || 0}
@@ -404,34 +405,34 @@ export const CommandCenter: React.FC = () => {
 
             {/* SOP Modal */}
             {activeSop && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md">
-                    <div className="max-w-md w-full bg-slate-900 border border-cyan-500/30 shadow-2xl rounded-lg overflow-hidden animate-in fade-in zoom-in duration-200">
-                        <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-scada-bg/80 backdrop-blur-sm">
+                    <div className="max-w-md w-full bg-scada-panel border border-scada-border shadow-scada-card rounded-sm overflow-hidden animate-in fade-in duration-150">
+                        <div className="px-6 py-4 border-b border-scada-border flex items-center justify-between bg-scada-panel">
                             <div className="flex items-center gap-2">
-                                <Shield className="w-4 h-4 text-cyan-400" />
-                                <h3 className="text-xs font-black uppercase tracking-widest text-white">Maintenance Action Plan</h3>
+                                <Shield className="w-4 h-4 text-status-info" />
+                                <h3 className="text-xs font-black uppercase tracking-widest text-scada-text font-header">Maintenance Action Plan</h3>
                             </div>
-                            <button onClick={() => setActiveSop(null)} className="text-slate-400 hover:text-white transition-colors">
+                            <button onClick={() => setActiveSop(null)} className="text-scada-muted hover:text-white transition-colors">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="p-6">
                             <div className="mb-4">
-                                <div className="text-[10px] text-slate-500 font-mono uppercase mb-1">Failure Mode</div>
-                                <div className="text-sm font-bold text-white">{activeSop.failureMode}</div>
+                                <div className="text-[10px] text-scada-muted font-mono uppercase mb-1">Failure Mode</div>
+                                <div className="text-sm font-bold text-scada-text">{activeSop.failureMode}</div>
                             </div>
-                            <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded">
-                                <div className="text-[10px] text-red-400 font-mono uppercase mb-1">Immediate Action</div>
-                                <div className="text-xs text-white leading-relaxed">{activeSop.action}</div>
+                            <div className="mb-6 p-3 bg-status-error/10 border border-status-error/20 rounded-sm">
+                                <div className="text-[10px] text-status-error font-mono uppercase mb-1">Immediate Action</div>
+                                <div className="text-xs text-scada-text leading-relaxed">{activeSop.action}</div>
                             </div>
                             <div className="space-y-4">
-                                <div className="text-[10px] text-slate-500 font-mono uppercase">Step-by-Step Procedure</div>
+                                <div className="text-[10px] text-scada-muted font-mono uppercase">Step-by-Step Procedure</div>
                                 {activeSop.steps.map((step) => (
                                     <div key={step.step} className="flex gap-3">
-                                        <div className="flex-shrink-0 w-5 h-5 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-[10px] font-bold text-cyan-400">
+                                        <div className="flex-shrink-0 w-5 h-5 rounded-none bg-status-info/20 border border-status-info/40 flex items-center justify-center text-[10px] font-bold text-status-info">
                                             {step.step}
                                         </div>
-                                        <div className="text-xs text-slate-300 leading-tight">
+                                        <div className="text-xs text-scada-text leading-tight">
                                             {step.description}
                                         </div>
                                     </div>
@@ -453,16 +454,16 @@ export const CommandCenter: React.FC = () => {
                                 if (allTools.length === 0) return null;
 
                                 return (
-                                    <div className="mt-6 p-4 bg-slate-950/50 border border-cyan-500/20 rounded">
+                                    <div className="mt-6 p-4 bg-scada-bg/50 border border-status-info/20 rounded-sm">
                                         <div className="flex items-center gap-2 mb-3">
-                                            <Wrench className="w-3 h-3 text-cyan-400" />
-                                            <div className="text-[10px] text-cyan-400 font-mono uppercase font-black uppercase tracking-widest">Required Tooling Checklist</div>
+                                            <Wrench className="w-3 h-3 text-status-info" />
+                                            <div className="text-[10px] text-status-info font-mono uppercase font-black uppercase tracking-widest">Required Tooling Checklist</div>
                                         </div>
                                         <div className="grid grid-cols-1 gap-2">
                                             {allTools.map(tool => (
                                                 <div key={tool} className="flex items-center gap-2">
-                                                    <div className="w-2 h-2 border border-cyan-500/50 rounded-sm" />
-                                                    <span className="text-[10px] text-slate-300 font-mono">{tool}</span>
+                                                    <div className="w-2 h-2 border border-status-info/50 rounded-none" />
+                                                    <span className="text-[10px] text-scada-text font-mono">{tool}</span>
                                                 </div>
                                             ))}
                                         </div>
@@ -470,11 +471,11 @@ export const CommandCenter: React.FC = () => {
                                 );
                             })()}
                         </div>
-                        <div className="px-6 py-4 bg-slate-950/50 border-t border-white/5 flex items-center justify-between">
-                            <span className="text-[9px] font-mono text-slate-500">Ref: {activeSop.kbRef}</span>
+                        <div className="px-6 py-4 bg-scada-bg/50 border-t border-scada-border flex items-center justify-between">
+                            <span className="text-[9px] font-mono text-scada-muted">Ref: {activeSop.kbRef}</span>
                             <button
                                 onClick={() => setActiveSop(null)}
-                                className="px-4 py-2 bg-cyan-500 text-slate-950 text-[10px] font-black uppercase tracking-widest rounded hover:bg-cyan-400 transition-all flex items-center gap-2"
+                                className="px-4 py-2 bg-status-info text-white text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-blue-600 transition-all flex items-center gap-2"
                             >
                                 <CheckCircle2 className="w-3 h-3" />
                                 Acknowledge SOP

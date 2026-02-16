@@ -90,7 +90,7 @@ export const FaultInjectorPanel: React.FC = () => {
         return (
             <button
                 onClick={() => setIsVisible(true)}
-                className="fixed bottom-4 right-4 z-50 p-3 bg-red-900/80 hover:bg-red-800 text-white rounded-full shadow-lg border border-red-500/50 backdrop-blur-sm transition-all hover:scale-110"
+                className="fixed bottom-4 right-4 z-50 p-3 bg-status-error text-white rounded-none shadow-scada-card border border-status-error transition-transform hover:scale-105"
                 title="Open Fault Injection Panel"
             >
                 <Zap className="w-5 h-5" />
@@ -99,18 +99,18 @@ export const FaultInjectorPanel: React.FC = () => {
     }
 
     return (
-        <div className="fixed bottom-4 right-4 z-50 w-72 bg-slate-950/95 border border-red-500/30 rounded-lg shadow-2xl backdrop-blur-md overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div className="fixed bottom-4 right-4 z-50 w-72 bg-scada-panel border border-status-error rounded-sm shadow-scada-card overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-100">
             {/* Header */}
-            <div className="px-4 py-3 bg-red-950/30 border-b border-red-500/20 flex justify-between items-center">
+            <div className="px-4 py-3 bg-status-error/20 border-b border-status-error flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-red-400" />
-                    <h3 className="text-xs font-black uppercase tracking-widest text-red-100">
+                    <Activity className="w-4 h-4 text-status-error" />
+                    <h3 className="text-xs font-black uppercase tracking-widest text-white font-header">
                         Fault Injector
                     </h3>
                 </div>
                 <button 
                     onClick={() => setIsVisible(false)}
-                    className="text-slate-400 hover:text-white transition-colors"
+                    className="text-scada-muted hover:text-white transition-colors"
                 >
                     <span className="text-xs font-mono">[CLOSE]</span>
                 </button>
@@ -120,64 +120,64 @@ export const FaultInjectorPanel: React.FC = () => {
             <div className="p-4 space-y-3">
                 <button
                     onClick={injectThermalRunaway}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-slate-900/50 hover:bg-red-900/20 border border-slate-800 hover:border-red-500/50 rounded transition-all group"
+                    className="w-full flex items-center justify-between px-3 py-2 bg-scada-bg hover:bg-status-error/10 border border-scada-border hover:border-status-error rounded-sm transition-colors group"
                 >
                     <div className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-orange-500 group-hover:text-red-400" />
-                        <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">Thermal Runaway</span>
+                        <AlertTriangle className="w-4 h-4 text-status-warning group-hover:text-status-error" />
+                        <span className="text-[10px] font-mono font-bold text-scada-text group-hover:text-white uppercase">Thermal Runaway</span>
                     </div>
-                    <span className="text-[9px] text-slate-500 font-mono">100°C</span>
+                    <span className="text-[9px] text-scada-muted font-mono">100°C</span>
                 </button>
 
                 <button
                     onClick={injectLoadRejection}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-slate-900/50 hover:bg-red-900/20 border border-slate-800 hover:border-red-500/50 rounded transition-all group"
+                    className="w-full flex items-center justify-between px-3 py-2 bg-scada-bg hover:bg-status-error/10 border border-scada-border hover:border-status-error rounded-sm transition-colors group"
                 >
                     <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-yellow-500 group-hover:text-red-400" />
-                        <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">Load Rejection</span>
+                        <Zap className="w-4 h-4 text-status-warning group-hover:text-status-error" />
+                        <span className="text-[10px] font-mono font-bold text-scada-text group-hover:text-white uppercase">Load Rejection</span>
                     </div>
-                    <span className="text-[9px] text-slate-500 font-mono">Trip</span>
+                    <span className="text-[9px] text-scada-muted font-mono">Trip</span>
                 </button>
 
                 <button
                     onClick={injectCavitation}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-slate-900/50 hover:bg-red-900/20 border border-slate-800 hover:border-red-500/50 rounded transition-all group"
+                    className="w-full flex items-center justify-between px-3 py-2 bg-scada-bg hover:bg-status-error/10 border border-scada-border hover:border-status-error rounded-sm transition-colors group"
                 >
                     <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-cyan-500 group-hover:text-red-400" />
-                        <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">Cavitation / Vib</span>
+                        <Activity className="w-4 h-4 text-status-info group-hover:text-status-error" />
+                        <span className="text-[10px] font-mono font-bold text-scada-text group-hover:text-white uppercase">Cavitation / Vib</span>
                     </div>
-                    <span className="text-[9px] text-slate-500 font-mono">5.0 mm/s</span>
+                    <span className="text-[9px] text-scada-muted font-mono">5.0 mm/s</span>
                 </button>
 
                 <button
                     onClick={injectWaterHammer}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-slate-900/50 hover:bg-red-900/20 border border-slate-800 hover:border-red-500/50 rounded transition-all group"
+                    className="w-full flex items-center justify-between px-3 py-2 bg-scada-bg hover:bg-status-error/10 border border-scada-border hover:border-status-error rounded-sm transition-colors group"
                 >
                     <div className="flex items-center gap-2">
-                        <Waves className="w-4 h-4 text-blue-500 group-hover:text-red-400" />
-                        <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">Water Hammer</span>
+                        <Waves className="w-4 h-4 text-status-info group-hover:text-status-error" />
+                        <span className="text-[10px] font-mono font-bold text-scada-text group-hover:text-white uppercase">Water Hammer</span>
                     </div>
-                    <span className="text-[9px] text-slate-500 font-mono">80 BAR</span>
+                    <span className="text-[9px] text-scada-muted font-mono">80 BAR</span>
                 </button>
 
                 <button
                     onClick={injectSedimentSurge}
-                    className="w-full flex items-center justify-between px-3 py-2 bg-slate-900/50 hover:bg-red-900/20 border border-slate-800 hover:border-red-500/50 rounded transition-all group"
+                    className="w-full flex items-center justify-between px-3 py-2 bg-scada-bg hover:bg-status-error/10 border border-scada-border hover:border-status-error rounded-sm transition-colors group"
                 >
                     <div className="flex items-center gap-2">
-                        <Hexagon className="w-4 h-4 text-amber-600 group-hover:text-red-400" />
-                        <span className="text-[10px] font-mono font-bold text-slate-300 group-hover:text-white uppercase">Sediment Surge</span>
+                        <Hexagon className="w-4 h-4 text-status-warning group-hover:text-status-error" />
+                        <span className="text-[10px] font-mono font-bold text-scada-text group-hover:text-white uppercase">Sediment Surge</span>
                     </div>
-                    <span className="text-[9px] text-slate-500 font-mono">5000 PPM</span>
+                    <span className="text-[9px] text-scada-muted font-mono">5000 PPM</span>
                 </button>
 
-                <div className="h-px bg-white/10 my-2" />
+                <div className="h-px bg-scada-border my-2" />
 
                 <button
                     onClick={resetToNominal}
-                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-emerald-900/20 hover:bg-emerald-900/40 border border-emerald-500/30 hover:border-emerald-500/60 rounded transition-all text-emerald-400 hover:text-emerald-300"
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-status-ok/10 hover:bg-status-ok/20 border border-status-ok/30 hover:border-status-ok rounded-sm transition-colors text-status-ok"
                 >
                     <RotateCcw className="w-3 h-3" />
                     <span className="text-[10px] font-black uppercase tracking-widest">Reset to Nominal</span>
@@ -185,7 +185,7 @@ export const FaultInjectorPanel: React.FC = () => {
             </div>
 
             {/* Live Status Tiny Footer */}
-            <div className="px-4 py-2 bg-black/40 text-[8px] font-mono text-slate-500 flex justify-between">
+            <div className="px-4 py-2 bg-scada-bg text-[8px] font-mono text-scada-muted flex justify-between border-t border-scada-border">
                 <span>TEMP: {mechanical.bearingTemp?.toFixed(1)}°C</span>
                 <span>VIB: {mechanical.vibration?.toFixed(2)}</span>
             </div>
