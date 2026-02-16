@@ -42,7 +42,7 @@ interface RunnerMeshProps {
     active?: boolean;
     turbineType?: string;
     heatmapMode?: boolean;
-    deltaMap?: Record<string, number>; // Component ID -> Delta Value (0-100)
+    deltaMap?: any; // Component ID -> Delta Value (0-100) or TruthDelta Object
     selectedPart?: string | null;
     showInfoPanel?: boolean;
 }
@@ -154,12 +154,23 @@ const RunnerMesh: React.FC<RunnerMeshProps> = ({
     const getComponentColor = (componentId: string, defaultColor: string) => {
         if (!heatmapMode || !deltaMap) return defaultColor;
         
-        const delta = deltaMap[componentId] || 0;
-        // Heatmap gradient: Green (0) -> Yellow (50) -> Red (100)
-        if (delta > 80) return COLORS.RED;
-        if (delta > 40) return COLORS.AMBER;
-        if (delta > 0) return COLORS.EMERALD; // Explicit agreement
-        return COLORS.GRAY; // No data
+        const delta = deltaMap[componentId];
+        if (!delta) return COLORS.GRAY; // No data
+
+        // Handle TruthDelta object (from TruthDeltaEngine)
+        if (typeof delta === 'object' && 'color' in delta) {
+            return delta.color;
+        }
+
+        // Handle numeric delta (legacy/simple map)
+        if (typeof delta === 'number') {
+            // Heatmap gradient: Green (0) -> Yellow (50) -> Red (100)
+            if (delta > 80) return COLORS.RED;
+            if (delta > 40) return COLORS.AMBER;
+            if (delta > 0) return COLORS.EMERALD; // Explicit agreement
+        }
+        
+        return COLORS.GRAY;
     };
 
     // Render different geometry based on turbine type
@@ -299,7 +310,9 @@ export interface TurbineRunner3DProps {
     className?: string;
     onSelect?: (id: string) => void;
     heatmapMode?: boolean;
-    deltaMap?: Record<string, number>;
+    deltaMap?: any;
+    selectedPart?: string | null;
+    showInfoPanel?: boolean;
 }
 
 export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(({ 
@@ -307,7 +320,9 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(
     className, 
     onSelect,
     heatmapMode,
-    deltaMap
+    deltaMap,
+    selectedPart,
+    showInfoPanel
 }, ref) => {
     const { selectedAsset } = useAssetContext();
     const [active, setActive] = useState(false);
@@ -371,6 +386,8 @@ export const TurbineRunner3D = forwardRef<HTMLDivElement, TurbineRunner3DProps>(
                         onMeshClick={(id) => onSelect?.(id)}
                         heatmapMode={heatmapMode}
                         deltaMap={deltaMap}
+                        selectedPart={selectedPart}
+                        showInfoPanel={showInfoPanel}
                     />
                 </ThreeErrorBoundary>
 
