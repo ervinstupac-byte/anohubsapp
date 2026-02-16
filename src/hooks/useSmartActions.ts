@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { SIMULATION_THRESHOLDS } from '../services/DemoDataOracle';
 
 export interface SmartAction {
     id: string;
@@ -20,9 +21,8 @@ export const useSmartActions = (): SmartAction[] => {
     // physics.powerMW is not available in TechnicalProjectState['physics']
     const powerMW = 0; // Or derive from hydraulic.powerKW if needed
 
-    // MOCK Thresholds (normally these come from AssetConfig)
-    const MAX_BEARING_TEMP = 65;
-    const MAX_VIBRATION = 2.0;
+    // Thresholds (Simulated via Oracle)
+    const { MAX_BEARING_TEMP, MAX_VIBRATION } = SIMULATION_THRESHOLDS;
 
     const actions = useMemo(() => {
         const activeActions: SmartAction[] = [];

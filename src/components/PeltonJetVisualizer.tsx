@@ -24,14 +24,14 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
     const analyzeJets = async () => {
         setIsAnalyzing(true);
 
-        // Mock analysis for each nozzle
+        // Simulated analysis for each nozzle
         const analyses: JetAnalysis[] = [];
 
         for (let i = 1; i <= nozzleCount; i++) {
             // Simulate acoustic data collection
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            const mockAcousticData = Array.from({ length: 1000 }, () => Math.random() * 100);
+            const simulatedAcousticData = Array.from({ length: 1000 }, () => Math.random() * 100);
 
             // Add intentional variation to nozzle 3 (erosion simulation)
             const whistleBoost = i === 3 ? 3 : 0;
@@ -39,7 +39,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
 
             const analysis = PeltonJetSyncService.analyzeJet(
                 i,
-                mockAcousticData.map(v => v + (i === 3 ? v * 0.5 : 0)), // Add noise to nozzle 3
+                simulatedAcousticData.map(v => v + (i === 3 ? v * 0.5 : 0)), // Add noise to nozzle 3
                 100 * pressureVariation, // bar
                 75 // needle position %
             );

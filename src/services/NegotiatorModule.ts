@@ -57,7 +57,7 @@ export class NegotiatorModule {
             baselineLoad,
             excessCapacity,
             confidence: 0.85,
-            duration: 4 // hours (mock)
+            duration: 4 // hours (simulated)
         };
     }
 

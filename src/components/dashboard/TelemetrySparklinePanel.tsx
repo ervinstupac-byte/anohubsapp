@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Activity, Thermometer, Gauge, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Activity, Thermometer, Gauge, TrendingUp, TrendingDown, Minus, Cpu, Waves } from 'lucide-react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { Sparkline } from '../ui/Sparkline';
 
@@ -122,11 +122,15 @@ export const TelemetrySparklinePanel: React.FC<{ className?: string }> = ({ clas
     const telemetryHistory = useTelemetryStore(state => state.telemetryHistory);
     const mechanical = useTelemetryStore(state => state.mechanical);
     const hydraulic = useTelemetryStore(state => state.hydraulic);
+    const governor = useTelemetryStore(state => state.governor);
+    const physics = useTelemetryStore(state => state.physics);
 
     // Extract values from history
     const vibrationXData = telemetryHistory.vibrationX.map(p => p.value);
     const bearingTempData = telemetryHistory.bearingTemp.map(p => p.value);
     const flowData = telemetryHistory.flow.map(p => p.value);
+    const pidOutputData = telemetryHistory.governorOutput.map(p => p.value);
+    const surgePressureData = telemetryHistory.surgePressure.map(p => p.value);
 
     return (
         <div className={`space-y-3 ${className}`}>
@@ -170,6 +174,23 @@ export const TelemetrySparklinePanel: React.FC<{ className?: string }> = ({ clas
                     data={flowData}
                     color="#34d399"
                     icon={<Gauge className="w-3 h-3" />}
+                />
+                <SparklineMetric
+                    label="PID Output"
+                    value={governor.outputSignal?.toNumber() ?? 0}
+                    unit="%/s"
+                    data={pidOutputData}
+                    color="#f97316"
+                    icon={<Cpu className="w-3 h-3" />}
+                />
+                <SparklineMetric
+                    label="Surge Pressure"
+                    value={typeof physics.surgePressureBar === 'number' ? physics.surgePressureBar : 0}
+                    unit="bar"
+                    data={surgePressureData}
+                    color="#8b5cf6"
+                    icon={<Waves className="w-3 h-3" />}
+                    threshold={{ warning: 10, alarm: 20 }}
                 />
             </div>
         </div>

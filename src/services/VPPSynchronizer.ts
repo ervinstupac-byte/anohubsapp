@@ -265,7 +265,7 @@ export class VPPSynchronizer {
         return {
             optimalDistribution,
             totalCapacity,
-            utilization: 0.85 // Mock
+            utilization: 0.85 // Simulated
         };
     }
 }

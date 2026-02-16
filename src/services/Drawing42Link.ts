@@ -20,7 +20,7 @@ export class Drawing42Link {
      * Resolves the request to a specific document location.
      */
     openDocument(drawingId: string, pageNumber: number, highlightedRegion: string): DocumentLink {
-        // Mock File System Check
+        // Simulated File System Check
         const rootDir = '/mnt/secure_archive/drawings/';
 
         let filename = 'Unknown.pdf';

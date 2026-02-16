@@ -39,7 +39,7 @@ export class MaintenancePredictor {
      */
     static estimateRemainingLife(stressIndexUnused: number, designLifeHours: number = 50000): { hours: number; days: number; status: string } {
         // Since we are bridging, we ideally should have access to the full telemetry. 
-        // But for this legacy call, we'll return a sensible default or mock based on "stressIndex"
+        // But for this legacy call, we'll return a sensible default or simulated based on "stressIndex"
         // In reality, components should move to useMaintenancePrediction hook.
 
         return {

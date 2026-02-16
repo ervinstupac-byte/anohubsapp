@@ -27,7 +27,7 @@ export class VortexDiagnostic {
         // In real code: Perform FFT to get Spectrum
         // Here we simulated detecting a peak
 
-        // Mock detection based on waveform variance (amplitude)
+        // Simulated detection based on waveform variance (amplitude)
         // A real rope creates distinct low-freq high-amp signal
 
         // Let's assume the 'hardware' passes us the dominant frequency and amp

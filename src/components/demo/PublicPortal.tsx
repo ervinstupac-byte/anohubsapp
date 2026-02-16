@@ -7,7 +7,7 @@ import { RCAService } from '../../lib/automation/RCAService'; // Logic Core
 export const PublicPortal: React.FC = () => {
     const [scenario, setScenario] = useState<'NOMINAL' | 'CAVITATION' | 'MISALIGNMENT' | 'LOOSENESS'>('NOMINAL');
 
-    // MOCKED TELEMETRY GENERATOR
+    // SimulatedED TELEMETRY GENERATOR
     const getScenarioData = () => {
         const base = { rpm: 428.6, efficiency: 94.5, vibration: 0.8, temp: 65, flow: 120, head: 110 };
 
@@ -37,7 +37,7 @@ export const PublicPortal: React.FC = () => {
                 vibrationMmS: data.vibration,
                 efficiencyPercent: data.efficiency,
                 bearingTempC: data.temp,
-                bearingTempRateOfChange: 0.2 // Mock benign unless Misalignment
+                bearingTempRateOfChange: 0.2 // Simulated benign unless Misalignment
             },
             peaks: scenario === 'MISALIGNMENT'
                 ? [{ frequencyHz: 7.14, amplitudeMmS: 6.0 }]

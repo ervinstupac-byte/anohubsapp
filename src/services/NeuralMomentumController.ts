@@ -41,7 +41,7 @@ export class NeuralMomentumController {
         currentState: MomentumState,
         targetLoad: number
     ): ControlAction[] {
-        const loadChange = targetLoad - 40; // Current 40 MW (mock)
+        const loadChange = targetLoad - 40; // Current 40 MW (simulated)
         const prediction = this.predictTransient(currentState, loadChange);
 
         const actions: ControlAction[] = [];

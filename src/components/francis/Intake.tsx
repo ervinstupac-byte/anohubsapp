@@ -12,8 +12,8 @@ export const Intake: React.FC = () => {
     const navigate = useNavigate();
     const telemetry = useTelemetryStore();
 
-    // Mock Telemetry (Pending integration into HydraulicStream)
-    const trashBuildUp = 12; // % (Mocked for context)
+    // Simulated Telemetry (Pending integration into HydraulicStream)
+    const trashBuildUp = 12; // % (Simulateded for context)
     const deltaP = 0.45; // meters
     const isAlarm = deltaP > 2.0;
 

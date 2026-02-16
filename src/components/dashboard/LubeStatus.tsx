@@ -21,7 +21,7 @@ export const LubeStatus: React.FC = () => {
             // Oil System
             oilPressure: oilSystem.oilPressureBar || 0,
             oilTemperature: oilSystem.oilTemperatureC || 0,
-            oilFlowRate: 0, // Mock or derived
+            oilFlowRate: 0, // Simulated or derived
             oilTankLevel: oilSystem.oilLevelPercent || 0,
             mainPumpRunning: true, // Assumption for now
             standbyPumpRunning: false, // Managed by controller state internally if we synced it back, but here we just read inputs

@@ -12,7 +12,7 @@ export const AuxiliarySystems: React.FC = () => {
     const navigate = useNavigate();
     const telemetry = useTelemetryStore();
 
-    // Mock Telemetry (Pending integration)
+    // Simulated Telemetry (Pending integration)
     const dcVoltage = 110.2; // VDC
     const brakesStatus = 'Ready';
     const drainageStatus = 'Optimal';

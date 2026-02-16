@@ -126,8 +126,8 @@ export const ServiceChecklistUI: React.FC = () => {
             setIsRecording(true);
             // In production, use Web Speech API here
             setTimeout(() => {
-                const mockTranscript = "Uređaj provjeren, sve u redu.";
-                addFieldNote(currentItem.id, mockTranscript);
+                const simulatedTranscript = "Uređaj provjeren, sve u redu.";
+                addFieldNote(currentItem.id, simulatedTranscript);
                 setIsRecording(false);
             }, 2000);
         }

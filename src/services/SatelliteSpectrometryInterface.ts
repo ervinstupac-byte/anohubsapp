@@ -23,12 +23,12 @@ export class SatelliteSpectrometryInterface {
      * PROCESS SATELLITE IMAGE
      */
     public static analyzeSnowpack(
-        sweMapData: Float32Array, // Mock grid
+        sweMapData: Float32Array, // Simulated grid
         areaKm2: number
     ): SnowPackStatus {
 
         // 1. Aggregate SWE
-        // Mock avg calculation from grid
+        // Simulated avg calculation from grid
         const avgSWE = 120; // mm (Example: 12cm of water equivalent in snow)
 
         // 2. Calculate Water Volume
@@ -43,7 +43,7 @@ export class SatelliteSpectrometryInterface {
         const energyMWh = energyJoules / 3.6e9; // J to MWh
 
         // 4. Melt Estimation
-        // Based on Albedo decrease? Mock value.
+        // Based on Albedo decrease? Simulated value.
         const meltRate = 5.0; // mm/day
 
         return {

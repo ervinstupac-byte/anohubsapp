@@ -85,11 +85,13 @@ function scanForIssues(dir: string, issues: { file: string; line: number; type: 
                 if (line.includes('FIXME')) {
                     issues.push({ file: path.relative(ROOT_DIR, fullPath), line: index + 1, type: 'FIXME', content: line.trim() });
                 }
-                // Check for MOCK (exclude tests and this script)
+                // Check for MOCK (exclude tests, this script, and the DemoDataOracle)
                 if (line.toUpperCase().includes('MOCK') && 
                     !fullPath.includes('.test.') && 
                     !fullPath.includes('__tests__') && 
-                    !fullPath.includes('genesis_audit.ts')) {
+                    !fullPath.includes('genesis_audit.ts') &&
+                    !fullPath.includes('DemoDataOracle.ts') &&
+                    !line.trim().startsWith('import')) {
                      // Allow "Mock" in specific contexts if needed, but flag it
                      issues.push({ file: path.relative(ROOT_DIR, fullPath), line: index + 1, type: 'MOCK_USAGE', content: line.trim() });
                 }

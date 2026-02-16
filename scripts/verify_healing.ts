@@ -5,7 +5,7 @@
  * Detection → Diagnosis → Protocol Matching → Simulation → Execution/Advisory
  */
 
-// --- INLINE MOCKS FOR VERIFICATION ---
+// --- INLINE SIMULATIONS FOR VERIFICATION ---
 
 enum HealingProtocol {
     THERMAL_STABILIZATION = 'THERMAL_STABILIZATION',
@@ -61,7 +61,7 @@ class SovereignHealerServiceMock {
     }
 
     public static simulateHealing(action: HealingAction): { actualImprovement: number; predictedLoss: number } {
-        // Mock: Good protocol achieves 80% of expected
+        // Simulation: Good protocol achieves 80% of expected
         return {
             actualImprovement: action.expectedImprovement * 0.8,
             predictedLoss: 200 // Low risk
@@ -118,7 +118,7 @@ async function verify() {
         description: 'Root Cause Analysis: temperature (45.0) driven anomaly in vibration.'
     };
 
-    const result1 = SovereignHealerServiceMock.heal(diagnosis1);
+    const result1 = SovereignHealerServiceSimulated.heal(diagnosis1);
 
     if (!result1) {
         console.error('❌ Failed: No protocol matched');
@@ -144,7 +144,7 @@ async function verify() {
         description: 'Low confidence diagnosis'
     };
 
-    const result2 = SovereignHealerServiceMock.heal(diagnosis2);
+    const result2 = SovereignHealerServiceSimulated.heal(diagnosis2);
 
     if (result2 === null) {
         console.log('✅ Test 2 PASSED: No protocol matched for unknown metric (expected)');

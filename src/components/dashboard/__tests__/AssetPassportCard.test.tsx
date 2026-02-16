@@ -9,9 +9,9 @@ import { useNotifications } from '../../../contexts/NotificationContext';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { Decimal } from 'decimal.js';
 
-// --- MOCKS ---
+// --- Simulated ---
 
-// Add explicit local mock as requested by user to ensure Vitest sees it
+// Add explicit local simulated as requested by user to ensure Vitest sees it
 vi.mock('react-i18next', () => {
     const useTranslation = () => ({ t: (key: string, opts: any) => key, i18n: { changeLanguage: vi.fn() } });
     const initReactI18next = { type: '3rdParty', init: vi.fn() };
@@ -27,7 +27,7 @@ vi.mock('../../../features/telemetry/store/useTelemetryStore');
 vi.mock('../../../contexts/DocumentContext');
 vi.mock('../../../contexts/NotificationContext');
 
-// Mock UI Components
+// Simulated UI Components
 vi.mock('../../../shared/components/ui/GlassCard', () => ({
     GlassCard: ({ children, className }: any) => <div className={className}>{children}</div>
 }));
@@ -38,7 +38,7 @@ vi.mock('../TelemetryDrilldownModal', () => ({
     TelemetryDrilldownModal: () => <div data-testid="drilldown-modal" />
 }));
 
-// Mock ForensicReportService
+// Simulated ForensicReportService
 vi.mock('../../../services/ForensicReportService', () => ({
     ForensicReportService: {
         generateAssetPassport: vi.fn(() => new Blob(['pdf-content'], { type: 'application/pdf' })),
@@ -46,7 +46,7 @@ vi.mock('../../../services/ForensicReportService', () => ({
     }
 }));
 
-// Mock icons
+// Simulated icons
 vi.mock('lucide-react', () => ({
     FileText: () => <div data-testid="icon-file-text" />,
     Calendar: () => <div data-testid="icon-calendar" />,
@@ -61,7 +61,7 @@ vi.mock('lucide-react', () => ({
 }));
 
 describe('AssetPassportCard Component', () => {
-    const mockSelectedAsset = {
+    const simulatedSelectedAsset = {
         id: 'asset-123',
         name: 'Turbine A',
         specs: {
@@ -73,18 +73,18 @@ describe('AssetPassportCard Component', () => {
         },
     };
 
-    const mockPushNotification = vi.fn();
-    const mockViewDocument = vi.fn();
+    const simulatedPushNotification = vi.fn();
+    const simulatedViewDocument = vi.fn();
 
     beforeEach(() => {
         vi.clearAllMocks();
 
         (useAssetContext as any).mockReturnValue({
-            selectedAsset: mockSelectedAsset,
+            selectedAsset: simulatedSelectedAsset,
             assetLogs: []
         });
-        (useNotifications as any).mockReturnValue({ pushNotification: mockPushNotification });
-        (useDocumentViewer as any).mockReturnValue({ viewDocument: mockViewDocument });
+        (useNotifications as any).mockReturnValue({ pushNotification: simulatedPushNotification });
+        (useDocumentViewer as any).mockReturnValue({ viewDocument: simulatedViewDocument });
 
         // Default: Nominal Telemetry
         (useTelemetryStore as any).mockReturnValue({
@@ -172,7 +172,7 @@ describe('AssetPassportCard Component', () => {
 
     it('handles incomplete specs with defaults', () => {
         (useAssetContext as any).mockReturnValue({
-            selectedAsset: { ...mockSelectedAsset, specs: {} }, // Empty specs
+            selectedAsset: { ...simulatedSelectedAsset, specs: {} }, // Empty specs
             assetLogs: []
         });
 
@@ -207,10 +207,10 @@ describe('AssetPassportCard Component', () => {
         fireEvent.click(downloadBtn);
 
         await waitFor(() => {
-            expect(mockPushNotification).toHaveBeenCalledWith('INFO', expect.anything());
+            expect(simulatedPushNotification).toHaveBeenCalledWith('INFO', expect.anything());
         });
 
-        // Check if generateAssetPassport was imported and called (via mock side effect or just assume success if notification fired)
-        // Since we mocked dynamic import, wait for async handling
+        // Check if generateAssetPassport was imported and called (via simulated side effect or just assume success if notification fired)
+        // Since we simulateded dynamic import, wait for async handling
     });
 });

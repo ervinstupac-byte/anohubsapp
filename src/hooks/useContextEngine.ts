@@ -109,7 +109,7 @@ export const useContextEngine = () => {
     const [activeComponentId, setActiveComponentId] = useState<string | null>(null);
     const [metricHistory, setMetricHistory] = useState<Record<string, number[]>>({});
 
-    // Track time at state for heuristics (mocked for now)
+    // Track time at state for heuristics (simulated for now)
     const [timeAtState, setTimeAtState] = useState(0);
 
     // Helper: Evaluation Logic for Knowledge Graph
@@ -174,8 +174,8 @@ export const useContextEngine = () => {
     const diagnosticsAndMetrics = useMemo(() => {
         if (!activeComponentId) return { diagnostics: [], metrics: { structuralSafetyMargin: 100 }, recoveryPaths: [] };
 
-        // Mock Baseline Data (The Archivist)
-        const mockBaselines = {
+        // Simulated Baseline Data (The Archivist)
+        const simulatedBaselines = {
             'bearingTemp_Loaded': { mean: 55, sigma: 1.5 }, // Normal: 55C. Simulating 60C (3.3 Sigma event)
             'draftTubePressure': { mean: 2.0, sigma: 0.2 }
         };
@@ -187,7 +187,7 @@ export const useContextEngine = () => {
             patterns,
             {
                 timeAtState: timeAtState,
-                baselines: mockBaselines,
+                baselines: simulatedBaselines,
                 weights: patternWeights // Inject the neural weights
             }
         );
@@ -365,7 +365,7 @@ export const useContextEngine = () => {
                     // Logic Trace formatting
                     const logicTrace = diag.vectors?.join('\n- ') || 'No trace available';
 
-                    // Historical Precedent (Mocked or Real from diag)
+                    // Historical Precedent (Simulated or Real from diag)
                     const precedent = diag.precedent || "Similar instability observed 14 months ago during rapid load rejection.";
 
                     // Physics Narrative (Constructed)

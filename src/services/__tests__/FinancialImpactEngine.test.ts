@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { FinancialImpactEngine } from '../core/FinancialImpactEngine';
 
-// Minimal mock state and physics
+// Minimal simulated state and physics
 const baseState: any = {
   identity: { turbineType: 'FRANCIS' },
   hydraulic: {

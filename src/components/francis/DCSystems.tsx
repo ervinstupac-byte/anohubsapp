@@ -12,7 +12,7 @@ export const DCSystems: React.FC = () => {
 
     // Local simulation for individual cell drift, subbed to CEREBRO for bus
     const [voltages, setVoltages] = useState([2.25, 2.24, 2.25, 2.18, 2.26, 2.25]);
-    const busVoltage = 122.4; // VDC (Mocked)
+    const busVoltage = 122.4; // VDC (Simulateded)
     const loadCurrent = 14.2; // Amps
 
     useEffect(() => {

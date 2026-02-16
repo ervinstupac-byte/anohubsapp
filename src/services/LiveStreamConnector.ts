@@ -2,7 +2,7 @@
  * LiveStreamConnector.ts
  * 
  * Production Live Stream Integration
- * Replaces all mock telemetry with real-time data from SCADA/PLC systems
+ * Replaces all simulated telemetry with real-time data from SCADA/PLC systems
  */
 
 import { TelemetryStream } from '../lib/engines/BaseTurbineEngine';

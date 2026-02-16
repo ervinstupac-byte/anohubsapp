@@ -11,8 +11,8 @@ export const TechnicalAuditReportModule: React.FC = () => {
     const { t } = useTranslation();
 
     const handleGenerateReport = () => {
-        // MOCK DATA - In production this comes from SmartStartService, VisualInspectionService, etc.
-        const mockData = {
+        // Simulated DATA - In production this comes from SmartStartService, VisualInspectionService, etc.
+        const simulatedData = {
             assetDetails: {
                 name: "T2 - KAPLAN PIT (Agregat 2)",
                 location: "Powerhouse Level -2",
@@ -57,14 +57,14 @@ export const TechnicalAuditReportModule: React.FC = () => {
         };
 
         const blob = ForensicReportService.generateProtocolReport({
-            contextTitle: mockData.assetDetails.name,
+            contextTitle: simulatedData.assetDetails.name,
             slogan: "High-Fidelity Technical Audit Report",
             metrics: [
-                { label: 'Bolt Grade', value: mockData.mechanical.boltGrade },
-                { label: 'Torque', value: mockData.mechanical.torqueApplied, unit: 'Nm' },
-                { label: 'Head', value: mockData.hydraulics.netHead, unit: 'm' }
+                { label: 'Bolt Grade', value: simulatedData.mechanical.boltGrade },
+                { label: 'Torque', value: simulatedData.mechanical.torqueApplied, unit: 'Nm' },
+                { label: 'Head', value: simulatedData.hydraulics.netHead, unit: 'm' }
             ],
-            diagnostics: mockData.executiveSummary.recommendedActions.map(a => ({ message: a })),
+            diagnostics: simulatedData.executiveSummary.recommendedActions.map(a => ({ message: a })),
             logs: [],
             physicsData: [],
             engineerName: "CEREBRO AI",

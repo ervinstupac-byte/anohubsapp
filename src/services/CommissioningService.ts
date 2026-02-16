@@ -429,7 +429,7 @@ export class CommissioningService {
 
     private static extractDominantFrequencies(vibration: any): number[] {
         // Simplified - in production would use FFT on time-domain data
-        return [16.67, 33.33, 50]; // Mock: 1x, 2x, 3x running speed
+        return [16.67, 33.33, 50]; // Simulated: 1x, 2x, 3x running speed
     }
 
     private static findPeaks(spectrum: number[]): Array<{ frequency: number; amplitude: number }> {

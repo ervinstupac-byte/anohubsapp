@@ -83,7 +83,7 @@ export class UIOverlayBridge {
 
         const sensors = kksRegistry.map(tag => ({
             kksCode: tag.code,
-            value: this.getMockSensorValue(tag.code),
+            value: this.getSimulatedSensorValue(tag.code),
             unit: this.getSensorUnit(tag.component),
             status: this.getSensorStatus(tag.code),
             position3D: this.get3DPosition(tag.code) // AR anchor
@@ -167,9 +167,9 @@ export class UIOverlayBridge {
     }
 
     /**
-     * Get mock sensor value
+     * Get simulated sensor value
      */
-    private static getMockSensorValue(kksCode: string): number {
+    private static getSimulatedSensorValue(kksCode: string): number {
         // In production: Query actual sensor
         if (kksCode.includes('TVB')) return 1.2 + Math.random() * 0.3; // Vibration
         if (kksCode.includes('TTB')) return 42 + Math.random() * 5; // Temperature
@@ -210,7 +210,7 @@ export class UIOverlayBridge {
      */
     private static get3DPosition(kksCode: string): { x: number; y: number; z: number } {
         // In production: Load from 3D plant model
-        // For now: Mock positions
+        // For now: Simulated positions
         const positions: Record<string, { x: number; y: number; z: number }> = {
             '10TVB01': { x: 10.5, y: 2.3, z: 15.2 }, // Upper bearing
             '10TVB02': { x: 10.5, y: -1.5, z: 15.2 }, // Lower bearing
@@ -233,7 +233,7 @@ export class UIOverlayBridge {
         return {
             activeClients: this.subscribers.size,
             framesStreamed: this.frameCounter,
-            avgLatency: 5.2, // Mock - would track actual
+            avgLatency: 5.2, // Simulated - would track actual
             updateRate: this.UPDATE_RATE_HZ
         };
     }

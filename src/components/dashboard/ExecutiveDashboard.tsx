@@ -464,13 +464,13 @@ export const ExecutiveDashboard: React.FC = () => {
 
     const [pendingAction, setPendingAction] = useState<{ id: string, desc: string } | null>(null);
 
-    // Mock Shadow Data
+    // Simulated Shadow Data
     const shadowData = useMemo(() => Array.from({ length: 15 }, (_, i) => ({ timestamp: i, deltaP: (Math.random() - 0.4) * 20 })), []);
 
     // Simulate an AI action triggering every 30s for demo
     React.useEffect(() => {
         const t = setInterval(() => {
-            // Only trigger if we are in a mode that supports it (mock check)
+            // Only trigger if we are in a mode that supports it (simulated check)
             if (Math.random() > 0.7 && !pendingAction) {
                 setPendingAction({ id: `ACT-${Date.now()}`, desc: 'Adjust Nozzle Sequence: 1-3-5 (Efficiency +1.2%)' });
             }

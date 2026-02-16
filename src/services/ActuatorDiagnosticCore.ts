@@ -61,7 +61,7 @@ export class ActuatorDiagnosticCore {
         // Reversal Error: When direction changes, does position lag significantly?
         // cmd: 50 -> 51 (pos 50->50.8) -> 50 (pos 50.8->50.8) -> 49 (pos 50.8 -> 49.5)
         // Deadband is the 'lost motion' on reversal.
-        const deadband = 0.5; // Mock calculation result (would require detecting reversals)
+        const deadband = 0.5; // Simulated calculation result (would require detecting reversals)
 
         // 4. Determine Status
         let status: ActuatorState['status'] = 'HEALTHY';
@@ -71,7 +71,7 @@ export class ActuatorDiagnosticCore {
         return {
             stictionIndex: stictionScore,
             deadbandPct: deadband,
-            hysteresisLoopWidth: 1.2, // Mock hysteresis width
+            hysteresisLoopWidth: 1.2, // Simulated hysteresis width
             isHunting: false, // Calculated by LoopMonitor usually
             status
         };

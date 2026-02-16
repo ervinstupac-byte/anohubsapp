@@ -23,7 +23,7 @@ export class CommissioningDashboardService {
      * Returns a snapshot of the nervous system health.
      */
     getDiagnostics(): CommissioningStats {
-        // Mock Diagnostics derived from system state
+        // Simulated Diagnostics derived from system state
         return {
             connectionLatencyMs: 12, // Excellent
             activeTagCount: 852,

@@ -2,7 +2,7 @@
  * verify_learning.ts
  * 
  * Verifies:
- * 1. FeedbackIntelligence calculates modifiers correctly from mock history.
+ * 1. FeedbackIntelligence calculates modifiers correctly from simulated history.
  * 2. SovereignStrategist applies modifiers to suppress previously vetoed actions.
  */
 
@@ -32,9 +32,9 @@ interface LearningModifiers {
 }
 
 class FeedbackIntelligence {
-    public static async getLearningModifiers(actionType: string, mockHistory: FeedbackItem[]): Promise<LearningModifiers> {
+    public static async getLearningModifiers(actionType: string, simulatedHistory: FeedbackItem[]): Promise<LearningModifiers> {
         // EXACT LOGIC FROM src/services/FeedbackIntelligence.ts
-        const vetoCount = mockHistory.length;
+        const vetoCount = simulatedHistory.length;
         let multiplier = 1.0;
         let penalty = 0;
         const threshold = 3;
@@ -122,16 +122,16 @@ async function verify() {
     // "Operator vetoed 'Increase load' 3 times citing 'Sensor Drift'"
     // Actually our logic requires > 3 to trigger penalty.
     // Let's create 4 vetoes.
-    const mockHistory: FeedbackItem[] = [
+    const simulatedHistory: FeedbackItem[] = [
         { action_id: '1', reason: 'Veto Increase Load: Sensor Drift', timestamp: new Date().toISOString() },
         { action_id: '2', reason: 'Veto Increase Load: Noise', timestamp: new Date().toISOString() },
         { action_id: '3', reason: 'Veto Increase Load: Valid check', timestamp: new Date().toISOString() },
         { action_id: '4', reason: 'Veto Increase Load: Unsafe', timestamp: new Date().toISOString() }
     ];
 
-    const modifiers = await FeedbackIntelligence.getLearningModifiers('Increase Load', mockHistory);
+    const modifiers = await FeedbackIntelligence.getLearningModifiers('Increase Load', simulatedHistory);
     console.log(`\n2. Learning Analysis:`);
-    console.log(`   Veto Count: ${mockHistory.length}`);
+    console.log(`   Veto Count: ${simulatedHistory.length}`);
     console.log(`   Calculated Multiplier: ${modifiers.thresholdMultiplier}`);
     console.log(`   Confidence Penalty: ${modifiers.confidencePenalty}`);
 

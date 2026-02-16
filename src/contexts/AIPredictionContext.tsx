@@ -149,7 +149,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
                                 // Create autonomous work order
                                 const orderId = `AI-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-                                // Get required parts (mock implementation)
+                                // Get required parts (simulated implementation)
                                 const requiredParts = getRequiredParts(rul.componentType);
 
                                 const newOrder: AutonomousWorkOrder = {

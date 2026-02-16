@@ -2,7 +2,7 @@
  * MASTER PROTOCOL BRIDGE
  * The Universal Ear 🤝🔌
  * "Shakes hands" with Manufacturer SCADA systems (Giants).
- * Supports mock OPC UA and Modbus protocols.
+ * Supports simulated OPC UA and Modbus protocols.
  */
 
 export interface GiantConnection {
@@ -23,7 +23,7 @@ export class MasterProtocolBridge extends BaseGuardian {
      * Pings the Giant and asks for a session.
      */
     connectToGiant(id: string, protocol: 'OPC_UA' | 'MODBUS_TCP'): GiantConnection {
-        // Mock Handshake Logic
+        // Simulated Handshake Logic
         const success = Math.random() > 0.1; // 90% chance of success
         const latency = Math.floor(Math.random() * 50) + 10; // 10-60ms
 

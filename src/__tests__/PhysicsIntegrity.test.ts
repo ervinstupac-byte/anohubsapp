@@ -10,8 +10,8 @@ describe('Physics Integrity (Golden Image Regression)', () => {
     });
 
     it('should match the Golden Image exactly for nominal Francis Turbine operation', () => {
-        // Mock import.meta.env for testing
-        (global as any).import = { meta: { env: { VITE_SUPABASE_URL: 'mock', VITE_SUPABASE_ANON_KEY: 'mock' } } };
+        // Simulated import.meta.env for testing
+        (global as any).import = { meta: { env: { VITE_SUPABASE_URL: 'simulated', VITE_SUPABASE_ANON_KEY: 'simulated' } } };
         
         const engine = new Sovereign_Executive_Engine();
         

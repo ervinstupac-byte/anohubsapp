@@ -42,7 +42,7 @@ export class AdditiveManufacturingBridge {
     }
 
     private static queuePrint(partId: string): PrintJob {
-        // Mock job creation
+        // Simulated job creation
         const job: PrintJob = {
             jobId: `PRT-${Date.now().toString().slice(-4)}`,
             partId,

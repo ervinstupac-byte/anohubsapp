@@ -31,7 +31,7 @@ export class EvolutionaryOptimizer extends BaseGuardian {
         components.forEach(comp => {
             // Logic: If it fails too often (> 3x/year) and Tech is OLD
             if (comp.failureRatePerYear > 3 && comp.currentTechLevel === 'STANDARD') {
-                // Mock lookup from ScientificIngestor
+                // Simulated lookup from ScientificIngestor
                 suggestions.push({
                     componentId: comp.componentId,
                     suggestion: 'Upgrade to "Quantum-Coated Sensor" detected in Global DB.',

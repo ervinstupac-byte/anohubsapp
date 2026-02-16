@@ -53,7 +53,7 @@ export class ForensicDiagnosticService {
         const path: CausalNode[] = [];
         let rootNode = endNode;
 
-        // Mock Logic for MVP: Scan known upstream suspects if correlated
+        // Simulated Logic for MVP: Scan known upstream suspects if correlated
         // If Vibration is the symptom, check Temperature.
         if (symptomMetric === 'vibration') {
             const temp = state.physics.temperature;

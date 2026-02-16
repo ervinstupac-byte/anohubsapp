@@ -81,7 +81,7 @@ export const PrecisionAudit: React.FC = () => {
         const assetType = selectedAsset?.turbine_type || (selectedDossier?.title?.toUpperCase().includes('FRANCIS') ? 'FRANCIS' : 'GENERIC');
 
         // Protocol NC-5.8: Injecting deep-scan findings from the manual source
-        const mockFindings = [
+        const simulatedFindings = [
             {
                 id: 1,
                 title: "Core Integrity Analysis",
@@ -107,7 +107,7 @@ export const PrecisionAudit: React.FC = () => {
 
         // If a dossier was specifically selected, ensure it's the primary finding
         if (selectedDossier) {
-            mockFindings[0] = {
+            simulatedFindings[0] = {
                 id: 1,
                 title: `Manual Source: ${selectedDossier.path.split('/').pop()?.replace('.html', '').replace(/-/g, ' ').toUpperCase()}`,
                 status: "NC-5.8 VERIFIED",
@@ -116,7 +116,7 @@ export const PrecisionAudit: React.FC = () => {
             };
         }
 
-        setFindings(mockFindings);
+        setFindings(simulatedFindings);
     };
 
     return (

@@ -29,7 +29,7 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
     const resolvedPathCandidate = resolvedSource?.path || filePath || '';
     const normalizedPath = resolvedPathCandidate.startsWith('/') ? resolvedPathCandidate : `/${resolvedPathCandidate}`;
     
-    // Fallback mapping to current archival locations (Mock logic for demo)
+    // Fallback mapping to current archival locations (Simulated logic for demo)
     const activePath = (() => {
         if (normalizedPath.includes('AnoHub_site')) {
             return normalizedPath.replace('/src/AnoHub_site/', '/docs/archive/').replace('/AnoHub_site/', '/docs/archive/');
@@ -48,7 +48,7 @@ export const DossierViewerModal: React.FC<DossierViewerModalProps> = ({ isOpen, 
             setTimeout(() => {
                 if (mounted) {
                     setIsChecking(false);
-                    // Mock content for demo purposes if fetch fails or is not implemented
+                    // Simulated content for demo purposes if fetch fails or is not implemented
                     setContent(`# ${title}\n\n**Classification:** CONFIDENTIAL\n**Integrity Hash:** 0x7F...9A2\n\n## Executive Summary\nThis document contains sensitive engineering data regarding the ${title}. Access is logged.\n\n## Technical Specifications\n- **Asset ID:** ${resolvedSource?.id || 'UNKNOWN'}\n- **Revision:** 2.4.1\n- **Last Audit:** ${new Date().toLocaleDateString()}\n\n## Operational Constraints\nEnsure all safety protocols are followed when interpreting this data.`);
                 }
             }, 800);

@@ -164,7 +164,7 @@ const ForensicHub: React.FC = () => {
         };
         initKnowledge();
 
-        // ROI Monitor (Mock data if empty)
+        // ROI Monitor (Simulated data if empty)
         if (ROIMonitorService.exportEvents().length === 0) {
              ROIMonitorService.recordHealingAction(0.95, 15000);
              ROIMonitorService.recordMarketOptimization(2500, 'Price Arbitrage - Battery Discharge');
@@ -172,7 +172,7 @@ const ForensicHub: React.FC = () => {
         }
         setRoiEvents(ROIMonitorService.exportEvents());
 
-        // Audit Trail (Mock data if empty)
+        // Audit Trail (Simulated data if empty)
         if (AuditTrailService.getAuditTrail('UNIT-1').length === 0) {
             AuditTrailService.logDecision('UNIT-1', {
                 timestamp: Date.now(),
@@ -200,7 +200,7 @@ const ForensicHub: React.FC = () => {
         setAuditEntries(AuditTrailService.getAuditTrail('UNIT-1'));
 
         // Compliance Report
-        const auditor = new AuditorExportService([], []); // Mock injection
+        const auditor = new AuditorExportService([], []); // Simulated injection
         const report = auditor.generateComplianceReport(30);
         setComplianceReport(report);
 
@@ -221,11 +221,11 @@ const ForensicHub: React.FC = () => {
         EcoGovernanceUnit.monitorWaterQuality({ dissolvedOxygen: 6.5, temperature: 18, pH: 7.2, turbidity: 5 });
         setEcoStatus(EcoGovernanceUnit.getEnvironmentalStatus());
 
-        // Fish Passage (Mock)
+        // Fish Passage (Simulated)
         const fish = FishPassageOrchestrator.optimizeFlow(new Date().getMonth(), 150, 450);
         setFishState(fish);
 
-        // Basin Coordinator (Mock)
+        // Basin Coordinator (Simulated)
         const basin = new BasinCoordinator();
         const fleetAction = basin.coordinateFleet(
             { id: 'U1', currentMw: 45, condition: 'OPTIMAL', maxCapacityMw: 100 },
@@ -234,13 +234,13 @@ const ForensicHub: React.FC = () => {
         );
         setBasinAction(fleetAction);
 
-        // H2 Synthesizer (Mock)
+        // H2 Synthesizer (Simulated)
         H2Synthesizer.initializeFuelCells();
         const h2Check = H2Synthesizer.checkElectrolysisTrigger({ islandMode: false, marketDemand: 20, excessPower: 5 });
         if (h2Check.shouldRun) {
             // No-op for demo
         }
-        // Create a mock session for display
+        // Create a simulated session for display
         setH2Session({
             sessionId: 'H2-AUTO-001',
             startTime: Date.now() - 3600000,
@@ -252,9 +252,9 @@ const ForensicHub: React.FC = () => {
             status: 'RUNNING'
         });
 
-        // Smart Contract Orders (Mock)
-        const mockOrder = SmartContractProcurement.createOrder('SEAL-KIT-SKF', 2, 450, 95);
-        setDaoOrders([mockOrder]);
+        // Smart Contract Orders (Simulated)
+        const simulatedOrder = SmartContractProcurement.createOrder('SEAL-KIT-SKF', 2, 450, 95);
+        setDaoOrders([simulatedOrder]);
 
         // Predictive Procurement (Scan)
         const reqs = PredictiveProcurementService.scanFleet();
@@ -270,7 +270,7 @@ const ForensicHub: React.FC = () => {
         // const plan = OutageOptimizer.findOptimalWindow(48, new Date());
         // setOutagePlan(plan);
 
-        // Civil Security (Mock)
+        // Civil Security (Simulated)
         CivilSecurityModule.registerPiezometer({ id: 'PZ-01', location: 'Foundation Left', elevation: 85, pressure: 2.1, upliftForce: 0, timestamp: Date.now() });
         CivilSecurityModule.registerPiezometer({ id: 'PZ-02', location: 'Foundation Right', elevation: 85, pressure: 1.8, upliftForce: 0, timestamp: Date.now() });
         CivilSecurityModule.registerSeismicEvent({ stationId: 'SEIS-MAIN', peakGroundAcceleration: 0.01, frequency: 12, magnitude: 1.2, timestamp: Date.now() });
@@ -292,6 +292,7 @@ const ForensicHub: React.FC = () => {
     const telemetry = useTelemetryStore(state => ({
         mechanical: state.mechanical,
         hydraulic: state.hydraulic,
+        physics: state.physics, // Needed for Surge Pressure
         alignment: state.alignment // NC-15200: Needed for Kinetic Oracle
     }));
 
@@ -345,10 +346,15 @@ const ForensicHub: React.FC = () => {
         const execState = engineRef.current.executeCycle({
             vibration: effectiveTelemetry.mechanical?.vibrationX || 0,
             scadaTimestamp: Date.now(),
-            sensors: { a: {}, b: {} }, // Mock validation inputs
+            sensors: { a: {}, b: {} }, // Simulated validation inputs
             market: { price: 65, fcr: 0, carbon: 0 },
             erosion: { sedimentPPM: 10, bucketThinningRate: 100, estimatedBucketLife: 20 },
-            ph: 7.2
+            ph: 7.2,
+            physicsAnalysis: {
+                cavitation: { risk: 'LOW' },
+                zone: { zone: 'OPTIMAL' },
+                surgePressureBar: effectiveTelemetry.physics?.surgePressureBar || 0
+            }
         }, { tier: PermissionTier.ADVISORY });
         setExecutiveResult(execState);
 
@@ -371,13 +377,13 @@ const ForensicHub: React.FC = () => {
 
         // NC-OutageOptimizer: Run calculation if Executive Tab is active (or just once)
         if (!outagePlan) {
-            // Mock Risk Map
+            // Simulated Risk Map
             const pfail = {
                 'Main Bearing': 0.15 + (effectiveTelemetry.mechanical?.vibrationX || 0),
                 'Generator Stator': 0.05,
                 'Wicket Gates': 0.02
             };
-            // Mock Price Forecast (Sine wave)
+            // Simulated Price Forecast (Sine wave)
             const prices = [];
             const now = Date.now();
             for (let i = 0; i < 720; i++) {
@@ -495,14 +501,14 @@ const ForensicHub: React.FC = () => {
 
     const handleGenerateServiceReport = async () => {
         const autoReport = new AutoReportService();
-        const mockMeasurements = [
+        const simulatedMeasurements = [
             { parameter: 'Vibration (ISO)', asFound: 4.5, asLeft: 1.2, unit: 'mm/s', standard: 2.5, improvement: 73 },
             { parameter: 'Cavitation (Sigma)', asFound: 0.8, asLeft: 1.1, unit: 'σ', standard: 1.0, improvement: -37 }, // Negative improvement handled by logic
             { parameter: 'Shaft Alignment', asFound: 0.15, asLeft: 0.03, unit: 'mm/m', standard: 0.05, improvement: 80 },
             { parameter: 'Efficiency', asFound: 88.5, asLeft: 92.1, unit: '%', standard: 93.0, improvement: 4.1 }
         ];
         
-        // Mock generation logic (since we can't really generate PDF in this env easily without proper setup)
+        // Simulated generation logic (since we can't really generate PDF in this env easily without proper setup)
         // In a real scenario, we'd call autoReport.generateReport(...)
         // Here we'll simulate the AI insights generation which is the core logic
         

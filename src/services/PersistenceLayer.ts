@@ -10,7 +10,7 @@ import { EnrichedTelemetry } from './SovereignKernel';
 import { LockedTrace } from './SovereigntyLock';
 import { LedgerEntry } from './ValueCompounder';
 
-// Mock Supabase client (in production, import from '@supabase/supabase-js')
+// Simulated Supabase client (in production, import from '@supabase/supabase-js')
 const supabase = {
     from: (table: string) => ({
         insert: async (data: any) => {

@@ -228,7 +228,7 @@ export class LegacyHandover {
     public static testSuccessionProtocol(): void {
         console.log('[Legacy] 🧪 Testing succession protocol...\n');
 
-        // Mock: Set architect as inactive
+        // Simulated: Set architect as inactive
         if (this.architectKey) {
             this.architectKey.lastActivity = Date.now() - 200 * 24 * 60 * 60 * 1000; // 200 days ago
         }

@@ -12,9 +12,9 @@ import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore
 import { PermissionTier } from '../services/Sovereign_Executive_Engine';
 import { vi, describe, test, expect, afterEach } from 'vitest';
 
-// --- MOCKS ---
+// --- Test Doubles ---
 
-// Mock CommandPalette dependencies
+// Simulated CommandPalette dependencies
 vi.mock('../contexts/AssetContext', () => ({
     useAssetContext: () => ({
         assets: [{ id: 1, name: 'Turbine A', type: 'FRANCIS' }],
@@ -49,7 +49,7 @@ vi.mock('../hooks/useSmartSuggestions', () => ({
     useSmartSuggestions: () => []
 }));
 
-// Mock framer-motion to avoid visibility issues and prop warnings
+// Simulated framer-motion to avoid visibility issues and prop warnings
 vi.mock('framer-motion', () => ({
     motion: {
         div: ({ children, dragMomentum, dragConstraints, dragElastic, whileInView, ...props }: any) => <div {...props}>{children}</div>,
@@ -59,7 +59,7 @@ vi.mock('framer-motion', () => ({
     AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 
-// Mock PersistenceService to silence IndexedDB errors
+// Simulated PersistenceService to silence IndexedDB errors
 vi.mock('../services/PersistenceService', () => ({
     saveLog: vi.fn().mockResolvedValue(undefined),
     saveTelemetryBatch: vi.fn().mockResolvedValue(undefined),
@@ -77,7 +77,7 @@ vi.mock('../services/PersistenceService', () => ({
     }
 }));
 
-// 1. Mock Supabase
+// 1. Simulated Supabase
 vi.mock('../services/supabaseClient', () => ({
     supabase: {
         auth: {
@@ -105,7 +105,7 @@ vi.mock('@supabase/supabase-js', () => ({
     })
 }));
 
-// 2. Mock i18n (Restored locally as global mock seems flaky)
+// 2. Simulated i18n (Restored locally as global mock seems flaky)
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, defaultVal: string) => defaultVal || key,
@@ -118,7 +118,7 @@ vi.mock('react-i18next', () => ({
     },
 }));
 
-// 3. Mock Recharts (to avoid ResizeObserver issues)
+// 3. Simulated Recharts (to avoid ResizeObserver issues)
 vi.mock('recharts', () => ({
     ResponsiveContainer: ({ children }: any) => <div className="recharts-responsive-container">{children}</div>,
     AreaChart: () => <div>AreaChart</div>,
@@ -132,14 +132,14 @@ vi.mock('recharts', () => ({
     Legend: () => <div>Legend</div>,
 }));
 
-// 4. Mock ResizeObserver
+// 4. Simulated ResizeObserver
 global.ResizeObserver = class ResizeObserver {
     observe() { }
     unobserve() { }
     disconnect() { }
 };
 
-// 5. Mock Canvas (Three.js/Fiber)
+// 5. Simulated Canvas (Three.js/Fiber)
 vi.mock('@react-three/fiber', () => ({
     Canvas: ({ children }: any) => <div>CanvasMock {children}</div>,
     useFrame: vi.fn(),
@@ -153,7 +153,7 @@ vi.mock('@react-three/drei', () => ({
     Text: ({ children }: any) => <div>{children}</div>,
 }));
 
-// Mock child components that might be heavy or problematic
+// Simulated child components that might be heavy or problematic
 vi.mock('../components/dashboard/StrategicConsultantView', () => ({
     StrategicConsultantView: () => <div>Strategic Consultant View Content</div>
 }));
@@ -244,7 +244,7 @@ describe('System Walkthrough: Guest Journey & Modals', () => {
             fireEvent.click(result);
         });
 
-        // Verify validateTask was called (mocked)
+        // Verify validateTask was called (simulateded)
         await waitFor(() => {
             expect(screen.queryByPlaceholderText(/Type a command or search assets/i)).not.toBeInTheDocument();
         });
@@ -335,7 +335,7 @@ describe('System Walkthrough: Guest Journey & Modals', () => {
         // Wait for overlay
         // Note: EmergencyOverlay logic might be complex. If this fails, we need to inspect MasterSovereignDashboard logic.
         // Assuming MasterSovereignDashboard renders EmergencyOverlay based on store.
-        // If not, we might need to mock a specific hook return value.
+        // If not, we might need to simulated a specific hook return value.
         // For now, let's see if this works.
     });
 
@@ -381,7 +381,7 @@ describe('System Walkthrough: Guest Journey & Modals', () => {
             fireEvent.click(screen.getByRole('button', { name: /timeline/i }));
         });
         
-        // Verify timeline event (mocked in the component)
+        // Verify timeline event (simulated in the component)
         // Note: The content loads after 800ms simulation.
         await waitFor(() => {
             expect(screen.getByText('Manufactured & Commissioned')).toBeInTheDocument();
@@ -389,7 +389,7 @@ describe('System Walkthrough: Guest Journey & Modals', () => {
 
         // 5. Close Modal
         // There is an X button or Back button. 
-        // The Back button has title="Back" (from translation mock 'common.back')
+        // The Back button has title="Back" (from translation simulated 'common.back')
         const closeBtns = screen.getAllByTitle('Back');
         const closeBtn = closeBtns[closeBtns.length - 1]; // Use the last one (likely the top-most modal)
         await act(async () => {

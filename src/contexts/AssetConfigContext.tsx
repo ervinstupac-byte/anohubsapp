@@ -163,7 +163,7 @@ export const AssetConfigProvider: React.FC<{ children: ReactNode }> = ({ childre
         setError(null);
 
         try {
-            // Mock API call - in production this would fetch from Supabase
+            // Simulated API call - in production this would fetch from Supabase
             // const { data, error } = await supabase.from('asset_configs').select('*').eq('asset_id', assetId).single();
             
             // For now, simulate API delay and return default config

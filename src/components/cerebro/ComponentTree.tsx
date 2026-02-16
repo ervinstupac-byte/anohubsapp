@@ -5,6 +5,7 @@ import { useTelemetryStore } from '../../features/telemetry/store/useTelemetrySt
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { InspectionImage } from '../../services/StrategicPlanningService';
 import { useTranslation } from 'react-i18next';
+import { getSimulatedAIAnalysis } from '../../services/DemoDataOracle';
 
 interface TreeNodeProps {
     id: string;
@@ -44,15 +45,8 @@ export const ComponentTree: React.FC<ComponentTreeProps> = ({ selectedId, onSele
             reader.onload = (ev) => {
                 const src = ev.target?.result as string;
 
-                // SIMULATE AI ANALYSIS (Gemini Vision Mock)
-                // In real app, we'd send 'src' to API. Here we mock specific tags for 'Radno kolo'.
-                let caption = "Standardinspektion.";
-                let tags = ['General'];
-
-                if (nodeId === 'TURBINE') {
-                    caption = "KI-ANALYSE: Materialabtrag an der Eintrittskante. Diagnose: Kavitationsfraß (mittel). Empfehlung: Schleifen.";
-                    tags = ['Kavitation', 'Materialabtrag'];
-                }
+                // AI ANALYSIS (Simulated via Oracle)
+                const { caption, tags } = getSimulatedAIAnalysis(nodeId);
 
                 const newImg: any = {
                     src: src,

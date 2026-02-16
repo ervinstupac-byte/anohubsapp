@@ -18,7 +18,7 @@ import {
 } from '../PhysicsCalculations.logic';
 import Decimal from 'decimal.js';
 
-// Setup Mock Constants if needed, but the logic file imports a constant file. 
+// Setup Simulated Constants if needed, but the logic file imports a constant file. 
 // We rely on the actual values for integration-style unit testing of the formulas.
 // Assuming water density ~1000, gravity ~9.81, bulk modulus, etc from SystemConstants.
 
@@ -206,7 +206,7 @@ describe('Physics Calculation Logic', () => {
             // If PELTON_VIBRATION_FACTOR is, say, 1.2 in constants?
             // Assuming factor exists, we test that it differs from raw calc or follows logic
             // But since we import constants, we rely on them. 
-            // Ideally we mock constant, but here we just check it runs.
+            // Ideally we simulated constant, but here we just check it runs.
 
             const vibX = new Decimal(10);
             const vibY = new Decimal(10);

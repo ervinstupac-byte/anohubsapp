@@ -32,7 +32,7 @@ export class RepairPlannerAI {
     ): DefectZone[] {
         const zones: DefectZone[] = [];
 
-        // Mock Segmentation Logic
+        // Simulated Segmentation Logic
         // In reality, this would utilize a voxel grid or octree difference
         let totalVolume = 0;
         let maxDepth = 0;
@@ -67,7 +67,7 @@ export class RepairPlannerAI {
     }
 
     /**
-     * GENERATE TOOLPATH (Mock)
+     * GENERATE TOOLPATH (Simulated)
      */
     public static generateToolpathGCode(zone: DefectZone): string {
         return `

@@ -129,7 +129,7 @@ export const FrancisHub: React.FC = () => {
     const telemetry = useTelemetryStore();
     const { updateTelemetry } = telemetry;
 
-    // Live Physics Data Hook (Mock for now or derive from techState)
+    // Live Physics Data Hook (Simulated for now or derive from techState)
     const simData: Partial<FrancisSensorData> = {
         rpm: telemetry.specializedState?.sensors?.rpm || 428.5,
         gridFrequency: telemetry.specializedState?.sensors?.gridFrequency || 50.02,

@@ -34,7 +34,7 @@ export class LifeExtensionEngine extends BaseGuardian {
     static getRecoveryPath(conclusion: string, state: TechnicalProjectState): RecoveryPath {
         const actions = MITIGATION_LIBRARY[conclusion] || [];
 
-        // Mock remaining life calculation for now
+        // Simulated remaining life calculation for now
         const Lrem = state.structural.remainingLife / 5; // 100% = 20 years approx
         const sigma_limit = 235; // MPa for S235
         const sigma_current = state.physics.hoopStressMPa || 150;

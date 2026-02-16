@@ -92,7 +92,7 @@ const childVariants = {
 
 const GuideVaneDetailView: React.FC<GuideVaneDetailProps> = ({ onBack, onHome }) => {
     const { t } = useTranslation();
-    const { mechanical, specializedState } = useTelemetryStore(); // Live Telemetry + Specialized Mock
+    const { mechanical, specializedState } = useTelemetryStore(); // Live Telemetry + Specialized Simulated
     const [activeSub, setActiveSub] = useState<string | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);

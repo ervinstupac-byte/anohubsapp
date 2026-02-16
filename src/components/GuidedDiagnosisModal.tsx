@@ -14,7 +14,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-    // Mock history for visual enhancement
+    // Simulated history for visual enhancement
     const historySteps = [
         { id: '1', label: 'Vibration Analysis', status: 'completed' },
         { id: '2', label: 'Thermal Check', status: 'completed' },

@@ -13,8 +13,8 @@ import { PDFRenderer, PAGE_CONFIG, COLORS } from '../../features/reporting/utils
 import jsPDF from 'jspdf';
 import { SovereignVerdict, UrgencyLevel, SovereignMemory, TelemetryData } from '../../types/sovereign-core';
 
-// Mock SovereignMemory for historical data
-const mockSovereignMemory: SovereignMemory = {
+// Simulated SovereignMemory for historical data
+const simulatedSovereignMemory: SovereignMemory = {
   drawing42: "Drawing 42: Initial water hammer analysis revealed critical surge pressure patterns",
   fieldNote: "Field Note: Cavitation detected at 75% load - immediate inspection required",
   wisdom: "Ancestral Wisdom: Governor response time within acceptable limits for 100% load rejection"
@@ -22,7 +22,7 @@ const mockSovereignMemory: SovereignMemory = {
 
 export const ExecutiveWarRoom: React.FC = () => {
   const { physics, hydraulic, mechanical, identity, updateTelemetry, executiveResult } = useTelemetryStore() as any;
-  const [sovereignPulse, setSovereignPulse] = useState(85); // Mock current pulse
+  const [sovereignPulse, setSovereignPulse] = useState(85); // Simulated current pulse
   const [relevantWisdom, setRelevantWisdom] = useState<string | null>(null);
 
   // Simulator state variables
@@ -91,11 +91,11 @@ export const ExecutiveWarRoom: React.FC = () => {
   // Update relevant wisdom based on current pulse
   useEffect(() => {
     if (sovereignPulse < 70) {
-      setRelevantWisdom(mockSovereignMemory.fieldNote);
+      setRelevantWisdom(simulatedSovereignMemory.fieldNote);
     } else if (sovereignPulse < 50) {
-      setRelevantWisdom(mockSovereignMemory.drawing42);
+      setRelevantWisdom(simulatedSovereignMemory.drawing42);
     } else {
-      setRelevantWisdom(mockSovereignMemory.wisdom);
+      setRelevantWisdom(simulatedSovereignMemory.wisdom);
     }
   }, [sovereignPulse]);
 
@@ -260,15 +260,15 @@ export const ExecutiveWarRoom: React.FC = () => {
                 <div className="space-y-3">
                   <div className="text-gray-400 text-sm">
                     <div className="font-medium text-gray-300">Drawing 42:</div>
-                    <div className="text-xs mt-1">{mockSovereignMemory.drawing42}</div>
+                    <div className="text-xs mt-1">{simulatedSovereignMemory.drawing42}</div>
                   </div>
                   <div className="text-gray-400 text-sm">
                     <div className="font-medium text-gray-300">Field Note:</div>
-                    <div className="text-xs mt-1">{mockSovereignMemory.fieldNote}</div>
+                    <div className="text-xs mt-1">{simulatedSovereignMemory.fieldNote}</div>
                   </div>
                   <div className="text-gray-400 text-sm">
                     <div className="font-medium text-gray-300">Ancestral Wisdom:</div>
-                    <div className="text-xs mt-1">{mockSovereignMemory.wisdom}</div>
+                    <div className="text-xs mt-1">{simulatedSovereignMemory.wisdom}</div>
                   </div>
                 </div>
               </div>

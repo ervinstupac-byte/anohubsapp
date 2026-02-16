@@ -107,7 +107,7 @@ export const ScadaMimic: React.FC = React.memo(() => {
     const liveData = selectedAsset ? telemetry[selectedAsset.id] : null;
     const isCritical = liveData?.status === 'CRITICAL';
 
-    // Mock Data
+    // Simulated Data
     const seed = selectedAsset ? String(selectedAsset.id).charCodeAt(0) : 0;
     const baseMw = isCritical ? 0 : (200 + (seed % 50));
 

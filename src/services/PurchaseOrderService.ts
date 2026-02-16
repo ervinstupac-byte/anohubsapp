@@ -212,7 +212,7 @@ export class PurchaseOrderService {
     }
 
     /**
-     * Send PO to ERP system (mock)
+     * Send PO to ERP system (simulated)
      */
     public static async sendToERP(po: PurchaseOrder): Promise<boolean> {
         console.log('[PurchaseOrder] Sending to ERP system...');
@@ -227,7 +227,7 @@ export class PurchaseOrderService {
         //     body: this.exportPOToJSON(po)
         // });
 
-        // Mock success
+        // Simulated success
         console.log('[PurchaseOrder] ✅ Successfully sent to ERP');
         return true;
     }

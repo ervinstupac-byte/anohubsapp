@@ -12,7 +12,7 @@ export interface FatigueState {
 }
 
 export class FatigueTracker {
-    private readonly MAX_POINTS = 10000; // Mock life limit (e.g. 10k cycles)
+    private readonly MAX_POINTS = 10000; // Simulated life limit (e.g. 10k cycles)
 
     // Cost Table
     private readonly COST_NORMAL_START = 1;

@@ -90,7 +90,7 @@ export class TheMemoryLink {
     }
 
     private detectSeasonalPattern(): boolean {
-        // Mock logic: Returns true if current month matches high-debris months (Nov, Dec)
+        // Simulated logic: Returns true if current month matches high-debris months (Nov, Dec)
         const month = new Date().getMonth();
         return (month === 10 || month === 11);
     }

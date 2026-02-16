@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 
-// --- 1. MOCK DATA (ESG METRICS) ---
+// --- 1. Simulated DATA (ESG METRICS) ---
 const METRICS = {
     totalWorkforce: 142,
     womenCount: 48,

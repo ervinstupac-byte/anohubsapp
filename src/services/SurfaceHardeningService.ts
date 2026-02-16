@@ -50,7 +50,7 @@ export class SurfaceHardeningService {
         return {
             zoneId,
             coveragePct: scannedCoverage,
-            impactDensity: 1200, // Mock
+            impactDensity: 1200, // Simulated
             residualStressMpa: stress,
             status: (scannedCoverage < 98) ? 'IN_PROGRESS' : 'COMPLETE'
         };

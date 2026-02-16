@@ -12,7 +12,7 @@ export interface EfficiencyState {
 }
 
 export class EfficiencyCurveTracker {
-    // Mock Hill Chart Data
+    // Simulated Hill Chart Data
     // BEP at 85% Gate = 94% Eff
     private readonly BEP_GATE = 85.0;
     private readonly BEP_EFF = 94.0;

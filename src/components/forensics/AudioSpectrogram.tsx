@@ -19,7 +19,7 @@ export const AudioSpectrogram: React.FC = () => {
         }
     }, [resonanceState.isResonant]);
 
-    // Mock Audio Visualizer Animation
+    // Simulated Audio Visualizer Animation
     useEffect(() => {
         if (!isListening || !canvasRef.current) return;
         const canvas = canvasRef.current;
@@ -47,7 +47,7 @@ export const AudioSpectrogram: React.FC = () => {
                 if (resonanceState.isResonant && i > barCount * 0.8) {
                      height = 100 + Math.random() * 80;
                 } else if (detectedPattern === 'SAND_HISS' && i > barCount * 0.8) {
-                    // Legacy mock fallback
+                    // Legacy simulated fallback
                     height = 100 + Math.random() * 50;
                 }
 

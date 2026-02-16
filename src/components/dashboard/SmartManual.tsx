@@ -21,7 +21,7 @@ export const SmartManual: React.FC = () => {
     const cavitationRisk = hoopStressVal > 140; // Simplified trigger
 
     // leakageStatus is not yet in the standard PhysicsResult schema, derived from efficiency/structural wear?
-    // For now we'll assume a safe default or mock it based on efficiency dropping if needed
+    // For now we'll assume a safe default or simulated it based on efficiency dropping if needed
     // In legacy it was on 'physics', but properly belongs on 'structural' or derived state.
     const leakageStatus: string = 'OPTIMAL'; // Placeholder during migration as property is missing in new store type
 

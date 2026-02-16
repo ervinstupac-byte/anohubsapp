@@ -16,7 +16,7 @@ export interface PQCMessage {
 
 export class EncryptionService {
 
-    // Polyfill for Edge environments if needed (mocked here natively supported in modern JS)
+    // Polyfill for Edge environments if needed (simulateded here natively supported in modern JS)
 
     /**
      * ENCAPSULATE MESSAGE
@@ -29,7 +29,7 @@ export class EncryptionService {
         const encoder = new TextEncoder();
         const data = encoder.encode(payload);
 
-        // Mock Encryption: Base64 of bytes + Key ID
+        // Simulated Encryption: Base64 of bytes + Key ID
         // In real PQC, this calls the WASM implementation of Kyber
         let binaryString = '';
         data.forEach(byte => binaryString += String.fromCharCode(byte));

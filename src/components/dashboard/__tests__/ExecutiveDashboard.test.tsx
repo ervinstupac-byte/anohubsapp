@@ -65,9 +65,9 @@ vi.mock('three', () => ({
     SRGBColorSpace: 'SRGBColorSpace'
 }));
 
-// Mocks
+// Test Doubles
 vi.mock('../../../features/telemetry/store/useTelemetryStore', () => {
-    const mockState = {
+    const simulatedState = {
         financials: {},
         hydraulic: {},
         physics: {},
@@ -80,7 +80,7 @@ vi.mock('../../../features/telemetry/store/useTelemetryStore', () => {
         investigatedComponents: []
     };
     return {
-        useTelemetryStore: vi.fn(() => mockState)
+        useTelemetryStore: vi.fn(() => simulatedState)
     };
 });
 
@@ -115,7 +115,7 @@ vi.mock('../../../stores/useAppStore', () => ({
     useDensity: vi.fn(() => 'compact')
 }));
 
-// Mock child components to isolate ExecutiveDashboard
+// Simulated child components to isolate ExecutiveDashboard
 vi.mock('../AIInsightsPanel', () => ({
     AIInsightsPanel: () => <div data-testid="ai-insights-panel">AI Insights Panel</div>
 }));
@@ -156,7 +156,7 @@ vi.mock('../ShadowRealityChart', () => ({
     ShadowRealityChart: () => <div data-testid="shadow-reality-chart">Shadow Reality Chart</div>
 }));
 
-// Mock Services
+// Simulated Services
 vi.mock('../../../models/AssetHierarchy', () => ({
     createFrancisHorizontalAssetTree: vi.fn(() => ({})),
     AssetNode: class {}
@@ -246,12 +246,12 @@ vi.mock('../../../lib/engines/FrancisBigBrotherEngine', () => ({
     FrancisBigBrotherEngine: class {
         variant: string;
         constructor() {
-            this.variant = 'MOCKED_VARIANT';
+            this.variant = 'SIMULATED_VARIANT';
         }
     }
 }));
 
-// Mock UI components
+// Simulated UI components
 vi.mock('../../ui/HeritagePrecisionBanner', () => ({
     HeritagePrecisionBanner: () => <div data-testid="heritage-precision-banner">Heritage Precision Banner</div>
 }));
@@ -292,7 +292,7 @@ vi.mock('../../../utils/idAdapter', () => ({
     }
 }));
 
-// Mock lazy components
+// Simulated lazy components
 vi.mock('../../../features/telemetry/components/VibrationAnalyzer', () => ({
     VibrationAnalyzer: () => <div data-testid="vibration-analyzer">Vibration Analyzer</div>
 }));

@@ -16,7 +16,7 @@ export const SystemHealthCard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Radial Gauge Mock */}
+            {/* Radial Gauge Simulated */}
             <div className="w-12 h-12 relative">
                 <svg className="w-full h-full -rotate-90">
                     <circle className="text-slate-800" strokeWidth="4" stroke="currentColor" fill="transparent" r="20" cx="24" cy="24" />

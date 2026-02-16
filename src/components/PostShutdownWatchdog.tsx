@@ -7,7 +7,7 @@ import { Flame, Bell, ThermometerSnowflake } from 'lucide-react';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 
 export const PostShutdownWatchdog: React.FC = () => {
-    // Mock State
+    // Simulated State
     const [isActive, setIsActive] = useState(false);
     const [machineStatus, setMachineStatus] = useState<'RUNNING' | 'STOPPED'>('RUNNING');
     const [currentTemp, setCurrentTemp] = useState(55); // Operating temp

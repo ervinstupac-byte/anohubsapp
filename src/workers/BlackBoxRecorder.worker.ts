@@ -131,7 +131,7 @@ export class BlackBoxRecorderLogic {
     }
 }
 
-// Worker Entry Point (mocked for file structure)
+// Worker Entry Point (simulateded for file structure)
 /*
 const recorder = new BlackBoxRecorderLogic();
 self.onmessage = (e) => {

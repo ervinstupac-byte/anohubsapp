@@ -22,7 +22,7 @@ export class VibrationBaseline {
      * Simulates a 24-hour learning period.
      */
     learnSignature(durationHours: number): VibrationProfile {
-        // Mock Learning Process
+        // Simulated Learning Process
         // Simulate collecting 10,000 samples
         // Result: This machine is naturally a bit noisy (Mean 1.8mm/s)
         const mean = 1.8;

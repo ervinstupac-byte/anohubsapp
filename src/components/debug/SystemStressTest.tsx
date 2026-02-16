@@ -31,7 +31,7 @@ export const SystemStressTest: React.FC = () => {
         try {
             // STEP 1: INITIALIZATION
             log('1. Initialization', 'PENDING', 'Setting: Head 50m, Flow 2m3/s, Bolts 8.8');
-            setConfig({ site: { ...site, grossHead: 50 } }); // Flow is derived or fixed in mock
+            setConfig({ site: { ...site, grossHead: 50 } }); // Flow is derived or fixed in simulated
             setMechanical({ boltSpecs: { count: 16, diameter: 24, grade: '8.8', torque: 450 } });
 
             await new Promise(r => setTimeout(r, 1000));
@@ -76,7 +76,7 @@ export const SystemStressTest: React.FC = () => {
                 throw new Error('Notification not generated.');
             }
 
-            // STEP 4: REPORT INTEGRITY (Mock)
+            // STEP 4: REPORT INTEGRITY (Simulated)
             log('4. Report Integrity', 'PENDING', 'Generating PDF Audit with Red Alert...');
             await new Promise(r => setTimeout(r, 1000));
             log('4. Report Integrity', 'PASS', 'PDF Generator accepted "Water Hammer" data.');

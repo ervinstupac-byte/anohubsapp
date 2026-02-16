@@ -6,11 +6,11 @@ import { useAssetContext } from '../../../contexts/AssetContext';
 import { LegacyKnowledgeService } from '../../../services/LegacyKnowledgeService';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-// --- MOCKS ---
-const mockNavigate = vi.fn();
+// --- Simulated ---
+const { simulatedNavigate } = vi.hoisted(() => ({ simulatedNavigate: vi.fn() }));
 
 vi.mock('react-router-dom', () => ({
-    useNavigate: () => mockNavigate,
+    useNavigate: () => simulatedNavigate,
 }));
 
 vi.mock('react-i18next', () => ({
@@ -66,7 +66,7 @@ describe('HeritageSearchWidget Component', () => {
             }
         });
 
-        // Default Legacy Service Mocks
+        // Default Legacy Service Test Doubles
         (LegacyKnowledgeService.semanticSearch as any).mockReturnValue([]);
         (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue([]);
     });
@@ -92,11 +92,11 @@ describe('HeritageSearchWidget Component', () => {
     });
 
     it('shows recommended critical cases when query is empty', () => {
-        const mockCases = [
+        const simulatedCases = [
             { id: 'c1', symptom: 'Vibration Low Load', severity: 'CRITICAL', turbineFamily: 'FRANCIS', dateOccurred: Date.now() },
             { id: 'c2', symptom: 'Blade Crack', severity: 'CRITICAL', turbineFamily: 'FRANCIS', dateOccurred: Date.now() }
         ];
-        (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue(mockCases);
+        (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue(simulatedCases);
 
         const { getByText } = render(<HeritageSearchWidget />);
         fireEvent.click(getByText('dashboard.heritageSearch.title'));
@@ -169,6 +169,6 @@ describe('HeritageSearchWidget Component', () => {
         expect(getByText('Click Me')).toBeInTheDocument();
 
         fireEvent.click(getByText('Click Me').closest('button')!);
-        expect(mockNavigate).toHaveBeenCalledWith('/legacy-hub?case=r1');
+        expect(simulatedNavigate).toHaveBeenCalledWith('/legacy-hub?case=r1');
     });
 });

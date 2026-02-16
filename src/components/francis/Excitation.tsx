@@ -16,7 +16,7 @@ export const Excitation: React.FC = () => {
     const [fieldFlashing, setFieldFlashing] = useState(false);
     const [voltagePerc, setVoltagePerc] = useState(0); // 0 to 100%
 
-    // Telemetry from CEREBRO (Mocked for current context)
+    // Telemetry from CEREBRO (Simulateded for current context)
     const thyristorTemp = 42.4; // °C
     const fieldCurrent = (voltagePerc * 8.5).toFixed(1);
 

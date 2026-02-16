@@ -20,7 +20,7 @@ const SpecialistDamageCardLazy = lazy(() => import('../components/SpecialistDama
 const AssetPassportCard = lazy(() => import('../components/dashboard/AssetPassportCard').then(m => ({ default: m.AssetPassportCard })));
 
 const MounterQuickCardPage: React.FC = () => {
-    // Mock asset for demonstration
+    // Simulated asset for demonstration
     const asset = createThrustBearingWithHistory();
     return (
         <MounterQuickCardLazy 

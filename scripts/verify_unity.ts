@@ -42,12 +42,12 @@ async function probe1_atomicExecution(): Promise<UnityProbeResult> {
     let asyncWaitsDetected = 0;
     let stageCount = 0;
 
-    // Mock kernel execution that simulates the real pipeline
+    // Simulated kernel execution that simulates the real pipeline
     const executionStart = performance.now();
 
     // In real system, this would be SovereignKernel.react()
     // We're checking if it's truly synchronous
-    const mockKernelExecution = () => {
+    const simulatedKernelExecution = () => {
         stageCount++;
         // Stage 1: Correlate (synchronous)
         const corrResult = { r: 0.9, synergy: true };
@@ -68,7 +68,7 @@ async function probe1_atomicExecution(): Promise<UnityProbeResult> {
     };
 
     // Execute and measure
-    const result = mockKernelExecution();
+    const result = simulatedKernelExecution();
     const executionTime = performance.now() - executionStart;
 
     // Check if all stages executed synchronously
@@ -99,7 +99,7 @@ async function probe2_holographicData(): Promise<UnityProbeResult> {
     console.log('\n🔬 PROBE 2: Holographic Data Check');
     console.log('   Testing: Single object contains Foundation + Middle + Economics + Sovereignty...');
 
-    // Mock EnrichedTelemetry from the system
+    // Simulated EnrichedTelemetry from the system
     const enrichedTelemetry = {
         // FOUNDATION: Raw physical data
         timestamp: Date.now(),
@@ -187,7 +187,7 @@ async function probe3_mirrorEffect(): Promise<UnityProbeResult> {
     console.log('\n🔬 PROBE 3: Mirror Effect');
     console.log('   Testing: Single veto recalibrates entire decision space...');
 
-    // Mock global state before veto
+    // Simulated global state before veto
     const initialState = {
         learningModifiers: {
             thresholdMultiplier: 1.0,

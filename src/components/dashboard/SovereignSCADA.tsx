@@ -20,7 +20,7 @@ export const SovereignSCADA: React.FC = () => {
     const [selectedUnit, setSelectedUnit] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'OVERVIEW' | 'DETAIL' | 'TRENDS'>('OVERVIEW');
 
-    // Mock fleet data
+    // Simulated fleet data
     const fleet: TurbineStatus[] = [
         { id: 'UNIT-1', name: 'Zakučac 1', type: 'FRANCIS', status: 'OPTIMAL', load: 42, capacity: 50, heff: 0.93, vibration: 1.6, temperature: 38 },
         { id: 'UNIT-2', name: 'Zakučac 2', type: 'FRANCIS', status: 'OPTIMAL', load: 45, capacity: 50, heff: 0.92, vibration: 1.8, temperature: 40 },

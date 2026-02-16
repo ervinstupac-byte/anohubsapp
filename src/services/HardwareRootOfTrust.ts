@@ -34,7 +34,7 @@ export class HardwareRootOfTrust {
 
         // 1. Check if Key is Trusted
         if (this.TRUSTED_KEYS.includes(publicKey)) {
-            // 2. Verify Signature (Mock crypto)
+            // 2. Verify Signature (Simulated crypto)
             // In real app: verify(payload, signature, publicKey)
             // Here: "valid_sig" is the magic string
             if (signature.startsWith('valid_sig_')) {

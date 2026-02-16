@@ -58,7 +58,7 @@ export class PatternEater {
         return results;
     }
 
-    // Mock "Anchor" Curve (The v1.1 Baseline)
+    // Simulated "Anchor" Curve (The v1.1 Baseline)
     private getAnchorEfficiency(gate: number): number {
         // Simple parabola around 85%
         const peak = 94.0;

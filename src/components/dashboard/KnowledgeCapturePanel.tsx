@@ -62,7 +62,7 @@ interface KnowledgeCapturePanelProps {
 
 export const KnowledgeCapturePanel: React.FC<KnowledgeCapturePanelProps> = ({ activeContext }) => {
     // const { selectedAsset } = useAssetContext(); // Commenting out context dependency for easier integration
-    const selectedAsset = { turbine_family: 'Francis', turbine_variant: 'Vertical' }; // Mock context
+    const selectedAsset = { turbine_family: 'Francis', turbine_variant: 'Vertical' }; // Simulated context
 
     const [activeTab, setActiveTab] = useState<'SUBMIT' | 'SEARCH' | 'LEADERBOARD'>('SUBMIT');
 

@@ -137,10 +137,10 @@ export class SystemRecoveryService {
         predictedLoss: number;
         description: string;
     }> {
-        // Mock simulation (In real system, call SimulationEngine from NC-12)
+        // Simulated simulation (In real system, call SimulationEngine from NC-12)
         // For now, assume simulation predicts 80% of expected improvement
         const actualImprovement = action.expectedImprovement * 0.8;
-        const predictedLoss = Math.random() * 500; // Mock risk assessment
+        const predictedLoss = Math.random() * 500; // Simulated risk assessment
 
         return {
             actualImprovement,

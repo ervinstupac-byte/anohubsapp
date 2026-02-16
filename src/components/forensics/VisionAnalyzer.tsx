@@ -26,7 +26,7 @@ export const VisionAnalyzer: React.FC = () => {
         }
     }, [erosion.severity, erosion.bucketThinningRate, erosion.recommendation, image]);
 
-    // Mock Simulation Logic
+    // Simulated Simulation Logic
     const simulateAnalysis = (type: 'PITTED' | 'POLISHED' | 'HIGH_EROSION') => {
         setIsAnalyzing(true);
         

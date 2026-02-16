@@ -17,7 +17,7 @@ export interface SafetyReport {
 export class PublicSafetyReporter {
 
     generateMonthlyReport(): SafetyReport {
-        // Mock data aggregation
+        // Simulated data aggregation
         return {
             month: new Date().toLocaleString('default', { month: 'long', year: 'numeric' }),
             kpi: {

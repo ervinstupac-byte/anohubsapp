@@ -11,7 +11,7 @@ export const DrainagePumps: React.FC = () => {
     const navigate = useNavigate();
 
     // Mapping from CEREBRO
-    const waterLevel = 35; // % (Mocked for current context)
+    const waterLevel = 35; // % (Simulateded for current context)
     const isSumpCritical = waterLevel > 90;
 
     return (

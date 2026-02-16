@@ -87,7 +87,7 @@ export const ClientConsultantDashboard: React.FC = () => {
                                 className="absolute w-4 h-4 bg-white rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)] z-10"
                                 initial={{ left: '50%', top: '50%' }}
                                 animate={{
-                                    left: `${(opPoint.flow / 16) * 100}%`, // Mock scaling
+                                    left: `${(opPoint.flow / 16) * 100}%`, // Simulated scaling
                                     top: `${100 - (opPoint.netHead / 60) * 100}%`
                                 }}
                                 transition={{ type: 'spring', damping: 20 }}

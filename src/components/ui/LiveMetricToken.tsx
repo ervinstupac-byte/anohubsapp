@@ -9,7 +9,7 @@ interface LiveMetricTokenProps {
 export const LiveMetricToken: React.FC<LiveMetricTokenProps> = ({ sensorId }) => {
     const { liveMetrics } = useContextAwareness();
 
-    // Find metric based on ID mapping (Mock mapping for now)
+    // Find metric based on ID mapping (Simulated mapping for now)
     // In real app, liveMetrics would be a dictionary keyed by ID.
     // Here we map simplified IDs to the known liveMetrics array labels.
 

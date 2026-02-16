@@ -23,10 +23,10 @@ export class CircularBuffer<T> {
     /**
      * Add a new data point to the buffer
      */
-    push(value: T): void {
+    push(value: T, timestamp: number = Date.now()): void {
         this.buffer[this.pointer] = {
             value,
-            timestamp: Date.now()
+            timestamp
         };
         this.pointer = (this.pointer + 1) % this.capacity;
         if (this.count < this.capacity) {
@@ -146,11 +146,11 @@ export class SignalBufferManager {
     /**
      * Record a signal value
      */
-    record(signalId: string, value: number): void {
+    record(signalId: string, value: number, timestamp: number = Date.now()): void {
         if (!this.buffers.has(signalId)) {
             this.buffers.set(signalId, new CircularBuffer<number>(this.defaultCapacity));
         }
-        this.buffers.get(signalId)!.push(value);
+        this.buffers.get(signalId)!.push(value, timestamp);
     }
 
     /**

@@ -100,7 +100,7 @@ export class CivilSecurityModule {
             : 0;
 
         // Get current water level (would come from reservoir sensor)
-        const waterLevel = 85.0; // Mock value - meters above foundation
+        const waterLevel = 85.0; // Simulated value - meters above foundation
 
         // Simplified safety factor calculation
         // In production: Use DamStabilityService for full calculation

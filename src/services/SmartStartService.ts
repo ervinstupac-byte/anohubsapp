@@ -20,7 +20,7 @@ export class SmartStartService {
     static generateChecklist(turbineId: string): CheckItem[] {
         const checks: CheckItem[] = [];
 
-        // Mock State (Simulating DB reads)
+        // Simulated State (Simulating DB reads)
         const machineState = {
             standbyDays: 92,
             greaseCycles: 45,

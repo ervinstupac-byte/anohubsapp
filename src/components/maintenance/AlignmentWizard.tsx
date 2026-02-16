@@ -88,9 +88,9 @@ export const AlignmentWizard: React.FC<AlignmentWizardProps> = ({
     };
 
     const connectBluetooth = async () => {
-        // Mock Bluetooth connection
+        // Simulated Bluetooth connection
         setIsBluetoothConnected(true);
-        alert('Bluetooth dial indicator connected! (Mock)');
+        alert('Bluetooth dial indicator connected! (Simulated)');
     };
 
     return (

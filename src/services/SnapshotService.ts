@@ -95,7 +95,7 @@ export class SnapshotService {
             uptime: 99.8 // Would calculate from actual uptime tracking
         };
 
-        // Identify critical events (mock - would query from database)
+        // Identify critical events (simulated - would query from database)
         const criticalEvents: SovereignSnapshot['criticalEvents'] = [
             // Would query: SELECT * FROM events WHERE severity='CRITICAL' AND timestamp BETWEEN...
         ];

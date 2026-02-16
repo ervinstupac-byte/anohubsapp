@@ -4,7 +4,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { QuickCalcSidebar } from '../QuickCalcSidebar';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
-// --- MOCKS ---
+// --- Simulated ---
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key: string, opts?: any) => key }),
 }));
@@ -21,11 +21,11 @@ vi.mock('../../shared/components/ui/GlassCard', () => ({
     GlassCard: ({ children, className }: any) => <div className={className}>{children}</div>
 }));
 
-// Mock clipboard
-const mockClipboard = {
+// Simulated clipboard
+const simulatedClipboard = {
     writeText: vi.fn(),
 };
-Object.assign(navigator, { clipboard: mockClipboard });
+Object.assign(navigator, { clipboard: simulatedClipboard });
 
 describe('QuickCalcSidebar Component', () => {
     beforeEach(() => {

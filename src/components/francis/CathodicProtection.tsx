@@ -10,7 +10,7 @@ export const CathodicProtection: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    // Mapping from CEREBRO (Mocked for electrochemical context)
+    // Mapping from CEREBRO (Simulateded for electrochemical context)
     const sacrificialCurrent = 1.2; // Amps
     const protectionPotential = -1100; // mV
     const isOptimal = protectionPotential < -850;

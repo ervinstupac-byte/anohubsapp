@@ -29,7 +29,7 @@ export class VisualInspectionService {
         return new Promise((resolve) => {
             // Simulate API latency
             setTimeout(() => {
-                // Mock logic: generate semi-random results for demo
+                // Simulated logic: generate semi-random results for demo
                 // In production, this would `POST` to a backend wrapping Gemini Pro Vision
 
                 const isClean = Math.random() > 0.7;

@@ -13,7 +13,7 @@ This document serves as the **Strategic Roadmap** for the AnoHUB platform. It co
 ### 1. Forensic Reporting
 *   **Dynamic Threshold Loading**: `AssetThresholds.ts` contains a placeholder for fetching threshold configs from an external API (`/api/asset-thresholds`) instead of hardcoded constants.
 *   **Image Evidence Integration**: `ForensicReportService.ts` defines an `evidenceImages` interface (AI tags, issue type, thumbnails) that is currently unused. Future state involves embedding these directly into the PDF.
-*   **Executive Briefing Data**: The `ExecutiveBriefingData` structure exists but is populated with mock/calculated data. Needs connection to a live Fleet Aggregator.
+*   **Executive Briefing Data**: The `ExecutiveBriefingData` structure exists but is populated with simulated/calculated data. Needs connection to a live Fleet Aggregator.
 
 ### 2. Alignment Wizard (Commissioning)
 *   **Bluetooth Dial Indicator Sync**: `AlignmentWizard.tsx` contains a `connectBluetooth` stub. Future update should use Web Bluetooth API to read values directly from digital indicators (e.g., Mitutoyo/Sylvac).

@@ -25,7 +25,7 @@ interface OptimizationDashboardProps {
 export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ asset, turbineModel }) => {
     const [selectedScenario, setSelectedScenario] = useState<'conservative' | 'recommended' | 'aggressive'>('recommended');
 
-    // Mock optimization report (in production, fetch from ConsultingEngine)
+    // Simulated optimization report (in production, fetch from ConsultingEngine)
     const report = useMemo<OptimizationReport>(() => ({
         assetId: asset.id,
         assetName: asset.name,

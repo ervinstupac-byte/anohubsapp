@@ -2,7 +2,7 @@
  * TelemetryLogger.ts
  * 
  * Production Logging & Error Ingestion.
- * Sends critical failures to Sentry/Datadog (Mocked).
+ * Sends critical failures to Sentry/Datadog (Simulated).
  */
 
 import { DeploymentConfig } from '../config/DeploymentConfig';
@@ -27,7 +27,7 @@ export class TelemetryLogger {
     }
 
     private static sendToExternalMonitor(payload: any) {
-        // Mock external ingestion (e.g. fetch to Sentry DSN)
+        // Simulated external ingestion (e.g. fetch to Sentry DSN)
         if (DeploymentConfig.isProduction) {
             // fetch('https://sentry.io/api/...', { method: 'POST', body: JSON.stringify(payload) });
             // console.log('Sent to Sentry');

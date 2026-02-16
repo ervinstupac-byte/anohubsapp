@@ -236,7 +236,7 @@ export const PrintPreviewModal: React.FC<PrintPreviewModalProps> = ({ isOpen, on
                                     animate={{ opacity: 1, scale: 1 }}
                                     className={`bg-white shadow-2xl transition-all duration-500 ${settings.orientation === 'LANDSCAPE' ? 'w-[842px] h-[595px]' : 'w-[595px] h-[842px]'}`}
                                 >
-                                    {/* Mock Document Content */}
+                                    {/* Simulated Document Content */}
                                     <div className="w-full h-full p-12 flex flex-col relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-12 opacity-10">
                                             <Layers className="w-64 h-64 text-slate-900" />

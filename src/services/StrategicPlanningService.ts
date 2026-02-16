@@ -295,7 +295,7 @@ export class StrategicPlanningService {
 
         // 3. Price Check (Simplified)
         // E.g., if price is too low, suspect bad materials
-        // Mock threshold
+        // Simulated threshold
         const estimatedMarketPrice = bid.ratedPowerMW * 1000000; // 1M per MW approx
         if (bid.price < estimatedMarketPrice * 0.6) {
             risks.push('Cijena značajno ispod tržišne. Provjeriti porijeklo čelika i referentnu listu.');

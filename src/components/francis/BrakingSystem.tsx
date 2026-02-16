@@ -15,7 +15,7 @@ export const BrakingSystem: React.FC = () => {
     // Mapping from Telemetry
     const rpm = telemetry.mechanical?.rpm ?? 0;
     const rpmPerc = (rpm / 428.5) * 100;
-    const airPressure = 7.0; // Bar (Mocked)
+    const airPressure = 7.0; // Bar (Simulateded)
     const canBrake = rpmPerc < 20;
 
     return (

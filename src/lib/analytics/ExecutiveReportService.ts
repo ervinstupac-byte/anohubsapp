@@ -31,7 +31,7 @@ export class ExecutiveReportService {
      * Calculates the overall health of the fleet based on detected faults and efficiency.
      */
     public calculateFleetHealth(fleetData: any[]): number {
-        // Mock logic: Start at 100, deduct for every active fault / drift
+        // Simulated logic: Start at 100, deduct for every active fault / drift
         let score = 100;
 
         fleetData.forEach(unit => {
@@ -70,7 +70,7 @@ export class ExecutiveReportService {
                 id: 'INS-001',
                 unitId: 'FLEET',
                 message: `Fleet efficiency is tracking 2.1% above industry average due to strict 'Hydraulic Trap' enforcement.`,
-                value: 450000, // Mock annualized value
+                value: 450000, // Simulated annualized value
                 timestamp: new Date().toISOString()
             });
         }
@@ -81,7 +81,7 @@ export class ExecutiveReportService {
                 const cost = this.COST_MODELS[d.cause as keyof typeof this.COST_MODELS] || 5000;
                 insights.push({
                     id: `INS-${Date.now()}`,
-                    unitId: 'UNIT-01', // Mock mapping
+                    unitId: 'UNIT-01', // Simulated mapping
                     message: `Early detection of ${d.cause} prevented potential forced outage.`,
                     value: cost,
                     timestamp: new Date().toISOString()

@@ -14,7 +14,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Decimal from 'decimal.js';
 
-// Mock services for testing (simplified versions)
+// Simulated services for testing (simplified versions)
 const MockPhysicsMathService = {
     analyzeOrbit: () => ({ 
         eccentricity: 0, 

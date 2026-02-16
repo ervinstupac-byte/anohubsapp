@@ -32,7 +32,7 @@ export const VibrationAnalyzer: React.FC = () => {
 
         return {
             shaftPlumbnessDeviation: plumbnessLog?.measuredValue || 0.02, // Default to a 'good' value if missing
-            bearingClearanceGap: 0.15 // Mocked for now
+            bearingClearanceGap: 0.15 // Simulateded for now
         };
     }, [logs]);
 

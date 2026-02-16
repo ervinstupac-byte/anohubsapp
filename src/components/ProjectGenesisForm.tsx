@@ -67,7 +67,7 @@ export const ProjectGenesisForm: React.FC = () => {
             flowDurationCurve: []
         };
 
-        // Mocking the specialized fields storage
+        // Simulateding the specialized fields storage
         console.log("UNIVERSAL ENTRY SAVED:", formData);
         alert(`genesis_dna_committed: {
   "roi_basis": "verified",

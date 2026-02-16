@@ -12,7 +12,7 @@ export const MIVDetail: React.FC = () => {
     const navigate = useNavigate();
     const telemetry = useTelemetryStore();
 
-    // Mock Telemetry (Pending integration into HydraulicStream)
+    // Simulated Telemetry (Pending integration into HydraulicStream)
     const mivPosition = 100; // % Open
     const mivSealPressure = (telemetry.physics?.staticPressureBar ?? 150) + 2.4; // Derived from static pressure
 

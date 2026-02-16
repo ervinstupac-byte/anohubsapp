@@ -121,7 +121,7 @@ export const MechanicalPanel: React.FC = () => {
                 <div className="relative h-4 bg-slate-800 rounded-full overflow-hidden">
                     <div
                         className="absolute top-0 bottom-0 left-0 bg-emerald-500"
-                        style={{ width: `${(1.0 / (currentShaftAlignmentLimit)) * 50}%` }} // Simplified visual logic, assumes 1.0 is current mock or live value if missing
+                        style={{ width: `${(1.0 / (currentShaftAlignmentLimit)) * 50}%` }} // Simplified visual logic, assumes 1.0 is current simulated or live value if missing
                     />
                     <div className="absolute top-0 bottom-0 w-0.5 bg-red-500 left-[80%]" /> {/* Limit Marker */}
                 </div>

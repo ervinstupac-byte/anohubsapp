@@ -73,7 +73,7 @@ export class GeopoliticalPulse {
      * Query weather satellites for renewable forecasts
      */
     private static async queryWeatherSatellites(): Promise<IntelligenceFeed['weather']> {
-        // Mock data - in production: ECMWF API
+        // Simulated data - in production: ECMWF API
         return {
             windForecast: 2500 + Math.random() * 1000, // MWh
             solarForecast: 1800 + Math.random() * 500,
@@ -85,7 +85,7 @@ export class GeopoliticalPulse {
      * Scan geopolitical events
      */
     private static async scanGeopoliticalEvents(): Promise<IntelligenceFeed['geopolitical']> {
-        // Mock data - in production: News APIs, GDELT
+        // Simulated data - in production: News APIs, GDELT
         const events = [
             'EU carbon price trading at €85/ton (+3%)',
             'Germany extends nuclear shutdown timeline',
@@ -102,7 +102,7 @@ export class GeopoliticalPulse {
      * Estimate competitor production
      */
     private static async estimateCompetitorOutput(): Promise<IntelligenceFeed['competitors']> {
-        // Mock data - in production: ENTSO-E transparency platform
+        // Simulated data - in production: ENTSO-E transparency platform
         return {
             estimatedOutput: 450, // MW basin-wide
             maintenance: ['HE Orlovac (Unit 2)', 'HE Rijeka (Unit 1)']
@@ -113,7 +113,7 @@ export class GeopoliticalPulse {
      * Analyze energy news sentiment
      */
     private static async analyzeEnergyNews(): Promise<IntelligenceFeed['news']> {
-        // Mock data - in production: Bloomberg API + NLP
+        // Simulated data - in production: Bloomberg API + NLP
         return {
             sentiment: 'BULLISH',
             headlines: [
@@ -136,7 +136,7 @@ export class GeopoliticalPulse {
         console.log(`[GeoPulse] Predicting price spike ${hoursAhead} hours ahead...`);
 
         const latest = this.feedHistory[this.feedHistory.length - 1];
-        const currentPrice = 65; // Mock current price
+        const currentPrice = 65; // Simulated current price
 
         // Prediction model (simplified - in production: ML model)
         let predictedPrice = currentPrice;

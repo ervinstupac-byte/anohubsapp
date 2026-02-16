@@ -1,7 +1,7 @@
 import { ProjectStateManager } from '../src/contexts/ProjectStateContext';
 import { Sovereign_Executive_Engine } from '../src/services/Sovereign_Executive_Engine';
 
-const MOCK_TELEMETRY = {
+const SIMULATED_TELEMETRY = {
     activeIncident: null,
     telemetry: {
         'U1': {
@@ -25,7 +25,7 @@ async function verifyReplay() {
         // 2. Perform Replay Logic (Simulating T-5min)
         console.log('   Replaying T-5min state through Sovereign logic...');
 
-        // Mock inputs required by executeCycle
+        // Simulated inputs required by executeCycle
         const inputs = {
             vibration: 0.05,
             scadaTimestamp: Date.now() - 300000,

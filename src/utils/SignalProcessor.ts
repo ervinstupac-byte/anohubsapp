@@ -49,7 +49,7 @@ export class SignalProcessor {
     static performFFT(timeSeriesData: number[], samplingRate: number = 1000): Map<number, number> {
         const spectrum = new Map<number, number>();
 
-        // Mocking the spectral extraction for demonstration of "Domain Logic"
+        // Simulateding the spectral extraction for demonstration of "Domain Logic"
         // In reality, this would be a complex math loop (Cooley-Tukey algorithm).
 
         // 1. Calculate Fundamental Frequency (1x RPM)

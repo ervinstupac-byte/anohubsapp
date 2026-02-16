@@ -176,7 +176,7 @@ export const LibraryHealthMonitor: React.FC = () => {
                                     </div>
                                     <div className="flex justify-between mt-2 text-[9px] font-mono font-bold">
                                         <span className={auditResults?.missing ? 'text-h-red' : 'text-h-cyan'}>
-                                            {auditResults ? `${auditResults.real} REAL / ${auditResults.missing} MOCKED` : `${totalFiles} / ${totalFiles} VALIDATED`}
+                                            {auditResults ? `${auditResults.real} REAL / ${auditResults.missing} MISSING` : `${totalFiles} / ${totalFiles} VALIDATED`}
                                         </span>
                                         <span className="text-h-cyan opacity-80">INTEGRITY LOCK ACTIVE</span>
                                     </div>
@@ -232,7 +232,7 @@ export const LibraryHealthMonitor: React.FC = () => {
                                     <div className="text-xl font-black text-white">{auditResults.real}</div>
                                 </div>
                                 <div className="p-3 bg-h-red/10 border border-h-red/20 rounded-xl">
-                                    <div className="text-[9px] font-mono text-h-red uppercase mb-1">Missing / Mocked</div>
+                                    <div className="text-[9px] font-mono text-h-red uppercase mb-1">Missing / Simulated</div>
                                     <div className="text-xl font-black text-white">{auditResults.missing}</div>
                                 </div>
                             </div>

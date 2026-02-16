@@ -7,7 +7,7 @@
  * - Fleet-wide profit maintenance
  */
 
-// --- INLINE MOCKS ---
+// --- INLINE SIMULATIONS ---
 
 interface FleetAsset {
     assetId: string;
@@ -25,7 +25,7 @@ interface LoadShiftPlan {
     feasible: boolean;
 }
 
-class FleetOrchestratorMock {
+class FleetOrchestratorSimulated {
     public static calculateLoadShift(healingAsset: FleetAsset, fleet: FleetAsset[]): LoadShiftPlan {
         const lostMW = healingAsset.currentLoad;
         const available = fleet.filter(a => a.assetId !== healingAsset.assetId && a.state === 'OPERATIONAL');
@@ -57,7 +57,7 @@ class FleetOrchestratorMock {
     }
 }
 
-class SwarmIntelligenceBridgeMock {
+class SwarmIntelligenceBridgeSimulated {
     private static learnings = 0;
 
     public static syncVeto(sourceAsset: string, actionType: string, similarCount: number): void {
@@ -113,7 +113,7 @@ async function verify() {
     console.log('⚠️  UNIT-1 entering HEALING state...');
 
     fleet[0].state = 'HEALING';
-    const plan = FleetOrchestratorMock.calculateLoadShift(fleet[0], fleet);
+    const plan = FleetOrchestratorSimulated.calculateLoadShift(fleet[0], fleet);
 
     console.log(`\n📊 Load Shift Plan:`);
     console.log(`  Lost MW: ${plan.lostMW}`);
@@ -144,9 +144,9 @@ async function verify() {
     console.log('👤 Operator vetoed action on UNIT-2...');
 
     const similarAssets = fleet.filter(a => a.turbineModel === fleet[1].turbineModel && a.assetId !== fleet[1].assetId);
-    SwarmIntelligenceBridgeMock.syncVeto('UNIT-2', 'INCREASE_LOAD', similarAssets.length);
+    SwarmIntelligenceBridgeSimulated.syncVeto('UNIT-2', 'INCREASE_LOAD', similarAssets.length);
 
-    const knowledgeIndex = SwarmIntelligenceBridgeMock.getKnowledgeIndex();
+    const knowledgeIndex = SwarmIntelligenceBridgeSimulated.getKnowledgeIndex();
     console.log(`\n📚 Collective Knowledge Index: ${knowledgeIndex}`);
 
     if (knowledgeIndex > 0) {

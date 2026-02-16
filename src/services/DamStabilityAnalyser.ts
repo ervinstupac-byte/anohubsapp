@@ -17,7 +17,7 @@ export interface StabilityMetrics {
 
 export class DamStabilityAnalyser {
     // Design constants
-    private static readonly DAM_WEIGHT_KN = 5000000; // Mock weight
+    private static readonly DAM_WEIGHT_KN = 5000000; // Simulated weight
     private static readonly FRICTION_COEFF = 0.7;
 
     // Baseline Seepage Curve (Flow vs Head)

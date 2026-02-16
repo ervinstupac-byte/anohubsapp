@@ -31,7 +31,7 @@ export class EdgeNeuralNode {
     ): InferenceResult {
         const start = performance.now();
 
-        // Mock Model Logic (Matrix multiplication simulation)
+        // Simulated Model Logic (Matrix multiplication simulation)
         // In real life: TensorFlow Lite or ONNX Runtime interaction
         const sum = inputs.reduce((a, b) => a + b, 0);
         const avg = sum / (inputs.length || 1);

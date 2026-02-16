@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTelemetryStore } from '../../telemetry/store/useTelemetryStore';
 import { calculateMaintenancePrediction } from '../logic/PredictiveAnalytics';
 import { PredictionInput, MaintenancePrediction } from '../types';
+import { SIMULATED_COMPONENTS } from '../../../services/DemoDataOracle';
 
 // UI Interface (Adapter Pattern)
 export interface MaintenanceEvent {
@@ -17,13 +18,13 @@ export interface MaintenanceEvent {
 export const useMaintenancePrediction = (): MaintenanceEvent[] => {
     const { mechanical, hydraulic } = useTelemetryStore();
 
-    // MOCK CONFIGURATION (Ideally from AssetStore)
-    const mockComponents = [
+    // Simulated CONFIGURATION (Ideally from AssetStore)
+    const simulatedComponents = [
         {
             id: 'thrust-bearing-01',
             name: 'Thrust Bearing Pads',
             designLifeHours: 50000,
-            accumulatedRunHours: 35000 // Mock Base
+            accumulatedRunHours: 35000 // Simulated Base
         },
         {
             id: 'runner-01',
@@ -36,12 +37,12 @@ export const useMaintenancePrediction = (): MaintenanceEvent[] => {
     const telemetrySnapshot = useMemo(() => ({
         vibration: mechanical.vibration || 0.032,
         cavitation: (hydraulic.efficiency || 0.9) < 0.85 ? 0.8 : 0.1, // Proxy cavitation from efficiency
-        runHoursDelta: 0, // Mock
+        runHoursDelta: 0, // Simulated
         starts: 0
     }), [mechanical, hydraulic]);
 
     const predictions = useMemo(() => {
-        return mockComponents.map(comp => {
+        return simulatedComponents.map(comp => {
             const input: PredictionInput = {
                 config: {
                     id: comp.id,

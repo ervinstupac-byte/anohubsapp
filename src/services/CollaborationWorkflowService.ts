@@ -210,7 +210,7 @@ export class CollaborationWorkflowService {
     }
 
     private static async validateHydraulicChange(data: any): Promise<AIValidationResult> {
-        // Mock validation for missing module
+        // Simulated validation for missing module
         const result = {
             safe: true,
             risks: [],
@@ -252,7 +252,7 @@ export class CollaborationWorkflowService {
         // Get consultant users from database
         // const consultants = await supabase.from('users').select('*').eq('role', 'CONSULTANT');
 
-        const mockConsultant: User = {
+        const simulatedConsultant: User = {
             id: 'CONSULTANT_001',
             name: 'Ervin Stupac',
             role: 'CONSULTANT',
@@ -261,7 +261,7 @@ export class CollaborationWorkflowService {
         };
 
         await this.sendNotification({
-            recipient: mockConsultant,
+            recipient: simulatedConsultant,
             type: 'CONSULTANT_REVIEW_REQUIRED',
             submissionId: submission.id,
             message: `New measurement requires your review: ${submission.measurementType} for asset ${submission.assetId}. AI Score: ${submission.aiValidationResult?.complianceScore?.toFixed(0)}%`,
@@ -298,7 +298,7 @@ export class CollaborationWorkflowService {
         //     .select('*')
         //     .eq('status', 'PENDING_CONSULTANT_REVIEW');
 
-        return []; // Mock
+        return []; // Simulated
     }
 
     /**
@@ -311,7 +311,7 @@ export class CollaborationWorkflowService {
         //     .eq('assetId', assetId)
         //     .order('timestamp', { ascending: false });
 
-        return []; // Mock
+        return []; // Simulated
     }
 }
 

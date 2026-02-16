@@ -186,7 +186,7 @@ export class MaintenanceOrchestrator {
         // Import ROI service (would be at top in real implementation)
         // const { ROIMonitorService } = await import('./ROIMonitorService');
 
-        // Mock data for demonstration (ROI calculation is complex)
+        // Simulated data for demonstration (ROI calculation is complex)
         const dailyROI = {
             totalSaved: 6420,
             preventedMaintenanceCosts: 4200,
@@ -198,7 +198,7 @@ export class MaintenanceOrchestrator {
 
         const reportPath = `/sovereign_reports/daily_${new Date().toISOString().split('T')[0]}.pdf`;
 
-        // Mock report content
+        // Simulated report content
         const reportContent = {
             date: new Date().toISOString(),
             summary: {

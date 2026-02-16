@@ -62,7 +62,7 @@ export class SecurityService {
         // In production: Use actual PQC library
         // Example: const { publicKey, privateKey } = await pqcrypto.kyber.generateKeyPair();
 
-        // For now: Mock with appropriate key sizes
+        // For now: Simulated with appropriate key sizes
         const keySizes = {
             'CRYSTALS-Kyber': { public: 1568, private: 3168 }, // Kyber-1024
             'CRYSTALS-Dilithium': { public: 2592, private: 4896 }, // Dilithium5
@@ -115,7 +115,7 @@ export class SecurityService {
         // In production: Use actual PQC signing
         // Example: const signature = await pqcrypto.dilithium.sign(data, keyPair.privateKey);
 
-        // Mock signature generation
+        // Simulated signature generation
         const signatureSize = keyPair.algorithm === 'CRYSTALS-Dilithium' ? 4595 : 49856;
         const signature = new Uint8Array(signatureSize);
         crypto.getRandomValues(signature);
@@ -158,7 +158,7 @@ export class SecurityService {
         // In production: Use actual PQC verification
         // Example: const valid = await pqcrypto.dilithium.verify(signature, data, keyPair.publicKey);
 
-        // Mock verification (always true for demo)
+        // Simulated verification (always true for demo)
         console.log(`[QuantumSov] ✅ Signature verified with ${signature.algorithm}`);
         return true;
     }
@@ -186,7 +186,7 @@ export class SecurityService {
         // const { ciphertext, sharedSecret } = await pqcrypto.kyber.encapsulate(keyPair.publicKey);
         // const encrypted = AES.encrypt(data, sharedSecret);
 
-        // Mock encryption
+        // Simulated encryption
         const encapsulatedKey = new Uint8Array(1568); // Kyber ciphertext size
         const ciphertext = new Uint8Array(data.length);
         crypto.getRandomValues(encapsulatedKey);
@@ -214,7 +214,7 @@ export class SecurityService {
         // const sharedSecret = await pqcrypto.kyber.decapsulate(encapsulatedKey, keyPair.privateKey);
         // const decrypted = AES.decrypt(ciphertext, sharedSecret);
 
-        // Mock decryption
+        // Simulated decryption
         console.log(`[QuantumSov] Data decrypted with Kyber-1024`);
 
         return '[DECRYPTED_DATA]';
@@ -225,7 +225,7 @@ export class SecurityService {
      */
     private static hashMessage(data: string): string {
         // In production: Use SHA-3 (Keccak)
-        // For now: Mock hash
+        // For now: Simulated hash
         return `SHA3-256:${data.substring(0, 10)}...`;
     }
 

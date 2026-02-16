@@ -19,9 +19,9 @@ async function persistAuditRecord(record) {
     const outDir = path.join(process.cwd(), 'artifacts');
     try {
       fs.mkdirSync(outDir, { recursive: true });
-      const file = path.join(outDir, `audit_mock_${Date.now()}.json`);
+      const file = path.join(outDir, `audit_simulated_${Date.now()}.json`);
       fs.writeFileSync(file, JSON.stringify(record, null, 2), 'utf8');
-      return { inserted: false, path: file, message: 'Integration disabled; wrote mock audit file.' };
+      return { inserted: false, path: file, message: 'Integration disabled; wrote simulated audit file.' };
     } catch (err) {
       return { inserted: false, error: String(err) };
     }

@@ -99,7 +99,7 @@ export class BlackoutSentinel {
         // - 1.1.1.1 (Cloudflare DNS)
         // - api.openweathermap.org
 
-        // Mock check
+        // Simulated check
         return Math.random() > 0.01; // 99% uptime simulation
     }
 
@@ -108,7 +108,7 @@ export class BlackoutSentinel {
      */
     private static async checkSatelliteLink(): Promise<boolean> {
         // In production: Check Starlink/Iridium connection
-        // Mock: Satellite available
+        // Simulated: Satellite available
         return true;
     }
 

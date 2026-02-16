@@ -45,7 +45,7 @@ export const SovereignView: React.FC<{ data: SovereignData }> = ({ data }) => {
 
     // Physics Integration: Fetch remediation on hotspot interaction
     const handleHotspotClick = async (subsystem: string) => {
-        // Mock mapping for demo - in production this comes from the 3D scene event
+        // Simulated mapping for demo - in production this comes from the 3D scene event
         const lookupId = subsystem === 'RUNNER' ? 'DOS-KAP-001' :
             subsystem === 'BEARING' ? 'DOS-BEA-006' :
                 'DOS-THE-008'; // Default fallback

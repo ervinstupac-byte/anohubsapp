@@ -5,7 +5,7 @@ import { SyncBadge } from '../SyncBadge';
 import { useSyncWatcher } from '../../../hooks/useSyncWatcher';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
-// --- MOCKS ---
+// --- SimulatedS ---
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({ t: (key: string, opts?: any) => opts?.count ? `${key} count:${opts.count}` : key }),
 }));
@@ -23,7 +23,7 @@ vi.mock('../../../hooks/useSyncWatcher', () => ({
 }));
 
 describe('SyncBadge Component', () => {
-    const mockTriggerSync = vi.fn();
+    const simulatedTriggerSync = vi.fn();
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -34,7 +34,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'OFFLINE',
             pendingCount: 0,
             isOnline: false,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByText, getByTestId } = render(<SyncBadge />);
@@ -52,7 +52,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'SYNCING',
             pendingCount: 5,
             isOnline: true,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByText, getByTestId } = render(<SyncBadge />);
@@ -70,7 +70,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'IDLE',
             pendingCount: 0,
             isOnline: true,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByText, getByTestId } = render(<SyncBadge />);
@@ -88,7 +88,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'ERROR',
             pendingCount: 3,
             isOnline: true,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByTestId } = render(<SyncBadge />);
@@ -101,7 +101,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'IDLE',
             pendingCount: 12,
             isOnline: true,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByText } = render(<SyncBadge />);
@@ -118,7 +118,7 @@ describe('SyncBadge Component', () => {
             syncStatus: 'IDLE',
             pendingCount: 2,
             isOnline: true,
-            triggerSync: mockTriggerSync
+            triggerSync: simulatedTriggerSync
         });
 
         const { getByText } = render(<SyncBadge />);
@@ -126,6 +126,6 @@ describe('SyncBadge Component', () => {
         const button = getByText('2').closest('button'); // Click the numbered button
         fireEvent.click(button!);
 
-        expect(mockTriggerSync).toHaveBeenCalled();
+        expect(simulatedTriggerSync).toHaveBeenCalled();
     });
 });

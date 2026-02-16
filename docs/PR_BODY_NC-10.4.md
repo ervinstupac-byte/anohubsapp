@@ -10,7 +10,7 @@ This draft PR introduces the Forensic Integrity Gate and supporting infrastructu
 - Supabase adapter + adapter.cjs: `src/lib/supabaseAuditAdapter.ts` and `.cjs` — server-side adapter used by `MasterIntelligenceEngine` to persist audit rows (with `INTEGRATION_MODE` guarding).  
 - Resolver endpoint & library: `api/canonical.js`, `src/lib/canonicalResolver.*` — deterministic canonical mapping using `scripts/hashes_applied.json`.  
 - Sensor harness + CI helpers: `scripts/sensor_harness.cjs`, `scripts/test_server.cjs`, `scripts/verify_nc102_integrity.cjs`, `scripts/persist_test.cjs`, `scripts/assert_audit_row.cjs` — for deterministic replay, insertion, and assertion.  
-- Engine patch: `src/services/MasterIntelligenceEngine.ts` — emits automated actions and calls the audit adapter (writes mocked artifact locally when `INTEGRATION_MODE` is disabled).  
+- Engine patch: `src/services/MasterIntelligenceEngine.ts` — emits automated actions and calls the audit adapter (writes simulated artifact locally when `INTEGRATION_MODE` is disabled).  
 - Documentation: `README.md` and `CONTRIBUTING.md` — operational runbook, Forensic Gate SOP, and merge policy enforcing preservation of the 854 dossiers and physics-core invariants.
 
 Invariant & Protection

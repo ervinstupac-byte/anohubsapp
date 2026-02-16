@@ -62,7 +62,7 @@ export class SpecialMeasurementSyncService {
         console.log(`   Format: ${format}`);
 
         // In production: Parse actual file
-        // For now, mock data
+        // For now, simulated data
         const points: GeometryPoint[] = [
             { id: '1', name: 'Spiral Case Inlet', x: 1500.234, y: 2000.156, z: 500.089, timestamp: Date.now() },
             { id: '2', name: 'Spiral Case Section A', x: 1450.123, y: 1980.234, z: 490.123, timestamp: Date.now() },
@@ -248,11 +248,11 @@ export class SpecialMeasurementSyncService {
         return value.getFloat32(0, true); // Little-endian float
         */
 
-        // Mock for development
-        const mockReading = 0.045 + Math.random() * 0.01; // mm
-        console.log(`   Reading: ${mockReading.toFixed(3)} mm`);
+        // Simulated for development
+        const simulatedReading = 0.045 + Math.random() * 0.01; // mm
+        console.log(`   Reading: ${simulatedReading.toFixed(3)} mm`);
 
-        return mockReading;
+        return simulatedReading;
     }
 }
 

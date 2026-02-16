@@ -23,7 +23,7 @@ export const useFinancialYield = (): FinancialYieldMetrics => {
     const { physics, hydraulic } = useTelemetryStore();
     const { config } = useAssetConfig();
 
-    // 1. Get Market Data (Mocked for POC, normally from MarketStore/API)
+    // 1. Get Market Data (Simulateded for POC, normally from MarketStore/API)
     const energyPrice = 85.0; // EUR/MWh
     const currency = '€';
 

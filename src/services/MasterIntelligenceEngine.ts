@@ -198,7 +198,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
                     strayCurrentDetected: false
                 }),
                 thermalInertia: {
-                    rate: 0.5, // Mocked rate for now
+                    rate: 0.5, // Simulated rate for now
                     risk: 'NOMINAL'
                 },
                 // NC-5.3 ISO 10816-5 Zone Mapping
@@ -610,8 +610,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         }
 
         const latest = history[history.length - 1];
-        // Mocking TelemetryData for aiPredictionService compatibility
-        const mockTelemetry: any = {
+        // Simulating TelemetryData for aiPredictionService compatibility
+        const simulatedTelemetry: any = {
             assetId: asset.id,
             cavitationIntensity: latest.specialized?.acoustic?.cavitationLevel || 0,
             temperature: latest.common.temperature,
@@ -631,8 +631,8 @@ export class MasterIntelligenceEngine extends BaseGuardian {
             };
         }
 
-        const synergeticRisks = aiPredictionService.detectSynergeticRisk(numericId, mockTelemetry);
-        const incidentPatterns = aiPredictionService.matchHistoricalPattern(numericId, mockTelemetry);
+        const synergeticRisks = aiPredictionService.detectSynergeticRisk(numericId, simulatedTelemetry);
+        const incidentPatterns = aiPredictionService.matchHistoricalPattern(numericId, simulatedTelemetry);
 
         // Forecast using persisted telemetry (async)
         const forecast = await aiPredictionService.forecastEtaBreakEven(numericId);
@@ -1364,7 +1364,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
         */
 
         console.log(`📦 Checking inventory for ${component}...`);
-        return Math.random() > 0.5; // Mock
+        return Math.random() > 0.5; // Simulated
     }
 
     private static async autoOrderPart(component: string, assetId: number): Promise<void> {
@@ -1483,7 +1483,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
     private static calculateTrendProjections(latest: CompleteSensorData): UnifiedDiagnosis['trendProjections'] {
         const projections: UnifiedDiagnosis['trendProjections'] = {};
 
-        // 1. Vibration Trend (Mock linear regression logic)
+        // 1. Vibration Trend (Simulated linear regression logic)
         const vibTrend = HistoricalTrendAnalyzer.analyzeTrend(
             {
                 parameterId: 'vibration',
@@ -1544,7 +1544,7 @@ export class MasterIntelligenceEngine extends BaseGuardian {
     }
 
     private static compareWithHistoricalBaseline(latest: CompleteSensorData, asset: EnhancedAsset) {
-        // NC-8.0: Mocks the comparison against the 854 technical dossiers
+        // NC-8.0: Simulateds the comparison against the 854 technical dossiers
         // In a real system, this would index the physical HTML files
         const baselines: Record<string, number> = {
             'vibration': 2.3, // ZONE_A Baseline

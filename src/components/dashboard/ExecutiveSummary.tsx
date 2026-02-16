@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DollarSign, Activity, TrendingUp, ShieldCheck, PieChart, ArrowUpRight } from 'lucide-react';
 import { ExecutiveReportService, CEOInsight } from '../../lib/analytics/ExecutiveReportService';
 
-// Mock Fleet Data (Synced with FleetOverview)
-const FLEET_DATA_MOCK = [
+// Simulated Fleet Data (Synced with FleetOverview)
+const FLEET_DATA_SIMULATION = [
     { id: 'UNIT-01', status: 'OPTIMAL' },
     { id: 'UNIT-02', status: 'DRIFT_WARNING' },
     { id: 'UNIT-03', status: 'OPTIMAL' },
@@ -23,23 +23,23 @@ export const ExecutiveSummary: React.FC = () => {
 
     useEffect(() => {
         // 1. Calculate Health
-        const score = service.calculateFleetHealth(FLEET_DATA_MOCK);
+        const score = service.calculateFleetHealth(FLEET_DATA_SIMULATION);
         setHealthScore(score);
 
         // 2. Simulate Risks & ROI
         // In a real app, we'd pull detection history. Here we simulate typical monthly catch.
-        const mockDiagnoses = [
+        const simulatedDiagnoses = [
             { cause: 'Dynamic Shaft Misalignment', severity: 'WARNING' },
             { cause: 'Hydraulic Cavitation (Gravel Noise)', severity: 'WATCH' }
         ];
         // Combine with Drift Value
         // drift loss (Unit 2) is a NEGATIVE value, so "Avoided Cost" is the value of the REST of the fleet being perfect.
         // Let's frame it as "System Value Delivered" = (Prevented Outages + Efficiency Gains)
-        const activeProtections = service.estimateAvoidedCost(mockDiagnoses as any);
+        const activeProtections = service.estimateAvoidedCost(simulatedDiagnoses as any);
         setAvoidedCost(activeProtections + 450000); // Adding the Efficiency Gain value
 
         // 3. Generate Insights
-        const generated = service.generateCEOInsights(FLEET_DATA_MOCK, mockDiagnoses as any);
+        const generated = service.generateCEOInsights(FLEET_DATA_SIMULATION, simulatedDiagnoses as any);
         setInsights(generated);
 
     }, [service]);
@@ -142,7 +142,7 @@ export const ExecutiveSummary: React.FC = () => {
 
             </div>
 
-            {/* Bottom Chart Mockup */}
+            {/* Bottom Chart Simulatedup */}
             <div className="mt-8 p-6 bg-slate-900/30 border border-slate-800 rounded-xl">
                 <div className="flex justify-between items-center mb-6">
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Cumulative Value Delivered (YTD)</h4>

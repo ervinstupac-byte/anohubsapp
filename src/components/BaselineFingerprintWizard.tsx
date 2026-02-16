@@ -8,6 +8,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { CommissioningService } from '../services/CommissioningService';
 import { EnhancedAsset } from '../models/turbine/types';
 import { useTelemetry } from '../contexts/TelemetryContext';
+import { getSimulatedAcousticSpectrum, getSimulatedEfficiency } from '../services/DemoDataOracle';
 
 interface BaselineFingerprintWizardProps {
     sessionId: string;
@@ -40,11 +41,11 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
         // Simulate recording for 3 seconds to collect stable data
         await new Promise(resolve => setTimeout(resolve, 3000));
 
-        // Mock acoustic spectrum (in production: real FFT from microphone)
-        const mockAcousticSpectrum = Array.from({ length: 100 }, () => Math.random() * 10);
+        // Get acoustic spectrum (Simulated via Oracle)
+        const acousticSpectrum = getSimulatedAcousticSpectrum();
 
         await CommissioningService.recordBaseline(sessionId, loadLevel, {
-            acousticSpectrum: mockAcousticSpectrum,
+            acousticSpectrum: acousticSpectrum,
             vibration: {
                 horizontal: tData.vibration || 3.2,
                 vertical: tData.vibration || 3.0,
@@ -60,7 +61,7 @@ export const BaselineFingerprintWizard: React.FC<BaselineFingerprintWizardProps>
                 servo: (tData as any).cylinderPressure || 60
             },
             powerOutput: (tData as any).output_power || asset.capacity * (loadLevel / 100),
-            efficiency: 90 + loadLevel / 20, // Mock efficiency curve
+            efficiency: getSimulatedEfficiency(loadLevel),
             waterFlow: (asset.turbine_config.design_flow || 0) * (loadLevel / 100)
         });
 

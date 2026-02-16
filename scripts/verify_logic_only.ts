@@ -13,7 +13,7 @@ interface LearningModifiers {
     confidencePenalty: number;
 }
 
-class MockFeedbackIntelligence {
+class SimulatedFeedbackIntelligence {
     public static calculateModifiers(vetoCount: number): LearningModifiers {
         let multiplier = 1.0;
         let penalty = 0;
@@ -42,7 +42,7 @@ async function verify() {
 
     let mathPass = true;
     for (const s of scenarios) {
-        const res = MockFeedbackIntelligence.calculateModifiers(s.vetoes);
+        const res = SimulatedFeedbackIntelligence.calculateModifiers(s.vetoes);
         const match = Math.abs(res.thresholdMultiplier - s.expectedMult) < 0.001;
         console.log(`   Vetoes: ${s.vetoes} | Multiplier: ${res.thresholdMultiplier.toFixed(2)} (Exp: ${s.expectedMult}) | ${match ? '✅' : '❌'}`);
         if (!match) mathPass = false;
@@ -66,7 +66,7 @@ async function verify() {
     const actionTriggeredBaseline = ratio > standardThreshold;
     console.log(`   Baseline (Ratio ${ratio} > ${standardThreshold}): ${actionTriggeredBaseline ? 'ACTION' : 'NO_ACTION'} (Expected: ACTION)`);
 
-    const modifiers = MockFeedbackIntelligence.calculateModifiers(4); // 4 vetoes -> 1.15
+    const modifiers = SimulatedFeedbackIntelligence.calculateModifiers(4); // 4 vetoes -> 1.15
     const adjustedThreshold = standardThreshold * modifiers.thresholdMultiplier;
 
     const actionTriggeredLearned = ratio > adjustedThreshold;

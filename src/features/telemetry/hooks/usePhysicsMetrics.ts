@@ -74,12 +74,12 @@ export const usePhysicsMetrics = (): PhysicsMetrics => {
         const alertLevel = diagnosis?.severity || 'NOMINAL';
 
         // Calculate maintenance urgency using centralized PhysicsEngine logic
-        const mockState = {
+        const simulatedState = {
             identity,
             mechanical,
             site,
         };
-        const maintenanceUrgency = PhysicsEngine.calculateMaintenanceUrgency(mockState as any);
+        const maintenanceUrgency = PhysicsEngine.calculateMaintenanceUrgency(simulatedState as any);
 
         // Health score (inverse of urgency: Level 1 = 100%, Level 5 = 0%)
         const healthScore = Math.max(0, 100 - (maintenanceUrgency - 1) * 25);

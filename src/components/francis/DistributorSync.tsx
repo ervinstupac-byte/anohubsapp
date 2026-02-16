@@ -14,7 +14,7 @@ export const DistributorSync: React.FC = () => {
 
     // Telemetry from TelemetryStore
     const guideVaneOpening = telemetry.hydraulic?.guideVaneOpening ?? 45.2; // %
-    const syncDelta = 0.08; // mm (Mocked for current context)
+    const syncDelta = 0.08; // mm (Simulateded for current context)
     const isOutOfSync = syncDelta > 0.5;
 
     return (

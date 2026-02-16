@@ -42,6 +42,7 @@ export const TruthHeatmapDemo: React.FC = () => {
             {/* 3D Turbine */}
             <TurbineRunner3D
                 rpm={300}
+                useLivePhysics={true}
                 deltaMap={deltaMap as unknown as Record<string, number>}
                 heatmapMode={heatmapMode}
                 selectedPart={selectedPart}

@@ -7,14 +7,14 @@ import { useAssetContext } from '../../../contexts/AssetContext';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
-// --- MOCKS ---
-const mockNavigate = vi.fn();
+// --- Test Doubles ---
+const simulatedNavigate = vi.fn();
 
 vi.mock('react-router-dom', async (importOriginal) => {
     const actual = await importOriginal<any>();
     return {
         ...actual,
-        useNavigate: () => mockNavigate,
+        useNavigate: () => simulatedNavigate,
     };
 });
 
@@ -139,7 +139,7 @@ describe('QuickCalcCard Component', () => {
         expect(button).toBeInTheDocument();
         fireEvent.click(button!);
 
-        expect(mockNavigate).toHaveBeenCalledWith('/maintenance/bolt-torque');
+        expect(simulatedNavigate).toHaveBeenCalledWith('/maintenance/bolt-torque');
     });
 
     it('shows critical alerts when limits exceeded', () => {
@@ -170,7 +170,7 @@ describe('QuickCalcCard Component', () => {
         );
 
         // Check for Limits Exceeded visual indicator (Amber border)
-        // The mock GlassCard renders the className, so we check for the warning class
+        // The simulated GlassCard renders the className, so we check for the warning class
         const title = getByText('dashboard.quickCalc.title');
         // The title is deep inside, so simpler to check if the specific warning class exists in the document
         // Component logic: border-l-amber-500 is applied when hasWarnings is true (which is true for warnings AND criticals in this implementation seems to imply warning color for border, or maybe logic is more complex. 

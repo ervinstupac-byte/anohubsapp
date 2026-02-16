@@ -18,7 +18,7 @@ export interface ScanResult {
 }
 
 export class NDTDataProcessor {
-    // Nominal CAD specs (Mock)
+    // Nominal CAD specs (Simulated)
     private static readonly NOMINAL_THICKNESS_MM = 12.0;
 
     /**
@@ -31,7 +31,7 @@ export class NDTDataProcessor {
         rawDataPoints: number // count
     ): ScanResult {
 
-        // Mock Analysis Logic
+        // Simulated Analysis Logic
 
         // 1. Compare to CAD
         // Simulate finding a deviation (e.g. sediment buildup or cavitation pit)

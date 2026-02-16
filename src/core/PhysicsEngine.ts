@@ -5,6 +5,7 @@ import masterKnowledge from '../knowledge/MasterKnowledgeMap.json';
 import { ProfileLoader } from '../services/ProfileLoader';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
 import { ASSET_THRESHOLDS } from '../config/AssetThresholds';
+import { EfficiencyOptimizer } from '../services/EfficiencyOptimizer';
 
 // Configuration for HPP environment precision
 Decimal.set({ precision: 20, rounding: Decimal.ROUND_HALF_UP });
@@ -132,6 +133,196 @@ export const PhysicsEngine = {
             boltCapacityKN,
             boltSafetyFactor
         };
+    },
+
+    /**
+     * DYNAMIC SIMULATION STEP (Temporal Physics)
+     * Integrates differential equations over time (dt).
+     * Converts "Snapshot" logic into "Living Breathing Machine".
+     */
+    simulateTimeStep: (state: TechnicalProjectState, dtSeconds: number): Partial<TechnicalProjectState> => {
+        if (dtSeconds <= 0) return {};
+
+        const updates: any = { mechanical: {}, governor: {}, hydraulic: {}, physics: {} };
+
+        // --- 0. CONSTANTS ---
+        const GRAVITY = SYSTEM_CONSTANTS.PHYSICS.GRAVITY; // 9.81
+        const RHO = SYSTEM_CONSTANTS.PHYSICS.WATER.DENSITY; // 1000
+        const INERTIA_J = 15000; // kg·m² (Rotational Inertia - Simulated Estimate for 10MW)
+        const PENSTOCK_L = state.penstock.length || 100;
+        const PENSTOCK_D = state.penstock.diameter || 2.0;
+        const PENSTOCK_A = Math.PI * Math.pow(PENSTOCK_D / 2, 2);
+        const GROSS_HEAD = state.site.grossHead || 100;
+
+        // --- 1. PID GOVERNOR (Speed Control Loop) ---
+        const governor = state.governor;
+        const targetRPM = governor.setpoint.toNumber();
+        const currentRPM = state.mechanical.rpm || 0;
+        
+        // Calculate Error
+        const error = targetRPM - currentRPM;
+        
+        // Update Integral Term (Anti-windup handled by clamping output)
+        let integral = governor.integralError.toNumber() + (governor.ki.toNumber() * error * dtSeconds);
+        // Decay integral if error is small (leak) or clamp to avoid windup
+        integral = Math.max(-50, Math.min(50, integral)); 
+
+        // Calculate Derivative Term
+        const prevError = governor.previousError.toNumber();
+        const derivative = (error - prevError) / dtSeconds;
+
+        // PID Output -> Wicket Gate Velocity Demand (%/s)
+        const pidOutput = (governor.kp.toNumber() * error) + integral + (governor.kd.toNumber() * derivative);
+        
+        // Slew Rate Limiter (Hydraulic Servo Constraints)
+        const maxSlewRate = 10; // % per second
+        const currentGate = governor.actualValue.toNumber();
+        let gateVelocity = pidOutput;
+        
+        // Clamp velocity to physical limits
+        if (gateVelocity > maxSlewRate) gateVelocity = maxSlewRate;
+        if (gateVelocity < -maxSlewRate) gateVelocity = -maxSlewRate;
+
+        // Integrate Gate Position
+        let nextGate = currentGate + gateVelocity * dtSeconds;
+        nextGate = Math.max(0, Math.min(100, nextGate)); // Clamp 0-100%
+
+        updates.governor = {
+            ...governor,
+            actualValue: new Decimal(nextGate),
+            integralError: new Decimal(integral),
+            previousError: new Decimal(error),
+            outputSignal: new Decimal(pidOutput)
+        };
+
+        // --- 2. HYDRAULIC DYNAMICS (Water Column Inertia) ---
+        // Equation: dQ/dt = (g * A / L) * (H_gross - H_loss - H_turbine)
+        
+        const currentFlow = state.hydraulic.flow || 0;
+        const gateOpening0to1 = Math.max(0.01, nextGate / 100); // Avoid div by zero
+
+        // H_loss (Friction): Darcy-Weisbach approximated
+        // f approx 0.02 for large pipes
+        const frictionFactor = 0.015; 
+        const velocity = currentFlow / PENSTOCK_A;
+        const hLoss = frictionFactor * (PENSTOCK_L / PENSTOCK_D) * (Math.pow(velocity, 2) / (2 * GRAVITY));
+
+        // H_turbine (Head consumed by turbine orifice)
+        // Model: Q = k * G * sqrt(H_turbine)  =>  H_turbine = (Q / (k * G))^2
+        // k is flow coefficient. At 100% gate and design head, Q = Q_design.
+        const designFlow = state.site.designFlow || 10;
+        const designHead = state.site.grossHead || 100;
+        const k_turb = designFlow / Math.sqrt(designHead); // Simplified C_v
+        
+        // Calculate required head to push current flow through current gate
+        const hTurbine = Math.pow(currentFlow / (k_turb * gateOpening0to1), 2);
+
+        // Net accelerating head
+        const hUnbalanced = GROSS_HEAD - hLoss - hTurbine;
+
+        // Differential Equation: Water Acceleration
+        const dQdt = (GRAVITY * PENSTOCK_A / PENSTOCK_L) * hUnbalanced;
+        
+        // Integrate Flow
+        let nextFlow = currentFlow + dQdt * dtSeconds;
+        // Flow cannot be negative (check valves/physics) nor infinite
+        nextFlow = Math.max(0, nextFlow);
+
+        // Calculate Surge Pressure (Water Hammer) from dQ/dt
+        // dP = - rho * L * dV/dt = - rho * L * (dQ/dt) / A
+        // Pressure Head Surge = - (L / gA) * dQ/dt
+        // But we already know dQ/dt = (gA/L) * hUnbalanced
+        // So Surge Head = - hUnbalanced
+        // If gate closes (hTurbine increases), hUnbalanced becomes negative (Gross < Loss + Turb),
+        // dQ/dt is negative (deceleration).
+        // Surge Head = - (-Neg) = Positive Pressure Spike. Correct.
+        const surgeHead = -hUnbalanced;
+        const surgePressureBar = (surgeHead * RHO * GRAVITY) / 1e5;
+
+        updates.hydraulic = {
+            ...state.hydraulic,
+            flow: nextFlow,
+            head: GROSS_HEAD - hLoss // Net Head at turbine inlet (Static - Friction)
+        };
+        
+        // Add dynamic surge pressure to physics updates
+        updates.physics.surgePressureBar = surgePressureBar;
+        updates.physics.waterHammerPressureBar = surgePressureBar;
+
+        // --- 3. MECHANICAL DYNAMICS (Rotational Inertia) ---
+        // Equation: J * dw/dt = Tau_mech - Tau_elec - Tau_fric
+
+        // Mechanical Power (Hydraulic)
+        // P_hyd = rho * g * H_net * Q * efficiency
+        // Calculate efficiency dynamically from Hill Chart based on current head and flow
+        const etaPercent = EfficiencyOptimizer.getEfficiency(GROSS_HEAD - hLoss, nextFlow);
+        const efficiency = etaPercent / 100;
+
+        const powerHydWatts = RHO * GRAVITY * (GROSS_HEAD - hLoss) * nextFlow * efficiency;
+        
+        // Electrical Load (Resistance)
+        // Simple model: Load is constant power (grid demand) or resistive (proportional to speed)
+        // Let's assume Grid Demand is setpoint-based or constant for simulation
+        // For off-grid/island mode or startup: Load = 0 until breaker closes
+        // For grid-connected: Load matches generation + droop, but let's model "Load Torque"
+        // Let's assume a simplified load curve: P_load = P_ref * (w/w_ref)
+        const currentOmega = (currentRPM * 2 * Math.PI) / 60;
+        const targetOmega = (targetRPM * 2 * Math.PI) / 60;
+        
+        // Torque = Power / Omega
+        const torqueMech = currentOmega > 0.1 ? powerHydWatts / currentOmega : 0;
+        
+        // Load Torque: Assume connected to grid if RPM > 80% of rated
+        let torqueLoad = 0;
+        if (currentRPM > targetRPM * 0.8) {
+             // Grid Load: Tries to hold speed constant (Infinite Bus approximation)
+             // or simplified: Load Torque proportional to gate (steady state assumption)
+             // Let's use a "Resistance" model for stability in this simulation
+             // T_load = k * w^2 (Fan/Pump law) or Constant Power
+             // Let's use Constant Torque approx for Generator Load
+             const loadMW = 5.0; // Assume 5MW base load
+             torqueLoad = (loadMW * 1e6) / targetOmega; 
+             
+             // Add "Grid Stiffness" (Synchronizing Torque)
+             // T_sync = K * delta_delta (angle). Simplified: K * (w - w_target) (Damping)
+             torqueLoad += 50000 * (currentOmega - targetOmega);
+        }
+
+        // Friction Torque (Bearings + Windage)
+        const torqueFric = 500 + (10 * currentOmega); 
+
+        // Net Torque
+        const torqueNet = torqueMech - torqueLoad - torqueFric;
+
+        // Acceleration: dw/dt = T_net / J
+        const alpha = torqueNet / INERTIA_J;
+
+        // Integrate Speed
+        let nextOmega = currentOmega + alpha * dtSeconds;
+        nextOmega = Math.max(0, nextOmega); // No reverse rotation
+
+        const nextRPM = (nextOmega * 60) / (2 * Math.PI);
+
+        updates.mechanical.rpm = nextRPM;
+        updates.physics.powerMW = powerHydWatts / 1e6;
+        updates.hydraulic.efficiency = efficiency; // Update efficiency for UI
+
+        // --- 4. THERMAL INERTIA (Existing Logic Refined) ---
+        // dT/dt = (PowerLoss - Cooling) / ThermalMass
+        const currentTemp = state.mechanical.bearingTemp || 20;
+        const ambientTemp = state.site.temperature || 20;
+        
+        // Heat Gen: Proportional to inefficiency (1-eff) * Power
+        const heatGen = (1 - efficiency) * (powerHydWatts / 1000) * 0.005; // kW -> Heat factor
+        
+        // Cooling: Newton's Law of Cooling
+        const coolingCoeff = 0.05; // 5% temp diff shed per second
+        const cooling = (currentTemp - ambientTemp) * coolingCoeff;
+
+        const nextTemp = currentTemp + (heatGen - cooling) * dtSeconds;
+        updates.mechanical.bearingTemp = Number(nextTemp.toFixed(2));
+
+        return updates;
     },
 
     /**

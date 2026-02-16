@@ -8,7 +8,7 @@ The Sovereign HPP Management System is a closed-loop digital twin that governs t
 ### A. Ingestion Layer (`scripts/scheduled_ingest.mjs`)
 The system heartbeat begins here.
 1.  **Trigger**: Runs hourly (via cron or scheduler).
-2.  **Source**: Fetches telemetry from `PRIMARY_SENSOR_URL` (or synthetic mock).
+2.11.  **Source**: Fetches telemetry from `PRIMARY_SENSOR_URL` (or simulated stream).
 3.  **Normalization**: Converts raw sensor JSON into a standardized SI-unit format (`asset_id`, `timestamp`, `output_power`, `francis_data`).
 4.  **Persistance**: Upserts data into the `dynamic_sensor_data` table in Supabase.
 5.  **Calibration Check**: Immediately runs `scripts/compute_pf_for_asset.mjs` to detect sensor drift.

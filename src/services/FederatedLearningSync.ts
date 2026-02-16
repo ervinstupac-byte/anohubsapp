@@ -15,7 +15,7 @@ export interface ModelWeights {
 
 export class FederatedLearningSync {
     private static localVersion = 1;
-    private static globalWeights: Map<string, number> = new Map(); // Mock hash of weights
+    private static globalWeights: Map<string, number> = new Map(); // Simulated hash of weights
 
     /**
      * SYNC WEIGHTS (LOCAL -> GLOBAL)
@@ -27,7 +27,7 @@ export class FederatedLearningSync {
         perfMetric: number // e.g., validation accuracy
     ): { status: string; newGlobalVersion: number } {
 
-        // Mock Sync Logic
+        // Simulated Sync Logic
         console.log(`[FedSync] Unit ${unitId} uploading weights for ${modelId}. Accuracy: ${perfMetric.toFixed(3)}`);
 
         // In a real system: Aggregate weights using weighted average

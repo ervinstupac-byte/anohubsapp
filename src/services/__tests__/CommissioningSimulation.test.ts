@@ -3,7 +3,7 @@ import { MasterIntelligenceEngine } from '../MasterIntelligenceEngine';
 
 describe('Commissioning Simulation (24h)', () => {
   it('runs a 24-hour simulated cycle and persists wisdom', async () => {
-    // Create a minimal mock asset
+    // Create a minimal simulated asset
     const asset: any = {
       id: 'SIM-001',
       name: 'Sim Turbine',

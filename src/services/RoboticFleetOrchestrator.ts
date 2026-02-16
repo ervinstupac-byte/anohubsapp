@@ -213,7 +213,7 @@ export class RoboticFleetOrchestrator {
         mission.status = 'COMPLETED';
         mission.completedAt = Date.now();
 
-        // Mock findings
+        // Simulated findings
         mission.findings = [
             `Visual inspection of ${mission.targetArea} completed`,
             'No critical damage detected',
@@ -222,7 +222,7 @@ export class RoboticFleetOrchestrator {
 
         unit.status = 'IDLE';
         unit.lastMission = Date.now();
-        unit.hoursOperated += 0.5; // Mock operation time
+        unit.hoursOperated += 0.5; // Simulated operation time
 
         console.log(`[RoboFleet] ✅ Mission ${mission.missionId} completed`);
         console.log(`  Findings: ${mission.findings.length} items`);

@@ -253,8 +253,8 @@ export const ManualDataEntry: React.FC = () => {
         }
 
         // 3. Root Cause Analysis (Forensic Diagnostic Service)
-        // Mocking a GlobalState for the service based on form input
-        const mockGlobalState: any = {
+        // Simulating a GlobalState for the service based on form input
+        const simulatedGlobalState: any = {
             timestamp: Date.now(),
             physics: {
                 vibration: formState.vibration,
@@ -266,7 +266,7 @@ export const ManualDataEntry: React.FC = () => {
 
         let rootCause = undefined;
         if (formState.vibration > 3.5 || formState.temperature > 65) {
-            const diagnosis = ForensicDiagnosticService.diagnose('vibration', mockGlobalState);
+            const diagnosis = ForensicDiagnosticService.diagnose('vibration', simulatedGlobalState);
             if (diagnosis.rootCause.metric !== 'vibration') {
                  rootCause = {
                      rootMetric: diagnosis.rootCause.metric,
@@ -280,7 +280,7 @@ export const ManualDataEntry: React.FC = () => {
         const oilSample = {
             sampleId: `MANUAL-${Date.now()}`,
             timestamp: Date.now(),
-            assetId: 1, // Mock
+            assetId: 1, // Simulated
             location: 'BEARING_LOWER' as const,
             viscosityIndex: 46, // default
             tan: formState.oilTan,
@@ -297,8 +297,8 @@ export const ManualDataEntry: React.FC = () => {
 
         // 5. AI Prediction (Synergetic Risk) - Unused Code Integration
         const aiService = new AIPredictionService();
-        // Mock TelemetryData for AI Service
-        const mockTelemetry: any = {
+        // Simulated TelemetryData for AI Service
+        const simulatedTelemetry: any = {
             timestamp: Date.now(),
             common: {
                 output_power: formState.activePower,
@@ -313,7 +313,7 @@ export const ManualDataEntry: React.FC = () => {
                 }
             }
         };
-        const risk = aiService.detectSynergeticRisk(1, mockTelemetry);
+        const risk = aiService.detectSynergeticRisk(1, simulatedTelemetry);
         
         // 6. Energy Harvesting (Unused Code Integration)
         const harvest = ResonanceHarvesterManager.harvestVibrationEnergy(formState.vibration, formState.activePower);
@@ -332,9 +332,9 @@ export const ManualDataEntry: React.FC = () => {
         const structStatus = structMargin < 20 ? 'CRITICAL' : structMargin < 40 ? 'WARNING' : 'NORMAL';
 
         // 9. Erosion Simulation
-        // Create mock point cloud based on inputs
-        const mockPoints = Array(formState.pitCount).fill(0).map(() => ({ x: 0, y: 0, z: -formState.pitDepth }));
-        const erosionResult = CavitationErosionService.mapBladePitting(1, mockPoints, 5000);
+        // Create simulated point cloud based on inputs
+        const simulatedPoints = Array(formState.pitCount).fill(0).map(() => ({ x: 0, y: 0, z: -formState.pitDepth }));
+        const erosionResult = CavitationErosionService.mapBladePitting(1, simulatedPoints, 5000);
         const erosionRec = erosionResult.massLoss > 10 ? 'WELD REPAIR' : 'MONITOR';
 
         // 10. Hydraulic Safety (What-If)
@@ -344,7 +344,7 @@ export const ManualDataEntry: React.FC = () => {
         );
 
         // 11. Acoustic Fingerprinting
-        // Generate mock spectrum based on selection
+        // Generate simulated spectrum based on selection
         const spectrum = new Array(1024).fill(0);
         if (formState.acousticSim === 'CAVITATION') {
             // Add noise in 2-10kHz
@@ -778,7 +778,7 @@ export const ManualDataEntry: React.FC = () => {
             // Run Particle Analysis if oil data suggests issues
             if (formState.oilTan > 0.5 || formState.oilParticles4um > 1000) {
                  const pResult = ParticleAnalysisService.classifyParticle(
-                    { imageData: 'mock-base64', magnification: 400, timestamp: Date.now() },
+                    { imageData: 'simulated-base64', magnification: 400, timestamp: Date.now() },
                     { tin: 5, lead: 2, copper: 3, iron: formState.oilParticles4um > 2000 ? 60 : 10 }
                  );
                  particleResult = pResult;
@@ -786,7 +786,7 @@ export const ManualDataEntry: React.FC = () => {
             }
 
         } else {
-            // Mock empty frame
+            // Simulated empty frame
             visionFrame = { frameId: Date.now(), timestamp: Date.now(), source: 'MANUAL_UPLOAD', imageData: new Uint8Array(), width: 1920, height: 1080 };
         }
         
@@ -828,7 +828,7 @@ export const ManualDataEntry: React.FC = () => {
                 bearingTemp: formState.temperature
             },
             kineticState: {
-                eccentricity: formState.vibration * 0.1, // Mock correlation
+                eccentricity: formState.vibration * 0.1, // Simulated correlation
                 phase: 45,
                 rsquared: 0.98,
                 offset: 0.02

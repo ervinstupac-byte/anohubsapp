@@ -18,13 +18,13 @@ export class FeedbackIntelligence {
     /**
      * Analyze recent vetoes to see if a specific action type is being rejected frequently.
      * @param actionType The type/category of action (e.g. "INCREASE_LOAD", "START_PUMP")
-     * @param mockHistory Optional history for testing without DB
+     * @param simulatedHistory Optional history for testing without DB
      */
-    public static async getLearningModifiers(actionType: string, mockHistory?: FeedbackItem[]): Promise<LearningModifiers> {
+    public static async getLearningModifiers(actionType: string, simulatedHistory?: FeedbackItem[]): Promise<LearningModifiers> {
         let history: FeedbackItem[] = [];
 
-        if (mockHistory) {
-            history = mockHistory;
+        if (simulatedHistory) {
+            history = simulatedHistory;
         } else {
             try {
                 // Dynamic import to avoid top-level side effects (like import.meta.env access in Node tests)

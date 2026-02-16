@@ -91,7 +91,7 @@ export class DataEnricher {
         legacyLog.forEach(entry => {
             // 1. Re-analyze Vibration
             if (entry.type === 'VIBRATION_EVENT') {
-                // Mocking data structure of legacy log
+                // Simulateding data structure of legacy log
                 const diag = this.vibrationExpert.checkFrequencyPeaks(
                     entry.peaks, entry.rpm, entry.blades
                 );

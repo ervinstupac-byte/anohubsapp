@@ -24,7 +24,7 @@ export class PartialDischargeMonitor {
         acousticSignalDb: number
     ): PDHealth {
 
-        // 1. Signal Conversion (Mock calibration)
+        // 1. Signal Conversion (Simulated calibration)
         const amplitudePc = uhfSignalMv * 10;
 
         // 2. Pulse Rate Logic (Simulated from signal noise or external counter)

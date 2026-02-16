@@ -12,7 +12,7 @@ export interface HillChartPoint {
 }
 
 export class EfficiencyMapper {
-    // Mock Hill Chart Data Points (Grid)
+    // Simulated Hill Chart Data Points (Grid)
     private static hillChart: HillChartPoint[] = [
         { head: 80, flow: 10, efficiency: 0.85 },
         { head: 80, flow: 20, efficiency: 0.92 },
@@ -31,7 +31,7 @@ export class EfficiencyMapper {
      */
     public static getEfficiency(head: number, flow: number): number {
         // Find nearest 4 points (Quad)
-        // Simple Nearest Neighbor for robustness in this mock, or Bilinear
+        // Simple Nearest Neighbor for robustness in this simulated, or Bilinear
 
         // 1. Identify Head Bracket
         // ... (Mesh sorting logic omitted for brevity in single file)

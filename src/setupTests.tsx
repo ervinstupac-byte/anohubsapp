@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock react-i18next
+// Simulated react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -16,7 +16,7 @@ vi.mock('react-i18next', () => ({
   },
 }));
 
-// Mock Recharts to avoid ResizeObserver errors and memory issues
+// Simulated Recharts to avoid ResizeObserver errors and memory issues
 vi.mock('recharts', () => {
   return {
     ResponsiveContainer: ({ children }: { children: any }) => (
@@ -40,7 +40,7 @@ vi.mock('recharts', () => {
   };
 });
 
-// Mock Supabase
+// Test Doubles: Supabase
 vi.mock('@supabase/supabase-js', () => ({
   createClient: () => ({
     from: () => ({

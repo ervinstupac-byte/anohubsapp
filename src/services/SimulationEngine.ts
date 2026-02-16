@@ -103,7 +103,7 @@ export class SimulationEngine {
         // In a real simulation, actions would feedback into the physics.
         // Here, we just re-run the financial math on the same telemetry but with REAL cost constants.
         // This penalizes the "Aggressive" strategy which ignored costs.
-        // (Simplified: Aggressive didn't change physics in this mock, just the financial calc)
+        // (Simplified: Aggressive didn't change physics in this simulated, just the financial calc)
 
         const res = this.simulatePath(history, realContext);
         return res.profit;

@@ -23,14 +23,14 @@ export class InspectionAnomalyLibrary {
      */
     public static classifyImage(
         imageId: string,
-        features: string[] // Mock features extracted from image
+        features: string[] // Simulated features extracted from image
     ): ClassificationResult {
 
         let type: DefectType = 'NONE';
         let severity: ClassificationResult['severity'] = 'LOW';
         let confidence = 0;
 
-        // Mock Inference Rules
+        // Simulated Inference Rules
         if (features.includes('linear_fracture')) {
             type = 'CRACK_CONCRETE';
             confidence = 88;
@@ -62,7 +62,7 @@ export class InspectionAnomalyLibrary {
             detectedType: type,
             confidence,
             severity,
-            location: { x: 10, y: 20, z: 5 } // Mock local coordinates
+            location: { x: 10, y: 20, z: 5 } // Simulated local coordinates
         };
     }
 

@@ -221,9 +221,9 @@ export const ExpertInference = {
         // 2. Thermal Inertia (Rate of Rise)
         // Simulate a history if we are in a heat-related scenario
         const isBearingFailure = state.demoMode.scenario === 'BEARING_FAILURE';
-        const mockTemps = isBearingFailure ? [55, 62, 71] : [55, 56];
-        const mockTimes = [Date.now() - 120000, Date.now() - 60000, Date.now()];
-        const thermal = SentinelKernel.checkThermalInertia(mockTemps, mockTimes);
+        const simulatedTemps = isBearingFailure ? [55, 62, 71] : [55, 56];
+        const simulatedTimes = [Date.now() - 120000, Date.now() - 60000, Date.now()];
+        const thermal = SentinelKernel.checkThermalInertia(simulatedTemps, simulatedTimes);
         if (thermal.risk) {
             result.alerts.push({
                 standard: 'NC-4.7 Infrastructure',

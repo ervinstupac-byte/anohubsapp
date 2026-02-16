@@ -66,7 +66,7 @@ export class SovereignKernel {
         const corrStart = performance.now();
         const globalState = SovereignGlobalState.getState();
 
-        // Mock correlation check (in real system, use history buffers)
+        // Simulated correlation check (in real system, use history buffers)
         const vibTempCorrelated = globalState.physics.vibration > 2.5 && globalState.physics.temperature > 40;
 
         enriched.correlationState = {
@@ -110,7 +110,7 @@ export class SovereignKernel {
 
                     ROIMonitorService.recordHealingAction(
                         enriched.healingAction.healingEffectiveness,
-                        5000 // Mock cost saved
+                        5000 // Simulated cost saved
                     );
 
                     trace.stages.push({

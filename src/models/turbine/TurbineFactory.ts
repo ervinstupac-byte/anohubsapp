@@ -47,7 +47,7 @@ export class KaplanTurbine implements ITurbineBehavior {
 
     getEfficiencyCurve(flow: number, head: number): number {
         // Double regulation (Blade + Wicket Gate) = Flat curve
-        // Simplified mock calculation
+        // Simplified simulated calculation
         return 92.5;
     }
 
@@ -129,7 +129,7 @@ export class FrancisTurbine implements ITurbineBehavior {
         // Adapt generic data to internal FrancisModel
         const model = new FrancisModel('francis_horizontal', {} as any);
 
-        // Mock historical data snapshot
+        // Simulated historical data snapshot
         const sensorData: CompleteSensorData = {
             timestamp: Date.now(),
             assetId: 2,

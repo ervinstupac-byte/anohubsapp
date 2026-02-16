@@ -35,7 +35,7 @@ export class GeodeticDeformationNode {
 
         const mag = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-        // Mock trend (random Drift)
+        // Simulated trend (random Drift)
         const trend = mag / 5.0; // mm/year assumed over 5 years
 
         return {

@@ -134,6 +134,7 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
             , physicsAnalysis?: {
                 cavitation: { risk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' };
                 zone: { zone: 'OPTIMAL' | 'ROUGH' | 'OVERLOAD' | 'PART_LOAD' };
+                surgePressureBar?: number; // NC-1100: Water Hammer Detection
             }
         },
         metadata?: ExecutionMetadata
@@ -145,8 +146,13 @@ export class Sovereign_Executive_Engine extends BaseGuardian {
         // 0. PHYSICS ANALYSIS (Cavitation & Rough Zone)
         // High cavitation risk forces a STOP_ORDER (NC-300)
         if (inputs.physicsAnalysis) {
-            const { cavitation, zone } = inputs.physicsAnalysis;
+            const { cavitation, zone, surgePressureBar } = inputs.physicsAnalysis;
             
+            // NC-1100: Water Hammer Protection
+            if (surgePressureBar && surgePressureBar > 40) {
+                return this.emergencyShutdown(`CRITICAL SURGE PRESSURE (${surgePressureBar.toFixed(1)} bar) - WATER HAMMER DETECTED`);
+            }
+
             if (cavitation.risk === 'HIGH' || cavitation.risk === 'CRITICAL') {
                 return this.emergencyShutdown(`CRITICAL CAVITATION RISK (${cavitation.risk})`);
             }

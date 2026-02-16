@@ -25,21 +25,21 @@ export async function persistAuditRecord(record: any) {
         const path = req('path');
         const outDir = path.join(process.cwd(), 'artifacts');
         fs.mkdirSync(outDir, { recursive: true });
-        const file = path.join(outDir, `audit_mock_${Date.now()}.json`);
+        const file = path.join(outDir, `audit_sim_${Date.now()}.json`);
         fs.writeFileSync(file, JSON.stringify(record, null, 2), 'utf8');
-        return { inserted: false, path: file, message: 'Integration disabled; wrote mock audit file (server).' };
+        return { inserted: false, path: file, message: 'Integration disabled; wrote simulated audit file (server).' };
       } catch (err) {
         return { inserted: false, error: String(err) };
       }
     }
 
-    // Browser fallback: persist to localStorage so the client still records an audit mock
+    // Browser fallback: persist to localStorage so the client still records an audit simulated
     try {
-      const key = 'audit_mock_history_v1';
+      const key = 'audit_sim_history_v1';
       const prev = JSON.parse(localStorage.getItem(key) || '[]');
       prev.push({ ts: Date.now(), record });
       localStorage.setItem(key, JSON.stringify(prev));
-      return { inserted: false, storage: 'localStorage', message: 'Integration disabled; wrote mock audit record to localStorage.' };
+      return { inserted: false, storage: 'localStorage', message: 'Integration disabled; wrote simulated audit record to localStorage.' };
     } catch (err) {
       return { inserted: false, error: String(err) };
     }

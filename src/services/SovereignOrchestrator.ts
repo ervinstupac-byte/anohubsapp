@@ -89,7 +89,7 @@ export class SovereignOrchestrator {
             // STEP 6: Start live data stream
             console.log('[6/6] 📡 Starting LiveStreamConnector...');
             await LiveStreamConnector.connect({
-                pollingUrl: '/api/mock/telemetry', // Default for now
+                pollingUrl: '/api/simulation/telemetry', // Default for now
                 pollingInterval: 2000
             });
             console.log('      ✓ Telemetry stream active\n');
@@ -176,7 +176,7 @@ export class SovereignOrchestrator {
         // For now: Demonstrate the connection
         console.log('      → Connecting to telemetry source...');
 
-        // Mock connection
+        // Simulated connection
         await new Promise(resolve => setTimeout(resolve, 100));
 
         // Would call: await LiveStreamConnector.connect({ websocketUrl: process.env.WS_URL });

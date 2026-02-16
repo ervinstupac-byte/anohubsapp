@@ -11,6 +11,7 @@ import {
     ChecklistTemplate
 } from '../types/checklist';
 import { ServiceChecklistEngine } from '../services/ServiceChecklistEngine';
+import { SIMULATED_INITIAL_TASKS, getSimulatedTranslation } from '../services/DemoDataOracle';
 
 export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'VERIFIED';
 
@@ -88,29 +89,7 @@ export const protocols = [
     { id: 'P3', name: 'Major Overhaul', threshold: 10000, description: 'Full disassembly and component validation.' }
 ];
 
-// MOCK INITIAL TASKS (derived from Audit)
-const INITIAL_TASKS: MaintenanceTask[] = [
-    {
-        id: 'T-101',
-        componentId: 'BOLTS',
-        title: 'Bolt Replacement',
-        description: 'Replace Grade 4.6 with Grade 8.8',
-        recommendedSpec: 8.8, // Grade
-        unit: 'Grade',
-        status: 'PENDING',
-        priority: 'HIGH'
-    },
-    {
-        id: 'T-102',
-        componentId: 'TURBINE',
-        title: 'Radial Clearance Check',
-        description: 'Verify radial clearance is within 0.05 - 0.10 mm',
-        recommendedSpec: 0.10, // Max limit
-        unit: 'mm',
-        status: 'PENDING',
-        priority: 'MEDIUM'
-    }
-];
+const INITIAL_TASKS = SIMULATED_INITIAL_TASKS;
 
 const MaintenanceContext = createContext<MaintenanceContextType | undefined>(undefined);
 
@@ -243,7 +222,7 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         const task = tasks.find(t => t.id === taskId);
         if (!task || task.recommendedSpec === undefined) return { valid: true, message: 'OK' };
 
-        // Custom logic per task type (Mocked)
+        // Custom logic per task type (Simulateded)
         if (task.componentId === 'TURBINE' && value > task.recommendedSpec) {
             return { valid: false, message: `Vrijednost izvan tolerancije! (${value} > ${task.recommendedSpec})` };
         }
@@ -255,13 +234,8 @@ export const MaintenanceProvider: React.FC<{ children: ReactNode }> = ({ childre
         // Validation Check
         const validation = entry.measuredValue ? validateEntry(taskId, entry.measuredValue) : { valid: true };
 
-        // Mock Translation Logic (Simple Map or static for prototype)
-        const translations: Record<string, string> = {
-            "Zategnuto na 450 Nm": "Auf 450 Nm angezogen",
-            "Provjera zazora": "Spielprüfung",
-            "Zamjena vijaka": "Schraubenaustausch"
-        };
-        const summaryDE = translations[entry.commentBS] || "Wartung durchgeführt.";
+        // Translation Logic (Simulated via Oracle)
+        const summaryDE = getSimulatedTranslation(entry.commentBS);
 
         // 1. Optimistic Update (UI feels instant)
         const tempId = Math.random().toString(36).substr(2, 9);

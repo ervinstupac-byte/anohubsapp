@@ -32,8 +32,12 @@ const rcaService = new RCAService();
 const sovereignEngine = new Sovereign_Executive_Engine();
 const patternEater = new PatternEater();
 
-// NC-300: Historical buffer for sparklines (50-point capacity)
-const signalHistoryManager = new SignalBufferManager(50);
+// NC-300: Historical buffer for sparklines (500-point capacity for Industrial Grade)
+const signalHistoryManager = new SignalBufferManager(500);
+
+// Throttling Constants
+const THROTTLE_INTERVAL_MS = 100; // Run heavy logic max 10Hz
+let lastHeavyLogicRun = 0;
 
 // TruthJudge instance for sensor validation
 const truthJudge = new TruthJudge();
@@ -409,7 +413,7 @@ interface TelemetryState {
     identity: AssetIdentity;
     site: TechnicalProjectState['site'];
     penstock: TechnicalProjectState['penstock'];
-    specializedState: TechnicalProjectState['specializedState']; // Derived/Mocked Specialized Data
+    specializedState: TechnicalProjectState['specializedState']; // Derived/Simulated Specialized Data
     fluidIntelligence: TechnicalProjectState['fluidIntelligence']; // NC-10030
 
     // NC-4.2 Persistent Mitigations
@@ -454,6 +458,8 @@ interface TelemetryState {
         bearingTemp: BufferedDataPoint<number>[];
         head: BufferedDataPoint<number>[];
         flow: BufferedDataPoint<number>[];
+        governorOutput: BufferedDataPoint<number>[];
+        surgePressure: BufferedDataPoint<number>[];
     };
 
     // NC-300: Signal filter mode toggle (UI uses filtered, RCA uses raw)
@@ -658,7 +664,9 @@ export const useTelemetryStore = create<TelemetryState>()(
                 vibrationY: [],
                 bearingTemp: [],
                 head: [],
-                flow: []
+                flow: [],
+                governorOutput: [],
+                surgePressure: []
             },
             sessionLedger: [],
 
@@ -724,16 +732,55 @@ export const useTelemetryStore = create<TelemetryState>()(
             },
 
             updateTelemetry: (payload: TelemetryUpdatePayload) => {
-                // NC-24000: Persist snapshot (fire and forget)
-                // We construct a flattened object for storage if payload is robust enough
-                if (payload.mechanical || payload.hydraulic) {
-                    saveTelemetryBatch(payload as any).catch(() => { });
-                }
-
+                const now = Date.now();
                 const state = get();
+
+                // 1. HIGH-FREQUENCY INGESTION (Unthrottled, Zero-Allocation)
+                // Push directly to Circular Buffers to avoid GC spikes
+                if (payload.mechanical?.vibrationX !== undefined) signalHistoryManager.record('vibrationX', payload.mechanical.vibrationX);
+                if (payload.mechanical?.vibrationY !== undefined) signalHistoryManager.record('vibrationY', payload.mechanical.vibrationY);
+                if (payload.mechanical?.bearingTemp !== undefined) signalHistoryManager.record('bearingTemp', payload.mechanical.bearingTemp);
+                if (payload.hydraulic?.head !== undefined) signalHistoryManager.record('head', payload.hydraulic.head);
+                if (payload.hydraulic?.flow !== undefined) signalHistoryManager.record('flow', payload.hydraulic.flow);
 
                 // NC-15300: Freeze updates during Forensic Replay
                 if (state.playbackSnapshot) return;
+
+                // 2. THROTTLE HEAVY LOGIC
+                // Only run TruthJudge, Forensics, and React State Updates at THROTTLE_INTERVAL_MS
+                if (now - lastHeavyLogicRun < THROTTLE_INTERVAL_MS) {
+                    // Skip React render, but data is safely in CircularBuffer
+                    return;
+                }
+                
+                const dt = (now - lastHeavyLogicRun) / 1000; // Delta time in seconds
+                lastHeavyLogicRun = now;
+
+                // 3. TEMPORAL PHYSICS SIMULATION (Industrial Grade)
+                // Evolve the state based on differential equations (Thermal Inertia, Servo Dynamics)
+                // Map TelemetryState to TechnicalProjectState for the engine
+                const simulationState: TechnicalProjectState = {
+                    ...DEFAULT_TECHNICAL_STATE, // Fallback for missing fields (hydrology, market)
+                    ...state,
+                    physics: state.physics as any,
+                    demoMode: { active: !!state.activeScenario, scenario: state.activeScenario },
+                    diagnosis: state.diagnosis || undefined // Fix: Convert null to undefined
+                };
+                const dynamicPhysics = PhysicsEngine.simulateTimeStep(simulationState, dt);
+
+                // Record dynamic signals to history
+                if (dynamicPhysics.governor?.outputSignal) {
+                    const val = dynamicPhysics.governor.outputSignal.toNumber();
+                    signalHistoryManager.record('governorOutput', val);
+                }
+                if (dynamicPhysics.physics?.surgePressureBar !== undefined) {
+                    signalHistoryManager.record('surgePressure', dynamicPhysics.physics.surgePressureBar);
+                }
+
+                // NC-24000: Persist snapshot (fire and forget)
+                if (payload.mechanical || payload.hydraulic) {
+                    saveTelemetryBatch(payload as any).catch(() => { });
+                }
 
                 // TruthJudge validation for each sensor
                 if (payload.hydraulic?.head !== undefined) {
@@ -879,7 +926,17 @@ export const useTelemetryStore = create<TelemetryState>()(
 
                 // Update telemetry with validated values
                 set((state) => {
-                    const nextMechanical = { ...state.mechanical, ...payload.mechanical };
+                    // Merge Physics Dynamics (Thermal Inertia, Governor Slew)
+                    const nextMechanical = { 
+                        ...state.mechanical, 
+                        ...payload.mechanical,
+                        // If physics engine simulated a new temp, use it (unless payload overrides it)
+                        bearingTemp: payload.mechanical?.bearingTemp ?? dynamicPhysics.mechanical?.bearingTemp ?? state.mechanical.bearingTemp 
+                    };
+                    
+                    // Merge Governor Dynamics
+                    const nextGovernor = payload.governor ? { ...state.governor, ...payload.governor } : (dynamicPhysics.governor ? { ...state.governor, ...dynamicPhysics.governor } : state.governor);
+
                     const shouldUpdateVibrationForensics =
                         payload.mechanical?.rpm !== undefined ||
                         payload.mechanical?.vibration !== undefined ||
@@ -891,7 +948,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                         mechanical: nextMechanical,
                         fluidIntelligence: payload.fluidIntelligence ? { ...state.fluidIntelligence, ...payload.fluidIntelligence } : state.fluidIntelligence,
                         physics: { ...state.physics, ...payload.physics },
-                        governor: payload.governor ? { ...state.governor, ...payload.governor } : state.governor,
+                        governor: nextGovernor,
                         identity: payload.identity ?? state.identity,
                         site: payload.site ?? state.site,
                         penstock: payload.penstock ?? state.penstock,
@@ -924,21 +981,13 @@ export const useTelemetryStore = create<TelemetryState>()(
                         baselineState: state.baselineState,
                         rcaResultsHistory: state.rcaResultsHistory,
                         telemetryHistory: {
-                            vibrationX: payload.mechanical?.vibrationX !== undefined ?
-                                [...state.telemetryHistory.vibrationX, { value: payload.mechanical.vibrationX, timestamp: Date.now() }] :
-                                state.telemetryHistory.vibrationX,
-                            vibrationY: payload.mechanical?.vibrationY !== undefined ?
-                                [...state.telemetryHistory.vibrationY, { value: payload.mechanical.vibrationY, timestamp: Date.now() }] :
-                                state.telemetryHistory.vibrationY,
-                            bearingTemp: payload.mechanical?.bearingTemp !== undefined ?
-                                [...state.telemetryHistory.bearingTemp, { value: payload.mechanical.bearingTemp, timestamp: Date.now() }] :
-                                state.telemetryHistory.bearingTemp,
-                            head: payload.hydraulic?.head !== undefined ?
-                                [...state.telemetryHistory.head, { value: payload.hydraulic.head, timestamp: Date.now() }] :
-                                state.telemetryHistory.head,
-                            flow: payload.hydraulic?.flow !== undefined ?
-                                [...state.telemetryHistory.flow, { value: payload.hydraulic.flow, timestamp: Date.now() }] :
-                                state.telemetryHistory.flow
+                            vibrationX: signalHistoryManager.getBuffer('vibrationX')?.getAll() ?? [],
+                            vibrationY: signalHistoryManager.getBuffer('vibrationY')?.getAll() ?? [],
+                            bearingTemp: signalHistoryManager.getBuffer('bearingTemp')?.getAll() ?? [],
+                            head: signalHistoryManager.getBuffer('head')?.getAll() ?? [],
+                            flow: signalHistoryManager.getBuffer('flow')?.getAll() ?? [],
+                            governorOutput: signalHistoryManager.getBuffer('governorOutput')?.getAll() ?? [],
+                            surgePressure: signalHistoryManager.getBuffer('surgePressure')?.getAll() ?? []
                         },
                         // Update Sovereign Pulse with new telemetry
                         sovereignPulse: ThePulseEngine.calculatePulse(
@@ -1002,13 +1051,16 @@ export const useTelemetryStore = create<TelemetryState>()(
                     turbineType: (currentState.identity.turbineType as any) || 'FRANCIS',
                     // NC-300: Physics Integration
                     physicsAnalysis: {
-                        cavitation: { risk: cavitationRisk as any },
-                        zone: { zone: operatingZone as any }
+                        cavitation: { risk: cavitationRisk },
+                        zone: { zone: operatingZone },
+                        surgePressureBar: typeof currentState.physics.surgePressureBar === 'number' 
+                            ? currentState.physics.surgePressureBar 
+                            : 0
                     }
                 };
 
                 try {
-                    const execResult = sovereignEngine.executeCycle(executiveInputs, { tier: PermissionTier.AUTONOMOUS });
+                    const execResult = sovereignEngine.executeCycle(executiveInputs as any, { tier: PermissionTier.AUTONOMOUS });
 
                     // Push engine protections to alarms
                     if (execResult.activeProtections && execResult.activeProtections.length > 0) {
@@ -1057,7 +1109,7 @@ export const useTelemetryStore = create<TelemetryState>()(
                 const state = get();
 
                 // Construct basic asset for engine with extra telemetry field for the engine to consume
-                const mockAsset: any = {
+                const simulatedAsset: any = {
                     id: state.identity.assetId || 'HPP-101',
                     name: state.identity.assetName || 'Hydro Asset',
                     type: 'HPP',
@@ -1090,8 +1142,8 @@ export const useTelemetryStore = create<TelemetryState>()(
                                 geodeticData: state.geodeticData,
                                 acoustic: {
                                     fingerprintMatch: state.acousticMatch,
-                                    spectrum: [], // Mock spectrum for acoustic analysis
-                                    rmsLevel: 0,   // Mock RMS level
+                                    spectrum: [], // Simulated spectrum for acoustic analysis
+                                    rmsLevel: 0,   // Simulated RMS level
                                     ...(state.specializedState?.acoustic || {})
                                 }
                             } as any
@@ -1102,8 +1154,8 @@ export const useTelemetryStore = create<TelemetryState>()(
 
                 try {
                     // Fix: Pass the current telemetry as history so the engine has data to analyze
-                    const history = [mockAsset.telemetry.latest];
-                    const diagnosis = await MasterIntelligenceEngine.analyzeAsset(mockAsset as EnhancedAsset, history as any);
+                    const history = [simulatedAsset.telemetry.latest];
+                    const diagnosis = await MasterIntelligenceEngine.analyzeAsset(simulatedAsset as EnhancedAsset, history as any);
                     set({ unifiedDiagnosis: diagnosis });
                 } catch (error) {
                     console.error("Deep AI Analysis failed:", error);
@@ -1206,17 +1258,34 @@ export const useTelemetryStore = create<TelemetryState>()(
                     vibrationY: [] as BufferedDataPoint<number>[],
                     bearingTemp: [] as BufferedDataPoint<number>[],
                     head: [] as BufferedDataPoint<number>[],
-                    flow: [] as BufferedDataPoint<number>[]
+                    flow: [] as BufferedDataPoint<number>[],
+                    governorOutput: [] as BufferedDataPoint<number>[],
+                    surgePressure: [] as BufferedDataPoint<number>[]
                 };
 
                 history.forEach(snap => {
                     const d = snap.dataBlob as any; // Type assertion for now
                     if (!d) return;
-                    if (d.mechanical?.vibrationX) recoveredBuffer.vibrationX.push({ value: d.mechanical.vibrationX, timestamp: snap.timestamp });
-                    if (d.mechanical?.vibrationY) recoveredBuffer.vibrationY.push({ value: d.mechanical.vibrationY, timestamp: snap.timestamp });
-                    if (d.mechanical?.bearingTemp) recoveredBuffer.bearingTemp.push({ value: d.mechanical.bearingTemp, timestamp: snap.timestamp });
-                    if (d.hydraulic?.head) recoveredBuffer.head.push({ value: d.hydraulic.head, timestamp: snap.timestamp });
-                    if (d.hydraulic?.flow) recoveredBuffer.flow.push({ value: d.hydraulic.flow, timestamp: snap.timestamp });
+                    if (d.mechanical?.vibrationX) {
+                        recoveredBuffer.vibrationX.push({ value: d.mechanical.vibrationX, timestamp: snap.timestamp });
+                        signalHistoryManager.record('vibrationX', d.mechanical.vibrationX, snap.timestamp);
+                    }
+                    if (d.mechanical?.vibrationY) {
+                        recoveredBuffer.vibrationY.push({ value: d.mechanical.vibrationY, timestamp: snap.timestamp });
+                        signalHistoryManager.record('vibrationY', d.mechanical.vibrationY, snap.timestamp);
+                    }
+                    if (d.mechanical?.bearingTemp) {
+                        recoveredBuffer.bearingTemp.push({ value: d.mechanical.bearingTemp, timestamp: snap.timestamp });
+                        signalHistoryManager.record('bearingTemp', d.mechanical.bearingTemp, snap.timestamp);
+                    }
+                    if (d.hydraulic?.head) {
+                        recoveredBuffer.head.push({ value: d.hydraulic.head, timestamp: snap.timestamp });
+                        signalHistoryManager.record('head', d.hydraulic.head, snap.timestamp);
+                    }
+                    if (d.hydraulic?.flow) {
+                        recoveredBuffer.flow.push({ value: d.hydraulic.flow, timestamp: snap.timestamp });
+                        signalHistoryManager.record('flow', d.hydraulic.flow, snap.timestamp);
+                    }
                 });
 
                 set({
@@ -1313,7 +1382,9 @@ export const useTelemetryStore = create<TelemetryState>()(
                                 vibrationY: [],
                                 bearingTemp: [],
                                 head: [],
-                                flow: []
+                                flow: [],
+                                governorOutput: [],
+                                surgePressure: []
                             },
                             isFilteredMode: true,
                             filterType: 'SMA' as FilterType,
@@ -1375,11 +1446,13 @@ export const useTelemetryStore = create<TelemetryState>()(
                     rcaResults: [],
                     activeAlarms: [],
                     telemetryHistory: {
-                        vibrationX: signalHistoryManager.getBuffer('vibrationX')?.getAll()?.slice(-20) ?? [],
-                        vibrationY: signalHistoryManager.getBuffer('vibrationY')?.getAll()?.slice(-20) ?? [],
-                        bearingTemp: signalHistoryManager.getBuffer('bearingTemp')?.getAll()?.slice(-20) ?? [],
-                        head: signalHistoryManager.getBuffer('head')?.getAll()?.slice(-20) ?? [],
-                        flow: signalHistoryManager.getBuffer('flow')?.getAll()?.slice(-20) ?? []
+                        vibrationX: [],
+                        vibrationY: [],
+                        bearingTemp: [],
+                        head: [],
+                        flow: [],
+                        governorOutput: [],
+                        surgePressure: []
                     }
                 });
             },
@@ -1387,7 +1460,7 @@ export const useTelemetryStore = create<TelemetryState>()(
             dispose: () => {
                 // Complete cleanup - clear all buffers and reset state
                 // Clear all signal buffers
-                ['vibrationX', 'vibrationY', 'bearingTemp', 'head', 'flow'].forEach(signalId => {
+                ['vibrationX', 'vibrationY', 'bearingTemp', 'head', 'flow', 'governorOutput', 'surgePressure'].forEach(signalId => {
                     const buffer = signalHistoryManager.getBuffer(signalId);
                     if (buffer) buffer.clear();
                 });
@@ -1404,7 +1477,9 @@ export const useTelemetryStore = create<TelemetryState>()(
                         vibrationY: [],
                         bearingTemp: [],
                         head: [],
-                        flow: []
+                        flow: [],
+                        governorOutput: [],
+                        surgePressure: []
                     },
                     investigatedComponents: [],
                     selectedDiagnosticId: null,

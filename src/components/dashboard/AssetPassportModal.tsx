@@ -67,7 +67,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'health' | 'docs'>('overview');
 
-  // Mock timeline data - in production this would come from a service
+  // Simulated timeline data - in production this would come from a service
   const timeline: TimelineEvent[] = [
     { date: '2020-01-15', event: 'Manufactured & Commissioned', type: 'BIRTH' },
     { date: '2021-03-20', event: 'First Major Inspection', type: 'MAINTENANCE' },
@@ -76,7 +76,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
     { date: rulData?.nextMaintenanceDate || '2026-06-01', event: 'Predicted Maintenance', type: 'PROJECTED_FAILURE', severity: 'HIGH' },
   ];
 
-  // Mock docs
+  // Simulated docs
   const docs = [
     { name: 'Technical Manual v2.4', size: '2.4 MB', date: '2023-01-15', type: 'PDF' },
     { name: 'Maintenance Log 2023', size: '856 KB', date: '2023-12-20', type: 'CSV' },

@@ -50,7 +50,7 @@ export class KnowledgeBridgeService {
         if (quality !== 'CLEAN') effDrop = 1.2;
 
         // 3. Allowable Vibration (Precision link)
-        // If we know the foundation is rocky (from Genesis logs - mocked here), we might be stricter?
+        // If we know the foundation is rocky (from Genesis logs - simulateded here), we might be stricter?
         // Let's rely on Turbine Type
         let vibrationLimit = 2.5; // ISO standard
         if (build.selectedTurbineType === 'PELTON') vibrationLimit = 1.5; // Stricter for Pelton

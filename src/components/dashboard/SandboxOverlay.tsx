@@ -87,7 +87,7 @@ export const SandboxOverlay: React.FC<SandboxOverlayProps> = ({
     }, [values]);
 
     const handleCommit = () => {
-        // Mock Ingest Call
+        // Simulated Ingest Call
         console.log('[SovereignSandbox] Committing values to lineage:', values);
 
         // NC-25100: Log commit

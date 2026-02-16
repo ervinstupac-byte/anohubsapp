@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { ForensicDashboard } from '../ForensicDashboard';
 import { useForensics } from '../../../hooks/useForensics';
 
-// Mock dependencies
+// Simulated dependencies
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string) => key,
@@ -15,7 +15,7 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../../hooks/useForensics');
 
-// Mock components that we don't need to test deeply here
+// Test Doubles for components that we don't need to test deeply here
 vi.mock('../VisionAnalyzer', () => ({ VisionAnalyzer: () => <div data-testid="vision-analyzer" /> }));
 vi.mock('../AudioSpectrogram', () => ({ AudioSpectrogram: () => <div data-testid="audio-spectrogram" /> }));
 vi.mock('../PostMortemMonitor', () => ({ PostMortemMonitor: () => <div data-testid="post-mortem" /> }));
@@ -35,7 +35,7 @@ describe('ForensicDashboard (War Game)', () => {
 
         render(<ForensicDashboard />);
 
-        // The mock returns the key.
+        // The simulated returns the key.
         expect(screen.getByText('forensics.title')).toBeInTheDocument();
         expect(screen.queryByText(/forensics.critical_alert/)).not.toBeInTheDocument();
     });
@@ -43,7 +43,7 @@ describe('ForensicDashboard (War Game)', () => {
     it('shows CRITICAL ALERT during ATTACK_IN_PROGRESS', () => {
         (useForensics as any).mockReturnValue({
             status: 'ATTACK_IN_PROGRESS', // Force attack status
-            trafficHistory: [{ inbound: 50, outbound: 900 }], // Mock spike
+            trafficHistory: [{ inbound: 50, outbound: 900 }], // Simulated spike
             securityEvents: ['Alert detected'],
             triggerSimulatedAttack: vi.fn(),
             executeKillSwitch: vi.fn(),
@@ -52,7 +52,7 @@ describe('ForensicDashboard (War Game)', () => {
 
         render(<ForensicDashboard />);
 
-        // The mock returns the key.
+        // The simulated returns the key.
         // Also note that the component might render children or other structure, but getByText should find the text node.
         expect(screen.getByText(/forensics.critical_alert/)).toBeInTheDocument();
         expect(screen.getByText(/2000/)).toBeInTheDocument(); // Latency check - "2000 ms" might be split

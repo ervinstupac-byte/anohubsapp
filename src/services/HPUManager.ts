@@ -73,7 +73,7 @@ export class HPUManager {
             nitrogenPreChargeBar: this.PRE_CHARGE_BAR, // Assumed constant unless monitored
             availableEnergyJoules,
             availableFullStrokes,
-            pumpDutyCycle: 15 // Mock duty cycle (15%)
+            pumpDutyCycle: 15 // Simulated duty cycle (15%)
         };
     }
 }

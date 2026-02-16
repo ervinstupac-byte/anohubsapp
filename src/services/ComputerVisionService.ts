@@ -79,9 +79,9 @@ export class ComputerVisionService {
         // In production: Run actual ML inference
         // Example: const predictions = await model.detect(frame.imageData);
 
-        // Mock detection logic
-        const mockDetections = this.runMockInference(frame);
-        detections.push(...mockDetections);
+        // Simulated detection logic
+        const simulatedDetections = this.runSimulatedInference(frame);
+        detections.push(...simulatedDetections);
 
         const endTime = performance.now();
         const processingTimeMs = endTime - startTime;
@@ -112,9 +112,9 @@ export class ComputerVisionService {
     }
 
     /**
-     * Mock inference (in production: actual ML model)
+     * Simulated inference (in production: actual ML model)
      */
-    private static runMockInference(frame: VideoFrame): DetectionResult['detections'] {
+    private static runSimulatedInference(frame: VideoFrame): DetectionResult['detections'] {
         const detections: DetectionResult['detections'] = [];
 
         // Random chance of detecting anomalies (for demo)

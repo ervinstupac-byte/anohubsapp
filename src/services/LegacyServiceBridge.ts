@@ -49,7 +49,7 @@ export class LegacyServiceBridge {
         //     (enriched as any).erosionSynergy = synergy;
         // }
 
-        // Mock example of legacy enrichment
+        // Simulated example of legacy enrichment
         (enriched as any).legacyServices = {
             molecularHealth: 'GOOD',
             truthVerdict: 'VERIFIED',

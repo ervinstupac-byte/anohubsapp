@@ -84,7 +84,7 @@ export class UpstreamPulseIntegrator {
     }
 
     private static calculateGuideVaneAdjustment(pulse: FlowPulse): void {
-        const currentOpening = 75; // % (mock)
+        const currentOpening = 75; // % (simulated)
         const flowChange = pulse.magnitude;
 
         // Proportional adjustment

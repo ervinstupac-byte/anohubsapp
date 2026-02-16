@@ -27,7 +27,7 @@ export const CoolingWater: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'winter' | 'summer' | 'failure'>('winter');
 
     // Telemetry from TelemetryStore
-    const coolingFlow = 120; // L/s (Mock or from francis.sensors)
+    const coolingFlow = 120; // L/s (Simulated or from francis.sensors)
     const coolingPressure = 4.2; // Bar
     const inletTemp = (telemetry.site?.temperature ?? 20) - 6.6; // Computed delta for cooling water
 

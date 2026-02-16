@@ -13,9 +13,11 @@ describe('useTelemetryStore', () => {
     expect(list[list.length - 1].acknowledged).toBe(true);
   });
 
-  it('updateTelemetry records vibration history', () => {
+  it('updateTelemetry records vibration history', async () => {
     const { updateTelemetry } = useTelemetryStore.getState() as any;
     updateTelemetry({ mechanical: { vibrationX: 3.1 } });
+    // Wait for throttle interval (100ms) to pass
+    await new Promise(resolve => setTimeout(resolve, 150));
     updateTelemetry({ mechanical: { vibrationX: 3.3 } });
     const { telemetryHistory } = useTelemetryStore.getState() as any;
     expect(telemetryHistory.vibrationX.length).toBeGreaterThanOrEqual(2);

@@ -58,14 +58,14 @@ export class MorningReportGenerator {
         const overallHealth = this.healthDashboard.assessStationHealth(
             // In a real app, we'd fetch all systems.
             // Here we assume the dashboard tracks them or we'd fetch them from Hierarchy.
-            // For now, let's mock an empty list or better, we need a way to get systems.
+            // For now, let's simulated an empty list or better, we need a way to get systems.
             // But since this is a service, maybe we pass systems in?
             []
         );
         // Wait, assessStationHealth REQUIRES systems input.
         // The generator doesn't have access to the full hierarchy here directly?
-        // Let's assume we can pass a mock list or the dashboard has internal state.
-        // For this demo, let's mock the top 3 priorities if the list is empty,
+        // Let's assume we can pass a simulated list or the dashboard has internal state.
+        // For this demo, let's simulated the top 3 priorities if the list is empty,
         // OR better, change the Demo to pass the systems to the Dashboard.
 
         // Actually, let's just use the result type correctly.
@@ -162,7 +162,7 @@ export class MorningReportGenerator {
     // New Helper: Generate Vital Organs Table
     private generateVitalOrgansSummary(): string {
         // In a real app, this would fetch the actual auxiliary monitor status.
-        // For the report engine string builder, we mock the 'Current Status'.
+        // For the report engine string builder, we simulated the 'Current Status'.
         // To do this really properly, we'd need to inject the AuxiliaryMonitor into this class.
         // For the purpose of the demo/artifact, I will structure the Markdown table to show what it LOOKS like.
 

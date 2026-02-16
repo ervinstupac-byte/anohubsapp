@@ -15,10 +15,10 @@ export class ScientificIngestor {
 
     /**
      * SCAN FOR BREAKTHROUGHS
-     * Mocks a search of global databases (IEEE, HydroReview, etc.).
+     * Simulates a search of global databases (IEEE, HydroReview, etc.).
      */
     scanGlobalResearch(keywords: string[]): ResearchPaper[] {
-        // Mock findings based on keywords
+        // Simulated findings based on keywords
         const findings: ResearchPaper[] = [];
 
         if (keywords.includes('erosion')) {

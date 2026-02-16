@@ -66,7 +66,7 @@ export class AuditorExportService {
         );
 
         // 1. ECOLOGICAL GUARDIAN CHECK
-        // Limit: 2.5 m (mock limit based on river regulator)
+        // Limit: 2.5 m (simulated limit based on river regulator)
         const ECOLOGICAL_MINIMUM = 2.5;
         let minLevel = 999;
         const breaches: any[] = [];
@@ -79,7 +79,7 @@ export class AuditorExportService {
                 breaches.push({
                     timestamp: snap.timestamp.toISOString(),
                     level: level,
-                    durationMinutes: 15, // Mock duration for snapshot
+                    durationMinutes: 15, // Simulated duration for snapshot
                     explanation: 'Low water event recorded'
                 });
             }
@@ -97,7 +97,7 @@ export class AuditorExportService {
                     totalTrips++;
 
                     // Find if there's a log for this
-                    // In a real app, we'd link by ID. Here we mock find by timestamp proximity
+                    // In a real app, we'd link by ID. Here we simulated find by timestamp proximity
                     const linkedLog = this.findLogForTrip(trip, snap.timestamp);
 
                     if (linkedLog) resolvedTrips++;
@@ -137,7 +137,7 @@ export class AuditorExportService {
     }
 
     private findLogForTrip(trip: string, timestamp: Date): ServiceLogEntry | undefined {
-        // Mock logic: Find a LOG with "REPAIR" action after the trip
+        // Simulated logic: Find a LOG with "REPAIR" action after the trip
         // In real life, we'd query the actual journal
         // This is a placeholder for the logic connecting logs to trips
         return undefined;

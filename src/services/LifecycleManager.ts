@@ -123,7 +123,7 @@ export class LifecycleManager {
         }
 
         // Logic: Cannot proceed if Regulatory Status is blocking
-        // (Mock check)
+        // (Simulated check)
 
         if (errors.length === 0) {
             proj.currentPhase = 'PROCUREMENT';

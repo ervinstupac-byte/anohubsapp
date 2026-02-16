@@ -16,7 +16,7 @@ export const GridSync: React.FC = () => {
     const [rotation, setRotation] = useState(0);
     const [syncLocked, setSyncLocked] = useState(false);
 
-    // Mock constants (Pending Telemetry Integration)
+    // Simulated constants (Pending Telemetry Integration)
     const machineFreq = 50.02;
     const gridFreq = 50.00;
     const phaseDelta = 4.2; // Degrees

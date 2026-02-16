@@ -16,7 +16,7 @@ export const ThermalCard: React.FC = () => {
                     <div className="text-[clamp(7px,0.8vh,9px)] text-slate-500 font-mono font-bold uppercase tracking-wider opacity-60 mt-1 truncate">Lower Bearing Pad B</div>
                 </div>
 
-                {/* Thermal Image (Heat Map) Mock */}
+                {/* Thermal Image (Heat Map) Simulated */}
                 <div className="w-16 h-16 lg:w-24 lg:h-24 rounded-lg border border-white/5 relative overflow-hidden bg-slate-950/80 shadow-inner group-hover:border-red-500/30 transition-colors shrink-0">
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(239,68,68,0.4),rgba(168,85,247,0.1)_50%,transparent_100%)] animate-pulse" />
                     <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full opacity-40">

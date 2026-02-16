@@ -23,6 +23,7 @@ import { StructuralSafetyMonitor } from '../features/telemetry/components/Struct
 import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
 import { SolutionArchitect } from '../services/SolutionArchitect';
 import { dispatch } from '../lib/events';
+import { FaultInjectorPanel } from './forensics/FaultInjectorPanel';
 
 export const CommandCenter: React.FC = () => {
     const { t } = useTranslation();
@@ -48,7 +49,7 @@ export const CommandCenter: React.FC = () => {
     const turbineRef = useRef<HTMLDivElement>(null);
 
     // Calculate Performance Delta (Baseline vs Actual)
-    // Design Baseline: 105.0 MW (Mock Design Spec)
+    // Design Baseline: 105.0 MW (Simulated Design Spec)
     const baselinePower = 105.0;
     const activePowerMetric = liveMetrics.find(m => m.label.includes('Power') || m.label.includes('Output'));
     const activePowerVal = activePowerMetric ? (typeof activePowerMetric.value === 'number' ? activePowerMetric.value : parseFloat(activePowerMetric.value as string)) : 0;
@@ -357,7 +358,8 @@ export const CommandCenter: React.FC = () => {
                                         </div>
                                     }>
                                         <TurbineRunner3D
-                                        rpm={300}
+                                        rpm={300} // Fallback if live physics disabled
+                                        useLivePhysics={true} // NC-300: Industrial Grade Physics
                                         deltaMap={deltaMap}
                                         heatmapMode={true}
                                         className="h-full"
@@ -481,6 +483,9 @@ export const CommandCenter: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* Fault Injector (Educational Tool) */}
+            <FaultInjectorPanel />
         </div>
     );
 };

@@ -15,7 +15,7 @@ async function verify() {
 
     // 1. Verify Simulation Engine
     console.log('\n--- 1. SimulationEngine (What-If) ---');
-    const mockHistory: TelemetryStream[] = Array.from({ length: 24 }, (_, i) => ({
+    const simulatedHistory: TelemetryStream[] = Array.from({ length: 24 }, (_, i) => ({
         timestamp: Date.now() - (24 - i) * 3600000,
         hydraulic: { powerKW: 10000, flowCMS: 50, efficiency: 0.9 },
         mechanical: { vibration: 0.05 + (Math.random() * 0.02) }, // Healthy
@@ -24,7 +24,7 @@ async function verify() {
     }));
 
     const result = SimulationEngine.runWhatIfAnalysis({
-        history: mockHistory,
+        history: simulatedHistory,
         baselineContext: {
             marketPriceEurPerMWh: 50,
             maintenanceHourlyRate: 200, // Standard
@@ -77,7 +77,7 @@ async function verify() {
     }
 
     // Case B: Autonomous
-    // Note: It might not output "Pelton apply: true" if safeControlAdapter logic isn't fully mocked or fails checks,
+    // Note: It might not output "Pelton apply: true" if safeControlAdapter logic isn't fully simulated or fails checks,
     // but we check if the LOGIC path was attempted vs Blocked.
     // If blocked by tier, opMsg contains "BLOCKED".
     // If blocked by safety, it contains something else.

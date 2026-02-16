@@ -57,7 +57,7 @@ export class RoboticSwarmCoordinator {
         // 2. RUL Trigger (Crawler)
         // If RUL is low, we need visual confirmation of wear
         if (rulHours < 1000) {
-            // Check if already inspected recently (mock check)
+            // Check if already inspected recently (simulated check)
             return this.createMission(
                 'CRAWLER_MAGNETIC',
                 'Penstock_Liner',

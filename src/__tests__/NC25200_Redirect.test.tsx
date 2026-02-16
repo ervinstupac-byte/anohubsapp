@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import App from '../App';
 
-// Mock the components (lazy loaded in App)
+// Simulated the components (lazy loaded in App)
 vi.mock('../components/ToolboxLaunchpad.tsx', () => ({
     ToolboxLaunchpad: () => <div data-testid="toolbox-fail">TOOLBOX_FAIL</div>
 }));
@@ -12,18 +12,18 @@ vi.mock('../components/diagnostic-twin/FleetOverview.tsx', () => ({
     FleetOverview: () => <div data-testid="fleet-success">FLEET_SUCCESS</div>
 }));
 
-// Mock complex providers/hooks to avoid crash
+// Test Doubles for complex providers/hooks to avoid crash
 vi.mock('../contexts/AuthContext.tsx', () => ({
     useAuth: () => ({ user: { id: 'test-user', role: 'ENGINEER' }, loading: false, signOut: vi.fn() }),
     AuthProvider: ({ children }: any) => <>{children}</>
 }));
 
-// Mock useSovereignSync and others
+// Simulated useSovereignSync and others
 vi.mock('../hooks/useSovereignSync.ts', () => ({ useSovereignSync: () => { } }));
 vi.mock('../hooks/useSentinelWatchdog.ts', () => ({ useSentinelWatchdog: () => { } }));
 vi.mock('../hooks/useSafeExit', () => ({ useSafeExit: () => { } }));
 
-// Mock BootstrapService to avoid real boot delay
+// Test Doubles for BootstrapService to avoid real boot delay
 vi.mock('../services/BootstrapService', () => ({
     BootstrapService: {
         boot: () => Promise.resolve()

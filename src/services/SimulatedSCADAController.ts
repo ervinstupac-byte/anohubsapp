@@ -1,13 +1,13 @@
-// Mock SCADA Controller
+// Simulated SCADA Controller
 // Simulates the physical hardware interface for development
 
-export class MockSCADAController {
+export class SimulatedSCADAController {
 
     static async readParameter(address: string): Promise<number> {
         // Simulate network delay
         await new Promise(r => setTimeout(r, 50));
 
-        // Return mock values
+        // Return simulated values
         if (address === 'TURBINE_RPM') return 428.5; // Kaplan rated
         if (address === 'GUIDE_VANE_OPENING') return 85.4; // %
         if (address === 'ACTIVE_POWER') return 12.4; // MW

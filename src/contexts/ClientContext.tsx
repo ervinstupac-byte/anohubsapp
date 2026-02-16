@@ -6,7 +6,7 @@ export interface AuditReport {
     date: string;
     title: string;
     summary: string; // "High Cavitation Risk detected..."
-    downloadUrl: string; // Mock
+    downloadUrl: string; // Simulated
 }
 
 export interface MaintenanceEvent {
@@ -27,8 +27,8 @@ export interface ClientProfile {
     timeline: MaintenanceEvent[];
 }
 
-// --- MOCK DATA ---
-const MOCK_CLIENTS: ClientProfile[] = [
+// --- Simulated DATA ---
+const SIMULATED_CLIENTS: ClientProfile[] = [
     {
         id: 'C-001',
         name: 'HydroBalkans AG',
@@ -73,17 +73,17 @@ interface ClientContextType {
 const ClientContext = createContext<ClientContextType | undefined>(undefined);
 
 export const ClientProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [activeClient, setActiveClient] = useState<ClientProfile | null>(MOCK_CLIENTS[0]); // Default to first for demo
+    const [activeClient, setActiveClient] = useState<ClientProfile | null>(SIMULATED_CLIENTS[0]); // Default to first for demo
 
     const loginClient = (id: string) => {
-        const client = MOCK_CLIENTS.find(c => c.id === id);
+        const client = SIMULATED_CLIENTS.find(c => c.id === id);
         if (client) setActiveClient(client);
     };
 
     const logout = () => setActiveClient(null);
 
     return (
-        <ClientContext.Provider value={{ activeClient, loginClient, logout, clients: MOCK_CLIENTS }}>
+        <ClientContext.Provider value={{ activeClient, loginClient, logout, clients: SIMULATED_CLIENTS }}>
             {children}
         </ClientContext.Provider>
     );

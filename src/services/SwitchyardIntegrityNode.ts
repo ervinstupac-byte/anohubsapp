@@ -42,7 +42,7 @@ export class SwitchyardIntegrityNode {
 
         // 2. Wear Accumulation
         // In real app, this accumulates. Here we simulate a static accumulation + last trip
-        const currentWear = 12000000; // Mock accumulated
+        const currentWear = 12000000; // Simulated accumulated
         const tripAdd = lastTripCurrent * lastTripCurrent * 0.05; // 50ms arc time approx
         const totalWear = currentWear + tripAdd;
 
@@ -66,7 +66,7 @@ export class SwitchyardIntegrityNode {
         return {
             breakerId,
             sf6DensityPct: densityPct,
-            leakRateYear: 0.5, // Mock %/yr
+            leakRateYear: 0.5, // Simulated %/yr
             accumulatedWearI2t: totalWear,
             remainingOperations: Math.max(0, remainingOps),
             lockoutActive: lockout,

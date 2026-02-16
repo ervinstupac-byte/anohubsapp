@@ -19,14 +19,14 @@ export interface VideoAnalysisResult {
 export class VideoForensicsService {
 
     /**
-     * MOCK SIMULATION of Multimodal Analysis
+     * SIMULATION of Multimodal Analysis
      * In a real app, this would send frame buffers to Gemini Pro Vision API
      */
     static async analyzeFrame(frameData: any): Promise<VideoAnalysisResult> {
         // Simulate processing delay
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Return mock findings based on "Legacy knowledge" patterns
+        // Return simulated findings based on "Legacy knowledge" patterns
         return {
             timestamp: Date.now(),
             detectedAnomalies: [

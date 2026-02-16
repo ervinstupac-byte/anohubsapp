@@ -229,6 +229,7 @@ export interface GovernorState {
     integralError: Decimal;
     previousError: Decimal;
     outputSignal: Decimal;
+    bladeAngle?: Decimal; // Kaplan blade pitch (degrees)
 }
 
 export type ProjectAction =
@@ -502,7 +503,7 @@ export const DEFAULT_TECHNICAL_STATE: TechnicalProjectState = {
         healthScore: 88,
         activeRisks: ['Seal Leakage', 'PEAK SURGE DETECT'],
         sensors: {
-            // Mock Data for Context Engine
+            // Simulated Data for Context Engine
             hoopStressMPa: 142.5,
             flowRate: 3.2,
             bearingTemp: 54.1,

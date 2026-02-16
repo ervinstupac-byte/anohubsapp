@@ -41,6 +41,10 @@ export class EfficiencyOptimizer {
         return { i0: 0, i1: 0, t: 0 };
     }
 
+    public static getEfficiency(head: number, flow: number): number {
+        return this.bilinear(head, flow);
+    }
+
     private static bilinear(head: number, flow: number): number {
         const hb = this.findBounds(head, this.HEAD_GRID);
         const qb = this.findBounds(flow, this.FLOW_GRID);

@@ -45,7 +45,7 @@ export class LoopPerformanceMonitor {
         // We'll reset count every N calls in a real impl, here we assume it's checking rate
 
         const isHunting = this.zeroCrossings > 5; // Placeholder threshold
-        if (Math.random() < 0.1) this.zeroCrossings = 0; // Random decay for mock
+        if (Math.random() < 0.1) this.zeroCrossings = 0; // Random decay for simulated
 
         this.lastError = error;
 
