@@ -414,7 +414,7 @@ const AppLayout: React.FC = () => {
         <NavigationProvider value={navValue}>
             <DrillDownProvider>
                 {/* Fix 3: Layout "Hidden Corners" & Space Efficiency */}
-                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'grid-cols-[280px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
+                <div className={`field-mode h-screen w-screen bg-[#05070a] text-slate-100 overflow-hidden selection:bg-cyan-500/30 font-sans relative grid ${isSidebarOpen ? 'grid-cols-[320px_1fr]' : 'grid-cols-[0px_1fr]'} transition-[grid-template-columns] duration-300 bg-[#020617] ${isCriticalDemo ? 'shadow-[inset_0_0_100px_rgba(239,68,68,0.2)]' : ''}`}>
 
                     {/* The "Elite" Background Glows */}
                     <div className="fixed inset-0 pointer-events-none z-0">
@@ -514,6 +514,7 @@ const AppLayout: React.FC = () => {
                                                 <Route path="/francis/sop-shaft-alignment" element={<Suspense fallback={<LoadingScreen />}><AlignmentWizardWrapper /></Suspense>} />
                                                 <Route path="/francis/legacy/:sopId" element={<Suspense fallback={<LoadingScreen />}><LegacySOPViewer /></Suspense>} />
                                                 <Route path="forensics/deep-dive" element={<Suspense fallback={<LoadingScreen />}><ForensicDeepDive /></Suspense>} />
+                                                <Route path="/docs/constitution" element={<AIConstitution />} />
                                                 <Route path="*" element={<Navigate to="/" replace />} />
                                             </Routes>
                                         </div>
