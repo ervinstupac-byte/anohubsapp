@@ -94,7 +94,7 @@ export const PeltonJetVisualizer: React.FC<PeltonJetVisualizerProps> = ({ sessio
                                 <button
                                     key={count}
                                     onClick={() => setNozzleCount(count)}
-                                    className={`flex-1 px-4 py-3 rounded-lg font-bold transition-all ${nozzleCount === count
+                                    className={`flex-1 px-4 py-3 rounded-none font-bold transition-all ${nozzleCount === count
                                         ? 'bg-cyan-500/30 text-cyan-400 border-2 border-cyan-500'
                                         : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:bg-slate-700/50'
                                         }`}

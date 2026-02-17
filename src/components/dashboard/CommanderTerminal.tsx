@@ -190,7 +190,7 @@ export const CommanderTerminal: React.FC = () => {
                         animate={{ opacity: 1, y: -16, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                        className="pointer-events-auto w-96 h-80 bg-black/90 backdrop-blur-3xl border border-cyan-500/30 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
+                        className="pointer-events-auto w-96 h-80 bg-black/90 backdrop-blur-3xl border border-cyan-500/30 shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden"
                     >
                         {/* HEADER */}
                         <div className="px-4 py-2.5 bg-cyan-500/10 border-b border-cyan-500/20 flex justify-between items-center shrink-0">

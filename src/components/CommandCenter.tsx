@@ -380,7 +380,7 @@ export const CommandCenter: React.FC = () => {
                 </div>
 
                 {/* Right Panel: Live Metrics */}
-                <div className="col-span-3 space-y-4 overflow-y-auto">
+                <div className="col-span-3 p-6 bg-slate-900 border-l border-slate-700 h-full overflow-y-auto">
                     <TacticalCard title="LIVE SENSOR DATA" status={hasCriticalRisks ? 'critical' : 'nominal'}>
                         <div className="space-y-3">
                             {liveMetrics.map((metric, i) => (

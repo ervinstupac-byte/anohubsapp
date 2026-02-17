@@ -91,7 +91,7 @@ const BladeAngleVisualizer: React.FC<BladeAngleVisualizerProps> = ({ angle, setp
     return (
         <GlassCard className={`border-l-4 ${isOutOfTolerance ? 'border-l-red-500' : 'border-l-emerald-500'}`}>
             <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                <div className="w-12 h-12 bg-cyan-500/20 flex items-center justify-center">
                     <Cog className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>

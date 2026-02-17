@@ -15,7 +15,11 @@ import { useTelemetryStore } from '../../features/telemetry/store/useTelemetrySt
 
 type WizardStep = 'general' | 'physical' | 'sensors' | 'francis' | 'hydraulics' | 'environmental' | 'review';
 
-export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => void; initialType?: TurbineType }> = ({ isOpen, onClose, initialType }) => {
+export const AssetOnboardingWizard: React.FC<{
+    isOpen: boolean;
+    onClose: () => void;
+    initialType?: TurbineType;
+}> = ({ isOpen, onClose, initialType }) => {
     const { setConfig } = useTelemetryStore();
     const { addAsset } = useAssetContext();
     const navigate = useNavigate();
@@ -307,7 +311,7 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
                                     type="text"
                                     value={assetName}
                                     onChange={(e) => setAssetName(e.target.value)}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-[#2dd4bf] outline-none"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-none p-3 text-white focus:border-[#2dd4bf] outline-none"
                                     placeholder="e.g. Unit 1"
                                 />
                             </div>
@@ -618,7 +622,7 @@ export const AssetOnboardingWizard: React.FC<{ isOpen: boolean; onClose: () => v
                                     ))}
                                 </div>
                                 {!hasSludgeCleaner && (
-                                    <div className="mt-2 p-3 bg-red-950/20 border border-red-500/30 rounded text-sm text-red-200">
+                                    <div className="mt-2 p-3 bg-red-950/20 border border-red-500/30 rounded-none text-sm text-red-200">
                                         ⚠️ Erosion Risk Score +5 (No automatic sludge removal)
                                     </div>
                                 )}
@@ -752,7 +756,7 @@ const MeasurementInput: React.FC<{ label: string; value: number; onChange: (val:
                 onChange={(e) => onChange(parseFloat(e.target.value))}
                 className="flex-1"
             />
-            <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded px-4 py-2 min-w-[120px]">
+            <div className="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-none px-4 py-2 min-w-[120px]">
                 <input
                     type="number"
                     value={value}
