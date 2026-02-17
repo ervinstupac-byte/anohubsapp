@@ -16,7 +16,7 @@ export const Manifesto: React.FC = () => {
                 backgroundSize: '40px 40px'
             }} />
 
-            <div className="max-w-4xl mx-auto relative z-10 border-2 border-white/20 p-8 md:p-16 bg-[#001f3f]/90 backdrop-blur-md shadow-[0_0_100px_rgba(255,255,255,0.05)] rounded-sm">
+            <div className="max-w-4xl mx-auto relative z-10 border-2 border-white/20 p-8 md:p-16 bg-[#001f3f]/90 backdrop-blur-md shadow-[0_0_100px_rgba(255,255,255,0.05)] rounded-none">
 
                 {/* Decorative Blueprint Corner Lines */}
                 <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-white/40" />
@@ -47,7 +47,7 @@ export const Manifesto: React.FC = () => {
                     <div className="relative group">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-white/10 group-hover:bg-cyan-500 transition-colors" />
                         <div className="flex items-center gap-6 mb-6">
-                            <div className="p-3 bg-white/5 rounded-full border border-white/10">
+                            <div className="p-3 bg-white/5 rounded-none border border-white/10">
                                 <Ruler className="w-8 h-8 text-white" />
                             </div>
                             <h2 className="text-3xl font-black uppercase tracking-tight">{t('manifesto.section1.title')}</h2>
@@ -64,7 +64,7 @@ export const Manifesto: React.FC = () => {
                     <div className="relative group">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-white/10 group-hover:bg-amber-500 transition-colors" />
                         <div className="flex items-center gap-6 mb-6">
-                            <div className="p-3 bg-white/5 rounded-full border border-white/10">
+                            <div className="p-3 bg-white/5 rounded-none border border-white/10">
                                 <Zap className="w-8 h-8 text-white" />
                             </div>
                             <h2 className="text-3xl font-black uppercase tracking-tight">{t('manifesto.section2.title')}</h2>
@@ -80,7 +80,7 @@ export const Manifesto: React.FC = () => {
                     <div className="relative group">
                         <div className="absolute -left-4 top-0 w-1 h-full bg-white/10 group-hover:bg-emerald-500 transition-colors" />
                         <div className="flex items-center gap-6 mb-6">
-                            <div className="p-3 bg-white/5 rounded-full border border-white/10">
+                            <div className="p-3 bg-white/5 rounded-none border border-white/10">
                                 <ShieldCheck className="w-8 h-8 text-white" />
                             </div>
                             <h2 className="text-3xl font-black uppercase tracking-tight">{t('manifesto.section3.title')}</h2>

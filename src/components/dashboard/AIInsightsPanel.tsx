@@ -49,7 +49,7 @@ export const AIInsightsPanel: React.FC = () => {
 
     if (!unifiedDiagnosis || unifiedDiagnosis.crossCorrelation.confidenceBoosts.length === 0) {
         return (
-            <div className="bg-scada-panel border border-scada-border rounded-sm p-6 flex flex-col items-center justify-center text-center space-y-3">
+            <div className="bg-scada-panel border border-scada-border rounded-none p-6 flex flex-col items-center justify-center text-center space-y-3">
                 <Search className="w-8 h-8 text-scada-text/50" />
                 <p className="text-scada-text/70 font-mono text-[10px] uppercase tracking-widest">
                     No active synergetic risks detected
@@ -68,7 +68,7 @@ export const AIInsightsPanel: React.FC = () => {
                     <Brain className="w-3 h-3 text-status-info" />
                     Master Intelligence Insights
                 </h3>
-                <span className="text-[8px] bg-status-info/10 text-status-info px-2 py-0.5 rounded-sm border border-status-info/20 font-mono">
+                <span className="text-[8px] bg-status-info/10 text-status-info px-2 py-0.5 rounded-none border border-status-info/20 font-mono">
                     LIVE ANALYSIS
                 </span>
             </div>
@@ -77,10 +77,10 @@ export const AIInsightsPanel: React.FC = () => {
                 {unifiedDiagnosis.crossCorrelation.confidenceBoosts.map((boost, idx) => (
                     <div
                         key={idx}
-                        className="bg-scada-panel border border-scada-border hover:border-status-info/60 rounded-sm p-3 transition-colors group cursor-pointer shadow-scada-card"
+                        className="bg-scada-panel border border-scada-border hover:border-status-info/60 rounded-none p-3 transition-colors group cursor-pointer shadow-none"
                     >
                         <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-sm bg-scada-bg border border-scada-border">
+                            <div className="p-2 rounded-none bg-scada-bg border border-scada-border">
                                 {boost.finding.toLowerCase().includes('oil') ? (
                                     <Droplets className="w-4 h-4 text-status-info" />
                                 ) : boost.finding.toLowerCase().includes('structural') || boost.finding.toLowerCase().includes('foundation') ? (
@@ -103,7 +103,7 @@ export const AIInsightsPanel: React.FC = () => {
                                     {boost.reason}
                                 </p>
 
-                                <div className="h-1 bg-scada-bg rounded-sm overflow-hidden">
+                                <div className="h-1 bg-scada-bg rounded-none overflow-hidden">
                                     <div
                                         className="h-full bg-status-info"
                                         style={{ width: `${boost.boostedConfidence}%` }}
@@ -119,7 +119,7 @@ export const AIInsightsPanel: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pb-2">
                 {/* Trend Projections */}
                 {unifiedDiagnosis.trendProjections && (
-                    <div className="bg-scada-panel border border-scada-border rounded-sm p-3 shadow-scada-card">
+                    <div className="bg-scada-panel border border-scada-border rounded-none p-3 shadow-none">
                         <div className="flex items-center gap-2 mb-2">
                             <TrendingUp className="w-3 h-3 text-status-ok" />
                             <span className="text-[9px] text-scada-text/70 font-mono font-black uppercase tracking-widest">Trend Projections</span>
@@ -142,12 +142,12 @@ export const AIInsightsPanel: React.FC = () => {
 
                 {/* Operating Zone */}
                 {unifiedDiagnosis.operatingZone && (
-                    <div className="bg-scada-panel border border-scada-border rounded-sm p-3 shadow-scada-card">
+                    <div className="bg-scada-panel border border-scada-border rounded-none p-3 shadow-none">
                         <div className="flex items-center gap-2 mb-2">
                             <ShieldCheck className="w-3 h-3 text-status-info" />
                             <span className="text-[9px] text-scada-text/70 font-mono font-black uppercase tracking-widest">Performance Guard</span>
                         </div>
-                        <div className={`text-xs font-black font-mono uppercase px-2 py-1 rounded-sm mb-1 text-center ${unifiedDiagnosis.operatingZone.color === 'red' ? 'bg-status-error/10 text-status-error' : 'bg-status-ok/10 text-status-ok'}`}>
+                        <div className={`text-xs font-black font-mono uppercase px-2 py-1 rounded-none mb-1 text-center ${unifiedDiagnosis.operatingZone.color === 'red' ? 'bg-status-error/10 text-status-error' : 'bg-status-ok/10 text-status-ok'}`}>
                             {unifiedDiagnosis.operatingZone.zone}
                         </div>
                         {unifiedDiagnosis.operatingZone.alert && (
@@ -161,7 +161,7 @@ export const AIInsightsPanel: React.FC = () => {
 
             {/* Life Extension ROI */}
             {unifiedDiagnosis.lifeExtension && (
-                <div className="bg-status-ok/5 border border-status-ok/20 rounded-sm p-3">
+                <div className="bg-status-ok/5 border border-status-ok/20 rounded-none p-3">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Gem className="w-3 h-3 text-status-ok" />
@@ -178,7 +178,7 @@ export const AIInsightsPanel: React.FC = () => {
                 <div className="pt-4 border-t border-scada-border space-y-3">
                     <h4 className="text-[8px] text-scada-text/50 uppercase font-mono tracking-[0.2em] mb-2 flex justify-between items-center">
                         Technical Service Findings
-                        <span className="text-[7px] text-scada-text/60 bg-scada-bg px-1 rounded-sm">CEREBRO V4.9</span>
+                        <span className="text-[7px] text-scada-text/60 bg-scada-bg px-1 rounded-none">CEREBRO V4.9</span>
                     </h4>
                     <div
                         ref={scrollContainerRef}
@@ -189,7 +189,7 @@ export const AIInsightsPanel: React.FC = () => {
                                 <div
                                     key={i}
                                     ref={el => noteRefs.current[note.service] = el}
-                                    className={`p-2 rounded-sm border relative overflow-hidden group/note transition-colors duration-300 ${focusedService === note.service
+                                    className={`p-2 rounded-none border relative overflow-hidden group/note transition-colors duration-300 ${focusedService === note.service
                                         ? 'border-status-info bg-status-info/10'
                                         : note.severity === 'CRITICAL' ? 'bg-status-error/5 border-status-error/20' :
                                             note.severity === 'WARNING' ? 'bg-status-warning/5 border-status-warning/20' :
@@ -202,7 +202,7 @@ export const AIInsightsPanel: React.FC = () => {
                                         }`} />
                                     <div className="flex items-center justify-between mb-1">
                                         <span className="text-[9px] font-black text-scada-text/80 uppercase tracking-tighter">{note.service}</span>
-                                        <span className={`text-[7px] font-black font-mono px-1 rounded-sm uppercase ${note.severity === 'CRITICAL' ? 'text-status-error bg-status-error/10' :
+                                        <span className={`text-[7px] font-black font-mono px-1 rounded-none uppercase ${note.severity === 'CRITICAL' ? 'text-status-error bg-status-error/10' :
                                             note.severity === 'WARNING' ? 'text-status-warning bg-status-warning/10' :
                                                 'text-status-info bg-status-info/10'
                                             }`}>
@@ -214,7 +214,7 @@ export const AIInsightsPanel: React.FC = () => {
                                     {/* NC-5.4: ISO IMS Verified Branding */}
                                     {note.recommendation.includes('[PROTOCOL_IMS_VERIFIED]') && (
                                         <div className="flex items-center justify-between mb-2">
-                                            <div className="flex items-center gap-1 px-1.5 py-0.5 bg-status-ok/10 border border-status-ok/30 rounded-sm w-fit">
+                                            <div className="flex items-center gap-1 px-1.5 py-0.5 bg-status-ok/10 border border-status-ok/30 rounded-none w-fit">
                                                 <ShieldCheck className="w-2.5 h-2.5 text-status-ok" />
                                                 <span className="text-[7px] font-black text-status-ok uppercase tracking-widest">ISO IMS Verified</span>
                                             </div>
@@ -229,7 +229,7 @@ export const AIInsightsPanel: React.FC = () => {
                                                     </button>
 
                                                     {/* NC-9.0: Trust Architecture Tooltip (Justified Proof) */}
-                                                    <div className="absolute bottom-full right-0 mb-2 w-72 bg-scada-panel border border-status-info/30 rounded-sm p-3 opacity-0 group-hover/evidence:opacity-100 pointer-events-none transition-opacity z-50 shadow-scada-card">
+                                                    <div className="absolute bottom-full right-0 mb-2 w-72 bg-scada-panel border border-status-info/30 rounded-none p-3 opacity-0 group-hover/evidence:opacity-100 pointer-events-none transition-opacity z-50 shadow-none">
                                                         <p className="text-[8px] text-status-info font-black uppercase mb-2 border-b border-status-info/20 pb-1 flex items-center gap-2">
                                                             <Library className="w-2.5 h-2.5" />
                                                             Knowledge Base Evidence
@@ -238,7 +238,7 @@ export const AIInsightsPanel: React.FC = () => {
                                                             {note.sourceFiles.map((source, fIdx) => (
                                                                 <div key={fIdx} className="space-y-1">
                                                                     <div className="text-[8px] text-scada-text/80 font-mono flex items-center gap-1 font-bold">
-                                                                        <div className="w-1 h-1 rounded-full bg-status-info" />
+                                                                        <div className="w-1 h-1 rounded-none bg-status-info" />
                                                                         {source.filename.split('/').pop()}
                                                                     </div>
                                                                     <p className="text-[8px] text-scada-text/60 font-mono leading-tight italic pl-2 border-l border-scada-border">
@@ -263,7 +263,7 @@ export const AIInsightsPanel: React.FC = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center py-4 border border-dashed border-scada-border rounded-sm">
+                            <div className="text-center py-4 border border-dashed border-scada-border rounded-none">
                                 <p className="text-[9px] text-scada-text/60 font-mono italic">No expert service warnings active.</p>
                             </div>
                         )}
@@ -271,7 +271,7 @@ export const AIInsightsPanel: React.FC = () => {
                 </div>
             )}
 
-            <button className="w-full py-2 bg-scada-bg hover:bg-scada-panel border border-scada-border hover:border-status-info/30 rounded-sm text-[9px] text-scada-text/70 hover:text-status-info font-mono uppercase font-black transition-all flex items-center justify-center gap-2 group">
+            <button className="w-full py-2 bg-scada-bg hover:bg-scada-panel border border-scada-border hover:border-status-info/30 rounded-none text-[9px] text-scada-text/70 hover:text-status-info font-mono uppercase font-black transition-all flex items-center justify-center gap-2 group">
                 Deep Dive Forensic Analysis
                 <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
             </button>

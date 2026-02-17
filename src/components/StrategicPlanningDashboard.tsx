@@ -215,7 +215,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
                                         </span>
                                         <div className="text-[10px] text-scada-muted uppercase mt-1">{t('physics.annualProd', 'Annual Production')}</div>
                                     </div>
-                                    <div className="p-4 bg-scada-panel rounded-sm border border-scada-border mt-4">
+                                    <div className="p-4 bg-scada-panel rounded-none border border-scada-border mt-4">
                                         <span className="text-2xl font-black text-scada-text font-mono tabular-nums">
                                             {formatNumber(impact?.safetyFactor || 0, language, 2)}x
                                         </span>
@@ -317,7 +317,7 @@ export const StrategicPlanningDashboard: React.FC = () => {
 
                     {/* Pro Tips (Contextual) - Accessing deep state */}
                     {technicalState.penstock.material === 'STEEL' && technicalState.site.waterQuality !== 'CLEAN' && (
-                        <div className="p-4 rounded-sm bg-status-info/10 border border-status-info/30 flex gap-3 items-start">
+                        <div className="p-4 rounded-none bg-status-info/10 border border-status-info/30 flex gap-3 items-start">
                             <Info className="w-4 h-4 text-status-info shrink-0 mt-0.5" />
                             <p className="text-xs text-status-info leading-relaxed font-mono">
                                 <b>Engineer's Note:</b> Bare steel is rarely used in Balkans due to moderate acidity in mountain streams. Highly recommend at least Epoxy Paint.
@@ -388,7 +388,7 @@ const Selector = ({ label, value, options, onChange }: any) => (
                 <button
                     key={opt}
                     onClick={() => onChange(opt)}
-                    className={`px-3 py-2 rounded-sm text-[10px] font-bold uppercase transition-all border ${value === opt
+                    className={`px-3 py-2 rounded-none text-[10px] font-bold uppercase transition-all border ${value === opt
                         ? 'bg-status-info/20 border-status-info text-status-info'
                         : 'bg-scada-panel border-scada-border text-scada-muted hover:border-scada-muted'
                         }`}

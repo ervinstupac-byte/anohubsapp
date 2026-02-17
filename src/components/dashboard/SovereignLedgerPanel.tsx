@@ -173,7 +173,7 @@ export const SovereignLedgerPanel: React.FC = () => {
     : 0;
 
   return (
-    <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+    <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
@@ -182,7 +182,7 @@ export const SovereignLedgerPanel: React.FC = () => {
             <h2 className="text-lg font-bold text-scada-text uppercase tracking-tight">Sovereign Ledger</h2>
             <div className="flex items-center gap-2">
               <span className="text-xs text-scada-muted font-mono uppercase">NC-1100 Immutable Record</span>
-              <div className="px-1.5 py-0.5 rounded-sm bg-status-info/10 border border-status-info/20 text-[10px] text-status-info font-mono font-bold">
+              <div className="px-1.5 py-0.5 rounded-none bg-status-info/10 border border-status-info/20 text-[10px] text-status-info font-mono font-bold">
                 {ledgerHistory.length} ENTRIES
               </div>
             </div>
@@ -191,7 +191,7 @@ export const SovereignLedgerPanel: React.FC = () => {
         <div className="flex gap-2">
             <button
                 onClick={() => setShowFullLog(true)}
-                className="p-2 bg-scada-bg hover:bg-scada-panel rounded-sm transition-colors border border-scada-border hover:border-scada-text text-status-info"
+                className="p-2 bg-scada-bg hover:bg-scada-panel rounded-none transition-colors border border-scada-border hover:border-scada-text text-status-info"
                 title="Open Full Forensic Log"
             >
                 <Maximize2 className="w-4 h-4" />
@@ -207,19 +207,19 @@ export const SovereignLedgerPanel: React.FC = () => {
 
       {/* Statistics */}
       <div className="grid grid-cols-4 gap-3 mb-4">
-        <div className="bg-scada-bg border border-scada-border rounded-sm p-2 text-center">
+        <div className="bg-scada-bg border border-scada-border rounded-none p-2 text-center">
           <div className="text-xl font-bold font-mono text-scada-text tabular-nums">{totalActions}</div>
           <div className="text-[10px] text-scada-muted uppercase font-mono">Total Actions</div>
         </div>
-        <div className="bg-scada-bg border border-scada-border rounded-sm p-2 text-center">
+        <div className="bg-scada-bg border border-scada-border rounded-none p-2 text-center">
           <div className="text-xl font-bold font-mono text-status-warning tabular-nums">{commanderActions}</div>
           <div className="text-[10px] text-scada-muted uppercase font-mono">Commander</div>
         </div>
-        <div className="bg-scada-bg border border-scada-border rounded-sm p-2 text-center">
+        <div className="bg-scada-bg border border-scada-border rounded-none p-2 text-center">
           <div className="text-xl font-bold font-mono text-status-info tabular-nums">{systemUpdates}</div>
           <div className="text-[10px] text-scada-muted uppercase font-mono">System</div>
         </div>
-        <div className="bg-scada-bg border border-scada-border rounded-sm p-2 text-center">
+        <div className="bg-scada-bg border border-scada-border rounded-none p-2 text-center">
           <div className="text-xl font-bold font-mono text-status-info tabular-nums">{avgPulseChange.toFixed(1)}%</div>
           <div className="text-[10px] text-scada-muted uppercase font-mono">Avg Change</div>
         </div>
@@ -233,7 +233,7 @@ export const SovereignLedgerPanel: React.FC = () => {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-3 py-1 rounded-sm text-[10px] font-bold uppercase tracking-wider transition-colors font-mono ${
+              className={`px-3 py-1 rounded-none text-[10px] font-bold uppercase tracking-wider transition-colors font-mono ${
                 filter === f
                   ? 'bg-status-info/20 text-status-info border border-status-info/50'
                   : 'bg-scada-bg text-scada-muted border border-scada-border hover:text-scada-text'
@@ -257,7 +257,7 @@ export const SovereignLedgerPanel: React.FC = () => {
             filteredEntries.map((entry, index) => (
               <div
                 key={entry.id}
-                className={`border rounded-sm overflow-hidden ${getSeverityColor(entry.severity)}`}
+                className={`border rounded-none overflow-hidden ${getSeverityColor(entry.severity)}`}
               >
                 <button
                   onClick={() => setExpandedEntry(expandedEntry === entry.id ? null : entry.id)}

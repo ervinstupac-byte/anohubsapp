@@ -58,7 +58,7 @@ export const FinancialHealthPanel: React.FC = () => {
     const expectedMaintenanceCost = (financials as any)?.expectedMaintenanceCost || 0;
 
     return (
-        <div className="p-6 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card relative overflow-hidden group">
+        <div className="p-6 bg-scada-panel border border-scada-border rounded-none shadow-none relative overflow-hidden group">
             
             <div className="flex items-center justify-between mb-6 relative z-10">
                 <h3 className="text-xl font-bold text-scada-text flex items-center gap-2 uppercase tracking-tight font-header">
@@ -73,7 +73,7 @@ export const FinancialHealthPanel: React.FC = () => {
                     >
                         <ExternalLink className="w-4 h-4" />
                     </button>
-                    <div className="px-3 py-1 bg-status-ok/20 border border-status-ok/30 rounded-sm">
+                    <div className="px-3 py-1 bg-status-ok/20 border border-status-ok/30 rounded-none">
                         <span className="text-xs text-status-ok font-black uppercase tracking-widest">LIVE</span>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ export const FinancialHealthPanel: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
                 {/* Hourly Loss */}
-                <div className="bg-scada-bg border border-status-error/30 rounded-sm p-4 hover:bg-status-error/5 transition-colors duration-300">
+                <div className="bg-scada-bg border border-status-error/30 rounded-none p-4 hover:bg-status-error/5 transition-colors duration-300">
                     <div className="flex items-center gap-2 mb-2">
                         <TrendingDown className="w-4 h-4 text-status-error" />
                         <span className="text-sm text-status-error font-bold uppercase tracking-wider">Hourly Loss</span>
@@ -93,7 +93,7 @@ export const FinancialHealthPanel: React.FC = () => {
                 </div>
 
                 {/* 30-Day Projection */}
-                <div className="bg-scada-bg border border-status-warning/30 rounded-sm p-4 hover:bg-status-warning/5 transition-colors duration-300">
+                <div className="bg-scada-bg border border-status-warning/30 rounded-none p-4 hover:bg-status-warning/5 transition-colors duration-300">
                     <div className="flex items-center gap-2 mb-2">
                         <AlertTriangle className="w-4 h-4 text-status-warning" />
                         <span className="text-sm text-status-warning font-bold uppercase tracking-wider">30-Day Projection</span>
@@ -105,7 +105,7 @@ export const FinancialHealthPanel: React.FC = () => {
                 </div>
 
                 {/* Expected Maintenance */}
-                <div className="bg-scada-bg border border-status-info/30 rounded-sm p-4 hover:bg-status-info/5 transition-colors duration-300">
+                <div className="bg-scada-bg border border-status-info/30 rounded-none p-4 hover:bg-status-info/5 transition-colors duration-300">
                     <div className="flex items-center gap-2 mb-2">
                         <Wrench className="w-4 h-4 text-status-info" />
                         <span className="text-sm text-status-info font-bold uppercase tracking-wider">Maintenance Cost</span>

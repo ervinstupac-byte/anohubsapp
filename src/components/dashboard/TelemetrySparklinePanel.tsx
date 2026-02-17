@@ -44,14 +44,14 @@ const SparklineMetric: React.FC<SparklineMetricProps> = ({
     const status = getStatus();
 
     return (
-        <div className={`bg-slate-900/60 backdrop-blur-sm rounded-lg p-3 border transition-colors ${status === 'alarm' ? 'border-red-500/50 bg-red-950/20' :
+        <div className={`bg-slate-900 border transition-colors rounded-none ${status === 'alarm' ? 'border-red-500/50 bg-red-950/20' :
             status === 'warning' ? 'border-amber-500/50 bg-amber-950/20' :
-                'border-slate-700/30'
+                'border-slate-700'
             }`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                    <div className={`p-1 rounded ${status === 'alarm' ? 'bg-red-500/20 text-red-400' :
+                    <div className={`p-1 rounded-none ${status === 'alarm' ? 'bg-red-500/20 text-red-400' :
                         status === 'warning' ? 'bg-amber-500/20 text-amber-400' :
                             'bg-slate-700/50 text-slate-400'
                         }`}>

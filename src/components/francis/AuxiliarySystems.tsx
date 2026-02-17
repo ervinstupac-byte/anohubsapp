@@ -20,7 +20,7 @@ export const AuxiliarySystems: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-blue-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+            <header className="bg-black/40 border-b-2 border-blue-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
@@ -34,7 +34,7 @@ export const AuxiliarySystems: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-6 py-2 bg-blue-600/10 border-2 border-blue-500/50 text-blue-400 rounded-full font-black hover:bg-blue-500 hover:text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all group uppercase text-xs tracking-tighter"
+                        className="flex items-center gap-2 px-6 py-2 bg-blue-600/10 border-2 border-blue-500/50 text-blue-400 rounded-none font-black hover:bg-blue-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.auxiliary.back') || "Return"}</span>
@@ -46,7 +46,7 @@ export const AuxiliarySystems: React.FC = () => {
                 {/* Real-time Focus Card */}
                 <GlassCard title="Auxiliary Control Hub" className="relative overflow-hidden group">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Cpu className="w-3 h-3 text-cyan-400" /> DC Control Voltage
                             </p>
@@ -54,7 +54,7 @@ export const AuxiliarySystems: React.FC = () => {
                                 {dcVoltage} <span className="text-xs text-slate-500">VDC</span>
                             </p>
                         </div>
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-amber-400" /> Brakes Hydraulic
                             </p>
@@ -62,7 +62,7 @@ export const AuxiliarySystems: React.FC = () => {
                                 {brakesStatus}
                             </p>
                         </div>
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Activity className="w-3 h-3 text-blue-400" /> Drainage System
                             </p>
@@ -74,7 +74,7 @@ export const AuxiliarySystems: React.FC = () => {
                 </GlassCard>
 
                 {/* SAFETY MODULE */}
-                <section className="bg-red-900/10 border-l-[12px] border-red-600 p-8 rounded-r-3xl shadow-2xl backdrop-blur-sm border border-red-900/20">
+                <section className="bg-red-900/10 border-l-[12px] border-red-600 p-8 rounded-none shadow-none backdrop-blur-sm border border-red-900/20">
                     <div className="flex items-start gap-6">
                         <ShieldAlert className="w-12 h-12 text-red-600 flex-shrink-0" />
                         <div>
@@ -103,9 +103,9 @@ export const AuxiliarySystems: React.FC = () => {
                 {/* SOP 1 & 2 Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* SOP 1 */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-6">
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-6">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                            <div className="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
+                            <div className="w-8 h-8 rounded-none bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
                                 <span className="text-blue-400 font-black text-xs">01</span>
                             </div>
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.auxiliary.sop1')}</h2>
@@ -117,15 +117,15 @@ export const AuxiliarySystems: React.FC = () => {
                             <div>
                                 <h4 className="text-blue-400 text-[10px] font-black uppercase mb-3 tracking-widest">{t('francis.auxiliary.s2Title')}</h4>
                                 <ul className="text-[10px] text-slate-500 space-y-2 font-bold uppercase tracking-tighter">
-                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded border border-white/5">
+                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded-none border border-white/5">
                                         <span>{t('francis.auxiliary.setpoint')}</span>
                                         <span className="text-white">{t('francis.auxiliary.s2Li1')}</span>
                                     </li>
-                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded border border-white/5">
+                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded-none border border-white/5">
                                         <span>{t('francis.auxiliary.tooEarly')}</span>
                                         <span className="text-amber-500">{t('francis.auxiliary.s2Li2')}</span>
                                     </li>
-                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded border border-white/5">
+                                    <li className="flex justify-between items-center bg-black/40 p-2 rounded-none border border-white/5">
                                         <span>{t('francis.auxiliary.tooLate')}</span>
                                         <span className="text-red-500">{t('francis.auxiliary.s2Li3')}</span>
                                     </li>
@@ -135,9 +135,9 @@ export const AuxiliarySystems: React.FC = () => {
                     </section>
 
                     {/* SOP 2 */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-6">
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-6">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                            <div className="w-8 h-8 rounded-lg bg-purple-600/20 flex items-center justify-center border border-purple-500/30">
+                            <div className="w-8 h-8 rounded-none bg-purple-600/20 flex items-center justify-center border border-purple-500/30">
                                 <span className="text-purple-400 font-black text-xs">02</span>
                             </div>
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.auxiliary.sop2')}</h2>
@@ -154,7 +154,7 @@ export const AuxiliarySystems: React.FC = () => {
                                     { label: t('francis.auxiliary.level3'), val: t('francis.auxiliary.s4Li3') },
                                     { label: t('francis.auxiliary.logic'), val: t('francis.auxiliary.s4Li4') }
                                 ].map((item, idx) => (
-                                    <div key={idx} className="bg-black/40 p-3 rounded-xl border border-white/5">
+                                    <div key={idx} className="bg-black/40 p-3 rounded-none border border-white/5">
                                         <span className="block text-[8px] text-slate-600 font-black uppercase mb-1">{item.label}</span>
                                         <span className="text-[10px] text-slate-300 font-bold">{item.val}</span>
                                     </div>
@@ -165,7 +165,7 @@ export const AuxiliarySystems: React.FC = () => {
                 </div>
 
                 {/* Checklist Summary */}
-                <div className="bg-black/60 p-8 rounded-3xl border border-white/5 flex flex-wrap gap-12 items-center justify-center shadow-2xl">
+                <div className="bg-black/60 p-8 rounded-none border border-white/5 flex flex-wrap gap-12 items-center justify-center shadow-none">
                     {[
                         { icon: Clock, label: t('francis.auxiliary.weekly'), desc: t('francis.auxiliary.weeklyDesc'), color: 'text-blue-500' },
                         { icon: Activity, label: t('francis.auxiliary.monthly'), desc: t('francis.auxiliary.monthlyDesc'), color: 'text-amber-500' },

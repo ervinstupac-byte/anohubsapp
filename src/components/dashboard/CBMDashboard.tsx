@@ -130,10 +130,10 @@ const ComponentStatus: React.FC<{ component: any }> = ({ component }) => {
     const daysUntilMaintenance = Math.round((component.nextMaintenance - Date.now()) / (1000 * 60 * 60 * 24));
 
     return (
-        <div className="bg-slate-800 rounded p-2">
+        <div className="bg-slate-800 rounded-none p-2">
             <div className="flex items-center justify-between mb-1">
                 <div className="text-xs font-bold text-slate-300">{component.name}</div>
-                <div className={`text-[10px] px-2 py-0.5 rounded-full bg-${color}-950 text-${color}-300 border border-${color}-500/30`}>
+                <div className={`text-[10px] px-2 py-0.5 rounded-none bg-${color}-950 text-${color}-300 border border-${color}-500/30`}>
                     {component.condition}
                 </div>
             </div>

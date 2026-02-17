@@ -84,7 +84,7 @@ export const SovereignSCADA: React.FC = () => {
                                 <div
                                     key={unit.id}
                                     onClick={() => setSelectedUnit(unit.id)}
-                                    className={`p-3 rounded-lg cursor-pointer transition-all ${selectedUnit === unit.id
+                                    className={`p-3 rounded-none cursor-pointer transition-all ${selectedUnit === unit.id
                                             ? `bg-${color}-950 border-2 border-${color}-500`
                                             : 'bg-slate-800 border border-slate-700 hover:bg-slate-750'
                                         }`}
@@ -94,10 +94,10 @@ export const SovereignSCADA: React.FC = () => {
                                             <div className="text-sm font-bold">{unit.id}</div>
                                             <div className="text-xs text-slate-400">{unit.name}</div>
                                         </div>
-                                        <div className={`w-2 h-2 rounded-full bg-${color}-500 animate-pulse`} />
+                                        <div className={`w-2 h-2 rounded-none bg-${color}-500 animate-pulse`} />
                                     </div>
 
-                                    <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden mb-2">
+                                    <div className="relative h-2 bg-slate-700 rounded-none overflow-hidden mb-2">
                                         <div
                                             className={`absolute inset-y-0 left-0 bg-${color}-500 transition-all`}
                                             style={{ width: `${loadPct}%` }}
@@ -142,7 +142,7 @@ export const SovereignSCADA: React.FC = () => {
                                 {fleet.map((unit) => (
                                     <div
                                         key={unit.id}
-                                        className="bg-slate-800 border border-slate-700 rounded p-3 text-center"
+                                        className="bg-slate-800 border border-slate-700 rounded-none p-3 text-center"
                                     >
                                         <div className="text-xs text-slate-400 mb-1">{unit.id}</div>
                                         <div className="text-2xl font-bold font-mono mb-1">
@@ -173,12 +173,12 @@ export const SovereignSCADA: React.FC = () => {
             </div>
 
             {/* View Mode Tabs */}
-            <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 bg-slate-800 border border-slate-700 rounded-lg p-2">
+            <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 bg-slate-800 border border-slate-700 rounded-none p-2">
                 {['OVERVIEW', 'DETAIL', 'TRENDS'].map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode as any)}
-                        className={`px-4 py-2 rounded text-sm font-mono transition-all ${viewMode === mode
+                        className={`px-4 py-2 rounded-none text-sm font-mono transition-all ${viewMode === mode
                                 ? 'bg-purple-600 text-white'
                                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                             }`}
@@ -197,7 +197,7 @@ const TurbineDetailView: React.FC<{ unit: TurbineStatus }> = ({ unit }) => {
         <div className="h-full flex flex-col">
             <div className="text-2xl font-bold mb-4">{unit.id} - {unit.type} Turbine</div>
 
-            <div className="flex-1 bg-slate-900 rounded-lg border border-slate-700 p-6 relative">
+            <div className="flex-1 bg-slate-900 rounded-none border border-slate-700 p-6 relative">
                 {/* Simplified P&ID - would be full SVG schematic in production */}
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
@@ -210,7 +210,7 @@ const TurbineDetailView: React.FC<{ unit: TurbineStatus }> = ({ unit }) => {
                 </div>
 
                 {/* Sensor Overlays */}
-                <div className="absolute top-6 right-6 bg-slate-800/90 border border-slate-700 rounded p-3 space-y-2">
+                <div className="absolute top-6 right-6 bg-slate-800/90 border border-slate-700 rounded-none p-3 space-y-2">
                     <SensorBadge label="VIB_BEARING_1" value={`${unit.vibration} mm/s`} status="normal" />
                     <SensorBadge label="TEMP_BEARING_1" value={`${unit.temperature}°C`} status="normal" />
                     <SensorBadge label="POWER_ACTIVE" value={`${unit.load} MW`} status="normal" />
@@ -255,7 +255,7 @@ const TrendsView: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
                 {/* Vibration vs Power */}
-                <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 flex flex-col">
+                <div className="bg-slate-900 rounded-none border border-slate-700 p-4 flex flex-col">
                     <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase tracking-wider">Vibration vs Power</h3>
                     <div className="flex-1 w-full min-h-[200px]">
                         <ResponsiveContainer width="100%" height="100%">
@@ -286,7 +286,7 @@ const TrendsView: React.FC = () => {
                 </div>
 
                 {/* Hydraulic Head */}
-                <div className="bg-slate-900 rounded-lg border border-slate-700 p-4 flex flex-col">
+                <div className="bg-slate-900 rounded-none border border-slate-700 p-4 flex flex-col">
                     <h3 className="text-sm font-bold text-slate-400 mb-4 uppercase tracking-wider">Hydraulic Head Stability</h3>
                     <div className="flex-1 w-full min-h-[200px]">
                         <ResponsiveContainer width="100%" height="100%">
@@ -319,25 +319,25 @@ const SovereignCommandPanel: React.FC<{ selectedUnit: string | null }> = ({ sele
 
             {selectedUnit ? (
                 <>
-                    <div className="bg-slate-800 border border-slate-700 rounded p-3">
+                    <div className="bg-slate-800 border border-slate-700 rounded-none p-3">
                         <div className="text-sm font-bold mb-3">Manual Control: {selectedUnit}</div>
 
                         <div className="space-y-3">
-                            <button className="w-full px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded text-sm font-mono transition-all">
+                            <button className="w-full px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-none text-sm font-mono transition-all">
                                 🛑 Trigger Veto
                             </button>
 
-                            <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-mono transition-all">
+                            <button className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-none text-sm font-mono transition-all">
                                 ⚙️ Adjust Governor
                             </button>
 
-                            <button className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded text-sm font-mono transition-all">
+                            <button className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-none text-sm font-mono transition-all">
                                 ✅ Approve Action
                             </button>
                         </div>
                     </div>
 
-                    <div className="bg-slate-800 border border-amber-500/30 rounded p-3">
+                    <div className="bg-slate-800 border border-amber-500/30 rounded-none p-3">
                         <div className="text-xs font-bold text-amber-400 mb-2">⚠️ WRITE ACCESS</div>
                         <div className="text-xs text-slate-400">
                             Changes require ARCHITECT approval (Multi-Sig)

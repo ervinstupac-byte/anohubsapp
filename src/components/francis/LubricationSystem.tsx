@@ -19,18 +19,18 @@ export const LubricationSystem: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-300 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-emerald-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+            <header className="bg-black/40 border-b-2 border-emerald-500 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-emerald-600 rounded-3xl border border-white/10 shadow-lg relative group">
+                        <div className="p-4 bg-emerald-600 rounded-none border border-white/10 shadow-none relative group">
                             <Droplet className="w-8 h-8 text-white group-hover:scale-110 transition-transform duration-500" />
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center border-2 border-emerald-600">
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-none flex items-center justify-center border-2 border-emerald-600">
                                 <Activity className="w-2 h-2 text-emerald-600 animate-pulse" />
                             </div>
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-500 text-[10px] font-black border border-emerald-900/50 uppercase tracking-widest">SOP-MECH-020</span>
+                                <span className="px-2 py-0.5 rounded-none bg-emerald-950 text-emerald-500 text-[10px] font-black border border-emerald-900/50 uppercase tracking-widest">SOP-MECH-020</span>
                                 <NeuralPulse />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
@@ -41,7 +41,7 @@ export const LubricationSystem: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
                         <ArrowLeft className="w-4 h-4 text-emerald-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.lubrication.return')}</span>
@@ -78,7 +78,7 @@ export const LubricationSystem: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="overflow-hidden rounded-3xl border border-white/10 shadow-2xl bg-black/40 mb-8">
+                        <div className="overflow-hidden rounded-none border border-white/10 shadow-none bg-black/40 mb-8">
                             <table className="w-full text-left text-xs border-collapse">
                                 <thead>
                                     <tr className="bg-emerald-900/40 text-emerald-400 uppercase font-black text-[9px] tracking-[0.2em]">
@@ -105,7 +105,7 @@ export const LubricationSystem: React.FC = () => {
                             </table>
                         </div>
 
-                        <div className="p-6 bg-amber-900/10 border-2 border-amber-600/30 rounded-3xl flex items-start gap-6 shadow-inner">
+                        <div className="p-6 bg-amber-900/10 border-2 border-amber-600/30 rounded-none flex items-start gap-6 shadow-none">
                             <AlertTriangle className="text-amber-500 w-10 h-10 flex-shrink-0 animate-pulse" />
                             <div>
                                 <span className="text-amber-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1 block">
@@ -122,14 +122,14 @@ export const LubricationSystem: React.FC = () => {
                 {/* Inventory & Manual Route Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Inventory */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8">
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-8">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                             <Info className="w-6 h-6 text-blue-500" />
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.lubrication.s2Title')}</h2>
                         </div>
                         <div className="grid gap-6">
                             {[1, 2, 3].map((num) => (
-                                <div key={num} className="p-5 bg-black/40 border border-white/5 rounded-2xl group hover:border-blue-500/30 transition-all flex justify-between items-center">
+                                <div key={num} className="p-5 bg-black/40 border border-white/5 rounded-none group hover:border-blue-500/30 transition-all flex justify-between items-center">
                                     <div className="flex flex-col">
                                         <span className="text-blue-400 text-[9px] font-black uppercase tracking-widest mb-1 group-hover:text-blue-300 transition-colors">
                                             {t(`francis.lubrication.l${num}Type`)}
@@ -138,7 +138,7 @@ export const LubricationSystem: React.FC = () => {
                                             {t(`francis.lubrication.l${num}Use`)}
                                         </p>
                                     </div>
-                                    <div className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${num === 2 ? 'bg-slate-800 text-slate-500 border-slate-700' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
+                                    <div className={`px-4 py-1 rounded-none text-[9px] font-black uppercase tracking-widest border ${num === 2 ? 'bg-slate-800 text-slate-500 border-slate-700' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
                                         {t(`francis.lubrication.l${num}St`)}
                                     </div>
                                 </div>
@@ -147,16 +147,15 @@ export const LubricationSystem: React.FC = () => {
                     </section>
 
                     {/* Manual Route */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full -mr-32 -mt-32" />
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-8 relative overflow-hidden">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4 relative z-10">
                             <MapPin className="w-6 h-6 text-emerald-500" />
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.lubrication.s3Title')}</h2>
                         </div>
                         <div className="grid gap-4 relative z-10">
                             {[1, 2, 3].map((num) => (
-                                <div key={num} className="flex items-center gap-4 p-5 bg-black/60 border border-white/10 rounded-2xl hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group">
-                                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform">
+                                <div key={num} className="flex items-center gap-4 p-5 bg-black/60 border border-white/10 rounded-none hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all group">
+                                    <div className="w-8 h-8 rounded-none bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 group-hover:scale-110 transition-transform">
                                         <span className="text-emerald-500 font-black text-xs">P{num}</span>
                                     </div>
                                     <span className="text-xs text-slate-200 font-black uppercase tracking-widest">

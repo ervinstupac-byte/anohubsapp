@@ -92,7 +92,7 @@ export const MasterControlRoom: React.FC = () => {
                             <h1 className="text-4xl font-black tracking-tighter text-white flex items-center gap-3">
                                 <LayoutDashboard className={`w-10 h-10 ${theme.text} drop-shadow-sm`} />
                                 SOVEREIGN <span className="text-slate-500">COMMAND</span>
-                                <span className={`text-xs font-mono ${theme.text} ${theme.bg} border ${theme.border} px-3 py-1 rounded ml-4 tracking-widest`}>
+                                <span className={`text-xs font-mono ${theme.text} ${theme.bg} border ${theme.border} px-3 py-1 rounded-none ml-4 tracking-widest`}>
                                     {plantName.toUpperCase()}
                                 </span>
                             </h1>
@@ -113,7 +113,7 @@ export const MasterControlRoom: React.FC = () => {
                 </div>
 
                 {/* Global Turbine Selector */}
-                <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <div className="bg-slate-900 border border-slate-800 rounded-none p-4">
                     <div className="flex items-center justify-between">
                         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                             <Activity className="w-4 h-4 text-emerald-500" />
@@ -127,7 +127,7 @@ export const MasterControlRoom: React.FC = () => {
                                 <button
                                     key={t.id}
                                     onClick={() => setSelectedVariant(t.id)}
-                                    className={`px-2 py-2 rounded border text-[10px] font-mono uppercase truncate ${
+                                    className={`px-2 py-2 rounded-none border text-[10px] font-mono uppercase truncate ${
                                         selectedVariant === t.id
                                             ? 'border-emerald-500 bg-emerald-900/20 text-emerald-300'
                                             : 'border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -145,7 +145,7 @@ export const MasterControlRoom: React.FC = () => {
                     {/* Left Column: Mission Control & Scenarios */}
                     <div className="col-span-3 space-y-6">
                         <ScenarioController />
-                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+                        <div className="bg-slate-900 border border-slate-800 rounded-none p-6 space-y-4">
                             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                                 Safety Integrity Level
@@ -165,7 +165,7 @@ export const MasterControlRoom: React.FC = () => {
 
                     {/* Middle Column: Efficiency & Distribution */}
                     <div className="col-span-5">
-                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <div className="bg-slate-900 border border-slate-800 rounded-none p-6">
                             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <Activity className="w-4 h-4 text-cyan-500" />
                                 Efficiency Monitor (Placeholder)
@@ -174,7 +174,7 @@ export const MasterControlRoom: React.FC = () => {
                                 Module not available in this build. Live charts load in full system.
                             </p>
                         </div>
-                        <div className="mt-6 bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <div className="mt-6 bg-slate-900 border border-slate-800 rounded-none p-6">
                             <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <Activity className="w-4 h-4 text-emerald-500" />
                                 Sovereign Pulse
@@ -187,14 +187,14 @@ export const MasterControlRoom: React.FC = () => {
 
                     {/* Right Column: Financials & Projections */}
                     <div className="col-span-4 space-y-6">
-                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+                        <div className="bg-slate-900 border border-slate-800 rounded-none p-6 space-y-6">
                             <h3 className="text-lg font-bold text-white flex items-center gap-2">
                                 <DollarSign className="w-5 h-5 text-emerald-400" />
                                 Economic Projections
                             </h3>
 
                             <div className="space-y-6">
-                                <div className="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-lg">
+                                <div className="flex items-center justify-between p-4 bg-slate-950 border border-slate-800 rounded-none">
                                     <div>
                                         <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Current Spot Revenue</div>
                                         <div className="text-2xl font-black text-white mt-1">€180.00 <span className="text-xs font-normal text-slate-500">MWh</span></div>
@@ -208,14 +208,14 @@ export const MasterControlRoom: React.FC = () => {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg">
+                                    <div className="p-4 bg-slate-950 border border-slate-800 rounded-none">
                                         <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2 flex items-center gap-1">
                                             <Zap className="w-3 h-3" />
                                             Grid Demand
                                         </div>
                                         <div className="text-xl font-bold text-sky-400">110.0 MW</div>
                                     </div>
-                                    <div className="p-4 bg-slate-950 border border-slate-800 rounded-lg">
+                                    <div className="p-4 bg-slate-950 border border-slate-800 rounded-none">
                                         <div className="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-2 flex items-center gap-1">
                                             <TrendingUp className="w-3 h-3" />
                                             ROI Forecast
@@ -231,7 +231,7 @@ export const MasterControlRoom: React.FC = () => {
 
             {/* NC-300: Optimization HUD Overlay */}
             <div className="absolute bottom-6 right-6 z-[1000] w-80 pointer-events-none hidden md:block">
-                <div className="bg-slate-950/85 backdrop-blur-md border border-slate-700/50 rounded-2xl p-4 shadow-2xl space-y-3 overflow-hidden relative">
+                <div className="bg-slate-950/85 backdrop-blur-md border border-slate-700/50 rounded-none p-4 shadow-2xl space-y-3 overflow-hidden relative">
                     <div className="absolute inset-0 bg-emerald-500/5" />
                     <div className="flex items-center gap-2 mb-2 border-b border-white/10 pb-2 relative z-10">
                         <Activity className="w-4 h-4 text-emerald-400" />
@@ -246,7 +246,7 @@ export const MasterControlRoom: React.FC = () => {
                             <span className="text-slate-400">η_max (Target)</span>
                             <span className="text-cyan-400 font-bold">{hud.etaMax.toFixed(2)}%</span>
                         </div>
-                        <div className={`col-span-2 mt-1 px-2 py-1 rounded border ${hud.badgeBg} flex items-center justify-between`}>
+                        <div className={`col-span-2 mt-1 px-2 py-1 rounded-none border ${hud.badgeBg} flex items-center justify-between`}>
                             <span className="text-slate-400 uppercase tracking-widest">Δ Optimization</span>
                             <span className={`font-black ${hud.statusColor}`}>{hud.delta.toFixed(2)}%</span>
                         </div>

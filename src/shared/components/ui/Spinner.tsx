@@ -29,43 +29,42 @@ export const Spinner: React.FC<SpinnerProps> = ({
         <div className={`flex flex-col items-center justify-center gap-6 ${className}`}>
             <div className="relative flex items-center justify-center">
 
-                {/* Glow Effect */}
-                <div className={`absolute bg-cyan-500/30 rounded-full blur-xl ${size === 'xl' ? 'w-48 h-48' : 'w-full h-full scale-150'}`}></div>
-
+                {/* Glow Effect - Removed for HMI Standard */}
+                
                 {/* Outer Static Ring */}
                 <div className={`${currentSize.w} ${currentSize.h} ${currentSize.border} border-slate-800 rounded-full absolute opacity-50`}></div>
 
                 {/* Main Rotating Ring */}
                 <div className={`
                     ${currentSize.w} ${currentSize.h} rounded-full 
-                    ${currentSize.border} border-t-cyan-400 border-r-transparent border-b-cyan-600 border-l-transparent 
-                    animate-spin shadow-[0_0_20px_rgba(34,211,238,0.5)]
+                    ${currentSize.border} border-t-cyan-600 border-r-transparent border-b-cyan-800 border-l-transparent 
+                    animate-spin
                     relative z-10
                 `}></div>
 
                 {/* Inner Counter-Rotating Ring */}
                 {size !== 'sm' && (
                     <div className={`
-                     absolute rounded-full border-t-transparent border-r-slate-500 border-b-transparent border-l-slate-500
+                     absolute rounded-full border-t-transparent border-r-slate-600 border-b-transparent border-l-slate-600
                      animate-[spin_1.5s_linear_infinite_reverse] opacity-60
                      ${size === 'xl' ? 'w-20 h-20 border-4' : size === 'lg' ? 'w-12 h-12 border-2' : 'w-7 h-7 border-2'}
                    `}></div>
                 )}
 
                 {/* Center Dot */}
-                <div className={`absolute bg-white rounded-full ${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'}`}></div>
+                <div className={`absolute bg-slate-400 rounded-none ${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'}`}></div>
             </div>
 
             {text && (
                 <div className="flex flex-col items-center gap-1">
-                    <div className="text-cyan-400 font-mono text-xs font-bold uppercase tracking-[0.3em]">
+                    <div className="text-cyan-600 font-mono text-xs font-bold uppercase tracking-[0.3em]">
                         {text}
                     </div>
                     {/* Loading dots */}
                     <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-1 h-1 bg-cyan-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0s' }}></div>
+                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1 h-1 bg-cyan-700 rounded-none animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                 </div>
             )}
@@ -74,7 +73,7 @@ export const Spinner: React.FC<SpinnerProps> = ({
 
     if (fullScreen) {
         return (
-            <div className="fixed inset-0 bg-[#020617]/90 backdrop-blur-md z-50 flex items-center justify-center animate-fade-in pointer-events-none">
+            <div className="fixed inset-0 bg-[#0f172a]/95 z-50 flex items-center justify-center animate-fade-in pointer-events-none">
                 {spinnerContent}
             </div>
         );

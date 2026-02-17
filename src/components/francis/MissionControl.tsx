@@ -70,28 +70,28 @@ export const MissionControl: React.FC = () => {
 
     const getNodeClass = (nodeId: number) => {
         if (step > nodeId) return "border-emerald-500 bg-emerald-950/5 opacity-100";
-        if (step === nodeId) return "border-cyan-500 bg-cyan-950/10 shadow-[0_0_30px_rgba(14,165,233,0.15)] opacity-100 translate-x-2";
+        if (step === nodeId) return "border-cyan-500 bg-cyan-950/10 shadow-none opacity-100 translate-x-2";
         return "border-slate-800 bg-slate-900/40 opacity-40";
     };
 
     const getCircleClass = (nodeId: number) => {
-        if (step > nodeId) return "bg-emerald-500 border-emerald-400 shadow-[0_0_15px_#10b981]";
-        if (step === nodeId) return "bg-slate-950 border-cyan-400 shadow-[0_0_20px_#22d3ee] scale-125";
+        if (step > nodeId) return "bg-emerald-500 border-emerald-400 shadow-none";
+        if (step === nodeId) return "bg-slate-950 border-cyan-400 shadow-none scale-125";
         return "bg-slate-900 border-slate-700";
     };
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl transition-all">
+            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-cyan-600 rounded-3xl border border-white/10 shadow-lg relative group overflow-hidden">
+                        <div className="p-4 bg-cyan-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
                             <Activity className="text-white w-8 h-8 relative z-10 animate-pulse" />
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-500 text-[10px] font-black border border-cyan-900/50 uppercase tracking-widest">SOP-MC-001</span>
+                                <span className="px-2 py-0.5 rounded-none bg-cyan-950 text-cyan-500 text-[10px] font-black border border-cyan-900/50 uppercase tracking-widest">SOP-MC-001</span>
                                 <NeuralPulse color="cyan" />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
@@ -112,7 +112,7 @@ export const MissionControl: React.FC = () => {
                         </div>
                         <button
                             onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                            className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
+                            className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                         >
                             <ArrowLeft className="w-4 h-4 text-cyan-500 group-hover:-translate-x-1 transition" />
                             <span>{t('francis.missionControl.returnBtn')}</span>
@@ -124,20 +124,20 @@ export const MissionControl: React.FC = () => {
             <main className="max-w-6xl mx-auto px-4 md:px-8">
 
                 {/* 1. Precision Audit Panel */}
-                <div className="mb-12 p-8 bg-slate-900/60 rounded-[2.5rem] border border-white/5 backdrop-blur-md relative overflow-hidden group">
+                <div className="mb-12 p-8 bg-slate-900/60 rounded-none border border-white/5 backdrop-blur-md relative overflow-hidden group">
                     <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-6">
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 italic">
                             <Cpu className="w-4 h-4 text-purple-500" /> {t('francis.missionControl.simTitle')}
                         </span>
-                        <div className="px-3 py-1 bg-purple-600 text-white text-[9px] font-black rounded-lg shadow-lg uppercase tracking-widest">Expert Override Mode</div>
+                        <div className="px-3 py-1 bg-purple-600 text-white text-[9px] font-black rounded-none shadow-none uppercase tracking-widest">Expert Override Mode</div>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {(['n2', 'sync', 'dp', 'angle'] as const).map((f) => (
                             <button
                                 key={f}
                                 onClick={() => toggleFault(f)}
-                                className={`p-4 rounded-2xl border transition-all duration-300 group/fault ${faults[f]
-                                    ? 'bg-red-950/30 border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.15)]'
+                                className={`p-4 rounded-none border transition-all duration-300 group/fault ${faults[f]
+                                    ? 'bg-red-950/30 border-red-500 shadow-none'
                                     : 'bg-black/40 border-white/5 hover:border-purple-500/50 grayscale hover:grayscale-0'}`}
                             >
                                 <div className="text-[9px] font-black uppercase tracking-tighter transition-colors mb-1 opacity-60 group-hover/fault:opacity-100">
@@ -154,9 +154,9 @@ export const MissionControl: React.FC = () => {
                 {/* 2. Sequence Workflow */}
                 <div className="relative pl-12 md:pl-20 py-8">
                     {/* Vertical Progression Rail */}
-                    <div className="absolute left-6 md:left-10 top-0 bottom-0 w-1.5 bg-slate-900 border-x border-white/5 rounded-full overflow-hidden">
+                    <div className="absolute left-6 md:left-10 top-0 bottom-0 w-1.5 bg-slate-900 border-x border-white/5 rounded-none overflow-hidden">
                         <div
-                            className="absolute top-0 left-0 w-full bg-emerald-500 shadow-[0_0_20px_#10b981] transition-all duration-1000 ease-in-out"
+                            className="absolute top-0 left-0 w-full bg-emerald-500 shadow-none transition-all duration-1000 ease-in-out"
                             style={{ height: timelineHeight }}
                         />
                     </div>
@@ -168,9 +168,9 @@ export const MissionControl: React.FC = () => {
                         const isBlocked = (nodeId === 1 && faults.n2) || (nodeId === 2 && faults.sync) || (nodeId === 3 && faults.dp) || (nodeId === 4 && faults.angle);
 
                         return (
-                            <div key={nodeId} className={`relative mb-16 p-10 rounded-[3rem] border transition-all duration-700 backdrop-blur-md group/node ${getNodeClass(nodeId)}`}>
+                            <div key={nodeId} className={`relative mb-16 p-10 rounded-none border transition-all duration-700 backdrop-blur-md group/node ${getNodeClass(nodeId)}`}>
                                 {/* Node Bullet */}
-                                <div className={`absolute -left-[3.35rem] md:-left-[4.35rem] top-12 w-8 h-8 rounded-full border-4 transition-all duration-700 z-10 flex items-center justify-center font-black text-[10px] ${getCircleClass(nodeId)} ${step >= nodeId ? 'text-white' : 'text-slate-700'}`}>
+                                <div className={`absolute -left-[3.35rem] md:-left-[4.35rem] top-12 w-8 h-8 rounded-none border-4 transition-all duration-700 z-10 flex items-center justify-center font-black text-[10px] ${getCircleClass(nodeId)} ${step >= nodeId ? 'text-white' : 'text-slate-700'}`}>
                                     {nodeId}
                                 </div>
 
@@ -179,7 +179,7 @@ export const MissionControl: React.FC = () => {
                                         <div className="flex items-center gap-4">
                                             <Icon className={`w-10 h-10 ${step >= nodeId ? 'text-cyan-400' : 'text-slate-700'}`} />
                                             <div>
-                                                <h3 className={`text-2xl font-black uppercase tracking-tighter ${step >= nodeId ? 'text-white shadow-cyan-900/20' : 'text-slate-700'}`}>
+                                                <h3 className={`text-2xl font-black uppercase tracking-tighter ${step >= nodeId ? 'text-white shadow-none' : 'text-slate-700'}`}>
                                                     {t(`francis.missionControl.${nodeKey}.title`)}
                                                 </h3>
                                                 <p className={`text-sm font-bold italic transition-colors leading-relaxed uppercase tracking-tighter ${step >= nodeId ? 'text-slate-400' : 'text-slate-800'}`}>
@@ -189,7 +189,7 @@ export const MissionControl: React.FC = () => {
                                         </div>
 
                                         {/* Dynamic Data Module */}
-                                        <div className={`p-6 rounded-3xl border transition-all duration-500 ${step >= nodeId ? 'bg-black/40 border-white/5' : 'bg-transparent border-transparent opacity-20'}`}>
+                                        <div className={`p-6 rounded-none border transition-all duration-500 ${step >= nodeId ? 'bg-black/40 border-white/5' : 'bg-transparent border-transparent opacity-20'}`}>
                                             {nodeId === 1 && (
                                                 <div className="grid grid-cols-2 gap-8">
                                                     <div>
@@ -232,8 +232,8 @@ export const MissionControl: React.FC = () => {
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div className="w-full h-2.5 bg-slate-900 rounded-full border border-white/5 overflow-hidden shadow-inner">
-                                                        <div className={`h-full transition-all duration-300 ${faults.dp && forensicPressure >= 11 ? 'bg-red-500' : 'bg-cyan-500'} shadow-[0_0_15px_rgba(34,211,238,0.3)]`} style={{ width: `${(forensicPressure / 14.5) * 100}%` }} />
+                                                    <div className="w-full h-2.5 bg-slate-900 rounded-none border border-white/5 overflow-hidden shadow-none">
+                                                        <div className={`h-full transition-all duration-300 ${faults.dp && forensicPressure >= 11 ? 'bg-red-500' : 'bg-cyan-500'} shadow-none`} style={{ width: `${(forensicPressure / 14.5) * 100}%` }} />
                                                     </div>
                                                 </div>
                                             )}
@@ -254,7 +254,7 @@ export const MissionControl: React.FC = () => {
                                         </div>
 
                                         {isBlocked && step === nodeId && (
-                                            <div className="p-6 bg-red-950/20 border-2 border-red-500/50 rounded-[2rem] flex items-center gap-6 animate-[shake_0.5s_infinite]">
+                                            <div className="p-6 bg-red-950/20 border-2 border-red-500/50 rounded-none flex items-center gap-6 animate-[shake_0.5s_infinite]">
                                                 <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
                                                 <div>
                                                     <h4 className="text-red-500 font-black text-[10px] uppercase tracking-widest italic mb-1">Safety Critical Blockage</h4>
@@ -271,14 +271,14 @@ export const MissionControl: React.FC = () => {
 
                                     <div className="w-full md:w-80 flex flex-col justify-center">
                                         {step > nodeId ? (
-                                            <div className="w-full py-4 bg-emerald-600 text-white font-black rounded-3xl text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-2xl shadow-emerald-900/30 italic">
+                                            <div className="w-full py-4 bg-emerald-600 text-white font-black rounded-none text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-none italic">
                                                 <ShieldCheck className="w-4 h-4" /> Logic Confirmed
                                             </div>
                                         ) : step === nodeId ? (
                                             nodeId === 3 && !isFilling && forensicPressure < 14.5 ? (
                                                 <button
                                                     onClick={() => setIsFilling(true)}
-                                                    className="w-full py-5 bg-cyan-600 hover:bg-cyan-500 border-2 border-cyan-400 text-white font-black rounded-3xl text-sm uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(14,165,233,0.3)] transition-all hover:scale-105 italic flex items-center justify-center gap-4 group/btn"
+                                                    className="w-full py-5 bg-cyan-600 hover:bg-cyan-500 border-2 border-cyan-400 text-white font-black rounded-none text-sm uppercase tracking-[0.2em] shadow-none transition-all hover:scale-105 italic flex items-center justify-center gap-4 group/btn"
                                                 >
                                                     <Waves className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                                     {t('francis.missionControl.actions.startFilling')}
@@ -286,16 +286,16 @@ export const MissionControl: React.FC = () => {
                                             ) : (
                                                 <button
                                                     onClick={() => confirmStep(nodeId)}
-                                                    className={`w-full py-5 rounded-3xl text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 italic flex items-center justify-center gap-4 group/btn ${isBlocked
+                                                    className={`w-full py-5 rounded-none text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 italic flex items-center justify-center gap-4 group/btn ${isBlocked
                                                         ? 'bg-red-950/20 border-2 border-red-500 text-red-500 opacity-60 cursor-not-allowed'
-                                                        : 'bg-indigo-600 hover:bg-indigo-500 border-2 border-indigo-400 text-white shadow-[0_0_30px_rgba(79,70,229,0.3)] hover:scale-105'}`}
+                                                        : 'bg-indigo-600 hover:bg-indigo-500 border-2 border-indigo-400 text-white shadow-none hover:scale-105'}`}
                                                 >
                                                     {isBlocked ? <Lock className="w-5 h-5" /> : <ShieldCheck className="w-5 h-5 group-hover:rotate-12 transition-transform" />}
                                                     {nodeId === 4 ? t('francis.missionControl.actions.openMiv') : nodeId === 3 ? t('francis.missionControl.actions.fillingComplete') : nodeId === 2 ? t('francis.missionControl.actions.confirmZero') : t('francis.missionControl.actions.confirm')}
                                                 </button>
                                             )
                                         ) : (
-                                            <div className="w-full py-4 bg-slate-900 text-slate-700 font-black rounded-3xl text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 italic">
+                                            <div className="w-full py-4 bg-slate-900 text-slate-700 font-black rounded-none text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 italic">
                                                 Locked Sequence
                                             </div>
                                         )}
@@ -307,26 +307,26 @@ export const MissionControl: React.FC = () => {
                 </div>
 
                 {/* ESD - Global Safety Layer */}
-                <div className="mt-12 bg-red-950/20 border-l-[16px] border-red-600 p-12 rounded-r-[4rem] border border-red-900/20 relative group overflow-hidden">
+                <div className="mt-12 bg-red-950/20 border-l-[16px] border-red-600 p-12 rounded-none border border-red-900/20 relative group overflow-hidden">
                     <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
                         <AlertTriangle className="w-64 h-64 text-red-600" />
                     </div>
                     <div className="flex items-center gap-8 mb-10 relative z-10">
-                        <div className="p-6 bg-red-600 rounded-[2rem] shadow-3xl">
+                        <div className="p-6 bg-red-600 rounded-none shadow-none">
                             <ShieldAlert className="text-white w-12 h-12 animate-pulse" />
                         </div>
                         <div>
                             <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-1 italic">{t('francis.missionControl.esdTitle')}</h2>
-                            <div className="px-4 py-1 bg-red-900/40 text-red-500 text-[10px] font-black uppercase tracking-widest rounded-lg border border-red-900/50 inline-block italic">Emergency Shutdown Protocol Active</div>
+                            <div className="px-4 py-1 bg-red-900/40 text-red-500 text-[10px] font-black uppercase tracking-widest rounded-none border border-red-900/50 inline-block italic">Emergency Shutdown Protocol Active</div>
                         </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
-                        <div className="flex items-center gap-5 p-6 bg-black/40 rounded-3xl border border-red-500/20 group/stat">
-                            <div className="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] group-hover:scale-125 transition-transform" />
+                        <div className="flex items-center gap-5 p-6 bg-black/40 rounded-none border border-red-500/20 group/stat">
+                            <div className="w-4 h-4 rounded-none bg-emerald-500 shadow-none group-hover:scale-125 transition-transform" />
                             <span className="text-sm font-black text-red-100 uppercase tracking-tighter italic">Gravity Weights: <span className="text-emerald-500">ARMED & NOMINAL</span></span>
                         </div>
-                        <div className="flex items-center gap-5 p-6 bg-black/40 rounded-3xl border border-red-500/20 group/stat">
-                            <div className="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981] group-hover:scale-125 transition-transform" />
+                        <div className="flex items-center gap-5 p-6 bg-black/40 rounded-none border border-red-500/20 group/stat">
+                            <div className="w-4 h-4 rounded-none bg-emerald-500 shadow-none group-hover:scale-125 transition-transform" />
                             <span className="text-sm font-black text-red-100 uppercase tracking-tighter italic">Hydraulic Integrity: <span className="text-emerald-500">NOMINAL FLUX</span></span>
                         </div>
                     </div>

@@ -38,7 +38,7 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
 
         {/* Turbine Runner */}
         <div className={`
-            w-36 h-24 mx-auto rounded-b-sm border-x-[2px] border-b-[2px] flex items-center justify-center overflow-hidden transition-all duration-700
+            w-36 h-24 mx-auto rounded-none border-x-[2px] border-b-[2px] flex items-center justify-center overflow-hidden transition-all duration-700
             ${status === 'running' ? 'border-status-info bg-scada-panel' : 'border-scada-border bg-scada-panel'}
             ${mw === 0 ? 'bg-status-error/10 border-status-error' : ''}
         `}>
@@ -46,7 +46,7 @@ const TurbineUnit: React.FC<{ id: string; name: string; status: 'running' | 'sto
                 <div className="w-full h-full bg-status-info/10 animate-[slide_1s_linear_infinite]"></div>
             )}
             {mw === 0 && (
-                <div className="text-xs font-black text-status-error tracking-tight px-2 py-1 bg-status-error/10 rounded-sm border border-status-error/30">EMERGENCY SHUTDOWN</div>
+                <div className="text-xs font-black text-status-error tracking-tight px-2 py-1 bg-status-error/10 rounded-none border border-status-error/30">EMERGENCY SHUTDOWN</div>
             )}
         </div>
     </div>

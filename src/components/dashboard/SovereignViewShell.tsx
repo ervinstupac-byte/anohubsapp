@@ -26,10 +26,10 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
   const HeaderIcon = config.icon;
 
   return (
-    <div className="w-full bg-scada-bg p-6 text-scada-text border border-scada-border rounded-sm">
+    <div className="w-full bg-scada-bg p-6 text-scada-text border border-scada-border rounded-none">
       <div className="flex items-center justify-between mb-6 border-b border-scada-border pb-4">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-sm ${config.iconWrapClassName}`}>
+          <div className={`p-2 rounded-none ${config.iconWrapClassName}`}>
             <HeaderIcon className={`w-6 h-6 ${config.iconClassName}`} />
           </div>
           <div>

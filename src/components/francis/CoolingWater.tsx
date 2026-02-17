@@ -34,7 +34,7 @@ export const CoolingWater: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12 selection:bg-cyan-500/30">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+            <header className="bg-black/40 border-b-2 border-cyan-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
@@ -47,13 +47,13 @@ export const CoolingWater: React.FC = () => {
                     </div>
 
                     <div className="flex gap-4">
-                        <div className="bg-black/40 border border-cyan-500/30 px-4 py-2 rounded-2xl flex flex-col items-end">
+                        <div className="bg-black/40 border border-cyan-500/30 px-4 py-2 rounded-none flex flex-col items-end">
                             <span className="text-[8px] text-cyan-500 font-black uppercase tracking-tighter">Current Flow</span>
                             <span className="text-xl font-black font-mono text-white">{coolingFlow} <span className="text-[10px] text-slate-500">L/s</span></span>
                         </div>
                         <button
                             onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                            className="flex items-center gap-2 px-6 py-2 bg-cyan-600/10 border-2 border-cyan-500/50 text-cyan-400 rounded-full font-black hover:bg-cyan-500 hover:text-white hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all group uppercase text-xs tracking-tighter"
+                            className="flex items-center gap-2 px-6 py-2 bg-cyan-600/10 border-2 border-cyan-500/50 text-cyan-400 rounded-none font-black hover:bg-cyan-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
                         >
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                             <span>{t('francis.coolingWater.return') || "Return"}</span>
@@ -72,13 +72,13 @@ export const CoolingWater: React.FC = () => {
                         </div>
 
                         <div className="relative z-10 space-y-6">
-                            <div className="bg-black/40 p-6 rounded-3xl border border-white/5 mb-6">
+                            <div className="bg-black/40 p-6 rounded-none border border-white/5 mb-6">
                                 <div className="flex justify-between items-center mb-4">
                                     <span className="text-slate-400 text-xs font-black uppercase tracking-widest">{t('francis.coolingWater.dpVal')}</span>
-                                    <span className="text-emerald-400 font-mono font-black text-xl bg-emerald-900/20 px-4 py-1 rounded-full border border-emerald-500/20">0.12 BAR</span>
+                                    <span className="text-emerald-400 font-mono font-black text-xl bg-emerald-900/20 px-4 py-1 rounded-none border border-emerald-500/20">0.12 BAR</span>
                                 </div>
-                                <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
-                                    <div className="w-[24%] bg-gradient-to-r from-cyan-500 to-emerald-500 h-full shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+                                <div className="w-full bg-slate-800 h-3 rounded-none overflow-hidden">
+                                    <div className="w-[24%] bg-gradient-to-r from-cyan-500 to-emerald-500 h-full shadow-none" />
                                 </div>
                                 <p className="text-[10px] text-slate-500 mt-4 italic font-bold leading-relaxed">{t('francis.coolingWater.dpDesc')}</p>
                             </div>
@@ -86,17 +86,17 @@ export const CoolingWater: React.FC = () => {
                             <div className="space-y-4">
                                 <h4 className="text-cyan-400 font-black text-[10px] uppercase tracking-[0.2em] border-b border-white/5 pb-2">{t('francis.coolingWater.flushLogic')}</h4>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div className="p-4 bg-white/5 rounded-none border border-white/10 hover:bg-white/10 transition-colors">
                                         <Activity className="w-5 h-5 text-cyan-400 mb-2" />
                                         <strong className="block text-white text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.trig')}</strong>
                                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">0.30 Bar Delta</span>
                                     </div>
-                                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
+                                    <div className="p-4 bg-white/5 rounded-none border border-white/10 hover:bg-white/10 transition-colors">
                                         <RefreshCw className="w-5 h-5 text-emerald-400 mb-2 animate-spin-slow" />
                                         <strong className="block text-white text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.act')}</strong>
                                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">60s Flush Cycle</span>
                                     </div>
-                                    <div className="p-4 bg-red-900/10 rounded-2xl border border-red-500/20 hover:bg-red-900/20 transition-colors">
+                                    <div className="p-4 bg-red-900/10 rounded-none border border-red-500/20 hover:bg-red-900/20 transition-colors">
                                         <AlertTriangle className="w-5 h-5 text-red-500 mb-2" />
                                         <strong className="block text-red-400 text-[10px] font-black uppercase mb-1">{t('francis.coolingWater.jam')}</strong>
                                         <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tighter">Manual Override</span>
@@ -108,7 +108,7 @@ export const CoolingWater: React.FC = () => {
 
                     {/* Component Performance */}
                     <GlassCard title={t('francis.coolingWater.s2Title')} icon={<Thermometer className="text-cyan-400" />}>
-                        <div className="overflow-hidden rounded-3xl border border-white/5 bg-black/40">
+                        <div className="overflow-hidden rounded-none border border-white/5 bg-black/40">
                             <table className="w-full text-left text-xs border-collapse">
                                 <thead>
                                     <tr className="bg-cyan-900/40 text-cyan-400 font-black text-[9px] uppercase tracking-[0.2em]">
@@ -125,7 +125,7 @@ export const CoolingWater: React.FC = () => {
                                                 {i === 1 ? '850 m³/h' : i === 2 ? '45 L/min' : '30 L/min'}
                                             </td>
                                             <td className="p-4 text-right">
-                                                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[9px] font-black rounded-full border border-emerald-500/20 uppercase tracking-widest">
+                                                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[9px] font-black rounded-none border border-emerald-500/20 uppercase tracking-widest">
                                                     {t('francis.coolingWater.healthy')}
                                                 </span>
                                             </td>
@@ -135,7 +135,7 @@ export const CoolingWater: React.FC = () => {
                             </table>
                         </div>
 
-                        <div className="mt-6 p-6 bg-gradient-to-br from-cyan-950/40 to-black rounded-3xl border border-cyan-500/20 flex justify-between items-center group overflow-hidden relative">
+                        <div className="mt-6 p-6 bg-gradient-to-br from-cyan-950/40 to-black rounded-none border border-cyan-500/20 flex justify-between items-center group overflow-hidden relative">
                             <div className="absolute inset-0 bg-cyan-500/5 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
                             <div className="relative z-10 flex flex-col">
                                 <span className="text-[10px] text-cyan-500 font-black uppercase tracking-[0.2em] mb-1">{t('francis.coolingWater.inletTemp')}</span>
@@ -147,7 +147,7 @@ export const CoolingWater: React.FC = () => {
                 </div>
 
                 {/* Thermal Regulation Logic Tabs */}
-                <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8">
+                <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-8">
                     <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                         <Activity className="w-6 h-6 text-cyan-400" />
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{t('francis.coolingWater.s3Title')}</h2>
@@ -162,12 +162,12 @@ export const CoolingWater: React.FC = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex-1 p-6 rounded-3xl border-2 transition-all duration-500 flex flex-col items-center gap-4 group relative overflow-hidden ${activeTab === tab.id
-                                    ? `${tab.bg} ${tab.border} ${tab.color} shadow-[0_0_30px_rgba(6,182,212,0.15)]`
+                                className={`flex-1 p-6 rounded-none border-2 transition-all duration-500 flex flex-col items-center gap-4 group relative overflow-hidden ${activeTab === tab.id
+                                    ? `${tab.bg} ${tab.border} ${tab.color} shadow-none`
                                     : 'bg-black/40 border-white/5 text-slate-500 hover:border-white/10'
                                     }`}
                             >
-                                <div className={`p-4 rounded-2xl ${activeTab === tab.id ? 'bg-white/10' : 'bg-white/5'} transition-colors`}>
+                                <div className={`p-4 rounded-none ${activeTab === tab.id ? 'bg-white/10' : 'bg-white/5'} transition-colors`}>
                                     <tab.icon className={`w-8 h-8 ${activeTab === tab.id ? tab.color : 'text-slate-600'}`} />
                                 </div>
                                 <span className={`font-black uppercase tracking-[0.2em] text-xs ${activeTab === tab.id ? 'text-white' : 'text-slate-500'}`}>{tab.label}</span>
@@ -176,7 +176,7 @@ export const CoolingWater: React.FC = () => {
                         ))}
                     </div>
 
-                    <div className="bg-black/60 p-8 rounded-3xl border border-white/5 min-h-[200px] flex items-center justify-center relative overflow-hidden shadow-2xl">
+                    <div className="bg-black/60 p-8 rounded-none border border-white/5 min-h-[200px] flex items-center justify-center relative overflow-hidden shadow-none">
                         <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
 
                         {activeTab === 'winter' && (
@@ -193,7 +193,7 @@ export const CoolingWater: React.FC = () => {
                                 <h4 className="text-2xl font-black text-amber-400 uppercase tracking-tighter">{t('francis.coolingWater.modeFull')}</h4>
                                 <p className="text-slate-300 text-lg font-bold leading-relaxed">{t('francis.coolingWater.descSummer')}</p>
                                 <div className="flex justify-center gap-2 pt-4">
-                                    <div className="w-12 h-1 bg-amber-500 rounded-full animate-pulse" />
+                                    <div className="w-12 h-1 bg-amber-500 rounded-none animate-pulse" />
                                 </div>
                             </div>
                         )}

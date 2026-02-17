@@ -28,18 +28,18 @@ export const ActiveAlarmsModal: React.FC<ActiveAlarmsModalProps> = ({ isOpen, on
                 className="absolute inset-0 bg-black/90"
             />
             <div
-                className="relative w-full max-w-2xl max-h-[80vh] flex flex-col bg-scada-panel border border-status-error/30 rounded-sm shadow-scada-card animate-in zoom-in-95 duration-200"
+                className="relative w-full max-w-2xl max-h-[80vh] flex flex-col bg-scada-panel border border-status-error/30 rounded-none shadow-none animate-in zoom-in-95 duration-200"
             >
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-scada-border bg-scada-bg">
                     <div className="flex items-center gap-3">
                         <button 
                             onClick={onClose}
-                            className="p-2 hover:bg-scada-panel rounded-sm text-scada-muted hover:text-scada-text transition-colors lg:hidden border border-transparent hover:border-scada-border"
+                            className="p-2 hover:bg-scada-panel rounded-none text-scada-muted hover:text-scada-text transition-colors lg:hidden border border-transparent hover:border-scada-border"
                         >
                             <ArrowLeft className="w-5 h-5" />
                         </button>
-                        <div className="p-2 bg-status-error/10 border border-status-error/20 rounded-sm">
+                        <div className="p-2 bg-status-error/10 border border-status-error/20 rounded-none">
                             <ShieldAlert className="w-6 h-6 text-status-error animate-pulse" />
                         </div>
                         <div>
@@ -51,7 +51,7 @@ export const ActiveAlarmsModal: React.FC<ActiveAlarmsModalProps> = ({ isOpen, on
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-scada-panel rounded-sm transition-colors border border-transparent hover:border-scada-border"
+                        className="p-2 hover:bg-scada-panel rounded-none transition-colors border border-transparent hover:border-scada-border"
                     >
                         <X className="w-5 h-5 text-scada-muted hover:text-scada-text" />
                     </button>
@@ -69,13 +69,13 @@ export const ActiveAlarmsModal: React.FC<ActiveAlarmsModalProps> = ({ isOpen, on
                         sortedAlarms.map((alarm) => (
                             <div
                                 key={alarm.id}
-                                className={`p-4 rounded-sm border flex items-start gap-4 group relative overflow-hidden transition-colors ${
+                                className={`p-4 rounded-none border flex items-start gap-4 group relative overflow-hidden transition-colors ${
                                     alarm.severity === 'CRITICAL' ? 'bg-status-error/10 border-status-error/50 hover:bg-status-error/15' :
                                     alarm.severity === 'WARNING' ? 'bg-status-warning/10 border-status-warning/50 hover:bg-status-warning/15' :
                                     'bg-status-info/10 border-status-info/50 hover:bg-status-info/15'
                                 }`}
                             >
-                                <div className={`mt-1 p-1.5 rounded-sm border ${
+                                <div className={`mt-1 p-1.5 rounded-none border ${
                                     alarm.severity === 'CRITICAL' ? 'bg-status-error/20 text-status-error border-status-error/30' :
                                     alarm.severity === 'WARNING' ? 'bg-status-warning/20 text-status-warning border-status-warning/30' :
                                     'bg-status-info/20 text-status-info border-status-info/30'
@@ -101,7 +101,7 @@ export const ActiveAlarmsModal: React.FC<ActiveAlarmsModalProps> = ({ isOpen, on
 
                                 <button
                                     onClick={() => acknowledgeAlarm?.(alarm.id)}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1 bg-scada-bg hover:bg-scada-panel border border-scada-border hover:border-scada-text rounded-sm text-[10px] font-bold text-scada-text uppercase tracking-wider font-mono"
+                                    className="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1 bg-scada-bg hover:bg-scada-panel border border-scada-border hover:border-scada-text rounded-none text-[10px] font-bold text-scada-text uppercase tracking-wider font-mono"
                                 >
                                     ACK
                                 </button>
@@ -115,7 +115,7 @@ export const ActiveAlarmsModal: React.FC<ActiveAlarmsModalProps> = ({ isOpen, on
                     <div className="p-4 border-t border-scada-border bg-scada-panel">
                         <button
                             onClick={acknowledgeAllAlarms}
-                            className="w-full py-3 bg-status-error/10 hover:bg-status-error/20 border border-status-error/30 rounded-sm text-status-error font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all font-mono"
+                            className="w-full py-3 bg-status-error/10 hover:bg-status-error/20 border border-status-error/30 rounded-none text-status-error font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all font-mono"
                         >
                             <Activity className="w-4 h-4" />
                             Acknowledge All Events

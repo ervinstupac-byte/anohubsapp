@@ -77,17 +77,17 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                     onClick={(e) => e.stopPropagation()}
                     className="w-full max-w-6xl h-[90vh] flex flex-col"
                 >
-                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-2xl">
+                    <GlassCard className="flex-1 flex flex-col overflow-hidden border-cyan-500/30 shadow-none">
                         {/* Header */}
                         <div className="flex items-center justify-between px-6 py-4 bg-slate-900/90 border-b border-white/10">
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={onClose}
-                                    className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors"
+                                    className="p-2 hover:bg-white/10 rounded-none text-slate-400 hover:text-white transition-colors"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
-                                <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                                <div className="p-3 bg-red-500/10 rounded-none border border-red-500/20">
                                     <FileText className="w-6 h-6 text-red-400" />
                                 </div>
                                 <div>
@@ -96,7 +96,7 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                                     </h3>
                                     <div className="flex items-center gap-3 text-xs text-slate-400 font-mono mt-1">
                                         <span className="text-slate-300">{filename}</span>
-                                        <span className="w-1 h-1 rounded-full bg-slate-600" />
+                                        <span className="w-1 h-1 rounded-none bg-slate-600" />
                                         <span>{formatSize(pdfBlob.size)}</span>
                                     </div>
                                 </div>
@@ -104,21 +104,21 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                             <div className="flex items-center gap-3">
                                 <button
                                     onClick={handleShare}
-                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white"
+                                    className="p-2 hover:bg-white/10 rounded-none transition-colors text-slate-400 hover:text-white"
                                     title="Share Link"
                                 >
                                     {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Share2 className="w-5 h-5" />}
                                 </button>
                                 <button
                                     onClick={handlePrint}
-                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white"
+                                    className="p-2 hover:bg-white/10 rounded-none transition-colors text-slate-400 hover:text-white"
                                     title="Print"
                                 >
                                     <Printer className="w-5 h-5" />
                                 </button>
                                 <button
                                     onClick={handleDownload}
-                                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-sm font-bold rounded-lg transition-all"
+                                    className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-sm font-bold rounded-none transition-all"
                                 >
                                     <Download className="w-4 h-4" />
                                     <span>{t('actions.download', 'Download')}</span>
@@ -126,7 +126,7 @@ export const PdfPreviewModal: React.FC<PdfPreviewModalProps> = ({
                                 <div className="w-px h-8 bg-white/10 mx-2" />
                                 <button
                                     onClick={onClose}
-                                    className="p-2 hover:bg-red-500/20 rounded-full transition-colors text-slate-400 hover:text-red-400"
+                                    className="p-2 hover:bg-red-500/20 rounded-none transition-colors text-slate-400 hover:text-red-400"
                                 >
                                     <X className="w-6 h-6" />
                                 </button>

@@ -5,42 +5,42 @@ export const STATUS_COLORS: Record<
   { dot: string; bg: string; border: string; text: string; glow: string; hex: string }
 > = {
   nominal: {
-    dot: 'bg-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20',
-    text: 'text-emerald-300',
-    glow: 'shadow-[0_0_20px_rgba(16,185,129,0.12)]',
+    dot: 'bg-emerald-500',
+    bg: 'bg-emerald-900/20',
+    border: 'border-emerald-700/50',
+    text: 'text-emerald-400',
+    glow: 'shadow-none',
     hex: '#34d399'
   },
   warning: {
-    dot: 'bg-amber-400',
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20',
-    text: 'text-amber-300',
-    glow: 'shadow-[0_0_20px_rgba(245,158,11,0.12)]',
+    dot: 'bg-amber-500',
+    bg: 'bg-amber-900/20',
+    border: 'border-amber-700/50',
+    text: 'text-amber-400',
+    glow: 'shadow-none',
     hex: '#fbbf24'
   },
   critical: {
-    dot: 'bg-red-400',
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/20',
-    text: 'text-red-300',
-    glow: 'shadow-[0_0_20px_rgba(248,113,113,0.12)]',
+    dot: 'bg-red-500',
+    bg: 'bg-red-900/20',
+    border: 'border-red-700/50',
+    text: 'text-red-400',
+    glow: 'shadow-none',
     hex: '#f87171'
   },
   syncing: {
-    dot: 'bg-cyan-400 animate-pulse',
-    bg: 'bg-cyan-500/10',
-    border: 'border-cyan-500/20',
-    text: 'text-cyan-300',
-    glow: 'shadow-[0_0_20px_rgba(34,211,238,0.12)]',
+    dot: 'bg-cyan-500 animate-pulse',
+    bg: 'bg-cyan-900/20',
+    border: 'border-cyan-700/50',
+    text: 'text-cyan-400',
+    glow: 'shadow-none',
     hex: '#22d3ee'
   },
   offline: {
-    dot: 'bg-slate-500',
-    bg: 'bg-slate-500/10',
-    border: 'border-slate-500/20',
-    text: 'text-slate-300',
+    dot: 'bg-slate-600',
+    bg: 'bg-slate-800/50',
+    border: 'border-slate-700',
+    text: 'text-slate-400',
     glow: 'shadow-none',
     hex: '#64748b'
   }
@@ -69,17 +69,17 @@ export const TYPOGRAPHY_COMPACT = {
 } as const;
 
 export const GLASS = {
-  base: 'bg-slate-950/40 backdrop-blur-md border border-white/10',
-  card: 'bg-slate-950/40 backdrop-blur-md border border-white/10',
-  panel: 'bg-slate-950/30 backdrop-blur-md border border-white/5',
-  commander: 'bg-slate-950/60 backdrop-blur-md border border-white/10'
+  base: 'bg-slate-900 border border-slate-700',
+  card: 'bg-slate-900 border border-slate-700',
+  panel: 'bg-slate-950 border border-slate-800',
+  commander: 'bg-black border border-cyan-900'
 } as const;
 
 export const RADIUS = {
-  cardLg: 'rounded-2xl',
-  card: 'rounded-2xl',
-  panel: 'rounded-xl',
-  control: 'rounded-lg'
+  cardLg: 'rounded-none',
+  card: 'rounded-none',
+  panel: 'rounded-none',
+  control: 'rounded-none'
 } as const;
 
 export const SPACING = {
@@ -99,5 +99,5 @@ export const Z_INDEX = {
 } as const;
 
 export const SECTOR_GLOW = {
-  mechanical: 'shadow-[0_0_30px_rgba(34,211,238,0.12)]'
+  mechanical: 'shadow-none'
 } as const;

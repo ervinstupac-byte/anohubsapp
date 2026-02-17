@@ -18,16 +18,16 @@ export const CathodicProtection: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-emerald-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl transition-all">
+            <header className="bg-black/40 border-b-2 border-emerald-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none transition-all">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-4 text-center md:text-left">
-                        <div className="p-4 bg-emerald-600 rounded-3xl border border-white/10 shadow-lg relative group overflow-hidden">
+                        <div className="p-4 bg-emerald-600 rounded-none border border-white/10 shadow-none relative group overflow-hidden">
                             <div className="absolute inset-0 bg-white/10 animate-[spin_8s_linear_infinite]" />
                             <Atom className="text-white w-8 h-8 relative z-10" />
                         </div>
                         <div>
                             <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-emerald-950 text-emerald-500 text-[10px] font-black border border-emerald-900/50 uppercase tracking-widest">SOP-MECH-014</span>
+                                <span className="px-2 py-0.5 rounded-none bg-emerald-950 text-emerald-500 text-[10px] font-black border border-emerald-900/50 uppercase tracking-widest">SOP-MECH-014</span>
                                 <NeuralPulse />
                             </div>
                             <h1 className="text-3xl font-black text-white tracking-tighter uppercase relative z-10">
@@ -38,7 +38,7 @@ export const CathodicProtection: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
+                        className="flex items-center gap-2 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest"
                     >
                         <ArrowLeft className="w-4 h-4 text-emerald-500 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.cathodic.return')}</span>
@@ -51,7 +51,7 @@ export const CathodicProtection: React.FC = () => {
                 {/* Real-time Focus Card */}
                 <GlassCard title="Electrochemical Protection Monitor" className="relative overflow-hidden group">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                        <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Activity className="w-3 h-3 text-emerald-400" /> Sacrificial Flux
                             </p>
@@ -59,7 +59,7 @@ export const CathodicProtection: React.FC = () => {
                                 {sacrificialCurrent.toFixed(2)} <span className="text-xs text-slate-500 uppercase ml-2">Amps</span>
                             </p>
                         </div>
-                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                        <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Cpu className="w-3 h-3 text-cyan-400" /> Protection Potential
                             </p>
@@ -67,7 +67,7 @@ export const CathodicProtection: React.FC = () => {
                                 {protectionPotential} <span className="text-xs text-slate-500 ml-1">mV</span>
                             </p>
                         </div>
-                        <div className="p-6 bg-black/60 rounded-3xl border border-white/5">
+                        <div className="p-6 bg-black/60 rounded-none border border-white/5">
                             <p className="text-[10px] text-emerald-500 uppercase font-black mb-2 tracking-[0.2em] flex items-center gap-2">
                                 <Shield className="w-3 h-3 text-amber-400" /> Anode Health
                             </p>
@@ -83,18 +83,18 @@ export const CathodicProtection: React.FC = () => {
                     <GlassCard title={t('francis.cathodic.s1Title')} icon={<Zap className="text-emerald-400" />}>
                         <div className="space-y-6">
                             <p className="text-[11px] text-slate-400 font-bold leading-relaxed">{t('francis.cathodic.s1Desc')}</p>
-                            <div className="p-6 bg-black/40 border border-white/5 rounded-3xl shadow-inner group/rule overflow-hidden relative">
+                            <div className="p-6 bg-black/40 border border-white/5 rounded-none shadow-none group/rule overflow-hidden relative">
                                 <div className="absolute inset-0 bg-emerald-500/5 -translate-x-full group-hover/rule:translate-x-0 transition-transform duration-700" />
                                 <span className="text-emerald-500 text-[10px] font-black uppercase block mb-3 tracking-[0.2em] relative z-10">{t('francis.cathodic.h1Rule')}</span>
                                 <p className="text-[11px] text-slate-300 font-bold italic border-l-2 border-emerald-500/30 pl-4 relative z-10">
                                     {t('francis.cathodic.ruleDesc')}
                                 </p>
                             </div>
-                            <div className="p-6 bg-emerald-950/20 border border-emerald-900/30 rounded-3xl relative group/spec overflow-hidden">
+                            <div className="p-6 bg-emerald-950/20 border border-emerald-900/30 rounded-none relative group/spec overflow-hidden">
                                 <div className="absolute inset-0 bg-emerald-500/5 translate-y-full group-hover/spec:translate-y-0 transition-transform duration-700" />
                                 <h4 className="text-white text-[10px] font-black uppercase mb-4 tracking-[0.2em] relative z-10">{t('francis.cathodic.h1Spec')}</h4>
-                                <div className="flex items-center gap-6 p-6 bg-black/60 rounded-2xl mb-4 relative z-10 border border-white/10">
-                                    <div className="p-4 bg-emerald-600 rounded-2xl shadow-xl group-hover/spec:scale-110 transition-transform">
+                                <div className="flex items-center gap-6 p-6 bg-black/60 rounded-none mb-4 relative z-10 border border-white/10">
+                                    <div className="p-4 bg-emerald-600 rounded-none shadow-none group-hover/spec:scale-110 transition-transform">
                                         <Zap className="text-white w-8 h-8" />
                                     </div>
                                     <div>
@@ -111,7 +111,7 @@ export const CathodicProtection: React.FC = () => {
 
                     {/* Troubleshooting Matrix */}
                     <GlassCard title={t('francis.cathodic.s3Title')} icon={<Settings className="text-emerald-400" />}>
-                        <div className="overflow-hidden rounded-3xl border border-white/10 bg-black/40 shadow-2xl">
+                        <div className="overflow-hidden rounded-none border border-white/10 bg-black/40 shadow-none">
                             <table className="w-full text-left text-[10px] border-collapse">
                                 <thead>
                                     <tr className="bg-emerald-900/40 text-emerald-400 font-black uppercase tracking-[0.2em]">
@@ -135,7 +135,7 @@ export const CathodicProtection: React.FC = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="mt-8 p-6 bg-black/40 rounded-3xl border border-white/5">
+                        <div className="mt-8 p-6 bg-black/40 rounded-none border border-white/5">
                             <div className="flex gap-4 items-center mb-4">
                                 <AlertTriangle className="text-amber-500 w-6 h-6 flex-shrink-0" />
                                 <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest">{t('francis.cathodic.h2Warn')}</span>
@@ -148,7 +148,7 @@ export const CathodicProtection: React.FC = () => {
                 </div>
 
                 {/* Installation Pulse */}
-                <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-8 relative overflow-hidden group">
+                <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-8 relative overflow-hidden group">
                     <div className="flex items-center gap-3 border-b border-white/5 pb-4">
                         <CheckSquare className="w-8 h-8 text-emerald-400" />
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">{t('francis.cathodic.s2Title')}</h2>
@@ -158,8 +158,8 @@ export const CathodicProtection: React.FC = () => {
                         <div className="space-y-4">
                             <h4 className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em]">{t('francis.cathodic.steps')}</h4>
                             {[1, 2, 3].map((num) => (
-                                <div key={num} className="p-5 bg-black/40 rounded-2xl border border-white/5 flex gap-5 items-center group/step hover:border-emerald-500/30 transition-all">
-                                    <div className="w-10 h-10 rounded-2xl bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 font-black shrink-0 group-hover/step:rotate-12 transition-transform">
+                                <div key={num} className="p-5 bg-black/40 rounded-none border border-white/5 flex gap-5 items-center group/step hover:border-emerald-500/30 transition-all">
+                                    <div className="w-10 h-10 rounded-none bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 font-black shrink-0 group-hover/step:rotate-12 transition-transform">
                                         {num}
                                     </div>
                                     <div className="text-[11px] text-slate-300 font-bold uppercase tracking-tight leading-relaxed">
@@ -169,7 +169,7 @@ export const CathodicProtection: React.FC = () => {
                             ))}
                         </div>
 
-                        <div className="bg-red-900/10 border-2 border-red-500/20 p-8 rounded-3xl relative overflow-hidden flex flex-col justify-center text-center group/crit">
+                        <div className="bg-red-900/10 border-2 border-red-500/20 p-8 rounded-none relative overflow-hidden flex flex-col justify-center text-center group/crit">
                             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover/crit:opacity-10 transition-opacity">
                                 <ShieldAlert className="w-32 h-32 text-red-600" />
                             </div>
@@ -177,7 +177,7 @@ export const CathodicProtection: React.FC = () => {
                             <span className="text-[11px] text-red-400 font-black uppercase tracking-widest leading-relaxed mb-4">
                                 {t('francis.cathodic.critAlert')}
                             </span>
-                            <div className="p-4 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest relative z-10 shadow-xl">
+                            <div className="p-4 bg-red-600 text-white rounded-none text-[10px] font-black uppercase tracking-widest relative z-10 shadow-none">
                                 Protocol Zero Resistance
                             </div>
                         </div>

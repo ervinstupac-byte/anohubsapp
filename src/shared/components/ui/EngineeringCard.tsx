@@ -103,7 +103,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                         e.stopPropagation();
                         setIsMenuOpen(!isMenuOpen);
                     }}
-                    className={`p-1 rounded hover:bg-white/10 text-slate-500 hover:text-cyan-400 transition-colors ${isMenuOpen ? 'text-cyan-400 bg-white/5' : ''}`}
+                    className={`p-1 rounded-none hover:bg-white/10 text-slate-500 hover:text-cyan-400 transition-colors ${isMenuOpen ? 'text-cyan-400 bg-white/5' : ''}`}
                 >
                     <MoreVertical className="w-4 h-4" />
                 </button>
@@ -115,7 +115,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 5 }}
                             transition={{ duration: 0.1 }}
-                            className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden backdrop-blur-xl"
+                            className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-none shadow-none z-50 overflow-hidden"
                         >
                             <div className="py-1">
                                 {actionMenu.map((action, idx) => (
@@ -163,14 +163,15 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                 transition={{ duration: 0.5 }}
                 onClick={onClick}
                 className={`
-                    ${GLASS.base} ${RADIUS.cardLg} ${spacing.cardPadding}
-                    ${colors.border} border-l-4
-                    ${isClickable ? 'cursor-pointer hover:border-opacity-80' : ''}
+                    bg-slate-900/90 border-r border-b border-t border-slate-700 ${spacing.cardPadding}
+                    ${colors.border} border-l-4 rounded-none
+                    ${isClickable ? 'cursor-pointer hover:bg-slate-800' : ''}
                     transition-all group relative overflow-visible
                     ${className}
                 `}
             >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-3xl rounded-full -mr-16 -mt-16 group-hover:bg-cyan-500/10 transition-colors pointer-events-none" />
+                {/* Industrial Grid Background */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
                 <HeaderWrapper>
                     <div className="flex items-center gap-2">
@@ -205,20 +206,20 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
             <div
                 onClick={onClick}
                 className={`
-                    relative ${RADIUS.card}
-                    border-2 ${colors.border} ${colors.bg} ${colors.glow}
-                    ${isClickable ? 'cursor-pointer hover:border-opacity-80' : ''}
+                    relative rounded-none
+                    border-2 ${colors.border} bg-slate-900
+                    ${isClickable ? 'cursor-pointer hover:bg-slate-800' : ''}
                     transition-all
                     ${className}
                 `}
             >
-                {/* Decorative Screws - Scaled down in compact mode */}
+                {/* Decorative Bolts - Industrial */}
                 {!isCompact && (
                     <>
-                        <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-slate-700 border border-slate-600" />
-                        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-slate-700 border border-slate-600" />
-                        <div className="absolute bottom-2 left-2 w-2 h-2 rounded-full bg-slate-700 border border-slate-600" />
-                        <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-slate-700 border border-slate-600" />
+                        <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+                        <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+                        <div className="absolute bottom-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+                        <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
                     </>
                 )}
 
@@ -238,7 +239,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     <div className="flex items-start justify-between mb-3 pr-8">
                         <div className="flex items-center gap-2">
                             {icon && (
-                                <div className={`p-1.5 rounded border ${colors.border} ${colors.bg}`}>
+                                <div className={`p-1.5 border ${colors.border} bg-slate-800`}>
                                     {icon}
                                 </div>
                             )}
@@ -254,13 +255,13 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                         </div>
                     </div>
 
-                    <div className="bg-slate-900/80 rounded-lg p-3 border border-white/5 mb-2">
+                    <div className="bg-black/40 p-3 border border-slate-700 mb-2 font-mono">
                         <div className="flex items-baseline justify-between">
                             <span className={`${typo.valueXl} ${colors.text}`}>
                                 {value}
                             </span>
                             {unit && (
-                                <span className="text-xs text-slate-500 font-mono font-bold uppercase ml-2">
+                                <span className="text-xs text-slate-500 font-bold uppercase ml-2">
                                     {unit}
                                 </span>
                             )}
@@ -277,7 +278,7 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
                     {children}
                 </div>
 
-                {!isCompact && <div className="h-1 bg-gradient-to-r from-transparent via-white/5 to-transparent" />}
+                {!isCompact && <div className="h-px bg-slate-800" />}
             </div>
         );
     }
@@ -292,19 +293,19 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
             transition={{ duration: 0.6 }}
             onClick={onClick}
             className={`
-                ${GLASS.base} ${RADIUS.cardLg} ${spacing.cardPadding}
+                bg-slate-900 border border-slate-700 ${spacing.cardPadding}
                 ${status !== 'nominal' ? `border-l-4 ${colors.border}` : ''}
-                hover:border-cyan-500/40 transition-all duration-500
-                ${isClickable ? 'cursor-pointer' : ''}
+                hover:border-cyan-500/50 transition-all duration-500 rounded-none
+                ${isClickable ? 'cursor-pointer hover:bg-slate-800/50' : ''}
                 ${className}
             `}
         >
             {(title || headerAction || actionMenu) && (
                 <div className="flex justify-between items-start mb-3 relative z-10">
                     <div className="flex items-center gap-3">
-                        {icon && <div className="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]">{icon}</div>}
+                        {icon && <div className="text-cyan-400">{icon}</div>}
                         <div>
-                            <h3 className={`${typo.valueMd} text-slate-100 tracking-tight`}>{title}</h3>
+                            <h3 className={`${typo.valueMd} text-slate-100 tracking-tight uppercase`}>{title}</h3>
                             {subtitle && <p className={typo.labelSm + ' text-slate-400 mt-0.5'}>{subtitle}</p>}
                         </div>
                     </div>

@@ -170,7 +170,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90">
       <div
         onClick={onClose}
         className="absolute inset-0"
@@ -178,7 +178,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
 
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl h-[90vh] flex flex-col bg-scada-panel border border-scada-border rounded-sm shadow-scada-card"
+        className="relative w-full max-w-5xl h-[90vh] flex flex-col bg-scada-panel border border-scada-border rounded-none shadow-none"
       >
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
@@ -186,34 +186,34 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
             <div className="flex items-center gap-4">
               <button
                   onClick={onClose}
-                  className="p-2 hover:bg-scada-panel rounded-full text-scada-muted hover:text-scada-text transition-colors"
+                  className="p-2 hover:bg-scada-panel rounded-none text-scada-muted hover:text-scada-text transition-colors"
                   title={t('common.back', 'Back')}
               >
                   <ArrowLeft className="w-5 h-5" />
               </button>
-              <div className="p-2 bg-status-info/10 rounded-sm border border-status-info/20">
+              <div className="p-2 bg-status-info/10 rounded-none border border-status-info/20">
                 <ShieldCheck className="w-6 h-6 text-status-info" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-scada-text tracking-wide font-header uppercase">{componentName}</h2>
                 <div className="flex items-center gap-3 text-xs text-scada-muted font-mono">
                   <span className="text-status-info">{componentId}</span>
-                  <span className="w-1 h-1 rounded-full bg-scada-muted" />
+                  <span className="w-1 h-1 rounded-none bg-scada-muted" />
                   <span>{componentType}</span>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-                <button className="p-2 hover:bg-scada-panel rounded-full transition-colors text-scada-muted hover:text-status-info" title="Verify Integrity">
+                <button className="p-2 hover:bg-scada-panel rounded-none transition-colors text-scada-muted hover:text-status-info" title="Verify Integrity">
                     <ShieldCheck className="w-5 h-5" />
                 </button>
-                <button className="p-2 hover:bg-scada-panel rounded-full transition-colors text-scada-muted hover:text-scada-text" title="Print Passport">
+                <button className="p-2 hover:bg-scada-panel rounded-none transition-colors text-scada-muted hover:text-scada-text" title="Print Passport">
                     <Printer className="w-5 h-5" />
                 </button>
                 <div className="w-px h-6 bg-scada-border mx-2" />
                 <button
                     onClick={onClose}
-                    className="p-2 hover:bg-status-error/10 rounded-full transition-colors text-scada-muted hover:text-status-error"
+                    className="p-2 hover:bg-status-error/10 rounded-none transition-colors text-scada-muted hover:text-status-error"
                 >
                     <X className="w-6 h-6" />
                 </button>
@@ -226,7 +226,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 font-mono ${
+                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 font-mono rounded-none ${
                   activeTab === tab
                     ? 'text-status-info border-status-info bg-status-info/5'
                     : 'text-scada-muted border-transparent hover:text-scada-text hover:border-scada-border'
@@ -241,7 +241,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
           <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-scada-panel">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center h-full gap-4">
-                <div className="w-12 h-12 border-4 border-status-info/30 border-t-status-info rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-status-info/30 border-t-status-info rounded-none animate-spin" />
                 <p className="text-sm text-status-info font-mono animate-pulse">ANALYZING ASSET TELEMETRY...</p>
               </div>
             ) : rulData ? (
@@ -251,7 +251,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                     {/* Left Column: Health & Stats */}
                     <div className="lg:col-span-2 space-y-6">
                       {/* Health Score Card */}
-                      <div className={`p-6 border rounded-sm ${getHealthBg(rulData.healthScore)}`}>
+                      <div className={`p-6 border rounded-none ${getHealthBg(rulData.healthScore)}`}>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="text-sm font-bold text-scada-muted uppercase tracking-widest mb-1 font-mono">Asset Health Score</div>
@@ -259,7 +259,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                               {rulData.healthScore}%
                             </div>
                             <div className="flex items-center gap-2 mt-2">
-                              <div className={`w-2 h-2 rounded-full ${rulData.healthScore >= 80 ? 'bg-status-ok' : 'bg-status-warning'}`} />
+                              <div className={`w-2 h-2 rounded-none ${rulData.healthScore >= 80 ? 'bg-status-ok' : 'bg-status-warning'}`} />
                               <span className="text-xs font-mono text-scada-text/80 uppercase">
                                 {rulData.healthScore >= 80 ? 'OPERATIONAL - OPTIMAL' : 'OPERATIONAL - DEGRADED'}
                               </span>
@@ -277,7 +277,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
 
                       {/* RUL Metrics */}
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="p-5 rounded-sm bg-scada-bg border border-scada-border">
+                        <div className="p-5 rounded-none bg-scada-bg border border-scada-border">
                           <div className="flex items-center gap-2 mb-3">
                             <Clock className="w-4 h-4 text-status-info" />
                             <span className="text-xs font-bold text-scada-muted uppercase font-mono">Remaining Useful Life</span>
@@ -285,7 +285,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                           <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">
                             {rulData.remainingYears.toFixed(1)} <span className="text-sm text-scada-muted font-normal">years</span>
                           </div>
-                          <div className="w-full h-1 bg-scada-border rounded-full mt-3 overflow-hidden">
+                          <div className="w-full h-1 bg-scada-border rounded-none mt-3 overflow-hidden">
                             <div 
                               className="h-full bg-status-info" 
                               style={{ width: `${(rulData.remainingYears / 10) * 100}%` }} 
@@ -293,7 +293,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-5 rounded-sm bg-scada-bg border border-scada-border">
+                        <div className="p-5 rounded-none bg-scada-bg border border-scada-border">
                           <div className="flex items-center gap-2 mb-3">
                             <Calendar className="w-4 h-4 text-status-warning" />
                             <span className="text-xs font-bold text-scada-muted uppercase font-mono">Next Maintenance</span>
@@ -310,7 +310,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
 
                     {/* Right Column: Risk Factors */}
                     <div className="lg:col-span-1">
-                      <div className="h-full p-5 rounded-sm bg-status-error/5 border border-status-error/20">
+                      <div className="h-full p-5 rounded-none bg-status-error/5 border border-status-error/20">
                         <div className="flex items-center gap-2 mb-4">
                           <AlertTriangle className="w-4 h-4 text-status-error" />
                           <h3 className="text-sm font-bold text-status-error uppercase tracking-wide font-mono">Active Risk Factors</h3>
@@ -319,7 +319,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                           {rulData.riskFactors.map((risk, index) => (
                             <div
                               key={index}
-                              className="p-3 bg-status-error/10 border border-status-error/20 rounded-sm"
+                              className="p-3 bg-status-error/10 border border-status-error/20 rounded-none"
                             >
                               <span className="text-xs font-medium text-status-error leading-relaxed block font-mono">{risk}</span>
                             </div>
@@ -342,14 +342,14 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                       {timeline.map((event, index) => (
                         <div key={index} className="relative">
                           {/* Timeline Dot */}
-                          <div className={`absolute -left-[39px] w-5 h-5 rounded-full border-4 border-scada-bg ${
+                          <div className={`absolute -left-[39px] w-5 h-5 rounded-none border-4 border-scada-bg ${
                             event.type === 'PROJECTED_FAILURE' ? 'bg-h-purple' :
                             event.type === 'INCIDENT' ? 'bg-status-error' :
                             event.type === 'BIRTH' ? 'bg-status-ok' :
                             'bg-scada-border'
                           }`} />
 
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-sm bg-scada-bg border border-scada-border hover:border-scada-text/30 transition-colors">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-none bg-scada-bg border border-scada-border hover:border-scada-text/30 transition-colors">
                             <div className="flex items-start gap-3">
                               <div className="mt-0.5">{getTimelineIcon(event.type)}</div>
                               <div>
@@ -358,7 +358,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                               </div>
                             </div>
                             {event.severity && (
-                              <span className={`text-[10px] font-bold px-2 py-1 rounded-sm border uppercase tracking-wider font-mono ${
+                              <span className={`text-[10px] font-bold px-2 py-1 rounded-none border uppercase tracking-wider font-mono ${
                                 event.severity === 'HIGH' ? 'bg-status-error/10 text-status-error border-status-error/30' :
                                 'bg-status-warning/10 text-status-warning border-status-warning/30'
                               }`}>
@@ -377,13 +377,13 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono">Real-time Telemetry</h3>
                       <div className="flex items-center gap-2 text-[10px] text-status-ok font-mono">
-                        <div className="w-1.5 h-1.5 rounded-full bg-status-ok animate-pulse" />
+                        <div className="w-1.5 h-1.5 rounded-none bg-status-ok animate-pulse" />
                         LIVE STREAM ACTIVE
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-none">
                         <div className="flex items-center gap-2 mb-3">
                           <Thermometer className="w-4 h-4 text-status-warning" />
                           <span className="text-xs font-bold text-scada-muted uppercase font-mono">Temperature</span>
@@ -392,7 +392,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                         <div className="mt-2 text-[10px] text-status-ok font-mono uppercase">NOMINAL RANGE</div>
                       </div>
 
-                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-none">
                         <div className="flex items-center gap-2 mb-3">
                           <Activity className="w-4 h-4 text-status-info" />
                           <span className="text-xs font-bold text-scada-muted uppercase font-mono">Vibration</span>
@@ -401,7 +401,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                         <div className="mt-2 text-[10px] text-status-warning font-mono uppercase">ELEVATED WARN</div>
                       </div>
 
-                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-none">
                         <div className="flex items-center gap-2 mb-3">
                           <Zap className="w-4 h-4 text-status-warning" />
                           <span className="text-xs font-bold text-scada-muted uppercase font-mono">Efficiency</span>
@@ -410,7 +410,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                         <div className="mt-2 text-[10px] text-status-ok font-mono uppercase">OPTIMAL</div>
                       </div>
 
-                      <div className="p-4 bg-scada-bg border border-scada-border rounded-sm">
+                      <div className="p-4 bg-scada-bg border border-scada-border rounded-none">
                         <div className="flex items-center gap-2 mb-3">
                           <Cpu className="w-4 h-4 text-h-purple" />
                           <span className="text-xs font-bold text-scada-muted uppercase font-mono">Load Factor</span>
@@ -427,15 +427,15 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                     <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono">Technical Documentation</h3>
                     <div className="grid gap-3">
                       {docs.map((doc, idx) => (
-                        <div key={idx} className="p-4 rounded-sm bg-scada-bg border border-scada-border hover:border-status-info/30 transition-colors flex items-center justify-between group cursor-pointer">
+                        <div key={idx} className="p-4 rounded-none bg-scada-bg border border-scada-border hover:border-status-info/30 transition-colors flex items-center justify-between group cursor-pointer">
                           <div className="flex items-center gap-4">
-                            <div className="p-3 bg-status-info/10 rounded-sm border border-status-info/20 group-hover:bg-status-info/20 transition-colors">
+                            <div className="p-3 bg-status-info/10 rounded-none border border-status-info/20 group-hover:bg-status-info/20 transition-colors">
                               <FileText className="w-5 h-5 text-status-info" />
                             </div>
                             <div>
                               <div className="font-bold text-scada-text text-sm font-mono">{doc.name}</div>
                               <div className="flex items-center gap-2 text-xs text-scada-muted mt-1 font-mono">
-                                <span className="px-1.5 py-0.5 rounded-sm bg-scada-panel text-scada-muted">{doc.type}</span>
+                                <span className="px-1.5 py-0.5 rounded-none bg-scada-panel text-scada-muted">{doc.type}</span>
                                 <span>•</span>
                                 <span>{doc.size}</span>
                                 <span>•</span>
@@ -444,10 +444,10 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <button className="p-2 text-scada-muted hover:text-scada-text hover:bg-scada-panel rounded-sm transition-colors">
+                            <button className="p-2 text-scada-muted hover:text-scada-text hover:bg-scada-panel rounded-none transition-colors">
                               <Share2 className="w-4 h-4" />
                             </button>
-                            <button className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-scada-bg bg-status-info hover:bg-status-info/90 rounded-sm transition-colors font-mono">
+                            <button className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-scada-bg bg-status-info hover:bg-status-info/90 rounded-none transition-colors font-mono">
                               <Download className="w-3 h-3" />
                               DOWNLOAD
                             </button>
@@ -463,7 +463,7 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                 <AlertTriangle className="w-12 h-12 text-status-error mb-4 opacity-50" />
                 <h3 className="text-lg font-bold text-scada-text font-header">Data Unavailable</h3>
                 <p className="text-scada-muted text-sm mt-2 font-mono">Could not retrieve asset passport data from the secure vault.</p>
-                <button onClick={fetchRUL} className="mt-6 px-4 py-2 bg-scada-bg hover:bg-scada-panel border border-scada-border rounded-sm text-sm font-bold text-scada-text transition-colors font-mono uppercase">
+                <button onClick={fetchRUL} className="mt-6 px-4 py-2 bg-scada-bg hover:bg-scada-panel border border-scada-border rounded-none text-sm font-bold text-scada-text transition-colors font-mono uppercase">
                   Retry Connection
                 </button>
               </div>

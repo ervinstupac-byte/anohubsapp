@@ -27,7 +27,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
             <div className="w-full max-w-4xl p-8">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-red-950 border-2 border-red-500 rounded-lg">
+                    <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-red-950 border-2 border-red-500 rounded-none">
                         <AlertTriangle className="w-8 h-8 text-red-400 animate-pulse" />
                         <div>
                             <div className="text-2xl font-bold text-red-300">SAFE STATE MODE</div>
@@ -43,7 +43,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
 
                 {/* Critical Alarms */}
                 {currentStatus.criticalAlarms.length > 0 && (
-                    <div className="mb-8 p-4 bg-red-950 border-2 border-red-500 rounded-lg">
+                    <div className="mb-8 p-4 bg-red-950 border-2 border-red-500 rounded-none">
                         <div className="text-lg font-bold text-red-300 mb-2">⚠️ CRITICAL ALARMS</div>
                         <div className="space-y-1">
                             {currentStatus.criticalAlarms.map((alarm, i) => (
@@ -69,7 +69,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                             }
                         }}
                         disabled={!currentStatus.running}
-                        className={`h-64 rounded-lg border-4 font-bold text-2xl transition-all ${!currentStatus.running
+                        className={`h-64 rounded-none border-4 font-bold text-2xl transition-all ${!currentStatus.running
                                 ? 'bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed'
                                 : confirmStop
                                     ? 'bg-red-700 border-red-500 text-white animate-pulse'
@@ -86,7 +86,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                     </button>
 
                     {/* STATUS */}
-                    <div className="h-64 rounded-lg border-4 border-blue-500 bg-blue-950 flex items-center justify-center">
+                    <div className="h-64 rounded-none border-4 border-blue-500 bg-blue-950 flex items-center justify-center">
                         <div className="text-center">
                             <CheckCircle className="w-24 h-24 text-blue-300 mx-auto mb-4" />
                             <div className="text-2xl font-bold text-blue-300 mb-2">STATUS</div>
@@ -114,7 +114,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                     <button
                         onClick={onStart}
                         disabled={currentStatus.running || currentStatus.criticalAlarms.length > 0}
-                        className={`h-64 rounded-lg border-4 font-bold text-2xl transition-all ${currentStatus.running || currentStatus.criticalAlarms.length > 0
+                        className={`h-64 rounded-none border-4 font-bold text-2xl transition-all ${currentStatus.running || currentStatus.criticalAlarms.length > 0
                                 ? 'bg-slate-800 border-slate-700 text-slate-600 cursor-not-allowed'
                                 : 'bg-emerald-950 border-emerald-500 text-emerald-300 hover:bg-emerald-900 active:scale-95'
                             }`}
@@ -133,7 +133,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                 <div className="text-center">
                     <button
                         onClick={onReset}
-                        className="px-8 py-4 bg-amber-950 border-2 border-amber-500 rounded-lg text-amber-300 font-bold text-lg hover:bg-amber-900 transition-all active:scale-95"
+                        className="px-8 py-4 bg-amber-950 border-2 border-amber-500 rounded-none text-amber-300 font-bold text-lg hover:bg-amber-900 transition-all active:scale-95"
                     >
                         <div className="flex items-center gap-3">
                             <RotateCcw className="w-6 h-6" />
@@ -143,7 +143,7 @@ export const SafeStateHMI: React.FC<SafeStateHMIProps> = ({
                 </div>
 
                 {/* Instructions */}
-                <div className="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-lg">
+                <div className="mt-8 p-4 bg-slate-900 border border-slate-700 rounded-none">
                     <div className="text-xs text-slate-400 space-y-1">
                         <div>• This simplified interface is for EMERGENCY USE ONLY</div>
                         <div>• STOP: Immediate emergency shutdown (confirm required)</div>

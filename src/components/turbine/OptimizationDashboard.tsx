@@ -68,19 +68,19 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
     return (
         <div className="space-y-6">
             {/* HEADER WITH SCENARIO SELECTOR */}
-            <GlassCard className="bg-gradient-to-r from-purple-950/40 to-pink-950/40 border-2 border-purple-500/30">
+            <GlassCard className="bg-slate-950 border-2 border-purple-500/30">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h2 className="text-2xl font-black uppercase tracking-tighter mb-1">
                             <span className="text-white">Optimization</span>
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 ml-2">
+                            <span className="text-purple-400 ml-2">
                                 Analysis
                             </span>
                         </h2>
                         <p className="text-sm text-slate-400">As-Is vs To-Be Performance Projection</p>
                     </div>
 
-                    <button className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg font-black text-white uppercase tracking-wider flex items-center gap-2 hover:shadow-lg hover:shadow-emerald-500/50 transition-all">
+                    <button className="px-6 py-3 bg-cyan-600 hover:bg-cyan-700 rounded-none font-black text-white uppercase tracking-wider flex items-center gap-2 hover:shadow-none transition-all">
                         <Download className="w-5 h-5" />
                         Export PDF Report
                     </button>
@@ -94,8 +94,8 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => setSelectedScenario(scenario)}
-                            className={`flex-1 p-4 rounded-lg border-2 transition-all ${selectedScenario === scenario
-                                ? 'bg-purple-500/20 border-purple-500 shadow-lg shadow-purple-500/20'
+                            className={`flex-1 p-4 rounded-none border-2 transition-all ${selectedScenario === scenario
+                                ? 'bg-purple-500/20 border-purple-500 shadow-none'
                                 : 'bg-slate-800/30 border-slate-700/50 hover:border-slate-600'
                                 }`}
                         >
@@ -117,7 +117,7 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                 {/* AS-IS (Current State) */}
                 <GlassCard className="border-l-4 border-l-red-500">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-none bg-red-500/20 flex items-center justify-center">
                             <Zap className="w-6 h-6 text-red-400" />
                         </div>
                         <div>
@@ -218,8 +218,8 @@ export const OptimizationDashboard: React.FC<OptimizationDashboardProps> = ({ as
                 </div>
 
                 {/* ROI Timeline */}
-                <div className="relative h-32 bg-slate-900/50 rounded-lg p-4">
-                    <div className="absolute bottom-4 left-0 right-0 h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="relative h-32 bg-slate-900/50 rounded-none p-4">
+                    <div className="absolute bottom-4 left-0 right-0 h-2 bg-slate-800 rounded-none overflow-hidden">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: '60%' }}
@@ -248,7 +248,7 @@ interface MetricRowProps {
 }
 
 const MetricRow: React.FC<MetricRowProps> = ({ label, value, status, improvement }) => (
-    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
+    <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-none">
         <span className="text-sm text-slate-400">{label}</span>
         <div className="flex items-center gap-2">
             <span className={`text-lg font-black ${status === 'success' ? 'text-emerald-400' :
@@ -258,7 +258,7 @@ const MetricRow: React.FC<MetricRowProps> = ({ label, value, status, improvement
                 {value}
             </span>
             {improvement && (
-                <span className="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded">
+                <span className="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded-none">
                     {improvement}
                 </span>
             )}
@@ -281,7 +281,7 @@ const ROIMetricCard: React.FC<ROIMetricCardProps> = ({ label, value, icon: Icon,
     };
 
     return (
-        <div className={`p-4 rounded-lg border ${colorMap[color]}`}>
+        <div className={`p-4 rounded-none border ${colorMap[color]}`}>
             <div className="flex items-center gap-2 mb-2">
                 <Icon className="w-5 h-5" />
                 <p className="text-xs uppercase font-bold opacity-80">{label}</p>

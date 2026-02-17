@@ -69,7 +69,7 @@ export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitI
                 </div>
 
                 {/* Adaptive Tuning Status */}
-                <div className="bg-slate-900 border-2 border-purple-500 rounded-lg p-4">
+                <div className="bg-slate-900 border-2 border-purple-500 rounded-none p-4">
                     <div className="flex items-center gap-2 mb-4">
                         <TrendingUp className="w-5 h-5 text-purple-400" />
                         <div className="text-lg font-bold text-purple-300">Adaptive Tuning</div>
@@ -101,7 +101,7 @@ export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitI
                 </div>
 
                 {/* Type-Specific Status */}
-                <div className="col-span-2 bg-slate-900 border border-cyan-500 rounded-lg p-4">
+                <div className="col-span-2 bg-slate-900 border border-cyan-500 rounded-none p-4">
                     <div className="flex items-center gap-2 mb-2">
                         <Activity className="w-5 h-5 text-cyan-400" />
                         <div className="text-sm font-bold text-cyan-300">Unit Specifics: {type}</div>

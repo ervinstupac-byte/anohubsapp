@@ -40,11 +40,11 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({ term, children }) =>
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-900/95 backdrop-blur-md border border-sky-500/30 rounded-lg shadow-xl z-50 text-left pointer-events-none"
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-900/95 backdrop-blur-md border border-sky-500/30 rounded-none shadow-none z-50 text-left pointer-events-none"
                     >
                         <div className="flex items-center gap-2 mb-1 pb-1 border-b border-white/10">
                             <span className="font-bold text-sky-400 text-xs uppercase tracking-wider">{term}</span>
-                            <span className="text-[10px] text-slate-500 px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700">NC-11400</span>
+                            <span className="text-[10px] text-slate-500 px-1.5 py-0.5 bg-slate-800 rounded-none border border-slate-700">NC-11400</span>
                         </div>
                         
                         <p className="text-xs text-slate-300 leading-relaxed">
@@ -52,7 +52,7 @@ export const SmartTooltip: React.FC<SmartTooltipProps> = ({ term, children }) =>
                         </p>
 
                         {entry.codeRef && educationMode && (
-                            <div className="mt-2 text-[10px] font-mono text-slate-500 bg-black/30 p-1.5 rounded border border-white/5 truncate">
+                            <div className="mt-2 text-[10px] font-mono text-slate-500 bg-black/30 p-1.5 rounded-none border border-white/5 truncate">
                                 ↳ {entry.codeRef.path.split('/').pop()}
                             </div>
                         )}

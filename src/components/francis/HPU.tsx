@@ -19,7 +19,7 @@ export const HPU: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-emerald-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+            <header className="bg-black/40 border-b-2 border-emerald-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
@@ -33,7 +33,7 @@ export const HPU: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-6 py-2 bg-emerald-600/10 border-2 border-emerald-500/50 text-emerald-400 rounded-full font-black hover:bg-emerald-500 hover:text-white hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all group uppercase text-xs tracking-tighter"
+                        className="flex items-center gap-2 px-6 py-2 bg-emerald-600/10 border-2 border-emerald-500/50 text-emerald-400 rounded-none font-black hover:bg-emerald-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.hpu.back_btn') || "Return"}</span>
@@ -45,7 +45,7 @@ export const HPU: React.FC = () => {
                 {/* Real-time Focus Card */}
                 <GlassCard title="HPU Power Intelligence" className="relative overflow-hidden group">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Activity className="w-3 h-3 text-emerald-400" /> Working Pressure
                             </p>
@@ -53,7 +53,7 @@ export const HPU: React.FC = () => {
                                 {staticPressure.toFixed(1)} <span className="text-xs text-slate-500">BAR</span>
                             </p>
                         </div>
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-amber-400" /> Accumulator Charge
                             </p>
@@ -61,7 +61,7 @@ export const HPU: React.FC = () => {
                                 98.4 <span className="text-xs text-slate-500">%</span>
                             </p>
                         </div>
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                        <div className="p-4 bg-white/5 rounded-none border border-white/10">
                             <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                 <Droplet className="w-3 h-3 text-blue-400" /> Oil Viscosity
                             </p>
@@ -73,7 +73,7 @@ export const HPU: React.FC = () => {
                 </GlassCard>
 
                 {/* SAFETY MODULE */}
-                <section className="bg-red-900/10 border-l-[12px] border-red-600 p-8 rounded-r-3xl shadow-2xl backdrop-blur-sm border border-red-900/20">
+                <section className="bg-red-900/10 border-l-[12px] border-red-600 p-8 rounded-none shadow-none backdrop-blur-sm border border-red-900/20">
                     <div className="flex items-start gap-6">
                         <AlertTriangle className="w-12 h-12 text-red-600 flex-shrink-0" />
                         <div>
@@ -102,9 +102,9 @@ export const HPU: React.FC = () => {
                 {/* SOP 1 & 2 Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* SOP 1 - Accumulators */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-6">
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-6">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                            <div className="w-8 h-8 rounded-lg bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30">
+                            <div className="w-8 h-8 rounded-none bg-emerald-600/20 flex items-center justify-center border border-emerald-500/30">
                                 <span className="text-emerald-400 font-black text-xs">01</span>
                             </div>
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.hpu.sop1Title')}</h2>
@@ -113,10 +113,10 @@ export const HPU: React.FC = () => {
                             {t('francis.hpu.accDesc')}
                         </p>
                         <div className="space-y-6 pt-4">
-                            <div className="p-4 bg-black/40 rounded-2xl border border-emerald-500/20">
+                            <div className="p-4 bg-black/40 rounded-none border border-emerald-500/20">
                                 <h4 className="text-emerald-400 text-[10px] font-black uppercase mb-3 tracking-widest">{t('francis.hpu.sub1_1')}</h4>
                                 <p className="text-xs font-bold text-slate-300 mb-2">{t('francis.hpu.p0Rule')}</p>
-                                <div className="bg-emerald-950/30 border-l-4 border-emerald-500 p-3 rounded text-[10px] text-emerald-200">
+                                <div className="bg-emerald-950/30 border-l-4 border-emerald-500 p-3 rounded-none text-[10px] text-emerald-200">
                                     <strong className="block mb-1 font-black uppercase tracking-tighter">{t('francis.hpu.techNote')}</strong>
                                     {t('francis.hpu.techNoteDesc')}
                                 </div>
@@ -125,9 +125,9 @@ export const HPU: React.FC = () => {
                     </section>
 
                     {/* SOP 2 - Sludge */}
-                    <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 space-y-6">
+                    <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 space-y-6">
                         <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                            <div className="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
+                            <div className="w-8 h-8 rounded-none bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
                                 <span className="text-blue-400 font-black text-xs">02</span>
                             </div>
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.hpu.sop2Title')}</h2>
@@ -136,7 +136,7 @@ export const HPU: React.FC = () => {
                             {t('francis.hpu.sludgeDesc')}
                         </p>
                         <div className="pt-4">
-                            <div className="p-4 bg-blue-900/10 rounded-2xl border border-blue-500/20 flex items-center gap-4">
+                            <div className="p-4 bg-blue-900/10 rounded-none border border-blue-500/20 flex items-center gap-4">
                                 <Droplet className="w-8 h-8 text-blue-500 animate-pulse" />
                                 <div>
                                     <strong className="text-blue-400 text-[10px] font-black uppercase block mb-1 tracking-widest">{t('francis.hpu.target')}</strong>
@@ -148,10 +148,10 @@ export const HPU: React.FC = () => {
                 </div>
 
                 {/* SOP 3 - Water Hammer (HPU context) */}
-                <section className="bg-slate-900/60 p-8 rounded-3xl border border-white/5 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full -mr-32 -mt-32" />
+                <section className="bg-slate-900/60 p-8 rounded-none border border-white/5 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-none -mr-32 -mt-32" />
                     <div className="flex items-center gap-3 border-b border-white/5 pb-4 mb-6 relative z-10">
-                        <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center border border-red-500/30">
+                        <div className="w-8 h-8 rounded-none bg-red-600/20 flex items-center justify-center border border-red-500/30">
                             <span className="text-red-400 font-black text-xs">03</span>
                         </div>
                         <h2 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.hpu.sop3Title')}</h2>
@@ -164,9 +164,9 @@ export const HPU: React.FC = () => {
                             </p>
                             <h3 className="text-red-500 font-black text-xs uppercase tracking-widest mb-4">{t('francis.hpu.sub3_1')}</h3>
                         </div>
-                        <div className="bg-black/80 rounded-3xl border border-white/10 p-8 flex flex-col items-center justify-center shadow-2xl">
+                        <div className="bg-black/80 rounded-none border border-white/10 p-8 flex flex-col items-center justify-center shadow-none">
                             <span className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mb-4">Physics Proof: Joukowsky Equation</span>
-                            <div className="text-3xl font-black text-white font-mono tracking-tighter bg-emerald-950/20 px-6 py-4 rounded-xl border border-emerald-500/30">
+                            <div className="text-3xl font-black text-white font-mono tracking-tighter bg-emerald-950/20 px-6 py-4 rounded-none border border-emerald-500/30">
                                 ΔP = ρ · c · Δv
                             </div>
                             <p className="text-[9px] text-slate-500 mt-4 uppercase font-bold text-center leading-relaxed">

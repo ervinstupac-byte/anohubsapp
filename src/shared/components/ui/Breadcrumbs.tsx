@@ -92,11 +92,11 @@ export const Breadcrumbs: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="flex items-center gap-2 mb-6 px-4 py-2 rounded-full border border-white/5 bg-slate-900/30 backdrop-blur-md w-fit"
+                className="flex items-center gap-2 mb-6 px-4 py-2 border border-slate-700 bg-slate-900 w-fit"
             >
                 <Link
                     to="/"
-                    className="flex items-center justify-center p-1 rounded-full hover:bg-white/5 text-slate-400 hover:text-cyan-400 transition-colors"
+                    className="flex items-center justify-center p-1 hover:bg-white/5 text-slate-400 hover:text-cyan-400 transition-colors"
                 >
                     <Home className="w-3.5 h-3.5" />
                 </Link>

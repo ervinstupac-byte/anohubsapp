@@ -43,7 +43,7 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
                 onClick={onClose}
             >
                 <motion.div
@@ -53,27 +53,27 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                     onClick={(e) => e.stopPropagation()}
                     className="w-full max-w-6xl h-[85vh] flex flex-col"
                 >
-                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] p-0">
+                    <GlassCard className="flex-1 flex flex-col relative overflow-hidden border-cyan-500/30 p-0 shadow-none rounded-none">
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/10 bg-slate-950/80 shrink-0">
                             <div className="flex items-center gap-4">
                                 <button 
                                     onClick={onClose}
-                                    className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors lg:hidden"
+                                    className="p-2 hover:bg-white/10 rounded-none text-slate-400 hover:text-white transition-colors lg:hidden"
                                 >
                                     <ArrowLeft className="w-6 h-6" />
                                 </button>
-                                <div className="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                                <div className="p-3 bg-cyan-500/10 rounded-none border border-cyan-500/20 shadow-none">
                                     <Server className="w-6 h-6 text-cyan-400" />
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-black text-white tracking-widest uppercase flex items-center gap-3">
                                         System Topology
-                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 tracking-normal font-mono">v2.4.0</span>
+                                        <span className="text-[10px] px-2 py-0.5 rounded-none bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 tracking-normal font-mono">v2.4.0</span>
                                     </h2>
                                     <div className="flex items-center gap-4 text-xs font-mono text-slate-400 mt-1">
                                         <span className="flex items-center gap-1.5">
-                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                                            <div className="w-2 h-2 rounded-none bg-emerald-500 animate-pulse" />
                                             ONLINE
                                         </span>
                                         <span className="text-slate-600">|</span>
@@ -86,22 +86,22 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                             </div>
                             <button
                                 onClick={onClose}
-                                className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white"
+                                className="p-2 hover:bg-white/10 rounded-none transition-colors text-slate-400 hover:text-white"
                             >
                                 <X className="w-6 h-6" />
                             </button>
                         </div>
 
                         {/* Telemetry Bar */}
-                        <div className="grid grid-cols-4 border-b border-white/10 bg-black/40 backdrop-blur-sm shrink-0">
+                        <div className="grid grid-cols-4 border-b border-white/10 bg-black/40 shrink-0">
                             <div className="p-4 border-r border-white/10 flex flex-col justify-center">
                                 <div className="text-[10px] text-slate-500 font-mono uppercase mb-1 flex items-center gap-2">
                                     <Shield className="w-3 h-3" />
                                     Sovereign Mode
                                 </div>
                                 <div className={`text-xl font-black tracking-wider ${
-                                    mode === 'RUN' ? 'text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 
-                                    mode === 'STOP' ? 'text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.5)]' : 'text-amber-400'
+                                    mode === 'RUN' ? 'text-emerald-400' : 
+                                    mode === 'STOP' ? 'text-red-400' : 'text-amber-400'
                                 }`}>
                                     {mode}
                                 </div>
@@ -167,8 +167,8 @@ export const SystemOverviewModal: React.FC<SystemOverviewModalProps> = ({ isOpen
                                     <span>NODES: <span className="text-slate-300">14/14</span></span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            <div className="flex items-center gap-2 px-3 py-1 rounded-none bg-emerald-500/10 border border-emerald-500/20">
+                                <div className="w-1.5 h-1.5 rounded-none bg-emerald-500" />
                                 <span className="text-emerald-400 font-bold">SYSTEM INTEGRITY VERIFIED</span>
                             </div>
                         </div>

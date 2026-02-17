@@ -147,7 +147,7 @@ export const GreenHydrogenPanel: React.FC = () => {
     <div className="space-y-4">
       {/* Header Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Gauge className="w-4 h-4 text-cyan-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Storage Level</span>
@@ -158,7 +158,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">{state.storage.volume.toFixed(0)} / {state.storage.capacity} Nm³</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Activity className="w-4 h-4 text-blue-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Pressure</span>
@@ -169,7 +169,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">99.999% purity</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Zap className="w-4 h-4 text-yellow-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Electrolyzer</span>
@@ -180,7 +180,7 @@ export const GreenHydrogenPanel: React.FC = () => {
           <div className="text-xs text-scada-muted font-mono">100 kW capacity</div>
         </div>
 
-        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+        <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
           <div className="flex items-center gap-2 mb-2">
             <Battery className="w-4 h-4 text-green-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Fuel Cells</span>
@@ -193,10 +193,10 @@ export const GreenHydrogenPanel: React.FC = () => {
       </div>
 
       {/* Island Mode Toggle */}
-      <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+      <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-sm ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}>
+            <div className={`p-2 rounded-none ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}>
               <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-cyan-400' : 'text-scada-muted'}`} />
             </div>
             <div>

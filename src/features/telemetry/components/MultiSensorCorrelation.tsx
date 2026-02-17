@@ -49,7 +49,7 @@ export const MultiSensorCorrelation: React.FC = () => {
                     </p>
                 </div>
                 {detected && (
-                    <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-lg">
+                    <div className="px-3 py-1 bg-red-500/20 border border-red-500/50 rounded-none">
                         <span className="text-xs font-black text-red-400 uppercase tracking-wider">
                             {probability}% RISK
                         </span>
@@ -115,25 +115,25 @@ export const MultiSensorCorrelation: React.FC = () => {
                 {/* Status indicators */}
                 <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.acoustic ? 'bg-amber-500' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-none ${triggers.acoustic ? 'bg-amber-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.acoustic ? 'text-amber-400' : 'text-slate-500'}`}>
                             Akustični potpis (kavitacija)
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.thermal ? 'bg-red-500' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-none ${triggers.thermal ? 'bg-red-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.thermal ? 'text-red-400' : 'text-slate-500'}`}>
                             Termalni trend (ležaj)
                         </span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${triggers.hydraulic ? 'bg-blue-500' : 'bg-slate-600'}`}></div>
+                        <div className={`w-2 h-2 rounded-none ${triggers.hydraulic ? 'bg-blue-500' : 'bg-slate-600'}`}></div>
                         <span className={`text-xs font-bold ${triggers.hydraulic ? 'text-blue-400' : 'text-slate-500'}`}>
                             Hidraulička stabilnost
                         </span>
                     </div>
 
-                    <div className={`mt-4 p-3 rounded-lg border ${detected ? 'bg-red-950/30 border-red-500/30' : 'bg-slate-900/30 border-slate-700/30'}`}>
+                    <div className={`mt-4 p-3 rounded-none border ${detected ? 'bg-red-950/30 border-red-500/30' : 'bg-slate-900/30 border-slate-700/30'}`}>
                         <p className={`text-[10px] font-bold ${detected ? 'text-red-300' : 'text-slate-400'}`}>
                             {message}
                         </p>

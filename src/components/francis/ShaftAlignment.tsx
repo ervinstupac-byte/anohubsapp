@@ -179,22 +179,22 @@ export const ShaftAlignment: React.FC = () => {
             <header className="bg-black/40 border-b-2 border-stone-800 py-6 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md">
                 <div className="max-w-6xl mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-amber-600 rounded-2xl shadow-lg border border-white/10">
+                        <div className="p-3 bg-amber-600 rounded-none shadow-none border border-white/10">
                             <Ruler className="text-white w-6 h-6" />
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-400 text-[10px] font-black border border-amber-900/50 uppercase tracking-widest">SOP-MECH-005</span>
+                                <span className="px-2 py-0.5 rounded-none bg-amber-950 text-amber-400 text-[10px] font-black border border-amber-900/50 uppercase tracking-widest">SOP-MECH-005</span>
                                 <NeuralPulse color="amber" />
                             </div>
                             <h1 className="text-2xl font-black text-white tracking-tighter uppercase">{t('francis.shaftAlignment.title')}</h1>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <button onClick={handleGenerateReport} className="flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/30 rounded-full text-[10px] font-black text-emerald-400 hover:bg-emerald-600 hover:text-white transition uppercase tracking-widest">
+                        <button onClick={handleGenerateReport} className="flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/30 rounded-none text-[10px] font-black text-emerald-400 hover:bg-emerald-600 hover:text-white transition uppercase tracking-widest">
                             <FileSearch className="w-3 h-3" /> Dossier
                         </button>
-                        <button onClick={() => navigate(`/${ROUTES.FRANCIS.HUB}`)} className="p-2 bg-white/5 border border-white/10 rounded-full hover:bg-white/10 transition">
+                        <button onClick={() => navigate(`/${ROUTES.FRANCIS.HUB}`)} className="p-2 bg-white/5 border border-white/10 rounded-none hover:bg-white/10 transition">
                             <ArrowLeft className="w-4 h-4 text-slate-400" />
                         </button>
                     </div>
@@ -204,12 +204,12 @@ export const ShaftAlignment: React.FC = () => {
             <main className={`max-w-6xl mx-auto px-4 md:px-8 ${densityMode === 'compact' ? 'space-y-6' : 'space-y-12'}`}>
 
                 {/* 1. API 686 CALCULATOR MODULE (DEEP DIVE) */}
-                <section className="bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-1 overflow-hidden backdrop-blur-sm relative">
+                <section className="bg-slate-900/40 border border-white/5 rounded-none p-1 overflow-hidden backdrop-blur-sm relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-cyan-500 to-amber-500 opacity-30" />
 
                     <div className={`grid grid-cols-1 lg:grid-cols-12 ${spacing.sectionGap}`}>
                         {/* Inputs */}
-                        <div className={`col-span-12 lg:col-span-4 bg-black/20 ${spacing.cardPadding} rounded-[2.5rem]`}>
+                        <div className={`col-span-12 lg:col-span-4 bg-black/20 ${spacing.cardPadding} rounded-none`}>
                             <div className="flex items-center gap-3 mb-6">
                                 <Calculator className="w-5 h-5 text-amber-500" />
                                 <h3 className="text-sm font-black text-slate-300 uppercase tracking-widest">API 686 Calculator</h3>
@@ -223,7 +223,7 @@ export const ShaftAlignment: React.FC = () => {
                                         type="number"
                                         value={rpm}
                                         onChange={(e) => setRpm(Number(e.target.value))}
-                                        className="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-2 text-cyan-400 font-mono font-bold focus:border-cyan-500 focus:outline-none transition-colors"
+                                        className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-cyan-400 font-mono font-bold focus:border-cyan-500 focus:outline-none transition-colors"
                                     />
                                     <div className="text-[9px] text-slate-600 font-mono">Tier: {tolerances.tier.max === 99999 ? '>3600' : `<${tolerances.tier.max}`} RPM</div>
                                 </div>
@@ -236,13 +236,13 @@ export const ShaftAlignment: React.FC = () => {
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => setCouplingType('short')}
-                                            className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'short' ? 'bg-cyan-600 text-white shadow-lg' : 'bg-white/5 text-slate-500'}`}
+                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'short' ? 'bg-cyan-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
                                         >
                                             Short
                                         </button>
                                         <button
                                             onClick={() => setCouplingType('spacer')}
-                                            className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'spacer' ? 'bg-cyan-600 text-white shadow-lg' : 'bg-white/5 text-slate-500'}`}
+                                            className={`flex-1 py-2 rounded-none text-xs font-black uppercase tracking-widest transition-all ${couplingType === 'spacer' ? 'bg-cyan-600 text-white shadow-none' : 'bg-white/5 text-slate-500'}`}
                                         >
                                             Spacer
                                         </button>
@@ -256,7 +256,7 @@ export const ShaftAlignment: React.FC = () => {
                                             type="number"
                                             value={spacerLength}
                                             onChange={(e) => setSpacerLength(Number(e.target.value))}
-                                            className="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-2 text-white font-mono font-bold focus:border-cyan-500 focus:outline-none"
+                                            className="w-full bg-black/60 border border-white/10 rounded-none px-4 py-2 text-white font-mono font-bold focus:border-cyan-500 focus:outline-none"
                                         />
                                     </motion.div>
                                 )}
@@ -297,7 +297,7 @@ export const ShaftAlignment: React.FC = () => {
                         </div>
 
                         {/* Interactive Manual Entry */}
-                        <div className="col-span-12 lg:col-span-3 bg-slate-950/50 p-6 rounded-[2.5rem] border-l border-white/5">
+                        <div className="col-span-12 lg:col-span-3 bg-slate-950/50 p-6 rounded-none border-l border-white/5">
                             <h4 className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <Activity className="w-3 h-3" /> Field Values
                             </h4>
@@ -308,7 +308,7 @@ export const ShaftAlignment: React.FC = () => {
                                         type="number" step="0.01"
                                         value={measurements.vOffset}
                                         onChange={(e) => setMeasurements({ ...measurements, vOffset: Number(e.target.value) })}
-                                        className={`w-full bg-black/40 border rounded px-3 py-1.5 font-mono text-sm font-bold ${Math.abs(measurements.vOffset) > tolerances.maxOffsetMm ? 'border-red-500 text-red-500' : 'border-white/10 text-emerald-400'}`}
+                                        className={`w-full bg-black/40 border rounded-none px-3 py-1.5 font-mono text-sm font-bold ${Math.abs(measurements.vOffset) > tolerances.maxOffsetMm ? 'border-red-500 text-red-500' : 'border-white/10 text-emerald-400'}`}
                                     />
                                 </div>
                                 <div>
@@ -317,7 +317,7 @@ export const ShaftAlignment: React.FC = () => {
                                         type="number" step="0.01"
                                         value={measurements.hOffset}
                                         onChange={(e) => setMeasurements({ ...measurements, hOffset: Number(e.target.value) })}
-                                        className={`w-full bg-black/40 border rounded px-3 py-1.5 font-mono text-sm font-bold ${Math.abs(measurements.hOffset) > tolerances.maxOffsetMm ? 'border-red-500 text-red-500' : 'border-white/10 text-emerald-400'}`}
+                                        className={`w-full bg-black/40 border rounded-none px-3 py-1.5 font-mono text-sm font-bold ${Math.abs(measurements.hOffset) > tolerances.maxOffsetMm ? 'border-red-500 text-red-500' : 'border-white/10 text-emerald-400'}`}
                                     />
                                 </div>
                                 <div>
@@ -326,13 +326,13 @@ export const ShaftAlignment: React.FC = () => {
                                         type="number" step="0.01"
                                         value={measurements.gapDiff}
                                         onChange={(e) => setMeasurements({ ...measurements, gapDiff: Number(e.target.value) })}
-                                        className={`w-full bg-black/40 border rounded px-3 py-1.5 font-mono text-sm font-bold ${measurements.gapDiff > tolerances.maxAngularityMmPerM ? 'border-amber-500 text-amber-500' : 'border-white/10 text-emerald-400'}`}
+                                        className={`w-full bg-black/40 border rounded-none px-3 py-1.5 font-mono text-sm font-bold ${measurements.gapDiff > tolerances.maxAngularityMmPerM ? 'border-amber-500 text-amber-500' : 'border-white/10 text-emerald-400'}`}
                                     />
                                 </div>
                             </div>
                             <button
                                 onClick={() => confirmStep('manual_entry', `Manual Alignment Input: ${totalOffset.toFixed(3)}mm`)}
-                                className="w-full mt-6 py-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-600 hover:text-white transition-all"
+                                className="w-full mt-6 py-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-none hover:bg-indigo-600 hover:text-white transition-all"
                             >
                                 Log To Ledger
                             </button>
@@ -345,7 +345,7 @@ export const ShaftAlignment: React.FC = () => {
                     <div className="lg:col-span-2">
                         <GlassCard title="Shaft Orbit Dynamic Stability" icon={<Microscope className="text-cyan-400" />}>
                             <div className="flex flex-col md:flex-row gap-6 items-center">
-                                <div className="p-4 bg-black/40 rounded-[2rem] border border-white/5 shadow-2xl">
+                                <div className="p-4 bg-black/40 rounded-none border border-white/5 shadow-none">
                                     <ShaftOrbitPlot
                                         ref={orbitRef}
                                         vibrationX={vibration.x}
@@ -361,17 +361,17 @@ export const ShaftAlignment: React.FC = () => {
                                 <div className="flex-1 w-full space-y-4">
                                     {/* Metric Cards */}
                                     <div className={`grid grid-cols-2 ${spacing.sectionGap}`}>
-                                        <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                                        <div className="p-4 bg-black/40 rounded-none border border-white/5">
                                             <div className="text-[9px] text-slate-500 font-black uppercase mb-1">Eccentricity</div>
                                             <div className="text-xl font-black font-mono text-cyan-400">{new Decimal(orbitAnalysis.eccentricity).toFixed(3)}</div>
                                         </div>
-                                        <div className="p-4 bg-black/40 rounded-2xl border border-white/5">
+                                        <div className="p-4 bg-black/40 rounded-none border border-white/5">
                                             <div className="text-[9px] text-slate-500 font-black uppercase mb-1">Drift (&mu;m)</div>
                                             <div className="text-xl font-black font-mono text-amber-400">{new Decimal(orbitAnalysis.centerMigration).mul(1000).toFixed(1)}</div>
                                         </div>
                                     </div>
 
-                                    <div className="p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                                    <div className="p-4 bg-slate-900/50 rounded-none border border-white/5">
                                         <p className="text-[10px] text-slate-300 font-medium italic leading-relaxed">
                                             {orbitAnalysis.isElliptical
                                                 ? "WARNING: Elliptical path detected. Inspect bearing fluid film."
@@ -380,8 +380,8 @@ export const ShaftAlignment: React.FC = () => {
                                     </div>
 
                                     <div className="flex gap-2">
-                                        <button onClick={handlePinBaseline} className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase rounded-lg">Pin Baseline</button>
-                                        <button onClick={handleResetBaseline} className="px-4 py-2 bg-red-950/20 text-red-500 text-[10px] font-black uppercase rounded-lg border border-red-500/20">Reset</button>
+                                        <button onClick={handlePinBaseline} className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase rounded-none">Pin Baseline</button>
+                                        <button onClick={handleResetBaseline} className="px-4 py-2 bg-red-950/20 text-red-500 text-[10px] font-black uppercase rounded-none border border-red-500/20">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -390,20 +390,20 @@ export const ShaftAlignment: React.FC = () => {
 
                     {/* 3. SOFT FOOT AUDIT - COMPACT */}
                     <div className="lg:col-span-1">
-                        <div className="bg-red-950/10 border-l-[4px] border-red-500 p-6 rounded-r-[2rem] border-y border-r border-red-500/10 h-full flex flex-col">
+                        <div className="bg-red-950/10 border-l-[4px] border-red-500 p-6 rounded-none border-y border-r border-red-500/10 h-full flex flex-col">
                             <h3 className="text-sm font-black text-white uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <Footprints className="w-4 h-4 text-red-500" /> Soft Foot
                                 <InfoTooltip docKey="soft_foot" />
                             </h3>
                             <div className="grid grid-cols-2 gap-3 mb-6">
                                 {['c1', 'c2', 'c3', 'c4'].map((id, i) => (
-                                    <div key={id} className="bg-black/40 p-3 rounded-xl border border-white/5 text-center">
+                                    <div key={id} className="bg-black/40 p-3 rounded-none border border-white/5 text-center">
                                         <span className="text-[8px] text-slate-500 font-black uppercase block mb-1">Foot {i + 1}</span>
                                         <span className={`text-xs font-mono font-bold ${i === 3 ? 'text-red-400 animate-pulse' : 'text-emerald-400'}`}>{i === 3 ? '0.08' : '0.02'}</span>
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-auto p-4 bg-red-500/10 rounded-xl border border-red-500/20 text-center">
+                            <div className="mt-auto p-4 bg-red-500/10 rounded-none border border-red-500/20 text-center">
                                 <div className="text-[9px] text-red-300 font-bold uppercase tracking-tight">Shim Correction Required on Foot 4</div>
                             </div>
                         </div>
@@ -414,4 +414,3 @@ export const ShaftAlignment: React.FC = () => {
         </div>
     );
 };
-

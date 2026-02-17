@@ -52,7 +52,7 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                 <div className="flex items-center gap-3">
                                     <button 
                                         onClick={onClose}
-                                        className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white transition-colors lg:hidden"
+                                        className="p-2 hover:bg-white/10 rounded-none text-slate-400 hover:text-white transition-colors lg:hidden"
                                     >
                                         <ArrowLeft className="w-5 h-5" />
                                     </button>
@@ -62,14 +62,14 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                 <div className="flex items-center gap-2">
                                     <button 
                                         onClick={handleExport}
-                                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded text-xs transition-colors"
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 rounded-none text-xs transition-colors"
                                     >
                                         <Download className="w-3 h-3" />
                                         Export JSON
                                     </button>
                                     <button 
                                         onClick={onClose} 
-                                        className="p-2 hover:bg-white/10 rounded-full text-slate-400 hover:text-white"
+                                        className="p-2 hover:bg-white/10 rounded-none text-slate-400 hover:text-white"
                                         title="Close"
                                     >
                                         <X className="w-5 h-5" />
@@ -86,7 +86,7 @@ export const FullAuditLogModal: React.FC<FullAuditLogModalProps> = ({ isOpen, on
                                             <input 
                                                 type="text" 
                                                 placeholder="Search logs..." 
-                                                className="w-full bg-black/20 border border-white/10 rounded pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
+                                                className="w-full bg-black/20 border border-white/10 rounded-none pl-9 pr-3 py-2 text-sm text-white focus:outline-none focus:border-cyan-500/50"
                                                 value={filter}
                                                 onChange={(e) => setFilter(e.target.value)}
                                             />

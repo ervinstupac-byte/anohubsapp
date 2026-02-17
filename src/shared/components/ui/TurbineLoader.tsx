@@ -22,7 +22,7 @@ export const TurbineLoader: React.FC<TurbineLoaderProps> = ({ message = "Generir
                 {/* Inner Runner (Rotor) - SVG Representation of Pelton Bucket */}
                 <motion.svg
                     viewBox="0 0 24 24"
-                    className="w-12 h-12 text-[#2dd4bf] drop-shadow-[0_0_10px_rgba(45,212,191,0.5)]"
+                    className="w-12 h-12 text-[#2dd4bf]"
                     animate={{ rotate: -360 }}
                     transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                 >

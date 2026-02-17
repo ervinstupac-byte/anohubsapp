@@ -259,7 +259,7 @@ export const CommandPalette = React.memo(() => {
                             initial={{ scale: 0.95, opacity: 0, y: -20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: -20 }}
-                            className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden relative z-10 flex flex-col max-h-[60vh]"
+                            className="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-none shadow-none overflow-hidden relative z-10 flex flex-col max-h-[60vh]"
                         >
                             {/* Search Input */}
                             <div className="flex items-center gap-3 px-4 py-4 border-b border-slate-700 bg-slate-900/50">
@@ -273,7 +273,7 @@ export const CommandPalette = React.memo(() => {
                                     className="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-500 text-lg"
                                 />
                                 <div className="hidden sm:flex items-center gap-1">
-                                    <span className="text-xs text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">ESC</span>
+                                    <span className="text-xs text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded-none border border-slate-700">ESC</span>
                                 </div>
                             </div>
 
@@ -291,11 +291,11 @@ export const CommandPalette = React.memo(() => {
                                                 key={`${result.id}-${index}`}
                                                 onClick={() => { result.action(); }}
                                                 onMouseEnter={() => setSelectedIndex(index)}
-                                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors group ${
+                                                className={`w-full flex items-center gap-3 px-3 py-3 rounded-none text-left transition-colors group ${
                                                     index === selectedIndex ? 'bg-cyan-500/10' : 'hover:bg-slate-800'
                                                 }`}
                                             >
-                                                <div className={`p-2 rounded-md ${
+                                                <div className={`p-2 rounded-none ${
                                                     result.variant === 'danger' ? 'bg-red-500/20 text-red-400' :
                                                     result.variant === 'warning' ? 'bg-amber-500/20 text-amber-400' :
                                                     index === selectedIndex ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'

@@ -47,14 +47,14 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
 
     return (
         <AnimatePresence mode="wait">
-            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90">
                 <motion.div 
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
                     className="w-full max-w-lg"
                 >
-                    <GlassCard className="w-full border-indigo-500/30 overflow-hidden relative shadow-[0_0_50px_rgba(79,70,229,0.2)]">
+                    <GlassCard className="w-full border-indigo-500/30 overflow-hidden relative shadow-none rounded-none">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-cyan-500 to-indigo-500 animate-pulse" />
 
                         {/* Session History Header */}
@@ -72,10 +72,10 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
 
                         <div className="p-6">
                             <div className="flex items-center gap-4 mb-6">
-                                <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 shrink-0 relative">
+                                <div className="w-12 h-12 rounded-none bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 shrink-0 relative">
                                     <Brain className="w-6 h-6 text-indigo-400" />
-                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-none bg-slate-900 border border-slate-700 flex items-center justify-center">
+                                        <div className="w-2 h-2 rounded-none bg-emerald-500 animate-pulse" />
                                     </div>
                                 </div>
                                 <div>
@@ -89,7 +89,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                                     key={query.id}
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    className="text-lg text-slate-200 font-medium leading-relaxed border-l-4 border-indigo-500/50 pl-4 py-3 bg-gradient-to-r from-indigo-500/10 to-transparent rounded-r-lg"
+                                    className="text-lg text-slate-200 font-medium leading-relaxed border-l-4 border-indigo-500/50 pl-4 py-3 bg-slate-900 rounded-none"
                                 >
                                     "{query.query}"
                                 </motion.div>
@@ -105,9 +105,9 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                                         onClick={() => handleOptionSelect(opt.value)}
                                         disabled={isSubmitting}
                                         className={`
-                                            w-full p-4 rounded-xl border transition-all text-left group relative overflow-hidden
+                                            w-full p-4 rounded-none border transition-all text-left group relative overflow-hidden
                                             ${selectedOption === opt.value 
-                                                ? 'bg-indigo-500/20 border-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]' 
+                                                ? 'bg-indigo-500/20 border-indigo-500 text-white shadow-none' 
                                                 : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-indigo-500/30 text-slate-300 hover:text-white'}
                                             ${isSubmitting && selectedOption !== opt.value ? 'opacity-50 cursor-not-allowed' : ''}
                                         `}
@@ -115,7 +115,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                                         <div className="flex justify-between items-center relative z-10">
                                             <span className="text-sm font-bold uppercase tracking-wider">{opt.label}</span>
                                             {selectedOption === opt.value ? (
-                                                <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center">
+                                                <div className="w-6 h-6 rounded-none bg-indigo-500 flex items-center justify-center">
                                                     <CheckCircle2 className="w-4 h-4 text-white" />
                                                 </div>
                                             ) : (

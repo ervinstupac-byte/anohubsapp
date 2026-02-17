@@ -31,7 +31,7 @@ export const GovernorPID: React.FC = () => {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-12">
             {/* Header */}
-            <header className="bg-black/40 border-b-2 border-blue-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-2xl">
+            <header className="bg-black/40 border-b-2 border-blue-900 py-8 px-4 md:px-8 mb-8 sticky top-0 z-50 backdrop-blur-md shadow-none">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-center md:text-left">
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center md:justify-start gap-3">
@@ -45,7 +45,7 @@ export const GovernorPID: React.FC = () => {
 
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-2 px-6 py-2 bg-blue-600/10 border-2 border-blue-500/50 text-blue-400 rounded-full font-black hover:bg-blue-500 hover:text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all group uppercase text-xs tracking-tighter"
+                        className="flex items-center gap-2 px-6 py-2 bg-blue-600/10 border-2 border-blue-500/50 text-blue-400 rounded-none font-black hover:bg-blue-500 hover:text-white hover:shadow-none transition-all group uppercase text-xs tracking-tighter"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition" />
                         <span>{t('francis.governorPID.return')}</span>
@@ -73,7 +73,7 @@ export const GovernorPID: React.FC = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
                         {/* Error Viz */}
-                        <div className="lg:col-span-1 flex flex-col justify-center items-center p-6 bg-black/60 rounded-3xl border border-white/5 shadow-2xl">
+                        <div className="lg:col-span-1 flex flex-col justify-center items-center p-6 bg-black/60 rounded-none border border-white/5 shadow-none">
                             <div className="relative w-40 h-40 flex items-center justify-center">
                                 <svg className="w-full h-full transform -rotate-90">
                                     <circle
@@ -89,7 +89,7 @@ export const GovernorPID: React.FC = () => {
                                         strokeDasharray={440}
                                         initial={{ strokeDashoffset: 440 }}
                                         animate={{ strokeDashoffset: 440 * (1 - Math.min(1, Math.abs(governorMath.error / 2))) }}
-                                        className={Math.abs(governorMath.error) < 0.2 ? 'text-emerald-500' : 'text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]'}
+                                        className={Math.abs(governorMath.error) < 0.2 ? 'text-emerald-500' : 'text-amber-500 shadow-none'}
                                     />
                                 </svg>
                                 <div className="absolute flex flex-col items-center">
@@ -104,7 +104,7 @@ export const GovernorPID: React.FC = () => {
                         {/* Metrics Grid */}
                         <div className="lg:col-span-3 space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:border-blue-500/50 transition-colors">
+                                <div className="p-4 bg-white/5 rounded-none border border-white/10 hover:border-blue-500/50 transition-colors">
                                     <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                         <Activity className="w-3 h-3 text-blue-400" /> Target Setpoint
                                     </p>
@@ -112,7 +112,7 @@ export const GovernorPID: React.FC = () => {
                                         {governor.setpoint.toFixed(2)} <span className="text-xs text-slate-500">Hz</span>
                                     </p>
                                 </div>
-                                <div className="p-4 bg-white/5 rounded-2xl border border-white/10 hover:border-blue-500/50 transition-colors">
+                                <div className="p-4 bg-white/5 rounded-none border border-white/10 hover:border-blue-500/50 transition-colors">
                                     <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                         <Zap className="w-3 h-3 text-amber-400" /> Dynamic Response
                                     </p>
@@ -120,7 +120,7 @@ export const GovernorPID: React.FC = () => {
                                         {governor.actualValue.toFixed(2)} <span className="text-xs text-slate-500">Hz</span>
                                     </p>
                                 </div>
-                                <div className="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+                                <div className="p-4 bg-blue-500/10 rounded-none border border-blue-500/20">
                                     <p className="text-[10px] text-blue-400 uppercase font-black mb-2 tracking-widest flex items-center gap-2">
                                         <Cpu className="w-3 h-3" /> Output Signal (Y)
                                     </p>
@@ -131,9 +131,9 @@ export const GovernorPID: React.FC = () => {
                             </div>
 
                             {/* Narrative Box */}
-                            <div className={`p-6 rounded-2xl border-2 transition-all ${Math.abs(governorMath.error) > 0.5 ? 'bg-amber-500/10 border-amber-500/30' : 'bg-blue-500/10 border-blue-500/30 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)]'}`}>
+                            <div className={`p-6 rounded-none border-2 transition-all ${Math.abs(governorMath.error) > 0.5 ? 'bg-amber-500/10 border-amber-500/30' : 'bg-blue-500/10 border-blue-500/30 shadow-none'}`}>
                                 <div className="flex items-center gap-3 mb-3">
-                                    <div className="w-2 h-2 rounded-full bg-blue-400 animate-ping" />
+                                    <div className="w-2 h-2 rounded-none bg-blue-400 animate-ping" />
                                     <span className="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em]">Neural Reflex Analysis</span>
                                 </div>
                                 <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-bold italic">
@@ -144,7 +144,7 @@ export const GovernorPID: React.FC = () => {
                             </div>
 
                             {/* Gains Detail */}
-                            <div className="flex flex-wrap justify-between items-center px-6 py-4 bg-black/40 rounded-2xl border border-white/5 shadow-inner gap-4">
+                            <div className="flex flex-wrap justify-between items-center px-6 py-4 bg-black/40 rounded-none border border-white/5 shadow-none gap-4">
                                 <div className="flex gap-8">
                                     <div className="text-center group/gain">
                                         <span className="text-[9px] text-slate-500 uppercase font-black block mb-1">Kp</span>
@@ -159,8 +159,8 @@ export const GovernorPID: React.FC = () => {
                                         <span className="text-sm font-mono font-black text-white group-hover/gain:text-blue-400 transition-colors">{governor.kd.toFixed(3)}</span>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3 bg-white/5 py-1 px-3 rounded-full border border-white/10">
-                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                                <div className="flex items-center gap-3 bg-white/5 py-1 px-3 rounded-none border border-white/10">
+                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse" />
                                     <span className="text-[10px] text-slate-400 uppercase font-black tracking-widest">Neural Reflex: {burstRate}ms</span>
                                 </div>
                             </div>
@@ -169,7 +169,7 @@ export const GovernorPID: React.FC = () => {
                 </GlassCard>
 
                 {/* Safety Alert (IEC Logic) */}
-                <div className="bg-red-500/10 border-l-[12px] border-red-600 p-8 rounded-r-3xl shadow-2xl backdrop-blur-sm border border-red-900/20">
+                <div className="bg-red-500/10 border-l-[12px] border-red-600 p-8 rounded-none shadow-none backdrop-blur-sm border border-red-900/20">
                     <div className="flex items-start gap-6">
                         <AlertOctagon className="w-12 h-12 text-red-600 flex-shrink-0" />
                         <div>
@@ -200,7 +200,7 @@ export const GovernorPID: React.FC = () => {
                 </div>
 
                 {/* PID Architecture Flow */}
-                <section className="bg-slate-900/50 p-8 rounded-3xl border border-white/5">
+                <section className="bg-slate-900/50 p-8 rounded-none border border-white/5">
                     <div className="flex items-center gap-3 mb-8">
                         <Cpu className="w-6 h-6 text-blue-500" />
                         <h3 className="text-xl font-black text-white uppercase tracking-tighter">{t('francis.governorPID.basicsTitle')}</h3>
@@ -211,13 +211,13 @@ export const GovernorPID: React.FC = () => {
                             "{t('francis.governorPID.govDesc')}"
                         </p>
 
-                        <div className="bg-gradient-to-br from-blue-600/10 to-transparent border border-blue-500/20 rounded-3xl p-8 relative overflow-hidden">
+                        <div className="bg-gradient-to-br from-blue-600/10 to-transparent border border-blue-500/20 rounded-none p-8 relative overflow-hidden">
                             {/* Decorative Grid */}
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[length:20px_20px] opacity-30" />
 
                             <h4 className="text-blue-400 font-black uppercase text-[10px] mb-6 tracking-[0.4em] text-center relative z-10">{t('francis.governorPID.loopTitle')}</h4>
                             <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
-                                <div className="px-6 py-3 bg-black/60 rounded-xl border border-white/10 shadow-lg font-mono text-sm text-white">
+                                <div className="px-6 py-3 bg-black/60 rounded-none border border-white/10 shadow-none font-mono text-sm text-white">
                                     {t('francis.governorPID.errEq')}
                                 </div>
                                 <motion.div
@@ -234,7 +234,7 @@ export const GovernorPID: React.FC = () => {
                                 >
                                     ↓
                                 </motion.div>
-                                <div className="px-8 py-4 bg-blue-600/20 rounded-xl border-2 border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.2)] font-mono text-base font-black text-blue-400">
+                                <div className="px-8 py-4 bg-blue-600/20 rounded-none border-2 border-blue-500/50 shadow-none font-mono text-base font-black text-blue-400">
                                     {t('francis.governorPID.outEq')}
                                 </div>
                             </div>
@@ -244,7 +244,7 @@ export const GovernorPID: React.FC = () => {
 
                 <div className="grid lg:grid-cols-2 gap-8">
                     {/* Dead Band */}
-                    <section className="bg-white/5 rounded-3xl border border-white/10 overflow-hidden backdrop-blur-md">
+                    <section className="bg-white/5 rounded-none border border-white/10 overflow-hidden backdrop-blur-md">
                         <div className="bg-white/5 p-4 font-black text-slate-400 flex justify-between items-center border-b border-white/5">
                             <span className="uppercase text-[10px] tracking-widest">{t('francis.governorPID.deadbandTitle')}</span>
                             <ShieldAlert className="w-4 h-4" />
@@ -253,7 +253,7 @@ export const GovernorPID: React.FC = () => {
                             <p className="text-sm text-slate-300 mb-6 leading-relaxed">
                                 <strong className="text-white">{t('francis.governorPID.dbDef')}</strong> {t('francis.governorPID.dbDesc')}
                             </p>
-                            <div className="bg-black/40 p-4 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div className="bg-black/40 p-4 rounded-none border border-white/5 flex justify-between items-center">
                                 <span className="text-xs text-slate-500 font-black uppercase">{t('francis.governorPID.dbParam')}</span>
                                 <span className="text-lg font-mono font-black text-white">{t('francis.governorPID.rpmRangeValue')}</span>
                             </div>
@@ -261,7 +261,7 @@ export const GovernorPID: React.FC = () => {
                     </section>
 
                     {/* Step Response */}
-                    <section className="bg-white/5 rounded-3xl border border-white/10 overflow-hidden backdrop-blur-md">
+                    <section className="bg-white/5 rounded-none border border-white/10 overflow-hidden backdrop-blur-md">
                         <div className="bg-white/5 p-4 font-black text-slate-400 flex justify-between items-center border-b border-white/5">
                             <span className="uppercase text-[10px] tracking-widest">{t('francis.governorPID.stepRespTitle')}</span>
                             <Activity className="w-4 h-4" />
@@ -284,7 +284,7 @@ export const GovernorPID: React.FC = () => {
                 </div>
 
                 {/* Checklist */}
-                <div className="bg-black/60 p-6 rounded-3xl flex flex-wrap gap-8 items-center justify-center text-[10px] border border-white/5">
+                <div className="bg-black/60 p-6 rounded-none flex flex-wrap gap-8 items-center justify-center text-[10px] border border-white/5">
                     <div className="flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         <span className="uppercase font-black text-white tracking-widest">{t('francis.governorPID.checklist')}:</span>

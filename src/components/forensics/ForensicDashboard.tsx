@@ -78,7 +78,7 @@ export const ForensicDashboard: React.FC = () => {
                         className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center"
                     >
                         <div className="w-full h-full border-[__20px] border-red-500/10 animate-pulse"></div>
-                        <div className="absolute top-10 bg-red-600 text-white px-6 py-2 rounded-full font-black tracking-widest uppercase shadow-[0_0_50px_rgba(239,68,68,0.5)] animate-bounce">
+                        <div className="absolute top-10 bg-red-600 text-white px-6 py-2 rounded-none font-black tracking-widest uppercase shadow-none animate-bounce">
                             ⚠️ {t('forensics.critical_alert', 'CRITICAL SECURITY ALERT: DATA EXFILTRATION')}
                         </div>
                     </motion.div>
@@ -88,7 +88,7 @@ export const ForensicDashboard: React.FC = () => {
             <header className="mb-8 border-b border-white/10 pb-6 flex justify-between items-end relative z-10">
                 <div>
                     <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2 flex items-center gap-3">
-                        <div className={`p-2 rounded-lg transition-colors ${status === 'ATTACK_IN_PROGRESS' ? 'bg-red-500 animate-pulse' : 'bg-[#2dd4bf] text-black'}`}>
+                        <div className={`p-2 rounded-none transition-colors ${status === 'ATTACK_IN_PROGRESS' ? 'bg-red-500 animate-pulse' : 'bg-[#2dd4bf] text-black'}`}>
                             {status === 'ATTACK_IN_PROGRESS' ? <ShieldAlert className="w-8 h-8 text-white" /> : <Microscope className="w-8 h-8" />}
                         </div>
                         {t('forensics.title', 'Diagnostic Forensics')}

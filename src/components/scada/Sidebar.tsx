@@ -48,7 +48,7 @@ const FleetSection: React.FC<FleetSectionProps> = ({ showMap, onToggleMap, onReg
                             e.stopPropagation();
                             onRegisterAsset();
                         }}
-                        className="p-1 rounded bg-emerald-900/20 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 border border-emerald-900/30"
+                        className="p-1 rounded-none bg-emerald-900/20 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 border border-emerald-900/30"
                         title="Register New Asset"
                     >
                         <Plus className="w-3 h-3" />
@@ -61,7 +61,7 @@ const FleetSection: React.FC<FleetSectionProps> = ({ showMap, onToggleMap, onReg
             {/* Content - Collapsible */}
             {isExpanded && (
                 <div className="pb-4 animate-in slide-in-from-top-2 duration-200">
-                    <ErrorBoundary fallback={<div className="p-4 text-xs text-red-500 bg-red-950/30 border border-red-500/30 rounded">Fleet Overview Unavailable</div>}>
+                    <ErrorBoundary fallback={<div className="p-4 text-xs text-red-500 bg-red-950/30 border border-red-500/30 rounded-none">Fleet Overview Unavailable</div>}>
                         <FleetOverview
                             onToggleMap={onToggleMap}
                             showMap={showMap}
@@ -117,9 +117,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
         { id: 'structuralIntegrity', title: t('sidebar.structuralIntegrity', 'Structural Integrity'), icon: '🏗️', route: `/${ROUTES.STRUCTURAL_INTEGRITY}` },
         { id: 'installationGuarantee', title: t('modules.installationGuarantee', 'Precision Audit'), icon: '📏', route: `/${ROUTES.INSTALLATION_GUARANTEE}` },
         { id: 'hppBuilder', title: t('modules.hppBuilder', 'HPP Studio'), icon: '⚡', route: `/${ROUTES.HPP_BUILDER}` },
-        { id: 'mounterCard', title: t('sidebar.mounterCard', 'Mounter Quick Card'), icon: '🔧', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.MOUNTER_CARD}` },
-        { id: 'damageCard', title: t('sidebar.damageCard', 'Damage Diagnosis'), icon: '🩺', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DAMAGE_CARD}` },
-        { id: 'assetPassportCard', title: t('sidebar.assetPassportCard', 'Asset Passport'), icon: '🪪', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}` },
+        { id: 'mounterCard', title: 'Mounter Quick Card', icon: '🔧', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.MOUNTER_CARD}` },
+        { id: 'damageCard', title: 'Damage Diagnosis', icon: '🩺', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.DAMAGE_CARD}` },
+        { id: 'assetPassportCard', title: 'Asset Passport', icon: '🪪', route: `/${ROUTES.MAINTENANCE.ROOT}/${ROUTES.MAINTENANCE.ASSET_PASSPORT_CARD}` },
         { id: 'genesis', title: 'Field Ingestion', icon: '📋', route: '/genesis' }, // NC-20701
     ];
 
@@ -171,15 +171,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-cyan-900/20 to-transparent opacity-50 pointer-events-none" />
 
                     <div className="flex items-center gap-3 relative z-10">
-                        <div className="w-10 h-10 bg-cyan-950 border border-cyan-500/30 rounded flex items-center justify-center relative">
-                            <div className="absolute inset-0 bg-cyan-500/10 animate-pulse-glow rounded" />
+                        <div className="w-10 h-10 bg-cyan-950 border border-cyan-500/30 rounded-none flex items-center justify-center relative">
+                            <div className="absolute inset-0 bg-cyan-500/10 animate-pulse-glow rounded-none" />
                             <span className="text-xl font-black text-cyan-400 tracking-tighter">Ah</span>
                         </div>
                         <div>
                             <h1 className="text-sm font-bold text-white tracking-[0.2em] uppercase">AnoHUB</h1>
                             <div className="flex items-center gap-2">
                                 <span className="text-[10px] text-cyan-500 font-mono">v4.2.0-TACTICAL</span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                                <div className="w-1.5 h-1.5 rounded-none bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                             </div>
                         </div>
                     </div>
@@ -190,13 +190,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                     <div className="p-4 space-y-4">
 
                         {/* A. LAYER SWITCHER (Fixed Strings) */}
-                        <div className="flex bg-slate-950 p-1 rounded-lg border border-cyan-900/30">
+                        <div className="flex bg-slate-950 p-1 rounded-none border border-cyan-900/30">
                             {(['HUMAN', 'HISTORY', 'REALTIME'] as const).map(layer => (
                                 <button
                                     key={layer}
                                     onClick={() => setActiveLayer(layer)}
-                                    className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded transition-all ${activeLayer === layer
-                                        ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]'
+                                    className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-none transition-all ${activeLayer === layer
+                                        ? 'bg-cyan-900/40 text-cyan-400 border border-cyan-500/30 shadow-none'
                                         : 'text-slate-600 hover:text-cyan-200'
                                         }`}
                                 >
@@ -213,8 +213,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     SIG: {(signalQuality * 100).toFixed(0)}%
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 p-3 bg-slate-950 rounded border-l-2 border-cyan-500 shadow-inner shadow-black/50">
-                                <div className="p-2 bg-cyan-950/50 rounded-full border border-cyan-500/30">
+                            <div className="flex items-center gap-3 p-3 bg-slate-950 rounded-none border-l-2 border-cyan-500 shadow-inner shadow-black/50">
+                                <div className="p-2 bg-cyan-950/50 rounded-none border border-cyan-500/30">
                                     <BrainCircuit className="w-4 h-4 text-cyan-400 animate-pulse" />
                                 </div>
                                 <div className="overflow-hidden">
@@ -225,7 +225,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         <p className="text-[10px] text-cyan-400 font-mono truncate">
                                             {activeDefinition?.slogan || 'Monitoring global streams...'}
                                         </p>
-                                        <div className="w-1 h-1 bg-cyan-400 rounded-full animate-ping" />
+                                        <div className="w-1 h-1 bg-cyan-400 rounded-none animate-ping" />
                                     </div>
                                 </div>
                             </div>
@@ -244,7 +244,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     max={100}
                                     value={playback.progress}
                                     onChange={(e) => playback.scrubTo(Number(e.target.value))}
-                                    className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500"
+                                    className="w-full h-1 bg-slate-800 rounded-none appearance-none cursor-pointer accent-cyan-500"
                                 />
                                 <div className="flex justify-center gap-4">
                                     <button onClick={playback.togglePlay} className={`p-1 transition-colors ${playback.isPlaying ? 'text-cyan-400' : 'text-slate-500'}`}>
@@ -281,7 +281,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         {diagnostics && diagnostics.length > 0 && (
                             <div className="mt-4 pt-4 border-t border-cyan-900/30 space-y-3">
                                 {diagnostics.slice(0, 2).map((insight: any) => (
-                                    <div key={insight.id || Math.random()} className={`p-3 rounded border-l-2 ${insight.type === 'CRITICAL' ? 'bg-red-950/20 border-red-500' : 'bg-amber-950/20 border-amber-500'} animate-in slide-in-from-right-4`}>
+                                    <div key={insight.id || Math.random()} className={`p-3 rounded-none border-l-2 ${insight.type === 'CRITICAL' ? 'bg-red-950/20 border-red-500' : 'bg-amber-950/20 border-amber-500'} animate-in slide-in-from-right-4`}>
                                         <div className="flex justify-between items-start mb-1">
                                             <div className="flex items-center gap-1.5">
                                                 <BrainCircuit className={`w-3 h-3 ${insight.type === 'CRITICAL' ? 'text-red-400' : 'text-amber-400'}`} />
@@ -305,7 +305,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                                     <button
                                                         key={idx}
                                                         onClick={() => handleAction(action)}
-                                                        className="flex-1 py-1 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded text-[9px] text-cyan-400 font-mono uppercase tracking-wider flex items-center justify-center gap-1 transition-colors"
+                                                        className="flex-1 py-1 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-none text-[9px] text-cyan-400 font-mono uppercase tracking-wider flex items-center justify-center gap-1 transition-colors"
                                                     >
                                                         {action.type === 'FOCUS_3D' ? <ArrowRight className="w-3 h-3" /> : <Info className="w-3 h-3" />}
                                                         {action.label}
@@ -343,15 +343,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                         navigate(item.route);
                                         if (window.innerWidth < 1024) onClose();
                                     }}
-                                    className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-3 transition-all duration-200 group ${isActive
-                                        ? 'bg-cyan-950/30 text-cyan-400 border border-cyan-500/20 shadow-[inset_0_0_10px_rgba(6,182,212,0.1)]'
+                                    className={`w-full text-left px-3 py-2 rounded-none flex items-center gap-3 transition-all duration-200 group ${isActive
+                                        ? 'bg-cyan-950/30 text-cyan-400 border border-cyan-500/20 shadow-none'
                                         : 'text-slate-400 hover:bg-white/5 hover:text-cyan-200'
                                         }`}
                                 >
                                     <span className="text-lg opacity-80 group-hover:scale-110 transition-transform filter grayscale group-hover:grayscale-0">{item.icon}</span>
                                     <span className="text-xs font-bold tracking-wide">{item.title}</span>
                                     {isActive && (
-                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-cyan-500 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
+                                        <div className="ml-auto w-1.5 h-1.5 rounded-none bg-cyan-500 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
                                     )}
                                 </button>
                             );
@@ -368,7 +368,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     navigate(item.route);
                                     if (window.innerWidth < 1024) onClose();
                                 }}
-                                className={`w-full text-left px-3 py-2 rounded-md flex items-center gap-3 transition-all duration-200 group ${location.pathname.includes(item.route)
+                                className={`w-full text-left px-3 py-2 rounded-none flex items-center gap-3 transition-all duration-200 group ${location.pathname.includes(item.route)
                                     ? 'bg-purple-950/30 text-purple-300 border border-purple-500/20'
                                     : 'text-slate-400 hover:bg-white/5 hover:text-purple-200'
                                     }`}
@@ -379,14 +379,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         ))}
 
                         <div className="px-3 pt-6 pb-2">
-                            <div className="bg-slate-900 border border-cyan-900/30 rounded p-3">
+                            <div className="bg-slate-900 border border-cyan-900/30 rounded-none p-3">
                                 <h4 className="text-[10px] font-bold text-cyan-500 mb-2 uppercase tracking-wider flex items-center gap-2">
                                     <Upload className="w-3 h-3" />
                                     Data Bridge
                                 </h4>
                                 <div className="space-y-2">
                                     <button
-                                        className="w-full py-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 rounded border border-white/5 flex items-center justify-center gap-2 transition-colors"
+                                        className="w-full py-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 rounded-none border border-white/5 flex items-center justify-center gap-2 transition-colors"
                                         onClick={() => document.getElementById('bridge-upload')?.click()}
                                     >
                                         <Clock className="w-3 h-3" />
@@ -415,9 +415,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                                     dispatch.triggerForensicExport();
                                     if (window.innerWidth < 1024) onClose();
                                 }}
-                                className="w-full py-3 bg-red-950/30 hover:bg-red-900/40 border border-red-500/30 text-red-400 rounded flex items-center justify-center gap-2 group transition-all"
+                                className="w-full py-3 bg-red-950/30 hover:bg-red-900/40 border border-red-500/30 text-red-400 rounded-none flex items-center justify-center gap-2 group transition-all"
                             >
-                                <div className="p-1 bg-red-500/10 rounded group-hover:bg-red-500/20">
+                                <div className="p-1 bg-red-500/10 rounded-none group-hover:bg-red-500/20">
                                     <FileText className="w-4 h-4" />
                                 </div>
                                 <div className="flex flex-col items-start">

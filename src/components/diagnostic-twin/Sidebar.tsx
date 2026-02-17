@@ -146,7 +146,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
             initial={{ x: -300 }}
             animate={{ x: isOpen ? 0 : -300 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 left-0 w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-40 shadow-2xl"
+            className="fixed inset-y-0 left-0 w-64 bg-slate-950 border-r border-slate-800 flex flex-col z-40 shadow-none"
         >
             {/* 1. HEADER & OMNIBAR */}
             <div className="p-4 border-b border-slate-800 bg-slate-950/50 backdrop-blur-sm">
@@ -166,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         placeholder="Search modules..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all"
+                        className="w-full bg-slate-900 border border-slate-800 rounded-none pl-8 pr-3 py-1.5 text-xs text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all"
                     />
                 </div>
 
@@ -177,14 +177,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="mt-2 bg-amber-900/20 border border-amber-500/30 rounded overflow-hidden"
+                            className="mt-2 bg-amber-900/20 border border-amber-500/30 rounded-none overflow-hidden"
                         >
                             <div className="px-3 py-1.5 bg-amber-500/10 text-[9px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-2">
                                 <BookOpen className="w-3 h-3" /> Ancestral Oracle
                             </div>
                             <div className="p-1">
                                 {safeOracleResults.map(res => (
-                                    <div key={res.id} className="p-2 hover:bg-amber-500/10 rounded cursor-pointer transition-colors group">
+                                    <div key={res.id} className="p-2 hover:bg-amber-500/10 rounded-none cursor-pointer transition-colors group">
                                         <div className="text-[10px] font-bold text-amber-200 group-hover:text-white">{res.title}</div>
                                         <div className="text-[9px] text-amber-500/70">{res.excerpt}</div>
                                     </div>
@@ -205,7 +205,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                         >
                             <div className="flex items-center gap-3">
                                 {/* Status Pulse */}
-                                <div className={`w-1.5 h-1.5 rounded-full ${getHealthColor(healthScore)}`} />
+                                <div className={`w-1.5 h-1.5 rounded-none ${getHealthColor(healthScore)}`} />
 
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-slate-200 transition-colors">
                                     {section.title}
@@ -264,17 +264,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-slate-950 p-2 rounded border border-slate-800 flex flex-col items-center">
+                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
                         <Gauge className="w-3 h-3 text-cyan-500 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{rpm.toFixed(0)}</span>
                         <span className="text-[8px] text-slate-600">RPM</span>
                     </div>
-                    <div className="bg-slate-950 p-2 rounded border border-slate-800 flex flex-col items-center">
+                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
                         <Zap className="w-3 h-3 text-amber-500 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{power.toFixed(1)}</span>
                         <span className="text-[8px] text-slate-600">MW</span>
                     </div>
-                    <div className="bg-slate-950 p-2 rounded border border-slate-800 flex flex-col items-center">
+                    <div className="bg-slate-950 p-2 rounded-none border border-slate-800 flex flex-col items-center">
                         <Target className="w-3 h-3 text-emerald-500 mb-1" />
                         <span className="text-[10px] font-mono text-slate-300">{efficiency.toFixed(1)}%</span>
                         <span className="text-[8px] text-slate-600">EFF</span>
@@ -283,7 +283,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, showMap, onTo
 
                 <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-none bg-emerald-500 animate-pulse" />
                         <span className="text-[9px] font-mono text-slate-500">SYSTEM ONLINE</span>
                     </div>
                     <span className="text-[9px] font-mono text-slate-600">v1.0.0</span>

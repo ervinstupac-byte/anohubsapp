@@ -95,7 +95,7 @@ export const VibrationAnalyzer: React.FC = () => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4">
             {/* FFT SPECTRUM CHART (8 Columns) */}
-            <div className="lg:col-span-8 bg-slate-800 rounded-2xl border border-slate-700 p-6 flex flex-col gap-4 relative">
+            <div className="lg:col-span-8 bg-slate-800 rounded-none border border-slate-700 p-6 flex flex-col gap-4 relative">
                 <div className="flex justify-between items-center">
                     <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
                         <Activity className="w-4 h-4 text-slate-200" />
@@ -103,15 +103,15 @@ export const VibrationAnalyzer: React.FC = () => {
                     </h3>
                     <div className="flex gap-4">
                         <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-slate-400"></div>
+                            <div className="w-2 h-2 rounded-none bg-slate-400"></div>
                             <span className="text-[9px] text-slate-400 uppercase font-black">1x RPM ({f0.toFixed(1)}Hz)</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-amber-400"></div>
+                            <div className="w-2 h-2 rounded-none bg-amber-400"></div>
                             <span className="text-[9px] text-amber-400 uppercase font-black">2x RPM ({(f0 * 2).toFixed(1)}Hz)</span>
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-slate-400/70"></div>
+                            <div className="w-2 h-2 rounded-none bg-slate-400/70"></div>
                             <span className="text-[9px] text-slate-400 uppercase font-black">Blade Pass ({fBlade.toFixed(1)}Hz)</span>
                         </div>
                     </div>
@@ -188,7 +188,7 @@ export const VibrationAnalyzer: React.FC = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0 }}
                                 style={{ position: 'fixed', left: tooltip.x + 15, top: tooltip.y - 15 }}
-                                className="z-50 bg-slate-900 border border-slate-600 p-3 rounded shadow-xl w-64 pointer-events-none"
+                                className="z-50 bg-slate-900 border border-slate-600 p-3 rounded-none shadow-none w-64 pointer-events-none"
                             >
                                 <h4 className="text-xs font-bold text-cyan-400 uppercase mb-1 flex items-center gap-2">
                                     <Info className="w-3 h-3" /> {tooltip.title}
@@ -212,7 +212,7 @@ export const VibrationAnalyzer: React.FC = () => {
 
             {/* VERDICT BOX (4 Columns) */}
             <div className="lg:col-span-4 flex flex-col gap-4">
-                <div className={`rounded-2xl border p-6 flex flex-col h-full justify-between transition-colors duration-500 ${verdict.danger ? 'bg-amber-500/8 border-amber-600/20' : 'bg-slate-700/40 border-slate-700/30'
+                <div className={`rounded-none border p-6 flex flex-col h-full justify-between transition-colors duration-500 ${verdict.danger ? 'bg-amber-500/8 border-amber-600/20' : 'bg-slate-700/40 border-slate-700/30'
                     }`}>
                     <div>
                         <div className="flex justify-between items-start mb-4">
@@ -229,20 +229,20 @@ export const VibrationAnalyzer: React.FC = () => {
                     </div>
 
                     <div className="mt-8 space-y-4">
-                        <div className="flex justify-between items-center bg-white/5 p-3 rounded-lg border border-white/5">
+                        <div className="flex justify-between items-center bg-white/5 p-3 rounded-none border border-white/5">
                             <span className="text-[10px] text-slate-500 font-black uppercase">Composite RMS</span>
                             <span className="text-sm font-mono text-white font-bold">{vib.toFixed(2)} mm/s</span>
                         </div>
                         <div className="flex gap-2">
                             {/* NC-130: Static Link Display */}
-                            <div className="flex-1 flex flex-col bg-slate-700/30 p-3 rounded-lg border border-slate-700">
+                            <div className="flex-1 flex flex-col bg-slate-700/30 p-3 rounded-none border border-slate-700">
                                 <span className="text-[10px] text-slate-400 uppercase font-black">Static Runout</span>
                                 <span className={`text-sm font-mono font-bold ${maintenanceFactors.shaftPlumbnessDeviation > 0.05 ? 'text-amber-500' : 'text-emerald-500'}`}>
                                     {maintenanceFactors.shaftPlumbnessDeviation}mm
                                 </span>
                             </div>
 
-                            <div className="flex-1 flex flex-col bg-slate-700/30 p-3 rounded-lg border border-slate-700">
+                            <div className="flex-1 flex flex-col bg-slate-700/30 p-3 rounded-none border border-slate-700">
                                 <span className="text-[10px] text-slate-400 uppercase font-black">Efficiency</span>
                                 <span className="text-sm font-mono text-white font-bold">{(eta * 100).toFixed(2)}%</span>
                             </div>

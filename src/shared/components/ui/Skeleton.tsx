@@ -14,9 +14,9 @@ interface SkeletonProps {
 }
 
 const variantStyles: Record<SkeletonVariant, string> = {
-    text: 'rounded',
-    card: 'rounded-xl',
-    chart: 'rounded-lg'
+    text: 'rounded-none',
+    card: 'rounded-none',
+    chart: 'rounded-none'
 };
 
 /**
@@ -55,7 +55,7 @@ Skeleton.displayName = 'Skeleton';
  * Card-shaped skeleton for data cards
  */
 export const CardSkeleton: React.FC<{ className?: string }> = React.memo(({ className = '' }) => (
-    <div className={`glass-panel p-5 space-y-4 ${className}`}>
+    <div className={`glass-panel p-5 space-y-4 rounded-none ${className}`}>
         <div className="flex justify-between items-start">
             <Skeleton variant="text" width="60%" height="1rem" />
             <Skeleton circle width={24} height={24} />
@@ -76,7 +76,7 @@ export const ChartSkeleton: React.FC<{ className?: string; height?: string }> = 
     className = '',
     height = '200px'
 }) => (
-    <div className={`glass-panel p-5 ${className}`}>
+    <div className={`glass-panel p-5 rounded-none ${className}`}>
         <div className="flex justify-between items-center mb-4">
             <Skeleton variant="text" width="40%" height="1rem" />
             <Skeleton variant="text" width="20%" height="0.75rem" />

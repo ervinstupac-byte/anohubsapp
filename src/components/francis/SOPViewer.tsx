@@ -15,11 +15,11 @@ export const SOPViewer: React.FC = () => {
     return (
         <div className="flex flex-col h-screen bg-slate-950 text-slate-200 font-sans overflow-hidden">
             {/* Toolbar - Ultra Industrial */}
-            <header className="bg-black/60 border-b-2 border-stone-800 px-8 py-6 z-50 backdrop-blur-xl flex items-center justify-between shadow-2xl">
+            <header className="bg-black/60 border-b-2 border-stone-800 px-8 py-6 z-50 backdrop-blur-xl flex items-center justify-between shadow-none">
                 <div className="flex items-center gap-10">
                     <button
                         onClick={() => navigate(FRANCIS_PATHS.HUB)}
-                        className="flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest italic"
+                        className="flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-none text-xs font-black text-slate-400 hover:text-white hover:bg-white/10 transition group uppercase tracking-widest italic"
                     >
                         <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:-translate-x-1 transition" />
                         <span>{t('actions.back')}</span>
@@ -28,13 +28,13 @@ export const SOPViewer: React.FC = () => {
                     <div className="h-10 w-px bg-white/5" />
 
                     <div className="flex items-center gap-6">
-                        <div className="p-3 bg-slate-800 rounded-2xl border border-white/5 relative group overflow-hidden">
+                        <div className="p-3 bg-slate-800 rounded-none border border-white/5 relative group overflow-hidden">
                             <FileText className="text-white w-5 h-5 group-hover:scale-110 transition-transform" />
                             <div className="absolute inset-0 bg-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-0.5">
-                                <span className="px-2 py-0.5 rounded bg-slate-900 border border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-widest italic">Digital Dossier</span>
+                                <span className="px-2 py-0.5 rounded-none bg-slate-900 border border-white/5 text-[9px] font-black text-slate-500 uppercase tracking-widest italic">Digital Dossier</span>
                                 <NeuralPulse color="slate" />
                             </div>
                             <h1 className="text-xl font-black text-white uppercase tracking-tighter italic">
@@ -45,7 +45,7 @@ export const SOPViewer: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-8">
-                    <div className="hidden lg:flex items-center gap-3 px-6 py-2 bg-emerald-950/20 rounded-full border border-emerald-900/40">
+                    <div className="hidden lg:flex items-center gap-3 px-6 py-2 bg-emerald-950/20 rounded-none border border-emerald-900/40">
                         <ShieldCheck className="w-4 h-4 text-emerald-500" />
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest italic tracking-tighter">Identity Verified</span>
                     </div>
@@ -54,7 +54,7 @@ export const SOPViewer: React.FC = () => {
                         href={`/francis-docs/${activeDoc}.html`}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-3 px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-full text-[10px] font-black uppercase tracking-widest transition-all shadow-xl shadow-cyan-900/20 italic"
+                        className="flex items-center gap-3 px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-none text-[10px] font-black uppercase tracking-widest transition-all shadow-none italic"
                     >
                         <span>Open Raw Source</span>
                         <ExternalLink className="w-4 h-4" />
@@ -67,7 +67,7 @@ export const SOPViewer: React.FC = () => {
                 <div className="absolute inset-0 bg-black/5 pointer-events-none group-hover:opacity-0 transition-opacity duration-1000" />
                 <iframe
                     src={`/francis-docs/${activeDoc}.html`}
-                    className="w-full h-full border-none shadow-inner"
+                    className="w-full h-full border-none shadow-none"
                     title="SOP Viewer"
                 />
 

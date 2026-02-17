@@ -96,17 +96,17 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="max-w-3xl w-full max-h-[90vh] overflow-y-auto"
                     >
-                        <GlassCard className="p-0 border-2 border-amber-500/50 bg-slate-950 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.15)]">
+                        <GlassCard className="p-0 border-2 border-amber-500/50 bg-slate-950 overflow-hidden shadow-none rounded-none">
                             {/* Terminal Header */}
                             <div className="flex items-center justify-between p-4 bg-amber-500/10 border-b border-amber-500/30">
                                 <div className="flex items-center gap-3">
                                     <button 
                                         onClick={onClose}
-                                        className="p-1.5 hover:bg-amber-500/20 rounded-full text-amber-600 hover:text-amber-400 transition-colors"
+                                        className="p-1.5 hover:bg-amber-500/20 rounded-none text-amber-600 hover:text-amber-400 transition-colors"
                                     >
                                         <ArrowLeft className="w-4 h-4" />
                                     </button>
-                                    <div className="p-2 bg-amber-500/20 rounded border border-amber-500/30">
+                                    <div className="p-2 bg-amber-500/20 rounded-none border border-amber-500/30">
                                         <Terminal className="w-5 h-5 text-amber-400" />
                                     </div>
                                     <div>
@@ -117,7 +117,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="p-2 hover:bg-amber-500/20 rounded transition-colors text-amber-500/50 hover:text-amber-400"
+                                    className="p-2 hover:bg-amber-500/20 rounded-none transition-colors text-amber-500/50 hover:text-amber-400"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -142,7 +142,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                             {validation && (
                                 <>
                                     {/* Validation Info */}
-                                    <div className={`mb-6 p-4 rounded-lg border-2 ${validation.riskLevel === 'HIGH' ? 'border-red-500 bg-red-950/20' :
+                                    <div className={`mb-6 p-4 rounded-none border-2 ${validation.riskLevel === 'HIGH' ? 'border-red-500 bg-red-950/20' :
                                             validation.riskLevel === 'MEDIUM' ? 'border-amber-500 bg-amber-950/20' :
                                                 'border-blue-500 bg-blue-950/20'
                                         }`}>
@@ -172,7 +172,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                                     key={index}
                                                     onClick={() => toggleChecklistItem(index)}
                                                     className={`
-                                                        group flex items-start gap-3 p-3 rounded cursor-pointer border transition-all font-mono text-xs
+                                                        group flex items-start gap-3 p-3 rounded-none cursor-pointer border transition-all font-mono text-xs
                                                         ${checklistStatus.get(index)
                                                             ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-300'
                                                             : 'bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-600 hover:bg-slate-800'}
@@ -202,7 +202,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                                 {validation.commonMistakes.map((mistake, index) => (
                                                     <div
                                                         key={index}
-                                                        className="flex gap-3 p-3 bg-red-950/20 border border-red-500/30 rounded-lg"
+                                                        className="flex gap-3 p-3 bg-red-950/20 border border-red-500/30 rounded-none"
                                                     >
                                                         <span className="text-red-400 font-bold">❌</span>
                                                         <p className="text-sm text-slate-300">{mistake}</p>
@@ -224,7 +224,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                         {relatedTips.map(tip => (
                                             <div
                                                 key={tip.id}
-                                                className={`p-3 rounded-lg border ${tip.criticality === 'MUST_FOLLOW'
+                                                className={`p-3 rounded-none border ${tip.criticality === 'MUST_FOLLOW'
                                                         ? 'border-red-500 bg-red-950/20'
                                                         : 'border-purple-500 bg-purple-950/20'
                                                     }`}
@@ -252,7 +252,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                             {Array.from(checklistStatus.values()).filter(v => v).length} / {checklistStatus.size}
                                         </span>
                                     </div>
-                                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                    <div className="w-full h-2 bg-slate-800 rounded-none overflow-hidden">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{
@@ -270,7 +270,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={onClose}
-                                    className="flex-1 px-6 py-3 bg-slate-800/50 border border-slate-700 rounded text-slate-400 font-mono text-xs uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
+                                    className="flex-1 px-6 py-3 bg-slate-800/50 border border-slate-700 rounded-none text-slate-400 font-mono text-xs uppercase tracking-wider hover:bg-slate-800 hover:text-white transition-all"
                                 >
                                     [ ABORT_SEQUENCE ]
                                 </motion.button>
@@ -279,7 +279,7 @@ export const LegacyValidationModal: React.FC<LegacyValidationModalProps> = ({
                                     whileTap={{ scale: canProceed ? 0.98 : 1 }}
                                     onClick={handleProceed}
                                     disabled={!canProceed && !!validation}
-                                    className={`flex-1 px-6 py-3 rounded font-mono text-xs uppercase tracking-wider transition-all border ${canProceed || !validation
+                                    className={`flex-1 px-6 py-3 rounded-none font-mono text-xs uppercase tracking-wider transition-all border ${canProceed || !validation
                                             ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400 hover:bg-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
                                             : 'bg-slate-900 border-slate-800 text-slate-600 cursor-not-allowed'
                                         }`}

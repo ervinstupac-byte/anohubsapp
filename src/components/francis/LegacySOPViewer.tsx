@@ -37,7 +37,7 @@ export const LegacySOPViewer: React.FC = () => {
                 </div>
             </div>
 
-            <GlassCard className="flex-1 overflow-hidden p-0 border border-slate-800 bg-white/5">
+            <GlassCard className="flex-1 overflow-hidden p-0 border border-slate-800 bg-white/5 rounded-none">
                 <iframe
                     src={sopUrl}
                     className="w-full h-full border-none bg-white"

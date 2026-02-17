@@ -26,7 +26,7 @@ export const ModuleFallback: React.FC<ModuleFallbackProps> = ({
 
     return (
         <GlassCard className="h-full min-h-[300px] flex flex-col items-center justify-center p-8 text-center border-dashed border-slate-700 bg-slate-900/20">
-            <div className="p-4 bg-slate-900/50 rounded-2xl mb-4 border border-white/5">
+            <div className="p-4 bg-slate-900/50 rounded-none mb-4 border border-white/5">
                 {getIcon()}
             </div>
             <h3 className="text-lg font-bold text-slate-300 mb-2">{title}</h3>
@@ -34,7 +34,7 @@ export const ModuleFallback: React.FC<ModuleFallbackProps> = ({
             {onRetry && (
                 <button
                     onClick={onRetry}
-                    className="px-4 py-2 text-xs font-bold text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 rounded-lg hover:bg-cyan-900/50 transition-colors uppercase tracking-wider"
+                    className="px-4 py-2 text-xs font-bold text-cyan-400 bg-cyan-950/30 border border-cyan-500/30 rounded-none hover:bg-cyan-900/50 transition-colors uppercase tracking-wider"
                 >
                     Retry Module
                 </button>

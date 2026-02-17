@@ -59,7 +59,7 @@ export const SystemHealth: React.FC = () => {
     const trustScore = executiveResult?.masterHealthScore ?? 100;
 
     return (
-        <div className="flex items-center gap-4 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg px-4 py-2">
+        <div className="flex items-center gap-4 bg-slate-900 border border-slate-700/50 rounded-none px-4 py-2">
             {/* Sensor Trust Score */}
             <div className="flex items-center gap-2 border-r border-slate-700 pr-4">
                 <ShieldCheck className={`w-4 h-4 ${trustScore > 90 ? 'text-emerald-400' : 'text-amber-400'}`} />
@@ -77,7 +77,7 @@ export const SystemHealth: React.FC = () => {
                     <Wifi className={`w-4 h-4 ${isLive ? 'text-emerald-400' : 'text-red-400'}`} />
                     {isLive && (
                         <motion.div
-                            className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full"
+                            className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-none"
                             animate={{ opacity: [1, 0.2, 1] }}
                             transition={{ duration: 2, repeat: Infinity }}
                         />

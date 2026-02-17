@@ -162,7 +162,7 @@ export const ExecutiveWarRoom: React.FC = () => {
                 >
                     <ExternalLink className="w-5 h-5" />
                 </button>
-                <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                <div className={`px-3 py-1 rounded-none text-xs font-medium ${
                     verdict.urgency === 'CRITICAL' ? 'bg-red-500 text-white' :
                     verdict.urgency === 'HIGH' ? 'bg-orange-500 text-white' :
                     verdict.urgency === 'MEDIUM' ? 'bg-yellow-500 text-black' :
@@ -191,12 +191,12 @@ export const ExecutiveWarRoom: React.FC = () => {
 
               <div>
                 <h3 className="text-lg font-semibold text-purple-300 mb-2">Confidence</h3>
-                <div className="w-full bg-black/30 rounded-full h-4 overflow-hidden">
+                <div className="w-full bg-black/30 rounded-none h-4 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${verdict.confidence}%` }}
                     transition={{ duration: 1 }}
-                    className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full"
+                    className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-none"
                   />
                 </div>
                 <div className="text-center mt-2 text-purple-300 text-sm">{verdict.confidence}%</div>
@@ -234,7 +234,7 @@ export const ExecutiveWarRoom: React.FC = () => {
 
             <div className="space-y-4">
               {/* Simulator Control Panel - Guest Mode */}
-              <div className="bg-slate-800/95 border border-slate-700 rounded-xl p-6 mb-6">
+              <div className="bg-slate-800/95 border border-slate-700 rounded-none p-6 mb-6">
                 <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">Simulator Control Panel</div>
                 <div>
                   <div className="text-[10px] text-slate-300 mb-2">RPM</div>
@@ -291,15 +291,15 @@ export const ExecutiveWarRoom: React.FC = () => {
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-none transition-colors">
                   Apply Setpoints
                 </button>
-                <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-none transition-colors">
                   Commit to History
                 </button>
               </div>
 
-              <div className="bg-black/20 rounded-lg p-4">
+              <div className="bg-black/20 rounded-none p-4">
                 <h4 className="text-green-300 font-semibold mb-2">Experience Ledger</h4>
                 <p className="text-gray-400 text-sm">
                   Last setpoint change: 2 hours ago<br />
@@ -311,7 +311,7 @@ export const ExecutiveWarRoom: React.FC = () => {
               <div className="mt-6 pt-6 border-t border-white/10">
                 <button 
                   onClick={downloadReport}
-                  className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-3 rounded-none font-semibold transition-all transform hover:scale-105"
                 >
                   <FileDown className="w-5 h-5 mr-2 inline" />
                   Download Experience Report

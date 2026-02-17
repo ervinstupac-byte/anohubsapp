@@ -57,7 +57,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                 className={`
                     ${SIZE_CLASSES[size]} 
                     ${colors.dot} 
-                    rounded-full 
+                    rounded-none
                     ${className}
                 `}
                 title={label || status.toUpperCase()}
@@ -73,7 +73,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                     className={`
                         ${SIZE_CLASSES[size]} 
                         ${colors.dot} 
-                        rounded-full 
+                        rounded-none
                     `}
                 />
                 {label && (
@@ -92,11 +92,11 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                 inline-flex items-center gap-1.5 
                 px-2 py-0.5 
                 ${colors.bg} ${colors.border} border 
-                rounded 
+                rounded-none
                 ${className}
             `}
         >
-            <div className={`${SIZE_CLASSES[size]} ${colors.dot} rounded-full`} />
+            <div className={`${SIZE_CLASSES[size]} ${colors.dot} rounded-none`} />
             {label && (
                 <span className={`${LABEL_SIZE_CLASSES[size]} ${colors.text} font-black uppercase tracking-wider`}>
                     {label}
