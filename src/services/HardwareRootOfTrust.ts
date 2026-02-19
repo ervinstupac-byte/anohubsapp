@@ -57,4 +57,53 @@ export class HardwareRootOfTrust {
     public static signRequest(payload: string): string {
         return `valid_sig_${payload.length}_${Date.now()}`;
     }
+
+    /**
+     * SIGN STATE OBJECT (Digital Twin)
+     * Creates a deterministic signature for an object
+     */
+    public static signState(state: any): string {
+        try {
+            // Deterministic stringify (simple)
+            const payload = JSON.stringify(state, Object.keys(state).sort());
+            // In reality: crypto.sign(payload, PRIVATE_KEY)
+            // Here: Simulated hash + time
+            const hash = this.simpleHash(payload);
+            return `SIG-v1.${hash}.${Date.now().toString(36)}`;
+        } catch (e) {
+            console.error('Signing failed', e);
+            return 'INVALID_SIGNATURE';
+        }
+    }
+
+    /**
+     * VERIFY STATE INTEGRITY
+     */
+    public static verifyState(state: any, signature: string): boolean {
+        if (!signature || !signature.startsWith('SIG-v1.')) return false;
+
+        try {
+            const payload = JSON.stringify(state, Object.keys(state).sort());
+            const currentHash = this.simpleHash(payload);
+
+            // Extract hash from signature: SIG-v1.<HASH>.<TIMESTAMP>
+            const parts = signature.split('.');
+            if (parts.length !== 3) return false;
+
+            const originalHash = parts[1];
+            return originalHash === currentHash;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    private static simpleHash(str: string): string {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash).toString(16);
+    }
 }

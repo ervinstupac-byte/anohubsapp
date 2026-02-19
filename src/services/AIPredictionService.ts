@@ -100,6 +100,28 @@ const HISTORICAL_INCIDENTS = [
 
 // --- AI PREDICTION SERVICE ---
 
+// ------------------------------------------------------------------
+// CACHE TABLE EXISTENCE CHECK (Lazy)
+// ------------------------------------------------------------------
+let cacheTableExists: boolean | null = null;
+async function checkCacheTableExists(): Promise<boolean> {
+    if (cacheTableExists !== null) return cacheTableExists;
+    try {
+        const { error } = await supabase.from('telemetry_history_cache').select('id').limit(1);
+        if (error && (error.code === '42P01' || error.message.includes('406') || (error as any).status === 406)) {
+            // 42P01 = Undefined Table, 406 = Not Acceptable (PostgREST)
+            cacheTableExists = false;
+        } else {
+            cacheTableExists = true;
+        }
+        return cacheTableExists;
+    } catch {
+        cacheTableExists = false;
+        return false;
+    }
+}
+// ------------------------------------------------------------------
+
 export class AIPredictionService {
     /**
      * MULTI-SENSOR CORRELATION (Spider Logic)
@@ -181,64 +203,70 @@ export class AIPredictionService {
             return this._computeLinearForecast(pts, threshold);
         }
 
+        const numeric = idAdapter.toNumber(assetId);
+        const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
+
         // First try persisted telemetry from Supabase (telemetry_logs.details.efficiency)
         try {
-            const numeric = idAdapter.toNumber(assetId);
-            const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
 
             // Prefer precomputed cache if available (server-side backfill upserts into telemetry_history_cache)
-            try {
-                const { data: cacheRes, error: cacheErr } = await supabase
-                    .from('telemetry_history_cache')
-                    .select('history')
-                    .eq('asset_id', dbId)
-                    .single();
+            if (await checkCacheTableExists()) {
+                try {
+                    const { data: cacheRes, error: cacheErr } = await supabase
+                        .from('telemetry_history_cache')
+                        .select('history')
+                        .eq('asset_id', dbId)
+                        .single();
 
-                if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
-                    const points = cacheRes.history
-                        .map((p: unknown) => {
-                            if (p && typeof p === 'object' && 't' in (p as Record<string, unknown>) && 'y' in (p as Record<string, unknown>)) {
-                                const obj = p as { t: number; y: number };
-                                return typeof obj.t === 'number' && typeof obj.y === 'number' ? { t: obj.t, y: obj.y } : null;
-                            }
-                            return null;
-                        })
-                        .filter(Boolean) as { t: number; y: number }[];
-                    if (points.length >= 5) return this._computeLinearForecast(points, threshold);
-                }
-            } catch (e) {
-                // ignore cache errors and fall back to raw logs
-            }
-
-            const { data, error } = await supabase
-                .from('telemetry_logs')
-                .select('details, created_at')
-                .eq('asset_id', dbId)
-                .order('created_at', { ascending: true })
-                .limit(HISTORY_WINDOW_SIZE * 5);
-
-            if (!error && Array.isArray(data) && data.length > 0) {
-                const points = data
-                    .map((r: unknown) => {
-                        if (!r || typeof r !== 'object') return null;
-                        const rec = r as Record<string, unknown>;
-                        const details = (rec.details && typeof rec.details === 'object') ? (rec.details as Record<string, unknown>) : {};
-                        const effRaw = details.efficiency ?? details.eta ?? details.efficiencyPercent ?? null;
-                        const y = typeof effRaw === 'number' ? effRaw : (typeof effRaw === 'string' ? Number(effRaw) : null);
-                        const t = rec.created_at ? new Date(String(rec.created_at)).getTime() : Date.now();
-                        return y !== null && !Number.isNaN(y) ? { t, y } : null;
-                    })
-                    .filter(Boolean) as { t: number; y: number }[];
-
-                if (points.length >= 5) {
-                    // Keep most recent HISTORY_WINDOW_SIZE samples
-                    const recent = points.slice(-HISTORY_WINDOW_SIZE);
-                    return this._computeLinearForecast(recent, threshold);
+                    if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
+                        const points = cacheRes.history
+                            .map((p: unknown) => {
+                                if (p && typeof p === 'object' && 't' in (p as Record<string, unknown>) && 'y' in (p as Record<string, unknown>)) {
+                                    const obj = p as { t: number; y: number };
+                                    return typeof obj.t === 'number' && typeof obj.y === 'number' ? { t: obj.t, y: obj.y } : null;
+                                }
+                                return null;
+                            })
+                            .filter(Boolean) as { t: number; y: number }[];
+                        if (points.length >= 5) return this._computeLinearForecast(points, threshold);
+                    }
+                } catch (e) {
+                    // ignore cache errors
                 }
             }
-        } catch (err) {
-            console.warn('[AIPrediction] Supabase query failed, falling back to in-memory history', err);
+
+
+        } catch (e) {
+            // ignore cache errors and fall back to raw logs
         }
+
+        const { data, error } = await supabase
+            .from('telemetry_logs')
+            .select('details, created_at')
+            .eq('asset_id', dbId)
+            .order('created_at', { ascending: true })
+            .limit(HISTORY_WINDOW_SIZE * 5);
+
+        if (!error && Array.isArray(data) && data.length > 0) {
+            const points = data
+                .map((r: unknown) => {
+                    if (!r || typeof r !== 'object') return null;
+                    const rec = r as Record<string, unknown>;
+                    const details = (rec.details && typeof rec.details === 'object') ? (rec.details as Record<string, unknown>) : {};
+                    const effRaw = details.efficiency ?? details.eta ?? details.efficiencyPercent ?? null;
+                    const y = typeof effRaw === 'number' ? effRaw : (typeof effRaw === 'string' ? Number(effRaw) : null);
+                    const t = rec.created_at ? new Date(String(rec.created_at)).getTime() : Date.now();
+                    return y !== null && !Number.isNaN(y) ? { t, y } : null;
+                })
+                .filter(Boolean) as { t: number; y: number }[];
+
+            if (points.length >= 5) {
+                // Keep most recent HISTORY_WINDOW_SIZE samples
+                const recent = points.slice(-HISTORY_WINDOW_SIZE);
+                return this._computeLinearForecast(recent, threshold);
+            }
+        }
+
 
         // Fallback to in-memory history
         const history = telemetryHistory.get(String(assetId)) || [];
@@ -321,26 +349,29 @@ export class AIPredictionService {
         try {
             const numeric = idAdapter.toNumber(assetId);
             const dbId = numeric !== null ? idAdapter.toDb(numeric) : String(assetId);
-            const { data: cacheRes, error: cacheErr } = await supabase
-                .from('telemetry_history_cache')
-                .select('history')
-                .eq('asset_id', dbId)
-                .single();
+            // Prefer precomputed cache if available
+            if (await checkCacheTableExists()) {
+                const { data: cacheRes, error: cacheErr } = await supabase
+                    .from('telemetry_history_cache')
+                    .select('history')
+                    .eq('asset_id', dbId)
+                    .single();
 
-            if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
-                const filtered = cacheRes.history
-                    .map((p: unknown) => {
-                        if (p && typeof p === 'object' && 't' in (p as Record<string, unknown>) && 'y' in (p as Record<string, unknown>)) {
-                            const obj = p as { t: number; y: number };
-                            return typeof obj.t === 'number' && typeof obj.y === 'number' ? { t: obj.t, y: obj.y, d: new Date(obj.t).toISOString().slice(0, 10) } : null;
-                        }
-                        return null;
-                    })
-                    .filter((p: any): p is { t: number; y: number; d: string } => !!p && typeof p.d === 'string')
-                    .filter((p: any) => !excludeDates.includes(p.d))
-                    .map((p: any) => ({ t: p.t, y: p.y }));
+                if (!cacheErr && cacheRes && cacheRes.history && Array.isArray(cacheRes.history)) {
+                    const filtered = cacheRes.history
+                        .map((p: unknown) => {
+                            if (p && typeof p === 'object' && 't' in (p as Record<string, unknown>) && 'y' in (p as Record<string, unknown>)) {
+                                const obj = p as { t: number; y: number };
+                                return typeof obj.t === 'number' && typeof obj.y === 'number' ? { t: obj.t, y: obj.y, d: new Date(obj.t).toISOString().slice(0, 10) } : null;
+                            }
+                            return null;
+                        })
+                        .filter((p: any): p is { t: number; y: number; d: string } => !!p && typeof p.d === 'string')
+                        .filter((p: any) => !excludeDates.includes(p.d))
+                        .map((p: any) => ({ t: p.t, y: p.y }));
 
-                if (filtered.length >= 5) return this._computeLinearForecast(filtered, threshold);
+                    if (filtered.length >= 5) return this._computeLinearForecast(filtered, threshold);
+                }
             }
         } catch (e) {
             // swallow and return null-ish

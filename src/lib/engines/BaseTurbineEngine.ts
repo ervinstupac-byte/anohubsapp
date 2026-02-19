@@ -19,6 +19,8 @@ export interface TelemetryStream {
     timestamp: number;
     hydraulic: HydraulicStream;
     mechanical: MechanicalStream;
+    physics?: any;
+    identity?: any;
 }
 
 /**

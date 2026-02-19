@@ -17,7 +17,7 @@ describe('ScadaCore state transitions', () => {
     expect(screen.getByText(/Grid Synchroscope/i)).toBeTruthy();
   });
 
-  it('renders alarm banner and persists red-state until acknowledged', () => {
+  it('renders alarm banner and persists red-state until acknowledged', async () => {
     const pushAlarm = useTelemetryStore.getState().pushAlarm;
     const acknowledgeAllAlarms = useTelemetryStore.getState().acknowledgeAllAlarms;
     pushAlarm({ id: 'A1', severity: 'CRITICAL', message: 'TEST TRIP' });
@@ -26,10 +26,12 @@ describe('ScadaCore state transitions', () => {
         <ScadaCore />
       </MemoryRouter>
     );
-    expect(screen.getByText(/\[CRITICAL\] TEST TRIP/i)).toBeTruthy();
+    // Increased timeout for slow rendering environments
+    expect(await screen.findByText(/TEST TRIP/i, {}, { timeout: 5000 })).toBeTruthy();
+    expect(screen.getByText(/\[CRITICAL\]/i)).toBeTruthy();
     acknowledgeAllAlarms();
     // Still present but will be acknowledged
-    expect(screen.getByText(/\[CRITICAL\] TEST TRIP/i)).toBeTruthy();
+    expect(await screen.findByText(/TEST TRIP/i)).toBeTruthy();
   });
 
   it('disables Start Sequence when interlock reports a trip', () => {

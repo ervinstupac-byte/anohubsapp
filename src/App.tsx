@@ -52,7 +52,7 @@ import { DataSyncBridge } from './components/DataSyncBridge';
 import { ProjectPhaseGuide } from './components/ProjectPhaseGuide';
 import { GlobalModalManager } from './components/managers/GlobalModalManager';
 import { SystemBootScreen } from './components/ui/SystemBootScreen.tsx';
-import { SimulationController } from './components/diagnostic-twin/SimulationController.tsx';
+import { ManualControlPanel } from './components/diagnostic-twin/ManualControlPanel.tsx';
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 import { useProjectConfigStore } from './features/config/ProjectConfigStore';
@@ -96,6 +96,7 @@ const StructuralIntegrity = lazy(() => import('./components/StructuralIntegrity.
 
 const AdminApproval = lazy(() => import('./components/AdminApproval.tsx').then(m => ({ default: m.AdminApproval })));
 const AdminHealth = lazy(() => import('./pages/AdminHealth').then(m => ({ default: m.default })));
+const AIConstitution = lazy(() => import('./components/docs/AIConstitution.tsx').then(m => ({ default: m.AIConstitution })));
 
 // NC-20701: Ghost Protocol Pages
 const ProjectGenesisPage = lazy(() => import('./pages/ProjectGenesisPage'));
@@ -253,7 +254,7 @@ const AppLayout: React.FC = () => {
             try { useProjectConfigStore.getState().integrityCheck(); } catch { }
 
             // Initialize Sovereign Orchestrator
-            SovereignOrchestrator.initialize().catch(err => 
+            SovereignOrchestrator.initialize().catch(err =>
                 console.error('[App] Sovereign Orchestrator failed to initialize:', err)
             );
         } catch { /* noop */ }
@@ -285,9 +286,9 @@ const AppLayout: React.FC = () => {
         // Wait, 'const [isPreviewOpen, setIsPreviewOpen] = useState(false);' MUST be there if it's used.
         // Maybe I missed it in the truncation or skip?
         // Regardless, I want to REMOVE them.
-        
+
         // I will remove the entire useEffect block that handles these events, and the state definitions.
-        
+
 
     }, []);
 
@@ -528,7 +529,7 @@ const AppLayout: React.FC = () => {
 
                 <VoiceAssistant />
                 {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
-                
+
                 {/* Global Modals Manager (Handles System Overview, Print, Passport, etc.) */}
                 <GlobalModalManager />
 
@@ -536,7 +537,7 @@ const AppLayout: React.FC = () => {
                     <AssetTypeSelector />
                 </Suspense>
 
-                <SimulationController />
+                <ManualControlPanel />
                 <CommanderTerminal />
                 <CommandPalette /> {/* GLOBAL COMMAND PALETTE - NOW INSIDE DRILLDOWN PROVIDER */}
 
@@ -549,6 +550,11 @@ const AppLayout: React.FC = () => {
         </NavigationProvider >
     );
 };
+
+import { consoleLogService } from './services/ConsoleLogService';
+
+// Initialize console interceptor immediately
+consoleLogService.intercept();
 
 const App: React.FC = () => {
     // BOOT SEQUENCE STATE (useEffect will resolve this)

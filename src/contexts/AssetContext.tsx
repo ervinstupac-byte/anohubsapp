@@ -261,7 +261,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     };
                 } catch (err) {
                     console.warn('[AssetContext] Online creation failed. Falling back to OFFLINE STORAGE.', err);
-                    
+
                     // FALLBACK: Save locally even if authenticated
                     newAsset = {
                         id: -Date.now(), // Negative ID for local
@@ -278,10 +278,10 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     const existingGuestAssets = loadFromStorage<Asset[]>('guest_assets') || [];
                     const updatedGuestAssets = [...existingGuestAssets, newAsset];
                     saveToStorage('guest_assets', updatedGuestAssets);
-                    
+
                     // Notify user (optional, but good for UX)
                     // We don't have toast here directly but logAction helps
-                    logAction('ASSET_REGISTER', `${newAsset.name} (OFFLINE)`, 'WARNING');
+                    logAction('ASSET_REGISTER', `${newAsset.name} (OFFLINE)`, 'SUCCESS', { level: 'WARNING' });
                 }
             }
 

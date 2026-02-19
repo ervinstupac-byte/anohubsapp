@@ -164,7 +164,7 @@ describe('AssetPassportCard Component', () => {
 
         // Verify Bearing Temp - Warning -> Amber
         const tempVal = screen.getByText(/68\.0/);
-        expect(tempVal).toHaveClass('text-amber-400');
+        expect(tempVal).toHaveClass('text-amber-500');
 
         // Also check generic banner
         expect(screen.getByText('dashboard.assetPassport.toleranceBreach')).toBeInTheDocument();

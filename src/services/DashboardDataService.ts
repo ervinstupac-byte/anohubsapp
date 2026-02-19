@@ -19,12 +19,31 @@ export async function fetchForecastForAsset(selectedAsset: any) {
 
     try {
         const dbId = idAdapter.toDb(numeric);
-        const { data: cacheRes } = await supabase.from('telemetry_history_cache').select('history').eq('asset_id', dbId).single();
+        // Check if table exists/is accessible before throwing hard errors
+        // 406 Not Acceptable usually means the table doesn't exist or RLS denies all
+        const { data: cacheRes, error } = await supabase
+            .from('telemetry_history_cache')
+            .select('history')
+            .eq('asset_id', dbId)
+            .single();
+
+        if (error) {
+            // PGRST116 = JSON 0 rows (expected if no cache)
+            // 406 = Not Acceptable (Table missing/RLS)
+            if (error.code === 'PGRST116' || error.message.includes('406') || (error as any).status === 406) {
+                // Return result with 0 samples, don't throw
+                result.sampleCount = 0;
+                result.dec25Present = false;
+                return result;
+            }
+            throw error;
+        }
+
         const hist = cacheRes?.history || [];
         const histCount = Array.isArray(hist) ? hist.length : 0;
         result.sampleCount = histCount;
         const hasDec25 = (hist || []).some((p: any) => {
-            try { const d = new Date(p.t); return d.getUTCFullYear() === 2025 && d.getUTCMonth() === 11 && d.getUTCDate() === 25; } catch(e){return false}
+            try { const d = new Date(p.t); return d.getUTCFullYear() === 2025 && d.getUTCMonth() === 11 && d.getUTCDate() === 25; } catch (e) { return false }
         });
         result.dec25Present = !!hasDec25;
 
@@ -33,14 +52,14 @@ export async function fetchForecastForAsset(selectedAsset: any) {
             const pts = (hist || []).map((p: any) => ({ t: p.t, y: p.y }));
             if (pts.length >= 5) {
                 const n = pts.length;
-                const meanT = pts.reduce((s:any,p:any)=>s+p.t,0)/n;
-                const meanY = pts.reduce((s:any,p:any)=>s+p.y,0)/n;
-                const Sxx = pts.reduce((s:any,p:any)=>s+Math.pow(p.t-meanT,2),0);
-                const Sxy = pts.reduce((s:any,p:any)=>s+(p.t-meanT)*(p.y-meanY),0);
-                const a = Sxy/(Sxx||1);
-                const residuals = pts.map((p:any)=>p.y - (a*p.t + (meanY - a*meanT)));
-                const SSE = residuals.reduce((s:any,r:any)=>s+r*r,0);
-                const sigma2 = SSE/Math.max(1,(n-2));
+                const meanT = pts.reduce((s: any, p: any) => s + p.t, 0) / n;
+                const meanY = pts.reduce((s: any, p: any) => s + p.y, 0) / n;
+                const Sxx = pts.reduce((s: any, p: any) => s + Math.pow(p.t - meanT, 2), 0);
+                const Sxy = pts.reduce((s: any, p: any) => s + (p.t - meanT) * (p.y - meanY), 0);
+                const a = Sxy / (Sxx || 1);
+                const residuals = pts.map((p: any) => p.y - (a * p.t + (meanY - a * meanT)));
+                const SSE = residuals.reduce((s: any, r: any) => s + r * r, 0);
+                const sigma2 = SSE / Math.max(1, (n - 2));
                 result.residualStd = Math.sqrt(sigma2);
             }
         }
@@ -57,6 +76,10 @@ export async function fetchForecastForAsset(selectedAsset: any) {
         }
     } catch (e) {
         // ignore cache errors
+        if (process.env.NODE_ENV === 'development' && !(e as any).__logged) {
+            console.warn('[DashboardData] Cache query suppressed:', (e as Error).message);
+            (e as any).__logged = true;
+        }
     }
 
     return result;
@@ -90,9 +113,9 @@ export function prefetchPredictiveAssets(selectedAsset: any) {
         schedule(async () => {
             try {
                 // Warm up lazy forensic dashboard bundle
-                import('../components/forensics/ForensicDashboard').catch(() => {});
+                import('../components/forensics/ForensicDashboard').catch(() => { });
                 // Warm up heavy services and worker module (non-blocking)
-                import('./ForensicReportService').catch(() => {});
+                import('./ForensicReportService').catch(() => { });
 
                 // Prefetch predictive forecast & telemetry cache for instant open
                 if (selectedAsset) await fetchForecastForAsset(selectedAsset);

@@ -37,35 +37,46 @@ export class ActuatorDiagnosticCore {
         // We look for: d(Cmd) > Threshold AND d(Pos) ~ 0 ... followed by large d(Pos)
 
         let stictionScore = 0;
-        // Simple heuristic on recent window
+        // High-fidelity heuristic:
+        // Identify "Stuck Phase": Command integrating, Position flat
+        // Identify "Slip Phase": Position jumps to catch up
         if (this.history.length > 5) {
             const h = this.history;
-            const recent = h[h.length - 1]; // Current
-            const prev = h[h.length - 5];   // ~500ms ago potentially
+            const current = h[h.length - 1];
 
-            const dCmd = Math.abs(recent.cmd - prev.cmd);
-            const dPos = Math.abs(recent.pos - prev.pos);
+            // Check last 5 samples for "Command Drift" vs "Position Lock"
+            let cmdDrift = 0;
+            let posMove = 0;
 
-            // If Command moved significant amount (>1%) but Pos did not (<0.1%)
-            if (dCmd > 1.0 && dPos < 0.1) {
-                stictionScore = 50; // Sticky!
+            for (let i = 1; i <= 5; i++) {
+                const p = h[h.length - i];
+                const pp = h[h.length - i - 1];
+                if (p && pp) {
+                    cmdDrift += Math.abs(p.cmd - pp.cmd);
+                    posMove += Math.abs(p.pos - pp.pos);
+                }
             }
 
-            // Or if position JUMPED recently (>2% in 1 step)
-            // (Assuming this analysis runs every update)
-            // Actually need finer grain, but let's simulate the score building up
-            // Ideally we track "integrated error before movement"
+            // Stiction Signature: Significant Command Movement (>0.5%) with Negligible Motion (<0.05%)
+            if (cmdDrift > 0.5 && posMove < 0.05) {
+                stictionScore = 65; // High probability of stiction
+            }
+
+            // Severe Stiction: Error accumulates then snaps (Slip)
+            const error = Math.abs(current.cmd - current.pos);
+            if (error > 2.0 && posMove < 0.05) {
+                stictionScore = 85;
+            }
         }
 
         // 3. Estimate Deadband / Play
         // Reversal Error: When direction changes, does position lag significantly?
-        // cmd: 50 -> 51 (pos 50->50.8) -> 50 (pos 50.8->50.8) -> 49 (pos 50.8 -> 49.5)
-        // Deadband is the 'lost motion' on reversal.
         const deadband = 0.5; // Simulated calculation result (would require detecting reversals)
 
         // 4. Determine Status
         let status: ActuatorState['status'] = 'HEALTHY';
         if (stictionScore > 40) status = 'STICKY';
+        if (stictionScore > 80) status = 'FAILED';
         if (Math.abs(commandPct - feedbackPct) > 5.0) status = 'FAILED'; // Gross deviation
 
         return {
@@ -75,5 +86,13 @@ export class ActuatorDiagnosticCore {
             isHunting: false, // Calculated by LoopMonitor usually
             status
         };
+    }
+
+    /**
+     * GET DIAGNOSTIC HISTORY
+     * For visualization in Dashboard
+     */
+    public static getHistory(): { cmd: number; pos: number; time: number }[] {
+        return this.history;
     }
 }

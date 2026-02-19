@@ -1,5 +1,5 @@
-import React from 'react';
-import { Target, TrendingUp, Cpu, Activity } from 'lucide-react';
+import { Target, TrendingUp, Cpu, Activity, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { HardwareRootOfTrust } from '../../services/HardwareRootOfTrust';
 
 interface UnitPersonalityProps {
     unitId: string;
@@ -13,12 +13,37 @@ interface UnitPersonalityProps {
         activeStrategies: string[]; // e.g. "Adaptive Cam", "Zone Avoidance"
         optimizationGain: number; // %
     };
+    // New prop: Cryptographic Proof from the backend/store
+    signature?: string;
 }
 
-export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitId, type, performance, tuning }) => {
+export const UnitPersonalityDashboard: React.FC<UnitPersonalityProps> = ({ unitId, type, performance, tuning, signature }) => {
+
+    // 1. Verify Integrity on Render (Real-time Root of Trust Check)
+    // We reconstruct the state object that was supposedly signed
+    const stateToVerify = { unitId, type, performance, tuning };
+    const isVerified = signature ? HardwareRootOfTrust.verifyState(stateToVerify, signature) : false; // Default false if no sig
+
     return (
-        <div className="w-full bg-slate-950 p-6">
-            <div className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <div className="w-full bg-slate-950 p-6 relative overflow-hidden">
+            {/* Watermark for Security Context */}
+            <div className="absolute top-0 right-0 p-4 opacity-50">
+                {isVerified ? (
+                    <div className="flex flex-col items-end text-emerald-500/80">
+                        <ShieldCheck className="w-16 h-16" />
+                        <span className="text-[10px] font-mono tracking-widest uppercase mt-2">Verified & Secure</span>
+                        <span className="text-[8px] font-mono text-emerald-700">{signature?.substring(0, 20)}...</span>
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-end text-red-500/80 animate-pulse">
+                        <ShieldAlert className="w-16 h-16" />
+                        <span className="text-[10px] font-mono tracking-widest uppercase mt-2">Integrity Violation</span>
+                        <span className="text-[8px] font-mono text-red-700">Digital Twin Mismatch</span>
+                    </div>
+                )}
+            </div>
+
+            <div className="text-2xl font-bold mb-4 flex items-center gap-2 relative z-10">
                 <Cpu className="w-6 h-6 text-purple-400" />
                 Unit Personality: {unitId}
             </div>

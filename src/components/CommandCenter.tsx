@@ -24,6 +24,7 @@ import { MaintenanceEngine, SOPMapping } from '../services/MaintenanceEngine';
 import { SolutionArchitect } from '../services/SolutionArchitect';
 import { dispatch } from '../lib/events';
 import { FaultInjectorPanel } from './forensics/FaultInjectorPanel';
+import { ExpertDiagnosticOverlay } from './forensics/ExpertDiagnosticOverlay';
 
 export const CommandCenter: React.FC = () => {
     const { t } = useTranslation();
@@ -358,16 +359,16 @@ export const CommandCenter: React.FC = () => {
                                         </div>
                                     }>
                                         <TurbineRunner3D
-                                        rpm={300} // Fallback if live physics disabled
-                                        useLivePhysics={true} // NC-300: Industrial Grade Physics
-                                        deltaMap={deltaMap}
-                                        heatmapMode={true}
-                                        className="h-full"
-                                        showInfoPanel={true}
-                                        selectedPart={selected3DPart}
-                                        onSelect={setSelected3DPart}
-                                        ref={turbineRef}
-                                    />
+                                            rpm={300} // Fallback if live physics disabled
+                                            useLivePhysics={true} // NC-300: Industrial Grade Physics
+                                            deltaMap={deltaMap}
+                                            heatmapMode={true}
+                                            className="h-full"
+                                            showInfoPanel={true}
+                                            selectedPart={selected3DPart}
+                                            onSelect={setSelected3DPart}
+                                            ref={turbineRef}
+                                        />
                                     </React.Suspense>
                                 </ErrorBoundary>
                             </div>
@@ -487,6 +488,9 @@ export const CommandCenter: React.FC = () => {
 
             {/* Fault Injector (Educational Tool) */}
             <FaultInjectorPanel />
+
+            {/* Educational Diagnostic Mentor - Auto-triggers on faults */}
+            <ExpertDiagnosticOverlay />
         </div>
     );
 };

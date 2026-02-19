@@ -24,7 +24,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
     const handleOptionSelect = async (value: string) => {
         setSelectedOption(value);
         setIsSubmitting(true);
-        
+
         // NC-25100: Log diagnosis step
         saveLog({
             event_type: 'DIAGNOSIS_STEP_SELECTED',
@@ -45,10 +45,24 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
         }, 800);
     };
 
+    // NC-Upgrade: Keyboard Shortcuts (1-9)
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            const key = parseInt(e.key);
+            if (!isNaN(key) && key > 0 && key <= query.options.length && !isSubmitting) {
+                const opt = query.options[key - 1];
+                if (opt) handleOptionSelect(opt.value);
+            }
+            if (e.key === 'Escape') clearQuery();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [query, isSubmitting, clearQuery]);
+
     return (
         <AnimatePresence mode="wait">
             <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90">
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -85,7 +99,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                             </div>
 
                             <div className="mb-8">
-                                <motion.div 
+                                <motion.div
                                     key={query.id}
                                     initial={{ opacity: 0, x: 20 }}
                                     animate={{ opacity: 1, x: 0 }}
@@ -106,14 +120,17 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
                                         disabled={isSubmitting}
                                         className={`
                                             w-full p-4 rounded-none border transition-all text-left group relative overflow-hidden
-                                            ${selectedOption === opt.value 
-                                                ? 'bg-indigo-500/20 border-indigo-500 text-white shadow-none' 
+                                            ${selectedOption === opt.value
+                                                ? 'bg-indigo-500/20 border-indigo-500 text-white shadow-none'
                                                 : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-indigo-500/30 text-slate-300 hover:text-white'}
                                             ${isSubmitting && selectedOption !== opt.value ? 'opacity-50 cursor-not-allowed' : ''}
                                         `}
                                     >
                                         <div className="flex justify-between items-center relative z-10">
-                                            <span className="text-sm font-bold uppercase tracking-wider">{opt.label}</span>
+                                            <span className="text-sm font-bold uppercase tracking-wider flex items-center gap-2">
+                                                <span className="text-[10px] bg-white/10 text-slate-400 px-1.5 rounded">{idx + 1}</span>
+                                                {opt.label}
+                                            </span>
                                             {selectedOption === opt.value ? (
                                                 <div className="w-6 h-6 rounded-none bg-indigo-500 flex items-center justify-center">
                                                     <CheckCircle2 className="w-4 h-4 text-white" />

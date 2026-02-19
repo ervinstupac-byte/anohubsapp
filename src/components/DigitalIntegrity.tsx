@@ -110,12 +110,12 @@ export const DigitalIntegrity: React.FC = () => {
     useEffect(() => {
         fetchLedger();
 
-            const sub = supabase.channel('public:digital_integrity_ledger')
+        const sub = supabase.channel('public:digital_integrity_ledger')
             .on('postgres_changes', {
                 event: 'INSERT',
                 schema: 'public',
                 table: 'digital_integrity_ledger',
-                    filter: selectedAsset ? `asset_id=eq.${idAdapter.toStorage(selectedAsset.id)}` : undefined
+                filter: selectedAsset ? `asset_id=eq.${idAdapter.toStorage(selectedAsset.id)}` : undefined
             }, (payload: any) => {
                 const newBlock = payload.new as Block;
                 setLedger(prev => [newBlock, ...prev.filter(b => b.block_index !== newBlock.block_index)]);
@@ -152,6 +152,12 @@ export const DigitalIntegrity: React.FC = () => {
 
         const dataString = `${idAdapter.toStorage(selectedAsset.id)}|${selectedAsset.name}|${operation}|${value}|${engineer}`;
         const prevBlock = ledger[0];
+
+        if (!prevBlock) {
+            showToast('Genesis block not found. Please refresh.', 'error');
+            setIsMining(false);
+            return;
+        }
 
         try {
             await new Promise(r => setTimeout(r, 1000));

@@ -17,7 +17,7 @@ const BearingsDetail = React.lazy(() => import('../components/francis/BearingsDe
 const ShaftAlignment = React.lazy(() => import('../components/maintenance/AlignmentWizardWrapper').then(module => ({ default: module.AlignmentWizardWrapper })));
 const CoolingWater = React.lazy(() => import('../components/francis/CoolingWater'));
 const DrainagePumps = React.lazy(() => import('../components/francis/DrainagePumps'));
-const OilHealth = React.lazy(() => import('../components/francis/OilHealth'));
+const OilHealth = React.lazy(() => import('../components/francis/OilHealth').then(module => ({ default: module.OilHealth })));
 const LubricationSystem = React.lazy(() => import('../components/francis/LubricationSystem').then(module => ({ default: module.LubricationSystem })));
 const GovernorPID = React.lazy(() => import('../components/francis/GovernorPID').then(module => ({ default: module.GovernorPID })));
 const GeneratorIntegrity = React.lazy(() => import('../components/francis/GeneratorIntegrity').then(module => ({ default: module.GeneratorIntegrity })));

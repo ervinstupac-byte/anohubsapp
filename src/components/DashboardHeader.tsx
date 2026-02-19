@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
 import { ROUTES } from '../routes/paths';
-import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid, Network } from 'lucide-react';
+import { Search, Command, X, ShieldCheck, Activity, Database, ChevronRight, ChevronDown, Settings, BarChart3, Wrench, Zap, Square, Grid, Network, Menu } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useRisk } from '../contexts/RiskContext';
 import { useRiskCalculator } from '../hooks/useRiskCalculator';
@@ -76,7 +76,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
                 {/* LEFT: Identity & Status */}
                 <div className="flex items-center gap-6">
-                    <button onClick={onToggleSidebar} className="lg:hidden p-2 text-slate-400 hover:text-white">☰</button>
+                    <button onClick={onToggleSidebar} className="p-2 text-slate-400 hover:text-white transition-colors">
+                        <Menu className="w-5 h-5" />
+                    </button>
 
                     {/* MISSION STATUS BAR */}
                     <div className="flex items-center gap-3 text-xs font-mono tracking-wider">

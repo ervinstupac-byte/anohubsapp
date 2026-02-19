@@ -17,6 +17,15 @@ export interface AlarmDefinition {
 
 export class AlarmStormFilter {
     private static activeAlarms: Map<string, AlarmDefinition> = new Map();
+    private static dependencyGraph: Map<string, string> = new Map(); // Child -> Parent
+
+    /**
+     * REGISTER ALARM DEPENDENCY
+     * e.g. registerDependency('LOW_PRESSURE', 'PUMP_TRIP')
+     */
+    public static registerDependency(childId: string, parentId: string): void {
+        this.dependencyGraph.set(childId, parentId);
+    }
 
     /**
      * UPDATE ALARM STATE
@@ -25,7 +34,7 @@ export class AlarmStormFilter {
     public static updateAlarm(
         id: string,
         active: boolean,
-        parentId?: string
+        explicitParentId?: string
     ): boolean {
         const now = Date.now();
         const existing = this.activeAlarms.get(id);
@@ -38,8 +47,10 @@ export class AlarmStormFilter {
             return false;
         }
 
-        // Check suppression
+        // Check suppression (Graph or Explicit)
         let suppressed = false;
+        let parentId = explicitParentId || this.dependencyGraph.get(id);
+
         if (parentId) {
             const parent = this.activeAlarms.get(parentId);
             if (parent && parent.active) {

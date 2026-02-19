@@ -73,6 +73,7 @@ export class SovereignOrchestrator {
 
             // STEP 3: Initialize Kernel observers
             console.log('[3/6] 🧠 Initializing SovereignKernel...');
+            SovereignKernel.initialize(); // Register service
             this.wireKernelObservers();
             console.log('      ✓ Observers registered\n');
 

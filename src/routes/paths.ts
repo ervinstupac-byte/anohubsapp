@@ -15,6 +15,8 @@ export const ROUTES = {
         MOUNTER_CARD: 'mounter-card',
         DAMAGE_CARD: 'damage-card',
         ASSET_PASSPORT_CARD: 'asset-passport-card',
+        AUTOSTART: 'autostart',
+        INTELLIGENT_DIAGNOSTICS: 'intelligent-diagnostics',
     },
     FRANCIS: {
         ROOT: 'francis',

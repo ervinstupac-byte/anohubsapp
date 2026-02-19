@@ -5,7 +5,7 @@
  * Prevents modifications to turbine physics models without architect-level approval
  */
 
-import crypto from 'crypto';
+import crypto from '../utils/cryptoUtils';
 
 export enum ApprovalLevel {
     SYSTEM = 0,

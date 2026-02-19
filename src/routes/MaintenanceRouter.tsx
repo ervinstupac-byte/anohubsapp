@@ -18,14 +18,16 @@ const TechnicalPassport = lazy(() => import('../components/TechnicalPassport').t
 const MounterQuickCardLazy = lazy(() => import('../components/MounterQuickCard').then(m => ({ default: m.MounterQuickCard })));
 const SpecialistDamageCardLazy = lazy(() => import('../components/SpecialistDamageCard').then(m => ({ default: m.SpecialistDamageCard })));
 const AssetPassportCard = lazy(() => import('../components/dashboard/AssetPassportCard').then(m => ({ default: m.AssetPassportCard })));
+const AutostartDashboard = lazy(() => import('../components/dashboard/AutostartDashboard'));
+const DiagnosticsDashboard = lazy(() => import('../components/dashboard/DiagnosticsDashboard'));
 
 const MounterQuickCardPage: React.FC = () => {
     // Simulated asset for demonstration
     const asset = createThrustBearingWithHistory();
     return (
-        <MounterQuickCardLazy 
-            asset={asset} 
-            onClose={() => window.history.back()} 
+        <MounterQuickCardLazy
+            asset={asset}
+            onClose={() => window.history.back()}
         />
     );
 };
@@ -48,6 +50,8 @@ const MaintenanceRouter: React.FC = () => {
                 <Route index element={<Navigate to={ROUTES.MAINTENANCE.DASHBOARD} replace />} />
 
                 <Route path={ROUTES.MAINTENANCE.DASHBOARD} element={<MaintenanceDashboard />} />
+                <Route path={ROUTES.MAINTENANCE.AUTOSTART} element={<AutostartDashboard />} />
+                <Route path={ROUTES.MAINTENANCE.INTELLIGENT_DIAGNOSTICS} element={<DiagnosticsDashboard />} />
                 <Route path={ROUTES.MAINTENANCE.LOGBOOK} element={<MaintenanceLogbook />} />
                 <Route path={ROUTES.MAINTENANCE.HYDRAULIC} element={<HydraulicMaintenance />} />
                 <Route path={ROUTES.MAINTENANCE.BOLT_TORQUE} element={<BoltTorqueCalculator />} />

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Save, RefreshCw, Database, Archive, AlertTriangle, Info, Zap, TrendingUp, Camera, Image as ImageIcon, ShieldAlert, Activity } from 'lucide-react';
+import { ScenarioBuilder } from './education/ScenarioBuilder';
+import { KernelMonitor } from './education/KernelMonitor';
+import { TaskManager } from './education/TaskManager';
+import { TerminalConsole } from './education/TerminalConsole';
+import { Settings, Save, RefreshCw, Database, Archive, AlertTriangle, Info, Zap, TrendingUp, Camera, Image as ImageIcon, ShieldAlert, Activity, PlayCircle, Sliders, Cpu, Server, Terminal } from 'lucide-react';
 import Decimal from 'decimal.js';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
+import { ManualInjectionSource } from '../services/telemetry/ManualInjectionSource';
+import { LiveStreamConnector } from '../services/LiveStreamConnector';
 import { calculateOperatingZone, calculateCavitationRisk } from '../features/physics-core/PhysicsCalculations.logic';
 import { ErrorHandlerService, CavitationStatus, ErosionStatus } from '../services/ErrorHandlerService';
 import { FrancisHorizontalEngine } from '../lib/engines/FrancisHorizontalEngine';
@@ -52,6 +58,54 @@ export const ManualDataEntry: React.FC = () => {
     const feedPattern = useTelemetryStore(state => state.feedPattern);
     const hydraulic = useTelemetryStore(state => state.hydraulic);
     const mechanical = useTelemetryStore(state => state.mechanical);
+
+    const [activeTab, setActiveTab] = useState<'manual' | 'scenario' | 'kernel' | 'processes' | 'console'>('manual');
+
+    // Activates Manual Injection Mode in LiveStreamConnector
+    useEffect(() => {
+        LiveStreamConnector.connect({ manualMode: true });
+        return () => {
+            LiveStreamConnector.disconnect();
+        };
+    }, []);
+
+    // Push changes to ManualInjectionSource whenever form updates
+    const broadcastTelemetry = (newData: any) => {
+        const payload = {
+            timestamp: Date.now(),
+            hydraulic: {
+                flowCMS: newData.flowRate,
+                headM: newData.netHead,
+                efficiency: 0.92, // Placeholder or calculated
+                powerKW: newData.activePower * 1000,
+                // Add required properties for HydraulicStream
+                flow: newData.flowRate,
+                head: newData.netHead,
+                waterHead: new Decimal(newData.netHead),
+                flowRate: new Decimal(newData.flowRate),
+                cavitationThreshold: new Decimal(0.1)
+            },
+            mechanical: {
+                rpm: newData.rpm,
+                vibration: newData.vibration,
+                tempC: newData.temperature,
+                // Add required properties for MechanicalStream
+                alignment: 0,
+                vibrationX: newData.vibration,
+                vibrationY: newData.vibration,
+                bearingTemp: newData.temperature,
+                radialClearance: 0,
+                boltSpecs: { grade: '8.8', count: 12, torque: 500 }
+            },
+            physics: {
+                surgePressureBar: newData.hpuPressure, // Example mapping
+                waterHammerPressureBar: 0,
+                efficiency: 0.92,
+                netHead: newData.netHead,
+            }
+        };
+        ManualInjectionSource.getInstance().inject(payload);
+    };
 
     const [formState, setFormState] = useState({
         flowRate: (hydraulic as any).flowRate || 45.0,
@@ -202,6 +256,11 @@ export const ManualDataEntry: React.FC = () => {
         // Initialize Resonance Manager once
         ResonanceHarvesterManager.initialize();
     }, []);
+
+    // Broadcast updates when form state changes
+    useEffect(() => {
+        broadcastTelemetry(formState);
+    }, [formState]);
 
     useEffect(() => {
         // Calculate estimated efficiency for Hill Chart
@@ -720,35 +779,16 @@ export const ManualDataEntry: React.FC = () => {
     const handleChange = (key: string, value: string) => {
         setFormState(prev => ({
             ...prev,
-            [key]: parseFloat(value)
+            [key]: parseFloat(value) || value // Handle non-numeric inputs
         }));
     };
 
     const handleApply = () => {
-        // Update Hydraulic State
-        updateTelemetry({
-            hydraulic: {
-                flow: formState.flowRate,
-                head: formState.netHead
-            },
-            mechanical: {
-                // activePower is not in MechanicalStream, moved to physics update below if needed or handled separately
-                rpm: formState.rpm,
-                vibration: formState.vibration, // Main RMS
-                vibrationX: formState.vibration,
-                vibrationY: formState.vibration * 0.9,
-                bearingTemp: formState.temperature
-            },
-            physics: {
-                // powerMW: new Decimal(formState.activePower) // powerMW not in TechnicalProjectState['physics']
-            }
-        });
-        
         // Visual feedback
         const btn = document.getElementById('apply-btn');
         if(btn) {
             const originalText = btn.innerText;
-            btn.innerText = 'UPDATED';
+            btn.innerText = 'INJECTED';
             setTimeout(() => btn.innerText = originalText, 1000);
         }
     };
@@ -993,14 +1033,65 @@ export const ManualDataEntry: React.FC = () => {
         }
     };
 
+
+
     return (
         <div className="bg-slate-900 border border-slate-700 rounded-lg p-4 w-full max-w-sm">
-            <div className="flex items-center gap-2 mb-4 border-b border-slate-800 pb-2">
-                <Database className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-bold text-white uppercase tracking-wider">Manual Data Entry</span>
+            <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
+                <div className="flex items-center gap-2">
+                    <Database className="w-4 h-4 text-cyan-400" />
+                    <span className="text-sm font-bold text-white uppercase tracking-wider">Data Injection</span>
+                </div>
+                <div className="flex gap-2">
+                     <button 
+                        onClick={() => setActiveTab('manual')}
+                        className={`p-1 rounded ${activeTab === 'manual' ? 'bg-cyan-900 text-cyan-400' : 'text-slate-500 hover:text-white'}`}
+                        title="Manual Entry"
+                    >
+                        <Sliders className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('scenario')}
+                        className={`p-1 rounded ${activeTab === 'scenario' ? 'bg-purple-900 text-purple-400' : 'text-slate-500 hover:text-white'}`}
+                        title="Scenario Builder"
+                    >
+                        <PlayCircle className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('kernel')}
+                        className={`p-1 rounded ${activeTab === 'kernel' ? 'bg-emerald-900 text-emerald-400' : 'text-slate-500 hover:text-white'}`}
+                        title="Kernel Monitor"
+                    >
+                        <Cpu className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('processes')}
+                        className={`p-1 rounded ${activeTab === 'processes' ? 'bg-blue-900 text-blue-400' : 'text-slate-500 hover:text-white'}`}
+                        title="Task Manager"
+                    >
+                        <Server className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => setActiveTab('console')}
+                        className={`p-1 rounded ${activeTab === 'console' ? 'bg-slate-700 text-white' : 'text-slate-500 hover:text-white'}`}
+                        title="System Console"
+                    >
+                        <Terminal className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
 
-            <div className="space-y-4">
+            {activeTab === 'scenario' ? (
+                <ScenarioBuilder />
+            ) : activeTab === 'kernel' ? (
+                <KernelMonitor />
+            ) : activeTab === 'processes' ? (
+                <TaskManager />
+            ) : activeTab === 'console' ? (
+                <TerminalConsole />
+            ) : (
+                <div className="space-y-4">
+                    {/* ... (existing manual form) ... */}
                 {/* Hydraulic Section */}
                 <div className="space-y-2">
                     <label className="text-xs text-slate-400 font-mono uppercase">Hydraulic Parameters</label>
@@ -1737,6 +1828,7 @@ export const ManualDataEntry: React.FC = () => {
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };

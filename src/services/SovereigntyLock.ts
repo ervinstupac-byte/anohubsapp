@@ -7,7 +7,7 @@
  */
 
 import { KernelExecutionTrace } from './SovereignKernel';
-import crypto from 'crypto';
+import crypto from '../utils/cryptoUtils';
 
 export interface LockedTrace {
     trace: KernelExecutionTrace;

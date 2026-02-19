@@ -43,9 +43,31 @@ export interface KernelExecutionTrace {
  * The Sovereign Kernel
  * Single point of execution for all autonomous intelligence
  */
+import { serviceRegistry } from './ServiceRegistry';
+
+// ... (existing imports)
+
 export class SovereignKernel {
     private static observers: Array<(enriched: EnrichedTelemetry) => void> = [];
     private static executionHistory: KernelExecutionTrace[] = [];
+
+    /**
+     * Initialize service registry entry
+     */
+    public static initialize() {
+        serviceRegistry.register({
+            id: 'sovereign-kernel',
+            name: 'Sovereign Kernel',
+            description: 'Core decision engine and autonomous intelligence.',
+            version: '4.6.2',
+            status: 'RUNNING',
+            lastHeartbeat: Date.now(),
+            metrics: {
+                uptime: 0,
+                eventsProcessed: 0
+            }
+        });
+    }
 
     /**
      * CORE REACTOR
@@ -53,6 +75,14 @@ export class SovereignKernel {
      * Foundation → Middle → Action as one atomic operation
      */
     public static async react(telemetry: TelemetryStream): Promise<EnrichedTelemetry> {
+        // Register/Heartbeat with Service Registry
+        serviceRegistry.heartbeat('sovereign-kernel', {
+            uptime: performance.now(),
+            eventsProcessed: this.executionHistory.length,
+            cpuUsage: Math.random() * 5 + 2, // Simulated low usage
+            memoryUsage: Math.random() * 20 + 50 // Simulated MB
+        });
+
         const startTime = performance.now();
         const trace: KernelExecutionTrace = {
             telemetryTimestamp: telemetry.timestamp,
@@ -135,8 +165,14 @@ export class SovereignKernel {
      * Register observer for telemetry events
      * Implements reactive observer pattern
      */
-    public static subscribe(observer: (enriched: EnrichedTelemetry) => void): void {
+    public static subscribe(observer: (enriched: EnrichedTelemetry) => void): () => void {
         this.observers.push(observer);
+        return () => {
+            const index = this.observers.indexOf(observer);
+            if (index > -1) {
+                this.observers.splice(index, 1);
+            }
+        };
     }
 
     /**
