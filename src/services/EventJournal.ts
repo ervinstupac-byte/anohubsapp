@@ -3,7 +3,7 @@ import { supabase } from './supabaseClient';
 type EventRecord = {
     id: string;
     type: string;
-    payload: any;
+    payload: Record<string, unknown>;
     ts: string;
 };
 
@@ -25,7 +25,7 @@ class EventJournalService {
         }
     }
 
-    append(eventType: string, payload: any) {
+    append(eventType: string, payload: Record<string, unknown>) {
         const rec: EventRecord = { id: `${Date.now()}-${Math.random().toString(36).slice(2,8)}`, type: eventType, payload, ts: new Date().toISOString() };
         this.store.unshift(rec);
         if (this.store.length > MAX_IN_MEMORY) this.store.pop();

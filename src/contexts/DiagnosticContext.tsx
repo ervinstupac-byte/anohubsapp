@@ -138,16 +138,22 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             }
 
             Object.entries(telemetry).forEach(([assetId, t]) => {
-                if (t.status === 'CRITICAL') {
+                // guard against malformed / empty telemetry entries
+                if (!t || typeof t !== 'object') return;
+
+                if ((t as any).status === 'CRITICAL') {
                     results.push({
                         symptom: 'TELEMETRY_ALARM',
                         source: 'TELEMETRY',
-                        message: `Critical alarm detected on ${assetId}: ${t.incidentDetails || ''}`
+                        message: `Critical alarm detected on ${assetId}: ${(t as any).incidentDetails || ''}`
                     });
                 }
 
                 // Field-Incident Safeguard: Metal Scraping check
-                const maxMag = Math.max(...(t.vibrationSpectrum || [0]));
+                const spectrum = Array.isArray((t as any).vibrationSpectrum) && (t as any).vibrationSpectrum.length > 0
+                    ? (t as any).vibrationSpectrum
+                    : [0];
+                const maxMag = Math.max(...spectrum);
                 if (maxMag > 0.7) {
                     results.push({
                         symptom: 'METAL_SCRAPING',
@@ -157,7 +163,7 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                 }
 
                 // Vibration threshold check (mm/s) - default 4.5
-                const latestVib = Number((t as any).francis_data?.stay_ring_vibration ?? t.vibration ?? t.rotorHeadVibration ?? 0);
+                const latestVib = Number((t as any)?.francis_data?.stay_ring_vibration ?? (t as any).vibration ?? (t as any).rotorHeadVibration ?? 0);
                 const thresh = thresholdsMap[String(assetId)] ?? 4.5;
                 if (!Number.isNaN(latestVib) && latestVib > thresh) {
                     results.push({
@@ -207,16 +213,19 @@ export const DiagnosticProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     useEffect(() => {
         // iterate telemetry entries
         Object.entries(telemetry).forEach(async ([aid, t]) => {
+            // guard malformed telemetry
+            if (!t || typeof t !== 'object') return;
+
             const numeric = idAdapter.toNumber(aid);
             if (numeric === null) return;
 
-            // prefer P/Q/H if present
-            const sanitizedFromPQH = sanitizeEtaInputs({ P: (t as any).P, Q: (t as any).Q, H: (t as any).H });
+            // prefer P/Q/H if present (safely access nested fields)
+            const sanitizedFromPQH = sanitizeEtaInputs({ P: (t as any)?.P, Q: (t as any)?.Q, H: (t as any)?.H });
 
             let etaVal: number | null = null;
             if (sanitizedFromPQH) {
                 etaVal = sanitizedFromPQH.eta;
-            } else if ((t as any).efficiency !== undefined && (t as any).efficiency !== null) {
+            } else if ((t as any)?.efficiency !== undefined && (t as any)?.efficiency !== null) {
                 // telemetry efficiency may be percentage (0-100) or fraction (0-1)
                 const raw = Number((t as any).efficiency);
                 if (Number.isFinite(raw)) etaVal = raw > 1 ? raw / 100 : raw;

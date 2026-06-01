@@ -2,13 +2,21 @@ import { supabase } from './supabaseClient.ts';
 import idAdapter from '../utils/idAdapter';
 
 export type LogSeverity = 'INFO' | 'WARNING' | 'CRITICAL';
-export type LogEventType = 'STRESS_TEST' | 'CRITICAL_FAILURE' | 'SYSTEM_RESET' | 'PERIODIC_HEALTH' | 'USER_ACTION' | 'MODULE_OPEN';
+export type LogEventType =
+    | 'STRESS_TEST'
+    | 'CRITICAL_FAILURE'
+    | 'SYSTEM_RESET'
+    | 'PERIODIC_HEALTH'
+    | 'USER_ACTION'
+    | 'MODULE_OPEN'
+    | 'TELEMETRY_VALIDATION_FAILURE'
+    | 'TELEMETRY_INGEST';
 
 export interface TelemetryLog {
-    assetId: number | null;
-    eventType: LogEventType;
-    severity: LogSeverity;
-    details: any;
+        assetId: number | null;
+        eventType: LogEventType;
+        severity: LogSeverity;
+        details: Record<string, unknown>;
 }
 
 class LoggingService {
@@ -38,24 +46,24 @@ class LoggingService {
     /**
      * Generic action logger
      */
-    async logAction(assetId: number | null, actionType: string, details: any) {
+    async logAction(assetId: number | null, actionType: string, details: Record<string, unknown>) {
         return this.logEvent({
             assetId,
             eventType: 'USER_ACTION',
             severity: 'INFO',
-            details: { ...details, action: actionType }
+            details: { ...(details || {}), action: actionType }
         });
     }
 
     /**
      * Specialized logger for Incident Simulator events
      */
-    async logIncident(assetId: number, type: string, details: any) {
+    async logIncident(assetId: number, type: string, details: Record<string, unknown>) {
         return this.logEvent({
             assetId,
             eventType: 'CRITICAL_FAILURE',
             severity: 'CRITICAL',
-            details: { ...details, incident_type: type }
+            details: { ...(details || {}), incident_type: type }
         });
     }
 

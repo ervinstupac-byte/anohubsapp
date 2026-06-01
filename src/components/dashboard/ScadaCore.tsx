@@ -18,9 +18,12 @@ import { SmartTooltip } from '../ui/SmartTooltip';
 import { ActiveAlarmsModal } from './ActiveAlarmsModal';
 import { EVENTS } from '../../lib/events';
 import { TURBINE_LIMITS } from '../../config/IndustrialStandards';
+import { PeltonScadaPanel } from './PeltonScadaPanel';
+import { useTelemetry } from '../../contexts/TelemetryContext';
 
 export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }> = ({ focusMode = false, forensicMode = false }) => {
   const navigate = useNavigate();
+  const { telemetry } = useTelemetry();
   const store = useTelemetryStore() as any;
   const cfgStore = useProjectConfigStore();
   const peltonCfg = cfgStore.getConfig('PELTON');
@@ -970,7 +973,12 @@ export const ScadaCore: React.FC<{ focusMode?: boolean, forensicMode?: boolean }
         )}
       </div>
 
-      <div className="col-span-4 bg-[#0c0c0c] border border-[#222222] rounded-none p-6 space-y-6">
+      <div className="col-span-4 bg-[#0c0c0c] border border-[#222222] rounded-none p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+        {/* Pelton SCADA Panel - Conditional Render */}
+        {family === 'PELTON' && (
+          <PeltonScadaPanel telemetry={telemetry ? Object.values(telemetry)[0] : undefined} />
+        )}
+
         <div>
           <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">Project Parameters</div>
           <div className="grid grid-cols-2 gap-3">
