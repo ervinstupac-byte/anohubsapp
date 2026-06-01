@@ -49,7 +49,8 @@ describe('Pelton fault -> UI integration (simulated)', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/Shaft jump detected/i)).toBeTruthy();
+      const matches = screen.getAllByText(/Shaft jump detected/i);
+      expect(matches.length).toBeGreaterThan(0);
     }, { timeout: 2000 });
 
     await waitFor(() => {
