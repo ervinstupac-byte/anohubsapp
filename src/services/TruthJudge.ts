@@ -113,6 +113,14 @@ export class TruthJudge {
                     reason: `Hysteresis: suppressed repeated fallback (${entry.suppressedCount}) for ${sensorId}`,
                     action: 'TRUST_A'
                 };
+                // Emit suppressed event for observability/UI
+                try {
+                    if (typeof window !== 'undefined' && typeof (window as any).dispatchEvent === 'function') {
+                        (window as any).dispatchEvent(new CustomEvent('truthJudge:fallback_suppressed', { detail: { sensorId, suppressedCount: entry.suppressedCount, verdict: suppressedVerdict } }));
+                    }
+                } catch (e) {
+                    // noop in non-browser or test environments
+                }
                 entry.lastVerdict = suppressedVerdict;
                 entry.lastValue = newValue;
                 entry.lastTimestamp = lastTimestamp;
@@ -132,6 +140,14 @@ export class TruthJudge {
             entry.lastVerdict = fallbackVerdict;
             entry.lastValue = newValue;
             entry.lastTimestamp = lastTimestamp;
+            // Emit fallback event for observability/UI
+            try {
+                if (typeof window !== 'undefined' && typeof (window as any).dispatchEvent === 'function') {
+                    (window as any).dispatchEvent(new CustomEvent('truthJudge:fallback', { detail: { sensorId, verdict: fallbackVerdict } }));
+                }
+            } catch (e) {
+                // noop in non-browser or test environments
+            }
             this.history.set(sensorId, entry);
             return fallbackVerdict;
         }
