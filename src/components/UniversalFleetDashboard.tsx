@@ -129,7 +129,7 @@ export const UniversalFleetDashboard: React.FC = () => {
             </motion.div>
 
             {/* MAIN CONTENT AREA */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
                 {viewMode === 'OPERATION' && (
                     <motion.div
                         key="operation"

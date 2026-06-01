@@ -23,7 +23,7 @@ vi.mock('../KillSwitch', () => ({ KillSwitch: () => <div data-testid="kill-switc
 
 describe('ForensicDashboard (War Game)', () => {
 
-    it('renders in IDLE state', () => {
+    it('renders in IDLE state', async () => {
         (useForensics as any).mockReturnValue({
             status: 'IDLE',
             trafficHistory: [],
@@ -33,14 +33,16 @@ describe('ForensicDashboard (War Game)', () => {
             currentLatency: 45
         });
 
-        render(<ForensicDashboard />);
+        await act(async () => {
+            render(<ForensicDashboard />);
+        });
 
         // The simulated returns the key.
         expect(screen.getByText('forensics.title')).toBeInTheDocument();
         expect(screen.queryByText(/forensics.critical_alert/)).not.toBeInTheDocument();
     });
 
-    it('shows CRITICAL ALERT during ATTACK_IN_PROGRESS', () => {
+    it('shows CRITICAL ALERT during ATTACK_IN_PROGRESS', async () => {
         (useForensics as any).mockReturnValue({
             status: 'ATTACK_IN_PROGRESS', // Force attack status
             trafficHistory: [{ inbound: 50, outbound: 900 }], // Simulated spike
@@ -50,7 +52,9 @@ describe('ForensicDashboard (War Game)', () => {
             currentLatency: 2000
         });
 
-        render(<ForensicDashboard />);
+        await act(async () => {
+            render(<ForensicDashboard />);
+        });
 
         // The simulated returns the key.
         // Also note that the component might render children or other structure, but getByText should find the text node.

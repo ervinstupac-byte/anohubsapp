@@ -12,50 +12,40 @@ global.IntersectionObserver = class IntersectionObserver {
 // Provide a lightweight fallback for TelemetryContext in tests so components
 // that call `useTelemetry()` don't throw when not wrapped in a provider.
 import { vi } from 'vitest';
-try {
-  vi.mock('../contexts/TelemetryContext.tsx', async () => {
-    const actual = await vi.importActual('../contexts/TelemetryContext.tsx');
-    return {
-      ...actual,
-      useTelemetry: () => ({
-        telemetry: {},
-        activeIncident: null,
-        triggerEmergency: () => undefined,
-        clearEmergency: () => undefined,
-        forceUpdate: () => undefined,
-        updatePipeDiameter: () => undefined,
-        shutdownExcitation: () => undefined,
-        updateWicketGateSetpoint: () => undefined,
-        resetFatigue: () => undefined
-      })
-    } as any;
-  });
-} catch (e) {
-  // If mocking fails in some environments, swallow to avoid breaking tests setup
-  // The real tests should still wrap components where necessary.
-  // eslint-disable-next-line no-console
-  console.warn('[test setup] TelemetryContext mock failed', e);
-}
-try {
-  vi.mock('../contexts/MaintenanceContext.tsx', async () => {
-    const actual = await vi.importActual('../contexts/MaintenanceContext.tsx');
-    return {
-      ...actual,
-      useMaintenance: () => ({
-        workOrders: [],
-        logs: [],
-        operatingHours: 0,
-        predictServiceDate: () => null,
-        createLogEntry: () => undefined,
-        createWorkOrder: () => undefined,
-        getMaintenanceSummary: () => ({ upcoming: 0 })
-      })
-    } as any;
-  });
-} catch (e) {
-  // eslint-disable-next-line no-console
-  console.warn('[test setup] MaintenanceContext mock failed', e);
-}
+
+vi.mock('../contexts/TelemetryContext.tsx', async () => {
+  const actual = await vi.importActual('../contexts/TelemetryContext.tsx');
+  return {
+    ...actual,
+    useTelemetry: () => ({
+      telemetry: {},
+      activeIncident: null,
+      triggerEmergency: () => undefined,
+      clearEmergency: () => undefined,
+      forceUpdate: () => undefined,
+      updatePipeDiameter: () => undefined,
+      shutdownExcitation: () => undefined,
+      updateWicketGateSetpoint: () => undefined,
+      resetFatigue: () => undefined
+    })
+  } as any;
+});
+
+vi.mock('../contexts/MaintenanceContext.tsx', async () => {
+  const actual = await vi.importActual('../contexts/MaintenanceContext.tsx');
+  return {
+    ...actual,
+    useMaintenance: () => ({
+      workOrders: [],
+      logs: [],
+      operatingHours: 0,
+      predictServiceDate: () => null,
+      createLogEntry: () => undefined,
+      createWorkOrder: () => undefined,
+      getMaintenanceSummary: () => ({ upcoming: 0 })
+    })
+  } as any;
+});
 
 // Minimal IndexedDB shim for Dexie in Node.js/jsdom test environment
 if (typeof (global as any).indexedDB === 'undefined') {

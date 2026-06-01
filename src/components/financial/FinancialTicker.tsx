@@ -62,7 +62,7 @@ export const FinancialTicker: React.FC<{ className?: string }> = ({ className = 
                         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span className="text-[10px] font-mono text-slate-400">MARKET PRICE: {currency}{energyPrice}/MWh</span>
                     </div>
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                         {isFinancialCritical && (
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}

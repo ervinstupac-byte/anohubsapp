@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { it, describe, expect } from 'vitest';
 import { NotificationProvider, useNotifications } from '../contexts/NotificationContext';
 import { DiagnosticAlertsPanel } from '../components/dashboard/DiagnosticAlertsPanel';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import Decimal from 'decimal.js';
 

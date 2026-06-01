@@ -104,9 +104,9 @@ export const SystemIntegrityCertificate: React.FC = () => {
             <div className="relative z-10">
               {/* Verification Status */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="sync">
                   {metrics.coreMathVerified && (
-                    <motion.div
+                    <motion.div key="core-math"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
@@ -124,7 +124,7 @@ export const SystemIntegrityCertificate: React.FC = () => {
                   )}
 
                   {metrics.decimalPrecision && (
-                    <motion.div
+                    <motion.div key="decimal-precision"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
@@ -142,7 +142,7 @@ export const SystemIntegrityCertificate: React.FC = () => {
                   )}
 
                   {metrics.physicsBoundaries && (
-                    <motion.div
+                    <motion.div key="physics-boundaries"
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}

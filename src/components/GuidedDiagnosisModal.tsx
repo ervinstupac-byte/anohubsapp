@@ -60,7 +60,7 @@ export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ quer
     }, [query, isSubmitting, clearQuery]);
 
     return (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
             <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}

@@ -152,7 +152,7 @@ export const PublicPortal: React.FC = () => {
                     </div>
 
                     {/* DIAGNOSTIC CONTAINER */}
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                         <motion.div
                             key={scenario}
                             initial={{ opacity: 0, y: 20 }}

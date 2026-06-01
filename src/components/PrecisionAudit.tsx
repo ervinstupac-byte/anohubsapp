@@ -282,7 +282,7 @@ export const PrecisionAudit: React.FC = () => {
 
                 {/* Right Side: Audit Results / Findings */}
                 <div className="lg:col-span-2">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                         {auditState === 'IDLE' || auditState === 'ANALYZING' ? (
                             <motion.div
                                 key="waiting"

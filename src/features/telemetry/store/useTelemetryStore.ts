@@ -45,38 +45,7 @@ const vibrationForensics = new VibrationForensics();
 
 const SCHEMA_VERSION = 2;
 
-// Quick log deduplication to reduce console spam from repeated sensor warnings
-const LOG_DEDUP_INTERVAL_MS = 1000; // 1s
-const _lastLogTimestamps: Map<string, number> = new Map();
-function dedupWarn(msg: string) {
-    try {
-        const now = Date.now();
-        const last = _lastLogTimestamps.get(msg) || 0;
-        if (now - last > LOG_DEDUP_INTERVAL_MS) {
-            console.warn(msg);
-            _lastLogTimestamps.set(msg, now);
-        }
-
-        // If a fallback warning is emitted, set a short-lived global flag and fire an event
-        if (msg.includes('using fallback')) {
-            try {
-                (window as any).__sensorFallbackActive = true;
-                window.dispatchEvent(new CustomEvent('sensorFallback', { detail: { message: msg, timestamp: now } }));
-                if ((window as any).__sensorFallbackClearTimer) clearTimeout((window as any).__sensorFallbackClearTimer);
-                (window as any).__sensorFallbackClearTimer = setTimeout(() => {
-                    (window as any).__sensorFallbackActive = false;
-                    window.dispatchEvent(new CustomEvent('sensorFallbackCleared'));
-                    (window as any).__sensorFallbackClearTimer = null;
-                }, 5000);
-            } catch (e) {
-                // ignore browser event errors in non-browser environments
-            }
-        }
-    } catch (e) {
-        // Fallback to plain warn if anything goes wrong
-        try { console.warn(msg); } catch (_) { }
-    }
-}
+import dedupWarn from '../../../utils/logDeduper';
 
 /**
  * BASELINE STATE

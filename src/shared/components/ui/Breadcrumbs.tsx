@@ -86,7 +86,7 @@ export const Breadcrumbs: React.FC = () => {
     if (pathnames.length === 0) return null;
 
     return (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
             <motion.nav
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}

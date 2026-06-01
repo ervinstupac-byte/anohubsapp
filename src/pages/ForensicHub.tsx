@@ -770,7 +770,7 @@ const ForensicHub: React.FC = () => {
                                 {/* Context Panel */}
                                 <div className="h-32">
                                     <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Active Context</h3>
-                                    <AnimatePresence mode="wait">
+                                    <AnimatePresence mode="sync">
                                         {selectedContext ? (
                                             <motion.div
                                                 key="context"

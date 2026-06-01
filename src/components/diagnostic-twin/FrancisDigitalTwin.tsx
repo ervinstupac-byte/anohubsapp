@@ -213,7 +213,7 @@ export const FrancisDigitalTwin: React.FC = () => {
             </div>
 
             {/* SVG CONTAINER */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
                 <motion.div
                     key={currentView}
                     initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
