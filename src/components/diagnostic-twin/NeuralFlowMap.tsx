@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext.tsx';
 // MIGRATED: From useProjectEngine to specialized stores
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { dispatch } from '../../lib/events';
 import { useDemoMode } from '../../stores/useAppStore';
 import { useEngineeringMath } from '../../hooks/useEngineeringMath.ts';
 import { Tooltip } from '../../shared/components/ui/Tooltip';
@@ -16,9 +15,6 @@ import { DOSSIER_LIBRARY, DossierFile, resolveDossier } from '../../data/knowled
 import { MasterIntelligenceEngine } from '../../services/MasterIntelligenceEngine';
 import { computeIntegritySummary } from '../../services/DossierIntegrity';
 import { useIntelligenceReport } from '../../services/useIntelligenceReport';
-import { KnowledgeBaseService } from '../../services/KnowledgeBaseService';
-
-// --- TYPES ---
 
 const TurbineUnit: React.FC<{
     id: string;
@@ -197,11 +193,11 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
     }, [selectedFile]);
 
     // Calculate MW output from physics (with null safety)
-    const surgePressure = physics?.surgePressureBar ?? 0;
+    const surgePressure = physics?.surgePressure?.toNumber?.() ?? 0;
     const mwOutput = surgePressure ? surgePressure * 2.5 : 45.0;
 
     // Risk score approximation (would come from diagnosis in production)
-    const riskScore = (physics?.hoopStressMPa ?? 0) > 140 ? 30 : 10;
+    const riskScore = physics?.hoopStress?.toNumber?.() ?? 0 > 140 ? 30 : 10;
 
     // Integrity summary derived from the manifest (fallback)
     const integrity = computeIntegritySummary(DOSSIER_LIBRARY as DossierFile[]);
@@ -312,9 +308,9 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                     </div>
 
                     <button
-            className="group relative px-10 py-5 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] transition-all active:scale-95 overflow-hidden"
-            onClick={() => dispatch.openAssetWizard()}
-        >
+                        className="group relative px-10 py-5 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_0_40px_rgba(6,182,212,0.3)] transition-all active:scale-95 overflow-hidden"
+                        onClick={() => window.dispatchEvent(new CustomEvent('openAssetWizard'))}
+                    >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
                         <span className="relative z-10">{t('neuralFlow.registerAsset')}</span>
                     </button>
@@ -534,7 +530,7 @@ export const NeuralFlowMap: React.FC = React.memo(() => {
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => navigate('/francis/sop-shaft-alignment')}
+                                    onClick={() => navigate('/maintenance/shaft-alignment')}
                                     className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-xl transition-all active:scale-95 shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2 whitespace-nowrap"
                                 >
                                     {t('neuralFlow.launchAlignmentWizard')}
