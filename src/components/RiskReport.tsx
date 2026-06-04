@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { BackButton } from './BackButton.tsx';
 import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
-import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
+import { useQuestionnaireStore } from '../stores/useQuestionnaireStore';
+import { useHPPDesignStore } from '../stores/useHPPDesignStore';
 import { supabase } from '../services/supabaseClient.ts';
 // ZAMJENA IMPORTA: Koristimo standardizirane funkcije za Blob i helper za otvaranje
 import { ForensicReportService } from '../services/ForensicReportService';
@@ -25,8 +25,8 @@ export const RiskReport: React.FC = () => {
     const { navigateTo } = useNavigation();
     const { t } = useTranslation();
     const { showToast } = useToast();
-    const { answers, description } = useQuestionnaire();
-    const { currentDesign } = useHPPDesign(); // ✅ Read HPP Design from context
+    const { answers, description } = useQuestionnaireStore();
+    const { currentDesign } = useHPPDesignStore(); // ✅ Read HPP Design from context
 
     const [cloudRiskData, setCloudRiskData] = useState<any>(null);
     const [cloudDesignData, setCloudDesignData] = useState<any>(null);

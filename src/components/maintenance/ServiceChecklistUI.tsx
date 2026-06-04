@@ -158,7 +158,7 @@ export const ServiceChecklistUI: React.FC = () => {
             </div>
 
             {/* Checklist Item Slider */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
                 <motion.div
                     key={currentItem.id}
                     initial={{ x: 100, opacity: 0 }}

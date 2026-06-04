@@ -12,6 +12,7 @@ import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore
 import { useAssetContext } from '../contexts/AssetContext'; // <--- NEW
 import { useContextAwareness } from '../contexts/ContextAwarenessContext'; // <--- NEW
 import { useDensity } from '../stores/useAppStore'; // <--- Density Control Phase 4
+import { useTheme } from '../stores/useTheme'; // <--- Theme Store
 import { dispatch } from '../lib/events';
 
 interface DashboardHeaderProps {
@@ -31,6 +32,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
     const { activePersona, hiveStatus } = useContextAwareness(); // <--- Get Persona & Sync
     const { densityMode: mode, toggleDensity } = useDensity();
     const { isCommanderMode, toggleCommanderMode } = telemetry;
+    const { mode: themeMode, toggleNightOps, toggleFieldMode } = useTheme();
 
     // const [searchQuery, setSearchQuery] = useState(''); // Removed in favor of Global Command Palette
     // const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -213,6 +215,24 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
 
                 {/* RIGHT: Global Actions */}
                 <div className="flex items-center gap-4">
+                    {/* Theme Toggle: Night Ops */}
+                    <button
+                        onClick={toggleNightOps}
+                        title="Toggle Night Ops Mode"
+                        className="p-2 text-slate-400 hover:text-white transition-colors"
+                    >
+                        <div className={`w-5 h-5 rounded-full ${themeMode === 'tactical-red' ? 'bg-red-500' : 'bg-slate-500'}`} />
+                    </button>
+                    
+                    {/* Theme Toggle: Field Mode */}
+                    <button
+                        onClick={toggleFieldMode}
+                        title="Toggle Field Contrast Mode"
+                        className={`p-2 transition-colors ${themeMode === 'field-contrast' ? 'text-amber-400' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        <ShieldCheck className="w-5 h-5" />
+                    </button>
+
                     {/* Density Toggle */}
                     <button
                         onClick={toggleDensity}

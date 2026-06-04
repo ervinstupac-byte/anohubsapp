@@ -31,7 +31,7 @@ import SafeControlAdapter from './SafeControlAdapter';
 import BaseGuardian from './BaseGuardian';
 import { TelegramNotificationService } from './TelegramNotificationService';
 import { saveLog } from './PersistenceService'; // NC-25100
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from './supabaseClient';
 
 // NC-11600: Sovereign Audit Logging
 // Ideally, this should be injected or handled by a dedicated service.
@@ -40,9 +40,7 @@ import { createClient } from '@supabase/supabase-js';
 // Assuming this runs in a context where process.env is available (like the ingestion script or Node backend).
 // NC-11940: Vite Environment Standardization
 // FIXED: Replaced process.env usage with import.meta.env
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = (SUPABASE_URL && SUPABASE_KEY) ? createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+// Use central supabase client from `src/services/supabaseClient.ts`
 
 export enum PermissionTier {
     READ_ONLY = 'READ_ONLY',     // Observe & Log only. No decisions output.

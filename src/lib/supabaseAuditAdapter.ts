@@ -1,13 +1,8 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { supabase } from '../services/supabaseClient';
 
-let supabase: SupabaseClient | null = null;
-
-function getSupabaseClient(): SupabaseClient | null {
-  if (supabase) return supabase;
-  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-  const key = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  supabase = createClient(url, key);
+function getSupabaseClient(): any | null {
+  // Reuse the shared singleton. Return null if it's a NOOP-like client without `from`.
+  if (!supabase || typeof (supabase as any).from !== 'function') return null;
   return supabase;
 }
 

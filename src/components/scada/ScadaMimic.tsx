@@ -98,16 +98,27 @@ export const ScadaMimic: React.FC = React.memo(() => {
     const [isLoading, setIsLoading] = useState(true);
     const [scadaAlarms, setScadaAlarms] = useState<any[]>([]);
     const [showAlarmsModal, setShowAlarmsModal] = useState(false);
+    const [fluctuation, setFluctuation] = useState(0);
 
     const liveData = selectedAsset ? telemetry[selectedAsset.id] : null;
     const isCritical = liveData?.status === 'CRITICAL';
 
-    // Simulated Data
+    // Live SCADA values read directly from Telemetry Store
+    const flowRate = telemetryStore.hydraulic?.flow ?? 42.5;
+    const headPressure = telemetryStore.hydraulic?.head ?? telemetryStore.physics?.netHead ?? 152.0;
+    const gridFreq = telemetryStore.gridFrequency ?? 50.0;
+    const bearingTemp = Number((Array.isArray(telemetryStore.telemetryHistory?.bearingTemp) && telemetryStore.telemetryHistory.bearingTemp.length > 0)
+        ? telemetryStore.telemetryHistory.bearingTemp[telemetryStore.telemetryHistory.bearingTemp.length - 1]?.value
+        : (telemetryStore.mechanical?.bearingTemp ?? 12.2));
+
+    // Simulated Base MW / Live Power MW Integration
     const seed = selectedAsset ? String(selectedAsset.id).charCodeAt(0) : 0;
     const baseMw = isCritical ? 0 : (200 + (seed % 50));
+    const powerMW = Number((telemetryStore.physics as any)?.powerMW?.toNumber?.() ?? telemetryStore.physics?.powerMW ?? (baseMw * 2));
 
-    const [t1Mw, setT1Mw] = useState(baseMw);
-    const [t2Mw, setT2Mw] = useState(baseMw);
+    // Compute generator outputs dynamically from store
+    const t1Mw = isCritical ? 0 : parseFloat((Math.max(0, powerMW / 2) + fluctuation).toFixed(1));
+    const t2Mw = isCritical ? 0 : parseFloat((Math.max(0, powerMW / 2) - fluctuation).toFixed(1));
 
     useEffect(() => {
         setIsLoading(true);
@@ -115,39 +126,20 @@ export const ScadaMimic: React.FC = React.memo(() => {
         return () => clearTimeout(timer);
     }, [selectedAsset]);
 
-    // Simulate subtle fluctuation
+    // Fluctuate subtle generator noise
     useEffect(() => {
         if (isLoading) return;
-        setT1Mw(baseMw);
-        setT2Mw(baseMw);
-
         const interval = setInterval(() => {
-            setT1Mw(prev => +(prev + (Math.random() - 0.5) * 0.2).toFixed(1));
-            setT2Mw(prev => +(prev + (Math.random() - 0.5) * 0.2).toFixed(1));
+            setFluctuation((Math.random() - 0.5) * 0.2);
         }, 2000);
         return () => clearInterval(interval);
-    }, [baseMw, isLoading]);
+    }, [isLoading]);
 
-    // SCADA TO EXPERT ENGINE INTEGRATION
+    // SCADA TO EXPERT ENGINE INTEGRATION (Live updates)
     useEffect(() => {
         if (!selectedAsset || isLoading) return;
 
-        // Extract SCADA values from display (simulated critical condition: 98.2 Hz)
-        const flowRate = 42.5; // m³/s from display
-        const headPressure = 152.0; // m from display
-
-        // MIGRATION: Update Telemetry Store directly instead of legacy ProjectEngine
-        updateTelemetry({
-            hydraulic: {
-                flow: flowRate,
-                head: headPressure,
-                efficiency: isCritical ? 65 : 92
-            }
-        });
-
-        const gridFreq = 98.2; // Hz from display (CRITICAL!)
-
-        // Connect to ExpertDiagnosisEngine
+        // Connect to ExpertDiagnosisEngine using the live values from the store
         const scadaConnection = connectSCADAToExpertEngine(flowRate, headPressure, gridFreq);
 
         if (scadaConnection?.criticalAlarms?.length && scadaConnection.criticalAlarms.length > 0) {
@@ -157,12 +149,11 @@ export const ScadaMimic: React.FC = React.memo(() => {
             setScadaAlarms([]);
         }
 
-        // Trigger visual alarm for frequency 98.2 Hz (massive deviation)
+        // Trigger visual alarm for frequency (massive deviation)
         if (gridFreq >= 98.0) {
-            // Could trigger emergency shutdown here
             console.error('CRITICAL: Grid frequency at', gridFreq, 'Hz - Risk of mechanical destruction!');
         }
-    }, [selectedAsset, isLoading, isCritical, updateTelemetry, connectSCADAToExpertEngine]);
+    }, [selectedAsset, isLoading, isCritical, flowRate, headPressure, gridFreq, connectSCADAToExpertEngine]);
 
     if (isLoading) {
         return (

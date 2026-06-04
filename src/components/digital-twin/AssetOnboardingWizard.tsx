@@ -292,7 +292,7 @@ export const AssetOnboardingWizard: React.FC<{
                 </div>
 
                 {/* Step Content */}
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="sync">
                     {currentStep === 'general' && (
                         <motion.div
                             key="general"

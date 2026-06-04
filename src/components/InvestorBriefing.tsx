@@ -8,7 +8,7 @@ import { useAssetContext } from '../contexts/AssetContext.tsx';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
-import { useHPPDesign } from '../contexts/HPPDesignContext.tsx';
+import { useHPPDesignStore } from '../stores/useHPPDesignStore';
 import { useTelemetry } from '../contexts/TelemetryContext.tsx';
 import idAdapter from '../utils/idAdapter';
 import { useInventory } from '../contexts/InventoryContext.tsx';
@@ -17,7 +17,7 @@ export const InvestorBriefing: React.FC = () => {
     const { showToast } = useToast();
     const { selectedAsset } = useAssetContext();
     const { t } = useTranslation();
-    const { currentDesign } = useHPPDesign();
+    const { currentDesign } = useHPPDesignStore();
     const { telemetry, activeIncident } = useTelemetry();
     const { getTotalInventoryValue } = useInventory();
 

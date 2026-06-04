@@ -43,7 +43,7 @@ export const InfrastructureHub: React.FC = () => {
                                 : 'bg-slate-900/40 border-white/5 text-slate-500 hover:border-white/10'
                                 }`}
                         >
-                            {React.cloneElement(tab.icon as React.ReactElement, { className: 'w-4 h-4' })}
+                            {React.cloneElement(tab.icon as React.ReactElement<any>, { className: 'w-4 h-4' })}
                             <span className="text-xs font-black uppercase tracking-widest">{tab.label}</span>
                         </Link>
                     );

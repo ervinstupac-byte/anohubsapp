@@ -10,11 +10,15 @@ const { savePdf } = vi.hoisted(() => ({
 }));
 
 vi.mock('jspdf', () => ({
-  default: vi.fn(() => ({
-    setFontSize: vi.fn(),
-    text: vi.fn(),
-    save: savePdf
-  }))
+  default: class MockJsPDF {
+    constructor() {
+      return {
+        setFontSize: vi.fn(),
+        text: vi.fn(),
+        save: savePdf
+      };
+    }
+  }
 }));
 
 vi.mock('../features/reporting/utils/PDFRenderer', () => ({

@@ -340,7 +340,7 @@ export const BaseAssetTemplateSchema = z.object({
   location: z.string(),
   coordinates: z.tuple([z.number(), z.number()]),
   status: z.enum(['Operational', 'Maintenance', 'Planned', 'Critical', 'Warning']),
-  specs: z.record(z.any()).optional(),
+  specs: z.record(z.string(), z.any()).optional(),
   assetPassport: z.any().optional() // Can be further specialized per plugin
 });
 

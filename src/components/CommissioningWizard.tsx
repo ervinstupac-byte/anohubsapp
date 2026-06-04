@@ -163,7 +163,7 @@ export const CommissioningWizard: React.FC<CommissioningWizardProps> = ({ asset,
             </GlassCard>
 
             {/* Step Content */}
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
                 <motion.div
                     key={currentStep}
                     initial={{ opacity: 0, x: 20 }}

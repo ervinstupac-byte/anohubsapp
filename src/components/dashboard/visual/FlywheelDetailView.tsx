@@ -290,7 +290,7 @@ const FlywheelDetailView: React.FC<FlywheelDetailProps> = ({ onBack, onHome }) =
 
                 {/* Data Card */}
                 <motion.div variants={childVariants} className="flex-1 min-w-[320px]">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                         {activeData ? (
                             <motion.div
                                 key={activeData.id}

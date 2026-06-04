@@ -16,7 +16,7 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { FrancisModel } from '../models/turbine/FrancisModel';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 import { useAssetContext } from '../contexts/AssetContext';
 import { TurbineFactory } from '../models/turbine/TurbineFactory';
 import { TurbineFamily, TurbineVariant, Anomaly } from '../models/turbine/types';
@@ -38,7 +38,7 @@ interface DiagnosticOutcome {
 export const SpecializedDiagnostics: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
     const { activeProfile } = useAssetContext();
 
     // -- STATE --

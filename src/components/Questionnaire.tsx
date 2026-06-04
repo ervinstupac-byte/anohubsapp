@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 import { QUESTIONS } from '../constants.ts';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
-import { useRisk } from '../contexts/RiskContext.tsx';
+import { useQuestionnaireStore } from '../stores/useQuestionnaireStore';
+import { useRiskStore } from '../stores/useRiskStore';
 import { supabase } from '../services/supabaseClient.ts';
 import idAdapter from '../utils/idAdapter';
 import { useAuth } from '../contexts/AuthContext.tsx';
@@ -21,8 +21,8 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({ onShowSummary, onR
     const { t } = useTranslation();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();
-    const { answers, setAnswer } = useQuestionnaire();
-    const { riskState } = useRisk();
+    const { answers, setAnswer } = useQuestionnaireStore();
+    const { riskState } = useRiskStore();
 
     // LOAD DRAFT LOGIC
     useEffect(() => {

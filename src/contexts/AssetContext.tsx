@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useMemo, useCallback, ReactNode, Suspense, lazy } from 'react';
 import { supabase } from '../services/supabaseClient.ts';
 import type { Asset, AssetContextType, AssetHistoryEntry } from '../types.ts';
-import { useAudit } from './AuditContext.tsx';
+import { useAuditStore } from '../stores/useAuditStore';
 import { useAuth } from './AuthContext.tsx';
 import { loadFromStorage, saveToStorage } from '../utils/storageUtils.ts';
 import { ProfileLoader } from '../services/ProfileLoader';
@@ -12,7 +12,7 @@ const AssetContext = createContext<AssetContextType | undefined>(undefined);
 const ASSET_CHANNEL_NAME = 'anohub_asset_channel';
 
 export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { logAction } = useAudit();
+    const { logAction } = useAuditStore();
     const [assets, setAssets] = useState<Asset[]>([]);
     const [assetLogs, setAssetLogs] = useState<AssetHistoryEntry[]>([]); // <--- NEW: Separate Logs State
     const [selectedAssetId, setSelectedAssetId] = useState<number | string | null>(null);
@@ -163,7 +163,7 @@ export const AssetProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Create a ref to hold the debounced logging function
     // We use a ref so the debounce timer persists across renders
-    const debouncedLogContextSwitch = useRef<(assetName: string) => void>();
+    const debouncedLogContextSwitch = useRef<((assetName: string) => void) | undefined>(undefined);
 
     // Initialize the debounced function
     useEffect(() => {

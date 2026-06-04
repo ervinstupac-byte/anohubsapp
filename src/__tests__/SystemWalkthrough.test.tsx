@@ -182,7 +182,7 @@ const TestApp = () => {
     return (
         <AuditProvider>
             <AuthProvider>
-                <MemoryRouter initialEntries={['/login']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <MemoryRouter initialEntries={['/login']}>
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/" element={

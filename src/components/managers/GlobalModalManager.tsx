@@ -3,11 +3,17 @@ import { EVENTS, AssetPassportPayload } from '../../lib/events';
 import { SystemOverviewModal } from '../modals/SystemOverviewModal';
 import { AssetPassportModal } from '../dashboard/AssetPassportModal';
 import { AssetOnboardingWizard } from '../digital-twin/AssetOnboardingWizard';
+import { LegacyValidationModal } from '../LegacyValidationModal';
+import ConfirmModal from '../ConfirmModal';
+import { useValidationStore } from '../../stores/useValidationStore';
+import { useConfirmStore } from '../../stores/useConfirmStore';
 
 // Lazy load heavy print modal
 const PrintPreviewModal = React.lazy(() => import('../modals/PrintPreviewModal').then(m => ({ default: m.PrintPreviewModal })));
 
 export const GlobalModalManager: React.FC = () => {
+    const { isOpen: validationIsOpen, config: validationConfig, handleProceed, handleClose } = useValidationStore();
+    const { isOpen: confirmIsOpen, config: confirmConfig, handleConfirm, handleCancel } = useConfirmStore();
 
     // Modal States
     const [isSystemOverviewOpen, setIsSystemOverviewOpen] = useState(false);
@@ -108,6 +114,31 @@ export const GlobalModalManager: React.FC = () => {
                         ) : null}
                     </div>
                 </div>
+            )}
+
+            {/* Legacy Validation Modal */}
+            {validationConfig && (
+                <LegacyValidationModal
+                    isOpen={validationIsOpen}
+                    onClose={handleClose}
+                    onProceed={handleProceed}
+                    turbineFamily={validationConfig.turbineFamily}
+                    component={validationConfig.component}
+                    taskDescription={validationConfig.taskDescription}
+                />
+            )}
+
+            {/* Confirm Modal - LAST TO RENDER SO IT'S ON TOP */}
+            {confirmConfig && (
+                <ConfirmModal
+                    open={confirmIsOpen}
+                    title={confirmConfig.title}
+                    message={confirmConfig.message}
+                    confirmLabel={confirmConfig.confirmLabel}
+                    variant={confirmConfig.variant}
+                    onConfirm={handleConfirm}
+                    onCancel={handleCancel}
+                />
             )}
         </>
     );

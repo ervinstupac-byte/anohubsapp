@@ -1,5 +1,6 @@
 import { BaseEngine } from './BaseEngine';
 import { RecommendationResult, TurbineSpecs, TurbineType } from './types';
+import { Diagnostic, makeDiagnostic } from './schemas';
 import Decimal from 'decimal.js';
 import { calculatePeltonEfficiency } from './TurbineMath';
 
@@ -32,14 +33,13 @@ export class PeltonEngine extends BaseEngine {
      * Checks if the jet is perfectly aligned with the splitter.
      * Tolerance: < 1.0 mm (Master Level)
      */
-    checkJetAlignment(offsetMM: number): { safe: boolean; message: string } {
-        if (Math.abs(offsetMM) > 1.0) {
-            return {
-                safe: false,
-                message: `🚨 BEARING STRESS ALERT! Jet offset ${offsetMM}mm (>1.0mm). Result: Uneven bucket loading & potential bearing damage.`
-            };
-        }
-        return { safe: true, message: '✅ Jet Alignment Perfect. Buckets loaded evenly.' };
+    checkJetAlignment(offsetMM: number): Diagnostic {
+        const severity = Math.abs(offsetMM) > 1.0 ? 'CRITICAL' : 'INFO';
+        return makeDiagnostic({
+            code: 'JET_ALIGNMENT',
+            severity,
+            params: { offsetMM }
+        });
     }
 
     /**
@@ -52,34 +52,27 @@ export class PeltonEngine extends BaseEngine {
         deflectorStatus: 'ACTIVE' | 'PASSIVE',
         deflectorResponseTime: number, // seconds
         deflectorGapMM: number
-    ): { safe: boolean; message: string } {
+    ): Diagnostic {
         if (!generatorTripped) {
-            // Even in standby, ensure gap is sufficient
             if (deflectorGapMM < 5) {
-                return { safe: false, message: `⚠️ SAFETY RISK: Deflector Gap ${deflectorGapMM}mm too small! Risk of accidental jet cutting.` };
+                return makeDiagnostic({
+                    code: 'DEFLECTOR_GAP_TOO_SMALL',
+                    severity: 'WARNING',
+                    params: { gapMM: deflectorGapMM }
+                });
             }
-            return { safe: true, message: 'Normal Operation. Deflector standing by.' };
+            return makeDiagnostic({ code: 'DEFLECTOR_OK', severity: 'INFO', params: { gapMM: deflectorGapMM } });
         }
 
-        // Generator TRIPPED!
         if (deflectorStatus !== 'ACTIVE') {
-            return {
-                safe: false,
-                message: '🚨 DANGER! Generator Tripped but Deflector is PASSIVE! Overspeed imminent!'
-            };
+            return makeDiagnostic({ code: 'DEFLECTOR_INACTIVE_ON_TRIP', severity: 'CRITICAL' });
         }
 
-        if (deflectorResponseTime > 1.0) { // MASTER SPEC: 1.0s limit
-            return {
-                safe: false,
-                message: `⚠️ WARNING! Deflector too slow (${deflectorResponseTime}s). Must be < 1.0s (Master Spec).`
-            };
+        if (deflectorResponseTime > 1.0) {
+            return makeDiagnostic({ code: 'DEFLECTOR_SLOW_RESPONSE', severity: 'WARNING', params: { responseTime: deflectorResponseTime } });
         }
 
-        return {
-            safe: true,
-            message: '✅ SAFE. Deflector cut the jet successfully (<1s).'
-        };
+        return makeDiagnostic({ code: 'DEFLECTOR_OK', severity: 'INFO', params: { responseTime: deflectorResponseTime } });
     }
 
     /**
@@ -90,41 +83,39 @@ export class PeltonEngine extends BaseEngine {
         runOutRadial: number,
         runOutAxial: number,
         shaftBounce: boolean
-    ): { healthy: boolean; message: string } {
-        const triggers = [];
-        if (runOutRadial > 0.15) triggers.push(`Radial Run-out ${runOutRadial}mm (>0.15)`);
-        if (runOutAxial > 0.20) triggers.push(`Axial Run-out ${runOutAxial}mm (>0.20)`);
-        if (shaftBounce) triggers.push('Shaft Bounce Detected (Orbit Instability)');
+    ): Diagnostic {
+        const triggers: string[] = [];
+        if (runOutRadial > 0.15) triggers.push(`radial:${runOutRadial}`);
+        if (runOutAxial > 0.20) triggers.push(`axial:${runOutAxial}`);
+        if (shaftBounce) triggers.push('shaftBounce');
 
         if (triggers.length > 0) {
-            return { healthy: false, message: `⚠️ MECHANICAL PULSE ISSUE: ${triggers.join(', ')}` };
+            return makeDiagnostic({ code: 'MECHANICAL_PULSE_ISSUE', severity: 'WARNING', params: { detail: triggers.join(',') } });
         }
-        return { healthy: true, message: '✅ Mechanical Pulse Steady. Shaft orbiting perfectly.' };
+        return makeDiagnostic({ code: 'MECHANICAL_OK', severity: 'INFO' });
     }
 
     /**
      * MASTER SPEC: WINDAGE MONITOR
      * Checks if housing pressure indicates poor venting.
      */
-    checkHousingAeration(pressureBar: number): { efficient: boolean; message: string } {
-        // Atmospheric is ~0 bar gauge. If > 0.05 bar (50 mbar), we have backpressure.
-        // > 1.0 bar means SERIOUS problem (drowning)
+    checkHousingAeration(pressureBar: number): Diagnostic {
         if (pressureBar > 1.0) {
-            return { efficient: false, message: `⚠️ WINDAGE LOSS: Housing Pressure ${pressureBar} bar. Runner is drowning in mist! Check Air Valve.` };
+            return makeDiagnostic({ code: 'HOUSING_AERATION_HIGH', severity: 'CRITICAL', params: { pressureBar } });
         }
-        return { efficient: true, message: '✅ Housing Aeration Normal. Runner spinning in free air.' };
+        return makeDiagnostic({ code: 'HOUSING_AERATION_OK', severity: 'INFO', params: { pressureBar } });
     }
 
     /**
      * MASTER SPEC: MAGNETIC SYMMETRY
      * Checks alignment of Mechanical Center vs Magnetic Center.
      */
-    checkMagneticCenter(mechanicalCenterZ: number, magneticCenterZ: number): { optimized: boolean; message: string } {
+    checkMagneticCenter(mechanicalCenterZ: number, magneticCenterZ: number): Diagnostic {
         const delta = Math.abs(mechanicalCenterZ - magneticCenterZ);
         if (delta > 2.0) {
-            return { optimized: false, message: `⚠️ MAGNETIC IMBALANCE: Delta ${delta}mm. Rotor is fighting the magnetic field! Thrust bearing load increased.` };
+            return makeDiagnostic({ code: 'MAGNETIC_IMBALANCE', severity: 'WARNING', params: { deltaMM: delta } });
         }
-        return { optimized: true, message: '✅ Magnetic Symmetry Locked. Rotor floating naturally.' };
+        return makeDiagnostic({ code: 'MAGNETIC_OK', severity: 'INFO', params: { deltaMM: delta } });
     }
 
     /**
@@ -136,26 +127,18 @@ export class PeltonEngine extends BaseEngine {
         mainNeedleOpenPercent: number,
         brakeValveStatus: 'OPEN' | 'CLOSED',
         brakePressureBar: number
-    ): { safe: boolean; message: string } {
-        // Interlock: If Main Needle > 5%, Brake MUST be CLOSED
+    ): Diagnostic {
         if (mainNeedleOpenPercent > 5.0) {
             if (brakeValveStatus === 'OPEN') {
-                return {
-                    safe: false,
-                    message: '🚨 CRITICAL SAFETY INTERLOCK: Brake Valve OPEN while Main Needle > 5%! Risk of Bucket Destruction!'
-                };
+                return makeDiagnostic({ code: 'BRAKE_INTERLOCK_VIOLATION', severity: 'CRITICAL' });
             }
 
-            // Check for passing valve (Pressure > 0.5 bar when closed)
             if (brakePressureBar > 0.5) {
-                return {
-                    safe: false,
-                    message: `⚠️ LEAK DETECTED: Brake Line Pressure ${brakePressureBar} bar. Valve passing? We are losing kW!`
-                };
+                return makeDiagnostic({ code: 'BRAKE_LEAK_DETECTED', severity: 'WARNING', params: { pressureBar: brakePressureBar } });
             }
         }
 
-        return { safe: true, message: '✅ Brake Operation Safe.' };
+        return makeDiagnostic({ code: 'BRAKE_OPERATION_OK', severity: 'INFO' });
     }
 
     calculateEfficiency(head: number, flow: number, bucketHours = 0): number {
@@ -202,30 +185,20 @@ export class PeltonEngine extends BaseEngine {
         rotorWeightKg: number,
         upliftForceNewtons: number,
         isAxialSecure: boolean // True = Double Acting (Safe), False = Gravity Only (Risk)
-    ): { safe: boolean; netForceN: number; message: string } {
+    ): Diagnostic {
         const gravityForceN = rotorWeightKg * 9.81; // Downward force
         const netForceN = gravityForceN - upliftForceNewtons; // Positive = Down, Negative = FLYING
-
-        // Risk Threshold for Gravity Bearings: Uplift > 80% of Weight
         const upliftRatio = upliftForceNewtons / gravityForceN;
 
         if (!isAxialSecure && upliftRatio > 0.8) {
-            return {
-                safe: false,
-                netForceN,
-                message: `⚠️ LIFT-OFF ALERT: Uplift is ${upliftRatio.toFixed(2)}x of Rotor Weight! Gravity Bond failing. Risk of flight!`
-            };
+            return makeDiagnostic({ code: 'AXIAL_LIFT_OFF', severity: 'WARNING', params: { upliftRatio } });
         }
 
         if (netForceN < 0) {
-            return {
-                safe: false,
-                netForceN,
-                message: `🚨 CRITICAL: NEGATIVE AXIAL FORCE (${netForceN.toFixed(0)} N). SHAFT IS LEVITATING! Thrust bearing unloaded.`
-            };
+            return makeDiagnostic({ code: 'AXIAL_NEGATIVE_FORCE', severity: 'CRITICAL', params: { netForceN } });
         }
 
-        return { safe: true, netForceN, message: `✅ Axial Balance Secure. Gravity holding strong (${upliftRatio.toFixed(2)}x uplift).` };
+        return makeDiagnostic({ code: 'AXIAL_OK', severity: 'INFO', params: { netForceN, upliftRatio } });
     }
 
     /**
@@ -234,15 +207,11 @@ export class PeltonEngine extends BaseEngine {
      */
     checkAxialJump(
         displacementZ_mm: number // Positive = Down/Normal, Negative = UP
-    ): { grounded: boolean; message: string } {
-        // If displacement is negative (UP) by more than 0.5mm, we have jumped.
+    ): Diagnostic {
         if (displacementZ_mm < -0.5) {
-            return {
-                grounded: false,
-                message: `🚨 CRITICAL: SHAFT JUMP DETECTED (${displacementZ_mm}mm). Rotor has lifted off the thrust pads!`
-            };
+            return makeDiagnostic({ code: 'SHAFT_JUMP', severity: 'CRITICAL', params: { displacementZ_mm } });
         }
-        return { grounded: true, message: '✅ Rotor Grounded. Resting on thrust pads.' };
+        return makeDiagnostic({ code: 'SHAFT_GROUNDED', severity: 'INFO', params: { displacementZ_mm } });
     }
 
     generateSpecs(head: number, flow: number): TurbineSpecs {

@@ -29,9 +29,9 @@ const getEnv = (key: string) => {
     return undefined;
 };
 
-// Use hardcoded values first, then fall back to env vars
-const supabaseUrl = SUPABASE_URL || getEnv('VITE_SUPABASE_URL') || 'https://nehxtecejxklqknscbgf.supabase.co';
-const supabaseAnonKey = SUPABASE_ANON_KEY || getEnv('VITE_SUPABASE_ANON_KEY') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+// Use environment variables
+const supabaseUrl = SUPABASE_URL || getEnv('VITE_SUPABASE_URL');
+const supabaseAnonKey = SUPABASE_ANON_KEY || getEnv('VITE_SUPABASE_ANON_KEY');
 
 // ============================================================================
 // CONNECTION STATE

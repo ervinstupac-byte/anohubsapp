@@ -24,6 +24,11 @@ export interface SensorHistory {
     isReliable?: boolean;
     confidence?: number;
     verdict?: Verdict;
+    // Hysteresis / backoff for repeated fallbacks
+    lastFallbackTime?: number;
+    fallbackCount?: number;
+    suppressedCount?: number;
+    lastVerdict?: Verdict;
 }
 
 export class TruthJudge {
@@ -75,36 +80,87 @@ export class TruthJudge {
         lastTimestamp: number
     ): Verdict {
         const health = this.evaluateSignalHealth(sensorId, newValue, lastTimestamp);
-        
+        // Read / initialize history entry
+        const entry = this.history.get(sensorId) || { lastValue, lastTimestamp } as SensorHistory;
+
+        // Reset fallback counters on healthy reading
         if (health === 'GOOD') {
-            return {
+            entry.fallbackCount = 0;
+            entry.suppressedCount = 0;
+            entry.lastVerdict = {
                 winner: 'SENSOR_A',
                 confidence: 1.0,
                 reason: 'Sensor reading is reliable',
                 action: 'TRUST_A'
             };
-        } else if (health === 'BAD_SLEW') {
-            return {
-                winner: 'PREDICTION',
-                confidence: 0.3,
-                reason: `Slew rate violation detected: ${sensorId}`,
-                action: 'USE_FALLBACK'
-            };
-        } else if (health === 'BAD_FROZEN') {
-            return {
-                winner: 'PREDICTION',
-                confidence: 0.2,
-                reason: `Sensor appears frozen: ${sensorId}`,
-                action: 'USE_FALLBACK'
-            };
+            this.history.set(sensorId, { ...entry, lastValue: newValue, lastTimestamp });
+            return entry.lastVerdict;
         }
 
-        return {
+        // For BAD_SLEW / BAD_FROZEN apply hysteresis/backoff so we don't repeatedly flip to fallback
+        if (health === 'BAD_SLEW' || health === 'BAD_FROZEN') {
+            const now = lastTimestamp;
+            const baseCooldownMs = 5000; // 5s base cooldown
+            const count = entry.fallbackCount ?? 0;
+            const cooldown = baseCooldownMs * Math.min(1024, Math.pow(2, count));
+
+            // If we've recently triggered a fallback, suppress repeated fallbacks within cooldown window
+            if (entry.lastFallbackTime && (now - entry.lastFallbackTime) < cooldown) {
+                entry.suppressedCount = (entry.suppressedCount ?? 0) + 1;
+                const suppressedVerdict: Verdict = {
+                    winner: 'SENSOR_A',
+                    confidence: 0.6,
+                    reason: `Hysteresis: suppressed repeated fallback (${entry.suppressedCount}) for ${sensorId}`,
+                    action: 'TRUST_A'
+                };
+                // Emit suppressed event for observability/UI
+                try {
+                    if (typeof window !== 'undefined' && typeof (window as any).dispatchEvent === 'function') {
+                        (window as any).dispatchEvent(new CustomEvent('truthJudge:fallback_suppressed', { detail: { sensorId, suppressedCount: entry.suppressedCount, verdict: suppressedVerdict } }));
+                    }
+                } catch (e) {
+                    // noop in non-browser or test environments
+                }
+                entry.lastVerdict = suppressedVerdict;
+                entry.lastValue = newValue;
+                entry.lastTimestamp = lastTimestamp;
+                this.history.set(sensorId, entry);
+                return suppressedVerdict;
+            }
+
+            // Otherwise, record a fallback event and return a USE_FALLBACK verdict
+            const fallbackVerdict: Verdict = {
+                winner: 'PREDICTION',
+                confidence: health === 'BAD_SLEW' ? 0.3 : 0.2,
+                reason: health === 'BAD_SLEW' ? `Slew rate violation detected: ${sensorId}` : `Sensor appears frozen: ${sensorId}`,
+                action: 'USE_FALLBACK'
+            };
+            entry.lastFallbackTime = now;
+            entry.fallbackCount = (entry.fallbackCount ?? 0) + 1;
+            entry.lastVerdict = fallbackVerdict;
+            entry.lastValue = newValue;
+            entry.lastTimestamp = lastTimestamp;
+            // Emit fallback event for observability/UI
+            try {
+                if (typeof window !== 'undefined' && typeof (window as any).dispatchEvent === 'function') {
+                    (window as any).dispatchEvent(new CustomEvent('truthJudge:fallback', { detail: { sensorId, verdict: fallbackVerdict } }));
+                }
+            } catch (e) {
+                // noop in non-browser or test environments
+            }
+            this.history.set(sensorId, entry);
+            return fallbackVerdict;
+        }
+
+        // Default safety return
+        const defaultVerdict: Verdict = {
             winner: 'SENSOR_A',
             confidence: 1.0,
             reason: 'Sensor reading is reliable',
             action: 'TRUST_A'
         };
+        this.history.set(sensorId, { ...entry, lastValue: newValue, lastTimestamp, lastVerdict: defaultVerdict });
+        return defaultVerdict;
     }
 
     /**

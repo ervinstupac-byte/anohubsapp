@@ -6,9 +6,10 @@ import { SentinelKernel } from '../services/SentinelKernel.ts';
 import { DEFAULT_TECHNICAL_STATE } from '../core/TechnicalSchema';
 import { ProjectStateManager } from '../core/ProjectStateManager';
 import { EventJournal } from '../services/EventJournal';
+import PeltonTelemetrySchema from '../lib/telemetry/schemas';
+import mapPeltonToTelemetry, { MappedPelton } from '../lib/telemetry/telemetryAdapter';
 import { ENABLE_REAL_TELEMETRY } from '../config/featureFlags';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
-import { useNotifications } from './NotificationContext.tsx';
 import { HppStatusSchema } from '../schemas/supabase';
 import idAdapter from '../utils/idAdapter';
 import { TURBINE_LIMITS } from '../config/IndustrialStandards';
@@ -72,6 +73,8 @@ export interface TelemetryData {
     bearingGrindIndex: number; // 0-10
     acousticBaselineMatch: number; // 0-1 (1 = perfect match)
     ultrasonicLeakIndex: number; // 0-10 (high-frequency hiss)
+    // Canonical hierarchical Pelton telemetry (optional)
+    pelton?: MappedPelton['pelton'];
 }
 
 interface TelemetryContextType {
@@ -169,7 +172,8 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
     };
 
     useEffect(() => {
-        if (!supabase || typeof (supabase as any).channel !== 'function') {
+        // Only enable Supabase realtime subscription when real telemetry is enabled
+        if (!ENABLE_REAL_TELEMETRY || !supabase || typeof (supabase as any).channel !== 'function') {
             // No realtime in build/CI environment - try load from DB first, then simulate
             loadLatestTelemetry().then(snapshot => {
                 if (snapshot && Object.keys(snapshot).length > 0) {
@@ -198,6 +202,57 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                             } catch (e) { /* swallow */ }
                         }
                         const u: any = parsed.success ? parsed.data : updatedData;
+                        // If this asset is a Pelton unit, validate incoming payloads against the Pelton Zod schema
+                        try {
+                            const rawId = u.asset_id; // Keep as string/number/BigInt
+                            const storageKey = idAdapter.toStorage(rawId);
+                            const asset = assets.find(a => String(a.id) === String(rawId) || idAdapter.toStorage(a.id) === storageKey);
+                            const looksLikePelton = asset?.turbine_type === 'PELTON' && (u.nozzles !== undefined || u.jets !== undefined || u.headM !== undefined || u.flowM3s !== undefined || u.turbineId !== undefined);
+                            if (looksLikePelton) {
+                                const p = PeltonTelemetrySchema.safeParse(u);
+                                if (!p.success) {
+                                    try {
+                                        loggingService.logEvent({ assetId: rawId, eventType: 'TELEMETRY_VALIDATION_FAILURE', severity: 'WARNING', details: { message: 'Pelton telemetry validation failed', error: p.error.format ? p.error.format() : {} } });
+                                    } catch (e) { /* swallow */ }
+                                    try {
+                                        const errors = typeof (p.error as any).flatten === 'function' ? (p.error as any).flatten() : (p.error.format ? p.error.format() : p.error);
+                                        EventJournal.append('TELEMETRY_VALIDATION_FAILURE', { assetId: rawId, ts: Date.now(), errors, raw: u });
+                                    } catch (e) { /* swallow */ }
+                                    // Do not setTelemetry for invalid Pelton payloads
+                                    return;
+                                }
+                                // Map validated Pelton payload into canonical hierarchical TelemetryData fragment
+                                try {
+                                    const mapped = mapPeltonToTelemetry(p.data as any);
+                                    // insert canonical sub-object under storage key; merge with existing telemetry state
+                                    setTelemetry(prev => ({
+                                        ...prev,
+                                        [storageKey]: {
+                                            ...(prev[storageKey] || {} as any),
+                                            assetId: rawId,
+                                            timestamp: Date.now(),
+                                            status: (prev[storageKey] as any)?.status || 'OPTIMAL',
+                                            vibration: (prev[storageKey] as any)?.vibration || 0.02,
+                                            temperature: mapped.pelton.generatorCooling?.bearingTempC ?? ((prev[storageKey] as any)?.temperature || 50),
+                                            efficiency: mapped.recommended?.efficiency ?? ((prev[storageKey] as any)?.efficiency || 92),
+                                            output: mapped.recommended?.output ?? ((prev[storageKey] as any)?.output || 0),
+                                            // attach hierarchical pelton payload for operator screens and worker clients
+                                            pelton: mapped.pelton
+                                        }
+                                    }));
+
+                                    // Journal the canonical mapping for auditing
+                                    try { EventJournal.append('TELEMETRY_INGEST', { assetId: rawId, ts: Date.now(), mapped }); } catch (e) { /* swallow */ }
+                                    // Move on to skip the legacy HppStatus mapping below
+                                    return;
+                                } catch (e) {
+                                    console.warn('[TelemetryAdapter] mapping failed', e);
+                                }
+                            }
+                        } catch (e) {
+                            // If validation helper fails for any reason, do not block main flow
+                            console.warn('[TelemetryValidation] Pelton validation helper error', e);
+                        }
                         // REVERT to String/BigInt safe handling (NC-11.3)
                         const rawId = u.asset_id; // Keep as string/number/BigInt
                         const storageKey = idAdapter.toStorage(rawId);
@@ -252,7 +307,7 @@ export const TelemetryProvider: React.FC<{ children: ReactNode }> = ({ children 
                                 ultrasonicLeakIndex: u.ultrasonic_leak_index || 0.3
                             }
                         }));
-                        // non-blocking journal append for each incoming sample
+                        // non-blocking journal append for each incoming sample (validated or legacy)
                         try {
                             const journalPayload = { assetId: rawId, ts: Date.now(), data: updatedData };
                             setTimeout(() => {

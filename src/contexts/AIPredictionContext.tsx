@@ -3,7 +3,7 @@ import { useTelemetry } from './TelemetryContext.tsx';
 import { useAssetContext } from './AssetContext.tsx';
 import { useToast } from '../stores/useAppStore';
 import { useAudit } from './AuditContext';
-import { useMaintenance } from './MaintenanceContext.tsx';
+import { useMaintenanceStore } from '../stores/useMaintenanceStore';
 import {
     aiPredictionService,
     SynergeticRisk,
@@ -67,7 +67,7 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
     const { assets } = useAssetContext();
     const { showToast } = useToast();
     const { logAction } = useAudit();
-    const maintenanceContext = useMaintenance();
+    const maintenanceContext = useMaintenanceStore();
     const { telemetry: telemetryContext } = useTelemetry() as any; // Expose for executeAction
 
     const [synergeticRisks, setSynergeticRisks] = useState<Record<string, SynergeticRisk>>({});

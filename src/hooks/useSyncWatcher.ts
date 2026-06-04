@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { LocalLedger } from '../services/LocalLedger';
 import { supabase } from '../services/supabaseClient';
 import idAdapter from '../utils/idAdapter';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -28,7 +28,7 @@ interface SyncStats {
 
 export const useSyncWatcher = (): SyncStats => {
     const { t } = useTranslation();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
     const [isOnline, setIsOnline] = useState(navigator.onLine);
     const [syncStatus, setSyncStatus] = useState<'IDLE' | 'SYNCING' | 'ERROR' | 'OFFLINE'>('IDLE');
     const [pendingCount, setPendingCount] = useState(0);

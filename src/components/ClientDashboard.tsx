@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useClient, MaintenanceEvent } from '../contexts/ClientContext';
-import { useNotifications, Severity } from '../contexts/NotificationContext';
+import { useNotificationStore, Severity } from '../stores/useNotificationStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Calendar, Activity, Zap, MessageSquare, LogOut, CheckCircle, Clock, Bell, Settings as SettingsIcon, X, AlertTriangle, AlertCircle, Info } from 'lucide-react';
 import { ToastSystem } from './ui/ToastSystem';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ClientDashboard: React.FC = () => {
     const { activeClient, logout, clients, loginClient } = useClient();
-    const { notifications, unreadCount, markAsRead, markAllAsRead, updateSettings, settings, simulateCriticalEvent } = useNotifications();
+    const { notifications, unreadCount, markAsRead, markAllAsRead, updateSettings, settings, simulateCriticalEvent } = useNotificationStore();
     const { t } = useTranslation();
     const [alerts, setAlerts] = useState<string[]>([]);
 

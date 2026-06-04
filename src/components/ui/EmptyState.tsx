@@ -84,7 +84,7 @@ export const EmptyState: React.FC<EmptyStateProps> = React.memo(({
 }) => {
     const { t } = useTranslation();
     const config = variantConfig[variant];
-    const Icon = IconOverride || config.icon;
+    const Icon = (IconOverride || config.icon) as React.ComponentType<any>;
 
     const displayTitle = title || t(`emptyState.${variant}.title`, config.defaultTitle);
     const displayDesc = description || t(`emptyState.${variant}.description`, config.defaultDesc);

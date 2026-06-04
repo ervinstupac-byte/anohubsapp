@@ -18,7 +18,7 @@ import { ModernInput } from './ui/ModernInput';
 import { FrancisModel } from '../models/turbine/FrancisModel';
 import { CompleteSensorData, FrancisSensorData } from '../models/turbine/types';
 
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 
 // Local UI State Interface
 interface FrancisTelemetry {
@@ -41,7 +41,7 @@ interface DiagnosticOutcome {
 export const FrancisDiagnostics: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
 
     // -- STATE --
     const [inputs, setInputs] = useState<FrancisTelemetry>({

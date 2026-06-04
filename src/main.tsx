@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import SensorFallbackBanner from './shared/components/ui/SensorFallbackBanner';
 import './index.css';
 
 console.log('[main.tsx] 🚀 BOOT SEQUENCE STARTED');
@@ -34,6 +35,7 @@ if (!rootElement) {
     root.render(
       <React.StrictMode>
         <App />
+        <SensorFallbackBanner />
       </React.StrictMode>
     );
     console.log('[main.tsx] ✅✅✅ React Mount Command Sent');

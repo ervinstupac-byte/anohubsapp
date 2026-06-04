@@ -11,7 +11,7 @@ export const KineticPolarView: React.FC = () => {
     // Config
     const [magnification, setMagnification] = useState(10); // 10x default
     const [rotation, setRotation] = useState(0);
-    const requestRef = useRef<number>();
+    const requestRef = useRef<number | undefined>(undefined);
     
     // Physics Constants
     const BASE_RADIUS = 100;

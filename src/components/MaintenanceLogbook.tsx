@@ -160,7 +160,7 @@ export const MaintenanceLogbook: React.FC = () => {
 
                 {/* ACTION PANEL */}
                 <div className="bg-[#121212] border border-white/5 rounded-lg p-6 h-fit sticky top-6">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                         {isAdHoc ? (
                             <motion.div
                                 key="adhoc-form"

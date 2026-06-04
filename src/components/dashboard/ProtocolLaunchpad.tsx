@@ -7,7 +7,7 @@ import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useSyncWatcher } from '../../hooks/useSyncWatcher';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { useNotificationStore } from '../../stores/useNotificationStore';
 import { LocalLedger } from '../../services/LocalLedger';
 import { SyncBadge } from './SyncBadge';
 import { useProtocolHistoryStore } from '../../stores/ProtocolHistoryStore';
@@ -68,7 +68,7 @@ export const ProtocolLaunchpad: React.FC = () => {
     const { mechanical, diagnosis } = useTelemetryStore();
     const { hasPendingData, pendingCount, syncStatus, isOnline } = useSyncWatcher();
     const { viewDocument } = useDocumentViewer();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
     const [generatingId, setGeneratingId] = useState<string | null>(null);
     const { addEntry: logProtocol } = useProtocolHistoryStore();
 

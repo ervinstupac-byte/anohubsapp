@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabaseClient.ts';
-import { useAudit } from './AuditContext.tsx';
+import { useAuditStore } from '../stores/useAuditStore';
 
 interface AuthContextType {
     session: Session | null;
     user: User | null;
     isGuest: boolean; // <--- NOVO
     signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
+    signUp: (email: string, password: string) => Promise<{ data: any; error: any }>;
+    resetPassword: (email: string) => Promise<{ data: any; error: any }>;
     signInAsGuest: () => Promise<void>; // <--- NOVO
     signOut: () => Promise<void>;
     loading: boolean;
@@ -16,7 +18,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { logAction } = useAudit(); // HOOK NA VRHU
+    const { logAction } = useAuditStore();
     const [session, setSession] = useState<Session | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
@@ -67,7 +69,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return await supabase.auth.signInWithPassword({ email, password });
     };
 
-    // 2. GUEST LOGIN (Lažiramo korisnika)
+    // 2. SIGNUP (REGISTRATION)
+    const signUp = async (email: string, password: string) => {
+        setIsGuest(false);
+        return await supabase.auth.signUp({ email, password });
+    };
+
+    // 3. PASSWORD RESET
+    const resetPassword = async (email: string) => {
+        return await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`
+        });
+    };
+
+    // 4. GUEST LOGIN (Lažiramo korisnika)
     const signInAsGuest = async () => {
         setIsGuest(true);
         // Kreiramo lažni User objekt da zavaramo TypeScript i UI
@@ -99,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
     };
 
-    // 3. LOGOUT (Pokriva i Guest i Pravi logout)
+    // 5. LOGOUT (Pokriva i Guest i Pravi logout)
     const signOut = async () => {
         const currentUser = user?.email || 'unknown';
 
@@ -119,6 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         isGuest,
         signIn,
+        signUp,
+        resetPassword,
         signInAsGuest, // Exportamo novu funkciju
         signOut,
         loading

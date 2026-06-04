@@ -8,13 +8,12 @@ import { ChevronDown, ChevronRight, Plus } from 'lucide-react';
 import { GlobalProvider } from './contexts/GlobalProvider.tsx';
 import { useAuth } from './contexts/AuthContext.tsx';
 import { NavigationProvider } from './contexts/NavigationContext.tsx';
-import { useRisk, RiskProvider } from './contexts/RiskContext.tsx';
+import { useRiskStore } from './stores/useRiskStore';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
-import { useAudit } from './contexts/AuditContext.tsx';
+import { useAuditStore } from './stores/useAuditStore';
 import { DEFAULT_TECHNICAL_STATE } from './core/TechnicalSchema.ts';
 // ClientProvider removed (Simulation)
-import { NotificationProvider } from './contexts/NotificationContext.tsx'; // Live Notifications
-import { MaintenanceProvider } from './contexts/MaintenanceContext.tsx'; // Logbook
+import { useMaintenanceStore } from './stores/useMaintenanceStore';
 import { AssetProvider } from './contexts/AssetContext.tsx';
 import { useRiskCalculator } from './hooks/useRiskCalculator.ts';
 import { DocumentProvider } from './contexts/DocumentContext.tsx';
@@ -56,6 +55,9 @@ import { ManualControlPanel } from './components/diagnostic-twin/ManualControlPa
 import { CommanderTerminal } from './components/dashboard/CommanderTerminal.tsx';
 import { LibraryHealthMonitor } from './components/knowledge/LibraryHealthMonitor';
 import { useProjectConfigStore } from './features/config/ProjectConfigStore';
+import { WorkflowSyncListener } from './stores/useWorkflowStore';
+import { NotificationTestAPI } from './components/managers/NotificationTestAPI';
+import { queryClient, QueryClientProvider } from './lib/queryClient';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -213,9 +215,9 @@ const AppLayout: React.FC = () => {
     const location = useLocation();
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { riskState: questionnaireRisk } = useRisk(); // Renamed Risk Context
+    const { riskState: questionnaireRisk } = useRiskStore(); // Renamed Risk Context
     const { status: assetRiskStatus, reason: riskReasons } = useRiskCalculator(); // Calculated Asset Risk
-    const { logAction } = useAudit();
+    const { logAction } = useAuditStore();
     const { user, signOut } = useAuth(); // Auth integration
     const { showToast } = useToast();
 
@@ -507,7 +509,8 @@ const AppLayout: React.FC = () => {
                                                 <Route path="/genesis" element={<ProjectGenesisPage />} />
                                                 <Route path="/knowledge/capture" element={<KnowledgeCapturePage />} />
                                                 <Route path="/governance/ledger" element={<SovereignLedgerPage />} />
-                                                <Route path="fleet" element={<FleetOverview showMap={isMapOpen} onToggleMap={() => setIsMapOpen(!isMapOpen)} onRegisterAsset={() => { navigate('/asset-onboarding'); setIsSidebarOpen(false); }} />} />
+                                                <Route path="master" element={<Suspense fallback={<LoadingShimmer />}><MasterSovereignDashboard /></Suspense>} />
+                                                <Route path="fleet" element={<Suspense fallback={<LoadingShimmer />}><MasterSovereignDashboard /></Suspense>} />
                                                 <Route path="alerts" element={<Suspense fallback={<LoadingScreen />}><ScadaCore /></Suspense>} />
                                                 <Route path="forensic-hub" element={<Suspense fallback={<LoadingScreen />}><ForensicHub /></Suspense>} />
                                                 <Route path="forensics" element={<Suspense fallback={<LoadingScreen />}><ForensicDashboard /></Suspense>} />
@@ -630,7 +633,7 @@ const App: React.FC = () => {
     }, []); // Run once on mount
 
     return (
-        <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <HashRouter>
             <ErrorBoundary fallback={
                 <div className="h-screen w-screen flex flex-col items-center justify-center bg-black text-white p-8">
                     <h1 className="text-3xl font-bold text-red-500 mb-4">CRITICAL SYSTEM FAILURE</h1>
@@ -639,7 +642,11 @@ const App: React.FC = () => {
                     <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="mt-4 text-xs text-slate-600 underline">CLEAR CACHE & REBOOT</button>
                 </div>
             }>
-                <GlobalProvider>
+                <QueryClientProvider client={queryClient}>
+                    <GlobalProvider>
+                        <WorkflowSyncListener />
+                        <NotificationTestAPI />
+                        <GlobalModalManager />
                     {booting ? (
                         <SystemBootScreen key="boot-screen" onComplete={() => setBooting(false)} />
                     ) : (
@@ -680,6 +687,7 @@ const App: React.FC = () => {
                         </div>
                     )}
                 </GlobalProvider>
+                </QueryClientProvider>
             </ErrorBoundary>
         </HashRouter>
     );
