@@ -188,7 +188,7 @@ export const AIInsightsPanel: React.FC = () => {
                             unifiedDiagnosis.serviceNotes.map((note, i) => (
                                 <div
                                     key={i}
-                                    ref={el => noteRefs.current[note.service] = el}
+                                    ref={el => { noteRefs.current[note.service] = el; }}
                                     className={`p-2 rounded-none border relative overflow-hidden group/note transition-colors duration-300 ${focusedService === note.service
                                         ? 'border-status-info bg-status-info/10'
                                         : note.severity === 'CRITICAL' ? 'bg-status-error/5 border-status-error/20' :

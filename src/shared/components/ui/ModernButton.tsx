@@ -1,4 +1,5 @@
 import React, { ButtonHTMLAttributes } from 'react';
+import { TRANSITIONS, SHADOWS } from '../../design-tokens';
 
 interface ModernButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
@@ -19,14 +20,14 @@ export const ModernButton: React.FC<ModernButtonProps> = ({
 }) => {
 
     // Base Styles
-    const baseStyles = "relative overflow-hidden rounded-none font-bold tracking-wide transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm uppercase";
+    const baseStyles = "relative overflow-hidden rounded-none font-bold tracking-wide active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 py-4 px-6 text-sm uppercase hover-lift";
 
     // Variants
     const variants = {
-        primary: "bg-cyan-700 hover:bg-cyan-600 text-white border border-cyan-500/50 active:bg-cyan-800",
-        secondary: "bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700 hover:border-slate-600 active:bg-slate-700",
-        danger: "bg-red-900/80 hover:bg-red-800 text-red-100 border border-red-700 hover:border-red-500 active:bg-red-900",
-        ghost: "bg-transparent hover:bg-slate-800/50 text-slate-400 hover:text-white border border-transparent hover:border-slate-700 active:bg-slate-800"
+        primary: "bg-cyan-700 hover:bg-cyan-600 text-white border border-cyan-500/50 active:bg-cyan-800 " + TRANSITIONS.fast,
+        secondary: "bg-slate-900 hover:bg-slate-800 text-slate-100 border border-slate-700 hover:border-slate-600 active:bg-slate-700 " + TRANSITIONS.fast,
+        danger: "bg-red-900/80 hover:bg-red-800 text-red-100 border border-red-700 hover:border-red-500 active:bg-red-900 " + TRANSITIONS.fast,
+        ghost: "bg-transparent hover:bg-slate-800/50 text-slate-400 hover:text-white border border-transparent hover:border-slate-700 active:bg-slate-800 " + TRANSITIONS.fast
     };
 
     return (

@@ -65,5 +65,5 @@ describe('NC-25200: Black Hole Fix Verification', () => {
         }, { timeout: 10000 });
 
         console.log('✅ VERIFIED: App redirected to FleetOverview.');
-    }, { timeout: 15000 });
+    }, 15000);
 });

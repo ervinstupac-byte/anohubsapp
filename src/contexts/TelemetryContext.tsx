@@ -10,7 +10,6 @@ import PeltonTelemetrySchema from '../lib/telemetry/schemas';
 import mapPeltonToTelemetry, { MappedPelton } from '../lib/telemetry/telemetryAdapter';
 import { ENABLE_REAL_TELEMETRY } from '../config/featureFlags';
 import { SYSTEM_CONSTANTS } from '../config/SystemConstants';
-import { useNotifications } from './NotificationContext.tsx';
 import { HppStatusSchema } from '../schemas/supabase';
 import idAdapter from '../utils/idAdapter';
 import { TURBINE_LIMITS } from '../config/IndustrialStandards';

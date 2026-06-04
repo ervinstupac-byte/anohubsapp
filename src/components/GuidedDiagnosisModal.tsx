@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDiagnostic, IntuitionQuery } from '../contexts/DiagnosticContext.tsx';
+import { useDiagnosticStore, IntuitionQuery } from '../stores/useDiagnosticStore';
 import { GlassCard } from '../shared/components/ui/GlassCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Brain, ArrowRight, SkipForward, CheckCircle2, History, RotateCcw } from 'lucide-react';
@@ -10,7 +10,7 @@ interface GuidedDiagnosisModalProps {
 }
 
 export const GuidedDiagnosisModal: React.FC<GuidedDiagnosisModalProps> = ({ query }) => {
-    const { submitQueryResponse, clearQuery } = useDiagnostic();
+    const { submitQueryResponse, clearQuery } = useDiagnosticStore();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 

@@ -5,7 +5,7 @@ import { ModernButton } from '../../shared/components/ui/ModernButton';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useDocumentViewer } from '../../contexts/DocumentContext';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useNavigate } from 'react-router-dom';
 import { Decimal } from 'decimal.js';
 import { TelemetryDrilldownModal } from './TelemetryDrilldownModal';
@@ -41,7 +41,7 @@ export const AssetPassportCard: React.FC = () => {
     const { selectedAsset, assetLogs } = useAssetContext();
     const { mechanical, identity } = useTelemetryStore();
     const { viewDocument } = useDocumentViewer();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
     const navigate = useNavigate();
 
     // --- DRILLDOWN STATE ---

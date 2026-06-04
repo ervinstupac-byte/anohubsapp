@@ -1,14 +1,14 @@
 import { useEffect, useCallback } from 'react';
-import { useHPPDesign } from './HPPDesignContext.tsx';
-import { useRisk } from './RiskContext.tsx';
+import { useHPPDesignStore } from '../stores/useHPPDesignStore';
+import { useRiskStore } from '../stores/useRiskStore';
 
 /**
  * useHPPData - Central Dispatcher Hook
  * Bridiing HPPBuilder (Design) and RiskAssessment (Diagnostics)
  */
 export const useHPPData = () => {
-    const { currentDesign } = useHPPDesign();
-    const { updateThresholds } = useRisk();
+    const { currentDesign } = useHPPDesignStore();
+    const { updateThresholds } = useRiskStore();
 
     const syncDesignToRisk = useCallback(() => {
         if (!currentDesign) return;

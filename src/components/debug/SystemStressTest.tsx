@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { useMaintenance } from '../../contexts/MaintenanceContext';
+import { useNotificationStore } from '../../stores/useNotificationStore';
+import { useMaintenanceStore } from '../../stores/useMaintenanceStore';
 import { PhysicsEngine } from '../../core/PhysicsEngine';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, AlertTriangle, PlayCircle, Loader2 } from 'lucide-react';
@@ -13,8 +13,8 @@ export const SystemStressTest: React.FC = () => {
     // MODERN STORE
     const { mechanical, site, setConfig, setMechanical } = useTelemetryStore();
     
-    const notifications = useNotifications();
-    const maintenance = useMaintenance();
+    const notifications = useNotificationStore();
+    const maintenance = useMaintenanceStore();
     const { t, i18n } = useTranslation();
 
     const [logs, setLogs] = useState<{ step: string, status: 'PENDING' | 'PASS' | 'FAIL', msg: string }[]>([]);

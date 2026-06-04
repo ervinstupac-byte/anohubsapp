@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { useAssetContext } from '../../contexts/AssetContext';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { useDensity } from '../../stores/useAppStore';
-import { useWorkflow, ModuleType } from '../../contexts/WorkflowContext';
+import { useWorkflowStore, ModuleType } from '../../stores/useWorkflowStore';
 import { SystemOverviewModal } from '../modals/SystemOverviewModal'; // NEW
 import { Map, ZapOff } from 'lucide-react'; // NEW Icons
 import { SovereignOrchestrator, SystemState } from '../../services/SovereignOrchestrator';
@@ -40,7 +40,7 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({ className = '' }
     const { selectedAsset, assets, selectAsset } = useAssetContext();
     const { diagnosis, mechanical } = useTelemetryStore();
     const { densityMode: mode } = useDensity();
-    const { logNavigation } = useWorkflow();
+    const { logNavigation } = useWorkflowStore();
     const [showMap, setShowMap] = React.useState(false); // NEW
     const [isOffline, setIsOffline] = React.useState(!navigator.onLine); // NEW
     const [systemState, setSystemState] = React.useState<SystemState>(SystemState.UNINITIALIZED);

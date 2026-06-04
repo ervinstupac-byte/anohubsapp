@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
+import { TRANSITIONS, SHADOWS } from '../../design-tokens';
 
 interface GlassCardProps extends Omit<HTMLMotionProps<"div">, 'title'> {
     children: ReactNode;
@@ -9,6 +10,7 @@ interface GlassCardProps extends Omit<HTMLMotionProps<"div">, 'title'> {
     icon?: ReactNode;
     variant?: 'base' | 'deep' | 'commander';
     noPadding?: boolean;
+    hoverable?: boolean;
 }
 
 export const GlassCard = ({
@@ -20,6 +22,7 @@ export const GlassCard = ({
     icon,
     variant = 'base',
     noPadding = false,
+    hoverable = true,
     ...props
 }: GlassCardProps) => {
     const variantClasses = {
@@ -32,10 +35,12 @@ export const GlassCard = ({
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={hoverable ? { y: -4, boxShadow: '0 10px 30px rgba(0,0,0,0.3)' } : {}}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className={`${variantClasses[variant]} ${noPadding ? '' : 'p-6'} 
                      hover:border-cyan-500/50 transition-all duration-500 
+                     ${hoverable ? 'cursor-pointer' : ''}
                      ${className}`}
             {...props}
         >

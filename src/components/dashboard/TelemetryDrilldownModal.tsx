@@ -183,7 +183,7 @@ export const TelemetryDrilldownModal: React.FC<TelemetryDrilldownModalProps> = (
                                         <Tooltip 
                                             contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#f1f5f9' }}
                                             itemStyle={{ color: '#e2e8f0' }}
-                                            formatter={(value: number) => [`${value.toFixed(2)} ${unit}`, metricLabel]}
+                                            formatter={(value: any) => [`${Number(value).toFixed(2)} ${unit}`, metricLabel]}
                                             labelFormatter={(label) => `T-${30 - Number(label)} Days`}
                                         />
                                         <ReferenceLine y={threshold.critical} stroke="#ef4444" strokeDasharray="3 3" label={{ value: 'CRITICAL', fill: '#ef4444', fontSize: 10 }} />

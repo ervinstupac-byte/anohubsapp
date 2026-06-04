@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 import mapDiagnosticToUI from '../lib/engines/diagnosticMapper';
 import { Diagnostic } from '../lib/engines/schemas';
 
@@ -22,7 +22,7 @@ export function useRecentAlerts(pollIntervalMs: number = 10000, pushToNotificati
     const [error, setError] = useState<string | null>(null);
     const abortRef = useRef<AbortController | null>(null);
     const processedRef = useRef<Set<string | number>>(new Set());
-    const notifications = useNotifications();
+    const { pushNotification } = useNotificationStore();
 
     const fetchOnce = async (signal?: AbortSignal) => {
         try {
@@ -54,10 +54,9 @@ export function useRecentAlerts(pollIntervalMs: number = 10000, pushToNotificati
         };
     }, [pollIntervalMs]);
 
-    // Push new alerts into global NotificationContext once
+    // Push new alerts into global NotificationStore once
     useEffect(() => {
         if (!pushToNotifications) return;
-        if (!notifications || !notifications.pushNotification) return;
         for (const a of alerts) {
             if (processedRef.current.has(a.id)) continue;
             if (a.severity === 'CRITICAL' || a.severity === 'WARNING') {
@@ -79,14 +78,14 @@ export function useRecentAlerts(pollIntervalMs: number = 10000, pushToNotificati
                 const params = { issue: a.issue, action: a.action, turbineId: a.turbineId, riskScore: a.riskScore, message: ui.message };
                 const link = a.id ? `/alerts#${a.id}` : undefined;
                 try {
-                    notifications.pushNotification(a.severity as any, ui.translationKey || 'notifications.alert', params, link);
+                    pushNotification(a.severity as any, ui.translationKey || 'notifications.alert', params, link);
                 } catch (e) {
                     console.error('Failed to push notification', e);
                 }
                 processedRef.current.add(a.id);
             }
         }
-    }, [alerts, notifications, pushToNotifications]);
+    }, [alerts, pushNotification, pushToNotifications]);
 
     return { alerts, loading, error, refresh: () => fetchOnce(abortRef.current?.signal) };
 }

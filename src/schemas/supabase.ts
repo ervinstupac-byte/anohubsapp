@@ -11,7 +11,7 @@ export const AssetSchema = z.object({
   power_output: z.number().optional(),
   status: z.string().optional(),
   turbine_type: z.string().optional(),
-  specs: z.record(z.any()).optional(),
+  specs: z.record(z.string(), z.any()).optional(),
   created_at: z.string().optional()
 });
 export type Asset = z.infer<typeof AssetSchema>;

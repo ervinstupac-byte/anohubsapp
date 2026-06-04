@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { TelemetryData } from '../contexts/TelemetryContext';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { PeltonEngine } from '../lib/engines/PeltonEngine';
 import mapDiagnosticToUI from '../lib/engines/diagnosticMapper';
@@ -17,7 +17,7 @@ function clamp(v: number, min = 0, max = 100) {
 export function usePeltonSimulator(assetId?: number | string | null): TelemetryData | null {
   const [telemetry, setTelemetry] = useState<TelemetryData | null>(null);
   const nozzlesRef = useRef<number[]>([45, 50, 38, 52, 48, 51]);
-  const notifications = useNotifications();
+  const notifications = useNotificationStore();
   const updateTelemetry = useTelemetryStore(state => state.updateTelemetry);
   const pushAlarm = useTelemetryStore(state => state.pushAlarm);
   const engineRef = useRef<PeltonEngine | null>(null);

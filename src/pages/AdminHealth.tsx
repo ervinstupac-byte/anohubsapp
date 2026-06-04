@@ -3,7 +3,7 @@ import { runForensicPulseCheck, IntegrityReport } from '../services/SystemIntegr
 import { runBackfill } from '../services/BackfillService';
 import { persistCenturyPlanForAsset } from '../services/CenturyPlanner';
 import { supabase } from '../services/supabaseClient';
-import { useConfirm } from '../contexts/ConfirmContext';
+import { useConfirmStore } from '../stores/useConfirmStore';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export default function AdminHealth() {
@@ -11,7 +11,7 @@ export default function AdminHealth() {
   const [loading, setLoading] = useState(false);
   const [backfillRunning, setBackfillRunning] = useState(false);
   const [backfillMessage, setBackfillMessage] = useState<string | null>(null);
-  const { confirm } = useConfirm();
+  const { confirm } = useConfirmStore();
   // SCADA Grid Sync
   // @ts-ignore
   const { gridFrequency = 50.0 } = useTelemetryStore() as any;

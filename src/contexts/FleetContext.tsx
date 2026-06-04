@@ -2,9 +2,9 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 import { useAssetContext } from './AssetContext.tsx';
 import idAdapter from '../utils/idAdapter';
 import { useTelemetry } from './TelemetryContext.tsx';
-import { useMaintenance } from './MaintenanceContext.tsx';
+import { useMaintenanceStore } from '../stores/useMaintenanceStore';
 import { useInventory } from './InventoryContext.tsx';
-import { useDiagnostic } from './DiagnosticContext.tsx';
+import { useDiagnosticStore } from '../stores/useDiagnosticStore';
 
 export interface InflowPrediction {
     days30: number; // MWh
@@ -41,9 +41,9 @@ const FleetContext = createContext<FleetContextType | undefined>(undefined);
 export const FleetProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { assets } = useAssetContext();
     const { telemetry } = useTelemetry();
-    const { operatingHours } = useMaintenance();
+    const { operatingHours } = useMaintenanceStore();
     const { getMissingParts } = useInventory();
-    const { activeDiagnoses } = useDiagnostic();
+    const { activeDiagnoses } = useDiagnosticStore();
     const [loading] = useState(false);
 
     const fleetReports = useMemo(() => {

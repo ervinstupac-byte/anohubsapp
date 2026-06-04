@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Wrench, BarChart3, Settings, History, Monitor } from 'lucide-react';
 import { useAssetContext } from '../contexts/AssetContext';
-import { useWorkflow } from '../contexts/WorkflowContext';
+import { useWorkflowStore } from '../stores/useWorkflowStore';
 import type { CardAction } from '../shared/components/ui/EngineeringCard';
 import idAdapter from '../utils/idAdapter';
 
@@ -23,7 +23,7 @@ export const useCrossModuleActions = (
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { selectAsset } = useAssetContext();
-    const { logNavigation } = useWorkflow();
+    const { logNavigation } = useWorkflowStore();
 
     const actions = useMemo(() => {
         // Common navigation handler with workflow logging

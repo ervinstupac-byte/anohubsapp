@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 import { useAppStore } from '../stores/useAppStore';
-import { useNotifications } from '../contexts/NotificationContext';
+import { useNotificationStore } from '../stores/useNotificationStore';
 import { SentinelKernel } from '../services/SentinelKernel';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 export const useSentinelWatchdog = () => {
     const { mechanical, identity, activeScenario } = useTelemetryStore();
     const { demoMode } = useAppStore();
-    const { pushNotification } = useNotifications();
+    const { pushNotification } = useNotificationStore();
     const { t } = useTranslation();
 
     // Persistent counters/history for rate calculations

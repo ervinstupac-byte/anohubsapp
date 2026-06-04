@@ -6,7 +6,7 @@ export const DiagnosticSchema = z.object({
   id: z.string().optional(),
   code: z.string(),
   severity: DiagnosticSeverity,
-  params: z.record(z.union([z.string(), z.number()])).optional(),
+  params: z.record(z.string(), z.union([z.string(), z.number()])).optional(),
   confidence: z.number().min(0).max(100).optional(),
   riskScore: z.number().min(0).max(1).optional(),
   timestamp: z.string().optional()

@@ -5,7 +5,7 @@ import { AssetPassportCard } from '../AssetPassportCard';
 import { useAssetContext } from '../../../contexts/AssetContext';
 import { useTelemetryStore } from '../../../features/telemetry/store/useTelemetryStore';
 import { useDocumentViewer } from '../../../contexts/DocumentContext';
-import { useNotifications } from '../../../contexts/NotificationContext';
+import { useNotificationStore } from '../../../stores/useNotificationStore';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { Decimal } from 'decimal.js';
 
@@ -25,7 +25,7 @@ vi.mock('react-i18next', () => {
 vi.mock('../../../contexts/AssetContext');
 vi.mock('../../../features/telemetry/store/useTelemetryStore');
 vi.mock('../../../contexts/DocumentContext');
-vi.mock('../../../contexts/NotificationContext');
+vi.mock('../../../stores/useNotificationStore');
 
 // Simulated UI Components
 vi.mock('../../../shared/components/ui/GlassCard', () => ({
@@ -83,7 +83,7 @@ describe('AssetPassportCard Component', () => {
             selectedAsset: simulatedSelectedAsset,
             assetLogs: []
         });
-        (useNotifications as any).mockReturnValue({ pushNotification: simulatedPushNotification });
+        (useNotificationStore as any).mockReturnValue({ pushNotification: simulatedPushNotification });
         (useDocumentViewer as any).mockReturnValue({ viewDocument: simulatedViewDocument });
 
         // Default: Nominal Telemetry

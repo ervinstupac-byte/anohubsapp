@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
+import { useQuestionnaireStore } from '../stores/useQuestionnaireStore';
 import { useNavigation } from '../contexts/NavigationContext.tsx';
-import { useRisk } from '../contexts/RiskContext.tsx';
+import { useRiskStore } from '../stores/useRiskStore';
 import { useToast } from '../stores/useAppStore';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import { supabase } from '../services/supabaseClient.ts';
@@ -90,8 +90,8 @@ const RiskGauge: React.FC<{ level: 'High' | 'Medium' | 'Low' }> = ({ level }) =>
 // OVO JE JEDINA DEKLARACIJA I EKSPORT
 export const QuestionnaireSummary: React.FC = () => {
     const { navigateToHub } = useNavigation();
-    const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaire();
-    const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRisk();
+    const { answers, resetQuestionnaire, operationalData, description } = useQuestionnaireStore();
+    const { calculateAndSetQuestionnaireRisk, disciplineRiskScore } = useRiskStore();
     const { showToast } = useToast();
     const { user } = useAuth();
     const { selectedAsset } = useAssetContext();

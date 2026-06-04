@@ -8,6 +8,7 @@ import { SovereignComponentTree } from './SovereignComponentTree';
 import { StressTestButton } from './StressTestButton';
 import { StrategicConsultantView } from './StrategicConsultantView';
 import { GreenHydrogenPanel } from './GreenHydrogenPanel';
+import { CustomizableDashboard } from './CustomizableDashboard';
 import { EmergencyOverlay } from '../ui/EmergencyOverlay';
 import { ResonanceAudioSystem } from '../ui/ResonanceAudioSystem';
 import { AudioSpectrogram } from '../forensics/AudioSpectrogram';
@@ -22,8 +23,11 @@ import { PulseArchiver } from '../../services/PulseArchiver';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
 import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 import SystemBoundaryAnalyzer from '../../services/SystemBoundaryAnalyzer';
+// Import new components
+import { Tabs, TabsList, TabsTrigger, TabsContent, GlassCard, ProgressBar } from '../../shared/components/ui';
 
 export const MasterSovereignDashboard: React.FC = () => {
+
     const navigate = useNavigate();
     const {
         hydraulic,
@@ -54,7 +58,7 @@ export const MasterSovereignDashboard: React.FC = () => {
     const [flowSetpoint, setFlowSetpoint] = useState(hydraulic?.flow || 42);
     const [loadSetpoint, setLoadSetpoint] = useState(mechanical?.rpm || 500);
     const [predictedPulse, setPredictedPulse] = useState<number | null>(null);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'strategic' | 'energy'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'strategic' | 'energy' | 'custom'>('dashboard');
     const [isForensicMode, setIsForensicMode] = useState(false);
     const [boundaryViolation, setBoundaryViolation] = useState<string | null>(null);
 
@@ -194,28 +198,31 @@ export const MasterSovereignDashboard: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-scada-bg p-6 text-scada-text">
+        <div className="min-h-screen bg-[#020617] p-6 text-slate-100 overflow-y-auto max-h-screen">
             {/* Header */}
-            <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
+            <div className="mb-8">
+                <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => navigate('/')}
-                            className="p-2 hover:bg-scada-panel rounded-none text-scada-muted hover:text-scada-text transition-colors"
+                            className="p-3 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-slate-300 hover:text-white transition-all hover:scale-105"
                             title="Back to Hub"
                         >
                             <Home className="w-6 h-6" />
                         </button>
-                        <h1 className="text-3xl font-bold text-scada-text font-header tracking-tight uppercase">Master Sovereign Dashboard</h1>
+                        <div>
+                            <h1 className="text-3xl font-bold text-white tracking-tight">Master Sovereign Dashboard</h1>
+                            <p className="text-slate-400 text-sm mt-1">Real-time hydro plant monitoring and control</p>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                         <SystemHealth />
                         {/* Strategic View Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'strategic'
-                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
-                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${activeTab === 'strategic'
+                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
                                 }`}
                         >
                             <Calculator className="w-4 h-4" />
@@ -225,21 +232,33 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Energy Hub Tab */}
                         <button
                             onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${activeTab === 'energy'
-                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
-                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${activeTab === 'energy'
+                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
                                 }`}
                         >
                             <Droplets className="w-4 h-4" />
                             Energy Hub
                         </button>
 
+                        {/* Customizable Dashboard Tab */}
+                        <button
+                            onClick={() => setActiveTab(activeTab === 'custom' ? 'dashboard' : 'custom')}
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${activeTab === 'custom'
+                                ? 'bg-purple-500/20 text-purple-400 border border-purple-500/50 shadow-lg shadow-purple-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
+                                }`}
+                        >
+                            <Layout className="w-4 h-4" />
+                            Custom Dashboard
+                        </button>
+
                         {/* NC-10070: Forensic Mode Toggle */}
                         <button
                             onClick={() => setIsForensicMode(!isForensicMode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isForensicMode
-                                ? 'bg-status-ok/20 text-status-ok border border-status-ok/50'
-                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${isForensicMode
+                                ? 'bg-green-500/20 text-green-400 border border-green-500/50 shadow-lg shadow-green-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
                                 }`}
                         >
                             <Microscope className="w-4 h-4" />
@@ -249,9 +268,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-11400: Education Mode Toggle */}
                         <button
                             onClick={toggleEducationMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${educationMode
-                                ? 'bg-status-info/20 text-status-info border border-status-info/50'
-                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${educationMode
+                                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
                                 }`}
                         >
                             <BookOpen className="w-4 h-4" />
@@ -261,9 +280,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* Commander Mode Toggle - ALWAYS VISIBLE */}
                         <button
                             onClick={toggleCommanderMode}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors ${isCommanderMode
-                                ? 'bg-status-warning/20 text-status-warning border border-status-warning/50'
-                                : 'bg-scada-panel text-scada-muted border border-scada-border hover:text-scada-text'
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${isCommanderMode
+                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50 shadow-lg shadow-amber-500/20'
+                                : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
                                 }`}
                         >
                             <Shield className="w-4 h-4" />
@@ -273,7 +292,7 @@ export const MasterSovereignDashboard: React.FC = () => {
                         {/* NC-9200: Tactical Layout Launcher */}
                         <button
                             onClick={launchTacticalLayout}
-                            className="flex items-center gap-2 px-4 py-2 rounded-none font-medium transition-colors bg-scada-panel text-status-info border border-status-info/50 hover:bg-scada-panel/80"
+                            className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all bg-slate-800/50 text-cyan-400 border border-cyan-500/50 hover:bg-slate-700/50 hover:shadow-lg hover:shadow-cyan-500/20"
                             title="Open all modules across screens"
                         >
                             <Layout className="w-4 h-4" />
@@ -283,12 +302,15 @@ export const MasterSovereignDashboard: React.FC = () => {
                         <StressTestButton />
                     </div>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-slate-400">
-                    <span>Asset: {identity?.assetName || 'Unknown'}</span>
-                    <span>•</span>
+                <div className="flex items-center gap-6 text-sm text-slate-400 bg-slate-800/30 p-3 rounded-lg border border-slate-700/50">
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse-soft"></span>
+                        <span className="font-medium">Asset: {identity?.assetName || 'Unknown'}</span>
+                    </div>
+                    <span className="text-slate-600">•</span>
                     <span>Last Update: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : 'Never'}</span>
-                    <span>•</span>
-                    <span className={isCommanderMode ? 'text-amber-400 font-semibold' : 'text-slate-500'}>
+                    <span className="text-slate-600">•</span>
+                    <span className={`font-semibold ${isCommanderMode ? 'text-amber-400' : 'text-slate-500'}`}>
                         {isCommanderMode ? 'COMMANDER CONTROL ACTIVE' : 'GUEST MODE'}
                     </span>
                 </div>
@@ -308,36 +330,46 @@ export const MasterSovereignDashboard: React.FC = () => {
                 </div>
             )}
 
+            {/* Customizable Dashboard View */}
+            {activeTab === 'custom' && (
+                <div className="animate-in fade-in duration-300">
+                    <CustomizableDashboard />
+                </div>
+            )}
+
             {/* Main Dashboard View */}
             {activeTab === 'dashboard' && (
                 <>
                     {/* Commander Mode Setpoint Controls */}
                     {isCommanderMode && (
-                        <div className="mb-6 animate-in slide-in-from-top-4 duration-300">
-                            <div className="p-6 bg-scada-panel border border-status-warning rounded-sm shadow-scada-card">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <Sliders className="w-5 h-5 text-status-warning" />
-                                    <h2 className="text-xl font-bold text-status-warning uppercase tracking-tight font-header">Commander Setpoint Control</h2>
+                        <div className="mb-8 animate-slide-up">
+                            <div className="p-8 bg-slate-900/70 border border-amber-500/30 rounded-xl shadow-lg shadow-amber-500/10">
+                                <div className="flex items-center gap-4 mb-6 flex-wrap">
+                                    <div className="p-3 bg-amber-500/10 rounded-lg">
+                                        <Sliders className="w-6 h-6 text-amber-400" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-amber-400 uppercase tracking-tight">Commander Setpoint Control</h2>
                                     {boundaryViolation && (
-                                        <div className="px-3 py-1 bg-status-error/20 border border-status-error/30 rounded-sm">
-                                            <span className="text-xs text-status-error font-mono font-bold uppercase">⚠ BOUNDARY VIOLATION</span>
+                                        <div className="px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2">
+                                            <AlertCircle className="w-4 h-4 text-red-400" />
+                                            <span className="text-xs text-red-400 font-mono font-bold uppercase">⚠ BOUNDARY VIOLATION</span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Boundary Violation Warning */}
                                 {boundaryViolation && (
-                                    <div className="mb-4 p-3 bg-status-error/10 border border-status-error/20 rounded-sm">
-                                        <p className="text-sm text-status-error font-mono">{boundaryViolation}</p>
+                                    <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                        <p className="text-sm text-red-400 font-mono">{boundaryViolation}</p>
                                     </div>
                                 )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                                     {/* Flow Setpoint Slider */}
                                     <div>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <label className="text-xs uppercase tracking-wider text-scada-muted font-bold font-mono">Flow Setpoint</label>
-                                            <span className="text-status-warning font-mono font-bold tabular-nums">{flowSetpoint.toFixed(1)} m³/s</span>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <label className="text-sm font-bold uppercase tracking-wider text-slate-400">Flow Setpoint</label>
+                                            <span className="text-amber-400 font-mono font-bold text-xl tabular-nums">{flowSetpoint.toFixed(1)} m³/s</span>
                                         </div>
                                         <input
                                             type="range"
@@ -346,9 +378,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                                             step="0.5"
                                             value={flowSetpoint}
                                             onChange={(e) => setFlowSetpoint(parseFloat(e.target.value))}
-                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                            className="w-full h-3 bg-slate-800 rounded-full appearance-none cursor-pointer accent-amber-500 hover:accent-amber-400 transition-all"
                                         />
-                                        <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
+                                        <div className="flex justify-between text-xs text-slate-500 font-mono mt-2">
                                             <span>0</span>
                                             <span>50</span>
                                             <span>100</span>
@@ -357,9 +389,9 @@ export const MasterSovereignDashboard: React.FC = () => {
 
                                     {/* RPM Setpoint Slider */}
                                     <div>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <label className="text-xs uppercase tracking-wider text-scada-muted font-bold font-mono">RPM Setpoint</label>
-                                            <span className="text-status-warning font-mono font-bold tabular-nums">{loadSetpoint.toFixed(0)} RPM</span>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <label className="text-sm font-bold uppercase tracking-wider text-slate-400">RPM Setpoint</label>
+                                            <span className="text-amber-400 font-mono font-bold text-xl tabular-nums">{loadSetpoint.toFixed(0)} RPM</span>
                                         </div>
                                         <input
                                             type="range"
@@ -368,9 +400,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                                             step="10"
                                             value={loadSetpoint}
                                             onChange={(e) => setLoadSetpoint(parseFloat(e.target.value))}
-                                            className="w-full h-2 bg-scada-bg rounded-none appearance-none cursor-pointer accent-status-warning"
+                                            className="w-full h-3 bg-slate-800 rounded-full appearance-none cursor-pointer accent-amber-500 hover:accent-amber-400 transition-all"
                                         />
-                                        <div className="flex justify-between text-[10px] text-scada-muted font-mono mt-1">
+                                        <div className="flex justify-between text-xs text-slate-500 font-mono mt-2">
                                             <span>300</span>
                                             <span>525</span>
                                             <span>750</span>
@@ -378,14 +410,14 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     </div>
 
                                     {/* Predicted Pulse Impact */}
-                                    <div className="bg-scada-bg border border-scada-border rounded-sm p-3">
-                                        <div className="text-[10px] uppercase font-mono text-scada-muted mb-1">Predicted Pulse Index</div>
-                                        <div className={`text-2xl font-bold font-mono tabular-nums ${(predictedPulse || 100) > 90 ? 'text-status-ok' :
-                                            (predictedPulse || 100) > 70 ? 'text-status-warning' : 'text-status-error'
+                                    <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-5">
+                                        <div className="text-xs uppercase font-mono text-slate-500 mb-2">Predicted Pulse Index</div>
+                                        <div className={`text-3xl font-bold font-mono tabular-nums ${(predictedPulse || 100) > 90 ? 'text-green-400' :
+                                            (predictedPulse || 100) > 70 ? 'text-amber-400' : 'text-red-400'
                                             }`}>
                                             {predictedPulse !== null ? predictedPulse.toFixed(1) : pulseIndex.toFixed(0)}%
                                         </div>
-                                        <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">
+                                        <div className="text-xs uppercase font-mono text-slate-500 mt-2">
                                             {predictedPulse !== null ? 'Based on setpoints' : 'Current'}
                                         </div>
                                     </div>
@@ -394,9 +426,9 @@ export const MasterSovereignDashboard: React.FC = () => {
                                     <div className="flex items-end">
                                         <button
                                             onClick={applySetpoints}
-                                            className="w-full py-3 bg-status-warning/20 hover:bg-status-warning/30 border border-status-warning/50 rounded-sm text-status-warning font-semibold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all active:scale-95"
+                                            className="w-full py-4 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 rounded-lg text-amber-400 font-bold font-mono uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 hover:shadow-lg hover:shadow-amber-500/20"
                                         >
-                                            <Shield className="w-4 h-4" />
+                                            <Shield className="w-5 h-5" />
                                             Apply Commander Setpoints
                                         </button>
                                     </div>
@@ -406,44 +438,48 @@ export const MasterSovereignDashboard: React.FC = () => {
                     )}
 
                     {/* Top Row: 4 Metric Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         {/* Active Power */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Zap className="w-4 h-4 text-status-info" />
-                                <span className="text-xs font-mono uppercase text-scada-muted">Active Power</span>
+                        <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-cyan-500/30 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-cyan-500/10 rounded-lg">
+                                    <Zap className="w-5 h-5 text-cyan-400" />
+                                </div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Active Power</span>
                             </div>
-                            <div className="text-2xl font-bold font-mono text-scada-text tabular-nums">
+                            <div className="text-3xl font-bold font-mono text-white tabular-nums">
                                 {currentPower.toFixed(1)}
                             </div>
-                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">MW</div>
+                            <div className="text-xs uppercase font-mono text-slate-500 mt-1">MW</div>
                         </div>
 
                         {/* Efficiency */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Activity className="w-4 h-4 text-status-ok" />
-                                <span className="text-xs font-mono uppercase text-scada-muted">Efficiency</span>
+                        <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-green-500/30 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-green-500/10 rounded-lg">
+                                    <Activity className="w-5 h-5 text-green-400" />
+                                </div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Efficiency</span>
                             </div>
-                            <div className={`text-2xl font-bold font-mono tabular-nums ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
+                            <div className={`text-3xl font-bold font-mono tabular-nums ${getMetricColor(efficiency, { good: 88, warning: 80 })}`}>
                                 {efficiency.toFixed(1)}%
                             </div>
-                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">hydraulic</div>
+                            <div className="text-xs uppercase font-mono text-slate-500 mt-1">hydraulic</div>
 
                             {/* Cavitation Risk Progress Bar */}
-                            <div className="mt-3">
-                                <div className="flex items-center justify-between mb-1">
-                                    <span className="text-[10px] uppercase font-mono text-scada-muted">Cavitation Risk</span>
-                                    <span className={`text-[10px] font-mono font-medium ${cavitationRisk > 70 ? 'text-status-error' :
-                                        cavitationRisk > 40 ? 'text-status-warning' : 'text-status-ok'
+                            <div className="mt-4">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs uppercase font-mono text-slate-400">Cavitation Risk</span>
+                                    <span className={`text-xs font-mono font-semibold ${cavitationRisk > 70 ? 'text-red-400' :
+                                        cavitationRisk > 40 ? 'text-amber-400' : 'text-green-400'
                                         }`}>
                                         {cavitationRisk.toFixed(0)}%
                                     </span>
                                 </div>
-                                <div className="w-full bg-scada-bg border border-scada-border rounded-sm h-1.5">
+                                <div className="w-full bg-slate-800 rounded-full h-2">
                                     <div
-                                        className={`h-full rounded-sm transition-all duration-300 ${cavitationRisk > 70 ? 'bg-status-error' :
-                                            cavitationRisk > 40 ? 'bg-status-warning' : 'bg-status-ok'
+                                        className={`h-full rounded-full transition-all duration-500 ${cavitationRisk > 70 ? 'bg-red-500' :
+                                            cavitationRisk > 40 ? 'bg-amber-500' : 'bg-green-500'
                                             }`}
                                         style={{ width: `${cavitationRisk}%` }}
                                     />
@@ -452,39 +488,44 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
 
                         {/* Sovereign Pulse Index */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
-                            <div className="flex items-center gap-2 mb-2">
-                                <AlertCircle className="w-4 h-4 text-status-info" />
-                                <span className="text-xs font-mono uppercase text-scada-muted">Sovereign Pulse</span>
+                        <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-cyan-500/30 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-cyan-500/10 rounded-lg">
+                                    <AlertCircle className="w-5 h-5 text-cyan-400" />
+                                </div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Sovereign Pulse</span>
                             </div>
-                            <div className={`text-2xl font-bold font-mono tabular-nums ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
+                            <div className={`text-3xl font-bold font-mono tabular-nums ${getMetricColor(pulseIndex, { good: 95, warning: 85 })}`}>
                                 {pulseIndex.toFixed(0)}
                             </div>
-                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">index</div>
+                            <div className="text-xs uppercase font-mono text-slate-500 mt-1">index</div>
                         </div>
 
                         {/* Hourly Loss */}
-                        <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
-                            <div className="flex items-center gap-2 mb-2">
-                                <TrendingDown className="w-4 h-4 text-status-error" />
-                                <span className="text-xs font-mono uppercase text-scada-muted">Hourly Loss</span>
+                        <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:border-red-500/30 hover:-translate-y-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-red-500/10 rounded-lg">
+                                    <TrendingDown className="w-5 h-5 text-red-400" />
+                                </div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Hourly Loss</span>
                             </div>
-                            <div className="text-2xl font-bold font-mono text-status-error tabular-nums">
+                            <div className="text-3xl font-bold font-mono text-red-400 tabular-nums">
                                 €{hourlyLossEuro.toFixed(2)}
                             </div>
-                            <div className="text-[10px] uppercase font-mono text-scada-muted mt-1">per hour</div>
+                            <div className="text-xs uppercase font-mono text-slate-500 mt-1">per hour</div>
                         </div>
                     </div>
 
                     {/* Middle Row: ScadaCore (2/3) + FinancialHealthPanel (1/3) */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                         {/* ScadaCore - 2 columns */}
                         <div className="lg:col-span-2">
-                            <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-bold text-scada-text font-header uppercase tracking-tight">SCADA Core</h3>
-                                    <div className="px-2 py-1 bg-status-info/20 border border-status-info/30 rounded-sm">
-                                        <span className="text-xs text-status-info font-black uppercase tracking-widest">LIVE</span>
+                            <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xl font-bold text-white tracking-tight">SCADA Core</h3>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full">
+                                        <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse-soft"></span>
+                                        <span className="text-xs text-cyan-400 font-black uppercase tracking-wider">LIVE</span>
                                     </div>
                                 </div>
                                 <div className="h-96">
@@ -499,28 +540,28 @@ export const MasterSovereignDashboard: React.FC = () => {
                         </div>
 
                         {/* FinancialHealthPanel or VisionAnalyzer (Forensic Mode) - 1 column */}
-                        <div className="lg:col-span-1">
+                        <div className="lg:col-span-1 space-y-6">
                             {isForensicMode ? (
                                 <div className="h-96">
                                     <VisionAnalyzer />
                                 </div>
                             ) : (
-                                <div className="space-y-6">
+                                <>
                                     <FinancialHealthPanel />
                                     
                                     {/* Sandbox Trigger (Moved here) */}
-                                    <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
+                                    <div className="p-6 bg-slate-900/70 border border-slate-700/50 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                                          <button
                                             onClick={() => setIsSandboxOpen(true)}
-                                            className="w-full py-3 bg-scada-bg border border-scada-border rounded-sm flex items-center justify-center gap-2 hover:bg-scada-panel transition-colors group"
+                                            className="w-full py-4 bg-slate-800/50 border border-slate-700 rounded-lg flex items-center justify-center gap-3 hover:bg-slate-700/50 transition-all group hover:border-cyan-500/30"
                                         >
-                                            <Sliders className="w-4 h-4 text-status-ok group-hover:rotate-180 transition-transform duration-500" />
-                                            <span className="text-xs font-black uppercase tracking-widest text-scada-muted group-hover:text-status-ok">
+                                            <Sliders className="w-5 h-5 text-green-400 group-hover:rotate-180 transition-transform duration-700" />
+                                            <span className="text-sm font-bold uppercase tracking-wider text-slate-400 group-hover:text-green-400">
                                                 Predictive Sandbox
                                             </span>
                                         </button>
                                     </div>
-                                </div>
+                                </>
                             )}
                         </div>
                     </div>

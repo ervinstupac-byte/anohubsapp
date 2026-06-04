@@ -9,29 +9,45 @@ import { TYPOGRAPHY } from '../shared/design-tokens';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
 
+type AuthMode = 'login' | 'signup' | 'reset';
+
 export const Login: React.FC = () => {
-    const { signIn, signInAsGuest } = useAuth();
+    const { signIn, signUp, resetPassword, signInAsGuest } = useAuth();
     const { showToast } = useToast();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
+    const [mode, setMode] = useState<AuthMode>('login');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { error } = await signIn(email, password);
-            if (error) throw error;
+            if (mode === 'login') {
+                const { error } = await signIn(email, password);
+                if (error) throw error;
+            } else if (mode === 'signup') {
+                if (password !== confirmPassword) {
+                    throw new Error('Passwords do not match');
+                }
+                const { error } = await signUp(email, password);
+                if (error) throw error;
+                showToast(t('login.signupSuccess', 'Check your email for verification!'), 'success');
+            } else if (mode === 'reset') {
+                const { error } = await resetPassword(email);
+                if (error) throw error;
+                showToast(t('login.resetSuccess', 'Password reset email sent!'), 'success');
+            }
         } catch (error: any) {
             showToast(error.message || t('login.error'), 'error');
         } finally {
             setLoading(false);
         }
     };
-
-    const navigate = useNavigate();
 
     const handleGuestLogin = async () => {
         try {
@@ -69,9 +85,38 @@ export const Login: React.FC = () => {
                 </div>
 
                 <GlassCard className="shadow-2xl shadow-cyan-900/20">
+                    <div className="flex gap-1 mb-6 bg-slate-900/50 p-1 rounded-lg">
+                        <button
+                            onClick={() => setMode('login')}
+                            className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-md transition-all ${mode === 'login' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/30' : 'text-slate-400 hover:text-slate-200'}`}
+                        >
+                            Login
+                        </button>
+                        <button
+                            onClick={() => setMode('signup')}
+                            className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-md transition-all ${mode === 'signup' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/30' : 'text-slate-400 hover:text-s-slate-200'}`}
+                        >
+                            Sign Up
+                        </button>
+                        <button
+                            onClick={() => setMode('reset')}
+                            className={`flex-1 py-2 text-xs font-bold tracking-wider rounded-md transition-all ${mode === 'reset' ? 'bg-cyan-600 text-white shadow-md shadow-cyan-500/30' : 'text-slate-400 hover:text-s-slate-200'}`}
+                        >
+                            Reset
+                        </button>
+                    </div>
+
                     <div className="mb-6 text-center">
-                        <h2 className="text-xl font-bold text-white tracking-tight">{t('login.title', 'Secure Access')}</h2>
-                        <p className={`${TYPOGRAPHY.bodyXs} mt-1`}>{t('login.instructions', 'Please verify your credentials.')}</p>
+                        <h2 className="text-xl font-bold text-white tracking-tight">
+                            {mode === 'login' ? t('login.title', 'Secure Access') :
+                                mode === 'signup' ? t('login.signupTitle', 'Create Account') :
+                                    t('login.resetTitle', 'Reset Password')}
+                        </h2>
+                        <p className={`${TYPOGRAPHY.bodyXs} mt-1`}>
+                            {mode === 'login' ? t('login.instructions', 'Please verify your credentials.') :
+                                mode === 'signup' ? t('login.signupInstructions', 'Join the AnoHUB community.') :
+                                    t('login.resetInstructions', 'Enter your email to reset your password.')}
+                        </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
@@ -85,15 +130,29 @@ export const Login: React.FC = () => {
                             required
                         />
 
-                        <ModernInput
-                            label={t('login.passwordLabel', 'Password')}
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
-                            icon={<span className="text-lg">🔒</span>}
-                            required
-                        />
+                        {mode !== 'reset' && (
+                            <ModernInput
+                                label={t('login.passwordLabel', 'Password')}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                icon={<span className="text-lg">🔒</span>}
+                                required
+                            />
+                        )}
+
+                        {mode === 'signup' && (
+                            <ModernInput
+                                label={t('login.confirmPasswordLabel', 'Confirm Password')}
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="••••••••"
+                                icon={<span className="text-lg">🔑</span>}
+                                required
+                            />
+                        )}
 
                         <div className="pt-2 space-y-3">
                             <ModernButton
@@ -103,27 +162,33 @@ export const Login: React.FC = () => {
                                 isLoading={loading}
                                 className="shadow-lg shadow-cyan-500/20"
                             >
-                                {t('login.signInButton', 'Authenticate')}
+                                {mode === 'login' ? t('login.signInButton', 'Authenticate') :
+                                    mode === 'signup' ? t('login.signUpButton', 'Create Account') :
+                                        t('login.resetButton', 'Send Reset Email')}
                             </ModernButton>
 
                             {/* GUEST BUTTON */}
-                            <div className="relative flex py-2 items-center">
-                                <div className="flex-grow border-t border-slate-700"></div>
-                                <span className={`flex-shrink-0 mx-4 ${TYPOGRAPHY.bodyXs} uppercase`}>
-                                    {t('login.or', 'Or')}
-                                </span>
-                                <div className="flex-grow border-t border-slate-700"></div>
-                            </div>
+                            {mode === 'login' && (
+                                <>
+                                    <div className="relative flex py-2 items-center">
+                                        <div className="flex-grow border-t border-slate-700"></div>
+                                        <span className={`flex-shrink-0 mx-4 ${TYPOGRAPHY.bodyXs} uppercase`}>
+                                            {t('login.or', 'Or')}
+                                        </span>
+                                        <div className="flex-grow border-t border-slate-700"></div>
+                                    </div>
 
-                            <ModernButton
-                                type="button"
-                                onClick={handleGuestLogin}
-                                fullWidth
-                                variant="secondary"
-                                icon={<span>👤</span>}
-                            >
-                                {t('login.guestButton', 'Continue as Guest')}
-                            </ModernButton>
+                                    <ModernButton
+                                        type="button"
+                                        onClick={handleGuestLogin}
+                                        fullWidth
+                                        variant="secondary"
+                                        icon={<span>👤</span>}
+                                    >
+                                        {t('login.guestButton', 'Continue as Guest')}
+                                    </ModernButton>
+                                </>
+                            )}
                         </div>
                     </form>
 

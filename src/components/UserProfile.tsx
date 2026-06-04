@@ -257,8 +257,8 @@ export const UserProfile: React.FC = () => {
                         <button
                             onClick={() => {
                                 if (confirm(t('profile.resetDataConfirm'))) {
-                                    const { resetDemoData } = require('../utils/demoSeeder');
-                                    resetDemoData();
+                                    localStorage.clear();
+                                    sessionStorage.clear();
                                     window.location.reload();
                                 }
                             }}

@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useQuestionnaire } from '../contexts/QuestionnaireContext.tsx';
+import { useQuestionnaireStore } from '../stores/useQuestionnaireStore';
 import { AlarmBar } from './diagnostic-twin/AlarmBar.tsx';
-import { useDiagnostic } from '../contexts/DiagnosticContext.tsx';
+import { useDiagnosticStore } from '../stores/useDiagnosticStore';
 // import { ExpertDiagnosticPanel } from './ExpertDiagnosticPanel.tsx'; // REMOVED: simulation feature
 import { ModernButton } from '../shared/components/ui/ModernButton';
 
@@ -13,10 +13,10 @@ const NeuralFlowMap = lazy(() => import('./diagnostic-twin/NeuralFlowMap.tsx').t
 const IncidentSimulator = lazy(() => import('./IncidentSimulator.tsx').then(m => ({ default: m.IncidentSimulator })));
 
 export const Hub: React.FC = () => {
-    const { answers } = useQuestionnaire();
+    const { answers } = useQuestionnaireStore();
     const location = useLocation();
     const showMap = location.pathname === '/map';
-    const { activeDiagnoses } = useDiagnostic();
+    const { activeDiagnoses } = useDiagnosticStore();
     const criticalDiagnosis = activeDiagnoses.find(d => d.diagnosis?.severity === 'CRITICAL');
 
     return (
