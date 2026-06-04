@@ -1,23 +1,27 @@
 Vercel Environment Variables Checklist
 
 Required (client build):
-- VITE_SUPABASE_URL = https://nehxtecejxklqknscbgf.supabase.co
-- VITE_SUPABASE_ANON_KEY = <anon-public-key>
+
+- VITE_SUPABASE_URL = https://cplfoowmdakqzoljuwcf.supabase.co
+- VITE_SUPABASE_ANON_KEY = <anon-public-key from Supabase dashboard>
 
 Required (server-only / secure):
-- SUPABASE_URL = https://nehxtecejxklqknscbgf.supabase.co
-- SUPABASE_KEY = <service-role-key>  # MUST be set as a secret and never exposed to client builds or committed to repo
-- SUPABASE_SERVICE_ROLE_KEY = <service-role-key>  # alias used by some scripts; store as a protected secret
+
+- SUPABASE_URL = https://cplfoowmdakqzoljuwcf.supabase.co
+- SUPABASE_KEY = <service-role-key> # MUST be set as a secret and never exposed to client builds or committed to repo
+- SUPABASE_SERVICE_ROLE_KEY = <service-role-key> # alias used by some scripts; store as a protected secret
 
 Optional / Worker / Backfill:
-- PRIMARY_SENSOR_URL = https://sensors.example.com/api/v1/telemetry?api_key=KEY&asset_id=1&hours=24  (or 'use-synthetic' for testing)
+
+- PRIMARY_SENSOR_URL = https://sensors.example.com/api/v1/telemetry?api_key=KEY&asset_id=1&hours=24 (or 'use-synthetic' for testing)
 - ASSET_ID = 1
 - INGEST_HOURS = 24
 - BACKFILL_DAYS = 45
-- REPORT_TMP_DIR = /tmp/anohub  (optional override for ephemeral report storage)
+- REPORT_TMP_DIR = /tmp/anohub (optional override for ephemeral report storage)
 - INTEGRATION_MODE = false
 
 Notes & Security:
+
 - Put all `SUPABASE_*` service-role keys into Vercel's Environment -> "Environment Variables" and mark them as Protected/Encrypted (do not expose to client builds).
 - Do NOT commit service-role keys into source control. For local development, create a `.env.local` (excluded by .gitignore) and store secrets there. Example values are intentionally omitted here.
 - All client-side keys must use the `VITE_` prefix so Vite will inject them at build time.
@@ -25,6 +29,7 @@ Notes & Security:
 - For Level-5 auditability, report artifacts should be stored in Supabase Storage or an object-storage bucket; avoid relying on ephemeral file system in serverless.
 
 Quick example secrets mapping (GitHub Actions):
+
 - SUPABASE_URL -> secrets.SUPABASE_URL
 - SUPABASE_SERVICE_ROLE_KEY -> secrets.SUPABASE_SERVICE_ROLE_KEY
 - PRIMARY_SENSOR_URL -> secrets.PRIMARY_SENSOR_URL

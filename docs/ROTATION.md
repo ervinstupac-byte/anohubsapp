@@ -11,7 +11,7 @@ Usage (bash):
 ```bash
 # Authenticate with GitHub CLI first: gh auth login
 export GITHUB_REPO=ervinstupac-byte/anohubsapp
-export VITE_SUPABASE_URL=https://nehxtecejxklqknscbgf.supabase.co
+export VITE_SUPABASE_URL=https://cplfoowmdakqzoljuwcf.supabase.co
 export VITE_SUPABASE_ANON_KEY="NEW_SUPABASE_KEY"
 export VITE_GEMINI_API_KEY="NEW_GEMINI_KEY"
 ./scripts/set-github-secrets.sh
@@ -21,7 +21,7 @@ Usage (PowerShell):
 
 ```powershell
 # $env:GITHUB_REPO = 'ervinstupac-byte/anohubsapp'
-# $env:VITE_SUPABASE_URL = 'https://nehxtecejxklqknscbgf.supabase.co'
+# $env:VITE_SUPABASE_URL = 'https://cplfoowmdakqzoljuwcf.supabase.co'
 # $env:VITE_SUPABASE_ANON_KEY = 'NEW_SUPABASE_KEY'
 # $env:VITE_GEMINI_API_KEY = 'NEW_GEMINI_KEY'
 ./scripts/set-github-secrets.ps1

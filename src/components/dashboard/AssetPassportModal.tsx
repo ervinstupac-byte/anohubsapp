@@ -29,6 +29,9 @@ import {
 import { calculateMaintenancePrediction } from '../../features/maintenance/logic/Predictor';
 import { useTranslation } from 'react-i18next';
 import { saveLog } from '../../services/PersistenceService';
+import { useTelemetry } from '../../contexts/TelemetryContext';
+import { useAlarmStore } from '../../stores/useAlarmStore';
+import { useAlarmBridge } from '../../contexts/AlarmBridgeContext';
 
 interface AssetPassportModalProps {
   isOpen: boolean;
@@ -63,9 +66,16 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
   const { t } = useTranslation();
   const [rulData, setRulData] = useState<RULResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'health' | 'docs'>(
+  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'health' | 'live' | 'docs'>(
     'overview'
   );
+
+  // NC-LOOP: Live data from the nervous system
+  const { telemetry } = useTelemetry();
+  const { getAlarmsForAsset } = useAlarmStore();
+  const { acknowledgeAlarm } = useAlarmBridge();
+  const assetTelemetry = telemetry[componentId];
+  const assetAlarms = getAlarmsForAsset(componentId);
 
   // Simulated timeline data - in production this would come from a service
   const timeline: TimelineEvent[] = [
@@ -245,17 +255,22 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
 
           {/* Tabs */}
           <div className="flex border-b border-scada-border bg-scada-bg/50 px-6">
-            {(['overview', 'timeline', 'health', 'docs'] as const).map(tab => (
+            {(['overview', 'timeline', 'health', 'live', 'docs'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 font-mono rounded-none ${
+                className={`px-4 py-3 text-sm font-bold uppercase tracking-wider transition-all border-b-2 font-mono rounded-none relative ${
                   activeTab === tab
                     ? 'text-status-info border-status-info bg-status-info/5'
                     : 'text-scada-muted border-transparent hover:text-scada-text hover:border-scada-border'
                 }`}
               >
                 {tab}
+                {tab === 'live' && assetAlarms.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center text-[8px] font-black bg-red-500 text-white rounded-full">
+                    {assetAlarms.length}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -512,6 +527,182 @@ export const AssetPassportModal: React.FC<AssetPassportModalProps> = ({
                           NOMINAL
                         </div>
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'live' && (
+                  <div className="space-y-6">
+                    {/* Live Telemetry Section */}
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono">
+                          Live Sensor Feed
+                        </h3>
+                        <div className="flex items-center gap-2 text-[10px] font-mono">
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full ${assetTelemetry ? 'bg-status-ok animate-pulse' : 'bg-red-500'}`}
+                          />
+                          {assetTelemetry ? 'STREAMING' : 'NO TELEMETRY'}
+                        </div>
+                      </div>
+
+                      {assetTelemetry ? (
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                          {[
+                            {
+                              label: 'Temperature',
+                              value: assetTelemetry.temperature,
+                              unit: '°C',
+                              icon: <Thermometer className="w-4 h-4 text-status-warning" />,
+                              warn: 70,
+                              crit: 85,
+                            },
+                            {
+                              label: 'Vibration',
+                              value: assetTelemetry.vibration,
+                              unit: 'mm/s',
+                              icon: <Activity className="w-4 h-4 text-status-info" />,
+                              warn: 4.5,
+                              crit: 7.1,
+                            },
+                            {
+                              label: 'Efficiency',
+                              value: assetTelemetry.efficiency,
+                              unit: '%',
+                              icon: <Zap className="w-4 h-4 text-status-ok" />,
+                              warn: 85,
+                              crit: 75,
+                              invert: true,
+                            },
+                            {
+                              label: 'Cavitation',
+                              value: assetTelemetry.cavitationIntensity,
+                              unit: 'idx',
+                              icon: <Cpu className="w-4 h-4 text-h-purple" />,
+                              warn: 4.0,
+                              crit: 7.0,
+                            },
+                          ].map((sensor, idx) => {
+                            const val = Number(sensor.value ?? 0);
+                            const isCrit = sensor.invert ? val <= sensor.crit : val >= sensor.crit;
+                            const isWarn = sensor.invert
+                              ? !isCrit && val <= sensor.warn
+                              : !isCrit && val >= sensor.warn;
+                            const statusColor = isCrit
+                              ? 'text-status-error'
+                              : isWarn
+                                ? 'text-status-warning'
+                                : 'text-status-ok';
+                            const statusLabel = isCrit
+                              ? 'CRITICAL'
+                              : isWarn
+                                ? 'WARNING'
+                                : 'NOMINAL';
+                            return (
+                              <div
+                                key={idx}
+                                className="p-4 bg-scada-bg border border-scada-border rounded-none"
+                              >
+                                <div className="flex items-center gap-2 mb-3">
+                                  {sensor.icon}
+                                  <span className="text-xs font-bold text-scada-muted uppercase font-mono">
+                                    {sensor.label}
+                                  </span>
+                                </div>
+                                <div className="text-2xl font-black text-scada-text font-mono tabular-nums">
+                                  {val.toFixed(1)}
+                                  <span className="text-lg text-scada-muted font-normal">
+                                    {sensor.unit}
+                                  </span>
+                                </div>
+                                <div
+                                  className={`mt-2 text-[10px] font-mono uppercase font-bold ${statusColor}`}
+                                >
+                                  {statusLabel}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="p-6 bg-scada-bg border border-scada-border rounded-none text-center">
+                          <p className="text-sm text-scada-muted font-mono">
+                            No telemetry data available for this asset.
+                          </p>
+                          <p className="text-[10px] text-scada-muted/60 mt-2 font-mono">
+                            Asset ID: {componentId}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Active Alarms Section */}
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-sm font-bold text-scada-text uppercase tracking-wide font-mono flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-status-error" />
+                          Active Alarms
+                          {assetAlarms.length > 0 && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 bg-red-500 text-white rounded-full">
+                              {assetAlarms.length}
+                            </span>
+                          )}
+                        </h3>
+                      </div>
+
+                      {assetAlarms.length > 0 ? (
+                        <div className="space-y-2">
+                          {assetAlarms.map(alarm => (
+                            <div
+                              key={alarm.id}
+                              className={`p-4 border rounded-none flex items-center justify-between ${
+                                alarm.priority === 'CRITICAL'
+                                  ? 'bg-status-error/5 border-status-error/30'
+                                  : 'bg-status-warning/5 border-status-warning/30'
+                              }`}
+                            >
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`text-[10px] font-bold uppercase font-mono ${
+                                      alarm.priority === 'CRITICAL'
+                                        ? 'text-status-error'
+                                        : 'text-status-warning'
+                                    }`}
+                                  >
+                                    {alarm.priority} · {alarm.category}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-scada-text mt-1 font-mono">
+                                  {alarm.message}
+                                </p>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <span className="text-[10px] font-mono text-scada-muted">
+                                    {alarm.value.toFixed(2)} {alarm.unit} (limit: {alarm.threshold}{' '}
+                                    {alarm.unit})
+                                  </span>
+                                </div>
+                              </div>
+                              {alarm.state === 'ACTIVE' && (
+                                <button
+                                  onClick={() => acknowledgeAlarm(alarm.id)}
+                                  className="px-3 py-1.5 text-[10px] font-bold uppercase font-mono bg-scada-bg border border-scada-border hover:border-status-ok/50 hover:text-status-ok text-scada-muted rounded-none transition-colors"
+                                >
+                                  ACK
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-6 bg-scada-bg border border-scada-border rounded-none text-center">
+                          <CheckCircle className="w-8 h-8 text-status-ok mx-auto mb-2 opacity-40" />
+                          <p className="text-sm text-scada-muted font-mono">
+                            No active alarms for this asset
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

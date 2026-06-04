@@ -90,7 +90,7 @@ const puppeteer = require('puppeteer-core');
     console.log('Found app frame; performing in-frame fetch for diagnostic');
     try {
       const res = await appFrame.evaluate(async () => {
-        const url = 'https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*';
+        const url = 'https://cplfoowmdakqzoljuwcf.supabase.co/rest/v1/risk_assessments?select=*';
         try {
           const r = await fetch(url, { method: 'GET' });
           const txt = await r.text();

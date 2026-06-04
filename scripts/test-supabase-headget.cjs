@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 const fetch = global.fetch || require('node-fetch');
 (async () => {
-  const url = 'https://nehxtecejxklqknscbgf.supabase.co/rest/v1/risk_assessments?select=*';
-  const key = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5laHh0ZWNlanhrbHFrbnNjYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2MjA4NTksImV4cCI6MjA4MTE5Njg1OX0.AWWPN9ocAhjBTMtOgQ29ey3y4KcEXQLvfB98Z998n7A';
+  const url = 'https://cplfoowmdakqzoljuwcf.supabase.co/rest/v1/risk_assessments?select=*';
+  const key = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbGZvb3dtZGFrcXpvbGp1d2NmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MTIxNzUsImV4cCI6MjA5NjA4ODE3NX0.XvGIjJT0RFZY9UEHRN68kTdMohGBDkdETG4DeLTJ0zE';
   const headers = {
     'apikey': key,
     'Authorization': 'Bearer ' + key,
