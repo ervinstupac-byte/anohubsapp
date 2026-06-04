@@ -1,6 +1,9 @@
 import React from 'react';
 import { AuthProvider } from './AuthContext.tsx';
-
+import { MaintenanceProvider } from './MaintenanceContext.tsx';
+import { RiskProvider } from './RiskContext.tsx';
+import { DiagnosticProvider } from './DiagnosticContext.tsx';
+import { AuditProvider } from './AuditContext.tsx';
 
 import { AssetProvider } from './AssetContext.tsx';
 import { TelemetryProvider } from './TelemetryContext.tsx';
@@ -31,13 +34,17 @@ interface GlobalProviderProps {
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     // Order matters: Top-level providers first (Audit, Auth, etc.)
     const providers = [
+        AuditProvider,
         AuthProvider,
         // NEW STORES: Zustand stores don't need providers, but AssetConfig does
         AssetConfigProvider,
         AssetProvider,
         TelemetryProvider,
+        MaintenanceProvider,
+        RiskProvider,
         InventoryProvider,
         WorkOrderProvider,
+        DiagnosticProvider,
         FleetProvider,
         VoiceAssistantProvider,
         ForensicsProvider,
