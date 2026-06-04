@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DigitalPanel } from './diagnostic-twin/DigitalPanel';
 import { LanguageSelector } from './LanguageSelector';
+import { AlarmBellButton } from './ui/NotificationCenter';
 import { ROUTES } from '../routes/paths';
 import {
   Search,
@@ -327,6 +328,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onToggleSideba
           >
             <ShieldCheck className={`w-5 h-5 ${isCommanderMode ? 'fill-current' : ''}`} />
           </button>
+
+          {/* NC-LOOP: Alarm Bell — reactive badge powered by AlarmBridgeContext */}
+          <AlarmBellButton />
 
           {/* Heritage Status (Golden Seal) */}
           <button

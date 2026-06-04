@@ -71,6 +71,7 @@ import { useProjectConfigStore } from './features/config/ProjectConfigStore';
 import { WorkflowSyncListener } from './stores/useWorkflowStore';
 import { NotificationTestAPI } from './components/managers/NotificationTestAPI';
 import { queryClient, QueryClientProvider } from './lib/queryClient';
+import { NotificationCenter, AlarmBellButton } from './components/ui/NotificationCenter';
 
 // --- 3. ASSETS & TYPES ---
 import type { AppView } from './contexts/NavigationContext.tsx';
@@ -713,7 +714,15 @@ const AppLayout: React.FC = () => {
                         <Route path="library" element={<ComponentLibrary />} />
                         <Route path="knowledge/health-monitor" element={<LibraryHealthMonitor />} />
                         <Route path="vision" element={<UnderConstruction />} />
-                        <Route path="forensic-hub" element={<ForensicHub />} />
+                        {/* forensic-hub: single canonical route (duplicates removed NC-LOOP) */}
+                        <Route
+                          path="forensic-hub"
+                          element={
+                            <Suspense fallback={<LoadingScreen />}>
+                              <ForensicHub />
+                            </Suspense>
+                          }
+                        />
                         <Route path="maintenance/*" element={<MaintenanceRouter />} />
                         <Route
                           path="executive"
@@ -749,7 +758,7 @@ const AppLayout: React.FC = () => {
                           }
                         />
                         <Route
-                          path="/forensics"
+                          path="forensics"
                           element={
                             <Suspense fallback={<LoadingScreen />}>
                               <ForensicDashboard />
@@ -785,22 +794,6 @@ const AppLayout: React.FC = () => {
                           element={
                             <Suspense fallback={<LoadingScreen />}>
                               <ScadaCore />
-                            </Suspense>
-                          }
-                        />
-                        <Route
-                          path="forensic-hub"
-                          element={
-                            <Suspense fallback={<LoadingScreen />}>
-                              <ForensicHub />
-                            </Suspense>
-                          }
-                        />
-                        <Route
-                          path="forensics"
-                          element={
-                            <Suspense fallback={<LoadingScreen />}>
-                              <ForensicDashboard />
                             </Suspense>
                           }
                         />
@@ -851,6 +844,8 @@ const AppLayout: React.FC = () => {
         {isFeedbackVisible && <Feedback onClose={() => setIsFeedbackVisible(false)} />}
         {/* Global Modals Manager (Handles System Overview, Print, Passport, etc.) */}
         <GlobalModalManager />
+        {/* NC-LOOP: Notification Center — reactive alarm panel fed by AlarmBridgeContext */}
+        <NotificationCenter />
         <Suspense fallback={null}>
           <AssetTypeSelector />
         </Suspense>

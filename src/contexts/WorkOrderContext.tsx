@@ -110,9 +110,43 @@ export const WorkOrderProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const verifyWorkOrder = async () => {
     if (!activeWorkOrder) return;
+
+    // 1. Seal the work order in DB
     await supabase.from('work_orders').update({ status: 'SEALED' }).eq('id', activeWorkOrder.id);
+
+    // 2. NC-LOOP: Write completion event to audit_logs (closes the feedback loop)
+    await supabase
+      .from('audit_logs')
+      .insert({
+        action: 'WORK_ORDER_SEALED',
+        details: JSON.stringify({
+          work_order_id: activeWorkOrder.id,
+          asset_id: activeWorkOrder.asset_id,
+          issue_type: activeWorkOrder.issue_type,
+          steps_completed: activeWorkOrder.steps.length,
+          sealed_at: new Date().toISOString(),
+        }),
+        user_id: null, // Will be filled by RLS policy
+      })
+      .then(() => {
+        console.log(`[NC-LOOP] Work order ${activeWorkOrder.id} sealed and logged to audit trail`);
+      });
+
+    // 3. NC-LOOP: Emit completion event for cross-context listeners
+    // This allows AssetContext, TelemetryContext, and AlarmBridgeContext to react
+    window.dispatchEvent(
+      new CustomEvent('anohubs:work-order-complete', {
+        detail: {
+          workOrderId: activeWorkOrder.id,
+          assetId: activeWorkOrder.asset_id,
+          issueType: activeWorkOrder.issue_type,
+          completedAt: Date.now(),
+        },
+      })
+    );
+
     setActiveWorkOrder(null);
-    showToast('Nalog ovjeren (Verified by Chief Engineer).', 'success');
+    showToast('Nalog ovjeren (Verified by Chief Engineer). Asset health will update.', 'success');
   };
 
   return (

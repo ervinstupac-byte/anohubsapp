@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useAssetContext } from '../../contexts/AssetContext';
 import idAdapter from '../../utils/idAdapter';
 import { useDensity } from '../../stores/useAppStore';
+import { ROUTE_INDEX, RouteEntry } from '../../routes/paths';
 import { useDrillDown } from '../../contexts/DrillDownContext';
 import { useConfirmStore } from '../../stores/useConfirmStore';
 import { useValidationStore } from '../../stores/useValidationStore';
@@ -279,7 +280,40 @@ export const CommandPalette = React.memo(() => {
         a.label.toLowerCase().includes(lowerQuery) || a.subtitle?.toLowerCase().includes(lowerQuery)
     );
 
-    return [...assetResults, ...moduleResults, ...actionResults];
+    // Filter Routes from ROUTE_INDEX (NC-LOOP: full searchable navigation)
+    const routeResults: CommandResult[] = ROUTE_INDEX.filter(
+      r =>
+        r.label.toLowerCase().includes(lowerQuery) ||
+        r.description.toLowerCase().includes(lowerQuery) ||
+        r.keywords.some(k => k.includes(lowerQuery))
+    )
+      // Exclude entries already covered by hardcoded modules
+      .filter(r => !modules.some(m => m.label === r.label))
+      .slice(0, 8) // Cap at 8 route results
+      .map(r => {
+        const catIcons: Record<string, React.ReactNode> = {
+          fleet: <Activity className="text-emerald-400" />,
+          maintenance: <Settings className="text-amber-400" />,
+          francis: <Box className="text-cyan-400" />,
+          analysis: <Zap className="text-purple-400" />,
+          forensics: <ShieldAlert className="text-red-400" />,
+          admin: <ShieldCheck className="text-slate-400" />,
+          content: <FileText className="text-sky-400" />,
+        };
+        return {
+          id: `route-${r.path}`,
+          label: r.label,
+          type: 'module' as const,
+          icon: catIcons[r.category] || <ChevronRight />,
+          subtitle: r.description,
+          action: () => {
+            navigate(r.path);
+            setIsOpen(false);
+          },
+        };
+      });
+
+    return [...assetResults, ...routeResults, ...moduleResults, ...actionResults];
   }, [query, assets, modules, systemActions]);
 
   // Keyboard Navigation
