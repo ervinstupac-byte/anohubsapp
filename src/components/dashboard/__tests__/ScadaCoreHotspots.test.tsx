@@ -13,7 +13,7 @@ describe('ScadaCore hotspots', () => {
       disconnect() {}
     };
   });
-  
+
   it('renders SCADA core with professional schematics', () => {
     render(
       <MemoryRouter>

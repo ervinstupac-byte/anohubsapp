@@ -1,10 +1,10 @@
 # Stage 1: Build
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install pnpm (match workspace `package.json` pnpm@10)
+RUN npm install -g pnpm@10
 
 # Copy package definition
 COPY package.json pnpm-lock.yaml ./

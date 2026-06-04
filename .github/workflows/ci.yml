@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,12 +23,15 @@ jobs:
           cache: 'pnpm'
 
       - name: Install pnpm
-        run: npm install -g pnpm@8
+        run: npm install -g pnpm@10
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run lint (optional)
+      - name: Run ESLint
+        run: pnpm run eslint:ci --if-present
+
+      - name: Run typecheck (tsc)
         run: pnpm run lint --if-present
 
       - name: Run tests

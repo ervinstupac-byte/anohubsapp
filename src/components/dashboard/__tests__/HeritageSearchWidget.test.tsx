@@ -10,165 +10,191 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 const { simulatedNavigate } = vi.hoisted(() => ({ simulatedNavigate: vi.fn() }));
 
 vi.mock('react-router-dom', () => ({
-    useNavigate: () => simulatedNavigate,
+  useNavigate: () => simulatedNavigate,
 }));
 
 vi.mock('react-i18next', () => ({
-    useTranslation: () => ({ t: (key: string, opts?: any) => key }),
+  useTranslation: () => ({ t: (key: string, opts?: any) => key }),
 }));
 
 vi.mock('lucide-react', () => ({
-    Search: () => <div data-testid="icon-search" />,
-    AlertCircle: () => <div data-testid="icon-alert-circle" />,
-    BookOpen: () => <div data-testid="icon-book-open" />,
-    ChevronRight: () => <div data-testid="icon-chevron-right" />,
-    X: () => <div data-testid="icon-close" />,
-    AlertTriangle: () => <div data-testid="icon-alert-triangle" />
+  Search: () => <div data-testid="icon-search" />,
+  AlertCircle: () => <div data-testid="icon-alert-circle" />,
+  BookOpen: () => <div data-testid="icon-book-open" />,
+  ChevronRight: () => <div data-testid="icon-chevron-right" />,
+  X: () => <div data-testid="icon-close" />,
+  AlertTriangle: () => <div data-testid="icon-alert-triangle" />,
 }));
 
 vi.mock('date-fns', () => ({
-    formatDistanceToNow: () => '5 years ago'
+  formatDistanceToNow: () => '5 years ago',
 }));
 
 vi.mock('../../../contexts/AssetContext', () => ({
-    useAssetContext: vi.fn()
+  useAssetContext: vi.fn(),
 }));
 
 vi.mock('../../../services/LegacyKnowledgeService', () => ({
-    LegacyKnowledgeService: {
-        semanticSearch: vi.fn(),
-        getCasesBySeverity: vi.fn()
-    }
+  LegacyKnowledgeService: {
+    semanticSearch: vi.fn(),
+    getCasesBySeverity: vi.fn(),
+  },
 }));
 
 vi.mock('../../../shared/components/ui/GlassCard', () => ({
-    GlassCard: ({ children, className }: any) => <div className={className}>{children}</div>
+  GlassCard: ({ children, className }: any) => <div className={className}>{children}</div>,
 }));
 
 describe('HeritageSearchWidget Component', () => {
-    beforeEach(() => {
-        vi.useFakeTimers();
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+
+    // Default Asset Context
+    (useAssetContext as any).mockReturnValue({
+      selectedAsset: {
+        id: 'francis-1',
+        turbine_type: 'FRANCIS',
+      },
     });
 
-    afterEach(() => {
-        vi.clearAllTimers();
-        vi.useRealTimers();
-    });
-    beforeEach(() => {
-        vi.clearAllMocks();
-        vi.useFakeTimers();
+    // Default Legacy Service Test Doubles
+    (LegacyKnowledgeService.semanticSearch as any).mockReturnValue([]);
+    (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue([]);
+  });
 
-        // Default Asset Context
-        (useAssetContext as any).mockReturnValue({
-            selectedAsset: {
-                id: 'francis-1',
-                turbine_type: 'FRANCIS'
-            }
-        });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
 
-        // Default Legacy Service Test Doubles
-        (LegacyKnowledgeService.semanticSearch as any).mockReturnValue([]);
-        (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue([]);
-    });
+  it('renders closed state initially', () => {
+    const { getByText, queryByPlaceholderText } = render(<HeritageSearchWidget />);
 
-    afterEach(() => {
-        vi.useRealTimers();
-    });
+    expect(getByText('dashboard.heritageSearch.title')).toBeInTheDocument();
+    expect(queryByPlaceholderText('dashboard.heritageSearch.placeholder')).not.toBeInTheDocument();
+  });
 
-    it('renders closed state initially', () => {
-        const { getByText, queryByPlaceholderText } = render(<HeritageSearchWidget />);
+  it('expands and shows search input on click', () => {
+    const { getByText, getByPlaceholderText } = render(<HeritageSearchWidget />);
 
-        expect(getByText('dashboard.heritageSearch.title')).toBeInTheDocument();
-        expect(queryByPlaceholderText('dashboard.heritageSearch.placeholder')).not.toBeInTheDocument();
-    });
+    // Click header to expand
+    fireEvent.click(getByText('dashboard.heritageSearch.title'));
 
-    it('expands and shows search input on click', () => {
-        const { getByText, getByPlaceholderText } = render(<HeritageSearchWidget />);
+    expect(getByPlaceholderText('dashboard.heritageSearch.placeholder')).toBeInTheDocument();
+  });
 
-        // Click header to expand
-        fireEvent.click(getByText('dashboard.heritageSearch.title'));
+  it('shows recommended critical cases when query is empty', () => {
+    const simulatedCases = [
+      {
+        id: 'c1',
+        symptom: 'Vibration Low Load',
+        severity: 'CRITICAL',
+        turbineFamily: 'FRANCIS',
+        dateOccurred: Date.now(),
+      },
+      {
+        id: 'c2',
+        symptom: 'Blade Crack',
+        severity: 'CRITICAL',
+        turbineFamily: 'FRANCIS',
+        dateOccurred: Date.now(),
+      },
+    ];
+    (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue(simulatedCases);
 
-        expect(getByPlaceholderText('dashboard.heritageSearch.placeholder')).toBeInTheDocument();
-    });
+    const { getByText } = render(<HeritageSearchWidget />);
+    fireEvent.click(getByText('dashboard.heritageSearch.title'));
 
-    it('shows recommended critical cases when query is empty', () => {
-        const simulatedCases = [
-            { id: 'c1', symptom: 'Vibration Low Load', severity: 'CRITICAL', turbineFamily: 'FRANCIS', dateOccurred: Date.now() },
-            { id: 'c2', symptom: 'Blade Crack', severity: 'CRITICAL', turbineFamily: 'FRANCIS', dateOccurred: Date.now() }
-        ];
-        (LegacyKnowledgeService.getCasesBySeverity as any).mockReturnValue(simulatedCases);
+    expect(getByText('Vibration Low Load')).toBeInTheDocument();
+    expect(getByText('Blade Crack')).toBeInTheDocument();
+  });
 
-        const { getByText } = render(<HeritageSearchWidget />);
-        fireEvent.click(getByText('dashboard.heritageSearch.title'));
+  it('debounces search and filters results', async () => {
+    const mockResults = [
+      {
+        id: 'r1',
+        symptom: 'Found Match',
+        severity: 'HIGH',
+        turbineFamily: 'FRANCIS',
+        realCause: 'Loose Bolt',
+        dateOccurred: Date.now(),
+      },
+    ];
+    (LegacyKnowledgeService.semanticSearch as any).mockReturnValue(mockResults);
 
-        expect(getByText('Vibration Low Load')).toBeInTheDocument();
-        expect(getByText('Blade Crack')).toBeInTheDocument();
-    });
+    const { getByPlaceholderText, getByText, queryByText } = render(<HeritageSearchWidget />);
+    fireEvent.click(getByText('dashboard.heritageSearch.title'));
 
-    it('debounces search and filters results', async () => {
-        const mockResults = [
-            { id: 'r1', symptom: 'Found Match', severity: 'HIGH', turbineFamily: 'FRANCIS', realCause: 'Loose Bolt', dateOccurred: Date.now() }
-        ];
-        (LegacyKnowledgeService.semanticSearch as any).mockReturnValue(mockResults);
+    const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
 
-        const { getByPlaceholderText, getByText, queryByText } = render(<HeritageSearchWidget />);
-        fireEvent.click(getByText('dashboard.heritageSearch.title'));
+    // Type query
+    fireEvent.change(input, { target: { value: 'vib' } });
 
-        const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
+    // Should not search yet (debounce)
+    expect(queryByText('Found Match')).not.toBeInTheDocument();
 
-        // Type query
-        fireEvent.change(input, { target: { value: 'vib' } });
-
-        // Should not search yet (debounce)
-        expect(queryByText('Found Match')).not.toBeInTheDocument();
-
-        // Fast forward timer
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
-
-        // Search called?
-        expect(LegacyKnowledgeService.semanticSearch).toHaveBeenCalledWith('vib', 'FRANCIS');
-
-        // Results rendered
-        expect(getByText('Found Match')).toBeInTheDocument();
+    // Fast forward timer
+    act(() => {
+      vi.advanceTimersByTime(500);
     });
 
-    it('shows no results state when search yields nothing', async () => {
-        (LegacyKnowledgeService.semanticSearch as any).mockReturnValue([]);
+    // Search called?
+    expect(LegacyKnowledgeService.semanticSearch).toHaveBeenCalledWith('vib', 'FRANCIS');
 
-        const { getByPlaceholderText, getByText } = render(<HeritageSearchWidget />);
-        fireEvent.click(getByText('dashboard.heritageSearch.title'));
+    // Results rendered
+    expect(getByText('Found Match')).toBeInTheDocument();
+  });
 
-        const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
-        fireEvent.change(input, { target: { value: 'alien invasion' } });
+  it('shows no results state when search yields nothing', async () => {
+    (LegacyKnowledgeService.semanticSearch as any).mockReturnValue([]);
 
-        await act(async () => {
-            vi.advanceTimersByTime(500);
-        });
+    const { getByPlaceholderText, getByText } = render(<HeritageSearchWidget />);
+    fireEvent.click(getByText('dashboard.heritageSearch.title'));
 
-        expect(getByText('dashboard.heritageSearch.noResults')).toBeInTheDocument();
+    const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
+    fireEvent.change(input, { target: { value: 'alien invasion' } });
+
+    await act(async () => {
+      vi.advanceTimersByTime(500);
     });
 
-    it('navigates to legacy hub on result click', async () => {
-        const mockResults = [
-            { id: 'r1', symptom: 'Click Me', severity: 'low', turbineFamily: 'FRANCIS', realCause: 'None', dateOccurred: Date.now() }
-        ];
-        (LegacyKnowledgeService.semanticSearch as any).mockReturnValue(mockResults);
+    expect(getByText('dashboard.heritageSearch.noResults')).toBeInTheDocument();
+  });
 
-        const { getByPlaceholderText, getByText } = render(<HeritageSearchWidget />);
-        fireEvent.click(getByText('dashboard.heritageSearch.title'));
+  it('navigates to legacy hub on result click', async () => {
+    const mockResults = [
+      {
+        id: 'r1',
+        symptom: 'Click Me',
+        severity: 'low',
+        turbineFamily: 'FRANCIS',
+        realCause: 'None',
+        dateOccurred: Date.now(),
+      },
+    ];
+    (LegacyKnowledgeService.semanticSearch as any).mockReturnValue(mockResults);
 
-        const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
-        fireEvent.change(input, { target: { value: 'click' } });
+    const { getByPlaceholderText, getByText } = render(<HeritageSearchWidget />);
+    fireEvent.click(getByText('dashboard.heritageSearch.title'));
 
-        act(() => {
-            vi.advanceTimersByTime(500);
-        });
+    const input = getByPlaceholderText('dashboard.heritageSearch.placeholder');
+    fireEvent.change(input, { target: { value: 'click' } });
 
-        expect(getByText('Click Me')).toBeInTheDocument();
-
-        fireEvent.click(getByText('Click Me').closest('button')!);
-        expect(simulatedNavigate).toHaveBeenCalledWith('/legacy-hub?case=r1');
+    act(() => {
+      vi.advanceTimersByTime(500);
     });
+
+    expect(getByText('Click Me')).toBeInTheDocument();
+
+    fireEvent.click(getByText('Click Me').closest('button')!);
+    expect(simulatedNavigate).toHaveBeenCalledWith('/legacy-hub?case=r1');
+  });
 });

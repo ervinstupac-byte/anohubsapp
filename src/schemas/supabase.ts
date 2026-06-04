@@ -12,7 +12,7 @@ export const AssetSchema = z.object({
   status: z.string().optional(),
   turbine_type: z.string().optional(),
   specs: z.record(z.string(), z.any()).optional(),
-  created_at: z.string().optional()
+  created_at: z.string().optional(),
 });
 export type Asset = z.infer<typeof AssetSchema>;
 
@@ -23,7 +23,7 @@ export const WorkOrderSchema = z.object({
   title: z.string(),
   issue_type: z.string().nullable().optional(),
   status: z.enum(['PENDING', 'IN_PROGRESS', 'SEALED']).optional(),
-  created_at: z.string().optional()
+  created_at: z.string().optional(),
 });
 export type WorkOrder = z.infer<typeof WorkOrderSchema>;
 
@@ -39,7 +39,7 @@ export const WorkOrderStepSchema = z.object({
   status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED']).optional(),
   actual_value: z.number().nullable().optional(),
   completed_at: z.string().nullable().optional(),
-  created_at: z.string().optional()
+  created_at: z.string().optional(),
 });
 export type WorkOrderStep = z.infer<typeof WorkOrderStepSchema>;
 
@@ -61,7 +61,7 @@ export const HppStatusSchema = z
     wicket_gate_position: z.number().optional(),
     tailwater_level: z.number().optional(),
     // arbitrary payload allowed
-    payload: z.any().optional()
+    payload: z.any().optional(),
   })
   .catchall(z.any());
 export type HppStatus = z.infer<typeof HppStatusSchema>;
@@ -74,7 +74,7 @@ export const ExperienceLedgerSchema = z.object({
   resolution_steps: z.string(),
   created_at: z.string().optional(),
   asset_id: z.string().uuid().nullable().optional(),
-  work_order_id: z.string().uuid().nullable().optional()
+  work_order_id: z.string().uuid().nullable().optional(),
 });
 export type ExperienceLedger = z.infer<typeof ExperienceLedgerSchema>;
 
@@ -83,5 +83,5 @@ export default {
   WorkOrderSchema,
   WorkOrderStepSchema,
   HppStatusSchema,
-  ExperienceLedgerSchema
+  ExperienceLedgerSchema,
 };

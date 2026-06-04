@@ -21,7 +21,10 @@ export function computeIntegritySummary(library: DossierFile[]): IntegritySummar
   const healthPercent = Math.max(50, Math.round((1 - duplicateRatio) * 100));
 
   // MTBF estimate: more unique hashes implies richer provenance -> higher MTBF
-  const mtbfEstimateHours = Math.max(1000, Math.round((uniqueHashes / Math.max(1, totalFiles)) * 20000));
+  const mtbfEstimateHours = Math.max(
+    1000,
+    Math.round((uniqueHashes / Math.max(1, totalFiles)) * 20000)
+  );
 
   // Risk: proportional to duplicateRatio
   const riskScore = Math.min(100, Math.round(duplicateRatio * 100));

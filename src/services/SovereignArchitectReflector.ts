@@ -11,7 +11,7 @@ const SUBSYSTEMS: ArchitectReport['subsystems'] = [
   { id: 'thermal-core', name: 'Thermal Core' },
   { id: 'vibration-forensics', name: 'Vibration Forensics' },
   { id: 'financial-impact', name: 'Financial Impact' },
-  { id: 'diagnostics', name: 'Diagnostics & Guardrails' }
+  { id: 'diagnostics', name: 'Diagnostics & Guardrails' },
 ];
 
 export function generateArchitectReport(): ArchitectReport {
@@ -19,12 +19,12 @@ export function generateArchitectReport(): ArchitectReport {
     generatedAt: new Date().toISOString(),
     summary: `I am aware of ${SUBSYSTEMS.length} subsystems and their boundaries.`,
     subsystemsCount: SUBSYSTEMS.length,
-    subsystems: SUBSYSTEMS
+    subsystems: SUBSYSTEMS,
   };
 }
 
 const Architect = {
-  generateArchitectReport
+  generateArchitectReport,
 };
 
 export default Architect;

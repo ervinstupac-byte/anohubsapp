@@ -36,9 +36,18 @@ export function decideMode(
   wearCostEurPerHour: number
 ): MarketDecision {
   // get optimizer suggestion
-  const seq = PeltonPhysicsOptimizer.optimizeNozzles(optimizerInput, { maxNozzles: Math.max(8, optimizerInput.activeNozzles + 4), minNozzles: 1 });
+  const seq = PeltonPhysicsOptimizer.optimizeNozzles(optimizerInput, {
+    maxNozzles: Math.max(8, optimizerInput.activeNozzles + 4),
+    minNozzles: 1,
+  });
 
-  const profit = evaluateProfitability(oracle, { activeNozzles: seq.activeNozzles, expectedEfficiencyPct: seq.expectedEfficiencyPct }, baselineEffPct, plantCapacityMW, wearCostEurPerHour);
+  const profit = evaluateProfitability(
+    oracle,
+    { activeNozzles: seq.activeNozzles, expectedEfficiencyPct: seq.expectedEfficiencyPct },
+    baselineEffPct,
+    plantCapacityMW,
+    wearCostEurPerHour
+  );
 
   // Decision heuristic
   let mode: MarketDecision['mode'] = 'BALANCE';
@@ -47,9 +56,12 @@ export function decideMode(
 
   return {
     mode,
-    recommendedSequence: { activeNozzles: seq.activeNozzles, expectedEfficiencyPct: seq.expectedEfficiencyPct },
+    recommendedSequence: {
+      activeNozzles: seq.activeNozzles,
+      expectedEfficiencyPct: seq.expectedEfficiencyPct,
+    },
     expectedNetBenefitEurPerHour: profit.netEurPerHour,
-    notes: `Gross ${profit.grossEurPerHour.toFixed(2)}€ / wear ${profit.wearCost.toFixed(2)}€ -> net ${profit.netEurPerHour.toFixed(2)}€/h`
+    notes: `Gross ${profit.grossEurPerHour.toFixed(2)}€ / wear ${profit.wearCost.toFixed(2)}€ -> net ${profit.netEurPerHour.toFixed(2)}€/h`,
   };
 }
 

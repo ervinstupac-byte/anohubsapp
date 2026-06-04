@@ -23,7 +23,7 @@ describe('ProjectConfigStore', () => {
     const s = useProjectConfigStore.getState();
     s.setHillChart('FRANCIS', [
       { head: 140, flow: 35, efficiency: 0.91 },
-      { head: 160, flow: 45, efficiency: 0.93 }
+      { head: 160, flow: 45, efficiency: 0.93 },
     ]);
     const snap = s.saveSnapshot('Baseline A');
     expect(snap.name).toBe('Baseline A');

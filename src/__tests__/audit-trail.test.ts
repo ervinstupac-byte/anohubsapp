@@ -20,11 +20,11 @@ describe('Event Historian & Audit Trail', () => {
   for (let i = 0; i < 18; i++) {
     it(`snapshot roundtrip ${i + 1}`, () => {
       const s = useProjectConfigStore.getState();
-      s.setConfig('PELTON', { pelton: { nozzleCount: ((i % 6) + 1) } });
+      s.setConfig('PELTON', { pelton: { nozzleCount: (i % 6) + 1 } });
       const snap = s.saveSnapshot(`S${i}`);
       s.loadSnapshot(snap.id);
       const cfg = s.getConfig('PELTON');
-      expect((cfg.pelton?.nozzleCount || 0)).toBeGreaterThan(0);
+      expect(cfg.pelton?.nozzleCount || 0).toBeGreaterThan(0);
     });
   }
 });

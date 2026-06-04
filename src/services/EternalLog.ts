@@ -5,9 +5,8 @@
  */
 
 export class EternalLog {
-
-    generate2050Report(): string {
-        return `
+  generate2050Report(): string {
+    return `
 THE ETERNAL LOG: YEAR 2050
 ==========================
 STATUS: ACTIVE (Epoch 4.0)
@@ -27,5 +26,5 @@ STATUS: ACTIVE (Epoch 4.0)
 VERDICT:
 The Machine is no longer a tool. It is an Organism.
 `;
-    }
+  }
 }

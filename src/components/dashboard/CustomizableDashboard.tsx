@@ -4,7 +4,8 @@ import { useDashboardStore } from '../../stores/useDashboardStore';
 import { WIDGET_REGISTRY } from './widgets/WidgetRegistry';
 
 export const CustomizableDashboard: React.FC = () => {
-  const { widgets, isEditMode, addWidget, removeWidget, toggleEditMode, resetLayout } = useDashboardStore();
+  const { widgets, isEditMode, addWidget, removeWidget, toggleEditMode, resetLayout } =
+    useDashboardStore();
 
   return (
     <div className="space-y-6">
@@ -44,7 +45,7 @@ export const CustomizableDashboard: React.FC = () => {
         <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-xl">
           <h3 className="text-sm font-semibold text-slate-200 mb-3">Add Widget</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {Object.values(WIDGET_REGISTRY).map((widget) => (
+            {Object.values(WIDGET_REGISTRY).map(widget => (
               <button
                 key={widget.id}
                 onClick={() => addWidget(widget.id)}
@@ -61,37 +62,41 @@ export const CustomizableDashboard: React.FC = () => {
 
       {/* Widget Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {widgets.filter(w => w.visible).map((widget) => {
-          const WidgetComponent = WIDGET_REGISTRY[widget.type]?.component;
-          if (!WidgetComponent) return null;
+        {widgets
+          .filter(w => w.visible)
+          .map(widget => {
+            const WidgetComponent = WIDGET_REGISTRY[widget.type]?.component;
+            if (!WidgetComponent) return null;
 
-          return (
-            <div
-              key={widget.id}
-              className={`col-span-${widget.layout.w} row-span-${widget.layout.h} bg-slate-900/60 border border-slate-700 rounded-xl p-4 relative`}
-            >
-              {/* Widget Header with Remove Button (edit mode only) */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{WIDGET_REGISTRY[widget.type]?.icon}</span>
-                  <h3 className="font-semibold text-white">{WIDGET_REGISTRY[widget.type]?.name}</h3>
+            return (
+              <div
+                key={widget.id}
+                className={`col-span-${widget.layout.w} row-span-${widget.layout.h} bg-slate-900/60 border border-slate-700 rounded-xl p-4 relative`}
+              >
+                {/* Widget Header with Remove Button (edit mode only) */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{WIDGET_REGISTRY[widget.type]?.icon}</span>
+                    <h3 className="font-semibold text-white">
+                      {WIDGET_REGISTRY[widget.type]?.name}
+                    </h3>
+                  </div>
+                  {isEditMode && (
+                    <button
+                      onClick={() => removeWidget(widget.id)}
+                      className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
-                {isEditMode && (
-                  <button
-                    onClick={() => removeWidget(widget.id)}
-                    className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                  >
-                    ✕
-                  </button>
-                )}
+                {/* Widget Content */}
+                <div className="h-[calc(100%-48px)]">
+                  <WidgetComponent />
+                </div>
               </div>
-              {/* Widget Content */}
-              <div className="h-[calc(100%-48px)]">
-                <WidgetComponent />
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </div>
   );

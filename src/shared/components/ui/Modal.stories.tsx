@@ -23,14 +23,12 @@ const Demo = ({ ...args }) => {
 };
 
 export const Default: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     title: 'Modal Title',
     children: (
       <div>
-        <p className="text-slate-300 mb-4">
-          This is a modal dialog. You can put any content here.
-        </p>
+        <p className="text-slate-300 mb-4">This is a modal dialog. You can put any content here.</p>
         <div className="flex gap-3 justify-end">
           <ModernButton variant="ghost">Cancel</ModernButton>
           <ModernButton>Confirm</ModernButton>
@@ -41,7 +39,7 @@ export const Default: Story = {
 };
 
 export const Small: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     size: 'sm',
     title: 'Small Modal',
@@ -50,15 +48,13 @@ export const Small: Story = {
 };
 
 export const Large: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     size: 'lg',
     title: 'Large Modal',
     children: (
       <div className="space-y-4">
-        <p className="text-slate-300">
-          This is a large modal with more content.
-        </p>
+        <p className="text-slate-300">This is a large modal with more content.</p>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-slate-800/50 p-4 rounded-lg">
             <p className="text-slate-400 text-sm">Column 1</p>

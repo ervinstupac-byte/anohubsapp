@@ -6,7 +6,7 @@ import { ExecutiveWarRoom } from '../components/dashboard/ExecutiveWarRoom';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 const { savePdf } = vi.hoisted(() => ({
-  savePdf: vi.fn()
+  savePdf: vi.fn(),
 }));
 
 vi.mock('jspdf', () => ({
@@ -15,20 +15,20 @@ vi.mock('jspdf', () => ({
       return {
         setFontSize: vi.fn(),
         text: vi.fn(),
-        save: savePdf
+        save: savePdf,
       };
     }
-  }
+  },
 }));
 
 vi.mock('../features/reporting/utils/PDFRenderer', () => ({
   PDFRenderer: {
     drawHeader: vi.fn(),
     drawFooter: vi.fn(),
-    drawDigitalSeal: vi.fn()
+    drawDigitalSeal: vi.fn(),
   },
   PAGE_CONFIG: { MARGIN: 10 },
-  COLORS: {}
+  COLORS: {},
 }));
 
 describe('Sovereign UI Smoke Test', () => {

@@ -23,9 +23,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   return (
     <label className={`flex items-center gap-3 cursor-pointer ${className}`}>
       {label && (
-        <span className={`text-sm text-slate-300 ${disabled ? 'opacity-50' : ''}`}>
-          {label}
-        </span>
+        <span className={`text-sm text-slate-300 ${disabled ? 'opacity-50' : ''}`}>{label}</span>
       )}
       <button
         type="button"

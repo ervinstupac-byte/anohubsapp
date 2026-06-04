@@ -79,7 +79,7 @@ export function computeBearingOilCooling(input: BearingOilCoolingInput): Bearing
     recommendedValvePositionPct: recommendedValve,
     recommendedWaterFlow_m3h: recommendedFlow,
     controlAction: action,
-    notes
+    notes,
   };
 }
 

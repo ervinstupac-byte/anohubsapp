@@ -38,9 +38,7 @@ export const Accordion: React.FC<AccordionProps> = ({
       newOpenItem = openItem === id ? null : id;
     } else {
       const current = Array.isArray(openItem) ? openItem : [];
-      newOpenItem = current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id];
+      newOpenItem = current.includes(id) ? current.filter(item => item !== id) : [...current, id];
     }
 
     if (!value) {
@@ -69,7 +67,7 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
 }) => {
   return (
     <div className={`border border-slate-700/50 rounded-lg overflow-hidden ${className}`}>
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child as React.ReactElement<any>, { itemValue: value });
         }

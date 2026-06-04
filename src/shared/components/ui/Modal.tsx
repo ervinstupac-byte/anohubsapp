@@ -78,11 +78,13 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={contentRef}
         className={`relative w-full ${sizeClasses[size]} ${GLASS.floating} rounded-xl shadow-2xl animate-scale-in ${className}`}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className={`flex items-center justify-between p-4 border-b border-slate-700/50 ${headerClassName}`}>
+          <div
+            className={`flex items-center justify-between p-4 border-b border-slate-700/50 ${headerClassName}`}
+          >
             {title && <h3 className="text-lg font-semibold text-slate-100">{title}</h3>}
             {showCloseButton && (
               <button
@@ -97,9 +99,7 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Body */}
-        <div className={`p-6 ${contentClassName}`}>
-          {children}
-        </div>
+        <div className={`p-6 ${contentClassName}`}>{children}</div>
       </div>
     </div>
   );

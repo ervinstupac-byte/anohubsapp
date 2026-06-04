@@ -10,7 +10,7 @@ export default class KaplanBladePhysics {
    */
   public static cavitationSensitivityModifier(z: number, alpha = 0.7): number {
     if (!z || z <= 0) return 1;
-    return Math.pow((KaplanBladePhysics.zRef / z), alpha);
+    return Math.pow(KaplanBladePhysics.zRef / z, alpha);
   }
 
   /**
@@ -28,7 +28,7 @@ export default class KaplanBladePhysics {
     const result: any = {
       crossheadBacklashMM: sample?.crossheadBacklashMM ?? null,
       trunnionFrictionNm: sample?.trunnionFrictionNm ?? null,
-      oilInWaterPPM: sample?.oilInWaterPPM ?? null
+      oilInWaterPPM: sample?.oilInWaterPPM ?? null,
     };
     return result;
   }

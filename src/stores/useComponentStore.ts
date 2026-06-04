@@ -3,10 +3,10 @@ import { persist } from 'zustand/middleware';
 
 /**
  * Component Store (Zustand)
- * 
+ *
  * Manages component-level health tracking, measurements, and inspections.
  * Separated from technical state to allow independent updates.
- * 
+ *
  * Separation Rationale:
  * - Component health is asset-specific, not physics-specific
  * - Measurements can be updated independently of live telemetry
@@ -14,229 +14,229 @@ import { persist } from 'zustand/middleware';
  */
 
 export interface ComponentHealthData {
-    score: number;                  // 0-100
-    status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
-    lastMeasured: string;           // ISO timestamp
-    component: string;
+  score: number; // 0-100
+  status: 'OPTIMAL' | 'GOOD' | 'WARNING' | 'CRITICAL';
+  lastMeasured: string; // ISO timestamp
+  component: string;
 }
 
 export interface MeasurementData {
-    measuredValue: number;
-    unit: 'mm' | 'bar' | 'rpm' | 'celsius';
-    nominalValue: number;
-    minValue: number;
-    maxValue: number;
-    tolerance: number;
-    timestamp: string;
-    healthScore: number;
-    isValid: boolean;
+  measuredValue: number;
+  unit: 'mm' | 'bar' | 'rpm' | 'celsius';
+  nominalValue: number;
+  minValue: number;
+  maxValue: number;
+  tolerance: number;
+  timestamp: string;
+  healthScore: number;
+  isValid: boolean;
 }
 
 export interface InspectionImage {
-    imageId: string;
-    src: string;                    // base64 or URL
-    tag: string;
-    timestamp: string;
-    notes?: string;
-    componentId: string;
-    assetId: number;
+  imageId: string;
+  src: string; // base64 or URL
+  tag: string;
+  timestamp: string;
+  notes?: string;
+  componentId: string;
+  assetId: number;
 }
 
 interface ComponentStore {
-    // Component Health Registry
-    componentHealth: {
-        [assetId: number]: {
-            [componentId: string]: ComponentHealthData;
-        };
+  // Component Health Registry
+  componentHealth: {
+    [assetId: number]: {
+      [componentId: string]: ComponentHealthData;
     };
+  };
 
-    // Measurement History
-    measurements: {
-        [assetId: number]: {
-            [componentId: string]: MeasurementData[];
-        };
+  // Measurement History
+  measurements: {
+    [assetId: number]: {
+      [componentId: string]: MeasurementData[];
     };
+  };
 
-    // Inspection Images
-    inspectionImages: {
-        [assetId: number]: {
-            [componentId: string]: InspectionImage[];
-        };
+  // Inspection Images
+  inspectionImages: {
+    [assetId: number]: {
+      [componentId: string]: InspectionImage[];
     };
+  };
 
-    // Actions - Component Health
-    updateComponentHealth: (
-        assetId: number,
-        componentId: string,
-        healthData: ComponentHealthData
-    ) => void;
+  // Actions - Component Health
+  updateComponentHealth: (
+    assetId: number,
+    componentId: string,
+    healthData: ComponentHealthData
+  ) => void;
 
-    getComponentHealth: (assetId: number, componentId: string) => ComponentHealthData | null;
+  getComponentHealth: (assetId: number, componentId: string) => ComponentHealthData | null;
 
-    // Actions - Measurements
-    addMeasurement: (
-        assetId: number,
-        componentId: string,
-        measurement: MeasurementData
-    ) => void;
+  // Actions - Measurements
+  addMeasurement: (assetId: number, componentId: string, measurement: MeasurementData) => void;
 
-    getMeasurements: (assetId: number, componentId: string) => MeasurementData[];
+  getMeasurements: (assetId: number, componentId: string) => MeasurementData[];
 
-    getLatestMeasurement: (assetId: number, componentId: string) => MeasurementData | null;
+  getLatestMeasurement: (assetId: number, componentId: string) => MeasurementData | null;
 
-    // Actions - Inspections
-    addInspectionImage: (
-        assetId: number,
-        componentId: string,
-        imageData: Omit<InspectionImage, 'imageId'>
-    ) => string; // Returns imageId
+  // Actions - Inspections
+  addInspectionImage: (
+    assetId: number,
+    componentId: string,
+    imageData: Omit<InspectionImage, 'imageId'>
+  ) => string; // Returns imageId
 
-    getInspectionImages: (assetId: number, componentId: string) => InspectionImage[];
+  getInspectionImages: (assetId: number, componentId: string) => InspectionImage[];
 
-    removeInspectionImage: (imageId: string) => void;
+  removeInspectionImage: (imageId: string) => void;
 
-    // Utility
-    getAssetHealthScore: (assetId: number) => number;
+  // Utility
+  getAssetHealthScore: (assetId: number) => number;
 
-    reset: () => void;
+  reset: () => void;
 }
 
 export const useComponentStore = create<ComponentStore>()(
-    persist(
-        (set, get) => ({
-            componentHealth: {},
-            measurements: {},
-            inspectionImages: {},
+  persist(
+    (set, get) => ({
+      componentHealth: {},
+      measurements: {},
+      inspectionImages: {},
 
-            // Component Health
-            updateComponentHealth: (assetId, componentId, healthData) => {
-                set((state) => ({
-                    componentHealth: {
-                        ...state.componentHealth,
-                        [assetId]: {
-                            ...(state.componentHealth[assetId] || {}),
-                            [componentId]: healthData
-                        }
-                    }
-                }));
-
-                console.log(`[ComponentStore] Health updated: ${assetId}/${componentId} = ${healthData.score} (${healthData.status})`);
+      // Component Health
+      updateComponentHealth: (assetId, componentId, healthData) => {
+        set(state => ({
+          componentHealth: {
+            ...state.componentHealth,
+            [assetId]: {
+              ...(state.componentHealth[assetId] || {}),
+              [componentId]: healthData,
             },
+          },
+        }));
 
-            getComponentHealth: (assetId, componentId) => {
-                return get().componentHealth[assetId]?.[componentId] || null;
+        console.log(
+          `[ComponentStore] Health updated: ${assetId}/${componentId} = ${healthData.score} (${healthData.status})`
+        );
+      },
+
+      getComponentHealth: (assetId, componentId) => {
+        return get().componentHealth[assetId]?.[componentId] || null;
+      },
+
+      // Measurements
+      addMeasurement: (assetId, componentId, measurement) => {
+        set(state => {
+          const assetMeasurements = state.measurements[assetId] || {};
+          const componentMeasurements = assetMeasurements[componentId] || [];
+
+          return {
+            measurements: {
+              ...state.measurements,
+              [assetId]: {
+                ...assetMeasurements,
+                [componentId]: [...componentMeasurements, measurement],
+              },
             },
+          };
+        });
 
-            // Measurements
-            addMeasurement: (assetId, componentId, measurement) => {
-                set((state) => {
-                    const assetMeasurements = state.measurements[assetId] || {};
-                    const componentMeasurements = assetMeasurements[componentId] || [];
+        console.log(`[ComponentStore] Measurement added: ${assetId}/${componentId}`);
+      },
 
-                    return {
-                        measurements: {
-                            ...state.measurements,
-                            [assetId]: {
-                                ...assetMeasurements,
-                                [componentId]: [...componentMeasurements, measurement]
-                            }
-                        }
-                    };
-                });
+      getMeasurements: (assetId, componentId) => {
+        return get().measurements[assetId]?.[componentId] || [];
+      },
 
-                console.log(`[ComponentStore] Measurement added: ${assetId}/${componentId}`);
+      getLatestMeasurement: (assetId, componentId) => {
+        const measurements = get().measurements[assetId]?.[componentId] || [];
+        return measurements.length > 0 ? measurements[measurements.length - 1] : null;
+      },
+
+      // Inspections
+      addInspectionImage: (assetId, componentId, imageData) => {
+        const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+        const image: InspectionImage = {
+          ...imageData,
+          imageId,
+          assetId,
+          componentId,
+        };
+
+        set(state => {
+          const assetImages = state.inspectionImages[assetId] || {};
+          const componentImages = assetImages[componentId] || [];
+
+          return {
+            inspectionImages: {
+              ...state.inspectionImages,
+              [assetId]: {
+                ...assetImages,
+                [componentId]: [...componentImages, image],
+              },
             },
+          };
+        });
 
-            getMeasurements: (assetId, componentId) => {
-                return get().measurements[assetId]?.[componentId] || [];
-            },
+        console.log(`[ComponentStore] Inspection image added: ${imageId}`);
+        return imageId;
+      },
 
-            getLatestMeasurement: (assetId, componentId) => {
-                const measurements = get().measurements[assetId]?.[componentId] || [];
-                return measurements.length > 0 ? measurements[measurements.length - 1] : null;
-            },
+      getInspectionImages: (assetId, componentId) => {
+        return get().inspectionImages[assetId]?.[componentId] || [];
+      },
 
-            // Inspections
-            addInspectionImage: (assetId, componentId, imageData) => {
-                const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      removeInspectionImage: imageId => {
+        set(state => {
+          const newImages: Record<string, any> = { ...state.inspectionImages } as any;
 
-                const image: InspectionImage = {
-                    ...imageData,
-                    imageId,
-                    assetId,
-                    componentId
-                };
+          // Find and remove image (work with string keys returned by Object.keys)
+          Object.keys(newImages).forEach(aid => {
+            const comps = newImages[aid] || {};
+            Object.keys(comps).forEach(componentId => {
+              comps[componentId] = (comps[componentId] || []).filter(
+                (img: InspectionImage) => img.imageId !== imageId
+              );
+            });
+            newImages[aid] = comps;
+          });
 
-                set((state) => {
-                    const assetImages = state.inspectionImages[assetId] || {};
-                    const componentImages = assetImages[componentId] || [];
+          return { inspectionImages: newImages } as any;
+        });
 
-                    return {
-                        inspectionImages: {
-                            ...state.inspectionImages,
-                            [assetId]: {
-                                ...assetImages,
-                                [componentId]: [...componentImages, image]
-                            }
-                        }
-                    };
-                });
+        console.log(`[ComponentStore] Inspection image removed: ${imageId}`);
+      },
 
-                console.log(`[ComponentStore] Inspection image added: ${imageId}`);
-                return imageId;
-            },
+      // Utility
+      getAssetHealthScore: assetId => {
+        const health = get().componentHealth[assetId];
+        if (!health) return 100;
 
-            getInspectionImages: (assetId, componentId) => {
-                return get().inspectionImages[assetId]?.[componentId] || [];
-            },
+        const scores = Object.values(health).map(h => h.score);
+        if (scores.length === 0) return 100;
 
-            removeInspectionImage: (imageId) => {
-                set((state) => {
-                    const newImages: Record<string, any> = { ...state.inspectionImages } as any;
+        return scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      },
 
-                    // Find and remove image (work with string keys returned by Object.keys)
-                    Object.keys(newImages).forEach(aid => {
-                        const comps = newImages[aid] || {};
-                        Object.keys(comps).forEach(componentId => {
-                            comps[componentId] = (comps[componentId] || []).filter((img: InspectionImage) => img.imageId !== imageId);
-                        });
-                        newImages[aid] = comps;
-                    });
-
-                    return { inspectionImages: newImages } as any;
-                });
-
-                console.log(`[ComponentStore] Inspection image removed: ${imageId}`);
-            },
-
-            // Utility
-            getAssetHealthScore: (assetId) => {
-                const health = get().componentHealth[assetId];
-                if (!health) return 100;
-
-                const scores = Object.values(health).map(h => h.score);
-                if (scores.length === 0) return 100;
-
-                return scores.reduce((sum, score) => sum + score, 0) / scores.length;
-            },
-
-            reset: () => {
-                set({
-                    componentHealth: {},
-                    measurements: {},
-                    inspectionImages: {}
-                });
-            }
-        }),
-        {
-            name: 'anohub-component-store'
-        }
-    )
+      reset: () => {
+        set({
+          componentHealth: {},
+          measurements: {},
+          inspectionImages: {},
+        });
+      },
+    }),
+    {
+      name: 'anohub-component-store',
+    }
+  )
 );
 
 // Selectors
 export const useAssetHealth = (assetId: number) =>
-    useComponentStore((state) => state.componentHealth[assetId] || {});
+  useComponentStore(state => state.componentHealth[assetId] || {});
 
 export const useComponentHealthScore = (assetId: number, componentId: string) =>
-    useComponentStore((state) => state.componentHealth[assetId]?.[componentId]?.score || 100);
+  useComponentStore(state => state.componentHealth[assetId]?.[componentId]?.score || 100);

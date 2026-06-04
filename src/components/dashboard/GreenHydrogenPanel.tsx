@@ -1,16 +1,16 @@
 /**
  * GreenHydrogenPanel.tsx
- * 
+ *
  * NC-1400: H2 Hub Integration
  * Real-time monitoring of electrolysis, storage, and robotic refueling
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Zap, 
-  Droplets, 
-  Gauge, 
+import {
+  Zap,
+  Droplets,
+  Gauge,
   Battery,
   Activity,
   AlertTriangle,
@@ -19,9 +19,14 @@ import {
   RefreshCw,
   Truck,
   Wifi,
-  WifiOff
+  WifiOff,
 } from 'lucide-react';
-import { H2Synthesizer, H2Storage, FuelCellStatus, ElectrolysisSession } from '../../services/H2Synthesizer';
+import {
+  H2Synthesizer,
+  H2Storage,
+  FuelCellStatus,
+  ElectrolysisSession,
+} from '../../services/H2Synthesizer';
 import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 
 interface H2PanelState {
@@ -47,7 +52,7 @@ export const GreenHydrogenPanel: React.FC = () => {
     marketDemand: 45, // Simulated
     excessPower: 0,
     fuelCellReadiness: H2Synthesizer.getFuelCellReadiness(),
-    currentSession: null
+    currentSession: null,
   });
 
   const [selectedUnit, setSelectedUnit] = useState<string>('ROV-001');
@@ -59,7 +64,7 @@ export const GreenHydrogenPanel: React.FC = () => {
         ...prev,
         storage: H2Synthesizer['storage'],
         fuelCellReadiness: H2Synthesizer.getFuelCellReadiness(),
-        currentSession: H2Synthesizer['currentSession']
+        currentSession: H2Synthesizer['currentSession'],
       }));
     }, 1000);
     return () => clearInterval(interval);
@@ -71,7 +76,7 @@ export const GreenHydrogenPanel: React.FC = () => {
       const trigger = H2Synthesizer.checkElectrolysisTrigger({
         islandMode: true,
         marketDemand: 0,
-        excessPower: 10
+        excessPower: 10,
       });
 
       if (trigger.shouldRun && !state.isRunning) {
@@ -84,7 +89,7 @@ export const GreenHydrogenPanel: React.FC = () => {
     const trigger = H2Synthesizer.checkElectrolysisTrigger({
       islandMode: state.isIslandMode,
       marketDemand: state.marketDemand,
-      excessPower: state.excessPower
+      excessPower: state.excessPower,
     });
 
     if (trigger.shouldRun) {
@@ -92,15 +97,15 @@ export const GreenHydrogenPanel: React.FC = () => {
         100, // 100 kW
         state.isIslandMode ? 'ISLAND_MODE' : 'MANUAL'
       );
-      
+
       setState(prev => ({ ...prev, isRunning: true, currentSession: session }));
 
       // Record in SovereignGlobalState
       SovereignGlobalState.updateState({
         physics: {
           ...SovereignGlobalState.getState().physics,
-          efficiency: 65 // Electrolyzer efficiency
-        }
+          efficiency: 65, // Electrolyzer efficiency
+        },
       });
     }
   }, [state.isIslandMode, state.marketDemand, state.excessPower]);
@@ -121,8 +126,8 @@ export const GreenHydrogenPanel: React.FC = () => {
       SovereignGlobalState.updateState({
         finance: {
           ...SovereignGlobalState.getState().finance,
-          molecularDebtRate: -0.1 // H2 refuel cost
-        }
+          molecularDebtRate: -0.1, // H2 refuel cost
+        },
       });
     }
     return result;
@@ -136,10 +141,14 @@ export const GreenHydrogenPanel: React.FC = () => {
 
   const getReadinessColor = (readiness: string) => {
     switch (readiness) {
-      case 'READY': return 'text-green-400';
-      case 'LOW_FUEL': return 'text-yellow-400';
-      case 'EMPTY': return 'text-red-400';
-      default: return 'text-slate-400';
+      case 'READY':
+        return 'text-green-400';
+      case 'LOW_FUEL':
+        return 'text-yellow-400';
+      case 'EMPTY':
+        return 'text-red-400';
+      default:
+        return 'text-slate-400';
     }
   };
 
@@ -152,10 +161,14 @@ export const GreenHydrogenPanel: React.FC = () => {
             <Gauge className="w-4 h-4 text-cyan-400" />
             <span className="text-xs text-scada-muted uppercase font-mono">Storage Level</span>
           </div>
-          <div className={`text-2xl font-bold font-mono tabular-nums ${getStatusColor(state.storage.fillLevel)}`}>
+          <div
+            className={`text-2xl font-bold font-mono tabular-nums ${getStatusColor(state.storage.fillLevel)}`}
+          >
             {state.storage.fillLevel.toFixed(1)}%
           </div>
-          <div className="text-xs text-scada-muted font-mono">{state.storage.volume.toFixed(0)} / {state.storage.capacity} Nm³</div>
+          <div className="text-xs text-scada-muted font-mono">
+            {state.storage.volume.toFixed(0)} / {state.storage.capacity} Nm³
+          </div>
         </div>
 
         <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
@@ -196,14 +209,18 @@ export const GreenHydrogenPanel: React.FC = () => {
       <div className="p-4 bg-scada-panel border border-scada-border rounded-none shadow-none">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-none ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}>
-              <Power className={`w-5 h-5 ${state.isIslandMode ? 'text-cyan-400' : 'text-scada-muted'}`} />
+            <div
+              className={`p-2 rounded-none ${state.isIslandMode ? 'bg-cyan-500/20' : 'bg-scada-bg'}`}
+            >
+              <Power
+                className={`w-5 h-5 ${state.isIslandMode ? 'text-cyan-400' : 'text-scada-muted'}`}
+              />
             </div>
             <div>
               <div className="font-bold text-scada-text uppercase font-mono">Island Mode</div>
               <div className="text-xs text-scada-muted font-mono">
-                {state.isIslandMode 
-                  ? 'Auto-produce H2 when grid demand is zero' 
+                {state.isIslandMode
+                  ? 'Auto-produce H2 when grid demand is zero'
                   : 'Manual control only'}
               </div>
             </div>
@@ -227,11 +244,17 @@ export const GreenHydrogenPanel: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Droplets className="w-5 h-5 text-cyan-400" />
-            <span className="font-bold text-scada-text uppercase font-mono">Electrolysis Control</span>
+            <span className="font-bold text-scada-text uppercase font-mono">
+              Electrolysis Control
+            </span>
           </div>
-          <div className={`px-3 py-1 rounded-sm text-xs font-bold font-mono ${
-            state.isRunning ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-scada-bg text-scada-muted border border-scada-border'
-          }`}>
+          <div
+            className={`px-3 py-1 rounded-sm text-xs font-bold font-mono ${
+              state.isRunning
+                ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                : 'bg-scada-bg text-scada-muted border border-scada-border'
+            }`}
+          >
             {state.isRunning ? 'RUNNING' : 'IDLE'}
           </div>
         </div>
@@ -239,7 +262,9 @@ export const GreenHydrogenPanel: React.FC = () => {
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
             <div className="text-xs text-scada-muted uppercase font-mono">Power Input</div>
-            <div className="text-xl font-bold text-scada-text font-mono tabular-nums">{state.isRunning ? '100' : '0'} kW</div>
+            <div className="text-xl font-bold text-scada-text font-mono tabular-nums">
+              {state.isRunning ? '100' : '0'} kW
+            </div>
           </div>
           <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
             <div className="text-xs text-scada-muted uppercase font-mono">H2 Production</div>
@@ -286,8 +311,8 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={() => setSelectedUnit('ROV-001')}
             className={`p-3 rounded-sm border text-left transition-colors ${
-              selectedUnit === 'ROV-001' 
-                ? 'border-amber-500/50 bg-amber-500/10' 
+              selectedUnit === 'ROV-001'
+                ? 'border-amber-500/50 bg-amber-500/10'
                 : 'border-scada-border bg-scada-bg hover:bg-scada-panel'
             }`}
           >
@@ -301,8 +326,8 @@ export const GreenHydrogenPanel: React.FC = () => {
           <button
             onClick={() => setSelectedUnit('UAV-THERMAL-01')}
             className={`p-3 rounded-sm border text-left transition-colors ${
-              selectedUnit === 'UAV-THERMAL-01' 
-                ? 'border-amber-500/50 bg-amber-500/10' 
+              selectedUnit === 'UAV-THERMAL-01'
+                ? 'border-amber-500/50 bg-amber-500/10'
                 : 'border-scada-border bg-scada-bg hover:bg-scada-panel'
             }`}
           >

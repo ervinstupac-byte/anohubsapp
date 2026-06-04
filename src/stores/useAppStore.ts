@@ -20,34 +20,35 @@ interface AppState {
 
 export const useAppStore = create<AppState>()(
   persist(
-    (set) => ({
+    set => ({
       // Density Logic
       densityMode: 'comfortable',
-      toggleDensity: () => set((state) => ({
-        densityMode: state.densityMode === 'comfortable' ? 'compact' : 'comfortable'
-      })),
+      toggleDensity: () =>
+        set(state => ({
+          densityMode: state.densityMode === 'comfortable' ? 'compact' : 'comfortable',
+        })),
 
       // Demo Logic
       demoMode: false,
-      toggleDemoMode: () => set((state) => ({ demoMode: !state.demoMode })),
-      setDemoMode: (mode) => set({ demoMode: mode.active }),
+      toggleDemoMode: () => set(state => ({ demoMode: !state.demoMode })),
+      setDemoMode: mode => set({ demoMode: mode.active }),
 
       hydrateSettings: () => {
-        // The 'persist' middleware handles this automatically, but we need 
-        // this method to satisfy legacy calls in App.tsx. 
-        console.log('[AppStore] Settings hydrated via middleware'); 
+        // The 'persist' middleware handles this automatically, but we need
+        // this method to satisfy legacy calls in App.tsx.
+        console.log('[AppStore] Settings hydrated via middleware');
       },
 
       // Toast Logic
       toasts: [],
       showToast: (message, type = 'info') => {
         const id = Math.random().toString(36).substring(7);
-        set((state) => ({ toasts: [...state.toasts, { id, message, type }] }));
+        set(state => ({ toasts: [...state.toasts, { id, message, type }] }));
         setTimeout(() => {
-          set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) }));
+          set(state => ({ toasts: state.toasts.filter(t => t.id !== id) }));
         }, 4000);
       },
-      removeToast: (id) => set((state) => ({ toasts: state.toasts.filter((t) => t.id !== id) })),
+      removeToast: id => set(state => ({ toasts: state.toasts.filter(t => t.id !== id) })),
     }),
     { name: 'app-storage' }
   )
@@ -65,9 +66,9 @@ export const useToast = () => {
 
 export const useDemoMode = () => {
   const store = useAppStore();
-  return { 
-    active: store.demoMode, 
-    isDemoActive: store.demoMode, 
-    toggleDemo: store.toggleDemoMode 
+  return {
+    active: store.demoMode,
+    isDemoActive: store.demoMode,
+    toggleDemo: store.toggleDemoMode,
   };
 };

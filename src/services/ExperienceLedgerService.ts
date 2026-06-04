@@ -17,7 +17,7 @@ export const ExperienceLedgerService = {
       resolution_steps: entry.resolution_steps || '',
       asset_id: entry.asset_id || null,
       work_order_id: entry.work_order_id || null,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     // Validate shape before inserting
@@ -27,16 +27,23 @@ export const ExperienceLedgerService = {
       try {
         await supabase.from('experience_ledger').insert(payload);
       } catch (e) {
-        console.warn('ExperienceLedgerService.record failed insert with invalid payload', e, parsed.error);
+        console.warn(
+          'ExperienceLedgerService.record failed insert with invalid payload',
+          e,
+          parsed.error
+        );
       }
       return { success: false, error: parsed.error };
     }
 
-    const { data, error } = await supabase.from('experience_ledger').insert(parsed.data).select().single();
+    const { data, error } = await supabase
+      .from('experience_ledger')
+      .insert(parsed.data)
+      .select()
+      .single();
     if (error) return { success: false, error };
     return { success: true, data };
-  }
-  ,
+  },
   async lookupDiagnosis(symptom_key: string, asset_id?: string) {
     try {
       let query = supabase
@@ -55,7 +62,7 @@ export const ExperienceLedgerService = {
     } catch (e) {
       return { success: false, error: e };
     }
-  }
+  },
 };
 
 export default ExperienceLedgerService;

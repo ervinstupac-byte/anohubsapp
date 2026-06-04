@@ -30,7 +30,7 @@ describe('CavitationWatcher', () => {
 
   it('lower atmospheric pressure increases cavitation risk', () => {
     const hi = CavitationWatcher.analyze(210, 200, 100, 25, 1.013);
-    const lo = CavitationWatcher.analyze(210, 200, 100, 25, 0.800);
+    const lo = CavitationWatcher.analyze(210, 200, 100, 25, 0.8);
     expect(lo.npshAvailable).toBeLessThan(hi.npshAvailable);
   });
 });

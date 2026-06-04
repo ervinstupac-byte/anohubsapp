@@ -5,46 +5,45 @@
  */
 
 export interface ComponentHealth {
-    componentId: string;
-    failureRatePerYear: number;
-    currentTechLevel: 'STANDARD' | 'ADVANCED' | 'QUANTUM';
+  componentId: string;
+  failureRatePerYear: number;
+  currentTechLevel: 'STANDARD' | 'ADVANCED' | 'QUANTUM';
 }
 
 export interface UpgradeSuggestion {
-    componentId: string;
-    suggestion: string;
-    improvementFactor: number; // e.g., 2.0 = 2x better
-    source: string;
+  componentId: string;
+  suggestion: string;
+  improvementFactor: number; // e.g., 2.0 = 2x better
+  source: string;
 }
 
 import BaseGuardian from './BaseGuardian';
 
 export class EvolutionaryOptimizer extends BaseGuardian {
+  /**
+   * OPTIMIZE THREADS
+   * Scans for weaknesses and proposes evolution.
+   */
+  optimizeThreads(components: ComponentHealth[]): UpgradeSuggestion[] {
+    const suggestions: UpgradeSuggestion[] = [];
 
-    /**
-     * OPTIMIZE THREADS
-     * Scans for weaknesses and proposes evolution.
-     */
-    optimizeThreads(components: ComponentHealth[]): UpgradeSuggestion[] {
-        const suggestions: UpgradeSuggestion[] = [];
-
-        components.forEach(comp => {
-            // Logic: If it fails too often (> 3x/year) and Tech is OLD
-            if (comp.failureRatePerYear > 3 && comp.currentTechLevel === 'STANDARD') {
-                // Simulated lookup from ScientificIngestor
-                suggestions.push({
-                    componentId: comp.componentId,
-                    suggestion: 'Upgrade to "Quantum-Coated Sensor" detected in Global DB.',
-                    improvementFactor: 10.0, // 10x reliability
-                    source: 'ScientificIngestor (IEEE 2025)'
-                });
-            }
+    components.forEach(comp => {
+      // Logic: If it fails too often (> 3x/year) and Tech is OLD
+      if (comp.failureRatePerYear > 3 && comp.currentTechLevel === 'STANDARD') {
+        // Simulated lookup from ScientificIngestor
+        suggestions.push({
+          componentId: comp.componentId,
+          suggestion: 'Upgrade to "Quantum-Coated Sensor" detected in Global DB.',
+          improvementFactor: 10.0, // 10x reliability
+          source: 'ScientificIngestor (IEEE 2025)',
         });
+      }
+    });
 
-        return suggestions;
-    }
+    return suggestions;
+  }
 
-    public getConfidenceScore(..._args: any[]): number {
-        return this.corrToScore(0);
-    }
+  public getConfidenceScore(..._args: any[]): number {
+    return this.corrToScore(0);
+  }
 }

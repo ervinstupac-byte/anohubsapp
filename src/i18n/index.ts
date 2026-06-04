@@ -54,17 +54,17 @@ try {
         common: en,
         francis: (en as any).francis || {},
         system: (en as any).system || {},
-        docs: docs
+        docs: docs,
       },
       bs: {
         common: bs,
         francis: (bs as any).francis || {},
-        system: (bs as any).system || {}
+        system: (bs as any).system || {},
       },
       de: { translation: de },
       tr: { translation: tr },
       ms: { translation: ms },
-      si: { translation: si }
+      si: { translation: si },
     },
     lng: savedLanguage,
     fallbackLng: 'en',
@@ -75,7 +75,7 @@ try {
     parseMissingKeyHandler: (key: string) => {
       const last = key.split('.').pop() || key;
       return last.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    }
+    },
   });
   console.log('[i18n] ✅✅✅ i18next initialized successfully');
 } catch (err) {
@@ -90,14 +90,14 @@ try {
           common: {},
           francis: {},
           system: {},
-          docs: {}
-        }
+          docs: {},
+        },
       },
       lng: 'en',
       fallbackLng: 'en',
       ns: ['common', 'francis', 'system', 'docs'],
       defaultNS: 'common',
-      interpolation: { escapeValue: false }
+      interpolation: { escapeValue: false },
     });
     console.log('[i18n] ⚠️  Emergency fallback i18n active (UI will show keys)');
   } catch (fallbackErr) {

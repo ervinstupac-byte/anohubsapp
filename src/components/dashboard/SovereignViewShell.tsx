@@ -22,7 +22,9 @@ export type SovereignViewShellConfig = {
   panels: SovereignViewShellPanel[];
 };
 
-export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } & { children?: React.ReactNode }> = ({ config, children }) => {
+export const SovereignViewShell: React.FC<
+  { config: SovereignViewShellConfig } & { children?: React.ReactNode }
+> = ({ config, children }) => {
   const HeaderIcon = config.icon;
 
   return (
@@ -33,7 +35,9 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
             <HeaderIcon className={`w-6 h-6 ${config.iconClassName}`} />
           </div>
           <div>
-            <h2 className="text-xl font-bold uppercase tracking-wide font-header">{config.sector}</h2>
+            <h2 className="text-xl font-bold uppercase tracking-wide font-header">
+              {config.sector}
+            </h2>
             <p className="text-xs text-scada-muted font-mono uppercase">
               {config.subtitle}
               {config.unitId ? ` • ${config.unitId}` : ''}
@@ -45,10 +49,11 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {config.panels.map((p) => {
+        {config.panels.map(p => {
           const PanelIcon = p.icon;
           const colSpan = p.colSpan ?? 1;
-          const colSpanClass = colSpan === 3 ? 'lg:col-span-3' : colSpan === 2 ? 'lg:col-span-2' : 'lg:col-span-1';
+          const colSpanClass =
+            colSpan === 3 ? 'lg:col-span-3' : colSpan === 2 ? 'lg:col-span-2' : 'lg:col-span-1';
 
           return (
             <div key={p.key} className={`${colSpanClass} ${p.className ?? ''}`.trim()}>
@@ -63,11 +68,7 @@ export const SovereignViewShell: React.FC<{ config: SovereignViewShellConfig } &
           );
         })}
       </div>
-      {children && (
-        <div className="mt-6">
-          {children}
-        </div>
-      )}
+      {children && <div className="mt-6">{children}</div>}
     </div>
   );
 };

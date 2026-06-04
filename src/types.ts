@@ -91,7 +91,12 @@ export interface AssetContextType {
   loading: boolean;
   addAsset: (newAsset: Omit<Asset, 'id'>) => Promise<void>;
   updateAsset: (id: string | number, updates: Partial<Asset>) => void;
-  logActivity: (assetId: string | number, category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM', message: string, changes?: { oldVal: any, newVal: any }) => void;
+  logActivity: (
+    assetId: string | number,
+    category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM',
+    message: string,
+    changes?: { oldVal: any; newVal: any }
+  ) => void;
   assetLogs: AssetHistoryEntry[];
   // --- NEW: Golden Thread additions ---
   isAssetSelected: boolean;
@@ -105,7 +110,7 @@ export interface AssetHistoryEntry {
   category: 'MAINTENANCE' | 'DESIGN' | 'SYSTEM';
   message: string;
   author: string;
-  changes?: { oldVal: any, newVal: any };
+  changes?: { oldVal: any; newVal: any };
   previousHash?: string; // <--- NEW: Crypto Chain
   hash?: string; // <--- NEW: SHA-256 Signature
 }
@@ -141,7 +146,8 @@ export interface QuestionnaireContextType {
 }
 
 // --- RISK CONTEXT UPDATE ---
-export interface RiskState { // <--- NOVO: Struktura stanja rizika
+export interface RiskState {
+  // <--- NOVO: Struktura stanja rizika
   riskScore: number;
   riskLevel: 'Low' | 'Medium' | 'High';
   criticalFlags: number;
@@ -188,7 +194,7 @@ export interface HPPSettings {
   penstockLength?: number;
   penstockDiameter?: number;
   penstockRoughness?: number;
-  assemblySequence?: { partId: string; alignment?: number; timestamp: number; }[];
+  assemblySequence?: { partId: string; alignment?: number; timestamp: number }[];
 }
 
 export interface TurbineRecommendation {
@@ -244,9 +250,9 @@ export interface HubTool {
 // --- ASSET PASSPORT (NC-4.2) ---
 export interface AssetPassport {
   mechanical: {
-    runout: number;       // mm
+    runout: number; // mm
     bearingClearance: number; // mm
-    axialPlay: number;    // mm
+    axialPlay: number; // mm
     governorDeadband: number; // %
     runnerGap: number;
     labyrinthGap: number;
@@ -254,19 +260,23 @@ export interface AssetPassport {
   };
   electrical: {
     statorInsulation: number; // MOhm
-    rotorInsulation: number;  // MOhm
+    rotorInsulation: number; // MOhm
     polarizationIndex: number;
     dcBatteryVoltage: number;
     lastRelayTest: string;
   };
   auxiliary: {
     sealLeakageRate: number; // ml/min
-    oilViscosity: number;    // cSt
-    oilAge: number;          // hours
+    oilViscosity: number; // cSt
+    oilAge: number; // hours
     lastOilChange: string;
     vibrationSensors: boolean;
     frequencySensors: boolean;
-    acousticObservation?: 'Metallic Knocking' | 'High-pitch Squeal' | 'Low-frequency Thumping' | 'Nominal';
+    acousticObservation?:
+      | 'Metallic Knocking'
+      | 'High-pitch Squeal'
+      | 'Low-frequency Thumping'
+      | 'Nominal';
   };
   pressureProfile: {
     penstock: number;
@@ -341,7 +351,7 @@ export const BaseAssetTemplateSchema = z.object({
   coordinates: z.tuple([z.number(), z.number()]),
   status: z.enum(['Operational', 'Maintenance', 'Planned', 'Critical', 'Warning']),
   specs: z.record(z.string(), z.any()).optional(),
-  assetPassport: z.any().optional() // Can be further specialized per plugin
+  assetPassport: z.any().optional(), // Can be further specialized per plugin
 });
 
 export type BaseAssetTemplate = z.infer<typeof BaseAssetTemplateSchema>;

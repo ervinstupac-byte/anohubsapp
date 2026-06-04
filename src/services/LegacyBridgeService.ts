@@ -1,10 +1,10 @@
 /**
  * LegacyBridgeService.ts (NC-76.1)
- * 
+ *
  * Consolidated service containing logic from deprecated stub services.
  * This replaces: ImmortalLegacyReport, GovernmentDashboard, GlobalPeaceDividend,
  * NanoRepairAdvisor, EternalLog, AbsoluteZero, HistoricalWisdomService, CollaborativeLibrary
- * 
+ *
  * IEC 60041 Compliant | ISO 10816-5 Mapped
  */
 
@@ -13,103 +13,105 @@
 // ============================================================================
 
 export interface CenturyStats {
-    currentYear: number;
-    totalRevenueEur: number;
-    autonomousRebuilds: number;
-    survivingAssets: number;
-    status: 'OPERATIONAL' | 'DEGRADED' | 'FAILED';
+  currentYear: number;
+  totalRevenueEur: number;
+  autonomousRebuilds: number;
+  survivingAssets: number;
+  status: 'OPERATIONAL' | 'DEGRADED' | 'FAILED';
 }
 
 export interface VerifiedDoc {
-    docId: string;
-    verifiedBy: string;
-    forIssue: string;
-    globalTag: boolean;
+  docId: string;
+  verifiedBy: string;
+  forIssue: string;
+  globalTag: boolean;
 }
 
 export type DefectType = 'MICRO_CRACK' | 'EROSION_PITTING';
 
 export type ReportType =
-    | 'IMMORTAL_LEGACY'
-    | 'GOVERNMENT_NATIONAL'
-    | 'PEACE_DIVIDEND'
-    | 'ETERNAL_2050';
+  | 'IMMORTAL_LEGACY'
+  | 'GOVERNMENT_NATIONAL'
+  | 'PEACE_DIVIDEND'
+  | 'ETERNAL_2050';
 
 // ============================================================================
 // LEGACY BRIDGE SERVICE
 // ============================================================================
 
 export class LegacyBridgeService {
-    private static instance: LegacyBridgeService;
-    private verifiedDocs: Map<string, VerifiedDoc> = new Map();
+  private static instance: LegacyBridgeService;
+  private verifiedDocs: Map<string, VerifiedDoc> = new Map();
 
-    private constructor() { }
+  private constructor() {}
 
-    public static getInstance(): LegacyBridgeService {
-        if (!LegacyBridgeService.instance) {
-            LegacyBridgeService.instance = new LegacyBridgeService();
-        }
-        return LegacyBridgeService.instance;
+  public static getInstance(): LegacyBridgeService {
+    if (!LegacyBridgeService.instance) {
+      LegacyBridgeService.instance = new LegacyBridgeService();
     }
+    return LegacyBridgeService.instance;
+  }
 
-    // ========================================================================
-    // SAFETY & TELEMETRY (NC-76.2)
-    // ========================================================================
+  // ========================================================================
+  // SAFETY & TELEMETRY (NC-76.2)
+  // ========================================================================
 
-    /**
-     * Wraps legacy method calls with error boundary and telemetry.
-     * Ensures zero application crash risk from legacy stubs.
-     */
-    private safeLegacyCall<T>(context: string, fn: () => T): T | null {
-        try {
-            // In production, this would emit a low-priority telemetry event
-            // console.debug(`[LegacyBridge] Accessing: ${context}`);
-            return fn();
-        } catch (error) {
-            console.warn(`[LegacyBridge] Error in ${context}:`, error);
+  /**
+   * Wraps legacy method calls with error boundary and telemetry.
+   * Ensures zero application crash risk from legacy stubs.
+   */
+  private safeLegacyCall<T>(context: string, fn: () => T): T | null {
+    try {
+      // In production, this would emit a low-priority telemetry event
+      // console.debug(`[LegacyBridge] Accessing: ${context}`);
+      return fn();
+    } catch (error) {
+      console.warn(`[LegacyBridge] Error in ${context}:`, error);
+      return null;
+    }
+  }
+
+  // ========================================================================
+  // REPORT GENERATION (Consolidated from multiple stub services)
+  // ========================================================================
+
+  /**
+   * Generate legacy reports previously handled by:
+   * - ImmortalLegacyReport.ts
+   * - GovernmentDashboard.ts
+   * - GlobalPeaceDividend.ts
+   * - EternalLog.ts
+   */
+  generateLegacyReport(type: ReportType): { filename: string; content: string } | null {
+    return (
+      this.safeLegacyCall(`generateLegacyReport(${type})`, () => {
+        let content = '';
+        switch (type) {
+          case 'IMMORTAL_LEGACY':
+            content = this.generateImmortalLegacy();
+            break;
+          case 'GOVERNMENT_NATIONAL':
+            content = this.generateNationalReport();
+            break;
+          case 'PEACE_DIVIDEND':
+            content = this.generateEfficiencyReport(); // Mapped to Efficiency
+            break;
+          case 'ETERNAL_2050':
+            content = this.generate2050Report();
+            break;
+          default:
             return null;
         }
-    }
+        return {
+          filename: `${type}_REPORT_${new Date().toISOString().slice(0, 10)}.txt`,
+          content: content,
+        };
+      }) || null
+    );
+  }
 
-    // ========================================================================
-    // REPORT GENERATION (Consolidated from multiple stub services)
-    // ========================================================================
-
-    /**
-     * Generate legacy reports previously handled by:
-     * - ImmortalLegacyReport.ts
-     * - GovernmentDashboard.ts
-     * - GlobalPeaceDividend.ts
-     * - EternalLog.ts
-     */
-    generateLegacyReport(type: ReportType): { filename: string, content: string } | null {
-        return this.safeLegacyCall(`generateLegacyReport(${type})`, () => {
-            let content = '';
-            switch (type) {
-                case 'IMMORTAL_LEGACY':
-                    content = this.generateImmortalLegacy();
-                    break;
-                case 'GOVERNMENT_NATIONAL':
-                    content = this.generateNationalReport();
-                    break;
-                case 'PEACE_DIVIDEND':
-                    content = this.generateEfficiencyReport(); // Mapped to Efficiency
-                    break;
-                case 'ETERNAL_2050':
-                    content = this.generate2050Report();
-                    break;
-                default:
-                    return null;
-            }
-            return {
-                filename: `${type}_REPORT_${new Date().toISOString().slice(0, 10)}.txt`,
-                content: content
-            };
-        }) || null;
-    }
-
-    private generateImmortalLegacy(): string {
-        return `
+  private generateImmortalLegacy(): string {
+    return `
 ANOHUB v4.0: THE IMMORTAL LEGACY
 ================================
 DATE: 2100-01-01
@@ -123,10 +125,10 @@ It has protected the valley from 14 floods.
 
 Treat it well. It is alive.
 `;
-    }
+  }
 
-    private generateNationalReport(): string {
-        return `
+  private generateNationalReport(): string {
+    return `
 NATIONAL FORTRESS REPORT (CONFIDENTIAL)
 ---------------------------------------
 STATUS: 🟢 OPERATIONAL
@@ -141,10 +143,10 @@ METRICS:
 MESSAGE TO PRESIDENT:
 "The fleet is ready for the storm. The lights will stay on."
 `;
-    }
+  }
 
-    private generateEfficiencyReport(): string {
-        return `
+  private generateEfficiencyReport(): string {
+    return `
 THE EFFICIENCY METRIC REPORT (v2.0)
 =================================
 "The Fortress built a shield around the valley, and a bridge to the future."
@@ -164,10 +166,10 @@ THE EFFICIENCY METRIC REPORT (v2.0)
 VERDICT:
 System Nominal. Operations Optimal. Efficiency Maximized.
 `;
-    }
+  }
 
-    private generate2050Report(): string {
-        return `
+  private generate2050Report(): string {
+    return `
 THE ETERNAL LOG: YEAR 2050
 ==========================
 STATUS: ACTIVE (Epoch 4.0)
@@ -187,129 +189,131 @@ STATUS: ACTIVE (Epoch 4.0)
 VERDICT:
 The Machine is no longer a tool. It is an Organism.
 `;
-    }
+  }
 
-    // ========================================================================
-    // CENTURY SIMULATION (Consolidated from AbsoluteZero.ts)
-    // ========================================================================
+  // ========================================================================
+  // CENTURY SIMULATION (Consolidated from AbsoluteZero.ts)
+  // ========================================================================
 
-    /**
-     * Runs the timeline from StartYear to StartYear + 100.
-     * Originally from AbsoluteZero.ts
-     */
-    simulateCentury(startYear: number): CenturyStats {
-        const defaultStats: CenturyStats = {
-            currentYear: startYear,
-            totalRevenueEur: 0,
-            autonomousRebuilds: 0,
-            survivingAssets: 0,
-            status: 'FAILED'
+  /**
+   * Runs the timeline from StartYear to StartYear + 100.
+   * Originally from AbsoluteZero.ts
+   */
+  simulateCentury(startYear: number): CenturyStats {
+    const defaultStats: CenturyStats = {
+      currentYear: startYear,
+      totalRevenueEur: 0,
+      autonomousRebuilds: 0,
+      survivingAssets: 0,
+      status: 'FAILED',
+    };
+
+    return (
+      this.safeLegacyCall('simulateCentury', () => {
+        let revenue = 0;
+        let rebuilds = 0;
+        const endYear = startYear + 100;
+
+        for (let year = startYear; year <= endYear; year++) {
+          // Accumulate Wealth (Avg €84M/year)
+          revenue += 84_000_000;
+
+          // Trigger Major Rebuilds every 30 years
+          if ((year - startYear) % 30 === 0 && year !== startYear) {
+            rebuilds++;
+            revenue -= 50_000_000; // Cost of rebuild
+          }
+        }
+
+        return {
+          currentYear: endYear,
+          totalRevenueEur: revenue,
+          autonomousRebuilds: rebuilds,
+          survivingAssets: 100,
+          status: 'OPERATIONAL',
         };
+      }) || defaultStats
+    );
+  }
 
-        return this.safeLegacyCall('simulateCentury', () => {
-            let revenue = 0;
-            let rebuilds = 0;
-            const endYear = startYear + 100;
+  // ... rest of class methods wrapped similarly ...
 
-            for (let year = startYear; year <= endYear; year++) {
-                // Accumulate Wealth (Avg €84M/year)
-                revenue += 84_000_000;
+  // ========================================================================
+  // NANO REPAIR ADVISOR (Consolidated from NanoRepairAdvisor.ts)
+  // ========================================================================
 
-                // Trigger Major Rebuilds every 30 years
-                if ((year - startYear) % 30 === 0 && year !== startYear) {
-                    rebuilds++;
-                    revenue -= 50_000_000; // Cost of rebuild
-                }
-            }
-
-            return {
-                currentYear: endYear,
-                totalRevenueEur: revenue,
-                autonomousRebuilds: rebuilds,
-                survivingAssets: 100,
-                status: 'OPERATIONAL'
-            };
-        }) || defaultStats;
+  /**
+   * Suggests advanced material science solutions for repairs.
+   * Originally from NanoRepairAdvisor.ts
+   */
+  suggestRepair(defectType: DefectType): string {
+    switch (defectType) {
+      case 'MICRO_CRACK':
+        return 'Solution: ROBOTIC COLD SPRAY (Titanium Alloy Ti-6Al-4V). Status: AVAILABLE.';
+      case 'EROSION_PITTING':
+        return 'Solution: LASER CLADDING (Stellite 6 Cobalt Base). Status: AVAILABLE.';
+      default:
+        return 'Solution: Standard Welding. Status: OBSOLETE.';
     }
+  }
 
-    // ... rest of class methods wrapped similarly ...
+  // ========================================================================
+  // COLLABORATIVE LIBRARY (Consolidated from CollaborativeLibrary.ts)
+  // ========================================================================
 
-    // ========================================================================
-    // NANO REPAIR ADVISOR (Consolidated from NanoRepairAdvisor.ts)
-    // ========================================================================
+  /**
+   * Tags a document as the "Golden Key" verified solution.
+   * Originally from CollaborativeLibrary.ts
+   */
+  markDocAsSolution(docId: string, siteName: string, issue: string): void {
+    this.verifiedDocs.set(docId, {
+      docId,
+      verifiedBy: siteName,
+      forIssue: issue,
+      globalTag: true,
+    });
+  }
 
-    /**
-     * Suggests advanced material science solutions for repairs.
-     * Originally from NanoRepairAdvisor.ts
-     */
-    suggestRepair(defectType: DefectType): string {
-        switch (defectType) {
-            case 'MICRO_CRACK':
-                return 'Solution: ROBOTIC COLD SPRAY (Titanium Alloy Ti-6Al-4V). Status: AVAILABLE.';
-            case 'EROSION_PITTING':
-                return 'Solution: LASER CLADDING (Stellite 6 Cobalt Base). Status: AVAILABLE.';
-            default:
-                return 'Solution: Standard Welding. Status: OBSOLETE.';
-        }
+  /**
+   * Checks if a document is fleet-verified.
+   * Originally from CollaborativeLibrary.ts
+   */
+  checkDocVerification(docId: string): string | null {
+    const doc = this.verifiedDocs.get(docId);
+    if (doc?.globalTag) {
+      return `✅ FLEET VERIFIED by ${doc.verifiedBy} for '${doc.forIssue}'`;
     }
+    return null;
+  }
 
-    // ========================================================================
-    // COLLABORATIVE LIBRARY (Consolidated from CollaborativeLibrary.ts)
-    // ========================================================================
+  // ========================================================================
+  // HISTORICAL WISDOM (Consolidated from HistoricalWisdomService.ts)
+  // ========================================================================
 
-    /**
-     * Tags a document as the "Golden Key" verified solution.
-     * Originally from CollaborativeLibrary.ts
-     */
-    markDocAsSolution(docId: string, siteName: string, issue: string): void {
-        this.verifiedDocs.set(docId, {
-            docId,
-            verifiedBy: siteName,
-            forIssue: issue,
-            globalTag: true
-        });
+  /**
+   * Finds precedent incidents matching issue type and component.
+   * Originally from HistoricalWisdomService.ts
+   *
+   * @returns Matching document ID or null
+   */
+  findPrecedent(issueType: string, component: string): string | null {
+    const query = `${component} ${issueType}`.toLowerCase();
+
+    // Simplified lookup - in production would query ExpertDossierRegistry
+    const precedentMap: Record<string, string> = {
+      'runner cavitation': 'DOS-CAV-001',
+      'bearing vibration': 'DOS-VIB-002',
+      'seal leakage': 'DOS-SEA-003',
+      'guide_vane erosion': 'DOS-ERO-004',
+    };
+
+    for (const [pattern, dossier] of Object.entries(precedentMap)) {
+      if (query.includes(pattern)) {
+        return dossier;
+      }
     }
-
-    /**
-     * Checks if a document is fleet-verified.
-     * Originally from CollaborativeLibrary.ts
-     */
-    checkDocVerification(docId: string): string | null {
-        const doc = this.verifiedDocs.get(docId);
-        if (doc?.globalTag) {
-            return `✅ FLEET VERIFIED by ${doc.verifiedBy} for '${doc.forIssue}'`;
-        }
-        return null;
-    }
-
-    // ========================================================================
-    // HISTORICAL WISDOM (Consolidated from HistoricalWisdomService.ts)
-    // ========================================================================
-
-    /**
-     * Finds precedent incidents matching issue type and component.
-     * Originally from HistoricalWisdomService.ts
-     * 
-     * @returns Matching document ID or null
-     */
-    findPrecedent(issueType: string, component: string): string | null {
-        const query = `${component} ${issueType}`.toLowerCase();
-
-        // Simplified lookup - in production would query ExpertDossierRegistry
-        const precedentMap: Record<string, string> = {
-            'runner cavitation': 'DOS-CAV-001',
-            'bearing vibration': 'DOS-VIB-002',
-            'seal leakage': 'DOS-SEA-003',
-            'guide_vane erosion': 'DOS-ERO-004',
-        };
-
-        for (const [pattern, dossier] of Object.entries(precedentMap)) {
-            if (query.includes(pattern)) {
-                return dossier;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 }
 
 // Export singleton instance

@@ -4,154 +4,157 @@ import { supabase } from '../services/supabaseClient.ts';
 import { useAuditStore } from '../stores/useAuditStore';
 
 interface AuthContextType {
-    session: Session | null;
-    user: User | null;
-    isGuest: boolean; // <--- NOVO
-    signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
-    signUp: (email: string, password: string) => Promise<{ data: any; error: any }>;
-    resetPassword: (email: string) => Promise<{ data: any; error: any }>;
-    signInAsGuest: () => Promise<void>; // <--- NOVO
-    signOut: () => Promise<void>;
-    loading: boolean;
+  session: Session | null;
+  user: User | null;
+  isGuest: boolean; // <--- NOVO
+  signIn: (email: string, password: string) => Promise<{ data: any; error: any }>;
+  signUp: (email: string, password: string) => Promise<{ data: any; error: any }>;
+  resetPassword: (email: string) => Promise<{ data: any; error: any }>;
+  signInAsGuest: () => Promise<void>; // <--- NOVO
+  signOut: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { logAction } = useAuditStore();
-    const [session, setSession] = useState<Session | null>(null);
-    const [user, setUser] = useState<User | null>(null);
-    const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
-    const [loading, setLoading] = useState(true);
+  const { logAction } = useAuditStore();
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isGuest, setIsGuest] = useState(false); // <--- NOVO STANJE
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        // Provjeri pravu sesiju SAMO ako nismo u guest modu
-        if (!isGuest) {
-            // Safety Timeout: if Supabase doesn't respond in 5s, continue as anonymous
-            const timeout = setTimeout(() => {
-                if (loading) {
-                    console.warn('[AUTH] Session check timed out. Proceeding as anonymous.');
-                    setLoading(false);
-                }
-            }, 5000);
-
-            supabase.auth.getSession()
-                .then(({ data }: any) => {
-                    clearTimeout(timeout);
-                    const session = data?.session ?? null;
-                    setSession(session);
-                    setUser(session?.user ?? null);
-                    setLoading(false);
-                })
-                .catch((err: any) => {
-                    clearTimeout(timeout);
-                    console.error('[AUTH] Critical session check failure:', err);
-                    setLoading(false);
-                });
+  useEffect(() => {
+    // Provjeri pravu sesiju SAMO ako nismo u guest modu
+    if (!isGuest) {
+      // Safety Timeout: if Supabase doesn't respond in 5s, continue as anonymous
+      const timeout = setTimeout(() => {
+        if (loading) {
+          console.warn('[AUTH] Session check timed out. Proceeding as anonymous.');
+          setLoading(false);
         }
+      }, 5000);
 
-        // Slušaj promjene
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
-            // Ako smo u guest modu, ignoriraj supabase promjene dok se ne odjavimo
-            if (!isGuest) {
-                setSession(session);
-                setUser(session?.user ?? null);
-                setLoading(false);
-            }
+      supabase.auth
+        .getSession()
+        .then(({ data }: any) => {
+          clearTimeout(timeout);
+          const session = data?.session ?? null;
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        })
+        .catch((err: any) => {
+          clearTimeout(timeout);
+          console.error('[AUTH] Critical session check failure:', err);
+          setLoading(false);
         });
+    }
 
-        return () => { try { subscription.unsubscribe(); } catch (e) { } };
-    }, [isGuest]);
+    // Slušaj promjene
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      // Ako smo u guest modu, ignoriraj supabase promjene dok se ne odjavimo
+      if (!isGuest) {
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    });
 
-    // 1. STANDARDNI LOGIN
-    const signIn = async (email: string, password: string) => {
-        setIsGuest(false);
-        return await supabase.auth.signInWithPassword({ email, password });
+    return () => {
+      try {
+        subscription.unsubscribe();
+      } catch (e) {}
     };
+  }, [isGuest]);
 
-    // 2. SIGNUP (REGISTRATION)
-    const signUp = async (email: string, password: string) => {
-        setIsGuest(false);
-        return await supabase.auth.signUp({ email, password });
-    };
+  // 1. STANDARDNI LOGIN
+  const signIn = async (email: string, password: string) => {
+    setIsGuest(false);
+    return await supabase.auth.signInWithPassword({ email, password });
+  };
 
-    // 3. PASSWORD RESET
-    const resetPassword = async (email: string) => {
-        return await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/reset-password`
-        });
-    };
+  // 2. SIGNUP (REGISTRATION)
+  const signUp = async (email: string, password: string) => {
+    setIsGuest(false);
+    return await supabase.auth.signUp({ email, password });
+  };
 
-    // 4. GUEST LOGIN (Lažiramo korisnika)
-    const signInAsGuest = async () => {
-        setIsGuest(true);
-        // Kreiramo lažni User objekt da zavaramo TypeScript i UI
-        const guestUser = {
-            id: 'guest-123',
-            aud: 'authenticated',
-            role: 'authenticated',
-            email: 'guest@anohub.com',
-            email_confirmed_at: new Date().toISOString(),
-            phone: '',
-            confirmed_at: new Date().toISOString(),
-            last_sign_in_at: new Date().toISOString(),
-            app_metadata: { provider: 'email', providers: ['email'] },
-            user_metadata: { full_name: 'Guest Engineer' },
-            identities: [],
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-        } as User;
+  // 3. PASSWORD RESET
+  const resetPassword = async (email: string) => {
+    return await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+  };
 
-        setUser(guestUser);
-        setSession({
-            access_token: 'simulated-token',
-            token_type: 'bearer',
-            expires_in: 3600,
-            refresh_token: 'simulated-refresh-token',
-            user: guestUser
-        });
-        setLoading(false); // CRITICAL: Allow AuthProvider to render children
-        logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
-    };
+  // 4. GUEST LOGIN (Lažiramo korisnika)
+  const signInAsGuest = async () => {
+    setIsGuest(true);
+    // Kreiramo lažni User objekt da zavaramo TypeScript i UI
+    const guestUser = {
+      id: 'guest-123',
+      aud: 'authenticated',
+      role: 'authenticated',
+      email: 'guest@anohub.com',
+      email_confirmed_at: new Date().toISOString(),
+      phone: '',
+      confirmed_at: new Date().toISOString(),
+      last_sign_in_at: new Date().toISOString(),
+      app_metadata: { provider: 'email', providers: ['email'] },
+      user_metadata: { full_name: 'Guest Engineer' },
+      identities: [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    } as User;
 
-    // 5. LOGOUT (Pokriva i Guest i Pravi logout)
-    const signOut = async () => {
-        const currentUser = user?.email || 'unknown';
+    setUser(guestUser);
+    setSession({
+      access_token: 'simulated-token',
+      token_type: 'bearer',
+      expires_in: 3600,
+      refresh_token: 'simulated-refresh-token',
+      user: guestUser,
+    });
+    setLoading(false); // CRITICAL: Allow AuthProvider to render children
+    logAction('AUTH_LOGIN', 'Guest System', 'SUCCESS', { user: 'guest' });
+  };
 
-        if (isGuest) {
-            setIsGuest(false);
-            setUser(null);
-            setSession(null);
-            logAction('AUTH_LOGOUT', 'Guest System', 'SUCCESS', { user: currentUser });
-        } else {
-            await supabase.auth.signOut();
-            logAction('AUTH_LOGOUT', 'Supabase Auth', 'SUCCESS', { user: currentUser });
-        }
-    };
+  // 5. LOGOUT (Pokriva i Guest i Pravi logout)
+  const signOut = async () => {
+    const currentUser = user?.email || 'unknown';
 
-    const value = {
-        session,
-        user,
-        isGuest,
-        signIn,
-        signUp,
-        resetPassword,
-        signInAsGuest, // Exportamo novu funkciju
-        signOut,
-        loading
-    };
+    if (isGuest) {
+      setIsGuest(false);
+      setUser(null);
+      setSession(null);
+      logAction('AUTH_LOGOUT', 'Guest System', 'SUCCESS', { user: currentUser });
+    } else {
+      await supabase.auth.signOut();
+      logAction('AUTH_LOGOUT', 'Supabase Auth', 'SUCCESS', { user: currentUser });
+    }
+  };
 
-    return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
-        </AuthContext.Provider>
-    );
+  const value = {
+    session,
+    user,
+    isGuest,
+    signIn,
+    signUp,
+    resetPassword,
+    signInAsGuest, // Exportamo novu funkciju
+    signOut,
+    loading,
+  };
+
+  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

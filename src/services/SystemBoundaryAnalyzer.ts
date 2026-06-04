@@ -19,7 +19,12 @@ export default class SystemBoundaryAnalyzer {
     let score = 100;
 
     // 1. If diagnosis relies on a single sensor reading, penalize heavily
-    const sources = (diagnosis && diagnosis.entries) ? diagnosis.entries.length : (diagnosis && diagnosis.automatedActions ? diagnosis.automatedActions.length : 0);
+    const sources =
+      diagnosis && diagnosis.entries
+        ? diagnosis.entries.length
+        : diagnosis && diagnosis.automatedActions
+          ? diagnosis.automatedActions.length
+          : 0;
     if (sources <= 1) {
       reasons.push('Diagnosis based on single source/sensor without cross-correlation');
       score -= 50;
@@ -27,12 +32,16 @@ export default class SystemBoundaryAnalyzer {
 
     // 2. If any entry contains 'confidence' fields under 0.5, penalize
     try {
-      const lowConfidence = (JSON.stringify(diagnosis).match(/confidence\W*[:=]\W*0\.[0-4]/gi) || []).length;
+      const lowConfidence = (
+        JSON.stringify(diagnosis).match(/confidence\W*[:=]\W*0\.[0-4]/gi) || []
+      ).length;
       if (lowConfidence > 0) {
         reasons.push('Low statistical confidence detected in one or more findings');
         score -= 20 * lowConfidence;
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
 
     // 3. If sentinel flagged anomalies (sensorAnomaly true) but action is HARD_TRIP, reduce confidence
     if (JSON.stringify(diagnosis).toLowerCase().includes('sensor anomaly')) {
@@ -43,7 +52,12 @@ export default class SystemBoundaryAnalyzer {
     // 4. Enforce bounds
     score = Math.max(0, Math.min(100, score));
 
-    const warning = score < 40 ? 'I am guessing here. My logic is reaching its boundary due to: ' + reasons.join('; ') + '. Manual inspection is MANDATORY.' : undefined;
+    const warning =
+      score < 40
+        ? 'I am guessing here. My logic is reaching its boundary due to: ' +
+          reasons.join('; ') +
+          '. Manual inspection is MANDATORY.'
+        : undefined;
 
     return { score, reasons, warning };
   }
@@ -53,7 +67,12 @@ export default class SystemBoundaryAnalyzer {
     const assessment = this.assessConfidence(report);
     report.systemConfidence = assessment;
     // persist a note in memory for audit
-    this.memory.saveOverrideRecord({ type: 'CONFIDENCE_ASSESSMENT', timestamp: Date.now(), score: assessment.score, reasons: assessment.reasons });
+    this.memory.saveOverrideRecord({
+      type: 'CONFIDENCE_ASSESSMENT',
+      timestamp: Date.now(),
+      score: assessment.score,
+      reasons: assessment.reasons,
+    });
     return report;
   }
 }

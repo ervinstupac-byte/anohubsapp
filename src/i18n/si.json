@@ -1,429 +1,429 @@
 {
-    "hub": {
-        "welcome": "ආයුබෝවන්, {{name}}",
-        "subtitle": "විශිෂ්ටත්වයේ ප්‍රමිතීන් බලාත්මක කිරීම සඳහා වන ගෝලීය වේදිකාව.",
-        "operationalModules": "මෙහෙයුම් මොඩියුල",
-        "strategicIntelligence": "උපායමාර්ගික බුද්ධිය",
-        "knowledgeCulture": "දැනුම සහ සංස්කෘතිය",
-        "systemStatusConnecting": "සම්බන්ධ වෙමින් පවතී...",
-        "systemStatusOperational": "පද්ධතිය ක්‍රියාත්මකයි",
-        "risks": "අවදානම් අනාවරණය විය",
-        "designs": "සුරකින ලද නිර්මාණ",
-        "fleetOutput": "යාත්‍රා ප්‍රතිදානය",
-        "riskFactors": "අවදානම් සාධක",
-        "activeContext": "සක්‍රීය සන්දර්භය",
-        "vision": "දැක්ම",
-        "manifesto": "ප්‍රකාශනය",
-        "footerText": "පරිපූර්ණත්වය සඳහා නිර්මාණය කර ඇත",
-        "operatorId": "ක්‍රියාකරු හැඳුනුම්පත",
-        "tagline": "ප්‍රතිශක්තිකරණ නිර්මාණකරුවන්",
-        "info": "තොරතුරු",
-        "copyright": "© 2025 Anohubs Inc.",
-        "protocol": "තාක්ෂණික ප්‍රතිශක්තිකරණ ප්‍රොටෝකෝලය"
+  "hub": {
+    "welcome": "ආයුබෝවන්, {{name}}",
+    "subtitle": "විශිෂ්ටත්වයේ ප්‍රමිතීන් බලාත්මක කිරීම සඳහා වන ගෝලීය වේදිකාව.",
+    "operationalModules": "මෙහෙයුම් මොඩියුල",
+    "strategicIntelligence": "උපායමාර්ගික බුද්ධිය",
+    "knowledgeCulture": "දැනුම සහ සංස්කෘතිය",
+    "systemStatusConnecting": "සම්බන්ධ වෙමින් පවතී...",
+    "systemStatusOperational": "පද්ධතිය ක්‍රියාත්මකයි",
+    "risks": "අවදානම් අනාවරණය විය",
+    "designs": "සුරකින ලද නිර්මාණ",
+    "fleetOutput": "යාත්‍රා ප්‍රතිදානය",
+    "riskFactors": "අවදානම් සාධක",
+    "activeContext": "සක්‍රීය සන්දර්භය",
+    "vision": "දැක්ම",
+    "manifesto": "ප්‍රකාශනය",
+    "footerText": "පරිපූර්ණත්වය සඳහා නිර්මාණය කර ඇත",
+    "operatorId": "ක්‍රියාකරු හැඳුනුම්පත",
+    "tagline": "ප්‍රතිශක්තිකරණ නිර්මාණකරුවන්",
+    "info": "තොරතුරු",
+    "copyright": "© 2025 Anohubs Inc.",
+    "protocol": "තාක්ෂණික ප්‍රතිශක්තිකරණ ප්‍රොටෝකෝලය"
+  },
+  "modules": {
+    "riskAssessment": "අවදානම් ඇගයීම",
+    "riskAssessmentDesc": "අසාර්ථක වීමට පෙර 'ක්‍රියාත්මක කිරීමේ පරතරය' හඳුනා ගන්න.",
+    "riskReport": "ප්‍රධාන ව්‍යාපෘති ගොනුව",
+    "riskReportDesc": "කාබද්ධ ආයතනික වාර්තාකරණය.",
+    "hppBuilder": "HPP නිර්මාණ ස්ටුඩියෝව",
+    "hppBuilderDesc": "භෞතික විද්‍යාව පදනම් කරගත් ටර්බයින ප්‍රමාණකරණය සහ සමාකරණය.",
+    "installationGuarantee": "ස්ථාපන ප්‍රමිතිය",
+    "installationGuaranteeDesc": "0.05 mm/m ප්‍රොටෝකෝලය බලාත්මක කරන්න.",
+    "globalMap": "ගෝලීය වත්කම් සිතියම",
+    "globalMapDesc": "භූගෝලීය වත්කම් බුද්ධිය.",
+    "investorBriefing": "ආයෝජක දැනුම්දීම",
+    "investorBriefingDesc": "මූල්‍ය KPI සහ අවදානම් බලපෑම්.",
+    "contractManagement": "කොන්ත්‍රාත් සහ නීති",
+    "contractManagementDesc": "දත්ත හරහා වගකීම් ආරක්ෂාව.",
+    "digitalIntegrity": "ඩිජිටල් අඛණ්ඩතාව",
+    "digitalIntegrityDesc": "වෙනස් කළ නොහැකි බ්ලොක්චේන් සාක්ෂි.",
+    "revitalizationStrategy": "පුනර්ජීවන උපාය මාර්ගය",
+    "revitalizationStrategyDesc": "ආයු කාලය දිගු කිරීමේ උපාය මාර්ග.",
+    "library": "උපාංග පුස්තකාලය",
+    "libraryDesc": "අසාර්ථක වීමේ ක්‍රම සහ KPI.",
+    "standardOfExcellence": "විශිෂ්ටත්වයේ ප්‍රමිතිය",
+    "standardOfExcellenceDesc": "0.05 mm/m ප්‍රකාශනය.",
+    "phaseGuide": "ව්‍යාපෘති අදියර මාර්ගෝපදේශය",
+    "phaseGuideDesc": "ව්‍යාපෘති ජීවන චක්‍රය බලාත්මක කිරීම.",
+    "hppImprovements": "HPP Ino-Hub",
+    "hppImprovementsDesc": "නවෝත්පාදන හඹා යාම.",
+    "riverWildlife": "ගංගා සහ වනජීවි",
+    "riverWildlifeDesc": "පරිසර විධානය.",
+    "genderEquity": "ස්ත්රී පුරුෂ සමානාත්මතාවය",
+    "genderEquityDesc": "මානව සම්පත් උපාය මාර්ග සහ සංස්කෘතිය.",
+    "digitalIntroduction": "ඩිජිටල් හැඳින්වීම",
+    "maintenance": "නඩත්තු එන්ජිම"
+  },
+  "common": {
+    "launch": "දියත් කරන්න",
+    "version": "v2.5.0 (ව්‍යවසාය)",
+    "system": "පද්ධතිය",
+    "immune": "ප්‍රතිශක්තිකරණය",
+    "compromised": "සම්මුතියට ලක් විය",
+    "critical": "විවේචනාත්මක",
+    "moderate": "මධ්‍යස්ථ",
+    "stable": "ස්ථාවර",
+    "riskLevel": "අවදානම් මට්ටම",
+    "active": "සක්‍රීය"
+  },
+  "questionnaire": {
+    "title": "රෝග විනිශ්චය වාර්තාව",
+    "liveAnalysis": "සජීවී විශ්ලේෂණය",
+    "aiReady": "AI සූදානම්",
+    "overallAssessment": "සමස්ත තක්සේරුව",
+    "highPriorityAlerts": "ඉහළ ප්‍රමුඛතා ඇඟවීම්",
+    "warnings": "අනතුරු ඇඟවීම්",
+    "downloadPDF": "PDF බාගන්න",
+    "uploading": "උඩුගත වෙමින් පවතී...",
+    "syncedToCloud": "✓ වලාකුළට සමමුහුර්ත කරන ලදී",
+    "submitToHQ": "මූලස්ථානයට යවන්න",
+    "conceptTitle": "සංකල්පය: ක්‍රියාත්මක කිරීමේ පරතරය",
+    "conceptDesc": "දෝෂ රහිත තාක්ෂණික සැලැස්මක් සහ අනුකූල නොවන අඩවි ක්‍රියාත්මක කිරීමේ යථාර්ථය අතර තීරණාත්මක අපගමනය.",
+    "criticalIndicators": "තීරණාත්මක දර්ශක",
+    "criticalIndicatorsDesc": "වගකීම් අහිමි වීම වැළැක්වීම සඳහා අවධානය යොමු කළ යුතුය.",
+    "operationalWarnings": "මෙහෙයුම් අනතුරු ඇඟවීම්",
+    "operationalWarningsDesc": "ලේඛනගත කිරීමේ හෝ විනයෙහි සිදුවිය හැකි හිඩැස්.",
+    "systemOptimal": "පද්ධතිය ප්‍රශස්ත",
+    "systemOptimalDesc": "විශිෂ්ටත්වයේ ප්‍රමිතියෙන් සැලකිය යුතු අපගමනයන් අනාවරණය නොවීය.",
+    "returnToDashboard": "උපකරණ පුවරුව වෙත ආපසු",
+    "noDataToSubmit": "ඉදිරිපත් කිරීමට දත්ත නැත.",
+    "diagnosisSynced": "{{email}} වෙතින් රෝග විනිශ්චය AnoHUB Cloud වෙත සමමුහුර්ත කරන ලදී.",
+    "cloudSyncFailed": "Cloud සමමුහුර්ත කිරීම අසාර්ථක විය: {{error}}",
+    "noDataAvailable": "දත්ත නොමැත.",
+    "pdfDownloaded": "අවදානම් වාර්තාව PDF බාගත කරන ලදී."
+  },
+  "login": {
+    "title": "AnoHUB පිවිසුම",
+    "subtitle": "ආයතනික ප්‍රවේශය",
+    "instructions": "කරුණාකර ඔබගේ අක්තපත්‍ර තහවුරු කරන්න.",
+    "emailLabel": "විද්‍යුත් තැපැල් ලිපිනය",
+    "passwordLabel": "මුරපදය",
+    "signInButton": "පුරන්න",
+    "guestButton": "අමුත්තා ලෙස ඉදිරියට යන්න",
+    "or": "හෝ",
+    "loading": "සත්‍යාපනය කරමින්...",
+    "error": "පිවිසීම අසාර්ථකයි",
+    "magicLink": "මැජික් සබැඳිය යවන්න",
+    "footer": "බලයලත් පිරිස් සඳහා පමණි",
+    "guestWelcome": "ආයුබෝවන්, ඉංජිනේරු!"
+  },
+  "auth": {
+    "signOut": "ඉවත් වන්න",
+    "signOutConfirm": "ඔබට විශ්වාසද ඔබට ඉවත් වීමට අවශ්‍යද?",
+    "signOutSuccess": "සාර්ථකව ඉවත් විය",
+    "accessDenied": "ප්‍රවේශය ප්‍රතික්ෂේප විය - කරුණාකර පුරන්න",
+    "loading": "සත්‍යාපනය කරමින්..."
+  },
+  "hppStudio": {
+    "title": "HPP බිල්ඩර් ස්ටුඩියෝව",
+    "subtitle": "උසස් ඉංජිනේරු සහායක v2.0",
+    "exitStudio": "ස්ටුඩියෝවෙන් පිටවන්න",
+    "steps": {
+      "hydrology": "ජල විද්‍යා සැකසුම",
+      "selection": "ටර්බයින තේරීම",
+      "export": "මූල්ය සහ අපනයන"
     },
-    "modules": {
-        "riskAssessment": "අවදානම් ඇගයීම",
-        "riskAssessmentDesc": "අසාර්ථක වීමට පෙර 'ක්‍රියාත්මක කිරීමේ පරතරය' හඳුනා ගන්න.",
-        "riskReport": "ප්‍රධාන ව්‍යාපෘති ගොනුව",
-        "riskReportDesc": "කාබද්ධ ආයතනික වාර්තාකරණය.",
-        "hppBuilder": "HPP නිර්මාණ ස්ටුඩියෝව",
-        "hppBuilderDesc": "භෞතික විද්‍යාව පදනම් කරගත් ටර්බයින ප්‍රමාණකරණය සහ සමාකරණය.",
-        "installationGuarantee": "ස්ථාපන ප්‍රමිතිය",
-        "installationGuaranteeDesc": "0.05 mm/m ප්‍රොටෝකෝලය බලාත්මක කරන්න.",
-        "globalMap": "ගෝලීය වත්කම් සිතියම",
-        "globalMapDesc": "භූගෝලීය වත්කම් බුද්ධිය.",
-        "investorBriefing": "ආයෝජක දැනුම්දීම",
-        "investorBriefingDesc": "මූල්‍ය KPI සහ අවදානම් බලපෑම්.",
-        "contractManagement": "කොන්ත්‍රාත් සහ නීති",
-        "contractManagementDesc": "දත්ත හරහා වගකීම් ආරක්ෂාව.",
-        "digitalIntegrity": "ඩිජිටල් අඛණ්ඩතාව",
-        "digitalIntegrityDesc": "වෙනස් කළ නොහැකි බ්ලොක්චේන් සාක්ෂි.",
-        "revitalizationStrategy": "පුනර්ජීවන උපාය මාර්ගය",
-        "revitalizationStrategyDesc": "ආයු කාලය දිගු කිරීමේ උපාය මාර්ග.",
-        "library": "උපාංග පුස්තකාලය",
-        "libraryDesc": "අසාර්ථක වීමේ ක්‍රම සහ KPI.",
-        "standardOfExcellence": "විශිෂ්ටත්වයේ ප්‍රමිතිය",
-        "standardOfExcellenceDesc": "0.05 mm/m ප්‍රකාශනය.",
-        "phaseGuide": "ව්‍යාපෘති අදියර මාර්ගෝපදේශය",
-        "phaseGuideDesc": "ව්‍යාපෘති ජීවන චක්‍රය බලාත්මක කිරීම.",
-        "hppImprovements": "HPP Ino-Hub",
-        "hppImprovementsDesc": "නවෝත්පාදන හඹා යාම.",
-        "riverWildlife": "ගංගා සහ වනජීවි",
-        "riverWildlifeDesc": "පරිසර විධානය.",
-        "genderEquity": "ස්ත්රී පුරුෂ සමානාත්මතාවය",
-        "genderEquityDesc": "මානව සම්පත් උපාය මාර්ග සහ සංස්කෘතිය.",
-        "digitalIntroduction": "ඩිජිටල් හැඳින්වීම",
-        "maintenance": "නඩත්තු එන්ජිම"
+    "labels": {
+      "grossHead": "දළ ජල පීඩනය (Gross Head)",
+      "flowRate": "ගලා යන වේගය",
+      "waterType": "ජල වර්ගය",
+      "flowProfile": "ප්‍රවාහ පැතිකඩ",
+      "specificSpeed": "නිශ්චිත වේගය (Nq)",
+      "topologyIndex": "ස්ථාන විද්‍යා දර්ශකය",
+      "potentialPower": "විභව බලය",
+      "calculatedCapacity": "ගණනය කළ ධාරිතාව",
+      "siteConditions": "වෙබ් අඩවියේ කොන්දේසි",
+      "recommendedMatches": "නිර්දේශිත ඉංජිනේරු ගැලපීම්",
+      "bestMatch": "හොඳම ගැලපීම",
+      "matchScore": "ගැලපුම් ලකුණු",
+      "projectExport": "ව්‍යාපෘති අපනයනය",
+      "configName": "වින්‍යාස නාමය"
     },
-    "common": {
-        "launch": "දියත් කරන්න",
-        "version": "v2.5.0 (ව්‍යවසාය)",
-        "system": "පද්ධතිය",
-        "immune": "ප්‍රතිශක්තිකරණය",
-        "compromised": "සම්මුතියට ලක් විය",
-        "critical": "විවේචනාත්මක",
-        "moderate": "මධ්‍යස්ථ",
-        "stable": "ස්ථාවර",
-        "riskLevel": "අවදානම් මට්ටම",
-        "active": "සක්‍රීය"
+    "waterTypes": {
+      "clean": "පිරිසිදු",
+      "suspended": "අත්හිටුවන ලද ඝන ද්රව්ය",
+      "abrasive": "ග්ලැසියර රොන්මඩ (Abrasive)"
     },
-    "questionnaire": {
-        "title": "රෝග විනිශ්චය වාර්තාව",
-        "liveAnalysis": "සජීවී විශ්ලේෂණය",
-        "aiReady": "AI සූදානම්",
-        "overallAssessment": "සමස්ත තක්සේරුව",
-        "highPriorityAlerts": "ඉහළ ප්‍රමුඛතා ඇඟවීම්",
-        "warnings": "අනතුරු ඇඟවීම්",
-        "downloadPDF": "PDF බාගන්න",
-        "uploading": "උඩුගත වෙමින් පවතී...",
-        "syncedToCloud": "✓ වලාකුළට සමමුහුර්ත කරන ලදී",
-        "submitToHQ": "මූලස්ථානයට යවන්න",
-        "conceptTitle": "සංකල්පය: ක්‍රියාත්මක කිරීමේ පරතරය",
-        "conceptDesc": "දෝෂ රහිත තාක්ෂණික සැලැස්මක් සහ අනුකූල නොවන අඩවි ක්‍රියාත්මක කිරීමේ යථාර්ථය අතර තීරණාත්මක අපගමනය.",
-        "criticalIndicators": "තීරණාත්මක දර්ශක",
-        "criticalIndicatorsDesc": "වගකීම් අහිමි වීම වැළැක්වීම සඳහා අවධානය යොමු කළ යුතුය.",
-        "operationalWarnings": "මෙහෙයුම් අනතුරු ඇඟවීම්",
-        "operationalWarningsDesc": "ලේඛනගත කිරීමේ හෝ විනයෙහි සිදුවිය හැකි හිඩැස්.",
-        "systemOptimal": "පද්ධතිය ප්‍රශස්ත",
-        "systemOptimalDesc": "විශිෂ්ටත්වයේ ප්‍රමිතියෙන් සැලකිය යුතු අපගමනයන් අනාවරණය නොවීය.",
-        "returnToDashboard": "උපකරණ පුවරුව වෙත ආපසු",
-        "noDataToSubmit": "ඉදිරිපත් කිරීමට දත්ත නැත.",
-        "diagnosisSynced": "{{email}} වෙතින් රෝග විනිශ්චය AnoHUB Cloud වෙත සමමුහුර්ත කරන ලදී.",
-        "cloudSyncFailed": "Cloud සමමුහුර්ත කිරීම අසාර්ථක විය: {{error}}",
-        "noDataAvailable": "දත්ත නොමැත.",
-        "pdfDownloaded": "අවදානම් වාර්තාව PDF බාගත කරන ලදී."
+    "flowProfiles": {
+      "stable": "ස්ථාවර (ගංගා ධාවනය)",
+      "seasonal": "සෘතුමය ගබඩා කිරීම"
     },
-    "login": {
-        "title": "AnoHUB පිවිසුම",
-        "subtitle": "ආයතනික ප්‍රවේශය",
-        "instructions": "කරුණාකර ඔබගේ අක්තපත්‍ර තහවුරු කරන්න.",
-        "emailLabel": "විද්‍යුත් තැපැල් ලිපිනය",
-        "passwordLabel": "මුරපදය",
-        "signInButton": "පුරන්න",
-        "guestButton": "අමුත්තා ලෙස ඉදිරියට යන්න",
-        "or": "හෝ",
-        "loading": "සත්‍යාපනය කරමින්...",
-        "error": "පිවිසීම අසාර්ථකයි",
-        "magicLink": "මැජික් සබැඳිය යවන්න",
-        "footer": "බලයලත් පිරිස් සඳහා පමණි",
-        "guestWelcome": "ආයුබෝවන්, ඉංජිනේරු!"
+    "buttons": {
+      "continue": "තේරීමට ඉදිරියට යන්න →",
+      "back": "← ආපසු",
+      "skipToExport": "අපනයනයට යන්න →",
+      "backToSelection": "← ආපසු තේරීමට",
+      "saveToCloud": "Cloud වෙත සුරකින්න",
+      "generateReport": "වාර්තාව උත්පාදනය කරන්න"
     },
-    "auth": {
-        "signOut": "ඉවත් වන්න",
-        "signOutConfirm": "ඔබට විශ්වාසද ඔබට ඉවත් වීමට අවශ්‍යද?",
-        "signOutSuccess": "සාර්ථකව ඉවත් විය",
-        "accessDenied": "ප්‍රවේශය ප්‍රතික්ෂේප විය - කරුණාකර පුරන්න",
-        "loading": "සත්‍යාපනය කරමින්..."
+    "placeholders": {
+      "configName": "උදා. යකඩ ගෝර්ජ් - ෆ්රැන්සිස් V1"
     },
-    "hppStudio": {
-        "title": "HPP බිල්ඩර් ස්ටුඩියෝව",
-        "subtitle": "උසස් ඉංජිනේරු සහායක v2.0",
-        "exitStudio": "ස්ටුඩියෝවෙන් පිටවන්න",
-        "steps": {
-            "hydrology": "ජල විද්‍යා සැකසුම",
-            "selection": "ටර්බයින තේරීම",
-            "export": "මූල්ය සහ අපනයන"
-        },
-        "labels": {
-            "grossHead": "දළ ජල පීඩනය (Gross Head)",
-            "flowRate": "ගලා යන වේගය",
-            "waterType": "ජල වර්ගය",
-            "flowProfile": "ප්‍රවාහ පැතිකඩ",
-            "specificSpeed": "නිශ්චිත වේගය (Nq)",
-            "topologyIndex": "ස්ථාන විද්‍යා දර්ශකය",
-            "potentialPower": "විභව බලය",
-            "calculatedCapacity": "ගණනය කළ ධාරිතාව",
-            "siteConditions": "වෙබ් අඩවියේ කොන්දේසි",
-            "recommendedMatches": "නිර්දේශිත ඉංජිනේරු ගැලපීම්",
-            "bestMatch": "හොඳම ගැලපීම",
-            "matchScore": "ගැලපුම් ලකුණු",
-            "projectExport": "ව්‍යාපෘති අපනයනය",
-            "configName": "වින්‍යාස නාමය"
-        },
-        "waterTypes": {
-            "clean": "පිරිසිදු",
-            "suspended": "අත්හිටුවන ලද ඝන ද්රව්ය",
-            "abrasive": "ග්ලැසියර රොන්මඩ (Abrasive)"
-        },
-        "flowProfiles": {
-            "stable": "ස්ථාවර (ගංගා ධාවනය)",
-            "seasonal": "සෘතුමය ගබඩා කිරීම"
-        },
-        "buttons": {
-            "continue": "තේරීමට ඉදිරියට යන්න →",
-            "back": "← ආපසු",
-            "skipToExport": "අපනයනයට යන්න →",
-            "backToSelection": "← ආපසු තේරීමට",
-            "saveToCloud": "Cloud වෙත සුරකින්න",
-            "generateReport": "වාර්තාව උත්පාදනය කරන්න"
-        },
-        "placeholders": {
-            "configName": "උදා. යකඩ ගෝර්ජ් - ෆ්රැන්සිස් V1"
-        },
-        "toasts": {
-            "turbineInitialized": "{{type}} සඳහා විශාරද ආරම්භ කරන ලදී",
-            "invalidCombination": "වලංගු නොවන ජල පීඩනය/ප්‍රවාහ සංයෝජනය. කරුණාකර අගයන් සීරුමාරු කරන්න.",
-            "savingDesign": "නිර්මාණ වින්‍යාසය සුරකිමින්...",
-            "saveSuccess": "නිර්මාණය සාර්ථකව සුරැකිණි!",
-            "enterConfigName": "කරුණාකර වින්‍යාස නාමයක් ඇතුලත් කරන්න",
-            "selectAssetFirst": "කරුණාකර පළමුව වත්කමක් තෝරන්න",
-            "physicsError": "භෞතික විද්‍යා ගණනය කිරීමේ දෝෂය - පෙරනිමි භාවිතා කරමින්",
-            "cloudSyncFailed": "Cloud සමමුහුර්ත කිරීම අසාර්ථක විය: {{error}}"
-        },
-        "errors": {
-            "crashRecovery": "HPP Builder දෝෂයකට මුහුණ දුන්නේය. කරුණාකර නැවත කරන්න.",
-            "noAssetSelected": "වත්කම් තෝරා නැත"
-        }
+    "toasts": {
+      "turbineInitialized": "{{type}} සඳහා විශාරද ආරම්භ කරන ලදී",
+      "invalidCombination": "වලංගු නොවන ජල පීඩනය/ප්‍රවාහ සංයෝජනය. කරුණාකර අගයන් සීරුමාරු කරන්න.",
+      "savingDesign": "නිර්මාණ වින්‍යාසය සුරකිමින්...",
+      "saveSuccess": "නිර්මාණය සාර්ථකව සුරැකිණි!",
+      "enterConfigName": "කරුණාකර වින්‍යාස නාමයක් ඇතුලත් කරන්න",
+      "selectAssetFirst": "කරුණාකර පළමුව වත්කමක් තෝරන්න",
+      "physicsError": "භෞතික විද්‍යා ගණනය කිරීමේ දෝෂය - පෙරනිමි භාවිතා කරමින්",
+      "cloudSyncFailed": "Cloud සමමුහුර්ත කිරීම අසාර්ථක විය: {{error}}"
+    },
+    "errors": {
+      "crashRecovery": "HPP Builder දෝෂයකට මුහුණ දුන්නේය. කරුණාකර නැවත කරන්න.",
+      "noAssetSelected": "වත්කම් තෝරා නැත"
+    }
+  },
+  "actions": {
+    "back": "ආපසු Hub වෙත",
+    "previewPrint": "පෙරදසුන සහ මුද්‍රණය",
+    "cancel": "අවලංගු කරන්න",
+    "close": "වසන්න"
+  },
+  "assetPicker": {
+    "selectContext": "වත්කම් සන්දර්භය තෝරන්න",
+    "registerNew": "+ නව වත්කම් ලියාපදිංචි කරන්න",
+    "modalTitle": "නව වත්කම් ලියාපදිංචි කරන්න",
+    "labelName": "වත්කම් නාමය",
+    "placeholderName": "උදා. HPP බ්ලැගජ්",
+    "labelType": "ටර්බයින වර්ගය",
+    "labelLocation": "ස්ථානය",
+    "placeholderLocation": "ගංගාව, රට",
+    "labelCapacity": "ධාරිතාව (MW)",
+    "registerButton": "වත්කම් ලියාපදිංචි කරන්න",
+    "successToast": "නව වත්කම සාර්ථකව ලියාපදිංචි කරන ලදී",
+    "failToast": "වත්කම් නිර්මාණය කිරීමට අසමත් විය"
+  },
+  "profile": {
+    "title": "Engineer Profile",
+    "subtitle": "Manage your identity and access levels.",
+    "back": "Back",
+    "noUser": "No user found",
+    "updateSuccess": "Profile updated successfully",
+    "uploadError": "You must select an image to upload.",
+    "avatarSuccess": "Avatar uploaded!",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "e.g. John Doe",
+    "role": "Position / Role",
+    "rolePlaceholder": "e.g. Lead Engineer",
+    "company": "Organization",
+    "companyPlaceholder": "e.g. Global Hydropower Inc.",
+    "saveButton": "Save Changes",
+    "unassignedRole": "Unassigned Role",
+    "guestSaveWarning": "Guest profiles cannot be saved",
+    "guestUploadWarning": "Guest profiles cannot upload avatars",
+    "developerTools": "Developer Tools",
+    "resetData": "Reset Demo Data",
+    "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
+    "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page."
+  },
+  "assetWizard": {
+    "title": "නව වත්කම් ලියාපදිංචි කරන්න",
+    "steps": {
+      "identity": "අනන්‍යතාවය",
+      "specs": "තාක්ෂණික පිරිවිතර",
+      "risk": "අවදානම් ක්‍රමාංකනය"
+    },
+    "fields": {
+      "name": "වත්කම් නාමය",
+      "type": "වත්කම් වර්ගය",
+      "location": "ස්ථානය",
+      "capacity": "ධාරිතාව (MW)",
+      "units": "ඒකක ගණන",
+      "kpi": "විවේචනාත්මක KPI"
+    },
+    "buttons": {
+      "next": "ඊළඟ පියවර",
+      "prev": "පෙර",
+      "register": "වත්කම් ලියාපදිංචි කරන්න"
+    },
+    "success": "වත්කම සාර්ථකව ලියාපදිංචි කර නැව්වල ආරම්භ කරන ලදී.",
+    "types": {
+      "francisDesc": "Reaction / Spiral",
+      "peltonDesc": "Impulse / Jet",
+      "kaplanDesc": "Axial / Propeller",
+      "bulbDesc": "Submersible / Tube",
+      "pumpingDesc": "Reversible Storage",
+      "solarDesc": "PV Array",
+      "windDesc": "Turbine Generator"
+    },
+    "specs": {
+      "spiralCasePressure": "Spiral Case Pressure (bar)",
+      "guideVaneCount": "Guide Vane Count",
+      "runnerDiameter": "Runner Diameter (mm)",
+      "draftTubeVacuum": "Draft Tube Vacuum (bar)",
+      "bearingType": "Bearing Type"
+    }
+  },
+  "globalMap": {
+    "fleet": "නැව්",
+    "liveMw": "සජීවී MW",
+    "alerts": "ඇඟවීම්",
+    "output": "ප්‍රතිදානය",
+    "status": {
+      "critical": "විවේචනාත්මක",
+      "warning": "අවවාදයයි"
+    }
+  },
+  "toolbox": {
+    "greeting": {
+      "morning": "සුභ උදෑසනක්",
+      "afternoon": "සුබ දහවල්",
+      "evening": "සුභ සන්ධ්යාවක්"
+    },
+    "engineer": "ඉංජිනේරු",
+    "systemOperational": "පද්ධතිය ක්‍රියාත්මකයි",
+    "assetsOnline": "පැල ඔන්ලයින්",
+    "activeAsset": "සක්‍රීය: {{name}}",
+    "passport": "විදේශ ගමන් බලපත්‍රය",
+    "addAsset": "රෝපණ එකතු කරන්න",
+    "sections": {
+      "utilities": "ඉංජිනේරු උපයෝගිතා",
+      "designAnalysis": "සැලසුම් සහ විශ්ලේෂණය",
+      "operationalModules": "මෙහෙයුම් මොඩියුල",
+      "recentActivity": "මෑත ක්රියාකාරකම්"
+    },
+    "activity": {
+      "none": "මෑත ක්‍රියාකාරකම් නැත.",
+      "open": "ලොග් පොත විවෘත කරන්න",
+      "view": "ලොග් පොත බලන්න"
+    }
+  },
+  "emergency": {
+    "activeProtocol": "සක්‍රීය හදිසි ප්‍රොටෝකෝලය",
+    "protocols": {
+      "vibration_excess": {
+        "0": "කම්පන වැඩි වීම තහවුරු විය.",
+        "1": "බර 50% දක්වා අඩු කරන්න.",
+        "2": "සියලුම ෙබයාරිං උෂ්ණත්වය පරීක්ෂා කරන්න.",
+        "3": "ඉංජිනේරුවන්ට වාර්තාවක් යවන්න."
+      },
+      "bearing_overheat": {
+        "0": "උෂ්ණත්වය ඉහළ යාම තහවුරු විය.",
+        "1": "සිසිලන ජල ප්රවාහය වැඩි කරන්න.",
+        "2": "තෙල් පීඩනය පරීක්ෂා කරන්න.",
+        "3": "උෂ්ණත්වය පහත වැටෙන්නේ නැත්නම් වසා දැමීමට සූදානම් වන්න."
+      },
+      "default": {
+        "0": "අනන්‍යතාව හඳුනා ගැනුණි.",
+        "1": "ප්‍රාදේශීය නඩත්තු මධ්‍යස්ථානයට දැනුම් දෙන්න."
+      }
+    }
+  },
+  "pdf": {
+    "passport": {
+      "title": "ඉංජිනේරු ඩොසියර්",
+      "generated": "ජනනය කරන ලදී",
+      "id": "හැඳුනුම්පත",
+      "assetIdentity": "වත්කම් අනන්‍යතාවය",
+      "assetName": "වත්කම් නාමය",
+      "type": "වර්ගය",
+      "location": "ස්ථානය",
+      "capacity": "ධාරිතාව",
+      "status": "තත්ත්වය",
+      "technicalSpecs": "තාක්ෂණික පිරිවිතර",
+      "noSpecs": "නිශ්චිත තාක්ෂණික පරාමිතීන් සටහන් කර නොමැත.",
+      "page": "පිටුව",
+      "maintenanceLog": "නඩත්තු ඉතිහාස ලොගය",
+      "date": "දිනය",
+      "category": "ප්‍රවර්ගය",
+      "action": "ක්රියාව / සාරාංශය",
+      "user": "පරිශීලක",
+      "noMaintenance": "මෙම වත්කම සඳහා නඩත්තු ඉතිහාසයක් වාර්තා වී නොමැත."
+    }
+  },
+  "engines": {
+    "pelton": {
+      "idealNsq": "+ අයිඩියල් අඩු නිශ්චිත වේගය ({{n_sq}})",
+      "highNsq": "+ පෙල්ටන් සඳහා ඉහළ නිශ්චිත වේගයක් (බහු-ජෙට් අවශ්‍ය වේ)",
+      "highHead": "+ ඉහළ ජල පීඩනය ප්‍රශස්ත චාලක ශක්තියක් සපයයි",
+      "lowPressure": "- ආවේග නිර්මාණය සඳහා ප්‍රමාණවත් පීඩනයක් නැත",
+      "silt": "+ බාල්දි ප්‍රතිස්ථාපනය කිරීමේ පහසුව රොන්මඩ වඩා හොඳින් හසුරුවයි"
+    },
+    "francis": {
+      "optimalNsq": "+ ෆ්‍රැන්සිස් සඳහා ප්‍රශස්ත නිශ්චිත වේගය ({{n_sq}})",
+      "mediumHead": "+ ජල පීඩනය සම්මත මධ්‍යම පරාසය තුළ ඇත",
+      "fixedBlade": "- ස්ථාවර තල ජ්‍යාමිතිය ප්‍රවාහ විචලනයන් සඳහා අඩු කාර්යක්ෂම වේ",
+      "siltErosion": "- ජලයෙන් යට වූ ධාවකය රොන්මඩ ඛාදනය වීමට ඉඩ ඇත"
+    },
+    "kaplan": {
+      "highNsq": "+ ඉහළ නිශ්චිත වේගයක් අනාවරණය විය ({{n_sq}})",
+      "lowHead": "+ අඩු ජල පීඩන යෙදුම් සඳහා වඩාත් සුදුසුය",
+      "headExceeded": "- ජල පීඩනය ප්‍රශස්ත කැප්ලාන් පරාසය ඉක්මවයි",
+      "variableFlow": "+ ද්විත්ව නියාමනය විචල්‍ය ප්‍රවාහය කාර්යක්ෂමව හැසිරවීමට සමත්"
+    },
+    "crossflow": {
+      "runOfRiver": "+ කුඩා පරිමාණයේ ගංගා ධාවනය සඳහා ඉහළ කාර්යක්ෂමතාව",
+      "selfCleaning": "+ ස්වයං පිරිසිදු කිරීමේ ධාවකය සුන්බුන් සහ රොන්මඩ හොඳින් හසුරුවයි"
+    }
+  },
+  "executive": {
+    "subtitle": "විධායක ඉංජිනේරු අතුරු මුහුණත // v1.0.5 UNIFIED",
+    "status": {
+      "scadaActive": "SCADA සක්‍රීයයි"
     },
     "actions": {
-        "back": "ආපසු Hub වෙත",
-        "previewPrint": "පෙරදසුන සහ මුද්‍රණය",
-        "cancel": "අවලංගු කරන්න",
-        "close": "වසන්න"
+      "downloadBrief": "වාර්තාව බාගන්න"
     },
-    "assetPicker": {
-        "selectContext": "වත්කම් සන්දර්භය තෝරන්න",
-        "registerNew": "+ නව වත්කම් ලියාපදිංචි කරන්න",
-        "modalTitle": "නව වත්කම් ලියාපදිංචි කරන්න",
-        "labelName": "වත්කම් නාමය",
-        "placeholderName": "උදා. HPP බ්ලැගජ්",
-        "labelType": "ටර්බයින වර්ගය",
-        "labelLocation": "ස්ථානය",
-        "placeholderLocation": "ගංගාව, රට",
-        "labelCapacity": "ධාරිතාව (MW)",
-        "registerButton": "වත්කම් ලියාපදිංචි කරන්න",
-        "successToast": "නව වත්කම සාර්ථකව ලියාපදිංචි කරන ලදී",
-        "failToast": "වත්කම් නිර්මාණය කිරීමට අසමත් විය"
+    "twin": {
+      "label": "TWIN",
+      "topology": "තත්කාලීන වත්කම් ස්ථලකය"
     },
-    "profile": {
-        "title": "Engineer Profile",
-        "subtitle": "Manage your identity and access levels.",
-        "back": "Back",
-        "noUser": "No user found",
-        "updateSuccess": "Profile updated successfully",
-        "uploadError": "You must select an image to upload.",
-        "avatarSuccess": "Avatar uploaded!",
-        "fullName": "Full Name",
-        "fullNamePlaceholder": "e.g. John Doe",
-        "role": "Position / Role",
-        "rolePlaceholder": "e.g. Lead Engineer",
-        "company": "Organization",
-        "companyPlaceholder": "e.g. Global Hydropower Inc.",
-        "saveButton": "Save Changes",
-        "unassignedRole": "Unassigned Role",
-        "guestSaveWarning": "Guest profiles cannot be saved",
-        "guestUploadWarning": "Guest profiles cannot upload avatars",
-        "developerTools": "Developer Tools",
-        "resetData": "Reset Demo Data",
-        "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
-        "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page."
+    "sensors": {
+      "activePower": "සක්‍රීය බලය",
+      "gridFrequency": "පද්ධති සංඛ්‍යාතය"
     },
-    "assetWizard": {
-        "title": "නව වත්කම් ලියාපදිංචි කරන්න",
-        "steps": {
-            "identity": "අනන්‍යතාවය",
-            "specs": "තාක්ෂණික පිරිවිතර",
-            "risk": "අවදානම් ක්‍රමාංකනය"
-        },
-        "fields": {
-            "name": "වත්කම් නාමය",
-            "type": "වත්කම් වර්ගය",
-            "location": "ස්ථානය",
-            "capacity": "ධාරිතාව (MW)",
-            "units": "ඒකක ගණන",
-            "kpi": "විවේචනාත්මක KPI"
-        },
-        "buttons": {
-            "next": "ඊළඟ පියවර",
-            "prev": "පෙර",
-            "register": "වත්කම් ලියාපදිංචි කරන්න"
-        },
-        "success": "වත්කම සාර්ථකව ලියාපදිංචි කර නැව්වල ආරම්භ කරන ලදී.",
-        "types": {
-            "francisDesc": "Reaction / Spiral",
-            "peltonDesc": "Impulse / Jet",
-            "kaplanDesc": "Axial / Propeller",
-            "bulbDesc": "Submersible / Tube",
-            "pumpingDesc": "Reversible Storage",
-            "solarDesc": "PV Array",
-            "windDesc": "Turbine Generator"
-        },
-        "specs": {
-            "spiralCasePressure": "Spiral Case Pressure (bar)",
-            "guideVaneCount": "Guide Vane Count",
-            "runnerDiameter": "Runner Diameter (mm)",
-            "draftTubeVacuum": "Draft Tube Vacuum (bar)",
-            "bearingType": "Bearing Type"
-        }
+    "kpi": {
+      "unitHealth": "ඒකක සෞඛ්‍යය",
+      "financialRisk": "මූල්‍ය අවදානම",
+      "projectedLoss": "පුරෝකථනය කළ පාඩුව (දින 30)"
     },
-    "globalMap": {
-        "fleet": "නැව්",
-        "liveMw": "සජීවී MW",
-        "alerts": "ඇඟවීම්",
-        "output": "ප්‍රතිදානය",
-        "status": {
-            "critical": "විවේචනාත්මක",
-            "warning": "අවවාදයයි"
-        }
+    "ai": {
+      "title": "Dr. Turbine AI",
+      "analyzing": "Dr. Turbine හයිඩ්‍රොලික් සලකුණු විශ්ලේෂණය කරමින්...",
+      "nominal": {
+        "title": "සියලු පද්ධති සාමාන්‍යයි",
+        "desc": "හයිඩ්‍රොලික් පරාමිතීන් ප්‍රශස්ත පරාසයක පවතී.",
+        "details": "Cavitation අවදානම: අඩුයි • බැරැන් උෂ්ණත්වය: සාමාන්‍යයි • කම්පනය: පිළිගත හැකිය"
+      },
+      "physicsAnalysis": "භෞතික විශ්ලේෂණය:",
+      "gridRisk": "සංඛ්‍යාත අපගමනය >5% ජනක යන්ත්‍ර විසන්ධි වීමේ හැකියාව පෙන්නුම් කරයි. {{freq}}Hz හි යාන්ත්‍රික අනුනාද අවදානම.",
+      "cavitationRisk": "ප්‍රවාහය: {{flow}} m³/s, පීඩන හිස: {{head}}m Cavitation සීමාව ඉක්මවයි. රනර් හිඩැස ප්‍රමාණවත් නොවනු ඇත.",
+      "acceptable": "පද්ධති පරාමිතීන් පිළිගත හැකි පරාසයක පවතී. අධීක්ෂණය ක්‍රියාත්මකයි."
     },
-    "toolbox": {
-        "greeting": {
-            "morning": "සුභ උදෑසනක්",
-            "afternoon": "සුබ දහවල්",
-            "evening": "සුභ සන්ධ්යාවක්"
-        },
-        "engineer": "ඉංජිනේරු",
-        "systemOperational": "පද්ධතිය ක්‍රියාත්මකයි",
-        "assetsOnline": "පැල ඔන්ලයින්",
-        "activeAsset": "සක්‍රීය: {{name}}",
-        "passport": "විදේශ ගමන් බලපත්‍රය",
-        "addAsset": "රෝපණ එකතු කරන්න",
-        "sections": {
-            "utilities": "ඉංජිනේරු උපයෝගිතා",
-            "designAnalysis": "සැලසුම් සහ විශ්ලේෂණය",
-            "operationalModules": "මෙහෙයුම් මොඩියුල",
-            "recentActivity": "මෑත ක්රියාකාරකම්"
-        },
-        "activity": {
-            "none": "මෑත ක්‍රියාකාරකම් නැත.",
-            "open": "ලොග් පොත විවෘත කරන්න",
-            "view": "ලොග් පොත බලන්න"
-        }
+    "control": {
+      "emergencyProtocols": "හදිසි ප්‍රතිචාර ප්‍රොටෝකෝල",
+      "scramButton": "🚨 හදිසි නැවතුම 🚨",
+      "scramConfirm": "හදිසි නැවතුම ආරම්භ කරන්නද? මෙය ටර්බයිනය අක්‍රිය කරන අතර අක්‍රිය කාලයක් ඇති කළ හැකිය.",
+      "safetyDisengaged": "ආරක්ෂිත අගුල අක්‍රියයි",
+      "scadaControls": "SCADA පාලන",
+      "flowRate": "ප්‍රවාහ අනුපාතය (m³/s)",
+      "head": "පීඩන හිස (m)",
+      "gridFrequencyInput": "පද්ධති සංඛ්‍යාතය (Hz)",
+      "criticalFreq": "⚠️ අවදානම් සංඛ්‍යාතයක් හඳුනා ගැනුණි"
     },
-    "emergency": {
-        "activeProtocol": "සක්‍රීය හදිසි ප්‍රොටෝකෝලය",
-        "protocols": {
-            "vibration_excess": {
-                "0": "කම්පන වැඩි වීම තහවුරු විය.",
-                "1": "බර 50% දක්වා අඩු කරන්න.",
-                "2": "සියලුම ෙබයාරිං උෂ්ණත්වය පරීක්ෂා කරන්න.",
-                "3": "ඉංජිනේරුවන්ට වාර්තාවක් යවන්න."
-            },
-            "bearing_overheat": {
-                "0": "උෂ්ණත්වය ඉහළ යාම තහවුරු විය.",
-                "1": "සිසිලන ජල ප්රවාහය වැඩි කරන්න.",
-                "2": "තෙල් පීඩනය පරීක්ෂා කරන්න.",
-                "3": "උෂ්ණත්වය පහත වැටෙන්නේ නැත්නම් වසා දැමීමට සූදානම් වන්න."
-            },
-            "default": {
-                "0": "අනන්‍යතාව හඳුනා ගැනුණි.",
-                "1": "ප්‍රාදේශීය නඩත්තු මධ්‍යස්ථානයට දැනුම් දෙන්න."
-            }
-        }
-    },
-    "pdf": {
-        "passport": {
-            "title": "ඉංජිනේරු ඩොසියර්",
-            "generated": "ජනනය කරන ලදී",
-            "id": "හැඳුනුම්පත",
-            "assetIdentity": "වත්කම් අනන්‍යතාවය",
-            "assetName": "වත්කම් නාමය",
-            "type": "වර්ගය",
-            "location": "ස්ථානය",
-            "capacity": "ධාරිතාව",
-            "status": "තත්ත්වය",
-            "technicalSpecs": "තාක්ෂණික පිරිවිතර",
-            "noSpecs": "නිශ්චිත තාක්ෂණික පරාමිතීන් සටහන් කර නොමැත.",
-            "page": "පිටුව",
-            "maintenanceLog": "නඩත්තු ඉතිහාස ලොගය",
-            "date": "දිනය",
-            "category": "ප්‍රවර්ගය",
-            "action": "ක්රියාව / සාරාංශය",
-            "user": "පරිශීලක",
-            "noMaintenance": "මෙම වත්කම සඳහා නඩත්තු ඉතිහාසයක් වාර්තා වී නොමැත."
-        }
-    },
-    "engines": {
-        "pelton": {
-            "idealNsq": "+ අයිඩියල් අඩු නිශ්චිත වේගය ({{n_sq}})",
-            "highNsq": "+ පෙල්ටන් සඳහා ඉහළ නිශ්චිත වේගයක් (බහු-ජෙට් අවශ්‍ය වේ)",
-            "highHead": "+ ඉහළ ජල පීඩනය ප්‍රශස්ත චාලක ශක්තියක් සපයයි",
-            "lowPressure": "- ආවේග නිර්මාණය සඳහා ප්‍රමාණවත් පීඩනයක් නැත",
-            "silt": "+ බාල්දි ප්‍රතිස්ථාපනය කිරීමේ පහසුව රොන්මඩ වඩා හොඳින් හසුරුවයි"
-        },
-        "francis": {
-            "optimalNsq": "+ ෆ්‍රැන්සිස් සඳහා ප්‍රශස්ත නිශ්චිත වේගය ({{n_sq}})",
-            "mediumHead": "+ ජල පීඩනය සම්මත මධ්‍යම පරාසය තුළ ඇත",
-            "fixedBlade": "- ස්ථාවර තල ජ්‍යාමිතිය ප්‍රවාහ විචලනයන් සඳහා අඩු කාර්යක්ෂම වේ",
-            "siltErosion": "- ජලයෙන් යට වූ ධාවකය රොන්මඩ ඛාදනය වීමට ඉඩ ඇත"
-        },
-        "kaplan": {
-            "highNsq": "+ ඉහළ නිශ්චිත වේගයක් අනාවරණය විය ({{n_sq}})",
-            "lowHead": "+ අඩු ජල පීඩන යෙදුම් සඳහා වඩාත් සුදුසුය",
-            "headExceeded": "- ජල පීඩනය ප්‍රශස්ත කැප්ලාන් පරාසය ඉක්මවයි",
-            "variableFlow": "+ ද්විත්ව නියාමනය විචල්‍ය ප්‍රවාහය කාර්යක්ෂමව හැසිරවීමට සමත්"
-        },
-        "crossflow": {
-            "runOfRiver": "+ කුඩා පරිමාණයේ ගංගා ධාවනය සඳහා ඉහළ කාර්යක්ෂමතාව",
-            "selfCleaning": "+ ස්වයං පිරිසිදු කිරීමේ ධාවකය සුන්බුන් සහ රොන්මඩ හොඳින් හසුරුවයි"
-        }
-    },
-    "executive": {
-        "subtitle": "විධායක ඉංජිනේරු අතුරු මුහුණත // v1.0.5 UNIFIED",
-        "status": {
-            "scadaActive": "SCADA සක්‍රීයයි"
-        },
-        "actions": {
-            "downloadBrief": "වාර්තාව බාගන්න"
-        },
-        "twin": {
-            "label": "TWIN",
-            "topology": "තත්කාලීන වත්කම් ස්ථලකය"
-        },
-        "sensors": {
-            "activePower": "සක්‍රීය බලය",
-            "gridFrequency": "පද්ධති සංඛ්‍යාතය"
-        },
-        "kpi": {
-            "unitHealth": "ඒකක සෞඛ්‍යය",
-            "financialRisk": "මූල්‍ය අවදානම",
-            "projectedLoss": "පුරෝකථනය කළ පාඩුව (දින 30)"
-        },
-        "ai": {
-            "title": "Dr. Turbine AI",
-            "analyzing": "Dr. Turbine හයිඩ්‍රොලික් සලකුණු විශ්ලේෂණය කරමින්...",
-            "nominal": {
-                "title": "සියලු පද්ධති සාමාන්‍යයි",
-                "desc": "හයිඩ්‍රොලික් පරාමිතීන් ප්‍රශස්ත පරාසයක පවතී.",
-                "details": "Cavitation අවදානම: අඩුයි • බැරැන් උෂ්ණත්වය: සාමාන්‍යයි • කම්පනය: පිළිගත හැකිය"
-            },
-            "physicsAnalysis": "භෞතික විශ්ලේෂණය:",
-            "gridRisk": "සංඛ්‍යාත අපගමනය >5% ජනක යන්ත්‍ර විසන්ධි වීමේ හැකියාව පෙන්නුම් කරයි. {{freq}}Hz හි යාන්ත්‍රික අනුනාද අවදානම.",
-            "cavitationRisk": "ප්‍රවාහය: {{flow}} m³/s, පීඩන හිස: {{head}}m Cavitation සීමාව ඉක්මවයි. රනර් හිඩැස ප්‍රමාණවත් නොවනු ඇත.",
-            "acceptable": "පද්ධති පරාමිතීන් පිළිගත හැකි පරාසයක පවතී. අධීක්ෂණය ක්‍රියාත්මකයි."
-        },
-        "control": {
-            "emergencyProtocols": "හදිසි ප්‍රතිචාර ප්‍රොටෝකෝල",
-            "scramButton": "🚨 හදිසි නැවතුම 🚨",
-            "scramConfirm": "හදිසි නැවතුම ආරම්භ කරන්නද? මෙය ටර්බයිනය අක්‍රිය කරන අතර අක්‍රිය කාලයක් ඇති කළ හැකිය.",
-            "safetyDisengaged": "ආරක්ෂිත අගුල අක්‍රියයි",
-            "scadaControls": "SCADA පාලන",
-            "flowRate": "ප්‍රවාහ අනුපාතය (m³/s)",
-            "head": "පීඩන හිස (m)",
-            "gridFrequencyInput": "පද්ධති සංඛ්‍යාතය (Hz)",
-            "criticalFreq": "⚠️ අවදානම් සංඛ්‍යාතයක් හඳුනා ගැනුණි"
-        },
-        "silhouette": {
-            "bearingTemp": "බැරැන් උෂ්ණත්වය",
-            "vibration": "කම්පනය",
-            "gridFreq": "පද්ධති සංඛ්‍යාතය",
-            "healthScore": "සෞඛ්‍ය අගය",
-            "criticalAlarms": "🚨 අවදානම් අනතුරු ඇඟවීම්"
-        }
-    },
-    "sidebar": {
-        "fleetOverview": "නෞකා දළ විශ්ලේෂණය",
-        "shaftAlignment": "ෂාෆ්ට් සැකසුම",
-        "hydraulicMaintenance": "හයිඩ්‍රොලික් නඩත්තුව",
-        "boltTorque": "බෝල්ට් තද කිරීම",
-        "shadowEngineer": "Shadow Engineer",
-        "intuitionLog": "Intuition Log",
-        "structuralIntegrity": "ව්‍යුහාත්මක අඛණ්ඩතාව",
-        "operations": "මෙහෙයුම්",
-        "maintenanceLogbook": "නඩත්තු සටහන් පොත",
-        "strategy": "උපායමාර්ග",
-        "toolboxAnalytics": "මෙවලම් විශ්ලේෂණ",
-        "knowledge": "දැනුම",
-        "exitToSite": "වෙබ් අඩවියට පිවිසෙන්න"
+    "silhouette": {
+      "bearingTemp": "බැරැන් උෂ්ණත්වය",
+      "vibration": "කම්පනය",
+      "gridFreq": "පද්ධති සංඛ්‍යාතය",
+      "healthScore": "සෞඛ්‍ය අගය",
+      "criticalAlarms": "🚨 අවදානම් අනතුරු ඇඟවීම්"
     }
+  },
+  "sidebar": {
+    "fleetOverview": "නෞකා දළ විශ්ලේෂණය",
+    "shaftAlignment": "ෂාෆ්ට් සැකසුම",
+    "hydraulicMaintenance": "හයිඩ්‍රොලික් නඩත්තුව",
+    "boltTorque": "බෝල්ට් තද කිරීම",
+    "shadowEngineer": "Shadow Engineer",
+    "intuitionLog": "Intuition Log",
+    "structuralIntegrity": "ව්‍යුහාත්මක අඛණ්ඩතාව",
+    "operations": "මෙහෙයුම්",
+    "maintenanceLogbook": "නඩත්තු සටහන් පොත",
+    "strategy": "උපායමාර්ග",
+    "toolboxAnalytics": "මෙවලම් විශ්ලේෂණ",
+    "knowledge": "දැනුම",
+    "exitToSite": "වෙබ් අඩවියට පිවිසෙන්න"
+  }
 }

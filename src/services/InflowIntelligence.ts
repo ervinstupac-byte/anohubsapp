@@ -19,7 +19,10 @@ export interface InflowPoint {
 export class InflowIntelligence {
   public static forecast24h(basin: BasinParams, inputs: WeatherInputs): InflowPoint[] {
     const res: InflowPoint[] = [];
-    const coeff = Math.min(0.95, Math.max(0.1, basin.runoffCoefficient * (inputs.soilMoisturePct / 100) * 1.5));
+    const coeff = Math.min(
+      0.95,
+      Math.max(0.1, basin.runoffCoefficient * (inputs.soilMoisturePct / 100) * 1.5)
+    );
     for (let h = 0; h < 24; h++) {
       const rain = Number(inputs.hourlyRainfallMM[h] || 0);
       const melt = Number(inputs.hourlySnowMeltMM[h] || 0);
@@ -31,7 +34,7 @@ export class InflowIntelligence {
       res.push({
         hour: idx,
         inflowM3s: qM3s,
-        confidence: Math.max(0.5, Math.min(0.95, (inputs.soilMoisturePct / 100) * 0.9))
+        confidence: Math.max(0.5, Math.min(0.95, (inputs.soilMoisturePct / 100) * 0.9)),
       });
     }
     const map: Record<number, { sum: number; conf: number; count: number }> = {};
@@ -44,7 +47,7 @@ export class InflowIntelligence {
     const out: InflowPoint[] = Object.entries(map).map(([hour, v]) => ({
       hour: Number(hour),
       inflowM3s: v.sum / Math.max(1, v.conf),
-      confidence: v.conf / Math.max(1, v.count)
+      confidence: v.conf / Math.max(1, v.count),
     }));
     return out.sort((a, b) => a.hour - b.hour);
   }

@@ -10,7 +10,11 @@ import { useProjectConfigStore } from '../../../features/config/ProjectConfigSto
 describe('ScadaCore Pelton nozzle binding', () => {
   beforeAll(() => {
     // @ts-ignore
-    global.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
+    global.ResizeObserver = class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
   });
 
   it('renders number of jets based on ProjectConfigStore', async () => {
@@ -21,13 +25,18 @@ describe('ScadaCore Pelton nozzle binding', () => {
         <ScadaCore />
       </MemoryRouter>
     );
-    await act(async () => dispatch.setTurbineType({ family: 'PELTON', variant: 'pelton_multi_jet' }));
+    await act(async () =>
+      dispatch.setTurbineType({ family: 'PELTON', variant: 'pelton_multi_jet' })
+    );
     // The mimic creates a path per jet between penstock and wheel — wait for rendering
     const label = await screen.findByText(/Pelton Wheel/i);
     const container = label.parentElement?.parentElement as HTMLElement;
-    await waitFor(() => {
-      const jetPaths = container.querySelectorAll('path');
-      expect(jetPaths.length).toBeGreaterThanOrEqual(4);
-    }, { timeout: 2000 });
+    await waitFor(
+      () => {
+        const jetPaths = container.querySelectorAll('path');
+        expect(jetPaths.length).toBeGreaterThanOrEqual(4);
+      },
+      { timeout: 2000 }
+    );
   });
 });

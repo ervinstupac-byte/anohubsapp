@@ -10,7 +10,7 @@ import { useForensics } from '../../hooks/useForensics';
 // Since ForensicDashboard uses a custom hook, we might need to simulated it at module level if we were using Jest/Vitest,
 // but for Storybook we often wrap in a context provider or accept props.
 // However, ForensicDashboard doesn't take props for state, it uses the hook internally.
-// We'll create a wrapper that simulateds the hook's return value if possible, or just render it as is 
+// We'll create a wrapper that simulateds the hook's return value if possible, or just render it as is
 // assuming the hook has default values or we can control it via global simulateds.
 
 // For now, let's render it wrapped in I18nextProvider.
@@ -38,8 +38,8 @@ type Story = StoryObj<typeof ForensicDashboard>;
 export const Idle: Story = {};
 
 export const AttackInProgress: Story = {
-  // Note: Since we can't easily simulated the internal hook state without a Context, 
-  // this story might just render the default state unless we modify the component to accept props 
+  // Note: Since we can't easily simulated the internal hook state without a Context,
+  // this story might just render the default state unless we modify the component to accept props
   // or use a simulated provider.
   // Ideally, ForensicDashboard should accept `status` as a prop or get it from a Context we can simulated.
 };

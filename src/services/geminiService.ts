@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import type { OperationalData, TurbineType, Answers } from "../types.ts";
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import type { OperationalData, TurbineType, Answers } from '../types.ts';
 
 // Inicijalizacija Gemini klijenta
 // NAPOMENA: Osiguraj da u .env fajlu imaš VITE_GEMINI_API_KEY=tvoj_kljuc
@@ -7,24 +7,24 @@ const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 interface AnalysisInput {
-    turbine: TurbineType | null;
-    operational: OperationalData;
-    answers: Answers;
-    riskScore: number;
+  turbine: TurbineType | null;
+  operational: OperationalData;
+  answers: Answers;
+  riskScore: number;
 }
 
 /**
  * Generira prompt za AI inženjera na temelju unesenih podataka.
  */
 const createEngineeringPrompt = (data: AnalysisInput): string => {
-    const { turbine, operational, answers, riskScore } = data;
+  const { turbine, operational, answers, riskScore } = data;
 
-    // Pretvaramo odgovore u čitljiv format
-    const formattedAnswers = Object.entries(answers)
-        .map(([key, value]) => `- Question ${key}: ${value}`)
-        .join('\n');
+  // Pretvaramo odgovore u čitljiv format
+  const formattedAnswers = Object.entries(answers)
+    .map(([key, value]) => `- Question ${key}: ${value}`)
+    .join('\n');
 
-    return `
+  return `
         ACT AS: "Hydro-Prijatelj", a Senior Hydropower Risk Engineer with 30 years of experience in LCC Optimization and RCFA (Root Cause Failure Analysis).
 
         CONTEXT:
@@ -59,30 +59,29 @@ const createEngineeringPrompt = (data: AnalysisInput): string => {
  * Glavna funkcija za pozivanje AI servisa.
  */
 export const generateAIAnalysis = async (input: AnalysisInput): Promise<string> => {
-    // 1. Sigurnosna provjera - ako nema ključa, vrati simulirani odgovor
-    if (!API_KEY) {
-        console.warn("Gemini API Key missing. Returning simulation.");
-        return simulateAnalysis(input);
-    }
+  // 1. Sigurnosna provjera - ako nema ključa, vrati simulirani odgovor
+  if (!API_KEY) {
+    console.warn('Gemini API Key missing. Returning simulation.');
+    return simulateAnalysis(input);
+  }
 
-    try {
-        // 2. Odabir modela (koristimo gemini-pro za tekst)
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  try {
+    // 2. Odabir modela (koristimo gemini-pro za tekst)
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-        // 3. Generiranje prompta
-        const prompt = createEngineeringPrompt(input);
+    // 3. Generiranje prompta
+    const prompt = createEngineeringPrompt(input);
 
-        // 4. Poziv API-ja
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+    // 4. Poziv API-ja
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-        return text;
-
-    } catch (error) {
-        console.error("Gemini API Error:", error);
-        return "System Warning: AI Diagnostic Service is currently unavailable. Please rely on the manual Risk Index and contact AnoHub support for a detailed audit.";
-    }
+    return text;
+  } catch (error) {
+    console.error('Gemini API Error:', error);
+    return 'System Warning: AI Diagnostic Service is currently unavailable. Please rely on the manual Risk Index and contact AnoHub support for a detailed audit.';
+  }
 };
 
 /**
@@ -90,9 +89,9 @@ export const generateAIAnalysis = async (input: AnalysisInput): Promise<string> 
  * Ovo osigurava da aplikacija izgleda funkcionalno i bez interneta/ključa.
  */
 const simulateAnalysis = (input: AnalysisInput): string => {
-    const isCritical = input.riskScore > 50;
+  const isCritical = input.riskScore > 50;
 
-    return `
+  return `
     [SIMULATION MODE - CONNECT API KEY FOR REAL-TIME AI]
 
     EXECUTIVE SUMMARY:

@@ -54,13 +54,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     let validFiles = files;
 
     if (maxSize) {
-      validFiles = validFiles.filter((file) => file.size <= maxSize);
+      validFiles = validFiles.filter(file => file.size <= maxSize);
     }
 
     if (accept) {
-      const acceptedTypes = accept.split(',').map((t) => t.trim());
-      validFiles = validFiles.filter((file) => {
-        return acceptedTypes.some((type) => {
+      const acceptedTypes = accept.split(',').map(t => t.trim());
+      validFiles = validFiles.filter(file => {
+        return acceptedTypes.some(type => {
           if (type.startsWith('.')) {
             return file.name.toLowerCase().endsWith(type.toLowerCase());
           }
@@ -88,14 +88,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
     <div className={className}>
-      {label && (
-        <label className="block text-sm font-medium text-slate-300 mb-2">{label}</label>
-      )}
+      {label && <label className="block text-sm font-medium text-slate-300 mb-2">{label}</label>}
 
       {/* Drop Zone */}
       <div
@@ -104,15 +102,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         onDrop={handleDrop}
         onClick={() => !disabled && fileInputRef.current?.click()}
         className={`p-8 border-2 border-dashed rounded-lg text-center cursor-pointer ${TRANSITIONS.fast} ${
-          isDragging
-            ? 'border-cyan-500 bg-cyan-500/10'
-            : 'border-slate-700 hover:border-slate-600'
+          isDragging ? 'border-cyan-500 bg-cyan-500/10' : 'border-slate-700 hover:border-slate-600'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${dropZoneClassName}`}
       >
         <Upload className="w-10 h-10 mx-auto mb-3 text-slate-400" />
-        <p className="text-slate-300 mb-1">
-          Drag and drop files here, or click to select
-        </p>
+        <p className="text-slate-300 mb-1">Drag and drop files here, or click to select</p>
         <p className="text-xs text-slate-500">
           {accept ? `Accepted formats: ${accept}` : 'All file types accepted'}
         </p>

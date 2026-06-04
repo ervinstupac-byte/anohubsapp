@@ -18,9 +18,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(
-    value || new Date()
-  );
+  const [currentMonth, setCurrentMonth] = useState(value || new Date());
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
@@ -49,11 +47,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const handleSelectDay = (day: number) => {
-    const newDate = new Date(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth(),
-      day
-    );
+    const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     onChange?.(newDate);
     setIsOpen(false);
   };
@@ -85,7 +79,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
       {/* Calendar Dropdown */}
       {isOpen && (
-        <div className={`absolute top-full mt-2 w-72 ${GLASS.floating} rounded-xl shadow-xl ${Z_INDEX.dropdown} animate-slide-down`}>
+        <div
+          className={`absolute top-full mt-2 w-72 ${GLASS.floating} rounded-xl shadow-xl ${Z_INDEX.dropdown} animate-slide-down`}
+        >
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-700/50">
             <button
@@ -111,11 +107,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           {/* Days Grid */}
           <div className="p-4">
             <div className="grid grid-cols-7 gap-1 mb-2">
-              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-                <div
-                  key={day}
-                  className="text-center text-xs text-slate-500 font-semibold py-1"
-                >
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                <div key={day} className="text-center text-xs text-slate-500 font-semibold py-1">
                   {day}
                 </div>
               ))}
@@ -128,11 +121,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
               {/* Days */}
               {Array.from({ length: days }).map((_, i) => {
                 const day = i + 1;
-                const date = new Date(
-                  currentMonth.getFullYear(),
-                  currentMonth.getMonth(),
-                  day
-                );
+                const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
                 const isSelected = value && isSameDay(date, value);
                 const isToday = isSameDay(date, new Date());
 
@@ -144,8 +133,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                       isSelected
                         ? 'bg-cyan-600 text-white font-semibold'
                         : isToday
-                        ? 'text-cyan-400 font-semibold'
-                        : 'text-slate-300 hover:bg-slate-800'
+                          ? 'text-cyan-400 font-semibold'
+                          : 'text-slate-300 hover:bg-slate-800'
                     }`}
                   >
                     {day}

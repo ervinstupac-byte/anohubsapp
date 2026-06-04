@@ -1,8 +1,8 @@
 /**
  * idAdapter.ts
- * 
+ *
  * NC-2600: Sovereign ID Adapter Utility
- * 
+ *
  * Centralized ID conversion utility for all components
  * Replaces scattered idAdapter usage throughout the codebase
  */
@@ -57,7 +57,7 @@ export const idAdapter = {
   toStorage,
   toNumber,
   toDb,
-  toBigInt
+  toBigInt,
 };
 
 export default idAdapter;

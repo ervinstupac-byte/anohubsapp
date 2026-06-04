@@ -17,9 +17,7 @@ export const UniversalTurbineDashboard: React.FC = () => {
             <div className="text-[11px] tracking-[0.22em] uppercase text-slate-400 font-mono">
               Secured Module
             </div>
-            <h2 className="mt-2 text-xl font-semibold text-white">
-              Universal Turbine Dashboard
-            </h2>
+            <h2 className="mt-2 text-xl font-semibold text-white">Universal Turbine Dashboard</h2>
             <p className="mt-2 text-sm text-slate-300 leading-relaxed">
               Engineering logic secured in Discovery Vault. Awaiting integration.
             </p>
@@ -39,14 +37,10 @@ export const UniversalTurbineDashboard: React.FC = () => {
                   <Archive className="w-4 h-4 text-amber-300" />
                   Archived Asset
                 </div>
-                <div className="mt-1 text-[11px] text-slate-500 font-mono">
-                  discovery-vault
-                </div>
+                <div className="mt-1 text-[11px] text-slate-500 font-mono">discovery-vault</div>
               </div>
               <div className="rounded-lg border border-white/10 bg-black/20 p-3">
-                <div className="text-xs text-slate-300">
-                  Status
-                </div>
+                <div className="text-xs text-slate-300">Status</div>
                 <div className="mt-1 text-[11px] text-slate-500 font-mono">
                   Awaiting integration
                 </div>

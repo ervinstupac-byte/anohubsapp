@@ -21,13 +21,19 @@ export default class SovereignAuditAdapter {
       assetId,
       timestamp: Date.now(),
       telemetryRef: telemetryRef || undefined,
-      report
+      report,
     };
 
     // Append to audit log list
     const log = ((this.memory as any).getItem('wisdom_audit_log') as any[]) || [];
     log.push(entry);
-    this.memory.saveOverrideRecord({ type: 'WISDOM_PERSIST', timestamp: entry.timestamp, id: entry.id, assetId, telemetryRef });
+    this.memory.saveOverrideRecord({
+      type: 'WISDOM_PERSIST',
+      timestamp: entry.timestamp,
+      id: entry.id,
+      assetId,
+      telemetryRef,
+    });
     // store full log
     (this.memory as any).setItem && (this.memory as any).setItem('wisdom_audit_log', log);
     return entry;
@@ -45,8 +51,11 @@ export default class SovereignAuditAdapter {
 
   queryByLegacyTip(term: string, sinceDays: number = 30): PersistedWisdom[] {
     const now = Date.now();
-    const cutoff = now - (sinceDays * 24 * 60 * 60 * 1000);
+    const cutoff = now - sinceDays * 24 * 60 * 60 * 1000;
     const all = this.getAuditLog();
-    return all.filter(a => a.timestamp >= cutoff && JSON.stringify(a.report).toLowerCase().includes(term.toLowerCase()));
+    return all.filter(
+      a =>
+        a.timestamp >= cutoff && JSON.stringify(a.report).toLowerCase().includes(term.toLowerCase())
+    );
   }
 }

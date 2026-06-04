@@ -21,7 +21,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetDefinition> = {
     icon: <span>💰</span>,
     defaultSize: { w: 2, h: 2 },
     component: FinancialHealthPanel,
-    category: 'analytics'
+    category: 'analytics',
   },
   componentHealth: {
     id: 'componentHealth',
@@ -30,7 +30,7 @@ export const WIDGET_REGISTRY: Record<string, WidgetDefinition> = {
     icon: <span>🌳</span>,
     defaultSize: { w: 4, h: 3 },
     component: SovereignComponentTree,
-    category: 'monitoring'
+    category: 'monitoring',
   },
   // Add more widgets here as we go!
 };

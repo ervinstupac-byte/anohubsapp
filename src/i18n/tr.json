@@ -1,429 +1,429 @@
 {
-    "hub": {
-        "welcome": "Hoş geldiniz, {{name}}",
-        "subtitle": "Mükemmellik Standartlarını Uygulayan Küresel Platform.",
-        "operationalModules": "Operasyonel Modüller",
-        "strategicIntelligence": "Stratejik İstihbarat",
-        "knowledgeCulture": "Bilgi ve Kültür",
-        "systemStatusConnecting": "BAĞLANIYOR...",
-        "systemStatusOperational": "SİSTEM ÇALIŞIYOR",
-        "risks": "Riskler Tespit Edildi",
-        "designs": "Tasarımlar Kaydedildi",
-        "fleetOutput": "Filo Çıktısı",
-        "riskFactors": "Risk Faktörleri",
-        "activeContext": "Aktif Bağlam",
-        "vision": "Vizyon",
-        "manifesto": "MANIFESTO",
-        "footerText": "Mükemmellik için Tasarlandı",
-        "operatorId": "Operatör Kimliği",
-        "tagline": "Bağışıklık Mimarları",
-        "info": "BİLGİ",
-        "copyright": "© 2025 Anohubs A.Ş.",
-        "protocol": "TEKNİK BAĞIŞIKLIK PROTOKOLÜ"
+  "hub": {
+    "welcome": "Hoş geldiniz, {{name}}",
+    "subtitle": "Mükemmellik Standartlarını Uygulayan Küresel Platform.",
+    "operationalModules": "Operasyonel Modüller",
+    "strategicIntelligence": "Stratejik İstihbarat",
+    "knowledgeCulture": "Bilgi ve Kültür",
+    "systemStatusConnecting": "BAĞLANIYOR...",
+    "systemStatusOperational": "SİSTEM ÇALIŞIYOR",
+    "risks": "Riskler Tespit Edildi",
+    "designs": "Tasarımlar Kaydedildi",
+    "fleetOutput": "Filo Çıktısı",
+    "riskFactors": "Risk Faktörleri",
+    "activeContext": "Aktif Bağlam",
+    "vision": "Vizyon",
+    "manifesto": "MANIFESTO",
+    "footerText": "Mükemmellik için Tasarlandı",
+    "operatorId": "Operatör Kimliği",
+    "tagline": "Bağışıklık Mimarları",
+    "info": "BİLGİ",
+    "copyright": "© 2025 Anohubs A.Ş.",
+    "protocol": "TEKNİK BAĞIŞIKLIK PROTOKOLÜ"
+  },
+  "modules": {
+    "riskAssessment": "Risk Değerlendirmesi",
+    "riskAssessmentDesc": "Arıza öncesi 'İcra Boşluğunu' belirleyin.",
+    "riskReport": "Ana Proje Dosyası",
+    "riskReportDesc": "Konsolide Kurumsal Raporlama.",
+    "hppBuilder": "HES Tasarım Stüdyosu",
+    "hppBuilderDesc": "Fizik Tabanlı Türbin Boyutlandırma ve Simülasyon.",
+    "installationGuarantee": "Kurulum Standardı",
+    "installationGuaranteeDesc": "0.05 mm/m Protokolünü Uygulayın.",
+    "globalMap": "Küresel Varlık Haritası",
+    "globalMapDesc": "Coğrafi Varlık İstihbaratı.",
+    "investorBriefing": "Yatırımcı Bilgilendirmesi",
+    "investorBriefingDesc": "Finansal KPI'lar ve Risk Etkileri.",
+    "contractManagement": "Sözleşme ve Hukuk",
+    "contractManagementDesc": "Veri Yoluyla Garanti Koruması.",
+    "digitalIntegrity": "Dijital Bütünlük",
+    "digitalIntegrityDesc": "Değiştirilemez Blockchain Kanıtı.",
+    "revitalizationStrategy": "Revitalizasyon Stratejisi",
+    "revitalizationStrategyDesc": "Ömür Uzatma Stratejileri.",
+    "library": "Bileşen Kütüphanesi",
+    "libraryDesc": "Hata Modları ve KPI'lar.",
+    "standardOfExcellence": "Mükemmellik Standardı",
+    "standardOfExcellenceDesc": "0.05 mm/m Manifestosu.",
+    "phaseGuide": "Proje Evre Rehberi",
+    "phaseGuideDesc": "Proje Yaşam Döngüsü Uygulaması.",
+    "hppImprovements": "HES İno-Hub",
+    "hppImprovementsDesc": "İnovasyon Takibi.",
+    "riverWildlife": "Nehir ve Yaban Hayatı",
+    "riverWildlifeDesc": "Çevresel Zorunluluk.",
+    "genderEquity": "Cinsiyet Eşitliği",
+    "genderEquityDesc": "İK Stratejisi ve Kültür.",
+    "digitalIntroduction": "Dijital Tanıtım",
+    "maintenance": "Bakım Motoru"
+  },
+  "common": {
+    "launch": "BAŞLAT",
+    "version": "v2.5.0 (Kurumsal)",
+    "system": "SİSTEM",
+    "immune": "BAĞIŞIK",
+    "compromised": "TEHLİKEDE",
+    "critical": "KRİTİK",
+    "moderate": "ORTA",
+    "stable": "STABİL",
+    "riskLevel": "Risk Seviyesi",
+    "active": "Aktif"
+  },
+  "questionnaire": {
+    "title": "Tanı Raporu",
+    "liveAnalysis": "Canlı Analiz",
+    "aiReady": "Yapay Zeka Hazır",
+    "overallAssessment": "Genel Değerlendirme",
+    "highPriorityAlerts": "Yüksek Öncelikli Uyarılar",
+    "warnings": "Uyarılar",
+    "downloadPDF": "PDF İndir",
+    "uploading": "Yükleniyor...",
+    "syncedToCloud": "✓ Bulut ile Eşitlendi",
+    "submitToHQ": "Merkeze Gönder",
+    "conceptTitle": "Kavram: İcra Boşluğu",
+    "conceptDesc": "Kusursuz bir teknik plan ile sahadaki tutarsız uygulama gerçeği arasındaki kritik sapma.",
+    "criticalIndicators": "Kritik Göstergeler",
+    "criticalIndicatorsDesc": "Garanti kaybını önlemek için acil müdahale gerekli.",
+    "operationalWarnings": "Operasyonel Uyarılar",
+    "operationalWarningsDesc": "Dokümantasyon veya disiplinde olası boşluklar.",
+    "systemOptimal": "Sistem Optimal",
+    "systemOptimalDesc": "Mükemmellik Standardından önemli bir sapma tespit edilmedi.",
+    "returnToDashboard": "Kontrol Paneline Dön",
+    "noDataToSubmit": "Gönderilecek veri yok.",
+    "diagnosisSynced": "{{email}} kullanıcısının tanısı AnoHUB Bulut ile eşitlendi.",
+    "cloudSyncFailed": "Bulut eşitleme başarısız: {{error}}",
+    "noDataAvailable": "Veri mevcut değil.",
+    "pdfDownloaded": "Risk Raporu PDF'i indirildi."
+  },
+  "login": {
+    "title": "AnoHUB Giriş",
+    "subtitle": "Kurumsal Erişim",
+    "instructions": "Lütfen kimlik bilgilerinizi doğrulayın.",
+    "emailLabel": "E-posta Adresi",
+    "passwordLabel": "Şifre",
+    "signInButton": "Giriş Yap",
+    "guestButton": "Misafir Olarak Devam Et",
+    "or": "Veya",
+    "loading": "Kimlik Doğrulanıyor...",
+    "error": "Giriş Başarısız",
+    "magicLink": "Sihirli Bağlantı Gönder",
+    "footer": "Sadece Yetkili Personel İçin",
+    "guestWelcome": "Hoş geldiniz, Mühendis!"
+  },
+  "auth": {
+    "signOut": "Çıkış Yap",
+    "signOutConfirm": "Çıkış yapmak istediğinizden emin misiniz?",
+    "signOutSuccess": "Başarıyla çıkış yapıldı",
+    "accessDenied": "Erişim Reddedildi - Lütfen Giriş Yapın",
+    "loading": "Kimlik Doğrulanıyor..."
+  },
+  "hppStudio": {
+    "title": "HES TASARIM STÜDYOSU",
+    "subtitle": "Gelişmiş Mühendislik Asistanı v2.0",
+    "exitStudio": "Stüdyodan Çık",
+    "steps": {
+      "hydrology": "Hidroloji Kurulumu",
+      "selection": "Türbin Seçimi",
+      "export": "Finans ve Dışa Aktar"
     },
-    "modules": {
-        "riskAssessment": "Risk Değerlendirmesi",
-        "riskAssessmentDesc": "Arıza öncesi 'İcra Boşluğunu' belirleyin.",
-        "riskReport": "Ana Proje Dosyası",
-        "riskReportDesc": "Konsolide Kurumsal Raporlama.",
-        "hppBuilder": "HES Tasarım Stüdyosu",
-        "hppBuilderDesc": "Fizik Tabanlı Türbin Boyutlandırma ve Simülasyon.",
-        "installationGuarantee": "Kurulum Standardı",
-        "installationGuaranteeDesc": "0.05 mm/m Protokolünü Uygulayın.",
-        "globalMap": "Küresel Varlık Haritası",
-        "globalMapDesc": "Coğrafi Varlık İstihbaratı.",
-        "investorBriefing": "Yatırımcı Bilgilendirmesi",
-        "investorBriefingDesc": "Finansal KPI'lar ve Risk Etkileri.",
-        "contractManagement": "Sözleşme ve Hukuk",
-        "contractManagementDesc": "Veri Yoluyla Garanti Koruması.",
-        "digitalIntegrity": "Dijital Bütünlük",
-        "digitalIntegrityDesc": "Değiştirilemez Blockchain Kanıtı.",
-        "revitalizationStrategy": "Revitalizasyon Stratejisi",
-        "revitalizationStrategyDesc": "Ömür Uzatma Stratejileri.",
-        "library": "Bileşen Kütüphanesi",
-        "libraryDesc": "Hata Modları ve KPI'lar.",
-        "standardOfExcellence": "Mükemmellik Standardı",
-        "standardOfExcellenceDesc": "0.05 mm/m Manifestosu.",
-        "phaseGuide": "Proje Evre Rehberi",
-        "phaseGuideDesc": "Proje Yaşam Döngüsü Uygulaması.",
-        "hppImprovements": "HES İno-Hub",
-        "hppImprovementsDesc": "İnovasyon Takibi.",
-        "riverWildlife": "Nehir ve Yaban Hayatı",
-        "riverWildlifeDesc": "Çevresel Zorunluluk.",
-        "genderEquity": "Cinsiyet Eşitliği",
-        "genderEquityDesc": "İK Stratejisi ve Kültür.",
-        "digitalIntroduction": "Dijital Tanıtım",
-        "maintenance": "Bakım Motoru"
+    "labels": {
+      "grossHead": "Brüt Düşü",
+      "flowRate": "Debi",
+      "waterType": "Su Tipi",
+      "flowProfile": "Debi Profili",
+      "specificSpeed": "Özgül Hız (Nq)",
+      "topologyIndex": "Topoloji İndeksi",
+      "potentialPower": "Potansiyel Güç",
+      "calculatedCapacity": "Hesaplanan Kapasite",
+      "siteConditions": "Saha Koşulları",
+      "recommendedMatches": "Önerilen Mühendislik Eşleşmeleri",
+      "bestMatch": "En İyi Eşleşme",
+      "matchScore": "Eşleşme Puanı",
+      "projectExport": "Proje Dışa Aktarımı",
+      "configName": "Yapılandırma Adı"
     },
-    "common": {
-        "launch": "BAŞLAT",
-        "version": "v2.5.0 (Kurumsal)",
-        "system": "SİSTEM",
-        "immune": "BAĞIŞIK",
-        "compromised": "TEHLİKEDE",
-        "critical": "KRİTİK",
-        "moderate": "ORTA",
-        "stable": "STABİL",
-        "riskLevel": "Risk Seviyesi",
-        "active": "Aktif"
+    "waterTypes": {
+      "clean": "Temiz",
+      "suspended": "Askıda Katı Madde",
+      "abrasive": "Buzul Mili (Aşındırıcı)"
     },
-    "questionnaire": {
-        "title": "Tanı Raporu",
-        "liveAnalysis": "Canlı Analiz",
-        "aiReady": "Yapay Zeka Hazır",
-        "overallAssessment": "Genel Değerlendirme",
-        "highPriorityAlerts": "Yüksek Öncelikli Uyarılar",
-        "warnings": "Uyarılar",
-        "downloadPDF": "PDF İndir",
-        "uploading": "Yükleniyor...",
-        "syncedToCloud": "✓ Bulut ile Eşitlendi",
-        "submitToHQ": "Merkeze Gönder",
-        "conceptTitle": "Kavram: İcra Boşluğu",
-        "conceptDesc": "Kusursuz bir teknik plan ile sahadaki tutarsız uygulama gerçeği arasındaki kritik sapma.",
-        "criticalIndicators": "Kritik Göstergeler",
-        "criticalIndicatorsDesc": "Garanti kaybını önlemek için acil müdahale gerekli.",
-        "operationalWarnings": "Operasyonel Uyarılar",
-        "operationalWarningsDesc": "Dokümantasyon veya disiplinde olası boşluklar.",
-        "systemOptimal": "Sistem Optimal",
-        "systemOptimalDesc": "Mükemmellik Standardından önemli bir sapma tespit edilmedi.",
-        "returnToDashboard": "Kontrol Paneline Dön",
-        "noDataToSubmit": "Gönderilecek veri yok.",
-        "diagnosisSynced": "{{email}} kullanıcısının tanısı AnoHUB Bulut ile eşitlendi.",
-        "cloudSyncFailed": "Bulut eşitleme başarısız: {{error}}",
-        "noDataAvailable": "Veri mevcut değil.",
-        "pdfDownloaded": "Risk Raporu PDF'i indirildi."
+    "flowProfiles": {
+      "stable": "Stabil (Nehir Tipi)",
+      "seasonal": "Mevsimsel Depolama"
     },
-    "login": {
-        "title": "AnoHUB Giriş",
-        "subtitle": "Kurumsal Erişim",
-        "instructions": "Lütfen kimlik bilgilerinizi doğrulayın.",
-        "emailLabel": "E-posta Adresi",
-        "passwordLabel": "Şifre",
-        "signInButton": "Giriş Yap",
-        "guestButton": "Misafir Olarak Devam Et",
-        "or": "Veya",
-        "loading": "Kimlik Doğrulanıyor...",
-        "error": "Giriş Başarısız",
-        "magicLink": "Sihirli Bağlantı Gönder",
-        "footer": "Sadece Yetkili Personel İçin",
-        "guestWelcome": "Hoş geldiniz, Mühendis!"
+    "buttons": {
+      "continue": "SEÇİME DEVAM ET →",
+      "back": "← Geri",
+      "skipToExport": "Dışa Aktarıma Atla →",
+      "backToSelection": "← Seçime Dön",
+      "saveToCloud": "Buluta Kaydet",
+      "generateReport": "Rapor Oluştur"
     },
-    "auth": {
-        "signOut": "Çıkış Yap",
-        "signOutConfirm": "Çıkış yapmak istediğinizden emin misiniz?",
-        "signOutSuccess": "Başarıyla çıkış yapıldı",
-        "accessDenied": "Erişim Reddedildi - Lütfen Giriş Yapın",
-        "loading": "Kimlik Doğrulanıyor..."
+    "placeholders": {
+      "configName": "örn. Demirkapı - Francis V1"
     },
-    "hppStudio": {
-        "title": "HES TASARIM STÜDYOSU",
-        "subtitle": "Gelişmiş Mühendislik Asistanı v2.0",
-        "exitStudio": "Stüdyodan Çık",
-        "steps": {
-            "hydrology": "Hidroloji Kurulumu",
-            "selection": "Türbin Seçimi",
-            "export": "Finans ve Dışa Aktar"
-        },
-        "labels": {
-            "grossHead": "Brüt Düşü",
-            "flowRate": "Debi",
-            "waterType": "Su Tipi",
-            "flowProfile": "Debi Profili",
-            "specificSpeed": "Özgül Hız (Nq)",
-            "topologyIndex": "Topoloji İndeksi",
-            "potentialPower": "Potansiyel Güç",
-            "calculatedCapacity": "Hesaplanan Kapasite",
-            "siteConditions": "Saha Koşulları",
-            "recommendedMatches": "Önerilen Mühendislik Eşleşmeleri",
-            "bestMatch": "En İyi Eşleşme",
-            "matchScore": "Eşleşme Puanı",
-            "projectExport": "Proje Dışa Aktarımı",
-            "configName": "Yapılandırma Adı"
-        },
-        "waterTypes": {
-            "clean": "Temiz",
-            "suspended": "Askıda Katı Madde",
-            "abrasive": "Buzul Mili (Aşındırıcı)"
-        },
-        "flowProfiles": {
-            "stable": "Stabil (Nehir Tipi)",
-            "seasonal": "Mevsimsel Depolama"
-        },
-        "buttons": {
-            "continue": "SEÇİME DEVAM ET →",
-            "back": "← Geri",
-            "skipToExport": "Dışa Aktarıma Atla →",
-            "backToSelection": "← Seçime Dön",
-            "saveToCloud": "Buluta Kaydet",
-            "generateReport": "Rapor Oluştur"
-        },
-        "placeholders": {
-            "configName": "örn. Demirkapı - Francis V1"
-        },
-        "toasts": {
-            "turbineInitialized": "{{type}} için sihirbaz başlatıldı",
-            "invalidCombination": "Geçersiz Düşü/Debi kombinasyonu. Lütfen değerleri ayarlayın.",
-            "savingDesign": "Tasarım yapılandırması kaydediliyor...",
-            "saveSuccess": "Tasarım başarıyla kaydedildi!",
-            "enterConfigName": "Lütfen bir yapılandırma adı girin",
-            "selectAssetFirst": "Lütfen önce bir varlık seçin",
-            "physicsError": "Fizik hesaplama hatası - varsayılan değerler kullanılıyor",
-            "cloudSyncFailed": "Bulut eşitleme başarısız: {{error}}"
-        },
-        "errors": {
-            "crashRecovery": "HES Tasarımcısı bir hatayla karşılaştı. Lütfen sayfayı yenileyin.",
-            "noAssetSelected": "Varlık seçilmedi"
-        }
+    "toasts": {
+      "turbineInitialized": "{{type}} için sihirbaz başlatıldı",
+      "invalidCombination": "Geçersiz Düşü/Debi kombinasyonu. Lütfen değerleri ayarlayın.",
+      "savingDesign": "Tasarım yapılandırması kaydediliyor...",
+      "saveSuccess": "Tasarım başarıyla kaydedildi!",
+      "enterConfigName": "Lütfen bir yapılandırma adı girin",
+      "selectAssetFirst": "Lütfen önce bir varlık seçin",
+      "physicsError": "Fizik hesaplama hatası - varsayılan değerler kullanılıyor",
+      "cloudSyncFailed": "Bulut eşitleme başarısız: {{error}}"
+    },
+    "errors": {
+      "crashRecovery": "HES Tasarımcısı bir hatayla karşılaştı. Lütfen sayfayı yenileyin.",
+      "noAssetSelected": "Varlık seçilmedi"
+    }
+  },
+  "actions": {
+    "back": "Merkeze Dön",
+    "previewPrint": "Önizle ve Yazdır",
+    "cancel": "İptal",
+    "close": "Kapat"
+  },
+  "assetPicker": {
+    "selectContext": "Varlık Bağlamını Seç",
+    "registerNew": "+ Yeni Varlık Kaydet",
+    "modalTitle": "Yeni Varlık Kaydet",
+    "labelName": "Varlık Adı",
+    "placeholderName": "örn. HES Demirkapı",
+    "labelType": "Türbin Tipi",
+    "labelLocation": "Konum",
+    "placeholderLocation": "Nehir, Ülke",
+    "labelCapacity": "Kapasite (MW)",
+    "registerButton": "Varlığı Kaydet",
+    "successToast": "Yeni Varlık başarıyla kaydedildi",
+    "failToast": "Varlık oluşturulamadı"
+  },
+  "profile": {
+    "title": "Engineer Profile",
+    "subtitle": "Manage your identity and access levels.",
+    "back": "Back",
+    "noUser": "No user found",
+    "updateSuccess": "Profile updated successfully",
+    "uploadError": "You must select an image to upload.",
+    "avatarSuccess": "Avatar uploaded!",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "e.g. John Doe",
+    "role": "Position / Role",
+    "rolePlaceholder": "e.g. Lead Engineer",
+    "company": "Organization",
+    "companyPlaceholder": "e.g. Global Hydropower Inc.",
+    "saveButton": "Save Changes",
+    "unassignedRole": "Unassigned Role",
+    "guestSaveWarning": "Guest profiles cannot be saved",
+    "guestUploadWarning": "Guest profiles cannot upload avatars",
+    "developerTools": "Developer Tools",
+    "resetData": "Reset Demo Data",
+    "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
+    "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page."
+  },
+  "assetWizard": {
+    "title": "Yeni Varlık Kaydet",
+    "steps": {
+      "identity": "Kimlik",
+      "specs": "Teknik Özellikler",
+      "risk": "Risk Kalibrasyonu"
+    },
+    "fields": {
+      "name": "Varlık Adı",
+      "type": "Varlık Tipi",
+      "location": "Konum",
+      "capacity": "Kapasite (MW)",
+      "units": "Ünite Sayısı",
+      "kpi": "Kritik KPI"
+    },
+    "buttons": {
+      "next": "Sonraki Adım",
+      "prev": "Geri",
+      "register": "Varlığı Kaydet"
+    },
+    "success": "Varlık başarıyla kaydedildi ve filoda başlatıldı.",
+    "types": {
+      "francisDesc": "Reaction / Spiral",
+      "peltonDesc": "Impulse / Jet",
+      "kaplanDesc": "Axial / Propeller",
+      "bulbDesc": "Submersible / Tube",
+      "pumpingDesc": "Reversible Storage",
+      "solarDesc": "PV Array",
+      "windDesc": "Turbine Generator"
+    },
+    "specs": {
+      "spiralCasePressure": "Spiral Case Pressure (bar)",
+      "guideVaneCount": "Guide Vane Count",
+      "runnerDiameter": "Runner Diameter (mm)",
+      "draftTubeVacuum": "Draft Tube Vacuum (bar)",
+      "bearingType": "Bearing Type"
+    }
+  },
+  "globalMap": {
+    "fleet": "Filo",
+    "liveMw": "Canlı MW",
+    "alerts": "Uyarılar",
+    "output": "Çıktı",
+    "status": {
+      "critical": "KRİTİK",
+      "warning": "UYARI"
+    }
+  },
+  "toolbox": {
+    "greeting": {
+      "morning": "Günaydın",
+      "afternoon": "Tünaydın",
+      "evening": "İyi Akşamlar"
+    },
+    "engineer": "Mühendis",
+    "systemOperational": "Sistem Çalışıyor",
+    "assetsOnline": "Tesisler Çevrimiçi",
+    "activeAsset": "Aktif: {{name}}",
+    "passport": "Pasaport",
+    "addAsset": "Tesis Ekle",
+    "sections": {
+      "utilities": "Mühendislik Araçları",
+      "designAnalysis": "Tasarım ve Analiz",
+      "operationalModules": "Operasyonel Modüller",
+      "recentActivity": "Son Aktiviteler"
+    },
+    "activity": {
+      "none": "Son aktivite yok.",
+      "open": "Seyir Defterini Aç",
+      "view": "Seyir Defterini Görüntüle"
+    }
+  },
+  "sidebar": {
+    "fleetOverview": "FİLO GENEL BAKIŞ",
+    "operations": "OPERASYONLAR",
+    "strategy": "STRATEJİ",
+    "knowledge": "BİLGİ",
+    "exitToSite": "Ana Siteye Çıkış",
+    "boltTorque": "Civata Torku",
+    "shaftAlign": "Şaft Hizalama",
+    "hydraulics": "Hidrolik",
+    "structuralIntegrity": "Yapısal Bütünlük",
+    "shadowEngineer": "Gölge Mühendis",
+    "toolboxAnalytics": "Araç Analitiği",
+    "maintenanceLogbook": "Bakım Seyir Defteri",
+    "settings": "Ayarlar"
+  },
+  "emergency": {
+    "activeProtocol": "AKTİF ACİL DURUM PROTOKOLÜ",
+    "protocols": {
+      "vibration_excess": {
+        "0": "Titreşim artışı onaylandı.",
+        "1": "Yükü %50'ye düşürün.",
+        "2": "Tüm yatak sıcaklıklarını kontrol edin.",
+        "3": "Mühendislere rapor gönderin."
+      },
+      "bearing_overheat": {
+        "0": "Sıcaklık artışı onaylandı.",
+        "1": "Soğutma suyu akışını artırın.",
+        "2": "Yağ basıncını kontrol edin.",
+        "3": "Sıcaklık düşmezse kapatmaya hazırlanın."
+      },
+      "default": {
+        "0": "Anomali tespit edildi.",
+        "1": "Bölgesel bakım merkezine bildirin."
+      }
+    }
+  },
+  "pdf": {
+    "passport": {
+      "title": "Mühendislik Dosyası",
+      "generated": "Oluşturulma",
+      "id": "ID",
+      "assetIdentity": "Varlık Kimliği",
+      "assetName": "Varlık Adı",
+      "type": "Tip",
+      "location": "Konum",
+      "capacity": "Kapasite",
+      "status": "Durum",
+      "technicalSpecs": "Teknik Özellikler",
+      "noSpecs": "Özel teknik parametre kaydedilmedi.",
+      "page": "Sayfa",
+      "maintenanceLog": "Bakım Geçmişi Kaydı",
+      "date": "Tarih",
+      "category": "Kategori",
+      "action": "Eylem / Özet",
+      "user": "Kullanıcı",
+      "noMaintenance": "Bu varlık için bakım geçmişi kaydedilmedi."
+    }
+  },
+  "engines": {
+    "pelton": {
+      "idealNsq": "+ İdeal düşük özgül hız ({{n_sq}})",
+      "highNsq": "+ Pelton için yüksek özgül hız (çoklu jet gerekir)",
+      "highHead": "+ Yüksek düşü optimal kinetik enerji sağlar",
+      "lowPressure": "- İmpuls tasarımı için yetersiz basınç",
+      "silt": "+ Kova değişim kolaylığı mili daha iyi tolere eder"
+    },
+    "francis": {
+      "optimalNsq": "+ Francis için optimal özgül hız ({{n_sq}})",
+      "mediumHead": "+ Düşü standart orta seviye aralığında",
+      "fixedBlade": "- Sabit kanat geometrisi değişken debi için daha az verimli",
+      "siltErosion": "- Batık çark mil erozyonuna duyarlı"
+    },
+    "kaplan": {
+      "highNsq": "+ Yüksek özgül hız tespit edildi ({{n_sq}})",
+      "lowHead": "+ Düşük düşü uygulamaları için ideal",
+      "headExceeded": "- Düşü optimal Kaplan aralığını aşıyor",
+      "variableFlow": "+ Çift regülasyon değişken debiyi verimli yönetir"
+    },
+    "crossflow": {
+      "runOfRiver": "+ Küçük ölçekli nehir tipi santraller için yüksek verim",
+      "selfCleaning": "+ Kendi kendini temizleyen çark moloz ve mili iyi tolere eder"
+    }
+  },
+  "executive": {
+    "subtitle": "Yönetici Mühendislik Arayüzü // v1.0.5 UNIFIED",
+    "status": {
+      "scadaActive": "SCADA AKTİF"
     },
     "actions": {
-        "back": "Merkeze Dön",
-        "previewPrint": "Önizle ve Yazdır",
-        "cancel": "İptal",
-        "close": "Kapat"
+      "downloadBrief": "RAPORU İNDİR"
     },
-    "assetPicker": {
-        "selectContext": "Varlık Bağlamını Seç",
-        "registerNew": "+ Yeni Varlık Kaydet",
-        "modalTitle": "Yeni Varlık Kaydet",
-        "labelName": "Varlık Adı",
-        "placeholderName": "örn. HES Demirkapı",
-        "labelType": "Türbin Tipi",
-        "labelLocation": "Konum",
-        "placeholderLocation": "Nehir, Ülke",
-        "labelCapacity": "Kapasite (MW)",
-        "registerButton": "Varlığı Kaydet",
-        "successToast": "Yeni Varlık başarıyla kaydedildi",
-        "failToast": "Varlık oluşturulamadı"
+    "twin": {
+      "label": "İKİZ",
+      "topology": "Canlı Varlık Topolojisi"
     },
-    "profile": {
-        "title": "Engineer Profile",
-        "subtitle": "Manage your identity and access levels.",
-        "back": "Back",
-        "noUser": "No user found",
-        "updateSuccess": "Profile updated successfully",
-        "uploadError": "You must select an image to upload.",
-        "avatarSuccess": "Avatar uploaded!",
-        "fullName": "Full Name",
-        "fullNamePlaceholder": "e.g. John Doe",
-        "role": "Position / Role",
-        "rolePlaceholder": "e.g. Lead Engineer",
-        "company": "Organization",
-        "companyPlaceholder": "e.g. Global Hydropower Inc.",
-        "saveButton": "Save Changes",
-        "unassignedRole": "Unassigned Role",
-        "guestSaveWarning": "Guest profiles cannot be saved",
-        "guestUploadWarning": "Guest profiles cannot upload avatars",
-        "developerTools": "Developer Tools",
-        "resetData": "Reset Demo Data",
-        "resetDataDesc": "Reset demo data to restore the default work orders, component health, and operating hours. This will reload the application.",
-        "resetDataConfirm": "Reset all demo data? This will clear localStorage and reload the page."
+    "sensors": {
+      "activePower": "Aktif Güç",
+      "gridFrequency": "Şebeke Frekansı"
     },
-    "assetWizard": {
-        "title": "Yeni Varlık Kaydet",
-        "steps": {
-            "identity": "Kimlik",
-            "specs": "Teknik Özellikler",
-            "risk": "Risk Kalibrasyonu"
-        },
-        "fields": {
-            "name": "Varlık Adı",
-            "type": "Varlık Tipi",
-            "location": "Konum",
-            "capacity": "Kapasite (MW)",
-            "units": "Ünite Sayısı",
-            "kpi": "Kritik KPI"
-        },
-        "buttons": {
-            "next": "Sonraki Adım",
-            "prev": "Geri",
-            "register": "Varlığı Kaydet"
-        },
-        "success": "Varlık başarıyla kaydedildi ve filoda başlatıldı.",
-        "types": {
-            "francisDesc": "Reaction / Spiral",
-            "peltonDesc": "Impulse / Jet",
-            "kaplanDesc": "Axial / Propeller",
-            "bulbDesc": "Submersible / Tube",
-            "pumpingDesc": "Reversible Storage",
-            "solarDesc": "PV Array",
-            "windDesc": "Turbine Generator"
-        },
-        "specs": {
-            "spiralCasePressure": "Spiral Case Pressure (bar)",
-            "guideVaneCount": "Guide Vane Count",
-            "runnerDiameter": "Runner Diameter (mm)",
-            "draftTubeVacuum": "Draft Tube Vacuum (bar)",
-            "bearingType": "Bearing Type"
-        }
+    "kpi": {
+      "unitHealth": "Ünite Sağlığı",
+      "financialRisk": "Finansal Risk",
+      "projectedLoss": "Öngörülen Kayıp (30g)"
     },
-    "globalMap": {
-        "fleet": "Filo",
-        "liveMw": "Canlı MW",
-        "alerts": "Uyarılar",
-        "output": "Çıktı",
-        "status": {
-            "critical": "KRİTİK",
-            "warning": "UYARI"
-        }
+    "ai": {
+      "title": "Dr. Türbin YZ",
+      "analyzing": "Dr. Türbin hidrolik imzaları analiz ediyor...",
+      "nominal": {
+        "title": "TÜM SİSTEMLER NOMİNAL",
+        "desc": "Hidrolik parametreler optimal aralıkta.",
+        "details": "Kavitasyon riski: DÜŞÜK • Yatak sıcaklığı: NORMAL • Titreşim: KABUL EDİLEBİLİR"
+      },
+      "physicsAnalysis": "FİZİKSEL ANALİZ:",
+      "gridRisk": "Frekans sapması >%5, potansiyel jeneratör ayrışmasını gösterir. {{freq}}Hz'de mekanik rezonans riski.",
+      "cavitationRisk": "Debi: {{flow}} m³/s, Düşü: {{head}}m kavitasyon eşiğini aşıyor. Çark boşluğu yetersiz olabilir.",
+      "acceptable": "Sistem parametreleri kabul edilebilir aralıkta. İzleme devam ediyor."
     },
-    "toolbox": {
-        "greeting": {
-            "morning": "Günaydın",
-            "afternoon": "Tünaydın",
-            "evening": "İyi Akşamlar"
-        },
-        "engineer": "Mühendis",
-        "systemOperational": "Sistem Çalışıyor",
-        "assetsOnline": "Tesisler Çevrimiçi",
-        "activeAsset": "Aktif: {{name}}",
-        "passport": "Pasaport",
-        "addAsset": "Tesis Ekle",
-        "sections": {
-            "utilities": "Mühendislik Araçları",
-            "designAnalysis": "Tasarım ve Analiz",
-            "operationalModules": "Operasyonel Modüller",
-            "recentActivity": "Son Aktiviteler"
-        },
-        "activity": {
-            "none": "Son aktivite yok.",
-            "open": "Seyir Defterini Aç",
-            "view": "Seyir Defterini Görüntüle"
-        }
+    "control": {
+      "emergencyProtocols": "Acil Durum Protokolleri",
+      "scramButton": "🚨 ACİL DURDURMA 🚨",
+      "scramConfirm": "ACİL DURDURMA (YÜK ATMA) BAŞLATILSIN MI? Bu, türbini durduracak ve kesintiye neden olabilir.",
+      "safetyDisengaged": "GÜVENLİK KİLİDİ DEVRE DIŞI",
+      "scadaControls": "SCADA Kontrolleri",
+      "flowRate": "Debi (m³/s)",
+      "head": "Düşü (m)",
+      "gridFrequencyInput": "Şebeke Frekansı (Hz)",
+      "criticalFreq": "⚠️ KRİTİK FREKANS TESPİT EDİLDİ"
     },
-    "sidebar": {
-        "fleetOverview": "FİLO GENEL BAKIŞ",
-        "operations": "OPERASYONLAR",
-        "strategy": "STRATEJİ",
-        "knowledge": "BİLGİ",
-        "exitToSite": "Ana Siteye Çıkış",
-        "boltTorque": "Civata Torku",
-        "shaftAlign": "Şaft Hizalama",
-        "hydraulics": "Hidrolik",
-        "structuralIntegrity": "Yapısal Bütünlük",
-        "shadowEngineer": "Gölge Mühendis",
-        "toolboxAnalytics": "Araç Analitiği",
-        "maintenanceLogbook": "Bakım Seyir Defteri",
-        "settings": "Ayarlar"
-    },
-    "emergency": {
-        "activeProtocol": "AKTİF ACİL DURUM PROTOKOLÜ",
-        "protocols": {
-            "vibration_excess": {
-                "0": "Titreşim artışı onaylandı.",
-                "1": "Yükü %50'ye düşürün.",
-                "2": "Tüm yatak sıcaklıklarını kontrol edin.",
-                "3": "Mühendislere rapor gönderin."
-            },
-            "bearing_overheat": {
-                "0": "Sıcaklık artışı onaylandı.",
-                "1": "Soğutma suyu akışını artırın.",
-                "2": "Yağ basıncını kontrol edin.",
-                "3": "Sıcaklık düşmezse kapatmaya hazırlanın."
-            },
-            "default": {
-                "0": "Anomali tespit edildi.",
-                "1": "Bölgesel bakım merkezine bildirin."
-            }
-        }
-    },
-    "pdf": {
-        "passport": {
-            "title": "Mühendislik Dosyası",
-            "generated": "Oluşturulma",
-            "id": "ID",
-            "assetIdentity": "Varlık Kimliği",
-            "assetName": "Varlık Adı",
-            "type": "Tip",
-            "location": "Konum",
-            "capacity": "Kapasite",
-            "status": "Durum",
-            "technicalSpecs": "Teknik Özellikler",
-            "noSpecs": "Özel teknik parametre kaydedilmedi.",
-            "page": "Sayfa",
-            "maintenanceLog": "Bakım Geçmişi Kaydı",
-            "date": "Tarih",
-            "category": "Kategori",
-            "action": "Eylem / Özet",
-            "user": "Kullanıcı",
-            "noMaintenance": "Bu varlık için bakım geçmişi kaydedilmedi."
-        }
-    },
-    "engines": {
-        "pelton": {
-            "idealNsq": "+ İdeal düşük özgül hız ({{n_sq}})",
-            "highNsq": "+ Pelton için yüksek özgül hız (çoklu jet gerekir)",
-            "highHead": "+ Yüksek düşü optimal kinetik enerji sağlar",
-            "lowPressure": "- İmpuls tasarımı için yetersiz basınç",
-            "silt": "+ Kova değişim kolaylığı mili daha iyi tolere eder"
-        },
-        "francis": {
-            "optimalNsq": "+ Francis için optimal özgül hız ({{n_sq}})",
-            "mediumHead": "+ Düşü standart orta seviye aralığında",
-            "fixedBlade": "- Sabit kanat geometrisi değişken debi için daha az verimli",
-            "siltErosion": "- Batık çark mil erozyonuna duyarlı"
-        },
-        "kaplan": {
-            "highNsq": "+ Yüksek özgül hız tespit edildi ({{n_sq}})",
-            "lowHead": "+ Düşük düşü uygulamaları için ideal",
-            "headExceeded": "- Düşü optimal Kaplan aralığını aşıyor",
-            "variableFlow": "+ Çift regülasyon değişken debiyi verimli yönetir"
-        },
-        "crossflow": {
-            "runOfRiver": "+ Küçük ölçekli nehir tipi santraller için yüksek verim",
-            "selfCleaning": "+ Kendi kendini temizleyen çark moloz ve mili iyi tolere eder"
-        }
-    },
-    "executive": {
-        "subtitle": "Yönetici Mühendislik Arayüzü // v1.0.5 UNIFIED",
-        "status": {
-            "scadaActive": "SCADA AKTİF"
-        },
-        "actions": {
-            "downloadBrief": "RAPORU İNDİR"
-        },
-        "twin": {
-            "label": "İKİZ",
-            "topology": "Canlı Varlık Topolojisi"
-        },
-        "sensors": {
-            "activePower": "Aktif Güç",
-            "gridFrequency": "Şebeke Frekansı"
-        },
-        "kpi": {
-            "unitHealth": "Ünite Sağlığı",
-            "financialRisk": "Finansal Risk",
-            "projectedLoss": "Öngörülen Kayıp (30g)"
-        },
-        "ai": {
-            "title": "Dr. Türbin YZ",
-            "analyzing": "Dr. Türbin hidrolik imzaları analiz ediyor...",
-            "nominal": {
-                "title": "TÜM SİSTEMLER NOMİNAL",
-                "desc": "Hidrolik parametreler optimal aralıkta.",
-                "details": "Kavitasyon riski: DÜŞÜK • Yatak sıcaklığı: NORMAL • Titreşim: KABUL EDİLEBİLİR"
-            },
-            "physicsAnalysis": "FİZİKSEL ANALİZ:",
-            "gridRisk": "Frekans sapması >%5, potansiyel jeneratör ayrışmasını gösterir. {{freq}}Hz'de mekanik rezonans riski.",
-            "cavitationRisk": "Debi: {{flow}} m³/s, Düşü: {{head}}m kavitasyon eşiğini aşıyor. Çark boşluğu yetersiz olabilir.",
-            "acceptable": "Sistem parametreleri kabul edilebilir aralıkta. İzleme devam ediyor."
-        },
-        "control": {
-            "emergencyProtocols": "Acil Durum Protokolleri",
-            "scramButton": "🚨 ACİL DURDURMA 🚨",
-            "scramConfirm": "ACİL DURDURMA (YÜK ATMA) BAŞLATILSIN MI? Bu, türbini durduracak ve kesintiye neden olabilir.",
-            "safetyDisengaged": "GÜVENLİK KİLİDİ DEVRE DIŞI",
-            "scadaControls": "SCADA Kontrolleri",
-            "flowRate": "Debi (m³/s)",
-            "head": "Düşü (m)",
-            "gridFrequencyInput": "Şebeke Frekansı (Hz)",
-            "criticalFreq": "⚠️ KRİTİK FREKANS TESPİT EDİLDİ"
-        },
-        "silhouette": {
-            "bearingTemp": "YATAK SIC.",
-            "vibration": "TİTREŞİM",
-            "gridFreq": "ŞEBEKE FREK.",
-            "healthScore": "SAĞLIK SKORU",
-            "criticalAlarms": "🚨 KRİTİK ALARMLAR"
-        }
+    "silhouette": {
+      "bearingTemp": "YATAK SIC.",
+      "vibration": "TİTREŞİM",
+      "gridFreq": "ŞEBEKE FREK.",
+      "healthScore": "SAĞLIK SKORU",
+      "criticalAlarms": "🚨 KRİTİK ALARMLAR"
     }
+  }
 }

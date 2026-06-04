@@ -3,7 +3,7 @@ import { useTelemetryStore } from '../useTelemetryStore';
 
 describe('useTelemetryStore', () => {
   it('pushAlarm appends and acknowledgeAllAlarms marks acknowledged', () => {
-    const { pushAlarm, acknowledgeAllAlarms, activeAlarms } = useTelemetryStore.getState() as any;
+    const { pushAlarm, acknowledgeAllAlarms, activeAlarms } = useTelemetryStore.getState();
     pushAlarm({ id: 'X1', severity: 'CRITICAL', message: 'Trip' });
     let list = useTelemetryStore.getState().activeAlarms;
     expect(list.length).toBeGreaterThan(0);
@@ -14,29 +14,29 @@ describe('useTelemetryStore', () => {
   });
 
   it('updateTelemetry records vibration history', async () => {
-    const { updateTelemetry } = useTelemetryStore.getState() as any;
+    const { updateTelemetry } = useTelemetryStore.getState();
     updateTelemetry({ mechanical: { vibrationX: 3.1 } });
     // Wait for throttle interval (100ms) to pass
     await new Promise(resolve => setTimeout(resolve, 150));
     updateTelemetry({ mechanical: { vibrationX: 3.3 } });
-    const { telemetryHistory } = useTelemetryStore.getState() as any;
+    const { telemetryHistory } = useTelemetryStore.getState();
     expect(telemetryHistory.vibrationX.length).toBeGreaterThanOrEqual(2);
   });
 
   it('updateTelemetry computes vibration forensics verdict', () => {
-    const { updateTelemetry } = useTelemetryStore.getState() as any;
+    const { updateTelemetry } = useTelemetryStore.getState();
     updateTelemetry({ mechanical: { rpm: 600, vibration: 12, vibrationX: 12, vibrationY: 0 } });
-    const { vibrationForensics } = useTelemetryStore.getState() as any;
+    const { vibrationForensics } = useTelemetryStore.getState();
     expect(vibrationForensics).toBeTruthy();
-    expect(vibrationForensics.pattern).toBe('BEARING_WEAR');
-    expect(vibrationForensics.severity).toBe('CRITICAL');
-    expect(Array.isArray(vibrationForensics.recommendations)).toBe(true);
+    expect(vibrationForensics!.pattern).toBe('BEARING_WEAR');
+    expect(vibrationForensics!.severity).toBe('CRITICAL');
+    expect(Array.isArray(vibrationForensics!.recommendations)).toBe(true);
   });
 
   it('high vibration triggers RCA results', () => {
-    const { updateTelemetry } = useTelemetryStore.getState() as any;
+    const { updateTelemetry } = useTelemetryStore.getState();
     updateTelemetry({ mechanical: { rpm: 600, vibrationX: 9.0 } });
-    const { rcaResults } = useTelemetryStore.getState() as any;
+    const { rcaResults } = useTelemetryStore.getState();
     expect(Array.isArray(rcaResults)).toBe(true);
   });
 

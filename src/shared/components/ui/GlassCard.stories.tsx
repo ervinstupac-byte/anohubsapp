@@ -37,7 +37,11 @@ export const WithIcon: Story = {
 export const WithAction: Story = {
   args: {
     title: 'Quick Actions',
-    action: <ModernButton size="sm" variant="ghost">Action</ModernButton>,
+    action: (
+      <ModernButton size="sm" variant="ghost">
+        Action
+      </ModernButton>
+    ),
     children: <p className="text-slate-300">Card with action button</p>,
   },
 };
@@ -46,7 +50,7 @@ export const Variants: Story = {
   render: () => (
     <div className="grid gap-4">
       <GlassCard title="Base Variant" variant="base">
-      <p className="text-slate-300">Base glass card</p>
+        <p className="text-slate-300">Base glass card</p>
       </GlassCard>
       <GlassCard title="Deep Variant" variant="deep">
         <p className="text-slate-300">Deep glass card</p>

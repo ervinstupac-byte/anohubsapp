@@ -1,4 +1,10 @@
-import { WorkerRequestSchema, WorkerResponseSchema, WorkerAction, WorkerRequest, WorkerResponse } from './workerSchemas';
+import {
+  WorkerRequestSchema,
+  WorkerResponseSchema,
+  WorkerAction,
+  WorkerRequest,
+  WorkerResponse,
+} from './workerSchemas';
 import { z } from 'zod';
 
 type ResolveReject = { resolve: (v: any) => void; reject: (e: any) => void };
@@ -74,8 +80,14 @@ export class WorkerClient {
       }, this.timeoutMs);
 
       // clear timeout when resolved/rejected
-      const wrappedResolve = (v: any) => { clearTimeout(to); resolve(v); };
-      const wrappedReject = (e: any) => { clearTimeout(to); reject(e); };
+      const wrappedResolve = (v: any) => {
+        clearTimeout(to);
+        resolve(v);
+      };
+      const wrappedReject = (e: any) => {
+        clearTimeout(to);
+        reject(e);
+      };
       this.pending.set(id, { resolve: wrappedResolve, reject: wrappedReject });
     });
   }

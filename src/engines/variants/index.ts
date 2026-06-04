@@ -33,5 +33,5 @@ export const VariantLogicRegistry: Record<VariantId, any> = {
   pelton_vertical: PeltonEngine,
   pelton_horizontal: PeltonEngine,
   pelton_multi_jet: PeltonEngine,
-  crossflow_standard: CrossflowEngine
+  crossflow_standard: CrossflowEngine,
 };

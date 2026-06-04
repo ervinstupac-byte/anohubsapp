@@ -46,11 +46,7 @@ interface TabsListProps {
 }
 
 export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) => {
-  return (
-    <div className={`flex border-b border-slate-700/50 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`flex border-b border-slate-700/50 ${className}`}>{children}</div>;
 };
 
 interface TabsTriggerProps {
@@ -59,11 +55,7 @@ interface TabsTriggerProps {
   className?: string;
 }
 
-export const TabsTrigger: React.FC<TabsTriggerProps> = ({
-  value,
-  children,
-  className = '',
-}) => {
+export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, className = '' }) => {
   const context = useContext(TabsContext);
   if (!context) {
     throw new Error('TabsTrigger must be used within a Tabs component');
@@ -91,11 +83,7 @@ interface TabsContentProps {
   className?: string;
 }
 
-export const TabsContent: React.FC<TabsContentProps> = ({
-  value,
-  children,
-  className = '',
-}) => {
+export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className = '' }) => {
   const context = useContext(TabsContext);
   if (!context) {
     throw new Error('TabsContent must be used within a Tabs component');

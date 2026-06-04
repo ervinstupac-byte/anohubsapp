@@ -5,9 +5,8 @@
  */
 
 export class GlobalEfficiencyMetric {
-
-    generateLegacyReport(): string {
-        return `
+  generateLegacyReport(): string {
+    return `
 THE EFFICIENCY METRIC REPORT (v2.0)
 =================================
 "The Fortress built a shield around the valley, and a bridge to the future."
@@ -27,5 +26,5 @@ THE EFFICIENCY METRIC REPORT (v2.0)
 VERDICT:
 The Ant is King. The Mountain is Safe. The Vision is Immortal.
 `;
-    }
+  }
 }

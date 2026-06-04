@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+public
+.vite
+.cache
+coverage
+artifacts
+scripts
+*.config.js
+*.config.cjs

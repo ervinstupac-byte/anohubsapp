@@ -9,9 +9,12 @@ type OptimizationHUDProps = {
   className?: string;
 };
 
-export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({ variant = 'overlay', className }) => {
+export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({
+  variant = 'overlay',
+  className,
+}) => {
   const { hydraulic, physics } = useTelemetryStore(
-    useShallow((state) => ({
+    useShallow(state => ({
       hydraulic: state.hydraulic,
       physics: state.physics,
     }))
@@ -21,7 +24,7 @@ export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({ variant = 'ove
     const netHead =
       typeof physics?.netHead === 'number'
         ? physics.netHead
-        : (physics as any)?.netHead?.toNumber?.() ?? hydraulic.head ?? 0;
+        : ((physics as any)?.netHead?.toNumber?.() ?? hydraulic.head ?? 0);
     const flow = hydraulic.flow ?? 0;
     const effRaw = hydraulic.efficiency ?? 0;
     const effPct = effRaw <= 1 ? effRaw * 100 : effRaw;
@@ -35,22 +38,13 @@ export const OptimizationHUD: React.FC<OptimizationHUDProps> = ({ variant = 'ove
     };
   }, [hydraulic, physics]);
 
-  const wrapperClass =
-    variant === 'overlay'
-      ? 'fixed bottom-6 right-6 z-[200]'
-      : 'relative';
+  const wrapperClass = variant === 'overlay' ? 'fixed bottom-6 right-6 z-[200]' : 'relative';
 
   const deltaClass =
-    data.delta < -0.5
-      ? 'text-red-400'
-      : data.delta > 0.5
-      ? 'text-emerald-400'
-      : 'text-slate-300';
+    data.delta < -0.5 ? 'text-red-400' : data.delta > 0.5 ? 'text-emerald-400' : 'text-slate-300';
 
   return (
-    <div
-      className={`${wrapperClass} ${className || ''}`}
-    >
+    <div className={`${wrapperClass} ${className || ''}`}>
       <div className="pointer-events-auto bg-black/60 border border-slate-700 rounded-xl shadow-2xl backdrop-blur-xl">
         <div className="px-4 py-3 flex items-center gap-2">
           <Activity className="w-4 h-4 text-cyan-400" />

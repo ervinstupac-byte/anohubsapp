@@ -4,13 +4,13 @@ import { z } from 'zod';
 export const NozzleSchema = z.object({
   index: z.number().int().nonnegative(),
   needlePositionMM: z.number().optional(),
-  deflectorOpen: z.boolean().optional()
+  deflectorOpen: z.boolean().optional(),
 });
 
 export const GeneratorCoolingSchema = z.object({
   bearingTempC: z.number().optional(),
   coolantFlowLps: z.number().optional(),
-  bearingCoolingPresent: z.boolean().optional()
+  bearingCoolingPresent: z.boolean().optional(),
 });
 
 export const PeltonTelemetrySchema = z.object({
@@ -34,7 +34,7 @@ export const PeltonTelemetrySchema = z.object({
   brakeValveStatus: z.enum(['OPEN', 'CLOSED']).optional(),
   deflectorStatus: z.enum(['ACTIVE', 'PASSIVE']).optional(),
   deflectorResponseTimeS: z.number().optional(),
-  deflectorGapMM: z.number().optional()
+  deflectorGapMM: z.number().optional(),
 });
 
 export type PeltonTelemetry = z.infer<typeof PeltonTelemetrySchema>;

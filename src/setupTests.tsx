@@ -36,7 +36,7 @@ vi.mock('recharts', () => {
     PieChart: () => <div>PieChart</div>,
     Pie: () => <div>Pie</div>,
     Cell: () => <div>Cell</div>,
-    Sector: () => <div>Sector</div>
+    Sector: () => <div>Sector</div>,
   };
 });
 

@@ -15,10 +15,7 @@ const Demo = ({ ...args }) => {
   const [files, setFiles] = useState<File[]>([]);
   return (
     <div className="max-w-lg">
-      <FileUpload
-        {...args}
-        onFileSelect={setFiles}
-      />
+      <FileUpload {...args} onFileSelect={setFiles} />
       {files.length > 0 && (
         <div className="mt-4">
           <h4 className="text-slate-300">Selected files:</h4>
@@ -34,14 +31,14 @@ const Demo = ({ ...args }) => {
 };
 
 export const Default: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Upload your files',
   },
 };
 
 export const AcceptImages: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Upload images',
     accept: 'image/*',
@@ -49,7 +46,7 @@ export const AcceptImages: Story = {
 };
 
 export const Multiple: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Upload multiple files',
     multiple: true,

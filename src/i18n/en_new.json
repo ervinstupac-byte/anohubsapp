@@ -506,39 +506,19 @@
   "questions": {
     "q1": {
       "text": "Do you verify intake velocity profiles using CFD or physical scale models?",
-      "options": [
-        "Yes, always",
-        "Only for large units",
-        "No, relied on OEM",
-        "Not documented"
-      ]
+      "options": ["Yes, always", "Only for large units", "No, relied on OEM", "Not documented"]
     },
     "q2": {
       "text": "Is the \"0.05 mm/m\" alignment tolerance strictly enforced in contracts?",
-      "options": [
-        "Yes, non-negotiable",
-        "Yes, but defined loosely",
-        "No",
-        "Unknown"
-      ]
+      "options": ["Yes, non-negotiable", "Yes, but defined loosely", "No", "Unknown"]
     },
     "q3": {
       "text": "Are vibration spectra (FFT) integrated into the SCADA logic?",
-      "options": [
-        "Yes, full integration",
-        "Standalone system only",
-        "Portable measurements",
-        "No"
-      ]
+      "options": ["Yes, full integration", "Standalone system only", "Portable measurements", "No"]
     },
     "q4": {
       "text": "Do you have EN 10204 3.1 certificates for all runner bolts?",
-      "options": [
-        "Yes, archived digitally",
-        "Paper copies only",
-        "Partial",
-        "No"
-      ]
+      "options": ["Yes, archived digitally", "Paper copies only", "Partial", "No"]
     },
     "q5": {
       "text": "Is \"Ownership Maintenance\" practiced by operators?",
@@ -550,12 +530,7 @@
     },
     "q6": {
       "text": "Is the runner clearance (gap) monitored and logged annually?",
-      "options": [
-        "Yes",
-        "No",
-        "Not Maintained",
-        "Partially Filled"
-      ]
+      "options": ["Yes", "No", "Not Maintained", "Partially Filled"]
     },
     "q7": {
       "text": "When failures occur, is a Root Cause Failure Analysis (RCFA) performed?",
@@ -568,85 +543,43 @@
     },
     "q8": {
       "text": "Is there an automated lubrication system for the wicket gate bearings?",
-      "options": [
-        "Yes",
-        "No",
-        "In Testing Phase"
-      ]
+      "options": ["Yes", "No", "In Testing Phase"]
     },
     "q9": {
       "text": "Are spare parts (seals, bearings) strictly OEM certified?",
-      "options": [
-        "Yes",
-        "No",
-        "Limited Access",
-        "Mixed Stock"
-      ]
+      "options": ["Yes", "No", "Limited Access", "Mixed Stock"]
     },
     "q10": {
       "text": "Is the oil quality (water content/particles) monitored in real-time?",
-      "options": [
-        "Yes",
-        "Not Monitored",
-        "Monitored Periodically"
-      ]
+      "options": ["Yes", "Not Monitored", "Monitored Periodically"]
     },
     "q11": {
       "text": "Do you measure the \"Execution Gap\" (Planned vs. Actual maintenance time)?",
-      "options": [
-        "Yes",
-        "No",
-        "Do not measure"
-      ]
+      "options": ["Yes", "No", "Do not measure"]
     },
     "q12": {
       "text": "Does the contract enforce specific penalties for alignment deviations?",
-      "options": [
-        "Yes",
-        "No, only replacement is offered",
-        "Only Replacement",
-        "Sometimes"
-      ]
+      "options": ["Yes", "No, only replacement is offered", "Only Replacement", "Sometimes"]
     },
     "q13": {
       "text": "Is the cavitation pitting depth measured during every major overhaul?",
-      "options": [
-        "Yes",
-        "No",
-        "Periodically"
-      ]
+      "options": ["Yes", "No", "Periodically"]
     },
     "q14": {
       "text": "Are vibration sensors installed on all main bearings?",
-      "options": [
-        "Yes",
-        "Not Installed/Functional",
-        "Some require checking"
-      ]
+      "options": ["Yes", "Not Installed/Functional", "Some require checking"]
     },
     "q15": {
       "text": "Is the SCADA system updated with the latest security patches?",
-      "options": [
-        "Yes",
-        "No",
-        "Outdated"
-      ]
+      "options": ["Yes", "No", "Outdated"]
     },
     "q16": {
       "text": "Is the emergency shutdown sequence tested annually?",
-      "options": [
-        "Automatic",
-        "Manual",
-        "Semi-Automatic"
-      ]
+      "options": ["Automatic", "Manual", "Semi-Automatic"]
     },
     "q17": {
       "text": "What is the current condition of the draft tube concrete surface?",
-      "options": [
-        "Good",
-        "Requires Minor Maintenance",
-        "Major Service Needed"
-      ]
+      "options": ["Good", "Requires Minor Maintenance", "Major Service Needed"]
     }
   },
   "globalMap": {

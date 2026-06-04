@@ -33,8 +33,8 @@ export function useIntelligenceReport(pollIntervalMs = 0) {
           baselineAverageScore: 98.5,
           globalHealthIndex: 99.2,
           alerts: [],
-          grouped: { 'HYDROLOGY': [], 'MECHANICAL': [] },
-          all: []
+          grouped: { HYDROLOGY: [], MECHANICAL: [] },
+          all: [],
         };
 
         if (mounted) setReport(FALLBACK);
@@ -42,7 +42,6 @@ export function useIntelligenceReport(pollIntervalMs = 0) {
         // if (!res.ok) { ... }
         // const json = await res.json();
         // if (mounted) setReport(json as IntelligenceReport);
-
       } catch (e: any) {
         if (mounted) setError(String(e.message || e));
       } finally {
@@ -52,7 +51,10 @@ export function useIntelligenceReport(pollIntervalMs = 0) {
 
     load();
     if (pollIntervalMs && pollIntervalMs > 0) timer = setInterval(load, pollIntervalMs);
-    return () => { mounted = false; if (timer) clearInterval(timer); };
+    return () => {
+      mounted = false;
+      if (timer) clearInterval(timer);
+    };
   }, [pollIntervalMs]);
 
   return { report, loading, error };

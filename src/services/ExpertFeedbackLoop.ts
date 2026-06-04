@@ -6,7 +6,13 @@
 
 import { SovereignMemory } from './SovereignMemory';
 
-export type OverrideRecord = { timestamp: number; actor: string; action: string; context?: any; validated?: boolean };
+export type OverrideRecord = {
+  timestamp: number;
+  actor: string;
+  action: string;
+  context?: any;
+  validated?: boolean;
+};
 
 export default class ExpertFeedbackLoop {
   private memory: SovereignMemory;
@@ -30,7 +36,9 @@ export default class ExpertFeedbackLoop {
   adjustPriors(guardianKey: string, validatedTruePositives: number, validatedTotal: number) {
     // Retrieve existing prior from memory (if any)
     const key = `prior_${guardianKey}`;
-    let prior = ((this.memory as any).getItem && (this.memory as any).getItem(key)) as number | null;
+    let prior = ((this.memory as any).getItem && (this.memory as any).getItem(key)) as
+      | number
+      | null;
     if (prior === null || prior === undefined) prior = 0.05; // default prior
 
     // Bayesian update (Beta-like): new_prior ~ (alpha + TP) / (alpha+beta + N)
@@ -38,8 +46,15 @@ export default class ExpertFeedbackLoop {
     const beta = (1 - prior) * 100;
     const newPrior = (alpha + validatedTruePositives) / (alpha + beta + validatedTotal);
     try {
-      this.memory.saveOverrideRecord({ timestamp: Date.now(), actor: 'system', action: `update_prior:${guardianKey}`, context: { old: prior, new: newPrior } });
-    } catch (e) { /* ignore */ }
+      this.memory.saveOverrideRecord({
+        timestamp: Date.now(),
+        actor: 'system',
+        action: `update_prior:${guardianKey}`,
+        context: { old: prior, new: newPrior },
+      });
+    } catch (e) {
+      /* ignore */
+    }
     return newPrior;
   }
 }

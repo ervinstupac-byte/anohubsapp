@@ -20,7 +20,12 @@
     "optimize:svgs": "node scripts/optimize_svgs.mjs",
     "bundle:report": "node scripts/generate_bundle_report.mjs",
     "stress:integrity": "node scripts/stress_test_integrity.mjs",
-    "inject:tokens": "tsx scripts/inject_efficiency_tokens.ts"
+    "inject:tokens": "tsx scripts/inject_efficiency_tokens.ts",
+    "prepare": "husky install",
+    "eslint": "eslint --ext .ts,.tsx,.js,.jsx src",
+    "eslint:ci": "eslint --ext .ts,.tsx,.js,.jsx src --max-warnings=0",
+    "lint:fix": "eslint --ext .ts,.tsx,.js,.jsx src --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -64,16 +69,38 @@
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
+    "@typescript-eslint/parser": "^8.60.1",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.5.0",
+    "eslint": "^10.4.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "gh-pages": "^6.1.1",
     "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
+    "prettier": "^3.8.3",
     "puppeteer": "^25.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^17.0.7",
     "rollup-plugin-visualizer": "^7.0.1",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,jsx}": [
+      "pnpm run lint:fix --",
+      "pnpm run format --",
+      "git add"
+    ],
+    "*.{json,css,md}": [
+      "pnpm run format --",
+      "git add"
+    ]
   }
 }

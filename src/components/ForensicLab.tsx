@@ -11,293 +11,334 @@ import { useContextAwareness } from '../contexts/ContextAwarenessContext';
 import { useTelemetryStore } from '../features/telemetry/store/useTelemetryStore';
 
 export const ForensicLab: React.FC = () => {
-    const { t } = useTranslation();
-    const { snapshots } = useDigitalLedger();
-    const { setFocus, activeComponentId } = useContextAwareness(); // Bi-Directional Sync
-    const [selectedSnapshot, setSelectedSnapshot] = useState<AuditSnapshot | null>(null);
-    const [rchAnalysis, setRchAnalysis] = useState<RootCauseAnalysis | null>(null);
-    const [ghostMode, setGhostMode] = useState(false);
-    const rpm = useTelemetryStore(s => s.mechanical.rpm);
-    const recordDossierHash = useTelemetryStore(s => s.recordDossierHash);
-    const ledgerHashes = useTelemetryStore(s => s.ledgerState.dossierHashes);
+  const { t } = useTranslation();
+  const { snapshots } = useDigitalLedger();
+  const { setFocus, activeComponentId } = useContextAwareness(); // Bi-Directional Sync
+  const [selectedSnapshot, setSelectedSnapshot] = useState<AuditSnapshot | null>(null);
+  const [rchAnalysis, setRchAnalysis] = useState<RootCauseAnalysis | null>(null);
+  const [ghostMode, setGhostMode] = useState(false);
+  const rpm = useTelemetryStore(s => s.mechanical.rpm);
+  const recordDossierHash = useTelemetryStore(s => s.recordDossierHash);
+  const ledgerHashes = useTelemetryStore(s => s.ledgerState.dossierHashes);
 
-    // Analyze selected snapshot
-    const analyzeSnapshot = (snapshot: AuditSnapshot) => {
-        setSelectedSnapshot(snapshot);
-        const analysis = RootCauseEngine.analyze(snapshot);
-        const rot = rpm || 300;
-        const f0 = rot / 60;
-        const bpf = 6 * f0;
-        const baseline = snapshot.data?.neuralPulse?.progress ? Math.max(0.5, (snapshot.data.neuralPulse.progress / 100) * 2) : 1.0;
-        const harmonic2x = snapshot.data?.systemHealth === 'CRITICAL' ? baseline * 3.2
-            : snapshot.data?.systemHealth === 'DEGRADED' ? baseline * 2.4
-            : baseline * 1.4;
-        const cavitationWarning = harmonic2x > 2 * baseline;
-        (analysis as any).fft = {
-            baseHz: Number(f0.toFixed(2)),
-            bpfHz: Number(bpf.toFixed(2)),
-            baselineAmp: Number(baseline.toFixed(2)),
-            harmonic2xAmp: Number(harmonic2x.toFixed(2)),
-            cavitationWarning
-        };
-        setRchAnalysis(analysis);
+  // Analyze selected snapshot
+  const analyzeSnapshot = (snapshot: AuditSnapshot) => {
+    setSelectedSnapshot(snapshot);
+    const analysis = RootCauseEngine.analyze(snapshot);
+    const rot = rpm || 300;
+    const f0 = rot / 60;
+    const bpf = 6 * f0;
+    const baseline = snapshot.data?.neuralPulse?.progress
+      ? Math.max(0.5, (snapshot.data.neuralPulse.progress / 100) * 2)
+      : 1.0;
+    const harmonic2x =
+      snapshot.data?.systemHealth === 'CRITICAL'
+        ? baseline * 3.2
+        : snapshot.data?.systemHealth === 'DEGRADED'
+          ? baseline * 2.4
+          : baseline * 1.4;
+    const cavitationWarning = harmonic2x > 2 * baseline;
+    (analysis as any).fft = {
+      baseHz: Number(f0.toFixed(2)),
+      bpfHz: Number(bpf.toFixed(2)),
+      baselineAmp: Number(baseline.toFixed(2)),
+      harmonic2xAmp: Number(harmonic2x.toFixed(2)),
+      cavitationWarning,
     };
+    setRchAnalysis(analysis);
+  };
 
-    // Export forensic dossier
-    const exportDossier = () => {
-        if (selectedSnapshot && rchAnalysis) {
-            const dossierJson = {
-                id: selectedSnapshot.id,
-                timestamp: selectedSnapshot.timestamp,
-                systemHealth: selectedSnapshot.data?.systemHealth,
-                analysis: {
-                    confidence: (rchAnalysis as any)?.confidence,
-                    summary: (rchAnalysis as any)?.summary,
-                    fft: (rchAnalysis as any)?.fft
-                }
-            };
-            ForensicReportService.generateDossierChecksum(dossierJson).then((hash) => {
-                recordDossierHash(selectedSnapshot.id, hash);
-            }).catch(() => { /* ignore checksum errors for UX */ });
+  // Export forensic dossier
+  const exportDossier = () => {
+    if (selectedSnapshot && rchAnalysis) {
+      const dossierJson = {
+        id: selectedSnapshot.id,
+        timestamp: selectedSnapshot.timestamp,
+        systemHealth: selectedSnapshot.data?.systemHealth,
+        analysis: {
+          confidence: (rchAnalysis as any)?.confidence,
+          summary: (rchAnalysis as any)?.summary,
+          fft: (rchAnalysis as any)?.fft,
+        },
+      };
+      ForensicReportService.generateDossierChecksum(dossierJson)
+        .then(hash => {
+          recordDossierHash(selectedSnapshot.id, hash);
+        })
+        .catch(() => {
+          /* ignore checksum errors for UX */
+        });
 
-            const blob = ForensicReportService.generateRootCauseDossier({
-                snapshot: selectedSnapshot,
-                rchAnalysis,
-                t
-            });
-            ForensicReportService.openAndDownloadBlob(blob, `Forensic_Dossier_${selectedSnapshot.id}.pdf`, true, {
-                reportType: 'ROOT_CAUSE_DOSSIER',
-                metadata: { snapshotId: selectedSnapshot.id }
-            });
+      const blob = ForensicReportService.generateRootCauseDossier({
+        snapshot: selectedSnapshot,
+        rchAnalysis,
+        t,
+      });
+      ForensicReportService.openAndDownloadBlob(
+        blob,
+        `Forensic_Dossier_${selectedSnapshot.id}.pdf`,
+        true,
+        {
+          reportType: 'ROOT_CAUSE_DOSSIER',
+          metadata: { snapshotId: selectedSnapshot.id },
         }
-    };
+      );
+    }
+  };
 
-    // Format timestamp
-    const formatTime = (timestamp: number) => {
-        const date = new Date(timestamp);
-        return date.toLocaleString();
-    };
+  // Format timestamp
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString();
+  };
 
-    return (
-        <div className="min-h-screen bg-transparent p-6">
-            {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-lg font-black uppercase tracking-[0.3em] text-white font-mono mb-2">
-                    FORENSIC LAB <span className="text-cyan-400">//</span> DIAGNOSTIC TIME-MACHINE
-                </h1>
-                <p className="text-[10px] text-slate-400 font-mono">
-                    Investigate historical system states and perform root cause analysis
-                </p>
-            </div>
+  return (
+    <div className="min-h-screen bg-transparent p-6">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-lg font-black uppercase tracking-[0.3em] text-white font-mono mb-2">
+          FORENSIC LAB <span className="text-cyan-400">//</span> DIAGNOSTIC TIME-MACHINE
+        </h1>
+        <p className="text-[10px] text-slate-400 font-mono">
+          Investigate historical system states and perform root cause analysis
+        </p>
+      </div>
 
-            <div className="grid grid-cols-12 gap-6">
-                {/* Left: Snapshot Timeline */}
-                <div className="col-span-4">
-                    <TacticalCard title="AUDIT SNAPSHOTS" status="nominal">
-                        {snapshots.length === 0 ? (
-                            <div className="text-center py-8 text-slate-500 text-sm">
-                                <AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                                No snapshots captured yet
-                            </div>
-                        ) : (
-                            <div className="space-y-2 max-h-[600px] overflow-y-auto">
-                                {snapshots.map((snapshot) => (
-                                    <button
-                                        key={snapshot.id}
-                                        onClick={() => analyzeSnapshot(snapshot)}
-                                        className={`w-full text-left p-3 rounded-sm border transition-all ${selectedSnapshot?.id === snapshot.id
-                                            ? 'border-cyan-500/50 bg-cyan-950/20'
-                                            : 'border-white/5 bg-slate-900/40 hover:border-cyan-500/30'
-                                            }`}
-                                    >
-                                        <div className="flex items-start gap-2 mb-2">
-                                            <Clock className="w-3 h-3 text-cyan-400 mt-0.5" />
-                                            <div className="flex-1 min-w-0">
-                                                <div className="text-[9px] font-mono text-white truncate">
-                                                    {snapshot.id}
-                                                </div>
-                                                <div className="text-[8px] font-mono text-slate-400">
-                                                    {formatTime(snapshot.timestamp)}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-[8px] font-mono">
-                                            <span className={`px-2 py-0.5 rounded-sm ${snapshot.data.systemHealth === 'CRITICAL'
-                                                ? 'bg-red-950/40 text-red-400'
-                                                : snapshot.data.systemHealth === 'DEGRADED'
-                                                    ? 'bg-amber-950/40 text-amber-400'
-                                                    : 'bg-cyan-950/40 text-cyan-400'
-                                                }`}>
-                                                {snapshot.data.systemHealth}
-                                            </span>
-                                            <span className="text-slate-500">
-                                                {snapshot.data.diagnostics?.length || 0} events
-                                            </span>
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </TacticalCard>
-                </div>
-
-                {/* Right: Analysis */}
-                <div className="col-span-8 space-y-6">
-                    {selectedSnapshot ? (
-                        <>
-                            {/* Snapshot Details */}
-                            <TacticalCard title="SNAPSHOT DETAILS" status="nominal">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
-                                            Snapshot ID
-                                        </div>
-                                        <div className="text-sm font-mono text-white">
-                                            {selectedSnapshot.id}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
-                                            Captured
-                                        </div>
-                                        <div className="text-sm font-mono text-white">
-                                            {formatTime(selectedSnapshot.timestamp)}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
-                                            System Health
-                                        </div>
-                                        <div className={`text-sm font-mono font-bold ${selectedSnapshot.data.systemHealth === 'CRITICAL' ? 'text-red-400' :
-                                            selectedSnapshot.data.systemHealth === 'DEGRADED' ? 'text-amber-400' :
-                                                'text-cyan-400'
-                                            }`}>
-                                            {selectedSnapshot.data.systemHealth}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
-                                            Neural Pulse
-                                        </div>
-                                        <div className="text-sm font-mono text-white">
-                                            {selectedSnapshot.data.neuralPulse?.progress || 0}%
-                                        </div>
-                                    </div>
-                                </div>
-                            </TacticalCard>
-
-                            {/* Root Cause Analysis */}
-                            {(rchAnalysis as any)?.fft?.cavitationWarning && (
-                                <div className="px-3 py-2 rounded-sm border border-red-500/40 bg-red-950/40 text-[10px] font-mono text-red-400">
-                                    Cavitation Warning: 2× harmonic exceeds baseline
-                                </div>
-                            )}
-                            <CausalChain analysis={rchAnalysis} />
-
-                            {/* 3D Visualization with Ghost Mode */}
-                            <TacticalCard title="3D TRUTH HEATMAP" status="nominal">
-                                <div className="mb-3 flex items-center justify-between">
-                                    <span className="text-[9px] text-slate-400 font-mono">
-                                        {ghostMode ? 'Ghost Mode: Baseline Overlay Active' : 'Heatmap Mode'}
-                                    </span>
-                                    <button
-                                        onClick={() => setGhostMode(!ghostMode)}
-                                        className={`px-3 py-1 rounded-sm border text-[9px] font-mono font-bold uppercase tracking-wider transition-all ${ghostMode
-                                            ? 'bg-purple-950/40 border-purple-500/30 text-purple-400'
-                                            : 'bg-slate-900/40 border-slate-700/30 text-slate-400 hover:border-purple-500/30'
-                                            }`}
-                                    >
-                                        {ghostMode ? <Eye className="w-3 h-3 inline mr-1" /> : <EyeOff className="w-3 h-3 inline mr-1" />}
-                                        {ghostMode ? 'GHOST ON' : 'GHOST OFF'}
-                                    </button>
-                                </div>
-                                <div className="h-[400px]">
-                                    <TurbineRunner3D
-                                        {...{
-                                            rpm: 300,
-                                            deltaMap: selectedSnapshot.data.deltaMap,
-                                            heatmapMode: true,
-                                            ghostMode,
-                                            baselineDelta: selectedSnapshot.data.deltaMap,
-                                            onSelect: (id: string) => setFocus(id),
-                                            highlightId: activeComponentId,
-                                            showInfoPanel: true
-                                        } as any}
-                                    />
-                                </div>
-                            </TacticalCard>
-
-                            {/* Export Button */}
-                            <div className="flex items-center gap-2">
-                                <button
-                                    onClick={exportDossier}
-                                    className="flex-1 py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
-                                >
-                                    <FileText className="w-4 h-4" />
-                                    Export Forensic Dossier (PDF)
-                                </button>
-                                {selectedSnapshot && ledgerHashes[selectedSnapshot.id] && (
-                                    <div className="px-3 py-2 rounded-sm border border-emerald-500/40 bg-emerald-950/40 text-[10px] font-mono text-emerald-400 flex items-center gap-2">
-                                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                        Seal Verified: {(ledgerHashes[selectedSnapshot.id] as string).slice(0, 8).toUpperCase()}
-                                    </div>
-                                )}
-                            </div>
-                        </>
-                    ) : (
-                        <TacticalCard title="NO SNAPSHOT SELECTED" status="unknown">
-                            <div className="text-center py-12 text-slate-500">
-                                <Clock className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                                <p className="text-sm">Select a snapshot from the timeline to begin investigation</p>
-                            </div>
-                        </TacticalCard>
-                    )}
-                </div>
-            </div>
-
-            {/* NC-300: FFT Visualization with Baseline Ghosting */}
-            {selectedSnapshot && rchAnalysis && (
-                <div className="mt-6 p-4 bg-slate-900/60 border border-white/5 rounded-sm">
-                    <div className="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">
-                        FFT Spectrum — Baseline Ghost vs Current Harmonics
+      <div className="grid grid-cols-12 gap-6">
+        {/* Left: Snapshot Timeline */}
+        <div className="col-span-4">
+          <TacticalCard title="AUDIT SNAPSHOTS" status="nominal">
+            {snapshots.length === 0 ? (
+              <div className="text-center py-8 text-slate-500 text-sm">
+                <AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                No snapshots captured yet
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                {snapshots.map(snapshot => (
+                  <button
+                    key={snapshot.id}
+                    onClick={() => analyzeSnapshot(snapshot)}
+                    className={`w-full text-left p-3 rounded-sm border transition-all ${
+                      selectedSnapshot?.id === snapshot.id
+                        ? 'border-cyan-500/50 bg-cyan-950/20'
+                        : 'border-white/5 bg-slate-900/40 hover:border-cyan-500/30'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <Clock className="w-3 h-3 text-cyan-400 mt-0.5" />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[9px] font-mono text-white truncate">
+                          {snapshot.id}
+                        </div>
+                        <div className="text-[8px] font-mono text-slate-400">
+                          {formatTime(snapshot.timestamp)}
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-full h-32 relative">
-                        <svg viewBox="0 0 300 100" className="w-full h-full">
-                            <defs>
-                                <linearGradient id="ghost" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0" stopColor="#94a3b8" stopOpacity="0.4" />
-                                    <stop offset="1" stopColor="#94a3b8" stopOpacity="0.1" />
-                                </linearGradient>
-                            </defs>
-                            {/* Baseline ghost curve (flat baseline amp) */}
-                            <path
-                                d={`M 0 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}
-                                    L 300 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}`}
-                                stroke="url(#ghost)"
-                                strokeWidth="8"
-                                strokeLinecap="round"
-                                fill="none"
-                            />
-                            {/* Current harmonic peaks */}
-                            {(() => {
-                                const fft = (rchAnalysis as any).fft || {};
-                                const baseHz = fft.baseHz || 1;
-                                const bpfHz = fft.bpfHz || baseHz * 6;
-                                const scaleX = (hz: number) => Math.min(300, (hz / (bpfHz * 2)) * 300);
-                                const scaleY = (amp: number) => Math.max(0, 100 - amp * 10);
-                                return (
-                                    <>
-                                        <rect x={scaleX(baseHz) - 3} y={scaleY(fft.baselineAmp || 1)} width="6" height={100 - scaleY(fft.baselineAmp || 1)} fill="#60a5fa" />
-                                        <rect x={scaleX(bpfHz * 2) - 3} y={scaleY(fft.harmonic2xAmp || 1)} width="6" height={100 - scaleY(fft.harmonic2xAmp || 1)} fill={fft.cavitationWarning ? '#ef4444' : '#22c55e'} />
-                                    </>
-                                );
-                            })()}
-                            {/* Axis */}
-                            <line x1="0" y1="100" x2="300" y2="100" stroke="#475569" strokeWidth="1" />
-                        </svg>
+                    <div className="flex items-center gap-2 text-[8px] font-mono">
+                      <span
+                        className={`px-2 py-0.5 rounded-sm ${
+                          snapshot.data.systemHealth === 'CRITICAL'
+                            ? 'bg-red-950/40 text-red-400'
+                            : snapshot.data.systemHealth === 'DEGRADED'
+                              ? 'bg-amber-950/40 text-amber-400'
+                              : 'bg-cyan-950/40 text-cyan-400'
+                        }`}
+                      >
+                        {snapshot.data.systemHealth}
+                      </span>
+                      <span className="text-slate-500">
+                        {snapshot.data.diagnostics?.length || 0} events
+                      </span>
                     </div>
-                </div>
+                  </button>
+                ))}
+              </div>
             )}
+          </TacticalCard>
         </div>
-    );
+
+        {/* Right: Analysis */}
+        <div className="col-span-8 space-y-6">
+          {selectedSnapshot ? (
+            <>
+              {/* Snapshot Details */}
+              <TacticalCard title="SNAPSHOT DETAILS" status="nominal">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
+                      Snapshot ID
+                    </div>
+                    <div className="text-sm font-mono text-white">{selectedSnapshot.id}</div>
+                  </div>
+                  <div>
+                    <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
+                      Captured
+                    </div>
+                    <div className="text-sm font-mono text-white">
+                      {formatTime(selectedSnapshot.timestamp)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
+                      System Health
+                    </div>
+                    <div
+                      className={`text-sm font-mono font-bold ${
+                        selectedSnapshot.data.systemHealth === 'CRITICAL'
+                          ? 'text-red-400'
+                          : selectedSnapshot.data.systemHealth === 'DEGRADED'
+                            ? 'text-amber-400'
+                            : 'text-cyan-400'
+                      }`}
+                    >
+                      {selectedSnapshot.data.systemHealth}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">
+                      Neural Pulse
+                    </div>
+                    <div className="text-sm font-mono text-white">
+                      {selectedSnapshot.data.neuralPulse?.progress || 0}%
+                    </div>
+                  </div>
+                </div>
+              </TacticalCard>
+
+              {/* Root Cause Analysis */}
+              {(rchAnalysis as any)?.fft?.cavitationWarning && (
+                <div className="px-3 py-2 rounded-sm border border-red-500/40 bg-red-950/40 text-[10px] font-mono text-red-400">
+                  Cavitation Warning: 2× harmonic exceeds baseline
+                </div>
+              )}
+              <CausalChain analysis={rchAnalysis} />
+
+              {/* 3D Visualization with Ghost Mode */}
+              <TacticalCard title="3D TRUTH HEATMAP" status="nominal">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-[9px] text-slate-400 font-mono">
+                    {ghostMode ? 'Ghost Mode: Baseline Overlay Active' : 'Heatmap Mode'}
+                  </span>
+                  <button
+                    onClick={() => setGhostMode(!ghostMode)}
+                    className={`px-3 py-1 rounded-sm border text-[9px] font-mono font-bold uppercase tracking-wider transition-all ${
+                      ghostMode
+                        ? 'bg-purple-950/40 border-purple-500/30 text-purple-400'
+                        : 'bg-slate-900/40 border-slate-700/30 text-slate-400 hover:border-purple-500/30'
+                    }`}
+                  >
+                    {ghostMode ? (
+                      <Eye className="w-3 h-3 inline mr-1" />
+                    ) : (
+                      <EyeOff className="w-3 h-3 inline mr-1" />
+                    )}
+                    {ghostMode ? 'GHOST ON' : 'GHOST OFF'}
+                  </button>
+                </div>
+                <div className="h-[400px]">
+                  <TurbineRunner3D
+                    {...({
+                      rpm: 300,
+                      deltaMap: selectedSnapshot.data.deltaMap,
+                      heatmapMode: true,
+                      ghostMode,
+                      baselineDelta: selectedSnapshot.data.deltaMap,
+                      onSelect: (id: string) => setFocus(id),
+                      highlightId: activeComponentId,
+                      showInfoPanel: true,
+                    } as any)}
+                  />
+                </div>
+              </TacticalCard>
+
+              {/* Export Button */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={exportDossier}
+                  className="flex-1 py-3 bg-cyan-950/20 border border-cyan-500/30 rounded-sm text-cyan-400 text-[10px] font-mono font-bold uppercase tracking-wider hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  Export Forensic Dossier (PDF)
+                </button>
+                {selectedSnapshot && ledgerHashes[selectedSnapshot.id] && (
+                  <div className="px-3 py-2 rounded-sm border border-emerald-500/40 bg-emerald-950/40 text-[10px] font-mono text-emerald-400 flex items-center gap-2">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    Seal Verified:{' '}
+                    {(ledgerHashes[selectedSnapshot.id] as string).slice(0, 8).toUpperCase()}
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <TacticalCard title="NO SNAPSHOT SELECTED" status="unknown">
+              <div className="text-center py-12 text-slate-500">
+                <Clock className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <p className="text-sm">
+                  Select a snapshot from the timeline to begin investigation
+                </p>
+              </div>
+            </TacticalCard>
+          )}
+        </div>
+      </div>
+
+      {/* NC-300: FFT Visualization with Baseline Ghosting */}
+      {selectedSnapshot && rchAnalysis && (
+        <div className="mt-6 p-4 bg-slate-900/60 border border-white/5 rounded-sm">
+          <div className="text-[10px] font-mono text-slate-400 mb-2 uppercase tracking-wider">
+            FFT Spectrum — Baseline Ghost vs Current Harmonics
+          </div>
+          <div className="w-full h-32 relative">
+            <svg viewBox="0 0 300 100" className="w-full h-full">
+              <defs>
+                <linearGradient id="ghost" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stopColor="#94a3b8" stopOpacity="0.4" />
+                  <stop offset="1" stopColor="#94a3b8" stopOpacity="0.1" />
+                </linearGradient>
+              </defs>
+              {/* Baseline ghost curve (flat baseline amp) */}
+              <path
+                d={`M 0 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}
+                                    L 300 ${100 - ((rchAnalysis as any).fft?.baselineAmp || 1) * 10}`}
+                stroke="url(#ghost)"
+                strokeWidth="8"
+                strokeLinecap="round"
+                fill="none"
+              />
+              {/* Current harmonic peaks */}
+              {(() => {
+                const fft = (rchAnalysis as any).fft || {};
+                const baseHz = fft.baseHz || 1;
+                const bpfHz = fft.bpfHz || baseHz * 6;
+                const scaleX = (hz: number) => Math.min(300, (hz / (bpfHz * 2)) * 300);
+                const scaleY = (amp: number) => Math.max(0, 100 - amp * 10);
+                return (
+                  <>
+                    <rect
+                      x={scaleX(baseHz) - 3}
+                      y={scaleY(fft.baselineAmp || 1)}
+                      width="6"
+                      height={100 - scaleY(fft.baselineAmp || 1)}
+                      fill="#60a5fa"
+                    />
+                    <rect
+                      x={scaleX(bpfHz * 2) - 3}
+                      y={scaleY(fft.harmonic2xAmp || 1)}
+                      width="6"
+                      height={100 - scaleY(fft.harmonic2xAmp || 1)}
+                      fill={fft.cavitationWarning ? '#ef4444' : '#22c55e'}
+                    />
+                  </>
+                );
+              })()}
+              {/* Axis */}
+              <line x1="0" y1="100" x2="300" y2="100" stroke="#475569" strokeWidth="1" />
+            </svg>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };

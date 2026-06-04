@@ -24,14 +24,14 @@ const DEFAULT_LAYOUT: WidgetInstance[] = [
     id: 'financialHealth-1',
     type: 'financialHealth',
     layout: { x: 0, y: 0, w: 2, h: 2 },
-    visible: true
+    visible: true,
   },
   {
     id: 'componentHealth-1',
     type: 'componentHealth',
     layout: { x: 2, y: 0, w: 4, h: 3 },
-    visible: true
-  }
+    visible: true,
+  },
 ];
 
 export const useDashboardStore = create<DashboardState>()(
@@ -47,34 +47,34 @@ export const useDashboardStore = create<DashboardState>()(
           id: newId,
           type,
           layout: { x: 0, y: 0, ...widgetDef.defaultSize },
-          visible: true
+          visible: true,
         };
-        set((state) => ({
-          widgets: [...state.widgets, newWidget]
+        set(state => ({
+          widgets: [...state.widgets, newWidget],
         }));
       },
       removeWidget: (id: string) => {
-        set((state) => ({
-          widgets: state.widgets.filter((w) => w.id !== id)
+        set(state => ({
+          widgets: state.widgets.filter(w => w.id !== id),
         }));
       },
       updateWidgetLayout: (id: string, layout: Partial<WidgetInstance['layout']>) => {
-        set((state) => ({
-          widgets: state.widgets.map((w) =>
+        set(state => ({
+          widgets: state.widgets.map(w =>
             w.id === id ? { ...w, layout: { ...w.layout, ...layout } } : w
-          )
+          ),
         }));
       },
       toggleEditMode: () => {
-        set((state) => ({ isEditMode: !state.isEditMode }));
+        set(state => ({ isEditMode: !state.isEditMode }));
       },
       resetLayout: () => {
         set({ widgets: DEFAULT_LAYOUT, isEditMode: false });
-      }
+      },
     }),
     {
       name: 'sovereign-dashboard-state',
-      storage: createJSONStorage(() => localStorage)
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

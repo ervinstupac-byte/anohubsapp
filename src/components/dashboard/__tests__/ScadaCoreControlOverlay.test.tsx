@@ -13,7 +13,7 @@ describe('ScadaCore control overlay', () => {
       disconnect() {}
     };
   });
-  
+
   it('renders professional SCADA schematics', () => {
     render(
       <MemoryRouter>

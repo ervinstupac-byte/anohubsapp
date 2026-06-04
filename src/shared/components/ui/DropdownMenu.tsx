@@ -21,11 +21,7 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = ({ children, className 
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(e.target as Node) &&
-        isOpen
-      ) {
+      if (triggerRef.current && !triggerRef.current.contains(e.target as Node) && isOpen) {
         const dropdown = document.querySelector('[data-dropdown-content]');
         if (dropdown && !dropdown.contains(e.target as Node)) {
           setIsOpen(false);
@@ -148,9 +144,7 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
       }}
       disabled={disabled}
       className={`w-full px-4 py-2 text-left text-sm ${TRANSITIONS.fast} ${
-        disabled
-          ? 'text-slate-500 cursor-not-allowed'
-          : 'text-slate-200 hover:bg-slate-800'
+        disabled ? 'text-slate-500 cursor-not-allowed' : 'text-slate-200 hover:bg-slate-800'
       } ${className}`}
     >
       {children}
@@ -162,8 +156,6 @@ interface DropdownMenuSeparatorProps {
   className?: string;
 }
 
-export const DropdownMenuSeparator: React.FC<DropdownMenuSeparatorProps> = ({
-  className = '',
-}) => {
+export const DropdownMenuSeparator: React.FC<DropdownMenuSeparatorProps> = ({ className = '' }) => {
   return <div className={`h-px bg-slate-700/50 my-1 ${className}`} />;
 };

@@ -24,7 +24,7 @@ describe('TruthJudge hysteresis/backoff', () => {
     // After cooldown passes, bad reading should again produce USE_FALLBACK
     const baseCooldownMs = 5000;
     // first fallback increments fallbackCount -> next cooldown is base * 2^1
-    const t3 = t1 + (baseCooldownMs * 2) + 100; // beyond cooldown after first fallback
+    const t3 = t1 + baseCooldownMs * 2 + 100; // beyond cooldown after first fallback
     // Use a large jump to ensure BAD_SLEW is detected after cooldown
     const v3 = tj.validateSensor(sensorId, 500, 105, t3);
     expect(v3.action).toBe('USE_FALLBACK');

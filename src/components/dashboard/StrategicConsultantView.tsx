@@ -1,17 +1,17 @@
 /**
  * StrategicConsultantView.tsx
- * 
+ *
  * NC-1000: Commander Protocol Strategic Planning Interface
  * Provides Bid Evaluation and Hydraulic Feasibility Analysis
  */
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Calculator, 
-  Scale, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  Calculator,
+  Scale,
+  AlertTriangle,
+  CheckCircle,
   XCircle,
   TrendingUp,
   Droplets,
@@ -22,13 +22,22 @@ import {
   Truck,
   Shield,
   ScanLine,
-  AlertOctagon
+  AlertOctagon,
 } from 'lucide-react';
 import { SovereignViewShell } from './SovereignViewShell';
-import { StrategicPlanningService, Bid, SiteParameters, BidEvaluation, FeasibilityResult } from '../../services/StrategicPlanningService';
+import {
+  StrategicPlanningService,
+  Bid,
+  SiteParameters,
+  BidEvaluation,
+  FeasibilityResult,
+} from '../../services/StrategicPlanningService';
 import { TurbineType } from '../../models/turbine/TurbineFactory';
 import { ThePulseEngine } from '../../services/ThePulseEngine';
-import { generateArchitectReport, ArchitectReport } from '../../services/SovereignArchitectReflector';
+import {
+  generateArchitectReport,
+  ArchitectReport,
+} from '../../services/SovereignArchitectReflector';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { SovereignGlobalState } from '../../services/SovereignGlobalState';
 
@@ -66,7 +75,7 @@ export const StrategicConsultantView: React.FC = () => {
     efficiencyAtBestPoint: 94,
     runnerDiameter: 1200,
     price: 5000000,
-    guaranteedIncluded: true
+    guaranteedIncluded: true,
   });
 
   const [siteInput, setSiteInput] = useState<SiteInput>({
@@ -78,7 +87,7 @@ export const StrategicConsultantView: React.FC = () => {
     boltClass: '8.8',
     corrosionProtection: 'PAINT',
     waterQuality: 'CLEAN',
-    ecologicalFlow: 2
+    ecologicalFlow: 2,
   });
 
   const [bidResult, setBidResult] = useState<BidEvaluation | null>(null);
@@ -99,7 +108,7 @@ export const StrategicConsultantView: React.FC = () => {
     deviation: 0,
     alert: 'NONE',
     message: '',
-    efficiencyAlert: false
+    efficiencyAlert: false,
   });
 
   // NC-1700: Perform design check with live telemetry
@@ -113,13 +122,14 @@ export const StrategicConsultantView: React.FC = () => {
         currentRPM: liveRPM,
         alert: 'NONE',
         message: 'Machine Stopped',
-        efficiencyAlert: false
+        efficiencyAlert: false,
       }));
       return;
     }
 
-    const deviation = Math.abs((liveRPM - designCheck.designBEP_RPM) / designCheck.designBEP_RPM) * 100;
-    
+    const deviation =
+      Math.abs((liveRPM - designCheck.designBEP_RPM) / designCheck.designBEP_RPM) * 100;
+
     let alert: 'NONE' | 'WARNING' | 'CRITICAL' = 'NONE';
     let message = 'Operating at design specifications';
     let efficiencyAlert = false;
@@ -144,7 +154,7 @@ export const StrategicConsultantView: React.FC = () => {
       deviation,
       alert,
       message,
-      efficiencyAlert
+      efficiencyAlert,
     }));
 
     // NC-1700: Broadcast to SovereignGlobalState for system-wide alert
@@ -152,9 +162,9 @@ export const StrategicConsultantView: React.FC = () => {
       SovereignGlobalState.updateState({
         physics: {
           ...SovereignGlobalState.getState().physics,
-          efficiency: 100 - (deviation * 0.5), // Estimate efficiency loss
-          cavitation: deviation // Store deviation in cavitation field for alerting
-        }
+          efficiency: 100 - deviation * 0.5, // Estimate efficiency loss
+          cavitation: deviation, // Store deviation in cavitation field for alerting
+        },
       });
     }
   }, [mechanical?.rpm, designCheck.designBEP_RPM]);
@@ -167,7 +177,7 @@ export const StrategicConsultantView: React.FC = () => {
   const evaluateBid = useCallback(() => {
     const bid: Bid = {
       ...bidInput,
-      turbineType: bidInput.turbineType as TurbineType
+      turbineType: bidInput.turbineType as TurbineType,
     };
 
     const site: SiteParameters = {
@@ -176,8 +186,8 @@ export const StrategicConsultantView: React.FC = () => {
         { flow: 20, probability: 10 },
         { flow: 15, probability: 30 },
         { flow: 10, probability: 50 },
-        { flow: 5, probability: 90 }
-      ]
+        { flow: 5, probability: 90 },
+      ],
     };
 
     // Evaluate bid using StrategicPlanningService
@@ -202,19 +212,27 @@ export const StrategicConsultantView: React.FC = () => {
 
   const getRecommendationColor = (rec: string) => {
     switch (rec) {
-      case 'SHORTLIST': return 'text-green-400';
-      case 'NEGOTIATE': return 'text-yellow-400';
-      case 'REJECT': return 'text-red-400';
-      default: return 'text-slate-400';
+      case 'SHORTLIST':
+        return 'text-green-400';
+      case 'NEGOTIATE':
+        return 'text-yellow-400';
+      case 'REJECT':
+        return 'text-red-400';
+      default:
+        return 'text-slate-400';
     }
   };
 
   const getRecommendationIcon = (rec: string) => {
     switch (rec) {
-      case 'SHORTLIST': return CheckCircle;
-      case 'NEGOTIATE': return AlertTriangle;
-      case 'REJECT': return XCircle;
-      default: return Scale;
+      case 'SHORTLIST':
+        return CheckCircle;
+      case 'NEGOTIATE':
+        return AlertTriangle;
+      case 'REJECT':
+        return XCircle;
+      default:
+        return Scale;
     }
   };
 
@@ -239,24 +257,30 @@ export const StrategicConsultantView: React.FC = () => {
                     <Factory className="w-5 h-5 text-status-info" />
                     Manufacturer Claims
                   </h3>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Manufacturer</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Manufacturer
+                      </label>
                       <input
                         type="text"
                         value={bidInput.manufacturer}
-                        onChange={(e) => setBidInput({ ...bidInput, manufacturer: e.target.value })}
+                        onChange={e => setBidInput({ ...bidInput, manufacturer: e.target.value })}
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none"
                         placeholder="e.g., Voith"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Turbine Type</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Turbine Type
+                      </label>
                       <select
                         value={bidInput.turbineType}
-                        onChange={(e) => setBidInput({ ...bidInput, turbineType: e.target.value as TurbineType })}
+                        onChange={e =>
+                          setBidInput({ ...bidInput, turbineType: e.target.value as TurbineType })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none"
                       >
                         <option value="FRANCIS">Francis</option>
@@ -265,57 +289,81 @@ export const StrategicConsultantView: React.FC = () => {
                         <option value="CROSSFLOW">Crossflow</option>
                       </select>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Rated Power (MW)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Rated Power (MW)
+                      </label>
                       <input
                         type="number"
                         value={bidInput.ratedPowerMW}
-                        onChange={(e) => setBidInput({ ...bidInput, ratedPowerMW: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setBidInput({ ...bidInput, ratedPowerMW: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Efficiency at BEP (%)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Efficiency at BEP (%)
+                      </label>
                       <input
                         type="number"
                         value={bidInput.efficiencyAtBestPoint}
-                        onChange={(e) => setBidInput({ ...bidInput, efficiencyAtBestPoint: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setBidInput({
+                            ...bidInput,
+                            efficiencyAtBestPoint: parseFloat(e.target.value),
+                          })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Runner Diameter (mm)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Runner Diameter (mm)
+                      </label>
                       <input
                         type="number"
                         value={bidInput.runnerDiameter}
-                        onChange={(e) => setBidInput({ ...bidInput, runnerDiameter: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setBidInput({ ...bidInput, runnerDiameter: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Price (EUR)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Price (EUR)
+                      </label>
                       <input
                         type="number"
                         value={bidInput.price}
-                        onChange={(e) => setBidInput({ ...bidInput, price: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setBidInput({ ...bidInput, price: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
                   </div>
-                  
+
                   <div className="mt-4 flex items-center gap-2">
                     <input
                       type="checkbox"
                       id="guaranteed"
                       checked={bidInput.guaranteedIncluded}
-                      onChange={(e) => setBidInput({ ...bidInput, guaranteedIncluded: e.target.checked })}
+                      onChange={e =>
+                        setBidInput({ ...bidInput, guaranteedIncluded: e.target.checked })
+                      }
                       className="rounded-sm border-scada-border bg-scada-bg checked:bg-status-info focus:ring-0 focus:ring-offset-0"
                     />
-                    <label htmlFor="guaranteed" className="text-xs text-scada-muted font-mono uppercase tracking-wider">
+                    <label
+                      htmlFor="guaranteed"
+                      className="text-xs text-scada-muted font-mono uppercase tracking-wider"
+                    >
                       Performance Guarantee Included
                     </label>
                   </div>
@@ -327,44 +375,60 @@ export const StrategicConsultantView: React.FC = () => {
                     <Droplets className="w-5 h-5 text-status-info" />
                     Site Parameters
                   </h3>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Gross Head (m)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Gross Head (m)
+                      </label>
                       <input
                         type="number"
                         value={siteInput.grossHead}
-                        onChange={(e) => setSiteInput({ ...siteInput, grossHead: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setSiteInput({ ...siteInput, grossHead: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Pipe Length (m)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Pipe Length (m)
+                      </label>
                       <input
                         type="number"
                         value={siteInput.pipeLength}
-                        onChange={(e) => setSiteInput({ ...siteInput, pipeLength: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setSiteInput({ ...siteInput, pipeLength: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Pipe Diameter (mm)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Pipe Diameter (mm)
+                      </label>
                       <input
                         type="number"
                         value={siteInput.pipeDiameter}
-                        onChange={(e) => setSiteInput({ ...siteInput, pipeDiameter: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setSiteInput({ ...siteInput, pipeDiameter: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Ecological Flow (m³/s)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Ecological Flow (m³/s)
+                      </label>
                       <input
                         type="number"
                         value={siteInput.ecologicalFlow}
-                        onChange={(e) => setSiteInput({ ...siteInput, ecologicalFlow: parseFloat(e.target.value) })}
+                        onChange={e =>
+                          setSiteInput({ ...siteInput, ecologicalFlow: parseFloat(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
                     </div>
@@ -385,35 +449,60 @@ export const StrategicConsultantView: React.FC = () => {
                   <div className="mt-6">
                     <div className="p-4 bg-scada-panel border border-scada-border rounded-sm shadow-scada-card">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-bold text-scada-text uppercase tracking-tight font-header">Evaluation Results</h3>
-                        <div className={`flex items-center gap-2 ${getRecommendationColor(bidResult.recommendation)}`}>
-                          {React.createElement(getRecommendationIcon(bidResult.recommendation), { className: 'w-5 h-5' })}
-                          <span className="font-bold uppercase tracking-wider">{bidResult.recommendation}</span>
+                        <h3 className="text-lg font-bold text-scada-text uppercase tracking-tight font-header">
+                          Evaluation Results
+                        </h3>
+                        <div
+                          className={`flex items-center gap-2 ${getRecommendationColor(bidResult.recommendation)}`}
+                        >
+                          {React.createElement(getRecommendationIcon(bidResult.recommendation), {
+                            className: 'w-5 h-5',
+                          })}
+                          <span className="font-bold uppercase tracking-wider">
+                            {bidResult.recommendation}
+                          </span>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-3 gap-4 mb-4">
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">{bidResult.score}/100</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Overall Score</div>
+                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">
+                            {bidResult.score}/100
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Overall Score
+                          </div>
                         </div>
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">{bidResult.efficiencyGap.toFixed(1)}%</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Efficiency Gap</div>
+                          <div className="text-2xl font-bold text-scada-text font-mono tabular-nums">
+                            {bidResult.efficiencyGap.toFixed(1)}%
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Efficiency Gap
+                          </div>
                         </div>
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className={`text-2xl font-bold font-mono ${bidResult.isRealistic ? 'text-status-ok' : 'text-status-error'}`}>
+                          <div
+                            className={`text-2xl font-bold font-mono ${bidResult.isRealistic ? 'text-status-ok' : 'text-status-error'}`}
+                          >
                             {bidResult.isRealistic ? 'YES' : 'NO'}
                           </div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Realistic</div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Realistic
+                          </div>
                         </div>
                       </div>
 
                       {bidResult.risks.length > 0 && (
                         <div className="space-y-2">
-                          <h4 className="text-sm font-bold text-scada-text uppercase tracking-wider font-mono">Identified Risks:</h4>
+                          <h4 className="text-sm font-bold text-scada-text uppercase tracking-wider font-mono">
+                            Identified Risks:
+                          </h4>
                           {bidResult.risks.map((risk, idx) => (
-                            <div key={idx} className="flex items-start gap-2 text-sm text-status-warning font-mono">
+                            <div
+                              key={idx}
+                              className="flex items-start gap-2 text-sm text-status-warning font-mono"
+                            >
                               <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                               <span>{risk}</span>
                             </div>
@@ -435,27 +524,46 @@ export const StrategicConsultantView: React.FC = () => {
 
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">{feasibilityResult.netHead.toFixed(1)}m</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Net Head</div>
+                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">
+                            {feasibilityResult.netHead.toFixed(1)}m
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Net Head
+                          </div>
                         </div>
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">{feasibilityResult.frictionLoss.toFixed(2)}m</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Friction Loss</div>
+                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">
+                            {feasibilityResult.frictionLoss.toFixed(2)}m
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Friction Loss
+                          </div>
                         </div>
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">{feasibilityResult.optimalFlow.toFixed(1)}m³/s</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Optimal Flow</div>
+                          <div className="text-xl font-bold text-scada-text font-mono tabular-nums">
+                            {feasibilityResult.optimalFlow.toFixed(1)}m³/s
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Optimal Flow
+                          </div>
                         </div>
                         <div className="bg-scada-bg border border-scada-border p-3 rounded-sm">
-                          <div className="text-xl font-bold text-status-ok font-mono tabular-nums">{feasibilityResult.annualProductionMWh.toFixed(0)}MWh</div>
-                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">Annual Production</div>
+                          <div className="text-xl font-bold text-status-ok font-mono tabular-nums">
+                            {feasibilityResult.annualProductionMWh.toFixed(0)}MWh
+                          </div>
+                          <div className="text-xs text-scada-muted uppercase tracking-wider font-mono">
+                            Annual Production
+                          </div>
                         </div>
                       </div>
 
                       <div className="bg-status-info/10 border border-status-info/20 p-3 rounded-sm">
-                        <div className="text-sm text-scada-muted mb-1 font-mono uppercase tracking-wider">Recommended Configuration</div>
+                        <div className="text-sm text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                          Recommended Configuration
+                        </div>
                         <div className="text-lg font-bold text-status-info font-mono">
-                          {feasibilityResult.recommendedAggregates.count}x {feasibilityResult.recommendedAggregates.type}
+                          {feasibilityResult.recommendedAggregates.count}x{' '}
+                          {feasibilityResult.recommendedAggregates.type}
                         </div>
                         <div className="text-xs text-scada-muted mt-1 font-mono italic">
                           {feasibilityResult.recommendedAggregates.reasoning}
@@ -475,13 +583,20 @@ export const StrategicConsultantView: React.FC = () => {
                       </h3>
 
                       <div className="flex items-center justify-between">
-                        <div className="text-4xl font-black text-status-info font-mono tabular-nums">{pulseImpact.index.toFixed(1)}%</div>
-                        <div className={`px-3 py-1 rounded-sm border text-sm font-bold uppercase tracking-wider font-mono ${
-                          pulseImpact.status === 'OPTIMAL' ? 'bg-status-ok/20 border-status-ok/30 text-status-ok' :
-                          pulseImpact.status === 'STRESSED' ? 'bg-status-warning/20 border-status-warning/30 text-status-warning' :
-                          pulseImpact.status === 'CRITICAL' ? 'bg-status-error/20 border-status-error/30 text-status-error' :
-                          'bg-scada-muted/20 border-scada-muted/30 text-scada-muted'
-                        }`}>
+                        <div className="text-4xl font-black text-status-info font-mono tabular-nums">
+                          {pulseImpact.index.toFixed(1)}%
+                        </div>
+                        <div
+                          className={`px-3 py-1 rounded-sm border text-sm font-bold uppercase tracking-wider font-mono ${
+                            pulseImpact.status === 'OPTIMAL'
+                              ? 'bg-status-ok/20 border-status-ok/30 text-status-ok'
+                              : pulseImpact.status === 'STRESSED'
+                                ? 'bg-status-warning/20 border-status-warning/30 text-status-warning'
+                                : pulseImpact.status === 'CRITICAL'
+                                  ? 'bg-status-error/20 border-status-error/30 text-status-error'
+                                  : 'bg-scada-muted/20 border-scada-muted/30 text-scada-muted'
+                          }`}
+                        >
                           {pulseImpact.status}
                         </div>
                       </div>
@@ -493,7 +608,7 @@ export const StrategicConsultantView: React.FC = () => {
                   </div>
                 )}
               </div>
-            )
+            ),
           },
           {
             key: 'design-reality',
@@ -509,41 +624,68 @@ export const StrategicConsultantView: React.FC = () => {
 
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Design BEP (RPM)</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Design BEP (RPM)
+                      </label>
                       <input
                         type="number"
                         value={designCheck.designBEP_RPM}
-                        onChange={(e) => setDesignCheck({ ...designCheck, designBEP_RPM: parseInt(e.target.value) })}
+                        onChange={e =>
+                          setDesignCheck({
+                            ...designCheck,
+                            designBEP_RPM: parseInt(e.target.value),
+                          })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
-                      <div className="text-xs text-scada-muted mt-1 font-mono">Best Efficiency Point from design specs</div>
+                      <div className="text-xs text-scada-muted mt-1 font-mono">
+                        Best Efficiency Point from design specs
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">Current Operating RPM</label>
+                      <label className="block text-xs text-scada-muted mb-1 font-mono uppercase tracking-wider">
+                        Current Operating RPM
+                      </label>
                       <input
                         type="number"
                         value={designCheck.currentRPM}
-                        onChange={(e) => setDesignCheck({ ...designCheck, currentRPM: parseInt(e.target.value) })}
+                        onChange={e =>
+                          setDesignCheck({ ...designCheck, currentRPM: parseInt(e.target.value) })
+                        }
                         className="w-full bg-scada-bg border border-scada-border rounded-sm px-3 py-2 text-scada-text font-mono focus:border-status-info focus:outline-none tabular-nums"
                       />
-                      <div className="text-xs text-scada-muted mt-1 font-mono">Actual turbine speed</div>
+                      <div className="text-xs text-scada-muted mt-1 font-mono">
+                        Actual turbine speed
+                      </div>
                     </div>
                   </div>
 
-                  <div className={`p-4 rounded-sm border ${
-                    designCheck.alert === 'CRITICAL' ? 'bg-status-error/10 border-status-error' :
-                    designCheck.alert === 'WARNING' ? 'bg-status-warning/10 border-status-warning' :
-                    'bg-status-ok/10 border-status-ok'
-                  }`}>
+                  <div
+                    className={`p-4 rounded-sm border ${
+                      designCheck.alert === 'CRITICAL'
+                        ? 'bg-status-error/10 border-status-error'
+                        : designCheck.alert === 'WARNING'
+                          ? 'bg-status-warning/10 border-status-warning'
+                          : 'bg-status-ok/10 border-status-ok'
+                    }`}
+                  >
                     <div className="flex items-center gap-2 mb-2">
-                      {designCheck.alert === 'CRITICAL' ? <AlertOctagon className="w-5 h-5 text-status-error" /> :
-                       designCheck.alert === 'WARNING' ? <AlertTriangle className="w-5 h-5 text-status-warning" /> :
-                       <CheckCircle className="w-5 h-5 text-status-ok" />}
-                      <span className={`font-black uppercase tracking-wider font-mono ${
-                        designCheck.alert === 'CRITICAL' ? 'text-status-error' :
-                        designCheck.alert === 'WARNING' ? 'text-status-warning' :
-                        'text-status-ok'
-                      }`}>
+                      {designCheck.alert === 'CRITICAL' ? (
+                        <AlertOctagon className="w-5 h-5 text-status-error" />
+                      ) : designCheck.alert === 'WARNING' ? (
+                        <AlertTriangle className="w-5 h-5 text-status-warning" />
+                      ) : (
+                        <CheckCircle className="w-5 h-5 text-status-ok" />
+                      )}
+                      <span
+                        className={`font-black uppercase tracking-wider font-mono ${
+                          designCheck.alert === 'CRITICAL'
+                            ? 'text-status-error'
+                            : designCheck.alert === 'WARNING'
+                              ? 'text-status-warning'
+                              : 'text-status-ok'
+                        }`}
+                      >
                         {designCheck.alert === 'NONE' ? 'DESIGN COMPLIANT' : designCheck.alert}
                       </span>
                     </div>
@@ -557,18 +699,21 @@ export const StrategicConsultantView: React.FC = () => {
 
                   {designCheck.alert !== 'NONE' && (
                     <div className="mt-4 p-3 bg-scada-bg border border-scada-border rounded-sm">
-                      <div className="text-xs text-status-info uppercase tracking-widest font-bold font-mono mb-2">Architect Analysis</div>
+                      <div className="text-xs text-status-info uppercase tracking-widest font-bold font-mono mb-2">
+                        Architect Analysis
+                      </div>
                       <div className="text-sm text-scada-text font-mono">
                         The machine is operating outside the Architect's intended design envelope.
-                        Efficiency losses: ~{(designCheck.deviation * 0.5).toFixed(0)}% per 10% deviation from BEP.
+                        Efficiency losses: ~{(designCheck.deviation * 0.5).toFixed(0)}% per 10%
+                        deviation from BEP.
                       </div>
                     </div>
                   )}
                 </div>
               </div>
-            )
-          }
-        ]
+            ),
+          },
+        ],
       }}
     />
   );

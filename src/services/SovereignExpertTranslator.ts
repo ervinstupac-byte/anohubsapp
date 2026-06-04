@@ -39,7 +39,8 @@ export default class SovereignExpertTranslator {
 
   private severityFromAction(action: string): WisdomEntry['severity'] {
     if (/CRIT|HARD_TRIP|CRITICAL|FAILSAFE|SOVEREIGN_TRIP/i.test(action)) return 'CRITICAL';
-    if (/WARN|DEGRADE|DEGRADED|WARNING|RISK|ANOMALY|SET_THROTTLED_SAFE/i.test(action)) return 'WARNING';
+    if (/WARN|DEGRADE|DEGRADED|WARNING|RISK|ANOMALY|SET_THROTTLED_SAFE/i.test(action))
+      return 'WARNING';
     return 'INFO';
   }
 
@@ -47,7 +48,9 @@ export default class SovereignExpertTranslator {
     const sev = this.severityFromAction(find.action);
     const mech = integrity.note || 'Sensor readings inconsistent with correlated channels.';
     const legacy = `Sensor physics check: abrupt ${integrity.anomalousField || 'parameter'} change violates expected system inertia (thermal/structural). Verify sensor wiring, junction box temperature drift, and transducer calibration before mechanical intervention.`;
-    const rec = integrity.recommendedSafeState ? `Recommend ${integrity.recommendedSafeState.mode} at ${integrity.recommendedSafeState.throttlePct ?? 50}% and schedule sensor inspection.` : 'Recommend immediate sensor validation.';
+    const rec = integrity.recommendedSafeState
+      ? `Recommend ${integrity.recommendedSafeState.mode} at ${integrity.recommendedSafeState.throttlePct ?? 50}% and schedule sensor inspection.`
+      : 'Recommend immediate sensor validation.';
     return {
       title: `${find.source}: Sensor Integrity Override`,
       severity: sev,
@@ -58,19 +61,26 @@ export default class SovereignExpertTranslator {
     };
   }
 
-  private explainKineticKick(find: GuardianFinding, inertia: InertiaAction | null, vcurve: VCurveOutput | null): WisdomEntry {
+  private explainKineticKick(
+    find: GuardianFinding,
+    inertia: InertiaAction | null,
+    vcurve: VCurveOutput | null
+  ): WisdomEntry {
     const sev = this.severityFromAction(find.action) || 'WARNING';
-    const mech = inertia && inertia.triggered
-      ? `Rapid frequency decay (${(inertia.dfdt||0).toFixed(3)} Hz/s) detected. Engaging rotor kinetic contribution: we temporarily convert stored rotational kinetic energy into electrical power to arrest grid frequency fall.`
-      : `Reactive support requested by grid: ${vcurve?.reactiveSupportMVar ?? 0} MVar.`;
+    const mech =
+      inertia && inertia.triggered
+        ? `Rapid frequency decay (${(inertia.dfdt || 0).toFixed(3)} Hz/s) detected. Engaging rotor kinetic contribution: we temporarily convert stored rotational kinetic energy into electrical power to arrest grid frequency fall.`
+        : `Reactive support requested by grid: ${vcurve?.reactiveSupportMVar ?? 0} MVar.`;
 
-    const legacy = inertia && inertia.triggered
-      ? 'Energy exchange principle: rotor kinetic energy ΔE ≈ ½·J·(ω1²−ω2²). Use short-duration over-excitation and controlled torque application; avoid prolonged over-generation to protect bearings.'
-      : 'Reactive power principle: adjust excitation per V-curve to stabilize voltage; follow excitation ramping guides to avoid step-change transients.';
+    const legacy =
+      inertia && inertia.triggered
+        ? 'Energy exchange principle: rotor kinetic energy ΔE ≈ ½·J·(ω1²−ω2²). Use short-duration over-excitation and controlled torque application; avoid prolonged over-generation to protect bearings.'
+        : 'Reactive power principle: adjust excitation per V-curve to stabilize voltage; follow excitation ramping guides to avoid step-change transients.';
 
-    const rec = inertia && inertia.triggered
-      ? 'Short-duration inertia support only. Notify grid operator and monitor rotor speed/shaft stress.'
-      : 'Apply excitation schedule from generator manual; prioritize grid voltage stability.';
+    const rec =
+      inertia && inertia.triggered
+        ? 'Short-duration inertia support only. Notify grid operator and monitor rotor speed/shaft stress.'
+        : 'Apply excitation schedule from generator manual; prioritize grid voltage stability.';
 
     return {
       title: `${find.source}: Grid Stability Action`,
@@ -78,26 +88,35 @@ export default class SovereignExpertTranslator {
       mechanicalExplanation: mech,
       legacyTip: legacy,
       recommendedAction: rec,
-      contextualNote: `V-curve note: ${vcurve?.note || 'N/A'}`
+      contextualNote: `V-curve note: ${vcurve?.note || 'N/A'}`,
     };
   }
 
   private noteOverridesForSource(source: string): string | undefined {
     const history = this.memory.getOverrideHistory() || [];
-    const relevant = history.filter(h => (h.action || '').toString().toLowerCase().includes(source.toLowerCase()));
+    const relevant = history.filter(h =>
+      (h.action || '').toString().toLowerCase().includes(source.toLowerCase())
+    );
     if (!relevant || relevant.length === 0) return undefined;
     const last = relevant[relevant.length - 1];
     const d = new Date(last.timestamp || Date.now()).toLocaleDateString();
     return `Based on your previous decision on ${d}, I have adjusted my severity assessment; continue to monitor ${source}.`;
   }
 
-  public generateWisdomReport(assetId: number | string | undefined, guardianFindings: GuardianFinding[], architectContext?: any): WisdomReport {
+  public generateWisdomReport(
+    assetId: number | string | undefined,
+    guardianFindings: GuardianFinding[],
+    architectContext?: any
+  ): WisdomReport {
     const entries: WisdomEntry[] = [];
 
     // Ingest architect summary if available
     let architectSummary: string | undefined = undefined;
     try {
-      if (architectContext) architectSummary = (architectContext.summary || JSON.stringify(architectContext)).toString();
+      if (architectContext)
+        architectSummary = (
+          architectContext.summary || JSON.stringify(architectContext)
+        ).toString();
       else {
         const a = Architect.generateArchitectReport();
         architectSummary = a.summary;
@@ -110,7 +129,10 @@ export default class SovereignExpertTranslator {
     for (const f of guardianFindings) {
       // Sensor integrity path
       if (/SOVEREIGN_TRIP|HARD_TRIP/i.test(f.action) && f.metrics && f.metrics.sensorSnapshot) {
-        const integrity = SensorIntegritySentinel.correlate(f.metrics.sensorSnapshot, f.metrics.recentHistory || []);
+        const integrity = SensorIntegritySentinel.correlate(
+          f.metrics.sensorSnapshot,
+          f.metrics.recentHistory || []
+        );
         if (integrity.sensorAnomaly) {
           const e = this.explainSensorIntegrity(f, integrity);
           const overrideNote = this.noteOverridesForSource(f.source);
@@ -123,19 +145,25 @@ export default class SovereignExpertTranslator {
       // Grid stability path
       if (/GRID|KineticKick|KINETIC/i.test(f.source) || /KINETIC/i.test(f.action)) {
         const g = new GridStabilityGuardian();
-        const inertia = (f.metrics && f.metrics.inertia) ? f.metrics.inertia as InertiaAction : null;
-        const vcurve = (f.metrics && f.metrics.vcurve) ? f.metrics.vcurve as VCurveOutput : null;
+        const inertia =
+          f.metrics && f.metrics.inertia ? (f.metrics.inertia as InertiaAction) : null;
+        const vcurve = f.metrics && f.metrics.vcurve ? (f.metrics.vcurve as VCurveOutput) : null;
         entries.push(this.explainKineticKick(f, inertia, vcurve));
         continue;
       }
 
       // Generic translator for bearing/cooling etc.
-      if (/THRUST|BEARING|COOLING|OIL|VARNISH|SEAL|SHAFT/i.test(f.source) || /BEARING|COOLING|OIL|SEAL/i.test(f.action)) {
+      if (
+        /THRUST|BEARING|COOLING|OIL|VARNISH|SEAL|SHAFT/i.test(f.source) ||
+        /BEARING|COOLING|OIL|SEAL/i.test(f.action)
+      ) {
         const sev = this.severityFromAction(f.action);
         const mech = f.details || 'Automated guardian reported an anomaly.';
         const legacy = (() => {
-          if (/bearing/i.test(f.source) || /THRUST/i.test(f.source)) return 'Legacy Tip: Bearings prefer slow, controlled deceleration and stable lubrication film. If temperature rises, check oil contamination and bearing clearances first.';
-          if (/cooling|oil/i.test(f.source)) return 'Legacy Tip: Cooling issues typically originate from fouling or blocked heat exchange. Verify cooling pump operation, filter ΔP, and heat-exchanger cleanliness.';
+          if (/bearing/i.test(f.source) || /THRUST/i.test(f.source))
+            return 'Legacy Tip: Bearings prefer slow, controlled deceleration and stable lubrication film. If temperature rises, check oil contamination and bearing clearances first.';
+          if (/cooling|oil/i.test(f.source))
+            return 'Legacy Tip: Cooling issues typically originate from fouling or blocked heat exchange. Verify cooling pump operation, filter ΔP, and heat-exchanger cleanliness.';
           return 'Legacy Tip: Follow the plant SOP for inspection and measurement verification before mechanical intervention.';
         })();
 
@@ -146,7 +174,7 @@ export default class SovereignExpertTranslator {
           mechanicalExplanation: mech,
           legacyTip: legacy,
           recommendedAction: f.details || 'Perform further inspection and validate sensors',
-          contextualNote: overrideNote
+          contextualNote: overrideNote,
         });
         continue;
       }
@@ -170,7 +198,7 @@ export default class SovereignExpertTranslator {
       assetId,
       entries,
       executiveSummary,
-      architectSummary
+      architectSummary,
     };
   }
 
@@ -182,25 +210,40 @@ export default class SovereignExpertTranslator {
       action: 'SOVEREIGN_TRIP',
       details: 'h_min below threshold; high pad temperatures observed',
       metrics: {
-        sensorSnapshot: { timestamp: Date.now(), temperatureC: 120, vibrationMmS: 18, loadMw: 2.1, flowM3s: 0.5 },
+        sensorSnapshot: {
+          timestamp: Date.now(),
+          temperatureC: 120,
+          vibrationMmS: 18,
+          loadMw: 2.1,
+          flowM3s: 0.5,
+        },
         recentHistory: [
-          { timestamp: Date.now() - 60000, temperatureC: 90, vibrationMmS: 17, loadMw: 2.1, flowM3s: 0.5 },
-        ]
-      }
+          {
+            timestamp: Date.now() - 60000,
+            temperatureC: 90,
+            vibrationMmS: 17,
+            loadMw: 2.1,
+            flowM3s: 0.5,
+          },
+        ],
+      },
     };
 
     const coolingFinding: GuardianFinding = {
       source: 'CoolingSystemGuardian',
       action: 'FAN_FAILURE_WARNING',
       details: 'Cooling ΔT rising, fouling suspected',
-      metrics: { avgDeltaP: 0.45, foulingDetected: true }
+      metrics: { avgDeltaP: 0.45, foulingDetected: true },
     };
 
     const gridFinding: GuardianFinding = {
       source: 'GridStabilityGuardian',
       action: 'KINETIC_KICK',
       details: 'Rapid frequency drop detected by SCADA',
-      metrics: { inertia: { triggered: true, dfdt: -0.35, durationSec: 6 }, vcurve: { excitationPct: 60, reactiveSupportMVar: 5, note: 'V low' } }
+      metrics: {
+        inertia: { triggered: true, dfdt: -0.35, durationSec: 6 },
+        vcurve: { excitationPct: 60, reactiveSupportMVar: 5, note: 'V low' },
+      },
     };
 
     const report = this.generateWisdomReport(assetId, [thrustFinding, coolingFinding, gridFinding]);

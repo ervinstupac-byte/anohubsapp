@@ -9,7 +9,12 @@ export interface EtaSanitizeResult {
 const RHO = 1000; // kg/m3
 const G = 9.80665; // m/s^2
 
-export function sanitizeEtaInputs(input: { P?: any; Q?: any; H?: any; rawEta?: any }): EtaSanitizeResult | null {
+export function sanitizeEtaInputs(input: {
+  P?: any;
+  Q?: any;
+  H?: any;
+  rawEta?: any;
+}): EtaSanitizeResult | null {
   try {
     // If rawEta is provided, prefer it but validate
     if (input.rawEta !== undefined && input.rawEta !== null) {
@@ -41,14 +46,23 @@ export function sanitizeEtaInputs(input: { P?: any; Q?: any; H?: any; rawEta?: a
 
     // Prevent division by zero
     if (Q === 0 || H === 0) {
-      console.error('CRITICAL: sanitizeEtaInputs - Q or H is zero leading to invalid eta', { P, Q, H });
+      console.error('CRITICAL: sanitizeEtaInputs - Q or H is zero leading to invalid eta', {
+        P,
+        Q,
+        H,
+      });
       return null;
     }
 
     const eta = P / (RHO * G * Q * H);
 
     if (!Number.isFinite(eta) || eta < 0 || eta > 1) {
-      console.error('CRITICAL: sanitizeEtaInputs - computed eta out of bounds [0,1]', { eta, P, Q, H });
+      console.error('CRITICAL: sanitizeEtaInputs - computed eta out of bounds [0,1]', {
+        eta,
+        P,
+        Q,
+        H,
+      });
       return null;
     }
 

@@ -1,8 +1,8 @@
 /**
  * sovereign-core.d.ts
- * 
+ *
  * NC-2400: Unified Type System for Sovereign Components
- * 
+ *
  * Centralizes all shared types to eliminate conflicts across services and components
  */
 
@@ -118,43 +118,43 @@ export interface EmergencyClosureResult {
 }
 
 export interface ThermalSpecs {
-  ambientTemperature: number;      // °C
-  operatingTemperature: number;    // °C
-  shaftLength: number;             // meters
-  runnerDiameterMM: number;        // mm
+  ambientTemperature: number; // °C
+  operatingTemperature: number; // °C
+  shaftLength: number; // meters
+  runnerDiameterMM: number; // mm
   materialType: 'STEEL' | 'STAINLESS' | 'TITANIUM' | 'CUSTOM';
-  customAlpha?: number;            // Optional custom expansion coefficient
+  customAlpha?: number; // Optional custom expansion coefficient
 }
 
 export interface ThermalGrowthResult {
   growthMM: number;
-  growthMils: number;              // thousandths of an inch
+  growthMils: number; // thousandths of an inch
   coefficient: number;
   targetTemp: number;
   deltaT: number;
-  clearanceRequired: number;       // mm
+  clearanceRequired: number; // mm
   compensationStatus: 'OK' | 'WARNING' | 'CRITICAL';
 }
 
 export interface LabyrinthGapResult {
-  baseGap: number;                 // mm
-  adjustedGap: number;               // mm after thermal compensation
-  compensation: number;              // mm compensation applied
-  temp: number;                    // Current temperature
-  alarmThreshold: number;          // mm
+  baseGap: number; // mm
+  adjustedGap: number; // mm after thermal compensation
+  compensation: number; // mm compensation applied
+  temp: number; // Current temperature
+  alarmThreshold: number; // mm
 }
 
 export interface HeatTransferResult {
-  heatFlow: number;                // Watts
-  surfaceTemp: number;             // °C
-  deltaT: number;                  // Temperature gradient
-  timeToEquilibrium: number;        // minutes
+  heatFlow: number; // Watts
+  surfaceTemp: number; // °C
+  deltaT: number; // Temperature gradient
+  timeToEquilibrium: number; // minutes
 }
 
 export interface ThermalStressResult {
-  stressMPa: number;               // MPa
-  strainPercent: number;            // percentage
-  safetyFactor: number;            // dimensionless
+  stressMPa: number; // MPa
+  strainPercent: number; // percentage
+  safetyFactor: number; // dimensionless
   status: 'SAFE' | 'WARNING' | 'CRITICAL';
 }
 
@@ -281,8 +281,8 @@ export const SOVEREIGN_CONSTANTS = {
   THERMAL_COEFFICIENTS: {
     STEEL: 12e-6,
     STAINLESS: 16e-6,
-    TITANIUM: 8.6e-6
-  }
+    TITANIUM: 8.6e-6,
+  },
 } as const;
 
 // ============================================================================

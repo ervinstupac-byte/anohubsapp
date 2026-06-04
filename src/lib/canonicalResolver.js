@@ -7,7 +7,10 @@ function normalizeRawFile(raw) {
   if (!raw) return null;
   let p = raw.replace(/\\\\/g, '/').replace(/\\/g, '/');
   // Remove leading public/ or ./public/
-  p = p.replace(/^\.\/public\//i, '').replace(/^public\//i, '').replace(/^\.\//, '');
+  p = p
+    .replace(/^\.\/public\//i, '')
+    .replace(/^public\//i, '')
+    .replace(/^\.\//, '');
   // Ensure archive segment
   const idx = p.indexOf('archive/');
   if (idx >= 0) p = p.slice(idx);
@@ -20,15 +23,17 @@ function buildIndex() {
   const raw = fs.readFileSync(manifestPath, 'utf8');
   const manifest = JSON.parse(raw);
 
-  const entries = manifest.map(item => {
-    const rawFile = item.file || item.filename || item.path || '';
-    const webPath = normalizeRawFile(rawFile);
-    return {
-      webPath,
-      raw: rawFile,
-      hash: item.hash || item.sha256 || item.sha || item.digest || null
-    };
-  }).filter(e => e.webPath);
+  const entries = manifest
+    .map(item => {
+      const rawFile = item.file || item.filename || item.path || '';
+      const webPath = normalizeRawFile(rawFile);
+      return {
+        webPath,
+        raw: rawFile,
+        hash: item.hash || item.sha256 || item.sha || item.digest || null,
+      };
+    })
+    .filter(e => e.webPath);
 
   const PATH_INDEX = Object.create(null);
   const PATH_ALIAS = Object.create(null);
@@ -82,5 +87,5 @@ function getSamplePaths(n = 10) {
 module.exports = {
   buildIndex,
   resolvePath,
-  getSamplePaths
+  getSamplePaths,
 };

@@ -5,7 +5,11 @@ import manifestRaw from '../../../scripts/hashes_applied.json';
 export interface DossierFile {
   path: string;
   justification: string;
-  category: 'Case Studies' | 'Technical Insights' | 'Maintenance Protocols' | 'Turbine Friend Dossiers';
+  category:
+    | 'Case Studies'
+    | 'Technical Insights'
+    | 'Maintenance Protocols'
+    | 'Turbine Friend Dossiers';
   hash?: string;
 }
 
@@ -14,7 +18,8 @@ function inferCategory(rel: string): DossierFile['category'] {
   if (l.startsWith('case-studies/')) return 'Case Studies';
   if (l.startsWith('insights/')) return 'Technical Insights';
   if (l.startsWith('protocol/')) return 'Maintenance Protocols';
-  if (l.startsWith('turbine_friend/') || l.startsWith('turbine-friend/')) return 'Turbine Friend Dossiers';
+  if (l.startsWith('turbine_friend/') || l.startsWith('turbine-friend/'))
+    return 'Turbine Friend Dossiers';
   return 'Maintenance Protocols';
 }
 
@@ -38,11 +43,12 @@ export const DOSSIER_LIBRARY_RAW: DossierFile[] = manifest.map(entry => {
     category,
     hash: entry.hash,
     // preserve original manifest path for exact-case resolution
-    originalPath: original
+    originalPath: original,
   } as any;
 });
 
-const normalizePath = (p: string) => p.replace(/\\/g, '/').replace(/protocol\/to_learn_archive\/protocols_v0\//g, 'protocol/');
+const normalizePath = (p: string) =>
+  p.replace(/\\/g, '/').replace(/protocol\/to_learn_archive\/protocols_v0\//g, 'protocol/');
 
 const toArchiveAbsolute = (p: string) => {
   const cleaned = normalizePath(p).replace(/^\/+/, '');
@@ -54,7 +60,8 @@ const toArchiveAbsolute = (p: string) => {
   return `/archive/${cleaned}`;
 };
 
-export const DOSSIER_LIBRARY: Array<DossierFile & { originalPath?: string }> = DOSSIER_LIBRARY_RAW.map(d => ({ ...d, path: toArchiveAbsolute(d.path) }));
+export const DOSSIER_LIBRARY: Array<DossierFile & { originalPath?: string }> =
+  DOSSIER_LIBRARY_RAW.map(d => ({ ...d, path: toArchiveAbsolute(d.path) }));
 
 export const DOSSIER_LIBRARY_COUNT = DOSSIER_LIBRARY.length;
 

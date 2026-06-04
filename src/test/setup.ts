@@ -26,8 +26,8 @@ vi.mock('../contexts/TelemetryContext.tsx', async () => {
       updatePipeDiameter: () => undefined,
       shutdownExcitation: () => undefined,
       updateWicketGateSetpoint: () => undefined,
-      resetFatigue: () => undefined
-    })
+      resetFatigue: () => undefined,
+    }),
   } as any;
 });
 
@@ -42,8 +42,8 @@ vi.mock('../contexts/MaintenanceContext.tsx', async () => {
       predictServiceDate: () => null,
       createLogEntry: () => undefined,
       createWorkOrder: () => undefined,
-      getMaintenanceSummary: () => ({ upcoming: 0 })
-    })
+      getMaintenanceSummary: () => ({ upcoming: 0 }),
+    }),
   } as any;
 });
 
@@ -53,7 +53,7 @@ if (typeof (global as any).indexedDB === 'undefined') {
     (global as any).indexedDB = {
       databases: () => [],
       open: () => ({ onupgradeneeded: null, onsuccess: null, onerror: null }),
-      deleteDatabase: () => ({})
+      deleteDatabase: () => ({}),
     } as any;
   } catch (e) {
     // ignore

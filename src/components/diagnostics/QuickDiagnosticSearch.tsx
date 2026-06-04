@@ -43,7 +43,9 @@ export default function QuickDiagnosticSearch({ initialQuery, assetId }: Props) 
       }
       setLoading(false);
     }, 300);
-    return () => { if (timer.current) window.clearTimeout(timer.current); };
+    return () => {
+      if (timer.current) window.clearTimeout(timer.current);
+    };
   }, [query, assetId]);
 
   const handleRecord = async (item: any) => {
@@ -65,7 +67,7 @@ export default function QuickDiagnosticSearch({ initialQuery, assetId }: Props) 
         aria-label="Search diagnostics"
         placeholder="Search symptoms or keys..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={e => setQuery(e.target.value)}
         className="border rounded p-2 w-full"
       />
 
@@ -77,7 +79,9 @@ export default function QuickDiagnosticSearch({ initialQuery, assetId }: Props) 
             <li key={r.symptom_key} className="p-3 border rounded hover:bg-gray-50">
               <div className="font-medium">{r.symptom_key}</div>
               {r.diagnosis && <div className="text-sm text-gray-700">{r.diagnosis}</div>}
-              {r.recommended_action && <div className="text-sm text-gray-600 mt-1">{r.recommended_action}</div>}
+              {r.recommended_action && (
+                <div className="text-sm text-gray-600 mt-1">{r.recommended_action}</div>
+              )}
               <div className="mt-2 flex gap-2">
                 <button
                   onClick={() => handleRecord(r)}

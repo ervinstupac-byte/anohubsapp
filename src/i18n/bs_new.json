@@ -520,30 +520,15 @@
     },
     "q2": {
       "text": "Da li je tolerancija poravnanja od \"0.05 mm/m\" strogo propisana u ugovorima?",
-      "options": [
-        "Da, bez pregovora",
-        "Da, ali labavo definisano",
-        "Ne",
-        "Nepoznato"
-      ]
+      "options": ["Da, bez pregovora", "Da, ali labavo definisano", "Ne", "Nepoznato"]
     },
     "q3": {
       "text": "Da li su spektri vibracija (FFT) integrisani u SCADA logiku?",
-      "options": [
-        "Da, potpuna integracija",
-        "Samo samostalni sistem",
-        "Prijenosna mjerenja",
-        "Ne"
-      ]
+      "options": ["Da, potpuna integracija", "Samo samostalni sistem", "Prijenosna mjerenja", "Ne"]
     },
     "q4": {
       "text": "Imate li EN 10204 3.1 certifikate za sve vijke rotora?",
-      "options": [
-        "Da, digitalno arhivirano",
-        "Samo papirne kopije",
-        "Djelomično",
-        "Ne"
-      ]
+      "options": ["Da, digitalno arhivirano", "Samo papirne kopije", "Djelomično", "Ne"]
     },
     "q5": {
       "text": "Da li operateri praktikuju \"Vlasničko Održavanje\"?",
@@ -555,12 +540,7 @@
     },
     "q6": {
       "text": "Prati li se i bilježi zazor rotora (gap) godišnje?",
-      "options": [
-        "Da",
-        "Ne",
-        "Ne održava se",
-        "Djelomično popunjeno"
-      ]
+      "options": ["Da", "Ne", "Ne održava se", "Djelomično popunjeno"]
     },
     "q7": {
       "text": "Kada dođe do kvara, da li se provodi Analiza Osnovnog Uzroka (RCFA)?",
@@ -573,85 +553,43 @@
     },
     "q8": {
       "text": "Postoji li automatski sistem podmazivanja za ležajeve sprovodnog aparata?",
-      "options": [
-        "Da",
-        "Ne",
-        "U fazi testiranja"
-      ]
+      "options": ["Da", "Ne", "U fazi testiranja"]
     },
     "q9": {
       "text": "Jesu li rezervni dijelovi (zaptivači, ležajevi) strogo OEM certificirani?",
-      "options": [
-        "Da",
-        "Ne",
-        "Ograničen pristup",
-        "Miješane zalihe"
-      ]
+      "options": ["Da", "Ne", "Ograničen pristup", "Miješane zalihe"]
     },
     "q10": {
       "text": "Prati li se kvaliteta ulja (sadržaj vode/čestice) u stvarnom vremenu?",
-      "options": [
-        "Da",
-        "Ne prati se",
-        "Prati se periodično"
-      ]
+      "options": ["Da", "Ne prati se", "Prati se periodično"]
     },
     "q11": {
       "text": "Mjerite li \"Izvršni Jaz\" (Planirano vs. Stvarno vrijeme održavanja)?",
-      "options": [
-        "Da",
-        "Ne",
-        "Ne mjerimo"
-      ]
+      "options": ["Da", "Ne", "Ne mjerimo"]
     },
     "q12": {
       "text": "Da li ugovor propisuje specifične penale za odstupanja u poravnanju?",
-      "options": [
-        "Da",
-        "Ne, nudi se samo zamjena",
-        "Samo zamjena",
-        "Ponekad"
-      ]
+      "options": ["Da", "Ne, nudi se samo zamjena", "Samo zamjena", "Ponekad"]
     },
     "q13": {
       "text": "Mjeri li se dubina kavitacijskog trošenja tokom svakog velikog remonta?",
-      "options": [
-        "Da",
-        "Ne",
-        "Periodično"
-      ]
+      "options": ["Da", "Ne", "Periodično"]
     },
     "q14": {
       "text": "Jesu li senzori vibracija instalirani na svim glavnim ležajevima?",
-      "options": [
-        "Da",
-        "Nije instalirano/funkcionalno",
-        "Neki zahtijevaju provjeru"
-      ]
+      "options": ["Da", "Nije instalirano/funkcionalno", "Neki zahtijevaju provjeru"]
     },
     "q15": {
       "text": "Je li SCADA sistem ažuriran najnovijim sigurnosnim zakrpama?",
-      "options": [
-        "Da",
-        "Ne",
-        "Zastarjelo"
-      ]
+      "options": ["Da", "Ne", "Zastarjelo"]
     },
     "q16": {
       "text": "Testira li se sekvenca hitnog isključenja godišnje?",
-      "options": [
-        "Automatski",
-        "Ručno",
-        "Polu-automatski"
-      ]
+      "options": ["Automatski", "Ručno", "Polu-automatski"]
     },
     "q17": {
       "text": "Kakvo je trenutno stanje betonske površine sifonske cijevi?",
-      "options": [
-        "Dobro",
-        "Zahtijeva manje održavanje",
-        "Potreban veliki servis"
-      ]
+      "options": ["Dobro", "Zahtijeva manje održavanje", "Potreban veliki servis"]
     }
   },
   "globalMap": {

@@ -7,7 +7,7 @@ describe('FrancisOptimizer', () => {
       draftTubePressure: [],
       rotationalSpeed: 600, // RPM
       vortexFrequency: 2.1, // Hz (0.2*10 to 0.4*10 => 2-4 Hz)
-      vortexAmplitude: 0.35
+      vortexAmplitude: 0.35,
     });
     expect(res.vortexDetected).toBe(true);
     expect(res.suppressionRequired).toBe(true);
@@ -19,7 +19,7 @@ describe('FrancisOptimizer', () => {
       draftTubePressure: [],
       rotationalSpeed: 600,
       vortexFrequency: 3.0,
-      vortexAmplitude: 0.12
+      vortexAmplitude: 0.12,
     });
     expect(res.vortexDetected).toBe(true);
     expect(res.suppressionRequired).toBe(false);

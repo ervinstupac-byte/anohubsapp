@@ -5,9 +5,8 @@
  */
 
 export class GovernmentDashboard {
-
-    generateNationalReport(): string {
-        return `
+  generateNationalReport(): string {
+    return `
 NATIONAL FORTRESS REPORT (CONFIDENTIAL)
 ---------------------------------------
 STATUS: 🟢 OPERATIONAL
@@ -22,5 +21,5 @@ METRICS:
 MESSAGE TO PRESIDENT:
 "The fleet is ready for the storm. The lights will stay on."
 `;
-    }
+  }
 }

@@ -5,27 +5,27 @@
  */
 
 export interface IncidentSolution {
-    incidentType: string;
-    solution: string;
-    originSite: string;
-    timestamp: Date;
+  incidentType: string;
+  solution: string;
+  originSite: string;
+  timestamp: Date;
 }
 
 export class LessonTransferCortex {
-    private subscribers: string[] = ['Site_B', 'Site_C']; // Hardcoded for demo
+  private subscribers: string[] = ['Site_B', 'Site_C']; // Hardcoded for demo
 
-    /**
-     * BROADCAST LESSON
-     * Sends wisdom to other sites.
-     */
-    broadcastLesson(incident: IncidentSolution): string[] {
-        const alerts: string[] = [];
+  /**
+   * BROADCAST LESSON
+   * Sends wisdom to other sites.
+   */
+  broadcastLesson(incident: IncidentSolution): string[] {
+    const alerts: string[] = [];
 
-        this.subscribers.forEach(siteId => {
-            const msg = `[TO: ${siteId}] 💡 NEW FLEET WISDOM: ${incident.originSite} solved '${incident.incidentType}' using: "${incident.solution}". Update your procedures!`;
-            alerts.push(msg);
-        });
+    this.subscribers.forEach(siteId => {
+      const msg = `[TO: ${siteId}] 💡 NEW FLEET WISDOM: ${incident.originSite} solved '${incident.incidentType}' using: "${incident.solution}". Update your procedures!`;
+      alerts.push(msg);
+    });
 
-        return alerts;
-    }
+    return alerts;
+  }
 }

@@ -13,31 +13,25 @@ type Story = StoryObj<typeof ToggleSwitch>;
 
 const Demo = ({ ...args }) => {
   const [checked, setChecked] = useState(false);
-  return (
-    <ToggleSwitch
-      {...args}
-      checked={checked}
-      onChange={setChecked}
-    />
-  );
+  return <ToggleSwitch {...args} checked={checked} onChange={setChecked} />;
 };
 
 export const Default: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Enable notifications',
   },
 };
 
 export const Checked: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Enabled',
   },
 };
 
 export const Disabled: Story = {
-  render: (args) => <Demo {...args} />,
+  render: args => <Demo {...args} />,
   args: {
     label: 'Disabled',
     disabled: true,

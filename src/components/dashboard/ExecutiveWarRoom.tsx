@@ -4,24 +4,42 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Crown, Activity, AlertTriangle, FileDown, Target, Euro, BookOpen, Clock, AlertCircle, ExternalLink } from 'lucide-react';
+import {
+  Crown,
+  Activity,
+  AlertTriangle,
+  FileDown,
+  Target,
+  Euro,
+  BookOpen,
+  Clock,
+  AlertCircle,
+  ExternalLink,
+} from 'lucide-react';
 import { useTelemetryStore } from '../../features/telemetry/store/useTelemetryStore';
 import { GlassCard } from '../../shared/components/ui/GlassCard';
 import { SovereignViewShell } from './SovereignViewShell';
 import { calculateRevenueLoss } from '../../features/business/logic/FinancialCalculator';
 import { PDFRenderer, PAGE_CONFIG, COLORS } from '../../features/reporting/utils/PDFRenderer';
 import jsPDF from 'jspdf';
-import { SovereignVerdict, UrgencyLevel, SovereignMemory, TelemetryData } from '../../types/sovereign-core';
+import {
+  SovereignVerdict,
+  UrgencyLevel,
+  SovereignMemory,
+  TelemetryData,
+} from '../../types/sovereign-core';
 
 // Simulated SovereignMemory for historical data
 const simulatedSovereignMemory: SovereignMemory = {
-  drawing42: "Drawing 42: Initial water hammer analysis revealed critical surge pressure patterns",
-  fieldNote: "Field Note: Cavitation detected at 75% load - immediate inspection required",
-  wisdom: "Ancestral Wisdom: Governor response time within acceptable limits for 100% load rejection"
+  drawing42: 'Drawing 42: Initial water hammer analysis revealed critical surge pressure patterns',
+  fieldNote: 'Field Note: Cavitation detected at 75% load - immediate inspection required',
+  wisdom:
+    'Ancestral Wisdom: Governor response time within acceptable limits for 100% load rejection',
 };
 
 export const ExecutiveWarRoom: React.FC = () => {
-  const { physics, hydraulic, mechanical, identity, updateTelemetry, executiveResult } = useTelemetryStore() as any;
+  const { physics, hydraulic, mechanical, identity, updateTelemetry, executiveResult } =
+    useTelemetryStore() as any;
   const [sovereignPulse, setSovereignPulse] = useState(85); // Simulated current pulse
   const [relevantWisdom, setRelevantWisdom] = useState<string | null>(null);
 
@@ -32,59 +50,74 @@ export const ExecutiveWarRoom: React.FC = () => {
 
   const verdict = useMemo<SovereignVerdict>(() => {
     if (!executiveResult) {
-        // Fallback to legacy logic if engine not ready
-        const reasoning: string[] = [];
-        let urgency: UrgencyLevel = 'LOW';
-        let recommendation = 'Continue nominal operation';
-        let action = 'MONITOR';
-    
-        const powerMW = physics?.powerMW ? Number(physics.powerMW) : 0;
-        const baselineMW = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
-        const rpm = mechanical?.rpm || 600;
-        const rpmDeviation = Math.abs((rpm - 600) / 600) * 100;
-    
-        if (rpmDeviation > 10) {
-          reasoning.push(`RPM deviation: ${rpmDeviation.toFixed(1)}% from BEP`);
-          urgency = 'MEDIUM';
-          recommendation = `Throttle to 600 RPM`;
-          action = 'THROTTLE';
-        }
-    
-        const eff = typeof hydraulic?.efficiency === 'number' ? hydraulic.efficiency : 90;
-        const efficiencyPercent = eff <= 1 ? eff * 100 : eff;
-    
-        const finResult = calculateRevenueLoss({
-          market: { energyPricePerMWh: 85, currency: 'EUR' },
-          technical: { 
-            currentActivePowerMW: powerMW,
-            designRatedPowerMW: baselineMW,
-            isTurbineRunning: powerMW > 0,
-            currentEfficiencyPercent: efficiencyPercent
-          }
-        });
-    
-        return {
-          recommendation,
-          action,
-          financialImpact: `€${finResult.revenueLossPerHour.toFixed(2)}/hr loss`,
-          confidence: 85,
-          urgency,
-          reasoning
-        };
+      // Fallback to legacy logic if engine not ready
+      const reasoning: string[] = [];
+      let urgency: UrgencyLevel = 'LOW';
+      let recommendation = 'Continue nominal operation';
+      let action = 'MONITOR';
+
+      const powerMW = physics?.powerMW ? Number(physics.powerMW) : 0;
+      const baselineMW = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
+      const rpm = mechanical?.rpm || 600;
+      const rpmDeviation = Math.abs((rpm - 600) / 600) * 100;
+
+      if (rpmDeviation > 10) {
+        reasoning.push(`RPM deviation: ${rpmDeviation.toFixed(1)}% from BEP`);
+        urgency = 'MEDIUM';
+        recommendation = `Throttle to 600 RPM`;
+        action = 'THROTTLE';
+      }
+
+      const eff = typeof hydraulic?.efficiency === 'number' ? hydraulic.efficiency : 90;
+      const efficiencyPercent = eff <= 1 ? eff * 100 : eff;
+
+      const finResult = calculateRevenueLoss({
+        market: { energyPricePerMWh: 85, currency: 'EUR' },
+        technical: {
+          currentActivePowerMW: powerMW,
+          designRatedPowerMW: baselineMW,
+          isTurbineRunning: powerMW > 0,
+          currentEfficiencyPercent: efficiencyPercent,
+        },
+      });
+
+      return {
+        recommendation,
+        action,
+        financialImpact: `€${finResult.revenueLossPerHour.toFixed(2)}/hr loss`,
+        confidence: 85,
+        urgency,
+        reasoning,
+      };
     }
 
     // NC-10051: Real Sovereign Engine Output
     const isProtectionActive = executiveResult.activeProtections.length > 0;
-    const isShutdown = executiveResult.activeProtections.some((p: string) => p.includes('SHUTDOWN'));
-    const isThrottled = executiveResult.activeProtections.some((p: string) => p.includes('THROTTLED'));
+    const isShutdown = executiveResult.activeProtections.some((p: string) =>
+      p.includes('SHUTDOWN')
+    );
+    const isThrottled = executiveResult.activeProtections.some((p: string) =>
+      p.includes('THROTTLED')
+    );
 
     return {
-        recommendation: executiveResult.operatorMessage,
-        action: executiveResult.fleetAction || (isShutdown ? 'SHUTDOWN' : (isThrottled ? 'THROTTLE' : 'OPTIMIZE')),
-        financialImpact: `Net Profit: €${executiveResult.financials.netSovereignProfitEur.toFixed(2)}/hr`,
-        confidence: Math.round(executiveResult.masterHealthScore),
-        urgency: isShutdown ? 'CRITICAL' : (isThrottled ? 'HIGH' : (isProtectionActive ? 'MEDIUM' : 'LOW')),
-        reasoning: executiveResult.activeProtections.length > 0 ? executiveResult.activeProtections : ['System Nominal']
+      recommendation: executiveResult.operatorMessage,
+      action:
+        executiveResult.fleetAction ||
+        (isShutdown ? 'SHUTDOWN' : isThrottled ? 'THROTTLE' : 'OPTIMIZE'),
+      financialImpact: `Net Profit: €${executiveResult.financials.netSovereignProfitEur.toFixed(2)}/hr`,
+      confidence: Math.round(executiveResult.masterHealthScore),
+      urgency: isShutdown
+        ? 'CRITICAL'
+        : isThrottled
+          ? 'HIGH'
+          : isProtectionActive
+            ? 'MEDIUM'
+            : 'LOW',
+      reasoning:
+        executiveResult.activeProtections.length > 0
+          ? executiveResult.activeProtections
+          : ['System Nominal'],
     };
   }, [physics, hydraulic, mechanical, executiveResult]);
 
@@ -104,7 +137,7 @@ export const ExecutiveWarRoom: React.FC = () => {
     const pid = (identity as any)?.projectId || 'SOVEREIGN-001';
     PDFRenderer.drawHeader(doc, pid);
     doc.setFontSize(20);
-    doc.text("SOVEREIGN REPORT", PAGE_CONFIG.MARGIN, 45);
+    doc.text('SOVEREIGN REPORT', PAGE_CONFIG.MARGIN, 45);
     doc.setFontSize(10);
     doc.text(`Generated: ${new Date().toLocaleDateString()}`, PAGE_CONFIG.MARGIN, 55);
     PDFRenderer.drawFooter(doc, 1);
@@ -117,12 +150,12 @@ export const ExecutiveWarRoom: React.FC = () => {
     const b = hydraulic?.baselineOutputMW ? Number(hydraulic.baselineOutputMW) : 100;
     const r = calculateRevenueLoss({
       market: { energyPricePerMWh: 85, currency: 'EUR' },
-      technical: { 
-        currentActivePowerMW: p, 
-        designRatedPowerMW: b, 
-        isTurbineRunning: p > 0, 
-        currentEfficiencyPercent: hydraulic?.efficiency || 90 
-      }
+      technical: {
+        currentActivePowerMW: p,
+        designRatedPowerMW: b,
+        isTurbineRunning: p > 0,
+        currentEfficiencyPercent: hydraulic?.efficiency || 90,
+      },
     });
     return { h: r.revenueLossPerHour.toFixed(0), m: (r.revenueLossPerHour * 24 * 30).toFixed(0) };
   };
@@ -130,17 +163,18 @@ export const ExecutiveWarRoom: React.FC = () => {
   const f = fin();
 
   return (
-    <SovereignViewShell config={{
-      sector: "Executive",
-      subtitle: "Sovereign Command Center",
-      unitId: "NC-1800",
-      icon: Crown,
-      iconWrapClassName: "bg-yellow-500/20",
-      iconClassName: "text-yellow-400",
-      panels: []
-    }}>
+    <SovereignViewShell
+      config={{
+        sector: 'Executive',
+        subtitle: 'Sovereign Command Center',
+        unitId: 'NC-1800',
+        icon: Crown,
+        iconWrapClassName: 'bg-yellow-500/20',
+        iconClassName: 'text-yellow-400',
+        panels: [],
+      }}
+    >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
         {/* Main Verdict Panel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -155,20 +189,31 @@ export const ExecutiveWarRoom: React.FC = () => {
                 Sovereign Verdict
               </h2>
               <div className="flex items-center gap-4">
-                <button 
-                    onClick={() => window.open('#/detach/war-room', '_blank', 'width=1000,height=800,menubar=no,status=no')}
-                    className="text-slate-500 hover:text-yellow-400 transition-colors"
-                    title="Detach Module"
+                <button
+                  onClick={() =>
+                    window.open(
+                      '#/detach/war-room',
+                      '_blank',
+                      'width=1000,height=800,menubar=no,status=no'
+                    )
+                  }
+                  className="text-slate-500 hover:text-yellow-400 transition-colors"
+                  title="Detach Module"
                 >
-                    <ExternalLink className="w-5 h-5" />
+                  <ExternalLink className="w-5 h-5" />
                 </button>
-                <div className={`px-3 py-1 rounded-none text-xs font-medium ${
-                    verdict.urgency === 'CRITICAL' ? 'bg-red-500 text-white' :
-                    verdict.urgency === 'HIGH' ? 'bg-orange-500 text-white' :
-                    verdict.urgency === 'MEDIUM' ? 'bg-yellow-500 text-black' :
-                    'bg-green-500 text-white'
-                }`}>
-                    {verdict.urgency}
+                <div
+                  className={`px-3 py-1 rounded-none text-xs font-medium ${
+                    verdict.urgency === 'CRITICAL'
+                      ? 'bg-red-500 text-white'
+                      : verdict.urgency === 'HIGH'
+                        ? 'bg-orange-500 text-white'
+                        : verdict.urgency === 'MEDIUM'
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-green-500 text-white'
+                  }`}
+                >
+                  {verdict.urgency}
                 </div>
               </div>
             </div>
@@ -199,7 +244,9 @@ export const ExecutiveWarRoom: React.FC = () => {
                     className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-none"
                   />
                 </div>
-                <div className="text-center mt-2 text-purple-300 text-sm">{verdict.confidence}%</div>
+                <div className="text-center mt-2 text-purple-300 text-sm">
+                  {verdict.confidence}%
+                </div>
               </div>
 
               {verdict.reasoning.length > 0 && (
@@ -235,7 +282,9 @@ export const ExecutiveWarRoom: React.FC = () => {
             <div className="space-y-4">
               {/* Simulator Control Panel - Guest Mode */}
               <div className="bg-slate-800/95 border border-slate-700 rounded-none p-6 mb-6">
-                <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">Simulator Control Panel</div>
+                <div className="text-[10px] text-slate-300 uppercase font-mono tracking-widest mb-2">
+                  Simulator Control Panel
+                </div>
                 <div>
                   <div className="text-[10px] text-slate-300 mb-2">RPM</div>
                   <input
@@ -244,7 +293,7 @@ export const ExecutiveWarRoom: React.FC = () => {
                     max="900"
                     step="10"
                     value={rpm}
-                    onChange={(e) => {
+                    onChange={e => {
                       const newRpm = Number(e.target.value);
                       setRpm(newRpm);
                       updateTelemetry({ mechanical: { rpm: newRpm } });
@@ -302,14 +351,16 @@ export const ExecutiveWarRoom: React.FC = () => {
               <div className="bg-black/20 rounded-none p-4">
                 <h4 className="text-green-300 font-semibold mb-2">Experience Ledger</h4>
                 <p className="text-gray-400 text-sm">
-                  Last setpoint change: 2 hours ago<br />
-                  Operator: System Administrator<br />
+                  Last setpoint change: 2 hours ago
+                  <br />
+                  Operator: System Administrator
+                  <br />
                   Signature: Pending
                 </p>
               </div>
 
               <div className="mt-6 pt-6 border-t border-white/10">
-                <button 
+                <button
                   onClick={downloadReport}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-3 rounded-none font-semibold transition-all transform hover:scale-105"
                 >

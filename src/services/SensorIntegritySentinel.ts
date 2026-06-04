@@ -27,18 +27,36 @@ import BaseGuardian from './BaseGuardian';
 export default class SensorIntegritySentinel extends BaseGuardian {
   // Simple correlation expectations (domain heuristics)
   // e.g., high temperature correlates with high vibration and increased load or low flow
-  static correlate(snapshot: SensorSnapshot, recentHistory: SensorSnapshot[] = []): IntegrityResult {
+  static correlate(
+    snapshot: SensorSnapshot,
+    recentHistory: SensorSnapshot[] = []
+  ): IntegrityResult {
     try {
       // Basic impossible checks
-      if (snapshot.temperatureC !== undefined && (snapshot.temperatureC < -40 || snapshot.temperatureC > 200)) {
-        return { sensorAnomaly: true, anomalousField: 'temperatureC', recommendedSafeState: { throttlePct: 50, mode: 'RUN_THROTTLED' }, confidence: 0.98, note: 'Temperature outside physical bounds' };
+      if (
+        snapshot.temperatureC !== undefined &&
+        (snapshot.temperatureC < -40 || snapshot.temperatureC > 200)
+      ) {
+        return {
+          sensorAnomaly: true,
+          anomalousField: 'temperatureC',
+          recommendedSafeState: { throttlePct: 50, mode: 'RUN_THROTTLED' },
+          confidence: 0.98,
+          note: 'Temperature outside physical bounds',
+        };
       }
 
       if (snapshot.vibrationMmS !== undefined && snapshot.vibrationMmS > 50) {
         // extremely high vibration should be cross-checked against load
         if ((snapshot.loadMw || 0) < 5) {
           // vibration high while load low -> sensor anomaly
-          return { sensorAnomaly: true, anomalousField: 'vibrationMmS', recommendedSafeState: { throttlePct: 30, mode: 'RUN_THROTTLED' }, confidence: 0.9, note: 'High vibration without load correlation' };
+          return {
+            sensorAnomaly: true,
+            anomalousField: 'vibrationMmS',
+            recommendedSafeState: { throttlePct: 30, mode: 'RUN_THROTTLED' },
+            confidence: 0.9,
+            note: 'High vibration without load correlation',
+          };
         }
       }
 
@@ -51,14 +69,26 @@ export default class SensorIntegritySentinel extends BaseGuardian {
         // Expect roughly T to increase with load; if load high and temp low/unexpected, flag
         if (L > 0 && T < 0.5 * (20 + Math.log(Math.max(1, L)) * 10)) {
           // implausibly low temp given load -> possible sensor error
-          return { sensorAnomaly: true, anomalousField: 'temperatureC', recommendedSafeState: { throttlePct: 80, mode: 'RUN_THROTTLED' }, confidence: 0.6, note: 'Temperature does not scale with load' };
+          return {
+            sensorAnomaly: true,
+            anomalousField: 'temperatureC',
+            recommendedSafeState: { throttlePct: 80, mode: 'RUN_THROTTLED' },
+            confidence: 0.6,
+            note: 'Temperature does not scale with load',
+          };
         }
       }
 
       if (F !== null && L !== null) {
         // flow should roughly match load (specific water consumption). If load >0 but flow is near zero, anomaly
         if (L > 1 && F < 0.01) {
-          return { sensorAnomaly: true, anomalousField: 'flowM3s', recommendedSafeState: { throttlePct: 20, mode: 'RUN_THROTTLED' }, confidence: 0.95, note: 'Load present without flow' };
+          return {
+            sensorAnomaly: true,
+            anomalousField: 'flowM3s',
+            recommendedSafeState: { throttlePct: 20, mode: 'RUN_THROTTLED' },
+            confidence: 0.95,
+            note: 'Load present without flow',
+          };
         }
       }
 
@@ -70,7 +100,13 @@ export default class SensorIntegritySentinel extends BaseGuardian {
           const vibStable = Math.abs((snapshot.vibrationMmS || 0) - (last.vibrationMmS || 0)) < 1;
           const loadStable = Math.abs((snapshot.loadMw || 0) - (last.loadMw || 0)) < 1;
           if (vibStable && loadStable) {
-            return { sensorAnomaly: true, anomalousField: 'temperatureC', recommendedSafeState: { throttlePct: 60, mode: 'RUN_THROTTLED' }, confidence: 0.92, note: 'Abrupt temperature step without matching dynamics' };
+            return {
+              sensorAnomaly: true,
+              anomalousField: 'temperatureC',
+              recommendedSafeState: { throttlePct: 60, mode: 'RUN_THROTTLED' },
+              confidence: 0.92,
+              note: 'Abrupt temperature step without matching dynamics',
+            };
           }
         }
       }

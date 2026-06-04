@@ -1,119 +1,119 @@
 /**
  * UpstreamPulseIntegrator.ts
- * 
+ *
  * Remote Sensor Network Integration
  * Monitors flow pulses 5km+ upstream
  * Calculates time-of-arrival for preemptive turbine adjustments
  */
 
 export interface UpstreamSensor {
-    sensorId: string;
-    distance: number; // km upstream
-    type: 'ACOUSTIC' | 'PRESSURE' | 'FLOW';
-    value: number;
-    timestamp: number;
+  sensorId: string;
+  distance: number; // km upstream
+  type: 'ACOUSTIC' | 'PRESSURE' | 'FLOW';
+  value: number;
+  timestamp: number;
 }
 
 export interface FlowPulse {
-    pulseId: string;
-    detectedAt: number; // timestamp
-    detectionDistance: number; // km
-    magnitude: number; // m³/s change
-    estimatedArrival: number; // timestamp at plant
-    timeToArrival: number; // seconds
+  pulseId: string;
+  detectedAt: number; // timestamp
+  detectionDistance: number; // km
+  magnitude: number; // m³/s change
+  estimatedArrival: number; // timestamp at plant
+  timeToArrival: number; // seconds
 }
 
 export class UpstreamPulseIntegrator {
-    private static sensors: Map<string, UpstreamSensor> = new Map();
-    private static activePulses: FlowPulse[] = [];
-    private static readonly FLOW_VELOCITY = 3; // m/s average
+  private static sensors: Map<string, UpstreamSensor> = new Map();
+  private static activePulses: FlowPulse[] = [];
+  private static readonly FLOW_VELOCITY = 3; // m/s average
 
-    public static initialize(): void {
-        console.log('[Upstream] Initializing remote sensor network...');
+  public static initialize(): void {
+    console.log('[Upstream] Initializing remote sensor network...');
 
-        // Sensors at various distances
-        const distances = [5, 7.5, 10, 12.5, 15]; // km
+    // Sensors at various distances
+    const distances = [5, 7.5, 10, 12.5, 15]; // km
 
-        for (const dist of distances) {
-            this.sensors.set(`ACOUSTIC-${dist}KM`, {
-                sensorId: `ACOUSTIC-${dist}KM`,
-                distance: dist,
-                type: 'ACOUSTIC',
-                value: 0,
-                timestamp: Date.now()
-            });
+    for (const dist of distances) {
+      this.sensors.set(`ACOUSTIC-${dist}KM`, {
+        sensorId: `ACOUSTIC-${dist}KM`,
+        distance: dist,
+        type: 'ACOUSTIC',
+        value: 0,
+        timestamp: Date.now(),
+      });
 
-            this.sensors.set(`PRESSURE-${dist}KM`, {
-                sensorId: `PRESSURE-${dist}KM`,
-                distance: dist,
-                type: 'PRESSURE',
-                value: 0,
-                timestamp: Date.now()
-            });
-        }
-
-        console.log(`[Upstream] ✅ ${this.sensors.size} sensors monitoring`);
+      this.sensors.set(`PRESSURE-${dist}KM`, {
+        sensorId: `PRESSURE-${dist}KM`,
+        distance: dist,
+        type: 'PRESSURE',
+        value: 0,
+        timestamp: Date.now(),
+      });
     }
 
-    public static detectFlowPulse(
-        detectionDistance: number,
-        magnitude: number
-    ): FlowPulse {
-        const travelTime = (detectionDistance * 1000) / this.FLOW_VELOCITY; // seconds
-        const estimatedArrival = Date.now() + travelTime * 1000;
+    console.log(`[Upstream] ✅ ${this.sensors.size} sensors monitoring`);
+  }
 
-        const pulse: FlowPulse = {
-            pulseId: `PULSE-${Date.now()}`,
-            detectedAt: Date.now(),
-            detectionDistance,
-            magnitude,
-            estimatedArrival,
-            timeToArrival: travelTime
-        };
+  public static detectFlowPulse(detectionDistance: number, magnitude: number): FlowPulse {
+    const travelTime = (detectionDistance * 1000) / this.FLOW_VELOCITY; // seconds
+    const estimatedArrival = Date.now() + travelTime * 1000;
 
-        this.activePulses.push(pulse);
+    const pulse: FlowPulse = {
+      pulseId: `PULSE-${Date.now()}`,
+      detectedAt: Date.now(),
+      detectionDistance,
+      magnitude,
+      estimatedArrival,
+      timeToArrival: travelTime,
+    };
 
-        console.log(`[Upstream] Flow pulse detected at ${detectionDistance}km`);
-        console.log(`  Magnitude: ${magnitude.toFixed(1)} m³/s`);
-        console.log(`  Arrival in: ${(travelTime / 60).toFixed(1)} minutes`);
+    this.activePulses.push(pulse);
 
-        // Calculate guide vane adjustment
-        this.calculateGuideVaneAdjustment(pulse);
+    console.log(`[Upstream] Flow pulse detected at ${detectionDistance}km`);
+    console.log(`  Magnitude: ${magnitude.toFixed(1)} m³/s`);
+    console.log(`  Arrival in: ${(travelTime / 60).toFixed(1)} minutes`);
 
-        return pulse;
-    }
+    // Calculate guide vane adjustment
+    this.calculateGuideVaneAdjustment(pulse);
 
-    private static calculateGuideVaneAdjustment(pulse: FlowPulse): void {
-        const currentOpening = 75; // % (simulated)
-        const flowChange = pulse.magnitude;
+    return pulse;
+  }
 
-        // Proportional adjustment
-        const adjustment = (flowChange / 50) * 10; // ±10% for ±50 m³/s
-        const targetOpening = Math.max(0, Math.min(100, currentOpening + adjustment));
+  private static calculateGuideVaneAdjustment(pulse: FlowPulse): void {
+    const currentOpening = 75; // % (simulated)
+    const flowChange = pulse.magnitude;
 
-        const leadTime = pulse.timeToArrival - 30; // Start adjustment 30s before arrival
+    // Proportional adjustment
+    const adjustment = (flowChange / 50) * 10; // ±10% for ±50 m³/s
+    const targetOpening = Math.max(0, Math.min(100, currentOpening + adjustment));
 
-        console.log(`[Upstream] Guide vane preemptive adjustment:`);
-        console.log(`  Current: ${currentOpening}%`);
-        console.log(`  Target: ${targetOpening.toFixed(1)}%`);
-        console.log(`  Execute in: ${(leadTime / 60).toFixed(1)} minutes`);
+    const leadTime = pulse.timeToArrival - 30; // Start adjustment 30s before arrival
 
-        // Schedule adjustment
-        setTimeout(() => {
-            this.executeGuideVaneAdjustment(targetOpening);
-        }, Math.max(0, leadTime * 1000));
-    }
+    console.log(`[Upstream] Guide vane preemptive adjustment:`);
+    console.log(`  Current: ${currentOpening}%`);
+    console.log(`  Target: ${targetOpening.toFixed(1)}%`);
+    console.log(`  Execute in: ${(leadTime / 60).toFixed(1)} minutes`);
 
-    private static executeGuideVaneAdjustment(targetOpening: number): void {
-        console.log(`[Upstream] ✅ Executing guide vane adjustment: ${targetOpening.toFixed(1)}%`);
-        // In production: actual servo control
-    }
+    // Schedule adjustment
+    setTimeout(
+      () => {
+        this.executeGuideVaneAdjustment(targetOpening);
+      },
+      Math.max(0, leadTime * 1000)
+    );
+  }
 
-    public static getActivePulses(): FlowPulse[] {
-        const now = Date.now();
-        // Filter to only pulses that haven't arrived yet
-        return this.activePulses.filter(p => p.estimatedArrival > now);
-    }
+  private static executeGuideVaneAdjustment(targetOpening: number): void {
+    console.log(`[Upstream] ✅ Executing guide vane adjustment: ${targetOpening.toFixed(1)}%`);
+    // In production: actual servo control
+  }
+
+  public static getActivePulses(): FlowPulse[] {
+    const now = Date.now();
+    // Filter to only pulses that haven't arrived yet
+    return this.activePulses.filter(p => p.estimatedArrival > now);
+  }
 }
 
 // UpstreamPulseIntegrator.initialize(); // DISABLED: Call manually to avoid blocking startup

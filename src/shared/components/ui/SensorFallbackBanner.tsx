@@ -20,7 +20,7 @@ export const SensorFallbackBanner: React.FC = () => {
         setVisible(true);
         setMessage('Sensor fallback active');
       }
-    } catch (e) { }
+    } catch (e) {}
 
     return () => {
       window.removeEventListener('sensorFallback', onFallback as EventListener);
@@ -31,7 +31,10 @@ export const SensorFallbackBanner: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <div id="sensor-fallback-banner" className="fixed top-4 right-4 z-[9999] px-3 py-2 bg-red-600 text-white rounded-md shadow-md font-semibold text-sm">
+    <div
+      id="sensor-fallback-banner"
+      className="fixed top-4 right-4 z-[9999] px-3 py-2 bg-red-600 text-white rounded-md shadow-md font-semibold text-sm"
+    >
       {message || 'Sensor fallback active'}
     </div>
   );

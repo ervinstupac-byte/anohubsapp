@@ -42,11 +42,13 @@ export function mapPeltonToTelemetry(p: PeltonTelemetry): MappedPelton {
     flowM3s: p.flowM3s ?? undefined,
     jets: p.jets ?? (p.nozzles ? p.nozzles.length : undefined) ?? undefined,
     nozzles: [],
-    generatorCooling: p.generatorCooling ? {
-      bearingTempC: p.generatorCooling.bearingTempC,
-      coolantFlowLps: p.generatorCooling.coolantFlowLps,
-      bearingCoolingPresent: (p.generatorCooling as any).bearingCoolingPresent ?? undefined
-    } : null
+    generatorCooling: p.generatorCooling
+      ? {
+          bearingTempC: p.generatorCooling.bearingTempC,
+          coolantFlowLps: p.generatorCooling.coolantFlowLps,
+          bearingCoolingPresent: (p.generatorCooling as any).bearingCoolingPresent ?? undefined,
+        }
+      : null,
   };
 
   // Map nozzles
@@ -56,9 +58,12 @@ export function mapPeltonToTelemetry(p: PeltonTelemetry): MappedPelton {
     // Prefer percent field when available, else convert mm->pct using default travel
     let needlePct: number | undefined = undefined;
     if (n.needlePositionPct !== undefined) needlePct = clamp(Number(n.needlePositionPct), 0, 100);
-    else if (n.needle_position_pct !== undefined) needlePct = clamp(Number(n.needle_position_pct), 0, 100);
-    else if (n.needlePositionMM !== undefined) needlePct = clamp((Number(n.needlePositionMM) / DEFAULT_NEEDLE_TRAVEL_MM) * 100, 0, 100);
-    else if (n.needle_position_mm !== undefined) needlePct = clamp((Number(n.needle_position_mm) / DEFAULT_NEEDLE_TRAVEL_MM) * 100, 0, 100);
+    else if (n.needle_position_pct !== undefined)
+      needlePct = clamp(Number(n.needle_position_pct), 0, 100);
+    else if (n.needlePositionMM !== undefined)
+      needlePct = clamp((Number(n.needlePositionMM) / DEFAULT_NEEDLE_TRAVEL_MM) * 100, 0, 100);
+    else if (n.needle_position_mm !== undefined)
+      needlePct = clamp((Number(n.needle_position_mm) / DEFAULT_NEEDLE_TRAVEL_MM) * 100, 0, 100);
 
     const deflectorOpen = n.deflectorOpen ?? n.deflector_open ?? undefined;
     const deflectorGapMM = n.deflectorGapMM ?? n.deflector_gap_mm ?? undefined;
@@ -68,11 +73,11 @@ export function mapPeltonToTelemetry(p: PeltonTelemetry): MappedPelton {
     const jetPressureBar = head ? clamp(head * 0.0980665, 0, 2000) : undefined;
 
     pelton.nozzles.push({
-      index: n.index ?? n.nozzle_index ?? (i + 1),
+      index: n.index ?? n.nozzle_index ?? i + 1,
       needlePct,
       deflectorOpen,
       deflectorGapMM,
-      jetPressureBar
+      jetPressureBar,
     });
   }
 
@@ -86,7 +91,7 @@ export function mapPeltonToTelemetry(p: PeltonTelemetry): MappedPelton {
     const rho = 1000;
     const g = 9.81;
     const eta = 0.9;
-    recommended.output = Number(((rho * g * (pelton.flowM3s) * (pelton.headM) * eta) / 1e6).toFixed(3));
+    recommended.output = Number(((rho * g * pelton.flowM3s * pelton.headM * eta) / 1e6).toFixed(3));
   }
 
   return { recommended, pelton };

@@ -6,143 +6,177 @@ import { PhysicsEngine } from '../../core/PhysicsEngine';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle, AlertTriangle, PlayCircle, Loader2 } from 'lucide-react';
 
-// STRESS TEST PROTOCOL 
+// STRESS TEST PROTOCOL
 // 1. Init Data -> 2. Trigger Failure -> 3. Verify Alert -> 4. Log Repair -> 5. Verify Health
 
 export const SystemStressTest: React.FC = () => {
-    // MODERN STORE
-    const { mechanical, site, setConfig, setMechanical } = useTelemetryStore();
-    
-    const notifications = useNotificationStore();
-    const maintenance = useMaintenanceStore();
-    const { t, i18n } = useTranslation();
+  // MODERN STORE
+  const { mechanical, site, setConfig, setMechanical } = useTelemetryStore();
 
-    const [logs, setLogs] = useState<{ step: string, status: 'PENDING' | 'PASS' | 'FAIL', msg: string }[]>([]);
-    const [isRunning, setIsRunning] = useState(false);
+  const notifications = useNotificationStore();
+  const maintenance = useMaintenanceStore();
+  const { t, i18n } = useTranslation();
 
-    const log = (step: string, status: 'PENDING' | 'PASS' | 'FAIL', msg: string) => {
-        setLogs(prev => [...prev, { step, status, msg }]);
-    };
+  const [logs, setLogs] = useState<
+    { step: string; status: 'PENDING' | 'PASS' | 'FAIL'; msg: string }[]
+  >([]);
+  const [isRunning, setIsRunning] = useState(false);
 
-    const runTest = async () => {
-        setIsRunning(true);
-        setLogs([]);
+  const log = (step: string, status: 'PENDING' | 'PASS' | 'FAIL', msg: string) => {
+    setLogs(prev => [...prev, { step, status, msg }]);
+  };
 
-        try {
-            // STEP 1: INITIALIZATION
-            log('1. Initialization', 'PENDING', 'Setting: Head 50m, Flow 2m3/s, Bolts 8.8');
-            setConfig({ site: { ...site, grossHead: 50 } }); // Flow is derived or fixed in simulated
-            setMechanical({ boltSpecs: { count: 16, diameter: 24, grade: '8.8', torque: 450 } });
+  const runTest = async () => {
+    setIsRunning(true);
+    setLogs([]);
 
-            await new Promise(r => setTimeout(r, 1000));
+    try {
+      // STEP 1: INITIALIZATION
+      log('1. Initialization', 'PENDING', 'Setting: Head 50m, Flow 2m3/s, Bolts 8.8');
+      setConfig({ site: { ...site, grossHead: 50 } }); // Flow is derived or fixed in simulated
+      setMechanical({ boltSpecs: { count: 16, diameter: 24, grade: '8.8', torque: 450 } });
 
-            // Verify
-            if (mechanical.boltSpecs.grade === '8.8') {
-                log('1. Initialization', 'PASS', 'State Initialized Correctly.');
-            } else {
-                throw new Error('State Init Failed');
-            }
+      await new Promise(r => setTimeout(r, 1000));
 
-            // STEP 2: CALCULATED FAILURE SIMULATION
-            log('2. Failure Simulation', 'PENDING', 'Triggering 200% Pressure Spike (Water Hammer)');
-            // Simulate by setting Site Condition to extreme temporarily
-            setConfig({ site: { ...site, grossHead: 150 } }); // 3x Head ~ Pressure Spike
+      // Verify
+      if (mechanical.boltSpecs.grade === '8.8') {
+        log('1. Initialization', 'PASS', 'State Initialized Correctly.');
+      } else {
+        throw new Error('State Init Failed');
+      }
 
-            await new Promise(r => setTimeout(r, 1000));
+      // STEP 2: CALCULATED FAILURE SIMULATION
+      log('2. Failure Simulation', 'PENDING', 'Triggering 200% Pressure Spike (Water Hammer)');
+      // Simulate by setting Site Condition to extreme temporarily
+      setConfig({ site: { ...site, grossHead: 150 } }); // 3x Head ~ Pressure Spike
 
-            // Check Project Risk Calculation (Physics Engine dependent)
-            // Assuming PhysicsEngine reacts to Head 150 -> Safety Factor drops
-            // For this Prototype, we check if Safety Factor < 1.5 in "physics"
-            // (Note: Real physics engine logic is inside ProjectContext or external)
-            
-            log('2. Failure Simulation', 'PASS', 'Pressure Spike Injected (Head 150m).');
+      await new Promise(r => setTimeout(r, 1000));
 
+      // Check Project Risk Calculation (Physics Engine dependent)
+      // Assuming PhysicsEngine reacts to Head 150 -> Safety Factor drops
+      // For this Prototype, we check if Safety Factor < 1.5 in "physics"
+      // (Note: Real physics engine logic is inside ProjectContext or external)
 
-            // STEP 3: NOTIFICATION & TRANSLATION
-            log('3. Notification Loop', 'PENDING', 'Verifying German Alert: "Warnung: Bolzenspannung kritisch"');
-            i18n.changeLanguage('de'); // Force German
+      log('2. Failure Simulation', 'PASS', 'Pressure Spike Injected (Head 150m).');
 
-            // Manually firing our Notification Engine to simulate the Watchdog detecting the Physics change
-            notifications.pushNotification('CRITICAL', 'notifications.tempSpike', { temp: 85, limit: 75 });
-            // Ideally this happens automatically, but for "Stress Test" script we can orchestrate it
+      // STEP 3: NOTIFICATION & TRANSLATION
+      log(
+        '3. Notification Loop',
+        'PENDING',
+        'Verifying German Alert: "Warnung: Bolzenspannung kritisch"'
+      );
+      i18n.changeLanguage('de'); // Force German
 
-            await new Promise(r => setTimeout(r, 500));
+      // Manually firing our Notification Engine to simulate the Watchdog detecting the Physics change
+      notifications.pushNotification('CRITICAL', 'notifications.tempSpike', {
+        temp: 85,
+        limit: 75,
+      });
+      // Ideally this happens automatically, but for "Stress Test" script we can orchestrate it
 
-            // Verify Notification exists in Context
-            const hasAlert = notifications.notifications.some(n => n.severity === 'CRITICAL');
-            if (hasAlert) {
-                log('3. Notification Loop', 'PASS', 'German Alert Detected in System.');
-            } else {
-                throw new Error('Notification not generated.');
-            }
+      await new Promise(r => setTimeout(r, 500));
 
-            // STEP 4: REPORT INTEGRITY (Simulated)
-            log('4. Report Integrity', 'PENDING', 'Generating PDF Audit with Red Alert...');
-            await new Promise(r => setTimeout(r, 1000));
-            log('4. Report Integrity', 'PASS', 'PDF Generator accepted "Water Hammer" data.');
+      // Verify Notification exists in Context
+      const hasAlert = notifications.notifications.some(n => n.severity === 'CRITICAL');
+      if (hasAlert) {
+        log('3. Notification Loop', 'PASS', 'German Alert Detected in System.');
+      } else {
+        throw new Error('Notification not generated.');
+      }
 
-            // STEP 5: LOGBOOK RESOLUTION
-            log('5. Logbook Resolution', 'PENDING', 'Technician replaces bolts to 10.9...');
+      // STEP 4: REPORT INTEGRITY (Simulated)
+      log('4. Report Integrity', 'PENDING', 'Generating PDF Audit with Red Alert...');
+      await new Promise(r => setTimeout(r, 1000));
+      log('4. Report Integrity', 'PASS', 'PDF Generator accepted "Water Hammer" data.');
 
-            // Call Maintenance Context
-            maintenance.createLogEntry('T-101', {
-                taskId: 'T-101',
-                commentBS: "Novi vijci 10.9",
-                technician: "TestBot",
-                measuredValue: 10.9, // Not validated for this task type usually but passed
-                proofImage: { id: 'test', componentId: 'BOLT', src: 'test.jpg', description: 'test', aiTags: [], metadata: { timestamp: '', gps: '' } }
-            });
+      // STEP 5: LOGBOOK RESOLUTION
+      log('5. Logbook Resolution', 'PENDING', 'Technician replaces bolts to 10.9...');
 
-            // SIMULATE REAL WORLD REPAIR (The System Updates State)
-            setMechanical({ boltSpecs: { ...mechanical.boltSpecs, grade: '10.9' } });
+      // Call Maintenance Context
+      maintenance.createLogEntry('T-101', {
+        taskId: 'T-101',
+        commentBS: 'Novi vijci 10.9',
+        technician: 'TestBot',
+        measuredValue: 10.9, // Not validated for this task type usually but passed
+        proofImage: {
+          id: 'test',
+          componentId: 'BOLT',
+          src: 'test.jpg',
+          description: 'test',
+          aiTags: [],
+          metadata: { timestamp: '', gps: '' },
+        },
+      });
 
-            await new Promise(r => setTimeout(r, 1000));
+      // SIMULATE REAL WORLD REPAIR (The System Updates State)
+      setMechanical({ boltSpecs: { ...mechanical.boltSpecs, grade: '10.9' } });
 
-            // VERIFY SYSTEM RECOVERY
-            if (String(mechanical.boltSpecs.grade) === '10.9') {
-                log('5. Logbook Resolution', 'PASS', 'System Health Restored! Bolt Grade upgraded to 10.9.');
-            } else {
-                log('5. Logbook Resolution', 'FAIL', `System Health Failed. Current Grade: ${mechanical.boltSpecs.grade}`);
-            }
+      await new Promise(r => setTimeout(r, 1000));
 
-        } catch (e: any) {
-            log('TEST ABORTED', 'FAIL', e.message);
-        } finally {
-            setIsRunning(false);
-            i18n.changeLanguage('en'); // Reset
-        }
-    };
+      // VERIFY SYSTEM RECOVERY
+      if (String(mechanical.boltSpecs.grade) === '10.9') {
+        log(
+          '5. Logbook Resolution',
+          'PASS',
+          'System Health Restored! Bolt Grade upgraded to 10.9.'
+        );
+      } else {
+        log(
+          '5. Logbook Resolution',
+          'FAIL',
+          `System Health Failed. Current Grade: ${mechanical.boltSpecs.grade}`
+        );
+      }
+    } catch (e: any) {
+      log('TEST ABORTED', 'FAIL', e.message);
+    } finally {
+      setIsRunning(false);
+      i18n.changeLanguage('en'); // Reset
+    }
+  };
 
-    return (
-        <div className="min-h-screen bg-black text-white p-10 font-mono">
-            <h1 className="text-2xl font-bold text-[#2dd4bf] mb-8 border-b border-white/10 pb-4">
-                SYSTEM INTEGRATION STRESS TEST
-            </h1>
+  return (
+    <div className="min-h-screen bg-black text-white p-10 font-mono">
+      <h1 className="text-2xl font-bold text-[#2dd4bf] mb-8 border-b border-white/10 pb-4">
+        SYSTEM INTEGRATION STRESS TEST
+      </h1>
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                <button
-                    onClick={runTest}
-                    disabled={isRunning}
-                    className="w-full py-4 bg-[#2dd4bf] text-black font-bold uppercase tracking-widest hover:bg-emerald-400 disabled:opacity-50"
-                >
-                    {isRunning ? <span className="flex items-center justify-center gap-2"><Loader2 className="animate-spin" /> Running Simulation...</span> : 'Start Stress Test'}
-                </button>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <button
+          onClick={runTest}
+          disabled={isRunning}
+          className="w-full py-4 bg-[#2dd4bf] text-black font-bold uppercase tracking-widest hover:bg-emerald-400 disabled:opacity-50"
+        >
+          {isRunning ? (
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="animate-spin" /> Running Simulation...
+            </span>
+          ) : (
+            'Start Stress Test'
+          )}
+        </button>
 
-                <div className="bg-[#111] border border-white/10 rounded p-6 h-[400px] overflow-y-auto font-mono text-sm space-y-3">
-                    {logs.map((l, i) => (
-                        <div key={i} className="flex gap-4 border-b border-white/5 pb-2">
-                            <span className={`font-bold ${l.status === 'PASS' ? 'text-emerald-500' :
-                                l.status === 'FAIL' ? 'text-red-500' : 'text-amber-500'
-                                }`}>
-                                [{l.status}]
-                            </span>
-                            <span className="text-slate-300">{l.step}:</span>
-                            <span className="text-slate-500">{l.msg}</span>
-                        </div>
-                    ))}
-                    {logs.length === 0 && <span className="text-slate-600">Ready to initiate...</span>}
-                </div>
+        <div className="bg-[#111] border border-white/10 rounded p-6 h-[400px] overflow-y-auto font-mono text-sm space-y-3">
+          {logs.map((l, i) => (
+            <div key={i} className="flex gap-4 border-b border-white/5 pb-2">
+              <span
+                className={`font-bold ${
+                  l.status === 'PASS'
+                    ? 'text-emerald-500'
+                    : l.status === 'FAIL'
+                      ? 'text-red-500'
+                      : 'text-amber-500'
+                }`}
+              >
+                [{l.status}]
+              </span>
+              <span className="text-slate-300">{l.step}:</span>
+              <span className="text-slate-500">{l.msg}</span>
             </div>
+          ))}
+          {logs.length === 0 && <span className="text-slate-600">Ready to initiate...</span>}
         </div>
-    );
+      </div>
+    </div>
+  );
 };

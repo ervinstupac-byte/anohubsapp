@@ -79,13 +79,18 @@ export function usePeltonSimulator(assetId?: number | string | null): TelemetryD
         headM: 150,
         flowM3s: 12.3,
         jets: 6,
-        nozzles: nozzlesRef.current.map((n, i) => ({ index: i + 1, needlePct: n, deflectorOpen: Math.random() > 0.1, jetPressureBar: +(150 * 0.0980665).toFixed(2) })),
+        nozzles: nozzlesRef.current.map((n, i) => ({
+          index: i + 1,
+          needlePct: n,
+          deflectorOpen: Math.random() > 0.1,
+          jetPressureBar: +(150 * 0.0980665).toFixed(2),
+        })),
         generatorCooling: {
           bearingTempC: 60,
           coolantFlowLps: 12.5,
-          bearingCoolingPresent: true
-        }
-      }
+          bearingCoolingPresent: true,
+        },
+      },
     } as TelemetryData;
 
     setTelemetry(base);
@@ -93,79 +98,122 @@ export function usePeltonSimulator(assetId?: number | string | null): TelemetryD
     // Initialize engine instance once
     if (!engineRef.current) engineRef.current = new PeltonEngine();
 
-    const interval = setInterval(() => {
-      // random walk needles
-      nozzlesRef.current = nozzlesRef.current.map(n => clamp(n + (Math.random() - 0.5) * 8, 0, 100));
+    const interval = setInterval(
+      () => {
+        // random walk needles
+        nozzlesRef.current = nozzlesRef.current.map(n =>
+          clamp(n + (Math.random() - 0.5) * 8, 0, 100)
+        );
 
-      const bearing = clamp(base.pelton!.generatorCooling!.bearingTempC! + (Math.random() - 0.5) * 4, 30, 120);
+        const bearing = clamp(
+          base.pelton!.generatorCooling!.bearingTempC! + (Math.random() - 0.5) * 4,
+          30,
+          120
+        );
 
-      const newTelem: TelemetryData = {
-        ...base,
-        timestamp: Date.now(),
-        temperature: +(bearing).toFixed(2),
-        output: +(10 + (Math.random() - 0.5) * 1.5).toFixed(3),
-        efficiency: +(92 + (Math.random() - 0.5) * 2).toFixed(2),
-        cavitationIntensity: +(Math.random() * 2).toFixed(2) as any,
-        pelton: {
-          ...base.pelton!,
-          headM: +(150 + (Math.random() - 0.5) * 3).toFixed(2),
-          flowM3s: +(12.3 + (Math.random() - 0.5) * 0.5).toFixed(3),
-          nozzles: nozzlesRef.current.map((n, i) => ({ index: i + 1, needlePct: +(n).toFixed(2), deflectorOpen: Math.random() > 0.05, jetPressureBar: +( (150 + (Math.random()-0.5)*3) * 0.0980665 ).toFixed(2) })),
-          generatorCooling: {
-            bearingTempC: bearing,
-            coolantFlowLps: +(12.5 + (Math.random() - 0.5) * 1).toFixed(2),
-            bearingCoolingPresent: Math.random() > 0.01
-          }
-        }
-      } as TelemetryData;
+        const newTelem: TelemetryData = {
+          ...base,
+          timestamp: Date.now(),
+          temperature: +bearing.toFixed(2),
+          output: +(10 + (Math.random() - 0.5) * 1.5).toFixed(3),
+          efficiency: +(92 + (Math.random() - 0.5) * 2).toFixed(2),
+          cavitationIntensity: +(Math.random() * 2).toFixed(2) as any,
+          pelton: {
+            ...base.pelton!,
+            headM: +(150 + (Math.random() - 0.5) * 3).toFixed(2),
+            flowM3s: +(12.3 + (Math.random() - 0.5) * 0.5).toFixed(3),
+            nozzles: nozzlesRef.current.map((n, i) => ({
+              index: i + 1,
+              needlePct: +n.toFixed(2),
+              deflectorOpen: Math.random() > 0.05,
+              jetPressureBar: +((150 + (Math.random() - 0.5) * 3) * 0.0980665).toFixed(2),
+            })),
+            generatorCooling: {
+              bearingTempC: bearing,
+              coolantFlowLps: +(12.5 + (Math.random() - 0.5) * 1).toFixed(2),
+              bearingCoolingPresent: Math.random() > 0.01,
+            },
+          },
+        } as TelemetryData;
 
-      setTelemetry(newTelem);
-    }, 2200 + Math.round(Math.random() * 800));
+        setTelemetry(newTelem);
+      },
+      2200 + Math.round(Math.random() * 800)
+    );
 
     // Fault injection: every 15-20s, create a simulated critical diagnostic
-    const faultInterval = setInterval(() => {
-      try {
-        if (!engineRef.current) engineRef.current = new PeltonEngine();
-        const engine = engineRef.current;
+    const faultInterval = setInterval(
+      () => {
+        try {
+          if (!engineRef.current) engineRef.current = new PeltonEngine();
+          const engine = engineRef.current;
 
-        // Randomly pick a fault to simulate
-        const faultType = Math.random() > 0.5 ? 'bearing_overheat' : 'deflector_mismatch';
+          // Randomly pick a fault to simulate
+          const faultType = Math.random() > 0.5 ? 'bearing_overheat' : 'deflector_mismatch';
 
-        let diagnostic = null as any;
+          let diagnostic = null as any;
 
-        if (faultType === 'bearing_overheat') {
-          // Create a severe bearing temp spike which PeltonEngine can reason about
-          diagnostic = engine.checkAxialJump(-1.2); // negative => lifted -> critical
+          if (faultType === 'bearing_overheat') {
+            // Create a severe bearing temp spike which PeltonEngine can reason about
+            diagnostic = engine.checkAxialJump(-1.2); // negative => lifted -> critical
 
-          // Update store telemetry to reflect sensor spike so other systems see it
-          updateTelemetry({ mechanical: { bearingTemp: 120 } as any, diagnosis: {
-            severity: 'CRITICAL',
-            messages: [{ code: diagnostic.code, en: diagnostic.params?.message ?? diagnostic.code, bs: diagnostic.params?.message ?? diagnostic.code }],
-            safetyFactor: new Decimal(0.2)
-          } as any });
+            // Update store telemetry to reflect sensor spike so other systems see it
+            updateTelemetry({
+              mechanical: { bearingTemp: 120 } as any,
+              diagnosis: {
+                severity: 'CRITICAL',
+                messages: [
+                  {
+                    code: diagnostic.code,
+                    en: diagnostic.params?.message ?? diagnostic.code,
+                    bs: diagnostic.params?.message ?? diagnostic.code,
+                  },
+                ],
+                safetyFactor: new Decimal(0.2),
+              } as any,
+            });
+          } else {
+            // Deflector mismatch scenario
+            diagnostic = engine.checkDeflectorSafety(false, 'PASSIVE', 2.5, 2.0); // generatorTripped=false, deflector gap too small -> warning/critical
 
-        } else {
-          // Deflector mismatch scenario
-          diagnostic = engine.checkDeflectorSafety(false, 'PASSIVE', 2.5, 2.0); // generatorTripped=false, deflector gap too small -> warning/critical
+            updateTelemetry({
+              mechanical: { bearingTemp: +(80 + Math.random() * 30) } as any,
+              diagnosis: {
+                severity: diagnostic.severity === 'CRITICAL' ? 'CRITICAL' : 'WARNING',
+                messages: [
+                  {
+                    code: diagnostic.code,
+                    en: diagnostic.params?.message ?? diagnostic.code,
+                    bs: diagnostic.params?.message ?? diagnostic.code,
+                  },
+                ],
+                safetyFactor: new Decimal(0.5),
+              } as any,
+            });
+          }
 
-          updateTelemetry({ mechanical: { bearingTemp: +(80 + Math.random() * 30) } as any, diagnosis: {
-            severity: diagnostic.severity === 'CRITICAL' ? 'CRITICAL' : 'WARNING',
-            messages: [{ code: diagnostic.code, en: diagnostic.params?.message ?? diagnostic.code, bs: diagnostic.params?.message ?? diagnostic.code }],
-            safetyFactor: new Decimal(0.5)
-          } as any });
+          // Map diagnostic to UI message and push a notification
+          if (diagnostic) {
+            const ui = mapDiagnosticToUI(diagnostic);
+            // Push alarm into telemetry store's activeAlarms and send a toast
+            pushAlarm({
+              id: `SIM-${Date.now()}`,
+              severity: diagnostic.severity as any,
+              message: ui.message,
+            });
+            notifications.pushNotification(
+              diagnostic.severity as any,
+              ui.translationKey || 'notifications.alert',
+              { message: ui.message },
+              '/alerts'
+            );
+          }
+        } catch (e) {
+          console.error('Simulator fault injection failed', e);
         }
-
-        // Map diagnostic to UI message and push a notification
-        if (diagnostic) {
-          const ui = mapDiagnosticToUI(diagnostic);
-          // Push alarm into telemetry store's activeAlarms and send a toast
-          pushAlarm({ id: `SIM-${Date.now()}`, severity: diagnostic.severity as any, message: ui.message });
-          notifications.pushNotification(diagnostic.severity as any, ui.translationKey || 'notifications.alert', { message: ui.message }, '/alerts');
-        }
-      } catch (e) {
-        console.error('Simulator fault injection failed', e);
-      }
-    }, 15000 + Math.round(Math.random() * 5000));
+      },
+      15000 + Math.round(Math.random() * 5000)
+    );
 
     return () => clearInterval(interval);
   }, [assetId]);

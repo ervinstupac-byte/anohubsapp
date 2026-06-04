@@ -5,129 +5,129 @@
  */
 
 export interface BufferedDataPoint<T> {
-    value: T;
-    timestamp: number;
+  value: T;
+  timestamp: number;
 }
 
 export class CircularBuffer<T> {
-    private buffer: BufferedDataPoint<T>[];
-    private pointer: number = 0;
-    private count: number = 0;
-    readonly capacity: number;
+  private buffer: BufferedDataPoint<T>[];
+  private pointer: number = 0;
+  private count: number = 0;
+  readonly capacity: number;
 
-    constructor(capacity: number = 50) {
-        this.capacity = capacity;
-        this.buffer = new Array(capacity);
+  constructor(capacity: number = 50) {
+    this.capacity = capacity;
+    this.buffer = new Array(capacity);
+  }
+
+  /**
+   * Add a new data point to the buffer
+   */
+  push(value: T, timestamp: number = Date.now()): void {
+    this.buffer[this.pointer] = {
+      value,
+      timestamp,
+    };
+    this.pointer = (this.pointer + 1) % this.capacity;
+    if (this.count < this.capacity) {
+      this.count++;
+    }
+  }
+
+  /**
+   * Get all buffered data points in chronological order
+   */
+  getAll(): BufferedDataPoint<T>[] {
+    if (this.count === 0) return [];
+
+    const result: BufferedDataPoint<T>[] = [];
+    const start = this.count < this.capacity ? 0 : this.pointer;
+
+    for (let i = 0; i < this.count; i++) {
+      const index = (start + i) % this.capacity;
+      result.push(this.buffer[index]);
     }
 
-    /**
-     * Add a new data point to the buffer
-     */
-    push(value: T, timestamp: number = Date.now()): void {
-        this.buffer[this.pointer] = {
-            value,
-            timestamp
-        };
-        this.pointer = (this.pointer + 1) % this.capacity;
-        if (this.count < this.capacity) {
-            this.count++;
-        }
-    }
+    return result;
+  }
 
-    /**
-     * Get all buffered data points in chronological order
-     */
-    getAll(): BufferedDataPoint<T>[] {
-        if (this.count === 0) return [];
+  /**
+   * Get just the values in chronological order
+   */
+  getValues(): T[] {
+    return this.getAll().map(dp => dp.value);
+  }
 
-        const result: BufferedDataPoint<T>[] = [];
-        const start = this.count < this.capacity ? 0 : this.pointer;
+  /**
+   * Get the most recent N data points
+   */
+  getLast(n: number): BufferedDataPoint<T>[] {
+    const all = this.getAll();
+    return all.slice(-n);
+  }
 
-        for (let i = 0; i < this.count; i++) {
-            const index = (start + i) % this.capacity;
-            result.push(this.buffer[index]);
-        }
+  /**
+   * Get the most recent value
+   */
+  getLatest(): BufferedDataPoint<T> | undefined {
+    if (this.count === 0) return undefined;
+    const lastIndex = (this.pointer - 1 + this.capacity) % this.capacity;
+    return this.buffer[lastIndex];
+  }
 
-        return result;
-    }
+  /**
+   * Get min/max/avg for numeric buffers
+   */
+  getStats(): { min: number; max: number; avg: number } | null {
+    const values = this.getValues() as unknown as number[];
+    if (values.length === 0 || typeof values[0] !== 'number') return null;
 
-    /**
-     * Get just the values in chronological order
-     */
-    getValues(): T[] {
-        return this.getAll().map(dp => dp.value);
-    }
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
 
-    /**
-     * Get the most recent N data points
-     */
-    getLast(n: number): BufferedDataPoint<T>[] {
-        const all = this.getAll();
-        return all.slice(-n);
-    }
+    return { min, max, avg };
+  }
 
-    /**
-     * Get the most recent value
-     */
-    getLatest(): BufferedDataPoint<T> | undefined {
-        if (this.count === 0) return undefined;
-        const lastIndex = (this.pointer - 1 + this.capacity) % this.capacity;
-        return this.buffer[lastIndex];
-    }
+  /**
+   * Serialize buffer for persistence
+   */
+  toJSON(): BufferedDataPoint<T>[] {
+    return this.getAll();
+  }
 
-    /**
-     * Get min/max/avg for numeric buffers
-     */
-    getStats(): { min: number; max: number; avg: number } | null {
-        const values = this.getValues() as unknown as number[];
-        if (values.length === 0 || typeof values[0] !== 'number') return null;
+  /**
+   * Restore buffer from serialized data
+   */
+  static fromJSON<T>(data: BufferedDataPoint<T>[], capacity: number = 50): CircularBuffer<T> {
+    const buffer = new CircularBuffer<T>(capacity);
+    // Only restore up to capacity
+    const toRestore = data.slice(-capacity);
+    toRestore.forEach(dp => {
+      buffer.buffer[buffer.pointer] = dp;
+      buffer.pointer = (buffer.pointer + 1) % buffer.capacity;
+      if (buffer.count < buffer.capacity) {
+        buffer.count++;
+      }
+    });
+    return buffer;
+  }
 
-        const min = Math.min(...values);
-        const max = Math.max(...values);
-        const avg = values.reduce((a, b) => a + b, 0) / values.length;
+  /**
+   * Current number of items in buffer
+   */
+  get size(): number {
+    return this.count;
+  }
 
-        return { min, max, avg };
-    }
-
-    /**
-     * Serialize buffer for persistence
-     */
-    toJSON(): BufferedDataPoint<T>[] {
-        return this.getAll();
-    }
-
-    /**
-     * Restore buffer from serialized data
-     */
-    static fromJSON<T>(data: BufferedDataPoint<T>[], capacity: number = 50): CircularBuffer<T> {
-        const buffer = new CircularBuffer<T>(capacity);
-        // Only restore up to capacity
-        const toRestore = data.slice(-capacity);
-        toRestore.forEach(dp => {
-            buffer.buffer[buffer.pointer] = dp;
-            buffer.pointer = (buffer.pointer + 1) % buffer.capacity;
-            if (buffer.count < buffer.capacity) {
-                buffer.count++;
-            }
-        });
-        return buffer;
-    }
-
-    /**
-     * Current number of items in buffer
-     */
-    get size(): number {
-        return this.count;
-    }
-
-    /**
-     * Clear all data
-     */
-    clear(): void {
-        this.buffer = new Array(this.capacity);
-        this.pointer = 0;
-        this.count = 0;
-    }
+  /**
+   * Clear all data
+   */
+  clear(): void {
+    this.buffer = new Array(this.capacity);
+    this.pointer = 0;
+    this.count = 0;
+  }
 }
 
 // ==================== SIGNAL BUFFER MANAGER ====================
@@ -136,56 +136,59 @@ export class CircularBuffer<T> {
  * Manages multiple circular buffers for different signals
  */
 export class SignalBufferManager {
-    private buffers: Map<string, CircularBuffer<number>> = new Map();
-    private defaultCapacity: number;
+  private buffers: Map<string, CircularBuffer<number>> = new Map();
+  private defaultCapacity: number;
 
-    constructor(capacity: number = 50) {
-        this.defaultCapacity = capacity;
-    }
+  constructor(capacity: number = 50) {
+    this.defaultCapacity = capacity;
+  }
 
-    /**
-     * Record a signal value
-     */
-    record(signalId: string, value: number, timestamp: number = Date.now()): void {
-        if (!this.buffers.has(signalId)) {
-            this.buffers.set(signalId, new CircularBuffer<number>(this.defaultCapacity));
-        }
-        this.buffers.get(signalId)!.push(value, timestamp);
+  /**
+   * Record a signal value
+   */
+  record(signalId: string, value: number, timestamp: number = Date.now()): void {
+    if (!this.buffers.has(signalId)) {
+      this.buffers.set(signalId, new CircularBuffer<number>(this.defaultCapacity));
     }
+    this.buffers.get(signalId)!.push(value, timestamp);
+  }
 
-    /**
-     * Get buffer for a specific signal
-     */
-    getBuffer(signalId: string): CircularBuffer<number> | undefined {
-        return this.buffers.get(signalId);
-    }
+  /**
+   * Get buffer for a specific signal
+   */
+  getBuffer(signalId: string): CircularBuffer<number> | undefined {
+    return this.buffers.get(signalId);
+  }
 
-    /**
-     * Get sparkline data for a signal (just values)
-     */
-    getSparklineData(signalId: string): number[] {
-        return this.buffers.get(signalId)?.getValues() ?? [];
-    }
+  /**
+   * Get sparkline data for a signal (just values)
+   */
+  getSparklineData(signalId: string): number[] {
+    return this.buffers.get(signalId)?.getValues() ?? [];
+  }
 
-    /**
-     * Serialize all buffers
-     */
-    toJSON(): Record<string, BufferedDataPoint<number>[]> {
-        const result: Record<string, BufferedDataPoint<number>[]> = {};
-        this.buffers.forEach((buffer, key) => {
-            result[key] = buffer.toJSON();
-        });
-        return result;
-    }
+  /**
+   * Serialize all buffers
+   */
+  toJSON(): Record<string, BufferedDataPoint<number>[]> {
+    const result: Record<string, BufferedDataPoint<number>[]> = {};
+    this.buffers.forEach((buffer, key) => {
+      result[key] = buffer.toJSON();
+    });
+    return result;
+  }
 
-    /**
-     * Restore from serialized data
-     */
-    static fromJSON(data: Record<string, BufferedDataPoint<number>[]>, capacity: number = 50): SignalBufferManager {
-        const manager = new SignalBufferManager(capacity);
-        Object.entries(data).forEach(([key, bufferData]) => {
-            manager.buffers.set(key, CircularBuffer.fromJSON(bufferData, capacity));
-        });
-        return manager;
-    }
+  /**
+   * Restore from serialized data
+   */
+  static fromJSON(
+    data: Record<string, BufferedDataPoint<number>[]>,
+    capacity: number = 50
+  ): SignalBufferManager {
+    const manager = new SignalBufferManager(capacity);
+    Object.entries(data).forEach(([key, bufferData]) => {
+      manager.buffers.set(key, CircularBuffer.fromJSON(bufferData, capacity));
+    });
+    return manager;
+  }
 }

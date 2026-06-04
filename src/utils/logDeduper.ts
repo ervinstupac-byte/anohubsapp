@@ -15,8 +15,11 @@ export function dedupWarn(msg: string, ttl = DEFAULT_TTL) {
     if (msg.includes('using fallback') || msg.includes('Sensor fallback')) {
       try {
         (window as any).__sensorFallbackActive = true;
-        window.dispatchEvent(new CustomEvent('sensorFallback', { detail: { message: msg, timestamp: now } }));
-        if ((window as any).__sensorFallbackClearTimer) clearTimeout((window as any).__sensorFallbackClearTimer);
+        window.dispatchEvent(
+          new CustomEvent('sensorFallback', { detail: { message: msg, timestamp: now } })
+        );
+        if ((window as any).__sensorFallbackClearTimer)
+          clearTimeout((window as any).__sensorFallbackClearTimer);
         (window as any).__sensorFallbackClearTimer = setTimeout(() => {
           (window as any).__sensorFallbackActive = false;
           window.dispatchEvent(new CustomEvent('sensorFallbackCleared'));
@@ -27,7 +30,9 @@ export function dedupWarn(msg: string, ttl = DEFAULT_TTL) {
       }
     }
   } catch (e) {
-    try { console.warn(msg); } catch (_) { }
+    try {
+      console.warn(msg);
+    } catch (_) {}
   }
 }
 

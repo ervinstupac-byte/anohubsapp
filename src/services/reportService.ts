@@ -28,7 +28,7 @@ export async function saveReport(params: SaveReportParams) {
     computedLossCostCurrency = 'EUR',
     pdfPath,
     metadata = {},
-    generatedBy
+    generatedBy,
   } = params;
 
   const asset_id = assetId != null ? idAdapter.toDb(assetId) : undefined;
@@ -43,12 +43,13 @@ export async function saveReport(params: SaveReportParams) {
       computed_loss_cost_currency: computedLossCostCurrency,
       pdf_path: pdfPath || undefined,
       metadata: metadata || {},
-      generated_by: generatedBy || undefined
+      generated_by: generatedBy || undefined,
     };
 
     // Include diagnostic sigma and expected maintenance cost if provided in metadata
     if ((metadata as any)?.sigma !== undefined) payload.sigma_variance = (metadata as any).sigma;
-    if ((metadata as any)?.expectedMaintenanceCost !== undefined) payload.expected_maintenance_cost = (metadata as any).expectedMaintenanceCost;
+    if ((metadata as any)?.expectedMaintenanceCost !== undefined)
+      payload.expected_maintenance_cost = (metadata as any).expectedMaintenanceCost;
 
     // Some environments (build/noop client) do not support chained .insert().select().single().
     // Use a robust await of insert result instead.
@@ -71,7 +72,8 @@ export async function saveReport(params: SaveReportParams) {
 
     return insertResult;
   } catch (err: unknown) {
-    const emsg = err && typeof err === 'object' && 'message' in err ? (err as any).message : String(err);
+    const emsg =
+      err && typeof err === 'object' && 'message' in err ? (err as any).message : String(err);
     console.error('[reportService] saveReport failed:', emsg);
     return { data: null, error: err };
   }

@@ -1,21 +1,54 @@
+/* =========================================================
+   ANOHUB SOVEREIGN CSS — NC-DESIGN-SYSTEM v2.0
+   Premium Industrial OS Aesthetic
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root, [data-theme='tactical-cyan'] {
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+
+:root,
+[data-theme='tactical-cyan'] {
+  /* Core Surfaces */
   --scada-bg: #020617;
   --scada-panel: #0f172a;
   --scada-border: #1e293b;
   --scada-text: #e2e8f0;
   --scada-muted: #64748b;
+
+  /* Status Colors */
   --status-ok: #22c55e;
   --status-warning: #f59e0b;
   --status-error: #ef4444;
   --status-info: #06b6d4;
+
+  /* Glows */
   --glow-ok: 0 0 20px rgba(34, 197, 94, 0.3);
   --glow-warning: 0 0 20px rgba(245, 158, 11, 0.3);
   --glow-error: 0 0 20px rgba(239, 68, 68, 0.3);
   --glow-info: 0 0 20px rgba(6, 182, 212, 0.3);
+
+  /* Accent System */
+  --accent-primary: #06b6d4;
+  --accent-secondary: #8b5cf6;
+  --accent-gold: #f59e0b;
+  --accent-emerald: #10b981;
+
+  /* Glass Surfaces */
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-blur: 16px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* Typography */
+  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
 }
 
 [data-theme='tactical-red'] {
@@ -50,9 +83,54 @@
   --glow-info: none;
 }
 
-/* Strip ambient decoration, glows, and filters in Field Contrast Mode */
-.field-mode .blur-[120px],
-.field-mode .blur-[40px],
+/* =========================================================
+   2. BASE RESET & BODY
+   ========================================================= */
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100vh !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background-color: var(--scada-bg) !important;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--scada-bg);
+  color: var(--scada-text);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Monospace elements use JetBrains Mono */
+code,
+pre,
+.font-mono,
+[class*='font-mono'] {
+  font-family: var(--font-mono) !important;
+}
+
+/* =========================================================
+   3. FIELD CONTRAST MODE — Strip ambient decoration
+   ========================================================= */
+
+.field-mode .blur-\[120px\],
+.field-mode .blur-\[40px\],
 .field-mode .blur-md,
 .field-mode .backdrop-blur-md,
 .field-mode .backdrop-blur-xl,
@@ -69,64 +147,130 @@
 .field-mode .animate-pulse-glow,
 .field-mode .animate-glow,
 .field-mode .animate-pulse-soft,
-.field-mode [class*="shadow-cyan"],
-.field-mode [class*="shadow-["] {
+.field-mode [class*='shadow-cyan'],
+.field-mode [class*='shadow-['] {
   animation: none !important;
   box-shadow: none !important;
 }
 
-/* NC-25300: Visual Resuscitation */
-html,
-body,
-#root {
-  height: 100vh !important;
-  width: 100vw !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  background-color: var(--scada-bg) !important;
-}
+/* =========================================================
+   4. SCROLLBAR STYLES
+   ========================================================= */
 
-:root {
-  color-scheme: dark;
-}
-
-html,
-body,
-#root {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  background: var(--scada-bg);
-  color: var(--scada-text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif;
-}
-
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--scada-panel);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--scada-border);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: background 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: rgba(6, 182, 212, 0.3);
 }
 
-/* Animations */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+/* =========================================================
+   5. GLASSMORPHISM UTILITIES
+   ========================================================= */
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-panel-deep {
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.bevel-industrial {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.04),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================
+   6. STATUS GLOW UTILITIES
+   ========================================================= */
+
+.glow-cyan {
+  box-shadow:
+    0 0 20px rgba(6, 182, 212, 0.25),
+    0 0 40px rgba(6, 182, 212, 0.1);
+}
+
+.glow-emerald {
+  box-shadow:
+    0 0 20px rgba(16, 185, 129, 0.25),
+    0 0 40px rgba(16, 185, 129, 0.1);
+}
+
+.glow-amber {
+  box-shadow:
+    0 0 20px rgba(245, 158, 11, 0.25),
+    0 0 40px rgba(245, 158, 11, 0.1);
+}
+
+.glow-red {
+  box-shadow:
+    0 0 20px rgba(239, 68, 68, 0.25),
+    0 0 40px rgba(239, 68, 68, 0.1);
+}
+
+.bloom-glow-cyan {
+  filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.6));
+}
+
+.bloom-glow-emerald {
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.6));
+}
+
+/* =========================================================
+   7. ANIMATIONS
+   ========================================================= */
+
+/* --- Base micro-animations --- */
+
 @keyframes pulse-soft {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
 }
 
 .animate-pulse-soft {
@@ -134,83 +278,438 @@ body {
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
-  50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(6, 182, 212, 0.7),
+      0 0 50px rgba(6, 182, 212, 0.2);
+  }
 }
 
 .animate-glow {
-  animation: glow 2s ease-in-out infinite;
+  animation: glow 2.5s ease-in-out infinite;
 }
 
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* --- Entrance animations --- */
+
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-slide-up {
-  animation: slide-up 0.3s ease-out forwards;
+  animation: slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@layer utilities {
-  .text-shadow-glow {
-    text-shadow: 0 0 10px currentColor;
-  }
-
-  .hover-lift {
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-2px);
-  }
-}
-
-/* Enhanced Animations */
 @keyframes slide-down {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-slide-down {
-  animation: slide-down 0.3s ease-out forwards;
+  animation: slide-down 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .animate-scale-in {
-  animation: scale-in 0.2s ease-out forwards;
+  animation: scale-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease forwards;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes bounce-in {
-  0% { opacity: 0; transform: scale(0.3); }
-  50% { opacity: 1; transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .animate-bounce-in {
-  animation: bounce-in 0.5s ease-out forwards;
+  animation: bounce-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* --- Industrial / SCADA animations --- */
+
+@keyframes scan-line {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 110%;
+  }
+}
+
+.animate-scan-line {
+  animation: scan-line 3s linear infinite;
+}
+
+@keyframes data-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.03);
+  }
+}
+
+.animate-data-pulse {
+  animation: data-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar {
+  animation: radar-sweep 3s linear infinite;
+  transform-origin: center;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 1.8s infinite;
 }
 
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin-slow {
   animation: spin-slow 12s linear infinite;
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 8s linear infinite;
+}
+
+/* Gear animation for mechanical indicators */
+@keyframes gear-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gear {
+  animation: gear-spin 4s linear infinite;
+}
+
+/* Offline pulse — amber warning */
+@keyframes offline-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0);
+  }
+}
+
+.animate-offline-pulse {
+  animation: offline-pulse 2s ease-in-out infinite;
+}
+
+/* Critical alert flash */
+@keyframes critical-flash {
+  0%,
+  100% {
+    background-color: rgba(239, 68, 68, 0.08);
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.18);
+  }
+}
+
+.animate-critical-flash {
+  animation: critical-flash 1.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   8. TEXT UTILITIES
+   ========================================================= */
+
+@layer utilities {
+  .text-shadow-glow {
+    text-shadow: 0 0 12px currentColor;
+  }
+
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    transition:
+      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.2s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* 3D card tilt on hover */
+  .card-3d {
+    transition:
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card-3d:hover {
+    transform: perspective(800px) rotateX(-2deg) rotateY(2deg) translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Offline mode body class */
+  .is-offline .online-only {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+/* =========================================================
+   9. OFFLINE MODE GLOBAL STYLES
+   ========================================================= */
+
+/* When browser is offline, add subtle amber tint to the border system */
+body[data-online='false'] .scada-border-glow {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+/* =========================================================
+   10. INTERACTIVE ELEMENT POLISH
+   ========================================================= */
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(6, 182, 212, 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Button base transitions */
+button {
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* Range input styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-track {
+  background: rgba(255, 255, 255, 0.1);
+  height: 4px;
+  border-radius: 2px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.5);
+  margin-top: -6px;
+  cursor: grab;
+}
+
+input[type='range']::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.2);
+}
+
+/* Select styling */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px !important;
+}
+
+/* =========================================================
+   11. METALLIC / INDUSTRIAL SURFACE TEXTURES (CSS-Only)
+   ========================================================= */
+
+.surface-brushed {
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.01) 2px,
+    rgba(255, 255, 255, 0.01) 4px
+  );
+}
+
+.surface-grid {
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.surface-scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+}
+
+.surface-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.metallic-border {
+  border-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.08)
+    )
+    1;
 }

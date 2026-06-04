@@ -1,7 +1,11 @@
 // Vibration Forensics Service
 // NC-3300: The NoisyRunner Recovery
 
-import { VibrationPattern, VibrationPatternConfig, HistoricalVibrationCases } from '../../knowledge/VibrationPatterns';
+import {
+  VibrationPattern,
+  VibrationPatternConfig,
+  HistoricalVibrationCases,
+} from '../../knowledge/VibrationPatterns';
 
 export interface VibrationForensicResult {
   timestamp: number;
@@ -35,13 +39,18 @@ export class VibrationForensics {
       id,
       severity: cfg.severity,
       recommendations: cfg.recommendations,
-      matches: cfg.matches
+      matches: cfg.matches,
     }));
 
     this.historicalCases = Object.values(HistoricalVibrationCases);
   }
 
-  analyzeVibration(timestamp: number, rpm: number, vibration: number, frequency: number): VibrationForensicResult {
+  analyzeVibration(
+    timestamp: number,
+    rpm: number,
+    vibration: number,
+    frequency: number
+  ): VibrationForensicResult {
     let matchedPattern = VibrationPattern.UNKNOWN;
     let severity: VibrationForensicResult['severity'] = 'NOMINAL';
     const recommendations: string[] = [];
@@ -51,13 +60,23 @@ export class VibrationForensics {
       const ancestral = (HistoricalVibrationCases as any).CAVITATION_2014;
       matchedPattern = ancestral?.name ?? '2014 Cavitation';
       severity = 'CRITICAL';
-      recommendations.push(...(ancestral?.recommendations ?? [
-        'Reduce load and avoid resonance band',
-        'Inspect runner blades for pitting/erosion',
-        'Review draft tube pressure and NPSH margin',
-        'Trend vibration spectrum at 120Hz/240Hz'
-      ]));
-      return { timestamp, rpm, vibration, frequency, pattern: matchedPattern, severity, recommendations };
+      recommendations.push(
+        ...(ancestral?.recommendations ?? [
+          'Reduce load and avoid resonance band',
+          'Inspect runner blades for pitting/erosion',
+          'Review draft tube pressure and NPSH margin',
+          'Trend vibration spectrum at 120Hz/240Hz',
+        ])
+      );
+      return {
+        timestamp,
+        rpm,
+        vibration,
+        frequency,
+        pattern: matchedPattern,
+        severity,
+        recommendations,
+      };
     }
 
     // Check against known patterns
@@ -87,13 +106,13 @@ export class VibrationForensics {
       frequency,
       pattern: matchedPattern,
       severity,
-      recommendations
+      recommendations,
     };
   }
 
   generateReport(results: VibrationForensicResult[]): string {
     let report = '# Vibration Forensics Report\n\n';
-    
+
     for (const result of results) {
       report += `## Case ${result.timestamp}\n`;
       report += `RPM: ${result.rpm}\n`;
@@ -102,13 +121,13 @@ export class VibrationForensics {
       report += `Pattern: ${result.pattern}\n`;
       report += `Severity: ${result.severity}\n`;
       report += `Recommendations:\n`;
-      
+
       for (const rec of result.recommendations) {
         report += `- ${rec}\n`;
       }
       report += '\n';
     }
-    
+
     return report;
   }
 }

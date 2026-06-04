@@ -1,7 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MoreVertical, ChevronRight, ExternalLink } from 'lucide-react';
-import { STATUS_COLORS, StatusType, TYPOGRAPHY, TYPOGRAPHY_COMPACT, GLASS, RADIUS, SPACING, SPACING_COMPACT } from '../../design-tokens';
+import {
+  STATUS_COLORS,
+  StatusType,
+  TYPOGRAPHY,
+  TYPOGRAPHY_COMPACT,
+  GLASS,
+  RADIUS,
+  SPACING,
+  SPACING_COMPACT,
+} from '../../design-tokens';
 import { StatusIndicator } from './StatusIndicator';
 import { Sparkline } from '../../../components/ui/Sparkline';
 import { InfoTooltip } from '../../../components/ui/InfoTooltip'; // NEW
@@ -11,49 +20,50 @@ import { useDensity } from '../../../stores/useAppStore';
 type CardVariant = 'stat' | 'instrument' | 'info' | 'tactical';
 
 export interface CardAction {
-    label: string;
-    onClick: (e: React.MouseEvent) => void;
-    icon?: React.ReactNode;
-    variant?: 'default' | 'danger';
+  label: string;
+  onClick: (e: React.MouseEvent) => void;
+  icon?: React.ReactNode;
+  variant?: 'default' | 'danger';
 }
 
 interface EngineeringCardProps {
-    /** Variant determines the card's layout and styling */
-    variant?: CardVariant;
-    /** Card title (shown in header) */
-    title: string;
-    /** Optional subtitle or ISO reference */
-    subtitle?: string;
-    /** Main value for stat/instrument variants */
-    value?: string | number;
-    /** Unit for the value (e.g., "MW", "mm", "%") */
-    unit?: string;
-    /** Status determines border color and indicator */
-    status?: StatusType;
-    /** Icon shown in header */
-    icon?: React.ReactNode;
-    /** Trend data for sparkline visualization */
-    trendData?: number[];
-    /** Event markers for sparkline */
-    eventMarkers?: { index: number; color?: string }[];
-    /** Optional action element in header */
-    headerAction?: React.ReactNode;
-    /** Contextual menu actions */
-    actionMenu?: CardAction[];
-    /** Children for info/tactical variants */
-    children?: React.ReactNode;
-    /** Click handler */
-    onClick?: () => void;
-    /** Optional documentation key for InfoTooltip */
-    docKey?: string; // NEW
-    className?: string;
+  /** Variant determines the card's layout and styling */
+  variant?: CardVariant;
+  /** Card title (shown in header) */
+  title: string;
+  /** Optional subtitle or ISO reference */
+  subtitle?: string;
+  /** Main value for stat/instrument variants */
+  value?: string | number;
+  /** Unit for the value (e.g., "MW", "mm", "%") */
+  unit?: string;
+  /** Status determines border color and indicator */
+  status?: StatusType;
+  /** Icon shown in header */
+  icon?: React.ReactNode;
+  /** Trend data for sparkline visualization */
+  trendData?: number[];
+  /** Event markers for sparkline */
+  eventMarkers?: { index: number; color?: string }[];
+  /** Optional action element in header */
+  headerAction?: React.ReactNode;
+  /** Contextual menu actions */
+  actionMenu?: CardAction[];
+  /** Children for info/tactical variants */
+  children?: React.ReactNode;
+  /** Click handler */
+  onClick?: () => void;
+  /** Optional documentation key for InfoTooltip */
+  docKey?: string; // NEW
+  className?: string;
 }
 
 /**
  * EngineeringCard — Unified card component for engineering dashboards
  * Now supports Global Density and Contextual Actions (Phase 3/4)
  */
-export const EngineeringCard = React.memo<EngineeringCardProps>(({
+export const EngineeringCard = React.memo<EngineeringCardProps>(
+  ({
     variant = 'info',
     title,
     subtitle,
@@ -68,8 +78,8 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
     children,
     onClick,
     docKey, // NEW
-    className = ''
-}) => {
+    className = '',
+  }) => {
     const { densityMode } = useDensity();
     const isCompact = densityMode === 'compact';
     const typo = isCompact ? TYPOGRAPHY_COMPACT : TYPOGRAPHY;
@@ -83,243 +93,257 @@ export const EngineeringCard = React.memo<EngineeringCardProps>(({
 
     // Handle click outside for menu
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setIsMenuOpen(false);
-            }
-        };
-        if (isMenuOpen) document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+      const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+          setIsMenuOpen(false);
+        }
+      };
+      if (isMenuOpen) document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isMenuOpen]);
 
     // Action Menu Render Helper
     const renderActionMenu = () => {
-        if (!actionMenu || actionMenu.length === 0) return null;
+      if (!actionMenu || actionMenu.length === 0) return null;
 
-        return (
-            <div className="relative ml-2" ref={menuRef}>
-                <button
-                    onClick={(e) => {
+      return (
+        <div className="relative ml-2" ref={menuRef}>
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            className={`p-1 rounded-none hover:bg-white/10 text-slate-500 hover:text-cyan-400 transition-colors ${isMenuOpen ? 'text-cyan-400 bg-white/5' : ''}`}
+          >
+            <MoreVertical className="w-4 h-4" />
+          </button>
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 5 }}
+                transition={{ duration: 0.1 }}
+                className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-none shadow-none z-50 overflow-hidden"
+              >
+                <div className="py-1">
+                  {actionMenu.map((action, idx) => (
+                    <button
+                      key={idx}
+                      onClick={e => {
                         e.stopPropagation();
-                        setIsMenuOpen(!isMenuOpen);
-                    }}
-                    className={`p-1 rounded-none hover:bg-white/10 text-slate-500 hover:text-cyan-400 transition-colors ${isMenuOpen ? 'text-cyan-400 bg-white/5' : ''}`}
-                >
-                    <MoreVertical className="w-4 h-4" />
-                </button>
-
-                <AnimatePresence>
-                    {isMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 5 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 5 }}
-                            transition={{ duration: 0.1 }}
-                            className="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-none shadow-none z-50 overflow-hidden"
-                        >
-                            <div className="py-1">
-                                {actionMenu.map((action, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            action.onClick(e);
-                                            setIsMenuOpen(false);
-                                        }}
-                                        className={`
+                        action.onClick(e);
+                        setIsMenuOpen(false);
+                      }}
+                      className={`
                                             w-full text-left px-4 py-2 text-xs font-mono font-bold flex items-center gap-2
                                             ${action.variant === 'danger' ? 'text-red-400 hover:bg-red-950/30' : 'text-slate-300 hover:bg-slate-800 hover:text-cyan-400'}
                                             transition-colors
                                         `}
-                                    >
-                                        {action.icon && <span className="opacity-70">{action.icon}</span>}
-                                        {action.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        );
+                    >
+                      {action.icon && <span className="opacity-70">{action.icon}</span>}
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
     };
 
     // Shared Header Wrapper
     const HeaderWrapper = ({ children }: { children: React.ReactNode }) => (
-        <div className="flex justify-between items-start mb-2 relative z-10">
-            {children}
-            {renderActionMenu()}
-        </div>
+      <div className="flex justify-between items-start mb-2 relative z-10">
+        {children}
+        {renderActionMenu()}
+      </div>
     );
 
     // === STAT VARIANT ===
     if (variant === 'stat') {
-        return (
-            <motion.div
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                onClick={onClick}
-                className={`
+      return (
+        <motion.div
+          layout
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          onClick={onClick}
+          className={`
                     bg-slate-900/90 border-r border-b border-t border-slate-700 ${spacing.cardPadding}
                     ${colors.border} border-l-4 rounded-none
                     ${isClickable ? 'cursor-pointer hover:bg-slate-800' : ''}
                     transition-all group relative overflow-visible
                     ${className}
                 `}
-            >
-                {/* Industrial Grid Background */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+        >
+          {/* Industrial Grid Background */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
-                <HeaderWrapper>
-                    <div className="flex items-center gap-2">
-                        <span className={typo.labelMd + ' text-slate-500'}>{title}</span>
-                        {docKey && <InfoTooltip docKey={docKey} className="text-slate-600 hover:text-cyan-400" />}
-                        {icon && <span className="text-slate-400 group-hover:text-cyan-400 transition-colors">{icon}</span>}
-                    </div>
-                </HeaderWrapper>
+          <HeaderWrapper>
+            <div className="flex items-center gap-2">
+              <span className={typo.labelMd + ' text-slate-500'}>{title}</span>
+              {docKey && (
+                <InfoTooltip docKey={docKey} className="text-slate-600 hover:text-cyan-400" />
+              )}
+              {icon && (
+                <span className="text-slate-400 group-hover:text-cyan-400 transition-colors">
+                  {icon}
+                </span>
+              )}
+            </div>
+          </HeaderWrapper>
 
-                <div className="flex items-baseline gap-2 relative z-10">
-                    <h3 className={`${typo.valueLg} ${colors.text}`}>
-                        {value}
-                    </h3>
-                    {unit && <span className="text-xs font-bold text-slate-500">{unit}</span>}
-                </div>
+          <div className="flex items-baseline gap-2 relative z-10">
+            <h3 className={`${typo.valueLg} ${colors.text}`}>{value}</h3>
+            {unit && <span className="text-xs font-bold text-slate-500">{unit}</span>}
+          </div>
 
-                {(subtitle || trendData) && (
-                    <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 relative z-10">
-                        {subtitle && <span className={typo.bodyXs}>{subtitle}</span>}
-                        {trendData && trendData.length >= 2 && (
-                            <Sparkline data={trendData} width={60} height={16} color={colors.hex} markers={eventMarkers} />
-                        )}
-                    </div>
-                )}
-            </motion.div>
-        );
+          {(subtitle || trendData) && (
+            <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 relative z-10">
+              {subtitle && <span className={typo.bodyXs}>{subtitle}</span>}
+              {trendData && trendData.length >= 2 && (
+                <Sparkline
+                  data={trendData}
+                  width={60}
+                  height={16}
+                  color={colors.hex}
+                  markers={eventMarkers}
+                />
+              )}
+            </div>
+          )}
+        </motion.div>
+      );
     }
 
     // === INSTRUMENT VARIANT ===
     if (variant === 'instrument') {
-        return (
-            <div
-                onClick={onClick}
-                className={`
+      return (
+        <div
+          onClick={onClick}
+          className={`
                     relative rounded-none
                     border-2 ${colors.border} bg-slate-900
                     ${isClickable ? 'cursor-pointer hover:bg-slate-800' : ''}
                     transition-all
                     ${className}
                 `}
-            >
-                {/* Decorative Bolts - Industrial */}
-                {!isCompact && (
-                    <>
-                        <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
-                        <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
-                        <div className="absolute bottom-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
-                        <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
-                    </>
-                )}
+        >
+          {/* Decorative Bolts - Industrial */}
+          {!isCompact && (
+            <>
+              <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+              <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+              <div className="absolute bottom-1 left-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+              <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-slate-600 opacity-50" />
+            </>
+          )}
 
-                <div className="absolute top-2 right-2 z-20">
-                    {/* Combined Status and Action Menu for Instrument */}
-                    <div className="flex items-center gap-1">
-                        {!isCompact && (
-                            <div className="mr-2">
-                                <StatusIndicator status={status} variant="led" size="xs" label={status === 'critical' ? 'ALERT' : status === 'warning' ? 'WARN' : 'OK'} />
-                            </div>
-                        )}
-                        {renderActionMenu()}
-                    </div>
+          <div className="absolute top-2 right-2 z-20">
+            {/* Combined Status and Action Menu for Instrument */}
+            <div className="flex items-center gap-1">
+              {!isCompact && (
+                <div className="mr-2">
+                  <StatusIndicator
+                    status={status}
+                    variant="led"
+                    size="xs"
+                    label={status === 'critical' ? 'ALERT' : status === 'warning' ? 'WARN' : 'OK'}
+                  />
                 </div>
-
-                <div className={`relative z-10 ${spacing.cardPadding}`}>
-                    <div className="flex items-start justify-between mb-3 pr-8">
-                        <div className="flex items-center gap-2">
-                            {icon && (
-                                <div className={`p-1.5 border ${colors.border} bg-slate-800`}>
-                                    {icon}
-                                </div>
-                            )}
-                            <div>
-                                <div className="flex items-center gap-1.5">
-                                    <p className={typo.labelMd + ' text-slate-500'}>{title}</p>
-                                    {docKey && <InfoTooltip docKey={docKey} />}
-                                </div>
-                                {subtitle && (
-                                    <p className={typo.labelXs + ' text-cyan-500/70 mt-0.5'}>{subtitle}</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-black/40 p-3 border border-slate-700 mb-2 font-mono">
-                        <div className="flex items-baseline justify-between">
-                            <span className={`${typo.valueXl} ${colors.text}`}>
-                                {value}
-                            </span>
-                            {unit && (
-                                <span className="text-xs text-slate-500 font-bold uppercase ml-2">
-                                    {unit}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    {trendData && trendData.length >= 2 && (
-                        <div className="flex items-center justify-between mb-1">
-                            <span className={typo.labelXs + ' text-slate-600'}>24H TREND</span>
-                            <Sparkline data={trendData} width={isCompact ? 60 : 80} height={isCompact ? 16 : 20} color={colors.hex} markers={eventMarkers} />
-                        </div>
-                    )}
-
-                    {children}
-                </div>
-
-                {!isCompact && <div className="h-px bg-slate-800" />}
+              )}
+              {renderActionMenu()}
             </div>
-        );
+          </div>
+
+          <div className={`relative z-10 ${spacing.cardPadding}`}>
+            <div className="flex items-start justify-between mb-3 pr-8">
+              <div className="flex items-center gap-2">
+                {icon && <div className={`p-1.5 border ${colors.border} bg-slate-800`}>{icon}</div>}
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <p className={typo.labelMd + ' text-slate-500'}>{title}</p>
+                    {docKey && <InfoTooltip docKey={docKey} />}
+                  </div>
+                  {subtitle && (
+                    <p className={typo.labelXs + ' text-cyan-500/70 mt-0.5'}>{subtitle}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-black/40 p-3 border border-slate-700 mb-2 font-mono">
+              <div className="flex items-baseline justify-between">
+                <span className={`${typo.valueXl} ${colors.text}`}>{value}</span>
+                {unit && (
+                  <span className="text-xs text-slate-500 font-bold uppercase ml-2">{unit}</span>
+                )}
+              </div>
+            </div>
+
+            {trendData && trendData.length >= 2 && (
+              <div className="flex items-center justify-between mb-1">
+                <span className={typo.labelXs + ' text-slate-600'}>24H TREND</span>
+                <Sparkline
+                  data={trendData}
+                  width={isCompact ? 60 : 80}
+                  height={isCompact ? 16 : 20}
+                  color={colors.hex}
+                  markers={eventMarkers}
+                />
+              </div>
+            )}
+
+            {children}
+          </div>
+
+          {!isCompact && <div className="h-px bg-slate-800" />}
+        </div>
+      );
     }
 
     // === INFO/TACTICAL VARIANT (Unified) ===
     return (
-        <motion.div
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            onClick={onClick}
-            className={`
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        onClick={onClick}
+        className={`
                 bg-slate-900 border border-slate-700 ${spacing.cardPadding}
                 ${status !== 'nominal' ? `border-l-4 ${colors.border}` : ''}
                 hover:border-cyan-500/50 transition-all duration-500 rounded-none
                 ${isClickable ? 'cursor-pointer hover:bg-slate-800/50' : ''}
                 ${className}
             `}
-        >
-            {(title || headerAction || actionMenu) && (
-                <div className="flex justify-between items-start mb-3 relative z-10">
-                    <div className="flex items-center gap-3">
-                        {icon && <div className="text-cyan-400">{icon}</div>}
-                        <div>
-                            <h3 className={`${typo.valueMd} text-slate-100 tracking-tight uppercase`}>{title}</h3>
-                            {subtitle && <p className={typo.labelSm + ' text-slate-400 mt-0.5'}>{subtitle}</p>}
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2 ml-auto">
-                        {headerAction}
-                        {renderActionMenu()}
-                    </div>
-                </div>
-            )}
-            <div className="relative z-10">
-                {children}
+      >
+        {(title || headerAction || actionMenu) && (
+          <div className="flex justify-between items-start mb-3 relative z-10">
+            <div className="flex items-center gap-3">
+              {icon && <div className="text-cyan-400">{icon}</div>}
+              <div>
+                <h3 className={`${typo.valueMd} text-slate-100 tracking-tight uppercase`}>
+                  {title}
+                </h3>
+                {subtitle && <p className={typo.labelSm + ' text-slate-400 mt-0.5'}>{subtitle}</p>}
+              </div>
             </div>
-        </motion.div>
+            <div className="flex items-center gap-2 ml-auto">
+              {headerAction}
+              {renderActionMenu()}
+            </div>
+          </div>
+        )}
+        <div className="relative z-10">{children}</div>
+      </motion.div>
     );
-});
+  }
+);
 
 EngineeringCard.displayName = 'EngineeringCard';

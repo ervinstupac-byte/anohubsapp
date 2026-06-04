@@ -5,10 +5,9 @@
  */
 
 export class StrategicPlanGenerator {
-
-    generatePlan(year: number): string {
-        const header = `STRATEGIC ASSET PLAN (${year}) - CONFIDENTIAL\n--------------------------------------------\n`;
-        const strategy = `
+  generatePlan(year: number): string {
+    const header = `STRATEGIC ASSET PLAN (${year}) - CONFIDENTIAL\n--------------------------------------------\n`;
+    const strategy = `
 1. WINTER HARVEST (Nov-Feb):
    - Strategy: MAXIMIZE GENERATION.
    - Logic: Energy Price High (€120/MWh).
@@ -28,6 +27,6 @@ FINANCIAL PROJECTION:
    - Estimated Wear Cost: €0.4M
    - Net Strategic Value: €12.1M
 `;
-        return header + strategy;
-    }
+    return header + strategy;
+  }
 }

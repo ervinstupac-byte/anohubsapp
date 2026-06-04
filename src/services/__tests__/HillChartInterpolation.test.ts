@@ -6,13 +6,13 @@ describe('Hill-Chart interpolation', () => {
   it('interpolates efficiency between head/flow points', () => {
     const s = useProjectConfigStore.getState();
     s.setHillChart('FRANCIS', [
-      { head: 140, flow: 35, efficiency: 0.90 },
+      { head: 140, flow: 35, efficiency: 0.9 },
       { head: 160, flow: 35, efficiency: 0.92 },
       { head: 140, flow: 45, efficiency: 0.91 },
-      { head: 160, flow: 45, efficiency: 0.94 }
+      { head: 160, flow: 45, efficiency: 0.94 },
     ]);
     const e = computeEfficiencyFromHillChart('FRANCIS', 150, 40);
-    expect(e).toBeGreaterThan(0.90);
+    expect(e).toBeGreaterThan(0.9);
     expect(e).toBeLessThanOrEqual(0.94);
   });
 

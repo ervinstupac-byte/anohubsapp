@@ -14,15 +14,19 @@ export async function persistAuditRecord(record: any) {
       // Server-side fallback: write to artifacts as before
       try {
         // dynamic require to avoid bundler resolving `fs` in browser builds
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const req = (Function('return require'))();
+
+        const req = Function('return require')();
         const fs = req('fs');
         const path = req('path');
         const outDir = path.join(process.cwd(), 'artifacts');
         fs.mkdirSync(outDir, { recursive: true });
         const file = path.join(outDir, `audit_sim_${Date.now()}.json`);
         fs.writeFileSync(file, JSON.stringify(record, null, 2), 'utf8');
-        return { inserted: false, path: file, message: 'Integration disabled; wrote simulated audit file (server).' };
+        return {
+          inserted: false,
+          path: file,
+          message: 'Integration disabled; wrote simulated audit file (server).',
+        };
       } catch (err) {
         return { inserted: false, error: String(err) };
       }
@@ -34,7 +38,11 @@ export async function persistAuditRecord(record: any) {
       const prev = JSON.parse(localStorage.getItem(key) || '[]');
       prev.push({ ts: Date.now(), record });
       localStorage.setItem(key, JSON.stringify(prev));
-      return { inserted: false, storage: 'localStorage', message: 'Integration disabled; wrote simulated audit record to localStorage.' };
+      return {
+        inserted: false,
+        storage: 'localStorage',
+        message: 'Integration disabled; wrote simulated audit record to localStorage.',
+      };
     } catch (err) {
       return { inserted: false, error: String(err) };
     }
@@ -46,10 +54,7 @@ export async function persistAuditRecord(record: any) {
   }
 
   try {
-    const { data, error } = await client
-      .from('automated_actions_audit')
-      .insert(record)
-      .select();
+    const { data, error } = await client.from('automated_actions_audit').insert(record).select();
 
     if (error) return { inserted: false, error };
     return { inserted: true, data };

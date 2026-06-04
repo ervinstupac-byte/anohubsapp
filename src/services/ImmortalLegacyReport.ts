@@ -5,9 +5,8 @@
  */
 
 export class ImmortalLegacyReport {
-
-    generateHandover(): string {
-        return `
+  generateHandover(): string {
+    return `
 ANOHUB v4.0: THE IMMORTAL LEGACY
 ================================
 DATE: 2100-01-01
@@ -21,5 +20,5 @@ It has protected the valley from 14 floods.
 
 Treat it well. It is alive.
 `;
-    }
+  }
 }

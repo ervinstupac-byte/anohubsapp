@@ -3,7 +3,11 @@
  * - Provides dynamic efficiency calculation for Pelton accounting for friction losses (psi)
  */
 
-export function calculatePeltonEfficiency(bucketHours: number, head: number, flow_m3s: number): number {
+export function calculatePeltonEfficiency(
+  bucketHours: number,
+  head: number,
+  flow_m3s: number
+): number {
   // Base efficiency (calibrated) at design: 91.5%
   const baseEff = 91.5;
   // If no bucket wear supplied, return base efficiency to preserve legacy expectations
