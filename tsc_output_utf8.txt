@@ -1,0 +1,4 @@
+﻿src/components/digital-twin/AssetOnboardingWizard.tsx(234,18): error TS2345: Argument of type '{ name: string; type: string; location: string; coordinates: number[]; capacity: number; status: string; turbine_type: TurbineType; specs: { identity: AssetIdentity; turbineProfile: { ...; }; }; }' is not assignable to parameter of type 'Omit<Asset, "id">'.
+  Types of property 'type' are incompatible.
+    Type 'string' is not assignable to type '"HPP" | "Solar" | "Wind"'.
+src/components/forensics/ExpertDiagnosticOverlay.tsx(156,92): error TS2339: Property 'shaft' does not exist on type 'TelemetryState'.

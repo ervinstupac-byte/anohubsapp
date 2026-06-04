@@ -1,0 +1,20 @@
+src/components/dashboard/FieldAuditForm.tsx(1,15): error TS2307: Cannot find module '../../features/discovery-vault/components/dashboard/FieldAuditForm' or its corresponding type declarations.
+src/components/dashboard/ProtocolLaunchpad.tsx(98,52): error TS2551: Property 'generateFieldAuditReport' does not exist on type 'typeof ForensicReportService'. Did you mean 'generateAuditReport'?
+src/components/dashboard/ProtocolLaunchpad.tsx(160,72): error TS2345: Argument of type '{ contextTitle: string; slogan: string; metrics: { label: string; value: string; }[]; diagnostics: { type: string; message: any; }[]; logs: never[]; physicsData: never[]; engineerName: string; t: TFunction<"translation", undefined>; ledgerId: string; }' is not assignable to parameter of type 'TechnicalAuditData'.
+  Type '{ contextTitle: string; slogan: string; metrics: { label: string; value: string; }[]; diagnostics: { type: string; message: any; }[]; logs: never[]; physicsData: never[]; engineerName: string; t: TFunction<"translation", undefined>; ledgerId: string; }' is missing the following properties from type 'TechnicalAuditData': assetDetails, executiveSummary, siteConditions, hydraulics, and 2 more.
+src/components/digital-twin/AssetOnboardingWizard.tsx(79,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/components/digital-twin/AssetOnboardingWizard.tsx(111,22): error TS2339: Property 'francisAdvanced' does not exist on type 'AssetIdentity'.
+src/components/digital-twin/AssetOnboardingWizard.tsx(136,87): error TS2339: Property 'francisAdvanced' does not exist on type 'AssetIdentity'.
+src/components/digital-twin/AssetOnboardingWizard.tsx(137,22): error TS2339: Property 'francisAdvanced' does not exist on type 'AssetIdentity'.
+src/components/digital-twin/AssetOnboardingWizard.tsx(138,22): error TS2339: Property 'francisAdvanced' does not exist on type 'AssetIdentity'.
+src/components/ExecutiveDashboard.tsx(219,75): error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'string | (() => string | null) | null'.
+  Type 'number' is not assignable to type 'string | (() => string | null) | null'.
+src/components/ExecutiveDashboard.tsx(227,51): error TS2367: This comparison appears to be unintentional because the types 'number' and 'string | null' have no overlap.
+src/components/forensics/AlignmentWizard.tsx(64,42): error TS2551: Property 'setAlignment' does not exist on type 'TelemetryState'. Did you mean 'alignment'?
+src/components/forensics/AlignmentWizard.tsx(164,40): error TS2322: Type 'RunoutPoint[]' is not assignable to type '{ angle: number; runout: number; }[]'.
+  Property 'runout' is missing in type 'RunoutPoint' but required in type '{ angle: number; runout: number; }'.
+src/components/forensics/ForensicDashboard.stories.tsx(1,37): error TS2307: Cannot find module '@storybook/react' or its corresponding type declarations.
+src/components/forensics/ForensicDashboard.stories.tsx(22,6): error TS7006: Parameter 'Story' implicitly has an 'any' type.
+src/components/francis/FrancisHub.tsx(133,24): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
+src/components/francis/FrancisHub.tsx(134,34): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
+src/components/francis/FrancisHub.tsx(135,32): error TS2339: Property 'francis' does not exist on type 'TechnicalProjectState'.
