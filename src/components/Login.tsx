@@ -9,7 +9,17 @@ import { GlassCard } from '../shared/components/ui/GlassCard';
 import { TYPOGRAPHY } from '../shared/design-tokens';
 import { ModernInput } from '../shared/components/ui/ModernInput';
 import { ModernButton } from '../shared/components/ui/ModernButton';
-import { Shield, Zap, Globe, Activity, CheckCircle, WifiOff } from 'lucide-react';
+import {
+  Shield,
+  Zap,
+  Globe,
+  Activity,
+  CheckCircle,
+  WifiOff,
+  Mail,
+  Lock,
+  KeyRound,
+} from 'lucide-react';
 
 type AuthMode = 'login' | 'signup' | 'reset';
 
@@ -380,7 +390,7 @@ export const Login: React.FC = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="engineer@anohub.com"
-                icon={<span className="text-lg">📧</span>}
+                icon={<Mail className="w-4 h-4" />}
                 required
               />
 
@@ -391,7 +401,7 @@ export const Login: React.FC = () => {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  icon={<span className="text-lg">🔒</span>}
+                  icon={<Lock className="w-4 h-4" />}
                   required
                 />
               )}
@@ -403,7 +413,7 @@ export const Login: React.FC = () => {
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  icon={<span className="text-lg">🔑</span>}
+                  icon={<KeyRound className="w-4 h-4" />}
                   required
                 />
               )}
@@ -456,7 +466,7 @@ export const Login: React.FC = () => {
                         onClick={handleGuestLogin}
                         fullWidth
                         variant="secondary"
-                        icon={<span>👤</span>}
+                        icon={<Shield className="w-4 h-4" />}
                       >
                         {isOffline
                           ? t('login.guestButtonOffline', 'Enter as Guest (Offline Mode)')

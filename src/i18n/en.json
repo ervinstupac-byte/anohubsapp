@@ -1,4 +1,27 @@
 {
+  "login": {
+    "subtitle": "Sovereign HPP Operating System",
+    "title": "Secure Access",
+    "instructions": "Please verify your credentials.",
+    "signupTitle": "Create Account",
+    "signupInstructions": "Join the AnoHUB engineering community.",
+    "resetTitle": "Reset Password",
+    "resetInstructions": "Enter your email to reset your password.",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "signInButton": "Authenticate",
+    "signUpButton": "Create Account",
+    "resetButton": "Send Reset Email",
+    "or": "Or",
+    "guestButton": "Continue as Guest",
+    "guestButtonOffline": "Enter as Guest (Offline Mode)",
+    "footer": "Secured by Blockchain Identity",
+    "error": "Authentication failed. Check your credentials.",
+    "signupSuccess": "Check your email for verification!",
+    "resetSuccess": "Password reset email sent!",
+    "guestWelcome": "Welcome, Guest Engineer!"
+  },
   "actions": {
     "troubleshoot": "Troubleshoot",
     "analyzeTrend": "Analyze Trend",

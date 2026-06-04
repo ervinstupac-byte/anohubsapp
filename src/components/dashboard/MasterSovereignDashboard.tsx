@@ -304,112 +304,138 @@ export const MasterSovereignDashboard: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-1 flex-wrap">
             <SystemHealth />
-            {/* Strategic View Tab */}
-            <button
-              onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                activeTab === 'strategic'
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <Calculator className="w-4 h-4" />
-              Strategic
-            </button>
 
-            {/* Energy Hub Tab */}
-            <button
-              onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                activeTab === 'energy'
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <Droplets className="w-4 h-4" />
-              Energy Hub
-            </button>
+            {/* ── VIEW TABS ─────────────────────────────────── */}
+            <div className="flex items-center gap-1 bg-slate-900/60 border border-slate-700/50 rounded-lg p-1">
+              {/* Strategic View Tab */}
+              <button
+                onClick={() => setActiveTab(activeTab === 'strategic' ? 'dashboard' : 'strategic')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
+                  activeTab === 'strategic'
+                    ? 'bg-cyan-500/20 text-cyan-300 shadow-sm shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                }`}
+              >
+                <Calculator className="w-3.5 h-3.5" />
+                Strategic
+              </button>
 
-            {/* Customizable Dashboard Tab */}
-            <button
-              onClick={() => setActiveTab(activeTab === 'custom' ? 'dashboard' : 'custom')}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                activeTab === 'custom'
-                  ? 'bg-purple-500/20 text-purple-400 border border-purple-500/50 shadow-lg shadow-purple-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <Layout className="w-4 h-4" />
-              Custom Dashboard
-            </button>
+              {/* Energy Hub Tab */}
+              <button
+                onClick={() => setActiveTab(activeTab === 'energy' ? 'dashboard' : 'energy')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
+                  activeTab === 'energy'
+                    ? 'bg-cyan-500/20 text-cyan-300 shadow-sm shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                }`}
+              >
+                <Droplets className="w-3.5 h-3.5" />
+                Energy Hub
+              </button>
 
-            {/* NC-10070: Forensic Mode Toggle */}
-            <button
-              onClick={() => setIsForensicMode(!isForensicMode)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                isForensicMode
-                  ? 'bg-green-500/20 text-green-400 border border-green-500/50 shadow-lg shadow-green-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <Microscope className="w-4 h-4" />
-              {isForensicMode ? 'FORENSICS ACTIVE' : 'FORENSICS'}
-            </button>
+              {/* Customizable Dashboard Tab */}
+              <button
+                onClick={() => setActiveTab(activeTab === 'custom' ? 'dashboard' : 'custom')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all ${
+                  activeTab === 'custom'
+                    ? 'bg-purple-500/20 text-purple-300 shadow-sm shadow-purple-500/20'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                }`}
+              >
+                <Layout className="w-3.5 h-3.5" />
+                Custom Dashboard
+              </button>
+            </div>
 
-            {/* NC-11400: Education Mode Toggle */}
-            <button
-              onClick={toggleEducationMode}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                educationMode
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-lg shadow-cyan-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              {educationMode ? 'EXPERT GUIDE ON' : 'EXPERT GUIDE'}
-            </button>
+            {/* Divider */}
+            <div className="w-px h-6 bg-slate-700/60 mx-1" />
 
-            {/* Commander Mode Toggle - ALWAYS VISIBLE */}
-            <button
-              onClick={toggleCommanderMode}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
-                isCommanderMode
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50 shadow-lg shadow-amber-500/20'
-                  : 'bg-slate-800/50 text-slate-400 border border-slate-700 hover:text-white hover:bg-slate-700/50'
-              }`}
-            >
-              <Shield className="w-4 h-4" />
-              {isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}
-            </button>
+            {/* ── MODE TOGGLES ──────────────────────────────── */}
+            <div className="flex items-center gap-1">
+              {/* NC-10070: Forensic Mode Toggle */}
+              <button
+                onClick={() => setIsForensicMode(!isForensicMode)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide border transition-all ${
+                  isForensicMode
+                    ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40'
+                    : 'text-slate-500 border-slate-700/60 hover:text-slate-300 hover:border-slate-600'
+                }`}
+              >
+                <Microscope className="w-3.5 h-3.5" />
+                FORENSICS
+              </button>
 
-            {/* NC-9200: Tactical Layout Launcher */}
-            <button
-              onClick={launchTacticalLayout}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all bg-slate-800/50 text-cyan-400 border border-cyan-500/50 hover:bg-slate-700/50 hover:shadow-lg hover:shadow-cyan-500/20"
-              title="Open all modules across screens"
-            >
-              <Layout className="w-4 h-4" />
-              TACTICAL MAP
-            </button>
+              {/* NC-11400: Education Mode Toggle */}
+              <button
+                onClick={toggleEducationMode}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide border transition-all ${
+                  educationMode
+                    ? 'bg-blue-500/15 text-blue-400 border-blue-500/40'
+                    : 'text-slate-500 border-slate-700/60 hover:text-slate-300 hover:border-slate-600'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                EXPERT GUIDE
+              </button>
+            </div>
 
-            <StressTestButton />
+            {/* Divider */}
+            <div className="w-px h-6 bg-slate-700/60 mx-1" />
+
+            {/* ── ACTION BUTTONS ────────────────────────────── */}
+            <div className="flex items-center gap-1">
+              {/* Commander Mode Toggle - ALWAYS VISIBLE */}
+              <button
+                onClick={toggleCommanderMode}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold tracking-wider border transition-all ${
+                  isCommanderMode
+                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/50 shadow-lg shadow-amber-500/15'
+                    : 'bg-slate-800/50 text-slate-400 border-slate-700 hover:text-amber-300 hover:border-amber-500/30'
+                }`}
+              >
+                <Shield className="w-3.5 h-3.5" />
+                {isCommanderMode ? 'COMMANDER ACTIVE' : 'COMMANDER MODE'}
+              </button>
+
+              {/* NC-9200: Tactical Layout Launcher */}
+              <button
+                onClick={launchTacticalLayout}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold tracking-wider border bg-slate-800/50 text-cyan-400 border-cyan-500/40 hover:bg-cyan-500/10 hover:border-cyan-500/70 hover:shadow-lg hover:shadow-cyan-500/15 transition-all"
+                title="Open all modules across screens"
+              >
+                <Layout className="w-3.5 h-3.5" />
+                TACTICAL MAP
+              </button>
+
+              <StressTestButton />
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-6 text-sm text-slate-400 bg-slate-800/30 p-3 rounded-lg border border-slate-700/50">
+        <div className="flex items-center gap-4 text-sm border-l-2 border-cyan-500/60 bg-slate-900/50 pl-4 pr-5 py-2.5 rounded-r-lg border border-slate-700/40 border-l-0">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse-soft"></span>
-            <span className="font-medium">Asset: {identity?.assetName || 'Unknown'}</span>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="font-semibold text-slate-200">{identity?.assetName || 'Unknown'}</span>
           </div>
-          <span className="text-slate-600">•</span>
-          <span>
-            Last Update: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : 'Never'}
+          <span className="text-slate-700">•</span>
+          <span className="text-slate-500 text-xs font-mono">
+            Updated {lastUpdate ? new Date(lastUpdate).toLocaleTimeString() : '—'}
           </span>
-          <span className="text-slate-600">•</span>
+          <span className="text-slate-700">•</span>
           <span
-            className={`font-semibold ${isCommanderMode ? 'text-amber-400' : 'text-slate-500'}`}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+              isCommanderMode
+                ? 'bg-amber-500/15 text-amber-400 border-amber-500/40'
+                : 'bg-slate-800/80 text-slate-400 border-slate-700'
+            }`}
           >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${isCommanderMode ? 'bg-amber-400 animate-pulse' : 'bg-slate-500'}`}
+            />
             {isCommanderMode ? 'COMMANDER CONTROL ACTIVE' : 'GUEST MODE'}
           </span>
         </div>

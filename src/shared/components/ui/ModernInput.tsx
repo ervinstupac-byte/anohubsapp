@@ -38,12 +38,12 @@ export const ModernInput: React.FC<ModernInputProps> = ({
 
         <Component
           className={`
-                        w-full bg-slate-950 text-white placeholder-slate-600
-                        border border-slate-700 rounded-none
+                        w-full bg-slate-900/80 text-white placeholder-slate-500
+                        border border-slate-700/80 rounded-xl
                         ${icon ? 'pl-10' : 'pl-4'} pr-4 py-3
-                        text-sm font-mono transition-all duration-300
-                        focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 focus:bg-slate-900
-                        hover:border-slate-600
+                        text-sm font-mono transition-all duration-200
+                        focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:bg-slate-900
+                        hover:border-slate-600 hover:bg-slate-900/90
                         disabled:opacity-50 disabled:cursor-not-allowed
                         ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}
                     `}
