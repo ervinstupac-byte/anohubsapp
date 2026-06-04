@@ -145,10 +145,12 @@ export const AlarmBridgeProvider: React.FC<{ children: ReactNode }> = ({ childre
     if (Object.keys(telemetry).length === 0) return;
 
     Object.entries(telemetry).forEach(([assetId, tData]) => {
+      // Guard: tData can be undefined when a stale key exists without a matching value
+      if (!tData || typeof tData !== 'object') return;
       const assetName = getAssetName(assetId);
 
       ALARM_THRESHOLDS.forEach(threshold => {
-        const rawValue = tData[threshold.field];
+        const rawValue = (tData as Record<string, unknown>)[threshold.field as string];
         if (rawValue === undefined || rawValue === null) return;
         const value = Number(rawValue);
         const alarmKey = `${assetId}::${threshold.category}`;

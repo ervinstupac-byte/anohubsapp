@@ -91,8 +91,11 @@ export const AIPredictionProvider: React.FC<{ children: ReactNode }> = ({ childr
 
       // Process each asset with telemetry data
       Object.entries(telemetry).forEach(([assetId, tData]) => {
+        // Guard: tData must be a valid telemetry object
+        if (!tData || typeof tData !== 'object') return;
         const numericAssetId = idAdapter.toNumber(assetId);
-        if (numericAssetId === null) return;
+        // toNumber returns 0 for bad IDs — skip those
+        if (!numericAssetId) return;
 
         // 1. SYNERGETIC RISK DETECTION (Spider Logic)
         const synergeticRisk = aiPredictionService.detectSynergeticRisk(numericAssetId, tData);
